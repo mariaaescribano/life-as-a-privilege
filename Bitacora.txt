@@ -1,0 +1,14 @@
+ 
+ MINIMO PRODUCTO VIABLE
+
+ - Usuario pueda registrarse y su contraseña se hashe 
+ - Tokens movida --> guardar aquí el id del usuario?
+ - El usuario pueda ver vídeos
+ - Tenga un perfil 
+    - Astrología
+    - TCM
+ 
+
+
+ CUENTA MÍA
+- Poder subir vídeos en los apartados
