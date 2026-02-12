@@ -12,3 +12,8 @@
 
  CUENTA MÍA
 - Poder subir vídeos en los apartados
+
+
+
+
+  <SimpleGrid mt="20px" columns={2} gap="20px" mb="20px">
