@@ -1,7 +1,7 @@
-import { Badge, Text } from '@chakra-ui/react';
+import { Badge, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
 
-function BadgeText(props:{text:string, color:string, colorFondo:string}) 
+function BadgeText(props:{text:string, color:string, colorFondo:string, icon:any}) 
 {
     return (
       <Badge
@@ -9,14 +9,18 @@ function BadgeText(props:{text:string, color:string, colorFondo:string})
         bg={props.colorFondo}
         fontSize="14px"       
         fontWeight="bold" 
-        maxW={"150px"}
+        maxW={"200px"}
         w="100%" 
-        p="20px"           
+        p="20px"          
+        
         borderRadius="20px" 
         textAlign="center"  
         display="inline-block" 
       >
-        {props.text}
+        <HStack justifyContent={"center"} >
+          {props.icon}
+          {props.text}
+        </HStack>
       </Badge>
     );
 }

@@ -10,29 +10,24 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
-import { Header } from "../../../components/global/Header";
-import BadgeText from "../../../components/global/BadgeText";
-import Footer from "../../../components/global/Footer";
-import { astrologiaBg, astrologiaTxt, fisiologiaBg, fisiologiaTxt, neuropsicologiaBg, neuropsicologiaTxt, nutricionBg, nutricionTxt, tcmBg, tcmTxt, turquesa } from "../../../Global";
+import { Header } from "../../components/global/Header";
+import BadgeText from "../../components/welcome/BadgeText";
+import Footer from "../../components/global/Footer";
+import { astrologiaBg, AstrologiaIcon, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaTxt, cabalaBg, CabalaIcon, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionTxt, tcmBg, TCMIcon, tcmTxt, turquesa } from "../../Global";
+import Card from "../../components/global/Card";
 
-const MainSection = () => {
+const Welcome = () => {
   return (
     <Box>
-        <Header></Header>
+        <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={""} linkLeft={"/logIn"} />
         
         <Flex
             align="center"
             justify="center"
-            px={4}
-            >
+            px={2}
+        >
             {/* BOX PRINCIPAL CON SOMBRA */}
-            <Box
-                w={{ base: "100%", md: "90%", lg: "800px" }}
-                bg="white"
-                p={8}
-                borderRadius="xl"
-                boxShadow="xl"
-            >
+            <Card>
                 {/* CONTENIDO PRINCIPAL */}
                 <Flex
                 direction={{ base: "column", md: "row" }}
@@ -56,7 +51,7 @@ const MainSection = () => {
                     {/* VStack */}
                     <Flex flex="1" justify="center" w="100%">
                         <VStack spacing={3} align="center">
-                            <Heading size="md">Conviértete en tu propia autoridad integrando...</Heading>
+                            <Heading size="md">Cambia tu Vida integrando...</Heading>
                             <Grid
                                 p={{ base: "10px", md: "10px" }}
                                 mb="20px"
@@ -64,12 +59,14 @@ const MainSection = () => {
                                 gap="20px"
                                 maxW="400px"
                             >
-                                <BadgeText text={"Fisiología"} color={"#34106d"} colorFondo={"#e6d7ff"} />
-                                <BadgeText text={"Neuropsicología"} color={neuropsicologiaTxt} colorFondo={neuropsicologiaBg} />
-                                <BadgeText text={"Astrología"} color={astrologiaTxt} colorFondo={astrologiaBg} />
-                                <BadgeText text={"Medicina China"} color={tcmTxt} colorFondo={tcmBg} />
-                                <BadgeText text={"Nutrición"} color={nutricionTxt} colorFondo={nutricionBg} />
-                                <BadgeText text={"Ayúrveda"} color={"#cb8e59"} colorFondo={"#593d25"} />
+                                <BadgeText text={"Fisiología"} color={fisiologiaTxt} colorFondo={fisiologiaBg} icon={<FisiologiaIcon />} />
+                                <BadgeText text={"Neuropsicología"} color={neuropsicologiaTxt} colorFondo={neuropsicologiaBg} icon={<NeuropsicologiaIcon />} />
+                                <BadgeText text={"Astrología"} color={astrologiaTxt} colorFondo={astrologiaBg} icon={<AstrologiaIcon />} />
+                                <BadgeText text={"Medicina China"} color={tcmTxt} colorFondo={tcmBg} icon={<TCMIcon />} />
+                                <BadgeText text={"Nutrición"} color={nutricionTxt} colorFondo={nutricionBg} icon={<NutricionIcon />} />
+                                <BadgeText text={"Ayúrveda"} color={ayurvedaTxt} colorFondo={ayurvedaBg} icon={<AyurvedaIcon />} />
+                                <BadgeText text={"Biología"} color={biologiaTxt} colorFondo={biologiaBg} icon={<BiologiaIcon />} />
+                                <BadgeText text={"Cábala"} color={cabalaTxt} colorFondo={cabalaBg} icon={<CabalaIcon />} />
                             </Grid>
                            </VStack>
                     </Flex>
@@ -82,11 +79,12 @@ const MainSection = () => {
                     alt="Imagen"
                     borderRadius="xl"
                     objectFit="cover"
-                    w={{ base: "80%", md: "100%" }}
+                    h="100%"
+                    w={{ base: "100%", md: "100%" }}
                     />
                 </Box>
                 </Flex>
-            </Box>
+            </Card>
         </Flex>
 
         <Flex justify="center" mt={8}>
@@ -96,9 +94,12 @@ const MainSection = () => {
                 minW="200px"
                 maxW="300px"
                 bg={turquesa}
-                borderRadius="20px"
+                borderRadius="15px"
+                _hover={{                  // hover effect
+                    bg: "teal.200",          // slightly darker on hover
+                }}
             >
-                Empezar
+                Entrar
             </Button>
         </Flex>
 
@@ -107,4 +108,4 @@ const MainSection = () => {
   );
 };
 
-export default MainSection;
+export default Welcome;

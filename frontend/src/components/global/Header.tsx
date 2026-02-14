@@ -1,16 +1,27 @@
 import React from "react";
 import { Box, Flex, Image, Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { turquesa } from "../../Global";
 
-export function Header() {
+export function Header(props:
+  {
+    textRight:string, textLeft:string, linkRight:string, linkLeft:string, 
+    linkHeader?:string,
+    mb?:string,
+  }) {
+  const navigate = useNavigate();
+
   return (
-    <Box mb="150px">
+    <Box mb={props.mb ?? "20px"}>
       <Box
-        position="fixed"
+        position="relative"
         top="0"
         left="0"
         width="100%"
         height="130px"
-        bg="#40E0D0"
+        bg={turquesa}
+        opacity={0.9}
         color="white"
         zIndex="1000"
       >
@@ -21,19 +32,19 @@ export function Header() {
           position="relative"
           px={6}
         >
-          {/* LEFT LINK */}
-          <Link
+         <Link
             position="absolute"
-            left="40px"
+            right="40px"
+            onClick={() => navigate(props.linkLeft)} 
             color="white"
             fontWeight="600"
             _hover={{ opacity: 0.8 }}
           >
-            Registrarse
+            {props.textLeft}
           </Link>
 
           {/* CENTER LOGO */}
-          <Box width="230px" height="130px">
+          <Box width="230px" height="130px" cursor="pointer" onClick={() => navigate(props.linkHeader ?? "/")}>
             <Image
               src="/img/life.png"
               alt="Life"
@@ -43,15 +54,15 @@ export function Header() {
             />
           </Box>
 
-          {/* RIGHT LINK */}
-          <Link
+           <Link
+            onClick={() => navigate(props.linkRight)} 
             position="absolute"
-            right="40px"
+            left="40px"
             color="white"
             fontWeight="600"
             _hover={{ opacity: 0.8 }}
           >
-            Iniciar sesión
+            {props.textRight}
           </Link>
         </Flex>
       </Box>

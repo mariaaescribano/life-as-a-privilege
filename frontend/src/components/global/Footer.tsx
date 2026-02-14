@@ -2,10 +2,10 @@ import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 import { turquesa } from "../../Global";
 
-const Footer = () => {
+const Footer = (props:{mt?:string}) => {
   return (
     <Box
-        mt={"100px"}
+        mt={props.mt ?? "100px"}
         py={10}
         textAlign="center"
         color="white"
