@@ -46,7 +46,7 @@ export function Header(props:
           {/* CENTER LOGO */}
           <Box width="230px" height="130px" cursor="pointer" onClick={() => navigate(props.linkHeader ?? "/")}>
             <Image
-              src="/img/life.png"
+              src="/public/img/life.png"
               alt="Life"
               width="100%"
               height="100%"

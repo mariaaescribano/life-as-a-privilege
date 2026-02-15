@@ -1,17 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { pool } from 'src/app.module';
+import { randomString } from 'src/Global';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+  
+  async createUser(data) 
+  {
+    try {
+      let id = randomString();
 
-  create(data: Partial<User>) {
-    const user = this.userRepository.create(data);
-    return this.userRepository.save(user);
+      const [result] = await pool.query(
+        'INSERT INTO user (id, name, email, password) VALUES (?, ?, ?, ?)',
+        [id, data.name, data.email, data.password],
+      );
+
+      if ((result as any).affectedRows === 1) {
+        return { id };
+      }
+
+    } catch (error) {
+      console.error(error);
+      throw error; 
+    }
+  }
+
+  async getUser(userId:string) {
+    const [result] = await pool.query(
+      'SELECT * from usuario WHERE id = ?',
+      [userId],
+    );
+
+    return result;
   }
 }

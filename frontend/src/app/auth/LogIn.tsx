@@ -18,7 +18,7 @@ export default function LogIn() {
       minH="100vh"            // full viewport height
       overflow="hidden"       // prevent scrolling
     >
-    <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={""} linkLeft={"/logIn"} />
+    <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={"/signIn"} linkLeft={"/logIn"} />
       <Flex
         align="center"
         justify="center"
@@ -35,7 +35,7 @@ export default function LogIn() {
             <InputField title={"Nombre de usuario"} value={""} onChange={undefined} placeholder={""}></InputField>
             <InputField title={"Contraseña"} type="password" value={""} onChange={undefined} placeholder={""} mt="5px"></InputField>
             <Text
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/signIn")}
               display="block"
               textAlign="center"
               mb="50px"
