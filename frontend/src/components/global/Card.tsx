@@ -2,7 +2,7 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 
-export default function Card(props: {children:any, maxW?:string, mb?:string, h?:string})
+export default function Card(props: {children:any, maxW?:string, mb?:string, h?:string, p?:number})
 {
     return (
         <Box
@@ -11,7 +11,7 @@ export default function Card(props: {children:any, maxW?:string, mb?:string, h?:
             maxW={props.maxW ?? "900px"}
             bg="white"
             mb={props.mb ?? "20px"}
-            p={8}
+            p={props.p ?? 10}
             borderRadius="xl"
             boxShadow="xl"
         >

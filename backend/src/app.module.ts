@@ -1,22 +1,13 @@
+// app.module.ts
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
+import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './user/user.module';
-import mysql from 'mysql2/promise';
-
-export const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'lifeasaprivilege',
-});
+import { DatabaseService } from './database.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [
-    UsersModule
-  ],
-  controllers: [],
-  providers: [],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, AuthModule],
+  providers: [DatabaseService],
+  exports: [DatabaseService],
 })
 export class AppModule {}

@@ -4,14 +4,15 @@ import { Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/global/Header";
 import Card from "../../components/global/Card";
-import { API_URL, turquesa } from "../../Global";
+import { API_URL, turquesa } from "../../GlobalVariables";
 import InputField from "../../components/global/InputField";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
 import Footer from "../../components/global/Footer";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import axios from "axios";
-import type { User } from "../../dto/user";
+import { gestionaError } from "../../GlobalHelper";
+import type { CreateUser } from "../../dtos/user.types";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -22,19 +23,18 @@ export default function SignIn() {
   const [email, setemail] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
 
-
   const registroFinal = async () =>
   {
     try 
     {
-      let body: User = {
+      let body: CreateUser = {
         name: name,
         email: email,
         password: contra
       };
 
       const response = await axios.post(
-      `${API_URL}/user`,
+      `${API_URL}/user/signIn`,
       body,
       {
         headers: {
@@ -42,13 +42,19 @@ export default function SignIn() {
         },
       }
       );
-      console.log(response.data)
+
       if(response.data!= null)
       {
-        
-      }   
-    } catch (error) {
-      console.error('Error in registroFinal:', error);
+        setmessage({
+          soy : 1,
+          title: "Bienvenido",
+          description: "Lo estamos preparando para ti"
+        });
+      } 
+    } 
+    catch (err:any) {
+      let error = gestionaError(err);
+      setmessage(error)
     }
   }
 
@@ -104,10 +110,10 @@ export default function SignIn() {
         <Card maxW="500px" h="800px">
           <VStack spacing={4} align="stretch">
             <Text fontSize="2xl" fontWeight="bold" mb="20px">
-              Registro
+              Registro 
             </Text>
 
-            <InputField title={"Nombre de usuario"} value={name} onChange={setname} placeholder={""}></InputField>
+            <InputField title={"Nombre"} value={name} onChange={setname} placeholder={""} autoFocus={true}></InputField>
             <InputField title={"Email"} value={email} onChange={setemail} placeholder={""}></InputField>
             <InputField title={"Contraseña"} type="password" value={contra} onChange={setcontra} placeholder={""} mt="5px"></InputField>
             <InputField title={"Repite la contraseña"} type="password" value={contraRepite} onChange={setcontraRepite} placeholder={""} mt="5px"></InputField>
@@ -127,8 +133,8 @@ export default function SignIn() {
 
             <Flex justifyContent={"center"} direction={"column"}>
               <VStack>
-                <BtnTurquesa text={"Registrarme"} onClick={() => registro()} />
                 {message && <SuccessErrorMessage soy={message.soy} title={message.title} description={message.description} onClick={()=>setmessage(null)}></SuccessErrorMessage>}
+                <BtnTurquesa text={"Registrarme"} onClick={() => registro()} />
               </VStack>
             </Flex>
            

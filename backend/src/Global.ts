@@ -1,4 +1,4 @@
-export function randomString(length = 8) {
+export function randomString(length = 10) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   let result = '';
 

@@ -1,12 +1,12 @@
 
 import { Input , Text, Flex } from '@chakra-ui/react';
 import React from 'react';
-import { turquesa } from '../../Global';
+import { turquesa } from '../../GlobalVariables';
 
 export default function InputField(props:
   {
-    title:string, value:string, onChange:any, placeholder:string,
-    mb?:string, mt?:string, type?:string
+    title:string, value:string, onChange:any, placeholder?:string,
+    mb?:string, mt?:string, type?:string, autoFocus?:boolean
   })
 {
   return (
@@ -14,13 +14,14 @@ export default function InputField(props:
       
       <Text  mb="5px" fontWeight={"black"}>{props.title}</Text>
       <Input
+        autoFocus = {props.autoFocus ?? false}
         type={props.type ?? "text"}
         borderRadius="md"
         borderWidth="1px"
         borderColor="gray.300"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
-        placeholder={props.placeholder}
+        placeholder={props.placeholder ?? ""}
         _hover={{
           borderColor: turquesa,
         }}

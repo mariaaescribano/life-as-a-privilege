@@ -18,8 +18,8 @@ export default function SuccessErrorMessage(props:{
   return (
     <Box
       position="relative"     
-      bg="red.100"
-      color="red.800"
+      bg= {props.soy === 2 ? "red.100" : "green.100"}
+      color= {props.soy === 2 ? "red.800" : "green.800"}
       p={4}
       borderRadius="md"
       boxShadow="md"
@@ -27,7 +27,7 @@ export default function SuccessErrorMessage(props:{
       alignItems="center"
       gap={3}
     >
-      <Icon as={props.soy === 1 ? CheckCircleIcon : WarningIcon} w={6} h={6} />
+      <Icon as={props.soy === 2 ? WarningIcon : CheckCircleIcon} w={6} h={6} />
 
       <Box flex="1">
         {props.title && (

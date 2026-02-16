@@ -3,19 +3,17 @@ import {
   Flex,
   Image,
   VStack,
-  Text,
   Heading,
-  Button,
-  Badge,
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
 import { Header } from "../../components/global/Header";
 import BadgeText from "../../components/welcome/BadgeText";
 import Footer from "../../components/global/Footer";
-import { astrologiaBg, AstrologiaIcon, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaTxt, cabalaBg, CabalaIcon, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionTxt, tcmBg, TCMIcon, tcmTxt, turquesa } from "../../Global";
+import { astrologiaBg, AstrologiaIcon, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaTxt, cabalaBg, CabalaIcon, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionTxt, tcmBg, TCMIcon, tcmTxt, turquesa } from "../../GlobalVariables";
 import Card from "../../components/global/Card";
 import { useNavigate } from "react-router-dom";
+import BtnTurquesa from "../../components/global/BtnTurquesa";
 
 const Welcome = () => {
     
@@ -69,7 +67,7 @@ const Welcome = () => {
                                     <BadgeText text={"Medicina China"} color={tcmTxt} colorFondo={tcmBg} icon={<TCMIcon />} />
                                     <BadgeText text={"Nutrición"} color={nutricionTxt} colorFondo={nutricionBg} icon={<NutricionIcon />} />
                                     <BadgeText text={"Ayúrveda"} color={ayurvedaTxt} colorFondo={ayurvedaBg} icon={<AyurvedaIcon />} />
-                                    <BadgeText text={"Remedios naturales"} color={biologiaTxt} colorFondo={biologiaBg} icon={<BiologiaIcon />} />
+                                    <BadgeText text={"Fitoterapia"} color={biologiaTxt} colorFondo={biologiaBg} icon={<BiologiaIcon />} />
                                     <BadgeText text={"Cábala"} color={cabalaTxt} colorFondo={cabalaBg} icon={<CabalaIcon />} />
                                 </Grid>
                             </VStack>
@@ -92,20 +90,7 @@ const Welcome = () => {
             </Flex>
 
             <Flex justify="center" mt={8}>
-                <Button
-                    size="lg"
-                    px={10}
-                    minW="200px"
-                    onClick={() => navigate("/logIn")} 
-                    maxW="300px"
-                    bg={turquesa}
-                    borderRadius="15px"
-                    _hover={{                  // hover effect
-                        bg: "teal.200",          // slightly darker on hover
-                    }}
-                >
-                    Entrar
-                </Button>
+                <BtnTurquesa text={"Entrar"} onClick={() => {window.scrollTo({ top: 0, behavior: 'auto' }); navigate("/logIn")}} />
             </Flex>
 
         <Footer />

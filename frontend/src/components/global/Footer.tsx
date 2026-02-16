@@ -1,6 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import React from "react";
-import { turquesa } from "../../Global";
+import { turquesa } from "../../GlobalVariables";
 
 const Footer = (props:{mt?:string}) => {
   return (

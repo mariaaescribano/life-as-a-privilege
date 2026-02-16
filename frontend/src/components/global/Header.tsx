@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Flex, Image, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { turquesa } from "../../Global";
+import { turquesa } from "../../GlobalVariables";
 
 export function Header(props:
   {

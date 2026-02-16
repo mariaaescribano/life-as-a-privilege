@@ -1,4 +1,23 @@
  
+ NEXT STEPS
+ - Que el usuario pueda ver la contraseña si quiere (Poner dentro de Input)
+ - error
+ - cambiar objetos
+
+
+
+
+---------------------------------------------
+COSAS QUE VER CON PAPI
+- La aplicación no lee .env
+
+
+
+
+
+
+
+ ---------------------------------------------
  MINIMO PRODUCTO VIABLE
 
  - Usuario pueda registrarse y su contraseña se hashe 
@@ -13,7 +32,3 @@
  CUENTA MÍA
 - Poder subir vídeos en los apartados
 
-
-
-
-  <SimpleGrid mt="20px" columns={2} gap="20px" mb="20px">

@@ -1,7 +1,7 @@
 'use client'
 import { Box, Button } from '@chakra-ui/react';
 import React from 'react';
-import { turquesa } from '../../Global';
+import { turquesa } from '../../GlobalVariables';
 
 export default function BtnTurquesa(props: {text:string, onClick:any})
 {
@@ -12,6 +12,7 @@ export default function BtnTurquesa(props: {text:string, onClick:any})
             minW="200px"
             maxW="300px"
             w="100%"
+            color="white"
             onClick={props.onClick}
             bg={turquesa}
             borderRadius="15px"
