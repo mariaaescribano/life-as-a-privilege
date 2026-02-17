@@ -9,6 +9,7 @@ export const API_URL = "http://localhost:3000";
 export const turquesa = "#48C0B5";
 
 // Fisiología
+export const fisiologiaNom = "Fisiología";
 export const fisiologiaBg = "#e6d7ff";
 export const fisiologiaTxt = "#34106d";
 export function FisiologiaIcon({ size = "24px"}) {
@@ -18,6 +19,7 @@ export function FisiologiaIcon({ size = "24px"}) {
 }
 
 // Neuropsicología
+export const neuropsicologiaNom = "Neuropsicología";
 export const neuropsicologiaBg = "#daa889";
 export const neuropsicologiaTxt = "#5e2d10";
 export function NeuropsicologiaIcon({ size = "24px"}) {
@@ -27,6 +29,7 @@ export function NeuropsicologiaIcon({ size = "24px"}) {
 }
 
 // Astrología
+export const astrologiaNom = "Astrología";
 export const astrologiaBg = "#1e296b";
 export const astrologiaTxt = "#feffe4";
 export function AstrologiaIcon({ size = "24px"}) {
@@ -36,6 +39,7 @@ export function AstrologiaIcon({ size = "24px"}) {
 }
 
 // TCM
+export const tcmNom = "Medicina China";
 export const tcmBg = "#6b0404";
 export const tcmTxt = "#da7171";
 export function TCMIcon({ size = "24px"}) {
@@ -45,6 +49,7 @@ export function TCMIcon({ size = "24px"}) {
 }
 
 // Nutrición
+export const nutricionNom = "Nutrición";
 export const nutricionBg = "#e4f8e1";
 export const nutricionTxt = "#536a50";
 export function NutricionIcon({ size = "24px"}) {
@@ -54,6 +59,7 @@ export function NutricionIcon({ size = "24px"}) {
 }
 
 // Ayurveda
+export const ayurvedaNom = "Ayúrveda";
 export const ayurvedaBg = "#ecd5ed";
 export const ayurvedaTxt = "#906891";
 export function AyurvedaIcon({ size = "24px"}) {
@@ -62,7 +68,8 @@ export function AyurvedaIcon({ size = "24px"}) {
   );
 }
 
-// Biología
+// Fitoterapia
+export const biologiaNom = "Fitoterapia";
 export const biologiaBg = "#0e590d";
 export const biologiaTxt = "#d5ffd5";
 export function BiologiaIcon({ size = "24px"}) {
@@ -72,6 +79,7 @@ export function BiologiaIcon({ size = "24px"}) {
 }
 
 // Cábala
+export const cabalaNom = "Cábala";
 export const cabalaBg = "#593d25";
 export const cabalaTxt = "#cb8e59";
 export function CabalaIcon({ size = "24px"}) {

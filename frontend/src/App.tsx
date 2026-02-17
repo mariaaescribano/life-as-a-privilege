@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import LogIn from "./app/auth/LogIn";
 import SignIn from "./app/auth/SignIn";
 import Home from "./app/home/Home";
+import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
 
 export default function App() 
 {
@@ -14,6 +15,7 @@ export default function App()
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/aprendizajeHome" element={<AprendizajeHome />} />
       <Route path="*" element={<Welcome />} />
     </Routes>
   );

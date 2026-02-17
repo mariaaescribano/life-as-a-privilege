@@ -10,7 +10,7 @@ import React from "react";
 import { Header } from "../../components/global/Header";
 import BadgeText from "../../components/welcome/BadgeText";
 import Footer from "../../components/global/Footer";
-import { astrologiaBg, AstrologiaIcon, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaTxt, cabalaBg, CabalaIcon, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionTxt, tcmBg, TCMIcon, tcmTxt, turquesa } from "../../GlobalVariables";
+import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
 import Card from "../../components/global/Card";
 import { useNavigate } from "react-router-dom";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
@@ -61,14 +61,14 @@ const Welcome = () => {
                                     gap="20px"
                                     maxW="800px"
                                 >
-                                    <BadgeText text={"Fisiología"} color={fisiologiaTxt} colorFondo={fisiologiaBg} icon={<FisiologiaIcon />} />
-                                    <BadgeText text={"Neuropsicología"} color={neuropsicologiaTxt} colorFondo={neuropsicologiaBg} icon={<NeuropsicologiaIcon />} />
-                                    <BadgeText text={"Astrología"} color={astrologiaTxt} colorFondo={astrologiaBg} icon={<AstrologiaIcon />} />
-                                    <BadgeText text={"Medicina China"} color={tcmTxt} colorFondo={tcmBg} icon={<TCMIcon />} />
-                                    <BadgeText text={"Nutrición"} color={nutricionTxt} colorFondo={nutricionBg} icon={<NutricionIcon />} />
-                                    <BadgeText text={"Ayúrveda"} color={ayurvedaTxt} colorFondo={ayurvedaBg} icon={<AyurvedaIcon />} />
-                                    <BadgeText text={"Fitoterapia"} color={biologiaTxt} colorFondo={biologiaBg} icon={<BiologiaIcon />} />
-                                    <BadgeText text={"Cábala"} color={cabalaTxt} colorFondo={cabalaBg} icon={<CabalaIcon />} />
+                                    <BadgeText text={fisiologiaNom} color={fisiologiaTxt} colorFondo={fisiologiaBg} icon={<FisiologiaIcon />} />
+                                    <BadgeText text={neuropsicologiaNom} color={neuropsicologiaTxt} colorFondo={neuropsicologiaBg} icon={<NeuropsicologiaIcon />} />
+                                    <BadgeText text={astrologiaNom} color={astrologiaTxt} colorFondo={astrologiaBg} icon={<AstrologiaIcon />} />
+                                    <BadgeText text={tcmNom} color={tcmTxt} colorFondo={tcmBg} icon={<TCMIcon />} />
+                                    <BadgeText text={nutricionNom} color={nutricionTxt} colorFondo={nutricionBg} icon={<NutricionIcon />} />
+                                    <BadgeText text={ayurvedaNom} color={ayurvedaTxt} colorFondo={ayurvedaBg} icon={<AyurvedaIcon />} />
+                                    <BadgeText text={biologiaNom} color={biologiaTxt} colorFondo={biologiaBg} icon={<BiologiaIcon />} />
+                                    <BadgeText text={cabalaNom} color={cabalaTxt} colorFondo={cabalaBg} icon={<CabalaIcon />} />
                                 </Grid>
                             </VStack>
                         </Flex>

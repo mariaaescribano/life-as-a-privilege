@@ -5,10 +5,10 @@ import { AprendizajeIcon, EspacioPersonalIcon, turquesa } from "../../GlobalVari
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export function Header(props: {
-  textRight: string;
-  textLeft: string;
-  linkRight: string;
-  linkLeft: string;
+  textRight?: string;
+  textLeft?: string;
+  linkRight?: string;
+  linkLeft?: string;
   linkHeader?: string;
   mb?: string;
 }) {
