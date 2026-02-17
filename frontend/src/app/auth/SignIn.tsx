@@ -45,6 +45,9 @@ export default function SignIn() {
 
       if(response.data!= null)
       {
+        sessionStorage.setItem("userId", response.data?.id)
+        sessionStorage.setItem("token", response.data?.token)
+
         setmessage({
           soy : 1,
           title: "Bienvenido",
@@ -92,6 +95,16 @@ export default function SignIn() {
       }
     }
   }
+
+  useEffect(() => {
+    if (message && message?.soy == 1) {
+      const timer = setTimeout(() => {
+        navigate("/home")
+      }, 3000);
+
+      return () => clearTimeout(timer); 
+    }
+  }, [message]); 
 
   return (
     <Flex

@@ -1,5 +1,5 @@
 // LogIn.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/global/Header";
@@ -41,6 +41,9 @@ export default function LogIn() {
 
       if(response.data!= null)
       {
+        sessionStorage.setItem("userId", response.data?.id)
+        sessionStorage.setItem("token", response.data?.token)
+
         setmessage({
           soy : 1,
           title: "Bienvenido",
@@ -77,6 +80,16 @@ export default function LogIn() {
       inicioSesion();
     }
   }
+
+  useEffect(() => {
+    if (message && message?.soy == 1) {
+      const timer = setTimeout(() => {
+        navigate("/home")
+      }, 3000);
+
+      return () => clearTimeout(timer); 
+    }
+  }, [message]); 
 
   return (
     <Flex

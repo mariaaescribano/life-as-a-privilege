@@ -18,7 +18,7 @@ function BadgeText(props:{text:string, color:string, colorFondo:string, icon:any
     >
       <HStack justifyContent={"center"} >
          {props.icon}
-    <Text fontSize="sm">{props.text}</Text>
+        <Text fontSize="sm">{props.text}</Text>
       </HStack>
     </Badge>
   );

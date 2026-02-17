@@ -2,7 +2,8 @@
  NEXT STEPS
  - Que el usuario pueda ver la contraseña si quiere (Poner dentro de Input)
  - error
- - cambiar objetos
+ - Acabar FeatureCard 
+ - 
 
 
 
