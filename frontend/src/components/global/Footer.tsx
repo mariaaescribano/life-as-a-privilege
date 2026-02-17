@@ -5,11 +5,11 @@ import { turquesa } from "../../GlobalVariables";
 const Footer = (props:{mt?:string}) => {
   return (
     <Box
-        mt={props.mt ?? "100px"}
-        py={10}
-        textAlign="center"
-        color="white"
-        bg={turquesa}
+      mt={props.mt ?? "0"}   // ya no necesitas margen grande
+      py={10}
+      textAlign="center"
+      color="white"
+      bg={turquesa}
     >
       <Text>© 2026 Life as a Privilege - Todos los derechos reservados</Text>
     </Box>

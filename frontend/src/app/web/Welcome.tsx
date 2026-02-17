@@ -93,7 +93,7 @@ const Welcome = () => {
                 <BtnTurquesa text={"Entrar"} onClick={() => {window.scrollTo({ top: 0, behavior: 'auto' }); navigate("/logIn")}} />
             </Flex>
 
-        <Footer />
+        <Footer mt="100px" />
         </Box>
     );
 };

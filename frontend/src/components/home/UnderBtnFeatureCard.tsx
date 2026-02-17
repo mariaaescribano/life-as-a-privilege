@@ -2,9 +2,12 @@ import { Box, Flex, Link } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import React from "react";
 import { AprendizajeIcon, EspacioPersonalIcon, } from "../../GlobalVariables";
+import { useNavigate } from "react-router-dom";
 
-const UnderBtnFeatureCard = (props:{color:string, linkPersonal?:string, linkAprendizaje?:string}) => {
-  return (
+const UnderBtnFeatureCard = (props:{color:string, linkEspacio:string, linkAprendizaje:string}) => {
+    const navigate = useNavigate();
+
+    return (
     <Flex
         direction="column"
         align="center"
@@ -31,6 +34,7 @@ const UnderBtnFeatureCard = (props:{color:string, linkPersonal?:string, linkApre
             display="flex"
             alignItems="center"
             gap={2}
+            onClick={()=> navigate(props.linkEspacio)}
             color="white"
             fontWeight="600"
             _hover={{ opacity: 0.8 }}
@@ -44,6 +48,7 @@ const UnderBtnFeatureCard = (props:{color:string, linkPersonal?:string, linkApre
                 alignItems="center"
                 gap={2}
                 color="white"
+                onClick={()=> navigate(props.linkAprendizaje)}
                 fontWeight="600"
                 _hover={{ opacity: 0.8 }}
             >

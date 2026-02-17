@@ -33,14 +33,14 @@ export function Header(props: {
           px={6}
         >
           {/* Link Derecho */}
-          {props.textRight == "" && (
+          {!props.textRight && (
             <Link
               position="absolute"
               right="0"
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate(props.linkRight)}
+              onClick={() => navigate("/aprendizaje/aprendizajeHome")}
               color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}
@@ -49,19 +49,18 @@ export function Header(props: {
               <HStack spacing={2} justify="flex-end">
                 <AprendizajeIcon></AprendizajeIcon>
                 <Box as={ArrowRight} w="24px" h="24px" />
-                <Text>{props.textRight}</Text>
               </HStack>
             </Link>
           )}
 
-          {props.textRight != "" && (
+          {props.textRight && (
             <Link
               position="absolute"
               right="0"
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate(props.linkRight)}
+              onClick={() => navigate("")}
               color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}
@@ -76,7 +75,7 @@ export function Header(props: {
             width="230px"
             height="130px"
             cursor="pointer"
-            onClick={() => navigate(props.linkHeader ?? "/")}
+            onClick={() => navigate(props.linkHeader ?? "/home")}
           >
             <Image
               src="/public/img/life.png"
@@ -88,14 +87,14 @@ export function Header(props: {
           </Box>
 
           {/* Link Izquierdo */}
-          {props.textLeft == "" && (
+          {!props.textLeft &&(
             <Link
               position="absolute"
               left="0"
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate(props.linkLeft)}
+              onClick={() => navigate("")}
               color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}
@@ -109,14 +108,14 @@ export function Header(props: {
             </Link>
           )}
 
-          {props.textLeft != "" && (
+          {props.textLeft && (
             <Link
               position="absolute"
               left="0"
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate(props.linkLeft)}
+              onClick={() => navigate("")}
               color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}

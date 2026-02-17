@@ -4,7 +4,7 @@ import UnderBtnFeatureCard from "./UnderBtnFeatureCard";
 
 const FeatureCard = (props:{
   imagePosition:string, bgColor:string, foto:string, color:string, title:string, 
-  icon:any, description: string, 
+  icon:any, description: string, linkEspacio:string, linkAprendizaje:string
 }) => {
   return (
   <Box
@@ -25,6 +25,7 @@ const FeatureCard = (props:{
           <Image
             src={props.foto}
             alt={"Img"}
+            boxSize={"230px"}
             objectFit="cover"
             transition="transform 0.5s"
             _hover={{ transform: "scale(1.05)" }}
@@ -59,7 +60,8 @@ const FeatureCard = (props:{
           {props.description}
         </Text>
 
-        <UnderBtnFeatureCard color={props.color} />
+        <UnderBtnFeatureCard color={props.color} linkAprendizaje={props.linkAprendizaje} 
+        linkEspacio={props.linkEspacio} />
 
       </Flex>
     </Flex>

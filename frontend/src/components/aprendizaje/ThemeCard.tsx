@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const ThemeCard = (props:{ 
-  title:string, bgColor:string, color:string, icon:any, link:string
+  title:string, bgColor:string, color:string, icon:any, link:string, cursor:string
 }) => {
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ export const ThemeCard = (props:{
       bg={props.bgColor}
       borderRadius="2xl"
       p={6}
-      cursor="pointer"
+      cursor={props.cursor}
       minH="180px"
       boxShadow="lg"
       onClick={() => {window.scrollTo({ top: 0, behavior: 'auto' }); navigate(props.link)}}

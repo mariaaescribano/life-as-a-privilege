@@ -3,21 +3,22 @@ import { Box, Button } from '@chakra-ui/react';
 import React from 'react';
 import { turquesa } from '../../GlobalVariables';
 
-export default function BtnTurquesa(props: {text:string, onClick:any})
+export default function BtnTurquesa(props: {
+    text:string, onClick:any, w?:string, bgColor?:string, color?:string
+})
 {
     return (
         <Button
             size="lg"
             px={10}
-            minW="200px"
-            maxW="300px"
-            w="100%"
-            color="white"
+            minW={props.w ?? "200px"}
+            maxW={props.w ?? "300px"}
+            color={props.color ?? "white"}
             onClick={props.onClick}
-            bg={turquesa}
+            bg={props.bgColor ?? turquesa}
             borderRadius="15px"
             _hover={{                 
-                bg: "teal.200",         
+                bg: "gray.100",         
             }}
         >
             {props.text}
