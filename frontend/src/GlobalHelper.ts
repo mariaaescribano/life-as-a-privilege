@@ -10,3 +10,4 @@ export const gestionaError = (err: any): SuccessErrorMessageDto => {
   };
   return error;
 };
+

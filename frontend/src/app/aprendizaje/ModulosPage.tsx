@@ -7,7 +7,7 @@ import Title from "../../components/global/Title";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
 import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
-import { modulosNeuroPsicologia } from "../../aprendizajes/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/ModulosNeuroPsicologia";
 
 export default function ModulesPage() {
   const navigate = useNavigate();
@@ -38,6 +38,7 @@ export default function ModulesPage() {
           bgColor: astrologiaBg,
           color: astrologiaTxt,
           icon: <AstrologiaIcon/>,
+          
         };
       case "tcm":
         return {
@@ -105,7 +106,7 @@ export default function ModulesPage() {
             {moduloDatos.modulos.map((mod, i) => (
               <ModuloAcordeon key={i} title={mod.title} 
               bgColor={moduloDatos.bgColor} color={moduloDatos.color} 
-              submodules={mod.submodules}/>
+              submodules={mod.submodules} />
             ))}
           </Box>
         </>}

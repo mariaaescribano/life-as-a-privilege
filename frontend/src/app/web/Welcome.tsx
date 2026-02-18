@@ -21,7 +21,7 @@ const Welcome = () => {
     
     return (
         <Box>
-            <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={"/signIn"} linkLeft={"/logIn"} />
+            <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={"/signIn"} linkLeft={"/logIn"} linkHeader={"/"} />
             
             <Flex
                 align="center"

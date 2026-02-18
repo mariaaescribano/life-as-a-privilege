@@ -60,7 +60,7 @@ export function Header(props: {
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate("")}
+              onClick={() => navigate(props.linkRight ?? "/")}
               color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}
@@ -115,7 +115,7 @@ export function Header(props: {
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate("")}
+              onClick={() => navigate(props.linkLeft ?? "/")}
               color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}

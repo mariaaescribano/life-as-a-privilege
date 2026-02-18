@@ -1,9 +1,9 @@
-import type { Detalles } from "../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt } from "../GlobalVariables";
+import type { Detalles, ModuloContenido } from "../../dtos/aprendizaje.type";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const detalles:Detalles = {color:neuropsicologiaTxt , icon:NeuropsicologiaIcon, bgColor:neuropsicologiaBg }
 
-export const modulosNeuroPsicologia = [
+export const modulosNeuroPsicologia: ModuloContenido[] = [
   {
     title: "1. Neuropsicología",
     submodules: [

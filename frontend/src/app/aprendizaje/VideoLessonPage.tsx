@@ -5,8 +5,8 @@ import Footer from "../../components/global/Footer";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
 import Title from "../../components/global/Title";
 import { useParams } from "react-router-dom";
-import { modulosNeuroPsicologia } from "../../aprendizajes/ModulosNeuroPsicologia";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
+import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/ModulosNeuroPsicologia";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string, submoduloId:string }>();

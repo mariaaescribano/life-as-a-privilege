@@ -112,7 +112,8 @@ export default function SignIn() {
       minH="100vh"            
       overflow="hidden"       
     >
-    <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={""} linkLeft={"/logIn"} />
+    <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={"/signIn"} linkLeft={"/logIn"} linkHeader={"/"} />
+    
       <Flex
         align="center"
         justify="center"

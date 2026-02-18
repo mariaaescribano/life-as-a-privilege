@@ -1,4 +1,10 @@
 
+export type Detalles = {
+  color: string;
+  icon: any;
+  bgColor:string;
+};
+
 export type Submodulo = {
   nom: string;
   link:string;
@@ -17,12 +23,20 @@ export type Modulo = {
   bgColor: string;
   color: string;
   icon: any;
+  cursor?: string;
   modulos?: ModuloContenido[];
 };
 
-export type Detalles = {
+export type ModuloDesdeHome = {
+  nom: string;
+  bgColor: string;
   color: string;
   icon: any;
-  bgColor:string;
+  cursor: string;
+  modulos?: ModuloContenido[];
 };
+
+
+
+
 
