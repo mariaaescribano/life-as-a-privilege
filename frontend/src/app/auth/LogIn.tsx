@@ -12,6 +12,7 @@ import type { SuccessErrorMessageDto } from "../../components/global/SuccessErro
 import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
+import { gestionaError } from "../../GlobalHelper";
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -19,6 +20,32 @@ export default function LogIn() {
   const [name, setname] = useState<string>("");
   const [contra, setcontra] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
+
+  const getImg = async (userId:string, token:string) =>
+  {
+    try 
+    {
+      const response = await axios.get(
+      `${API_URL}/user/img/${userId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      );
+
+      if(response.data)
+      {
+        return response.data.url;
+      }
+    }
+    catch (err:any) {
+      let error = gestionaError(err);
+      setmessage(error)
+    }
+
+  }
 
   const inicioSesion = async () =>
   {
@@ -41,9 +68,19 @@ export default function LogIn() {
 
       if(response.data!= null)
       {
-        sessionStorage.setItem("userId", response.data?.id)
+        sessionStorage.setItem("userId", response.data?.user.id)
+        sessionStorage.setItem("name", response.data?.user.name)
         sessionStorage.setItem("token", response.data?.token)
 
+        let img = await getImg(response.data?.user.id, response.data?.token);
+
+        sessionStorage.setItem(
+          "img",
+          response.data?.user.img && response.data.user.img !== ""
+            ? img
+            : "/public/img/noImg.png"
+        );
+        
         setmessage({
           soy : 1,
           title: "Bienvenido",
@@ -52,16 +89,8 @@ export default function LogIn() {
       } 
     } 
     catch (err:any) {
-      if (err.response?.status === 409) {
-        let message = err.response.data.message;
-        setmessage({
-          soy : 2,
-          title: "Error",
-          description: message
-        })
-      } else {
-        console.error(err);
-      }
+      let error = gestionaError(err);
+      setmessage(error)
     }
   }
 
@@ -92,52 +121,54 @@ export default function LogIn() {
   }, [message]); 
 
   return (
-    <Flex
-      direction="column"      
-      minH="100vh"            
-      overflow="hidden"      
+    <Box
+      minH="100vh"
+      display="flex"
+      flexDirection="column"
     >
     <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={"/signIn"} linkLeft={"/logIn"} linkHeader={"/"} />
       
-      <Flex
-        align="center"
-        justify="center"
-        px={4}
-        mt="20px"
-        mb="100px"
-      >
-        <Card maxW="500px" h="600px">
-          <VStack spacing={4} align="stretch">
-            <Text fontSize="2xl" fontWeight="bold" mb="20px">
-              Iniciar sesión
-            </Text>
+      <Box flex="1">
+        <Flex
+          align="center"
+          justify="center"
+          px={4}
+          mt="20px"
+          mb="100px"
+        >
+          <Card maxW="500px" h="600px">
+            <VStack spacing={4} align="stretch">
+              <Text fontSize="2xl" fontWeight="bold" mb="20px">
+                Iniciar sesión
+              </Text>
 
-            <InputField title={"Nombre o email"} value={name} onChange={setname} ></InputField>
-            <InputField title={"Contraseña"} type="password" value={contra} onChange={setcontra} mt="5px"></InputField>
-            <Text
-              onClick={() => navigate("/signIn")}
-              display="block"
-              textAlign="center"
-              mb="50px"
-              color={turquesa}
-              fontWeight="500"
-              cursor="pointer"
-              _hover={{ textDecoration: "underline" }}
-            >
-              Crear una cuenta
-            </Text>
+              <InputField title={"Nombre o email"} value={name} onChange={setname} ></InputField>
+              <InputField title={"Contraseña"} type="password" value={contra} onChange={setcontra} mt="5px"></InputField>
+              <Text
+                onClick={() => navigate("/signIn")}
+                display="block"
+                textAlign="center"
+                mb="50px"
+                color={turquesa}
+                fontWeight="500"
+                cursor="pointer"
+                _hover={{ textDecoration: "underline" }}
+              >
+                Crear una cuenta
+              </Text>
 
-            <Flex justifyContent={"center"} direction={"column"}>
-              <VStack>
-                {message && <SuccessErrorMessage soy={message.soy} title={message.title} description={message.description} onClick={()=>setmessage(null)}></SuccessErrorMessage>}
-                <BtnTurquesa text={"Iniciar sesión"} onClick={() => validarInicioSesion()} />
-              </VStack>
-            </Flex>
-           
-          </VStack>
-        </Card>
-      </Flex>
+              <Flex justifyContent={"center"} direction={"column"}>
+                <VStack>
+                  {message && <SuccessErrorMessage soy={message.soy} title={message.title} description={message.description} onClick={()=>setmessage(null)}></SuccessErrorMessage>}
+                  <BtnTurquesa text={"Iniciar sesión"} onClick={() => validarInicioSesion()} />
+                </VStack>
+              </Flex>
+            
+            </VStack>
+          </Card>
+        </Flex>
+      </Box>
       <Footer mt="10px"></Footer>
-    </Flex>
+    </Box>
   );
 }

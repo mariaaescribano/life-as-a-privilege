@@ -31,8 +31,12 @@ export default function VideoLessonPage() {
 
   
   return (
-    <Box minH="100vh" display="flex" flexDirection="column">
-      <Header />
+    <Box
+      minH="100vh"
+      display="flex"
+      flexDirection="column"
+    >
+      <Header dondeEstoy="aprendizaje" />
 
       {/* CONTENIDO */}
       {datos && <Box flex="1" display="flex" flexDirection="column" alignItems="center" px={4}>

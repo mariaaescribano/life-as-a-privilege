@@ -24,7 +24,7 @@ export default function ModulesPage() {
           icon: <FisiologiaIcon/>,
           modulos: modulosNeuroPsicologia
         };
-      case "neuropsicologia":
+      case neuropsicologiaNom:
         return {
           nom: neuropsicologiaNom,
           bgColor: neuropsicologiaBg,
@@ -95,22 +95,26 @@ export default function ModulesPage() {
   }, [moduloId]); 
 
   return (
-    <Box >
-      <Header/>
+    <Box
+      minH="100vh"
+      display="flex"
+      flexDirection="column"
+    >
+      <Header dondeEstoy="aprendizaje" />
+        <Box flex="1">
+          {moduloDatos != null && moduloDatos.modulos &&
+          <>
+            <Title icon={moduloDatos.icon} title={moduloDatos.nom} color={moduloDatos.color}/>
 
-        {moduloDatos != null && moduloDatos.modulos &&
-        <>
-          <Title icon={moduloDatos.icon} title={moduloDatos.nom} color={moduloDatos.color}/>
-
-          <Box p={8}>
-            {moduloDatos.modulos.map((mod, i) => (
-              <ModuloAcordeon key={i} title={mod.title} 
-              bgColor={moduloDatos.bgColor} color={moduloDatos.color} 
-              submodules={mod.submodules} />
-            ))}
-          </Box>
-        </>}
-        
+            <Box p={8}>
+              {moduloDatos.modulos.map((mod, i) => (
+                <ModuloAcordeon key={i} title={mod.title} 
+                bgColor={moduloDatos.bgColor} color={moduloDatos.color} 
+                submodules={mod.submodules} />
+              ))}
+            </Box>
+          </>}
+        </Box>
       <Footer />    
     </Box>
   );

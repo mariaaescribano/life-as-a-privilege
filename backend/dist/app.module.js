@@ -6,19 +6,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.AppModule = exports.uploadFolder = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const user_module_1 = require("./user/user.module");
 const database_service_1 = require("./database.service");
 const auth_module_1 = require("./auth/auth.module");
+const jwt_strategy_1 = require("./auth/jwt.strategy");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
+exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot({ isGlobal: true }), user_module_1.UsersModule, auth_module_1.AuthModule],
-        providers: [database_service_1.DatabaseService],
+        imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: exports.uploadFolder,
+                serveRoot: "/img",
+                serveStaticOptions: {
+                    index: false,
+                },
+            }),
+            user_module_1.UsersModule,
+            auth_module_1.AuthModule,
+        ],
+        providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],
     })
 ], AppModule);

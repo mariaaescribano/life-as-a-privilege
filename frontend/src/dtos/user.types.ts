@@ -1,9 +1,10 @@
 
-export type UserEntity = {
+export type User = {
   id: string;
   name: string;
   email: string;
   password: string; 
+  img: string;
 };
 
 export type CreateUser = {
@@ -17,3 +18,8 @@ export type LoginUser = {
   password: string;
 };
 
+export type SessionStorageUser = {
+  userId: string;
+  name: string;
+  img: string;
+};

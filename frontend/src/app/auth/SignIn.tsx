@@ -45,8 +45,15 @@ export default function SignIn() {
 
       if(response.data!= null)
       {
-        sessionStorage.setItem("userId", response.data?.id)
+        sessionStorage.setItem("userId", response.data?.user.id)
+        sessionStorage.setItem("name", response.data?.user.name)
         sessionStorage.setItem("token", response.data?.token)
+        sessionStorage.setItem(
+          "img",
+          response.data?.user.img && response.data.user.img !== ""
+            ? response.data.user.img
+            : "/public/img/noImg.png"
+        );
 
         setmessage({
           soy : 1,
@@ -107,55 +114,57 @@ export default function SignIn() {
   }, [message]); 
 
   return (
-    <Flex
-      direction="column"      
-      minH="100vh"            
-      overflow="hidden"       
+    <Box
+      minH="100vh"
+      display="flex"
+      flexDirection="column"
     >
     <Header textRight={"Registrarse"} textLeft={"Iniciar sesión"} linkRight={"/signIn"} linkLeft={"/logIn"} linkHeader={"/"} />
-    
-      <Flex
-        align="center"
-        justify="center"
-        px={4}
-        mt="20px"
-        mb="100px"
-      >
-        <Card maxW="500px" h="800px">
-          <VStack spacing={4} align="stretch">
-            <Text fontSize="2xl" fontWeight="bold" mb="20px">
-              Registro 
-            </Text>
 
-            <InputField title={"Nombre"} value={name} onChange={setname} placeholder={""} autoFocus={true}></InputField>
-            <InputField title={"Email"} value={email} onChange={setemail} placeholder={""}></InputField>
-            <InputField title={"Contraseña"} type="password" value={contra} onChange={setcontra} placeholder={""} mt="5px"></InputField>
-            <InputField title={"Repite la contraseña"} type="password" value={contraRepite} onChange={setcontraRepite} placeholder={""} mt="5px"></InputField>
+      <Box flex="1">
+        <Flex
+          align="center"
+          justify="center"
+          px={4}
+          mt="20px"
+          mb="100px"
+        >
+          <Card maxW="500px" h="800px">
+            <VStack spacing={4} align="stretch">
+              <Text fontSize="2xl" fontWeight="bold" mb="20px">
+                Registro 
+              </Text>
 
-            <Text
-              onClick={() => navigate("/logIn")}
-              display="block"
-              textAlign="center"
-              mb="30px"
-              color={turquesa}
-              fontWeight="500"
-              cursor="pointer"
-              _hover={{ textDecoration: "underline" }}
-            >
-              Ya tengo una cuenta
-            </Text>
+              <InputField title={"Nombre"} value={name} onChange={setname} placeholder={""} autoFocus={true}></InputField>
+              <InputField title={"Email"} value={email} onChange={setemail} placeholder={""}></InputField>
+              <InputField title={"Contraseña"} type="password" value={contra} onChange={setcontra} placeholder={""} mt="5px"></InputField>
+              <InputField title={"Repite la contraseña"} type="password" value={contraRepite} onChange={setcontraRepite} placeholder={""} mt="5px"></InputField>
 
-            <Flex justifyContent={"center"} direction={"column"}>
-              <VStack>
-                {message && <SuccessErrorMessage soy={message.soy} title={message.title} description={message.description} onClick={()=>setmessage(null)}></SuccessErrorMessage>}
-                <BtnTurquesa text={"Registrarme"} onClick={() => registro()} />
-              </VStack>
-            </Flex>
-           
-          </VStack>
-        </Card>
-      </Flex>
+              <Text
+                onClick={() => navigate("/logIn")}
+                display="block"
+                textAlign="center"
+                mb="30px"
+                color={turquesa}
+                fontWeight="500"
+                cursor="pointer"
+                _hover={{ textDecoration: "underline" }}
+              >
+                Ya tengo una cuenta
+              </Text>
+
+              <Flex justifyContent={"center"} direction={"column"}>
+                <VStack>
+                  {message && <SuccessErrorMessage soy={message.soy} title={message.title} description={message.description} onClick={()=>setmessage(null)}></SuccessErrorMessage>}
+                  <BtnTurquesa text={"Registrarme"} onClick={() => registro()} />
+                </VStack>
+              </Flex>
+            
+            </VStack>
+          </Card>
+        </Flex>
+      </Box>
       <Footer mt="10px" />
-    </Flex>
+    </Box>
   );
 }

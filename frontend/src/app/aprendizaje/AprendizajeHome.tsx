@@ -76,22 +76,29 @@ export const AprendizajeHome = () => {
 
 
   return (
-    <Box>
-      <Header></Header>
+    <Box
+      minH="100vh"
+      display="flex"
+      flexDirection="column"
+    >
+      <Header dondeEstoy="aprendizaje" />
 
-      <Title icon={<AprendizajeIcon color="black" size="60px" />} title={"Aprendizajes"}></Title>
+      <Box flex="1">
+        <Title icon={<AprendizajeIcon color="black" size="60px" />} title={"Aprendizajes"}></Title>
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 4 }}
-        spacing={6}
-        p="30px"
-      >
-        {items.map((item, i) => (
-          <ThemeCard key={i} title={item.title} bgColor={item.bgColor} 
-          color={item.color} icon={item.icon} link={item.link} 
-          cursor={item.cursor}/>
-        ))}
-      </SimpleGrid>
+        <SimpleGrid
+          columns={{ base: 1, md: 2, lg: 4 }}
+          spacing={6}
+          p="30px"
+          mb="100px"
+        >
+          {items.map((item, i) => (
+            <ThemeCard key={i} title={item.title} bgColor={item.bgColor} 
+            color={item.color} icon={item.icon} link={item.link} 
+            cursor={item.cursor}/>
+          ))}
+        </SimpleGrid>
+      </Box>
 
       <Footer></Footer>
     </Box>

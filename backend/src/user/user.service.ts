@@ -4,6 +4,11 @@ import { DatabaseService } from 'src/database.service';
 import { randomString } from 'src/Global';
 import * as bcrypt from 'bcrypt';
 import { CreateUser, LoginUser } from '../dtos/user.types';
+import express from "express";
+import multer from "multer";
+import path from "path";
+import mysql from "mysql2/promise"; 
+
 
 // #region hash
 
@@ -59,9 +64,16 @@ export class UserService {
           );
 
           if (result.affectedRows === 1) {
+            const newUserId = result.insertId;
             inserted = true;
             let token = this.authService.generateToken(id);
-            return {token:token, id:id}
+
+            const [userRows]: any = await this.databaseService.pool.query(
+              'SELECT * FROM user WHERE id = ?',
+              [newUserId]
+            );
+
+            return {token:token, user: userRows[0]}
           }
 
         } catch (error: any) {
@@ -94,7 +106,9 @@ export class UserService {
         if(coinciden)
         {
           let token = this.authService.generateToken(result[0].id);
-          return {token:token, id:result[0].id}
+          const baseUrl = 'http://localhost:3000';
+          result[0].img = `${baseUrl.replace(/\/$/, '')}/${result[0].img}`;
+          return {token:token, user: result[0]}
         }
         else
         {
@@ -123,5 +137,51 @@ export class UserService {
 
     return result;
   }
+
+ // #region img
+
+  async perfilPicPost(userId: string, file: Express.Multer.File) {
+    try {
+      const rutaRelativa = `img/${file.filename}`;
+      await this.databaseService.pool.execute(
+        "UPDATE user SET img = ? WHERE id = ?",
+        [rutaRelativa, userId]
+      );
+
+      const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
+      const url = `${baseUrl.replace(/\/$/, '')}/${rutaRelativa}`;
+      return{url:url};
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getProfilePic(userId: string) {
+    try {
+      const [rows]: any = await this.databaseService.pool.query(
+        'SELECT img FROM user WHERE id = ?',
+        [userId]
+      );
+
+      let imgPath = rows[0]?.img;
+      if(imgPath)
+      { 
+        const baseUrl = 'http://localhost:3000';
+        const url = `${baseUrl.replace(/\/$/, '')}/${imgPath}`;
+        console.log(url)
+        return { url:url };
+      }
+      else
+      {
+        return null;
+      }
+      
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
 
 }

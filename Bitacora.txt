@@ -5,8 +5,8 @@
  - Mandala -> poder cambiar y guardar foto de usuario
 
 
-
-
+---------------------------------------------
+USAR OBJ+ID : userId
 ---------------------------------------------
 COSAS QUE VER CON PAPI
 - La aplicación no lee .env

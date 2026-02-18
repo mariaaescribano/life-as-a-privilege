@@ -51,40 +51,44 @@ const ThemePreguntas = () => {
 
 
   return (
-    <Box>
-      <Header />
+    <Box
+      minH="100vh"
+      display="flex"
+      flexDirection="column"
+    >
+      <Header dondeEstoy="espacio" />
+       <Box flex="1">
+          {theme && 
+          <>
+            <Title
+              icon={theme.icon}
+              title={theme.title}
+              color={theme.color}
+            /> 
 
-      {theme && 
-      <>
-        <Title
-          icon={theme.icon}
-          title={theme.title}
-          color={theme.color}
-        /> 
-
-        <Box
-          p={{ base: 4, md: 8 }}
-          display="flex"
-          mb="100px"
-          alignItems={"center"}
-          justifyContent="center" 
-        >
-          <Box w="100%" maxW="850px">
-            <VStack spacing={8}>
-              {bloques.map((bloque, index) => (
-                <ThemeSection
-                  key={index+"preg"}
-                  title={bloque.title}
-                  icon={bloque.icon}
-                  subPreguntas={bloque.subPreguntas} 
-                  color={theme.color} bgColor={theme.bgColor}                
-                />
-              ))}
-            </VStack>
-          </Box>
+            <Box
+              p={{ base: 4, md: 8 }}
+              display="flex"
+              mb="100px"
+              alignItems={"center"}
+              justifyContent="center" 
+            >
+              <Box w="100%" maxW="850px">
+                <VStack spacing={8}>
+                  {bloques.map((bloque, index) => (
+                    <ThemeSection
+                      key={index+"preg"}
+                      title={bloque.title}
+                      icon={bloque.icon}
+                      subPreguntas={bloque.subPreguntas} 
+                      color={theme.color} bgColor={theme.bgColor}                
+                    />
+                  ))}
+                </VStack>
+              </Box>
+            </Box>
+          </>}
         </Box>
-      </>}
-
       <Footer />
     </Box>
   );

@@ -4,10 +4,26 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './user/user.module';
 import { DatabaseService } from './database.service';
 import { AuthModule } from './auth/auth.module';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
+export const uploadFolder = join(process.cwd(), 'img');
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, AuthModule],
-  providers: [DatabaseService],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ServeStaticModule.forRoot({
+      rootPath: uploadFolder, 
+      serveRoot: "/img", 
+       serveStaticOptions: {
+          index: false, // no buscar index.html
+        },
+    }),
+    UsersModule,
+    AuthModule,
+  ],
+  providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],
 })
 export class AppModule {}

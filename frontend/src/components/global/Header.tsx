@@ -10,6 +10,7 @@ export function Header(props: {
   linkRight?: string;
   linkLeft?: string;
   linkHeader?: string;
+  dondeEstoy?:string;
   mb?: string;
 }) {
   const navigate = useNavigate();
@@ -41,14 +42,13 @@ export function Header(props: {
               top="50%"
               transform="translateY(-50%)"
               onClick={() => navigate("/aprendizaje/aprendizajeHome")}
-              color="white"
               fontWeight="600"
               _hover={{ opacity: 0.8 }}
               textAlign="end"
             >
               <HStack spacing={2} justify="flex-end">
-                <AprendizajeIcon></AprendizajeIcon>
-                <Box as={ArrowRight} w="24px" h="24px" />
+                <AprendizajeIcon color={props.dondeEstoy == "aprendizaje" ? "gray.300" : "white"} />
+                {props.dondeEstoy != "aprendizaje" && <Box as={ArrowRight} w="24px" h="24px" />}
               </HStack>
             </Link>
           )}
@@ -94,16 +94,14 @@ export function Header(props: {
               px={6}
               top="50%"
               transform="translateY(-50%)"
-              onClick={() => navigate("")}
-              color="white"
+              onClick={() => navigate("/espacio/espacioHome")}
               fontWeight="600"
               _hover={{ opacity: 0.8 }}
               textAlign="start"
             >
               <HStack spacing={2} justify="flex-start">
-                <Box as={ArrowLeft} w="24px" h="24px" />
-                <EspacioPersonalIcon></EspacioPersonalIcon>
-                <Text>{props.textLeft}</Text>
+                {props.dondeEstoy != "espacio" && <Box as={ArrowLeft} w="24px" h="24px" />}
+                <EspacioPersonalIcon color={props.dondeEstoy == "espacio" ? "gray.300" : "white"} />
               </HStack>
             </Link>
           )}

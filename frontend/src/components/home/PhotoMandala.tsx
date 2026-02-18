@@ -3,17 +3,17 @@ import React from "react";
 import { astrologiaBg, AstrologiaIcon, astrologiaNom, ayurvedaBg, AyurvedaIcon, ayurvedaNom, biologiaBg, BiologiaIcon, biologiaNom, cabalaBg, CabalaIcon, cabalaNom, EspacioPersonalIcon, fisiologiaBg, FisiologiaIcon, fisiologiaNom, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, nutricionBg, NutricionIcon, nutricionNom, tcmBg, TCMIcon, tcmNom } from "../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
 
-const PhotoMandala = () => {
+const PhotoMandala = (props:{fotoCentro?:string}) => {
   const navigate = useNavigate();
   const photos = [ 
-    { bg: fisiologiaBg, icon: <FisiologiaIcon size="35px"/>, link: "/espacio/questions/"+ fisiologiaNom },
-    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size="35px" />, link: "/espacio/questions/" + neuropsicologiaNom } ,
-    { bg: astrologiaBg, icon: <AstrologiaIcon size="35px" />, link: "/espacio/questions/" + astrologiaNom } ,
-    { bg: tcmBg, icon: <TCMIcon size="35px" />, link: "/espacio/questions/" + tcmNom } ,
-    { bg: nutricionBg, icon: <NutricionIcon size="35px" />, link: "/espacio/questions/" + nutricionNom} ,
-    { bg: ayurvedaBg, icon: <AyurvedaIcon size="35px" />, link: "/espacio/questions/" + ayurvedaNom} ,
-    { bg: biologiaBg, icon: <BiologiaIcon size="35px" />, link: "/espacio/questions/" + biologiaNom},
-    { bg: cabalaBg, icon: <CabalaIcon size="35px" />, link: "/espacio/questions/" + cabalaNom } 
+    { bg: fisiologiaBg, icon: <FisiologiaIcon size="35px"/>, link: "/espacio/questions/"+ fisiologiaNom, cursor: "not-allowed" },
+    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size="35px" />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer" } ,
+    { bg: astrologiaBg, icon: <AstrologiaIcon size="35px" />, link: "/espacio/questions/" + astrologiaNom, cursor: "not-allowed" } ,
+    { bg: tcmBg, icon: <TCMIcon size="35px" />, link: "/espacio/questions/" + tcmNom, cursor: "not-allowed" } ,
+    { bg: nutricionBg, icon: <NutricionIcon size="35px" />, link: "/espacio/questions/" + nutricionNom, cursor: "not-allowed"} ,
+    { bg: ayurvedaBg, icon: <AyurvedaIcon size="35px" />, link: "/espacio/questions/" + ayurvedaNom, cursor: "not-allowed"} ,
+    { bg: biologiaBg, icon: <BiologiaIcon size="35px" />, link: "/espacio/questions/" + biologiaNom, cursor: "not-allowed"},
+    { bg: cabalaBg, icon: <CabalaIcon size="35px" />, link: "/espacio/questions/" + cabalaNom, cursor: "not-allowed" } 
   ];
 
   const radius = { base: 100, sm: 120, md: 150, lg: 160, xl: 150 }; // radios más grandes para PC
@@ -53,7 +53,7 @@ const PhotoMandala = () => {
           transition="transform 0.3s"
           onClick={()=> navigate("/espacio/espacioHome")}
         >
-          <Image alt="Centro" w="100%" h="100%" objectFit="cover" /> 
+          <Image src={props.fotoCentro ?? "/public/img/noImg.png"} alt="Centro" w="100%" h="100%" objectFit="cover" /> 
         </Box>
 
         {photos.map((photo, index) => {
@@ -81,7 +81,7 @@ const PhotoMandala = () => {
             <Box
               key={index}
               position="absolute"
-              cursor="pointer"
+              cursor={photo.cursor}
               w={{ base: "58px", sm: "64px", md: "66px", lg: "80px", xl: "96px" }}
               h={{ base: "58px", sm: "64px", md: "66px", lg: "80px", xl: "96px" }}
               borderRadius="full"

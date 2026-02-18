@@ -7,7 +7,7 @@ import Home from "./app/home/Home";
 import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
 import ModulosPage from "./app/aprendizaje/ModulosPage";
 import VideoLessonPage from "./app/aprendizaje/VideoLessonPage";
-import Mandala from "./app/espacio/Mandala";
+import EspacioHome from "./app/espacio/EspacioHome";
 import ExpandablePage from "./app/espacio/ThemePreguntas";
 
 export default function App() 
@@ -20,7 +20,7 @@ export default function App()
       <Route path="/signIn" element={<SignIn />} />
       <Route path="/home" element={<Home />} />
       
-      <Route path="/espacio/espacioHome" element={<Mandala />} />
+      <Route path="/espacio/espacioHome" element={<EspacioHome />} />
       <Route path="/espacio/questions/:themeId" element={<ExpandablePage />} />
       
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />

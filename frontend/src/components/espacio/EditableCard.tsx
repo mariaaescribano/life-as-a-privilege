@@ -10,7 +10,7 @@ import {
   Textarea,
   VStack
 } from "@chakra-ui/react";
-import { ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
+import { CheckCheckIcon, CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
 import { turquesa } from "../../GlobalVariables";
 
 const EditableCard = (props:{
@@ -24,15 +24,6 @@ const EditableCard = (props:{
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleEdit = () => {
-    // Si ya está editando → cerrar todo
-    if (isEditing) {
-      setIsEditing(false);
-      setIsVisible(false);
-      setIsOpen(false);
-      return;
-    }
-
-    // Si no está editando → abrir y enfocar
     setIsOpen(true);
     setIsEditing(true);
     setIsVisible(true);
@@ -40,6 +31,11 @@ const EditableCard = (props:{
     setTimeout(() => {
       textareaRef.current?.focus();
     }, 0);
+  };
+
+  const toggleSave = () => {
+    setIsEditing(false);
+    setIsVisible(false);
   };
 
   return (
@@ -81,26 +77,26 @@ const EditableCard = (props:{
           >
             <CardBody>
               <Flex gap={4}>
-              <Textarea
-                ref={textareaRef}
-                value={isVisible ? text : "•".repeat(text.length)}
-                onChange={(e) => setText(e.target.value)}
-                isReadOnly={!isEditing}
-                resize="none"
-                minH="130px"
-                bgColor={props.bgColor}
-                color={props.color}
-                borderRadius="2xl"
-                bg={!isVisible ? "gray.200" : "white"}
-                _hover={{
-                  cursor: "not-allowed"
-                }}
-                _focus={{
-                  borderColor: turquesa,
-                  boxShadow: "0 0 0 3px rgba(0, 128, 128, 0.3)",
-                }}
-              />
-
+                <Textarea
+                  ref={textareaRef}
+                  value={isVisible ? text : "•".repeat(text.length)}
+                  onChange={(e) => isEditing ? setText(e.target.value) : ""}
+                  isReadOnly={!isEditing}
+                  resize="none"
+                  isDisabled={!isEditing}
+                  minH="140px"
+                  bgColor={props.bgColor}
+                  color={props.color}
+                  borderRadius="2xl"
+                  bg={!isVisible ? "gray.200" : "white"}
+                  _hover={{
+                    cursor: "not-allowed"
+                  }}
+                  _focus={{
+                    borderColor: turquesa,
+                    boxShadow: "0 0 0 3px rgba(0, 128, 128, 0.3)",
+                  }}
+                />
                 <VStack>
                   <IconButton
                     aria-label="Ver"
@@ -113,6 +109,12 @@ const EditableCard = (props:{
                     icon={<Pencil size={18} />}
                     borderRadius="full"
                     onClick={toggleEdit}
+                  />
+                  <IconButton
+                    aria-label="Editar"
+                    icon={<CheckIcon size={18} />}
+                    borderRadius="full"
+                    onClick={toggleSave}
                   />
                 </VStack>
               </Flex>

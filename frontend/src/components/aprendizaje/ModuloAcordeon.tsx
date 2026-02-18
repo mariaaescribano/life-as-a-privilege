@@ -63,13 +63,13 @@ export function ModuloAcordeon(props:{
             >
               <Text fontWeight="600">{sub.nom}</Text>
 
-              <Box
+              {/* <Box
                 w="32px"
                 h="32px"
                 borderRadius="md"
               >
                 <ViewIcon/>
-              </Box>
+              </Box> */}
 
             </Flex>
           ))}
