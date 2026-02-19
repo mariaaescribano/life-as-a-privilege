@@ -52,8 +52,9 @@ const Home = () => {
       title: neuropsicologiaNom,
       bgColor: neuropsicologiaBg,
       color: neuropsicologiaTxt,
-      icon: <NeuropsicologiaIcon size="60px"/>,
-      description: "Aprende sobre el sistema nervioso y las funciones cognitivas.",
+      img: "/public/img/me2.jpg",
+      icon: <NeuropsicologiaIcon size={{ base: "45px", md: "60px" }}/>,
+      description: "Entiende lo que te condicionó desde antes de tu nacimiento que ha dictaminado tu Vida. Integra desde el Amor, la racionalidad y el perdón todas las partes de ti para así poder coger las riendas de tu Vida.",
       linkAprendizaje: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
       linkEspacio: "/espacio/questions/" + neuropsicologiaNom
     },
@@ -167,8 +168,9 @@ const Home = () => {
                   h="500px"
                   children={
                     <VStack  align="center" justify="center">
-                        <Box w={{ base: "80%", md: "80%" }} h="200px" borderRadius="xl" overflow="hidden">
+                        <Box w={{ base: "80%", md: "80%" }} h="300px" borderRadius="xl" overflow="hidden">
                           <Image
+                            src={"/public/img/me3.jpg"}
                             alt="Imagen"
                             objectFit="cover"
                             w="100%"
@@ -177,9 +179,9 @@ const Home = () => {
                         </Box>
   
                       <Text color="black" fontWeight="bold" fontSize={{ base: "md", md: "xl" }} textAlign="center" mb="20px">
-                        ¿Quieres que te acompañe?
+                        ¿Quién soy?
                       </Text>
-                      <BtnTurquesa text={"Saber más"} onClick={undefined} />
+                      <BtnTurquesa text={"Saber más"} onClick={()=> navigate("/quienSoy")} />
                     </VStack>
                   }
                 />
@@ -205,7 +207,7 @@ const Home = () => {
                   description={aprendizaje.description}
                   linkAprendizaje={aprendizaje.linkAprendizaje}
                   linkEspacio={aprendizaje.linkEspacio} 
-                  foto={" "}            
+                  foto={aprendizaje.img}            
                 />
               ))}
             </SimpleGrid>

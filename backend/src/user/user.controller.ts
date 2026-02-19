@@ -42,28 +42,21 @@ export class UserController {
     return await this.usersService.logIn(body);
   }
 
-  @Post("/img/:userId")
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor("imagen", multerOptions))
-  async uploadProfilePic(
-    @Param("userId") userId: string,
-    @UploadedFile() file: Express.Multer.File
-  ) {
-    return await this.usersService.perfilPicPost(userId, file);
-  }
 
-  @Get('/img/:userId')
-  @UseGuards(JwtAuthGuard)
-  async getProfilePic(@Param('userId') userId: string) {
-    return this.usersService.getProfilePic(userId);
-  }
+  // @Post("/img/:userId")
+  // @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(FileInterceptor("imagen", multerOptions))
+  // async uploadProfilePic(
+  //   @Param("userId") userId: string,
+  //   @UploadedFile() file: Express.Multer.File
+  // ) {
+  //   return await this.usersService.perfilPicPost(userId, file);
+  // }
 
-
-
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  getUser() {
-    return this.usersService.getUser();
-  }
+  // @Get('/img/:userId')
+  // @UseGuards(JwtAuthGuard)
+  // async getProfilePic(@Param('userId') userId: string) {
+  //   return this.usersService.getProfilePic(userId);
+  // }
 
 }

@@ -9,6 +9,7 @@ import ModulosPage from "./app/aprendizaje/ModulosPage";
 import VideoLessonPage from "./app/aprendizaje/VideoLessonPage";
 import EspacioHome from "./app/espacio/EspacioHome";
 import ExpandablePage from "./app/espacio/ThemePreguntas";
+import QuienSoy from "./app/web/QuienSoy";
 
 export default function App() 
 {
@@ -19,6 +20,7 @@ export default function App()
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/quienSoy" element={<QuienSoy />} />
       
       <Route path="/espacio/espacioHome" element={<EspacioHome />} />
       <Route path="/espacio/questions/:themeId" element={<ExpandablePage />} />

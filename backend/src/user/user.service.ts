@@ -125,44 +125,41 @@ export class UserService {
   }
 
   // --------- Subir foto de perfil ---------
-  async perfilPicPost(userId: string, file: Express.Multer.File) {
-    try {
-      const rutaRelativa = `img/${file.filename}`;
-      await this.databaseService.query(
-        'UPDATE "user" SET img = $1 WHERE id = $2',
-        [rutaRelativa, userId]
-      );
+  // async perfilPicPost(userId: string, file: Express.Multer.File) {
+  //   try {
+  //     const rutaRelativa = `img/${file.filename}`;
 
-      const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
-      const url = `${baseUrl.replace(/\/$/, '')}/${rutaRelativa}`;
-      return { url };
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
+  //     await this.databaseService.query(
+  //       'UPDATE "user" SET img = $1 WHERE id = $2',
+  //       [rutaRelativa, userId]
+  //     );
 
-  // --------- Obtener foto de perfil ---------
-  async getProfilePic(userId: string) {
-    try {
-      const rows = await this.databaseService.query(
-        'SELECT img FROM "user" WHERE id = $1',
-        [userId]
-      );
+  //     return { rutaRelativa };
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw error;
+  //   }
+  // }
 
-      const imgPath = rows[0]?.img;
-      if (imgPath) {
-        const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
-        const url = `${baseUrl.replace(/\/$/, '')}/${imgPath}`;
-        return { url };
-      } else {
-        return null;
-      }
+  // // --------- Obtener foto de perfil ---------
+  // async getProfilePic(userId: string) {
+  //   try {
+  //     const rows = await this.databaseService.query(
+  //       'SELECT img FROM "user" WHERE id = $1',
+  //       [userId]
+  //     );
 
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
+  //     const imgPath = rows[0]?.img;
+  //     if (imgPath) {
+  //       return { imgPath };
+  //     } else {
+  //       return null;
+  //     }
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw error;
+  //   }
+  //}
 
 }

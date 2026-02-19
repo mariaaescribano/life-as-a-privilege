@@ -15,6 +15,7 @@ export type Submodulo = {
 
 export type ModuloContenido = {
   title: string;
+  icon:any;
   submodules: Submodulo[];
 };
 

@@ -29,7 +29,7 @@ export default function ModulesPage() {
           nom: neuropsicologiaNom,
           bgColor: neuropsicologiaBg,
           color: neuropsicologiaTxt,
-          icon: <NeuropsicologiaIcon size="60px" />,
+          icon: <NeuropsicologiaIcon size={{base:"60px", md:"60px"}} />,
           modulos: modulosNeuroPsicologia
         };
       case "astrologia":
@@ -76,7 +76,7 @@ export default function ModulesPage() {
           icon: <CabalaIcon/>,
         };
       default:
-        navigate("/logIn"); // si no coincide ningún módulo
+        //navigate("/logIn"); // si no coincide ningún módulo
         return {
           nom: "",
           bgColor: "",
@@ -108,9 +108,9 @@ export default function ModulesPage() {
 
             <Box p={8}>
               {moduloDatos.modulos.map((mod, i) => (
-                <ModuloAcordeon key={i} title={mod.title} 
-                bgColor={moduloDatos.bgColor} color={moduloDatos.color} 
-                submodules={mod.submodules} />
+                <ModuloAcordeon key={i} title={mod.title}
+                bgColor={moduloDatos.bgColor} color={moduloDatos.color}
+                submodules={mod.submodules} icon={mod.icon} />
               ))}
             </Box>
           </>}

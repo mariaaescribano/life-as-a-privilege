@@ -25,7 +25,7 @@ const FeatureCard = (props:{
           <Image
             src={props.foto}
             alt={"Img"}
-            boxSize={"230px"}
+            boxSize={{ base: "230px", md: "300px" }} 
             objectFit="cover"
             transition="transform 0.5s"
             _hover={{ transform: "scale(1.05)" }}

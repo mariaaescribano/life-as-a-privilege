@@ -21,31 +21,31 @@ export default function LogIn() {
   const [contra, setcontra] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
 
-  const getImg = async (userId:string, token:string) =>
-  {
-    try 
-    {
-      const response = await axios.get(
-      `${API_URL}/user/img/${userId}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-      );
+  // const getImg = async (userId:string, token:string) =>
+  // {
+  //   try 
+  //   {
+  //     const response = await axios.get(
+  //     `${API_URL}/user/img/${userId}`,
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //     );
 
-      if(response.data)
-      {
-        return response.data.url;
-      }
-    }
-    catch (err:any) {
-      let error = gestionaError(err);
-      setmessage(error)
-    }
+  //     if(response.data)
+  //     {
+  //       return response.data.url;
+  //     }
+  //   }
+  //   catch (err:any) {
+  //     let error = gestionaError(err);
+  //     setmessage(error)
+  //   }
 
-  }
+  // }
 
   const inicioSesion = async () =>
   {
@@ -72,14 +72,16 @@ export default function LogIn() {
         sessionStorage.setItem("name", response.data?.user.name)
         sessionStorage.setItem("token", response.data?.token)
 
-        let img = await getImg(response.data?.user.id, response.data?.token);
+        const res = await fetch(API_URL+`/upload/profile-pic/${response.data?.user.id}`);
+        const data = await res.json();
+        console.log(data)
 
-        sessionStorage.setItem(
-          "img",
-          response.data?.user.img && response.data.user.img !== ""
-            ? img
-            : "/public/img/noImg.png"
-        );
+        // sessionStorage.setItem(
+        //   "img",
+        //   response.data?.user.img && response.data.user.img !== ""
+        //     ? img
+        //     : "/public/img/noImg.png"
+        // );
         
         setmessage({
           soy : 1,
@@ -113,7 +115,7 @@ export default function LogIn() {
   useEffect(() => {
     if (message && message?.soy == 1) {
       const timer = setTimeout(() => {
-        navigate("/home")
+       // navigate("/home")
       }, 3000);
 
       return () => clearTimeout(timer); 

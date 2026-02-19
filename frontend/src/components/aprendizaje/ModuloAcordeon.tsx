@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Collapse } from "@chakra-ui/react";
+import { Box, Flex, Text, Collapse, HStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import React from "react";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export function ModuloAcordeon(props:{
   title:string, bgColor:string, color:string,
-  submodules: Submodulo[]
+  submodules: Submodulo[], icon:any
 }) {
 
   const [open, setOpen] = useState(false);
@@ -30,9 +30,13 @@ export function ModuloAcordeon(props:{
         transition="all 0.2s"
         _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
       >
-        <Text fontSize="xl" fontWeight="700">
-          {props.title}
-        </Text>
+        <HStack>
+            {< props.icon />}
+            <Text fontSize="xl" fontWeight="700">
+              {props.title}
+            </Text>
+        </HStack>
+        
 
         <Box
           as={ChevronDown}

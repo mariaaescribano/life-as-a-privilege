@@ -20,8 +20,8 @@ export const AprendizajeHome = () => {
       title: neuropsicologiaNom, 
       bgColor: neuropsicologiaBg, 
       color: neuropsicologiaTxt, 
-      icon: <NeuropsicologiaIcon size="70px" />, 
-      link: "/aprendizaje/modulosPage/neuropsicologia",
+      icon: <NeuropsicologiaIcon size={{ base: "60px", md: "70px" }} />, 
+      link: "/aprendizaje/modulosPage/"+ neuropsicologiaNom,
       cursor: "pointer"  
     },
     { 

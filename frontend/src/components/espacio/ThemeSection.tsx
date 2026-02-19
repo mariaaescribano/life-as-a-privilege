@@ -36,7 +36,7 @@ const ThemeSection = (props:{
         onClick={() => setIsOpen(!isOpen)}
       >
         <HStack>
-          {props.icon}
+          {< props.icon />}
           <Text fontSize="xl" fontWeight="800" color={props.color}>
             {props.title}
           </Text>

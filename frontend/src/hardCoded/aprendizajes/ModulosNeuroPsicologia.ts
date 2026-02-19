@@ -1,11 +1,12 @@
 import type { Detalles, ModuloContenido } from "../../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt } from "../../GlobalVariables";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon } from "../../GlobalVariables";
 
 const detalles:Detalles = {color:neuropsicologiaTxt , icon:NeuropsicologiaIcon, bgColor:neuropsicologiaBg }
 
 export const modulosNeuroPsicologia: ModuloContenido[] = [
   {
     title: "1. La Madre y el Niño",
+    icon: MadreIcon,
     submodules: [
       { 
         nom: "1.1 El vínculo entre la Madre y el Hijo",
@@ -25,6 +26,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
   },
   {
     title: "2. La Infancia",
+    icon: FamilyIcon,
     submodules: [
       { 
         nom: "2.1 Los primeros años de Vida",
@@ -44,6 +46,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
   },
   {
     title: "3. El adulto joven",
+    icon: ChildIcon,
     submodules: [
       { 
         nom: "3.1 Los trastornos y la adolescencia",
@@ -70,6 +73,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
   },
   {
     title: "4. El adulto",
+    icon: AdultIcon,
     submodules: [
       { 
         nom: "4.1 La adultez, la decadencia y el bucle del sinsentido",
