@@ -5,9 +5,6 @@ import { randomString } from 'src/Global';
 import * as bcrypt from 'bcrypt';
 import { CreateUser, LoginUser } from '../dtos/user.types';
 import express from "express";
-import multer from "multer";
-import path from "path";
-import mysql from "mysql2/promise"; 
 
 
 // #region hash
@@ -19,8 +16,8 @@ The original password is never stored, only the hash and embedded salt.
 To verify, the system recomputes the hash from the entered password and compares it to the stored hash. */
 
 async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 10; // Determines the strength.
-  const hashed = await bcrypt.hash(password, saltRounds); // Generates a random salt automatically
+  const saltRounds = 10;
+  const hashed = await bcrypt.hash(password, saltRounds);
   return hashed;
 }
 
@@ -33,21 +30,19 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 export class UserService {
   constructor(private readonly authService: AuthService, private readonly databaseService: DatabaseService) {}
   
-  // #region create 
-  
+  // --------- Verifica si el nombre o email existen ---------
   async getNomEmailExist(nom:string, email:string): Promise<boolean> {
-    const [result] = await this.databaseService.pool.query(
-      'SELECT * from user WHERE name = ? OR email = ?',
+    const rows = await this.databaseService.query(
+      'SELECT * FROM "user" WHERE name = $1 OR email = $2',
       [nom, email]
     );
-
-    return (result as any[]).length > 0;
+    return rows.length > 0;
   }
 
+  // --------- Crear usuario ---------
   async createUser(data: CreateUser) {
     try {
       const existeNom = await this.getNomEmailExist(data.name, data.email);
-
       if (existeNom) {
         throw new ConflictException('El usuario ya existe');
       }
@@ -58,32 +53,33 @@ export class UserService {
 
       do {
         try {
-          const [result]: any = await this.databaseService.pool.query(
-            'INSERT INTO user (id, name, email, password) VALUES (?, ?, ?, ?)',
-            [id, data.name, data.email, pass],
+          // INSERT con RETURNING id
+          const rows = await this.databaseService.query(
+            'INSERT INTO "user" (id, name, email, password) VALUES ($1, $2, $3, $4) RETURNING id',
+            [id, data.name, data.email, pass]
           );
 
-          if (result.affectedRows === 1) {
-            const newUserId = result.insertId;
+          if (rows.length === 1) {
             inserted = true;
-            let token = this.authService.generateToken(id);
+            const newUserId = rows[0].id;
+            const token = this.authService.generateToken(newUserId);
 
-            const [userRows]: any = await this.databaseService.pool.query(
-              'SELECT * FROM user WHERE id = ?',
+            const [user] = await this.databaseService.query(
+              'SELECT * FROM "user" WHERE id = $1',
               [newUserId]
             );
 
-            return {token:token, user: userRows[0]}
+            return { token, user };
           }
 
         } catch (error: any) {
-          if (error.code === 'ER_DUP_ENTRY') {
+          // Si choca con id duplicado, genera otro
+          if (error.code === '23505') { // unique_violation en Postgres
             id = randomString();
           } else {
-            throw error; 
+            throw error;
           }
         }
-
       } while (!inserted);
 
     } catch (error) {
@@ -92,96 +88,81 @@ export class UserService {
     }
   }
 
+  // --------- Login ---------
   async logIn(body: LoginUser) {
-    try
-    {
-      const [result] = await this.databaseService.pool.query(
-        'SELECT * from user WHERE name = ? OR email = ?',
-        [body.name, body.name]
+    try {
+      const rows = await this.databaseService.query(
+        'SELECT * FROM "user" WHERE name = $1 OR email = $1',
+        [body.name]
       );
 
-      if((result as any[]).length > 0)
-      {
-        let coinciden = await comparePassword(body.password, result[0].password);
-        if(coinciden)
-        {
-          let token = this.authService.generateToken(result[0].id);
-          const baseUrl = 'http://localhost:3000';
-          result[0].img = `${baseUrl.replace(/\/$/, '')}/${result[0].img}`;
-          return {token:token, user: result[0]}
-        }
-        else
-        {
+      if (rows.length > 0) {
+        const user = rows[0];
+        const coinciden = await comparePassword(body.password, user.password);
+        if (coinciden) {
+          const token = this.authService.generateToken(user.id);
+          const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
+          user.img = user.img ? `${baseUrl.replace(/\/$/, '')}/${user.img}` : null;
+          return { token, user };
+        } else {
           throw new ConflictException('La contraseña es errónea');
         }
-      }
-      else
-      {
+      } else {
         throw new ConflictException('Nombre o email no existen');
       }
-    }
-    catch(error)
-    {
+    } catch(error) {
       console.log(error);
       throw error;
     }
   }
 
-
-  // #region get 
-
+  // --------- Obtener todos los usuarios ---------
   async getUser() {
-    const [result] = await this.databaseService.pool.query(
-      'SELECT * from user',
+    const rows = await this.databaseService.query(
+      'SELECT * FROM "user"'
     );
-
-    return result;
+    return rows;
   }
 
- // #region img
-
+  // --------- Subir foto de perfil ---------
   async perfilPicPost(userId: string, file: Express.Multer.File) {
     try {
       const rutaRelativa = `img/${file.filename}`;
-      await this.databaseService.pool.execute(
-        "UPDATE user SET img = ? WHERE id = ?",
+      await this.databaseService.query(
+        'UPDATE "user" SET img = $1 WHERE id = $2',
         [rutaRelativa, userId]
       );
 
       const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
       const url = `${baseUrl.replace(/\/$/, '')}/${rutaRelativa}`;
-      return{url:url};
+      return { url };
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
 
+  // --------- Obtener foto de perfil ---------
   async getProfilePic(userId: string) {
     try {
-      const [rows]: any = await this.databaseService.pool.query(
-        'SELECT img FROM user WHERE id = ?',
+      const rows = await this.databaseService.query(
+        'SELECT img FROM "user" WHERE id = $1',
         [userId]
       );
 
-      let imgPath = rows[0]?.img;
-      if(imgPath)
-      { 
-        const baseUrl = 'http://localhost:3000';
+      const imgPath = rows[0]?.img;
+      if (imgPath) {
+        const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
         const url = `${baseUrl.replace(/\/$/, '')}/${imgPath}`;
-        console.log(url)
-        return { url:url };
-      }
-      else
-      {
+        return { url };
+      } else {
         return null;
       }
-      
+
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
-
 
 }

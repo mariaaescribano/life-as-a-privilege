@@ -2,6 +2,7 @@
 export type Pregunta = {
     idPregunta: string,
     pregunta: string,
+    consejo?:string,
 };
 
 export type Bloque = {

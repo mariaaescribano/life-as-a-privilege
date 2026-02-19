@@ -55,27 +55,21 @@ const EspacioHome = () => {
         if(userId && token)
         {
             const selectedFile = e.target.files[0];
+
             const formData = new FormData();
-            formData.append("imagen", selectedFile);
+            formData.append('file', selectedFile);      
+            formData.append('userId', userId);   
 
-            try {
-                const res = await fetch(`${API_URL}/user/img/${userId}`, {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
+            const res = await fetch(`${API_URL}/upload/profile-pic`, {
+                method: "POST",
+                body: formData,
+            });
 
-                const data = await res.json();
-                if(data.url)
-                {
-                    sessionStorage.setItem("img", data.url);
-                }
-
-            } catch (error) {
-                console.error(error);
+            const data = await res.json();
+            if (data.url) {
+                sessionStorage.setItem("img", data.url); // guardar URL pública
             }
+
         }
         else
         {

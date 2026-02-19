@@ -166,9 +166,8 @@ const Home = () => {
                   w="100%"
                   h="500px"
                   children={
-                    <VStack>
-                      <Box w={{ base: "80%", md: "80%" }} borderRadius="xl" overflow="hidden">
-                        <Box aspectRatio={1} w="100%">
+                    <VStack  align="center" justify="center">
+                        <Box w={{ base: "80%", md: "80%" }} h="200px" borderRadius="xl" overflow="hidden">
                           <Image
                             alt="Imagen"
                             objectFit="cover"
@@ -176,7 +175,7 @@ const Home = () => {
                             h="100%"
                           />
                         </Box>
-                      </Box>
+  
                       <Text color="black" fontWeight="bold" fontSize={{ base: "md", md: "xl" }} textAlign="center" mb="20px">
                         ¿Quieres que te acompañe?
                       </Text>

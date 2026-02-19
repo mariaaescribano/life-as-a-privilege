@@ -32,3 +32,42 @@ COSAS QUE VER CON PAPI
  CUENTA MÍA
 - Poder subir vídeos en los apartados
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CONECTANDO CON SUPABASE
+
+postgresql://postgres:[YOUR-PASSWORD]@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres
+
+postgresql://postgres:mariaaescribano@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres
+
+Poner en env: DATABASE_URL="postgresql://postgres:TU_PASSWORD@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres"
+
+
+Si usas TypeORM
+
+En app.module.ts:
+
+TypeOrmModule.forRoot({
+  type: 'postgres',
+  url: process.env.DATABASE_URL,
+  autoLoadEntities: true,
+  synchronize: true, // SOLO en local
+})
+
+
+Y asegúrate de tener:
+
+npm install @nestjs/typeorm typeorm pg

@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { UploadModule } from './upload/upload.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -22,6 +23,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     }),
     UsersModule,
     AuthModule,
+    UploadModule
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],
