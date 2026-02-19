@@ -19,6 +19,7 @@ const ThemeSection = (props:{
   title:string, icon:any, subPreguntas: Pregunta[], color: string,
   bgColor:string
 }) => {
+  
   const [isOpen, setIsOpen] = useState(false);
 
   return (

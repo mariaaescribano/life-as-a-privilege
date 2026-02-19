@@ -16,6 +16,7 @@ const jwt_strategy_1 = require("./auth/jwt.strategy");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const upload_module_1 = require("./upload/upload.module");
+const respuesta_module_1 = require("./respuesta/respuesta.module");
 exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
@@ -33,7 +34,8 @@ exports.AppModule = AppModule = __decorate([
             }),
             user_module_1.UsersModule,
             auth_module_1.AuthModule,
-            upload_module_1.UploadModule
+            upload_module_1.UploadModule,
+            respuesta_module_1.RespuestaModule
         ],
         providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],

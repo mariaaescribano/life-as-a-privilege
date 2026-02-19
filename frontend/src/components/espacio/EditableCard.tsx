@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Card,
@@ -11,16 +11,23 @@ import {
   VStack
 } from "@chakra-ui/react";
 import { CheckCheckIcon, CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
-import { HelpIcon, turquesa } from "../../GlobalVariables";
+import { API_URL, HelpIcon, turquesa } from "../../GlobalVariables";
+import axios from "axios";
+import type { Pregunta } from "../../dtos/espacio.type";
+import type { Respuesta } from "../../dtos/respuesta.type";
+import { useNavigate } from "react-router-dom";
+import SpinnerTurquesa from "../global/Spinner";
 
 const EditableCard = (props:{
   idPregunta:string, pregunta:string,
   bgColor:string, color:string, consejo?:string
 }) => {
+
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [text, setText] = useState("Aquí puedes escribir varias frases...");
+  const [text, setText] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleEdit = () => {
@@ -33,10 +40,72 @@ const EditableCard = (props:{
     }, 0);
   };
 
+  const subeRespuesta = async() =>
+  {
+    let userId =  sessionStorage.getItem("userId");
+
+    if(!userId) navigate("/");
+    else
+    {
+      let pregunta: Respuesta = {
+        idPregunta: props.idPregunta,
+        userId: userId,
+        respuesta: text
+      };
+
+      try
+      {
+        const response = await axios.post(
+        `${API_URL}/respuesta/npmn`,
+        pregunta,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log(response.data)
+      }
+      catch(error)
+      {
+        // xxx q hacer con error?
+        console.log(error)
+        // let error = gestionaError(err);
+        //       setmessage(error)
+      }
+    }
+  }
+
   const toggleSave = () => {
     setIsEditing(false);
     setIsVisible(false);
+    subeRespuesta();
   };
+
+  // llama a por la respuesta previamente guardada (si existe)
+  const getRespuesta = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/respuesta/npmn/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      if(response.data)
+      {
+        setText(response.data?.respuesta);
+      }
+
+    } catch (error) {
+      console.log(error);
+      setText(""); // si falla, dejamos vacío
+    }
+  };
+
+  useEffect(() => {
+    if(isOpen == true)
+    {
+      getRespuesta();
+    }
+  }, [isOpen]);
 
   return (
     <Box w="100%">
@@ -76,7 +145,7 @@ const EditableCard = (props:{
             bg={props.bgColor}
             p={4}
           >
-            {props.consejo && <Flex justify="center" align="center" mb={4}>
+            {props.consejo && <Flex justify="center" align="center" mb={1}>
               <Box
                 w="80%"
                 bg="gray.100"
@@ -103,7 +172,7 @@ const EditableCard = (props:{
               <Flex gap={4}>
                 <Textarea
                   ref={textareaRef}
-                  value={isVisible ? text : "•".repeat(text.length)}
+                  value={text ? (isVisible ? text : "•".repeat(text?.length)) : ""}
                   onChange={(e) => isEditing ? setText(e.target.value) : ""}
                   isReadOnly={!isEditing}
                   resize="none"
