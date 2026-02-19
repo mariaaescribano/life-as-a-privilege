@@ -94,6 +94,10 @@ export default function ModulesPage() {
     }
   }, [moduloId]); 
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
   return (
     <Box
       minH="100vh"

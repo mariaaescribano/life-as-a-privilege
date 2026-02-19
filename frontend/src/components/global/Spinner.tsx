@@ -7,7 +7,7 @@ interface SpinnerProps {
   fullScreen?: boolean; // si ocupa toda la pantalla
 }
 
-const Spinner: React.FC<SpinnerProps> = ({
+const SpinnerTurquesa: React.FC<SpinnerProps> = ({
   size = 60,
   thickness = 6,
   fullScreen = true,
@@ -68,4 +68,4 @@ const Spinner: React.FC<SpinnerProps> = ({
   );
 };
 
-export default Spinner;
+export default SpinnerTurquesa;

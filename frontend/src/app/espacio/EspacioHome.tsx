@@ -1,10 +1,11 @@
-import { Box, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Image, Spinner, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { API_URL, astrologiaBg, AstrologiaIcon, astrologiaNom, ayurvedaBg, AyurvedaIcon, ayurvedaNom, biologiaBg, BiologiaIcon, biologiaNom, cabalaBg, CabalaIcon, cabalaNom, EspacioPersonalIcon, fisiologiaBg, FisiologiaIcon, fisiologiaNom, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, nutricionBg, NutricionIcon, nutricionNom, tcmBg, TCMIcon, tcmNom } from "../../GlobalVariables";
 import { Header } from "../../components/global/Header";
 import Footer from "../../components/global/Footer";
 import Title from "../../components/global/Title";
 import { useNavigate } from "react-router-dom";
+import SpinnerTurquesa from "../../components/global/Spinner";
 
 const EspacioHome = () => {
     const navigate = useNavigate();
@@ -46,6 +47,19 @@ const EspacioHome = () => {
 
     // #region img
 
+    const [img, setimg] = useState<string | null>(null);
+
+    // 1) comprueba si el user ya tiene foto
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        if(img == null)
+        {
+            let img = sessionStorage.getItem("img");
+            setimg(img);
+        }
+    }, []);
+
+
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
 
@@ -68,6 +82,7 @@ const EspacioHome = () => {
             const data = await res.json();
             if (data.url) {
                 sessionStorage.setItem("img", data.url); // guardar URL pública
+                setimg(data.url);
             }
 
         }
@@ -84,94 +99,96 @@ const EspacioHome = () => {
             flexDirection="column"
         >
             <Header dondeEstoy="espacio" />
-            <Box
-                flex="1"
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                position="relative"
-                mb="100px"
-            >
-
-                <Title icon={<EspacioPersonalIcon color="black" size="60px" />} title={"Mi Espacio"} />
-            
-                <Box
-                    position="relative"
-                    w={containerSize}
-                    h={containerSize}
+                {img != null && <Box
+                    flex="1"
                     display="flex"
+                    flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
+                    position="relative"
+                    mb="100px"
                 >
-                    {/* Centro */}
+
+                    <Title icon={<EspacioPersonalIcon color="black" size="60px" />} title={"Mi Espacio"} />
+                
                     <Box
-                        position="absolute"
-                        w={centerSize}
-                        h={centerSize}
-                        borderRadius="full"
-                        overflow="hidden"
-                        boxShadow="2xl"
-                        border="6px solid white"
-                        zIndex={10}
+                        position="relative"
+                        w={containerSize}
+                        h={containerSize}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
                     >
-                        <Image src={sessionStorage.getItem("img") ?? "/public/img/noImg.png"} alt="Centro" w="100%" h="100%" objectFit="cover" />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                opacity: 0,
-                                cursor: "pointer",
-                            }}
-                        />
-                    </Box>
-
-                        {/* Elementos alrededor */}
-                        {photos.map((photo, index) => {
-                        const angle = angleStep * index - Math.PI / 2;
-                        const x = Math.cos(angle) * (radius ?? 150);
-                        const y = Math.sin(angle) * (radius ?? 150);
-
-                        return (
-                            <Box
-                                key={index}
-                                cursor={photo.cursor}
-                                position="absolute"
-                                w={{ base: "70px", md: "90px", lg: "110px" }}
-                                h={{ base: "70px", md: "90px", lg: "110px" }}
-                                borderRadius="full"
-                                overflow="hidden"
-                                boxShadow="xl"
-                                onClick={()=> navigate(photo.link)}
-                                border="5px solid white"
-                                transform={`translate(${x}px, ${y}px)`}
-                                transition="all 0.3s ease"
-                                _hover={{
-                                    transform: `translate(${x}px, ${y}px) scale(1.15)`
+                        {/* Centro */}
+                        <Box
+                            position="absolute"
+                            w={centerSize}
+                            h={centerSize}
+                            borderRadius="full"
+                            overflow="hidden"
+                            boxShadow="2xl"
+                            border="6px solid white"
+                            zIndex={10}
+                        >
+                            <Image src={img} alt="Centro" w="100%" h="100%" objectFit="cover" />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    opacity: 0,
+                                    cursor: "pointer",
                                 }}
-                            >
-                                <Box
-                                    w="100%"
-                                    h="100%"
-                                    bg={photo.bg}
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                >
-                                    {photo.icon}
-                                </Box>
-                            </Box>
-                        );
-                    })}
-                </Box>
-            </Box>
+                            />
+                        </Box>
 
+                            {/* Elementos alrededor */}
+                            {photos.map((photo, index) => {
+                            const angle = angleStep * index - Math.PI / 2;
+                            const x = Math.cos(angle) * (radius ?? 150);
+                            const y = Math.sin(angle) * (radius ?? 150);
+
+                            return (
+                                <Box
+                                    key={index}
+                                    cursor={photo.cursor}
+                                    position="absolute"
+                                    w={{ base: "70px", md: "90px", lg: "110px" }}
+                                    h={{ base: "70px", md: "90px", lg: "110px" }}
+                                    borderRadius="full"
+                                    overflow="hidden"
+                                    boxShadow="xl"
+                                    onClick={()=> navigate(photo.link)}
+                                    border="5px solid white"
+                                    transform={`translate(${x}px, ${y}px)`}
+                                    transition="all 0.3s ease"
+                                    _hover={{
+                                        transform: `translate(${x}px, ${y}px) scale(1.15)`
+                                    }}
+                                >
+                                    <Box
+                                        w="100%"
+                                        h="100%"
+                                        bg={photo.bg}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                    >
+                                        {photo.icon}
+                                    </Box>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                </Box>}
+
+                {img == null && 
+                <SpinnerTurquesa />}
             <Footer />
         </Box>
     );

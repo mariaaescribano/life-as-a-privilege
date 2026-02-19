@@ -23,6 +23,10 @@ export default function SignIn() {
   const [email, setemail] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
   const registroFinal = async () =>
   {
     try 

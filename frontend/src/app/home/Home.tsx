@@ -10,11 +10,15 @@ import Footer from "../../components/global/Footer";
 import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
 import type { SessionStorageUser, User } from "../../dtos/user.types";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../../components/global/Spinner";
+import SpinnerTurquesa from "../../components/global/Spinner";
 
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<SessionStorageUser | null>(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   useEffect(() => {
     if (user == null) {
@@ -149,7 +153,7 @@ const Home = () => {
                   children={
                     <>
                       <Text color="black" fontWeight="bold" fontSize={{ base: "3xl", md: "5xl" }} textAlign="center">
-                        Bienvenido
+                        Bienvenido, {sessionStorage.getItem("name")}
                       </Text>
                       <Text color="black" fontSize={{ base: "md", md: "xl" }} textAlign="center">
                         Este es tu espacio para aprender e integrar distintas modalidades en las que serás capaz de identificar tus bloqueos y tus trampas.
@@ -213,7 +217,7 @@ const Home = () => {
             </SimpleGrid>
           </Grid>}
 
-          {!user && <Spinner />}
+          {!user && <SpinnerTurquesa />}
         </Box>
       <Footer />    
     </Box>

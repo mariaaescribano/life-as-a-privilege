@@ -17,64 +17,57 @@ export class UploadService {
     );
   }
 
+
   async uploadProfilePic(userId: string, file: Express.Multer.File) {
-  const extension = file.originalname.split('.').pop(); // jpg, png, etc
-  const fileName = `${userId}.${extension}`;           // archivo único por usuario
-
-  const bucket = this.supabase.storage.from('img');
-
-  // 1️⃣ Revisar si ya hay foto
-  const result = await this.databaseService.query(
-    'SELECT img FROM "user" WHERE id = $1',
-    [userId]
-  );
-  const oldUrl = result.rows[0]?.img;
-
-  if (oldUrl) {
-    // Extraer el path dentro del bucket
-    const oldPath = oldUrl.split('/img/')[1]; // solo la parte después de img/
-    if (oldPath) {
-      await bucket.remove([`img/${oldPath}`]); // borrar la antigua
-    }
-  }
-
-  // 2️⃣ Subir la nueva foto (nombre único)
-  const { error } = await bucket.upload(`img/${fileName}`, file.buffer, {
-    contentType: file.mimetype,
-  });
-  if (error) throw new Error(error.message);
-
-  // 3️⃣ Obtener URL pública
-  const publicURL = bucket.getPublicUrl(`img/${fileName}`).data.publicUrl;
-
-  // 4️⃣ Guardar URL en DB
-  await this.databaseService.query(
-    'UPDATE "user" SET img = $1 WHERE id = $2',
-    [publicURL, userId]
-  );
-
-  return { url: publicURL };
-}
-
-
-
-  async getProfilePic(userId: string) {
+    const extension = file.originalname.split('.').pop();
+    const fileName = `${userId}.${extension}`; // nombre único por usuario
+    const bucket = this.supabase.storage.from('img');
 
     const result = await this.databaseService.query(
       'SELECT img FROM "user" WHERE id = $1',
       [userId]
     );
 
-    const filePath = result.rows[0].img;
+    const oldUrl = result.rows?.[0]?.img;
 
-    const { data, error } = await this.supabase.storage
-      .from('img')
-      .createSignedUrl(filePath, 60 * 5); // 5 minutos
+    if (oldUrl) {
+      const oldPath = oldUrl.split('/img/')[1]; // solo la parte después de img/
+      if (oldPath) {
+        console.log("Borrando foto anterior del bucket...");
+        const { data, error } = await bucket.remove([`img/${oldPath}`]);
+        if (error) console.log("Error al borrar foto antigua:", error);
+        else console.log("Foto antigua borrada correctamente:", data);
+      }
+    }
 
-    if (error) throw new Error(error.message);
+    const { error: uploadError, data: uploadData } = await bucket.upload(
+      `img/${fileName}`,
+      file.buffer,
+      { contentType: file.mimetype, upsert: true, }
+    );
+    if (uploadError) {
+      console.log("Error al subir la foto:", uploadError);
+      throw new Error(uploadError.message);
+    }
 
-    return { url: data.signedUrl };
+    const publicURL = bucket.getPublicUrl(`img/${fileName}`).data.publicUrl;
+
+    await this.databaseService.query(
+      'UPDATE "user" SET img = $1 WHERE id = $2',
+      [publicURL, userId]
+    );
+    return { url: publicURL };
   }
 
+
+  async getProfilePic(userId: string) {
+    const result = await this.databaseService.query(
+      'SELECT img FROM "user" WHERE id = $1',
+      [userId]
+    );
+
+    const filePath = result[0].img;
+    return { url: filePath };
+  }
 
 }

@@ -10,7 +10,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Header } from "../../components/global/Header";
 import BadgeText from "../../components/welcome/BadgeText";
 import Footer from "../../components/global/Footer";
@@ -58,6 +58,10 @@ const QuienSoy = () => {
         {img:"/certificados/7.png"}, {img:"/certificados/8.png"}, {img:"/certificados/9.png"}, {img:"/certificados/10.png"}, {img:"/certificados/11.png"}, {img:"/certificados/12.png"}, 
         {img:"/certificados/13.png"}, {img:"/certificados/14.png"}, {img:"/certificados/15.png"}, {img:"/certificados/16.png"} 
     ];
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+    }, []);
 
     
     return (

@@ -1,5 +1,5 @@
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { Header } from "../../components/global/Header";
 import Footer from "../../components/global/Footer";
@@ -74,6 +74,9 @@ export const AprendizajeHome = () => {
     },
   ];
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   return (
     <Box

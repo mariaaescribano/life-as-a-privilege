@@ -3,7 +3,7 @@ import { AdultIcon, ChildhoodIcon, ChildIcon, CoupleIcon, FamilyIcon, FriendsIco
 
 export const preguntasNeuroPsicologia: Bloque[] = [
   {
-    title: "1. La relación con tu Madre",
+    title: "1. Tu Madre",
     icon: MadreIcon,
     subPreguntas: [
       { 

@@ -15,6 +15,7 @@ export type ThemeTitleObject = {
     title: string,
     icon: any,
     color: string,
+    bgColor:string
 };
 
 

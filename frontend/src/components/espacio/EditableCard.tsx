@@ -11,11 +11,11 @@ import {
   VStack
 } from "@chakra-ui/react";
 import { CheckCheckIcon, CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
-import { turquesa } from "../../GlobalVariables";
+import { HelpIcon, turquesa } from "../../GlobalVariables";
 
 const EditableCard = (props:{
   idPregunta:string, pregunta:string,
-  bgColor:string, color:string
+  bgColor:string, color:string, consejo?:string
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -61,6 +61,7 @@ const EditableCard = (props:{
         <Box
           as={ChevronDown}
           w="22px"
+          color={props.color}
           h="22px"
           transition="transform 0.3s"
           transform={isOpen ? "rotate(180deg)" : "rotate(0deg)"}
@@ -75,6 +76,29 @@ const EditableCard = (props:{
             bg={props.bgColor}
             p={4}
           >
+            {props.consejo && <Flex justify="center" align="center" mb={4}>
+              <Box
+                w="80%"
+                bg="gray.100"
+                p={3}
+                borderRadius="20px"
+                justifyContent="center"
+                display="flex"        
+                flexDirection="row"  
+                alignItems="center"  
+                alignContent={"center"}
+                gap={3}              
+              >
+                <HelpIcon size={{ base: "24px", md: "24px" }} color={props.color} />
+                <Text
+                  color={props.color}
+                  fontSize="sm"
+                >
+                  {props.consejo}
+                </Text>
+              </Box>
+            </Flex>}
+
             <CardBody>
               <Flex gap={4}>
                 <Textarea
@@ -119,6 +143,7 @@ const EditableCard = (props:{
                 </VStack>
               </Flex>
             </CardBody>
+
           </Card>
         </Box>
       </Collapse>

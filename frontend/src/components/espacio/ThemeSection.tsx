@@ -59,7 +59,8 @@ const ThemeSection = (props:{
               key={index + "subPreg"} 
               idPregunta={subPreg.idPregunta}
               pregunta={subPreg.pregunta} 
-              bgColor={props.bgColor} color={props.color} 
+              bgColor={props.bgColor} color={props.color}
+              consejo={subPreg.consejo} 
             /> 
           ))}
         </VStack>

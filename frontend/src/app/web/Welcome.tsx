@@ -6,7 +6,7 @@ import {
   Heading,
   Grid,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Header } from "../../components/global/Header";
 import BadgeText from "../../components/welcome/BadgeText";
 import Footer from "../../components/global/Footer";
@@ -18,6 +18,10 @@ import BtnTurquesa from "../../components/global/BtnTurquesa";
 const Welcome = () => {
     
     const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+    }, []);
     
     return (
         <Box

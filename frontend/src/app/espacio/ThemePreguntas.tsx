@@ -9,7 +9,7 @@ import ThemeSection from "../../components/espacio/ThemeSection";
 import { Header } from "../../components/global/Header";
 import Footer from "../../components/global/Footer";
 import Title from "../../components/global/Title";
-import type { Bloque, ThemeObject } from "../../dtos/espacio.type";
+import type { Bloque, ThemeTitleObject, } from "../../dtos/espacio.type";
 
 import { preguntasNeuroPsicologia } from "../../hardCoded/espacio/PreguntasNeuroPsicologia";
 import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
@@ -21,7 +21,11 @@ const ThemePreguntas = () => {
   const navigate = useNavigate();
 
   const [bloques, setBloques] = useState<Bloque[]>([]);
-  const [theme, settheme] = useState<ThemeObject>();
+  const [theme, settheme] = useState<ThemeTitleObject>();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   const getThemeData = () =>
   {
@@ -29,7 +33,7 @@ const ThemePreguntas = () => {
     {
       settheme({
         title: neuropsicologiaNom,
-        icon: <NeuropsicologiaIcon size="60px" />,
+        icon: <NeuropsicologiaIcon size={{base:"40px", md:"60px"}} />,
         color: neuropsicologiaTxt,
         bgColor:neuropsicologiaBg
       });

@@ -12,6 +12,10 @@ export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string, submoduloId:string }>();
   const [datos, setdatos] = useState<Submodulo | null>(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
   const getNeuroPsicologiaSubmoduleByTitle = (title: string): Submodulo | null => {
     for (const modulo of modulosNeuroPsicologia) {
       const found = modulo.submodules.find(
