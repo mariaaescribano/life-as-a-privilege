@@ -78,7 +78,7 @@ export function Header(props: {
             onClick={() => navigate(props.linkHeader ?? "/home")}
           >
             <Image
-              src="/public/img/life.png"
+              src="/img/life.png"
               alt="Life"
               width="100%"
               height="100%"

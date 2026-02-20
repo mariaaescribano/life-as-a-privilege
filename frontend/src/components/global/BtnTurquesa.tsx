@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import React from 'react';
 import { turquesa } from '../../GlobalVariables';
 

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
-import { NotViewIcon, ViewIcon } from "../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
 
 export function ModuloAcordeon(props:{

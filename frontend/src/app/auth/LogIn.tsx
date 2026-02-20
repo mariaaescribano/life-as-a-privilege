@@ -1,6 +1,6 @@
 // LogIn.tsx
 import React, { useEffect, useState } from "react";
-import { Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/global/Header";
 import Card from "../../components/global/Card";
@@ -57,7 +57,7 @@ export default function LogIn() {
           "img",
           data.url && data.url !=""
             ? data.url
-            : "/public/img/noImg.png"
+            : "/img/noImg.png"
         );
         
         setmessage({

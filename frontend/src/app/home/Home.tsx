@@ -7,10 +7,11 @@ import FeatureCard from "../../components/home/FeatureCard";
 import BgImageCard from "../../components/home/BgImageCard";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
 import Footer from "../../components/global/Footer";
-import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
-import type { SessionStorageUser, User } from "../../dtos/user.types";
+//import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
+import type { SessionStorageUser } from "../../dtos/user.types";
 import { useNavigate } from "react-router-dom";
 import SpinnerTurquesa from "../../components/global/Spinner";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ const Home = () => {
       title: neuropsicologiaNom,
       bgColor: neuropsicologiaBg,
       color: neuropsicologiaTxt,
-      img: "/public/img/me2.jpg",
+      img: "/img/me2.jpg",
       icon: <NeuropsicologiaIcon size={{ base: "45px", md: "60px" }}/>,
       description: "Entiende lo que te condicionó desde antes de tu nacimiento que ha dictaminado tu Vida. Integra desde el Amor, la racionalidad y el perdón todas las partes de ti para así poder coger las riendas de tu Vida.",
       linkAprendizaje: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
@@ -149,7 +150,7 @@ const Home = () => {
                 <BgImageCard
                   h="500px"
                   w="100%"
-                  backgroundImage="../public/img/flor.png"
+                  backgroundImage="../img/flor.png"
                   children={
                     <>
                       <Text color="black" fontWeight="bold" fontSize={{ base: "3xl", md: "5xl" }} textAlign="center">
@@ -174,7 +175,7 @@ const Home = () => {
                     <VStack  align="center" justify="center">
                         <Box w={{ base: "80%", md: "80%" }} h="300px" borderRadius="xl" overflow="hidden">
                           <Image
-                            src={"/public/img/me3.jpg"}
+                            src={"/img/me3.jpg"}
                             alt="Imagen"
                             objectFit="cover"
                             w="100%"

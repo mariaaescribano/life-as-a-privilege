@@ -1,17 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
-  Card,
-  CardBody,
   Collapse,
   Flex,
   HStack,
-  IconButton,
   Text,
-  Textarea,
   VStack
 } from "@chakra-ui/react";
-import { ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import EditableCard from "./EditableCard";
 import type { Pregunta } from "../../dtos/espacio.type";
 

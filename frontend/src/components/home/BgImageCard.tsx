@@ -1,5 +1,5 @@
 'use client'
-import { Box, VStack, Text } from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react';
 import React from 'react';
 
 export default function BgImageCard(props: 

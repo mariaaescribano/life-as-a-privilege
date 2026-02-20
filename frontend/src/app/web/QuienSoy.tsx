@@ -1,10 +1,8 @@
 import {
   Box,
-  Flex,
   Image,
   VStack,
   Heading,
-  Grid,
   Text,
   SimpleGrid,
   Button,
@@ -12,12 +10,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Header } from "../../components/global/Header";
-import BadgeText from "../../components/welcome/BadgeText";
 import Footer from "../../components/global/Footer";
-import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
-import Card from "../../components/global/Card";
-import { useNavigate } from "react-router-dom";
-import BtnTurquesa from "../../components/global/BtnTurquesa";
+import { turquesa } from "../../GlobalVariables";
+//import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
 
 type Libro = {
   title: string;
@@ -62,10 +57,9 @@ const QuienSoy = () => {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "auto" });
     }, []);
-
     
     return (
-         <Box
+        <Box
             minH="100vh"
             display="flex"
             flexDirection="column"
@@ -104,7 +98,7 @@ const QuienSoy = () => {
                         overflow="hidden"
                     >
                         <Image
-                        src="/img/me3.jpg" // ✅ SIN /public
+                        src="/img/me3.jpg" 
                         alt="Mi foto"
                         w="100%"
                         h="100%"

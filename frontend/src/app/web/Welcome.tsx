@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 import { Header } from "../../components/global/Header";
 import BadgeText from "../../components/welcome/BadgeText";
 import Footer from "../../components/global/Footer";
-import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt, turquesa } from "../../GlobalVariables";
+import { astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt, ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt, biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt, cabalaBg, CabalaIcon, cabalaNom, cabalaTxt, fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt, nutricionBg, NutricionIcon, nutricionNom, nutricionTxt, tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../GlobalVariables";
 import Card from "../../components/global/Card";
 import { useNavigate } from "react-router-dom";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
@@ -59,7 +59,7 @@ const Welcome = () => {
                             {/* Imagen */}
                             <Box w={{ base: "80%", md: "100%" }}>
                             <Image
-                                src="../public/img/life.png"
+                                src="../img/life.png"
                                 alt="Imagen"
                                 borderRadius="xl"
                                 objectFit="cover"
@@ -94,7 +94,7 @@ const Welcome = () => {
                         {/* COLUMNA DERECHA */}
                         <Box flex="1" display="flex" justifyContent="center" alignItems="center">
                             <Image
-                            src="../public/img/me.jpg"
+                            src="../img/me.jpg"
                             alt="Imagen"
                             borderRadius="xl"
                             objectFit="cover"

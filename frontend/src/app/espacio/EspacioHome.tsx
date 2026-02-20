@@ -1,4 +1,4 @@
-import { Box, Image, Spinner, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Image, useBreakpointValue } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { API_URL, astrologiaBg, AstrologiaIcon, astrologiaNom, ayurvedaBg, AyurvedaIcon, ayurvedaNom, biologiaBg, BiologiaIcon, biologiaNom, cabalaBg, CabalaIcon, cabalaNom, EspacioPersonalIcon, fisiologiaBg, FisiologiaIcon, fisiologiaNom, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, nutricionBg, NutricionIcon, nutricionNom, tcmBg, TCMIcon, tcmNom } from "../../GlobalVariables";
 import { Header } from "../../components/global/Header";
@@ -11,7 +11,7 @@ const EspacioHome = () => {
     const navigate = useNavigate();
     const photos = [ 
         { bg: fisiologiaBg, icon: <FisiologiaIcon size="50px"/>, link: "/espacio/questions/"+ fisiologiaNom, cursor:"not-allowed" },
-        { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size="50px" />, link: "/espacio/questions/" + neuropsicologiaNom, cursor:"pointer" } ,
+        { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{base:"50px", md:"50px"}} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor:"pointer" } ,
         { bg: astrologiaBg, icon: <AstrologiaIcon size="50px" />, link: "/espacio/questions/" + astrologiaNom, cursor:"not-allowed" } ,
         { bg: tcmBg, icon: <TCMIcon size="50px" />, link: "/espacio/questions/" + tcmNom, cursor:"not-allowed" } ,
         { bg: nutricionBg, icon: <NutricionIcon size="50px" />, link: "/espacio/questions/" + nutricionNom, cursor:"not-allowed"} ,

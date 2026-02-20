@@ -1,13 +1,13 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import React from "react";
-import { astrologiaBg, AstrologiaIcon, astrologiaNom, ayurvedaBg, AyurvedaIcon, ayurvedaNom, biologiaBg, BiologiaIcon, biologiaNom, cabalaBg, CabalaIcon, cabalaNom, EspacioPersonalIcon, fisiologiaBg, FisiologiaIcon, fisiologiaNom, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, nutricionBg, NutricionIcon, nutricionNom, tcmBg, TCMIcon, tcmNom } from "../../GlobalVariables";
+import { astrologiaBg, AstrologiaIcon, astrologiaNom, ayurvedaBg, AyurvedaIcon, ayurvedaNom, biologiaBg, BiologiaIcon, biologiaNom, cabalaBg, CabalaIcon, cabalaNom, fisiologiaBg, FisiologiaIcon, fisiologiaNom, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, nutricionBg, NutricionIcon, nutricionNom, tcmBg, TCMIcon, tcmNom } from "../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
 
 const PhotoMandala = (props:{fotoCentro?:string}) => {
   const navigate = useNavigate();
   const photos = [ 
     { bg: fisiologiaBg, icon: <FisiologiaIcon size="35px"/>, link: "/espacio/questions/"+ fisiologiaNom, cursor: "not-allowed" },
-    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size="35px" />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer" } ,
+    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{base:"30px", md:"35px"}} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer" } ,
     { bg: astrologiaBg, icon: <AstrologiaIcon size="35px" />, link: "/espacio/questions/" + astrologiaNom, cursor: "not-allowed" } ,
     { bg: tcmBg, icon: <TCMIcon size="35px" />, link: "/espacio/questions/" + tcmNom, cursor: "not-allowed" } ,
     { bg: nutricionBg, icon: <NutricionIcon size="35px" />, link: "/espacio/questions/" + nutricionNom, cursor: "not-allowed"} ,
@@ -53,7 +53,7 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
           transition="transform 0.3s"
           onClick={()=> navigate("/espacio/espacioHome")}
         >
-          <Image src={props.fotoCentro ?? "/public/img/noImg.png"} alt="Centro" w="100%" h="100%" objectFit="cover" /> 
+          <Image src={props.fotoCentro ?? "/img/noImg.png"} alt="Centro" w="100%" h="100%" objectFit="cover" /> 
         </Box>
 
         {photos.map((photo, index) => {

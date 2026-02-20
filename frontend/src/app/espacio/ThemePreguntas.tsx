@@ -3,7 +3,7 @@ import {
   Box,
   VStack
 } from "@chakra-ui/react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import ThemeSection from "../../components/espacio/ThemeSection";
 import { Header } from "../../components/global/Header";
@@ -18,7 +18,6 @@ import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicol
 const ThemePreguntas = () => {
 
   const { themeId } = useParams<{ themeId: string }>();
-  const navigate = useNavigate();
 
   const [bloques, setBloques] = useState<Bloque[]>([]);
   const [theme, settheme] = useState<ThemeTitleObject>();

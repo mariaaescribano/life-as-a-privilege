@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { Header } from "../../components/global/Header";
 import Footer from "../../components/global/Footer";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
