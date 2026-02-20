@@ -28,16 +28,16 @@ const multerOptions = {
 };
 
 // #region user
-@Controller('/user')
+@Controller('user')
 export class UserController {
   constructor(private readonly usersService: UserService) {}
 
-  @Post("/signIn")
+  @Post("signIn")
   async create(@Body() body: CreateUser) {
     return await this.usersService.createUser(body);
   }
 
-  @Post("/logIn")
+  @Post("logIn")
   async logIn(@Body() body: LoginUser) {
     return await this.usersService.logIn(body);
   }

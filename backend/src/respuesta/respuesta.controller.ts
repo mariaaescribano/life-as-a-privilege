@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFi
 import type { Respuesta } from 'src/dtos/respuesta.types';
 import { RespuestaService } from './respuesta.service';
 
-@Controller('/respuesta')
+@Controller('respuesta')
 export class RespuestaController {
   constructor(private readonly respuestaService: RespuestaService) {}
 
@@ -11,7 +11,7 @@ export class RespuestaController {
     return await this.respuestaService.postRespuesta(body);
   }
 
-  @Get("/:pregId/:userId")
+  @Get(":pregId/:userId")
   async getRespuestaDePregunta(@Param('pregId') pregId: string, @Param('userId') userId: string) {
     return await this.respuestaService.getRespuestaDePregunta(pregId, userId);
   }
