@@ -1,7 +1,7 @@
  
- NEXT STEPS
- - Que el usuario pueda ver la contraseña si quiere (Poner dentro de Input)
-  - que ent odas las paginas haya un scroll al top por si acaso
+NEXT STEPS
+- editableCard decir fallos
+- para cada bloque hacer endpoint
 
 
 ---------------------------------------------

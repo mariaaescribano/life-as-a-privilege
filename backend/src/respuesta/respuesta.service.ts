@@ -6,32 +6,32 @@ import { Respuesta } from 'src/dtos/respuesta.types';
 export class RespuestaService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-    async npmnPostRespuesta(body: Respuesta): Promise<boolean> {
+    async postRespuesta(body: Respuesta): Promise<boolean> {
         try {
             // 1️⃣ Verificar si ya existe
             const checkResult = await this.databaseService.query(
-            `SELECT * FROM np_npmn WHERE userid = $1 AND npmn = $2`,
-            [body.userId, body.idPregunta]
+                `SELECT * FROM respuesta WHERE userid = $1 AND pregid = $2`,
+                [body.userId, body.idPregunta]
             );
 
             if (checkResult.length > 0) {
             // 2️⃣ Borrar si existe
             await this.databaseService.query(
-                `DELETE FROM np_npmn WHERE userid = $1 AND npmn = $2`,
+                `DELETE FROM respuesta WHERE userid = $1 AND pregid = $2`,
                 [body.userId, body.idPregunta]
             );
             }
 
             // 3️⃣ Insertar nueva respuesta
             const insertResult = await this.databaseService.query(
-            `INSERT INTO np_npmn (userid, npmn, respuesta)
-            VALUES ($1, $2, $3)`,
-            [body.userId, body.idPregunta, body.respuesta]
+                `INSERT INTO respuesta (userid, pregid, respuesta)
+                VALUES ($1, $2, $3)`,
+                [body.userId, body.idPregunta, body.respuesta]
             );
 
             return true;
         } catch (error) {
-            console.error("Error en npmnPostRespuesta:", error);
+            console.error("Error en postRespuesta:", error);
             return false;
         }
     }
@@ -39,16 +39,15 @@ export class RespuestaService {
     async getRespuestaDePregunta(pregId:string, userId:string): Promise<Respuesta> {
         try {
             const result = await this.databaseService.query(
-            `SELECT * FROM np_npmn WHERE userid = $1 AND npmn = $2`,
+            `SELECT * FROM respuesta WHERE userid = $1 AND pregid = $2`,
             [userId, pregId]
             );
 
             return result[0];
             
         } catch (error) {
-            console.log("Error en npmnPostRespuesta:", error);
+            console.log("Error en getRespuestaDePregunta:", error);
             throw new Error(error);
         }
     }
-
 }

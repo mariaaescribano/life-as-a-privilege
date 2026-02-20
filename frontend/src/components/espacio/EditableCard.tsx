@@ -10,13 +10,11 @@ import {
   Textarea,
   VStack
 } from "@chakra-ui/react";
-import { CheckCheckIcon, CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
+import { CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
 import { API_URL, HelpIcon, turquesa } from "../../GlobalVariables";
 import axios from "axios";
-import type { Pregunta } from "../../dtos/espacio.type";
 import type { Respuesta } from "../../dtos/respuesta.type";
 import { useNavigate } from "react-router-dom";
-import SpinnerTurquesa from "../global/Spinner";
 
 const EditableCard = (props:{
   idPregunta:string, pregunta:string,
@@ -28,6 +26,7 @@ const EditableCard = (props:{
   const [isVisible, setIsVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState<string | null>(null);
+  const [color, setColor] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleEdit = () => {
@@ -50,30 +49,43 @@ const EditableCard = (props:{
       let pregunta: Respuesta = {
         idPregunta: props.idPregunta,
         userId: userId,
-        respuesta: text
+        respuesta: text ?? ""
       };
 
       try
       {
         const response = await axios.post(
-        `${API_URL}/respuesta/npmn`,
+        `${API_URL}/respuesta`,
         pregunta,
         {
           headers: {
             'Content-Type': 'application/json',
           },
         });
-        console.log(response.data)
+
+        if(response.data)
+        {
+          setColor("green.500");
+        }
+
       }
       catch(error)
       {
-        // xxx q hacer con error?
+        setColor("red.500");
         console.log(error)
-        // let error = gestionaError(err);
-        //       setmessage(error)
       }
     }
   }
+
+  useEffect(() => {
+    if (color != null) {
+      const timer = setTimeout(() => {
+        setColor(null)
+      }, 3000);
+
+      return () => clearTimeout(timer); 
+    }
+  }, [color]); 
 
   const toggleSave = () => {
     setIsEditing(false);
@@ -85,7 +97,7 @@ const EditableCard = (props:{
   const getRespuesta = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/respuesta/npmn/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
+        `${API_URL}/respuesta/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
         { headers: { 'Content-Type': 'application/json' } }
       );
 
@@ -106,6 +118,13 @@ const EditableCard = (props:{
       getRespuesta();
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if(isVisible == false)
+    {
+      setIsEditing(false);
+    }
+  }, [isVisible]);
 
   return (
     <Box w="100%">
@@ -183,7 +202,7 @@ const EditableCard = (props:{
                   borderRadius="2xl"
                   bg={!isVisible ? "gray.200" : "white"}
                   _hover={{
-                    cursor: "not-allowed"
+                    cursor: isEditing == true ? "cursor" : "not-allowed"
                   }}
                   _focus={{
                     borderColor: turquesa,
@@ -205,9 +224,12 @@ const EditableCard = (props:{
                   />
                   <IconButton
                     aria-label="Editar"
+                    disabled={!isEditing || color != null}
                     icon={<CheckIcon size={18} />}
                     borderRadius="full"
                     onClick={toggleSave}
+                    bgColor={color ?? "gray.100"}
+                    _hover={isEditing ? { opacity: 0.8 } : {}}
                   />
                 </VStack>
               </Flex>

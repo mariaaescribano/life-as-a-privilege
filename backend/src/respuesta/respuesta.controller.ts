@@ -6,14 +6,13 @@ import { RespuestaService } from './respuesta.service';
 export class RespuestaController {
   constructor(private readonly respuestaService: RespuestaService) {}
 
-  @Post("/npmn")
+  @Post("")
   async create(@Body() body: Respuesta) {
-    return await this.respuestaService.npmnPostRespuesta(body);
+    return await this.respuestaService.postRespuesta(body);
   }
 
-  @Get("/npmn/:pregId/:userId")
+  @Get("/:pregId/:userId")
   async getRespuestaDePregunta(@Param('pregId') pregId: string, @Param('userId') userId: string) {
     return await this.respuestaService.getRespuestaDePregunta(pregId, userId);
   }
-
 }
