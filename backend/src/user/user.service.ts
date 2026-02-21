@@ -101,8 +101,8 @@ export class UserService {
         const coinciden = await comparePassword(body.password, user.password);
         if (coinciden) {
           const token = this.authService.generateToken(user.id);
-          const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
-          user.img = user.img ? `${baseUrl.replace(/\/$/, '')}/${user.img}` : null;
+          // const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
+          // user.img = user.img ? `${baseUrl.replace(/\/$/, '')}/${user.img}` : null;
           return { token, user };
         } else {
           throw new ConflictException('La contraseña es errónea');
