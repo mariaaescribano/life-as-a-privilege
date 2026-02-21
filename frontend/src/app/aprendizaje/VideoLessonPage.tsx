@@ -58,11 +58,6 @@ export default function VideoLessonPage() {
           boxShadow="2xl"
           mb={6}
         >
-          {/* <video
-            src={datos.video}
-            controls
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          /> */}
           <iframe
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
             src={`https://www.youtube.com/embed/${datos.video}`}

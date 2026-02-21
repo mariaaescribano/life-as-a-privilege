@@ -5,19 +5,6 @@ const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIco
 
 const basePath = "/aprendizaje/videoLessonPage/neuropsicologia";
 
-const videos = [
-  { id: "np1" },
-  { id: "np2" },
-  { id: "np3" },
-  { id: "np4" },
-  { id: "np5" },
-  { id: "np6" },
-  { id: "np7" },
-  { id: "np8" },
-  { id: "np9" },
-  { id: "np10" },
-];
-
 export const modulosNeuroPsicologia: ModuloContenido[] = [
   {
     title: "1. La Madre y el Niño",

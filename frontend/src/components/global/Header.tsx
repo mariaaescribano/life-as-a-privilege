@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, HStack, Image, Link, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, Image, Link } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { AprendizajeIcon, EspacioPersonalIcon, turquesa } from "../../GlobalVariables";
 import { ArrowLeft, ArrowRight } from "lucide-react";
