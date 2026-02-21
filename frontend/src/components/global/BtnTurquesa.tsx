@@ -4,13 +4,15 @@ import React from 'react';
 import { turquesa } from '../../GlobalVariables';
 
 export default function BtnTurquesa(props: {
-    text:string, onClick:any, w?:string, bgColor?:string, color?:string
+    text:string, onClick:any, w?:string, bgColor?:string, color?:string,
+    disabled?:boolean
 })
 {
     return (
         <Button
             size="lg"
             px={10}
+            disabled={props.disabled ?? false}
             minW={props.w ?? "200px"}
             maxW={props.w ?? "300px"}
             color={props.color ?? "white"}

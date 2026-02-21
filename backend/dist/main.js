@@ -39,7 +39,10 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.enableCors();
+    app.enableCors({
+        origin: ['https://lifeasaprivilege.onrender.com'],
+        credentials: true,
+    });
     const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
     await app.listen(port);
     console.log(`🚀 Server running on port ${port}`);

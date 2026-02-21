@@ -4,13 +4,14 @@ import { Header } from "../../components/global/Header";
 import Footer from "../../components/global/Footer";
 import BtnTurquesa from "../../components/global/BtnTurquesa";
 import Title from "../../components/global/Title";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/ModulosNeuroPsicologia";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string, submoduloId:string }>();
   const [datos, setdatos] = useState<Submodulo | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -19,10 +20,11 @@ export default function VideoLessonPage() {
   const getNeuroPsicologiaSubmoduleByTitle = (title: string): Submodulo | null => {
     for (const modulo of modulosNeuroPsicologia) {
       const found = modulo.submodules.find(
-        (sub) => sub.nom === title
+        (sub) => sub.id === title
       );
       if (found) return found;
     }
+   
     return null;
   };
 
@@ -56,10 +58,16 @@ export default function VideoLessonPage() {
           boxShadow="2xl"
           mb={6}
         >
-          <video
+          {/* <video
             src={datos.video}
             controls
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          /> */}
+          <iframe
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            src={`https://www.youtube.com/embed/${datos.video}`}
+            title="YouTube video player"
+            allowFullScreen
           />
         </Box>
 
@@ -76,8 +84,8 @@ export default function VideoLessonPage() {
 
         {/* BOTONES */}
         <Flex w="100%" justify="center" mb="100px" gap="20px" p="5px">
-          <BtnTurquesa text={"←"} onClick={undefined} w="100px" color={datos.detalles.color} bgColor={datos.detalles.bgColor} />
-          <BtnTurquesa text={"→"} onClick={undefined} w="100px" color={datos.detalles.color} bgColor={datos.detalles.bgColor} />
+          <BtnTurquesa text={"←"} disabled={datos.linkAnterior ? false : true} onClick={datos.linkAnterior ? ()=> navigate(datos.linkAnterior) : {}} w="100px" color={datos.detalles.color} bgColor={datos.detalles.bgColor} />
+          <BtnTurquesa text={"→"} disabled={datos.linkNext ? false : true} onClick={datos.linkNext ? ()=> navigate(datos.linkNext) : {}} w="100px" color={datos.detalles.color} bgColor={datos.detalles.bgColor} />
         </Flex>
       </Box>}
 

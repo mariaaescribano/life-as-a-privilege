@@ -6,11 +6,14 @@ export type Detalles = {
 };
 
 export type Submodulo = {
+  id:string;
   nom: string;
   link:string;
   descripcion: string;
   video: string;
   detalles: Detalles;
+  linkAnterior:string;
+  linkNext:string;
 };
 
 export type ModuloContenido = {

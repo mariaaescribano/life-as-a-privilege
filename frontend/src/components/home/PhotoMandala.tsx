@@ -1,22 +1,42 @@
+
 import { Box, Image } from "@chakra-ui/react";
 import React from "react";
-import { astrologiaBg, AstrologiaIcon, astrologiaNom, ayurvedaBg, AyurvedaIcon, ayurvedaNom, biologiaBg, BiologiaIcon, biologiaNom, cabalaBg, CabalaIcon, cabalaNom, fisiologiaBg, FisiologiaIcon, fisiologiaNom, neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, nutricionBg, NutricionIcon, nutricionNom, tcmBg, TCMIcon, tcmNom } from "../../GlobalVariables";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import {
+  astrologiaBg, AstrologiaIcon, astrologiaNom,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom,
+  biologiaBg, BiologiaIcon, biologiaNom,
+  cabalaBg, CabalaIcon, cabalaNom,
+  fisiologiaBg, FisiologiaIcon, fisiologiaNom,
+  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom,
+  nutricionBg, NutricionIcon, nutricionNom,
+  tcmBg, TCMIcon, tcmNom
+} from "../../GlobalVariables";
+
+const MotionBox = motion(Box);
 
 const PhotoMandala = (props:{fotoCentro?:string}) => {
+
   const navigate = useNavigate();
-  const photos = [ 
-    { bg: fisiologiaBg, icon: <FisiologiaIcon size="35px"/>, link: "/espacio/questions/"+ fisiologiaNom, cursor: "not-allowed" },
-    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{base:"30px", md:"35px"}} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer" } ,
-    { bg: astrologiaBg, icon: <AstrologiaIcon size="35px" />, link: "/espacio/questions/" + astrologiaNom, cursor: "not-allowed" } ,
-    { bg: tcmBg, icon: <TCMIcon size="35px" />, link: "/espacio/questions/" + tcmNom, cursor: "not-allowed" } ,
-    { bg: nutricionBg, icon: <NutricionIcon size="35px" />, link: "/espacio/questions/" + nutricionNom, cursor: "not-allowed"} ,
-    { bg: ayurvedaBg, icon: <AyurvedaIcon size="35px" />, link: "/espacio/questions/" + ayurvedaNom, cursor: "not-allowed"} ,
-    { bg: biologiaBg, icon: <BiologiaIcon size="35px" />, link: "/espacio/questions/" + biologiaNom, cursor: "not-allowed"},
-    { bg: cabalaBg, icon: <CabalaIcon size="35px" />, link: "/espacio/questions/" + cabalaNom, cursor: "not-allowed" } 
+
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth < 768;
+
+  const size = isMobile ? 280 : 460;
+  const radius = isMobile ? 150 : 170;
+
+  const photos = [
+    { bg: fisiologiaBg, icon: <FisiologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/"+ fisiologiaNom },
+    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={isMobile ? {base:"46px", md:"46px"} : {base:"38px", md:"38px"}} />, link: "/espacio/questions/" + neuropsicologiaNom },
+    { bg: astrologiaBg, icon: <AstrologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + astrologiaNom },
+    { bg: tcmBg, icon: <TCMIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + tcmNom },
+    { bg: nutricionBg, icon: <NutricionIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + nutricionNom },
+    { bg: ayurvedaBg, icon: <AyurvedaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + ayurvedaNom },
+    { bg: biologiaBg, icon: <BiologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + biologiaNom },
+    { bg: cabalaBg, icon: <CabalaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + cabalaNom }
   ];
 
-  const radius = { base: 100, sm: 120, md: 150, lg: 160, xl: 150 }; // radios más grandes para PC
   const angleStep = (2 * Math.PI) / photos.length;
 
   return (
@@ -24,92 +44,96 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
       bg="white"
       borderRadius="2xl"
       boxShadow="lg"
-      p={4}
-      position="relative"  
-      display="flex"
+      p={6}
       w="100%"
+      h={isMobile ? "500px" : "500px"}
+      display="flex"
       justifyContent="center"
-      h={{ base: "350px", sm: "400px", md: "500px", lg: "500px", xl: "500px" }} // alturas grandes
+      alignItems="center"
     >
+
+      {/* Mandala Container */}
       <Box
         position="relative"
-        w={{ base: "250px", sm: "320px", md: "400px", lg: "500px", xl: "500px" }}
-        h={{ base: "250px", sm: "320px", md: "400px", lg: "500px", xl: "500px" }}
+        w={`${size}px`}
+        h={`${size}px`}
         display="flex"
-        alignItems="center"
         justifyContent="center"
+        alignItems="center"
       >
+
         {/* Centro */}
-        <Box
+        <MotionBox
           position="absolute"
-          w={{ base: "120px", md: "128px", lg: "150px", xl: "180px" }}
-          h={{ base: "120px", md: "128px", lg: "150px", xl: "180px" }}
+          w={isMobile ? "150px" : "180px"}
+          h={isMobile ? "150px" : "180px"}
           borderRadius="full"
           overflow="hidden"
-          cursor="pointer"
           boxShadow="xl"
           border="4px solid white"
           zIndex={10}
-          transition="transform 0.3s"
+          cursor="pointer"
           onClick={()=> navigate("/espacio/espacioHome")}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.7 }}
         >
-          <Image src={props.fotoCentro ?? "/img/noImg.png"} alt="Centro" w="100%" h="100%" objectFit="cover" /> 
-        </Box>
+          <Image
+            src={props.fotoCentro ?? "/img/noImg.png"}
+            w="100%"
+            h="100%"
+            objectFit="cover"
+          />
+        </MotionBox>
 
+        {/* Círculos del mandala */}
         {photos.map((photo, index) => {
+
           const angle = angleStep * index - Math.PI / 2;
 
-          const r = radius.base; // base
-          const rSm = radius.sm;
-          const rMd = radius.md;
-          const rLg = radius.lg;
-          const rXl = radius.xl;
-
-          let rFinal = r;
-          if (typeof window !== "undefined") {
-            const width = window.innerWidth;
-            if (width >= 1280) rFinal = rXl;       // xl
-            else if (width >= 1024) rFinal = rLg;  // lg
-            else if (width >= 768) rFinal = rMd;   // md
-            else if (width >= 480) rFinal = rSm;   // sm
-          }
-
-          const x = Math.cos(angle) * rFinal;
-          const y = Math.sin(angle) * rFinal;
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
 
           return (
-            <Box
+            <MotionBox
               key={index}
               position="absolute"
-              cursor={photo.cursor}
-              w={{ base: "58px", sm: "64px", md: "66px", lg: "80px", xl: "96px" }}
-              h={{ base: "58px", sm: "64px", md: "66px", lg: "80px", xl: "96px" }}
+              cursor="pointer"
+              w={isMobile ? "78px" : "96px"}
+              h={isMobile ? "78px" : "96px"}
               borderRadius="full"
               overflow="hidden"
               onClick={()=> navigate(photo.link)}
               boxShadow="lg"
               border="4px solid white"
-              transform={`translate(${x}px, ${y}px)`}
-              transition="transform 0.3s"
-              _hover={{ transform: `translate(${x}px, ${y}px) scale(1.1)` }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+                x,
+                y
+              }}
+              transition={{
+                duration: 0.7,
+                delay: index * 0.06
+              }}
             >
               <Box
                 w="100%"
                 h="100%"
                 bg={photo.bg}
-                justifyContent="center"
                 display="flex"
+                justifyContent="center"
                 alignItems="center"
               >
                 {photo.icon}
               </Box>
-            </Box>
+            </MotionBox>
           );
         })}
       </Box>
     </Box>
   );
 };
-
 
 export default PhotoMandala;
