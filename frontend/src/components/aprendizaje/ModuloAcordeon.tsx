@@ -23,7 +23,7 @@ export function ModuloAcordeon(props:{
         p={5}
         color={props.color}
         borderRadius="2xl"
-        boxShadow="md"
+        boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
         cursor="pointer"
         onClick={() => setOpen(!open)}
         transition="all 0.2s"
@@ -61,7 +61,7 @@ export function ModuloAcordeon(props:{
               onClick={()=> navigate(sub.link)}
               p={4}
               borderRadius="xl"
-              boxShadow="sm"
+              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
               _hover={{ filter: "brightness(0.92)" }}
             >
               <Text fontWeight="600">{sub.nom}</Text>

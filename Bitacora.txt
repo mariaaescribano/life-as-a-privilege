@@ -1,14 +1,17 @@
  
-NEXT STEPS
-- editableCard decir fallos
-- para cada bloque hacer endpoint
 
 
 ---------------------------------------------
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-
+COSAS:
+- Qua cuando se esta cargando la pagina se ponga un spinner
+- que cuando se cambie la imagen, salga un spinner hasta q acabe de cambiarse
+- q el usu pueda ver su contra cuando hace log in, si quiere
+- en questions hacer que todos tengan mismo boxshadow de luz azul, q no se corte
+- que modules page y theme preguntas se parezcna lo maximo posible
+- hacer parte de quien soy con el estilo
 
 
 

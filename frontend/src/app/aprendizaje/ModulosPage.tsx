@@ -133,7 +133,7 @@ export default function ModulesPage() {
             <Box
               bg={moduloDatos.bgColor}
               borderRadius="2xl"
-              boxShadow="0 6px 30px rgba(0,0,0,0.3), 0 0 35px rgba(107,196,200,0.5)"
+              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
               px={{ base: 8, md: 14 }}
               py={{ base: 6, md: 8 }}
               w="100%"

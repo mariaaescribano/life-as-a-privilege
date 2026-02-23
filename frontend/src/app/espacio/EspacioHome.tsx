@@ -4,14 +4,22 @@ import {
   API_URL,
   AprendizajeIcon,
   astrologiaBg, AstrologiaIcon, astrologiaNom,
+  astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom,
+  ayurvedaTxt,
   biologiaBg, BiologiaIcon, biologiaNom,
+  biologiaTxt,
   cabalaBg, CabalaIcon, cabalaNom,
+  cabalaTxt,
   EspacioPersonalIcon,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom,
+  fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom,
+  neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom,
+  nutricionTxt,
   tcmBg, TCMIcon, tcmNom,
+  tcmTxt,
 } from "../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -20,14 +28,14 @@ const EspacioHome = () => {
   const navigate = useNavigate();
 
   const photos = [
-    { bg: fisiologiaBg,      icon: <FisiologiaIcon size="58px" />,                              link: "/espacio/questions/" + fisiologiaNom,      cursor: "not-allowed" },
-    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{ base: "58px", md: "58px" }} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer"     },
-    { bg: astrologiaBg,      icon: <AstrologiaIcon size="58px" />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "not-allowed" },
-    { bg: tcmBg,             icon: <TCMIcon size="58px" />,                                     link: "/espacio/questions/" + tcmNom,             cursor: "not-allowed" },
-    { bg: nutricionBg,       icon: <NutricionIcon size="58px" />,                               link: "/espacio/questions/" + nutricionNom,       cursor: "not-allowed" },
-    { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" },
-    { bg: biologiaBg,        icon: <BiologiaIcon size="58px" />,                                link: "/espacio/questions/" + biologiaNom,        cursor: "not-allowed" },
-    { bg: cabalaBg,          icon: <CabalaIcon size="58px" />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "not-allowed" },
+    { bg: fisiologiaBg,      icon: <FisiologiaIcon size="58px" />,                              link: "/espacio/questions/" + fisiologiaNom,      cursor: "not-allowed" , txt: fisiologiaTxt},
+    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{ base: "58px", md: "58px" }} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer"  , txt: neuropsicologiaTxt   },
+    { bg: astrologiaBg,      icon: <AstrologiaIcon size="58px" />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "not-allowed" , txt: astrologiaTxt},
+    { bg: tcmBg,             icon: <TCMIcon size="58px" />,                                     link: "/espacio/questions/" + tcmNom,             cursor: "not-allowed" , txt: tcmTxt},
+    { bg: nutricionBg,       icon: <NutricionIcon size="58px" />,                               link: "/espacio/questions/" + nutricionNom,       cursor: "not-allowed", txt: nutricionTxt },
+    { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" , txt: ayurvedaTxt},
+    { bg: biologiaBg,        icon: <BiologiaIcon size="58px" />,                                link: "/espacio/questions/" + biologiaNom,        cursor: "not-allowed" , txt: biologiaTxt},
+    { bg: cabalaBg,          icon: <CabalaIcon size="58px" />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "not-allowed" , txt: cabalaTxt},
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;
@@ -206,12 +214,12 @@ const EspacioHome = () => {
                     overflow="hidden"
                     boxShadow="0 4px 20px rgba(0,0,0,0.35), 0 0 32px rgba(107,196,200,0.95), 0 0 65px rgba(107,196,200,0.5), 0 0 100px rgba(107,196,200,0.2)"
                     onClick={() => photo.cursor === "pointer" && navigate(photo.link)}
-                    border="4px solid rgba(255,255,255,0.8)"
+                    border={"4px solid "+ photo.txt}
                     transform={`translate(${x}px, ${y}px)`}
                     transition="all 0.3s ease"
                     _hover={
                       photo.cursor === "pointer"
-                        ? { transform: `translate(${x}px, ${y}px) scale(1.18)`, border: "4px solid white" }
+                        ? { transform: `translate(${x}px, ${y}px) scale(1.18)`, border: ("4px solid " + photo.txt) }
                         : {}
                     }
                   >

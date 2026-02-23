@@ -127,7 +127,7 @@ const ThemePreguntas = () => {
             <Box
               bg={theme.bgColor}
               borderRadius="2xl"
-              boxShadow="0 6px 30px rgba(0,0,0,0.3), 0 0 35px rgba(107,196,200,0.5)"
+              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
               px={{ base: 8, md: 14 }}
               py={{ base: 6, md: 8 }}
               w="100%"
@@ -138,7 +138,7 @@ const ThemePreguntas = () => {
                 {theme.icon}
                 <Text
                   color={theme.color}
-                  fontSize={{ base: "2xl", md: "3xl" }}
+                  fontSize={{ base: "2xl", md: "4xl" }}
                   fontWeight="700"
                   letterSpacing="0.05em"
                   filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.3))"

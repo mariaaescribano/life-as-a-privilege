@@ -357,10 +357,10 @@ const Home = () => {
                         position="absolute"
                         top="-28px" left="50%"
                         transform="translateX(-50%)"
-                        bg={d.txt}
+                        bg={d.bg}
                         borderRadius="full"
                         p="10px"
-                        border="3px solid rgba(255,255,255,0.6)"
+                        border={"3px solid "+ d.txt}
                         boxShadow="0 4px 16px rgba(107,196,200,0.6)"
                         w="56px" h="56px"
                         display="flex" alignItems="center" justifyContent="center"
