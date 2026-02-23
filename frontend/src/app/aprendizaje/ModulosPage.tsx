@@ -89,8 +89,8 @@ export default function ModulesPage() {
             onClick={() => navigate("/espacio/espacioHome")}
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
-            <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Mi Espacio
             </Text>
           </Flex>
@@ -100,8 +100,8 @@ export default function ModulesPage() {
             onClick={() => navigate("/aprendizaje/aprendizajeHome")}
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
-            <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Aprendizajes
             </Text>
           </Flex>

@@ -173,8 +173,8 @@ const Home = () => {
               onClick={() => navigate("/espacio/espacioHome")}
               color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
             >
-              <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+              <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
                 Mi Espacio
               </Text>
             </Flex>
@@ -184,8 +184,8 @@ const Home = () => {
               onClick={() => navigate("/aprendizaje/aprendizajeHome")}
               color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
             >
-              <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+              <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
                 Aprendizajes
               </Text>
             </Flex>
@@ -286,9 +286,9 @@ const Home = () => {
                 transition="opacity 0.75s ease 0.12s, transform 0.75s ease 0.12s"
               >
                 <Flex align="center" gap={3}>
-                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="32px" />
+                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="42px" />
                   <Text
-                    color="white" fontSize={{ base: "2xl", md: "3xl", lg: "3xl" }}
+                    color="white" fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
                     fontWeight="700" letterSpacing="0.05em"
                     textShadow="0 2px 10px rgba(0,100,90,0.4)" textAlign="center"
                   >
@@ -307,17 +307,19 @@ const Home = () => {
               px={{ base: 6, md: 12 }}
               py={{ base: 10, md: 14 }}
             >
-              <Text
-                color="white"
-                fontSize={{ base: "3xl", md: "4xl" }}
-                fontWeight="700"
-                letterSpacing="0.06em"
-                textShadow="0 2px 10px rgba(0,100,90,0.4)"
-                textAlign="center"
-                mb={{ base: 10, md: 14 }}
-              >
-                Aprendizajes
-              </Text>
+              <Flex align="center" justify="center" gap={3} mb={{ base: 10, md: 14 }}>
+                <AprendizajeIcon color="rgba(255,255,255,0.9)" size="42px" />
+                <Text
+                  color="white"
+                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                  fontWeight="700"
+                  letterSpacing="0.06em"
+                  textShadow="0 2px 10px rgba(0,100,90,0.4)"
+                  textAlign="center"
+                >
+                  Aprendizajes
+                </Text>
+              </Flex>
 
               <Grid
                 templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
@@ -329,8 +331,8 @@ const Home = () => {
                     <Box
                       key={i}
                       position="relative"
-                      mt="34px"
-                      pt="38px"
+                      mt="42px"
+                      pt="46px"
                       pb={{ base: 5, md: 7 }}
                       px={{ base: 3, md: 5 }}
                       bg={d.bg}
@@ -352,17 +354,17 @@ const Home = () => {
                       {/* Icono sobresaliente — bg con color contraste */}
                       <Box
                         position="absolute"
-                        top="-28px" left="50%"
+                        top="-36px" left="50%"
                         transform="translateX(-50%)"
                         bg={d.bg}
                         borderRadius="full"
-                        p="10px"
+                        p="8px"
                         border={"3px solid "+ d.txt}
                         boxShadow="0 4px 16px rgba(107,196,200,0.6)"
-                        w="56px" h="56px"
+                        w="72px" h="72px"
                         display="flex" alignItems="center" justifyContent="center"
                       >
-                        {d.renderIcon("28px")}
+                        {d.renderIcon("42px")}
                       </Box>
 
                       <Text

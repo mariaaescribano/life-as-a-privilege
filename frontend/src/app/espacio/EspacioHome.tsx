@@ -118,8 +118,8 @@ const EspacioHome = () => {
               onClick={() => navigate("/espacio/espacioHome")}
               color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
             >
-              <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+              <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
                 Mi Espacio
               </Text>
             </Flex>
@@ -129,8 +129,8 @@ const EspacioHome = () => {
               onClick={() => navigate("/aprendizaje/aprendizajeHome")}
               color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
             >
-              <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+              <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
                 Aprendizajes
               </Text>
             </Flex>
@@ -159,10 +159,10 @@ const EspacioHome = () => {
           >
             {/* Título */}
             <Flex align="center" gap={3} mb={{ base: 8, md: 10 }}>
-              <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="34px" />
+              <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="42px" />
               <Text
                 color="white"
-                fontSize={{ base: "3xl", md: "4xl" }}
+                fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
                 fontWeight="700"
                 letterSpacing="0.05em"
                 textShadow="0 2px 10px rgba(0,100,90,0.4)"
@@ -235,12 +235,12 @@ const EspacioHome = () => {
                     overflow="hidden"
                     boxShadow="0 4px 20px rgba(0,0,0,0.35), 0 0 32px rgba(107,196,200,0.95), 0 0 65px rgba(107,196,200,0.5), 0 0 100px rgba(107,196,200,0.2)"
                     onClick={() => photo.cursor === "pointer" && navigate(photo.link)}
-                    border={"4px solid "+ photo.txt}
+                    border={"6px solid "+ photo.txt}
                     transform={`translate(${x}px, ${y}px)`}
                     transition="all 0.3s ease"
                     _hover={
                       photo.cursor === "pointer"
-                        ? { transform: `translate(${x}px, ${y}px) scale(1.18)`, border: ("4px solid " + photo.txt) }
+                        ? { transform: `translate(${x}px, ${y}px) scale(1.18)`, border: ("6px solid " + photo.txt) }
                         : {}
                     }
                   >

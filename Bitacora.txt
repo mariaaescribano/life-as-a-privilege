@@ -7,8 +7,8 @@ USAR OBJ+ID : userId
 
 
 
-- hacer componente para header con letra grande fontSize={{ base: "md", md: "lg" }}
-- 
+- headers revisar
+- cambio de foto actualizar!
 
 
 

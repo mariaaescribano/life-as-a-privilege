@@ -27,7 +27,7 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }
         <Box
           borderRadius="full"
           bg={bgColor}
-          border={`3px solid ${color}`}
+          border={`5px solid ${color}`}
           boxShadow={`0 0 22px ${color}77, 0 0 55px ${color}28`}
           w={{ base: "60px", md: "72px" }}
           h={{ base: "60px", md: "72px" }}
@@ -40,9 +40,10 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }
         </Box>
         <Text
           color={color}
-          fontSize={{ base: "3xl", md: "4xl" }}
+          fontSize={{ base: "4xl", md: "5xl" }}
           fontWeight="700"
           letterSpacing="0.05em"
+         // textShadow="0 2px 12px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)"
           filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
         >
           {title}

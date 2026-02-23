@@ -4,14 +4,14 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
-  astrologiaBg, AstrologiaIcon, astrologiaNom,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom,
-  biologiaBg, BiologiaIcon, biologiaNom,
-  cabalaBg, CabalaIcon, cabalaNom,
-  fisiologiaBg, FisiologiaIcon, fisiologiaNom,
-  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom,
-  nutricionBg, NutricionIcon, nutricionNom,
-  tcmBg, TCMIcon, tcmNom
+  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
+  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
+  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
+  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
+  tcmBg, TCMIcon, tcmNom, tcmTxt
 } from "../../GlobalVariables";
 
 const MotionBox = motion(Box);
@@ -27,14 +27,14 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
   const radius = isMobile ? 150 : 170;
 
   const photos = [
-    { bg: fisiologiaBg, icon: <FisiologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/"+ fisiologiaNom },
-    { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={isMobile ? {base:"46px", md:"46px"} : {base:"38px", md:"38px"}} />, link: "/espacio/questions/" + neuropsicologiaNom },
-    { bg: astrologiaBg, icon: <AstrologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + astrologiaNom },
-    { bg: tcmBg, icon: <TCMIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + tcmNom },
-    { bg: nutricionBg, icon: <NutricionIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + nutricionNom },
-    { bg: ayurvedaBg, icon: <AyurvedaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + ayurvedaNom },
-    { bg: biologiaBg, icon: <BiologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + biologiaNom },
-    { bg: cabalaBg, icon: <CabalaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + cabalaNom }
+    { bg: fisiologiaBg, txt: fisiologiaTxt, icon: <FisiologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/"+ fisiologiaNom },
+    { bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={isMobile ? {base:"46px", md:"46px"} : {base:"38px", md:"38px"}} />, link: "/espacio/questions/" + neuropsicologiaNom },
+    { bg: astrologiaBg, txt: astrologiaTxt, icon: <AstrologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + astrologiaNom },
+    { bg: tcmBg, txt: tcmTxt, icon: <TCMIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + tcmNom },
+    { bg: nutricionBg, txt: nutricionTxt, icon: <NutricionIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + nutricionNom },
+    { bg: ayurvedaBg, txt: ayurvedaTxt, icon: <AyurvedaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + ayurvedaNom },
+    { bg: biologiaBg, txt: biologiaTxt, icon: <BiologiaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + biologiaNom },
+    { bg: cabalaBg, txt: cabalaTxt, icon: <CabalaIcon size={isMobile ? "46px" : "38px"} />, link: "/espacio/questions/" + cabalaNom }
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;
@@ -104,7 +104,7 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
               overflow="hidden"
               onClick={()=> navigate(photo.link)}
               boxShadow="0 4px 20px rgba(0,0,0,0.35), 0 0 32px rgba(107,196,200,0.95), 0 0 65px rgba(107,196,200,0.5), 0 0 100px rgba(107,196,200,0.2)"
-              border="3px solid rgba(255,255,255,0.8)"
+              border={`5px solid ${photo.txt}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{
                 scale: 1,
@@ -112,6 +112,7 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
                 x,
                 y
               }}
+              whileHover={{ scale: 1.22 }}
               transition={{
                 duration: 0.7,
                 delay: index * 0.06

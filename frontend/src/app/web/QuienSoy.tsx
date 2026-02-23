@@ -140,7 +140,7 @@ const QuienSoy = () => {
               border="4px solid rgba(255,255,255,0.75)"
               boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(107,196,200,0.9), 0 0 75px rgba(107,196,200,0.45)"
             >
-              <Image src="/img/me3.jpg" alt="María Escribano" w="100%" h="100%" objectFit="cover" />
+              <Image src="/img/me3.jpg" alt="María Escribano" w="100%" h="100%" objectFit="cover" objectPosition="center 35%" sx={{ transform: "scale(1.18)", transformOrigin: "center 35%" }} />
             </Box>
 
             {/* Bio */}

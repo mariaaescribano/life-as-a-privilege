@@ -18,6 +18,7 @@ type Discipline = {
   txt: string;
   renderIcon: (size: string) => React.ReactNode;
   desc: string;
+  link: string;
 };
 
 const disciplines: Discipline[] = [
@@ -27,6 +28,7 @@ const disciplines: Discipline[] = [
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
     desc: "Comprende los mecanismos vitales del cuerpo y optimiza tu salud desde su raíz funcional.",
+    link: "/aprendizaje/modulosPage/" + fisiologiaNom,
   },
   {
     name: neuropsicologiaNom,
@@ -34,6 +36,7 @@ const disciplines: Discipline[] = [
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={size} />,
     desc: "Conecta mente y cuerpo para transformar patrones mentales y emocionales profundos.",
+    link: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
   },
   {
     name: astrologiaNom,
@@ -41,6 +44,7 @@ const disciplines: Discipline[] = [
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={size} />,
     desc: "Descubre los ciclos cósmicos que influyen en tu personalidad y en tu camino de vida.",
+    link: "/aprendizaje/modulosPage/" + astrologiaNom,
   },
   {
     name: tcmNom,
@@ -48,6 +52,7 @@ const disciplines: Discipline[] = [
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={size} />,
     desc: "Restablece el equilibrio energético del organismo con milenaria sabiduría oriental.",
+    link: "/aprendizaje/modulosPage/" + tcmNom,
   },
   {
     name: nutricionNom,
@@ -55,6 +60,7 @@ const disciplines: Discipline[] = [
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={size} />,
     desc: "Alimenta tu cuerpo con conciencia, adaptando la dieta a tu naturaleza única.",
+    link: "/aprendizaje/modulosPage/" + nutricionNom,
   },
   {
     name: ayurvedaNom,
@@ -62,6 +68,7 @@ const disciplines: Discipline[] = [
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={size} />,
     desc: "El arte de vivir en armonía con tu constitución natural para una salud integral.",
+    link: "/aprendizaje/modulosPage/" + ayurvedaNom,
   },
   {
     name: biologiaNom,
@@ -69,6 +76,7 @@ const disciplines: Discipline[] = [
     txt: biologiaTxt,
     renderIcon: (size) => <BiologiaIcon size={size} />,
     desc: "El poder curativo de las plantas al servicio de tu bienestar físico y emocional.",
+    link: "/aprendizaje/modulosPage/" + biologiaNom,
   },
   {
     name: cabalaNom,
@@ -76,6 +84,7 @@ const disciplines: Discipline[] = [
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={size} />,
     desc: "Explora la dimensión espiritual de la existencia y los secretos del árbol de la vida.",
+    link: "/aprendizaje/modulosPage/" + cabalaNom,
   },
 ];
 
@@ -338,8 +347,8 @@ const Welcome = () => {
             <Box
               key={i}
               position="relative"
-              mt="34px"
-              pt="38px"
+              mt="42px"
+              pt="46px"
               pb={{ base: 5, md: 7 }}
               px={{ base: 3, md: 5 }}
               bg={d.bg}
@@ -359,21 +368,21 @@ const Welcome = () => {
               {/* Icono que sobresale por arriba */}
               <Box
                 position="absolute"
-                top="-28px"
+                top="-36px"
                 left="50%"
                 transform="translateX(-50%)"
                 bg={d.bg}
                 borderRadius="full"
-                p="10px"
-                border="3px solid rgba(255,255,255,0.5)"
+                p="8px"
+                border={"3px solid "+ d.txt}
                 boxShadow="0 4px 16px rgba(107,196,200,0.6)"
-                w="56px"
-                h="56px"
+                w="72px"
+                h="72px"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
               >
-                {d.renderIcon("28px")}
+                {d.renderIcon("42px")}
               </Box>
 
               <Text
@@ -495,16 +504,16 @@ const Welcome = () => {
               <Box
                 bg={selected.bg}
                 borderRadius="full"
-                p="16px"
-                border={`3px solid ${selected.txt}`}
+                p="12px"
+                border={`5px solid ${selected.txt}`}
                 boxShadow="0 4px 24px rgba(0,0,0,0.15)"
-                w="80px"
-                h="80px"
+                w="96px"
+                h="96px"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
               >
-                {selected.renderIcon("44px")}
+                {selected.renderIcon("52px")}
               </Box>
             </Flex>
 
@@ -523,9 +532,32 @@ const Welcome = () => {
               fontSize={{ base: "sm", md: "md" }}
               lineHeight="tall"
               opacity={0.85}
+              mb={7}
             >
               {selected.desc}
             </Text>
+
+            <Flex justify="center">
+              <Box
+                as="button"
+                onClick={() => navigate(selected.link)}
+                color={selected.txt}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "lg", md: "xl" }}
+                letterSpacing="0.12em"
+                px={10}
+                py={3}
+                borderRadius="full"
+                border={`2px solid ${selected.txt}`}
+                bg={`${selected.txt}18`}
+                cursor="pointer"
+                _hover={{ bg: `${selected.txt}33`, transform: "translateY(-2px)" }}
+                transition="all 0.2s ease"
+              >
+                APRENDER
+              </Box>
+            </Flex>
           </Box>
         </Box>
       )}

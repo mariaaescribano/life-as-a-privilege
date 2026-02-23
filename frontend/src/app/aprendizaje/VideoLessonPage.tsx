@@ -14,7 +14,6 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
 } from "../../GlobalVariables";
-import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -103,8 +102,8 @@ export default function VideoLessonPage() {
             onClick={() => navigate("/espacio/espacioHome")}
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
-            <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Mi Espacio
             </Text>
           </Flex>
@@ -114,8 +113,8 @@ export default function VideoLessonPage() {
             onClick={() => navigate("/aprendizaje/aprendizajeHome")}
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
-            <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Aprendizajes
             </Text>
           </Flex>
@@ -160,7 +159,7 @@ export default function VideoLessonPage() {
                       <Box
                         borderRadius="full"
                         bg={moduloDatos.bgColor}
-                        border={`3px solid ${moduloDatos.color}`}
+                        border={`5px solid ${moduloDatos.color}`}
                         boxShadow={`0 0 22px ${moduloDatos.color}77, 0 0 55px ${moduloDatos.color}28`}
                         w={{ base: "60px", md: "72px" }}
                         h={{ base: "60px", md: "72px" }}
@@ -173,10 +172,11 @@ export default function VideoLessonPage() {
                       </Box>
                       <Text
                         color={moduloDatos.color}
-                        fontSize={{ base: "3xl", md: "4xl" }}
+                        fontSize={{ base: "lg", md: "2xl" }}
                         fontWeight="700"
                         letterSpacing="0.05em"
-                        filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
+                        textShadow="0 2px 8px rgba(0,0,0,0.3)"
+                        filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))"
                       >
                         {datos.nom}
                       </Text>
@@ -202,17 +202,41 @@ export default function VideoLessonPage() {
             </Box>
 
             {/* Descripción */}
-            <Text
-              maxW="800px"
-              textAlign="center"
-              fontSize={{ base: "lg", md: "xl" }}
-              color="rgba(255,255,255,0.9)"
-              lineHeight="1.8"
-              letterSpacing="0.02em"
-              mb={{ base: 8, md: 10 }}
-            >
-              {datos.descripcion}
-            </Text>
+            {moduloDatos ? (
+              <Box
+                maxW="800px"
+                w="100%"
+                textAlign="center"
+                bg={moduloDatos.bgColor + "99"}
+                border={`1px solid ${moduloDatos.color}44`}
+                borderRadius="2xl"
+                px={{ base: 6, md: 10 }}
+                py={{ base: 4, md: 6 }}
+                mb={{ base: 8, md: 10 }}
+                sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+              >
+                <Text
+                  fontSize={{ base: "lg", md: "xl" }}
+                  color={moduloDatos.color}
+                  lineHeight="1.8"
+                  letterSpacing="0.02em"
+                >
+                  {datos.descripcion}
+                </Text>
+              </Box>
+            ) : (
+              <Text
+                maxW="800px"
+                textAlign="center"
+                fontSize={{ base: "lg", md: "xl" }}
+                color="rgba(255,255,255,0.9)"
+                lineHeight="1.8"
+                letterSpacing="0.02em"
+                mb={{ base: 8, md: 10 }}
+              >
+                {datos.descripcion}
+              </Text>
+            )}
 
             {/* Botones de navegación */}
             <Flex gap={4} justify="center">
