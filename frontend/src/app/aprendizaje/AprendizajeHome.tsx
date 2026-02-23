@@ -67,7 +67,7 @@ export const AprendizajeHome = () => {
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
             <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Mi Espacio
             </Text>
           </Flex>
@@ -78,7 +78,7 @@ export const AprendizajeHome = () => {
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
             <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Aprendizajes
             </Text>
           </Flex>
@@ -111,7 +111,7 @@ export const AprendizajeHome = () => {
             <AprendizajeIcon color="rgba(255,255,255,0.9)" size="34px" />
             <Text
               color="white"
-              fontSize={{ base: "2xl", md: "3xl" }}
+              fontSize={{ base: "3xl", md: "4xl" }}
               fontWeight="700"
               letterSpacing="0.05em"
               textShadow="0 2px 10px rgba(0,100,90,0.4)"

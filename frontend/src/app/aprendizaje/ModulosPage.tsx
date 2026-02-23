@@ -1,4 +1,5 @@
-import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -89,7 +90,7 @@ export default function ModulesPage() {
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
             <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Mi Espacio
             </Text>
           </Flex>
@@ -100,7 +101,7 @@ export default function ModulesPage() {
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
             <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Aprendizajes
             </Text>
           </Flex>
@@ -129,30 +130,12 @@ export default function ModulesPage() {
             pt={{ base: 10, md: 14 }}
             pb={{ base: 14, md: 20 }}
           >
-            {/* Cabecera disciplina — con sus propios colores */}
-            <Box
-              bg={moduloDatos.bgColor}
-              borderRadius="2xl"
-              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
-              px={{ base: 8, md: 14 }}
-              py={{ base: 6, md: 8 }}
-              w="100%"
-              maxW="850px"
-              mb={{ base: 10, md: 12 }}
-            >
-              <HStack spacing={4} justify="center">
-                {moduloDatos.icon}
-                <Text
-                  color={moduloDatos.color}
-                  fontSize={{ base: "2xl", md: "3xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.05em"
-                  filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.3))"
-                >
-                  {moduloDatos.nom}
-                </Text>
-              </HStack>
-            </Box>
+            <DisciplineHeader
+              icon={moduloDatos.icon}
+              title={moduloDatos.nom}
+              bgColor={moduloDatos.bgColor}
+              color={moduloDatos.color}
+            />
 
             {/* Módulos directos — sin card contenedor */}
             <Box w="100%" maxW="850px">

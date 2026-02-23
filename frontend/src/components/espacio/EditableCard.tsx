@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
-  Card,
-  CardBody,
   Collapse,
   Flex,
   IconButton,
@@ -136,13 +134,12 @@ const EditableCard = (props:{
         opacity={0.8}
         borderRadius="3xl"
         bg={props.bgColor}
-        boxShadow="0 4px 18px rgba(0,0,0,0.2), 0 0 24px rgba(107,196,200,0.65), 0 0 48px rgba(107,196,200,0.3)"
         cursor="pointer"
         transition="all 0.2s"
-        _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
+        _hover={{ transform: "translateY(-2px)" }}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Text fontSize="lg" fontWeight="700" color={props.color} >
+        <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" color={props.color} >
           {props.pregunta}
         </Text>
 
@@ -157,85 +154,81 @@ const EditableCard = (props:{
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
-        <Box mt={4} pl={4}>
-          <Card
+        <Box mt={3} pl={3}>
+          <Box
             borderRadius="3xl"
-            boxShadow="sm"
             bg={props.bgColor}
-            p={4}
+            p={5}
           >
-            {props.consejo && <Flex justify="center" align="center" mb={1}>
-              <Box
-                w="80%"
-                bg="gray.100"
-                p={3}
-                borderRadius="20px"
-                justifyContent="center"
-                display="flex"        
-                flexDirection="row"  
-                alignItems="center"  
-                alignContent={"center"}
-                gap={3}              
-              >
-                <HelpIcon size={{ base: "24px", md: "24px" }} color={props.color} />
-                <Text
-                  color={props.color}
-                  fontSize="sm"
+            {props.consejo && (
+              <Flex justify="center" align="center" mb={4}>
+                <Flex
+                  w="85%"
+                  bg="rgba(255,255,255,0.15)"
+                  border="1px solid rgba(255,255,255,0.2)"
+                  p={3}
+                  borderRadius="20px"
+                  alignItems="center"
+                  gap={3}
                 >
-                  {props.consejo}
-                </Text>
-              </Box>
-            </Flex>}
-
-            <CardBody>
-              <Flex gap={4}>
-                <Textarea
-                  ref={textareaRef}
-                  value={text ? (isVisible ? text : "•".repeat(text?.length)) : ""}
-                  onChange={(e) => isEditing ? setText(e.target.value) : ""}
-                  isReadOnly={!isEditing}
-                  resize="none"
-                  isDisabled={!isEditing}
-                  minH="140px"
-                  bgColor={props.bgColor}
-                  color={props.color}
-                  borderRadius="2xl"
-                  bg={!isVisible ? "gray.200" : "white"}
-                  _hover={{
-                    cursor: isEditing == true ? "cursor" : "not-allowed"
-                  }}
-                  _focus={{
-                    borderColor: turquesa,
-                    boxShadow: "0 0 0 3px rgba(0, 128, 128, 0.3)",
-                  }}
-                />
-                <VStack>
-                  <IconButton
-                    aria-label="Ver"
-                    icon={isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                    borderRadius="full"
-                    onClick={() => setIsVisible(!isVisible)}
-                  />
-                  <IconButton
-                    aria-label="Editar"
-                    icon={<Pencil size={18} />}
-                    borderRadius="full"
-                    onClick={toggleEdit}
-                  />
-                  <IconButton
-                    aria-label="Editar"
-                    disabled={!isEditing || color != null}
-                    icon={<CheckIcon size={18} />}
-                    borderRadius="full"
-                    onClick={toggleSave}
-                    bgColor={color ?? "gray.100"}
-                    _hover={isEditing ? { opacity: 0.8 } : {}}
-                  />
-                </VStack>
+                  <HelpIcon size={{ base: "24px", md: "24px" }} color={props.color} />
+                  <Text color={props.color} fontSize={{ base: "sm", md: "md" }}>
+                    {props.consejo}
+                  </Text>
+                </Flex>
               </Flex>
-            </CardBody>
+            )}
 
-          </Card>
+            <Flex gap={4}>
+              <Textarea
+                ref={textareaRef}
+                value={text ? (isVisible ? text : "•".repeat(text?.length)) : ""}
+                onChange={(e) => isEditing ? setText(e.target.value) : ""}
+                isReadOnly={!isEditing}
+                resize="none"
+                minH="140px"
+                color={props.color}
+                borderRadius="2xl"
+                border="1px solid rgba(255,255,255,0.2)"
+                bg={!isVisible ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.1)"}
+                _hover={{ cursor: isEditing ? "text" : "default" }}
+                _focus={{
+                  borderColor: turquesa,
+                  boxShadow: "0 0 0 3px rgba(0, 128, 128, 0.3)",
+                }}
+              />
+              <VStack>
+                <IconButton
+                  aria-label="Ver"
+                  icon={isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+                  borderRadius="full"
+                  bg="rgba(255,255,255,0.15)"
+                  color={props.color}
+                  _hover={{ bg: "rgba(255,255,255,0.28)" }}
+                  onClick={() => setIsVisible(!isVisible)}
+                />
+                <IconButton
+                  aria-label="Editar"
+                  icon={<Pencil size={18} />}
+                  borderRadius="full"
+                  bg="rgba(255,255,255,0.15)"
+                  color={props.color}
+                  _hover={{ bg: "rgba(255,255,255,0.28)" }}
+                  onClick={toggleEdit}
+                />
+                <IconButton
+                  aria-label="Guardar"
+                  disabled={!isEditing || color != null}
+                  icon={<CheckIcon size={18} />}
+                  borderRadius="full"
+                  bg={color ?? "rgba(255,255,255,0.15)"}
+                  color={props.color}
+                  _hover={isEditing ? { bg: "rgba(255,255,255,0.28)" } : {}}
+                  onClick={toggleSave}
+                />
+              </VStack>
+            </Flex>
+          </Box>
         </Box>
       </Collapse>
     </Box>

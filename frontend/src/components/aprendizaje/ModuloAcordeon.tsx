@@ -5,6 +5,11 @@ import React from "react";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
 import { useNavigate } from "react-router-dom";
 
+const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
+const GLOW_HOVER = "0 8px 24px rgba(0,0,0,0.28), 0 0 32px rgba(107,196,200,1)";
+const SUB_GLOW = "0 3px 12px rgba(0,0,0,0.18), 0 0 14px rgba(107,196,200,0.65)";
+const SUB_GLOW_HOVER = "0 6px 18px rgba(0,0,0,0.24), 0 0 22px rgba(107,196,200,0.9)";
+
 export function ModuloAcordeon(props:{
   title:string, bgColor:string, color:string,
   submodules: Submodulo[], icon:any
@@ -14,7 +19,7 @@ export function ModuloAcordeon(props:{
   const navigate = useNavigate();
 
   return (
-    <Box w="100%" maxW="800px" mx="auto" mb={6}>
+    <Box w="100%" maxW="800px" mx="auto" mb={5}>
       {/* Módulo principal */}
       <Flex
         align="center"
@@ -23,19 +28,18 @@ export function ModuloAcordeon(props:{
         p={5}
         color={props.color}
         borderRadius="2xl"
-        boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
+        boxShadow={GLOW}
         cursor="pointer"
         onClick={() => setOpen(!open)}
-        transition="all 0.2s"
-        _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
+        transition="all 0.25s"
+        _hover={{ transform: "translateY(-3px)", boxShadow: GLOW_HOVER }}
       >
         <HStack>
-            {< props.icon />}
-            <Text fontSize="xl" fontWeight="700">
-              {props.title}
-            </Text>
+          {< props.icon />}
+          <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
+            {props.title}
+          </Text>
         </HStack>
-        
 
         <Box
           as={ChevronDown}
@@ -46,34 +50,24 @@ export function ModuloAcordeon(props:{
         />
       </Flex>
 
-      {/* Submódulos */}
+      {/* Submódulos — glow individual, no se fusionan */}
       <Collapse in={open} animateOpacity>
-        <Box mt={4} pl={4} display="flex" flexDirection="column" gap={3}>
+        <Box mt={4} pl={2} pb={1} display="flex" flexDirection="column" gap={4}>
           {props.submodules.map((sub, i) => (
             <Flex
               key={i}
               align="center"
               justify="space-between"
-              opacity={0.8}
               bg={props.bgColor ?? "white"}
               color={props.color}
               cursor="pointer"
-              onClick={()=> navigate(sub.link)}
+              onClick={() => navigate(sub.link)}
               p={4}
-              borderRadius="xl"
-              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
-              _hover={{ filter: "brightness(0.92)" }}
+              borderRadius="2xl"
+              transition="all 0.25s"
+              _hover={{ transform: "translateY(-2px)"}}
             >
-              <Text fontWeight="600">{sub.nom}</Text>
-
-              {/* <Box
-                w="32px"
-                h="32px"
-                borderRadius="md"
-              >
-                <ViewIcon/>
-              </Box> */}
-
+              <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }}>{sub.nom}</Text>
             </Flex>
           ))}
         </Box>

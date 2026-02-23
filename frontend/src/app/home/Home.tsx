@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Collapse, Divider, Flex, Grid, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -134,9 +134,6 @@ const Home = () => {
     }
   }, [user]);
 
-  const toggleDisc = (d: Discipline) => {
-    setSelectedDisc(prev => prev?.name === d.name ? null : d);
-  };
 
   return (
     <Box
@@ -177,7 +174,7 @@ const Home = () => {
               color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
             >
               <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
                 Mi Espacio
               </Text>
             </Flex>
@@ -188,7 +185,7 @@ const Home = () => {
               color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
             >
               <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
                 Aprendizajes
               </Text>
             </Flex>
@@ -251,7 +248,7 @@ const Home = () => {
                 <VStack spacing={5} zIndex={1} position="relative" align="center">
                   <Text
                     color="white" fontWeight="700"
-                    fontSize={{ base: "3xl", md: "3xl", lg: "4xl" }}
+                    fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
                     textAlign="center" letterSpacing="0.06em" lineHeight="1.2"
                     textShadow="0 2px 10px rgba(0,100,90,0.4)"
                   >
@@ -259,7 +256,7 @@ const Home = () => {
                   </Text>
                   <Text
                     color="rgba(255,255,255,0.88)"
-                    fontSize={{ base: "md", md: "md", lg: "lg" }}
+                    fontSize={{ base: "lg", md: "lg", lg: "xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
                     textShadow="0 1px 5px rgba(0,100,90,0.25)"
                   >
@@ -267,7 +264,7 @@ const Home = () => {
                   </Text>
                   <Text
                     color="rgba(255,255,255,0.88)"
-                    fontSize={{ base: "md", md: "md", lg: "lg" }}
+                    fontSize={{ base: "lg", md: "lg", lg: "xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
                     textShadow="0 1px 5px rgba(0,100,90,0.25)"
                   >
@@ -291,7 +288,7 @@ const Home = () => {
                 <Flex align="center" gap={3}>
                   <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="32px" />
                   <Text
-                    color="white" fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
+                    color="white" fontSize={{ base: "2xl", md: "3xl", lg: "3xl" }}
                     fontWeight="700" letterSpacing="0.05em"
                     textShadow="0 2px 10px rgba(0,100,90,0.4)" textAlign="center"
                   >
@@ -312,7 +309,7 @@ const Home = () => {
             >
               <Text
                 color="white"
-                fontSize={{ base: "2xl", md: "3xl" }}
+                fontSize={{ base: "3xl", md: "4xl" }}
                 fontWeight="700"
                 letterSpacing="0.06em"
                 textShadow="0 2px 10px rgba(0,100,90,0.4)"
@@ -342,7 +339,7 @@ const Home = () => {
                         ? "0 0 0 3px white, 0 8px 32px rgba(255,255,255,0.35), 0 0 40px rgba(107,196,200,0.7)"
                         : "0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"}
                       cursor="pointer"
-                      onClick={() => toggleDisc(d)}
+                      onClick={() => setSelectedDisc(d)}
                       opacity={disciplinasReveal.visible ? 1 : 0}
                       transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
                       transition={`opacity 0.5s ease ${i * 0.09}s, transform 0.5s ease ${i * 0.09}s, box-shadow 0.25s ease`}
@@ -372,7 +369,7 @@ const Home = () => {
                         color={d.txt}
                         filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.4))"
                         fontWeight="700"
-                        fontSize={{ base: "xl", md: "xl", lg: "2xl" }}
+                        fontSize={{ base: "2xl", md: "2xl", lg: "3xl" }}
                         letterSpacing="0.03em"
                         lineHeight="short"
                       >
@@ -383,88 +380,6 @@ const Home = () => {
                 })}
               </Grid>
 
-              {/* ── TARJETA EXPANDIDA ── */}
-              <Collapse in={selectedDisc !== null} animateOpacity>
-                {selectedDisc && (
-                  <Box
-                    mt={10}
-                    bg="rgba(255,255,255,0.12)"
-                    border="1px solid rgba(255,255,255,0.35)"
-                    sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
-                    borderRadius="2xl"
-                    boxShadow="0 6px 30px rgba(107,196,200,0.4)"
-                    p={{ base: 7, md: 10 }}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    gap={6}
-                  >
-                    {/* Icono grande */}
-                    <Box
-                      bg={selectedDisc.txt}
-                      borderRadius="full"
-                      w={{ base: "88px", md: "108px" }}
-                      h={{ base: "88px", md: "108px" }}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      border="3px solid rgba(255,255,255,0.55)"
-                      boxShadow="0 4px 24px rgba(0,0,0,0.3), 0 0 40px rgba(107,196,200,0.5)"
-                    >
-                      {selectedDisc.renderIcon("52px")}
-                    </Box>
-
-                    {/* Descripción */}
-                    <Text
-                      color="rgba(255,255,255,0.92)"
-                      fontSize={{ base: "lg", md: "xl" }}
-                      textAlign="center"
-                      lineHeight="1.9"
-                      letterSpacing="0.02em"
-                      maxW="620px"
-                    >
-                      {selectedDisc.description}
-                    </Text>
-
-                    <Divider borderColor="rgba(255,255,255,0.25)" w="70%" />
-
-                    {/* Botones de acción */}
-                    <Flex gap={{ base: 4, md: 8 }} justify="center" wrap="wrap">
-                      <Flex
-                        align="center" gap={3} cursor="pointer"
-                        onClick={() => navigate(selectedDisc.linkAprendizaje)}
-                        bg="rgba(255,255,255,0.12)"
-                        border="1px solid rgba(255,255,255,0.32)"
-                        borderRadius="full"
-                        px={{ base: 5, md: 7 }} py={3}
-                        _hover={{ bg: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.65)" }}
-                        transition="all 0.2s"
-                      >
-                        <AprendizajeIcon color="rgba(255,255,255,0.9)" size="26px" />
-                        <Text color="rgba(255,255,255,0.9)" fontWeight="600" fontSize={{ base: "md", md: "lg" }}>
-                          Aprendizaje
-                        </Text>
-                      </Flex>
-
-                      <Flex
-                        align="center" gap={3} cursor="pointer"
-                        onClick={() => navigate(selectedDisc.linkEspacio)}
-                        bg="rgba(255,255,255,0.12)"
-                        border="1px solid rgba(255,255,255,0.32)"
-                        borderRadius="full"
-                        px={{ base: 5, md: 7 }} py={3}
-                        _hover={{ bg: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.65)" }}
-                        transition="all 0.2s"
-                      >
-                        <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="26px" />
-                        <Text color="rgba(255,255,255,0.9)" fontWeight="600" fontSize={{ base: "md", md: "lg" }}>
-                          Mi Espacio
-                        </Text>
-                      </Flex>
-                    </Flex>
-                  </Box>
-                )}
-              </Collapse>
             </Box>
 
           </Flex>
@@ -472,6 +387,135 @@ const Home = () => {
 
         {!user && <SpinnerTurquesa />}
       </Box>
+
+      {/* ── MODAL DISCIPLINA ── */}
+      {selectedDisc && (
+        <Box
+          position="fixed"
+          inset={0}
+          zIndex={200}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          bg="rgba(0,0,0,0.6)"
+          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+          onClick={() => setSelectedDisc(null)}
+          px={{ base: 5, md: 10 }}
+        >
+          {/* Card */}
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            bg={selectedDisc.bg + "e8"}
+            border={`1.5px solid ${selectedDisc.txt}55`}
+            sx={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
+            borderRadius="2xl"
+            boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selectedDisc.txt}22`}
+            p={{ base: 8, md: 12 }}
+            maxW="560px"
+            w="100%"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={6}
+            position="relative"
+          >
+            {/* X */}
+            <Box
+              position="absolute"
+              top={4}
+              right={5}
+              as="button"
+              onClick={() => setSelectedDisc(null)}
+              color={selectedDisc.txt}
+              fontSize="xl"
+              cursor="pointer"
+              bg={selectedDisc.txt + "22"}
+              borderRadius="full"
+              w="36px"
+              h="36px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              _hover={{ bg: selectedDisc.txt + "44" }}
+              transition="background 0.2s"
+            >
+              ✕
+            </Box>
+
+            {/* Icono */}
+            <Box
+              bg={selectedDisc.bg}
+              borderRadius="full"
+              w={{ base: "88px", md: "108px" }}
+              h={{ base: "88px", md: "108px" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              border={`3px solid ${selectedDisc.txt}`}
+              boxShadow={`0 4px 24px rgba(0,0,0,0.25), 0 0 32px ${selectedDisc.txt}55`}
+            >
+              {selectedDisc.renderIcon("52px")}
+            </Box>
+
+            {/* Nombre */}
+            <Text
+              color={selectedDisc.txt}
+              fontSize={{ base: "2xl", md: "3xl" }}
+              fontWeight="700"
+              letterSpacing="0.04em"
+              textAlign="center"
+            >
+              {selectedDisc.name}
+            </Text>
+
+            {/* Descripción */}
+            <Text
+              color={selectedDisc.txt}
+              fontSize={{ base: "lg", md: "xl" }}
+              textAlign="center"
+              lineHeight="1.9"
+              letterSpacing="0.02em"
+              opacity={0.82}
+            >
+              {selectedDisc.description}
+            </Text>
+
+            {/* Botones */}
+            <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap" mt={2}>
+              <Flex
+                align="center" gap={3} cursor="pointer"
+                onClick={() => navigate(selectedDisc.linkEspacio)}
+                bg={selectedDisc.txt + "18"}
+                border={`1px solid ${selectedDisc.txt}66`}
+                borderRadius="full"
+                px={{ base: 5, md: 7 }} py={3}
+                _hover={{ bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` }}
+                transition="all 0.2s"
+              >
+                <EspacioPersonalIcon color={selectedDisc.txt} size="24px" />
+                <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                  Mi Espacio
+                </Text>
+              </Flex>
+               <Flex
+                align="center" gap={3} cursor="pointer"
+                onClick={() => navigate(selectedDisc.linkAprendizaje)}
+                bg={selectedDisc.txt + "18"}
+                border={`1px solid ${selectedDisc.txt}66`}
+                borderRadius="full"
+                px={{ base: 5, md: 7 }} py={3}
+                _hover={{ bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` }}
+                transition="all 0.2s"
+              >
+                <AprendizajeIcon color={selectedDisc.txt} size="24px" />
+                <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                  Aprendizaje
+                </Text>
+              </Flex>
+            </Flex>
+          </Box>
+        </Box>
+      )}
 
       {/* ── FOOTER ── */}
       <Box

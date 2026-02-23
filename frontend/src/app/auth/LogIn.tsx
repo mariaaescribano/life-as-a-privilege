@@ -123,7 +123,7 @@ export default function LogIn() {
             onClick={() => navigate("/logIn")}
             color="white"
             fontWeight="600"
-            fontSize={{ base: "sm", md: "md" }}
+            fontSize={{ base: "md", md: "lg" }}
             letterSpacing="0.03em"
             textShadow="0 1px 4px rgba(0,80,70,0.5)"
             _hover={{ color: "white", textDecoration: "none" }}
@@ -137,7 +137,7 @@ export default function LogIn() {
             onClick={() => navigate("/signIn")}
             color="white"
             fontWeight="600"
-            fontSize={{ base: "sm", md: "md" }}
+            fontSize={{ base: "md", md: "lg" }}
             letterSpacing="0.04em"
             px={{ base: 4, md: 6 }}
             py={{ base: "8px", md: "10px" }}
@@ -173,7 +173,7 @@ export default function LogIn() {
         >
           <Text
             color="white"
-            fontSize={{ base: "2xl", md: "3xl" }}
+            fontSize={{ base: "3xl", md: "4xl" }}
             fontWeight="700"
             letterSpacing="0.05em"
             lineHeight="1.2"
@@ -251,7 +251,7 @@ export default function LogIn() {
               textAlign="center"
               color="rgba(255,255,255,0.6)"
               fontWeight="500"
-              fontSize="sm"
+              fontSize={{ base: "sm", md: "md" }}
               letterSpacing="0.02em"
               cursor="pointer"
               _hover={{ color: "white" }}
@@ -277,7 +277,7 @@ export default function LogIn() {
                 color="white"
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
+                fontSize={{ base: "lg", md: "xl" }}
                 letterSpacing="0.18em"
                 px={12}
                 py="12px"

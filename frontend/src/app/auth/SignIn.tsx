@@ -116,62 +116,62 @@ export default function SignIn() {
       fontFamily="'EB Garamond', serif"
     >
       {/* ── HEADER ── */}
-      <Flex
-        as="header"
-        align="center"
-        justify="space-between"
-        px={{ base: 5, md: 12 }}
-        py={{ base: 3, md: 4 }}
-        bg="#008080"
-        position="sticky"
-        top="0"
-        zIndex="100"
-        borderBottom="1px solid rgba(255,255,255,0.12)"
-      >
-        <Image
-          src="/img/life.png"
-          h={{ base: "56px", md: "70px" }}
-          objectFit="contain"
-          cursor="pointer"
-          onClick={() => navigate("/")}
-          _hover={{ opacity: 0.85 }}
-          transition="opacity 0.2s"
-        />
-
-        <Flex align="center" gap={{ base: 3, md: 6 }}>
-          <Link
-            onClick={() => navigate("/logIn")}
-            color="white"
-            fontWeight="500"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.03em"
-            textShadow="0 1px 4px rgba(0,80,70,0.5)"
-            _hover={{ color: "white", textDecoration: "none" }}
-            transition="color 0.2s"
-          >
-            Inicio de sesión
-          </Link>
-
-          <Box
-            as="button"
-            onClick={() => navigate("/signIn")}
-            color="white"
-            fontWeight="600"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.04em"
-            px={{ base: 4, md: 6 }}
-            py={{ base: "8px", md: "10px" }}
-            borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.6)"
-            bg="rgba(255,255,255,0.12)"
-            cursor="pointer"
-            _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-            transition="all 0.2s"
-          >
-            Registrarse
-          </Box>
-        </Flex>
-      </Flex>
+       <Flex
+                    as="header"
+                    align="center"
+                    justify="space-between"
+                    px={{ base: 5, md: 12 }}
+                    py={{ base: 3, md: 4 }}
+                    bg="#008080"
+                    position="sticky"
+                    top="0"
+                    zIndex="100"
+                    borderBottom="1px solid rgba(255,255,255,0.12)"
+                  >
+                    <Image
+                      src="/img/life.png"
+                      h={{ base: "56px", md: "70px" }}
+                      objectFit="contain"
+                      cursor="pointer"
+                      onClick={() => navigate("/")}
+                      _hover={{ opacity: 0.85 }}
+                      transition="opacity 0.2s"
+                    />
+            
+                    <Flex align="center" gap={{ base: 3, md: 6 }}>
+                      <Link
+                        onClick={() => navigate("/logIn")}
+                        color="white"
+                        fontWeight="600"
+                        fontSize={{ base: "md", md: "lg" }}
+                        letterSpacing="0.03em"
+                        textShadow="0 1px 4px rgba(0,80,70,0.5)"
+                        _hover={{ color: "white", textDecoration: "none" }}
+                        transition="color 0.2s"
+                      >
+                        Inicio de sesión
+                      </Link>
+            
+                      <Box
+                        as="button"
+                        onClick={() => navigate("/signIn")}
+                        color="white"
+                        fontWeight="600"
+                        fontSize={{ base: "md", md: "lg" }}
+                        letterSpacing="0.04em"
+                        px={{ base: 4, md: 6 }}
+                        py={{ base: "8px", md: "10px" }}
+                        borderRadius="full"
+                        border="1.5px solid rgba(255,255,255,0.6)"
+                        bg="rgba(255,255,255,0.12)"
+                        cursor="pointer"
+                        _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
+                        transition="all 0.2s"
+                      >
+                        Registrarse
+                      </Box>
+                    </Flex>
+                  </Flex>
 
       {/* ── CARD REGISTRO ── */}
       <Flex
@@ -193,7 +193,7 @@ export default function SignIn() {
         >
           <Text
             color="white"
-            fontSize={{ base: "2xl", md: "3xl" }}
+            fontSize={{ base: "3xl", md: "4xl" }}
             fontWeight="700"
             letterSpacing="0.05em"
             lineHeight="1.2"
@@ -253,7 +253,7 @@ export default function SignIn() {
               textAlign="center"
               color="rgba(255,255,255,0.6)"
               fontWeight="500"
-              fontSize="sm"
+              fontSize={{ base: "sm", md: "md" }}
               letterSpacing="0.02em"
               cursor="pointer"
               _hover={{ color: "white" }}
@@ -279,7 +279,7 @@ export default function SignIn() {
                 color="white"
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
+                fontSize={{ base: "lg", md: "xl" }}
                 letterSpacing="0.18em"
                 px={12}
                 py="12px"

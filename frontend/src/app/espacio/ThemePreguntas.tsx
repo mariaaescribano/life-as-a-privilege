@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import ThemeSection from "../../components/espacio/ThemeSection";
+import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import type { Bloque, ThemeTitleObject } from "../../dtos/espacio.type";
 import { preguntasNeuroPsicologia } from "../../hardCoded/espacio/PreguntasNeuroPsicologia";
 import {
@@ -83,7 +84,7 @@ const ThemePreguntas = () => {
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
             <EspacioPersonalIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Mi Espacio
             </Text>
           </Flex>
@@ -94,7 +95,7 @@ const ThemePreguntas = () => {
             color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
           >
             <AprendizajeIcon color="currentColor" size={{ base: "22px", md: "24px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize="sm" fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
+            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
               Aprendizajes
             </Text>
           </Flex>
@@ -123,30 +124,12 @@ const ThemePreguntas = () => {
             pt={{ base: 10, md: 14 }}
             pb={{ base: 14, md: 20 }}
           >
-            {/* Cabecera de la disciplina — con sus propios colores */}
-            <Box
-              bg={theme.bgColor}
-              borderRadius="2xl"
-              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
-              px={{ base: 8, md: 14 }}
-              py={{ base: 6, md: 8 }}
-              w="100%"
-              maxW="850px"
-              mb={{ base: 10, md: 12 }}
-            >
-              <HStack spacing={4} justify="center">
-                {theme.icon}
-                <Text
-                  color={theme.color}
-                  fontSize={{ base: "2xl", md: "4xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.05em"
-                  filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.3))"
-                >
-                  {theme.title}
-                </Text>
-              </HStack>
-            </Box>
+            <DisciplineHeader
+              icon={theme.icon}
+              title={theme.title}
+              bgColor={theme.bgColor}
+              color={theme.color}
+            />
 
             {/* Preguntas flotantes — sin card contenedor */}
             <VStack spacing={6} w="100%" maxW="850px">

@@ -35,7 +35,7 @@ export const ThemeCard = (props:{
 
         <Text
           fontWeight="600"
-          fontSize="xl"
+          fontSize={{ base: "xl", md: "2xl" }}
           color={props.color}
           textAlign="center"
         >
