@@ -6,48 +6,45 @@ import { Respuesta } from 'src/dtos/respuesta.types';
 export class RespuestaService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-    async postRespuesta(body: Respuesta): Promise<boolean> {
-        try {
-            // 1️⃣ Verificar si ya existe
-            const checkResult = await this.databaseService.query(
-                `SELECT * FROM respuesta WHERE userid = $1 AND pregid = $2`,
-                [body.userId, body.idPregunta]
-            );
+  async postRespuesta(body: Respuesta): Promise<boolean> {
+    try {
+      const db = this.databaseService.getClient();
 
-            if (checkResult.length > 0) {
-            // 2️⃣ Borrar si existe
-            await this.databaseService.query(
-                `DELETE FROM respuesta WHERE userid = $1 AND pregid = $2`,
-                [body.userId, body.idPregunta]
-            );
-            }
+      // 1️⃣ Borrar si ya existe
+      await db
+        .from('respuesta')
+        .delete()
+        .eq('userid', body.userId)
+        .eq('pregid', body.idPregunta);
 
-            // 3️⃣ Insertar nueva respuesta
-            const insertResult = await this.databaseService.query(
-                `INSERT INTO respuesta (userid, pregid, respuesta)
-                VALUES ($1, $2, $3)`,
-                [body.userId, body.idPregunta, body.respuesta]
-            );
+      // 2️⃣ Insertar nueva respuesta
+      const { error } = await db
+        .from('respuesta')
+        .insert({ userid: body.userId, pregid: body.idPregunta, respuesta: body.respuesta });
 
-            return true;
-        } catch (error) {
-            console.error("Error en postRespuesta:", error);
-            return false;
-        }
+      if (error) throw error;
+
+      return true;
+    } catch (error) {
+      console.error("Error en postRespuesta:", error);
+      return false;
     }
+  }
 
-    async getRespuestaDePregunta(pregId:string, userId:string): Promise<Respuesta> {
-        try {
-            const result = await this.databaseService.query(
-            `SELECT * FROM respuesta WHERE userid = $1 AND pregid = $2`,
-            [userId, pregId]
-            );
+  async getRespuestaDePregunta(pregId: string, userId: string): Promise<Respuesta> {
+    try {
+      const { data, error } = await this.databaseService.getClient()
+        .from('respuesta')
+        .select('*')
+        .eq('userid', userId)
+        .eq('pregid', pregId);
 
-            return result[0];
-            
-        } catch (error) {
-            console.log("Error en getRespuestaDePregunta:", error);
-            throw new Error(error);
-        }
+      if (error) throw error;
+
+      return data?.[0];
+    } catch (error) {
+      console.log("Error en getRespuestaDePregunta:", error);
+      throw new Error(error);
     }
+  }
 }

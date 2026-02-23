@@ -1,37 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { createClient } from '@supabase/supabase-js';
 import { DatabaseService } from 'src/database.service';
 
 @Injectable()
 export class UploadService {
-  private supabase;
-
-  constructor(private readonly databaseService: DatabaseService) {
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error("No se encontraron variables de entorno de Supabase.");
-    }
-
-    this.supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-  }
-
+  constructor(private readonly databaseService: DatabaseService) {}
 
   async uploadProfilePic(userId: string, file: Express.Multer.File) {
     const extension = file.originalname.split('.').pop();
-    const fileName = `${userId}.${extension}`; // nombre único por usuario
-    const bucket = this.supabase.storage.from('img');
+    const fileName = `${userId}.${extension}`;
+    const bucket = this.databaseService.getClient().storage.from('img');
 
-    const result = await this.databaseService.query(
-      'SELECT img FROM "user" WHERE id = $1',
-      [userId]
-    );
+    const { data: userData } = await this.databaseService.getClient()
+      .from('user')
+      .select('img')
+      .eq('id', userId);
 
-    const oldUrl = result.rows?.[0]?.img;
+    const oldUrl = userData?.[0]?.img;
 
     if (oldUrl) {
-      const oldPath = oldUrl.split('/img/')[1]; // solo la parte después de img/
+      const oldPath = oldUrl.split('/img/')[1];
       if (oldPath) {
         console.log("Borrando foto anterior del bucket...");
         const { data, error } = await bucket.remove([`img/${oldPath}`]);
@@ -40,10 +27,10 @@ export class UploadService {
       }
     }
 
-    const { error: uploadError, data: uploadData } = await bucket.upload(
+    const { error: uploadError } = await bucket.upload(
       `img/${fileName}`,
       file.buffer,
-      { contentType: file.mimetype, upsert: true, }
+      { contentType: file.mimetype, upsert: true }
     );
     if (uploadError) {
       console.log("Error al subir la foto:", uploadError);
@@ -52,22 +39,20 @@ export class UploadService {
 
     const publicURL = bucket.getPublicUrl(`img/${fileName}`).data.publicUrl;
 
-    await this.databaseService.query(
-      'UPDATE "user" SET img = $1 WHERE id = $2',
-      [publicURL, userId]
-    );
+    await this.databaseService.getClient()
+      .from('user')
+      .update({ img: publicURL })
+      .eq('id', userId);
+
     return { url: publicURL };
   }
 
-
   async getProfilePic(userId: string) {
-    const result = await this.databaseService.query(
-      'SELECT img FROM "user" WHERE id = $1',
-      [userId]
-    );
+    const { data } = await this.databaseService.getClient()
+      .from('user')
+      .select('img')
+      .eq('id', userId);
 
-    const filePath = result[0].img;
-    return { url: filePath };
+    return { url: data?.[0]?.img };
   }
-
 }

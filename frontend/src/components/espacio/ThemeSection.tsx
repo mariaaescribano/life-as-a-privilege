@@ -15,21 +15,22 @@ const ThemeSection = (props:{
   title:string, icon:any, subPreguntas: Pregunta[], color: string,
   bgColor:string
 }) => {
-  
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Box w="100%">
+      {/* Barra principal con glow azul */}
       <Flex
         align="center"
         justify="space-between"
         bg={props.bgColor}
         p={6}
         borderRadius="3xl"
-        boxShadow="lg"
+        boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 28px rgba(107,196,200,0.75), 0 0 55px rgba(107,196,200,0.35)"
         cursor="pointer"
-        transition="all 0.2s"
-        _hover={{ boxShadow: "xl", transform: "translateY(-3px)" }}
+        transition="all 0.25s"
+        _hover={{ transform: "translateY(-4px)", boxShadow: "0 8px 28px rgba(0,0,0,0.28), 0 0 38px rgba(107,196,200,0.95), 0 0 70px rgba(107,196,200,0.45)" }}
         onClick={() => setIsOpen(!isOpen)}
       >
         <HStack>
@@ -49,16 +50,26 @@ const ThemeSection = (props:{
         />
       </Flex>
 
+      {/* Preguntas expandidas — cada una flota con glow */}
       <Collapse in={isOpen} animateOpacity>
-        <VStack mt={6} spacing={6} pl={2}>
+        <VStack mt={5} spacing={5} pl={2}>
           {props.subPreguntas.map((subPreg, index) => (
-            <EditableCard 
-              key={index + "subPreg"} 
-              idPregunta={subPreg.idPregunta}
-              pregunta={subPreg.pregunta} 
-              bgColor={props.bgColor} color={props.color}
-              consejo={subPreg.consejo} 
-            /> 
+            <Box
+              key={index + "subPreg"}
+              w="100%"
+              borderRadius="3xl"
+              boxShadow="0 4px 18px rgba(0,0,0,0.2), 0 0 24px rgba(107,196,200,0.65), 0 0 48px rgba(107,196,200,0.3)"
+              transition="all 0.25s"
+              _hover={{ transform: "translateY(-3px)", boxShadow: "0 8px 24px rgba(0,0,0,0.26), 0 0 35px rgba(107,196,200,0.9), 0 0 65px rgba(107,196,200,0.4)" }}
+            >
+              <EditableCard
+                idPregunta={subPreg.idPregunta}
+                pregunta={subPreg.pregunta}
+                bgColor={props.bgColor}
+                color={props.color}
+                consejo={subPreg.consejo}
+              />
+            </Box>
           ))}
         </VStack>
       </Collapse>

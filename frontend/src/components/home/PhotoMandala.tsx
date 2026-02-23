@@ -41,9 +41,8 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
 
   return (
     <Box
-      bg="white"
+      bg="transparent"
       borderRadius="2xl"
-      boxShadow="lg"
       p={6}
       w="100%"
       h={isMobile ? "500px" : "500px"}
@@ -69,8 +68,8 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
           h={isMobile ? "150px" : "180px"}
           borderRadius="full"
           overflow="hidden"
-          boxShadow="xl"
-          border="4px solid white"
+          boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 45px rgba(107,196,200,1), 0 0 90px rgba(107,196,200,0.55), 0 0 140px rgba(107,196,200,0.25)"
+          border="4px solid rgba(255,255,255,0.85)"
           zIndex={10}
           cursor="pointer"
           onClick={()=> navigate("/espacio/espacioHome")}
@@ -104,8 +103,8 @@ const PhotoMandala = (props:{fotoCentro?:string}) => {
               borderRadius="full"
               overflow="hidden"
               onClick={()=> navigate(photo.link)}
-              boxShadow="lg"
-              border="4px solid white"
+              boxShadow="0 4px 20px rgba(0,0,0,0.35), 0 0 32px rgba(107,196,200,0.95), 0 0 65px rgba(107,196,200,0.5), 0 0 100px rgba(107,196,200,0.2)"
+              border="3px solid rgba(255,255,255,0.8)"
               initial={{ scale: 0, opacity: 0 }}
               animate={{
                 scale: 1,

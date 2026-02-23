@@ -40,7 +40,12 @@ dotenv.config();
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
-        origin: ['https://lifeasaprivilege.onrender.com'],
+        origin: [
+            'https://lifeasaprivilege.onrender.com',
+            'http://localhost:5173',
+            'http://localhost:3001',
+            'http://localhost:3000',
+        ],
         credentials: true,
     });
     const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;

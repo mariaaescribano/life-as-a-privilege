@@ -1,21 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Pool } from 'pg';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class DatabaseService {
-  private pool: Pool;
+  private supabase: SupabaseClient;
 
   constructor() {
-    this.pool = new Pool({
-      connectionString: process.env.DATABASE_URL || "postgresql://postgres:mariaaescribano@db.lrdenqkwfrrsvhcuqpyy.supabase.co:6543/postgres",
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    });
+    this.supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
   }
 
-  async query(text: string, params?: any[]) {
-    const res = await this.pool.query(text, params);
-    return res.rows;
+  getClient(): SupabaseClient {
+    return this.supabase;
   }
 }

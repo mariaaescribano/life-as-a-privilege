@@ -62,7 +62,7 @@ export function ModuloAcordeon(props:{
               p={4}
               borderRadius="xl"
               boxShadow="sm"
-              _hover={{ bg: "gray.100" }}
+              _hover={{ filter: "brightness(0.92)" }}
             >
               <Text fontWeight="600">{sub.nom}</Text>
 

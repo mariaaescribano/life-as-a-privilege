@@ -14,12 +14,12 @@ export const ThemeCard = (props:{
       p={6}
       cursor={props.cursor}
       minH="180px"
-      boxShadow="lg"
+      boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 28px rgba(107,196,200,0.75), 0 0 55px rgba(107,196,200,0.35)"
       onClick={() => {window.scrollTo({ top: 0, behavior: 'auto' }); navigate(props.link)}}
       transition="all 0.3s"
       _hover={{
         transform: "translateY(-6px)",
-        boxShadow: "xl",
+        boxShadow: "0 8px 28px rgba(0,0,0,0.28), 0 0 38px rgba(107,196,200,0.95), 0 0 70px rgba(107,196,200,0.45)",
       }}
     >
       <Flex

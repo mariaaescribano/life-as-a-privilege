@@ -9,7 +9,12 @@ async function bootstrap() {
   // app.enableCors(); 
 
   app.enableCors({
-    origin: ['https://lifeasaprivilege.onrender.com'], // URL de tu frontend en Render
+    origin: [
+      'https://lifeasaprivilege.onrender.com',
+      'http://localhost:5173',
+      'http://localhost:3001',
+      'http://localhost:3000',
+    ],
     credentials: true,
   });
 
