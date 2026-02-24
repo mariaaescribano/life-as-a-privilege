@@ -1,7 +1,8 @@
 // LogIn.tsx
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Input, Text, VStack, Link } from "@chakra-ui/react";
+import { Box, Flex, Input, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
 import axios from "axios";
@@ -96,62 +97,7 @@ export default function LogIn() {
       fontFamily="'EB Garamond', serif"
     >
       {/* ── HEADER ── */}
-      <Flex
-        as="header"
-        align="center"
-        justify="space-between"
-        px={{ base: 5, md: 12 }}
-        py={{ base: 3, md: 4 }}
-        bg="#008080"
-        position="sticky"
-        top="0"
-        zIndex="100"
-        borderBottom="1px solid rgba(255,255,255,0.12)"
-      >
-        <Image
-          src="/img/life.png"
-          h={{ base: "56px", md: "70px" }}
-          objectFit="contain"
-          cursor="pointer"
-          onClick={() => navigate("/")}
-          _hover={{ opacity: 0.85 }}
-          transition="opacity 0.2s"
-        />
-
-        <Flex align="center" gap={{ base: 3, md: 6 }}>
-          <Link
-            onClick={() => navigate("/logIn")}
-            color="white"
-            fontWeight="600"
-            fontSize={{ base: "md", md: "lg" }}
-            letterSpacing="0.03em"
-            textShadow="0 1px 4px rgba(0,80,70,0.5)"
-            _hover={{ color: "white", textDecoration: "none" }}
-            transition="color 0.2s"
-          >
-            Inicio de sesión
-          </Link>
-
-          <Box
-            as="button"
-            onClick={() => navigate("/signIn")}
-            color="white"
-            fontWeight="600"
-            fontSize={{ base: "md", md: "lg" }}
-            letterSpacing="0.04em"
-            px={{ base: 4, md: 6 }}
-            py={{ base: "8px", md: "10px" }}
-            borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.6)"
-            bg="rgba(255,255,255,0.12)"
-            cursor="pointer"
-            _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-            transition="all 0.2s"
-          >
-            Registrarse
-          </Box>
-        </Flex>
-      </Flex>
+      <SiteHeader variant="public" />
 
       {/* ── CARD LOGIN ── */}
       <Flex

@@ -1,11 +1,11 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import SiteHeader from "../../components/global/SiteHeader";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
-  AprendizajeIcon, EspacioPersonalIcon,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
   biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
@@ -21,7 +21,6 @@ export default function ModulesPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
   const navigate = useNavigate();
   const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
-  const [img, setImg] = useState<string | null>(null);
 
   const getModuloDatos = (): Modulo => {
     switch (moduloId) {
@@ -54,71 +53,13 @@ export default function ModulesPage() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    setImg(sessionStorage.getItem("img"));
   }, []);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
 
       {/* ── HEADER ── */}
-      <Flex
-        as="header"
-        align="center"
-        justify="space-between"
-        px={{ base: 5, md: 12 }}
-        py={{ base: 3, md: 4 }}
-        bg="#008080"
-        position="sticky"
-        top="0"
-        zIndex="100"
-        borderBottom="1px solid rgba(255,255,255,0.12)"
-      >
-        <Image
-          src="/img/life.png"
-          h={{ base: "56px", md: "70px" }}
-          objectFit="contain"
-          cursor="pointer"
-          onClick={() => navigate("/")}
-          _hover={{ opacity: 0.85 }}
-          transition="opacity 0.2s"
-        />
-
-        <Flex align="center" gap={{ base: 4, md: 6 }}>
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/espacio/espacioHome")}
-            color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
-          >
-            <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
-              Mi Espacio
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/aprendizaje/aprendizajeHome")}
-            color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
-          >
-            <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
-              Aprendizajes
-            </Text>
-          </Flex>
-
-          {img && (
-            <Box
-              w={{ base: "36px", md: "42px" }} h={{ base: "36px", md: "42px" }}
-              borderRadius="full" overflow="hidden"
-              border="2px solid rgba(255,255,255,0.55)" flexShrink={0}
-              cursor="pointer" onClick={() => navigate("/espacio/espacioHome")}
-              _hover={{ border: "2px solid white" }} transition="border 0.2s"
-            >
-              <Image src={img} w="100%" h="100%" objectFit="cover" />
-            </Box>
-          )}
-        </Flex>
-      </Flex>
+      <SiteHeader variant="auto" />
 
       {/* ── MAIN ── */}
       <Box flex="1">

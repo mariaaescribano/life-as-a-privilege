@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, VStack } from "@chakra-ui/react";
+import SiteHeader from "../../components/global/SiteHeader";
 import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -144,64 +145,7 @@ const Home = () => {
       fontFamily="'EB Garamond', serif"
     >
       {/* ── HEADER ── */}
-      <Flex
-        as="header"
-        align="center"
-        justify="space-between"
-        px={{ base: 5, md: 12 }}
-        py={{ base: 3, md: 4 }}
-        bg="#008080"
-        position="sticky"
-        top="0"
-        zIndex="100"
-        borderBottom="1px solid rgba(255,255,255,0.12)"
-      >
-        <Image
-          src="/img/life.png"
-          h={{ base: "56px", md: "70px" }}
-          objectFit="contain"
-          cursor="pointer"
-          onClick={() => navigate("/")}
-          _hover={{ opacity: 0.85 }}
-          transition="opacity 0.2s"
-        />
-
-        {user && (
-          <Flex align="center" gap={{ base: 4, md: 6 }}>
-            <Flex
-              align="center" gap={2} cursor="pointer"
-              onClick={() => navigate("/espacio/espacioHome")}
-              color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
-            >
-              <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
-                Mi Espacio
-              </Text>
-            </Flex>
-
-            <Flex
-              align="center" gap={2} cursor="pointer"
-              onClick={() => navigate("/aprendizaje/aprendizajeHome")}
-              color="rgba(255,255,255,0.85)" _hover={{ color: "white" }} transition="color 0.2s"
-            >
-              <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-              <Text display={{ base: "none", md: "block" }} fontSize={{ base: "md", md: "lg" }} fontWeight="500" letterSpacing="0.04em" textShadow="0 1px 4px rgba(0,80,70,0.5)">
-                Aprendizajes
-              </Text>
-            </Flex>
-
-            <Box
-              w={{ base: "36px", md: "42px" }} h={{ base: "36px", md: "42px" }}
-              borderRadius="full" overflow="hidden"
-              border="2px solid rgba(255,255,255,0.55)" flexShrink={0}
-              cursor="pointer" onClick={() => navigate("/espacio/espacioHome")}
-              _hover={{ border: "2px solid white" }} transition="border 0.2s"
-            >
-              <Image src={user.img} w="100%" h="100%" objectFit="cover" />
-            </Box>
-          </Flex>
-        )}
-      </Flex>
+      <SiteHeader variant="private" userImg={user?.img} />
 
       {/* ── MAIN ── */}
       <Box flex="1">
@@ -483,38 +427,60 @@ const Home = () => {
             </Text>
 
             {/* Botones */}
-            <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap" mt={2}>
-              <Flex
-                align="center" gap={3} cursor="pointer"
-                onClick={() => navigate(selectedDisc.linkEspacio)}
-                bg={selectedDisc.txt + "18"}
-                border={`1px solid ${selectedDisc.txt}66`}
-                borderRadius="full"
-                px={{ base: 5, md: 7 }} py={3}
-                _hover={{ bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` }}
-                transition="all 0.2s"
-              >
-                <EspacioPersonalIcon color={selectedDisc.txt} size="24px" />
-                <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
-                  Mi Espacio
-                </Text>
-              </Flex>
-               <Flex
-                align="center" gap={3} cursor="pointer"
-                onClick={() => navigate(selectedDisc.linkAprendizaje)}
-                bg={selectedDisc.txt + "18"}
-                border={`1px solid ${selectedDisc.txt}66`}
-                borderRadius="full"
-                px={{ base: 5, md: 7 }} py={3}
-                _hover={{ bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` }}
-                transition="all 0.2s"
-              >
-                <AprendizajeIcon color={selectedDisc.txt} size="24px" />
-                <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
-                  Aprendizaje
-                </Text>
-              </Flex>
-            </Flex>
+            {(() => {
+              const isAvailable = selectedDisc.name === neuropsicologiaNom;
+              return (
+                <Flex direction="column" align="center" gap={3} mt={2}>
+                  <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap">
+                    <Flex
+                      align="center" gap={3}
+                      cursor={isAvailable ? "pointer" : "not-allowed"}
+                      onClick={isAvailable ? () => navigate(selectedDisc.linkEspacio) : undefined}
+                      bg={selectedDisc.txt + "18"}
+                      border={`1px solid ${selectedDisc.txt}66`}
+                      borderRadius="full"
+                      px={{ base: 5, md: 7 }} py={3}
+                      opacity={isAvailable ? 1 : 0.45}
+                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` } : {}}
+                      transition="all 0.2s"
+                    >
+                      <EspacioPersonalIcon color={selectedDisc.txt} size="24px" />
+                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                        Mi Espacio
+                      </Text>
+                    </Flex>
+                    <Flex
+                      align="center" gap={3}
+                      cursor={isAvailable ? "pointer" : "not-allowed"}
+                      onClick={isAvailable ? () => navigate(selectedDisc.linkAprendizaje) : undefined}
+                      bg={selectedDisc.txt + "18"}
+                      border={`1px solid ${selectedDisc.txt}66`}
+                      borderRadius="full"
+                      px={{ base: 5, md: 7 }} py={3}
+                      opacity={isAvailable ? 1 : 0.45}
+                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` } : {}}
+                      transition="all 0.2s"
+                    >
+                      <AprendizajeIcon color={selectedDisc.txt} size="24px" />
+                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                        Aprendizaje
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  {!isAvailable && (
+                    <Text
+                      color={selectedDisc.txt}
+                      fontSize="xs"
+                      letterSpacing="0.1em"
+                      opacity={0.6}
+                      fontStyle="italic"
+                    >
+                      Próximamente
+                    </Text>
+                  )}
+                </Flex>
+              );
+            })()}
           </Box>
         </Box>
       )}

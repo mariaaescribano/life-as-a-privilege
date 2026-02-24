@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Link, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -133,62 +134,7 @@ const Welcome = () => {
       fontFamily="'EB Garamond', serif"
     >
       {/* ── HEADER ── */}
-       <Flex
-              as="header"
-              align="center"
-              justify="space-between"
-              px={{ base: 5, md: 12 }}
-              py={{ base: 3, md: 4 }}
-              bg="#008080"
-              position="sticky"
-              top="0"
-              zIndex="100"
-              borderBottom="1px solid rgba(255,255,255,0.12)"
-            >
-              <Image
-                src="/img/life.png"
-                h={{ base: "56px", md: "70px" }}
-                objectFit="contain"
-                cursor="pointer"
-                onClick={() => navigate("/")}
-                _hover={{ opacity: 0.85 }}
-                transition="opacity 0.2s"
-              />
-      
-              <Flex align="center" gap={{ base: 3, md: 6 }}>
-                <Link
-                  onClick={() => navigate("/logIn")}
-                  color="white"
-                  fontWeight="600"
-                  fontSize={{ base: "md", md: "lg" }}
-                  letterSpacing="0.03em"
-                  textShadow="0 1px 4px rgba(0,80,70,0.5)"
-                  _hover={{ color: "white", textDecoration: "none" }}
-                  transition="color 0.2s"
-                >
-                  Inicio de sesión
-                </Link>
-      
-                <Box
-                  as="button"
-                  onClick={() => navigate("/signIn")}
-                  color="white"
-                  fontWeight="600"
-                  fontSize={{ base: "md", md: "lg" }}
-                  letterSpacing="0.04em"
-                  px={{ base: 4, md: 6 }}
-                  py={{ base: "8px", md: "10px" }}
-                  borderRadius="full"
-                  border="1.5px solid rgba(255,255,255,0.6)"
-                  bg="rgba(255,255,255,0.12)"
-                  cursor="pointer"
-                  _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-                  transition="all 0.2s"
-                >
-                  Registrarse
-                </Box>
-              </Flex>
-            </Flex>
+      <SiteHeader variant="public" />
 
       {/* ── CARD BIENVENIDA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
@@ -211,7 +157,7 @@ const Welcome = () => {
           transition="opacity 0.7s ease, transform 0.7s ease"
         >
           {/* Logo */}
-          <Box flexShrink={0} w={{ base: "110px", md: "140px" }} alignSelf="center">
+          <Box flexShrink={0} w={{ base: "140px", md: "170px" }} alignSelf="center">
             <Image src="/img/life.png" alt="Life as a Privilege" w="100%" objectFit="contain" />
           </Box>
 
@@ -226,7 +172,7 @@ const Welcome = () => {
               textShadow="0 2px 10px rgba(0,100,90,0.35)"
               mb={3}
             >
-              Bienvenida
+              LIFE AS A PRIVILEGE
             </Text>
             <Text
               color="rgba(255,255,255,0.85)"
@@ -235,8 +181,9 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,100,90,0.25)"
             >
-              {/* Aquí irá una descripción de lo que es esta web */}
-              Próximamente una descripción de la plataforma y su propósito.
+              Una plataforma gratuita que reúne disciplinas como Neuropsicología, Fisiología,
+              Nutrición, Astrología y más, para acompañarte en tu crecimiento personal con
+              conocimiento libre y accesible para todos.
             </Text>
           </Box>
         </Box>
@@ -537,10 +484,10 @@ const Welcome = () => {
               {selected.desc}
             </Text>
 
-            <Flex justify="center">
+            <Flex justify="center" direction="column" align="center" gap={2}>
               <Box
                 as="button"
-                onClick={() => navigate(selected.link)}
+                onClick={() => selected.name === neuropsicologiaNom ? navigate(selected.link) : undefined}
                 color={selected.txt}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
@@ -550,13 +497,25 @@ const Welcome = () => {
                 py={3}
                 borderRadius="full"
                 border={`2px solid ${selected.txt}`}
-                bg={`${selected.txt}18`}
-                cursor="pointer"
-                _hover={{ bg: `${selected.txt}33`, transform: "translateY(-2px)" }}
+                bg={selected.name === neuropsicologiaNom ? `${selected.txt}18` : `${selected.txt}0a`}
+                cursor={selected.name === neuropsicologiaNom ? "pointer" : "not-allowed"}
+                opacity={selected.name === neuropsicologiaNom ? 1 : 0.45}
+                _hover={selected.name === neuropsicologiaNom ? { bg: `${selected.txt}33`, transform: "translateY(-2px)" } : {}}
                 transition="all 0.2s ease"
               >
                 APRENDER
               </Box>
+              {selected.name !== neuropsicologiaNom && (
+                <Text
+                  color={selected.txt}
+                  fontSize="xs"
+                  letterSpacing="0.1em"
+                  opacity={0.6}
+                  fontStyle="italic"
+                >
+                  Próximamente
+                </Text>
+              )}
             </Flex>
           </Box>
         </Box>
