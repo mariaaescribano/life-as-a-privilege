@@ -40,7 +40,7 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }
         </Box>
         <Text
           color={color}
-          fontSize={{ base: "4xl", md: "5xl" }}
+          fontSize={{ base: "2xl", md: "5xl" }}
           fontWeight="700"
           letterSpacing="0.05em"
          // textShadow="0 2px 12px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)"
