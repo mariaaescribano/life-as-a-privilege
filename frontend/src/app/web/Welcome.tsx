@@ -35,7 +35,7 @@ const disciplines: Discipline[] = [
     name: neuropsicologiaNom,
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
-    renderIcon: (size) => <NeuropsicologiaIcon size={size} />,
+    renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
     desc: neuropsicologiaDescrip,
     link: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
   },

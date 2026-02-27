@@ -3,7 +3,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -19,7 +19,6 @@ import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/ModulosNeur
 
 export default function ModulesPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
-  const navigate = useNavigate();
   const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
 
   const getModuloDatos = (): Modulo => {

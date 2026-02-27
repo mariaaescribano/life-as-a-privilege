@@ -1,10 +1,9 @@
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
-import { useNavigate } from "react-router-dom";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import {
-  AprendizajeIcon, EspacioPersonalIcon,
+  AprendizajeIcon,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
   biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
@@ -16,8 +15,6 @@ import {
 } from "../../GlobalVariables";
 
 export const AprendizajeHome = () => {
-  const navigate = useNavigate();
-
   const items = [
     { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size="70px" />,                             link: "",                                           cursor: "not-allowed" },
     { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "60px", md: "70px" }} />, link: "/aprendizaje/modulosPage/" + neuropsicologiaNom, cursor: "pointer"     },

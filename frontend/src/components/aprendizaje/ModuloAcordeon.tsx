@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 const GLOW_HOVER = "0 8px 24px rgba(0,0,0,0.28), 0 0 32px rgba(107,196,200,1)";
-const SUB_GLOW = "0 3px 12px rgba(0,0,0,0.18), 0 0 14px rgba(107,196,200,0.65)";
-const SUB_GLOW_HOVER = "0 6px 18px rgba(0,0,0,0.24), 0 0 22px rgba(107,196,200,0.9)";
 
 export function ModuloAcordeon(props:{
   title:string, bgColor:string, color:string,

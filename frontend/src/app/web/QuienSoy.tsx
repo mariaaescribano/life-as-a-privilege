@@ -34,12 +34,10 @@ const certificados: Certificado[] = [
 
 const QuienSoy = () => {
   const navigate = useNavigate();
-  const [img, setImg] = useState<string | null>(null);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    setImg(sessionStorage.getItem("img"));
   }, []);
 
   const closeLightbox = () => setLightboxIdx(null);
