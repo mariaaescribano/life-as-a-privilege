@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Welcome from "./app/web/Welcome";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import LogIn from "./app/auth/LogIn";
 import SignIn from "./app/auth/SignIn";
 import Home from "./app/home/Home";
@@ -11,9 +11,17 @@ import EspacioHome from "./app/espacio/EspacioHome";
 import ExpandablePage from "./app/espacio/ThemePreguntas";
 import QuienSoy from "./app/web/QuienSoy";
 
-export default function App() 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
+export default function App()
 {
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />
@@ -32,6 +40,7 @@ export default function App()
       
       <Route path="*" element={<Welcome />} />
     </Routes>
+    </>
   );
 }
 

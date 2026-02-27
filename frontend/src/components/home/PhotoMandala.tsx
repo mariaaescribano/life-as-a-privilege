@@ -1,6 +1,6 @@
 
 import { Box, Image } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -78,21 +78,37 @@ const MandalaCircle = ({
 const PhotoMandala = (props: { fotoCentro?: string }) => {
   const navigate = useNavigate();
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
 
-  const size    = isMobile ? 280 : 460;
-  const radius  = isMobile ? 150 : 170;
-  const circleSize = isMobile ? "78px" : "96px";
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Breakpoints responsive
+  const isXs  = windowWidth < 380;
+  const isSm  = windowWidth < 480;
+  const isMd  = windowWidth < 768;
+
+  const size        = isXs ? 200 : isSm ? 230 : isMd ? 260 : 460;
+  const radius      = isXs ?  82 : isSm ? 100 : isMd ? 118 : 170;
+  const circleSize  = isXs ? "58px" : isSm ? "64px" : isMd ? "72px" : "96px";
+  const centerSize  = isXs ? "110px" : isSm ? "120px" : isMd ? "135px" : "180px";
+  const containerH  = isXs ? "320px" : isSm ? "360px" : isMd ? "400px" : "500px";
+  const iconSize    = isXs ? "34px"  : isSm ? "38px"  : isMd ? "42px"  : "38px";
 
   const photos: CirclePhoto[] = [
-    { name: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + fisiologiaNom },
-    { name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={isMobile ? { base: "46px", md: "46px" } : { base: "38px", md: "38px" }} />, link: "/espacio/questions/" + neuropsicologiaNom },
-    { name: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + astrologiaNom },
-    { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + tcmNom },
-    { name: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + nutricionNom },
-    { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + ayurvedaNom },
-    { name: biologiaNom,        bg: biologiaBg,        txt: biologiaTxt,        icon: <BiologiaIcon        size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + biologiaNom },
-    { name: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={isMobile ? "46px" : "38px"} />,                                    link: "/espacio/questions/" + cabalaNom },
+    { name: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + fisiologiaNom },
+    { name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + neuropsicologiaNom },
+    { name: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
+    { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={iconSize} />,                                    link: "/espacio/questions/" + tcmNom },
+    { name: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
+    { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
+    { name: biologiaNom,        bg: biologiaBg,        txt: biologiaTxt,        icon: <BiologiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + biologiaNom },
+    { name: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;
@@ -103,7 +119,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
       borderRadius="2xl"
       p={6}
       w="100%"
-      h="500px"
+      h={containerH}
       display="flex"
       justifyContent="center"
       alignItems="center"
@@ -133,8 +149,8 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
         {/* Centro */}
         <MotionBox
           position="absolute"
-          w={isMobile ? "150px" : "180px"}
-          h={isMobile ? "150px" : "180px"}
+          w={centerSize}
+          h={centerSize}
           borderRadius="full"
           overflow="hidden"
           boxShadow="0 8px 32px rgba(0,0,0,0.35), 0 0 28px rgba(107,196,200,0.55), 0 0 60px rgba(107,196,200,0.25)"

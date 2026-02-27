@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import { useNavigate } from "react-router-dom";
 import {
@@ -126,9 +126,11 @@ const Home = () => {
   const mandalaReveal = useReveal(0.05);
   const disciplinasReveal = useReveal(0.04);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
+  const iconSizeMiEspacio   = useBreakpointValue({ base: "34px", md: "52px" }) ?? "52px";
+  const iconSizeAprendizaje = useBreakpointValue({ base: "30px", md: "42px" }) ?? "42px";
+  const iconSizeCard        = useBreakpointValue({ base: "30px", md: "42px" }) ?? "42px";
+  const cardIconBox         = useBreakpointValue({ base: "56px", md: "72px" }) ?? "72px";
+  const cardIconTop         = useBreakpointValue({ base: "-28px", md: "-36px" }) ?? "-36px";
 
   useEffect(() => {
     if (user == null) {
@@ -248,9 +250,9 @@ const Home = () => {
                 }}
               >
                 <Flex align="center" gap={3}>
-                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="52px" />
+                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size={iconSizeMiEspacio} />
                   <Text
-                    color="white" fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
+                    color="white" fontSize={{ base: "xl", md: "4xl", lg: "5xl" }}
                     fontWeight="700" letterSpacing="0.05em"
                     textShadow="0 2px 10px rgba(0,100,90,0.4)" textAlign="center"
                   >
@@ -270,10 +272,10 @@ const Home = () => {
               py={{ base: 10, md: 14 }}
             >
               <Flex align="center" justify="center" gap={3} mb={{ base: 10, md: 14 }}>
-                <AprendizajeIcon color="rgba(255,255,255,0.9)" size="42px" />
+                <AprendizajeIcon color="rgba(255,255,255,0.9)" size={iconSizeAprendizaje} />
                 <Text
                   color="white"
-                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                  fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
                   fontWeight="700"
                   letterSpacing="0.06em"
                   textShadow="0 2px 10px rgba(0,100,90,0.4)"
@@ -293,8 +295,8 @@ const Home = () => {
                     <Box
                       key={i}
                       position="relative"
-                      mt="42px"
-                      pt="46px"
+                      mt={{ base: "34px", md: "42px" }}
+                      pt={{ base: "38px", md: "46px" }}
                       pb={{ base: 5, md: 7 }}
                       px={{ base: 3, md: 5 }}
                       bg={d.bg}
@@ -316,24 +318,24 @@ const Home = () => {
                       {/* Icono sobresaliente — bg con color contraste */}
                       <Box
                         position="absolute"
-                        top="-36px" left="50%"
+                        top={cardIconTop} left="50%"
                         transform="translateX(-50%)"
                         bg={d.bg}
                         borderRadius="full"
-                        p="8px"
+                        p={{ base: "6px", md: "8px" }}
                         border={"3px solid "+ d.txt}
                         boxShadow="0 4px 16px rgba(107,196,200,0.6)"
-                        w="72px" h="72px"
+                        w={cardIconBox} h={cardIconBox}
                         display="flex" alignItems="center" justifyContent="center"
                       >
-                        {d.renderIcon("42px")}
+                        {d.renderIcon(iconSizeCard)}
                       </Box>
 
                       <Text
                         color={d.txt}
                         filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.4))"
                         fontWeight="700"
-                        fontSize={{ base: "2xl", md: "2xl", lg: "3xl" }}
+                        fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
                         letterSpacing="0.03em"
                         lineHeight="short"
                       >

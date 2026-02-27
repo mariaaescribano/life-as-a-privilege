@@ -266,6 +266,7 @@ export default function VideoLessonPage() {
                   fontSize={{ base: "lg", md: "xl" }}
                   color={moduloDatos.color}
                   lineHeight="1.8"
+                  fontStyle={"italic"}
                   letterSpacing="0.02em"
                 >
                   {datos.descripcion}
