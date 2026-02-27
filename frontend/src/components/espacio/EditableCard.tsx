@@ -171,9 +171,8 @@ const EditableCard = (props:{
                   alignItems="center"
                   gap={3}
                 >
-                  <HelpIcon size={{ base: "24px", md: "24px" }} color={props.color} />
                   <Text color={props.color} fontSize={{ base: "sm", md: "md" }}>
-                    {props.consejo}
+                    {"♥  " + props.consejo}
                   </Text>
                 </Flex>
               </Flex>

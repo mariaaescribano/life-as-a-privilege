@@ -93,7 +93,7 @@ export const preguntasNeuroPsicologia: Bloque[] = [
       },
       { 
         idPregunta:"npi3",
-        pregunta: "¿Cómo fue tu infancia? Escribe lo que te parezca más relevante o absolutamente todo lo que quieras",
+        pregunta: "¿Cómo fue tu infancia? Escribe lo que te parezca más relevante o absolutamente todo lo que quieras.",
       },
       { 
         idPregunta:"npi4",
@@ -102,7 +102,7 @@ export const preguntasNeuroPsicologia: Bloque[] = [
       { 
         idPregunta:"npi5",
         pregunta: "¿Eres capaz de reconocer a tu niño interior? ¿Eres capaz de decirle que tiene derecho a la existencia y que solo se debe lealtad a sí mismo?",
-        consejo: "La mayoría de los niños entierran su Amor bajo la frustración de sus padres"
+        consejo: "La mayoría de los niños entierran su Amor bajo la frustración de sus padres."
       },
       { 
         idPregunta:"npi6",
