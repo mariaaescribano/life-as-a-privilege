@@ -50,11 +50,12 @@ export const AprendizajeHome = () => {
         >
           {/* Título */}
           <Flex align="center" gap={3} mb={{ base: 8, md: 10 }}>
-            <AprendizajeIcon color="rgba(255,255,255,0.9)" size="42px" />
+            <AprendizajeIcon color="rgba(255,255,255,0.9)" size="47px" />
             <Text
               color="white"
               fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
               fontWeight="700"
+              
               letterSpacing="0.05em"
               textShadow="0 2px 10px rgba(0,100,90,0.4)"
             >

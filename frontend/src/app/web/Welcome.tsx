@@ -3,14 +3,14 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import {
-  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
-  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
-  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
-  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmTxt,
+  astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
+  ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  biologiaBg, biologiaDescrip, BiologiaIcon, biologiaNom, biologiaTxt,
+  cabalaBg, cabalaDescrip, CabalaIcon, cabalaNom, cabalaTxt,
+  fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
+  neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
+  nutricionBg, nutricionDescrip, NutricionIcon, nutricionNom, nutricionTxt,
+  tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmTxt,
 } from "../../GlobalVariables";
 
 type Discipline = {
@@ -28,7 +28,7 @@ const disciplines: Discipline[] = [
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
-    desc: "Comprende los mecanismos vitales del cuerpo y optimiza tu salud desde su raíz funcional.",
+    desc: fisiologiaDescrip,
     link: "/aprendizaje/modulosPage/" + fisiologiaNom,
   },
   {
@@ -36,7 +36,7 @@ const disciplines: Discipline[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={size} />,
-    desc: "Conecta mente y cuerpo para transformar patrones mentales y emocionales profundos.",
+    desc: neuropsicologiaDescrip,
     link: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
   },
   {
@@ -44,7 +44,7 @@ const disciplines: Discipline[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={size} />,
-    desc: "Descubre los ciclos cósmicos que influyen en tu personalidad y en tu camino de vida.",
+    desc: astrologiaDescrip,
     link: "/aprendizaje/modulosPage/" + astrologiaNom,
   },
   {
@@ -52,7 +52,7 @@ const disciplines: Discipline[] = [
     bg: tcmBg,
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={size} />,
-    desc: "Restablece el equilibrio energético del organismo con milenaria sabiduría oriental.",
+    desc: tcmDescrip,
     link: "/aprendizaje/modulosPage/" + tcmNom,
   },
   {
@@ -60,7 +60,7 @@ const disciplines: Discipline[] = [
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={size} />,
-    desc: "Alimenta tu cuerpo con conciencia, adaptando la dieta a tu naturaleza única.",
+    desc: nutricionDescrip,
     link: "/aprendizaje/modulosPage/" + nutricionNom,
   },
   {
@@ -68,7 +68,7 @@ const disciplines: Discipline[] = [
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={size} />,
-    desc: "El arte de vivir en armonía con tu constitución natural para una salud integral.",
+    desc: ayurvedaDescrip,
     link: "/aprendizaje/modulosPage/" + ayurvedaNom,
   },
   {
@@ -76,7 +76,7 @@ const disciplines: Discipline[] = [
     bg: biologiaBg,
     txt: biologiaTxt,
     renderIcon: (size) => <BiologiaIcon size={size} />,
-    desc: "El poder curativo de las plantas al servicio de tu bienestar físico y emocional.",
+    desc: biologiaDescrip,
     link: "/aprendizaje/modulosPage/" + biologiaNom,
   },
   {
@@ -84,7 +84,7 @@ const disciplines: Discipline[] = [
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={size} />,
-    desc: "Explora la dimensión espiritual de la existencia y los secretos del árbol de la vida.",
+    desc: cabalaDescrip,
     link: "/aprendizaje/modulosPage/" + cabalaNom,
   },
 ];
@@ -165,7 +165,7 @@ const Welcome = () => {
           <Box flex="1" textAlign={{ base: "center", md: "left" }}>
             <Text
               color="white"
-              fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+              fontSize={{ base: "3xl", md: "4xl", lg: "4xl" }}
               fontWeight="700"
               letterSpacing="0.05em"
               lineHeight="1.2"
@@ -176,14 +176,12 @@ const Welcome = () => {
             </Text>
             <Text
               color="rgba(255,255,255,0.85)"
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "md", md: "2xl" }}
               lineHeight="1.9"
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,100,90,0.25)"
             >
-              Una plataforma gratuita que reúne disciplinas como Neuropsicología, Fisiología,
-              Nutrición, Astrología y más, para acompañarte en tu crecimiento personal con
-              conocimiento libre y accesible para todos.
+              Es una plataforma gratuita que integra conocimientos ancestrales para crear una visión holística del ser humano.
             </Text>
           </Box>
         </Box>
@@ -233,7 +231,7 @@ const Welcome = () => {
           <Box flex="1" textAlign={{ base: "center", md: "left" }}>
             <Text
               color="white"
-              fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+              fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
               fontWeight="700"
               fontFamily="'EB Garamond', serif"
               letterSpacing="0.04em"
@@ -245,15 +243,15 @@ const Welcome = () => {
             </Text>
             <Text
               color="rgba(255,255,255,0.88)"
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "md", md: "xl" }}
               fontFamily="'EB Garamond', serif"
               lineHeight="1.9"
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,60,50,0.3)"
             >
-              Busco conocer la Verdad profunda del ser humano que va más allá de cualquier religión,
-              tradición o percepción. El conocimiento y la sabiduría pertenecen al pueblo y esta web
-              tiene como propósito compartir aquello que me ha ayudado a crecer.
+
+              
+              Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
             </Text>
             <Flex justify={{ base: "center", md: "flex-end" }} mt={6}>
               <Box
@@ -467,7 +465,7 @@ const Welcome = () => {
             <Text
               color={selected.txt}
               fontWeight="800"
-              fontSize={{ base: "xl", md: "2xl" }}
+              fontSize={{ base: "3xl", md: "4xl" }}
               mb={4}
               letterSpacing="0.02em"
             >
@@ -476,9 +474,9 @@ const Welcome = () => {
 
             <Text
               color={selected.txt}
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "xl", md: "2xl" }}
               lineHeight="tall"
-              opacity={0.85}
+              opacity={0.9}
               mb={7}
             >
               {selected.desc}

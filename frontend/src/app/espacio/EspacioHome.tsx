@@ -40,10 +40,10 @@ const EspacioHome = () => {
 
   const angleStep = (2 * Math.PI) / photos.length;
 
-  const radius        = useBreakpointValue({ base: 140, sm: 180, md: 235, lg: 295, xl: 335 });
-  const containerSize = useBreakpointValue({ base: "380px", sm: "470px", md: "620px", lg: "770px", xl: "880px" });
-  const centerSize    = useBreakpointValue({ base: "155px", md: "210px", lg: "260px", xl: "310px" });
-  const circleSize    = useBreakpointValue({ base: "76px", md: "100px", lg: "120px" });
+  const radius        = useBreakpointValue({ base: 105, sm: 130, md: 165, lg: 210, xl: 240 });
+  const containerSize = useBreakpointValue({ base: "290px", sm: "350px", md: "440px", lg: "540px", xl: "620px" });
+  const centerSize    = useBreakpointValue({ base: "110px", md: "145px", lg: "180px", xl: "210px" });
+  const circleSize    = useBreakpointValue({ base: "58px", md: "76px", lg: "90px" });
 
   const [img, setimg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -98,12 +98,12 @@ const EspacioHome = () => {
           <Flex
             direction="column"
             alignItems="center"
-            pt={{ base: 10, md: 14 }}
-            pb={{ base: 14, md: 20 }}
+            pt={{ base: 6, md: 8 }}
+            pb={{ base: 6, md: 8 }}
           >
             {/* Título */}
-            <Flex align="center" gap={3} mb={{ base: 8, md: 10 }}>
-              <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="42px" />
+            <Flex align="center" gap={3} mb={{ base: 4, md: 6 }}>
+              <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="52px" />
               <Text
                 color="white"
                 fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
@@ -123,6 +123,19 @@ const EspacioHome = () => {
               display="flex"
               alignItems="center"
               justifyContent="center"
+              sx={{
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: "url('/img/life.png')",
+                  backgroundSize: "100%",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  opacity: 0.12,
+                  zIndex: 0,
+                },
+              }}
             >
               {/* Centro — clic para cambiar foto */}
               <Box

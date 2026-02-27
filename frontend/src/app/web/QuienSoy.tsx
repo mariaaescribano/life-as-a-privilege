@@ -155,8 +155,8 @@ const QuienSoy = () => {
               >
                 María Escribano
               </Text>
-              <Text color="rgba(255,255,255,0.65)" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.08em" mb={4}>
-                Comunicadora · Investigadora · Aprendiz
+              <Text color="rgba(255,255,255,0.65)" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.08em" mb={4}>
+                La Vida es un privilegio, pero nuestra realidad depende de cómo decidamos percibirla.
               </Text>
               <Text
                 color="rgba(255,255,255,0.88)"
@@ -164,10 +164,7 @@ const QuienSoy = () => {
                 lineHeight="1.9"
                 letterSpacing="0.02em"
               >
-                Busco conocer la Verdad profunda del ser humano que va más allá
-                de cualquier religión, tradición o percepción. El conocimiento
-                y la sabiduría pertenecen al pueblo y esta web tiene como
-                propósito compartir aquello que me ha ayudado a crecer.
+                Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
               </Text>
             </Box>
           </Box>

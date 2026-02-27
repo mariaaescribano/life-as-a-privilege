@@ -51,7 +51,7 @@ const MandalaCircle = ({
       boxShadow="0 4px 16px rgba(0,0,0,0.28), 0 0 20px rgba(107,196,200,0.5), 0 0 45px rgba(107,196,200,0.2)"
       border={`5px solid ${photo.txt}`}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-      animate={{ scale: 1, opacity: isAvailable ? 1 : 0.5, x, y }}
+      animate={{ scale: 1, opacity: 1, x, y }}
       // Tras la entrada (entered=true) la transition se vuelve rápida,
       // por eso el return del hover también es instantáneo.
       transition={entered
@@ -99,7 +99,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
 
   return (
     <Box
-      bg="transparent"
+      position="relative"
       borderRadius="2xl"
       p={6}
       w="100%"
@@ -116,6 +116,20 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
         justifyContent="center"
         alignItems="center"
       >
+        {/* Life.png de fondo del mandala */}
+        <Box
+          position="absolute"
+          w="100%"
+          h="100%"
+          backgroundImage="url('/img/life.png')"
+          backgroundSize="90%"
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
+          opacity={0.13}
+          zIndex={0}
+          pointerEvents="none"
+        />
+
         {/* Centro */}
         <MotionBox
           position="absolute"

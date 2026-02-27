@@ -11,6 +11,7 @@ export type Submodulo = {
   link:string;
   descripcion: string;
   video: string;
+  letra: string;
   detalles: Detalles;
   linkAnterior:string;
   linkNext:string;

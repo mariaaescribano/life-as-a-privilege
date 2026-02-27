@@ -12,6 +12,14 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
   EspacioPersonalIcon, AprendizajeIcon,
+  fisiologiaDescrip,
+  neuropsicologiaDescrip,
+  astrologiaDescrip,
+  tcmDescrip,
+  nutricionDescrip,
+  ayurvedaDescrip,
+  biologiaDescrip,
+  cabalaDescrip,
 } from "../../GlobalVariables";
 import type { SessionStorageUser } from "../../dtos/user.types";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -30,56 +38,56 @@ type Discipline = {
 const disciplines: Discipline[] = [
   {
     name: fisiologiaNom, bg: fisiologiaBg, txt: fisiologiaTxt,
-    description: "Comprende los procesos biológicos que rigen tu cuerpo y aprende a escuchar sus señales para vivir en equilibrio con tu naturaleza.",
+    description: fisiologiaDescrip,
     renderIcon: (s) => <FisiologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + fisiologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + fisiologiaNom,
   },
   {
     name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt,
-    description: "Entiende lo que te condicionó desde antes de tu nacimiento. Integra desde el Amor, la racionalidad y el perdón todas las partes de ti para coger las riendas de tu Vida.",
+    description: neuropsicologiaDescrip,
     renderIcon: (s) => <NeuropsicologiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + neuropsicologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
   },
   {
     name: astrologiaNom, bg: astrologiaBg, txt: astrologiaTxt,
-    description: "Descubre el mapa cósmico de tu alma y cómo los ciclos planetarios influyen en tus patrones de vida, tus relaciones y tu propósito.",
+    description: astrologiaDescrip,
     renderIcon: (s) => <AstrologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + astrologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + astrologiaNom,
   },
   {
     name: tcmNom, bg: tcmBg, txt: tcmTxt,
-    description: "Equilibra el flujo de energía vital Qi y descubre cómo los principios milenarios de la Medicina Tradicional China pueden restaurar tu armonía interior.",
+    description: tcmDescrip,
     renderIcon: (s) => <TCMIcon size={s} />,
     linkEspacio: "/espacio/questions/" + tcmNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + tcmNom,
   },
   {
     name: nutricionNom, bg: nutricionBg, txt: nutricionTxt,
-    description: "Aprende a alimentarte de forma consciente, comprendiendo cómo cada elección nutricional impacta tu energía, tus emociones y tu bienestar.",
+    description: nutricionDescrip,
     renderIcon: (s) => <NutricionIcon size={s} />,
     linkEspacio: "/espacio/questions/" + nutricionNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + nutricionNom,
   },
   {
     name: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt,
-    description: "Conoce tu constitución única según la medicina ancestral india y transforma tu vida con hábitos y rutinas adaptadas a tu naturaleza.",
+    description: ayurvedaDescrip,
     renderIcon: (s) => <AyurvedaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + ayurvedaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + ayurvedaNom,
   },
   {
     name: biologiaNom, bg: biologiaBg, txt: biologiaTxt,
-    description: "Descubre el poder curativo de las plantas y aprende a utilizar la sabiduría de la naturaleza para tu salud y equilibrio.",
+    description: biologiaDescrip,
     renderIcon: (s) => <BiologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + biologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + biologiaNom,
   },
   {
     name: cabalaNom, bg: cabalaBg, txt: cabalaTxt,
-    description: "Explora la tradición mística judía para comprender la estructura del alma y desvelar tu camino único de evolución espiritual.",
+    description: cabalaDescrip,
     renderIcon: (s) => <CabalaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + cabalaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + cabalaNom,
@@ -189,26 +197,28 @@ const Home = () => {
                   backgroundRepeat="no-repeat" opacity={0.13}
                   zIndex={0} pointerEvents="none"
                 />
-                <VStack spacing={5} zIndex={1} position="relative" align="center">
+                <VStack spacing={5} zIndex={1} position="relative" w="80%" align="center">
                   <Text
                     color="white" fontWeight="700"
                     fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
                     textAlign="center" letterSpacing="0.06em" lineHeight="1.2"
                     textShadow="0 2px 10px rgba(0,100,90,0.4)"
                   >
-                    Bienvenida, {user.name}
+                    Bienvenid@, {user.name}
                   </Text>
                   <Text
                     color="rgba(255,255,255,0.88)"
-                    fontSize={{ base: "lg", md: "lg", lg: "xl" }}
+                    mt="10px"
+                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
                     textShadow="0 1px 5px rgba(0,100,90,0.25)"
                   >
                     Este es tu espacio para aprender e integrar distintas modalidades en las que serás capaz de identificar tus bloqueos y tus trampas.
+                    En esta página encontrarás múltiples recursos para tu camino, pero siempre puedes contactarnos.
                   </Text>
                   <Text
                     color="rgba(255,255,255,0.88)"
-                    fontSize={{ base: "lg", md: "lg", lg: "xl" }}
+                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
                     textShadow="0 1px 5px rgba(0,100,90,0.25)"
                   >
@@ -221,18 +231,26 @@ const Home = () => {
               <Box
                 ref={mandalaReveal.ref}
                 flex="1"
-                {...glassCard}
+                position="relative"
+                border="1px solid rgba(255,255,255,0.38)"
+                borderRadius="2xl"
+                boxShadow="0 8px 40px rgba(107,196,200,0.45)"
                 px={{ base: 6, md: 6 }}
                 py={{ base: 8, md: 10 }}
                 display="flex" flexDirection="column" alignItems="center" gap={4}
                 opacity={mandalaReveal.visible ? 1 : 0}
                 transform={mandalaReveal.visible ? "none" : "translateY(28px)"}
                 transition="opacity 0.75s ease 0.12s, transform 0.75s ease 0.12s"
+                bg="rgba(255,255,255,0.14)"
+                sx={{
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                }}
               >
                 <Flex align="center" gap={3}>
-                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="42px" />
+                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size="52px" />
                   <Text
-                    color="white" fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                    color="white" fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
                     fontWeight="700" letterSpacing="0.05em"
                     textShadow="0 2px 10px rgba(0,100,90,0.4)" textAlign="center"
                   >
