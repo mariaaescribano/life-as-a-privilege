@@ -13,6 +13,7 @@ import QuienSoy from "./app/web/QuienSoy";
 import Productos from "./app/web/Productos";
 import ProductoDetalle from "./app/web/ProductoDetalle";
 import ReelsPage from "./app/web/Reels";
+import FitoterapiaPage from "./app/web/Fitoterapia";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,6 +36,7 @@ export default function App()
       <Route path="/productos" element={<Productos />} />
       <Route path="/productos/:id" element={<ProductoDetalle />} />
       <Route path="/reels" element={<ReelsPage />} />
+      <Route path="/fitoterapia" element={<FitoterapiaPage />} />
       
       <Route path="/espacio/espacioHome" element={<EspacioHome />} />
       <Route path="/espacio/questions/:themeId" element={<ExpandablePage />} />
