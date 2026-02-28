@@ -122,21 +122,46 @@ export default function SignIn() {
       {/* ── CARD REGISTRO ── */}
       <Flex
         flex="1"
-        align="center"
+        align="flex-start"
         justify="center"
         px={{ base: 5, md: 10 }}
-        py={{ base: 12, md: 16 }}
+        pt={{ base: 7, md: 10 }}
+        pb={{ base: 12, md: 16 }}
       >
-        <Box
-          w={{ base: "100%", sm: "460px" }}
-          bg="rgba(255,255,255,0.14)"
-          border="1px solid rgba(255,255,255,0.38)"
-          sx={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-          borderRadius="2xl"
-          boxShadow="0 8px 40px rgba(107,196,200,0.45)"
-          px={{ base: 8, md: 12 }}
-          py={{ base: 10, md: 12 }}
-        >
+        <VStack w={{ base: "100%", sm: "460px" }} spacing={4} align="stretch">
+
+          {/* ── AVISO ── */}
+          <Box
+            bg="rgba(255,255,255,0.07)"
+            border="1px solid rgba(255,255,255,0.2)"
+            sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+            borderRadius="xl"
+            px={{ base: 3, md: 4 }}
+            py={5}
+            textAlign="center"
+          >
+            <Text
+              color="rgba(255,255,255,0.76)"
+              fontSize={{ base: "lg", md: "xl" }}
+              lineHeight="1.85"
+              fontStyle="italic"
+            >
+              Esta plataforma acaba de nacer y está creciendo poco a poco.
+              Si algo no responde a la primera, inténtalo de nuevo —
+              tu paciencia es un regalo que agradecemos de corazón.
+            </Text>
+          </Box>
+
+          <Box
+            w="100%"
+            bg="rgba(255,255,255,0.14)"
+            border="1px solid rgba(255,255,255,0.38)"
+            sx={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+            borderRadius="2xl"
+            boxShadow="0 8px 40px rgba(107,196,200,0.45)"
+            px={{ base: 8, md: 12 }}
+            py={{ base: 10, md: 12 }}
+          >
           <Text
             color="white"
             fontSize={{ base: "3xl", md: "4xl" }}
@@ -249,6 +274,7 @@ export default function SignIn() {
             </Flex>
           </VStack>
         </Box>
+        </VStack>
       </Flex>
 
       {/* ── FOOTER ── */}
