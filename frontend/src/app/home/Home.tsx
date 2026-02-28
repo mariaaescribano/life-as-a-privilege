@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
+import ProductosBanner from "../../components/global/ProductosBanner";
 import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -347,6 +348,9 @@ const Home = () => {
               </Grid>
 
             </Box>
+
+            {/* ── BANNER PRODUCTOS ── */}
+            <ProductosBanner maxW="unset" />
 
           </Flex>
         )}

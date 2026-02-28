@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import ProductosBanner from "../../components/global/ProductosBanner";
 import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -201,7 +202,7 @@ const Welcome = () => {
           py={{ base: 8, md: 10 }}
           display="flex"
           flexDirection={{ base: "column", md: "row" }}
-          alignItems="center"
+          alignItems={{ base: "center", md: "stretch" }}
           gap={{ base: 6, md: 10 }}
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "none" : "translateX(50px)"}
@@ -228,7 +229,7 @@ const Welcome = () => {
           </Box>
 
           {/* Texto */}
-          <Box flex="1" textAlign={{ base: "center", md: "left" }}>
+          <Box flex="1" textAlign={{ base: "center", md: "left" }} display="flex" flexDirection="column">
             <Text
               color="white"
               fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
@@ -253,7 +254,7 @@ const Welcome = () => {
               
               Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
             </Text>
-            <Flex justify={{ base: "center", md: "flex-end" }} mt={6}>
+            <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
               <Box
                 as="button"
                 onClick={() => navigate("/quienSoy")}
@@ -275,6 +276,11 @@ const Welcome = () => {
             </Flex>
           </Box>
         </Box>
+      </Flex>
+
+      {/* ── BANNER PRODUCTOS ── */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
+        <ProductosBanner w={{ base: "100%", md: "80%" }} maxW="unset" />
       </Flex>
 
       {/* ── CARDS DE DISCIPLINAS ── */}

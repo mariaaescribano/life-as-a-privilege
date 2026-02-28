@@ -3,6 +3,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProductosBanner from "../../components/global/ProductosBanner";
 
 type Libro = { title: string; descripcion: string; img: string; link: string };
 type Certificado = { img: string };
@@ -166,6 +167,9 @@ const QuienSoy = () => {
               </Text>
             </Box>
           </Box>
+
+          {/* ── BANNER PRODUCTOS ── */}
+          <ProductosBanner />
 
           {/* ── CARD 2: MIS LIBROS ── */}
           <Box w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>

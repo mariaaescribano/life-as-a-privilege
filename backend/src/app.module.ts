@@ -9,6 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UploadModule } from './upload/upload.module';
 import { RespuestaModule } from './respuesta/respuesta.module';
+import { PaymentModule } from './payment/payment.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -25,7 +26,8 @@ export const uploadFolder = join(process.cwd(), 'img');
     UsersModule,
     AuthModule,
     UploadModule,
-    RespuestaModule
+    RespuestaModule,
+    PaymentModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],
