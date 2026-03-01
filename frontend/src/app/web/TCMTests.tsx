@@ -84,7 +84,7 @@ export default function TCMTests() {
         >
           {/* Encabezado de disciplina */}
           <DisciplineHeader
-            icon={<TCMIcon size="60px" />}
+            icon={<TCMIcon size={{base:"40px", md:"60px"}} />}
             title="Tests · Medicina China"
             bgColor={tcmBg}
             color={tcmTxt}

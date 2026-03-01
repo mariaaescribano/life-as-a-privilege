@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 
-import ThemeSection from "../../components/espacio/ThemeSection";
-import { DisciplineHeader } from "../../components/global/DisciplineHeader";
-import SiteHeader from "../../components/global/SiteHeader";
-import type { Bloque, ThemeTitleObject } from "../../dtos/espacio.type";
-import { preguntasNeuroPsicologia } from "../../hardCoded/espacio/PreguntasNeuroPsicologia";
+import ThemeSection from "../../../components/espacio/components/ThemeSection";
+import { DisciplineHeader } from "../../../components/global/DisciplineHeader";
+import SiteHeader from "../../../components/global/SiteHeader";
+import type { Bloque, ThemeTitleObject } from "../../../dtos/espacio.type";
+import { preguntasNeuroPsicologia } from "../../../hardCoded/espacio/PreguntasNeuroPsicologia";
 import {
   neuropsicologiaBg,
   NeuropsicologiaIcon,
   neuropsicologiaNom,
   neuropsicologiaTxt,
-} from "../../GlobalVariables";
+} from "../../../GlobalVariables";
 
 const ThemePreguntas = () => {
   const { themeId } = useParams<{ themeId: string }>();

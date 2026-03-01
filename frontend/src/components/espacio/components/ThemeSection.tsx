@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDown } from "lucide-react";
 import EditableCard from "./EditableCard";
-import type { Pregunta } from "../../dtos/espacio.type";
+import type { Pregunta } from "../../../dtos/espacio.type";
 
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 const GLOW_HOVER = "0 8px 24px rgba(0,0,0,0.28), 0 0 32px rgba(107,196,200,1)";

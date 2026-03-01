@@ -365,10 +365,10 @@ const Home = () => {
             </Box>
 
             {/* ── BANNERS PRODUCTOS & REELS ── */}
-            <Flex gap={{ base: 5, md: 7 }} direction={{ base: "column", md: "row" }}>
+            {/* <Flex gap={{ base: 5, md: 7 }} direction={{ base: "column", md: "row" }}>
               <ProductosBanner maxW="unset" w="100%" compact />
               <ReelsBanner    maxW="unset" w="100%" compact />
-            </Flex>
+            </Flex> */}
 
           </Flex>
         )}

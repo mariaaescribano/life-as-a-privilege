@@ -22,6 +22,10 @@ export default function ModulesPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
   const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
   const getModuloDatos = (): Modulo => {
     switch (moduloId) {
       case "fisiologia":

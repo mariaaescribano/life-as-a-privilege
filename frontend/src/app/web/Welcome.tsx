@@ -289,7 +289,7 @@ const Welcome = () => {
       </Flex>
 
       {/* ── BANNERS PRODUCTOS & REELS ── */}
-      <Flex
+      {/* <Flex
         justify="center"
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 12, md: 16 }}
@@ -302,7 +302,7 @@ const Welcome = () => {
           <ProductosBanner maxW="unset" w="100%" compact />
           <ReelsBanner    maxW="unset" w="100%" compact />
         </Flex>
-      </Flex>
+      </Flex> */}
 
       {/* ── CARDS DE DISCIPLINAS ── */}
       <Box

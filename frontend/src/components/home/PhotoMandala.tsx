@@ -11,13 +11,14 @@ import {
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmTxt
+  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt
 } from "../../GlobalVariables";
 
 const MotionBox = motion(Box);
 
 type CirclePhoto = {
   name: string;
+  available:boolean;
   bg: string;
   txt: string;
   icon: React.ReactNode;
@@ -52,8 +53,6 @@ const MandalaCircle = ({
       border={`5px solid ${photo.txt}`}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
       animate={{ scale: 1, opacity: 1, x, y }}
-      // Tras la entrada (entered=true) la transition se vuelve rápida,
-      // por eso el return del hover también es instantáneo.
       transition={entered
         ? { duration: 0.15 }
         : { duration: 0.7, delay: index * 0.06 }
@@ -98,17 +97,17 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
   const circleSize  = isXs ? "58px" : isSm ? "64px" : isMd ? "72px" : "96px";
   const centerSize  = isXs ? "110px" : isSm ? "120px" : isMd ? "135px" : "180px";
   const containerH  = isXs ? "320px" : isSm ? "360px" : isMd ? "400px" : "500px";
-  const iconSize    = isXs ? "34px"  : isSm ? "38px"  : isMd ? "42px"  : "38px";
+  const iconSize    = isXs ? "34px"  : isSm ? "42px"  : isMd ? "48px"  : "48px";
 
   const photos: CirclePhoto[] = [
-    { name: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + fisiologiaNom },
-    { name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + neuropsicologiaNom },
-    { name: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
-    { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + tcmNom },
-    { name: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
-    { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
-    { name: biologiaNom,        bg: biologiaBg,        txt: biologiaTxt,        icon: <BiologiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + biologiaNom },
-    { name: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
+    { name: fisiologiaNom,    available:false,  bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + fisiologiaNom },
+    { name: neuropsicologiaNom, available:true,  bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + neuropsicologiaNom },
+    { name: astrologiaNom,  available:false,     bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
+    { name: tcmNom,  available:true,   bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + tcmNomLink },
+    { name: nutricionNom,  available:false,      bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
+    { name: ayurvedaNom,  available:false,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
+    { name: biologiaNom,  available:false,       bg: biologiaBg,        txt: biologiaTxt,        icon: <BiologiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + biologiaNom },
+    { name: cabalaNom,     available:false,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;
@@ -175,7 +174,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
           const angle = angleStep * index - Math.PI / 2;
           const x = Math.cos(angle) * radius;
           const y = Math.sin(angle) * radius;
-          const isAvailable = photo.name === neuropsicologiaNom;
+          const isAvailable = photo.available === true;
 
           return (
             <MandalaCircle

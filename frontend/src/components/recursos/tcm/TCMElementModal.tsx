@@ -146,13 +146,14 @@ const TCMElementModal = ({
         maxH="90vh"
         overflowY="auto"
         borderRadius="24px"
-        bg={element.bgColor}
-        boxShadow={`0 32px 80px rgba(0,0,0,0.70), 0 0 40px ${element.iconColor}20`}
+        bg={element.iconColor}
+        borderTop={`3px solid ${element.bgColor}`}
+        boxShadow={`0 32px 80px rgba(0,0,0,0.70), 0 0 60px ${element.iconColor}55, 0 0 120px ${element.iconColor}20`}
         sx={{
           "&::-webkit-scrollbar": { width: "4px" },
           "&::-webkit-scrollbar-track": { background: "transparent" },
           "&::-webkit-scrollbar-thumb": {
-            background: element.iconColor + "55",
+            background: element.bgColor + "55",
             borderRadius: "999px",
           },
         }}
@@ -162,13 +163,13 @@ const TCMElementModal = ({
           as="button"
           position="absolute" top="13px" right="13px"
           w="34px" h="34px" borderRadius="full"
-          bg="rgba(255,255,255,0.10)"
-          border="1px solid rgba(255,255,255,0.20)"
+          bg="rgba(0,0,0,0.10)"
+          border="1px solid rgba(0,0,0,0.20)"
           display="flex" alignItems="center" justifyContent="center"
-          color="rgba(255,255,255,0.70)"
+          color="rgba(0,0,0,0.65)"
           fontSize="15px" fontWeight="700"
           cursor="pointer" zIndex={10}
-          _hover={{ bg: "rgba(255,255,255,0.20)" }}
+          _hover={{ bg: "rgba(0,0,0,0.20)" }}
           onClick={onClose}
         >
           ✕
@@ -182,9 +183,9 @@ const TCMElementModal = ({
               w={{ base: "54px", md: "62px" }}
               h={{ base: "54px", md: "62px" }}
               borderRadius="full"
-              bg={element.iconColor + "20"}
-              border={`2px solid ${element.iconColor}70`}
-              boxShadow={`0 0 18px ${element.iconColor}35`}
+              bg={element.bgColor}
+              border={`2px solid ${element.iconColor}90`}
+              boxShadow={`0 4px 20px rgba(0,0,0,0.45), 0 0 18px ${element.iconColor}99, 0 0 38px ${element.iconColor}40`}
               display="flex" alignItems="center" justifyContent="center"
               flexShrink={0}
               color={element.iconColor}
@@ -193,7 +194,7 @@ const TCMElementModal = ({
             </Box>
             <Box>
               <Text
-                color={element.iconColor + "aa"}
+                color={element.bgColor + "aa"}
                 fontSize="xs"
                 letterSpacing="0.2em"
                 textTransform="uppercase"
@@ -203,7 +204,7 @@ const TCMElementModal = ({
                 Elemento · TCM
               </Text>
               <Text
-                color={element.iconColor}
+                color={element.bgColor}
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 fontFamily="'EB Garamond', serif"
@@ -212,7 +213,7 @@ const TCMElementModal = ({
                 {element.name}
               </Text>
               <Text
-                color={element.iconColor + "cc"}
+                color={element.bgColor + "cc"}
                 fontSize={{ base: "lg", md: "xl" }}
                 fontStyle="italic"
                 letterSpacing="0.08em"
@@ -224,14 +225,14 @@ const TCMElementModal = ({
 
           {/* Línea decorativa */}
           <Flex mb={5} gap={1}>
-            <Box w="18px" h="1.5px" borderRadius="full" bg={element.iconColor} opacity={0.3} />
-            <Box w="42px" h="1.5px" borderRadius="full" bg={element.iconColor} opacity={0.6} />
-            <Box w="18px" h="1.5px" borderRadius="full" bg={element.iconColor} opacity={0.3} />
+            <Box w="18px" h="1.5px" borderRadius="full" bg={element.bgColor} opacity={0.3} />
+            <Box w="42px" h="1.5px" borderRadius="full" bg={element.bgColor} opacity={0.6} />
+            <Box w="18px" h="1.5px" borderRadius="full" bg={element.bgColor} opacity={0.3} />
           </Flex>
 
           {/* ── Descripción ── */}
           <Text
-            color={element.iconColor + "cc"}
+            color={element.bgColor + "cc"}
             fontSize={{ base: "md", md: "lg" }}
             lineHeight="1.92"
             fontFamily="'EB Garamond', serif"
@@ -247,8 +248,8 @@ const TCMElementModal = ({
                 key={i}
                 label={field.label}
                 value={field.value}
-                bgColor={element.bgColor}
-                iconColor={element.iconColor}
+                bgColor={element.iconColor}
+                iconColor={element.bgColor}
                 isOpen={openIndex === i}
                 onToggle={() => toggle(i)}
               />

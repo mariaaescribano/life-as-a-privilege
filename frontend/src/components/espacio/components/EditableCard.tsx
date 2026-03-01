@@ -9,9 +9,9 @@ import {
   VStack
 } from "@chakra-ui/react";
 import { CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
-import { API_URL, turquesa } from "../../GlobalVariables";
+import { API_URL, turquesa } from "../../../GlobalVariables";
 import axios from "axios";
-import type { Respuesta } from "../../dtos/respuesta.type";
+import type { Respuesta } from "../../../dtos/respuesta.type";
 import { useNavigate } from "react-router-dom";
 
 const EditableCard = (props:{

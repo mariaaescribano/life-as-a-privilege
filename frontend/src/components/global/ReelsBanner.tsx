@@ -9,7 +9,7 @@ const ReelsPlayIcon = () => (
 );
 
 const ReelsNavIcon = ({ size = "36px" }: { size?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="rgba(255,255,255,0.92)">
+  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="#008080">
     <path d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"/>
   </svg>
 );
@@ -128,7 +128,9 @@ const ReelsBanner = ({ maxW = "900px", w = "100%", compact = false }: ReelsBanne
           flex="1"
         >
           <Flex align="center" gap={2}>
-            <ReelsNavIcon size="24px" />
+            <Box bg="white" borderRadius="full" p="7px" display="flex" alignItems="center" justifyContent="center" flexShrink={0} boxShadow="0 2px 10px rgba(0,0,0,0.12)">
+              <ReelsNavIcon size="34px" />
+            </Box>
             <Text
               color="white"
               fontSize={{ base: "xl", md: "2xl" }}
@@ -262,7 +264,9 @@ const ReelsBanner = ({ maxW = "900px", w = "100%", compact = false }: ReelsBanne
         textAlign={{ base: "center", md: "left" }}
       >
         <Flex align="center" gap={3} justify={{ base: "center", md: "flex-start" }}>
-          <ReelsNavIcon size="36px" />
+          <Box bg="white" borderRadius="full" p="9px" display="flex" alignItems="center" justifyContent="center" flexShrink={0} boxShadow="0 2px 14px rgba(0,0,0,0.14)">
+            <ReelsNavIcon size="48px" />
+          </Box>
           <Text
             color="white"
             fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}

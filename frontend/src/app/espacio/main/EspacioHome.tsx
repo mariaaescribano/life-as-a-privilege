@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
-import SiteHeader from "../../components/global/SiteHeader";
+import SiteHeader from "../../../components/global/SiteHeader";
 import React, { useEffect, useState } from "react";
 import {
   API_URL,
@@ -19,10 +19,11 @@ import {
   nutricionBg, NutricionIcon, nutricionNom,
   nutricionTxt,
   tcmBg, TCMIcon, tcmNom,
+  tcmNomLink,
   tcmTxt,
-} from "../../GlobalVariables";
+} from "../../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import SpinnerTurquesa from "../../../components/global/Spinner";
 
 const EspacioHome = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const EspacioHome = () => {
     { bg: fisiologiaBg,      icon: <FisiologiaIcon size="58px" />,                              link: "/espacio/questions/" + fisiologiaNom,      cursor: "not-allowed" , txt: fisiologiaTxt},
     { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{ base: "58px", md: "58px" }} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer"  , txt: neuropsicologiaTxt   },
     { bg: astrologiaBg,      icon: <AstrologiaIcon size="58px" />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "not-allowed" , txt: astrologiaTxt},
-    { bg: tcmBg,             icon: <TCMIcon size="58px" />,                                     link: "/espacio/questions/" + tcmNom,             cursor: "not-allowed" , txt: tcmTxt},
+    { bg: tcmBg,             icon: <TCMIcon size={{ base: "58px", md: "58px" }}/>,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},
     { bg: nutricionBg,       icon: <NutricionIcon size="58px" />,                               link: "/espacio/questions/" + nutricionNom,       cursor: "not-allowed", txt: nutricionTxt },
     { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" , txt: ayurvedaTxt},
     { bg: biologiaBg,        icon: <BiologiaIcon size="58px" />,                                link: "/espacio/questions/" + biologiaNom,        cursor: "not-allowed" , txt: biologiaTxt},
