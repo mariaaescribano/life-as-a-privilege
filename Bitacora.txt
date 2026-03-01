@@ -6,11 +6,9 @@ USAR OBJ+ID : userId
 ---------------------------------------------
 
 
-
-- headers revisar
-- cambio de foto actualizar!
-
-
+COSAS
+- Videos TCM + transcripcion + descrip
+- 
 
 
 

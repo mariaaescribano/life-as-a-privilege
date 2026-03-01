@@ -13,9 +13,10 @@ import {
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmTxt,
+  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
-import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 
 export default function ModulesPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
@@ -24,13 +25,13 @@ export default function ModulesPage() {
   const getModuloDatos = (): Modulo => {
     switch (moduloId) {
       case "fisiologia":
-        return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />, modulos: modulosNeuroPsicologia };
+        return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
       case neuropsicologiaNom:
-        return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "60px", md: "60px" }} />, modulos: modulosNeuroPsicologia };
+        return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos: modulosNeuroPsicologia };
       case "astrologia":
         return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon /> };
-      case "tcm":
-        return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon /> };
+      case tcmNomLink:
+        return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos: modulostcm };
       case "nutricion":
         return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon /> };
       case "ayurveda":

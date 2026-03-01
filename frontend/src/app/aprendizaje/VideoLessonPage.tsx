@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Modulo, Submodulo } from "../../dtos/aprendizaje.type";
-import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -12,8 +12,9 @@ import {
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmTxt,
+  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
+import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -28,14 +29,14 @@ export default function VideoLessonPage() {
 
   const getModuloDatos = (): Modulo => {
     switch (moduloId) {
-      case "neuropsicologia":
+      case neuropsicologiaNom:
         return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case "fisiologia":
         return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
       case "astrologia":
         return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size="44px" /> };
-      case "tcm":
-        return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon size="44px" /> };
+      case tcmNomLink:
+        return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon size={{ base: "44px", md: "44px" }} /> };
       case "nutricion":
         return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size="44px" /> };
       case "ayurveda":
@@ -49,8 +50,18 @@ export default function VideoLessonPage() {
     }
   };
 
+  // SUBMODULOS
+
   const getNeuroPsicologiaSubmoduleByTitle = (title: string): Submodulo | null => {
     for (const modulo of modulosNeuroPsicologia) {
+      const found = modulo.submodules.find((sub) => sub.id === title);
+      if (found) return found;
+    }
+    return null;
+  };
+
+  const getTCMSubmoduleByTitle = (title: string): Submodulo | null => {
+    for (const modulo of modulostcm) {
       const found = modulo.submodules.find((sub) => sub.id === title);
       if (found) return found;
     }
@@ -63,7 +74,14 @@ export default function VideoLessonPage() {
 
   useEffect(() => {
     if (moduloId && submoduloId) {
-      setdatos(getNeuroPsicologiaSubmoduleByTitle(submoduloId!));
+      if(moduloId === neuropsicologiaNom)
+      { 
+        setdatos(getNeuroPsicologiaSubmoduleByTitle(submoduloId!));
+      }
+      else if(moduloId === tcmNomLink)
+      { 
+        setdatos(getTCMSubmoduleByTitle(submoduloId!));
+      }
     }
   }, [moduloId, submoduloId]);
 

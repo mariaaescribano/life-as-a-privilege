@@ -8,45 +8,127 @@ const FlowerIcon = ({ size = "28px" }: { size?: string }) => (
   </svg>
 );
 
+const glassCard = {
+  bg: "rgba(255,255,255,0.22)",
+  border: "1px solid rgba(255,255,255,0.45)",
+  sx: { backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" },
+  borderRadius: "2xl",
+  boxShadow: "0 8px 36px rgba(107,196,200,0.45)",
+};
+
 interface ProductosBannerProps {
   maxW?: string | object;
   w?: string | object;
+  compact?: boolean;
 }
 
-const ProductosBanner = ({ maxW = "900px", w = "100%" }: ProductosBannerProps) => {
+const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: ProductosBannerProps) => {
   const navigate = useNavigate();
+
+  if (compact) {
+    return (
+      <Box
+        w={w} maxW={maxW}
+        {...glassCard}
+        overflow="hidden"
+        display="flex"
+        flexDirection="column"
+      >
+        {/* Imagen */}
+        <Box h="150px" position="relative" overflow="hidden" flexShrink={0}>
+          <Image
+            src="/img/jabones.png"
+            alt="Productos naturales"
+            w="100%" h="100%"
+            objectFit="cover" objectPosition="center"
+          />
+          <Box
+            position="absolute" bottom={0} left={0} right={0} h="70px"
+            bgGradient="linear(to-b, transparent, rgba(0,100,90,0.7))"
+            pointerEvents="none"
+          />
+        </Box>
+
+        {/* Contenido */}
+        <Box
+          px={6} py={5}
+          display="flex" flexDirection="column"
+          alignItems="center" gap={3}
+          textAlign="center"
+          flex="1"
+        >
+          <Flex align="center" gap={2}>
+            <FlowerIcon size="24px" />
+            <Text
+              color="white"
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontWeight="700"
+              fontFamily="'EB Garamond', serif"
+              letterSpacing="0.04em"
+              textShadow="0 2px 8px rgba(0,100,90,0.4)"
+              lineHeight="1.2"
+            >
+              Productos Naturales
+            </Text>
+          </Flex>
+
+          <Text
+            color="rgba(255,255,255,0.78)"
+            fontSize={{ base: "sm", md: "md" }}
+            fontFamily="'EB Garamond', serif"
+            lineHeight="1.7"
+            letterSpacing="0.01em"
+          >
+            Cuídate con ingredientes naturales y el amor de la madre tierra.
+          </Text>
+
+          <Box
+            as="button"
+            onClick={() => navigate("/productos")}
+            cursor="pointer"
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize="sm"
+            letterSpacing="0.07em"
+            px={5} py="6px"
+            borderRadius="full"
+            border="1.5px solid rgba(255,255,255,0.5)"
+            bg="rgba(255,255,255,0.1)"
+            mt="auto"
+            _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
+            transition="all 0.2s"
+          >
+            Ver más →
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box
-      w={w}
-      maxW={maxW}
-      bg="rgba(255,255,255,0.13)"
-      border="1px solid rgba(255,255,255,0.35)"
-      sx={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-      borderRadius="2xl"
-      boxShadow="0 8px 40px rgba(107,196,200,0.4)"
+      w={w} maxW={maxW}
+      {...glassCard}
       overflow="hidden"
       display="flex"
       flexDirection={{ base: "column", md: "row" }}
-      minH={{ base: "auto", md: "200px" }}
+      alignItems={{ base: "center", md: "stretch" }}
     >
       {/* ── Imagen jabones (izquierda) ── */}
       <Box
         flexShrink={0}
-        w={{ base: "100%", md: "280px" }}
-        h={{ base: "200px", md: "auto" }}
+        w={{ base: "100%", md: "260px" }}
+        h={{ base: "220px", md: "auto" }}
         position="relative"
         overflow="hidden"
       >
         <Image
           src="/img/jabones.png"
           alt="Productos naturales"
-          w="100%"
-          h="100%"
-          objectFit="cover"
-          objectPosition="center"
+          w="100%" h="100%"
+          objectFit="cover" objectPosition="center"
         />
-        {/* Degradado derecho para fusionar con el contenido */}
         <Box
           position="absolute"
           bottom={{ base: "0", md: "unset" }}
@@ -62,61 +144,53 @@ const ProductosBanner = ({ maxW = "900px", w = "100%" }: ProductosBannerProps) =
         />
       </Box>
 
-      {/* ── Contenido derecho ── */}
+      {/* ── Contenido ── */}
       <Box
         flex="1"
-        px={{ base: 7, md: 10 }}
+        px={{ base: 8, md: 14 }}
         py={{ base: 8, md: 10 }}
-        display="flex"
-        flexDirection="column"
+        display="flex" flexDirection="column"
         justifyContent="space-between"
         gap={4}
+        textAlign={{ base: "center", md: "left" }}
       >
-        {/* Título con icono */}
-        <Flex align="center" gap={3}>
-          <FlowerIcon size="26px" />
+        <Flex align="center" gap={3} justify={{ base: "center", md: "flex-start" }}>
+          <FlowerIcon size="36px" />
           <Text
             color="white"
-            fontSize={{ base: "2xl", md: "3xl" }}
+            fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
             fontWeight="700"
             fontFamily="'EB Garamond', serif"
-            letterSpacing="0.06em"
-            textShadow="0 2px 12px rgba(0,90,80,0.5)"
-            lineHeight="1.1"
+            letterSpacing="0.05em"
+            textShadow="0 2px 10px rgba(0,100,90,0.35)"
+            lineHeight="1.2"
           >
             Productos Naturales
           </Text>
         </Flex>
 
-        {/* Descripción */}
         <Text
-          color="rgba(255,255,255,0.82)"
-          fontSize={{ base: "md", md: "lg" }}
+          color="rgba(255,255,255,0.85)"
+          fontSize={{ base: "md", md: "xl" }}
           fontFamily="'EB Garamond', serif"
-          lineHeight="1.85"
-          letterSpacing="0.02em"
+          lineHeight="1.9" letterSpacing="0.02em"
+          textShadow="0 1px 5px rgba(0,100,90,0.25)"
         >
           Descubre todos los productos hechos con ingredientes naturales y Amor.
           Cuídate con las herramientas que nos ha dado la madre tierra.
         </Text>
 
-        {/* Botón */}
-        <Flex justify="flex-end" mt={1}>
+        <Flex justify={{ base: "center", md: "flex-end" }} mt={1}>
           <Box
             as="button"
             onClick={() => navigate("/productos")}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.08em"
-            px={7}
-            py="9px"
+            color="white" fontFamily="'EB Garamond', serif"
+            fontWeight="600" fontSize={{ base: "sm", md: "md" }}
+            letterSpacing="0.08em" px={7} py="9px"
             borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.55)"
-            bg="rgba(255,255,255,0.1)"
-            cursor="pointer"
-            _hover={{ bg: "rgba(255,255,255,0.22)", borderColor: "white" }}
+            border="1.5px solid rgba(255,255,255,0.6)"
+            bg="rgba(255,255,255,0.12)" cursor="pointer"
+            _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
             transition="all 0.22s"
           >
             Ver más →

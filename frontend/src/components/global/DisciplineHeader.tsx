@@ -32,6 +32,7 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }
           w={{ base: "60px", md: "72px" }}
           h={{ base: "60px", md: "72px" }}
           display="flex"
+          p="5px"
           alignItems="center"
           justifyContent="center"
           flexShrink={0}

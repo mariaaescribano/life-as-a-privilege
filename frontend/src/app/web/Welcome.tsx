@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import ProductosBanner from "../../components/global/ProductosBanner";
+import ReelsBanner from "../../components/global/ReelsBanner";
 import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -11,7 +12,7 @@ import {
   fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, nutricionDescrip, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmTxt,
+  tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 
 type Discipline = {
@@ -21,6 +22,7 @@ type Discipline = {
   renderIcon: (size: string) => React.ReactNode;
   desc: string;
   link: string;
+  available:boolean;
 };
 
 const disciplines: Discipline[] = [
@@ -31,6 +33,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <FisiologiaIcon size={size} />,
     desc: fisiologiaDescrip,
     link: "/aprendizaje/modulosPage/" + fisiologiaNom,
+    available: false
   },
   {
     name: neuropsicologiaNom,
@@ -39,6 +42,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
     desc: neuropsicologiaDescrip,
     link: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
+    available:true
   },
   {
     name: astrologiaNom,
@@ -47,14 +51,16 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <AstrologiaIcon size={size} />,
     desc: astrologiaDescrip,
     link: "/aprendizaje/modulosPage/" + astrologiaNom,
+    available:false
   },
   {
     name: tcmNom,
     bg: tcmBg,
     txt: tcmTxt,
-    renderIcon: (size) => <TCMIcon size={size} />,
+    renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
     desc: tcmDescrip,
-    link: "/aprendizaje/modulosPage/" + tcmNom,
+    link: "/aprendizaje/modulosPage/" + tcmNomLink,
+    available:true
   },
   {
     name: nutricionNom,
@@ -63,6 +69,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <NutricionIcon size={size} />,
     desc: nutricionDescrip,
     link: "/aprendizaje/modulosPage/" + nutricionNom,
+    available:false
   },
   {
     name: ayurvedaNom,
@@ -71,6 +78,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <AyurvedaIcon size={size} />,
     desc: ayurvedaDescrip,
     link: "/aprendizaje/modulosPage/" + ayurvedaNom,
+    available:false
   },
   {
     name: biologiaNom,
@@ -79,6 +87,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <BiologiaIcon size={size} />,
     desc: biologiaDescrip,
     link: "/aprendizaje/modulosPage/" + biologiaNom,
+    available:false
   },
   {
     name: cabalaNom,
@@ -87,6 +96,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <CabalaIcon size={size} />,
     desc: cabalaDescrip,
     link: "/aprendizaje/modulosPage/" + cabalaNom,
+    available:false
   },
 ];
 
@@ -278,9 +288,20 @@ const Welcome = () => {
         </Box>
       </Flex>
 
-      {/* ── BANNER PRODUCTOS ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
-        <ProductosBanner w={{ base: "100%", md: "80%" }} maxW="unset" />
+      {/* ── BANNERS PRODUCTOS & REELS ── */}
+      <Flex
+        justify="center"
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 12, md: 16 }}
+      >
+        <Flex
+          w={{ base: "100%", md: "80%" }}
+          gap={{ base: 5, md: 7 }}
+          direction={{ base: "column", md: "row" }}
+        >
+          <ProductosBanner maxW="unset" w="100%" compact />
+          <ReelsBanner    maxW="unset" w="100%" compact />
+        </Flex>
       </Flex>
 
       {/* ── CARDS DE DISCIPLINAS ── */}
@@ -491,7 +512,7 @@ const Welcome = () => {
             <Flex justify="center" direction="column" align="center" gap={2}>
               <Box
                 as="button"
-                onClick={() => selected.name === neuropsicologiaNom ? navigate(selected.link) : undefined}
+                onClick={() => selected.available ? navigate(selected.link) : undefined}
                 color={selected.txt}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
@@ -501,15 +522,15 @@ const Welcome = () => {
                 py={3}
                 borderRadius="full"
                 border={`2px solid ${selected.txt}`}
-                bg={selected.name === neuropsicologiaNom ? `${selected.txt}18` : `${selected.txt}0a`}
-                cursor={selected.name === neuropsicologiaNom ? "pointer" : "not-allowed"}
-                opacity={selected.name === neuropsicologiaNom ? 1 : 0.45}
-                _hover={selected.name === neuropsicologiaNom ? { bg: `${selected.txt}33`, transform: "translateY(-2px)" } : {}}
+                bg={selected.available  ? `${selected.txt}18` : `${selected.txt}0a`}
+                cursor={selected.available ? "pointer" : "not-allowed"}
+                opacity={selected.available ? 1 : 0.45}
+                _hover={selected.available ? { bg: `${selected.txt}33`, transform: "translateY(-2px)" } : {}}
                 transition="all 0.2s ease"
               >
                 APRENDER
               </Box>
-              {selected.name !== neuropsicologiaNom && (
+              {selected.available == false && (
                 <Text
                   color={selected.txt}
                   fontSize="xs"

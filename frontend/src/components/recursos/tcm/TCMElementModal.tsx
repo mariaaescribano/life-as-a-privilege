@@ -1,0 +1,264 @@
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+
+/* ═══════════════════════════════════════════
+   TIPOS
+═══════════════════════════════════════════ */
+export type TCMElementField = { label: string; value: string };
+
+export type TCMElementData = {
+  id: number;
+  name: string;
+  chinese: string;
+  bgColor: string;       // fondo oscuro del modal
+  iconColor: string;     // color más claro para los boxes y borde
+  leftPct: string;
+  topPct: string;
+  icon: React.ReactNode;
+  description: string;
+  fields: TCMElementField[];  // dinámico: tantos como se pasen
+};
+
+/* ═══════════════════════════════════════════
+   ITEM ACORDEÓN (se abre hacia abajo)
+═══════════════════════════════════════════ */
+const AccordionItem = ({
+  label,
+  value,
+  bgColor,
+  iconColor,
+  isOpen,
+  onToggle,
+}: {
+  label: string;
+  value: string;
+  bgColor: string;
+  iconColor: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) => (
+  <Box borderRadius="xl" overflow="hidden">
+    {/* Cabecera — siempre visible */}
+    <Flex
+      bg={iconColor}
+      px={4}
+      py={2.5}
+      cursor="pointer"
+      align="center"
+      justify="space-between"
+      onClick={onToggle}
+      userSelect="none"
+      borderRadius={isOpen ? "xl xl 0 0" : "xl"}
+      sx={{ transition: "border-radius 0.22s" }}
+    >
+      <Text
+        color={bgColor}
+        fontFamily="'EB Garamond', serif"
+        fontWeight="700"
+        fontSize={{ base: "xs", md: "sm" }}
+        letterSpacing="0.14em"
+        textTransform="uppercase"
+      >
+        {label}
+      </Text>
+      <Text
+        color={bgColor}
+        fontSize="9px"
+        sx={{
+          transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "transform 0.25s ease",
+        }}
+      >
+        ▼
+      </Text>
+    </Flex>
+
+    {/* Contenido — se despliega */}
+    <Box
+      maxH={isOpen ? "280px" : "0"}
+      overflow="hidden"
+      sx={{ transition: "max-height 0.32s ease" }}
+    >
+      <Box
+        bg={iconColor + "d0"}
+        px={4}
+        py={3}
+        borderTop={`1px solid ${bgColor}30`}
+      >
+        <Text
+          color={bgColor}
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "sm", md: "md" }}
+          lineHeight="1.55"
+          fontWeight="500"
+        >
+          {value}
+        </Text>
+      </Box>
+    </Box>
+  </Box>
+);
+
+/* ═══════════════════════════════════════════
+   MODAL PRINCIPAL
+   bg = bgColor oscuro del elemento
+   boxes = iconColor (más claro)
+   texto = bgColor (oscuro, legible sobre claro)
+═══════════════════════════════════════════ */
+const TCMElementModal = ({
+  element,
+  onClose,
+}: {
+  element: TCMElementData;
+  onClose: () => void;
+}) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const toggle = (i: number) => setOpenIndex(prev => (prev === i ? null : i));
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [onClose]);
+
+  return (
+    <Box
+      position="fixed" inset={0} zIndex={1100}
+      bg="rgba(0,0,0,0.70)"
+      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      px={4}
+      py={6}
+      onClick={onClose}
+    >
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        position="relative"
+        w="95vw"
+        maxW="720px"
+        maxH="90vh"
+        overflowY="auto"
+        borderRadius="24px"
+        bg={element.bgColor}
+        boxShadow={`0 32px 80px rgba(0,0,0,0.70), 0 0 40px ${element.iconColor}20`}
+        sx={{
+          "&::-webkit-scrollbar": { width: "4px" },
+          "&::-webkit-scrollbar-track": { background: "transparent" },
+          "&::-webkit-scrollbar-thumb": {
+            background: element.iconColor + "55",
+            borderRadius: "999px",
+          },
+        }}
+      >
+        {/* ── Botón cerrar ── */}
+        <Box
+          as="button"
+          position="absolute" top="13px" right="13px"
+          w="34px" h="34px" borderRadius="full"
+          bg="rgba(255,255,255,0.10)"
+          border="1px solid rgba(255,255,255,0.20)"
+          display="flex" alignItems="center" justifyContent="center"
+          color="rgba(255,255,255,0.70)"
+          fontSize="15px" fontWeight="700"
+          cursor="pointer" zIndex={10}
+          _hover={{ bg: "rgba(255,255,255,0.20)" }}
+          onClick={onClose}
+        >
+          ✕
+        </Box>
+
+        <Box px={{ base: 6, md: 10 }} pt={10} pb={10}>
+
+          {/* ── Icono + Nombre ── */}
+          <Flex align="center" gap={4} mb={5}>
+            <Box
+              w={{ base: "54px", md: "62px" }}
+              h={{ base: "54px", md: "62px" }}
+              borderRadius="full"
+              bg={element.iconColor + "20"}
+              border={`2px solid ${element.iconColor}70`}
+              boxShadow={`0 0 18px ${element.iconColor}35`}
+              display="flex" alignItems="center" justifyContent="center"
+              flexShrink={0}
+              color={element.iconColor}
+            >
+              {element.icon}
+            </Box>
+            <Box>
+              <Text
+                color={element.iconColor + "aa"}
+                fontSize="xs"
+                letterSpacing="0.2em"
+                textTransform="uppercase"
+                fontFamily="'EB Garamond', serif"
+                mb={0.5}
+              >
+                Elemento · TCM
+              </Text>
+              <Text
+                color={element.iconColor}
+                fontSize={{ base: "2xl", md: "3xl" }}
+                fontWeight="700"
+                fontFamily="'EB Garamond', serif"
+                lineHeight="1.1"
+              >
+                {element.name}
+              </Text>
+              <Text
+                color={element.iconColor + "cc"}
+                fontSize={{ base: "lg", md: "xl" }}
+                fontStyle="italic"
+                letterSpacing="0.08em"
+              >
+                {element.chinese}
+              </Text>
+            </Box>
+          </Flex>
+
+          {/* Línea decorativa */}
+          <Flex mb={5} gap={1}>
+            <Box w="18px" h="1.5px" borderRadius="full" bg={element.iconColor} opacity={0.3} />
+            <Box w="42px" h="1.5px" borderRadius="full" bg={element.iconColor} opacity={0.6} />
+            <Box w="18px" h="1.5px" borderRadius="full" bg={element.iconColor} opacity={0.3} />
+          </Flex>
+
+          {/* ── Descripción ── */}
+          <Text
+            color={element.iconColor + "cc"}
+            fontSize={{ base: "md", md: "lg" }}
+            lineHeight="1.92"
+            fontFamily="'EB Garamond', serif"
+            mb={6}
+          >
+            {element.description}
+          </Text>
+
+          {/* ── Campos acordeón (dinámicos) ── */}
+          <Flex direction="column" gap={2}>
+            {element.fields.map((field, i) => (
+              <AccordionItem
+                key={i}
+                label={field.label}
+                value={field.value}
+                bgColor={element.bgColor}
+                iconColor={element.iconColor}
+                isOpen={openIndex === i}
+                onToggle={() => toggle(i)}
+              />
+            ))}
+          </Flex>
+
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default TCMElementModal;

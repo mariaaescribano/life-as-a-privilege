@@ -48,7 +48,7 @@ const MandalaCircle = ({
       borderRadius="full"
       overflow="hidden"
       onClick={isAvailable ? onNavigate : undefined}
-      boxShadow="0 4px 16px rgba(0,0,0,0.28), 0 0 20px rgba(107,196,200,0.5), 0 0 45px rgba(107,196,200,0.2)"
+      boxShadow="0 4px 16px rgba(0,0,0,0.28), 0 0 28px rgba(107,196,200,0.95), 0 0 70px rgba(107,196,200,0.7), 0 0 110px rgba(107,196,200,0.4)"
       border={`5px solid ${photo.txt}`}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
       animate={{ scale: 1, opacity: 1, x, y }}
@@ -104,7 +104,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
     { name: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + fisiologiaNom },
     { name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + neuropsicologiaNom },
     { name: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
-    { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={iconSize} />,                                    link: "/espacio/questions/" + tcmNom },
+    { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + tcmNom },
     { name: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
     { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
     { name: biologiaNom,        bg: biologiaBg,        txt: biologiaTxt,        icon: <BiologiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + biologiaNom },

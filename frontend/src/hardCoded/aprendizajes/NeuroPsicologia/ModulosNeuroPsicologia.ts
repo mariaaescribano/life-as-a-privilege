@@ -1,10 +1,10 @@
-import type { Detalles, ModuloContenido } from "../../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon } from "../../GlobalVariables";
+import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom } from "../../../GlobalVariables";
 import { letranp1, letranp10, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 
-const basePath = "/aprendizaje/videoLessonPage/neuropsicologia";
+const basePath = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom;
 
 export const modulosNeuroPsicologia: ModuloContenido[] = [
   {

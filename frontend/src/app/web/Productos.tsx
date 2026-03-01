@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { productos } from "../../data/productos";
+import SiteHeader from "../../components/global/SiteHeader";
 
 const FlowerIcon = ({ size = "48px" }: { size?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="rgba(255,255,255,0.92)">
@@ -29,6 +30,7 @@ const glassCard = {
 
 const Productos = () => {
   const navigate = useNavigate();
+  const isRegistered = !!sessionStorage.getItem("userId");
   const [favoritos, setFavoritos] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem("favoritos") || "[]")); }
     catch { return new Set(); }
@@ -57,46 +59,7 @@ const Productos = () => {
       fontFamily="'EB Garamond', serif"
     >
       {/* ── HEADER ── */}
-      <Flex
-        as="header"
-        align="center"
-        justify="space-between"
-        px={{ base: 5, md: 12 }}
-        py={{ base: 3, md: 4 }}
-        bg="#008080"
-        position="sticky"
-        top="0"
-        zIndex="100"
-        borderBottom="1px solid rgba(255,255,255,0.12)"
-      >
-        <Image
-          src="/img/life.png"
-          h={{ base: "56px", md: "70px" }}
-          objectFit="contain"
-          cursor="pointer"
-          onClick={() => navigate("/")}
-          _hover={{ opacity: 0.85 }}
-          transition="opacity 0.2s"
-        />
-        <Box
-          as="button"
-          onClick={() => navigate(-1)}
-          color="white"
-          fontWeight="600"
-          fontSize={{ base: "md", md: "lg" }}
-          letterSpacing="0.04em"
-          px={{ base: 4, md: 6 }}
-          py={{ base: "8px", md: "10px" }}
-          borderRadius="full"
-          border="1.5px solid rgba(255,255,255,0.6)"
-          bg="rgba(255,255,255,0.12)"
-          cursor="pointer"
-          _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-          transition="all 0.2s"
-        >
-          ← Volver
-        </Box>
-      </Flex>
+      <SiteHeader variant="auto" />
 
       {/* ── MAIN ── */}
       <Box flex="1">
@@ -113,7 +76,7 @@ const Productos = () => {
             <FlowerIcon size="44px" />
             <Text
               color="white"
-              fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+              fontSize={{ base: "2xl", md: "2xl", lg: "4xl" }}
               fontWeight="700"
               letterSpacing="0.06em"
               textShadow="0 2px 10px rgba(0,100,90,0.4)"
@@ -158,29 +121,31 @@ const Productos = () => {
                   boxShadow: "0 18px 50px rgba(107,196,200,0.65)",
                 }}
               >
-                {/* Corazón favorito */}
-                <Box
-                  as="button"
-                  position="absolute"
-                  top={3}
-                  right={3}
-                  zIndex={2}
-                  w="36px"
-                  h="36px"
-                  borderRadius="full"
-                  bg={favoritos.has(p.id) ? "rgba(255,107,138,0.18)" : "rgba(0,0,0,0.25)"}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  cursor="pointer"
-                  border={favoritos.has(p.id) ? "1.5px solid rgba(255,107,138,0.6)" : "1.5px solid rgba(255,255,255,0.25)"}
-                  _hover={{ bg: favoritos.has(p.id) ? "rgba(255,107,138,0.3)" : "rgba(255,255,255,0.15)" }}
-                  transition="all 0.18s"
-                  onClick={(e: React.MouseEvent) => toggleFavorito(p.id, e)}
-                  title={favoritos.has(p.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
-                >
-                  <HeartIcon filled={favoritos.has(p.id)} />
-                </Box>
+                {/* Corazón favorito — solo si está registrado */}
+                {isRegistered && (
+                  <Box
+                    as="button"
+                    position="absolute"
+                    top={3}
+                    right={3}
+                    zIndex={2}
+                    w="36px"
+                    h="36px"
+                    borderRadius="full"
+                    bg={favoritos.has(p.id) ? "rgba(255,107,138,0.18)" : "rgba(0,0,0,0.25)"}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    cursor="pointer"
+                    border={favoritos.has(p.id) ? "1.5px solid rgba(255,107,138,0.6)" : "1.5px solid rgba(255,255,255,0.25)"}
+                    _hover={{ bg: favoritos.has(p.id) ? "rgba(255,107,138,0.3)" : "rgba(255,255,255,0.15)" }}
+                    transition="all 0.18s"
+                    onClick={(e: React.MouseEvent) => toggleFavorito(p.id, e)}
+                    title={favoritos.has(p.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
+                  >
+                    <HeartIcon filled={favoritos.has(p.id)} />
+                  </Box>
+                )}
 
                 {/* Imagen */}
                 <Box h={{ base: "220px", md: "240px" }} overflow="hidden" flexShrink={0}>

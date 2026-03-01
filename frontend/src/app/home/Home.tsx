@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import ProductosBanner from "../../components/global/ProductosBanner";
+import ReelsBanner from "../../components/global/ReelsBanner";
 import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -21,6 +22,7 @@ import {
   ayurvedaDescrip,
   biologiaDescrip,
   cabalaDescrip,
+  tcmNomLink,
 } from "../../GlobalVariables";
 import type { SessionStorageUser } from "../../dtos/user.types";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -34,6 +36,7 @@ type Discipline = {
   renderIcon: (size: string) => React.ReactNode;
   linkEspacio: string;
   linkAprendizaje: string;
+  available:boolean;
 };
 
 const disciplines: Discipline[] = [
@@ -43,6 +46,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <FisiologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + fisiologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + fisiologiaNom,
+    available:false
   },
   {
     name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt,
@@ -50,6 +54,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <NeuropsicologiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + neuropsicologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
+    available:true
   },
   {
     name: astrologiaNom, bg: astrologiaBg, txt: astrologiaTxt,
@@ -57,13 +62,15 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <AstrologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + astrologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + astrologiaNom,
+    available:false
   },
   {
     name: tcmNom, bg: tcmBg, txt: tcmTxt,
     description: tcmDescrip,
-    renderIcon: (s) => <TCMIcon size={s} />,
-    linkEspacio: "/espacio/questions/" + tcmNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + tcmNom,
+    renderIcon: (s) => <TCMIcon size={{ base: s, md: s }} />,
+    linkEspacio: "/espacio/questions/" + tcmNomLink,
+    linkAprendizaje: "/aprendizaje/modulosPage/" + tcmNomLink,
+    available:true
   },
   {
     name: nutricionNom, bg: nutricionBg, txt: nutricionTxt,
@@ -71,6 +78,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <NutricionIcon size={s} />,
     linkEspacio: "/espacio/questions/" + nutricionNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + nutricionNom,
+    available:false
   },
   {
     name: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt,
@@ -78,6 +86,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <AyurvedaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + ayurvedaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + ayurvedaNom,
+    available:false
   },
   {
     name: biologiaNom, bg: biologiaBg, txt: biologiaTxt,
@@ -85,6 +94,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <BiologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + biologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + biologiaNom,
+    available:false
   },
   {
     name: cabalaNom, bg: cabalaBg, txt: cabalaTxt,
@@ -92,6 +102,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <CabalaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + cabalaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + cabalaNom,
+    available:false
   },
 ];
 
@@ -146,6 +157,8 @@ const Home = () => {
     }
   }, [user]);
 
+
+  // #region return
 
   return (
     <Box
@@ -301,6 +314,8 @@ const Home = () => {
                       pb={{ base: 5, md: 7 }}
                       px={{ base: 3, md: 5 }}
                       bg={d.bg}
+                      border="1px solid rgba(255,255,255,0.38)"
+                      sx={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
                       borderRadius="2xl"
                       boxShadow={isSelected
                         ? "0 0 0 3px white, 0 8px 32px rgba(255,255,255,0.35), 0 0 40px rgba(107,196,200,0.7)"
@@ -334,7 +349,7 @@ const Home = () => {
 
                       <Text
                         color={d.txt}
-                        filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.4))"
+                        textShadow="0 2px 8px rgba(0,0,0,0.5)"
                         fontWeight="700"
                         fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
                         letterSpacing="0.03em"
@@ -349,8 +364,11 @@ const Home = () => {
 
             </Box>
 
-            {/* ── BANNER PRODUCTOS ── */}
-            <ProductosBanner maxW="unset" />
+            {/* ── BANNERS PRODUCTOS & REELS ── */}
+            <Flex gap={{ base: 5, md: 7 }} direction={{ base: "column", md: "row" }}>
+              <ProductosBanner maxW="unset" w="100%" compact />
+              <ReelsBanner    maxW="unset" w="100%" compact />
+            </Flex>
 
           </Flex>
         )}
@@ -452,7 +470,7 @@ const Home = () => {
 
             {/* Botones */}
             {(() => {
-              const isAvailable = selectedDisc.name === neuropsicologiaNom;
+              const isAvailable = selectedDisc.available === true;
               return (
                 <Flex direction="column" align="center" gap={3} mt={2}>
                   <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap">

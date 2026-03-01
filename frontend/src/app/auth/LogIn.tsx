@@ -229,7 +229,7 @@ export default function LogIn() {
               transition="color 0.2s"
               mt={1}
             >
-              ¿No tienes cuenta? Regístrate
+              ¿No tienes una cuenta? Regístrate
             </Text>
 
             {message && (

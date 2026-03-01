@@ -52,11 +52,21 @@ export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada �
 
 // TCM
 export const tcmNom = "Medicina China";
+export const tcmNomLink = "medicinachina";
 export const tcmBg = "#6b0404";
 export const tcmTxt = "#da7171";
-export function TCMIcon({ size = "24px"}) {
+export function TCMIcon({ size = { base: "24px", md: "24px" }}) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height={size ?? "24px"} viewBox="0 -960 960 960" width={size ?? "24px"} fill={tcmTxt}><path d="M440-120v-319q-64 0-123-24.5T213-533q-45-45-69-104t-24-123v-80h80q63 0 122 24.5T426-746q31 31 51.5 68t31.5 79q5-7 11-13.5t13-13.5q45-45 104-69.5T760-720h80v80q0 64-24.5 123T746-413q-45 45-103.5 69T520-320v200h-80Zm0-400q0-48-18.5-91.5T369-689q-34-34-77.5-52.5T200-760q0 48 18 92t52 78q34 34 78 52t92 18Zm80 120q48 0 91.5-18t77.5-52q34-34 52.5-78t18.5-92q-48 0-92 18.5T590-569q-34 34-52 77.5T520-400Zm0 0Zm-80-120Z"/></svg>
+    <Box
+      as="svg"
+      xmlns="http://www.w3.org/2000/svg"
+      w={size}
+      h={size}
+      viewBox="0 -960 960 960"
+      fill={tcmTxt}
+    >
+      <path d="M440-120v-319q-64 0-123-24.5T213-533q-45-45-69-104t-24-123v-80h80q63 0 122 24.5T426-746q31 31 51.5 68t31.5 79q5-7 11-13.5t13-13.5q45-45 104-69.5T760-720h80v80q0 64-24.5 123T746-413q-45 45-103.5 69T520-320v200h-80Zm0-400q0-48-18.5-91.5T369-689q-34-34-77.5-52.5T200-760q0 48 18 92t52 78q34 34 78 52t92 18Zm80 120q48 0 91.5-18t77.5-52q34-34 52.5-78t18.5-92q-48 0-92 18.5T590-569q-34 34-52 77.5T520-400Z" />
+    </Box>
   );
 }
 export const tcmDescrip = "Comprende el funcionamiento del ser humano y el origen de sus desequilibrios desde la medicina tradicional china y su visión taoísta."
@@ -150,8 +160,67 @@ export function ViewIcon({ size = "24px"}) {
   );
 }
 
+// #region tcm
 
-// NEUROPSICOLOGIA ICONS
+export function DiagnosticoIcon({ size = { base: "24px", md: "24px" } }) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 -960 960 960"
+      w={size}
+      h={size}              
+      fill={tcmTxt}                    
+    >
+      <path d="M343.5-743.5Q320-767 320-800t23.5-56.5Q367-880 400-880t56.5 23.5Q480-833 480-800t-23.5 56.5Q433-720 400-720t-56.5-23.5ZM731-269q29-29 29-71t-29-71q-29-29-71-29t-71 29q-29 29-29 71t29 71q29 29 71 29t71-29ZM864-80 756-188q-22 14-46 21t-50 7q-75 0-127.5-52.5T480-340q0-75 52.5-127.5T660-520q75 0 127.5 52.5T840-340q0 26-7 50t-21 46l108 108-56 56Zm-424 0v-121q15 24 35.5 44t44.5 36v41h-80Zm-160 0v-520q-61-5-121-14.5T40-640l20-80q84 23 168.5 31.5T400-680q87 0 171.5-8.5T740-720l20 80q-59 16-119 25.5T520-600v41q-54 35-87 92.5T400-340v10q0 5 1 10h-41v240h-80Z"/>
+    </Box>
+  );
+}
+
+export function CincoElementosIcon({ size = { base: "24px", md: "24px" } }) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 -960 960 960"
+      w={size}
+      h={size}              
+      fill={tcmTxt}                    
+    >
+     <path d="M480-300q75 0 127.5-52.5T660-480v-180H480q-75 0-127.5 52.5T300-480q0 26 7 50t21 46l-16 16q-11 11-11 28t11 28q11 11 28 11t28-11l16-16q22 14 46 21t50 7Zm0-80q-9 0-18-2t-18-5l84-85q11-11 11-28t-11-28q-11-11-28-11t-28 11l-85 84q-3-9-5-18t-2-18q0-42 29-71t71-29h100v100q0 42-29 71t-71 29Zm20-120ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+    </Box>
+  );
+}
+
+export function LifestyleIcon({ size = { base: "24px", md: "24px" } }) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 -960 960 960"
+      w={size}
+      h={size}              
+      fill={tcmTxt}                    
+    >
+     <path d="M480-80q-73-9-145-39.5T206.5-207Q150-264 115-351T80-560v-40h40q51 0 105 13t101 39q12-86 54.5-176.5T480-880q57 65 99.5 155.5T634-548q47-26 101-39t105-13h40v40q0 122-35 209t-91.5 144q-56.5 57-128 87.5T480-80Zm-2-82q-11-166-98.5-251T162-518q11 171 101.5 255T478-162Zm2-254q15-22 36.5-45.5T558-502q-2-57-22.5-119T480-742q-35 59-55.5 121T402-502q20 17 42 40.5t36 45.5Zm78 236q37-12 77-35t74.5-62.5q34.5-39.5 59-98.5T798-518q-94 14-165 62.5T524-332q12 32 20.5 70t13.5 82Zm-78-236Zm78 236Zm-80 18Zm46-170ZM480-80Z"/>
+    </Box>
+  );
+}
+
+export function RecursosIcon({ size = { base: "24px", md: "24px" } }) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 -960 960 960"
+      w={size}
+      h={size}              
+      fill={tcmTxt}                    
+    >
+      <path d="M270-80q-45 0-77.5-30.5T160-186v-558q0-38 23.5-68t61.5-38l395-78v640l-379 76q-9 2-15 9.5t-6 16.5q0 11 9 18.5t21 7.5h450v-640h80v720H270Zm90-233 200-39v-478l-200 39v478Zm-80 16v-478l-15 3q-11 2-18 9.5t-7 18.5v457q5-2 10.5-3.5T261-293l19-4Zm-40-472v482-482Z"/>
+    </Box>
+  );
+}
+
+
+
+// #region np 
 
 export function MadreIcon({ size = { base: "24px", md: "24px" } }) {
   return (
