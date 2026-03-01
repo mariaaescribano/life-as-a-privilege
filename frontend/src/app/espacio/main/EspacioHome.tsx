@@ -7,8 +7,8 @@ import {
   astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom,
   ayurvedaTxt,
-  biologiaBg, BiologiaIcon, biologiaNom,
-  biologiaTxt,
+  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom,
+  fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom,
   cabalaTxt,
   EspacioPersonalIcon,
@@ -35,7 +35,7 @@ const EspacioHome = () => {
     { bg: tcmBg,             icon: <TCMIcon size={{ base: "58px", md: "58px" }}/>,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},
     { bg: nutricionBg,       icon: <NutricionIcon size="58px" />,                               link: "/espacio/questions/" + nutricionNom,       cursor: "not-allowed", txt: nutricionTxt },
     { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" , txt: ayurvedaTxt},
-    { bg: biologiaBg,        icon: <BiologiaIcon size="58px" />,                                link: "/espacio/questions/" + biologiaNom,        cursor: "not-allowed" , txt: biologiaTxt},
+    { bg: fitoterapiaBg,        icon: <FitoterapiaIcon size="58px" />,                                link: "/espacio/questions/" + fitoterapiaNom,        cursor: "not-allowed" , txt: fitoterapiaTxt},
     { bg: cabalaBg,          icon: <CabalaIcon size="58px" />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "not-allowed" , txt: cabalaTxt},
   ];
 

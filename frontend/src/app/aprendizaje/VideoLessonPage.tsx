@@ -7,7 +7,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
+  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -42,7 +42,7 @@ export default function VideoLessonPage() {
       case "ayurveda":
         return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size="44px" /> };
       case "biologia":
-        return { nom: biologiaNom, bgColor: biologiaBg, color: biologiaTxt, icon: <BiologiaIcon size="44px" /> };
+        return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size="44px" /> };
       case "cabala":
         return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size="44px" /> };
       default:

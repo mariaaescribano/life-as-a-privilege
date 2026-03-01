@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
+  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -20,7 +20,7 @@ import {
   tcmDescrip,
   nutricionDescrip,
   ayurvedaDescrip,
-  biologiaDescrip,
+  fitoterapiaDescrip,
   cabalaDescrip,
   tcmNomLink,
 } from "../../GlobalVariables";
@@ -89,12 +89,12 @@ const disciplines: Discipline[] = [
     available:false
   },
   {
-    name: biologiaNom, bg: biologiaBg, txt: biologiaTxt,
-    description: biologiaDescrip,
-    renderIcon: (s) => <BiologiaIcon size={s} />,
-    linkEspacio: "/espacio/questions/" + biologiaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + biologiaNom,
-    available:false
+    name: fitoterapiaNom, bg: fitoterapiaBg, txt: fitoterapiaTxt,
+    description: fitoterapiaDescrip,
+    renderIcon: (s) => <FitoterapiaIcon size={{ base: s, md: s }} />,
+    linkEspacio: "/espacio/questions/" + fitoterapiaNom,
+    linkAprendizaje: "/aprendizaje/modulosPage/" + fitoterapiaNom,
+    available:true
   },
   {
     name: cabalaNom, bg: cabalaBg, txt: cabalaTxt,

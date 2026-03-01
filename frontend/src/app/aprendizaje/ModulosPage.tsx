@@ -8,7 +8,7 @@ import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
+  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -17,6 +17,7 @@ import {
 } from "../../GlobalVariables";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
+import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 
 export default function ModulesPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
@@ -40,8 +41,8 @@ export default function ModulesPage() {
         return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon /> };
       case "ayurveda":
         return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
-      case "biologia":
-        return { nom: biologiaNom, bgColor: biologiaBg, color: biologiaTxt, icon: <BiologiaIcon /> };
+      case fitoterapiaNom:
+        return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "40px", md: "50px" }} />, modulos: modulosFitoterapia};
       case "cabala":
         return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon /> };
       default:

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  biologiaBg, BiologiaIcon, biologiaNom, biologiaTxt,
+  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -106,7 +106,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
     { name: tcmNom,  available:true,   bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + tcmNomLink },
     { name: nutricionNom,  available:false,      bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
     { name: ayurvedaNom,  available:false,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
-    { name: biologiaNom,  available:false,       bg: biologiaBg,        txt: biologiaTxt,        icon: <BiologiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + biologiaNom },
+    { name: fitoterapiaNom,  available:false,       bg: fitoterapiaBg,        txt: fitoterapiaTxt,        icon: <FitoterapiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + fitoterapiaNom },
     { name: cabalaNom,     available:false,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];
 

@@ -6,9 +6,13 @@ USAR OBJ+ID : userId
 ---------------------------------------------
 
 
-COSAS
+FUTURO
 - Videos TCM + transcripcion + descrip
-- 
+- Asegurarme de q solo se puede mandar una vez hasta q no devuelva respuesta el formulario de log in o sign in + ponerle spinner
+- Que no se pueda acceder a las paginas de espacio o de home a no ser que esté registrado.
+
+Fitoterapia: 
+
 
 
 

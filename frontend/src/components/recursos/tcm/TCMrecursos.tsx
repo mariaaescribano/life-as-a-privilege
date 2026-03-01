@@ -52,7 +52,7 @@ export const ELEMENTS: TCMElementData[] = [
   {
     id: 1, name: "Madera", chinese: "木 Mù",
     bgColor: "#3d1a08", iconColor: "#d4895a",
-    leftPct: "39%", topPct: "6%",
+    leftPct: "57%", topPct: "63%",
     icon: <EarthIcon />,
     description:
       "La Madera representa el impulso vital, el crecimiento y la visión. El Hígado mueve el Qi; cuando fluye libremente, hay creatividad y flexibilidad. La Madera nos enseña a crecer sin rigidez, como el bambú: fuerte y flexible a la vez.",
@@ -100,7 +100,7 @@ export const ELEMENTS: TCMElementData[] = [
   {
     id: 3, name: "Tierra", chinese: "土 Tǔ ",
     bgColor: "#082d08", iconColor: "#5ab85a",
-    leftPct: "57%", topPct: "63%",
+    leftPct: "39%", topPct: "6%",
     icon: <WoodIcon />,
     description:
       "La Tierra representa la estabilidad, la transformación y la nutrición. En TCM, el Bazo y el Estómago transforman y transportan los alimentos en Qi y Sangre. Un Bazo equilibrado piensa con claridad; desequilibrado, nos atrapa en la preocupación crónica y el pensamiento repetitivo.",
@@ -241,6 +241,24 @@ const SHEN_RELATIONS: Record<string, ArrowRelation> = {
     verb: "engendra",
     description:
       "Los Riñones (Agua) influencian al Hígado (Madera) porque filtran la sangre y eliminan el exceso de electrolitos. Si los Riñones funcionan adecuadamente, el Hígado no se sobrecarga y puede cumplir mejor su función reguladora.",
+  },
+  "3-2": {
+    fromName: EL[3].name, fromChinese: EL[3].chinese,
+    toName:   EL[2].name, toChinese:   EL[2].chinese,
+    color1: EL[3].iconColor, color2: EL[2].iconColor,
+    cycleLabel: "Ciclo Generador · 相生 Shēng",
+    verb: "engendra",
+    description:
+      "El Bazo (Tierra) genera la sangre que nutre al Corazón (Fuego). Una digestión sana y un Bazo fuerte producen sangre de calidad, lo que permite que el Corazón mantenga su ritmo y claridad mental. Cuando el Bazo falla, el Corazón se queda sin sustento y pueden aparecer insomnio, ansiedad o palpitaciones.",
+  },
+  "2-1": {
+    fromName: EL[2].name, fromChinese: EL[2].chinese,
+    toName:   EL[1].name, toChinese:   EL[1].chinese,
+    color1: EL[2].iconColor, color2: EL[1].iconColor,
+    cycleLabel: "Ciclo Generador · 相生 Shēng",
+    verb: "engendra",
+    description:
+      "El Corazón (Fuego) impulsa la circulación que lleva sangre al Hígado (Madera). El Hígado almacena y regula la sangre; cuando el Corazón bombea con buen ritmo, el Hígado recibe el flujo necesario para regular el Qi y las emociones. Si el Corazón falla, el Hígado no puede almacenar ni distribuir la sangre correctamente.",
   },
 };
 
@@ -502,9 +520,9 @@ const PULSE_TABLES: TCMTableData[] = [
    GEOMETRÍA DEL PENTAGRAMA (SVG 100×100)
 ═══════════════════════════════════════════ */
 const CENTERS: Record<number, [number, number]> = {
-  1: [50, 17],   // Tierra  — top
+  1: [68, 74],   // Madera  — lower right
   2: [79, 41],   // Fuego   — upper right
-  3: [68, 74],   // Madera  — lower right
+  3: [50, 17],   // Tierra  — top
   4: [27, 74],   // Metal   — lower left
   5: [22, 41],   // Agua    — upper left
 };

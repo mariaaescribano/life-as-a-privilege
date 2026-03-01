@@ -13,9 +13,9 @@ import QuienSoy from "./app/web/QuienSoy";
 import Productos from "./app/web/Productos";
 import ProductoDetalle from "./app/web/ProductoDetalle";
 import ReelsPage from "./app/web/Reels";
-import FitoterapiaPage from "./app/web/Fitoterapia";
-import TCMTests from "./app/web/TCMTests";
 import TCMTest1 from "./app/web/TCMTest1";
+import TCMTest2 from "./app/web/TCMTest2";
+import TCMTest3 from "./app/web/TCMTest3";
 import RecursosPage from "./app/recursos/RecursosPage";
 
 function ScrollToTop() {
@@ -42,10 +42,9 @@ export default function App()
 
       <Route path="/reels" element={<ReelsPage />} />
 
-
-      <Route path="/fitoterapia" element={<FitoterapiaPage />} />
-      <Route path="/tcm/tests" element={<TCMTests />} />
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
+      <Route path="/tcm/test/2" element={<TCMTest2 />} />
+      <Route path="/tcm/test/3" element={<TCMTest3 />} />
       
       <Route path="/espacio/espacioHome" element={<EspacioHome />} />
       <Route path="/espacio/questions/:themeId" element={<ExpandablePage />} />

@@ -223,13 +223,6 @@ const TCMElementModal = ({
             </Box>
           </Flex>
 
-          {/* Línea decorativa */}
-          <Flex mb={5} gap={1}>
-            <Box w="18px" h="1.5px" borderRadius="full" bg={element.bgColor} opacity={0.3} />
-            <Box w="42px" h="1.5px" borderRadius="full" bg={element.bgColor} opacity={0.6} />
-            <Box w="18px" h="1.5px" borderRadius="full" bg={element.bgColor} opacity={0.3} />
-          </Flex>
-
           {/* ── Descripción ── */}
           <Text
             color={element.bgColor + "cc"}

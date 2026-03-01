@@ -7,7 +7,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  biologiaBg, biologiaDescrip, BiologiaIcon, biologiaNom, biologiaTxt,
+  fitoterapiaBg, fitoterapiaDescrip, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, cabalaDescrip, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -81,12 +81,12 @@ const disciplines: Discipline[] = [
     available:false
   },
   {
-    name: biologiaNom,
-    bg: biologiaBg,
-    txt: biologiaTxt,
-    renderIcon: (size) => <BiologiaIcon size={size} />,
-    desc: biologiaDescrip,
-    link: "/aprendizaje/modulosPage/" + biologiaNom,
+    name: fitoterapiaNom,
+    bg: fitoterapiaBg,
+    txt: fitoterapiaTxt,
+    renderIcon: (size) => <FitoterapiaIcon size={size} />,
+    desc: fitoterapiaDescrip,
+    link: "/aprendizaje/modulosPage/" + fitoterapiaNom,
     available:false
   },
   {

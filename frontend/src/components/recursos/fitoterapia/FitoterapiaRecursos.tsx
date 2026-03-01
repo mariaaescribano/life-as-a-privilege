@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
-import SiteHeader from "../../components/global/SiteHeader";
-import { biologiaBg, biologiaTxt } from "../../GlobalVariables";
+import SiteHeader from "../../global/SiteHeader";
+import { fitoterapiaBg, fitoterapiaTxt } from "../../../GlobalVariables";
 
 /* Color de acento en cards (sobre fondo teal oscuro) */
-const CARD_COLOR  = biologiaTxt;  // #d5ffd5 — verde menta claro
+const CARD_COLOR  = fitoterapiaTxt;  // #d5ffd5 — verde menta claro
 /* Color de acento en modal (sobre fondo pergamino claro) */
-const MODAL_COLOR = biologiaBg;   // #0e590d — verde botánico oscuro
+const MODAL_COLOR = fitoterapiaBg;   // #0e590d — verde botánico oscuro
 
 /* ═══════════════════════════════════════════
    TIPOS
@@ -859,7 +859,7 @@ const useReveal = () => {
 /* ═══════════════════════════════════════════
    PÁGINA PRINCIPAL
 ═══════════════════════════════════════════ */
-const FitoterapiaPage = () => {
+const FitoterapiaRecursos = () => {
   const [selected, setSelected] = useState<Planta | null>(null);
   const titleReveal = useReveal();
   const gridReveal  = useReveal();
@@ -967,4 +967,4 @@ const FitoterapiaPage = () => {
   );
 };
 
-export default FitoterapiaPage;
+export default FitoterapiaRecursos;

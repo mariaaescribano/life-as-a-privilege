@@ -1,5 +1,5 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { tcmTxt, TCMIcon, tcmBg, tcmNomLink, DiagnosticoIcon, CincoElementosIcon, LifestyleIcon, RecursosIcon } from "../../../GlobalVariables";
+import { tcmTxt, TCMIcon, tcmBg, tcmNomLink, DiagnosticoIcon, CincoElementosIcon, LifestyleIcon, RecursosIconTCM } from "../../../GlobalVariables";
 import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8 } from "./LetraTCM";
 
 const detalles: Detalles = { color: tcmTxt, icon: TCMIcon, bgColor: tcmBg };
@@ -9,7 +9,7 @@ const basePath = "/aprendizaje/videoLessonPage/" + tcmNomLink;
 export const modulostcm: ModuloContenido[] = [
   {
     title: "Recursos",
-    icon: RecursosIcon,
+    icon: RecursosIconTCM,
     submodules: [
       { 
         id:"tcm0",
