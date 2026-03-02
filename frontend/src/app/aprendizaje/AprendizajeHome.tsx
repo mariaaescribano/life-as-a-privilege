@@ -22,7 +22,7 @@ export const AprendizajeHome = () => {
     { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "60px", md: "70px" }} />,            link: "/aprendizaje/modulosPage/" + tcmNomLink, cursor: "pointer" },
     { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size="70px" />,                              link: "",                                           cursor: "not-allowed" },
     { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size="70px" />,                               link: "",                                           cursor: "not-allowed" },
-    { title: fitoterapiaNom,      bgColor: fitoterapiaBg,        color: fitoterapiaTxt,        icon: <FitoterapiaIcon size="70px" />,                   link: "/aprendizaje/modulosPage/" + fitoterapiaNom,  cursor: "pointer" },
+    { title: fitoterapiaNom,      bgColor: fitoterapiaBg,        color: fitoterapiaTxt,  icon: <FitoterapiaIcon size={{ base: "60px", md: "70px" }} />,                   link: "/aprendizaje/modulosPage/" + fitoterapiaNom,  cursor: "pointer" },
     { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "",                                           cursor: "not-allowed" },
   ];
 

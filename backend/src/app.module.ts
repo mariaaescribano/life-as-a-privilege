@@ -10,6 +10,8 @@ import { join } from 'path';
 import { UploadModule } from './upload/upload.module';
 import { RespuestaModule } from './respuesta/respuesta.module';
 import { PaymentModule } from './payment/payment.module';
+import { FitoterapiaModule } from './fitoterapia/fitoterapia.module';
+import { TcmModule } from './tcm/tcm.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -28,6 +30,8 @@ export const uploadFolder = join(process.cwd(), 'img');
     UploadModule,
     RespuestaModule,
     PaymentModule,
+    FitoterapiaModule,
+    TcmModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
+import React from "react";
+import { Text } from "@chakra-ui/react";
+import TCMTestPage from "./TCMTestPage";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
@@ -12,7 +11,6 @@ const ELEMENTOS = [
   {
     nombre: "Madera",
     numero: "I",
-    subtitulo: "Desarmonía del Hígado",
     dominio: "Ira, estancamiento, tensión muscular",
     preguntas: [
       "Irritabilidad o frustración frecuente.",
@@ -28,7 +26,6 @@ const ELEMENTOS = [
   {
     nombre: "Fuego",
     numero: "II",
-    subtitulo: "Desarmonía del Corazón",
     dominio: "Agitación del Shen, calor interno",
     preguntas: [
       "Insomnio o sueño ligero.",
@@ -44,7 +41,6 @@ const ELEMENTOS = [
   {
     nombre: "Tierra",
     numero: "III",
-    subtitulo: "Desarmonía del Bazo",
     dominio: "Deficiencia de Qi, humedad interna",
     preguntas: [
       "Pesadez corporal.",
@@ -60,7 +56,6 @@ const ELEMENTOS = [
   {
     nombre: "Metal",
     numero: "IV",
-    subtitulo: "Desarmonía del Pulmón",
     dominio: "Tristeza, alteración del Qi respiratorio",
     preguntas: [
       "Melancolía persistente.",
@@ -76,7 +71,6 @@ const ELEMENTOS = [
   {
     nombre: "Agua",
     numero: "V",
-    subtitulo: "Desarmonía del Riñón",
     dominio: "Deficiencia de Jing o Qi",
     preguntas: [
       "Cansancio profundo o crónico.",
@@ -125,495 +119,38 @@ const INTERPRETACIONES = [
 ];
 
 /* ══════════════════════════════════════════════
-   COMPONENTES
+   PÁGINA
 ══════════════════════════════════════════════ */
-
-const Divider = () => (
-  <Flex align="center" gap={3} my={5}>
-    <Box flex="1" h="1px" bg={tcmTxt} opacity={0.15} />
-    <Box w="4px" h="4px" borderRadius="full" bg={tcmTxt} opacity={0.35} />
-    <Box flex="1" h="1px" bg={tcmTxt} opacity={0.15} />
-  </Flex>
+const ICON = (
+  <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#da7171">
+    <path d="M824-120 636-308q-41 32-90.5 50T440-240q-90 0-162.5-44T163-400h98q34 37 79.5 58.5T440-320q100 0 170-70t70-170q0-100-70-170t-170-70q-94 0-162.5 63.5T201-580h-80q8-127 99.5-213.5T440-880q134 0 227 93t93 227q0 56-18 105.5T692-364l188 188-56 56ZM397-400l-63-208-52 148H80v-60h160l66-190h60l61 204 43-134h60l60 120h30v60h-67l-47-94-50 154h-59Z"/>
+  </svg>
 );
 
-const ScaleBtn = ({
-  val,
-  selected,
-  onClick,
-}: {
-  val: number;
-  selected: boolean;
-  onClick: () => void;
-}) => (
-  <Flex direction="column" align="center" gap={1.5}>
-    <Box
-      as="button"
-      onClick={onClick}
-      w={{ base: "40px", md: "48px" }}
-      h={{ base: "40px", md: "48px" }}
-      borderRadius="full"
-      border={selected ? `2px solid ${tcmTxt}` : "1.5px solid rgba(255,255,255,0.2)"}
-      bg={selected ? "rgba(107,4,4,0.65)" : "rgba(255,255,255,0.05)"}
-      color={selected ? tcmTxt : "rgba(255,255,255,0.45)"}
-      fontSize={{ base: "md", md: "lg" }}
-      fontWeight="700"
-      fontFamily="'EB Garamond', serif"
-      cursor="pointer"
-      transition="all 0.18s"
-      boxShadow={selected ? "0 0 14px rgba(218,113,113,0.35)" : "none"}
-      _hover={{
-        bg: "rgba(107,4,4,0.45)",
-        borderColor: "rgba(218,113,113,0.65)",
-        color: tcmTxt,
-        boxShadow: "0 0 10px rgba(218,113,113,0.2)",
-      }}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      flexShrink={0}
-    >
-      {val}
-    </Box>
-    <Text
-      color={selected ? tcmTxt : "rgba(255,255,255,0.28)"}
-      fontSize="7px"
-      letterSpacing="0.03em"
-      textAlign="center"
-      maxW="50px"
-      lineHeight="1.3"
-      display={{ base: "none", md: "block" }}
-      transition="color 0.18s"
-    >
-      {SCALE_LABELS[val]}
-    </Text>
-  </Flex>
-);
-
-const ElementoSection = ({
-  el,
-  respuestas,
-  onAnswer,
-}: {
-  el: typeof ELEMENTOS[0];
-  respuestas: (number | null)[];
-  onAnswer: (qi: number, val: number) => void;
-}) => {
-  const total = respuestas.reduce((s, a) => s + (a ?? 0), 0);
-  const answered = respuestas.filter((a) => a !== null).length;
-  const complete = answered === 8;
-
-  return (
-    <Box
-      w="100%"
-      maxW="820px"
-      bg="rgba(107,4,4,0.28)"
-      border={`1px solid ${complete ? "rgba(218,113,113,0.32)" : "rgba(218,113,113,0.15)"}`}
-      borderRadius="2xl"
-      px={{ base: 5, md: 8 }}
-      py={{ base: 6, md: 8 }}
-      mb={4}
-      transition="border-color 0.3s"
-    >
-      <Flex align="baseline" gap={3} mb={1}>
-        <Text color="rgba(218,113,113,0.45)" fontSize="sm" letterSpacing="0.28em" textTransform="uppercase" flexShrink={0}>
-          {el.numero}
-        </Text>
-        <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="600" letterSpacing="0.1em">
-          {el.nombre}
-        </Text>
-      </Flex>
-
-      <Text color="rgba(255,255,255,0.42)" fontSize="sm" letterSpacing="0.12em" textTransform="uppercase" mb={4}>
-        {el.dominio}
-      </Text>
-
-      <Divider />
-
-      <Flex direction="column" gap={7}>
-        {el.preguntas.map((pregunta, qi) => (
-          <Box key={qi}>
-            <Text
-              color={tcmTxt}
-              fontSize={{ base: "md", md: "lg" }}
-              letterSpacing="0.02em"
-              lineHeight="1.75"
-              mb={3}
-            >
-              {qi + 1}. {pregunta}
-            </Text>
-            <Flex gap={{ base: 2, md: 4 }} align="flex-start" flexWrap="wrap">
-              {[0, 1, 2, 3].map((v) => (
-                <ScaleBtn key={v} val={v} selected={respuestas[qi] === v} onClick={() => onAnswer(qi, v)} />
-              ))}
-              <Box display={{ base: "flex", md: "none" }} alignItems="center" pl={1} pt={3}>
-                <Text color="rgba(255,255,255,0.25)" fontSize="9px" fontStyle="italic">
-                  0 = Ausente · 3 = Persistente
-                </Text>
-              </Box>
-            </Flex>
-          </Box>
-        ))}
-      </Flex>
-
-      <Divider />
-
-      <Flex align="center" justify="space-between">
-        <Text color="rgba(255,255,255,0.35)" fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
-          Subtotal {el.nombre}
-        </Text>
-        <Flex align="center" gap={2}>
-          <Text
-            color={complete ? tcmTxt : "rgba(255,255,255,0.22)"}
-            fontSize={{ base: "2xl", md: "3xl" }}
-            fontWeight="700"
-            letterSpacing="0.04em"
-            transition="color 0.3s"
-            textShadow={complete ? "0 0 12px rgba(218,113,113,0.4)" : "none"}
-          >
-            {total}
-          </Text>
-          <Text color="rgba(255,255,255,0.28)" fontSize="sm">/ 24</Text>
-        </Flex>
-      </Flex>
-    </Box>
-  );
-};
-
-/* ══════════════════════════════════════════════
-   PÁGINA PRINCIPAL
-══════════════════════════════════════════════ */
 export default function TCMTest3() {
-  const [answers, setAnswers] = useState<(number | null)[][]>(
-    ELEMENTOS.map(() => Array(8).fill(null))
-  );
-  const [showResults, setShowResults] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const resultsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
-
-  const totals = ELEMENTOS.map((_e, ei) =>
-    answers[ei].reduce((s: number, a) => s + (a ?? 0), 0)
-  );
-
-  const totalAnswered = answers.flat().filter((a) => a !== null).length;
-  const allAnswered = answers.every((group) => group.filter((a) => a !== null).length === 8);
-
-  const handleAnswer = (ei: number, qi: number, val: number) => {
-    setAnswers((prev) => {
-      const next = prev.map((r) => [...r]);
-      next[ei][qi] = val;
-      return next;
-    });
-  };
-
-  const handleShowResults = () => {
-    setShowResults(true);
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 80);
-  };
-
-  const maxTotal = Math.max(...totals);
-
-  const handleSaveResult = () => {
-    const primaryIdx = totals.indexOf(maxTotal);
-    const result = {
-      date: new Date().toISOString().split("T")[0],
-      primaryDesequilibrio: ELEMENTOS[primaryIdx]?.nombre,
-      scores: ELEMENTOS.map((e, i) => ({
-        nombre: e.nombre,
-        score: totals[i],
-        max: 24,
-      })),
-    };
-    localStorage.setItem("tcm_test3_result", JSON.stringify(result));
-    setSaved(true);
-  };
-
   return (
-    <Box
-      minH="100vh"
-      display="flex"
-      flexDirection="column"
-      bg={tcmBg}
-      fontFamily="'EB Garamond', serif"
-    >
-      <Flex justify="center" w="100%">
-        <DisciplineHeader
-          icon={<TCMIcon size={{ base: "36px", md: "52px" }} />}
-          title="Tu desequilibrio actual"
-          bgColor="rgba(107,4,4,0.6)"
-          color={tcmTxt}
-          maxW="820px"
-        />
-      </Flex>
-
-      <Box flex="1">
-        <Flex
-          direction="column"
-          alignItems="center"
-          px={{ base: 4, md: 10, lg: 16 }}
-          pt={{ base: 8, md: 10 }}
-          pb={{ base: 14, md: 20 }}
-        >
-          {/* ── INTRO ── */}
-          <Box
-            w="100%"
-            maxW="820px"
-            bg="rgba(107,4,4,0.38)"
-            border="1px solid rgba(218,113,113,0.22)"
-            borderRadius="2xl"
-            px={{ base: 5, md: 8 }}
-            py={{ base: 5, md: 7 }}
-            mb={8}
-          >
-            <Text color={tcmTxt} fontSize="sm" fontWeight="700" letterSpacing="0.2em" textTransform="uppercase" mb={3}>
-              Cuestionario II · Patrón de Desequilibrio Actual
-            </Text>
-            <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" mb={5}>
-              Evaluación sintomática según diferenciación por Cinco Movimientos.
-              Responde según los últimos 2–3 meses.
-            </Text>
-            <Flex gap={{ base: 3, md: 6 }} flexWrap="wrap">
-              {SCALE_LABELS.map((label, i) => (
-                <Flex key={i} align="center" gap={2}>
-                  <Box
-                    w="26px" h="26px" borderRadius="full"
-                    border="1.5px solid rgba(218,113,113,0.45)"
-                    display="flex" alignItems="center" justifyContent="center"
-                    bg="rgba(107,4,4,0.4)"
-                    flexShrink={0}
-                  >
-                    <Text color={tcmTxt} fontSize="xs" fontWeight="700">{i}</Text>
-                  </Box>
-                  <Text color="rgba(255,255,255,0.65)" fontSize={{ base: "xs", md: "sm" }}>{label}</Text>
-                </Flex>
-              ))}
-            </Flex>
-          </Box>
-
-          {/* ── SECCIONES ── */}
-          {ELEMENTOS.map((el, ei) => (
-            <ElementoSection
-              key={ei}
-              el={el}
-              respuestas={answers[ei]}
-              onAnswer={(qi, val) => handleAnswer(ei, qi, val)}
-            />
-          ))}
-
-          {/* ── BOTÓN ── */}
-          <Box w="100%" maxW="820px" textAlign="center" mt={6}>
-            {!allAnswered && (
-              <Text color="rgba(255,255,255,0.35)" fontSize="xs" letterSpacing="0.08em" fontStyle="italic" mb={4}>
-                Responde todas las preguntas para ver los resultados ({totalAnswered} / 40)
-              </Text>
-            )}
-            <Box
-              as="button"
-              onClick={allAnswered ? handleShowResults : undefined}
-              px={10} py={4}
-              borderRadius="full"
-              fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="600"
-              letterSpacing="0.1em"
-              border={`1.5px solid ${allAnswered ? "rgba(218,113,113,0.6)" : "rgba(218,113,113,0.18)"}`}
-              bg={allAnswered ? "rgba(107,4,4,0.58)" : "rgba(107,4,4,0.2)"}
-              color={allAnswered ? "white" : "rgba(255,255,255,0.25)"}
-              cursor={allAnswered ? "pointer" : "not-allowed"}
-              transition="all 0.22s"
-              boxShadow={allAnswered ? "0 0 20px rgba(218,113,113,0.15)" : "none"}
-              _hover={allAnswered ? { bg: "rgba(107,4,4,0.8)", borderColor: tcmTxt, boxShadow: "0 0 32px rgba(218,113,113,0.3)" } : {}}
-            >
-              Ver mis resultados
-            </Box>
-          </Box>
-
-          {/* ── RESULTADOS ── */}
-          {showResults && (
-            <Box ref={resultsRef} w="100%" maxW="820px" mt={12}>
-
-              <Box
-                bg="rgba(107,4,4,0.42)"
-                border="1px solid rgba(218,113,113,0.28)"
-                borderRadius="2xl"
-                px={{ base: 5, md: 8 }}
-                py={{ base: 6, md: 8 }}
-                mb={5}
-              >
-                <Text color={tcmTxt} fontSize="xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase" mb={7} textAlign="center">
-                  Tus Resultados
-                </Text>
-
-                <Flex direction="column" gap={4}>
-                  {ELEMENTOS.map((el, ei) => {
-                    const isMax = totals[ei] === maxTotal && maxTotal > 0;
-                    const pct = Math.round(((totals[ei] ?? 0) / 24) * 100);
-                    return (
-                      <Box key={ei}>
-                        <Flex align="center" justify="space-between" mb={2}>
-                          <Flex align="center" gap={2}>
-                            <Text
-                              color={isMax ? "white" : "rgba(255,255,255,0.65)"}
-                              fontSize={{ base: "sm", md: "md" }}
-                              fontWeight={isMax ? "600" : "400"}
-                              letterSpacing="0.06em"
-                              textShadow={isMax ? "0 0 12px rgba(255,255,255,0.2)" : "none"}
-                            >
-                              {el.nombre}
-                            </Text>
-                            {isMax && (
-                              <Box
-                                bg="rgba(107,4,4,0.6)"
-                                border="1px solid rgba(218,113,113,0.5)"
-                                borderRadius="full"
-                                px={2.5} py={0.5}
-                                boxShadow="0 0 10px rgba(218,113,113,0.2)"
-                              >
-                                <Text color={tcmTxt} fontSize="9px" fontWeight="700" letterSpacing="0.16em">
-                                  PREDOMINANTE
-                                </Text>
-                              </Box>
-                            )}
-                          </Flex>
-                          <Text
-                            color={isMax ? tcmTxt : "rgba(255,255,255,0.4)"}
-                            fontSize={{ base: "lg", md: "xl" }}
-                            fontWeight="700"
-                            textShadow={isMax ? "0 0 12px rgba(218,113,113,0.4)" : "none"}
-                          >
-                            {totals[ei]}
-                            <Text as="span" fontSize="sm" fontWeight="400" color="rgba(255,255,255,0.25)"> / 24</Text>
-                          </Text>
-                        </Flex>
-                        <Box w="100%" h="5px" borderRadius="full" bg="rgba(255,255,255,0.07)">
-                          <Box
-                            h="100%" borderRadius="full"
-                            bg={isMax ? tcmTxt : "rgba(218,113,113,0.35)"}
-                            boxShadow={isMax ? "0 0 8px rgba(218,113,113,0.5)" : "none"}
-                            w={`${pct}%`}
-                            transition="width 0.9s ease"
-                          />
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Flex>
-
-                {maxTotal > 0 && (
-                  <Box mt={7} p={5} bg="rgba(0,0,0,0.18)" borderRadius="xl" border="1px solid rgba(218,113,113,0.14)">
-                    <Text color="rgba(255,255,255,0.48)" fontSize="xs" fontStyle="italic" lineHeight="1.9">
-                      El puntaje más alto indica el patrón de desequilibrio predominante en este momento.
-                      Dos puntajes elevados pueden sugerir interacción entre ciclos de generación o control.
-                      La coincidencia entre terreno constitucional (Test II) y patrón actual puede indicar sobrecarga del movimiento base.
-                    </Text>
-                  </Box>
-                )}
-
-                <Flex justify="center" mt={8}>
-                  {saved ? (
-                    <Flex direction="column" align="center" gap={2}>
-                      <Text color="rgba(218,113,113,0.85)" fontSize="sm" letterSpacing="0.08em" fontWeight="600">
-                        Resultado guardado en tu espacio
-                      </Text>
-                      <Text color="rgba(255,255,255,0.35)" fontSize="xs" fontStyle="italic">
-                        Puedes consultarlo en cualquier momento desde tu espacio TCM
-                      </Text>
-                    </Flex>
-                  ) : (
-                    <Box
-                      as="button"
-                      onClick={handleSaveResult}
-                      px={8} py={3}
-                      borderRadius="full"
-                      fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "sm", md: "md" }}
-                      fontWeight="600"
-                      letterSpacing="0.1em"
-                      border="1.5px solid rgba(218,113,113,0.5)"
-                      bg="rgba(107,4,4,0.42)"
-                      color="rgba(255,255,255,0.88)"
-                      cursor="pointer"
-                      transition="all 0.22s"
-                      _hover={{ bg: "rgba(107,4,4,0.7)", borderColor: tcmTxt, boxShadow: "0 0 24px rgba(218,113,113,0.28)" }}
-                    >
-                      Guardar resultado en mi espacio
-                    </Box>
-                  )}
-                </Flex>
-              </Box>
-
-              {/* Interpretación */}
-              <Box
-                bg="rgba(107,4,4,0.32)"
-                border="1px solid rgba(218,113,113,0.2)"
-                borderRadius="2xl"
-                px={{ base: 5, md: 8 }}
-                py={{ base: 6, md: 8 }}
-              >
-                <Text color={tcmTxt} fontSize="xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase" mb={6} textAlign="center">
-                  Interpretación Clínica Orientativa
-                </Text>
-                <Flex direction="column" gap={3}>
-                  {INTERPRETACIONES.map((interp, i) => {
-                    const isMax = totals[i] === maxTotal && maxTotal > 0;
-                    return (
-                      <Box
-                        key={i}
-                        p={{ base: 4, md: 5 }}
-                        bg={isMax ? "rgba(107,4,4,0.55)" : "rgba(255,255,255,0.03)"}
-                        border={`1px solid ${isMax ? "rgba(218,113,113,0.42)" : "rgba(255,255,255,0.07)"}`}
-                        borderRadius="xl"
-                        boxShadow={isMax ? "0 0 20px rgba(218,113,113,0.18)" : "none"}
-                        transition="all 0.35s"
-                      >
-                        <Flex align="baseline" gap={2} mb={isMax ? 2 : 0}>
-                          <Text
-                            color={isMax ? "white" : "rgba(255,255,255,0.6)"}
-                            fontWeight={isMax ? "600" : "400"}
-                            fontSize={{ base: "sm", md: "md" }}
-                            letterSpacing="0.08em"
-                          >
-                            {interp.nombre}
-                          </Text>
-                          <Text
-                            color={isMax ? "rgba(218,113,113,0.65)" : "rgba(255,255,255,0.3)"}
-                            fontSize="xs"
-                            fontStyle="italic"
-                            letterSpacing="0.04em"
-                          >
-                            · {interp.subtitulo}
-                          </Text>
-                          {isMax && (
-                            <Text color="rgba(218,113,113,0.75)" fontSize="9px" fontWeight="700" letterSpacing="0.16em" textTransform="uppercase" ml={1}>
-                              · Actual
-                            </Text>
-                          )}
-                        </Flex>
-                        {isMax && (
-                          <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.85">
-                            {interp.descripcion}
-                          </Text>
-                        )}
-                      </Box>
-                    );
-                  })}
-                </Flex>
-              </Box>
-            </Box>
-          )}
-        </Flex>
-      </Box>
-
-      <Box as="footer" borderTop="1px solid rgba(255,255,255,0.1)" px={{ base: 6, md: 16 }} py={{ base: 8, md: 10 }}>
-        <Text color="rgba(255,255,255,0.38)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+    <TCMTestPage
+      pageIcon={ICON}
+      tcmField="desequilibrio"
+      pageTitle="Tu desequilibrio actual"
+      instruccionesTitle="Patrón de Desequilibrio Actual"
+      instruccionesText="Evaluación sintomática según diferenciación por Cinco Movimientos. Responde según los últimos 2–3 meses."
+      scaleValues={[0, 1, 2, 3]}
+      scaleLabels={SCALE_LABELS}
+      scaleMobileHint="0 = Ausente · 3 = Persistente"
+      secciones={ELEMENTOS}
+      resultadosNota={() => (
+        <Text color="rgba(255,255,255,0.48)" fontSize="xs" fontStyle="italic" letterSpacing="0.03em" lineHeight="1.9">
+          El puntaje más alto indica el patrón de desequilibrio predominante en este momento.
+          Dos puntajes elevados pueden sugerir interacción entre ciclos de generación o control.
+          La coincidencia entre terreno constitucional (Test II) y patrón actual puede indicar sobrecarga del movimiento base.
         </Text>
-      </Box>
-    </Box>
+      )}
+      interpretacionTitle="Interpretación Clínica Orientativa"
+      interpretaciones={INTERPRETACIONES}
+      resultadoEtiqueta="Actual"
+      localStorageKey="tcm_test3_result"
+      savePrimaryKey="primaryDesequilibrio"
+    />
   );
 }

@@ -10,13 +10,12 @@ interface DisciplineHeaderProps {
 }
 
 export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }: DisciplineHeaderProps) {
-  const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 
   return (
     <Box
       bg={bgColor}
       borderRadius="2xl"
-      boxShadow={GLOW}
+      boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
       px={{ base: 8, md: 14 }}
       py={{ base: 8, md: 12 }}
       w="100%"

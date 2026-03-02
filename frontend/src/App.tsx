@@ -13,10 +13,10 @@ import QuienSoy from "./app/web/QuienSoy";
 import Productos from "./app/web/Productos";
 import ProductoDetalle from "./app/web/ProductoDetalle";
 import ReelsPage from "./app/web/Reels";
-import TCMTest1 from "./app/web/TCMTest1";
-import TCMTest2 from "./app/web/TCMTest2";
-import TCMTest3 from "./app/web/TCMTest3";
 import RecursosPage from "./app/recursos/RecursosPage";
+import TCMTest1 from "./components/espacio/components/TCMTest1";
+import TCMTest2 from "./components/espacio/components/TCMTest2";
+import TCMTest3 from "./components/espacio/components/TCMTest3";
 
 function ScrollToTop() {
   const { pathname } = useLocation();

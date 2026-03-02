@@ -7,12 +7,24 @@ USAR OBJ+ID : userId
 
 
 FUTURO
-- Videos TCM + transcripcion + descrip
+- Videos TCM muchos!! + transcripcion + descrip
+- Encasquetar mis vídeos en Recursos
+- Hacer vídeos para cada constitución, desequilibrio de elementos y elemento predominante
+- PLAN: que cuando el usuario tenga un resultado, le salga un vídeo de enlace a youtube explicando , debajo que salga transcripción + descripc
+
+
 - Asegurarme de q solo se puede mandar una vez hasta q no devuelva respuesta el formulario de log in o sign in + ponerle spinner
 - Que no se pueda acceder a las paginas de espacio o de home a no ser que esté registrado.
 
-Fitoterapia: 
 
+
+
+En tcm questions, asegurate porfa de que los iconos de los tests sean mas grandes y del color de tcmTxt
+ademas de poner un icono a la izquierda de Test que sea como una hoja/test tb del color de tcmTxt.
+
+Quiero que vayas test por test y cambies los colores de sombras y letras segun el elemento que sea. es decir, si es madera, busca el color usado
+en tcmEspacio para la madera y reutilizadlo. Puedes crear un ts solo para compartir variables pero ya hay uno creado para variable globales por si quieres 
+usarlo. Por favor que quede bonito y elegante
 
 
 

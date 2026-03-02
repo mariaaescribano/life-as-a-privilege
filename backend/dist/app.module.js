@@ -18,6 +18,8 @@ const path_1 = require("path");
 const upload_module_1 = require("./upload/upload.module");
 const respuesta_module_1 = require("./respuesta/respuesta.module");
 const payment_module_1 = require("./payment/payment.module");
+const fitoterapia_module_1 = require("./fitoterapia/fitoterapia.module");
+const tcm_module_1 = require("./tcm/tcm.module");
 exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
@@ -38,6 +40,8 @@ exports.AppModule = AppModule = __decorate([
             upload_module_1.UploadModule,
             respuesta_module_1.RespuestaModule,
             payment_module_1.PaymentModule,
+            fitoterapia_module_1.FitoterapiaModule,
+            tcm_module_1.TcmModule,
         ],
         providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],

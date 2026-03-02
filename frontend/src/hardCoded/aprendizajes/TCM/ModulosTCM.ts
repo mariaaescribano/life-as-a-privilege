@@ -17,7 +17,7 @@ export const modulostcm: ModuloContenido[] = [
         link:`/recursos/` + tcmNomLink,
         linkAnterior:"",
         linkNext:"",
-        descripcion:"El estado de la madre influye a su hijo desde antes del embarazo.",
+        descripcion:"",
         video:"-w67yUcj_SM",
         letra: letranp1,
         detalles: detalles
@@ -54,6 +54,62 @@ export const modulostcm: ModuloContenido[] = [
   },
   {
     title: "2. Los Cinco Elementos",
+    icon: CincoElementosIcon,
+    submodules: [
+      { 
+        id:"tcm3",
+        nom: "2.1 Los Cinco Elementos",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"La seguridad y el Amor no deberían ser un objetivo a alcanzar dentro de la familia, sino la base desde la que cada hijo comienza su Vida.",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm4",
+        nom: "2.2 Las interrelaciones",
+        link:`${basePath}/tcm4`,
+        linkAnterior:`${basePath}/tcm3`,
+        linkNext:`${basePath}/tcm5`,
+        descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
+        video:"wRO7-7Z0zsM",
+        letra: letranp4,
+        detalles: detalles
+      },
+    ],
+  },
+  {
+    title: "3. El ciclo generador de los 5 Elementos",
+    icon: CincoElementosIcon,
+    submodules: [
+      { 
+        id:"tcm3",
+        nom: "2.1 Los Cinco Elementos",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"La seguridad y el Amor no deberían ser un objetivo a alcanzar dentro de la familia, sino la base desde la que cada hijo comienza su Vida.",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm4",
+        nom: "2.2 Las interrelaciones",
+        link:`${basePath}/tcm4`,
+        linkAnterior:`${basePath}/tcm3`,
+        linkNext:`${basePath}/tcm5`,
+        descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
+        video:"wRO7-7Z0zsM",
+        letra: letranp4,
+        detalles: detalles
+      },
+    ],
+  },
+  {
+    title: "4. El ciclo destructor de los 5 Elementos",
     icon: CincoElementosIcon,
     submodules: [
       { 
