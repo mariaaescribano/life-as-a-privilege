@@ -14,6 +14,7 @@ export type ArrowRelation = {
   cycleLabel: string;  // e.g., "Ciclo Generador · 相生"
   verb: string;        // e.g., "engendra" / "controla"
   description: string;
+  video?: string;      // ID de YouTube — e.g. "dQw4w9WgXcQ"
 };
 
 /* ═══════════════════════════════════════════
@@ -191,15 +192,46 @@ const TCMArrowModal = ({
             />
           </Flex>
 
+          {/* ── Vídeo ── */}
+          {relation.video && (
+            <Box
+              w="100%"
+              aspectRatio={16 / 9}
+              borderRadius="xl"
+              overflow="hidden"
+              boxShadow="0 8px 28px rgba(0,0,0,0.30)"
+              mb={6}
+              bg="rgba(0,0,0,0.12)"
+            >
+              <iframe
+                style={{ width: "100%", height: "100%", border: "none" }}
+                src={`https://www.youtube.com/embed/${relation.video}`}
+                title={`${relation.fromName} → ${relation.toName} · TCM`}
+                allowFullScreen
+              />
+            </Box>
+          )}
+
           {/* ── Descripción ── */}
-          <Text
-            color="rgba(10,5,5,0.80)"
-            fontSize={{ base: "md", md: "lg" }}
-            lineHeight="1.90"
-            fontFamily="'EB Garamond', serif"
+          <Box
+            sx={{
+              borderLeft: `3px solid`,
+              borderImageSource: `linear-gradient(180deg, ${relation.color1}88, ${relation.color2}88)`,
+              borderImageSlice: 1,
+            }}
+            pl={{ base: 4, md: 5 }}
+            py={1}
           >
-            {relation.description}
-          </Text>
+            <Text
+              color="rgba(10,5,5,0.80)"
+              fontSize={{ base: "md", md: "lg" }}
+              lineHeight="1.90"
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+            >
+              {relation.description}
+            </Text>
+          </Box>
 
         </Box>
       </Box>

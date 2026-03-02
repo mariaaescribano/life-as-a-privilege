@@ -273,6 +273,7 @@ const KE_RELATIONS: Record<string, ArrowRelation> = {
     color1: EL[3].iconColor, color2: EL[1].iconColor,
     cycleLabel: "Ciclo Controlador · 相克 Kè",
     verb: "controla",
+    video:"-w67yUcj_SM",
     description:
       "El Hígado (Madera) controla al Bazo (Tierra). Si el proceso de depuración del hígado no es correcto, la sangre contendrá más toxinas. El Bazo intentará filtrarlas, incrementando su desgaste por uso excesivo.",
   },

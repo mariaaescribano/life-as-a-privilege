@@ -45,11 +45,11 @@ export interface TCMTestPageProps {
 /* ══════════════════════════════════════════════
    SUBCOMPONENTES
 ══════════════════════════════════════════════ */
-const Divider = () => (
+const Divider = ({ color = tcmTxt }: { color?: string }) => (
   <Flex align="center" gap={3} my={5}>
-    <Box flex="1" h="1px" bg={tcmTxt} opacity={0.15} />
-    <Box w="4px" h="4px" borderRadius="full" bg={tcmTxt} opacity={0.35} />
-    <Box flex="1" h="1px" bg={tcmTxt} opacity={0.15} />
+    <Box flex="1" h="1px" bg={color} opacity={0.15} />
+    <Box w="4px" h="4px" borderRadius="full" bg={color} opacity={0.35} />
+    <Box flex="1" h="1px" bg={color} opacity={0.15} />
   </Flex>
 );
 
@@ -58,11 +58,13 @@ const ScaleBtn = ({
   selected,
   scaleLabels,
   onClick,
+  accent = tcmTxt,
 }: {
   val: number;
   selected: boolean;
   scaleLabels: string[];
   onClick: () => void;
+  accent?: string;
 }) => (
   <Flex direction="column" align="center" gap={1.5}>
     <Box
@@ -71,20 +73,20 @@ const ScaleBtn = ({
       w={{ base: "44px", md: "52px" }}
       h={{ base: "44px", md: "52px" }}
       borderRadius="full"
-      border={selected ? `2px solid ${tcmTxt}` : "1.5px solid rgba(255,255,255,0.2)"}
+      border={selected ? `2px solid ${accent}` : "1.5px solid rgba(255,255,255,0.2)"}
       bg={selected ? "rgba(107,4,4,0.65)" : "rgba(255,255,255,0.05)"}
-      color={selected ? tcmTxt : "rgba(255,255,255,0.45)"}
+      color={selected ? accent : "rgba(255,255,255,0.45)"}
       fontSize={{ base: "lg", md: "xl" }}
       fontWeight="700"
       fontFamily="'EB Garamond', serif"
       cursor="pointer"
       transition="all 0.18s"
-      boxShadow={selected ? "0 0 14px rgba(218,113,113,0.35), 0 0 4px rgba(218,113,113,0.2)" : "none"}
+      boxShadow={selected ? `0 0 14px ${accent}55, 0 0 4px ${accent}33` : "none"}
       _hover={{
         bg: "rgba(107,4,4,0.45)",
-        borderColor: "rgba(218,113,113,0.65)",
-        color: tcmTxt,
-        boxShadow: "0 0 10px rgba(218,113,113,0.2)",
+        borderColor: `${accent}aa`,
+        color: accent,
+        boxShadow: `0 0 10px ${accent}33`,
       }}
       display="flex"
       alignItems="center"
@@ -94,7 +96,7 @@ const ScaleBtn = ({
       {val}
     </Box>
     <Text
-      color={selected ? tcmTxt : "rgba(255,255,255,0.28)"}
+      color={selected ? accent : "rgba(255,255,255,0.28)"}
       fontSize={{ base: "md", md: "lg" }}
       letterSpacing="0.04em"
       textAlign="center"
@@ -128,61 +130,55 @@ const SeccionCard = ({
   const total = respuestas.reduce((s, a) => s + (a ?? 0), 0);
   const answered = respuestas.filter((a) => a !== null).length;
   const complete = answered === el.preguntas.length;
+  const elTheme = getTheme(el.nombre);
+  const accent = elTheme.accent;
 
   return (
     <Box
       w="100%"
       maxW="820px"
-      boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+      boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${accent}40`}
       bg={tcmBg}
-      border={`1px solid ${complete ? "rgba(218,113,113,0.32)" : "rgba(218,113,113,0.15)"}`}
+      border={`1px solid ${complete ? `${accent}55` : `${accent}1a`}`}
       borderRadius="2xl"
       px={{ base: 5, md: 8 }}
       py={{ base: 6, md: 8 }}
       mb={4}
-      transition="border-color 0.3s"
+      transition="border-color 0.3s, box-shadow 0.3s"
     >
-      <Flex align="baseline" gap={3} mb={2}>
-        {/* {el.numero && (
-          // <Text
-          //   color="rgba(218,113,113,0.45)"
-          //   fontSize="sm"
-          //   letterSpacing="0.28em"
-          //   textTransform="uppercase"
-          //   flexShrink={0}
-          // >
-          //   {el.numero}
-          // </Text>
-        )} */}
+      <Flex align="center" gap={3} mb={2}>
+        <Box
+          w="28px"
+          h="28px"
+          borderRadius="full"
+          bg={elTheme.bg}
+          border={`1.5px solid ${accent}55`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          color={accent}
+          flexShrink={0}
+        >
+          {elTheme.icon}
+        </Box>
         <Text
-          color={tcmTxt}
+          color={accent}
           fontSize={{ base: "2xl", md: "3xl" }}
           fontWeight="600"
           letterSpacing="0.1em"
+          textShadow={`0 0 18px ${accent}33`}
         >
           {el.nombre}
         </Text>
       </Flex>
 
-      {/* {el.dominio && (
-        <Text
-          color="rgba(255,255,255,0.42)"
-          fontSize="sm"
-          letterSpacing="0.12em"
-          textTransform="uppercase"
-          mb={4}
-        >
-          {el.dominio}
-        </Text>
-      )} */}
-
-      <Divider />
+      <Divider color={accent} />
 
       <Flex direction="column" gap={7}>
         {el.preguntas.map((pregunta, qi) => (
           <Box key={qi}>
             <Text
-              color={tcmTxt}
+              color="rgba(255,255,255,0.82)"
               fontSize={{ base: "lg", md: "xl" }}
               letterSpacing="0.02em"
               lineHeight="1.75"
@@ -198,6 +194,7 @@ const SeccionCard = ({
                   selected={respuestas[qi] === v}
                   scaleLabels={scaleLabels}
                   onClick={() => onAnswer(qi, v)}
+                  accent={accent}
                 />
               ))}
               <Box display={{ base: "flex", md: "none" }} alignItems="center" pl={1} pt={3}>
@@ -210,20 +207,20 @@ const SeccionCard = ({
         ))}
       </Flex>
 
-      <Divider />
+      <Divider color={accent} />
 
       <Flex align="center" justify="space-between">
-        <Text color="rgba(255,255,255,0.35)" fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
+        <Text color={`${accent}55`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
           Suma {el.nombre}
         </Text>
         <Flex align="center" gap={2}>
           <Text
-            color={complete ? tcmTxt : "rgba(255,255,255,0.22)"}
+            color={complete ? accent : "rgba(255,255,255,0.22)"}
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
             transition="color 0.3s"
-            textShadow={complete ? "0 0 12px rgba(218,113,113,0.4)" : "none"}
+            textShadow={complete ? `0 0 12px ${accent}66` : "none"}
           >
             {total}
           </Text>

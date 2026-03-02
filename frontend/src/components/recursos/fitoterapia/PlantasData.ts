@@ -6,6 +6,7 @@ export type Planta = {
   color: string;
   foto: string;
   fotos?: string[];
+  videoUrl?: string;
   uso: string;
   propiedades?: string[];
   beneficios: string[];

@@ -17,6 +17,7 @@ export type TCMElementData = {
   icon: React.ReactNode;
   description: string;
   fields: TCMElementField[];  // dinámico: tantos como se pasen
+  video?: string;        // ID de YouTube — e.g. "dQw4w9WgXcQ"
 };
 
 /* ═══════════════════════════════════════════
@@ -178,7 +179,7 @@ const TCMElementModal = ({
         <Box px={{ base: 6, md: 10 }} pt={10} pb={10}>
 
           {/* ── Icono + Nombre ── */}
-          <Flex align="center" gap={4} mb={5}>
+          <Flex align="center" gap={4} mb={6}>
             <Box
               w={{ base: "54px", md: "62px" }}
               h={{ base: "54px", md: "62px" }}
@@ -223,16 +224,45 @@ const TCMElementModal = ({
             </Box>
           </Flex>
 
+          {/* ── Vídeo ── */}
+          {element.video && (
+            <Box
+              w="100%"
+              aspectRatio={16 / 9}
+              borderRadius="xl"
+              overflow="hidden"
+              boxShadow={`0 8px 28px rgba(0,0,0,0.45), 0 0 18px ${element.bgColor}55`}
+              mb={6}
+              bg={element.bgColor + "55"}
+            >
+              <iframe
+                style={{ width: "100%", height: "100%", border: "none" }}
+                src={`https://www.youtube.com/embed/${element.video}`}
+                title={`${element.name} · Medicina Tradicional China`}
+                allowFullScreen
+              />
+            </Box>
+          )}
+
           {/* ── Descripción ── */}
-          <Text
-            color={element.bgColor + "cc"}
-            fontSize={{ base: "md", md: "lg" }}
-            lineHeight="1.92"
-            fontFamily="'EB Garamond', serif"
+          <Box
+            bg={element.bgColor + "18"}
+            borderLeft={`3px solid ${element.bgColor}55`}
+            borderRadius="0 xl xl 0"
+            px={{ base: 4, md: 6 }}
+            py={{ base: 4, md: 5 }}
             mb={6}
           >
-            {element.description}
-          </Text>
+            <Text
+              color={element.bgColor}
+              fontSize={{ base: "md", md: "lg" }}
+              lineHeight="1.92"
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+            >
+              {element.description}
+            </Text>
+          </Box>
 
           {/* ── Campos acordeón (dinámicos) ── */}
           <Flex direction="column" gap={2}>

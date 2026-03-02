@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Welcome from "./app/web/Welcome";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LogIn from "./app/auth/LogIn";
 import SignIn from "./app/auth/SignIn";
 import Home from "./app/home/Home";
@@ -24,6 +24,12 @@ function ScrollToTop() {
   return null;
 }
 
+function PrivateRoute({ children }: { children: React.ReactNode }) {
+  const userId = sessionStorage.getItem("userId");
+  if (!userId) return <Navigate to="/welcome" replace />;
+  return <>{children}</>;
+}
+
 export default function App()
 {
   return (
@@ -34,7 +40,7 @@ export default function App()
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
-      <Route path="/home" element={<Home />} />
+      <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
 
       <Route path="/productos" element={<Productos />} />
@@ -45,17 +51,17 @@ export default function App()
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
       <Route path="/tcm/test/3" element={<TCMTest3 />} />
-      
-      <Route path="/espacio/espacioHome" element={<EspacioHome />} />
-      <Route path="/espacio/questions/:themeId" element={<ExpandablePage />} />
-      
+
+      <Route path="/espacio/espacioHome" element={<PrivateRoute><EspacioHome /></PrivateRoute>} />
+      <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />
+
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
       <Route path="/aprendizaje/modulosPage/:moduloId" element={<ModulosPage />} />
       <Route path="/aprendizaje/videoLessonPage/:moduloId/:submoduloId" element={<VideoLessonPage />} />
 
       <Route path="/recursos/:moduloId" element={<RecursosPage />} />
-      
-      
+
+
       <Route path="*" element={<Welcome />} />
     </Routes>
     </>

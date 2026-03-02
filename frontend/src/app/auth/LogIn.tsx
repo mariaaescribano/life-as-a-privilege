@@ -9,6 +9,7 @@ import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
+import SpinnerTurquesa from "../../components/global/Spinner";
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function LogIn() {
   const [name, setname] = useState<string>("");
   const [contra, setcontra] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -23,7 +25,8 @@ export default function LogIn() {
 
    const inicioSesion = async () =>
   {
-    try 
+    setLoading(true);
+    try
     {
       let body: LoginUser = {
         name: name,
@@ -55,17 +58,20 @@ export default function LogIn() {
             ? data.url
             : "/img/noImg.png"
         );
-        
+
         setmessage({
           soy : 1,
           title: "Bienvenido",
           description: "Lo estamos preparando para ti"
         })
-      } 
-    } 
+      }
+    }
     catch (err:any) {
       let error = gestionaError(err);
       setmessage(error)
+    }
+    finally {
+      setLoading(false);
     }
   }
   
@@ -96,6 +102,8 @@ export default function LogIn() {
       bg="#008080"
       fontFamily="'EB Garamond', serif"
     >
+      {loading && <SpinnerTurquesa />}
+
       {/* ── HEADER ── */}
       <SiteHeader variant="public" />
 
@@ -244,7 +252,7 @@ export default function LogIn() {
             <Flex justify="center" mt={2}>
               <Box
                 as="button"
-                onClick={validarInicioSesion}
+                onClick={loading ? undefined : validarInicioSesion}
                 color="white"
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
@@ -255,10 +263,11 @@ export default function LogIn() {
                 borderRadius="full"
                 border="1.5px solid rgba(255,255,255,0.6)"
                 bg="rgba(255,255,255,0.12)"
-                cursor="pointer"
+                cursor={loading ? "not-allowed" : "pointer"}
+                opacity={loading ? 0.55 : 1}
                 textShadow="0 1px 6px rgba(0,0,0,0.2)"
                 boxShadow="0 4px 20px rgba(0,0,0,0.15)"
-                _hover={{
+                _hover={loading ? {} : {
                   bg: "rgba(255,255,255,0.25)",
                   borderColor: "white",
                   boxShadow: "0 8px 28px rgba(0,0,0,0.22)",

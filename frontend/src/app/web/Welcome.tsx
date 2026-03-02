@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import ProductosBanner from "../../components/global/ProductosBanner";
-import ReelsBanner from "../../components/global/ReelsBanner";
 import SiteHeader from "../../components/global/SiteHeader";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -84,10 +82,10 @@ const disciplines: Discipline[] = [
     name: fitoterapiaNom,
     bg: fitoterapiaBg,
     txt: fitoterapiaTxt,
-    renderIcon: (size) => <FitoterapiaIcon size={size} />,
+    renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
     desc: fitoterapiaDescrip,
     link: "/aprendizaje/modulosPage/" + fitoterapiaNom,
-    available:false
+    available:true
   },
   {
     name: cabalaNom,

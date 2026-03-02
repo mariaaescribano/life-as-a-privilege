@@ -103,10 +103,10 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
     { name: fisiologiaNom,    available:false,  bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + fisiologiaNom },
     { name: neuropsicologiaNom, available:true,  bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + neuropsicologiaNom },
     { name: astrologiaNom,  available:false,     bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
-    { name: tcmNom,  available:true,   bg: tcmBg,             txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + tcmNomLink },
+    { name: tcmNom,  available:true, bg: tcmBg,  txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,   link: "/espacio/questions/" + tcmNomLink },
     { name: nutricionNom,  available:false,      bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
     { name: ayurvedaNom,  available:false,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
-    { name: fitoterapiaNom,  available:false,       bg: fitoterapiaBg,        txt: fitoterapiaTxt,        icon: <FitoterapiaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + fitoterapiaNom },
+    { name: fitoterapiaNom,  available:true,    bg: fitoterapiaBg,        txt: fitoterapiaTxt,        icon: <FitoterapiaIcon        size={{ base: iconSize, md: iconSize }} />,  link: "/espacio/questions/" + fitoterapiaNom },
     { name: cabalaNom,     available:false,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];
 

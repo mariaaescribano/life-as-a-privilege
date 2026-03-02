@@ -9,6 +9,7 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import axios from "axios";
 import { gestionaError } from "../../GlobalHelper";
 import type { CreateUser } from "../../dtos/user.types";
+import SpinnerTurquesa from "../../components/global/Spinner";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -18,12 +19,14 @@ export default function SignIn() {
   const [contra, setcontra] = useState<string>("");
   const [contraRepite, setcontraRepite] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
   const registroFinal = async () => {
+    setLoading(true);
     try {
       const body: CreateUser = { name, email, password: contra };
 
@@ -50,6 +53,8 @@ export default function SignIn() {
       }
     } catch (err: any) {
       setmessage(gestionaError(err));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,6 +121,8 @@ export default function SignIn() {
       bg="#008080"
       fontFamily="'EB Garamond', serif"
     >
+      {loading && <SpinnerTurquesa />}
+
       {/* ── HEADER ── */}
       <SiteHeader variant="public" />
 
@@ -246,7 +253,7 @@ export default function SignIn() {
             <Flex justify="center" mt={2}>
               <Box
                 as="button"
-                onClick={registro}
+                onClick={loading ? undefined : registro}
                 color="white"
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
@@ -257,10 +264,11 @@ export default function SignIn() {
                 borderRadius="full"
                 border="1.5px solid rgba(255,255,255,0.6)"
                 bg="rgba(255,255,255,0.12)"
-                cursor="pointer"
+                cursor={loading ? "not-allowed" : "pointer"}
+                opacity={loading ? 0.55 : 1}
                 textShadow="0 1px 6px rgba(0,0,0,0.2)"
                 boxShadow="0 4px 20px rgba(0,0,0,0.15)"
-                _hover={{
+                _hover={loading ? {} : {
                   bg: "rgba(255,255,255,0.25)",
                   borderColor: "white",
                   boxShadow: "0 8px 28px rgba(0,0,0,0.22)",
