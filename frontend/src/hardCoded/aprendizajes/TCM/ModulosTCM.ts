@@ -58,24 +58,57 @@ export const modulostcm: ModuloContenido[] = [
     submodules: [
       { 
         id:"tcm3",
-        nom: "2.1 Los Cinco Elementos",
+        nom: "2.1 La Madera",
         link:`${basePath}/tcm3`,
         linkAnterior:`${basePath}/tcm2`,
         linkNext:`${basePath}/tcm4`,
-        descripcion:"La seguridad y el Amor no deberían ser un objetivo a alcanzar dentro de la familia, sino la base desde la que cada hijo comienza su Vida.",
+        descripcion:"",
         video:"JqnJlu6L6mc",
         letra: letranp3,
         detalles: detalles
       },
       { 
-        id:"tcm4",
-        nom: "2.2 Las interrelaciones",
-        link:`${basePath}/tcm4`,
-        linkAnterior:`${basePath}/tcm3`,
-        linkNext:`${basePath}/tcm5`,
-        descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
-        video:"wRO7-7Z0zsM",
-        letra: letranp4,
+        id:"tcm3",
+        nom: "2.2 El fuego",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm3",
+        nom: "2.1 La Madera",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm3",
+        nom: "2.1 La Madera",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm3",
+        nom: "2.1 La Madera",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
         detalles: detalles
       },
     ],
@@ -95,23 +128,12 @@ export const modulostcm: ModuloContenido[] = [
         letra: letranp3,
         detalles: detalles
       },
-      { 
-        id:"tcm4",
-        nom: "2.2 Las interrelaciones",
-        link:`${basePath}/tcm4`,
-        linkAnterior:`${basePath}/tcm3`,
-        linkNext:`${basePath}/tcm5`,
-        descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
-        video:"wRO7-7Z0zsM",
-        letra: letranp4,
-        detalles: detalles
-      },
     ],
   },
   {
     title: "4. El ciclo destructor de los 5 Elementos",
     icon: CincoElementosIcon,
-    submodules: [
+    submodules: [ //hacer 1 video por pareja
       { 
         id:"tcm3",
         nom: "2.1 Los Cinco Elementos",
@@ -137,7 +159,102 @@ export const modulostcm: ModuloContenido[] = [
     ],
   },
   {
-    title: "3. El diagnóstico",
+    title: " Consejos para tu elemento predominante",
+    icon: CincoElementosIcon,
+    submodules: [ //hacer 1 video por pareja
+      { 
+        id:"tcm3",
+        nom: "2.1 Los Cinco Elementos",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"La seguridad y el Amor no deberían ser un objetivo a alcanzar dentro de la familia, sino la base desde la que cada hijo comienza su Vida.",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm4",
+        nom: "2.2 Las interrelaciones",
+        link:`${basePath}/tcm4`,
+        linkAnterior:`${basePath}/tcm3`,
+        linkNext:`${basePath}/tcm5`,
+        descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
+        video:"wRO7-7Z0zsM",
+        letra: letranp4,
+        detalles: detalles
+      },
+    ],
+  },
+  {
+    title: "Consejos para el desequilibrio elemental",
+    icon: CincoElementosIcon,
+    submodules: [ //hacer 1 video por pareja
+      { 
+        id:"tcm3",
+        nom: "2.1 Los Cinco Elementos",
+        link:`${basePath}/tcm3`,
+        linkAnterior:`${basePath}/tcm2`,
+        linkNext:`${basePath}/tcm4`,
+        descripcion:"La seguridad y el Amor no deberían ser un objetivo a alcanzar dentro de la familia, sino la base desde la que cada hijo comienza su Vida.",
+        video:"JqnJlu6L6mc",
+        letra: letranp3,
+        detalles: detalles
+      },
+      { 
+        id:"tcm4",
+        nom: "2.2 Las interrelaciones",
+        link:`${basePath}/tcm4`,
+        linkAnterior:`${basePath}/tcm3`,
+        linkNext:`${basePath}/tcm5`,
+        descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
+        video:"wRO7-7Z0zsM",
+        letra: letranp4,
+        detalles: detalles
+      },
+    ],
+  },
+  {
+    title: "5. El diagnóstico",
+    icon: DiagnosticoIcon,
+    submodules: [
+      { 
+        id:"tcm5",
+        nom: "3.1 La lengua como espejo de los órganos",
+        link:`${basePath}/tcm5`,
+        linkAnterior:`${basePath}/tcm4`,
+        linkNext:`${basePath}/tcm6`,
+        descripcion:"En la individualización, la falta de Amor propio de los niños aflora, y la sociedad trata de tacharles de rotos asignándoles enfermedades mentales.",
+        video:"MK9lQqogmbY",
+        letra: letranp5,
+        detalles: detalles
+      },
+      { 
+        id:"tcm6",
+        nom: "3.2 Los meridianos ~ los caminos del qi",
+        link:`${basePath}/tcm6`,
+        linkAnterior:`${basePath}/tcm5`,
+        linkNext:`${basePath}/tcm7`,
+        descripcion:"Usamos a los demás para darnos cuenta de lo rotos que ya estamos. Nadie nos rompe el corazón, solo nos muestra dónde lo estaba.",
+        video:"CEE_gCwAdDM",
+        letra: letranp6,
+        detalles: detalles
+      },
+      { 
+        id:"tcm7",
+        nom: "3.3 El pulso",
+        link:`${basePath}/tcm7`,
+        linkAnterior:`${basePath}/tcm6`,
+        linkNext:`${basePath}/tcm8`,
+        descripcion:"Atraemos a personas para que nos muestren dónde no nos aceptamos.",
+        video:"jmLKf9E-X6A",
+        letra: letranp7,
+        detalles: detalles
+      },
+    ],
+  },
+    {
+    title: "5. La constitución y sus desequilibrios",
     icon: DiagnosticoIcon,
     submodules: [
       { 
@@ -176,7 +293,7 @@ export const modulostcm: ModuloContenido[] = [
     ],
   },
   {
-    title: "4. El estilo de Vida",
+    title: "6. El estilo de Vida",
     icon: LifestyleIcon,
     submodules: [
       { 

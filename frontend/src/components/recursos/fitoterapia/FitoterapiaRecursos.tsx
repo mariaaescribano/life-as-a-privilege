@@ -125,8 +125,7 @@ const HeartIcon = () => (
 );
 
 const HeartIconFilled = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
   </svg>
 );
@@ -247,11 +246,11 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
           <YoutubePlayer videoUrl={planta.videoUrl} color={MODAL_COLOR} />
           <BotanicalDivider color={MODAL_COLOR} />
           {/* USO */}
-          <SeccionModal titulo="Uso" color={MODAL_COLOR} textMid={textMid}>
+
             <Text color={textDark} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" opacity={0.85}>
               {planta.uso}
             </Text>
-          </SeccionModal>
+   
 
           <BotanicalDivider color={MODAL_COLOR} />
 
@@ -424,10 +423,10 @@ const PlantCard = ({
           w={{ base: "42px", md: "46px" }}
           h={{ base: "42px", md: "46px" }}
           borderRadius="full"
-          bg={isFavorite ? CARD_COLOR : CARD_COLOR + "20"}
+          bg={CARD_COLOR + "20"}
           border={`1.5px solid ${CARD_COLOR}60`}
           display="flex" alignItems="center" justifyContent="center"
-          color={isFavorite ? fitoterapiaBg : CARD_COLOR}
+          color={CARD_COLOR}
           flexShrink={0}
           transition="all 0.22s ease"
           _hover={{ transform: "scale(1.15)" }}

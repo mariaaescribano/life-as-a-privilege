@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Modulo, Submodulo } from "../../dtos/aprendizaje.type";
+import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
 import {
@@ -15,6 +15,7 @@ import {
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
+import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -41,8 +42,8 @@ export default function VideoLessonPage() {
         return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size="44px" /> };
       case "ayurveda":
         return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size="44px" /> };
-      case "biologia":
-        return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size="44px" /> };
+      case fitoterapiaNom:
+        return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "44px", md: "44px" }}  /> };
       case "cabala":
         return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size="44px" /> };
       default:
@@ -52,16 +53,8 @@ export default function VideoLessonPage() {
 
   // SUBMODULOS
 
-  const getNeuroPsicologiaSubmoduleByTitle = (title: string): Submodulo | null => {
-    for (const modulo of modulosNeuroPsicologia) {
-      const found = modulo.submodules.find((sub) => sub.id === title);
-      if (found) return found;
-    }
-    return null;
-  };
-
-  const getTCMSubmoduleByTitle = (title: string): Submodulo | null => {
-    for (const modulo of modulostcm) {
+  const getModuleByTitle = (title: string, modulos:ModuloContenido[]): Submodulo | null => {
+    for (const modulo of modulos) {
       const found = modulo.submodules.find((sub) => sub.id === title);
       if (found) return found;
     }
@@ -76,11 +69,15 @@ export default function VideoLessonPage() {
     if (moduloId && submoduloId) {
       if(moduloId === neuropsicologiaNom)
       { 
-        setdatos(getNeuroPsicologiaSubmoduleByTitle(submoduloId!));
+        setdatos(getModuleByTitle(submoduloId!, modulosNeuroPsicologia));
       }
       else if(moduloId === tcmNomLink)
       { 
-        setdatos(getTCMSubmoduleByTitle(submoduloId!));
+        setdatos(getModuleByTitle(submoduloId!, modulostcm));
+      }
+      else if(moduloId === fitoterapiaNom)
+      { 
+        setdatos(getModuleByTitle(submoduloId!, modulosFitoterapia));
       }
     }
   }, [moduloId, submoduloId]);

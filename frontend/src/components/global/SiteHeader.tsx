@@ -112,7 +112,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             </Text>
           </Flex>
 
-          <Flex
+          {/* <Flex
             align="center" gap={2} cursor="pointer"
             onClick={() => navigate("/productos")}
             color="rgba(255,255,255,0.85)"
@@ -148,7 +148,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             >
               Reels
             </Text>
-          </Flex>
+          </Flex> */}
 
           {avatarSrc && (
             <Box
@@ -169,45 +169,46 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         </Flex>
       ) : (
         /* ── Navegación pública ── */
+        // <Flex align="center" gap={{ base: 3, md: 6 }}>
+        //   <Flex
+        //     align="center" gap={2} cursor="pointer"
+        //     onClick={() => navigate("/productos")}
+        //     color="rgba(255,255,255,0.85)"
+        //     _hover={{ color: "white" }}
+        //     transition="color 0.2s"
+        //   >
+        //     <ProductosNaturalesIcon size="28px" color="currentColor" />
+        //     <Text
+        //       display={{ base: "none", md: "block" }}
+        //       fontSize={{ base: "md", md: "lg" }}
+        //       fontWeight="500"
+        //       letterSpacing="0.04em"
+        //       textShadow="0 1px 4px rgba(0,80,70,0.5)"
+        //     >
+        //       Productos
+        //     </Text>
+        //   </Flex>
+
+        //   <Flex
+        //     align="center" gap={2} cursor="pointer"
+        //     onClick={() => navigate("/reels")}
+        //     color="rgba(255,255,255,0.85)"
+        //     _hover={{ color: "white" }}
+        //     transition="color 0.2s"
+        //   >
+        //     <ReelsIcon size="28px" color="currentColor" />
+        //     <Text
+        //       display={{ base: "none", md: "block" }}
+        //       fontSize={{ base: "md", md: "lg" }}
+        //       fontWeight="500"
+        //       letterSpacing="0.04em"
+        //       textShadow="0 1px 4px rgba(0,80,70,0.5)"
+        //     >
+        //       Reels
+        //     </Text>
+        //   </Flex>
+        
         <Flex align="center" gap={{ base: 3, md: 6 }}>
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/productos")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <ProductosNaturalesIcon size="28px" color="currentColor" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
-            >
-              Productos
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/reels")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <ReelsIcon size="28px" color="currentColor" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
-            >
-              Reels
-            </Text>
-          </Flex>
-
           <Flex
             align="center" gap={2} cursor="pointer"
             onClick={() => navigate("/logIn")}

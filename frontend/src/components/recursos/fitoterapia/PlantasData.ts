@@ -16,115 +16,214 @@ export type Planta = {
 };
 
 
-export const plantas: Planta[] = [
-    { id: 1, nombre: "Manzanilla", nombreCientifico: "Matricaria chamomilla", color: "#c8a83a", foto: "/img/plantas/manzanilla.jpg", fotos: ["/img/plantas/manzanilla.jpg", "/img/plantas/manzanilla-2.jpg"], uso: "Planta de uso interno y externo, indicada especialmente para calmar el sistema digestivo, reducir la ansiedad leve y tratar irritaciones cutáneas. Es una de las plantas más estudiadas y seguras para todas las edades.", propiedades: [ "Apigenina — flavonoide con acción ansiolítica y antiinflamatoria potente", "Bisabolol — aceite esencial con propiedades calmantes y cicatrizantes", "Camazuleno — antiinflamatorio generado durante la destilación al vapor", "Mucílagos — efecto suavizante sobre mucosas digestivas y respiratorias", "Ácidos fenólicos — antioxidantes naturales", ], beneficios: [ "Calma el sistema nervioso y reduce la ansiedad leve", "Alivia cólicos, gases y espasmos digestivos", "Antiinflamatoria en pieles sensibles e irritadas", "Facilita el sueño cuando se toma en infusión antes de dormir", "Cicatrizante y antiséptica en uso tópico", ], formaDeUso: "Infusión: 1–2 cucharaditas de flores secas en 250 ml de agua caliente, reposar 10 min. 2–3 tazas al día. Uso externo: compresas con infusión concentrada o aceite esencial diluido al 2–3 % en aceite portador.", datosCuriosos: [ "Es la hierba medicinal más consumida en forma de infusión en el mundo mediterráneo, por encima del té verde", "El camazuleno azulado del aceite esencial no existe en la planta fresca: se forma únicamente durante la destilación al vapor", "Los antiguos egipcios la consagraban al dios Ra y la utilizaban en rituales de embalsamamiento por sus propiedades conservantes", ], },
+export const plantas: Planta[] = 
+[
+  {
+    id: 1,
+    nombre: "Perejil",
+    nombreCientifico: "Petroselinum crispum",
+    color: "#2e7d32",
+    foto: "/img/plantas/Perejil.png",
+    videoUrl: "https://youtu.be/tUB4apNjgcY?si=HmAEv1eMND5fQ2-H",
+    uso: "Planta depurativa y diurética que apoya la función renal y fortalece el sistema inmunitario.",
+    beneficios: [
+      "Favorece el funcionamiento del riñón",
+      "Ayuda a eliminar toxinas",
+      "Rico en vitamina C y vitamina K",
+      "Potente antioxidante",
+      "Fortalece el sistema inmunitario",
+      "Protege del daño oxidativo",
+      "Favorece la circulación",
+      "Apoya la salud cardiovascular"
+    ],
+    formaDeUso: "Fresco en ensaladas y platos, en infusión o como ingrediente en jugos verdes.",
+    datosCuriosos: [
+      "Es una de las plantas más depurativas que existen",
+      "Se utiliza tanto en cocina como en remedios tradicionales"
+    ]
+  },
   {
     id: 2,
-    nombre: "Diente de León",
-    nombreCientifico: "Taraxacum officinale",
-    color: "#f2c200",
-    foto: "/img/plantas/diente-de-leon.jpg",
-    uso: "Planta depurativa con acción principal sobre hígado, vesícula biliar y sistema digestivo. Indicada en trastornos hepáticos y biliares, digestiones lentas y problemas cutáneos asociados a sobrecarga hepática.",
-    // propiedades: [
-    //   "Flavonoides — acción antioxidante y depurativa",
-    //   "Carotenoides — protectores celulares",
-    //   "Inulina — fibra prebiótica que favorece la flora intestinal",
-    //   "Principios amargos — estimulan hígado y digestión",
-    //   "Sales potásicas — efecto diurético y depurativo",
-    //   "Vitaminas B2, C y A — apoyo inmunológico y antioxidante",
-    //   "Minerales como calcio, potasio, hierro, fósforo y magnesio"
-    // ],
+    nombre: "Manzanilla",
+    nombreCientifico: "Matricaria chamomilla",
+    color: "#f4c542",
+    foto: "/img/plantas/Manzanilla.png",
+    videoUrl: "https://youtu.be/uuFbrCorj7Y?si=XH-Z_LfWXkETLaK_",
+    uso: "Planta digestiva, calmante y antiinflamatoria ideal para molestias digestivas y nerviosas.",
     beneficios: [
-      "Estimula la producción y expulsión de bilis (colerético y colagogo)",
-      "Mejora la digestión y actúa como eupéptico",
-      "Ligeramente laxante",
-      "Ayuda a depurar sangre y piel",
-      "Útil como apoyo en psoriasis y dermatitis",
-      "Favorece la salud del sistema linfático en uso externo"
+      "Favorece la digestión",
+      "Antiinflamatoria y relajante muscular",
+      "Alivia dolores digestivos y menstruales",
+      "Rica en antioxidantes",
+      "Cicatrizante y calmante de irritaciones",
+      "Calma el sistema nervioso",
+      "Reduce el estrés",
+      "Favorece el descanso nocturno"
     ],
-    formaDeUso: "Infusión de hojas o raíz. La raíz tostada puede utilizarse como sustituto del café. Uso externo: oleato aplicado en masaje en zonas linfáticas como senos o axilas.",
+    formaDeUso: "En infusión diaria, compresas para la piel o como parte del cuidado natural.",
     datosCuriosos: [
-      "Dioscórides y Avicena lo comparaban con la endivia y la achicoria por su acción depurativa",
-      "Antiguamente su raíz tostada se utilizaba como sustituto del café",
-      "Sus flores tienen sabor agridulce y se consumen en ensaladas"
-    ],
-    precauciones: [
-      "No aconsejado en personas sin vesícula biliar",
-      "Puede causar molestias gástricas en personas con hiperacidez",
-      "Se recomienda combinar con plantas ricas en mucílagos como malva o malvavisco"
+      "Fue utilizada como ofrenda en la antigüedad",
+      "Puede utilizarse a diario por su acción suave"
     ]
   },
   {
     id: 3,
-    nombre: "Fumaria",
-    nombreCientifico: "Fumaria officinalis",
-    color: "#b07aa1",
-    foto: "/img/plantas/fumaria.jpg",
-    uso: "Planta reguladora hepatobiliar y digestiva, utilizada tradicionalmente como depurativa y para equilibrar la función de la bilis.",
-    // propiedades: [
-    //   "Alcaloides — acción espasmolítica sobre el esfínter de Oddi",
-    //   "Compuestos anfocoleréticos — regulan la producción de bilis",
-    //   "Acción colagoga — facilita la expulsión de bilis",
-    //   "Actividad antiespasmódica digestiva",
-    //   "Modulación de neurotransmisores como GABA y serotonina"
-    // ],
+    nombre: "Orégano",
+    nombreCientifico: "Origanum vulgare",
+    color: "#4a6b2f",
+    foto: "/img/plantas/Oregano.png",
+    videoUrl: "https://youtu.be/NFft0FeeVnE?si=e2SRy3TIQf_Pi6DW",
+    uso: "Planta digestiva y antimicrobiana que favorece la microbiota y la salud cardiovascular.",
     beneficios: [
-      "Regula el flujo biliar",
+      "Potente antibacteriano y antifúngico",
       "Mejora la digestión",
-      "Reduce espasmos en estómago e intestino delgado",
-      "Acción depurativa tradicional",
-      "Efecto moderado sobre el sistema nervioso"
+      "Reduce la inflamación intestinal",
+      "Favorece el equilibrio de la microbiota",
+      "Refuerza el sistema inmunitario",
+      "Puede disminuir el colesterol LDL",
+      "Ayuda a aumentar el HDL",
+      "Estimula el metabolismo"
     ],
-    formaDeUso: "Infusión de flores y hojas jóvenes.",
+    formaDeUso: "Como condimento en comidas o en infusión.",
     datosCuriosos: [
-      "Antiguamente los exorcistas la quemaban para ahuyentar malos espíritus",
-      "Tradicionalmente se consumía en ensaladas depurativas pese a su sabor amargo"
-    ],
-    precauciones: [
-      "Consultar al médico en caso de problemas hepatobiliares serios",
-      "No aconsejada en personas sin vesícula biliar"
+      "Su nombre significa “alegría de oro” en griego",
+      "Es rico en aceites esenciales"
     ]
   },
   {
     id: 4,
-    nombre: "Alcachofa",
-    nombreCientifico: "Cynara scolymus",
-    color: "#4f8a3c",
-    foto: "/img/plantas/alcachofa.jpg",
-    uso: "Planta hepatoprotectora y digestiva, indicada en digestiones pesadas, colesterol alto y apoyo metabólico.",
+    nombre: "Tomillo",
+    nombreCientifico: "Thymus vulgaris",
+    color: "#6a8f3c",
+    foto: "/img/plantas/Tomillo.png",
+    videoUrl: "https://youtu.be/xF0HvXVkMYY?si=9g1zEnjzUW_GzvnY",
+    uso: "Planta antibacteriana y digestiva que fortalece el sistema inmunitario.",
     beneficios: [
-      "Hepatoprotectora y estimulante de la detoxificación hepática",
-      "Facilita la expulsión de bilis",
-      "Alivia digestiones pesadas y gases",
-      "Ligeramente laxante",
-      "Antiemética (reduce náuseas y vómitos)",
-      "Diurética",
-      "Disminuye colesterol y triglicéridos",
-      "Recomendada en personas con diabetes o hiperglucemia"
+      "Potente antibacteriano natural",
+      "Inhibe la candidiasis",
+      "Puede combatir Helicobacter pylori",
+      "Favorece la digestión",
+      "Rico en antioxidantes",
+      "Refuerza el sistema inmunitario",
+      "Protege del estrés oxidativo",
+      "Aporta energía natural"
     ],
-    formaDeUso: "Tisanas, sopas y caldos para extraer la cinarina con agua caliente. También en tinturas hidroalcohólicas o hidroglicéridas.",
+    formaDeUso: "En infusión, como condimento o vaporizaciones.",
     datosCuriosos: [
-      "Griegos y romanos la utilizaban habitualmente en su alimentación",
-      "Brota de su cepa cada año aunque el tallo desaparezca en invierno"
+      "Es considerada una de las plantas más antibacterianas",
+      "Puede estimular de forma equilibrada"
     ]
   },
   {
     id: 5,
-    nombre: "Cardo Mariano",
-    nombreCientifico: "Silybum marianum",
-    color: "#9c2f2f",
-    foto: "/img/plantas/cardo-mariano.jpg",
-    uso: "Planta hepatoprotectora indicada para regenerar y proteger el hígado frente a toxinas.",
+    nombre: "Laurel",
+    nombreCientifico: "Laurus nobilis",
+    color: "#3f6b3f",
+    foto: "/img/plantas/Laurel.png",
+    videoUrl: "https://youtu.be/YY2EP3FoBj0?si=P1i8bvCPck5hVxgp",
+    uso: "Planta digestiva y protectora usada tradicionalmente para comidas pesadas.",
     beneficios: [
-      "Regenera células hepáticas",
-      "Protege frente a sustancias hepatotóxicas",
-      "Actividad antifibrótica",
-      "Acción antiinflamatoria e inmunomoduladora",
-      "Propiedad antihemorrágica asociada a mejora hepática"
+      "Mejora la digestión",
+      "Reduce la inflamación abdominal",
+      "Propiedades antimicrobianas",
+      "Acción antioxidante",
+      "Protege frente a bacterias",
+      "Ayuda a despejar vías respiratorias"
     ],
-    formaDeUso: "Consumir la semilla molida en polvo, ya que sus principios activos no se disuelven bien en agua. Puede elaborarse en cápsulas herbales.",
-    precauciones: [
-      "Puede tener efecto hipertensivo, evitar en personas con tensión alta"
+    formaDeUso: "En guisos, caldos o en infusión.",
+    datosCuriosos: [
+      "Símbolo de victoria en la antigüedad",
+      "Muy utilizado en cocina mediterránea"
+    ]
+  },
+  {
+    id: 6,
+    nombre: "Canela",
+    nombreCientifico: "Cinnamomum verum",
+    color: "#a0522d",
+    foto: "/img/plantas/Canela.png",
+    videoUrl: "https://youtu.be/-4PgvcvE_k0?si=MWQlLoJpMNpoKD42",
+    uso: "Especia reguladora del azúcar en sangre y estimulante circulatoria.",
+    beneficios: [
+      "Regula los niveles de azúcar",
+      "Mejora la sensibilidad a la insulina",
+      "Antiinflamatoria",
+      "Antibacteriana",
+      "Estimula la circulación",
+      "Mejora el estado de ánimo"
+    ],
+    formaDeUso: "En infusiones, postres, batidos o espolvoreada.",
+    datosCuriosos: [
+      "Una de las especias más antiguas del mundo",
+      "Su aroma tiene efectos estimulantes"
+    ]
+  },
+  {
+    id: 7,
+    nombre: "Jengibre",
+    nombreCientifico: "Zingiber officinale",
+    color: "#c68642",
+    foto: "/img/plantas/Jengibre.png",
+    videoUrl: "https://youtu.be/Fprj4svcHOc?si=8XS0G67roIHAEkjP",
+    uso: "Raíz digestiva y antiinflamatoria que mejora la circulación.",
+    beneficios: [
+      "Mejora la digestión",
+      "Alivia la pesadez estomacal",
+      "Potente antiinflamatorio",
+      "Útil para dolor muscular",
+      "Rico en antioxidantes",
+      "Refuerza el sistema inmunitario",
+      "Mejora la circulación",
+      "Aporta energía natural"
+    ],
+    formaDeUso: "En infusión, rallado en comidas o batidos.",
+    datosCuriosos: [
+      "Usado en medicina tradicional desde hace miles de años",
+      "Muy versátil en cocina y salud natural"
+    ]
+  },
+  {
+    id: 8,
+    nombre: "Cúrcuma",
+    nombreCientifico: "Curcuma longa",
+    color: "#d4a017",
+    foto: "/img/plantas/Curcuma.png",
+    videoUrl: "https://youtu.be/QRgp0yhtCoc?si=nt9KRA0RZUO8uZC8",
+    uso: "Especia antiinflamatoria y antioxidante que favorece la salud hepática.",
+    beneficios: [
+      "Potente acción antiinflamatoria",
+      "Reduce la inflamación crónica",
+      "Antioxidante natural",
+      "Favorece la salud del hígado",
+      "Apoya la desintoxicación",
+      "Mejora el rendimiento cognitivo"
+    ],
+    formaDeUso: "En sopas, guisos, infusiones o combinada con pimienta.",
+    datosCuriosos: [
+      "Contiene curcumina como compuesto activo",
+      "Una de las especias más estudiadas"
+    ]
+  },
+  {
+    id: 9,
+    nombre: "Pimienta",
+    nombreCientifico: "Piper nigrum",
+    color: "#1c1c1c",
+    foto: "/img/plantas/Pimienta.png",
+    videoUrl: "https://youtu.be/HXqVq14MM6U?si=YCmfJNHY9bu6Xsrh",
+    uso: "Especia estimulante que activa el metabolismo y mejora la digestión.",
+    beneficios: [
+      "Activa el metabolismo",
+      "Favorece la digestión",
+      "Mejora la absorción de nutrientes",
+      "Incrementa la capacidad cognitiva",
+      "Rica en antioxidantes",
+      "Propiedades antimicrobianas"
+    ],
+    formaDeUso: "Como condimento diario, preferiblemente recién molida.",
+    datosCuriosos: [
+      "Mejora la absorción de la curcumina",
+      "Fue una de las especias más comercializadas históricamente"
     ]
   }
 ];

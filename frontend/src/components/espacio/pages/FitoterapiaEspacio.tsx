@@ -259,11 +259,9 @@ const PlantModal = ({
           <BotanicalDivider color={MODAL_COLOR} />
 
           {/* USO */}
-          <SeccionModal titulo="Uso" color={MODAL_COLOR} textMid={textMid}>
-            <Text color={textDark} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" opacity={0.85}>
+          <Text color={textDark} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" opacity={0.85}>
               {planta.uso}
             </Text>
-          </SeccionModal>
 
           <BotanicalDivider color={MODAL_COLOR} />
 
@@ -454,10 +452,10 @@ const PlantCard = ({
         w={{ base: "42px", md: "46px" }}
         h={{ base: "42px", md: "46px" }}
         borderRadius="full"
-        bg={CARD_COLOR}
+        bg={CARD_COLOR + "20"}
         border={`1.5px solid ${CARD_COLOR}60`}
         display="flex" alignItems="center" justifyContent="center"
-        color={fitoterapiaBg}
+        color={CARD_COLOR}
         flexShrink={0}
         transition="all 0.22s ease"
         _hover={{ transform: "scale(1.15)", opacity: 0.75 }}

@@ -1,6 +1,4 @@
  
-
-
 ---------------------------------------------
 USAR OBJ+ID : userId
 ---------------------------------------------
@@ -14,8 +12,10 @@ TCM
 FITO
 - Sustituir fotos por vídeo de youtube q tenga foto en la portada de la que se hable
 
-
-
+NEXT STEP
+- vídeos FITO
+- videos TCM (originales) + nuevos + espacio
+- poner cartelito de "EN embarazo en caso de lactancia, hablar con un médico"
 
 
 

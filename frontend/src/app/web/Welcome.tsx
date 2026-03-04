@@ -359,7 +359,7 @@ const Welcome = () => {
                 color={d.txt}
                 filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.4))"
                 fontWeight="700"
-                fontSize={{ base: "xl", md: "2xl" }}
+                fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
                 letterSpacing="0.03em"
                 lineHeight="short"
               >
