@@ -9,13 +9,30 @@ TCM
 - Hacer vídeos para cada constitución, desequilibrio de elementos y elemento predominante
 - PLAN: que cuando el usuario tenga un resultado, le salga un vídeo de enlace a youtube explicando , debajo que salga transcripción + descripc
 
-FITO
-- Sustituir fotos por vídeo de youtube q tenga foto en la portada de la que se hable
 
-NEXT STEP
-- vídeos FITO
-- videos TCM (originales) + nuevos + espacio
+
 - poner cartelito de "EN embarazo en caso de lactancia, hablar con un médico"
+- revisar el orden de los ciclos de tcm, NO son correctos ahora mismo
+- mensaje de q "No sustituye un diagnostico profesional, es solo una herramienta para e autoconocimiento y para encontrar desequilibrios y potenciar nuestra constitución"
+
+
+
+
+IDEA: cuando salga la constitucion desequilibrada, te lleve a ese videos
+Cuando salga desequilibrio/potente elemental te lleva a video + 
+te pone abajo lo q significa (para NO hacer un video por desequilibrio)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
