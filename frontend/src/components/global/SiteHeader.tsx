@@ -87,7 +87,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               fontSize={{ base: "md", md: "lg" }}
               fontWeight="500"
               letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
             >
               Mi Espacio
             </Text>
@@ -106,7 +108,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               fontSize={{ base: "md", md: "lg" }}
               fontWeight="500"
               letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
             >
               Aprendizajes
             </Text>

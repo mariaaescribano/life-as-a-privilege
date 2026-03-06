@@ -134,9 +134,8 @@ export default function LogIn() {
               lineHeight="1.85"
               fontStyle="italic"
             >
-              Esta plataforma acaba de nacer y está creciendo poco a poco.
-              Si algo no responde a la primera, inténtalo de nuevo —
-              tu paciencia es un regalo que agradecemos de corazón.
+              Por favor, si algo no responde a la primera, inténtalo de nuevo ~
+              gracias por tu paciencia
             </Text>
           </Box>
 

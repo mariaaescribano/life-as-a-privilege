@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import { tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
 import TCMElementModal from "./TCMElementModal";
@@ -22,7 +22,7 @@ const CARD_SHADOW = "0 8px 36px rgba(107,196,200,0.45)";
 /* ═══════════════════════════════════════════
    ICONOS (Material Symbols · fill="currentColor")
 ═══════════════════════════════════════════ */
-const EarthIcon = () => (
+const WoodIcon = () => (
   <svg width="34" height="34" viewBox="0 -960 960 960" fill="currentColor">
     <path d="M200-80v-80h240v-160h-80q-83 0-141.5-58.5T160-520q0-60 33-110.5t89-73.5q9-75 65.5-125.5T480-880q76 0 132.5 50.5T678-704q56 23 89 73.5T800-520q0 83-58.5 141.5T600-320h-80v160h240v80H200Zm160-320h240q50 0 85-35t35-85q0-36-20.5-66T646-630l-42-18-6-46q-6-45-39.5-75.5T480-800q-45 0-78.5 30.5T362-694l-6 46-42 18q-33 14-53.5 44T240-520q0 50 35 85t85 35Zm120-200Z" />
   </svg>
@@ -32,7 +32,7 @@ const FireIcon = () => (
     <path d="M240-400q0 52 21 98.5t60 81.5q-1-5-1-9v-9q0-32 12-60t35-51l113-111 113 111q23 23 35 51t12 60v9q0 4-1 9 39-35 60-81.5t21-98.5q0-50-18.5-94.5T648-574q-20 13-42 19.5t-45 6.5q-62 0-107.5-41T401-690q-39 33-69 68.5t-50.5 72Q261-513 250.5-475T240-400Zm240 52-57 56q-11 11-17 25t-6 29q0 32 23.5 55t56.5 23q33 0 56.5-23t23.5-55q0-16-6-29.5T537-292l-57-56Zm0-492v132q0 34 23.5 57t57.5 23q18 0 33.5-7.5T622-658l18-22q74 42 117 117t43 163q0 134-93 227T480-80q-134 0-227-93t-93-227q0-129 86.5-245T480-840Z" />
   </svg>
 );
-const WoodIcon = () => (
+const  EarthIcon= () => (
   <svg width="34" height="34" viewBox="0 -960 960 960" fill="currentColor">
     <path d="M440-690v-100q0-42 29-71t71-29h100v100q0 42-29 71t-71 29H440ZM220-450q-58 0-99-41t-41-99v-140h140q58 0 99 41t41 99v140H220ZM640-90q-39 0-74.5-12T501-135l-33 33q-11 11-28 11t-28-11q-11-11-11-28t11-28l33-33q-21-29-33-64.5T400-330q0-100 70-170.5T640-571h241v241q0 100-70.5 170T640-90Zm0-80q67 0 113-47t46-113v-160H640q-66 0-113 46.5T480-330q0 23 5.5 43.5T502-248l110-110q11-11 28-11t28 11q11 11 11 28t-11 28L558-192q18 11 38.5 16.5T640-170Zm1-161Z" />
   </svg>
@@ -50,10 +50,11 @@ const WaterIcon = () => (
 
 export const ELEMENTS: TCMElementData[] = [
   {
-    id: 1, name: "Madera", chinese: "木 Mù",
+    id: 1, name: "Madera", chinese: "木",
     bgColor: "#3d1a08", iconColor: "#d4895a",
-    leftPct: "57%", topPct: "63%",
-    icon: <EarthIcon />,
+    leftPct: "39%", topPct: "6%",
+    video: "1gMBVFKMAXY",
+    icon: <WoodIcon />,
     description:
       "La Madera representa el impulso vital, el crecimiento y la visión. El Hígado mueve el Qi; cuando fluye libremente, hay creatividad y flexibilidad. La Madera nos enseña a crecer sin rigidez, como el bambú: fuerte y flexible a la vez.",
     fields: [
@@ -74,9 +75,10 @@ export const ELEMENTS: TCMElementData[] = [
       { label: "Consejos", value: "Estirar el cuerpo · Movimiento diario · Expresar el enfado con conciencia · Establecer límites sanos" },],
     },
   {
-    id: 2, name: "Fuego", chinese: "火 Huǒ",
+    id: 2, name: "Fuego", chinese: "火",
     bgColor: "#3d0808", iconColor: "#e06060",
     leftPct: "68%", topPct: "30%",
+    video: "oqmoovl3Yio",
     icon: <FireIcon />,
     description:
       "El Fuego es el elemento de la conexión, la alegría y la consciencia. El Corazón alberga el Shen —la mente y el espíritu—. Cuando el Fuego arde en equilibrio, hay calidez, presencia y comunicación genuina. La gran medicina del Fuego es el amor sin condiciones.",
@@ -98,10 +100,11 @@ export const ELEMENTS: TCMElementData[] = [
       { label: "Consejos", value: "Prioriza amistades · Meditación diaria · Bailar · Ejercicio cardiovascular consciente" },],
   },
   {
-    id: 3, name: "Tierra", chinese: "土 Tǔ ",
+    id: 3, name: "Tierra", chinese: "土",
     bgColor: "#082d08", iconColor: "#5ab85a",
-    leftPct: "39%", topPct: "6%",
-    icon: <WoodIcon />,
+    leftPct: "57%", topPct: "63%",
+    video: "tXqEjnQPgwc",
+    icon: <EarthIcon />,
     description:
       "La Tierra representa la estabilidad, la transformación y la nutrición. En TCM, el Bazo y el Estómago transforman y transportan los alimentos en Qi y Sangre. Un Bazo equilibrado piensa con claridad; desequilibrado, nos atrapa en la preocupación crónica y el pensamiento repetitivo.",
       fields: [
@@ -123,9 +126,10 @@ export const ELEMENTS: TCMElementData[] = [
     ],
   },
   {
-    id: 4, name: "Metal", chinese: "金 Jīn",
+    id: 4, name: "Metal", chinese: "金",
     bgColor: "#083030", iconColor: "#5ecfca",
     leftPct: "16%", topPct: "63%",
+    video: "BzgxPMYOqrA",
     icon: <MetalIcon />,
     description:
       "El Metal encarna la pureza, los límites y la capacidad de soltar. Los Pulmones reciben el Qi del cielo en cada respiración. Respirar profundo, aceptar las pérdidas y reconocer el valor de cada experiencia es su medicina.",
@@ -147,9 +151,10 @@ export const ELEMENTS: TCMElementData[] = [
     { label: "Consejos", value: "Crear rituales con significado · Respiración consciente · Pilates · Procesar el dolor acumulado" },],
   },
   {
-    id: 5, name: "Agua", chinese: "水 Shuǐ",
+    id: 5, name: "Agua", chinese: "水",
     bgColor: "#08102d", iconColor: "#5a90e0",
     leftPct: "11%", topPct: "30%",
+    video: "o2ot4bFWMoQ",
     icon: <WaterIcon />,
     description:
       "El Agua es la fuente primordial. Los Riñones guardan el Jing —la esencia vital— y gobiernan el envejecimiento y la voluntad. El invierno es su estación: tiempo de recogerse y conectar con la profundidad de quiénes somos.",
@@ -201,64 +206,46 @@ const SHEN_RELATIONS: Record<string, ArrowRelation> = {
     fromName: EL[2].name, fromChinese: EL[2].chinese,
     toName:   EL[3].name, toChinese:   EL[3].chinese,
     color1: EL[2].iconColor, color2: EL[3].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
+    cycleLabel: "Ciclo Generador 相生",
     verb: "engendra",
-    description:
-      "El Corazón (Fuego) influencia al Hígado (Madera) porque impulsa la sangre a través de los latidos. El Hígado regula la circulación y almacena la sangre, ayudando a que el Corazón no se sobrecargue. Si la circulación es adecuada, ambos órganos funcionan de manera coordinada.",
+    video: "ufDdxo0Ffxw",
+    description: "Cuando el corazón está en equilibrio, todo el cuerpo respira en armonía.",
   },
-  "3-1": {
+  "3-4": {
     fromName: EL[3].name, fromChinese: EL[3].chinese,
-    toName:   EL[1].name, toChinese:   EL[1].chinese,
-    color1: EL[3].iconColor, color2: EL[1].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
-    verb: "engendra",
-    description:
-      "El Hígado (Madera) influencia al Bazo (Tierra) porque regula el flujo de sangre y energía en el organismo. Además, participa en la gestión de glucosa y grasas. Cuando el Hígado funciona correctamente, facilita que el Bazo transforme y distribuya los nutrientes sin dificultad.",
-  },
-  "1-4": {
-    fromName: EL[1].name, fromChinese: EL[1].chinese,
     toName:   EL[4].name, toChinese:   EL[4].chinese,
-    color1: EL[1].iconColor, color2: EL[4].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
+    color1: EL[3].iconColor, color2: EL[4].iconColor,
+    cycleLabel: "Ciclo Generador 相生",
     verb: "engendra",
-    description:
-      "El Bazo (Tierra) influencia al Pulmón (Metal) porque se encarga de producir y transformar la energía y la sangre que el Pulmón necesita para funcionar correctamente. Si el Bazo no trabaja bien, el Pulmón puede debilitarse.",
+    video: "n0Cqpw_A3VU",
+    description: "Nutrirte bien es el primer paso para vivir en armonía y equilibrio.",
   },
   "4-5": {
     fromName: EL[4].name, fromChinese: EL[4].chinese,
     toName:   EL[5].name, toChinese:   EL[5].chinese,
     color1: EL[4].iconColor, color2: EL[5].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
+    cycleLabel: "Ciclo Generador 相生",
     verb: "engendra",
-    description:
-      "El Pulmón (Metal) influencia a los Riñones (Agua) porque dirige y regula la respiración y el movimiento de los líquidos en el cuerpo. Una buena función pulmonar facilita que los Riñones filtren y mantengan el equilibrio de electrolitos.",
+    video: "AjwK8HIYBpU",
+    description: "La respiración consciente es el puente entre el cuerpo y el universo.",
   },
-  "5-3": {
+  "5-1": {
     fromName: EL[5].name, fromChinese: EL[5].chinese,
-    toName:   EL[3].name, toChinese:   EL[3].chinese,
-    color1: EL[5].iconColor, color2: EL[3].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
-    verb: "engendra",
-    description:
-      "Los Riñones (Agua) influencian al Hígado (Madera) porque filtran la sangre y eliminan el exceso de electrolitos. Si los Riñones funcionan adecuadamente, el Hígado no se sobrecarga y puede cumplir mejor su función reguladora.",
-  },
-  "3-2": {
-    fromName: EL[3].name, fromChinese: EL[3].chinese,
-    toName:   EL[2].name, toChinese:   EL[2].chinese,
-    color1: EL[3].iconColor, color2: EL[2].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
-    verb: "engendra",
-    description:
-      "El Bazo (Tierra) genera la sangre que nutre al Corazón (Fuego). Una digestión sana y un Bazo fuerte producen sangre de calidad, lo que permite que el Corazón mantenga su ritmo y claridad mental. Cuando el Bazo falla, el Corazón se queda sin sustento y pueden aparecer insomnio, ansiedad o palpitaciones.",
-  },
-  "2-1": {
-    fromName: EL[2].name, fromChinese: EL[2].chinese,
     toName:   EL[1].name, toChinese:   EL[1].chinese,
-    color1: EL[2].iconColor, color2: EL[1].iconColor,
-    cycleLabel: "Ciclo Generador · 相生 Shēng",
+    color1: EL[5].iconColor, color2: EL[1].iconColor,
+    cycleLabel: "Ciclo Generador 相生",
     verb: "engendra",
-    description:
-      "El Corazón (Fuego) impulsa la circulación que lleva sangre al Hígado (Madera). El Hígado almacena y regula la sangre; cuando el Corazón bombea con buen ritmo, el Hígado recibe el flujo necesario para regular el Qi y las emociones. Si el Corazón falla, el Hígado no puede almacenar ni distribuir la sangre correctamente.",
+    video: "FD4FYd6utzM",
+    description: "Cuando te escuchas, permites que todo en ti fluya sin resistencia.",
+  },
+  "1-2": {
+    fromName: EL[1].name, fromChinese: EL[1].chinese,
+    toName:   EL[2].name, toChinese:   EL[2].chinese,
+    color1: EL[1].iconColor, color2: EL[2].iconColor,
+    cycleLabel: "Ciclo Generador 相生",
+    verb: "engendra",
+    video: "a8220pAxffc",
+    description: "Un corazón equilibrado protege tu cuerpo y permite la manifestación de tu verdadero yo.",
   },
 };
 
@@ -267,51 +254,50 @@ const SHEN_RELATIONS: Record<string, ArrowRelation> = {
    Madera→Tierra→Agua→Fuego→Metal→Madera
 ═══════════════════════════════════════════ */
 const KE_RELATIONS: Record<string, ArrowRelation> = {
-  "3-1": {
-    fromName: EL[3].name, fromChinese: EL[3].chinese,
-    toName:   EL[1].name, toChinese:   EL[1].chinese,
-    color1: EL[3].iconColor, color2: EL[1].iconColor,
-    cycleLabel: "Ciclo Controlador · 相克 Kè",
-    verb: "controla",
-    video:"-w67yUcj_SM",
-    description:
-      "El Hígado (Madera) controla al Bazo (Tierra). Si el proceso de depuración del hígado no es correcto, la sangre contendrá más toxinas. El Bazo intentará filtrarlas, incrementando su desgaste por uso excesivo.",
-  },
-  "1-5": {
+  "1-3": {
     fromName: EL[1].name, fromChinese: EL[1].chinese,
-    toName:   EL[5].name, toChinese:   EL[5].chinese,
-    color1: EL[1].iconColor, color2: EL[5].iconColor,
-    cycleLabel: "Ciclo Controlador · 相克 Kè",
+    toName:   EL[3].name, toChinese:   EL[3].chinese,
+    color1: EL[1].iconColor, color2: EL[3].iconColor,
+    cycleLabel: "Ciclo Controlador 相克",
     verb: "controla",
-    description:
-      "El Bazo (Tierra) controla a los Riñones (Agua). Los Riñones filtran la sangre en busca de desequilibrios de electrolitos. Si el Bazo no filtra y elimina las células sanguíneas viejas, los Riñones se sobrecargarán, favoreciendo su desgaste.",
+    video: "aWJBZDaW8bM",
+    description: "La ira no resuelta se transforma en desequilibrio; la conciencia la transforma en crecimiento.",
+  },
+  "3-5": {
+    fromName: EL[3].name, fromChinese: EL[3].chinese,
+    toName:   EL[5].name, toChinese:   EL[5].chinese,
+    color1: EL[3].iconColor, color2: EL[5].iconColor,
+    cycleLabel: "Ciclo Controlador 相克",
+    verb: "controla",
+    video: "U8iyzmfOWu0",
+    description: "La pre-ocupación debilita; la calma y la gestión emocional te hace más fuerte.",
   },
   "5-2": {
     fromName: EL[5].name, fromChinese: EL[5].chinese,
     toName:   EL[2].name, toChinese:   EL[2].chinese,
     color1: EL[5].iconColor, color2: EL[2].iconColor,
-    cycleLabel: "Ciclo Controlador · 相克 Kè",
+    cycleLabel: "Ciclo Controlador 相克",
     verb: "controla",
-    description:
-      "Los Riñones (Agua) controlan al Corazón (Fuego). Si los Riñones no filtran y eliminan el exceso de calcio en la sangre, este puede provocar que el Corazón se contraiga de forma no natural, alterando su funcionamiento.",
+    video: "s-b1j0Snz1w",
+    description: "El miedo se disuelve cuando encuentras te encuentras.",
   },
   "2-4": {
     fromName: EL[2].name, fromChinese: EL[2].chinese,
     toName:   EL[4].name, toChinese:   EL[4].chinese,
     color1: EL[2].iconColor, color2: EL[4].iconColor,
-    cycleLabel: "Ciclo Controlador · 相克 Kè",
+    cycleLabel: "Ciclo Controlador 相克",
     verb: "controla",
-    description:
-      "El Corazón (Fuego) controla a los Pulmones (Metal). Si el Corazón se contrae de forma no natural, la respiración puede volverse demasiado rápida o demasiado lenta. Esto afecta la coordinación entre Corazón y Pulmones y, en consecuencia, al equilibrio general del organismo.",
+    video: "HL1tc3EKLrQ",
+    description: "Respirar con calma es regalarle claridad a tu corazón.",
   },
-  "4-3": {
+  "4-1": {
     fromName: EL[4].name, fromChinese: EL[4].chinese,
-    toName:   EL[3].name, toChinese:   EL[3].chinese,
-    color1: EL[4].iconColor, color2: EL[3].iconColor,
-    cycleLabel: "Ciclo Controlador · 相克 Kè",
+    toName:   EL[1].name, toChinese:   EL[1].chinese,
+    color1: EL[4].iconColor, color2: EL[1].iconColor,
+    cycleLabel: "Ciclo Controlador 相克",
     verb: "controla",
-    description:
-      "Los Pulmones (Metal) controlan al Hígado (Madera). Una respiración anormal puede activar el estado de alerta del organismo. El Hígado gestiona hormonas como el cortisol y la adrenalina, por lo que un exceso prolongado de estas sustancias puede generar un desgaste innecesario hepático.",
+    video: "PNqzu2Y2a9M",
+    description: "Cada respiración consciente es un abrazo a nuestro interior y un agradecimiento a la Vida.",
   },
 };
 
@@ -521,9 +507,9 @@ const PULSE_TABLES: TCMTableData[] = [
    GEOMETRÍA DEL PENTAGRAMA (SVG 100×100)
 ═══════════════════════════════════════════ */
 const CENTERS: Record<number, [number, number]> = {
-  1: [68, 74],   // Madera  — lower right
+  1: [50, 17],   // Madera  — top
   2: [79, 41],   // Fuego   — upper right
-  3: [50, 17],   // Tierra  — top
+  3: [68, 74],   // Tierra  — lower right
   4: [27, 74],   // Metal   — lower left
   5: [22, 41],   // Agua    — upper left
 };
@@ -715,17 +701,13 @@ const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       boxShadow={CARD_SHADOW}
       display="flex" flexDirection="column"
-      alignItems="flex-start"
+      alignItems="center"
       minH={{ base: "300px", md: "420px" }}
       p={{ base: 6, md: 8 }}
     >
       <Text color={textoColor} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
+        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={"10px"}>
         Yin · Yang
-      </Text>
-      <Text color={textoColor} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-        letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={4}>
-        阴阳 · Filosofía Taoísta
       </Text>
 
       <Box flex="1" w="100%" display="flex" flexDirection="column"
@@ -753,10 +735,10 @@ const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
           </Box>
         )}
       </Box>
-      <Text color={textoColor} fontSize="sm" letterSpacing="0.15em"
+      {/* <Text color={textoColor} fontSize="sm" letterSpacing="0.15em"
         textTransform="uppercase" fontStyle="italic" textAlign="center" userSelect="none">
         Haz click para explorar
-      </Text>
+      </Text> */}
       </Box>
     </Box>
   );
@@ -772,17 +754,13 @@ const WuXingCard = ({ onSelectElement }: { onSelectElement: (el: TCMElementData)
       borderRadius="2xl"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       boxShadow={CARD_SHADOW}
-      display="flex" flexDirection="column" alignItems="flex-start"
+      display="flex" flexDirection="column" alignItems="center"
       minH={{ base: "300px", md: "420px" }}
       p={{ base: 6, md: 8 }}
     >
       <Text color={textoColor} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
-        Los Cinco Elementos
-      </Text>
-      <Text color={textoColor} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-        letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={4}>
-        五行 Wǔ Xíng
+        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={"20px"}>
+        Los Cinco Elementos 五行 
       </Text>
 
       <Box w="100%" display="flex" justifyContent="center" flex="1" alignItems="center">
@@ -821,7 +799,7 @@ const WuXingCard = ({ onSelectElement }: { onSelectElement: (el: TCMElementData)
    TARJETA DE CICLO (generador o controlador)
 ═══════════════════════════════════════════ */
 const CycleCard = ({
-  title, chinese, subtitle,
+  title,
   connections,
   relations,
   onSelectRelation,
@@ -840,22 +818,22 @@ const CycleCard = ({
       borderRadius="2xl"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       boxShadow={CARD_SHADOW}
-      display="flex" flexDirection="column" alignItems="flex-start"
+      display="flex" flexDirection="column" alignItems="center"
       minH={{ base: "300px", md: "420px" }}
       p={{ base: 6, md: 8 }}
     >
       <Text color={tcmTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
+        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={"20px"}>
         {title}
       </Text>
-      <Text color={`${tcmTxt}80`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+      {/* <Text color={`${tcmTxt}80`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
         letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={0.5}>
         {chinese}
       </Text>
       <Text color={`${tcmTxt}55`} fontSize="xl" letterSpacing="0.06em"
         fontFamily="'EB Garamond', serif" mb={4}>
         {subtitle}
-      </Text>
+      </Text> */}
 
       <Box w="100%" display="flex" justifyContent="center" flex="1" alignItems="center">
         <Box position="relative" w={{ base: "78%", md: "82%", lg: "76%" }} sx={{ aspectRatio: "1" }}>
@@ -869,12 +847,20 @@ const CycleCard = ({
               {connections.map(([f, t]) => {
                 const el = EL[f];
                 return (
-                  <marker key={`m-${f}-${t}`}
+                  <marker
+                    key={`m-${f}-${t}`}
                     id={`arr-${f}-${t}`}
-                    markerWidth="7" markerHeight="7"
-                    refX="6" refY="3.5" orient="auto"
+                    markerWidth="5"
+                    markerHeight="5"
+                    refX="4.5"
+                    refY="2.5"
+                    orient="auto"
                   >
-                    <path d="M 0 0 L 7 3.5 L 0 7 Z" fill={el.iconColor} opacity="0.75" />
+                    <path
+                      d="M 0 0 L 5 2.5 L 0 5 Z"
+                      fill={el.iconColor}
+                      opacity="0.75"
+                    />
                   </marker>
                 );
               })}
@@ -1067,6 +1053,14 @@ const PhotoModal = ({ src, onClose }: { src: string; onClose: () => void }) => {
 const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
   const [imgError, setImgError]  = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
+
+  const lessonLinks = [
+    { id: "tcm23", label: "Forma" },
+    { id: "tcm24", label: "Capa" },
+    { id: "tcm25", label: "Taichi" },
+  ];
 
   return (
     <>
@@ -1083,10 +1077,49 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
         El diagnóstico de la lengua
       </Text>
       <Text color={`${tcmTxt}80`} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
-        letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={8}>
-        La lengua como espejo de las vísceras
+        letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={3}>
+        La lengua como espejo del interior
       </Text>
 
+      {/* ── Controles: expandir + lecciones ── */}
+      <Flex align="center" gap={2} mb={expanded ? 6 : 0}>
+        <Box
+          as="button"
+          display="flex" alignItems="center" justifyContent="center"
+          w="34px" h="34px" borderRadius="full"
+          bg={`${tcmTxt}18`} border={`1px solid ${tcmTxt}45`}
+          color={tcmTxt} cursor="pointer"
+          _hover={{ bg: `${tcmTxt}35` }}
+          sx={{ transition: "background 0.18s ease" }}
+          onClick={() => setExpanded(p => !p)}
+          title={expanded ? "Colapsar" : "Expandir"}
+        >
+          <Text fontSize="10px" sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease", display: "block" }}>
+            ▼
+          </Text>
+        </Box>
+        {lessonLinks.map(({ id, label }) => (
+          <Flex
+            key={id}
+            as="button"
+            align="center" gap={1}
+            px={3} py={1.5}
+            borderRadius="full"
+            bg={`${tcmTxt}18`} border={`1px solid ${tcmTxt}45`}
+            color={tcmTxt} cursor="pointer"
+            _hover={{ bg: `${tcmTxt}35` }}
+            sx={{ transition: "background 0.18s ease" }}
+            onClick={() => navigate(`/aprendizaje/videoLessonPage/medicinachina/${id}`)}
+          >
+            <Text fontSize="10px">▶</Text>
+            <Text fontSize={{ base: "xs", md: "sm" }} fontFamily="'EB Garamond', serif" fontWeight="600">
+              {label}
+            </Text>
+          </Flex>
+        ))}
+      </Flex>
+
+      <Collapse in={expanded} animateOpacity>
       <Flex
         direction={{ base: "column", md: "row" }}
         gap={{ base: 7, md: 9 }}
@@ -1176,6 +1209,7 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
           ))}
         </Flex>
       </Flex>
+      </Collapse>
     </Box>
 
     {photoOpen && <PhotoModal src="/img/lengua.png" onClose={() => setPhotoOpen(false)} />}
@@ -1183,124 +1217,124 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
   );
 };
 
-const TriTablesCard2 = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
-  const [imgError, setImgError]  = useState(false);
-  const [photoOpen, setPhotoOpen] = useState(false);
+// const TriTablesCard2 = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
+//   const [imgError, setImgError]  = useState(false);
+//   const [photoOpen, setPhotoOpen] = useState(false);
 
-  return (
-    <>
-    <Box
-      bg={CARD_BG} border={`1px solid ${CARD_BORDER}`}
-      borderRadius="2xl"
-      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-      boxShadow={CARD_SHADOW}
-      p={{ base: 6, md: 8 }}
-    >
-      {/* ── Título — arriba del todo ── */}
-      <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
-        fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
-        El diagnóstico del pulso
-      </Text>
-      <Text color={`${tcmTxt}80`} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
-        letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={8}>
-        Los pulsos revelan el estado de los órganos
-      </Text>
+//   return (
+//     <>
+//     <Box
+//       bg={CARD_BG} border={`1px solid ${CARD_BORDER}`}
+//       borderRadius="2xl"
+//       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+//       boxShadow={CARD_SHADOW}
+//       p={{ base: 6, md: 8 }}
+//     >
+//       {/* ── Título — arriba del todo ── */}
+//       <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
+//         fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
+//         El diagnóstico del pulso
+//       </Text>
+//       <Text color={`${tcmTxt}80`} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
+//         letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={8}>
+//         Los pulsos revelan el estado de los órganos
+//       </Text>
 
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        gap={{ base: 7, md: 9 }}
-        align={{ base: "stretch", md: "flex-start" }}
-      >
-        {/* ── Columna izquierda: foto ── */}
-        <Box flexShrink={0} w={{ base: "100%", md: "34%" }}>
-          <Box
-            borderRadius="xl" overflow="hidden"
-            w="100%"
-            sx={{ aspectRatio: "4/3", cursor: imgError ? "default" : "zoom-in" }}
-            bg="rgba(107,4,4,0.30)"
-            border={`1px solid ${CARD_BORDER}`}
-            boxShadow={GLOW_BLUE}
-            minH="180px"
-            display="flex" alignItems="center" justifyContent="center"
-            onClick={() => { if (!imgError) setPhotoOpen(true); }}
-          >
-            {!imgError ? (
-              <Image
-                src="/img/pulso.png"
-                alt=""
-                w="100%" h="100%"
-                objectFit="cover"
-                onError={() => setImgError(true)}
-                draggable={false}
-              />
-            ) : (
-              <Box color={tcmTxt} opacity={0.3}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                </svg>
-              </Box>
-            )}
-          </Box>
-        </Box>
+//       <Flex
+//         direction={{ base: "column", md: "row" }}
+//         gap={{ base: 7, md: 9 }}
+//         align={{ base: "stretch", md: "flex-start" }}
+//       >
+//         {/* ── Columna izquierda: foto ── */}
+//         <Box flexShrink={0} w={{ base: "100%", md: "34%" }}>
+//           <Box
+//             borderRadius="xl" overflow="hidden"
+//             w="100%"
+//             sx={{ aspectRatio: "4/3", cursor: imgError ? "default" : "zoom-in" }}
+//             bg="rgba(107,4,4,0.30)"
+//             border={`1px solid ${CARD_BORDER}`}
+//             boxShadow={GLOW_BLUE}
+//             minH="180px"
+//             display="flex" alignItems="center" justifyContent="center"
+//             onClick={() => { if (!imgError) setPhotoOpen(true); }}
+//           >
+//             {!imgError ? (
+//               <Image
+//                 src="/img/pulso.png"
+//                 alt=""
+//                 w="100%" h="100%"
+//                 objectFit="cover"
+//                 onError={() => setImgError(true)}
+//                 draggable={false}
+//               />
+//             ) : (
+//               <Box color={tcmTxt} opacity={0.3}>
+//                 <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+//                   <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+//                 </svg>
+//               </Box>
+//             )}
+//           </Box>
+//         </Box>
 
-        {/* ── Columna derecha: 3 tablas ── */}
-        <Flex flex="1" gap={{ base: 3, md: 4 }} direction={{ base: "column", sm: "row" }} align="flex-start">
-          {PULSE_TABLES.map((table) => (
-            <Box key={table.header} flex="1" w={{ base: "100%", sm: "auto" }}>
-              {/* Cabecera de tabla */}
-              <Box
-                bg={tcmTxt}
-                borderTopRadius="lg"
-                px={3} py={3}
-                textAlign="center"
-              >
-                <Text color="#3d0000" fontWeight="700" fontSize="xl"
-                  fontFamily="'EB Garamond', serif" letterSpacing="0.14em">
-                  {table.header}
-                </Text>
-              </Box>
+//         {/* ── Columna derecha: 3 tablas ── */}
+//         <Flex flex="1" gap={{ base: 3, md: 4 }} direction={{ base: "column", sm: "row" }} align="flex-start">
+//           {PULSE_TABLES.map((table) => (
+//             <Box key={table.header} flex="1" w={{ base: "100%", sm: "auto" }}>
+//               {/* Cabecera de tabla */}
+//               <Box
+//                 bg={tcmTxt}
+//                 borderTopRadius="lg"
+//                 px={3} py={3}
+//                 textAlign="center"
+//               >
+//                 <Text color="#3d0000" fontWeight="700" fontSize="xl"
+//                   fontFamily="'EB Garamond', serif" letterSpacing="0.14em">
+//                   {table.header}
+//                 </Text>
+//               </Box>
 
-              {/* Opciones */}
-              <Flex direction="column">
-                {table.options.map((opt, idx) => (
-                  <Box
-                    key={idx}
-                    as="button"
-                    w="100%"
-                    px={3} py={3}
-                    bg={idx % 2 === 0 ? `${tcmTxt}30` : `${tcmTxt}1c`}
-                    borderLeft={`1px solid ${tcmTxt}45`}
-                    borderRight={`1px solid ${tcmTxt}45`}
-                    borderBottom={`1px solid ${tcmTxt}30`}
-                    borderBottomRadius={idx === table.options.length - 1 ? "lg" : "0"}
-                    textAlign="left"
-                    cursor="pointer"
-                    _hover={{ bg: `${tcmTxt}50` }}
-                    sx={{
-                      backdropFilter: "blur(8px)",
-                      WebkitBackdropFilter: "blur(8px)",
-                      transition: "background 0.18s ease",
-                    }}
-                    onClick={() => onSelect(opt)}
-                  >
-                    <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }}
-                      fontFamily="'EB Garamond', serif" lineHeight="1.4"
-                      sx={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                      {opt.label}
-                    </Text>
-                  </Box>
-                ))}
-              </Flex>
-            </Box>
-          ))}
-        </Flex>
-      </Flex>
-    </Box>
+//               {/* Opciones */}
+//               <Flex direction="column">
+//                 {table.options.map((opt, idx) => (
+//                   <Box
+//                     key={idx}
+//                     as="button"
+//                     w="100%"
+//                     px={3} py={3}
+//                     bg={idx % 2 === 0 ? `${tcmTxt}30` : `${tcmTxt}1c`}
+//                     borderLeft={`1px solid ${tcmTxt}45`}
+//                     borderRight={`1px solid ${tcmTxt}45`}
+//                     borderBottom={`1px solid ${tcmTxt}30`}
+//                     borderBottomRadius={idx === table.options.length - 1 ? "lg" : "0"}
+//                     textAlign="left"
+//                     cursor="pointer"
+//                     _hover={{ bg: `${tcmTxt}50` }}
+//                     sx={{
+//                       backdropFilter: "blur(8px)",
+//                       WebkitBackdropFilter: "blur(8px)",
+//                       transition: "background 0.18s ease",
+//                     }}
+//                     onClick={() => onSelect(opt)}
+//                   >
+//                     <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }}
+//                       fontFamily="'EB Garamond', serif" lineHeight="1.4"
+//                       sx={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+//                       {opt.label}
+//                     </Text>
+//                   </Box>
+//                 ))}
+//               </Flex>
+//             </Box>
+//           ))}
+//         </Flex>
+//       </Flex>
+//     </Box>
 
-    {photoOpen && <PhotoModal src="/img/pulso.png" onClose={() => setPhotoOpen(false)} />}
-    </>
-  );
-};
+//     {photoOpen && <PhotoModal src="/img/pulso.png" onClose={() => setPhotoOpen(false)} />}
+//     </>
+//   );
+// };
 
 // #region main
 
@@ -1309,10 +1343,10 @@ const TCMPage = () => {
   const [selectedElement, setSelectedElement] = useState<TCMElementData | null>(null);
   const [selectedRelation, setSelectedRelation] = useState<ArrowRelation | null>(null);
   const [selectedOption, setSelectedOption] = useState<TCMTableOption | null>(null);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const cardsReveal    = useReveal();
   const cycles1Reveal  = useReveal();
   const tablesReveal   = useReveal();
-  const tables2Reveal  = useReveal();
   const ctaReveal      = useReveal();
   const navigate       = useNavigate();
 
@@ -1341,6 +1375,8 @@ const TCMPage = () => {
           color={tcmTxt}
         />
 
+       
+
         {/* ── FILA 1: foto + pentagrama ── */}
         <Box
           ref={cardsReveal.ref}
@@ -1368,19 +1404,19 @@ const TCMPage = () => {
           <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align="stretch">
 
             <CycleCard
-              title="Ciclo Generador"
-              chinese="相生 Shēng"
-              subtitle="Agua → Madera → Fuego → Tierra → Metal → Agua"
-              connections={[[5,3],[3,2],[2,1],[1,4],[4,5]]}
+              title="El Ciclo Generador 相生"
+              chinese=""
+              subtitle=""
+              connections={[[2,3],[3,4],[4,5],[5,1],[1,2]]}
               relations={SHEN_RELATIONS}
               onSelectRelation={setSelectedRelation}
             />
 
             <CycleCard
-              title="Ciclo Controlador"
-              chinese="相克 Kè"
-              subtitle="Madera → Tierra → Agua → Fuego → Metal → Madera"
-              connections={[[3,1],[1,5],[5,2],[2,4],[4,3]]}
+              title="El Ciclo Controlador 相克"
+              chinese=""
+              subtitle=""
+              connections={[[1,3],[3,5],[5,2],[2,4],[4,1]]}
               relations={KE_RELATIONS}
               onSelectRelation={setSelectedRelation}
             />
@@ -1400,7 +1436,7 @@ const TCMPage = () => {
           <TriTablesCard onSelect={setSelectedOption} />
         </Box>
 
-        <Box
+        {/* <Box
           ref={tables2Reveal.ref}
           w="100%" maxW="960px"
           pb={{ base: 5, md: 7 }}
@@ -1409,6 +1445,73 @@ const TCMPage = () => {
           transition="opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s"
         >
           <TriTablesCard2 onSelect={setSelectedOption} />
+        </Box> */}
+
+         {/* AVISO — discreto y desplegable */}
+        <Box w="100%" maxW="680px" mb="50px" mx="auto" mt={2}>
+          <Flex
+            as="button"
+            w="100%"
+            align="center"
+            justify="center"
+            gap={3}
+            px={{ base: 5, md: 6 }}
+            py={3}
+            bg={`${tcmBg}55`}
+            border={`1px solid ${tcmTxt}22`}
+            borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
+            cursor="pointer"
+            onClick={() => setDisclaimerOpen((o) => !o)}
+            transition="border-radius 0.2s"
+            sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          >
+            <Flex align="center" gap={2.5}>
+              <Box color={`${tcmTxt}88`} flexShrink={0}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                  <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                </svg>
+              </Box>
+              <Text
+                color={`${tcmTxt}99`}
+                fontSize="md"
+                letterSpacing="0.12em"
+                textTransform="uppercase"
+                fontFamily="'EB Garamond', serif"
+              >
+                Información importante
+              </Text>
+            </Flex>
+            <Text
+              color={`${tcmTxt}66`}
+              fontSize="sm"
+              transition="transform 0.22s"
+              transform={disclaimerOpen ? "rotate(180deg)" : "rotate(0deg)"}
+            >
+              ▾
+            </Text>
+          </Flex>
+          <Collapse in={disclaimerOpen} animateOpacity>
+            <Box
+              px={{ base: 5, md: 6 }}
+              py={4}
+              bg={`${tcmBg}33`}
+              border={`1px solid ${tcmTxt}22`}
+              borderTop="none"
+              borderRadius="0 0 xl xl"
+              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+            >
+              <Text
+                color={`${tcmTxt}cc`}
+                fontSize={{ base: "lg", md: "xl" }}
+                lineHeight="1.85"
+                letterSpacing="0.02em"
+                fontFamily="'EB Garamond', serif"
+                fontStyle="italic"
+              >
+                Esta información no sustituye un diagnóstico profesional. Es solo una herramienta para el autoconocimiento, para encontrar desequilibrios y potenciar tu constitución. Gracias por tu comprensión y por querer cuidarte con coherencia.
+              </Text>
+            </Box>
+          </Collapse>
         </Box>
 
         {/* ── SIGUE APRENDIENDO ── */}

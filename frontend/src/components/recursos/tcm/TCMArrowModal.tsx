@@ -92,52 +92,26 @@ const TCMArrowModal = ({
 
         <Box px={{ base: 6, md: 10 }} pt={10} pb={10}>
 
-          {/* ── Etiqueta de ciclo ── */}
-          <Text
-            color="rgba(0,0,0,0.42)"
-            fontSize="xs"
-            letterSpacing="0.22em"
-            textTransform="uppercase"
-            fontFamily="'EB Garamond', serif"
-            textAlign="center"
-            mb={5}
-          >
-            {relation.cycleLabel}
-          </Text>
-
           {/* ── Relación: Origen → Destino ── */}
-          <Flex align="center" justify="center" gap={{ base: 3, md: 5 }} mb={3}>
+          <Flex align="center" justify="center" mb="30px" gap={{ base: 3, md: 5 }}>
             {/* Elemento origen */}
             <Box textAlign="right" flex="1">
               <Text
                 color={relation.color1}
-                fontSize={{ base: "xl", md: "2xl" }}
+                fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 fontFamily="'EB Garamond', serif"
                 lineHeight="1.1"
+                 style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
               >
-                {relation.fromName}
-              </Text>
-              <Text
-                color={relation.color1 + "bb"}
-                fontSize="sm"
-                fontStyle="italic"
-                letterSpacing="0.04em"
-              >
-                {relation.fromChinese}
+                {relation.fromName + " "+ relation.fromChinese}
               </Text>
             </Box>
 
             {/* Flecha central */}
-            <Flex direction="column" align="center" flexShrink={0} gap={0.5}>
-              <Box
-                w={{ base: "36px", md: "46px" }}
-                h="2px"
-                sx={{
-                  backgroundImage: `linear-gradient(90deg, ${relation.color1}, ${relation.color2})`,
-                }}
-                borderRadius="full"
-              />
+            <Flex direction="column" align="center" flexShrink={0}>
               <Text
                 fontSize={{ base: "20px", md: "26px" }}
                 lineHeight="1"
@@ -149,47 +123,23 @@ const TCMArrowModal = ({
               >
                 →
               </Text>
-              <Text
-                color="rgba(0,0,0,0.45)"
-                fontSize="xs"
-                fontStyle="italic"
-                fontFamily="'EB Garamond', serif"
-                letterSpacing="0.06em"
-              >
-                {relation.verb}
-              </Text>
             </Flex>
 
             {/* Elemento destino */}
             <Box textAlign="left" flex="1">
               <Text
                 color={relation.color2}
-                fontSize={{ base: "xl", md: "2xl" }}
+                fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 fontFamily="'EB Garamond', serif"
                 lineHeight="1.1"
+                 style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
               >
-                {relation.toName}
-              </Text>
-              <Text
-                color={relation.color2 + "bb"}
-                fontSize="sm"
-                fontStyle="italic"
-                letterSpacing="0.04em"
-              >
-                {relation.toChinese}
+                 {relation.toName + " "+ relation.toChinese}
               </Text>
             </Box>
-          </Flex>
-
-          {/* Línea decorativa degradada */}
-          <Flex justify="center" mb={6}>
-            <Box
-              w="120px" h="1.5px" borderRadius="full"
-              sx={{
-                backgroundImage: `linear-gradient(90deg, ${relation.color1}60, ${relation.color2}60)`,
-              }}
-            />
           </Flex>
 
           {/* ── Vídeo ── */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Grid, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
 import {
@@ -465,6 +465,7 @@ const FitoterapiaRecursos = () => {
   const [selected, setSelected]   = useState<Planta | null>(null);
   const [search, setSearch]       = useState("");
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const gridReveal                = useReveal();
   const userId                    = sessionStorage.getItem("userId");
 
@@ -540,6 +541,73 @@ const FitoterapiaRecursos = () => {
           bgColor={fitoterapiaBg}
           color={fitoterapiaTxt}
         />
+
+        {/* AVISO LEGAL — discreto y desplegable */}
+        <Box w="100%" maxW="680px" mx="auto" mt={4} mb={6}>
+          <Flex
+            as="button"
+            w="100%"
+            align="center"
+            justify="space-between"
+            gap={3}
+            px={{ base: 5, md: 6 }}
+            py={3}
+            bg={`${fitoterapiaBg}55`}
+            border={`1px solid ${fitoterapiaTxt}22`}
+            borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
+            cursor="pointer"
+            onClick={() => setDisclaimerOpen((o) => !o)}
+            transition="border-radius 0.2s"
+            sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          >
+            <Flex align="center" gap={2.5}>
+              <Box color={`${fitoterapiaTxt}88`} flexShrink={0}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                  <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                </svg>
+              </Box>
+              <Text
+                color={`${fitoterapiaTxt}99`}
+                fontSize="xs"
+                letterSpacing="0.12em"
+                textTransform="uppercase"
+                fontFamily="'EB Garamond', serif"
+              >
+                Información importante
+              </Text>
+            </Flex>
+            <Text
+              color={`${fitoterapiaTxt}66`}
+              fontSize="sm"
+              transition="transform 0.22s"
+              transform={disclaimerOpen ? "rotate(180deg)" : "rotate(0deg)"}
+            >
+              ▾
+            </Text>
+          </Flex>
+          <Collapse in={disclaimerOpen} animateOpacity>
+            <Box
+              px={{ base: 5, md: 6 }}
+              py={4}
+              bg={`${fitoterapiaBg}33`}
+              border={`1px solid ${fitoterapiaTxt}22`}
+              borderTop="none"
+              borderRadius="0 0 xl xl"
+              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+            >
+              <Text
+                color={`${fitoterapiaTxt}cc`}
+                fontSize={{ base: "sm", md: "md" }}
+                lineHeight="1.85"
+                letterSpacing="0.02em"
+                fontFamily="'EB Garamond', serif"
+                fontStyle="italic"
+              >
+                Esta información está científicamente demostrada y todas las plantas son muy recomendadas a casi toda la población, pero en caso de embarazo, lactancia, alguna enfermedad o patología, por favor, habla con tu médico. Gracias por tu comprensión y por cuidarte con coherencia.
+              </Text>
+            </Box>
+          </Collapse>
+        </Box>
 
         {/* BUSCADOR */}
         <Box w="100%" maxW="500px" mx="auto" mt={3} mb={20} position="relative">

@@ -195,31 +195,13 @@ const TCMElementModal = ({
             </Box>
             <Box>
               <Text
-                color={element.bgColor + "aa"}
-                fontSize="xs"
-                letterSpacing="0.2em"
-                textTransform="uppercase"
-                fontFamily="'EB Garamond', serif"
-                mb={0.5}
-              >
-                Elemento · TCM
-              </Text>
-              <Text
                 color={element.bgColor}
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 fontFamily="'EB Garamond', serif"
                 lineHeight="1.1"
               >
-                {element.name}
-              </Text>
-              <Text
-                color={element.bgColor + "cc"}
-                fontSize={{ base: "lg", md: "xl" }}
-                fontStyle="italic"
-                letterSpacing="0.08em"
-              >
-                {element.chinese}
+                {element.name +" "+element.chinese}
               </Text>
             </Box>
           </Flex>

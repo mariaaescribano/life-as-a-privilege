@@ -224,13 +224,12 @@ const Home = () => {
                   </Text>
                   <Text
                     color="rgba(255,255,255,0.88)"
-                    mt="10px"
+                    mt="15px"
                     fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
                     textShadow="0 1px 5px rgba(0,100,90,0.25)"
                   >
                     Este es tu espacio para aprender e integrar distintas modalidades en las que serás capaz de identificar tus bloqueos y tus trampas.
-                    En esta página encontrarás múltiples recursos para tu camino, pero siempre puedes contactarnos.
                   </Text>
                   <Text
                     color="rgba(255,255,255,0.88)"
@@ -268,7 +267,7 @@ const Home = () => {
                   <Text
                     color="white" fontSize={{ base: "xl", md: "4xl", lg: "5xl" }}
                     fontWeight="700" letterSpacing="0.05em"
-                    textShadow="0 2px 10px rgba(0,100,90,0.4)" textAlign="center"
+                    textShadow="0 2px 10px rgba(7, 19, 17, 0.4)" textAlign="center"
                   >
                     Mi Espacio
                   </Text>
@@ -292,7 +291,7 @@ const Home = () => {
                   fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
                   fontWeight="700"
                   letterSpacing="0.06em"
-                  textShadow="0 2px 10px rgba(0,100,90,0.4)"
+                  textShadow="0 2px 10px rgba(7, 19, 17, 0.4)" 
                   textAlign="center"
                 >
                   Aprendizajes
@@ -339,7 +338,7 @@ const Home = () => {
                         bg={d.bg}
                         borderRadius="full"
                         p={{ base: "6px", md: "8px" }}
-                        border={"3px solid "+ d.txt}
+                        border={"4px solid "+ d.txt}
                         boxShadow="0 4px 16px rgba(107,196,200,0.6)"
                         w={cardIconBox} h={cardIconBox}
                         display="flex" alignItems="center" justifyContent="center"
@@ -487,7 +486,10 @@ const Home = () => {
                       transition="all 0.2s"
                     >
                       <EspacioPersonalIcon color={selectedDisc.txt} size="24px" />
-                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}
+                       style={{
+                        filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                      }}>
                         Mi Espacio
                       </Text>
                     </Flex>
@@ -503,8 +505,11 @@ const Home = () => {
                       _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` } : {}}
                       transition="all 0.2s"
                     >
-                      <AprendizajeIcon color={selectedDisc.txt} size="24px" />
-                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                      <AprendizajeIcon color={selectedDisc.txt} size="30px" />
+                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}
+                      style={{
+                        filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                      }}>
                         Aprendizaje
                       </Text>
                     </Flex>

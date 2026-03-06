@@ -11,10 +11,11 @@ export type Submodulo = {
   link:string;
   descripcion: string;
   video: string;
-  letra: string;
+  letra: string | null;
   detalles: Detalles;
   linkAnterior:string;
   linkNext:string;
+  icon:any | null;
 };
 
 export type ModuloContenido = {

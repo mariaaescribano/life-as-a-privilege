@@ -125,7 +125,7 @@ export default function VideoLessonPage() {
                         justifyContent="center"
                         flexShrink={0}
                       >
-                        {moduloDatos.icon}
+                        {< datos.icon size={{base:"30px", md:"40px"}}/>}
                       </Box>
                       <Text
                         color={moduloDatos.color}

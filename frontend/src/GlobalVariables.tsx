@@ -102,7 +102,7 @@ export function FitoterapiaIcon({ size = { base: "30px", md: "24px" }}) {
    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={fitoterapiaTxt}><path d="m720-600-32 28q-14 13-33 13t-33-11q-14-11-19-28t1-36l16-50-34-20q-16-9-22.5-26t-1.5-34q5-17 20-26.5t34-9.5h40l12-38q6-19 20.5-30.5T720-880q17 0 31.5 11.5T772-838l12 38h40q19 0 33.5 9.5T878-764q7 18 0 35t-22 25l-36 20 16 50q6 19 1 36.5T818-570q-15 11-33.5 11T752-572l-32-28Zm28.5-91.5Q760-703 760-720t-11.5-28.5Q737-760 720-760t-28.5 11.5Q680-737 680-720t11.5 28.5Q703-680 720-680t28.5-11.5ZM552-244q23 60-15 112T430-80q-33 0-62.5-17T324-142q-83 12-137.5-42.5T142-324q-30-17-46-46.5T80-438q0-61 55.5-98.5T244-552l62 26q20-31 53-50.5t71-21.5v-82h60v90q37 11 61 34.5t41 65.5h88v60h-82q-2 38-20.5 71T528-306l24 62Zm-248 24q0-27 4.5-52.5T322-322q-23 11-49.5 15.5T220-304q0 39 22.5 61.5T304-220Zm-74-164q32 0 56.5-8t63.5-32l-120-50q-29-12-49.5.5T160-434q0 26 17 38t53 12Zm200 224q25 0 40.5-17.5T478-214l-54-136q-19 32-29.5 64T384-228q0 33 11.5 50.5T430-160Zm66-222q10-10 16-26.5t6-34.5q0-32-21-54t-52-22q-18 0-34 6t-27 17l78 36 34 78Zm-174 60Z"/></Box>
   );
 }
-export const fitoterapiaDescrip="Explora el poder de las plantas medicinal y comprende cómo la Madre Tierra nos acompaña y nos cuida cada día.";
+export const fitoterapiaDescrip="Explora el poder de las plantas medicinal y comprende cómo la Madre Tierra nos acompaña y nos cuida, si se lo permitimos.";
 
 // Cábala
 export const cabalaNom = "Cábala";
@@ -116,7 +116,7 @@ export function CabalaIcon({ size = "24px"}) {
 export const cabalaDescrip="Explora la sabiduría de la Cábala y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia.";
 
 // Espacio personal
-export function EspacioPersonalIcon({ color = "white", size = "50px"}) {
+export function EspacioPersonalIcon({ color = "white", size = "50px" }) {
   return (
     <Box
       as="svg"
@@ -125,6 +125,9 @@ export function EspacioPersonalIcon({ color = "white", size = "50px"}) {
       width={size}
       height={size}
       fill={color}
+      style={{
+        filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+      }}
     >
       <path d="M480-240Zm-320 80v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440h14q-11 18-16.5 38.5T472-360q-54 1-107.5 14.5T260-306q-9 5-14.5 14t-5.5 20v32h283l80 80H160Zm207-367q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm236 480L576-300q-13-13-18.5-28t-5.5-30q0-32 23-57t59-25q28 0 44 13t38 35q20-20 36.5-34t45.5-14q37 0 59.5 25.5T880-357q0 15-6 30t-18 27L716-160Z"/>
     </Box>
@@ -141,6 +144,9 @@ export function AprendizajeIcon({ color = "white", size = "50px"}) {
       width={size}
       height={size}
       fill={color}
+      style={{
+        filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+      }}
     >
       <path d="M440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6q47 0 91.5 10.5T440-278Zm40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q74 0 126 17t112 52q11 6 16.5 14t5.5 21v418q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-481q15 5 29.5 11t28.5 14q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm140-240v-440l120-40v440l-120 40Zm-340-99Z"/>
     </Box>
@@ -185,10 +191,25 @@ export function CincoElementosIcon({ size = { base: "24px", md: "24px" } }) {
       h={size}              
       fill={tcmTxt}                    
     >
-     <path d="M480-300q75 0 127.5-52.5T660-480v-180H480q-75 0-127.5 52.5T300-480q0 26 7 50t21 46l-16 16q-11 11-11 28t11 28q11 11 28 11t28-11l16-16q22 14 46 21t50 7Zm0-80q-9 0-18-2t-18-5l84-85q11-11 11-28t-11-28q-11-11-28-11t-28 11l-85 84q-3-9-5-18t-2-18q0-42 29-71t71-29h100v100q0 42-29 71t-71 29Zm20-120ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+     <path d="M852-212 732-332l56-56 120 120-56 56ZM708-692l-56-56 120-120 56 56-120 120Zm-456 0L132-812l56-56 120 120-56 56ZM108-212l-56-56 120-120 56 56-120 120Zm246-75 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-361Z"/>
     </Box>
   );
 }
+
+export function MouthIcon({ size = { base: "24px", md: "24px" } }) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 -960 960 960"
+      w={size}
+      h={size}              
+      fill={tcmTxt}                    
+    >
+     <path d="M454-280h52q108 0 176.5-47T805-452q-60 18-146 35t-179 17q-93 0-178.5-17.5T156-452q54 78 122 125t176 47Zm0 80q-147 0-262-89T40-520l202-202q17-17 38.5-27.5T326-760q18 0 35.5 6.5T394-737l86 57 86-57q15-10 32.5-16.5T634-760q24 0 45.5 10.5T718-722l202 202q-37 142-152 231t-262 89h-52Zm27-280q91 0 174.5-18T795-533L662-666q-6-6-13.5-9t-15.5-3q-6 0-11.5 1.5T611-671l-131 87-130-87q-5-4-10.5-5.5T328-678q-8 0-15.5 3t-13.5 9L167-533q55 17 139 35t175 18Z"/>
+    </Box>
+  );
+}
+
 
 export function LifestyleIcon({ size = { base: "24px", md: "24px" } }) {
   return (

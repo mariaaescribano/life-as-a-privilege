@@ -42,7 +42,7 @@ export default function SuccessErrorMessage(props:{
         )}
       </Box>
 
-      <IconButton
+      {/* <IconButton
         aria-label="Close message"
         icon={<CloseIcon />}
         size="sm"
@@ -52,7 +52,7 @@ export default function SuccessErrorMessage(props:{
         top="2"
         right="2"
         onClick={props.onClick}
-      />
+      /> */}
     </Box>
   );
 }

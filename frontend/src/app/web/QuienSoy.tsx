@@ -26,16 +26,26 @@ const libros: Libro[] = [
 ];
 
 const certificados: Certificado[] = [
+  { img: "/certificados/0.png"  }, 
   { img: "/certificados/1.png"  }, { img: "/certificados/2.png"  }, { img: "/certificados/3.png"  },
   { img: "/certificados/4.png"  }, { img: "/certificados/5.png"  }, { img: "/certificados/6.png"  },
   { img: "/certificados/7.png"  }, { img: "/certificados/8.png"  }, { img: "/certificados/9.png"  },
   { img: "/certificados/10.png" }, { img: "/certificados/11.png" }, { img: "/certificados/12.png" },
   { img: "/certificados/13.png" }, { img: "/certificados/14.png" }, { img: "/certificados/15.png" },
   { img: "/certificados/16.png" },
+  { img: "/certificados/17.png" },
+  { img: "/certificados/18.png" },
+  { img: "/certificados/19.png" },
+  { img: "/certificados/20.png" },
+  { img: "/certificados/21.png" },
+  { img: "/certificados/22.png" },
+  { img: "/certificados/23.png" },
+  { img: "/certificados/24.png" },
+  { img: "/certificados/25.png" },
+  { img: "/certificados/26.png" },
 ];
 
 const QuienSoy = () => {
-  const navigate = useNavigate();
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   useEffect(() => {
@@ -100,17 +110,17 @@ const QuienSoy = () => {
               >
                 María Escribano
               </Text>
-              <Text color="rgba(255,255,255,0.65)" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.08em" mb={4}>
-                La Vida es un privilegio, pero nuestra realidad depende de cómo decidamos percibirla.
-              </Text>
+              {/* <Text color="rgba(255,255,255,0.65)" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.08em" mb={4}>
+                Aprendiz · Comunicadora · Acompañante
+              </Text> */}
               <Text
                 color="rgba(255,255,255,0.88)"
                 fontSize={{ base: "lg", md: "xl" }}
                 lineHeight="1.9"
                 letterSpacing="0.02em"
               >
-                Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
-              </Text>
+                Mi propósito es descubrir la Verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
+                </Text>
             </Box>
           </Box>
 

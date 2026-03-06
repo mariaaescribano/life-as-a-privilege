@@ -3,32 +3,33 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-TCM
-- Videos TCM muchos!! + transcripcion + descrip
-- Encasquetar mis vídeos en Recursos
-- Hacer vídeos para cada constitución, desequilibrio de elementos y elemento predominante
-- PLAN: que cuando el usuario tenga un resultado, le salga un vídeo de enlace a youtube explicando , debajo que salga transcripción + descripc
-
-
-
-- poner cartelito de "EN embarazo en caso de lactancia, hablar con un médico"
 - revisar el orden de los ciclos de tcm, NO son correctos ahora mismo
-- mensaje de q "No sustituye un diagnostico profesional, es solo una herramienta para e autoconocimiento y para encontrar desequilibrios y potenciar nuestra constitución"
 
 
 
+- EN el card del diagnostico de la lengua, por favor, haz que
+las opciones sean desplegables , por lo que al replegarlas ocupen menos espacio. 
+y por tanto el card se haga mas pequeño. Necesito que sea abajo del titulo donde
+pongas los iconos, de expandir y otro de video con estos links
+/aprendizaje/videoLessonPage/
+el primero es: tcm23
+el segundo; tcm24 y el ultimo tcm25
 
-IDEA: cuando salga la constitucion desequilibrada, te lleve a ese videos
-Cuando salga desequilibrio/potente elemental te lleva a video + 
-te pone abajo lo q significa (para NO hacer un video por desequilibrio)
-
-
-
-
-
-
-
-
+- EN el card del yin y el yang necesito que pongas el icono de cambio
+abajo a la derecha y que se quede siempre abajo a la derecha, aunque haya mas
+o menos texto. Pero lo importante es que pongas el video 
+ { 
+        id:"tcm2",
+        nom: "1.2 El yin y el yang",
+        link:`${basePath}/tcm2`,
+        linkAnterior:`${basePath}/tcm1`,
+        linkNext:`${basePath}/tcm3`,
+        descripcion:"El verdadero equilibrio es la armonía entre fuerzas que se complementan.",
+        video:"OU5huhK-FxU",
+        letra: letratcm2,
+        detalles: detalles,
+        icon: TCMIcon,
+      },
 
 
 

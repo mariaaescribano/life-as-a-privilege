@@ -258,9 +258,10 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,60,50,0.3)"
             >
-
-              
+              <br />
               Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
+              <br />
+              “La Vida como Privilegio” no es solo un título, es una invitación. La vida no es únicamente lo que sucede, sino la forma en que decidimos mirarla cada día. Esta es una oportunidad para cambiar la perspectiva y transformar tu realidad.
             </Text>
             <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
               <Box
@@ -344,7 +345,7 @@ const Welcome = () => {
                 bg={d.bg}
                 borderRadius="full"
                 p="8px"
-                border={"3px solid "+ d.txt}
+                border={"4px solid "+ d.txt}
                 boxShadow="0 4px 16px rgba(107,196,200,0.6)"
                 w="72px"
                 h="72px"
