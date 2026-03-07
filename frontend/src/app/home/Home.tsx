@@ -216,7 +216,9 @@ const Home = () => {
                     color="white" fontWeight="700"
                     fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
                     textAlign="center" letterSpacing="0.06em" lineHeight="1.2"
-                    textShadow="0 2px 10px rgba(0,100,90,0.4)"
+                    style={{
+                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                    }}
                   >
                     Bienvenid@, {user.name}
                   </Text>
@@ -225,7 +227,10 @@ const Home = () => {
                     mt="15px"
                     fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
-                    textShadow="0 1px 5px rgba(0,100,90,0.25)"
+                    //textShadow="0 1px 5px rgba(0,100,90,0.25)"
+                    style={{
+                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                    }}
                   >
                     Este es tu espacio para aprender e integrar distintas modalidades en las que serás capaz de identificar tus bloqueos y tus trampas.
                   </Text>
@@ -233,7 +238,9 @@ const Home = () => {
                     color="rgba(255,255,255,0.88)"
                     fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                     textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
-                    textShadow="0 1px 5px rgba(0,100,90,0.25)"
+                    style={{
+                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                    }}
                   >
                     Recuerda tratarte con paciencia y con Amor, este camino no es fácil pero merece la pena.
                   </Text>

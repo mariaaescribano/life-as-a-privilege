@@ -154,7 +154,7 @@ const RecBox = ({
         </Box>
         <Text
           color={c}
-          fontSize={{ base: "md", md: "lg" }}
+          fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           letterSpacing="0.07em"
           fontFamily="'EB Garamond', serif"
@@ -170,12 +170,12 @@ const RecBox = ({
               h="5px"
               borderRadius="full"
               bg={`${c}66`}
-              mt="9px"
+              mt="15px"
               flexShrink={0}
             />
             <Text
               color={`${c}cc`}
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "lg", md: "xl" }}
               lineHeight="1.75"
               letterSpacing="0.015em"
             >
@@ -465,7 +465,7 @@ const ResultSection = ({
                 sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
               >
                 <Text
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "lg", md: "xl" }}
                   color={`${c}bb`}
                   lineHeight="1.9"
                   fontStyle="italic"
