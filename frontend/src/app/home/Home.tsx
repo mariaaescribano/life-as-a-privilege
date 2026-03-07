@@ -60,7 +60,7 @@ const disciplines: Discipline[] = [
     renderIcon: (s) => <AstrologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + astrologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + astrologiaNom,
-    available:false
+    available:true
   },
   {
     name: tcmNom, bg: tcmBg, txt: tcmTxt,

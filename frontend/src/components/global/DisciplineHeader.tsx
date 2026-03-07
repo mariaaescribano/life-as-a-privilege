@@ -7,9 +7,10 @@ interface DisciplineHeaderProps {
   bgColor: string;
   color: string;
   maxW?: string;
+  mb?:any;
 }
 
-export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }: DisciplineHeaderProps) {
+export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 } }: DisciplineHeaderProps) {
 
   return (
     <Box
@@ -20,7 +21,7 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px" }
       py={{ base: 8, md: 12 }}
       w="100%"
       maxW={maxW}
-      mb={{ base: 10, md: 12 }}
+      mb= {mb}
     >
       <Flex direction="row" align="center" justify="center" gap={5}>
         <Box

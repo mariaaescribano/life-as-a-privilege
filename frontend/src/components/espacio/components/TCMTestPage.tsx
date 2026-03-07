@@ -142,7 +142,7 @@ const SeccionCard = ({
     <Box
       w="100%"
       maxW="820px"
-      boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${accent}40`}
+     boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
       bg={tcmBg}
       border={`1px solid ${complete ? `${accent}55` : `${accent}1a`}`}
       borderRadius="2xl"
@@ -360,8 +360,8 @@ export default function TCMTestPage({
           <Box
             w="100%"
             maxW="820px"
+            boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
             bg={tcmBg}
-            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
             border="1px solid rgba(218,113,113,0.22)"
             borderRadius="2xl"
             px={{ base: 5, md: 8 }}
@@ -473,7 +473,7 @@ export default function TCMTestPage({
 
           {/* ── RESULTADOS ── */}
           {showResults && (
-            <Box ref={resultsRef} w="100%" maxW="820px" mt={12}>
+            <Box ref={resultsRef} boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"} w="100%" maxW="820px" mt={12}>
 
               {/* Puntuaciones */}
               <Box
@@ -575,7 +575,7 @@ export default function TCMTestPage({
                 borderRadius="2xl"
                 px={{ base: 5, md: 8 }}
                 py={{ base: 6, md: 8 }}
-                boxShadow="0 4px 24px rgba(0,0,0,0.25), 0 0 18px rgba(107,4,4,0.38)"
+                boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
               >
                 <Text
                   color={tcmTxt}
@@ -685,15 +685,15 @@ export default function TCMTestPage({
                     fontWeight="600"
                     letterSpacing="0.08em"
                     border={`1.5px solid ${tcmTxt}55`}
-                    bg={`${tcmBg}99`}
+                    bg={`${tcmBg}`}
+                    borderColor= {tcmTxt}
                     color={tcmTxt}
                     cursor="pointer"
                     transition="all 0.22s"
-                    boxShadow={`0 0 20px ${tcmTxt}22`}
+                    boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
                     _hover={{
                       bg: `${tcmBg}dd`,
-                      borderColor: tcmTxt,
-                      boxShadow: `0 0 32px ${tcmTxt}44`,
+                      
                     }}
                   >
                     <EspacioPersonalIcon color={tcmTxt} size="22px" />

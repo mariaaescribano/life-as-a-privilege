@@ -190,7 +190,7 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,100,90,0.25)"
             >
-              Es una plataforma gratuita que integra conocimientos ancestrales para crear una visión holística del ser humano.
+              Es una plataforma gratuita que integra conocimientos ancestrales para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación personal.
             </Text>
           </Box>
         </Box>

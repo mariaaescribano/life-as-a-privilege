@@ -3,10 +3,16 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-- revisar el orden de los ciclos de tcm, NO son correctos ahora mismo
+- que brillen los cards de welcome y home
+- d
 
 
+en astrologiaEspacio aqui @C:\Users\maria\aprogs\life-as-a-privilege\frontend\src\components\espacio\pages\AstrologiaEspacio.tsx
 
+necesito que hagas una pagina, las bases tiene que ser como la de TCMespacio por ejemplo, es decir, el header, el DisciplineHeader y debajo ya es distinto. 
+Tiene que haber 3 cards en forma de circulo dentro pondre imagenes, estos boxes/cards tienen q estar formando medio circulo , como media luna y debajo la foto del user, de modo que quede un circulo a la derecha, otro en el centro, otro a la izquerda y uno arriba del del centro. Tiene que haber separacion entre ellos pero que igualmente esten iluminados con el color de AstrologiaTxt. 
+
+Debajo de cada circulo menos el del centro que va a ser la foto del user (no editable), tiene que el propio circulo ser clicable y cuando se abra que aparezca una card modal que te dé para elegir varias opciones, como un select. Estos select tienen que ser los signos del zodiaco y a la izquierda tiene que haber un icono del signo. Es importante que el color del fondo del modal sea el de AstrologiaBg con el texto de AstrologiaTxt. Una vez que se elige, tienes que hacer un back que guarde el signo elegido en esta tabla:
 
 
 

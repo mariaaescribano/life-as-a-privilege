@@ -31,7 +31,7 @@ const EspacioHome = () => {
   const photos = [
     { bg: fisiologiaBg,      icon: <FisiologiaIcon size="58px" />,                              link: "/espacio/questions/" + fisiologiaNom,      cursor: "not-allowed" , txt: fisiologiaTxt},
     { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{ base: "58px", md: "58px" }} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer"  , txt: neuropsicologiaTxt   },
-    { bg: astrologiaBg,      icon: <AstrologiaIcon size="58px" />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "not-allowed" , txt: astrologiaTxt},
+    { bg: astrologiaBg,      icon: <AstrologiaIcon size="58px" />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "pointer" , txt: astrologiaTxt},
     { bg: tcmBg,             icon: <TCMIcon size={{ base: "58px", md: "58px" }}/>,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},
     { bg: nutricionBg,       icon: <NutricionIcon size="58px" />,                               link: "/espacio/questions/" + nutricionNom,       cursor: "not-allowed", txt: nutricionTxt },
     { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" , txt: ayurvedaTxt},

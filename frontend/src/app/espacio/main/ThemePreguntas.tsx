@@ -1,9 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { fitoterapiaNom, neuropsicologiaNom, tcmNomLink } from "../../../GlobalVariables";
+import { astrologiaNom, fitoterapiaNom, neuropsicologiaNom, tcmNomLink } from "../../../GlobalVariables";
 import NeurosicologiaEspacio from "../../../components/espacio/pages/NeurosicologiaEspacio";
 import TCMespacio from "../../../components/espacio/pages/TCMespacio";
 import FitoterapiaEspacio from "../../../components/espacio/pages/FitoterapiaEspacio";
+import AstrologiaEspacio from "../../../components/espacio/pages/AstrologiaEspacio";
 
 
 export default function ThemePreguntas() {
@@ -12,6 +13,7 @@ export default function ThemePreguntas() {
   if (themeId === neuropsicologiaNom) return <NeurosicologiaEspacio />;
   if (themeId === tcmNomLink)         return <TCMespacio />;
   if (themeId === fitoterapiaNom)     return <FitoterapiaEspacio />;
+  if (themeId === astrologiaNom)     return <AstrologiaEspacio />;
 
   return null;
 }

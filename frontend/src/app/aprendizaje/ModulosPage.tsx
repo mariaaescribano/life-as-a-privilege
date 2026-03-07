@@ -18,6 +18,7 @@ import {
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
+import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 
 export default function ModulesPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
@@ -33,8 +34,8 @@ export default function ModulesPage() {
         return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
       case neuropsicologiaNom:
         return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos: modulosNeuroPsicologia };
-      case "astrologia":
-        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon /> };
+      case astrologiaNom:
+        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon />, modulos: modulosAstrologia };
       case tcmNomLink:
         return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos: modulostcm };
       case "nutricion":

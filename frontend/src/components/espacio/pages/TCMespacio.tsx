@@ -303,11 +303,12 @@ const ResultSection = ({
       px={{ base: 6, md: 10 }}
       pt={{ base: 8, md: 10 }}
       pb={{ base: 8, md: 10 }}
-      boxShadow={
-        locked
-          ? "0 4px 24px rgba(0,0,0,0.2)"
-          : `0 6px 40px rgba(0,0,0,0.3), 0 0 40px ${tcmTxt}15`
-      }
+      boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+      // boxShadow={
+      //   locked
+      //     ? "0 4px 24px rgba(0,0,0,0.2)"
+      //     : `0 6px 40px rgba(0,0,0,0.3), 0 0 40px ${tcmTxt}15`
+      // }
     >
       {/* ── Encabezado ── */}
       <Flex w="100%" align="center" justify="space-between" gap={4} mb={{ base: 6, md: 8 }} flexWrap="wrap">
@@ -609,7 +610,7 @@ export default function TCMespacio() {
         <Flex
           direction="column"
           alignItems="center"
-          gap={{ base: 8, md: 10 }}
+          gap="20px"
           px={{ base: 5, md: 10, lg: 16 }}
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
@@ -620,24 +621,25 @@ export default function TCMespacio() {
             bgColor={tcmBg}
             color={tcmTxt}
             maxW="900px"
+            mb={{ base: 0, md: 0 }}
           />
 
           {/* ══ SPINNER DE CARGA ══ */}
           {loading && <SpinnerTurquesa />}
-
           {!loading && (
             <>
               {/* ══ TARJETAS DE ESTADO DE TESTS ══ */}
               <Box
                 w="100%"
                 maxW="900px"
+                mt="20px"
+                boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
                 bg={tcmBg}
                 border={`1.5px solid ${tcmTxt}55`}
                 borderRadius="3xl"
                 px={{ base: 6, md: 10 }}
                 pt={{ base: 8, md: 10 }}
                 pb={{ base: 8, md: 10 }}
-                boxShadow={`0 6px 48px rgba(0,0,0,0.28), 0 0 60px ${tcmTxt}22`}
               >
                 <Flex justify="center" align="center" gap={3} mb={{ base: 8, md: 10 }}>
                   <Box
