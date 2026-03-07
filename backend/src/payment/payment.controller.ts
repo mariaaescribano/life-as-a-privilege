@@ -7,6 +7,6 @@ export class PaymentController {
 
   @Post('create-intent')
   createPaymentIntent(@Body() body: { amount: number }) {
-    return this.paymentService.createPaymentIntent(body.amount);
+   // return this.paymentService.createPaymentIntent(body.amount);
   }
 }
