@@ -52,7 +52,9 @@ export const AprendizajeHome = () => {
               color="white"
               fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
               fontWeight="700"
-              
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
               letterSpacing="0.05em"
               textShadow="0 2px 10px rgba(0,100,90,0.4)"
             >

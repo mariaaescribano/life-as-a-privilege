@@ -309,7 +309,7 @@ type TCMTableData   = { header: string; options: TCMTableOption[] };
 
 const TABLES: TCMTableData[] = [
   {
-    header: "Color de la lengua",
+    header: "El color",
     options: [
       {
         label: "Pálida (Deficiencia de Sangre)",
@@ -359,7 +359,7 @@ const TABLES: TCMTableData[] = [
     ],
   },
   {
-    header: "Rasgo de la lengua",
+    header: "La forma",
     options: [
       {
         label: "Delgada o pequeña",
@@ -394,7 +394,7 @@ const TABLES: TCMTableData[] = [
     ],
   },
   {
-    header: "Color de la capa",
+    header: "La capa",
     options: [
       {
         label: "Blanca fina",
@@ -440,68 +440,68 @@ const TABLES: TCMTableData[] = [
   },
 ];
 
-const PULSE_TABLES: TCMTableData[] = [
-  {
-    header: "Velocidad del pulso",
-    options: [
-      {
-        label: "Rápido",
-        description:
-          "Indica calor interno o exceso de Yang. Puede observarse en fiebre, inflamación o procesos agudos.",
-      },
-      {
-        label: "Lento",
-        description:
-          "Indica frío interno o deficiencia de Yang. Se asocia a metabolismo lento y falta de energía.",
-      },
-    ],
-  },
-  {
-    header: "Profundidad",
-    options: [
-      {
-        label: "Superficial (flotante)",
-        description:
-          "Se percibe con leve presión. Sugiere condición externa o invasión de factores externos como viento o frío.",
-      },
-      {
-        label: "Profundo",
-        description:
-          "Solo se percibe con presión fuerte. Indica trastorno interno, generalmente relacionado con órganos internos.",
-      },
-    ],
-  },
-  {
-    header: "Fuerza y forma",
-    options: [
-      {
-        label: "Débil o fino",
-        description:
-          "Indica deficiencia de Qi o Sangre. Se siente débil al aplicar presión.",
-      },
-      {
-        label: "Fuerte o pleno",
-        description:
-          "Indica exceso de Qi o presencia de patógeno persistente.",
-      },
-      {
-        label: "Áspero o irregular",
-        description:
-          "Sugiere estasis de Sangre, retención de alimentos o acumulación de flema/humedad. Puede asociarse a deficiencia de Qi y Sangre.",
-      },
-      {
-        label: "Resbaladizo (liso)",
-        description:
-          "Sensación suave y rodante. Puede indicar flema, humedad o embarazo.",
-      },
-      {
-        label: "Tenso o en alambre",
-        description:
-          "Pulso rígido y tenso. Asociado a frío interno o dolor interior.",
-      },
-    ],
-  },
-];
+// const PULSE_TABLES: TCMTableData[] = [
+//   {
+//     header: "Velocidad del pulso",
+//     options: [
+//       {
+//         label: "Rápido",
+//         description:
+//           "Indica calor interno o exceso de Yang. Puede observarse en fiebre, inflamación o procesos agudos.",
+//       },
+//       {
+//         label: "Lento",
+//         description:
+//           "Indica frío interno o deficiencia de Yang. Se asocia a metabolismo lento y falta de energía.",
+//       },
+//     ],
+//   },
+//   {
+//     header: "Profundidad",
+//     options: [
+//       {
+//         label: "Superficial (flotante)",
+//         description:
+//           "Se percibe con leve presión. Sugiere condición externa o invasión de factores externos como viento o frío.",
+//       },
+//       {
+//         label: "Profundo",
+//         description:
+//           "Solo se percibe con presión fuerte. Indica trastorno interno, generalmente relacionado con órganos internos.",
+//       },
+//     ],
+//   },
+//   {
+//     header: "Fuerza y forma",
+//     options: [
+//       {
+//         label: "Débil o fino",
+//         description:
+//           "Indica deficiencia de Qi o Sangre. Se siente débil al aplicar presión.",
+//       },
+//       {
+//         label: "Fuerte o pleno",
+//         description:
+//           "Indica exceso de Qi o presencia de patógeno persistente.",
+//       },
+//       {
+//         label: "Áspero o irregular",
+//         description:
+//           "Sugiere estasis de Sangre, retención de alimentos o acumulación de flema/humedad. Puede asociarse a deficiencia de Qi y Sangre.",
+//       },
+//       {
+//         label: "Resbaladizo (liso)",
+//         description:
+//           "Sensación suave y rodante. Puede indicar flema, humedad o embarazo.",
+//       },
+//       {
+//         label: "Tenso o en alambre",
+//         description:
+//           "Pulso rígido y tenso. Asociado a frío interno o dolor interior.",
+//       },
+//     ],
+//   },
+// ];
 
 /* ═══════════════════════════════════════════
    GEOMETRÍA DEL PENTAGRAMA (SVG 100×100)
@@ -533,22 +533,12 @@ const getArrow = (fromId: number, toId: number) => {
 ═══════════════════════════════════════════ */
 const MODAL_CONTENT = {
   light: {
-    subtitle: "Yang 陽",
-    paragraphs: [
-      "La energía Yang en la Medicina Tradicional China es la fuerza activa, cálida y ascendente que impulsa el movimiento, el metabolismo y la transformación. Representa dinamismo, expansión y capacidad de acción. Es la energía que activa el chi y sostiene las funciones del organismo.",
-      "En equilibrio, aporta vitalidad estable, temperatura corporal adecuada y motivación clara.",
-      "En exceso, genera hiperactividad, agitación y sobrecalentamiento.",
-      "En deficiencia, produce frío interno, metabolismo lento y debilidad funcional."
-    ],
+    subtitle: "El Yang",
+    text: "Fuerza activa, cálida y expansiva que impulsa el movimiento y el metabolismo. En equilibrio: vitalidad estable y motivación. En exceso: agitación y sobrecalentamiento. En deficiencia: frío interno y metabolismo lento.",
   },
   dark: {
-    subtitle: "Yin 阴",
-    paragraphs: [
-      "La energía Yin en la Medicina Tradicional China representa la sustancia, el enfriamiento, la nutrición y la calma. Está relacionada con la sangre, los líquidos corporales y los procesos de reposo y reparación. Es la base material que equilibra y contiene la actividad del Yang.",
-      "En equilibrio, hay buena hidratación, descanso adecuado, estabilidad emocional y regulación térmica.",
-      "En exceso, puede manifestarse lentitud funcional, pesadez o estancamiento.",
-      "En deficiencia, aparece sequedad, calor vacío, agitación interna y sensación de energía alta pero inestable."
-    ],
+    subtitle: "El Yin",
+    text: "Sustancia, enfriamiento y nutrición profunda. Sostiene la sangre y los fluidos, favorece el reposo y la reparación. En equilibrio: calma, hidratación y sueño reparador. En exceso: lentitud y estancamiento. En deficiencia: sequedad, calor vacío e inestabilidad.",
   },
 };
 
@@ -568,40 +558,34 @@ const TCMInfoModal = ({ onClose }: { onClose: () => void }) => {
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
-  const content     = isDark ? MODAL_CONTENT.dark : MODAL_CONTENT.light;
-  const panelBg     = isDark ? "#0c0202"  : "#ffffff";
-  const textColor   = isDark ? "rgba(245,224,224,0.88)" : "rgba(26,2,2,0.80)";
-  const closeBg     = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)";
-  const closeBdr    = isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)";
-  const closeClr    = isDark ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.45)";
+  const content   = isDark ? MODAL_CONTENT.dark : MODAL_CONTENT.light;
+  const panelBg   = isDark ? "#0c0202"  : "#ffffff";
+  const textColor = isDark ? "rgba(245,224,224,0.88)" : "rgba(26,2,2,0.80)";
+  const closeBg   = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)";
+  const closeBdr  = isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)";
+  const closeClr  = isDark ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.45)";
 
   return (
     <Box
       position="fixed" inset={0} zIndex={1000}
       bg="rgba(0,0,0,0.68)"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
+      display="flex" alignItems="center" justifyContent="center"
       px={4} py={6}
       onClick={onClose}
     >
+      {/* Panel — sin overflow propio para que el toggle quede fijo */}
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
-        w="95vw"
-        maxW="720px"
-        maxH="90vh"
-        overflowY="auto"
+        w="95vw" maxW="640px" maxH="90vh"
         borderRadius="24px"
         bg={panelBg}
         boxShadow="0 32px 80px rgba(0,0,0,0.65)"
-        sx={{
-          transition: "background-color 0.38s ease",
-          "&::-webkit-scrollbar": { width: "5px" },
-          "&::-webkit-scrollbar-thumb": { background: "rgba(107,4,4,0.4)", borderRadius: "999px" },
-        }}
+        display="flex" flexDirection="column"
+        sx={{ transition: "background-color 0.38s ease" }}
       >
+        {/* Botón cerrar */}
         <Box
           as="button"
           position="absolute" top="13px" right="13px"
@@ -614,25 +598,46 @@ const TCMInfoModal = ({ onClose }: { onClose: () => void }) => {
           onClick={onClose}
         >✕</Box>
 
-        <Box px={{ base: 6, md: 10 }} pt={10} pb={14}>
-          <Box textAlign="center" mb={7}>
-            <Text color={textColor} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
-              letterSpacing="0.1em" mt={2} sx={{ transition: "color 0.38s ease" }}>
-              {content.subtitle}
-            </Text>
+        {/* Contenido desplazable */}
+        <Box
+          overflowY="auto" flex="1"
+          px={{ base: 6, md: 10 }} pt={10} pb={16}
+          sx={{
+            "&::-webkit-scrollbar": { width: "5px" },
+            "&::-webkit-scrollbar-thumb": { background: "rgba(107,4,4,0.4)", borderRadius: "999px" },
+          }}
+        >
+          {/* Subtítulo */}
+          <Text color={textColor} fontSize={{ base: "2xl", md: "3xl" }} fontStyle="bold"
+            letterSpacing="0.1em" mb={4} textAlign="center"
+            sx={{ transition: "color 0.38s ease" }}>
+            {content.subtitle}
+          </Text>
+
+          {/* Vídeo */}
+          <Box borderRadius="xl" overflow="hidden" w="100%" mb={5}
+            sx={{ aspectRatio: "16/9" }}
+            boxShadow="0 4px 16px rgba(0,0,0,0.35)"
+          >
+            <iframe
+              src="https://www.youtube.com/embed/OU5huhK-FxU"
+              width="100%" height="100%"
+              style={{ display: "block", border: "none" }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="Yin Yang"
+            />
           </Box>
-          <Box h="1px" bg={textColor} mb={7} opacity={0.8}/>
-          <Flex direction="column" gap={5}>
-            {content.paragraphs.map((p, i) => (
-              <Text key={`${isDark ? "d" : "l"}-${i}`} color={textColor}
-                fontSize={{ base: "lg", md: "xl" }} lineHeight="1.88"
-                fontFamily="'EB Garamond', serif" sx={{ transition: "color 0.38s ease" }}>
-                {p}
-              </Text>
-            ))}
-          </Flex>
+
+          {/* Texto resumido */}
+          <Text color={textColor} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.88"
+            fontFamily="'EB Garamond', serif"
+            sx={{ transition: "color 0.38s ease" }}>
+            {content.text}
+          </Text>
         </Box>
 
+        {/* Toggle — siempre visible, fuera del área desplazable */}
         <Box
           as="button"
           position="absolute" bottom="13px" right="13px"
@@ -641,7 +646,8 @@ const TCMInfoModal = ({ onClose }: { onClose: () => void }) => {
           cursor="pointer" bg="transparent" border="none" p={0}
           sx={{ transition: "transform 0.35s ease" }}
           _hover={{ transform: "rotate(90deg)" }}
-          onClick={() => setIsDark(d => !d)}
+          onClick={() => setIsDark((d) => !d)}
+          title={isDark ? "Ver Yang" : "Ver Yin"}
         >
           <YinYangIcon size={42} isDark={isDark} />
         </Box>
@@ -735,10 +741,6 @@ const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
           </Box>
         )}
       </Box>
-      {/* <Text color={textoColor} fontSize="sm" letterSpacing="0.15em"
-        textTransform="uppercase" fontStyle="italic" textAlign="center" userSelect="none">
-        Haz click para explorar
-      </Text> */}
       </Box>
     </Box>
   );
@@ -1050,17 +1052,16 @@ const PhotoModal = ({ src, onClose }: { src: string; onClose: () => void }) => {
 /* ═══════════════════════════════════════════
    CARD — TABLAS A / B / C + FOTO
 ═══════════════════════════════════════════ */
+const VIDEO_IDS = ["tcm22", "tcm23", "tcm24"];
+
 const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
-  const [imgError, setImgError]  = useState(false);
+  const [imgError, setImgError]   = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded]   = useState([false, false, false]);
   const navigate = useNavigate();
 
-  const lessonLinks = [
-    { id: "tcm23", label: "Forma" },
-    { id: "tcm24", label: "Capa" },
-    { id: "tcm25", label: "Taichi" },
-  ];
+  const toggle = (idx: number) =>
+    setExpanded(prev => prev.map((v, i) => (i === idx ? !v : v)));
 
   return (
     <>
@@ -1071,70 +1072,32 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
       boxShadow={CARD_SHADOW}
       p={{ base: 6, md: 8 }}
     >
-      {/* ── Título — arriba del todo ── */}
+      {/* ── Título ── */}
       <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
         fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
         El diagnóstico de la lengua
       </Text>
       <Text color={`${tcmTxt}80`} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
-        letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={3}>
+        letterSpacing="0.08em" fontFamily="'EB Garamond', serif">
         La lengua como espejo del interior
       </Text>
 
-      {/* ── Controles: expandir + lecciones ── */}
-      <Flex align="center" gap={2} mb={expanded ? 6 : 0}>
-        <Box
-          as="button"
-          display="flex" alignItems="center" justifyContent="center"
-          w="34px" h="34px" borderRadius="full"
-          bg={`${tcmTxt}18`} border={`1px solid ${tcmTxt}45`}
-          color={tcmTxt} cursor="pointer"
-          _hover={{ bg: `${tcmTxt}35` }}
-          sx={{ transition: "background 0.18s ease" }}
-          onClick={() => setExpanded(p => !p)}
-          title={expanded ? "Colapsar" : "Expandir"}
-        >
-          <Text fontSize="10px" sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease", display: "block" }}>
-            ▼
-          </Text>
-        </Box>
-        {lessonLinks.map(({ id, label }) => (
-          <Flex
-            key={id}
-            as="button"
-            align="center" gap={1}
-            px={3} py={1.5}
-            borderRadius="full"
-            bg={`${tcmTxt}18`} border={`1px solid ${tcmTxt}45`}
-            color={tcmTxt} cursor="pointer"
-            _hover={{ bg: `${tcmTxt}35` }}
-            sx={{ transition: "background 0.18s ease" }}
-            onClick={() => navigate(`/aprendizaje/videoLessonPage/medicinachina/${id}`)}
-          >
-            <Text fontSize="10px">▶</Text>
-            <Text fontSize={{ base: "xs", md: "sm" }} fontFamily="'EB Garamond', serif" fontWeight="600">
-              {label}
-            </Text>
-          </Flex>
-        ))}
-      </Flex>
-
-      <Collapse in={expanded} animateOpacity>
+      {/* ── Fila principal: foto + 3 boxes ── */}
       <Flex
         direction={{ base: "column", md: "row" }}
-        gap={{ base: 7, md: 9 }}
+        gap={{ base: 6, md: 7 }} mt="50px"
         align={{ base: "stretch", md: "flex-start" }}
       >
-        {/* ── Columna izquierda: foto ── */}
-        <Box flexShrink={0} w={{ base: "100%", md: "34%" }}>
+        {/* ── Foto ── */}
+        <Box flexShrink={0} w={{ base: "100%", md: "30%" }}>
           <Box
             borderRadius="xl" overflow="hidden"
             w="100%"
             sx={{ aspectRatio: "4/3", cursor: imgError ? "default" : "zoom-in" }}
             bg="rgba(107,4,4,0.30)"
             border={`1px solid ${CARD_BORDER}`}
-            boxShadow={GLOW_BLUE}
-            minH="180px"
+            boxShadow={ "0 4px 16px rgba(0,0,0,0.28), 0 0 20px rgba(251, 255, 255, 0.5), 0 0 45px rgba(255, 255, 255, 0.2)"}
+            minH="160px"
             display="flex" alignItems="center" justifyContent="center"
             onClick={() => { if (!imgError) setPhotoOpen(true); }}
           >
@@ -1157,59 +1120,104 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
           </Box>
         </Box>
 
-        {/* ── Columna derecha: 3 tablas ── */}
+        {/* ── 3 Boxes ── */}
         <Flex flex="1" gap={{ base: 3, md: 4 }} direction={{ base: "column", sm: "row" }} align="flex-start">
-          {TABLES.map((table) => (
+          {TABLES.map((table, idx) => (
             <Box key={table.header} flex="1" w={{ base: "100%", sm: "auto" }}>
-              {/* Cabecera de tabla */}
+
+              {/* Cabecera: título + iconos */}
               <Box
                 bg={tcmTxt}
                 borderTopRadius="lg"
-                px={3} py={3}
+                borderBottomRadius={expanded[idx] ? "0" : "lg"}
+                px={3} pt={3} pb={2}
                 textAlign="center"
+                sx={{ transition: "border-radius 0.22s ease" }}
               >
-                <Text color="#3d0000" fontWeight="700" fontSize="xl"
-                  fontFamily="'EB Garamond', serif" letterSpacing="0.14em">
+                <Text color="#3d0000" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                  fontFamily="'EB Garamond', serif" letterSpacing="0.10em" lineHeight="1.3" mb={2}>
                   {table.header}
                 </Text>
+
+                {/* Iconos */}
+                <Flex justify="center" gap={3}>
+                  {/* Icono de video */}
+                  <Box
+                    as="button"
+                    display="flex" alignItems="center" justifyContent="center"
+                    w="32px" h="32px" borderRadius="full"
+                    bg="rgba(61,0,0,0.18)" border="1px solid rgba(61,0,0,0.35)"
+                    color="#3d0000" cursor="pointer"
+                    _hover={{ bg: "rgba(61,0,0,0.34)", transform: "scale(1.10)" }}
+                    sx={{ transition: "background 0.18s ease, transform 0.18s ease" }}
+                    onClick={() => navigate(`/aprendizaje/videoLessonPage/medicinachina/${VIDEO_IDS[idx]}`)}
+                    title="Ver video"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </Box>
+
+                  {/* Icono de despliegue */}
+                  <Box
+                    as="button"
+                    display="flex" alignItems="center" justifyContent="center"
+                    w="32px" h="32px" borderRadius="full"
+                    bg="rgba(61,0,0,0.18)" border="1px solid rgba(61,0,0,0.35)"
+                    color="#3d0000" cursor="pointer"
+                    _hover={{ bg: "rgba(61,0,0,0.34)", transform: "scale(1.10)" }}
+                    sx={{ transition: "background 0.18s ease, transform 0.18s ease" }}
+                    onClick={() => toggle(idx)}
+                    title={expanded[idx] ? "Colapsar" : "Expandir"}
+                  >
+                    <svg
+                      width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
+                      style={{ transform: expanded[idx] ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </Box>
+                </Flex>
               </Box>
 
-              {/* Opciones */}
-              <Flex direction="column">
-                {table.options.map((opt, idx) => (
-                  <Box
-                    key={idx}
-                    as="button"
-                    w="100%"
-                    px={3} py={3}
-                    bg={idx % 2 === 0 ? `${tcmTxt}30` : `${tcmTxt}1c`}
-                    borderLeft={`1px solid ${tcmTxt}45`}
-                    borderRight={`1px solid ${tcmTxt}45`}
-                    borderBottom={`1px solid ${tcmTxt}30`}
-                    borderBottomRadius={idx === table.options.length - 1 ? "lg" : "0"}
-                    textAlign="left"
-                    cursor="pointer"
-                    _hover={{ bg: `${tcmTxt}50` }}
-                    sx={{
-                      backdropFilter: "blur(8px)",
-                      WebkitBackdropFilter: "blur(8px)",
-                      transition: "background 0.18s ease",
-                    }}
-                    onClick={() => onSelect(opt)}
-                  >
-                    <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }}
-                      fontFamily="'EB Garamond', serif" lineHeight="1.4"
-                      sx={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                      {opt.label}
-                    </Text>
-                  </Box>
-                ))}
-              </Flex>
+              {/* Opciones desplegables */}
+              <Collapse in={expanded[idx]} animateOpacity>
+                <Flex direction="column">
+                  {table.options.map((opt, oi) => (
+                    <Box
+                      key={oi}
+                      as="button"
+                      w="100%"
+                      px={3} py={3}
+                      bg={oi % 2 === 0 ? `${tcmTxt}30` : `${tcmTxt}1c`}
+                      borderLeft={`1px solid ${tcmTxt}45`}
+                      borderRight={`1px solid ${tcmTxt}45`}
+                      borderBottom={`1px solid ${tcmTxt}30`}
+                      borderBottomRadius={oi === table.options.length - 1 ? "lg" : "0"}
+                      textAlign="left"
+                      cursor="pointer"
+                      _hover={{ bg: `${tcmTxt}50` }}
+                      sx={{
+                        backdropFilter: "blur(8px)",
+                        WebkitBackdropFilter: "blur(8px)",
+                        transition: "background 0.18s ease",
+                      }}
+                      onClick={() => onSelect(opt)}
+                    >
+                      <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }}
+                        fontFamily="'EB Garamond', serif" lineHeight="1.4"
+                        sx={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                        {opt.label}
+                      </Text>
+                    </Box>
+                  ))}
+                </Flex>
+              </Collapse>
+
             </Box>
           ))}
         </Flex>
       </Flex>
-      </Collapse>
     </Box>
 
     {photoOpen && <PhotoModal src="/img/lengua.png" onClose={() => setPhotoOpen(false)} />}

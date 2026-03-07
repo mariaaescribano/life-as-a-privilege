@@ -336,7 +336,7 @@ export const modulostcm: ModuloContenido[] = [
         nom: "5.4 La capa de la lengua",
         link:`${basePath}/tcm24`,
         linkAnterior:`${basePath}/tcm23`,
-        linkNext:`${basePath}/tcm25`,
+        linkNext:"",
         descripcion:"La capa de la lengua revela tu armonía interior.",
         video:"AhobpjkmH0I",
         letra: letratcm24,
@@ -346,22 +346,22 @@ export const modulostcm: ModuloContenido[] = [
     ],
   },
 
-  {
-    title: "7. El estilo de Vida",
-    icon: LifestyleIcon,
-    submodules: [
-      { 
-        id:"tcm25",
-        nom: "7.1 El taichi y la paz interior",
-        link:`${basePath}/tcm25`,
-        linkAnterior:`${basePath}/tcm24`,
-        linkNext:"",
-        descripcion:"El movimiento consciente y la meditación son caminos hacia tu vitalidad más auténtica.",
-        video:"YezjA0ZSK2Y",
-        letra: letratcm25,
-        detalles: detalles,
-        icon: LifestyleIcon
-      },
-    ],
-  },
+  // {
+  //   title: "7. El estilo de Vida",
+  //   icon: LifestyleIcon,
+  //   submodules: [
+  //     { 
+  //       id:"tcm25",
+  //       nom: "7.1 El taichi y la paz interior",
+  //       link:`${basePath}/tcm25`,
+  //       linkAnterior:`${basePath}/tcm24`,
+  //       linkNext:"",
+  //       descripcion:"El movimiento consciente y la meditación son caminos hacia tu vitalidad más auténtica.",
+  //       video:"YezjA0ZSK2Y",
+  //       letra: letratcm25,
+  //       detalles: detalles,
+  //       icon: LifestyleIcon
+  //     },
+  //   ],
+  // },
 ];

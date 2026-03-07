@@ -103,7 +103,7 @@ const TCMArrowModal = ({
                 fontFamily="'EB Garamond', serif"
                 lineHeight="1.1"
                  style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                filter: "drop-shadow(4px 4px 6px rgba(61, 61, 61, 0.5))"
               }}
               >
                 {relation.fromName + " "+ relation.fromChinese}
@@ -134,7 +134,7 @@ const TCMArrowModal = ({
                 fontFamily="'EB Garamond', serif"
                 lineHeight="1.1"
                  style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                filter: "drop-shadow(4px 4px 6px rgba(61, 61, 61, 0.5))"
               }}
               >
                  {relation.toName + " "+ relation.toChinese}

@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Box, Collapse, Flex, Grid, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Grid, HStack, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
 import {
   API_URL,
   fitoterapiaBg,
   FitoterapiaIcon,
+  FitoterapiaIconOscuro,
   fitoterapiaNom,
   fitoterapiaTxt,
 } from "../../../GlobalVariables";
@@ -26,27 +27,65 @@ const BotanicalCorner = ({ flip = false }: { flip?: boolean }) => (
     left={flip ? "auto" : 0}
     right={flip ? 0 : "auto"}
     transform={flip ? "rotate(180deg)" : "none"}
-    opacity={0.17}
+    opacity={0.18}
     pointerEvents="none"
     zIndex={0}
   >
     <svg width="170" height="170" viewBox="0 0 170 170" fill="none">
-      <path d="M 10 160 C 22 124 55 88 90 58 C 118 34 142 18 162 8" stroke="#1e4a18" strokeWidth="2.2" strokeLinecap="round"/>
-      <path d="M 30 136 C 10 122 8 102 22 92 C 40 104 44 124 30 136 Z" fill="#1e4a18"/>
-      <path d="M 30 136 C 24 116 18 98 22 92" stroke="#1e4a18" strokeWidth="0.9" fill="none"/>
-      <path d="M 58 108 C 72 92 74 72 60 62 C 44 72 42 92 58 108 Z" fill="#1e4a18"/>
-      <path d="M 58 108 C 56 90 54 74 60 62" stroke="#1e4a18" strokeWidth="0.9" fill="none"/>
-      <path d="M 88 78 C 72 64 70 46 84 38 C 102 48 104 66 88 78 Z" fill="#1e4a18"/>
-      <path d="M 88 78 C 82 62 80 48 84 38" stroke="#1e4a18" strokeWidth="0.9" fill="none"/>
-      <path d="M 118 50 C 130 36 134 18 120 10 C 104 18 100 36 118 50 Z" fill="#1e4a18"/>
-      <path d="M 118 50 C 116 34 114 20 120 10" stroke="#1e4a18" strokeWidth="0.9" fill="none"/>
-      <circle cx="10" cy="158" r="5.5" fill="#1e4a18"/>
-      <circle cx="5"  cy="148" r="4"   fill="#1e4a18"/>
-      <circle cx="18" cy="149" r="4"   fill="#1e4a18"/>
-      <circle cx="6"  cy="138" r="2.5" fill="#1e4a18" opacity="0.7"/>
-      <circle cx="162" cy="9"  r="4"   fill="#1e4a18"/>
-      <circle cx="158" cy="4"  r="2.8" fill="#1e4a18" opacity="0.8"/>
-      <circle cx="167" cy="5"  r="2.5" fill="#1e4a18" opacity="0.7"/>
+      <path d="M 10 160 C 22 124 55 88 90 58 C 118 34 142 18 162 8" stroke={fitoterapiaBg} strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M 30 136 C 10 122 8 102 22 92 C 40 104 44 124 30 136 Z" fill={fitoterapiaBg}/>
+      <path d="M 30 136 C 24 116 18 98 22 92" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <path d="M 58 108 C 72 92 74 72 60 62 C 44 72 42 92 58 108 Z" fill={fitoterapiaBg}/>
+      <path d="M 58 108 C 56 90 54 74 60 62" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <path d="M 88 78 C 72 64 70 46 84 38 C 102 48 104 66 88 78 Z" fill={fitoterapiaBg}/>
+      <path d="M 88 78 C 82 62 80 48 84 38" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <path d="M 118 50 C 130 36 134 18 120 10 C 104 18 100 36 118 50 Z" fill={fitoterapiaBg}/>
+      <path d="M 118 50 C 116 34 114 20 120 10" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <circle cx="10" cy="158" r="5.5" fill={fitoterapiaBg}/>
+      <circle cx="5"  cy="148" r="4"   fill={fitoterapiaBg}/>
+      <circle cx="18" cy="149" r="4"   fill={fitoterapiaBg}/>
+      <circle cx="6"  cy="138" r="2.5" fill={fitoterapiaBg} opacity="0.7"/>
+      <circle cx="162" cy="9"  r="4"   fill={fitoterapiaBg}/>
+      <circle cx="158" cy="4"  r="2.8" fill={fitoterapiaBg} opacity="0.8"/>
+      <circle cx="167" cy="5"  r="2.5" fill={fitoterapiaBg} opacity="0.7"/>
+    </svg>
+  </Box>
+);
+
+/* ═══════════════════════════════════════════
+   SVG — ABEJITA DECORATIVA
+═══════════════════════════════════════════ */
+const BeeDecoration = ({
+  size = 52, opacity = 0.13, style = {},
+}: {
+  size?: number; opacity?: number; style?: React.CSSProperties;
+}) => (
+  <Box position="absolute" pointerEvents="none" zIndex={0} style={{ opacity, ...style }}>
+    <svg width={size} height={size} viewBox="0 0 52 52" fill="none">
+      {/* Alas */}
+      <ellipse cx="16" cy="19" rx="11" ry="6" fill={fitoterapiaBg} opacity={0.55}
+        transform="rotate(-30 16 19)"/>
+      <ellipse cx="36" cy="19" rx="11" ry="6" fill={fitoterapiaBg} opacity={0.55}
+        transform="rotate(30 36 19)"/>
+      {/* Cuerpo */}
+      <ellipse cx="26" cy="32" rx="9" ry="12" fill={fitoterapiaBg}/>
+      {/* Rayas */}
+      <rect x="17.5" y="28" width="17" height="3.5" rx="1.75" fill="white" opacity={0.45}/>
+      <rect x="17.5" y="34" width="17" height="3.5" rx="1.75" fill="white" opacity={0.38}/>
+      {/* Cabeza */}
+      <circle cx="26" cy="19" r="6" fill={fitoterapiaBg}/>
+      {/* Ojos */}
+      <circle cx="23.5" cy="18.5" r="1.2" fill="white" opacity={0.7}/>
+      <circle cx="28.5" cy="18.5" r="1.2" fill="white" opacity={0.7}/>
+      {/* Antenas */}
+      <path d="M23 14 C21 10 17 8 16 5" stroke={fitoterapiaBg} strokeWidth="1.6"
+        strokeLinecap="round"/>
+      <circle cx="15.5" cy="4.5" r="2.2" fill={fitoterapiaBg}/>
+      <path d="M29 14 C31 10 35 8 36 5" stroke={fitoterapiaBg} strokeWidth="1.6"
+        strokeLinecap="round"/>
+      <circle cx="36.5" cy="4.5" r="2.2" fill={fitoterapiaBg}/>
+      {/* Aguijón */}
+      <path d="M26 44 L24 49 L26 47 L28 49 Z" fill={fitoterapiaBg}/>
     </svg>
   </Box>
 );
@@ -172,15 +211,15 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
-  const textDark     = "#1a3320";
-  const textMid      = "#3d6b40";
-  const accentBg     = MODAL_COLOR + "16";
-  const accentBorder = MODAL_COLOR + "50";
+  const textDark     = fitoterapiaBg;
+  const textMid      = "#2d7a2b";
+  const accentBg     = MODAL_COLOR + "12";
+  const accentBorder = MODAL_COLOR + "40";
 
   return (
     <Box
       position="fixed" inset={0} zIndex={1000}
-      bg="rgba(0,32,10,0.65)"
+      bg="rgba(5,40,10,0.60)"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       display="flex"
       alignItems={{ base: "flex-end", md: "center" }}
@@ -196,8 +235,8 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
         maxH={{ base: "92vh", md: "88vh" }}
         overflowY="auto"
         borderRadius={{ base: "24px 24px 0 0", md: "24px" }}
-        bg="#f8f5ec"
-        boxShadow="0 32px 80px rgba(0,0,0,0.50), 0 4px 16px rgba(0,0,0,0.18)"
+        bg="#fdf7ee"
+        boxShadow="0 32px 80px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.15)"
         sx={{
           "&::-webkit-scrollbar": { width: "5px" },
           "&::-webkit-scrollbar-track": { bg: "transparent" },
@@ -207,6 +246,14 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
         {/* Decoraciones botánicas en esquinas */}
         <BotanicalCorner />
         <BotanicalCorner flip />
+
+        {/* Abejitas decorativas de fondo */}
+        <BeeDecoration size={62} opacity={0.11}
+          style={{ top: "22%", right: "12px" }} />
+        <BeeDecoration size={40} opacity={0.08}
+          style={{ top: "55%", left: "18px", transform: "rotate(-15deg) scaleX(-1)" }} />
+        <BeeDecoration size={30} opacity={0.07}
+          style={{ bottom: "18%", right: "60px", transform: "rotate(10deg)" }} />
 
         {/* Contenido */}
         <Box position="relative" zIndex={2} px={{ base: 6, md: 10 }} pt={10} pb={10}>
@@ -227,13 +274,20 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
 
           {/* NOMBRE */}
           <Box textAlign="center" mb={6}>
-            <Text
-              color={textDark} fontSize={{ base: "3xl", md: "4xl" }}
-              fontWeight="700" fontFamily="'EB Garamond', serif"
-              letterSpacing="0.03em" lineHeight="1.1"
-            >
-              {planta.nombre}
-            </Text>
+            <HStack spacing={3} align="center" alignItems={"center"} justifyContent={"center"}>
+              <FitoterapiaIconOscuro />
+
+              <Text
+                color={textDark}
+                fontSize={{ base: "3xl", md: "4xl" }}
+                fontWeight="700"
+                fontFamily="'EB Garamond', serif"
+                letterSpacing="0.03em"
+                lineHeight="1.1"
+              >
+                {planta.nombre}
+              </Text>
+            </HStack>
             <Text
               color={textMid} fontSize={{ base: "sm", md: "md" }}
               fontStyle="italic" letterSpacing="0.06em" mt={1} opacity={0.8}
@@ -542,73 +596,6 @@ const FitoterapiaRecursos = () => {
           color={fitoterapiaTxt}
         />
 
-        {/* AVISO LEGAL — discreto y desplegable */}
-        <Box w="100%" maxW="680px" mx="auto" mt={4} mb={6}>
-          <Flex
-            as="button"
-            w="100%"
-            align="center"
-            justify="space-between"
-            gap={3}
-            px={{ base: 5, md: 6 }}
-            py={3}
-            bg={`${fitoterapiaBg}55`}
-            border={`1px solid ${fitoterapiaTxt}22`}
-            borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
-            cursor="pointer"
-            onClick={() => setDisclaimerOpen((o) => !o)}
-            transition="border-radius 0.2s"
-            sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-          >
-            <Flex align="center" gap={2.5}>
-              <Box color={`${fitoterapiaTxt}88`} flexShrink={0}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
-                  <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
-                </svg>
-              </Box>
-              <Text
-                color={`${fitoterapiaTxt}99`}
-                fontSize="xs"
-                letterSpacing="0.12em"
-                textTransform="uppercase"
-                fontFamily="'EB Garamond', serif"
-              >
-                Información importante
-              </Text>
-            </Flex>
-            <Text
-              color={`${fitoterapiaTxt}66`}
-              fontSize="sm"
-              transition="transform 0.22s"
-              transform={disclaimerOpen ? "rotate(180deg)" : "rotate(0deg)"}
-            >
-              ▾
-            </Text>
-          </Flex>
-          <Collapse in={disclaimerOpen} animateOpacity>
-            <Box
-              px={{ base: 5, md: 6 }}
-              py={4}
-              bg={`${fitoterapiaBg}33`}
-              border={`1px solid ${fitoterapiaTxt}22`}
-              borderTop="none"
-              borderRadius="0 0 xl xl"
-              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-            >
-              <Text
-                color={`${fitoterapiaTxt}cc`}
-                fontSize={{ base: "sm", md: "md" }}
-                lineHeight="1.85"
-                letterSpacing="0.02em"
-                fontFamily="'EB Garamond', serif"
-                fontStyle="italic"
-              >
-                Esta información está científicamente demostrada y todas las plantas son muy recomendadas a casi toda la población, pero en caso de embarazo, lactancia, alguna enfermedad o patología, por favor, habla con tu médico. Gracias por tu comprensión y por cuidarte con coherencia.
-              </Text>
-            </Box>
-          </Collapse>
-        </Box>
-
         {/* BUSCADOR */}
         <Box w="100%" maxW="500px" mx="auto" mt={3} mb={20} position="relative">
           <Box
@@ -686,6 +673,73 @@ const FitoterapiaRecursos = () => {
           )}
         </Box>
       </Flex>
+
+      {/* AVISO LEGAL — discreto y desplegable */}
+        <Box w="100%" maxW="680px" mx="auto" mt={4} mb={6}>
+          <Flex
+            as="button"
+            w="100%"
+            align="center"
+            justify="center"
+            gap={3}
+            px={{ base: 5, md: 6 }}
+            py={3}
+            bg={`${fitoterapiaBg}55`}
+            border={`1px solid ${fitoterapiaTxt}22`}
+            borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
+            cursor="pointer"
+            onClick={() => setDisclaimerOpen((o) => !o)}
+            transition="border-radius 0.2s"
+            sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          >
+            <Flex align="center" gap={2.5}>
+              <Box color={`${fitoterapiaTxt}88`} flexShrink={0}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                  <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                </svg>
+              </Box>
+              <Text
+                color={`${fitoterapiaTxt}99`}
+                fontSize="md"
+                letterSpacing="0.12em"
+                textTransform="uppercase"
+                fontFamily="'EB Garamond', serif"
+              >
+                Información importante
+              </Text>
+            </Flex>
+            <Text
+              color={`${fitoterapiaTxt}66`}
+              fontSize="sm"
+              transition="transform 0.22s"
+              transform={disclaimerOpen ? "rotate(180deg)" : "rotate(0deg)"}
+            >
+              ▾
+            </Text>
+          </Flex>
+          <Collapse in={disclaimerOpen} animateOpacity>
+            <Box
+              px={{ base: 5, md: 6 }}
+              py={4}
+              bg={`${fitoterapiaBg}33`}
+              border={`1px solid ${fitoterapiaTxt}22`}
+              borderTop="none"
+              borderRadius="0 0 xl xl"
+              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+            >
+              <Text
+                color={`${fitoterapiaTxt}cc`}
+                fontSize={{ base: "lg", md: "xl" }}
+                lineHeight="1.85"
+                letterSpacing="0.02em"
+                fontFamily="'EB Garamond', serif"
+                fontStyle="italic"
+              >
+                Esta información está científicamente demostrada y todas las plantas son muy recomendadas a casi toda la población, pero en caso de embarazo, lactancia, alguna enfermedad o patología, por favor, habla con tu médico. Gracias por tu comprensión y por cuidarte con coherencia.
+              </Text>
+            </Box>
+          </Collapse>
+        </Box>
 
       {/* FOOTER */}
       <Box
