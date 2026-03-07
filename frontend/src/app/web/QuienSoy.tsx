@@ -1,9 +1,7 @@
 import {
-  Box, Flex, Image, Link, SimpleGrid, Text,
+  Box, Flex, Image, SimpleGrid, Text,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ProductosBanner from "../../components/global/ProductosBanner";
 import SiteHeader from "../../components/global/SiteHeader";
 
 type Libro = { title: string; descripcion: string; img: string; link: string };

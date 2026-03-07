@@ -1,6 +1,6 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { tcmTxt, TCMIcon, tcmBg, tcmNomLink, CincoElementosIcon, LifestyleIcon, RecursosIconTCM, MouthIcon } from "../../../GlobalVariables";
-import { letratcm1, letratcm10, letratcm11, letratcm12, letratcm13, letratcm14, letratcm15, letratcm16, letratcm17, letratcm18, letratcm19, letratcm2, letratcm20, letratcm21, letratcm22, letratcm23, letratcm24, letratcm25, letratcm3, letratcm4, letratcm5, letratcm6, letratcm7, letratcm8, letratcm9 } from "./LetraTCM";
+import { tcmTxt, TCMIcon, tcmBg, tcmNomLink, CincoElementosIcon, RecursosIconTCM, MouthIcon } from "../../../GlobalVariables";
+import { letratcm1, letratcm10, letratcm11, letratcm12, letratcm13, letratcm14, letratcm15, letratcm16, letratcm17, letratcm18, letratcm19, letratcm2, letratcm20, letratcm21, letratcm22, letratcm23, letratcm24, letratcm3, letratcm4, letratcm5, letratcm6, letratcm7, letratcm8, letratcm9 } from "./LetraTCM";
 
 const detalles: Detalles = { color: tcmTxt, icon: TCMIcon, bgColor: tcmBg };
 

@@ -1,5 +1,5 @@
-import { Box, Text, Icon, IconButton } from '@chakra-ui/react';
-import { CheckCircleIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
+import { Box, Text, Icon } from '@chakra-ui/react';
+import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 import React from 'react';
 
 export type SuccessErrorMessageDto = {

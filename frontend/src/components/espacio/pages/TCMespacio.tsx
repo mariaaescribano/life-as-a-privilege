@@ -336,7 +336,6 @@ type ResultSectionProps = {
 };
 
 const ResultSection = ({
-  testNum,
   testLabel,
   testSubtitle,
   testLink,

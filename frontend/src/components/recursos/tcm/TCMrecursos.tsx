@@ -9,9 +9,6 @@ import TCMArrowModal from "./TCMArrowModal";
 import type { ArrowRelation } from "./TCMArrowModal";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 
-/* ─── Glow azul (igual que PhotoMandala) ─── */
-const GLOW_BLUE =
-  "0 4px 16px rgba(0,0,0,0.28), 0 0 20px rgba(107,196,200,0.5), 0 0 45px rgba(107,196,200,0.2)";
 
 /* ─── Estilos de las tarjetas principales ─── */
 const CARD_BG     = tcmBg;

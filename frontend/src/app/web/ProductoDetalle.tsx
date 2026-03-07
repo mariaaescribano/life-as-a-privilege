@@ -121,7 +121,6 @@ const StripeCheckoutForm = ({ clientSecret, nombre, email, precio, onSuccess, on
         </Box>
         <Box
           as="button"
-          onClick={handlePay}
           color="white"
           fontFamily="'EB Garamond', serif"
           fontWeight="700"

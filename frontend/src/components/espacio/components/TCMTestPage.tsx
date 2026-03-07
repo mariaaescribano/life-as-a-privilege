@@ -127,7 +127,7 @@ const SeccionCard = ({
 }) => {
   const maxPerQ = Math.max(...scaleValues);
   const maxScore = el.preguntas.length * maxPerQ;
-  const total = respuestas.reduce((s, a) => s + (a ?? 0), 0);
+  const total = respuestas.reduce((s: number, a) => s + (a ?? 0), 0);
   const answered = respuestas.filter((a) => a !== null).length;
   const complete = answered === el.preguntas.length;
   const elTheme = getTheme(el.nombre);
@@ -266,8 +266,8 @@ export default function TCMTestPage({
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  const totals = secciones.map((_s, si) =>
-    answers[si].reduce((sum, a) => sum + (a ?? 0), 0)
+  const totals: number[] = secciones.map((_s, si) =>
+    answers[si].reduce<number>((sum, a) => sum + (a ?? 0), 0)
   );
 
   const totalAnswered = answers.flat().filter((a) => a !== null).length;

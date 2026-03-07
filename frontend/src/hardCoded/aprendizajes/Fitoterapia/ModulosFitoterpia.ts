@@ -1,5 +1,5 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { RecursosIconFitoterpia, PlantasIcon, fitoterapiaBg, FitoterapiaIcon, fitoterapiaTxt, fitoterapiaNom } from "../../../GlobalVariables";
+import { RecursosIconFitoterpia, fitoterapiaBg, FitoterapiaIcon, fitoterapiaTxt, fitoterapiaNom } from "../../../GlobalVariables";
 
 const detalles: Detalles = { color: fitoterapiaTxt, icon: FitoterapiaIcon, bgColor: fitoterapiaBg };
 
@@ -19,7 +19,8 @@ export const modulosFitoterapia: ModuloContenido[] = [
         descripcion:"",
         video:"-w67yUcj_SM",
         letra: "",
-        detalles: detalles
+        detalles: detalles,
+        icon: null
       },
     ],
   },
