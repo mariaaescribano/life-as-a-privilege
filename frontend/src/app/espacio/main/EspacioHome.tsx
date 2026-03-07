@@ -36,7 +36,7 @@ const EspacioHome = () => {
     { bg: nutricionBg,       icon: <NutricionIcon size="58px" />,                               link: "/espacio/questions/" + nutricionNom,       cursor: "not-allowed", txt: nutricionTxt },
     { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" , txt: ayurvedaTxt},
     { bg: fitoterapiaBg,     icon: <FitoterapiaIcon size={{ base: "58px", md: "58px" }} />,     link: "/espacio/questions/" + fitoterapiaNom,     cursor: "pointer" , txt: fitoterapiaTxt},
-    { bg: cabalaBg,          icon: <CabalaIcon size="58px" />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "not-allowed" , txt: cabalaTxt},
+    { bg: cabalaBg,          icon: <CabalaIcon size="58px" />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "pointer" , txt: cabalaTxt},
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;

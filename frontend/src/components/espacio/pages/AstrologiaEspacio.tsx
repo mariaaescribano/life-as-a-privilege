@@ -10,7 +10,6 @@ import {
   AstrologiaIcon,
 } from "../../../GlobalVariables";
 import axios from "axios";
-
 /* ══════════════════════════════════════════════
    SIGNOS DEL ZODIACO
 ══════════════════════════════════════════════ */
@@ -494,7 +493,7 @@ export default function AstrologiaEspacio() {
           pb={{ base: 14, md: 20 }}
         >
           <DisciplineHeader
-            icon={<AstrologiaIcon size="48px" />}
+            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Astrología"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}

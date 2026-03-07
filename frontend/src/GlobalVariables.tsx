@@ -43,9 +43,18 @@ export const neuropsicologiaDescrip = "Entiende el porqué de tus hábitos diari
 export const astrologiaNom = "Astrología";
 export const astrologiaBg = "#1e296b";
 export const astrologiaTxt = "#feffe4";
-export function AstrologiaIcon({ size = "24px"}) {
+export function AstrologiaIcon({ size = { base: "24px", md: "24px" }}) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height={size ?? "24px"} viewBox="0 -960 960 960" width={size ?? "24px"} fill={astrologiaTxt}><path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z"/></svg>
+    <Box
+      as="svg"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      fill={astrologiaTxt}
+      w={size}
+      h={size}
+    >
+      <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z"/>
+    </Box>
   );
 }
 export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu vida, comprende su propósito y utilízalos conscientemente para dejar de hacerte daño y de autosabotearte."
@@ -113,9 +122,18 @@ export const fitoterapiaDescrip="Explora el poder de las plantas medicinales y c
 export const cabalaNom = "Cábala";
 export const cabalaBg = "#593d25";
 export const cabalaTxt = "#cb8e59";
-export function CabalaIcon({ size = "24px"}) {
+export function CabalaIcon({ size = { base: "24px", md: "24px" }}) {
   return (
-   <svg xmlns="http://www.w3.org/2000/svg" height={size ?? "24px"} viewBox="0 -960 960 960" width={size ?? "24px"} fill={cabalaTxt}><path d="M240-160h480q17 0 28.5-11.5T760-200H200q0 17 11.5 28.5T240-160Zm160-513.5Q368-707 370-755q2-52 36.5-91.5T480-920q39 34 73.5 73.5T590-755q2 48-30 81.5T480-640q-48 0-80-33.5ZM440-280h80v-240h-80v240Zm61.5-449q8.5-9 8.5-22 0-17-9.5-31T480-809q-11 13-20.5 27t-9.5 31q0 13 8.5 22t21.5 9q13 0 21.5-9Zm330 440.5Q840-297 840-310t-8.5-21.5Q823-340 810-340t-21.5 8.5Q780-323 780-310t8.5 21.5Q797-280 810-280t21.5-8.5ZM720-80H240q-50 0-85-35t-35-85v-80h240v-240q0-33 23.5-56.5T440-600h80q33 0 56.5 23.5T600-520v240h104q-2-8-3-15t-1-15q0-46 32-78t78-32q46 0 78 32t32 78q0 38-22.5 67T840-204v4q0 50-35 85t-85 35Zm-240-80Zm-40-120h80-80Zm40-484Z"/></svg>
+    <Box
+      as="svg"
+      xmlns="http://www.w3.org/2000/svg"
+      w={size}
+      h={size}
+      viewBox="0 -960 960 960"
+      fill={cabalaTxt}
+    >
+      <path d="M240-160h480q17 0 28.5-11.5T760-200H200q0 17 11.5 28.5T240-160Zm160-513.5Q368-707 370-755q2-52 36.5-91.5T480-920q39 34 73.5 73.5T590-755q2 48-30 81.5T480-640q-48 0-80-33.5ZM440-280h80v-240h-80v240Zm61.5-449q8.5-9 8.5-22 0-17-9.5-31T480-809q-11 13-20.5 27t-9.5 31q0 13 8.5 22t21.5 9q13 0 21.5-9Zm330 440.5Q840-297 840-310t-8.5-21.5Q823-340 810-340t-21.5 8.5Q780-323 780-310t8.5 21.5Q797-280 810-280t21.5-8.5ZM720-80H240q-50 0-85-35t-35-85v-80h240v-240q0-33 23.5-56.5T440-600h80q33 0 56.5 23.5T600-520v240h104q-2-8-3-15t-1-15q0-46 32-78t78-32q46 0 78 32t32 78q0 38-22.5 67T840-204v4q0 50-35 85t-85 35Zm-240-80Zm-40-120h80-80Zm40-484Z"/>
+    </Box>
   );
 }
 export const cabalaDescrip="Explora la sabiduría de la Cábala y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia.";
