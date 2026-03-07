@@ -1,5 +1,4 @@
 import React from "react";
-import { Text } from "@chakra-ui/react";
 import TCMTestPage from "./TCMTestPage";
 
 /* ══════════════════════════════════════════════
@@ -140,19 +139,14 @@ export default function TCMTest1() {
       scaleLabels={SCALE_LABELS}
       scaleMobileHint="0 = Nunca · 2 = Siempre"
       secciones={CONSTITUCIONES}
-      resultadosNota={() => (
-        <Text color="rgba(255,255,255,0.48)" fontSize="xs" fontStyle="italic" letterSpacing="0.03em" lineHeight="1.9">
-          El patrón con mayor puntaje indica tu constitución predominante.
-          Si hay empates, puede indicar constituciones mixtas, lo cual es muy común.
-          Si el patrón Equilibrado es el más alto, tu cuerpo está en buena armonía.
-          Estos resultados son orientativos: úsalos como punto de partida para la reflexión, no como diagnóstico.
-        </Text>
-      )}
       interpretacionTitle="Interpretación Orientativa"
       interpretaciones={INTERPRETACIONES}
       resultadoEtiqueta="Tu Constitución"
       localStorageKey="tcm_test1_result"
       savePrimaryKey="primaryConstitution"
+      monoColor={true}
+      showInterpretacion={false}
+      backToSpaceLink="/espacio/questions/medicinachina"
     />
   );
 }

@@ -19,9 +19,9 @@ export type Recs = {
 export const RECS_CONSTITUCIONES: Record<string, Recs> = {
   "Equilibrado": {
     infusiones: [
-      "Té verde (Camellia sinensis) · 1 taza mañana, antioxidante y equilibrante",
+      "Té verde (Camellia sinensis) · energético, antioxidante y equilibrante",
       "Crisantemo (Ju Hua) · ocasional en épocas de calor o estrés visual",
-      "Rosa mosqueta · vitamina C natural, equilibra los 5 movimientos",
+      "Rosa mosqueta · vitamina C natural, equilibrante",
     ],
     hierbas: [
       "Huang Qi (Astragalus) · mantenimiento preventivo del Wei Qi",
@@ -31,13 +31,13 @@ export const RECS_CONSTITUCIONES: Record<string, Recs> = {
     estiloDeVida: [
       "Sueño regular: acostarse antes de las 23 h, levantarse con el sol",
       "Ejercicio moderado: caminata, tai chi o natación 30 min al día",
-      "Autoobservación estacional: adaptar hábitos en los cambios de estación",
-      "Gratitud y emoción positiva: nutre el Shen (mente-espíritu)",
+      "Gratitud y emoción positiva: nutre el Shen (el Alma)",
     ],
     nutricion: [
       "5 sabores equilibrados · ácido, amargo, dulce, picante y salado en armonía",
       "Alimentos de temporada · adaptarse a cada estación, locales y frescos",
-      "Cereales integrales · arroz, mijo, cebada como base diaria",
+      "Verduras, proteínas y grasas saludables en todos los platos",
+      "Cereales integrales · arroz, cebada, quinoa",
       "Moderación en todo · ni excesos ni restricciones, escuchar al cuerpo",
     ],
   },
@@ -45,77 +45,70 @@ export const RECS_CONSTITUCIONES: Record<string, Recs> = {
   "Deficiencia de Qi": {
     infusiones: [
       "Dang Shen (Codonopsis) + Da Zao (dátil rojo) · tónica diaria del Centro",
-      "Huang Qi (Astragalus) · cocción 15 min, refuerza Wei Qi y defensas",
-      "Jengibre fresco (Sheng Jiang) + miel · calienta y tonifica el Bazo-Estómago",
+      "Huang Qi (Astragalus) · cocción 15 min, refuerza las defensas",
+      "Jengibre fresco (Sheng Jiang) · calienta y tonifica el Bazo-Estómago",
     ],
     hierbas: [
       "Ren Shen (Panax ginseng) · principal tónico del Qi, base de Si Jun Zi Tang",
-      "Huang Qi (Astragalus membranaceus) · refuerza Wei Qi y la defensa",
-      "Bai Zhu (Atractylodes macrocephala) · fortalece Bazo, seca Humedad",
-      "Gan Cao (Glycyrrhiza uralensis) · armoniza Centro y tonifica con suavidad",
+      "Bai Zhu (Atractylodes macrocephala) · fortalece Bazo, libera obstrucciones",
+      "Gan Cao (Glycyrrhiza uralensis) · armoniza y tonifica con suavidad",
     ],
     estiloDeVida: [
       "Evitar sobreesfuerzo físico y mental prolongado; respetar el descanso",
       "Qi Gong suave y Tai Chi: movimiento que genera Qi sin gastarlo",
       "Comidas calientes, cocinadas y a horas regulares; no saltarse el desayuno",
-      "Descanso de 20 min después de comer para no drenar el Bazo",
-      "Moxibustión en ST 36 (Zu San Li) y Ren 6 (Qi Hai)",
     ],
     nutricion: [
-      "Pollo, cordero, huevo · proteína calórica que tonifica directamente el Qi",
+      "Proteína completa · huevo, tofu, soja, pollo, pescado",
       "Arroz, mijo, avena caliente · cereales que nutren y refuerzan el Bazo",
       "Dátil rojo (Da Zao) y goji · dulces naturales tónicos del Centro",
-      "Evitar: crudos, batidos fríos, bebidas heladas y azúcares refinados",
+      "Evitar: crudos, fríos, bebidas heladas y azúcares refinados",
     ],
   },
 
   "Deficiencia de Yang": {
     infusiones: [
       "Gui Zhi (canela en rama) + Gan Jiang (jengibre seco) · calienta el Interior",
-      "Astrágalo + canela en rama · tonifica Yang y refuerza Wei Qi frente al frío",
+      "Astrágalo + canela en rama · tonifica Yang y refuerza las defensas frente al frío",
       "Nuez (He Tao Ren) cocida con dátil · nutre Riñón Yang y calienta",
     ],
     hierbas: [
-      "Rou Gui (Cinnamomum cassia) · calienta Riñón Yang, activa el Ren Mai",
-      "Du Zhong (Eucommia ulmoides) · tonifica Yang de Riñón y fortalece tendones",
-      "Ba Ji Tian (Morinda officinalis) · Yang de Riñón, base de You Gui Wan",
-      "Fu Zi (Aconitum) · solo con supervisión cualificada; precaución máxima",
+      "Rou Gui (Cinnamomum cassia) · calienta el Yang del riñón",
+      "Du Zhong (Eucommia ulmoides) · tonifica el Yang de riñón y fortalece tendones",
+      "Ba Ji Tian (Morinda officinalis) · tonifica el Yang de riñón ",
     ],
     estiloDeVida: [
-      "Moxibustión en Ren 4 (Guan Yuan), Du 4 (Ming Men) y ST 36",
       "Evitar fríos externos: baños fríos, aire acondicionado directo, ropa insuficiente",
-      "Ejercicio suave con sudoración ligera al sol; baños de sol en zona lumbar",
+      "Ejercicio suave con sudoración ligera a la salida o a la puesta del sol",
       "Dormir con ropa suficiente; mantener pies y zona lumbar calientes",
     ],
     nutricion: [
-      "Cordero, gambas, venado · proteína cálida que activa el Yang de Riñón",
+      "Proteína completa · huevo, tofu, soja, pollo, pescado",
       "Canela, jengibre seco, clavo, cebollino · especias calorígenas del Interior",
-      "Nueces, castañas, semillas de girasol · nutren el Yang de Riñón",
+      "Nueces, castañas, semillas de girasol · nutren el Yang de riñón",
       "Evitar: pepino, sandía, yogur, batidos fríos, lácteos y crudos en exceso",
     ],
   },
 
   "Deficiencia de Yin": {
     infusiones: [
-      "Gou Qi Zi (Lycium) + Ju Hua (crisantemo) · nutre Hígado, enfría ojos",
+      "Gou Qi Zi (Lycium) + Ju Hua (crisantemo) · nutre hígado, enfría ojos",
       "Mai Men Dong (Ophiopogon) · humedece Pulmón y Estómago, Yin de fluidos",
       "Bai He (Lilium brownii) · calma el Shen y nutre el Yin del Pulmón-Corazón",
     ],
     hierbas: [
-      "Shu Di Huang (Rehmannia preparada) · nutre Yin y Sangre, Liu Wei Di Huang Wan",
-      "Nu Zhen Zi (Ligustrum lucidum) · Yin de Hígado y Riñón, vértigo y tinnitus",
+      "Shu Di Huang (Rehmannia preparada) · nutre el Yin y la Sangre",
       "Tian Men Dong (Asparagus cochinchinensis) · Yin de Pulmón y Riñón profundo",
-      "Bai Shao (Paeonia lactiflora) · nutre Sangre de Hígado, ablanda el carácter",
+      "Bai Shao (Paeonia lactiflora) · nutre Sangre del Hígado, relajante",
     ],
     estiloDeVida: [
       "Dormir antes de las 23 h; el Yin se regenera en el sueño profundo",
       "Evitar alcohol, picantes fuertes y alimentos muy secos o ahumados",
-      "Meditación, yoga Yin y actividades sin exceso de calor",
-      "Hidratación: 1,5–2 L agua templada al día; no beber muy fría",
-      "Acupuntura en KD 3 (Tai Xi), SP 6 y Ren 4",
+      "Meditación, yoga y actividades sin exceso de calor",
+      "Hidratación: +2 L de agua con sal templada o caliente al día; no beber fría",
     ],
     nutricion: [
-      "Cerdo, pato, mejillones, almejas · nutren el Yin sin calentar",
+      "Proteína completa · huevo, tofu, soja, pollo, pescado",
       "Sésamo negro, tofu, yema de huevo · nutren el Yin y la Sangre",
       "Pera, mora, uva, melón · enfrían y humedecen los fluidos internos",
       "Evitar: alcohol, picantes fuertes, ahumados y alimentos muy secos o tostados",
@@ -125,7 +118,7 @@ export const RECS_CONSTITUCIONES: Record<string, Recs> = {
   "Flema-Humedad": {
     infusiones: [
       "Yi Yi Ren (Coix / cebada china) · drena Humedad, cocción 20 min",
-      "Chen Pi (piel de mandarina) + Ban Xia · disuelve Flema, base de Er Chen Tang",
+      "Chen Pi (piel de mandarina) + Ban Xia · disuelve Flema",
       "Canela + jengibre seco · activa el Bazo y seca la Humedad interna",
     ],
     hierbas: [
@@ -150,21 +143,20 @@ export const RECS_CONSTITUCIONES: Record<string, Recs> = {
 
   "Calor-Humedad": {
     infusiones: [
-      "Pu Gong Ying (diente de león) · drena Calor-Humedad del Hígado y piel",
-      "He Ye (hoja de loto) + Ju Hua (crisantemo) · enfría el Interior, hidrata",
+      "Pu Gong Ying (diente de león) · drena Calor-Humedad del hígado y piel",
+      "He Ye (hoja de loto) + Ju Hua (crisantemo) · enfría el interior, hidrata",
       "Yin Chen Hao (Artemisia capillaris) · Calor-Humedad hepatobiliar",
     ],
     hierbas: [
-      "Huang Lian (Coptis chinensis) · limpia Calor intenso, seca Humedad",
+      "Huang Lian (Coptis chinensis) · limpia calor intenso, seca Humedad",
       "Long Dan Cao (Gentiana scabra) · Calor-Humedad en Hígado y Vesícula Biliar",
       "Yin Chen Hao (Artemisia capillaris) · clásico para afecciones hepatobiliares",
       "Yi Yi Ren (Coix) · remueve Humedad con componente calórico leve",
     ],
     estiloDeVida: [
-      "Dieta fresca y ligera: verduras verdes, cereales, pescado blanco",
+      "Dieta fresca y ligera: verduras verdes, cereales, proteínas completas",
       "Gestión del estrés: meditación, respiración abdominal, contacto con naturaleza",
       "Ejercicio moderado con sudoración: yoga activo, natación matutina",
-      "Acupuntura en GB 34 (Yang Ling Quan), SP 9 (Yin Ling Quan), LV 3",
     ],
     nutricion: [
       "Judía mungo, loto · clásicos anticalóricos de la MTC, drenan Calor-Humedad",
@@ -181,7 +173,7 @@ export const RECS_CONSTITUCIONES: Record<string, Recs> = {
       "Mo Li Hua (jazmín) · armoniza Hígado-Estómago, suaviza las emociones",
     ],
     hierbas: [
-      "Chai Hu (Bupleurum chinense) · mueve Qi de Hígado, base de Xiao Yao San",
+      "Chai Hu (Bupleurum chinense) · mueve Qi de Hígado",
       "Xiang Fu (Cyperus rotundus) · regulador maestro del Qi estancado",
       "Yu Jin (Curcuma aromatica) · mueve Qi y Sangre, drena Calor de Hígado",
       "Bai Shao (Paeonia lactiflora) · nutre Sangre de Hígado, suaviza el carácter",
@@ -191,7 +183,6 @@ export const RECS_CONSTITUCIONES: Record<string, Recs> = {
       "Expresión emocional: escritura, conversación honesta, arte, música",
       "Respiración consciente y pranayama expansivo en el tórax",
       "Acostarse antes de las 23 h; el Hígado se regenera de 23 a 3 h",
-      "Acupuntura en LV 3 (Tai Chong), PC 6 (Nei Guan), GB 34",
     ],
     nutricion: [
       "Puerro, cebolla, hinojo, ajo · mueven el Qi estancado del Hígado",
@@ -248,7 +239,6 @@ export const RECS_ELEMENTOS: Record<string, Recs> = {
       "Meditación diaria y técnicas de regulación emocional consciente",
       "Reducir estimulación digital especialmente después de las 18 h",
       "Relaciones sociales equilibradas; evitar intensidad afectiva sin descanso",
-      "Acupuntura en HT 7 (Shen Men), PC 6 (Nei Guan), KD 6",
     ],
     nutricion: [
       "Sabor amargo · cacao puro, endivias, achicoria, rúcula, té rojo",
@@ -275,12 +265,12 @@ export const RECS_ELEMENTOS: Record<string, Recs> = {
       "Comidas regulares a las mismas horas; nunca saltarse el desayuno",
       "Masticar 20–30 veces por bocado; comer sin pantallas ni prisa",
       "Paseos de 15 min después de comer: activa el Qi de Bazo",
-      "Reducir rumiación mental: meditación Vipassana, journaling, naturaleza",
+      "Reducir rumiación mental: meditación, journaling, naturaleza",
     ],
     nutricion: [
       "Sabor dulce natural · calabaza, boniato, zanahoria, maíz, miel",
       "Alimentos cocinados y cálidos · sopas, guisos, cremas, compotas de fruta",
-      "Fermentados suaves · miso, kéfir de agua, chucrut — activan el Bazo",
+      "Fermentados suaves · miso, kéfir, chucrut — activan el Bazo",
       "Evitar: crudos, lácteos en exceso, azúcares refinados y comer con prisa",
     ],
   },
@@ -302,7 +292,6 @@ export const RECS_ELEMENTOS: Record<string, Recs> = {
       "Respiración profunda diaria: pranayama, qigong respiratorio, 10 min",
       "Contacto con naturaleza y aire limpio; abrir ventanas cada día",
       "Permitir el duelo y expresar la tristeza sin suprimirla",
-      "Acupuntura en LU 7 (Lie Que), LU 9 (Tai Yuan), SP 6",
     ],
     nutricion: [
       "Sabor picante suave · ajo, cebolla, puerro, jengibre moderado",
@@ -359,7 +348,6 @@ export const RECS_DESEQUILIBRIOS: Record<string, Recs> = {
       "Danza o artes marciales para liberar tensión corporal acumulada",
       "Diario emocional: identificar y expresar la ira y la frustración",
       "Acostarse antes de las 23 h; el Hígado trabaja de 23 a 3 h",
-      "Acupuntura en LV 3 (Tai Chong), GB 34 (Yang Ling Quan), PC 6",
     ],
     nutricion: [
       "Sabor ácido suave · limón, ciruela, rosa mosqueta, vinagre de umeboshi",
@@ -386,7 +374,6 @@ export const RECS_DESEQUILIBRIOS: Record<string, Recs> = {
       "Meditación Yin o Yoga Nidra antes de acostarse",
       "Técnica respiratoria 4-7-8 para bajar la activación simpática",
       "Evitar cafeína tras las 13 h y picantes o alcohol por la noche",
-      "Acupuntura en HT 7 (Shen Men), KD 6 (Zhao Hai), Yin Tang",
     ],
     nutricion: [
       "Sabor amargo refrescante · cacao puro, lechuga, achicoria, pétalos de rosa",
@@ -413,7 +400,6 @@ export const RECS_DESEQUILIBRIOS: Record<string, Recs> = {
       "Masticación pausada: 20–30 masticaciones por bocado",
       "Tai Chi o Qi Gong: mueve el Qi de Bazo sin agotarlo",
       "Reducir la preocupación crónica y la rumiación mental excesiva",
-      "Acupuntura en ST 36 (Zu San Li), SP 3 (Tai Bai), Ren 12 (Zhong Wan)",
     ],
     nutricion: [
       "Cereales calientes · arroz, mijo, avena cocinada, cebada perlada",
@@ -440,7 +426,6 @@ export const RECS_DESEQUILIBRIOS: Record<string, Recs> = {
       "Paseos en naturaleza abierta: oxigenación y contacto con el exterior",
       "Humidificador en casa si el ambiente es muy seco o hay calefacción",
       "Permitir expresar la tristeza y el duelo sin suprimirlos",
-      "Acupuntura en LU 7 (Lie Que), ST 36, LI 4 (He Gu), LU 1 (Zhong Fu)",
     ],
     nutricion: [
       "Pera cocinada con miel de abeja · humedece el Pulmón, calma la tos",

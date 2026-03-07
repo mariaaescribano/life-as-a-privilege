@@ -151,6 +151,7 @@ export default function TCMTest3() {
       resultadoEtiqueta="Actual"
       localStorageKey="tcm_test3_result"
       savePrimaryKey="primaryDesequilibrio"
+       backToSpaceLink="/espacio/questions/medicinachina"
     />
   );
 }

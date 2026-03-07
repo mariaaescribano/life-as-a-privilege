@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, Collapse, Flex, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import SpinnerTurquesa from "../../global/Spinner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
@@ -11,6 +12,7 @@ import {
   RECS_DESEQUILIBRIOS,
   type Recs,
 } from "../data/tcmRecommendations";
+import { getTheme } from "../data/tcmTheme";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -26,13 +28,13 @@ interface TcmData {
 ══════════════════════════════════════════════ */
 const DESC_CONSTITUCION: Record<string, string> = {
   "Equilibrado":
-    "Tu cuerpo está en buena armonía. Mantén tus hábitos de vida y sigue escuchando tu cuerpo con regularidad.",
+    "Tu cuerpo está en armonía. Mantén tus hábitos de vida y sigue escuchando tu cuerpo con regularidad.",
   "Deficiencia de Qi":
     "El Qi (energía vital) está disminuido. Descansa más, come caliente y nutritivo, y evita el sobreesfuerzo físico y mental.",
   "Deficiencia de Yang":
-    "El Yang (fuerza calórica) está débil. Abrígate, prioriza alimentos calientes, y evita crudos, frío y humedad.",
+    "El Yang está débil. Abrígate, prioriza alimentos calientes, y evita crudos, frío y humedad.",
   "Deficiencia de Yin":
-    "El Yin (fluidos y refrigeración interna) está disminuido. Descansa, hidrátate, reduce el estrés y evita los picantes.",
+    "El Yin (tu hidratación y nutrición) está disminuido o no es adecuada. Ten descansos de calida y reduce el estrés.",
   "Flema-Humedad":
     "Hay exceso de Humedad interna. Evita lácteos y azúcares refinados, muévete a diario y come ligero y caliente.",
   "Calor-Humedad":
@@ -68,53 +70,48 @@ const DESC_DESEQUILIBRIO: Record<string, string> = {
 };
 
 /* ══════════════════════════════════════════════
-   VIDEOS POR RESULTADO (TODO: añadir IDs de YouTube)
+   VIDEOS POR RESULTADO
 ══════════════════════════════════════════════ */
 const VIDEOS_CONSTITUCION: Record<string, string | undefined> = {};
-const VIDEOS_ELEMENTO: Record<string, string | undefined> = {};
+
+const VIDEOS_ELEMENTO: Record<string, string | undefined> = {
+  "Madera": "1gMBVFKMAXY",
+  "Fuego":  "oqmoovl3Yio",
+  "Tierra": "tXqEjnQPgwc",
+  "Metal":  "BzgxPMYOqrA",
+  "Agua":   "o2ot4bFWMoQ",
+};
+
 const VIDEOS_DESEQUILIBRIO: Record<string, string | undefined> = {};
 
-const TRANSCRIPTS_CONSTITUCION: Record<string, string | undefined> = {};
-const TRANSCRIPTS_ELEMENTO: Record<string, string | undefined> = {};
-const TRANSCRIPTS_DESEQUILIBRIO: Record<string, string | undefined> = {};
-
-/* ══════════════════════════════════════════════
-   SEPARADOR DECORATIVO
-══════════════════════════════════════════════ */
-const SectionDivider = () => (
-  <Flex align="center" gap={3} w="100%" maxW="900px" my={{ base: 10, md: 14 }}>
-    <Box flex="1" h="1px" bg={`${tcmTxt}22`} borderRadius="full" />
-    <Text color={`${tcmTxt}55`} fontSize="10px" letterSpacing="0.3em">✦</Text>
-    <Box flex="1" h="1px" bg={`${tcmTxt}22`} borderRadius="full" />
-  </Flex>
-);
 
 /* ══════════════════════════════════════════════
    ICONOS DE CATEGORÍA
 ══════════════════════════════════════════════ */
 const TeaIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
+  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
     <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h440q33 0 56.5 23.5T720-760v80h40q33 0 56.5 23.5T840-600v200q0 33-23.5 56.5T760-320h-40v120q0 33-23.5 56.5T640-120H200Zm0-80h440v-560H200v560Zm520-160h40v-200h-40v200ZM360-400q-50 0-85-35t-35-85v-120h240v120q0 50-35 85t-85 35Zm-60-160v80q0 25 17.5 42.5T360-420q25 0 42.5-17.5T420-480v-80H300Zm60 80Z"/>
   </svg>
 );
 
 const HerbIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
+  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
     <path d="M440-120v-319q-64 0-123-24.5T213-533q-45-45-69-104t-24-123v-80h80q63 0 122 24.5T426-746q31 31 51.5 68t31.5 79q5-7 11-13.5t13-13.5q45-45 104-69.5T760-720h80v80q0 64-24.5 123T746-413q-45 45-103.5 69T520-320v200h-80Zm0-400q0-48-18.5-91.5T369-689q-34-34-77.5-52.5T200-760q0 48 18 92t52 78q34 34 78 52t92 18Zm80 120q48 0 91.5-18t77.5-52q34-34 52.5-78t18.5-92q-48 0-92 18.5T590-569q-34 34-52 77.5T520-400Z"/>
   </svg>
 );
 
 const LifestyleIconSm = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
+  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
     <path d="M480-80q-73-9-145-39.5T206.5-207Q150-264 115-351T80-560v-40h40q51 0 105 13t101 39q12-86 54.5-176.5T480-880q57 65 99.5 155.5T634-548q47-26 101-39t105-13h40v40q0 122-35 209t-91.5 144q-56.5 57-128 87.5T480-80Zm-2-82q-11-166-98.5-251T162-518q11 171 101.5 255T478-162Zm2-254q15-22 36.5-45.5T558-502q-2-57-22.5-119T480-742q-35 59-55.5 121T402-502q20 17 42 40.5t36 45.5Zm78 236q37-12 77-35t74.5-62.5q34.5-39.5 59-98.5T798-518q-94 14-165 62.5T524-332q12 32 20.5 70t13.5 82Z"/>
   </svg>
 );
 
-const NutriIconSm = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
-    <path d="M454-280h52q108 0 176.5-47T805-452q-60 18-146 35t-179 17q-93 0-178.5-17.5T156-452q54 78 122 125t176 47Zm0 80q-147 0-262-89T40-520l202-202q17-17 38.5-27.5T326-760q18 0 35.5 6.5T394-737l86 57 86-57q15-10 32.5-16.5T634-760q24 0 45.5 10.5T718-722l202 202q-37 142-152 231t-262 89h-52Z"/>
+const NutriIconCustom = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+    <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 80-80v-148q-26-15-43-50.5T500-500q0-58 26-99t64-41q37 0 63.5 41t26.5 99q0 47-17 82.5T620-368v128h100v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h100v-160q-26-6-43-27.5T280-477v-163h40v151h30v-151h40v151h30v-151h40v163q0 28-17 49.5T400-400v180l80 80Zm0-340Z"/>
   </svg>
 );
+
 
 /* ══════════════════════════════════════════════
    CAJA DE CATEGORÍA DE RECOMENDACIONES
@@ -123,79 +120,84 @@ const RecBox = ({
   title,
   icon,
   items,
+  accentColor,
 }: {
   title: string;
   icon: React.ReactNode;
   items: string[];
-}) => (
-  <Box
-    bg={`${tcmBg}cc`}
-    border={`1px solid ${tcmTxt}33`}
-    borderRadius="2xl"
-    p={{ base: 5, md: 6 }}
-    sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-  >
-    <Flex align="center" gap={2.5} mb={4}>
-      <Box
-        w="32px"
-        h="32px"
-        borderRadius="full"
-        bg={`${tcmTxt}18`}
-        border={`1px solid ${tcmTxt}44`}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        flexShrink={0}
-      >
-        {icon}
-      </Box>
-      <Text
-        color={tcmTxt}
-        fontSize={{ base: "md", md: "lg" }}
-        fontWeight="700"
-        letterSpacing="0.07em"
-        fontFamily="'EB Garamond', serif"
-      >
-        {title}
-      </Text>
-    </Flex>
-    <Flex direction="column" gap={2.5}>
-      {items.map((item, i) => (
-        <Flex key={i} gap={2.5} align="flex-start">
-          <Box
-            w="5px"
-            h="5px"
-            borderRadius="full"
-            bg={`${tcmTxt}66`}
-            mt="9px"
-            flexShrink={0}
-          />
-          <Text
-            color={`${tcmTxt}cc`}
-            fontSize={{ base: "sm", md: "md" }}
-            lineHeight="1.75"
-            letterSpacing="0.015em"
-          >
-            {item}
-          </Text>
-        </Flex>
-      ))}
-    </Flex>
-  </Box>
-);
+  accentColor?: string;
+}) => {
+  const c = accentColor ?? tcmTxt;
+  return (
+    <Box
+      bg={`${tcmBg}cc`}
+      border={`1px solid ${c}33`}
+      borderRadius="2xl"
+      p={{ base: 5, md: 6 }}
+      sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+    >
+      <Flex align="center" gap={2.5} mb={4}>
+        <Box
+          w="32px"
+          h="32px"
+          borderRadius="full"
+          bg={`${c}22`}
+          border={`1px solid ${c}66`}
+          boxShadow={`0 0 10px ${c}55, 0 0 4px ${c}33`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexShrink={0}
+          color={c}
+        >
+          {icon}
+        </Box>
+        <Text
+          color={c}
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="700"
+          letterSpacing="0.07em"
+          fontFamily="'EB Garamond', serif"
+        >
+          {title}
+        </Text>
+      </Flex>
+      <Flex direction="column" gap={2.5}>
+        {items.map((item, i) => (
+          <Flex key={i} gap={2.5} align="flex-start">
+            <Box
+              w="5px"
+              h="5px"
+              borderRadius="full"
+              bg={`${c}66`}
+              mt="9px"
+              flexShrink={0}
+            />
+            <Text
+              color={`${c}cc`}
+              fontSize={{ base: "sm", md: "md" }}
+              lineHeight="1.75"
+              letterSpacing="0.015em"
+            >
+              {item}
+            </Text>
+          </Flex>
+        ))}
+      </Flex>
+    </Box>
+  );
+};
 
 /* ══════════════════════════════════════════════
-   TARJETA DE ESTADO DE TEST
+   TARJETA DE ESTADO DE TEST (simplificada)
 ══════════════════════════════════════════════ */
 const TestStatusCard = ({
-  num,
   label,
   link,
   result,
   icon,
   navigate,
 }: {
-  num: number;
   label: string;
   link: string;
   result: string | null;
@@ -204,220 +206,171 @@ const TestStatusCard = ({
 }) => {
   const done = !!result;
   return (
-    <Flex
-      direction="column"
-      align="center"
+    <Box
+      as="button"
+      onClick={() => navigate(link)}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
       gap={3}
-      bg={done ? `${tcmBg}dd` : `${tcmBg}66`}
-      border={`1px solid ${done ? tcmTxt + "44" : tcmTxt + "18"}`}
+      bg={done ? `${tcmBg}ee` : `${tcmBg}55`}
+      border={`1px solid ${done ? tcmTxt + "55" : tcmTxt + "1a"}`}
       borderRadius="2xl"
-      px={{ base: 5, md: 5 }}
+      px={{ base: 4, md: 5 }}
       py={{ base: 6, md: 7 }}
-      boxShadow={done ? `0 4px 24px rgba(0,0,0,0.28), 0 0 20px rgba(107,4,4,0.35)` : "0 2px 12px rgba(0,0,0,0.15)"}
+      cursor="pointer"
+      borderColor={done ? `${tcmTxt}44` : `${tcmTxt}22`}
       transition="all 0.22s ease"
+      boxShadow="0 2px 12px rgba(0,0,0,0.22)"
+      _hover={{
+        boxShadow: `0 4px 20px rgba(0,0,0,0.3), 0 0 18px ${tcmTxt}52`,
+        borderColor: `${tcmTxt}44`,
+      }}
+      w="100%"
+      textAlign="center"
     >
-      {/* Icono */}
+      {/* Icono iluminado */}
       <Box
-        w={{ base: "48px", md: "54px" }}
-        h={{ base: "48px", md: "54px" }}
+        w={{ base: "54px", md: "60px" }}
+        h={{ base: "54px", md: "60px" }}
         borderRadius="full"
         bg={tcmBg}
-        border={`2px solid ${done ? tcmTxt + "55" : tcmTxt + "22"}`}
-        boxShadow={done ? `0 0 16px ${tcmTxt}33` : "none"}
+        border={`1px solid ${done ? tcmTxt + "55" : tcmTxt + "1a"}`}
+        boxShadow="none"
         display="flex"
         alignItems="center"
         justifyContent="center"
-        flexShrink={0}
       >
         {icon}
       </Box>
 
-      {/* Número + label */}
-      <Box textAlign="center">
-        <Text
-          color={`${tcmTxt}55`}
-          fontSize="10px"
-          letterSpacing="0.25em"
-          textTransform="uppercase"
-          fontFamily="'EB Garamond', serif"
-          mb={0.5}
-        >
-          Test {num}
-        </Text>
-        <Text
-          color={done ? tcmTxt : `${tcmTxt}55`}
-          fontSize={{ base: "md", md: "lg" }}
-          fontWeight="600"
-          fontFamily="'EB Garamond', serif"
-          letterSpacing="0.03em"
-          lineHeight="1.3"
-          textAlign="center"
-        >
-          {label}
-        </Text>
-      </Box>
-
-      {/* Resultado */}
-      {done ? (
-        <Box
-          bg={`${tcmTxt}18`}
-          border={`1px solid ${tcmTxt}44`}
-          borderRadius="full"
-          px={4}
-          py={1}
-        >
-          <Text
-            color={tcmTxt}
-            fontSize={{ base: "sm", md: "md" }}
-            fontWeight="600"
-            letterSpacing="0.06em"
-            textAlign="center"
-            fontFamily="'EB Garamond', serif"
-          >
-            {result}
-          </Text>
-        </Box>
-      ) : (
-        <Text
-          color={`${tcmTxt}33`}
-          fontSize="md"
-          fontStyle="italic"
-          letterSpacing="0.04em"
-          fontFamily="'EB Garamond', serif"
-        >
-          Pendiente...
-        </Text>
-      )}
-
-      {/* Botón */}
-      <Box
-        as="button"
-        onClick={() => navigate(link)}
-        mt={1}
-        px={5}
-        py={2}
-        borderRadius="full"
-        fontFamily="'EB Garamond', serif"
-        fontSize={{ base: "sm", md: "md" }}
-        fontWeight="600"
-        letterSpacing="0.07em"
-        border={`1.5px solid ${done ? tcmTxt + "55" : tcmTxt + "33"}`}
-        bg={done ? `${tcmTxt}18` : "transparent"}
+      {/* Título */}
+      <Text
         color={done ? tcmTxt : `${tcmTxt}66`}
-        cursor="pointer"
-        transition="all 0.2s"
-        _hover={{
-          bg: `${tcmTxt}28`,
-          borderColor: tcmTxt,
-          color: tcmTxt,
-        }}
+        fontSize={{ base: "md", md: "lg" }}
+        fontWeight="600"
+        fontFamily="'EB Garamond', serif"
+        letterSpacing="0.03em"
+        lineHeight="1.3"
       >
-        {done ? "Rehacer test" : `Hacer test`}
-      </Box>
-    </Flex>
+        {label}
+      </Text>
+    </Box>
   );
 };
 
 /* ══════════════════════════════════════════════
-   SECCIÓN DE RESULTADO (bloqueada / desbloqueada)
+   SECCIÓN DE RESULTADO
 ══════════════════════════════════════════════ */
 type ResultSectionProps = {
   testNum: number;
   testLabel: string;
-  testSubtitle: string;
   testLink: string;
   headerIcon: React.ReactNode;
   result: string | null;
   recs: Record<string, Recs>;
   descriptions: Record<string, string>;
   videos: Record<string, string | undefined>;
-  transcripts: Record<string, string | undefined>;
   navigate: (path: string) => void;
+  useElementColor?: boolean;
 };
 
 const ResultSection = ({
+  testNum,
   testLabel,
-  testSubtitle,
   testLink,
   headerIcon,
   result,
   recs,
   descriptions,
   videos,
-  transcripts,
   navigate,
+  useElementColor,
 }: ResultSectionProps) => {
-  const [transcriptOpen, setTranscriptOpen] = useState(false);
-
   const locked = !result;
   const rec = result ? recs[result] : null;
   const video = result ? videos[result] : undefined;
-  const transcript = result ? transcripts[result] : undefined;
   const description = result ? descriptions[result] : undefined;
+  const elTheme = result && useElementColor ? getTheme(result) : null;
 
   return (
-    <Flex direction="column" w="100%" maxW="900px" gap={{ base: 4, md: 5 }}>
-
+    <Box
+      w="100%"
+      maxW="900px"
+      bg={tcmBg}
+      border={`1px solid ${locked ? tcmTxt + "1a" : tcmTxt + "33"}`}
+      borderRadius="3xl"
+      px={{ base: 6, md: 10 }}
+      pt={{ base: 8, md: 10 }}
+      pb={{ base: 8, md: 10 }}
+      boxShadow={
+        locked
+          ? "0 4px 24px rgba(0,0,0,0.2)"
+          : `0 6px 40px rgba(0,0,0,0.3), 0 0 40px ${tcmTxt}15`
+      }
+    >
       {/* ── Encabezado ── */}
-      <Flex w="100%" align="center" gap={4} px={{ base: 1, md: 2 }}>
-        <Box
-          w={{ base: "46px", md: "54px" }}
-          h={{ base: "46px", md: "54px" }}
-          borderRadius="full"
-          bg={tcmBg}
-          border={`2px solid ${locked ? tcmTxt + "22" : tcmTxt + "55"}`}
-          boxShadow={locked ? "none" : `0 0 18px ${tcmTxt}33`}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexShrink={0}
-        >
-          {headerIcon}
-        </Box>
-        <Box flex="1">
-          <Text
-            color={`${tcmTxt}66`}
-            fontSize="xs"
-            letterSpacing="0.22em"
-            textTransform="uppercase"
-            fontFamily="'EB Garamond', serif"
-            lineHeight="1"
-            mb={0.5}
+      <Flex w="100%" align="center" justify="space-between" gap={4} mb={{ base: 6, md: 8 }} flexWrap="wrap">
+        <Flex align="center" gap={4}>
+          <Box
+            w={{ base: "46px", md: "54px" }}
+            h={{ base: "46px", md: "54px" }}
+            borderRadius="full"
+            bg={`${tcmBg}dd`}
+            border={`2px solid ${locked ? tcmTxt + "22" : tcmTxt + "66"}`}
+            boxShadow={locked ? "none" : `0 0 22px ${tcmTxt}66, 0 0 8px ${tcmTxt}44`}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexShrink={0}
           >
-            {testSubtitle}
+            {headerIcon}
+          </Box>
+          <Text
+            color={locked ? `${tcmTxt}44` : tcmTxt}
+            fontSize={{ base: "2xl", md: "3xl" }}
+            fontWeight="700"
+            fontFamily="'EB Garamond', serif"
+            lineHeight="1.1"
+            letterSpacing="0.04em"
+          >
+            {testNum}. {testLabel}
           </Text>
-          <Flex align="baseline" gap={3} flexWrap="wrap">
-            <Text
-              color={locked ? `${tcmTxt}44` : tcmTxt}
-              fontSize={{ base: "2xl", md: "3xl" }}
-              fontWeight="700"
-              fontFamily="'EB Garamond', serif"
-              lineHeight="1.1"
-              letterSpacing="0.04em"
-            >
-              {testLabel}
-            </Text>
-            {result && (
-              <Box
-                bg={`${tcmTxt}18`}
-                border={`1px solid ${tcmTxt}44`}
-                borderRadius="full"
-                px={3}
-                py={0.5}
-              >
-                <Text
-                  color={tcmTxt}
-                  fontSize={{ base: "sm", md: "md" }}
-                  fontWeight="600"
-                  letterSpacing="0.08em"
-                  fontFamily="'EB Garamond', serif"
+        </Flex>
+        {result && (
+          <Box
+            bg={elTheme ? `${elTheme.accent}18` : `${tcmTxt}15`}
+            border={`1.5px solid ${elTheme ? elTheme.accent + "88" : tcmTxt + "77"}`}
+            borderRadius="full"
+            px={{ base: 4, md: 5 }}
+            py={{ base: 1, md: 1.5 }}
+            boxShadow={`0 0 20px ${elTheme ? elTheme.accent + "55" : tcmTxt + "55"}, 0 0 8px ${elTheme ? elTheme.accent + "33" : tcmTxt + "33"}`}
+          >
+            <Flex align="center" gap={2}>
+              {elTheme?.icon && (
+                <Box
+                  w="22px"
+                  h="22px"
+                  color={elTheme.accent}
+                  flexShrink={0}
+                  filter={`drop-shadow(0 0 4px ${elTheme.accent}88)`}
                 >
-                  {result}
-                </Text>
-              </Box>
-            )}
-          </Flex>
-        </Box>
+                  {elTheme.icon}
+                </Box>
+              )}
+              <Text
+                color={elTheme ? elTheme.accent : tcmTxt}
+                fontSize={{ base: "xl", md: "2xl" }}
+                fontWeight="700"
+                letterSpacing="0.06em"
+                fontFamily="'EB Garamond', serif"
+                filter={`drop-shadow(0 0 6px ${elTheme ? elTheme.accent + "88" : tcmTxt + "88"})`}
+              >
+                {result}
+              </Text>
+            </Flex>
+          </Box>
+        )}
       </Flex>
 
       {/* ── BLOQUEADO ── */}
@@ -434,7 +387,6 @@ const ResultSection = ({
           py={{ base: 12, md: 16 }}
           px={{ base: 6, md: 12 }}
         >
-          {/* Candado */}
           <Box color={`${tcmTxt}33`}>
             <svg xmlns="http://www.w3.org/2000/svg" height="44px" viewBox="0 -960 960 960" width="44px" fill={`${tcmTxt}44`}>
               <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
@@ -460,7 +412,8 @@ const ResultSection = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight="600"
             letterSpacing="0.08em"
-            border={`1.5px solid ${tcmTxt}44`}
+            border={`1.5px solid ${tcmTxt}74`}
+            boxShadow={`0 0 24px ${tcmTxt}77, 0 0 8px ${tcmTxt}55`}
             bg={`${tcmBg}99`}
             color={`${tcmTxt}99`}
             cursor="pointer"
@@ -469,7 +422,6 @@ const ResultSection = ({
               bg: `rgba(107,4,4,0.65)`,
               borderColor: tcmTxt,
               color: tcmTxt,
-              boxShadow: `0 0 24px ${tcmTxt}28`,
             }}
           >
             Hacer test de {testLabel}
@@ -479,186 +431,82 @@ const ResultSection = ({
         /* ── DESBLOQUEADO ── */
         <Flex direction="column" gap={4}>
 
-          {/* Vídeo */}
-          <Box
-            w="100%"
-            aspectRatio={16 / 9}
-            borderRadius="2xl"
-            overflow="hidden"
-            boxShadow="0 8px 40px rgba(0,0,0,0.45), 0 0 30px rgba(218,113,113,0.2)"
-            bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${tcmTxt}22`}
-          >
-            {video ? (
+          {/* Vídeo (solo si existe) */}
+          {video && (
+            <Box
+              w="100%"
+              aspectRatio={16 / 9}
+              borderRadius="2xl"
+              overflow="hidden"
+              boxShadow={`0 8px 40px rgba(0,0,0,0.5), 0 0 48px ${tcmTxt}77, 0 0 14px ${tcmTxt}55`}
+              bg="rgba(0,0,0,0.45)"
+              border={`2px solid ${tcmTxt}bb`}
+            >
               <iframe
                 style={{ width: "100%", height: "100%", border: "none" }}
                 src={`https://www.youtube.com/embed/${video}`}
                 title={testLabel}
                 allowFullScreen
               />
-            ) : (
-              <Flex w="100%" h="100%" align="center" justify="center" direction="column" gap={3}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="44px" viewBox="0 -960 960 960" width="44px" fill={`${tcmTxt}33`}>
-                  <path d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"/>
-                </svg>
-                <Text
-                  color={`${tcmTxt}33`}
-                  fontSize={{ base: "md", md: "lg" }}
-                  fontStyle="italic"
-                  fontFamily="'EB Garamond', serif"
-                  letterSpacing="0.04em"
-                >
-                  Vídeo próximamente
-                </Text>
-              </Flex>
-            )}
-          </Box>
-
-          {/* Descripción */}
-          <Box
-            w="100%"
-            bg={`${tcmBg}99`}
-            border={`1px solid ${tcmTxt}44`}
-            borderRadius="2xl"
-            px={{ base: 7, md: 12 }}
-            py={{ base: 6, md: 7 }}
-            sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          >
-            <Flex justify="center" gap={2} mb={4}>
-              <Box w="16px" h="1px" borderRadius="full" bg={`${tcmTxt}55`} />
-              <Box w="32px" h="1px" borderRadius="full" bg={`${tcmTxt}99`} />
-              <Box w="16px" h="1px" borderRadius="full" bg={`${tcmTxt}55`} />
-            </Flex>
-            <Text
-              fontSize={{ base: "lg", md: "xl" }}
-              color={tcmTxt}
-              lineHeight="1.95"
-              fontStyle="italic"
-              letterSpacing="0.025em"
-              textAlign="center"
-              fontFamily="'EB Garamond', serif"
-            >
-              {description}
-            </Text>
-            <Flex justify="center" gap={2} mt={4}>
-              <Box w="16px" h="1px" borderRadius="full" bg={`${tcmTxt}55`} />
-              <Box w="32px" h="1px" borderRadius="full" bg={`${tcmTxt}99`} />
-              <Box w="16px" h="1px" borderRadius="full" bg={`${tcmTxt}55`} />
-            </Flex>
-          </Box>
-
-          {/* Transcripción plegable */}
-          <Box w="100%">
-            <Flex
-              as="button"
-              w="100%"
-              align="center"
-              justify="space-between"
-              px={{ base: 6, md: 10 }}
-              py={{ base: 3, md: 4 }}
-              bg={`${tcmBg}99`}
-              border={`1px solid ${tcmTxt}44`}
-              borderRadius={transcriptOpen ? "2xl 2xl 0 0" : "2xl"}
-              cursor="pointer"
-              onClick={() => setTranscriptOpen(!transcriptOpen)}
-              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-              transition="border-radius 0.2s"
-            >
-              <Text
-                color={tcmTxt}
-                fontSize={{ base: "md", md: "lg" }}
-                fontWeight="600"
-                letterSpacing="0.04em"
-                fontFamily="'EB Garamond', serif"
-              >
-                Transcripción
-              </Text>
-              <Text
-                color={tcmTxt}
-                fontSize="xl"
-                transition="transform 0.25s"
-                transform={transcriptOpen ? "rotate(180deg)" : "rotate(0deg)"}
-              >
-                ▾
-              </Text>
-            </Flex>
-            <Collapse in={transcriptOpen} animateOpacity>
-              <Box
-                px={{ base: 6, md: 10 }}
-                py={{ base: 5, md: 7 }}
-                bg={`${tcmBg}66`}
-                border={`1px solid ${tcmTxt}33`}
-                borderTop="none"
-                borderRadius="0 0 2xl 2xl"
-                sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-              >
-                {transcript ? (
-                  <Text
-                    color={tcmTxt}
-                    fontSize={{ base: "md", md: "lg" }}
-                    lineHeight="2"
-                    letterSpacing="0.02em"
-                    whiteSpace="pre-wrap"
-                    fontFamily="'EB Garamond', serif"
-                  >
-                    {transcript}
-                  </Text>
-                ) : (
-                  <Text
-                    color={`${tcmTxt}66`}
-                    fontSize={{ base: "md", md: "lg" }}
-                    lineHeight="2"
-                    fontStyle="italic"
-                    textAlign="center"
-                    fontFamily="'EB Garamond', serif"
-                  >
-                    La transcripción estará disponible próximamente.
-                  </Text>
-                )}
-              </Box>
-            </Collapse>
-          </Box>
-
-          {/* Recomendaciones */}
-          {rec && (
-            <Box w="100%">
-              <Flex align="center" gap={3} mb={4}>
-                <Box flex="1" h="1px" bg={`${tcmTxt}22`} borderRadius="full" />
-                <Text
-                  color={`${tcmTxt}66`}
-                  fontSize="xs"
-                  letterSpacing="0.25em"
-                  textTransform="uppercase"
-                  fontFamily="'EB Garamond', serif"
-                >
-                  Recomendaciones
-                </Text>
-                <Box flex="1" h="1px" bg={`${tcmTxt}22`} borderRadius="full" />
-              </Flex>
-              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                <RecBox
-                  title="Infusiones y Tés"
-                  icon={<TeaIcon />}
-                  items={rec.infusiones}
-                />
-                <RecBox
-                  title="Hierbas Medicinales"
-                  icon={<HerbIcon />}
-                  items={rec.hierbas}
-                />
-                <RecBox
-                  title="Estilo de Vida"
-                  icon={<LifestyleIconSm />}
-                  items={rec.estiloDeVida}
-                />
-                <RecBox
-                  title="Nutrición"
-                  icon={<NutriIconSm />}
-                  items={rec.nutricion}
-                />
-              </SimpleGrid>
             </Box>
           )}
+
+          {/* Descripción */}
+          {description && (() => {
+            const c = elTheme ? elTheme.accent : tcmTxt;
+            return (
+              <Box
+                w="100%"
+                bg={`${tcmBg}66`}
+                border={`1px solid ${c}28`}
+                borderRadius="2xl"
+                px={{ base: 6, md: 10 }}
+                py={{ base: 5, md: 7 }}
+                sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+              >
+                <Text
+                  fontSize={{ base: "md", md: "lg" }}
+                  color={`${c}bb`}
+                  lineHeight="1.9"
+                  fontStyle="italic"
+                  letterSpacing="0.02em"
+                  textAlign="center"
+                  fontFamily="'EB Garamond', serif"
+                >
+                  {description}
+                </Text>
+              </Box>
+            );
+          })()}
+
+
+          {/* Recomendaciones */}
+          {rec && (() => {
+            const c = elTheme ? elTheme.accent : tcmTxt;
+            return (
+              <Box w="100%">
+                <Flex align="center" gap={3} mb={4}>
+                  <Box flex="1" h="1px" bg={`${c}22`} borderRadius="full" />
+                  <Text
+                    color={`${c}66`}
+                    fontSize="xs"
+                    letterSpacing="0.25em"
+                    textTransform="uppercase"
+                    fontFamily="'EB Garamond', serif"
+                  >
+                    Recomendaciones
+                  </Text>
+                  <Box flex="1" h="1px" bg={`${c}22`} borderRadius="full" />
+                </Flex>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                  <RecBox title="Infusiones y Tés" icon={<TeaIcon />} items={rec.infusiones} accentColor={c} />
+                  <RecBox title="Hierbas Medicinales" icon={<HerbIcon />} items={rec.hierbas} accentColor={c} />
+                  <RecBox title="Estilo de Vida" icon={<LifestyleIconSm />} items={rec.estiloDeVida} accentColor={c} />
+                  <RecBox title="Nutrición" icon={<NutriIconCustom />} items={rec.nutricion} accentColor={c} />
+                </SimpleGrid>
+              </Box>
+            );
+          })()}
 
           {/* Botón rehacer test */}
           <Flex justify="center" mt={2}>
@@ -688,7 +536,7 @@ const ResultSection = ({
           </Flex>
         </Flex>
       )}
-    </Flex>
+    </Box>
   );
 };
 
@@ -738,7 +586,6 @@ export default function TCMespacio() {
     window.scrollTo({ top: 0, behavior: "auto" });
     fetchData();
 
-    // Refetch cuando el usuario vuelve desde el test
     const onFocus = () => fetchData();
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
@@ -762,6 +609,7 @@ export default function TCMespacio() {
         <Flex
           direction="column"
           alignItems="center"
+          gap={{ base: 8, md: 10 }}
           px={{ base: 5, md: 10, lg: 16 }}
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
@@ -775,11 +623,7 @@ export default function TCMespacio() {
           />
 
           {/* ══ SPINNER DE CARGA ══ */}
-          {loading && (
-            <Flex align="center" justify="center" py={20}>
-              <Spinner size="xl" color={tcmTxt} />
-            </Flex>
-          )}
+          {loading && <SpinnerTurquesa />}
 
           {!loading && (
             <>
@@ -788,16 +632,19 @@ export default function TCMespacio() {
                 w="100%"
                 maxW="900px"
                 bg={tcmBg}
-                border="1px solid rgba(218,113,113,0.22)"
+                border={`1.5px solid ${tcmTxt}55`}
                 borderRadius="3xl"
                 px={{ base: 6, md: 10 }}
                 pt={{ base: 8, md: 10 }}
                 pb={{ base: 8, md: 10 }}
-                mb={{ base: 10, md: 14 }}
-                boxShadow="0 6px 48px rgba(0,0,0,0.22), 0 0 60px rgba(107,4,4,0.18)"
+                boxShadow={`0 6px 48px rgba(0,0,0,0.28), 0 0 60px ${tcmTxt}22`}
               >
                 <Flex justify="center" align="center" gap={3} mb={{ base: 8, md: 10 }}>
-                  <Box color={tcmTxt} filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))" flexShrink={0}>
+                  <Box
+                    color={tcmTxt}
+                    filter={`drop-shadow(0 0 8px ${tcmTxt}88)`}
+                    flexShrink={0}
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill={tcmTxt}>
                       <path d="M440-120v-319q-64 0-123-24.5T213-533q-45-45-69-104t-24-123v-80h80q63 0 122 24.5T426-746q31 31 51.5 68t31.5 79q5-7 11-13.5t13-13.5q45-45 104-69.5T760-720h80v80q0 64-24.5 123T746-413q-45 45-103.5 69T520-320v200h-80Zm0-400q0-48-18.5-91.5T369-689q-34-34-77.5-52.5T200-760q0 48 18 92t52 78q34 34 78 52t92 18Zm80 120q48 0 91.5-18t77.5-52q34-34 52.5-78t18.5-92q-48 0-92 18.5T590-569q-34 34-52 77.5T520-400Z"/>
                     </svg>
@@ -809,7 +656,7 @@ export default function TCMespacio() {
                     textAlign="center"
                     fontWeight="700"
                     letterSpacing="0.05em"
-                    filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
+                    filter={`drop-shadow(0 0 6px ${tcmTxt}66)`}
                     fontFamily="'EB Garamond', serif"
                   >
                     Tests para el Autoconocimiento
@@ -818,7 +665,6 @@ export default function TCMespacio() {
 
                 <SimpleGrid w="100%" columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 5 }}>
                   <TestStatusCard
-                    num={1}
                     label="Conoce tu constitución"
                     link="/tcm/test/1"
                     result={constitucion}
@@ -826,7 +672,6 @@ export default function TCMespacio() {
                     navigate={navigate}
                   />
                   <TestStatusCard
-                    num={2}
                     label="Tu elemento predominante"
                     link="/tcm/test/2"
                     result={elemento}
@@ -834,7 +679,6 @@ export default function TCMespacio() {
                     navigate={navigate}
                   />
                   <TestStatusCard
-                    num={3}
                     label="Tu desequilibrio actual"
                     link="/tcm/test/3"
                     result={desequilibrio}
@@ -848,49 +692,42 @@ export default function TCMespacio() {
               <ResultSection
                 testNum={1}
                 testLabel="Tu Constitución"
-                testSubtitle="Test 1"
                 testLink="/tcm/test/1"
                 headerIcon={<IconConstitucion />}
                 result={constitucion}
                 recs={RECS_CONSTITUCIONES}
                 descriptions={DESC_CONSTITUCION}
                 videos={VIDEOS_CONSTITUCION}
-                transcripts={TRANSCRIPTS_CONSTITUCION}
+
                 navigate={navigate}
               />
-
-              <SectionDivider />
 
               {/* ══ SECCIÓN 2: ELEMENTO ══ */}
               <ResultSection
                 testNum={2}
                 testLabel="Tu Elemento Predominante"
-                testSubtitle="Test 2"
                 testLink="/tcm/test/2"
                 headerIcon={<IconElemento />}
                 result={elemento}
                 recs={RECS_ELEMENTOS}
                 descriptions={DESC_ELEMENTO}
                 videos={VIDEOS_ELEMENTO}
-                transcripts={TRANSCRIPTS_ELEMENTO}
                 navigate={navigate}
+                useElementColor
               />
-
-              <SectionDivider />
 
               {/* ══ SECCIÓN 3: DESEQUILIBRIO ══ */}
               <ResultSection
                 testNum={3}
                 testLabel="Tu Desequilibrio Actual"
-                testSubtitle="Test 3"
                 testLink="/tcm/test/3"
                 headerIcon={<IconDesequilibrio />}
                 result={desequilibrio}
                 recs={RECS_DESEQUILIBRIOS}
                 descriptions={DESC_DESEQUILIBRIO}
                 videos={VIDEOS_DESEQUILIBRIO}
-                transcripts={TRANSCRIPTS_DESEQUILIBRIO}
                 navigate={navigate}
+                useElementColor
               />
             </>
           )}

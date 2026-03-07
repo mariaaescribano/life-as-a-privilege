@@ -7,34 +7,6 @@ USAR OBJ+ID : userId
 
 
 
-- EN el card del diagnostico de la lengua, por favor, haz que
-las opciones sean desplegables , por lo que al replegarlas ocupen menos espacio. 
-y por tanto el card se haga mas pequeño. Necesito que sea abajo del titulo donde
-pongas los iconos, de expandir y otro de video con estos links
-/aprendizaje/videoLessonPage/
-el primero es: tcm23
-el segundo; tcm24 y el ultimo tcm25
-
-- EN el card del yin y el yang necesito que pongas el icono de cambio
-abajo a la derecha y que se quede siempre abajo a la derecha, aunque haya mas
-o menos texto. Pero lo importante es que pongas el video 
- { 
-        id:"tcm2",
-        nom: "1.2 El yin y el yang",
-        link:`${basePath}/tcm2`,
-        linkAnterior:`${basePath}/tcm1`,
-        linkNext:`${basePath}/tcm3`,
-        descripcion:"El verdadero equilibrio es la armonía entre fuerzas que se complementan.",
-        video:"OU5huhK-FxU",
-        letra: letratcm2,
-        detalles: detalles,
-        icon: TCMIcon,
-      },
-
-
-
-
-
 
 
 

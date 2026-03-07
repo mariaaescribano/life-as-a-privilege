@@ -145,12 +145,12 @@ export default function TCMTest2() {
           Math.abs((sortedIdx[0].t ?? 0) - (sortedIdx[1].t ?? 0)) < 3;
         return (
           <Flex direction="column" gap={1.5}>
-            <Text color="rgba(255,255,255,0.48)" fontSize="xs" fontStyle="italic" lineHeight="1.9">
+            <Text color="rgba(255,255,255,0.48)" fontSize="md" fontStyle="italic" lineHeight="1.9">
               El mayor puntaje indica tu terreno constitucional predominante.
               El segundo puntaje corresponde al movimiento de soporte.
               {isMixed && " La diferencia menor a 3 puntos entre los dos primeros sugiere constitución mixta."}
             </Text>
-            <Text color="rgba(255,255,255,0.35)" fontSize="xs" fontStyle="italic">
+            <Text color="rgba(255,255,255,0.35)" fontSize="md" fontStyle="italic">
               Esta lectura se alinea con los principios del Huangdi Neijing respecto a la diferenciación del terreno energético.
             </Text>
           </Flex>
@@ -161,6 +161,7 @@ export default function TCMTest2() {
       resultadoEtiqueta="Tu Terreno"
       localStorageKey="tcm_test2_result"
       savePrimaryKey="primaryElemento"
+       backToSpaceLink="/espacio/questions/medicinachina"
     />
   );
 }

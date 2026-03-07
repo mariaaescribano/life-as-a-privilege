@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   Box, Flex, Image, Text, SimpleGrid,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
-  Input, FormControl, FormLabel, VStack, Checkbox, Spinner,
+  Input, FormControl, FormLabel, VStack, Checkbox,
 } from "@chakra-ui/react";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -139,7 +140,7 @@ const StripeCheckoutForm = ({ clientSecret, nombre, email, precio, onSuccess, on
           gap={2}
           onClick={loading ? undefined : handlePay}
         >
-          {loading ? <><Spinner size="sm" color="white" /> Procesando...</> : "Confirmar pago →"}
+          {loading ? <><SpinnerTurquesa fullScreen={false} size={16} thickness={2} /> Procesando...</> : "Confirmar pago →"}
         </Box>
       </Flex>
 
@@ -569,7 +570,7 @@ const ProductoDetalle = () => {
                     alignItems="center"
                     gap={2}
                   >
-                    {loadingIntent ? <><Spinner size="sm" color="white" /> Cargando...</> : "Pagar →"}
+                    {loadingIntent ? <><SpinnerTurquesa fullScreen={false} size={16} thickness={2} /> Cargando...</> : "Pagar →"}
                   </Box>
                 </Box>
               </>

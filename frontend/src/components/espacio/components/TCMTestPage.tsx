@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteHeader from "../../global/SiteHeader";
-import { API_URL, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
+import { API_URL, EspacioPersonalIcon, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
 import { getTheme } from "../data/tcmTheme";
 
 /* ══════════════════════════════════════════════
@@ -33,13 +34,16 @@ export interface TCMTestPageProps {
   scaleLabels: string[];
   scaleMobileHint: string;
   secciones: TCMSeccion[];
-  resultadosNota: (totals: number[], maxTotal: number) => React.ReactNode;
+  resultadosNota?: (totals: number[], maxTotal: number) => React.ReactNode;
   interpretacionTitle: string;
   interpretaciones: TCMInterpretacion[];
   resultadoEtiqueta: string;
   localStorageKey: string;
   savePrimaryKey: string;
   tcmField?: 'constitucion' | 'elemento' | 'desequilibrio';
+  monoColor?: boolean;
+  showInterpretacion?: boolean;
+  backToSpaceLink?: string;
 }
 
 /* ══════════════════════════════════════════════
@@ -66,7 +70,7 @@ const ScaleBtn = ({
   onClick: () => void;
   accent?: string;
 }) => (
-  <Flex direction="column" align="center" gap={1.5}>
+  <Flex direction="column" align="center" gap={1.5} w={{ base: "auto", md: "120px" }}>
     <Box
       as="button"
       onClick={onClick}
@@ -76,7 +80,7 @@ const ScaleBtn = ({
       border={selected ? `2px solid ${accent}` : "1.5px solid rgba(255,255,255,0.2)"}
       bg={selected ? "rgba(107,4,4,0.65)" : "rgba(255,255,255,0.05)"}
       color={selected ? accent : "rgba(255,255,255,0.45)"}
-      fontSize={{ base: "lg", md: "xl" }}
+      fontSize={{ base: "xl", md: "2xl" }}
       fontWeight="700"
       fontFamily="'EB Garamond', serif"
       cursor="pointer"
@@ -97,10 +101,9 @@ const ScaleBtn = ({
     </Box>
     <Text
       color={selected ? accent : "rgba(255,255,255,0.28)"}
-      fontSize={{ base: "md", md: "lg" }}
+      fontSize={{ base: "lg", md: "xl" }}
       letterSpacing="0.04em"
       textAlign="center"
-      maxW="204px"
       lineHeight="1.3"
       display={{ base: "none", md: "block" }}
       transition="color 0.18s"
@@ -117,6 +120,7 @@ const SeccionCard = ({
   scaleLabels,
   scaleMobileHint,
   onAnswer,
+  monoColor = false,
 }: {
   el: TCMSeccion;
   respuestas: (number | null)[];
@@ -124,6 +128,7 @@ const SeccionCard = ({
   scaleLabels: string[];
   scaleMobileHint: string;
   onAnswer: (qi: number, val: number) => void;
+  monoColor?: boolean;
 }) => {
   const maxPerQ = Math.max(...scaleValues);
   const maxScore = el.preguntas.length * maxPerQ;
@@ -131,7 +136,7 @@ const SeccionCard = ({
   const answered = respuestas.filter((a) => a !== null).length;
   const complete = answered === el.preguntas.length;
   const elTheme = getTheme(el.nombre);
-  const accent = elTheme.accent;
+  const accent = monoColor ? tcmTxt : elTheme.accent;
 
   return (
     <Box
@@ -147,26 +152,29 @@ const SeccionCard = ({
       transition="border-color 0.3s, box-shadow 0.3s"
     >
       <Flex align="center" gap={3} mb={2}>
-        <Box
-          w="28px"
-          h="28px"
-          borderRadius="full"
-          bg={elTheme.bg}
-          border={`1.5px solid ${accent}55`}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          color={accent}
-          flexShrink={0}
-        >
-          {elTheme.icon}
-        </Box>
+        {!monoColor && (
+          <Box
+            w="36px"
+            h="36px"
+            borderRadius="full"
+            bg={elTheme.accent}
+            border={`1.5px solid ${elTheme.accent}88`}
+            boxShadow={`0 0 14px ${elTheme.accent}66, 0 0 4px ${elTheme.accent}44`}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            color={elTheme.bg}
+            flexShrink={0}
+          >
+            {elTheme.icon}
+          </Box>
+        )}
         <Text
-          color={accent}
+          color={tcmTxt}
           fontSize={{ base: "2xl", md: "3xl" }}
           fontWeight="600"
           letterSpacing="0.1em"
-          textShadow={`0 0 18px ${accent}33`}
+          textShadow={`0 0 18px ${tcmTxt}33`}
         >
           {el.nombre}
         </Text>
@@ -179,7 +187,7 @@ const SeccionCard = ({
           <Box key={qi}>
             <Text
               color="rgba(255,255,255,0.82)"
-              fontSize={{ base: "lg", md: "xl" }}
+              fontSize={{ base: "xl", md: "2xl" }}
               letterSpacing="0.02em"
               lineHeight="1.75"
               mb={3}
@@ -210,7 +218,7 @@ const SeccionCard = ({
       <Divider color={accent} />
 
       <Flex align="center" justify="space-between">
-        <Text color={`${accent}55`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
+        <Text color={`${accent}85`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
           Suma {el.nombre}
         </Text>
         <Flex align="center" gap={2}>
@@ -252,14 +260,17 @@ export default function TCMTestPage({
   localStorageKey,
   savePrimaryKey,
   tcmField,
+  monoColor = false,
+  showInterpretacion = true,
+  backToSpaceLink,
 }: TCMTestPageProps) {
+  const navigate = useNavigate();
   const maxPerQ = Math.max(...scaleValues);
 
   const [answers, setAnswers] = useState<(number | null)[][]>(
     secciones.map((s) => s.preguntas.map(() => null))
   );
   const [showResults, setShowResults] = useState(false);
-  const [saved, setSaved] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -282,13 +293,6 @@ export default function TCMTestPage({
       next[si][qi] = val;
       return next;
     });
-  };
-
-  const handleShowResults = () => {
-    setShowResults(true);
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 80);
   };
 
   const maxTotal = Math.max(...totals);
@@ -320,7 +324,14 @@ export default function TCMTestPage({
         }
       }
     }
-    setSaved(true);
+  };
+
+  const handleShowResults = () => {
+    setShowResults(true);
+    handleSaveResult();
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
   };
 
   return (
@@ -359,7 +370,7 @@ export default function TCMTestPage({
           >
             <Text
               color={tcmTxt}
-              fontSize="md"
+              fontSize={{ base: "lg", md: "xl" }}
               fontWeight="700"
               letterSpacing="0.2em"
               textTransform="uppercase"
@@ -369,7 +380,7 @@ export default function TCMTestPage({
             </Text>
             <Text
               color={tcmTxt}
-              fontSize={{ base: "md", md: "lg" }}
+              fontSize={{ base: "lg", md: "xl" }}
               lineHeight="1.9"
               mb={5}
             >
@@ -379,15 +390,15 @@ export default function TCMTestPage({
               {scaleLabels.map((label, i) => (
                 <Flex key={i} align="center" gap={2}>
                   <Box
-                    w="38px" h="38px" borderRadius="full"
+                    w="42px" h="42px" borderRadius="full"
                     border="1.5px solid rgba(218,113,113,0.45)"
                     display="flex" alignItems="center" justifyContent="center"
                     bg={tcmBg}
                     flexShrink={0}
                   >
-                    <Text color={tcmTxt} fontSize="sm" fontWeight="700">{i}</Text>
+                    <Text color={tcmTxt} fontSize="md" fontWeight="700">{i}</Text>
                   </Box>
-                  <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }}>
+                  <Text color={tcmTxt} fontSize={{ base: "lg", md: "xl" }}>
                     {label}
                   </Text>
                 </Flex>
@@ -396,7 +407,7 @@ export default function TCMTestPage({
             {instruccionesNota && (
               <Text
                 color={tcmTxt}
-                fontSize="xs"
+                fontSize="sm"
                 fontStyle="italic"
                 mt={5}
                 letterSpacing="0.03em"
@@ -416,6 +427,7 @@ export default function TCMTestPage({
               scaleLabels={scaleLabels}
               scaleMobileHint={scaleMobileHint}
               onAnswer={(qi, val) => handleAnswer(si, qi, val)}
+              monoColor={monoColor}
             />
           ))}
 
@@ -491,39 +503,40 @@ export default function TCMTestPage({
                     const maxPossible = sec.preguntas.length * maxPerQ;
                     const pct = Math.round(((totals[si] ?? 0) / maxPossible) * 100);
                     const elTheme = getTheme(sec.nombre);
+                    const barColor = monoColor ? tcmTxt : elTheme.accent;
                     return (
                       <Box key={si}>
                         <Flex align="center" justify="space-between" mb={2}>
                           <Flex align="center" gap={3} flexWrap="wrap">
                             <Text
                               color={isMax ? "white" : "rgba(255,255,255,0.65)"}
-                              fontSize={{ base: "xl", md: "2xl" }}
+                              fontSize={{ base: "2xl", md: "3xl" }}
                               fontWeight={isMax ? "600" : "400"}
                               letterSpacing="0.04em"
                               transition="all 0.3s"
-                              textShadow={isMax ? `0 0 12px ${elTheme.accent}50` : "none"}
+                              textShadow={isMax ? `0 0 12px ${barColor}50` : "none"}
                             >
                               {sec.nombre}
                             </Text>
                             {isMax && (
                               <Box
-                                bg={`${elTheme.bg}cc`}
-                                border={`1px solid ${elTheme.accent}70`}
+                                bg={monoColor ? `${tcmBg}cc` : `${elTheme.bg}cc`}
+                                border={`1px solid ${barColor}70`}
                                 borderRadius="full"
                                 px={3} py={0.5}
-                                boxShadow={`0 0 10px ${elTheme.accent}28`}
+                                boxShadow={`0 0 10px ${barColor}28`}
                               >
-                                <Text color={elTheme.accent} fontSize="xs" fontWeight="700" letterSpacing="0.16em">
+                                <Text color={barColor} fontSize="xs" fontWeight="700" letterSpacing="0.16em">
                                   PREDOMINANTE
                                 </Text>
                               </Box>
                             )}
                           </Flex>
                           <Text
-                            color={isMax ? elTheme.accent : "rgba(255,255,255,0.4)"}
+                            color={isMax ? barColor : "rgba(255,255,255,0.4)"}
                             fontSize={{ base: "2xl", md: "3xl" }}
                             fontWeight="700"
-                            textShadow={isMax ? `0 0 12px ${elTheme.accent}55` : "none"}
+                            textShadow={isMax ? `0 0 12px ${barColor}55` : "none"}
                             transition="all 0.3s"
                             flexShrink={0}
                           >
@@ -537,8 +550,8 @@ export default function TCMTestPage({
                           <Box
                             h="100%"
                             borderRadius="full"
-                            bg={isMax ? elTheme.accent : "rgba(218,113,113,0.28)"}
-                            boxShadow={isMax ? `0 0 8px ${elTheme.accent}60` : "none"}
+                            bg={isMax ? barColor : `${barColor}44`}
+                            boxShadow={isMax ? `0 0 8px ${barColor}60` : "none"}
                             w={`${pct}%`}
                             transition="width 0.9s ease"
                           />
@@ -548,53 +561,15 @@ export default function TCMTestPage({
                   })}
                 </Flex>
 
-                {maxTotal > 0 && (
+                {maxTotal > 0 && resultadosNota && (
                   <Box mt={7} p={5} bg="rgba(0,0,0,0.18)" borderRadius="xl" border="1px solid rgba(218,113,113,0.14)">
                     {resultadosNota(totals, maxTotal)}
                   </Box>
                 )}
-
-                {/* ── GUARDAR RESULTADO ── */}
-                <Flex justify="center" mt={8}>
-                  {saved ? (
-                    <Flex align="center" gap={2} direction="column">
-                      <Text color="rgba(218,113,113,0.85)" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.08em" fontWeight="600">
-                        Resultado guardado en tu espacio
-                      </Text>
-                      <Text color="rgba(255,255,255,0.45)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
-                        Puedes consultarlo en cualquier momento desde tu espacio TCM
-                      </Text>
-                    </Flex>
-                  ) : (
-                    <Box
-                      as="button"
-                      onClick={handleSaveResult}
-                      px={8}
-                      py={3}
-                      borderRadius="full"
-                      fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "lg", md: "xl" }}
-                      fontWeight="600"
-                      letterSpacing="0.1em"
-                      border="1.5px solid rgba(218,113,113,0.5)"
-                      bg="rgba(107,4,4,0.42)"
-                      color="rgba(255,255,255,0.88)"
-                      cursor="pointer"
-                      transition="all 0.22s"
-                      _hover={{
-                        bg: "rgba(107,4,4,0.7)",
-                        borderColor: tcmTxt,
-                        boxShadow: "0 0 24px rgba(218,113,113,0.28)",
-                      }}
-                    >
-                      Guardar resultado en mi espacio
-                    </Box>
-                  )}
-                </Flex>
               </Box>
 
               {/* Interpretación */}
-              <Box
+              {showInterpretacion && <Box
                 bg={tcmBg}
                 border="1px solid rgba(218,113,113,0.35)"
                 borderRadius="2xl"
@@ -631,14 +606,15 @@ export default function TCMTestPage({
                       >
                         <Flex align="center" gap={3} mb={isMax ? 3 : 0} flexWrap="wrap">
                           {/* Icono del elemento para el predominante */}
-                          {isMax && (
+                          {isMax && !monoColor && (
                             <Box
-                              w="28px" h="28px"
+                              w="36px" h="36px"
                               borderRadius="full"
-                              bg={elTheme.bg}
-                              border={`1.5px solid ${elTheme.accent}55`}
+                              bg={elTheme.accent}
+                              border={`1.5px solid ${elTheme.accent}88`}
+                              boxShadow={`0 0 14px ${elTheme.accent}66, 0 0 4px ${elTheme.accent}44`}
                               display="flex" alignItems="center" justifyContent="center"
-                              color={elTheme.accent}
+                              color={elTheme.bg}
                               flexShrink={0}
                             >
                               {elTheme.icon}
@@ -648,7 +624,7 @@ export default function TCMTestPage({
                             <Text
                               color={isMax ? "white" : "rgba(255,255,255,0.55)"}
                               fontWeight={isMax ? "600" : "400"}
-                              fontSize={{ base: "xl", md: "2xl" }}
+                              fontSize={{ base: "2xl", md: "3xl" }}
                               letterSpacing="0.06em"
                             >
                               {interp.nombre}
@@ -679,7 +655,7 @@ export default function TCMTestPage({
                         {isMax && (
                           <Text
                             color="rgba(255,255,255,0.82)"
-                            fontSize={{ base: "md", md: "lg" }}
+                            fontSize={{ base: "lg", md: "xl" }}
                             lineHeight="1.85"
                           >
                             {interp.descripcion}
@@ -689,9 +665,42 @@ export default function TCMTestPage({
                     );
                   })}
                 </Flex>
-              </Box>
+              </Box>}
             </Box>
           )}
+           {/* ── VOLVER A MI ESPACIO ── */}
+              {backToSpaceLink && (
+                <Flex justify="center" mt={8}>
+                  <Box
+                    as="button"
+                    onClick={() => navigate(backToSpaceLink)}
+                    display="flex"
+                    alignItems="center"
+                    gap={3}
+                    px={8}
+                    py={3}
+                    borderRadius="full"
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    fontWeight="600"
+                    letterSpacing="0.08em"
+                    border={`1.5px solid ${tcmTxt}55`}
+                    bg={`${tcmBg}99`}
+                    color={tcmTxt}
+                    cursor="pointer"
+                    transition="all 0.22s"
+                    boxShadow={`0 0 20px ${tcmTxt}22`}
+                    _hover={{
+                      bg: `${tcmBg}dd`,
+                      borderColor: tcmTxt,
+                      boxShadow: `0 0 32px ${tcmTxt}44`,
+                    }}
+                  >
+                    <EspacioPersonalIcon color={tcmTxt} size="22px" />
+                    Volver a Mi Espacio
+                  </Box>
+                </Flex>
+              )}
         </Flex>
       </Box>
 
