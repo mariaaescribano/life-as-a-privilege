@@ -11,7 +11,7 @@ import EspacioHome from "./app/espacio/main/EspacioHome";
 import ExpandablePage from "./app/espacio/main/ThemePreguntas";
 import QuienSoy from "./app/web/QuienSoy";
 import Productos from "./app/web/Productos";
-import ProductoDetalle from "./app/web/ProductoDetalle";
+// import ProductoDetalle from "./app/web/ProductoDetalle";
 import ReelsPage from "./app/web/Reels";
 import RecursosPage from "./app/recursos/RecursosPage";
 import TCMTest1 from "./components/espacio/components/TCMTest1";
@@ -44,7 +44,7 @@ export default function App()
       <Route path="/quienSoy" element={<QuienSoy />} />
 
       <Route path="/productos" element={<Productos />} />
-      <Route path="/productos/:id" element={<ProductoDetalle />} />
+      {/* <Route path="/productos/:id" element={<ProductoDetalle />} /> */}
 
       <Route path="/reels" element={<ReelsPage />} />
 
