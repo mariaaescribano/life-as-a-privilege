@@ -35,7 +35,7 @@ export default function ModulesPage() {
       case neuropsicologiaNom:
         return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos: modulosNeuroPsicologia };
       case astrologiaNom:
-        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon />, modulos: modulosAstrologia };
+        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos: modulosAstrologia };
       case tcmNomLink:
         return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos: modulostcm };
       case "nutricion":
@@ -44,8 +44,8 @@ export default function ModulesPage() {
         return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
       case fitoterapiaNom:
         return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos: modulosFitoterapia};
-      case "cabala":
-        return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon /> };
+      case cabalaNom:
+        return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} /> };
       default:
         return { nom: "", bgColor: "", color: "", icon: null };
     }
@@ -110,6 +110,20 @@ export default function ModulesPage() {
       >
         <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
           © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+        </Text>
+        <Text
+          as="a"
+          href="/contacto"
+          color="rgba(255,255,255,0.4)"
+          fontSize="xs"
+          letterSpacing="0.05em"
+          display="block"
+          textAlign="center"
+          mt={1}
+          textDecoration="underline"
+          cursor="pointer"
+        >
+          Contactar
         </Text>
       </Box>
     </Box>

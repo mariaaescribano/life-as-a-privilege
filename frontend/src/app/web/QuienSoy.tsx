@@ -97,7 +97,7 @@ const QuienSoy = () => {
             </Box>
 
             {/* Bio */}
-            <Box flex="1" textAlign={{ base: "center", md: "left" }}>
+            <Box flex="1" textAlign={{ base: "center", md: "left" }} display="flex" flexDirection="column">
               <Text
                 color="white"
                 fontSize={{ base: "4xl", md: "5xl" }}
@@ -118,7 +118,30 @@ const QuienSoy = () => {
                 letterSpacing="0.02em"
               >
                 Mi propósito es descubrir la Verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
-                </Text>
+              </Text>
+              <Flex justify={{ base: "center", md: "flex-end" }} mt={5}>
+                <Box
+                  as="a"
+                  href="/contacto"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={2}
+                  px={6} py={2}
+                  borderRadius="full"
+                  border="2px solid rgba(255,255,255,0.55)"
+                  color="white"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="600"
+                  bg="transparent"
+                  letterSpacing="0.05em"
+                  cursor="pointer"
+                  _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
+                  transition="all 0.2s"
+                >
+                  Contactar
+                </Box>
+              </Flex>
             </Box>
           </Box>
 
@@ -362,6 +385,20 @@ const QuienSoy = () => {
       <Box as="footer" borderTop="1px solid rgba(255,255,255,0.15)" px={{ base: 6, md: 16 }} py={{ base: 8, md: 10 }}>
         <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
           © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+        </Text>
+        <Text
+          as="a"
+          href="/contacto"
+          color="rgba(255,255,255,0.4)"
+          fontSize="xs"
+          letterSpacing="0.05em"
+          display="block"
+          textAlign="center"
+          mt={1}
+          textDecoration="underline"
+          cursor="pointer"
+        >
+          Contactar
         </Text>
       </Box>
     </Box>

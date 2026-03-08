@@ -46,10 +46,10 @@ const disciplines: Discipline[] = [
     name: astrologiaNom,
     bg: astrologiaBg,
     txt: astrologiaTxt,
-    renderIcon: (size) => <AstrologiaIcon size={size} />,
+    renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
     desc: astrologiaDescrip,
     link: "/aprendizaje/modulosPage/" + astrologiaNom,
-    available:false
+    available:true
   },
   {
     name: tcmNom,
@@ -91,10 +91,10 @@ const disciplines: Discipline[] = [
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
-    renderIcon: (size) => <CabalaIcon size={size} />,
+    renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
     desc: cabalaDescrip,
     link: "/aprendizaje/modulosPage/" + cabalaNom,
-    available:false
+    available:true
   },
 ];
 
@@ -219,9 +219,10 @@ const Welcome = () => {
           {/* Foto */}
           <Box
             flexShrink={0}
-            w={{ base: "200px", md: "260px" }}
-            h={{ base: "260px", md: "320px" }}
+            w={{ base: "200px", md: "300px" }}
+            h={{ base: "260px", md: "380px" }}
             borderRadius="xl"
+            mt={{ base: "0px", md: "10px" }}
             overflow="hidden"
             boxShadow="0 20px 50px rgba(0,0,0,0.35), 0 4px 16px rgba(0,0,0,0.2)"
             alignSelf={{ base: "center", md: "flex-start" }}
@@ -260,6 +261,7 @@ const Welcome = () => {
             >
               <br />
               Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
+              <br />
               <br />
               “La Vida como Privilegio” no es solo un título, es una invitación. La vida no es únicamente lo que sucede, sino la forma en que decidimos mirarla cada día. Esta es una oportunidad para cambiar la perspectiva y transformar tu realidad.
             </Text>
@@ -346,7 +348,7 @@ const Welcome = () => {
                 borderRadius="full"
                 p="8px"
                 border={"4px solid "+ d.txt}
-                boxShadow="0 4px 16px rgba(107,196,200,0.6)"
+                boxShadow={`0 0 18px ${d.txt}99, 0 4px 14px ${d.txt}55`}
                 w="72px"
                 h="72px"
                 display="flex"
@@ -413,6 +415,20 @@ const Welcome = () => {
       >
         <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
           © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+        </Text>
+        <Text
+          as="a"
+          href="/contacto"
+          color="rgba(255,255,255,0.4)"
+          fontSize="xs"
+          letterSpacing="0.05em"
+          display="block"
+          textAlign="center"
+          mt={1}
+          textDecoration="underline"
+          cursor="pointer"
+        >
+          Contactar
         </Text>
       </Box>
 
@@ -524,7 +540,8 @@ const Welcome = () => {
                 bg={selected.available  ? `${selected.txt}18` : `${selected.txt}0a`}
                 cursor={selected.available ? "pointer" : "not-allowed"}
                 opacity={selected.available ? 1 : 0.45}
-                _hover={selected.available ? { bg: `${selected.txt}33`, transform: "translateY(-2px)" } : {}}
+                boxShadow={selected.available ? `0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77` : "none"}
+                _hover={selected.available ? { bg: `${selected.txt}33`, transform: "translateY(-2px)", boxShadow: `0 0 30px ${selected.txt}dd, 0 4px 18px ${selected.txt}99` } : {}}
                 transition="all 0.2s ease"
               >
                 APRENDER

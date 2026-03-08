@@ -35,7 +35,6 @@ export default function CabalaEspacio() {
             <Box
                 w="100%"
                 maxW="900px"
-                mt="20px"
                 boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
                 bg={cabalaBg}
                 border={`1.5px solid ${cabalaTxt}55`}
@@ -64,6 +63,20 @@ export default function CabalaEspacio() {
             >
             © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
             </Text>
+        <Text
+          as="a"
+          href="/contacto"
+          color="rgba(255,255,255,0.4)"
+          fontSize="xs"
+          letterSpacing="0.05em"
+          display="block"
+          textAlign="center"
+          mt={1}
+          textDecoration="underline"
+          cursor="pointer"
+        >
+          Contactar
+        </Text>
         </Box>
     </Box>
   );

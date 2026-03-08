@@ -57,7 +57,7 @@ const disciplines: Discipline[] = [
   {
     name: astrologiaNom, bg: astrologiaBg, txt: astrologiaTxt,
     description: astrologiaDescrip,
-    renderIcon: (s) => <AstrologiaIcon size={s} />,
+    renderIcon: (s) => <AstrologiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + astrologiaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + astrologiaNom,
     available:true
@@ -97,10 +97,10 @@ const disciplines: Discipline[] = [
   {
     name: cabalaNom, bg: cabalaBg, txt: cabalaTxt,
     description: cabalaDescrip,
-    renderIcon: (s) => <CabalaIcon size={s} />,
+    renderIcon: (s) => <CabalaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + cabalaNom,
     linkAprendizaje: "/aprendizaje/modulosPage/" + cabalaNom,
-    available:false
+    available:true
   },
 ];
 
@@ -344,7 +344,7 @@ const Home = () => {
                         borderRadius="full"
                         p={{ base: "6px", md: "8px" }}
                         border={"4px solid "+ d.txt}
-                        boxShadow="0 4px 16px rgba(107,196,200,0.6)"
+                        boxShadow={`0 0 18px ${d.txt}99, 0 4px 14px ${d.txt}55`}
                         w={cardIconBox} h={cardIconBox}
                         display="flex" alignItems="center" justifyContent="center"
                       >
@@ -487,7 +487,8 @@ const Home = () => {
                       borderRadius="full"
                       px={{ base: 5, md: 7 }} py={3}
                       opacity={isAvailable ? 1 : 0.45}
-                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` } : {}}
+                      boxShadow={isAvailable ? `0 0 20px ${selectedDisc.txt}bb, 0 2px 14px ${selectedDisc.txt}77` : "none"}
+                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 30px ${selectedDisc.txt}dd, 0 4px 18px ${selectedDisc.txt}99` } : {}}
                       transition="all 0.2s"
                     >
                       <EspacioPersonalIcon color={selectedDisc.txt} size="24px" />
@@ -507,7 +508,8 @@ const Home = () => {
                       borderRadius="full"
                       px={{ base: 5, md: 7 }} py={3}
                       opacity={isAvailable ? 1 : 0.45}
-                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}` } : {}}
+                      boxShadow={isAvailable ? `0 0 20px ${selectedDisc.txt}bb, 0 2px 14px ${selectedDisc.txt}77` : "none"}
+                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 30px ${selectedDisc.txt}dd, 0 4px 18px ${selectedDisc.txt}99` } : {}}
                       transition="all 0.2s"
                     >
                       <AprendizajeIcon color={selectedDisc.txt} size="30px" />
@@ -546,6 +548,20 @@ const Home = () => {
       >
         <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
           © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+        </Text>
+        <Text
+          as="a"
+          href="/contacto"
+          color="rgba(255,255,255,0.4)"
+          fontSize="xs"
+          letterSpacing="0.05em"
+          display="block"
+          textAlign="center"
+          mt={1}
+          textDecoration="underline"
+          cursor="pointer"
+        >
+          Contactar
         </Text>
       </Box>
     </Box>
