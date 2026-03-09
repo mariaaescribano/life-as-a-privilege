@@ -162,7 +162,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
           transition={{ duration: 0.7 }}
         >
           <Image
-            src={props.fotoCentro ?? "/img/noImg.png"}
+            src={props.fotoCentro ?? "/img/icono/noImg.png"}
             w="100%"
             h="100%"
             objectFit="cover"

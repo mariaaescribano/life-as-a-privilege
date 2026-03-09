@@ -42,7 +42,7 @@ export default function SignIn() {
           "img",
           response.data?.user.img && response.data.user.img !== ""
             ? response.data.user.img
-            : "/img/noImg.png"
+            : "/img/icono/noImg.png"
         );
 
         setmessage({

@@ -56,7 +56,7 @@ export default function LogIn() {
           "img",
           data.url && data.url !=""
             ? data.url
-            : "/img/noImg.png"
+            : "/img/icono/noImg.png"
         );
 
         setmessage({
