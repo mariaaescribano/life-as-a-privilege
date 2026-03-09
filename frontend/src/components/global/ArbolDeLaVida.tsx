@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import { cabalaBg, cabalaTxt } from '../../GlobalVariables'
 
 export type SefiraKey =

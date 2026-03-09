@@ -3,8 +3,9 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-- que brillen los cards de welcome y home
-- poner email de contacto
+- Cabala
+- Cuenta de user (poder borrar, cerrar sesión, cambiar email, cambiar nombre)
+- Poner modulos en cards (para ponerles precio)
 
 
 

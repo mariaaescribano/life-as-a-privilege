@@ -23,7 +23,7 @@ export const fisiologiaDescrip = "Redescubre tu cuerpo como el milagro que es. C
 export const neuropsicologiaNom = "Neuropsicología";
 export const neuropsicologiaBg = "#daa889";
 export const neuropsicologiaTxt = "#5e2d10";
-export function NeuropsicologiaIcon({ size = { base: "24px", md: "24px" } }) {
+export function NeuropsicologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
       as="svg"
@@ -43,7 +43,7 @@ export const neuropsicologiaDescrip = "Entiende el porqué de tus hábitos diari
 export const astrologiaNom = "Astrología";
 export const astrologiaBg = "#1e296b";
 export const astrologiaTxt = "#feffe4";
-export function AstrologiaIcon({ size = { base: "24px", md: "24px" }}) {
+export function AstrologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
       as="svg"
@@ -64,7 +64,7 @@ export const tcmNom = "Medicina China";
 export const tcmNomLink = "medicinachina";
 export const tcmBg = "#6b0404";
 export const tcmTxt = "#da7171";
-export function TCMIcon({ size = { base: "24px", md: "24px" }}) {
+export function TCMIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
       as="svg"
@@ -122,7 +122,7 @@ export const fitoterapiaDescrip="Explora el poder de las plantas medicinales y c
 export const cabalaNom = "Cábala";
 export const cabalaBg = "#593d25";
 export const cabalaTxt = "#cb8e59";
-export function CabalaIcon({ size = { base: "24px", md: "24px" }}) {
+export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
       as="svg"
@@ -277,6 +277,20 @@ export function PlantasIcon({ size = { base: "24px", md: "24px" } }) {
 }
 
 export function RecursosIconFitoterpia({ size = { base: "24px", md: "24px" } }) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 -960 960 960"
+      w={size}
+      h={size}              
+      fill={fitoterapiaTxt}                    
+    >
+      <path d="M270-80q-45 0-77.5-30.5T160-186v-558q0-38 23.5-68t61.5-38l395-78v640l-379 76q-9 2-15 9.5t-6 16.5q0 11 9 18.5t21 7.5h450v-640h80v720H270Zm90-233 200-39v-478l-200 39v478Zm-80 16v-478l-15 3q-11 2-18 9.5t-7 18.5v457q5-2 10.5-3.5T261-293l19-4Zm-40-472v482-482Z"/>
+    </Box>
+  );
+}
+
+export function RecursosIconCabala({ size = { base: "24px", md: "24px" } }) {
   return (
     <Box
       as="svg"

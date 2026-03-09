@@ -1,5 +1,5 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom, AstrologiaIcon, AscendenteIcon, SunIcon, MoonIcon, astrologiaNom } from "../../../GlobalVariables";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, AstrologiaIcon, AscendenteIcon, SunIcon, astrologiaNom } from "../../../GlobalVariables";
 import { 
   asc1, asc2, asc3, asc4, asc5, asc6, asc7, asc8, asc9, asc10, asc11, asc12, 
   astrologia1, astrologia2, 
