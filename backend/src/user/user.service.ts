@@ -1,9 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database.service';
 import { randomString } from 'src/Global';
 import * as bcrypt from 'bcrypt';
-import { CreateUser, LoginUser } from '../dtos/user.types';
+import { CreateUser, LoginUser, UpdateUser } from '../dtos/user.types';
 
 
 async function hashPassword(password: string): Promise<string> {
@@ -107,5 +107,44 @@ export class UserService {
       .from('user')
       .select('*');
     return data;
+  }
+
+  // --------- Obtener usuario por ID ---------
+  async getUserById(id: string) {
+    const { data, error } = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, img')
+      .eq('id', id)
+      .single();
+    if (error || !data) throw new NotFoundException('Usuario no encontrado');
+    return data;
+  }
+
+  // --------- Actualizar usuario ---------
+  async updateUser(id: string, body: UpdateUser) {
+    const updates: Record<string, string> = {};
+    if (body.name) updates.name = body.name;
+    if (body.email) updates.email = body.email;
+    if (body.password) updates.password = await hashPassword(body.password);
+
+    const { data, error } = await this.databaseService.getClient()
+      .from('user')
+      .update(updates)
+      .eq('id', id)
+      .select('id, name, email, img')
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  // --------- Eliminar usuario ---------
+  async deleteUser(id: string) {
+    const { error } = await this.databaseService.getClient()
+      .from('user')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    return { message: 'Cuenta eliminada' };
   }
 }

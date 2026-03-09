@@ -1,31 +1,7 @@
-import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import type { CreateUser, LoginUser } from "../dtos/user.types";
-import { FileInterceptor } from '@nestjs/platform-express';
+import type { CreateUser, LoginUser, UpdateUser } from "../dtos/user.types";
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { existsSync, mkdirSync } from "fs";
-import { diskStorage } from "multer";
-import { extname, join } from "path";
-const uploadFolder = join(process.cwd(), 'img');
-
-// #region multer
-
-if (!existsSync(uploadFolder)) {
-  mkdirSync(uploadFolder, { recursive: true });
-}
-
-const multerOptions = {
-  storage: diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, uploadFolder);
-    },
-    filename: (req, file, cb) => {
-      const userId = req.params.userId;
-      const extension = extname(file.originalname); 
-      cb(null, `${userId}${extension}`); 
-    },
-  }),
-};
 
 // #region user
 @Controller('user')
@@ -42,21 +18,28 @@ export class UserController {
     return await this.usersService.logIn(body);
   }
 
+  @Get("me")
+  @UseGuards(JwtAuthGuard)
+  async getMe(@Req() req: any) {
+    return await this.usersService.getUserById(req.user.userId);
+  }
 
-  // @Post("/img/:userId")
-  // @UseGuards(JwtAuthGuard)
-  // @UseInterceptors(FileInterceptor("imagen", multerOptions))
-  // async uploadProfilePic(
-  //   @Param("userId") userId: string,
-  //   @UploadedFile() file: Express.Multer.File
-  // ) {
-  //   return await this.usersService.perfilPicPost(userId, file);
-  // }
+  @Get(":id")
+  @UseGuards(JwtAuthGuard)
+  async getById(@Param("id") id: string) {
+    return await this.usersService.getUserById(id);
+  }
 
-  // @Get('/img/:userId')
-  // @UseGuards(JwtAuthGuard)
-  // async getProfilePic(@Param('userId') userId: string) {
-  //   return this.usersService.getProfilePic(userId);
-  // }
+  @Patch(":id")
+  @UseGuards(JwtAuthGuard)
+  async update(@Param("id") id: string, @Body() body: UpdateUser) {
+    return await this.usersService.updateUser(id, body);
+  }
+
+  @Delete(":id")
+  @UseGuards(JwtAuthGuard)
+  async remove(@Param("id") id: string) {
+    return await this.usersService.deleteUser(id);
+  }
 
 }

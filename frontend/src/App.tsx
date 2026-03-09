@@ -15,6 +15,7 @@ import Productos from "./app/web/Productos";
 import ReelsPage from "./app/web/Reels";
 import Contacto from "./app/web/Contacto";
 import RecursosPage from "./app/recursos/RecursosPage";
+import UserAccount from "./app/user/UserAccount";
 import TCMTest1 from "./components/espacio/components/TCMTest1";
 import TCMTest2 from "./components/espacio/components/TCMTest2";
 import TCMTest3 from "./components/espacio/components/TCMTest3";
@@ -53,6 +54,8 @@ export default function App()
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
       <Route path="/tcm/test/3" element={<TCMTest3 />} />
+
+      <Route path="/user/account" element={<PrivateRoute><UserAccount /></PrivateRoute>} />
 
       <Route path="/espacio/espacioHome" element={<PrivateRoute><EspacioHome /></PrivateRoute>} />
       <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />

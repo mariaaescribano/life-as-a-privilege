@@ -3,7 +3,7 @@ export type UserEntity = {
   id: string;
   name: string;
   email: string;
-  password: string; 
+  password: string;
 };
 
 export type CreateUser = {
@@ -15,5 +15,11 @@ export type CreateUser = {
 export type LoginUser = {
   name: string;
   password: string;
+};
+
+export type UpdateUser = {
+  name?: string;
+  email?: string;
+  password?: string;
 };
 

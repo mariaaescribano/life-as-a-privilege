@@ -51,7 +51,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     >
       {/* Logo */}
       <Image
-        src="/img/life.png"
+        src="/img/icono/life.png"
         h={{ base: "56px", md: "70px" }}
         objectFit="contain"
         cursor="pointer"
@@ -152,7 +152,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               border="2px solid rgba(255,255,255,0.55)"
               flexShrink={0}
               cursor="pointer"
-              onClick={() => navigate("/espacio/espacioHome")}
+              onClick={() => navigate("/user/account")}
               _hover={{ border: "2px solid white" }}
               transition="border 0.2s"
             >
