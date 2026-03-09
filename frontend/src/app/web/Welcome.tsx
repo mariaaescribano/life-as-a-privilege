@@ -348,7 +348,7 @@ const Welcome = () => {
                 borderRadius="full"
                 p="8px"
                 border={"4px solid "+ d.txt}
-                boxShadow={`0 0 18px ${d.txt}99, 0 4px 14px ${d.txt}55`}
+                boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
                 w="72px"
                 h="72px"
                 display="flex"
@@ -493,7 +493,7 @@ const Welcome = () => {
                 borderRadius="full"
                 p="12px"
                 border={`5px solid ${selected.txt}`}
-                boxShadow="0 4px 24px rgba(0,0,0,0.15)"
+                boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
                 w="96px"
                 h="96px"
                 display="flex"

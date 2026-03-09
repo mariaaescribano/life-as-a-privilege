@@ -272,7 +272,7 @@ export const modulostcm: ModuloContenido[] = [
         linkAnterior:`${basePath}/tcm18`,
         linkNext:`${basePath}/tcm20`,
         descripcion:"Respirar con calma es regalarle claridad a tu corazón.",
-        video:"HL1tc3EKLrQ",
+        video:"6XUZromIhBE",
         letra: letratcm19,
         detalles: detalles,
         icon: CincoElementosIcon

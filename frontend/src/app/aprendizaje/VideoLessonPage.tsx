@@ -16,6 +16,7 @@ import {
 } from "../../GlobalVariables";
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
+import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -34,8 +35,8 @@ export default function VideoLessonPage() {
         return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case "fisiologia":
         return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
-      case "astrologia":
-        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size="44px" /> };
+      case astrologiaNom:
+        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "44px", md: "44px" }}/> };
       case tcmNomLink:
         return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon size={{ base: "44px", md: "44px" }} /> };
       case "nutricion":
@@ -44,8 +45,8 @@ export default function VideoLessonPage() {
         return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size="44px" /> };
       case fitoterapiaNom:
         return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "44px", md: "44px" }}  /> };
-      case "cabala":
-        return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size="44px" /> };
+      case cabalaNom:
+        return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "44px", md: "44px" }} /> };
       default:
         return { nom: "", bgColor: "", color: "", icon: null };
     }
@@ -78,6 +79,10 @@ export default function VideoLessonPage() {
       else if(moduloId === fitoterapiaNom)
       { 
         setdatos(getModuleByTitle(submoduloId!, modulosFitoterapia));
+      }
+      else if(moduloId === astrologiaNom)
+      { 
+        setdatos(getModuleByTitle(submoduloId!, modulosAstrologia));
       }
     }
   }, [moduloId, submoduloId]);
@@ -269,13 +274,12 @@ export default function VideoLessonPage() {
                 maxW="800px"
                 w="100%"
                 textAlign="center"
-                bg={moduloDatos.bgColor + "99"}
+                bg={moduloDatos.bgColor}
                 border={`1px solid ${moduloDatos.color}44`}
                 borderRadius="2xl"
                 px={{ base: 6, md: 10 }}
                 py={{ base: 4, md: 6 }}
                 mb={datos.letra ? { base: 4, md: 5 } : 0}
-                sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
               >
                 <Text
                   fontSize={{ base: "lg", md: "xl" }}
@@ -300,12 +304,11 @@ export default function VideoLessonPage() {
                   justify="space-between"
                   px={{ base: 6, md: 10 }}
                   py={{ base: 3, md: 4 }}
-                  bg={moduloDatos.bgColor + "99"}
+                  bg={moduloDatos.bgColor}
                   border={`1px solid ${moduloDatos.color}44`}
                   borderRadius={letraOpen ? "2xl 2xl 0 0" : "2xl"}
                   cursor="pointer"
                   onClick={() => setLetraOpen(!letraOpen)}
-                  sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
                   transition="border-radius 0.2s"
                 >
                   <Text
@@ -331,11 +334,10 @@ export default function VideoLessonPage() {
                   <Box
                     px={{ base: 6, md: 10 }}
                     py={{ base: 5, md: 7 }}
-                    bg={moduloDatos.bgColor + "66"}
-                    border={`1px solid ${moduloDatos.color}33`}
+                    bg={moduloDatos.bgColor}
+                    border={`1px solid ${moduloDatos.color}44`}
                     borderTop="none"
                     borderRadius="0 0 2xl 2xl"
-                    sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
                   >
                     <Text
                       color={moduloDatos.color}
@@ -350,6 +352,63 @@ export default function VideoLessonPage() {
                 </Collapse>
               </Box>
             )}
+            {/* CTA Clases particulares */}
+            {moduloDatos && (
+              <Flex
+                direction="column"
+                align="center"
+                maxW="800px"
+                w="100%"
+                textAlign="center"
+                px={{ base: 6, md: 10 }}
+                pt={{ base: 6, md: 8 }}
+                gap={1}
+              >
+                <Text
+                  fontSize={{ base: "lg", md: "xl" }}
+                  color={moduloDatos.bgColor}
+                  lineHeight="1.8"
+                  textShadow={`0 0 10px ${moduloDatos.color}, 0 2px 14px ${moduloDatos.color}97`}
+                  letterSpacing="0.02em"
+                >
+                  ¿Buscas profundizar y recibir un acompañamiento personalizado?
+                </Text>
+                <Text
+                  fontSize={{ base: "lg", md: "xl" }}
+                  color={moduloDatos.bgColor}
+                  lineHeight="1.8"
+                  textShadow={`0 0 10px ${moduloDatos.color}, 0 2px 14px ${moduloDatos.color}97`}
+                  letterSpacing="0.02em"
+                  fontStyle="italic"
+                  mb={4}
+                >
+                  Pide información sin compromiso.
+                </Text>
+                <Box
+                  as="a"
+                  href="/contacto"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={2}
+                  px={7} py={2}
+                  borderRadius="full"
+                  border={`2px solid ${moduloDatos.color}88`}
+                  color={moduloDatos.color}
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="600"
+                  bg={moduloDatos.bgColor}
+                  letterSpacing="0.05em"
+                  cursor="pointer"
+                  boxShadow={`0 0 20px ${moduloDatos.color}bb, 0 2px 14px ${moduloDatos.color}77`}
+                  _hover={{ bg: `${moduloDatos.color}22`, borderColor: moduloDatos.color, boxShadow: `0 0 30px ${moduloDatos.color}dd, 0 4px 18px ${moduloDatos.color}99` }}
+                  transition="all 0.2s"
+                >
+                  Contactar
+                </Box>
+              </Flex>
+            )}
+
           </Flex>
         </Box>
       )}

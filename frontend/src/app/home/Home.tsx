@@ -344,7 +344,7 @@ const Home = () => {
                         borderRadius="full"
                         p={{ base: "6px", md: "8px" }}
                         border={"4px solid "+ d.txt}
-                        boxShadow={`0 0 18px ${d.txt}99, 0 4px 14px ${d.txt}55`}
+                        boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
                         w={cardIconBox} h={cardIconBox}
                         display="flex" alignItems="center" justifyContent="center"
                       >
@@ -444,7 +444,7 @@ const Home = () => {
               alignItems="center"
               justifyContent="center"
               border={`3px solid ${selectedDisc.txt}`}
-              boxShadow={`0 4px 24px rgba(0,0,0,0.25), 0 0 32px ${selectedDisc.txt}55`}
+              boxShadow={`0 0 20px ${selectedDisc.txt}bb, 0 2px 14px ${selectedDisc.txt}77`}
             >
               {selectedDisc.renderIcon("52px")}
             </Box>

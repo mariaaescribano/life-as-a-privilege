@@ -71,17 +71,20 @@ const Contacto = () => {
           <Box w="100%" maxW="680px" {...glassCard} px={{ base: 7, md: 12 }} py={{ base: 8, md: 12 }}>
 
             {/* Título */}
-            <Text
-              color="white"
-              fontSize={{ base: "3xl", md: "4xl" }}
-              fontWeight="700"
-              letterSpacing="0.04em"
-              textShadow="0 2px 10px rgba(0,100,90,0.5)"
-              mb={2}
-              textAlign="center"
-            >
-              Contactar
-            </Text>
+            <Flex justify="center" align="center" gap={3} mb={2}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "28px", md: "34px" }} h={{ base: "28px", md: "34px" }} fill="white" flexShrink={0}>
+                <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/>
+              </Box>
+              <Text
+                color="white"
+                fontSize={{ base: "3xl", md: "4xl" }}
+                fontWeight="700"
+                letterSpacing="0.04em"
+                textShadow="0 2px 10px rgba(0,100,90,0.5)"
+              >
+                Contactar
+              </Text>
+            </Flex>
             <Text
               color="rgba(255,255,255,0.65)"
               fontSize={{ base: "md", md: "lg" }}
@@ -94,6 +97,21 @@ const Contacto = () => {
 
             {status === "ok" ? (
               <Box textAlign="center" py={8}>
+                <Text
+                  fontSize="5xl"
+                  mb={4}
+                  sx={{
+                    animation: "heartbeat 1.2s ease-in-out infinite",
+                    "@keyframes heartbeat": {
+                      "0%, 100%": { transform: "scale(1)" },
+                      "50%": { transform: "scale(1.18)" },
+                    },
+                    display: "inline-block",
+                    filter: "drop-shadow(0 0 12px rgba(255,150,150,0.8))",
+                  }}
+                >
+                  ♥
+                </Text>
                 <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="600" mb={2}>
                   ¡Mensaje enviado!
                 </Text>
