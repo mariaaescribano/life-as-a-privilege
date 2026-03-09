@@ -401,7 +401,7 @@ export default function VideoLessonPage() {
                   letterSpacing="0.05em"
                   cursor="pointer"
                   boxShadow={`0 0 20px ${moduloDatos.color}bb, 0 2px 14px ${moduloDatos.color}77`}
-                  _hover={{ bg: `${moduloDatos.color}22`, borderColor: moduloDatos.color, boxShadow: `0 0 30px ${moduloDatos.color}dd, 0 4px 18px ${moduloDatos.color}99` }}
+                  _hover={{ borderColor: moduloDatos.color, boxShadow: `0 0 30px ${moduloDatos.color}dd, 0 4px 18px ${moduloDatos.color}99` }}
                   transition="all 0.2s"
                 >
                   Contactar

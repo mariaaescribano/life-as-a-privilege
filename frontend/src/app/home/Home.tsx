@@ -206,7 +206,7 @@ const Home = () => {
                   position="absolute" top="50%" left="50%"
                   transform="translate(-50%, -50%)"
                   w="90%" h="90%"
-                  backgroundImage="url('/img/flor.png')"
+                  backgroundImage="url('/img/extras/flor.png')"
                   backgroundSize="contain" backgroundPosition="center"
                   backgroundRepeat="no-repeat" opacity={0.13}
                   zIndex={0} pointerEvents="none"

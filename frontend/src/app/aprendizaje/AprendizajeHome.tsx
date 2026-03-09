@@ -18,12 +18,12 @@ export const AprendizajeHome = () => {
   const items = [
     { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size="70px" />,                             link: "",                                           cursor: "not-allowed" },
     { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "60px", md: "70px" }} />, link: "/aprendizaje/modulosPage/" + neuropsicologiaNom, cursor: "pointer"     },
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="70px" />,                             link: "",                                           cursor: "not-allowed" },
+    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="70px" />,                             link: "/aprendizaje/modulosPage/" +astrologiaNom,    cursor: "pointer" },
     { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "60px", md: "70px" }} />,            link: "/aprendizaje/modulosPage/" + tcmNomLink, cursor: "pointer" },
     { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size="70px" />,                              link: "",                                           cursor: "not-allowed" },
     { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size="70px" />,                               link: "",                                           cursor: "not-allowed" },
     { title: fitoterapiaNom,      bgColor: fitoterapiaBg,        color: fitoterapiaTxt,  icon: <FitoterapiaIcon size={{ base: "60px", md: "70px" }} />,                   link: "/aprendizaje/modulosPage/" + fitoterapiaNom,  cursor: "pointer" },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "",                                           cursor: "not-allowed" },
+    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "/aprendizaje/modulosPage/" + cabalaNom,      cursor: "pointer"  },
   ];
 
   useEffect(() => {

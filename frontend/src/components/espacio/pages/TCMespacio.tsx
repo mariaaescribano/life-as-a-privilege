@@ -219,12 +219,11 @@ const TestStatusCard = ({
       px={{ base: 4, md: 5 }}
       py={{ base: 6, md: 7 }}
       cursor="pointer"
-      borderColor={done ? `${tcmTxt}44` : `${tcmTxt}22`}
+      borderColor={`${tcmTxt}44`}
       transition="all 0.22s ease"
-      boxShadow="0 2px 12px rgba(0,0,0,0.22)"
+      boxShadow={`0 4px 20px rgba(0,0,0,0.3), 0 0 18px ${tcmTxt}52`}
       _hover={{
-        boxShadow: `0 4px 20px rgba(0,0,0,0.3), 0 0 18px ${tcmTxt}52`,
-        borderColor: `${tcmTxt}44`,
+        borderColor: `${tcmTxt}84`,
       }}
       w="100%"
       textAlign="center"

@@ -3,10 +3,10 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-- Cabala
-- Cuenta de user (poder borrar, cerrar sesión, cambiar email, cambiar nombre)
-- Poner modulos en cards (para ponerles precio)
+- en user/account cuando se edita algo, que se quede el tick de salvado para indicar al usuario que se ha salvado
+que se ilumine el tick, NO el lapiz
 
+- 
 
 
 

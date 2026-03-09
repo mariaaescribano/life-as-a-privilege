@@ -11,6 +11,7 @@ import {
 } from "../../../GlobalVariables";
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
+
 /* ══════════════════════════════════════════════
    SIGNOS DEL ZODIACO
 ══════════════════════════════════════════════ */
@@ -33,6 +34,34 @@ type SignField = "sol" | "luna" | "ascendente";
 interface AstrologiaData { sol: string | null; luna: string | null; ascendente: string | null; }
 
 /* ══════════════════════════════════════════════
+   PLANETAS DE LA CARTA NATAL
+══════════════════════════════════════════════ */
+type PlanetKey = "sol" | "luna" | "ascendente" | "mercurio" | "venus" | "marte" | "jupiter" | "saturno" | "urano" | "neptuno" | "pluton";
+
+interface Planet {
+  key: PlanetKey;
+  label: string;
+  symbol: string;
+  img: string | null;       // null = usa símbolo
+  color: string;            // glow y acento
+  interactive: boolean;
+}
+
+const PLANETS: Planet[] = [
+  { key: "sol",        label: "Sol",        symbol: "\u2609", img: null,                         color: "#FFD97D", interactive: true  },
+  { key: "luna",       label: "Luna",       symbol: "\u263D", img: null,                         color: "#C8C8E8", interactive: true  },
+  { key: "mercurio",   label: "Mercurio",   symbol: "\u263F", img: null,                         color: "#A8B8C8", interactive: false },
+  { key: "venus",      label: "Venus",      symbol: "\u2640", img: null,                         color: "#FFB8D0", interactive: false },
+  { key: "marte",      label: "Marte",      symbol: "\u2642", img: null,                         color: "#FF7055", interactive: false },
+  { key: "jupiter",    label: "Júpiter",    symbol: "\u2643", img: null,                         color: "#FFBA60", interactive: false },
+  { key: "saturno",    label: "Saturno",    symbol: "\u2644", img: null,                         color: "#E0CC80", interactive: false },
+  { key: "urano",      label: "Urano",      symbol: "\u2645", img: null,                         color: "#80EFD8", interactive: false },
+  { key: "neptuno",    label: "Neptuno",    symbol: "\u2646", img: null,                         color: "#6090FF", interactive: false },
+  { key: "pluton",     label: "Plutón",     symbol: "\u2647", img: null,                         color: "#B080E0", interactive: false },
+  { key: "ascendente", label: "Ascendente", symbol: "\u2191", img: null,                         color: astrologiaTxt, interactive: true  },
+];
+
+/* ══════════════════════════════════════════════
    FONDO ESPACIAL (foto real + overlay)
 ══════════════════════════════════════════════ */
 const SpaceBg = () => (
@@ -45,7 +74,6 @@ const SpaceBg = () => (
       w="100%" h="100%"
       style={{ objectFit: "cover", objectPosition: "center" }}
     />
-    {/* Overlay oscuro para legibilidad */}
     <Box
       position="absolute" inset="0"
       style={{ background: "rgba(8,13,30,0.55)" }}
@@ -60,6 +88,19 @@ const ZodiacGlyph = ({ symbol, size = 22 }: { symbol: string; size?: number }) =
   <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ flexShrink: 0 }}>
     <text x="12" y="19" textAnchor="middle" fontSize="19"
       fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
+      {symbol}{"\uFE0E"}
+    </text>
+  </svg>
+);
+
+/* ══════════════════════════════════════════════
+   SÍMBOLO DE PLANETA — en círculo
+══════════════════════════════════════════════ */
+const PlanetGlyph = ({ symbol, size = 32, color }: { symbol: string; size?: number; color: string }) => (
+  <svg viewBox="0 0 36 36" width={size} height={size} style={{ flexShrink: 0, filter: `drop-shadow(0 0 6px ${color}99)` }}>
+    <text x="18" y="27" textAnchor="middle" fontSize="26"
+      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
+      fill={color}>
       {symbol}{"\uFE0E"}
     </text>
   </svg>
@@ -114,7 +155,7 @@ const SIGN_INFO: Record<SignField, Record<string, string>> = {
 };
 
 /* ══════════════════════════════════════════════
-   ICONOS DE CAMPO
+   ICONOS DE CAMPO (Sol / Luna / Ascendente)
 ══════════════════════════════════════════════ */
 const SolFieldIcon = ({ size = 24 }: { size?: number }) => (
   <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="currentColor">
@@ -147,7 +188,146 @@ const FIELD_META: Record<SignField, { label: string; img: string; icon: (size?: 
 };
 
 /* ══════════════════════════════════════════════
-   MODAL (selector o información)
+   MODAL — TEASER (planetas no interactivos)
+══════════════════════════════════════════════ */
+const PlanetTeaserModal = ({
+  planet,
+  onClose,
+}: {
+  planet: Planet;
+  onClose: () => void;
+}) => (
+  <Box
+    position="fixed" inset="0" zIndex={1000}
+    display="flex" alignItems="center" justifyContent="center"
+    px={4}
+    onClick={onClose}
+  >
+    <Box position="absolute" inset="0" bg="rgba(0,0,0,0.82)" />
+
+    <Box
+      position="relative"
+      filter={`drop-shadow(0 0 12px ${planet.color}88) drop-shadow(0 0 32px ${planet.color}33)`}
+      borderRadius="2xl"
+      overflow="hidden"
+      w="100%" maxW="480px"
+      display="flex" flexDirection="column"
+      boxShadow={`0 16px 64px rgba(0,0,0,0.85), 0 0 80px ${planet.color}18`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <SpaceBg />
+
+      {/* Botón X */}
+      <Box position="absolute" top={3} right={3} zIndex={2}>
+        <Box
+          as="button"
+          onClick={onClose}
+          w="30px" h="30px" borderRadius="full"
+          display="flex" alignItems="center" justifyContent="center"
+          bg="rgba(0,0,0,0.5)"
+          border={`1px solid ${astrologiaTxt}33`}
+          color={`${astrologiaTxt}77`}
+          cursor="pointer"
+          transition="all 0.15s"
+          _hover={{ color: astrologiaTxt, borderColor: `${astrologiaTxt}66`, bg: "rgba(0,0,0,0.7)" }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+          </svg>
+        </Box>
+      </Box>
+
+      {/* Contenido */}
+      <Box position="relative" zIndex={1} px={8} py={10} display="flex" flexDirection="column" alignItems="center" gap={6}>
+
+        {/* Símbolo del planeta */}
+        <Box
+          w="72px" h="72px" borderRadius="full"
+          bg={`${astrologiaBg}cc`}
+          border={`1.5px solid ${planet.color}55`}
+          boxShadow={`0 0 28px ${planet.color}44, 0 0 56px ${planet.color}18, inset 0 0 16px ${planet.color}0a`}
+          display="flex" alignItems="center" justifyContent="center"
+        >
+          <PlanetGlyph symbol={planet.symbol} size={38} color={planet.color} />
+        </Box>
+
+        {/* Nombre del planeta */}
+        <Text
+          color={planet.color}
+          fontSize="lg"
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.18em"
+          textTransform="uppercase"
+          filter={`drop-shadow(0 0 8px ${planet.color}88)`}
+          mt={-3}
+        >
+          {planet.label}
+        </Text>
+
+        {/* Línea decorativa */}
+        <Box w="60px" h="1px" bg={`${astrologiaTxt}33`} borderRadius="full" />
+
+        {/* Preguntas */}
+        <Flex direction="column" gap={4} align="center" textAlign="center">
+          <Text
+            color={`${astrologiaTxt}ee`}
+            fontSize={{ base: "xl", md: "2xl" }}
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            lineHeight="1.65"
+            letterSpacing="0.02em"
+          >
+            ¿Quieres saber qué arquetipos te forman?
+          </Text>
+          <Text
+            color={`${astrologiaTxt}cc`}
+            fontSize={{ base: "lg", md: "xl" }}
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            lineHeight="1.65"
+            letterSpacing="0.02em"
+          >
+            ¿Quieres entender qué dicen las estrellas de ti?
+          </Text>
+        </Flex>
+
+        {/* Línea decorativa */}
+        <Box w="60px" h="1px" bg={`${astrologiaTxt}33`} borderRadius="full" />
+
+        {/* Botón Contactar */}
+        <Box
+          as="a"
+          href="/contacto"
+          px={8} py={3}
+          borderRadius="full"
+          border={`1.5px solid ${astrologiaTxt}66`}
+          bg="rgba(0,0,0,0.25)"
+          color={astrologiaTxt}
+          fontSize="md"
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.14em"
+          textTransform="uppercase"
+          cursor="pointer"
+          transition="all 0.22s ease"
+          textDecoration="none"
+          display="inline-block"
+          boxShadow={`0 0 20px ${astrologiaTxt}22`}
+          _hover={{
+            bg: `${astrologiaTxt}18`,
+            border: `1.5px solid ${astrologiaTxt}cc`,
+            boxShadow: `0 0 28px ${astrologiaTxt}55, 0 0 56px ${astrologiaTxt}22`,
+            transform: "scale(1.04)",
+          }}
+        >
+          Contactar
+        </Box>
+      </Box>
+    </Box>
+  </Box>
+);
+
+/* ══════════════════════════════════════════════
+   MODAL — SELECTOR / INFORMACIÓN (Sol · Luna · Asc)
 ══════════════════════════════════════════════ */
 const ZodiacModal = ({
   field, currentSign, onClose, onSelect, onClear,
@@ -174,16 +354,14 @@ const ZodiacModal = ({
     <Box
       position="fixed" inset="0" zIndex={1000}
       display="flex" alignItems="center" justifyContent="center"
-      px={4}  
+      px={4}
       onClick={onClose}
     >
-      {/* Backdrop oscuro */}
       <Box position="absolute" inset="0" bg="rgba(0,0,0,0.78)" />
 
-      {/* Contenedor del modal — fondo space */}
       <Box
         position="relative"
-         filter={`drop-shadow(0 0 10px ${astrologiaTxt}cc) drop-shadow(0 0 20px ${astrologiaTxt}77)`}
+        filter={`drop-shadow(0 0 10px ${astrologiaTxt}cc) drop-shadow(0 0 20px ${astrologiaTxt}77)`}
         borderRadius="2xl"
         overflow="hidden"
         w="100%" maxW="660px"
@@ -192,10 +370,8 @@ const ZodiacModal = ({
         boxShadow={`0 12px 60px rgba(0,0,0,0.8), 0 0 60px ${astrologiaTxt}18`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Fondo espacial del modal */}
         <SpaceBg />
 
-        {/* Botón X — arriba a la derecha */}
         <Box position="absolute" top={3} right={3} zIndex={2}>
           <Box
             as="button"
@@ -215,12 +391,10 @@ const ZodiacModal = ({
           </Box>
         </Box>
 
-        {/* Contenido relativo al fondo */}
         <Box position="relative" zIndex={1} px={6} py={7} display="flex" flexDirection="column" gap={4} overflowY="auto" flex="1">
 
           {mode === "info" && signData && info ? (
             <>
-              {/* Tarjeta 1 — encabezado brillante */}
               <Box
                 bg={astrologiaBg}
                 border={`1.5px solid ${astrologiaTxt}33`}
@@ -260,11 +434,10 @@ const ZodiacModal = ({
                 </Flex>
               </Box>
 
-              {/* Video del submódulo */}
               {submoduleData && (
                 <Box
                   borderRadius="xl"
-                  overflow="hidden" border={`1px solid ${astrologiaTxt}22`} borderWidth={"1px"}
+                  overflow="hidden" border={`1px solid ${astrologiaTxt}22`}
                   style={{ aspectRatio: "16/9" }}
                   boxShadow={`0 4px 24px rgba(0,0,0,0.55), 0 0 24px ${astrologiaTxt}18`}
                 >
@@ -277,7 +450,6 @@ const ZodiacModal = ({
                 </Box>
               )}
 
-              {/* Descripción del video */}
               {submoduleData && (
                 <Box
                   bg={astrologiaBg}
@@ -299,7 +471,6 @@ const ZodiacModal = ({
                 </Box>
               )}
 
-              {/* Transcripción (plegable) */}
               {submoduleData?.letra && (
                 <Box>
                   <Flex
@@ -352,10 +523,7 @@ const ZodiacModal = ({
                 </Box>
               )}
 
-              {/* Tarjeta 2 — descripción + papelera */}
-              <Box
-              >
-                {/* Papelera — abajo a la derecha */}
+              <Box>
                 <Box
                   as="button"
                   onClick={onClear}
@@ -370,7 +538,6 @@ const ZodiacModal = ({
               </Box>
             </>
           ) : (
-            /* ── Vista selector ── */
             <Box
               bg={astrologiaBg}
               border={`1px solid ${astrologiaTxt}22`}
@@ -378,7 +545,6 @@ const ZodiacModal = ({
               overflow="hidden"
               boxShadow={`0 0 20px ${astrologiaTxt}14, inset 0 0 16px rgba(0,0,0,0.3)`}
             >
-              {/* Header selector */}
               <Flex align="center" gap={2.5} px={6} pt={5} pb={4} borderBottom={`1px solid ${astrologiaTxt}18`}>
                 <Box color={astrologiaTxt} filter={`drop-shadow(0 0 6px ${astrologiaTxt}88)`}>
                   {meta.icon(24)}
@@ -424,60 +590,71 @@ const ZodiacModal = ({
 };
 
 /* ══════════════════════════════════════════════
-   CÍRCULO ZODIACAL
+   CÍRCULO DE PLANETA
 ══════════════════════════════════════════════ */
-const ZodiacCircle = ({
-  field, sign, onClick, size,
+const PlanetCircle = ({
+  planet,
+  sign,
+  onClick,
+  size,
 }: {
-  field: SignField; sign: string | null; onClick: () => void; size: number;
+  planet: Planet;
+  sign?: string | null;
+  onClick: () => void;
+  size: number;
 }) => {
-  const meta = FIELD_META[field];
-  const signData = sign ? ZODIAC_SIGNS.find((s) => s.name === sign) : null;
+  const [imgError, setImgError] = useState(false);
+  const innerSize = Math.round(size * 0.65);
 
   return (
-    <Flex direction="column" align="center" gap={2} style={{ width: size }}>
+    <Flex direction="column" align="center" gap={1.5} style={{ width: size + 24 }}>
       <Box
         as="button" onClick={onClick}
         w={`${size}px`} h={`${size}px`}
         borderRadius="full"
-        bg={`${astrologiaBg}ee`}
-        border={`2px solid ${astrologiaTxt}44`}
-        boxShadow={`0 0 20px ${astrologiaTxt}33, 0 0 40px ${astrologiaTxt}18, inset 0 0 14px ${astrologiaTxt}0a`}
-        display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={1.5}
-        cursor="pointer" transition="all 0.24s ease" overflow="hidden"
+        bg={`${astrologiaBg}dd`}
+        border={`1.5px solid ${planet.color}74`}
+        boxShadow={`0 0 28px ${planet.color}66, 0 0 56px ${planet.color}28, inset 0 0 16px ${planet.color}14`}
+        display="flex" flexDirection="column" alignItems="center" justifyContent="center"
+        cursor="pointer" transition="all 0.26s ease" overflow="hidden"
         _hover={{
-          border: `2px solid ${astrologiaTxt}88`,
-          boxShadow: `0 0 32px ${astrologiaTxt}66, 0 0 64px ${astrologiaTxt}28, inset 0 0 18px ${astrologiaTxt}18`,
-          transform: "scale(1.06)",
+          border: `1.5px solid ${planet.color}99`,
+          transform: "scale(1.08)",
         }}
       >
-        <Box
-          as="img" src={meta.img} alt={meta.label}
-          style={{
-            width: "115px", height: "115px",
-            objectFit: "contain", opacity: 0.9, transition: "all 0.24s ease",
-            filter: `drop-shadow(0 0 10px ${astrologiaTxt}77)`,
-          }}
-        />
+        {planet.img && !imgError ? (
+          <Box
+            as="img"
+            src={planet.img}
+            alt={planet.label}
+            onError={() => setImgError(true)}
+            style={{
+              width: innerSize, height: innerSize,
+              objectFit: "contain", opacity: 0.92,
+              filter: `drop-shadow(0 0 8px ${planet.color}77)`,
+              transition: "all 0.26s ease",
+            }}
+          />
+        ) : (
+          <PlanetGlyph symbol={planet.symbol} size={Math.round(size * 0.5)} color={planet.color} />
+        )}
       </Box>
 
-      {/* Debajo del círculo: signo elegido (icono + nombre) o vacío */}
-      {signData ? (
-        <Flex align="center" gap={1.5} justify="center">
-          <Box color={astrologiaTxt} filter={`drop-shadow(0 0 4px ${astrologiaTxt}99)`} lineHeight={1}>
-            <ZodiacGlyph symbol={signData.symbol} size={18} />
-          </Box>
-          <Text
-            color={astrologiaTxt} fontSize="sm"
-            fontFamily="'EB Garamond', serif" letterSpacing="0.06em"
-            lineHeight="1" userSelect="none"
-          >
-            {signData.name}
-          </Text>
-        </Flex>
-      ) : (
-        <Box h="16px" />
-      )}
+      {/* Nombre del planeta */}
+      <Text
+        color={`${astrologiaTxt}cc`}
+        fontSize="xs"
+        fontFamily="'EB Garamond', serif"
+        letterSpacing="0.08em"
+        textTransform="uppercase"
+        lineHeight="1"
+        userSelect="none"
+        textAlign="center"
+        noOfLines={1}
+      >
+        {planet.label}
+      </Text>
+
     </Flex>
   );
 };
@@ -501,31 +678,38 @@ const ProfileCircle = ({ imgUrl, size }: { imgUrl: string; size: number }) => (
    PÁGINA PRINCIPAL
 ══════════════════════════════════════════════ */
 export default function AstrologiaEspacio() {
-  const [data, setData]           = useState<AstrologiaData | null>(null);
-  const [loading, setLoading]     = useState(true);
-  const [openModal, setOpenModal] = useState<SignField | null>(null);
-  const [saving, setSaving]       = useState(false);
-  const [imgUrl, setImgUrl]       = useState("/img/icono/noImg.png");
+  const [data, setData]               = useState<AstrologiaData | null>(null);
+  const [loading, setLoading]         = useState(true);
+  const [openModal, setOpenModal]     = useState<SignField | null>(null);
+  const [teaserPlanet, setTeaserPlanet] = useState<Planet | null>(null);
+  const [saving, setSaving]           = useState(false);
+  const [imgUrl, setImgUrl]           = useState("/img/icono/noImg.png");
   const chartWrapperRef = useRef<HTMLDivElement>(null);
   const [wrapperWidth, setWrapperWidth] = useState(0);
 
-  /* ── Geometría ── */
-  const CIRCLE = 150;
-  const CENTER = 165;
-  const R      = 220;
-  const cx     = 275;
-  const cy     = 325;
-  const rad    = (deg: number) => (deg * Math.PI) / 180;
-  const pos = {
-    sol:        { x: cx + R * Math.cos(rad(90))  - CIRCLE / 2, y: cy - R * Math.sin(rad(90))  - CIRCLE / 2 },
-    luna:       { x: cx + R * Math.cos(rad(150)) - CIRCLE / 2, y: cy - R * Math.sin(rad(150)) - CIRCLE / 2 },
-    ascendente: { x: cx + R * Math.cos(rad(30))  - CIRCLE / 2, y: cy - R * Math.sin(rad(30))  - CIRCLE / 2 },
-    center:     { x: cx - CENTER / 2,                           y: cy - CENTER / 2 },
+  /* ── Geometría (círculo completo, 11 planetas) ── */
+  const N       = PLANETS.length;   // 11
+  const PSIZE   = 100;              // diámetro de cada círculo planeta (px)
+  const CENTER  = 168;              // diámetro foto perfil (px)
+  const R       = 290;              // radio de la órbita (px) — espacioso en desktop, escala en móvil
+  const PAD     = 28;               // margen exterior
+  const LABEL_H = 44;              // espacio etiqueta debajo de cada círculo
+
+  const containerSide = Math.round(2 * (R + PSIZE / 2 + PAD));   // ancho = alto del cuadrado base
+  const cx = containerSide / 2;
+  const cy = containerSide / 2;
+  const containerH = containerSide + LABEL_H + PAD;
+
+  const getPlanetPos = (i: number) => {
+    const angle = (2 * Math.PI / N) * i - Math.PI / 2; // empieza arriba, sentido horario
+    return {
+      x: Math.round(cx + R * Math.cos(angle) - PSIZE / 2),
+      y: Math.round(cy + R * Math.sin(angle) - PSIZE / 2),
+    };
   };
-  const containerW = Math.round(cx + R * Math.cos(rad(30)) + CIRCLE / 2 + 14);
-  const containerH = Math.round(cy + CENTER / 2 + 62);
-  const chartScale = wrapperWidth > 0 ? Math.min(1, wrapperWidth / containerW) : 1;
-  const chartOffsetX = Math.max(0, (wrapperWidth - containerW * chartScale) / 2);
+
+  const chartScale    = wrapperWidth > 0 ? Math.min(1, wrapperWidth / containerSide) : 1;
+  const chartOffsetX  = Math.max(0, (wrapperWidth - containerSide * chartScale) / 2);
 
   const userId = sessionStorage.getItem("userId") ?? "";
 
@@ -553,7 +737,15 @@ export default function AstrologiaEspacio() {
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [containerW, loading]);
+  }, [loading]);
+
+  const handlePlanetClick = (planet: Planet) => {
+    if (planet.interactive) {
+      setOpenModal(planet.key as SignField);
+    } else {
+      setTeaserPlanet(planet);
+    }
+  };
 
   const handleSelect = async (sign: string) => {
     if (!openModal || !userId || saving) return;
@@ -579,6 +771,13 @@ export default function AstrologiaEspacio() {
     finally { setSaving(false); }
   };
 
+  const getSign = (key: PlanetKey): string | null => {
+    if (key === "sol")        return data?.sol        ?? null;
+    if (key === "luna")       return data?.luna       ?? null;
+    if (key === "ascendente") return data?.ascendente ?? null;
+    return null;
+  };
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
@@ -601,23 +800,21 @@ export default function AstrologiaEspacio() {
           {loading && <SpinnerTurquesa />}
 
           {!loading && (
-            /* Card principal con fondo espacial */
             <Box
               w="100%" maxW="900px"
               position="relative" overflow="hidden"
               border={`1.5px solid ${astrologiaTxt}28`}
-              borderRadius="3xl" 
-              px={{ base: 6, md: 10 }}
+              borderRadius="3xl"
+              px={{ base: 4, md: 8 }}
               pt={{ base: 8, md: 10 }}
-              pb={{ base: 5, md: 6 }}
+              pb={{ base: 6, md: 8 }}
               boxShadow={`0 4px 24px rgba(0,0,0,0.5), 0 0 48px ${astrologiaTxt}14`}
             >
-              {/* Fondo espacial de la card */}
               <SpaceBg />
 
-              {/* Contenido relativo */}
               <Box position="relative" zIndex={1}>
-                <Flex justify="center" align="center" gap={2.5} mb={{ base: 8, md: 10 }}>
+                {/* Título */}
+                <Flex justify="center" align="center" gap={2.5} mb={{ base: 6, md: 8 }}>
                   <Box flex="1" h="1px" bg={`${astrologiaTxt}1a`} borderRadius="full" />
                   <Text
                     color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
@@ -629,50 +826,92 @@ export default function AstrologiaEspacio() {
                   <Box flex="1" h="1px" bg={`${astrologiaTxt}1a`} borderRadius="full" />
                 </Flex>
 
-                {/* ── Media luna ── */}
-                <Box ref={chartWrapperRef} w="100%" mb={3} style={{ height: containerH * chartScale, overflow: "hidden" }}>
+                {/* Chart responsivo */}
+                <Box
+                  ref={chartWrapperRef}
+                  w="100%"
+                  mb={3}
+                  style={{ height: containerH * chartScale, overflow: "hidden" }}
+                >
                   <Box
                     position="relative"
                     style={{
-                      width: containerW,
+                      width: containerSide,
                       height: containerH,
                       transform: `translateX(${chartOffsetX}px) scale(${chartScale})`,
                       transformOrigin: "top left",
                     }}
                   >
+                    {/* SVG: órbita circular y líneas radiales */}
                     <svg
                       style={{ position: "absolute", top: 0, left: 0, overflow: "visible", pointerEvents: "none" }}
-                      width={containerW} height={containerH}
+                      width={containerSide} height={containerH}
                     >
-                      <path
-                        d={`M ${pos.luna.x + CIRCLE / 2} ${pos.luna.y + CIRCLE / 2}
-                            A ${R} ${R} 0 0 1 ${pos.ascendente.x + CIRCLE / 2} ${pos.ascendente.y + CIRCLE / 2}`}
-                        fill="none" stroke={`${astrologiaTxt}22`} strokeWidth="1.5" strokeDasharray="5 8"
+                      {/* Círculo de órbita */}
+                      <circle
+                        cx={cx} cy={cy} r={R}
+                        fill="none"
+                        stroke={`${astrologiaTxt}14`}
+                        strokeWidth="1"
+                        strokeDasharray="4 8"
                       />
-                      {(["sol", "luna", "ascendente"] as const).map((k) => (
-                        <line
-                          key={k}
-                          x1={pos[k].x + CIRCLE / 2} y1={pos[k].y + CIRCLE / 2}
-                          x2={cx} y2={cy}
-                          stroke={`${astrologiaTxt}16`} strokeWidth="1" strokeDasharray="3 6"
-                        />
-                      ))}
+                      {/* Líneas radiales hacia el centro */}
+                      {PLANETS.map((p, i) => {
+                        const pos = getPlanetPos(i);
+                        return (
+                          <line
+                            key={p.key}
+                            x1={pos.x + PSIZE / 2} y1={pos.y + PSIZE / 2}
+                            x2={cx} y2={cy}
+                            stroke={`${p.color}18`}
+                            strokeWidth="1"
+                            strokeDasharray="3 7"
+                          />
+                        );
+                      })}
                     </svg>
 
-                    <Box position="absolute" style={{ left: pos.sol.x, top: pos.sol.y }}>
-                      <ZodiacCircle field="sol" sign={data?.sol ?? null} onClick={() => setOpenModal("sol")} size={CIRCLE} />
-                    </Box>
-                    <Box position="absolute" style={{ left: pos.luna.x, top: pos.luna.y }}>
-                      <ZodiacCircle field="luna" sign={data?.luna ?? null} onClick={() => setOpenModal("luna")} size={CIRCLE} />
-                    </Box>
-                    <Box position="absolute" style={{ left: pos.ascendente.x, top: pos.ascendente.y }}>
-                      <ZodiacCircle field="ascendente" sign={data?.ascendente ?? null} onClick={() => setOpenModal("ascendente")} size={CIRCLE} />
-                    </Box>
-                    <Box position="absolute" style={{ left: pos.center.x, top: pos.center.y }}>
+                    {/* Círculos de planeta */}
+                    {PLANETS.map((planet, i) => {
+                      const pos = getPlanetPos(i);
+                      return (
+                        <Box
+                          key={planet.key}
+                          position="absolute"
+                          style={{ left: pos.x - 12, top: pos.y }}
+                        >
+                          <PlanetCircle
+                            planet={planet}
+                            sign={getSign(planet.key)}
+                            onClick={() => handlePlanetClick(planet)}
+                            size={PSIZE}
+                          />
+                        </Box>
+                      );
+                    })}
+
+                    {/* Foto de perfil en el centro */}
+                    <Box
+                      position="absolute"
+                      style={{ left: cx - CENTER / 2, top: cy - CENTER / 2 }}
+                    >
                       <ProfileCircle imgUrl={imgUrl} size={CENTER} />
                     </Box>
                   </Box>
                 </Box>
+
+                {/* Leyenda: toca Sol, Luna o Ascendente */}
+                {/* <Text
+                  textAlign="center"
+                  color={`${astrologiaTxt}55`}
+                  fontSize="xs"
+                  fontFamily="'EB Garamond', serif"
+                  letterSpacing="0.06em"
+                  fontStyle="italic"
+                  mt={2}
+                >
+                  Toca el Sol, la Luna o el Ascendente para personalizar tu carta
+                </Text> */}
               </Box>
             </Box>
           )}
@@ -699,17 +938,22 @@ export default function AstrologiaEspacio() {
         </Text>
       </Box>
 
+      {/* Modal interactivo (Sol · Luna · Ascendente) */}
       {openModal && (
         <ZodiacModal
           field={openModal}
-          currentSign={
-            openModal === "sol"  ? (data?.sol        ?? null) :
-            openModal === "luna" ? (data?.luna       ?? null) :
-                                    (data?.ascendente ?? null)
-          }
+          currentSign={getSign(openModal)}
           onClose={() => setOpenModal(null)}
           onSelect={handleSelect}
           onClear={handleClear}
+        />
+      )}
+
+      {/* Modal teaser (resto de planetas) */}
+      {teaserPlanet && (
+        <PlanetTeaserModal
+          planet={teaserPlanet}
+          onClose={() => setTeaserPlanet(null)}
         />
       )}
     </Box>

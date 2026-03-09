@@ -32,7 +32,7 @@ export const modulosAstrologia: ModuloContenido[] = [
         nom: "1.2 El Sol, el Ascendente y la Luna",
         link:`${basePath}/astro2`,
         linkAnterior:`${basePath}/astro1`,
-        linkNext:`${basePath}/astro3`,
+        linkNext:`${basePath}/asc1`,
         descripcion:"El Ascendente es el camino, el Sol nuestra esencia y Luna las raíces tempranas.",
         video:"aBav2XmgGpE",
         letra: astrologia2,
