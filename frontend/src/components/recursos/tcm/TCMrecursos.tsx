@@ -111,7 +111,7 @@ export const ELEMENTS: TCMElementData[] = [
 
       { label: "Desequilibrio", value: "Distensión abdominal · Insuficiente producción de chi o sangre · Diarrea o retención · Edema · Boca o garganta secas · Falta de apetito · Náuseas · Vómitos · Frío y dolor estomacal" },
 
-      { label: "Balanceado", value: "Digestiones armónicas · Energía estable · Responsabilidad · Confianza en la vida · Practicidad" },
+      { label: "Balanceado", value: "Digestiones armónicas · Energía estable · Responsabilidad · Confianza en la Vida· Practicidad" },
 
       { label: "Exceso", value: "Sobreprotección · Necesidad de control y rutina · Sobre reacción · Aumento de peso rápido · Ruido mental" },
 

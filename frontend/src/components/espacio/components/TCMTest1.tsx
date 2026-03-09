@@ -88,7 +88,7 @@ const CONSTITUCIONES = [
 const INTERPRETACIONES = [
   {
     nombre: "Equilibrado",
-    descripcion: "Tu cuerpo está en buena armonía. Mantén tus hábitos de vida y sigue escuchando tu cuerpo con regularidad.",
+    descripcion: "Tu cuerpo está en buena armonía. Mantén tus hábitos de Viday sigue escuchando tu cuerpo con regularidad.",
   },
   {
     nombre: "Deficiencia de Qi",

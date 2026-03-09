@@ -134,7 +134,7 @@ export default function TCMTest2() {
       tcmField="elemento"
       pageTitle="Tu elemento predominante"
       instruccionesTitle="Terreno Constitucional"
-      instruccionesText="Evaluación de Tendencia Energética Base según los Cinco Movimientos. Responde según cómo ha sido la mayor parte de tu vida adulta, no según el estado actual."
+      instruccionesText="Evaluación de Tendencia Energética Base según los Cinco Movimientos. Responde según cómo ha sido la mayor parte de tu Vidaadulta, no según el estado actual."
       scaleValues={[0, 1, 2, 3]}
       scaleLabels={SCALE_LABELS}
       scaleMobileHint="0 = No me describe · 3 = Muy característico"

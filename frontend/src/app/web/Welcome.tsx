@@ -263,7 +263,7 @@ const Welcome = () => {
               Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
               <br />
               <br />
-              “La Vida como Privilegio” no es solo un título, es una invitación. La vida no es únicamente lo que sucede, sino la forma en que decidimos mirarla cada día. Esta es una oportunidad para cambiar la perspectiva y transformar tu realidad.
+              “La Vida como Privilegio” no es solo un título, es una invitación. La Vidano es únicamente lo que sucede, sino la forma en que decidimos mirarla cada día. Esta es una oportunidad para cambiar la perspectiva y transformar tu realidad.
             </Text>
             <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
               <Box

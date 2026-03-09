@@ -64,7 +64,7 @@ const SEFIROT: Sefira[] = [
   },
   {
     key: 'malkuth', number: 10, spanishName: 'REINO', hebrewName: 'Malkuth', x: 200, y: 660,
-    description: 'El mundo material y la experiencia física. Representa la manifestación concreta de todo lo espiritual, el cuerpo, la tierra y la vida cotidiana.',
+    description: 'El mundo material y la experiencia física. Representa la manifestación concreta de todo lo espiritual, el cuerpo, la tierra y la Vidacotidiana.',
   },
 ]
 

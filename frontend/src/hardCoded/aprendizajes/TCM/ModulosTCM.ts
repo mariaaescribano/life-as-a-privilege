@@ -44,7 +44,7 @@ export const modulostcm: ModuloContenido[] = [
       },
       { 
         id:"tcm2",
-        nom: "1.2 El yin y el yang",
+        nom: "1.2 El Yin y el Yang",
         link:`${basePath}/tcm2`,
         linkAnterior:`${basePath}/tcm1`,
         linkNext:`${basePath}/tcm3`,

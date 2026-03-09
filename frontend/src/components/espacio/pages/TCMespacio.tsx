@@ -28,7 +28,7 @@ interface TcmData {
 ══════════════════════════════════════════════ */
 const DESC_CONSTITUCION: Record<string, string> = {
   "Equilibrado":
-    "Tu cuerpo está en armonía. Mantén tus hábitos de vida y sigue escuchando tu cuerpo con regularidad.",
+    "Tu cuerpo está en armonía. Mantén tus hábitos de Viday sigue escuchando tu cuerpo con regularidad.",
   "Deficiencia de Qi":
     "El Qi (energía vital) está disminuido. Descansa más, come caliente y nutritivo, y evita el sobreesfuerzo físico y mental.",
   "Deficiencia de Yang":
