@@ -1,4 +1,5 @@
 import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import SiteHeader from "../../../components/global/SiteHeader";
 import React, { useEffect, useState } from "react";
 import {
@@ -24,6 +25,18 @@ import {
 } from "../../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import SpinnerTurquesa from "../../../components/global/Spinner";
+import SiteFooter from "../../../components/global/Footer";
+
+const popIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
 
 const EspacioHome = () => {
   const navigate = useNavigate();
@@ -179,33 +192,45 @@ const EspacioHome = () => {
                 )}
               </Box>
 
-              {/* Disciplinas alrededor */}
+              {/* Disciplinas alrededor — aparecen una a una en sentido horario */}
               {photos.map((photo, index) => {
                 const angle = angleStep * index - Math.PI / 2;
                 const x = Math.cos(angle) * (radius ?? 150);
                 const y = Math.sin(angle) * (radius ?? 150);
+                const delay = `${index * 0.18}s`;
                 return (
+                  // Capa exterior: solo posicionamiento (translate fijo)
                   <Box
                     key={index}
-                    cursor={photo.cursor}
                     position="absolute"
+                    transform={`translate(${x}px, ${y}px)`}
                     w={circleSize}
                     h={circleSize}
-                    borderRadius="full"
-                    overflow="hidden"
-                    boxShadow="0 4px 20px rgba(0,0,0,0.35), 0 0 32px rgba(107,196,200,0.95), 0 0 65px rgba(107,196,200,0.5), 0 0 100px rgba(107,196,200,0.2)"
-                    onClick={() => photo.cursor === "pointer" && navigate(photo.link)}
-                    border={"6px solid "+ photo.txt}
-                    transform={`translate(${x}px, ${y}px)`}
-                    transition="all 0.3s ease"
-                    _hover={
-                      photo.cursor === "pointer"
-                        ? { transform: `translate(${x}px, ${y}px) scale(1.18)`, border: ("6px solid " + photo.txt) }
-                        : {}
-                    }
                   >
-                    <Box w="100%" h="100%" bg={photo.bg} display="flex" alignItems="center" justifyContent="center">
-                      {photo.icon}
+                    {/* Capa interior: animación de entrada + interactividad */}
+                    <Box
+                      cursor={photo.cursor}
+                      w="100%"
+                      h="100%"
+                      borderRadius="full"
+                      overflow="hidden"
+                      boxShadow={`
+                        0 0 80px ${photo.txt}bb,
+                        0 2px 44px ${photo.txt}97
+                      `}
+                      onClick={() => photo.cursor === "pointer" && navigate(photo.link)}
+                      border={"6px solid " + photo.txt}
+                      animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
+                      transition="transform 0.3s ease"
+                      _hover={
+                        photo.cursor === "pointer"
+                          ? { transform: "scale(1.18)" }
+                          : {}
+                      }
+                    >
+                      <Box w="100%" h="100%" bg={photo.bg} display="flex" alignItems="center" justifyContent="center">
+                        {photo.icon}
+                      </Box>
                     </Box>
                   </Box>
                 );
@@ -218,30 +243,7 @@ const EspacioHome = () => {
       </Box>
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.15)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
     </Box>
   );
 };

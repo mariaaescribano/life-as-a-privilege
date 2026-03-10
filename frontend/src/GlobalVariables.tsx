@@ -94,7 +94,7 @@ export const nutricionDescrip="Descubre qué hay más allá de los alimentos que
 // Ayurveda
 export const ayurvedaNom = "Ayúrveda";
 export const ayurvedaBg = "#ecd5ed";
-export const ayurvedaTxt = "#906891";
+export const ayurvedaTxt = "#906891" ;
 export function AyurvedaIcon({ size = "24px"}) {
   return (
    <svg xmlns="http://www.w3.org/2000/svg" height={size ?? "24px"} viewBox="0 -960 960 960" width={size ?? "24px"} fill={ayurvedaTxt}><path d="M272-160q-30 0-51-21t-21-51q0-21 12-39.5t32-26.5l156-62v-90q-54 63-125.5 96.5T120-320v-80q68 0 123.5-28T344-508l54-64q12-14 28-21t34-7h40q18 0 34 7t28 21l54 64q45 52 100.5 80T840-400v80q-83 0-154.5-33.5T560-450v90l156 62q20 8 32 26.5t12 39.5q0 30-21 51t-51 21H400v-20q0-26 17-43t43-17h120q9 0 14.5-5.5T600-260q0-9-5.5-14.5T580-280H460q-42 0-71 29t-29 71v20h-88Zm151.5-503.5Q400-687 400-720t23.5-56.5Q447-800 480-800t56.5 23.5Q560-753 560-720t-23.5 56.5Q513-640 480-640t-56.5-23.5Z"/></svg>
@@ -139,7 +139,7 @@ export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: str
 export const cabalaDescrip="Explora la sabiduría de la Cábala y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia.";
 
 // Espacio personal
-export function EspacioPersonalIcon({ color = "white", size = "50px" }) {
+export function EspacioPersonalIcon({ color = "white", size = "50px", shadow = true }) {
   return (
     <Box
       as="svg"
@@ -148,9 +148,9 @@ export function EspacioPersonalIcon({ color = "white", size = "50px" }) {
       width={size}
       height={size}
       fill={color}
-      style={{
+      style={ shadow == true ? {
         filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-      }}
+      } : {filter:""}}
     >
       <path d="M480-240Zm-320 80v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440h14q-11 18-16.5 38.5T472-360q-54 1-107.5 14.5T260-306q-9 5-14.5 14t-5.5 20v32h283l80 80H160Zm207-367q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm169.5-56.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm236 480L576-300q-13-13-18.5-28t-5.5-30q0-32 23-57t59-25q28 0 44 13t38 35q20-20 36.5-34t45.5-14q37 0 59.5 25.5T880-357q0 15-6 30t-18 27L716-160Z"/>
     </Box>
@@ -158,7 +158,7 @@ export function EspacioPersonalIcon({ color = "white", size = "50px" }) {
 }
 
 // Aprendizaje
-export function AprendizajeIcon({ color = "white", size = "50px"}) {
+export function AprendizajeIcon({ color = "white", size = "50px", shadow = true }) {
   return (
     <Box
       as="svg"
@@ -167,9 +167,9 @@ export function AprendizajeIcon({ color = "white", size = "50px"}) {
       width={size}
       height={size}
       fill={color}
-      style={{
+      style={ shadow == true ? {
         filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-      }}
+      } : {filter:""}}
     >
       <path d="M440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6q47 0 91.5 10.5T440-278Zm40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q74 0 126 17t112 52q11 6 16.5 14t5.5 21v418q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-481q15 5 29.5 11t28.5 14q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm140-240v-440l120-40v440l-120 40Zm-340-99Z"/>
     </Box>

@@ -6,7 +6,7 @@ const detalles: Detalles = { color: tcmTxt, icon: TCMIcon, bgColor: tcmBg };
 
 const basePath = "/aprendizaje/videoLessonPage/" + tcmNomLink;
 
-export const modulostcm: ModuloContenido[] = [
+export const moduloLosFundamentos: ModuloContenido[] = [
   {
     title: "Recursos",
     icon: RecursosIconTCM,

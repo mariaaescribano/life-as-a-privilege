@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -405,32 +406,7 @@ const Welcome = () => {
       </Flex>
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        background="#008080"
-        borderTop="1px solid rgba(255,255,255,0.15)"
-        px={{ base: 6, md: 16 }}
-        pt={{ base: 10, md: 12 }}
-        pb={{ base: 8, md: 10 }}
-      >
-        <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
 
       {/* ── MODAL ── */}
       {selected && (

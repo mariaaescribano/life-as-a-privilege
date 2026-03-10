@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import SiteHeader from "../../global/SiteHeader";
+
+const popIn = keyframes`
+  from { opacity: 0; transform: scale(0.2); }
+  to   { opacity: 1; transform: scale(1); }
+`;
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SpinnerTurquesa from "../../global/Spinner";
 import {
@@ -871,7 +877,7 @@ export default function AstrologiaEspacio() {
                       })}
                     </svg>
 
-                    {/* Círculos de planeta */}
+                    {/* Círculos de planeta — aparecen uno a uno en sentido horario */}
                     {PLANETS.map((planet, i) => {
                       const pos = getPlanetPos(i);
                       return (
@@ -879,6 +885,7 @@ export default function AstrologiaEspacio() {
                           key={planet.key}
                           position="absolute"
                           style={{ left: pos.x - 12, top: pos.y }}
+                          animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.15}s both`}
                         >
                           <PlanetCircle
                             planet={planet}

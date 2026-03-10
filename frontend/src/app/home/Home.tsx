@@ -25,6 +25,7 @@ import {
 import type { SessionStorageUser } from "../../dtos/user.types";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import PhotoMandala from "../../components/home/PhotoMandala";
+import SiteFooter from "../../components/global/Footer";
 
 type Discipline = {
   name: string;
@@ -43,7 +44,7 @@ const disciplines: Discipline[] = [
     description: fisiologiaDescrip,
     renderIcon: (s) => <FisiologiaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + fisiologiaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + fisiologiaNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
     available:false
   },
   {
@@ -51,7 +52,7 @@ const disciplines: Discipline[] = [
     description: neuropsicologiaDescrip,
     renderIcon: (s) => <NeuropsicologiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + neuropsicologiaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom,
     available:true
   },
   {
@@ -59,7 +60,7 @@ const disciplines: Discipline[] = [
     description: astrologiaDescrip,
     renderIcon: (s) => <AstrologiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + astrologiaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + astrologiaNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + astrologiaNom,
     available:true
   },
   {
@@ -67,7 +68,7 @@ const disciplines: Discipline[] = [
     description: tcmDescrip,
     renderIcon: (s) => <TCMIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + tcmNomLink,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + tcmNomLink,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + tcmNomLink,
     available:true
   },
   {
@@ -75,7 +76,7 @@ const disciplines: Discipline[] = [
     description: nutricionDescrip,
     renderIcon: (s) => <NutricionIcon size={s} />,
     linkEspacio: "/espacio/questions/" + nutricionNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + nutricionNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + nutricionNom,
     available:false
   },
   {
@@ -83,7 +84,7 @@ const disciplines: Discipline[] = [
     description: ayurvedaDescrip,
     renderIcon: (s) => <AyurvedaIcon size={s} />,
     linkEspacio: "/espacio/questions/" + ayurvedaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + ayurvedaNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + ayurvedaNom,
     available:false
   },
   {
@@ -91,7 +92,7 @@ const disciplines: Discipline[] = [
     description: fitoterapiaDescrip,
     renderIcon: (s) => <FitoterapiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + fitoterapiaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + fitoterapiaNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + fitoterapiaNom,
     available:true
   },
   {
@@ -99,7 +100,7 @@ const disciplines: Discipline[] = [
     description: cabalaDescrip,
     renderIcon: (s) => <CabalaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + cabalaNom,
-    linkAprendizaje: "/aprendizaje/modulosPage/" + cabalaNom,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + cabalaNom,
     available:true
   },
 ];
@@ -493,11 +494,12 @@ const Home = () => {
                       _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 30px ${selectedDisc.txt}dd, 0 4px 18px ${selectedDisc.txt}99` } : {}}
                       transition="all 0.2s"
                     >
-                      <EspacioPersonalIcon color={selectedDisc.txt} size="24px" />
+                      <EspacioPersonalIcon color={selectedDisc.txt} size="24px" shadow={false}/>
                       <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}
-                       style={{
-                        filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                      }}>
+                      //  style={{
+                      //   filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                      // }}
+                      >
                         Mi Espacio
                       </Text>
                     </Flex>
@@ -514,11 +516,12 @@ const Home = () => {
                       _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 30px ${selectedDisc.txt}dd, 0 4px 18px ${selectedDisc.txt}99` } : {}}
                       transition="all 0.2s"
                     >
-                      <AprendizajeIcon color={selectedDisc.txt} size="30px" />
+                      <AprendizajeIcon color={selectedDisc.txt} size="30px" shadow={false} />
                       <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}
-                      style={{
-                        filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                      }}>
+                      // style={{
+                      //   filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+                      // }}
+                      >
                         Aprendizaje
                       </Text>
                     </Flex>
@@ -542,30 +545,7 @@ const Home = () => {
       )}
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.15)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
     </Box>
   );
 };

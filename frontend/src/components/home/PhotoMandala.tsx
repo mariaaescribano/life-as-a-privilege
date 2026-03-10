@@ -1,5 +1,5 @@
 
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -44,13 +44,11 @@ const MandalaCircle = ({
     <MotionBox
       position="absolute"
       cursor={isAvailable ? "pointer" : "not-allowed"}
-      w={circleSize}
-      h={circleSize}
-      borderRadius="full"
-      overflow="hidden"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      gap="4px"
       onClick={isAvailable ? onNavigate : undefined}
-      boxShadow="0 4px 16px rgba(0,0,0,0.28), 0 0 28px rgba(107,196,200,0.95), 0 0 70px rgba(107,196,200,0.7), 0 0 110px rgba(107,196,200,0.4)"
-      border={`5px solid ${photo.txt}`}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
       animate={{ scale: 1, opacity: 1, x, y }}
       transition={entered
@@ -60,6 +58,18 @@ const MandalaCircle = ({
       onAnimationComplete={() => { if (!entered) setEntered(true); }}
       whileHover={isAvailable ? { scale: 1.22 } : {}}
     >
+      {/* Círculo */}
+    <Box
+      w={circleSize}
+      h={circleSize}
+      borderRadius="full"
+      overflow="hidden"
+      border={`5px solid ${photo.txt}`}
+      boxShadow={`
+        0 0 20px ${photo.txt}bb,
+        0 2px 14px ${photo.txt}97
+      `}
+    >
       <Box
         w="100%"
         h="100%"
@@ -67,9 +77,29 @@ const MandalaCircle = ({
         display="flex"
         justifyContent="center"
         alignItems="center"
+        boxShadow={`
+          0 0 20px ${photo.txt}bb,
+          0 2px 14px ${photo.txt}77
+        `}
       >
         {photo.icon}
       </Box>
+    </Box>
+
+      {/* Nombre del módulo */}
+      {/* <Text
+        color={photo.txt}
+        fontSize="xs"
+        fontWeight="700"
+        textAlign="center"
+        textShadow="0 2px 8px rgba(0,0,0,0.5)"
+        letterSpacing="0.03em"
+        lineHeight="1.2"
+        maxW={circleSize}
+        noOfLines={2}
+      >
+        {photo.name}
+      </Text> */}
     </MotionBox>
   );
 };

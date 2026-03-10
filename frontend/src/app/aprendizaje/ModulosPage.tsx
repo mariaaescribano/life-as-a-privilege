@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import React, { useEffect, useState } from "react";
@@ -79,7 +80,7 @@ export default function ModulesPage() {
           >
             <DisciplineHeader
               icon={moduloDatos.icon}
-              title={moduloDatos.nom}
+              title={moduloDatos.}
               bgColor={moduloDatos.bgColor}
               color={moduloDatos.color}
             />
@@ -102,30 +103,7 @@ export default function ModulesPage() {
       </Box>
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.15)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
     </Box>
   );
 }

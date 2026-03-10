@@ -1,6 +1,7 @@
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import {
   AprendizajeIcon,
@@ -17,13 +18,13 @@ import {
 export const AprendizajeHome = () => {
   const items = [
     { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size="70px" />,                             link: "",                                           cursor: "not-allowed" },
-    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "60px", md: "70px" }} />, link: "/aprendizaje/modulosPage/" + neuropsicologiaNom, cursor: "pointer"     },
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="70px" />,                             link: "/aprendizaje/modulosPage/" +astrologiaNom,    cursor: "pointer" },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "60px", md: "70px" }} />,            link: "/aprendizaje/modulosPage/" + tcmNomLink, cursor: "pointer" },
+    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "60px", md: "70px" }} />, link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom, cursor: "pointer"     },
+    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="70px" />,                             link: "/aprendizaje/cursosModalidad/" + astrologiaNom,    cursor: "pointer" },
+    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "60px", md: "70px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
     { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size="70px" />,                              link: "",                                           cursor: "not-allowed" },
     { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size="70px" />,                               link: "",                                           cursor: "not-allowed" },
-    { title: fitoterapiaNom,      bgColor: fitoterapiaBg,        color: fitoterapiaTxt,  icon: <FitoterapiaIcon size={{ base: "60px", md: "70px" }} />,                   link: "/aprendizaje/modulosPage/" + fitoterapiaNom,  cursor: "pointer" },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "/aprendizaje/modulosPage/" + cabalaNom,      cursor: "pointer"  },
+    { title: fitoterapiaNom,      bgColor: fitoterapiaBg,        color: fitoterapiaTxt,  icon: <FitoterapiaIcon size={{ base: "60px", md: "70px" }} />,                   link: "/aprendizaje/cursosModalidad/" + fitoterapiaNom,  cursor: "pointer" },
+    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
   ];
 
   useEffect(() => {
@@ -80,30 +81,7 @@ export const AprendizajeHome = () => {
       </Box>
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.15)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
     </Box>
   );
 };

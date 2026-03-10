@@ -1,0 +1,28 @@
+import React from "react";
+import type { ModalidadInfo } from "./cursos.type";
+import {
+  FitoterapiaIcon,
+  fitoterapiaBg,
+  fitoterapiaNom,
+  fitoterapiaTxt,
+} from "../../GlobalVariables";
+
+export const fitoterapiaCursos: ModalidadInfo = {
+  moduloLink: "/aprendizaje/modulosPage/" + fitoterapiaNom,
+  nom: fitoterapiaNom,
+  bgColor: fitoterapiaBg,
+  color: fitoterapiaTxt,
+  icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />,
+  cursos: [
+    {
+      id: "fito-curso-1",
+      titulo: "Plantas comunes",
+      foto: "/img/fitoterapia/especias.jpg",
+      descripcion:
+        "Descubre las propiedades beneficiosas de las especias comunes.",
+      precio: 5,
+      numLecciones: 8,
+      icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />,
+    },
+  ],
+};

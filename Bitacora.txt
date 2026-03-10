@@ -6,7 +6,12 @@ USAR OBJ+ID : userId
 - en user/account cuando se edita algo, que se quede el tick de salvado para indicar al usuario que se ha salvado
 que se ilumine el tick, NO el lapiz
 
-- 
+
+xxx
+
+- cabala poner preguntas 
+- cabala hacer recursos
+
 
 
 
