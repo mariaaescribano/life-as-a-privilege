@@ -49,3 +49,47 @@ export const sol10 = "Una persona con Sol en Capricornio, cuando está en sombra
 export const sol11 = "Una persona con Sol en Acuario, cuando está en sombra, es muy mental y puede ver las emociones como algo peligroso, ya que no quiere dependencias. Odia a los humanos por amar a la humanidad. Cuando está en luz, es capaz de reconocer su valía y su individualidad dentro de un grupo; este grupo puede ser una empresa, sus amistades o el universo en sí. Para ella es más fácil conectar con varias personas que establecer un vínculo con solo una.";
 
 export const sol12 = "Una persona con Sol en Piscis, cuando está en sombra, puede tratar de escapar a la mente y al análisis debido a que se siente abrumada y confusa por su gran sensibilidad y percepción. Se siente como una esponja de las energías de otros. Puede hablar mucho y, al ser tan compasiva, otros pueden aprovecharse de ella. Es fácilmente incomprendida, porque a veces ni ella se entiende a sí misma. Cuando está en luz, es trascendental, amable, dulce y artista. En muy alta frecuencia es capaz de conectarse con el infinito sin interferencias egoicas.";
+
+export const luna1 = "Una persona con Luna en Aries significa que percibió a su madre como una enemiga, alguien violento, intenso y con quien competir. Por ello, siente que no puede contar con nadie y nunca pide ayuda. Individualmente suele tomar la iniciativa y siempre está haciendo algo. Puede ser demasiado impulsiva, tener explosiones emocionales y no medir las consecuencias de sus actos.";
+
+export const luna2 = "Una persona con Luna en Tauro siente un fuerte apego a la madre, la cual le ha proveído de bienes materiales, comida y calor. La comida para ellos es equivalente a la seguridad emocional, por eso pueden comer demasiado o, de repente, dejar de comer. Sin embargo, cuando compran alimentos buscan siempre la más alta calidad. Pueden ser muy trabajadores, pero también cabezotas, con resistencia al cambio o perezosos. En conclusión, usan los bienes materiales o el dinero como seguridad y fuente de confianza.";
+
+export const luna3 = "Una persona con Luna en Géminis significa que no ha tenido un vínculo profundo con la madre, la cual es una mujer muy ocupada e inteligente. Por esto, no puede desarrollar una expresión emocional correcta y prefiere intelectualizar todas sus experiencias. Son emocionalmente fríos, pero no por maldad, sino porque las emociones son un lenguaje que no saben hablar. Pueden sabotearse con comida rápida.";
+
+export const luna4 = "Una persona con Luna en Cáncer significa que tiene un apego muy grande a la madre, la cual se percibe como un ser nutricio, pero también manipulador. Inconscientemente le hace sentir que nadie lo va a querer tanto como ella, lo que crea confusión y dependencia. La persona puede crear un refugio al cual retirarse para protegerse de lo que percibe de los demás. Puede negar sus propias necesidades emocionales, ser muy resentida y ver el mundo como un lugar hostil.";
+
+export const luna5 = "Una persona con Luna en Leo significa que la madre le ha hecho saber que no debe dejar que nadie le menosprecie. Suele ser el favorito de los abuelos o haber idealizado a algún miembro de su familia. Necesita sentirse admirado para sentirse amado y disfruta mucho del teatro y de las películas. Es brillante, carismático y egocéntrico, pero necesita desarrollar la autoestima y la autovalidación en lugar de buscarlas fuera. Puede ser impulsivo, guiado por su corazón, sin atender demasiado a razones.";
+
+export const luna6 = "Una persona con Luna en Virgo significa que ha crecido creyendo que solo puede ser querida si es útil. Percibió a su madre como juzgadora y distante. Por eso, para sentirse amado, necesita que se le reconozca en voz alta todo lo que hace. Son perfeccionistas, trabajadores y críticos. Puede ignorar sus propias necesidades y perderse el presente por estar demasiado en la mente. Pueden presentar molestias digestivas o trastornos de la conducta alimentaria. Igualmente, tienen interés en la nutrición, la salud y los cuidados naturales.";
+
+export const luna7 = "Una persona con Luna en Libra significa que su casa era un sitio social y de constante actividad. Por ello, los padres pudieron obligarle a querer a personas que en realidad no quería. Esta persona aprecia la armonía y la delicadeza, y no tolera las agresiones o las malas formas sociales. Puede racionalizar lo que siente en vez de simplemente sentirlo. Los ambientes no armónicos pueden afectar su salud. Son complacientes y diplomáticos. Pueden pensar que el matrimonio es importante, pero no necesariamente el amor.";
+
+export const luna8 = "Una persona con Luna en Escorpio significa que su madre ha sido o es tóxica, posesiva, controladora, dramática y, tristemente, muy idealizada por la propia persona. Puede sentir miedo cuando algo es verdaderamente nutritivo para ella o cuando está cómoda. Puede pensar que el amor es dejar de ser uno mismo, porque la madre no ha sido capaz de crear un espacio en el que se permitiera el desarrollo de un amor real. Pueden ser reservados y celosos.";
+
+export const luna9 = "Una persona con Luna en Sagitario significa que ha crecido en un espacio emocionalmente inseguro, en el cual la madre le decía que se relajara sin ayudarle realmente a gestionar sus emociones. Son enérgicos, imprudentes, independientes y espontáneos, y necesitan libertad. Pueden ayudar a otros a encontrar el sentido de su vida. Sin embargo, pueden deprimirse cuando se les ponen límites a su libertad y suelen tener un optimismo tóxico hacia el futuro que les impide ser conscientes de sus emociones.";
+
+export const luna10 = "Una persona con Luna en Capricornio significa que la madre, inconscientemente, le hace sentir que no tiene espacio para pedir lo que necesita, que no puede quejarse y que no merece nada; por lo tanto, si quiere algo debe trabajar por ello. Estas personas pueden necesitar validación externa, ya que la madre no les proporcionó ese apoyo. Pueden parecer frías, críticas y poco emocionales. Tienen tendencia a la depresión, que se manifiesta en melancolía, sensación de miseria y búsqueda de estabilidad y trabajo duro en lugar de valores trascendentes o amor real.";
+
+export const luna11 = "Una persona con Luna en Acuario significa que ha crecido en un ambiente que carecía de seguridad emocional. La madre es impredecible y no cumple con su rol protector: aparece, desaparece o se enfada sin un patrón coherente. Por ello, la persona desarrolla un apego evitativo y siempre está preparada para la pérdida. Tiene miedo al compromiso porque ha aprendido que su única seguridad es la libertad. Sin embargo, valoran profundamente y buscan amistades verdaderas.";
+
+export const luna12 = "Una persona con Luna en Piscis significa que ha tenido una madre que le ha dado un amor sofocante que no le ha permitido ser él mismo. Siempre ha recibido mucho, pero nunca le han preguntado qué era lo que realmente necesitaba. Es emocional y sensible, pero tiene que aprender a poner límites frente al miedo de su madre. Es vulnerable y puede autocompadecerse, ya que otros pueden aprovecharse de su gran corazón. Puede dormir demasiado, sentirse siempre cansado o desarrollar adicciones y pensamientos obsesivos. Tiene que aprender a ser su propia madre.";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
