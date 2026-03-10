@@ -8,7 +8,6 @@ import {
 } from "../../GlobalVariables";
 
 export const cabalaCursos: ModalidadInfo = {
-  moduloLink: "/aprendizaje/modulosPage/" + cabalaNom,
   nom: cabalaNom,
   bgColor: cabalaBg,
   color: cabalaTxt,
@@ -16,6 +15,7 @@ export const cabalaCursos: ModalidadInfo = {
   cursos: [
     {
       id: "cabala-curso-1",
+      cursoLink: "/aprendizaje/modulosPage/" + cabalaNom + "/cabala-curso-1",
       titulo: "Cábala: Sabiduría y equilibrio",
       foto: "/img/extras/flor.png",
       descripcion:

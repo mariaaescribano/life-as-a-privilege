@@ -8,7 +8,6 @@ import {
 } from "../../GlobalVariables";
 
 export const fitoterapiaCursos: ModalidadInfo = {
-  moduloLink: "/aprendizaje/modulosPage/" + fitoterapiaNom,
   nom: fitoterapiaNom,
   bgColor: fitoterapiaBg,
   color: fitoterapiaTxt,
@@ -16,6 +15,7 @@ export const fitoterapiaCursos: ModalidadInfo = {
   cursos: [
     {
       id: "fito-curso-1",
+      cursoLink: "/aprendizaje/modulosPage/" + fitoterapiaNom + "/fito-curso-1",
       titulo: "Plantas comunes",
       foto: "/img/fitoterapia/especias.jpg",
       descripcion:

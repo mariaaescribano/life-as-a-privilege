@@ -20,43 +20,52 @@ import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicol
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
+import { cursosData } from "../../hardCoded/cursos";
 
 export default function ModulesPage() {
-  const { moduloId } = useParams<{ moduloId: string }>();
+  const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
   const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
+  const getCursoTitulo = (): string => {
+    if (!modalidadId || !cursoId) return "";
+    const modalidad = cursosData[modalidadId];
+    if (!modalidad) return "";
+    return modalidad.cursos.find((c) => c.id === cursoId)?.titulo ?? "";
+  };
+
   const getModuloDatos = (): Modulo => {
-    switch (moduloId) {
+    const titulo = getCursoTitulo();
+    switch (modalidadId) {
       case "fisiologia":
-        return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
+        return { nom: titulo || fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
       case neuropsicologiaNom:
-        return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos: modulosNeuroPsicologia };
+        return { nom: titulo || neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos: modulosNeuroPsicologia };
       case astrologiaNom:
-        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos: modulosAstrologia };
+        return { nom: titulo || astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos: modulosAstrologia };
       case tcmNomLink:
-        return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos: modulostcm };
+        return { nom: titulo || tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos: modulostcm };
       case "nutricion":
-        return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon /> };
+        return { nom: titulo || nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon /> };
       case "ayurveda":
-        return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
+        return { nom: titulo || ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
       case fitoterapiaNom:
-        return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos: modulosFitoterapia};
+        return { nom: titulo || fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos: modulosFitoterapia};
       case cabalaNom:
-        return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} /> };
+        return { nom: titulo || cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} /> };
       default:
         return { nom: "", bgColor: "", color: "", icon: null };
     }
   };
 
   useEffect(() => {
-    if (moduloId) {
+    if (modalidadId) {
       setmoduloDatos(getModuloDatos());
     }
-  }, [moduloId]);
+  }, [modalidadId, cursoId]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -80,7 +89,7 @@ export default function ModulesPage() {
           >
             <DisciplineHeader
               icon={moduloDatos.icon}
-              title={moduloDatos.}
+              title={moduloDatos.nom}
               bgColor={moduloDatos.bgColor}
               color={moduloDatos.color}
             />

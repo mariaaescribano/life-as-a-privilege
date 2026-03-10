@@ -9,7 +9,6 @@ import {
 } from "../../GlobalVariables";
 
 export const tcmCursos: ModalidadInfo = {
-  moduloLink: "/aprendizaje/modulosPage/" + tcmNomLink,
   nom: tcmNom,
   bgColor: tcmBg,
   color: tcmTxt,
@@ -17,6 +16,7 @@ export const tcmCursos: ModalidadInfo = {
   cursos: [
     {
       id: "tcm-curso-1",
+      cursoLink: "/aprendizaje/modulosPage/" + tcmNomLink + "/tcm-curso-1",
       titulo: "Los fundamentos",
       foto: "/img/tcm/tcm_curso1.jpg",
       descripcion:

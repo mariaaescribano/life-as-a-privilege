@@ -8,14 +8,13 @@ import {
 } from "../../GlobalVariables";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
-  moduloLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
   nom: neuropsicologiaNom,
   bgColor: neuropsicologiaBg,
   color: neuropsicologiaTxt,
   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
     {
-      id: "np-curso-1",
+      id: "etapasVida",
       titulo: "Resumen de las etapas de la Vida",
       foto: "/img/np/neuropsicologia1Foto.jpg",
       descripcion:
@@ -23,6 +22,7 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       precio: null,
       numLecciones: 10,
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom +"/etapasVida",
     },
   ],
 };

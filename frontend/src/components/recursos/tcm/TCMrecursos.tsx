@@ -1546,7 +1546,7 @@ const TCMPage = () => {
               letterSpacing="0.12em"
               textShadow="0 2px 8px rgba(0,0,0,0.2)"
               boxShadow="0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)"
-              onClick={() => navigate("/aprendizaje/modulosPage/medicinachina")}
+              onClick={() => navigate("/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}
               _hover={{
                 bg: {tcmBg},
                 borderColor: "white",

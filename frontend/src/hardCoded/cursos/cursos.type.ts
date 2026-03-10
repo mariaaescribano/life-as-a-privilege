@@ -8,10 +8,10 @@ export interface Curso {
   precio: number | null; // null = gratis
   numLecciones: number;
   icon: ReactNode;
+  cursoLink : string;
 }
 
 export interface ModalidadInfo {
-  moduloLink: string;
   nom: string;
   bgColor: string;
   color: string;

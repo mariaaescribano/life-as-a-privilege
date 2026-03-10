@@ -63,7 +63,7 @@ export default function App()
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
       <Route path="/aprendizaje/cursosModalidad/:moduloId" element={<CursosModalidad />} />
-      <Route path="/aprendizaje/modulosPage/:moduloId" element={<ModulosPage />} />
+      <Route path="/aprendizaje/modulosPage/:modalidadId/:cursoId" element={<ModulosPage />} />
       <Route path="/aprendizaje/videoLessonPage/:moduloId/:submoduloId" element={<VideoLessonPage />} />
 
       <Route path="/recursos/:moduloId" element={<RecursosPage />} />

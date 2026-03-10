@@ -122,7 +122,7 @@ export default function CursosModalidad() {
 
   const handleAcceder = (curso: Curso) => {
     if (curso.precio === null) {
-      navigate(modalidad.moduloLink);
+      navigate(curso.cursoLink);
     } else {
       window.open(STRIPE_PAYMENT_LINK, "_blank");
     }

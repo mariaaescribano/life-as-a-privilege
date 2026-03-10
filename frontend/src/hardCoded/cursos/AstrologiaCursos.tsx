@@ -8,7 +8,6 @@ import {
 } from "../../GlobalVariables";
 
 export const astrologiaCursos: ModalidadInfo = {
-  moduloLink: "/aprendizaje/modulosPage/" + astrologiaNom,
   nom: astrologiaNom,
   bgColor: astrologiaBg,
   color: astrologiaTxt,
@@ -16,6 +15,7 @@ export const astrologiaCursos: ModalidadInfo = {
   cursos: [
     {
       id: "astro-curso-1",
+      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/astro-curso-1",
       titulo: "El Ascendente, el Sol y la Luna",
       foto: "/img/astrologia/astro.png",
       descripcion:

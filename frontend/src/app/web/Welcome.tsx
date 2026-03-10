@@ -40,7 +40,7 @@ const disciplines: Discipline[] = [
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
     desc: neuropsicologiaDescrip,
-    link: "/aprendizaje/modulosPage/" + neuropsicologiaNom,
+    link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom,
     available:true
   },
   {
@@ -49,7 +49,7 @@ const disciplines: Discipline[] = [
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
     desc: astrologiaDescrip,
-    link: "/aprendizaje/modulosPage/" + astrologiaNom,
+    link: "/aprendizaje/cursosModalidad/" + astrologiaNom,
     available:true
   },
   {
@@ -58,7 +58,7 @@ const disciplines: Discipline[] = [
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
     desc: tcmDescrip,
-    link: "/aprendizaje/modulosPage/" + tcmNomLink,
+    link: "/aprendizaje/cursosModalidad/" + tcmNomLink,
     available:true
   },
   {
@@ -85,7 +85,7 @@ const disciplines: Discipline[] = [
     txt: fitoterapiaTxt,
     renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
     desc: fitoterapiaDescrip,
-    link: "/aprendizaje/modulosPage/" + fitoterapiaNom,
+    link: "/aprendizaje/cursosModalidad/" + fitoterapiaNom,
     available:true
   },
   {
@@ -94,7 +94,7 @@ const disciplines: Discipline[] = [
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
     desc: cabalaDescrip,
-    link: "/aprendizaje/modulosPage/" + cabalaNom,
+    link: "/aprendizaje/cursosModalidad/" + cabalaNom,
     available:true
   },
 ];
