@@ -137,7 +137,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
     { name: nutricionNom,  available:false,      bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={iconSize} />,                                    link: "/espacio/questions/" + nutricionNom },
     { name: ayurvedaNom,  available:false,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={iconSize} />,                                    link: "/espacio/questions/" + ayurvedaNom },
     { name: fitoterapiaNom,  available:true,    bg: fitoterapiaBg,        txt: fitoterapiaTxt,        icon: <FitoterapiaIcon        size={{ base: iconSize, md: iconSize }} />,  link: "/espacio/questions/" + fitoterapiaNom },
-    { name: cabalaNom,     available:false,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
+    { name: cabalaNom,     available:true,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;

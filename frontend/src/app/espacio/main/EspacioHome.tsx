@@ -114,6 +114,11 @@ const EspacioHome = () => {
             alignItems="center"
             pt={{ base: 6, md: 8 }}
             pb={{ base: 6, md: 8 }}
+            sx={{
+              "@media (min-width: 768px)": {
+                zoom: "0.8",
+              },
+            }}
           >
             {/* Título */}
             <Flex align="center" gap={3} mb={{ base: 4, md: 6 }}>

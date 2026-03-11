@@ -6,6 +6,7 @@ import {
   cabalaNom,
   cabalaTxt,
 } from "../../GlobalVariables";
+import { modulosCabala } from "../aprendizajes/Cabala/ModulosCabala";
 
 export const cabalaCursos: ModalidadInfo = {
   nom: cabalaNom,
@@ -16,13 +17,14 @@ export const cabalaCursos: ModalidadInfo = {
     {
       id: "cabala-curso-1",
       cursoLink: "/aprendizaje/modulosPage/" + cabalaNom + "/cabala-curso-1",
-      titulo: "Cábala: Sabiduría y equilibrio",
-      foto: "/img/extras/flor.png",
+      titulo: "Los fundamentos",
+      foto: "/img/cabala/cabala.png",
       descripcion:
         "Explora la sabiduría de la Cábala y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia. Un camino hacia el autoconocimiento a través de los símbolos y la tradición mística.",
       precio: null,
       numLecciones: 12,
       icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />,
+      modulos: modulosCabala,
     },
   ],
 };

@@ -18,6 +18,7 @@ import {
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
+import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -84,6 +85,10 @@ export default function VideoLessonPage() {
       else if(moduloId === astrologiaNom)
       { 
         setdatos(getModuleByTitle(submoduloId!, modulosAstrologia));
+      }
+      else if(moduloId === cabalaNom)
+      { 
+        setdatos(getModuleByTitle(submoduloId!, modulosCabala));
       }
     }
   }, [moduloId, submoduloId]);

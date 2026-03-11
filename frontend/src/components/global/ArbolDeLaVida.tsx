@@ -21,6 +21,7 @@ export interface Sefira {
 interface Props {
   onSefiraClick?: (sefira: Sefira) => void
   maxWidth?: string
+  suppressInternalModal?: boolean
 }
 
 const R = 34
@@ -201,12 +202,12 @@ function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void 
 }
 
 /* ─── Componente principal ─────────────────────────────── */
-export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px' }: Props) {
+export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false }: Props) {
   const [hovered, setHovered] = useState<SefiraKey | null>(null)
   const [open, setOpen]       = useState<Sefira | null>(null)
 
   const handleClick = (sefira: Sefira) => {
-    setOpen(sefira)
+    if (!suppressInternalModal) setOpen(sefira)
     onSefiraClick?.(sefira)
   }
 
@@ -220,14 +221,14 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px' }: Pro
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            {/* Filtro de brillo dorado */}
-            <filter id="sefira-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
+            {/* Filtro de brillo dorado — reposo */}
+            <filter id="sefira-glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
               <feColorMatrix
                 in="blur" type="matrix"
-                values="1.2 0.6 0   0 0
-                        0.8 0.5 0   0 0
-                        0   0   0.2 0 0
+                values="1.6 0.7 0   0 0
+                        1.0 0.5 0   0 0
+                        0   0   0.1 0 0
                         0   0   0   1 0"
                 result="glow"
               />
@@ -236,13 +237,14 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px' }: Pro
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
-            <filter id="sefira-glow-hover" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="7" result="blur" />
+            {/* Filtro de brillo dorado — hover */}
+            <filter id="sefira-glow-hover" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="11" result="blur" />
               <feColorMatrix
                 in="blur" type="matrix"
-                values="1.5 0.7 0   0 0
-                        1.0 0.6 0   0 0
-                        0   0   0.2 0 0
+                values="2.0 0.9 0   0 0
+                        1.3 0.7 0   0 0
+                        0   0   0.1 0 0
                         0   0   0   1 0"
                 result="glow"
               />
@@ -296,35 +298,14 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px' }: Pro
                   stroke={strokeColor}
                   strokeWidth={strokeW}
                 />
-                {/* Número */}
+                {/* Nombre hebreo centrado */}
                 <text
-                  x={sefira.x} y={sefira.y - 11}
+                  x={sefira.x} y={sefira.y + 4}
                   textAnchor="middle"
-                  fontSize="12" fontWeight="bold"
-                  fontFamily="Georgia, serif"
-                  fill={mainColor}
-                >
-                  {sefira.number}
-                </text>
-                {/* Nombre en castellano */}
-                <text
-                  x={sefira.x} y={sefira.y + 2}
-                  textAnchor="middle"
-                  fontSize="5.8"
-                  fontFamily="Arial, sans-serif"
-                  fontWeight="700"
-                  fill={subColor}
-                >
-                  {sefira.spanishName}
-                </text>
-                {/* Nombre hebreo */}
-                <text
-                  x={sefira.x} y={sefira.y + 14}
-                  textAnchor="middle"
-                  fontSize="8"
+                  fontSize="9"
                   fontFamily="Georgia, serif"
                   fontStyle="italic"
-                  fill={subColor}
+                  fill={mainColor}
                 >
                   {sefira.hebrewName}
                 </text>

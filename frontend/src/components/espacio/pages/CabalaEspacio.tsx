@@ -1,6 +1,7 @@
-import React from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
+import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import {
   CabalaIcon,
@@ -9,8 +10,14 @@ import {
   cabalaTxt,
 } from "../../../GlobalVariables";
 import ArbolDeLaVida from "../../global/ArbolDeLaVida";
+import ThemeSection from "../components/ThemeSection";
+import { preguntasCabala } from "../../../hardCoded/espacio/PreguntasCabala";
 
 export default function CabalaEspacio() {
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -31,52 +38,39 @@ export default function CabalaEspacio() {
             maxW="900px"
           />
 
-            <Box
-                w="100%"
-                maxW="900px"
-                boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-                bg={cabalaBg}
-                border={`1.5px solid ${cabalaTxt}55`}
-                borderRadius="3xl"
-                px={{ base: 6, md: 10 }}
-                pt={{ base: 8, md: 10 }}
-                pb={{ base: 8, md: 10 }}
-            >
-                <ArbolDeLaVida />
-            </Box>
-         
+          {/* ── Árbol de la Vida ── */}
+          <Box
+            w="100%"
+            maxW="900px"
+            boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+            bg={cabalaBg}
+            border={`1.5px solid ${cabalaTxt}55`}
+            borderRadius="3xl"
+            px={{ base: 6, md: 10 }}
+            pt={{ base: 8, md: 10 }}
+            pb={{ base: 8, md: 10 }}
+            mb={{ base: 10, md: 14 }}
+          >
+            <ArbolDeLaVida />
+          </Box>
+
+          {/* ── Preguntas por sephirot ── */}
+          <VStack spacing={6} w="100%" maxW="900px">
+            {preguntasCabala.map((bloque, i) => (
+              <ThemeSection
+                key={i}
+                title={bloque.title}
+                icon={bloque.icon}
+                subPreguntas={bloque.subPreguntas}
+                bgColor={cabalaBg}
+                color={cabalaTxt}
+              />
+            ))}
+          </VStack>
         </Flex>
       </Box>
 
-       <Box
-            as="footer"
-            borderTop="1px solid rgba(255,255,255,0.1)"
-            px={{ base: 6, md: 16 }}
-            py={{ base: 8, md: 10 }}
-        >
-            <Text
-            color="rgba(255,255,255,0.38)"
-            fontSize="xs"
-            letterSpacing="0.05em"
-            textAlign="center"
-            >
-            © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-            </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-        </Box>
+      <SiteFooter />
     </Box>
   );
 }

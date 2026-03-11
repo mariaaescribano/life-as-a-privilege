@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { ModuloContenido } from "../../dtos/aprendizaje.type";
 
 export interface Curso {
   id: string;
@@ -9,6 +10,7 @@ export interface Curso {
   numLecciones: number;
   icon: ReactNode;
   cursoLink : string;
+  modulos?: ModuloContenido[];
 }
 
 export interface ModalidadInfo {

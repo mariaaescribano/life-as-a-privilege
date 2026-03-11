@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import {
   fitoterapiaNom,
   tcmNomLink,
+  cabalaNom,
 } from "../../GlobalVariables";
 import TCMrecursos from "../../components/recursos/tcm/TCMrecursos";
 import FitoterapiaRecursos from "../../components/recursos/fitoterapia/FitoterapiaRecursos";
+import CabalaRecursos from "../../components/recursos/cabala/CabalaRecursos";
 
 export default function RecursosPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
@@ -17,6 +19,8 @@ export default function RecursosPage() {
         return TCMrecursos;
       case fitoterapiaNom:
         return FitoterapiaRecursos;
+      case cabalaNom:
+        return CabalaRecursos;
       default:
         return null;
     }
