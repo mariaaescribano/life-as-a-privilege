@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 const EditableCard = (props:{
   idPregunta:string, pregunta:string,
-  bgColor:string, color:string, consejo?:string
+  bgColor:string, color:string, consejo?:string,
+  apiPath?: string
 }) => {
 
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const EditableCard = (props:{
       try
       {
         const response = await axios.post(
-        `${API_URL}/respuesta`,
+        `${API_URL}/${props.apiPath ?? "respuesta"}`,
         pregunta,
         {
           headers: {
@@ -95,7 +96,7 @@ const EditableCard = (props:{
   const getRespuesta = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/respuesta/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
+        `${API_URL}/${props.apiPath ?? "respuesta"}/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
         { headers: { 'Content-Type': 'application/json' } }
       );
 

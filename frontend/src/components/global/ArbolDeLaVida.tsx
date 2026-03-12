@@ -281,7 +281,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
             const strokeColor = active ? cabalaTxt : `${cabalaTxt}88`
             const strokeW     = active ? 3 : 2
             const mainColor   = cabalaBg
-            const subColor    = `${cabalaBg}dd`
+
 
             return (
               <g

@@ -600,7 +600,7 @@ const ZodiacModal = ({
 ══════════════════════════════════════════════ */
 const PlanetCircle = ({
   planet,
-  sign,
+  sign: _sign,
   onClick,
   size,
 }: {

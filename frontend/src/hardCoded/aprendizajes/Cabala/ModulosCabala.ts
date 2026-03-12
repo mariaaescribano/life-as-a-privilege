@@ -1,5 +1,5 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { TCMIcon, CincoElementosIcon, cabalaNom, RecursosIconCabala, cabalaTxt, CabalaIcon, cabalaBg } from "../../../GlobalVariables";
+import { cabalaNom, RecursosIconCabala, cabalaTxt, CabalaIcon, cabalaBg } from "../../../GlobalVariables";
 import { cabalaLetra, tikunOlamLetra, orkliLetra, ketherLetra, chokmahLetra, chesedLetra, geburahLetra, tiferetLetra, netzachLetra, yesodLetra, malkhutLetra } from "./LetraCabala";
 
 const detalles: Detalles = { color: cabalaTxt, icon: CabalaIcon, bgColor: cabalaBg };

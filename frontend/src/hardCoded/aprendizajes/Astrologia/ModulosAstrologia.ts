@@ -82,29 +82,162 @@ export const modulosAstrologia: ModuloContenido[] = [
     title: "4. La Luna",
     icon: MoonIcon,
     submodules: [
-      { id:"luna1", nom: "Luna en ♈︎ Aries", link:`${basePath}/luna1`, linkAnterior:`${basePath}/sol12`, linkNext:`${basePath}/luna2`, descripcion:"La Luna en Aries siente que debe defenderse sola, reaccionando con independencia e impulsividad emocional.", video:"zbyC_x43Qx0", letra: luna1, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna1",
+      nom: "Luna en ♈︎ Aries",
+      link:`${basePath}/luna1`,
+      linkAnterior:`${basePath}/sol12`,
+      linkNext:`${basePath}/luna2`,
+      descripcion:"La Luna en Aries siente que debe defenderse sola, reaccionando con independencia e impulsividad emocional.",
+      video:"5u_eDK03nxw",
+      letra: luna1,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna2", nom: "Luna en ♉︎ Tauro", link:`${basePath}/luna2`, linkAnterior:`${basePath}/luna1`, linkNext:`${basePath}/luna3`, descripcion:"La Luna en Tauro busca seguridad emocional en lo material, desarrollando apego a la estabilidad y a los recursos.", video:"Zd0gtDOfFBU", letra: luna2, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna2",
+      nom: "Luna en ♉︎ Tauro",
+      link:`${basePath}/luna2`,
+      linkAnterior:`${basePath}/luna1`,
+      linkNext:`${basePath}/luna3`,
+      descripcion:"La Luna en Tauro busca seguridad emocional en lo material, desarrollando apego a la estabilidad y a los recursos.",
+      video:"yzj1MoluTiE",
+      letra: luna2,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna3", nom: "Luna en ♊︎ Géminis", link:`${basePath}/luna3`, linkAnterior:`${basePath}/luna2`, linkNext:`${basePath}/luna4`, descripcion:"La Luna en Géminis intelectualiza las emociones porque no aprendió a expresarlas afectivamente.", video:"P-y8MOFR2wI", letra: luna3, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna3",
+      nom: "Luna en ♊︎ Géminis",
+      link:`${basePath}/luna3`,
+      linkAnterior:`${basePath}/luna2`,
+      linkNext:`${basePath}/luna4`,
+      descripcion:"La Luna en Géminis intelectualiza las emociones porque no aprendió a expresarlas afectivamente.",
+      video:"-nKmbn68i0k",
+      letra: luna3,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna4", nom: "Luna en ♋︎ Cáncer", link:`${basePath}/luna4`, linkAnterior:`${basePath}/luna3`, linkNext:`${basePath}/luna5`, descripcion:"La Luna en Cáncer vive un fuerte apego materno que puede generar dependencia emocional y necesidad de refugio.", video:"wRO7-7Z0zsM", letra: luna4, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna4",
+      nom: "Luna en ♋︎ Cáncer",
+      link:`${basePath}/luna4`,
+      linkAnterior:`${basePath}/luna3`,
+      linkNext:`${basePath}/luna5`,
+      descripcion:"La Luna en Cáncer vive un fuerte apego materno que puede generar dependencia emocional y necesidad de refugio.",
+      video:"WunkXx2KAxM",
+      letra: luna4,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna5", nom: "Luna en ♌︎ Leo", link:`${basePath}/luna5`, linkAnterior:`${basePath}/luna4`, linkNext:`${basePath}/luna6`, descripcion:"La Luna en Leo necesita sentirse admirada para sentirse amada y aprender a desarrollar su propia autoestima.", video:"wRO7-7Z0zsM", letra: luna5, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna5",
+      nom: "Luna en ♌︎ Leo",
+      link:`${basePath}/luna5`,
+      linkAnterior:`${basePath}/luna4`,
+      linkNext:`${basePath}/luna6`,
+      descripcion:"La Luna en Leo necesita sentirse admirada para sentirse amada y aprender a desarrollar su propia autoestima.",
+      video:"rE8ufNQMzmg",
+      letra: luna5,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna6", nom: "Luna en ♍︎ Virgo", link:`${basePath}/luna6`, linkAnterior:`${basePath}/luna5`, linkNext:`${basePath}/luna7`, descripcion:"La Luna en Virgo cree que solo merece amor si es útil, desarrollando perfeccionismo y autoexigencia.", video:"2na3Wq4wGiY", letra: luna6, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna6",
+      nom: "Luna en ♍︎ Virgo",
+      link:`${basePath}/luna6`,
+      linkAnterior:`${basePath}/luna5`,
+      linkNext:`${basePath}/luna7`,
+      descripcion:"La Luna en Virgo cree que solo merece amor si es útil, desarrollando perfeccionismo y autoexigencia.",
+      video:"qjG1k3_94xg",
+      letra: luna6,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna7", nom: "Luna en ♎︎ Libra", link:`${basePath}/luna7`, linkAnterior:`${basePath}/luna6`, linkNext:`${basePath}/luna8`, descripcion:"La Luna en Libra busca armonía emocional en las relaciones, evitando el conflicto y priorizando la diplomacia.", video:"jjkhJwSbaxU", letra: luna7, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna7",
+      nom: "Luna en ♎︎ Libra",
+      link:`${basePath}/luna7`,
+      linkAnterior:`${basePath}/luna6`,
+      linkNext:`${basePath}/luna8`,
+      descripcion:"La Luna en Libra busca armonía emocional en las relaciones, evitando el conflicto y priorizando la diplomacia.",
+      video:"tJa4nHwHYcI",
+      letra: luna7,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna8", nom: "Luna en ♏︎ Escorpio", link:`${basePath}/luna8`, linkAnterior:`${basePath}/luna7`, linkNext:`${basePath}/luna9`, descripcion:"La Luna en Escorpio vive emociones intensas y complejas, donde el amor puede confundirse con control o pérdida.", video:"Q_zzeWeWwKk", letra: luna8, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna8",
+      nom: "Luna en ♏︎ Escorpio",
+      link:`${basePath}/luna8`,
+      linkAnterior:`${basePath}/luna7`,
+      linkNext:`${basePath}/luna9`,
+      descripcion:"La Luna en Escorpio vive emociones intensas y complejas, donde el amor puede confundirse con control o pérdida.",
+      video:"oJ4w1IcZ6XM",
+      letra: luna8,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna9", nom: "Luna en ♐︎ Sagitario", link:`${basePath}/luna9`, linkAnterior:`${basePath}/luna8`, linkNext:`${basePath}/luna10`, descripcion:"La Luna en Sagitario busca libertad emocional y sentido, pero puede evitar profundizar en sus sentimientos.", video:"M3gTOQr_UAY", letra: luna9, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna9",
+      nom: "Luna en ♐︎ Sagitario",
+      link:`${basePath}/luna9`,
+      linkAnterior:`${basePath}/luna8`,
+      linkNext:`${basePath}/luna10`,
+      descripcion:"La Luna en Sagitario busca libertad emocional y sentido, pero puede evitar profundizar en sus sentimientos.",
+      video:"uno3h94XJ2o",
+      letra: luna9,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna10", nom: "Luna en ♑︎ Capricornio", link:`${basePath}/luna10`, linkAnterior:`${basePath}/luna9`, linkNext:`${basePath}/luna11`, descripcion:"La Luna en Capricornio aprende a reprimir sus emociones y a buscar valor a través del esfuerzo y la responsabilidad.", video:"pT7crWfsF3I", letra: luna10, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna10",
+      nom: "Luna en ♑︎ Capricornio",
+      link:`${basePath}/luna10`,
+      linkAnterior:`${basePath}/luna9`,
+      linkNext:`${basePath}/luna11`,
+      descripcion:"La Luna en Capricornio aprende a reprimir sus emociones y a buscar valor a través del esfuerzo y la responsabilidad.",
+      video:"vSqpdFimvV0",
+      letra: luna10,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna11", nom: "Luna en ♒︎ Acuario", link:`${basePath}/luna11`, linkAnterior:`${basePath}/luna10`, linkNext:`${basePath}/luna12`, descripcion:"La Luna en Acuario desarrolla distancia emocional y apego evitativo para proteger su libertad.", video:"oMuiKav8CKM", letra: luna11, detalles: detalles, icon: MoonIcon },
+      {
+      id:"luna11",
+      nom: "Luna en ♒︎ Acuario",
+      link:`${basePath}/luna11`,
+      linkAnterior:`${basePath}/luna10`,
+      linkNext:`${basePath}/luna12`,
+      descripcion:"La Luna en Acuario desarrolla distancia emocional y apego evitativo para proteger su libertad.",
+      video:"N2t3zsuQXNw",
+      letra: luna11,
+      detalles: detalles,
+      icon: MoonIcon
+      },
 
-      { id:"luna12", nom: "Luna en ♓︎ Piscis", link:`${basePath}/luna12`, linkAnterior:`${basePath}/luna11`, linkNext:`${basePath}/luna13`, descripcion:"La Luna en Piscis es profundamente sensible y empática, pero necesita aprender a poner límites emocionales.", video:"QiP6zlkeWLg", letra: luna12, detalles: detalles, icon: MoonIcon }
-    ]
+      {
+      id:"luna12",
+      nom: "Luna en ♓︎ Piscis",
+      link:`${basePath}/luna12`,
+      linkAnterior:`${basePath}/luna11`,
+      linkNext:`${basePath}/luna13`,
+      descripcion:"La Luna en Piscis es profundamente sensible y empática, pero necesita aprender a poner límites emocionales.",
+      video:"Tca57If-0NI",
+      letra: luna12,
+      detalles: detalles,
+      icon: MoonIcon
+      }
+
+]
   }
 ];

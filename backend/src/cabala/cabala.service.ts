@@ -3,30 +3,18 @@ import { DatabaseService } from 'src/database.service';
 import { Respuesta } from 'src/dtos/respuesta.types';
 
 @Injectable()
-export class RespuestaService {
+export class CabalaService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async postRespuesta(body: Respuesta): Promise<boolean> {
     try {
       const db = this.databaseService.getClient();
-
-      // 1️⃣ Borrar si ya existe
-      await db
-        .from('neuroPsicologia')
-        .delete()
-        .eq('userid', body.userId)
-        .eq('pregid', body.idPregunta);
-
-      // 2️⃣ Insertar nueva respuesta
-      const { error } = await db
-        .from('neuroPsicologia')
-        .insert({ userid: body.userId, pregid: body.idPregunta, respuesta: body.respuesta });
-
+      await db.from('cabala').delete().eq('userid', body.userId).eq('pregid', body.idPregunta);
+      const { error } = await db.from('cabala').insert({ userid: body.userId, pregid: body.idPregunta, respuesta: body.respuesta });
       if (error) throw error;
-
       return true;
     } catch (error) {
-      console.error("Error en postRespuesta:", error);
+      console.error('Error en cabala postRespuesta:', error);
       return false;
     }
   }
@@ -34,16 +22,11 @@ export class RespuestaService {
   async getRespuestaDePregunta(pregId: string, userId: string): Promise<Respuesta> {
     try {
       const { data, error } = await this.databaseService.getClient()
-        .from('neuroPsicologia')
-        .select('*')
-        .eq('userid', userId)
-        .eq('pregid', pregId);
-
+        .from('cabala').select('*').eq('userid', userId).eq('pregid', pregId);
       if (error) throw error;
-
       return data?.[0];
     } catch (error) {
-      console.log("Error en getRespuestaDePregunta:", error);
+      console.log('Error en cabala getRespuestaDePregunta:', error);
       throw new Error(error);
     }
   }
