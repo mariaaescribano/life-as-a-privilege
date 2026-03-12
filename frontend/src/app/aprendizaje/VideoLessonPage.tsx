@@ -358,8 +358,9 @@ export default function VideoLessonPage() {
                 </Collapse>
               </Box>
             )}
+            
             {/* CTA Clases particulares */}
-            {moduloDatos && (
+            {/* {moduloDatos && (
               <Flex
                 direction="column"
                 align="center"
@@ -413,7 +414,7 @@ export default function VideoLessonPage() {
                   Contactar
                 </Box>
               </Flex>
-            )}
+            )} */}
 
           </Flex>
         </Box>

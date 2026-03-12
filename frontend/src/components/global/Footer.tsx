@@ -1,9 +1,11 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const DONATION_LINK = "https://donate.stripe.com/REPLACE_WITH_REAL_LINK";
+const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const SiteFooter = () => {
+  const navigate = useNavigate();
   return (
     <Box
       as="footer"
@@ -16,8 +18,6 @@ const SiteFooter = () => {
       </Text>
       <Flex justify="center" gap={6} mt={3} flexWrap="wrap" alignItems="center">
         <Text
-          as="a"
-          href="/contacto"
           color="rgba(255,255,255,0.65)"
           fontSize="sm"
           letterSpacing="0.05em"
@@ -25,12 +25,11 @@ const SiteFooter = () => {
           cursor="pointer"
           _hover={{ color: "white" }}
           transition="color 0.2s"
+          onClick={() => navigate("/contacto")}
         >
           Contactar
         </Text>
         <Text
-          as="a"
-          href="/quienSoy"
           color="rgba(255,255,255,0.65)"
           fontSize="sm"
           letterSpacing="0.05em"
@@ -38,6 +37,7 @@ const SiteFooter = () => {
           cursor="pointer"
           _hover={{ color: "white" }}
           transition="color 0.2s"
+          onClick={() => navigate("/quienSoy")}
         >
           Quién soy
         </Text>

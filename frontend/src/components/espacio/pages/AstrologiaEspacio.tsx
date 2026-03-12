@@ -293,7 +293,7 @@ const PlanetTeaserModal = ({
             lineHeight="1.65"
             letterSpacing="0.02em"
           >
-            ¿Quieres entender qué dicen las estrellas de ti?
+            ¿Quieres una lectura profesional de tu Carta Astral?
           </Text>
         </Flex>
 

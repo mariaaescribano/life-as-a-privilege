@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 
-const DONATION_LINK = "https://donate.stripe.com/REPLACE_WITH_REAL_LINK";
+const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 type Libro = { title: string; descripcion: string; img: string; link: string };
 type Certificado = { img: string };
@@ -147,10 +147,7 @@ const QuienSoy = () => {
               </Flex>
             </Box>
           </Box>
-
-          {/* ── BANNER PRODUCTOS ── */}
-          {/* <ProductosBanner /> */}
-
+          
           {/* ── CARD 2: MIS LIBROS ── */}
           <Box w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
             {/* Título sección */}
@@ -220,41 +217,6 @@ const QuienSoy = () => {
             </SimpleGrid>
           </Box>
 
-          {/* ── CARD 3: MIS CERTIFICADOS ── */}
-          <Box w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
-            <Flex align="center" gap={3} justify="center" mb={{ base: 8, md: 10 }}>
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="34px" h="34px" fill="rgba(255,255,255,0.9)">
-                <path d="M395-475q-35-35-35-85t35-85q35-35 85-35t85 35q35 35 35 85t-35 85q-35 35-85 35t-85-35ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm410-350q70-70 70-170t-70-170q-70-70-170-70t-170 70q-70 70-70 170t70 170q70 70 170 70t170-70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
-              </Box>
-              <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" letterSpacing="0.05em" textShadow="0 2px 10px rgba(0,100,90,0.4)">
-                Mis Certificados
-              </Text>
-            </Flex>
-
-            <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
-              {certificados.map((cert, i) => (
-                <Box
-                  key={i}
-                  borderRadius="xl"
-                  overflow="hidden"
-                  boxShadow={GLOW}
-                  transition="all 0.25s"
-                  _hover={{ transform: "translateY(-4px)", boxShadow: GLOW_HV }}
-                  cursor="pointer"
-                  onClick={() => setLightboxIdx(i)}
-                >
-                  <Image
-                    src={cert.img}
-                    alt={`Certificado ${i + 1}`}
-                    w="100%"
-                    h={{ base: "130px", md: "170px" }}
-                    objectFit="cover"
-                  />
-                </Box>
-              ))}
-            </SimpleGrid>
-          </Box>
-
           {/* ── CARD DONACIÓN ── */}
           <Box
             w="100%"
@@ -289,19 +251,9 @@ const QuienSoy = () => {
                 fontWeight="700"
                 letterSpacing="0.04em"
                 textShadow="0 2px 10px rgba(0,100,90,0.5)"
-                mb={3}
+                mb={2}
               >
                 Apoya este proyecto
-              </Text>
-              <Text
-                color="rgba(255,255,255,0.80)"
-                fontSize={{ base: "lg", md: "xl" }}
-                lineHeight="1.85"
-                letterSpacing="0.02em"
-                maxW="560px"
-                mx="auto"
-              >
-                Todo el contenido de Life as a Privilege es gratuito. Si este trabajo te aporta valor y quieres contribuir a que siga creciendo, puedes hacer una donación voluntaria.
               </Text>
             </Box>
 
@@ -342,6 +294,43 @@ const QuienSoy = () => {
               Pago seguro a través de Stripe · Cualquier importe es bienvenido
             </Text>
           </Box>
+
+          {/* ── CARD 3: MIS CERTIFICADOS ── */}
+          <Box w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
+            <Flex align="center" gap={3} justify="center" mb={{ base: 8, md: 10 }}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="34px" h="34px" fill="rgba(255,255,255,0.9)">
+                <path d="M395-475q-35-35-35-85t35-85q35-35 85-35t85 35q35 35 35 85t-35 85q-35 35-85 35t-85-35ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm410-350q70-70 70-170t-70-170q-70-70-170-70t-170 70q-70 70-70 170t70 170q70 70 170 70t170-70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+              </Box>
+              <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" letterSpacing="0.05em" textShadow="0 2px 10px rgba(0,100,90,0.4)">
+                Mis Certificados
+              </Text>
+            </Flex>
+
+            <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
+              {certificados.map((cert, i) => (
+                <Box
+                  key={i}
+                  borderRadius="xl"
+                  overflow="hidden"
+                  boxShadow={GLOW}
+                  transition="all 0.25s"
+                  _hover={{ transform: "translateY(-4px)", boxShadow: GLOW_HV }}
+                  cursor="pointer"
+                  onClick={() => setLightboxIdx(i)}
+                >
+                  <Image
+                    src={cert.img}
+                    alt={`Certificado ${i + 1}`}
+                    w="100%"
+                    h={{ base: "130px", md: "170px" }}
+                    objectFit="cover"
+                  />
+                </Box>
+              ))}
+            </SimpleGrid>
+          </Box>
+
+          
 
           {/* ── CARD 4: CIERRE ── */}
           <Box
