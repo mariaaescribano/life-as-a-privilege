@@ -334,7 +334,6 @@ const Welcome = () => {
               transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
               transition={`opacity 0.5s ease ${i * 0.09}s, transform 0.5s ease ${i * 0.09}s, box-shadow 0.22s ease`}
               _hover={{
-                transform: "translateY(-5px)",
                 boxShadow: "0 18px 45px rgba(107,196,200,0.75), 0 4px 14px rgba(107,196,200,0.45)",
               }}
               textAlign="center"
@@ -397,7 +396,6 @@ const Welcome = () => {
             bg: "rgba(255,255,255,0.25)",
             borderColor: "white",
             boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
-            transform: "translateY(-2px)",
           }}
           transition="all 0.25s ease"
         >
