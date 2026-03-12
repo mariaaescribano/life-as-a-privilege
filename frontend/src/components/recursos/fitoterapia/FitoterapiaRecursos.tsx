@@ -596,6 +596,33 @@ const FitoterapiaRecursos = () => {
           color={fitoterapiaTxt}
         />
 
+        {/* ENLACE A CURSOS */}
+        <Box
+          as="a"
+          href={`/aprendizaje/cursosModalidad/${fitoterapiaNom}`}
+          display="inline-flex"
+          alignItems="center"
+          gap={2}
+          px={6} py="10px"
+          mt={4} mb={2}
+          borderRadius="full"
+          border={`1.5px solid ${fitoterapiaTxt}88`}
+          color={fitoterapiaTxt}
+          fontSize={{ base: "md", md: "lg" }}
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.06em"
+          bg={`${fitoterapiaBg}22`}
+          cursor="pointer"
+          textDecoration="none"
+          transition="all 0.2s"
+          _hover={{ bg: `${fitoterapiaBg}44`, borderColor: fitoterapiaTxt }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+            <path d="M160-120v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-758v84q-72 26-116 88.5T240-438q0 45 14.5 85t43.5 71l22 22v-100h80v240H160Zm400-2v-84q72-26 116-88.5T720-438q0-45-14.5-85T662-594l-22-22v100h-80v-240h240v80H690l16 14q52 46 73 105t21 119q0 111-66.5 197.5T560-122Z"/>
+          </svg>
+          Explorar cursos de Fitoterapia
+        </Box>
+
         {/* BUSCADOR */}
         <Box w="100%" maxW="500px" mx="auto" mt={3} mb={20} position="relative">
           <Box

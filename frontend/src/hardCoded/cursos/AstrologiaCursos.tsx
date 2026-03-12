@@ -21,7 +21,7 @@ export const astrologiaCursos: ModalidadInfo = {
       descripcion:
         "Entiende los arquetipos de tu Ascendente, de tu Sol y de tu Luna.",
       precio: null,
-      numLecciones: 26,
+      numLecciones: 38,
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
     },
   ],

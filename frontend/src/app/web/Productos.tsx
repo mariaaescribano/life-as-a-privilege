@@ -102,7 +102,7 @@ const Productos = () => {
               letterSpacing="0.03em"
             >
               Cada producto nace de un proceso artesanal, con ingredientes seleccionados por su pureza y su poder sanador.
-              Porque cuidarse es un acto de amor propio, y mereces lo mejor que la madre tierra tiene para ofrecerte.
+              Porque cuidarse es un acto de Amor propio, y mereces lo mejor que la madre tierra tiene para ofrecerte.
             </Text>
           </Box>
 

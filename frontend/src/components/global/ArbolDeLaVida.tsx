@@ -306,6 +306,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   fontFamily="Georgia, serif"
                   fontStyle="italic"
                   fill={mainColor}
+                  style={{ fill: mainColor }}
                 >
                   {sefira.hebrewName}
                 </text>

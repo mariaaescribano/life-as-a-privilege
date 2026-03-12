@@ -179,17 +179,25 @@ function FieldRow({ label, field, value, editing, setEditing, onSave, savedField
           >
             <CheckIcon />
           </Box>
+        ) : justSaved ? (
+          <Box
+            color={turquesa}
+            flexShrink={0}
+            style={{ filter: `drop-shadow(0 0 8px ${turquesa})` }}
+            transition="color 0.3s, filter 0.3s"
+          >
+            <CheckIcon />
+          </Box>
         ) : (
           <Box
             as="button"
-            color={justSaved ? turquesa : "rgba(255,255,255,0.45)"}
+            color="rgba(255,255,255,0.45)"
             _hover={{ color: turquesa }}
             cursor="pointer"
             onClick={() => setEditing(field)}
             flexShrink={0}
             title="Editar"
             transition="color 0.3s, filter 0.3s"
-            style={justSaved ? { filter: `drop-shadow(0 0 5px ${turquesa})` } : {}}
           >
             <EditIcon />
           </Box>

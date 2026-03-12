@@ -151,7 +151,7 @@ const ReelsBanner = ({ maxW = "900px", w = "100%", compact = false }: ReelsBanne
             lineHeight="1.7"
             letterSpacing="0.01em"
           >
-            Vídeos cortos y transformadores. Conocimiento que cambia la vida.
+            Vídeos cortos y transformadores. Conocimiento que cambia la Vida.
           </Text>
 
           <Box

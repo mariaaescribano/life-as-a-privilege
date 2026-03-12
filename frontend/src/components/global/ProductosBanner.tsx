@@ -81,7 +81,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
             lineHeight="1.7"
             letterSpacing="0.01em"
           >
-            Cuídate con ingredientes naturales y el amor de la madre tierra.
+            Cuídate con ingredientes naturales y el Amor de la madre tierra.
           </Text>
 
           <Box

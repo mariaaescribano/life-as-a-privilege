@@ -353,6 +353,7 @@ const ZodiacModal = ({
   const submoduleData = signIndex >= 0
     ? field === "ascendente" ? modulosAstrologia[1]?.submodules[signIndex]
     : field === "sol"        ? modulosAstrologia[2]?.submodules[signIndex]
+    : field === "luna"       ? modulosAstrologia[3]?.submodules[signIndex]
     : null
     : null;
 
@@ -369,7 +370,7 @@ const ZodiacModal = ({
         position="relative"
         filter={`drop-shadow(0 0 10px ${astrologiaTxt}cc) drop-shadow(0 0 20px ${astrologiaTxt}77)`}
         borderRadius="2xl"
-        overflow="hidden"
+        style={{ overflow: "clip" }}
         w="100%" maxW="660px"
         maxH="92vh"
         display="flex" flexDirection="column"
@@ -419,9 +420,9 @@ const ZodiacModal = ({
                     color={astrologiaTxt}
                     fontSize="2xl" fontWeight="700"
                     fontFamily="'EB Garamond', serif" letterSpacing="0.07em"
-                    filter={`drop-shadow(0 0 10px ${astrologiaTxt}bb)`}
+                    style={{ textShadow: `0 0 10px ${astrologiaTxt}bb, 0 0 20px ${astrologiaTxt}66` }}
                   >
-                    {meta.label} en
+                    {field === "ascendente" ? meta.label : `${meta.label} en`}
                   </Text>
                   <Box
                     color={astrologiaTxt}
@@ -433,7 +434,7 @@ const ZodiacModal = ({
                     color={astrologiaTxt}
                     fontSize="2xl" fontWeight="700"
                     fontFamily="'EB Garamond', serif" letterSpacing="0.07em"
-                    filter={`drop-shadow(0 0 10px ${astrologiaTxt}bb)`}
+                    style={{ textShadow: `0 0 10px ${astrologiaTxt}bb, 0 0 20px ${astrologiaTxt}66` }}
                   >
                     {currentSign}
                   </Text>
@@ -444,7 +445,7 @@ const ZodiacModal = ({
                 <Box
                   borderRadius="xl"
                   overflow="hidden" border={`1px solid ${astrologiaTxt}22`}
-                  style={{ aspectRatio: "16/9" }}
+                  style={{ aspectRatio: "16/9", flexShrink: 0 }}
                   boxShadow={`0 4px 24px rgba(0,0,0,0.55), 0 0 24px ${astrologiaTxt}18`}
                 >
                   <iframe
@@ -529,11 +530,10 @@ const ZodiacModal = ({
                 </Box>
               )}
 
-              <Box>
+              <Box display="flex" justifyContent="flex-end">
                 <Box
                   as="button"
                   onClick={onClear}
-                  position="absolute" bottom={3} right={3}
                   color={`${astrologiaTxt}44`}
                   cursor="pointer"
                   transition="all 0.18s"

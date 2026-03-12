@@ -212,7 +212,7 @@ const EspacioHome = () => {
                     w={circleSize}
                     h={circleSize}
                   >
-                    {/* Capa interior: animación de entrada + interactividad */}
+                    {/* Capa interior: animación de entrada + interactiVidad */}
                     <Box
                       cursor={photo.cursor}
                       w="100%"

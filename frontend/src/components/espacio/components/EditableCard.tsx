@@ -190,7 +190,7 @@ const EditableCard = (props:{
                 color={props.color}
                 borderRadius="2xl"
                 border="1px solid rgba(255,255,255,0.2)"
-                bg={!isVisible ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.1)"}
+                bg={!isVisible ? "rgba(0,0,0,0.18)" : "rgba(0,0,0,0.28)"}
                 _hover={{ cursor: isEditing ? "text" : "default" }}
                 _focus={{
                   borderColor: turquesa,

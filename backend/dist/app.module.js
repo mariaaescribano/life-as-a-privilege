@@ -22,6 +22,7 @@ const fitoterapia_module_1 = require("./fitoterapia/fitoterapia.module");
 const tcm_module_1 = require("./tcm/tcm.module");
 const astrologia_module_1 = require("./astrologia/astrologia.module");
 const contact_module_1 = require("./contact/contact.module");
+const cabala_module_1 = require("./cabala/cabala.module");
 exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
@@ -46,6 +47,7 @@ exports.AppModule = AppModule = __decorate([
             tcm_module_1.TcmModule,
             astrologia_module_1.AstrologiaModule,
             contact_module_1.ContactModule,
+            cabala_module_1.CabalaModule,
         ],
         providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],

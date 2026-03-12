@@ -53,7 +53,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "1gMBVFKMAXY",
     icon: <WoodIcon />,
     description:
-      "La Madera representa el impulso vital, el crecimiento y la visión. El Hígado mueve el Qi; cuando fluye libremente, hay creatividad y flexibilidad. La Madera nos enseña a crecer sin rigidez, como el bambú: fuerte y flexible a la vez.",
+      "La Madera representa el impulso vital, el crecimiento y la visión. El Hígado mueve el Qi; cuando fluye libremente, hay creatiVidad y flexibilidad. La Madera nos enseña a crecer sin rigidez, como el bambú: fuerte y flexible a la vez.",
     fields: [
       { label: "Emoción", value: "Enfado · Decisión · Dirección" },
 
@@ -78,7 +78,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "oqmoovl3Yio",
     icon: <FireIcon />,
     description:
-      "El Fuego es el elemento de la conexión, la alegría y la consciencia. El Corazón alberga el Shen —la mente y el espíritu—. Cuando el Fuego arde en equilibrio, hay calidez, presencia y comunicación genuina. La gran medicina del Fuego es el amor sin condiciones.",
+      "El Fuego es el elemento de la conexión, la alegría y la consciencia. El Corazón alberga el Shen —la mente y el espíritu—. Cuando el Fuego arde en equilibrio, hay calidez, presencia y comunicación genuina. La gran medicina del Fuego es el Amor sin condiciones.",
     fields: [
       { label: "Emoción", value: "Pasión · Alegría · Expresión" },
 
@@ -162,7 +162,7 @@ export const ELEMENTS: TCMElementData[] = [
 
     { label: "Desequilibrio", value: "Debilidad ósea · Fuerza baja · Palidez · Diarrea con alimento no digerido · Retención de líquidos · Frío crónico · Dolor lumbar y de rodillas" },
 
-    { label: "Balanceado", value: "Paciencia · Fuerza de voluntad · Longevidad · Calma profunda · Intuición estable" },
+    { label: "Balanceado", value: "Paciencia · Fuerza de voluntad · LongeVidad · Calma profunda · Intuición estable" },
 
     { label: "Exceso", value: "Miedo paralizador · Conducta evitativa · Aislamiento · Perfeccionismo rígido · Miedo a perder el control" },
 

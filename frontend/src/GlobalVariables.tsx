@@ -3,7 +3,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-export const API_URL = "https://life-as-a-privilege.onrender.com"; //'http://localhost:3000'; //
+export const API_URL =  "https://life-as-a-privilege.onrender.com"; //'http://localhost:3000';
 
 // COLORES
 export const turquesa = "#48C0B5";
@@ -17,7 +17,7 @@ export function FisiologiaIcon({ size = "24px"}) {
     <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size ?? "24px"} fill={fisiologiaTxt}><path d="m316-240 76-364-72 28v96h-80v-148l202-85q14-6 29.5-7.5T501-717q14 5 26.5 14t20.5 23l40 64q28 45 73.5 70.5T760-520v80q-70 0-125.5-28T540-540l-24 60 84 80v160h-80v-122l-78-72-42 194h-84Zm167.5-523.5Q460-787 460-820t23.5-56.5Q507-900 540-900t56.5 23.5Q620-853 620-820t-23.5 56.5Q573-740 540-740t-56.5-23.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-119 61.5-214T302-838l36 71q-79 39-128.5 115.5T160-480q0 134 93 227t227 93q134 0 227-93t93-227h80q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>
   );
 }
-export const fisiologiaDescrip = "Redescubre tu cuerpo como el milagro que es. Comprende su funcionamiento y transforma el enfado y la frustración en amor y respeto."
+export const fisiologiaDescrip = "Redescubre tu cuerpo como el milagro que es. Comprende su funcionamiento y transforma el enfado y la frustración en Amor y respeto."
 
 // Neuropsicología
 export const neuropsicologiaNom = "Neuropsicología";
@@ -57,7 +57,7 @@ export function AstrologiaIcon({ size = { base: "24px", md: "24px" } }: { size?:
     </Box>
   );
 }
-export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu vida, comprende su propósito y utilízalos conscientemente para dejar de hacerte daño y de autosabotearte."
+export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu Vida, comprende su propósito y utilízalos conscientemente para dejar de hacerte daño y de autosabotearte."
 
 // TCM
 export const tcmNom = "Medicina China";
@@ -94,13 +94,13 @@ export const nutricionDescrip="Descubre qué hay más allá de los alimentos que
 // Ayurveda
 export const ayurvedaNom = "Ayúrveda";
 export const ayurvedaBg = "#ecd5ed";
-export const ayurvedaTxt = "#462f46" ;
+export const ayurvedaTxt = "#672d67" ;
 export function AyurvedaIcon({ size = "24px"}) {
   return (
    <svg xmlns="http://www.w3.org/2000/svg" height={size ?? "24px"} viewBox="0 -960 960 960" width={size ?? "24px"} fill={ayurvedaTxt}><path d="M272-160q-30 0-51-21t-21-51q0-21 12-39.5t32-26.5l156-62v-90q-54 63-125.5 96.5T120-320v-80q68 0 123.5-28T344-508l54-64q12-14 28-21t34-7h40q18 0 34 7t28 21l54 64q45 52 100.5 80T840-400v80q-83 0-154.5-33.5T560-450v90l156 62q20 8 32 26.5t12 39.5q0 30-21 51t-51 21H400v-20q0-26 17-43t43-17h120q9 0 14.5-5.5T600-260q0-9-5.5-14.5T580-280H460q-42 0-71 29t-29 71v20h-88Zm151.5-503.5Q400-687 400-720t23.5-56.5Q447-800 480-800t56.5 23.5Q560-753 560-720t-23.5 56.5Q513-640 480-640t-56.5-23.5Z"/></svg>
   );
 }
-export const ayurvedaDescrip= "Descubre, desde la sabiduría ancestral de Oriente, tu constitución y cómo influye en tu vida, tus gustos y tus desequilibrios.";
+export const ayurvedaDescrip= "Descubre, desde la sabiduría ancestral de Oriente, tu constitución y cómo influye en tu Vida, tus gustos y tus desequilibrios.";
 
 // Fitoterapia
 export const fitoterapiaNom = "Fitoterapia";
@@ -120,7 +120,7 @@ export const fitoterapiaDescrip="Explora el poder de las plantas medicinales y c
 
 // Cábala
 export const cabalaNom = "Cábala";
-export const cabalaBg = "#593d25";
+export const cabalaBg = "#2c1e11";
 export const cabalaTxt = "#cb8e59";
 export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (

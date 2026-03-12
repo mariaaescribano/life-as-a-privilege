@@ -1,6 +1,8 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
+const DONATION_LINK = "https://donate.stripe.com/REPLACE_WITH_REAL_LINK";
+
 const SiteFooter = () => {
   return (
     <Box
@@ -12,7 +14,7 @@ const SiteFooter = () => {
       <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
         © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
       </Text>
-      <Flex justify="center" gap={6} mt={3}>
+      <Flex justify="center" gap={6} mt={3} flexWrap="wrap" alignItems="center">
         <Text
           as="a"
           href="/contacto"
@@ -39,6 +41,32 @@ const SiteFooter = () => {
         >
           Quién soy
         </Text>
+        <Box
+          as="a"
+          href={DONATION_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          display="inline-flex"
+          alignItems="center"
+          gap="6px"
+          px={4}
+          py="5px"
+          borderRadius="full"
+          border="1px solid rgba(255,255,255,0.35)"
+          color="rgba(255,255,255,0.80)"
+          fontSize="sm"
+          letterSpacing="0.05em"
+          fontFamily="'EB Garamond', serif"
+          cursor="pointer"
+          textDecoration="none"
+          transition="all 0.2s"
+          _hover={{ bg: "rgba(255,255,255,0.10)", color: "white", borderColor: "rgba(255,255,255,0.6)" }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor">
+            <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+          </svg>
+          Donar
+        </Box>
       </Flex>
     </Box>
   );

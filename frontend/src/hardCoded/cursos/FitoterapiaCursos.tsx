@@ -20,8 +20,8 @@ export const fitoterapiaCursos: ModalidadInfo = {
       foto: "/img/fitoterapia/especias.jpg",
       descripcion:
         "Descubre las propiedades beneficiosas de las especias comunes.",
-      precio: 5,
-      numLecciones: 8,
+      precio: null,
+      numLecciones: 10,
       icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />,
     },
   ],

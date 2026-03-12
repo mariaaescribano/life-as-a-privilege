@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Flex, Modal, ModalBody, ModalContent, ModalOverlay,
+  Box, Flex, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay,
   Text, VStack,
 } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
@@ -75,6 +75,8 @@ export default function CabalaEspacio() {
           mx={4}
           fontFamily="'EB Garamond', serif"
         >
+          <ModalCloseButton color={cabalaTxt} top={3} right={3} />
+
           {/* Línea de brillo superior */}
           <Box
             h="2px"
@@ -96,6 +98,9 @@ export default function CabalaEspacio() {
                   >
                     Sefirá {sefiraAbierta.number}
                   </Text> */}
+                <HStack spacing={2} align="center" mb={4}>
+                  <CabalaIcon size={{base:"25px", md:"35px"}} />
+
                   <Text
                     color={cabalaTxt}
                     fontSize="3xl"
@@ -104,10 +109,10 @@ export default function CabalaEspacio() {
                     lineHeight="1"
                     mt="5px"
                     style={{ textShadow: `0 0 20px ${cabalaTxt}77` }}
-                    mb={4}
                   >
                     {sefiraAbierta.hebrewName}
                   </Text>
+                </HStack>
                   {/* <Text
                     color={`${cabalaTxt}88`}
                     fontSize="sm"

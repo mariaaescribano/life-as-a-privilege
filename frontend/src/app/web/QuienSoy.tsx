@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 
+const DONATION_LINK = "https://donate.stripe.com/REPLACE_WITH_REAL_LINK";
+
 type Libro = { title: string; descripcion: string; img: string; link: string };
 type Certificado = { img: string };
 
@@ -251,6 +253,94 @@ const QuienSoy = () => {
                 </Box>
               ))}
             </SimpleGrid>
+          </Box>
+
+          {/* ── CARD DONACIÓN ── */}
+          <Box
+            w="100%"
+            maxW="900px"
+            {...glassCard}
+            px={{ base: 8, md: 14 }}
+            py={{ base: 10, md: 12 }}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            textAlign="center"
+            gap={6}
+          >
+            {/* Icono corazón */}
+            <Box
+              w="64px" h="64px"
+              borderRadius="full"
+              bg="rgba(255,255,255,0.12)"
+              border="1.5px solid rgba(255,255,255,0.35)"
+              display="flex" alignItems="center" justifyContent="center"
+              boxShadow="0 0 28px rgba(255,255,255,0.15)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="rgba(255,255,255,0.9)">
+                <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+              </svg>
+            </Box>
+
+            <Box>
+              <Text
+                color="white"
+                fontSize={{ base: "2xl", md: "3xl" }}
+                fontWeight="700"
+                letterSpacing="0.04em"
+                textShadow="0 2px 10px rgba(0,100,90,0.5)"
+                mb={3}
+              >
+                Apoya este proyecto
+              </Text>
+              <Text
+                color="rgba(255,255,255,0.80)"
+                fontSize={{ base: "lg", md: "xl" }}
+                lineHeight="1.85"
+                letterSpacing="0.02em"
+                maxW="560px"
+                mx="auto"
+              >
+                Todo el contenido de Life as a Privilege es gratuito. Si este trabajo te aporta valor y quieres contribuir a que siga creciendo, puedes hacer una donación voluntaria.
+              </Text>
+            </Box>
+
+            <Box
+              as="a"
+              href={DONATION_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              display="inline-flex"
+              alignItems="center"
+              gap={3}
+              px={8} py={3}
+              borderRadius="full"
+              border="2px solid rgba(255,255,255,0.55)"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600"
+              bg="transparent"
+              letterSpacing="0.06em"
+              cursor="pointer"
+              textDecoration="none"
+              transition="all 0.25s"
+              _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "white", transform: "scale(1.03)" }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+              </svg>
+              Hacer una donación
+            </Box>
+
+            <Text
+              color="rgba(255,255,255,0.40)"
+              fontSize="xs"
+              letterSpacing="0.06em"
+              fontStyle="italic"
+            >
+              Pago seguro a través de Stripe · Cualquier importe es bienvenido
+            </Text>
           </Box>
 
           {/* ── CARD 4: CIERRE ── */}

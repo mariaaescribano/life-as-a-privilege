@@ -64,7 +64,7 @@ const MandalaCircle = ({
       h={circleSize}
       borderRadius="full"
       overflow="hidden"
-      border={`5px solid ${photo.txt}`}
+      border={`3px solid ${photo.txt}`}
       boxShadow={`
         0 0 20px ${photo.txt}bb,
         0 2px 14px ${photo.txt}97
@@ -122,11 +122,11 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
   const isSm  = windowWidth < 480;
   const isMd  = windowWidth < 768;
 
-  const size        = isXs ? 200 : isSm ? 230 : isMd ? 260 : 460;
-  const radius      = isXs ?  82 : isSm ? 100 : isMd ? 118 : 170;
+  const size        = isXs ? 220 : isSm ? 260 : isMd ? 290 : 460;
+  const radius      = isXs ?  96 : isSm ? 116 : isMd ? 134 : 170;
   const circleSize  = isXs ? "58px" : isSm ? "64px" : isMd ? "72px" : "96px";
   const centerSize  = isXs ? "110px" : isSm ? "120px" : isMd ? "135px" : "180px";
-  const containerH  = isXs ? "320px" : isSm ? "360px" : isMd ? "400px" : "500px";
+  const containerH  = isXs ? "360px" : isSm ? "410px" : isMd ? "450px" : "500px";
   const iconSize    = isXs ? "34px"  : isSm ? "42px"  : isMd ? "48px"  : "48px";
 
   const photos: CirclePhoto[] = [

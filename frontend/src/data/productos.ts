@@ -32,7 +32,7 @@ export const productos: Producto[] = [
     imgs: ["/img/jabones.png", "/img/jabones.png", "/img/jabones.png"],
     desc: "Hidratación profunda con manteca de karité, aloe vera y extractos botánicos. Tu piel, en armonía con la tierra...",
     descFull:
-      "Hidratación profunda y duradera gracias a una fórmula rica en manteca de karité virgen, gel de aloe vera ecológico y una sinfonía de extractos botánicos. Formulada sin ingredientes artificiales, respetando tu piel y el medio ambiente.\n\nIdeal para pieles secas, sensibles o con necesidad de regeneración. Se absorbe fácilmente y deja una sensación de suavidad y confort durante todo el día.",
+      "Hidratación profunda y duradera gracias a una fórmula rica en manteca de karité virgen, gel de aloe vera ecológico y una sinfonía de extractos botánicos. Formulada sin ingredientes artificiales, respetando tu piel y el medio ambiente.\n\nIdeal para pieles secas, sensibles o con necesidad de regeneración. Se absorbe fácilmente y deja una sensación de suaVidad y confort durante todo el día.",
     price: 19.99,
   },
 ];
