@@ -12,6 +12,7 @@ import {
 } from "../../../GlobalVariables";
 import { plantas, type Planta } from "./PlantasData";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
+import SiteFooter from "../../global/Footer";
 
 const CARD_COLOR  = fitoterapiaTxt;  // #d5ffd5
 const MODAL_COLOR = fitoterapiaBg;   // #0e590d
@@ -231,7 +232,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
-        w={{ base: "100%", md: "640px" }}
+        w={{ base: "90%", md: "640px" }}
         maxH={{ base: "92vh", md: "88vh" }}
         overflowY="auto"
         borderRadius={{ base: "24px 24px 0 0", md: "24px" }}
@@ -314,10 +315,10 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
               {planta.beneficios.map((b, i) => (
                 <Flex key={i} gap={3} align="flex-start">
                   <Box
-                    mt="9px" w={0} h={0} flexShrink={0}
-                    borderTop="5px solid transparent"
-                    borderBottom="5px solid transparent"
-                    borderLeft={`9px solid ${MODAL_COLOR}`}
+                    mt="9px" w="8px" h="8px"
+                    borderRadius="full"
+                    bg={MODAL_COLOR}
+                    flexShrink={0}
                     opacity={0.65}
                   />
                   <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.85}>
@@ -596,35 +597,8 @@ const FitoterapiaRecursos = () => {
           color={fitoterapiaTxt}
         />
 
-        {/* ENLACE A CURSOS */}
-        <Box
-          as="a"
-          href={`/aprendizaje/cursosModalidad/${fitoterapiaNom}`}
-          display="inline-flex"
-          alignItems="center"
-          gap={2}
-          px={6} py="10px"
-          mt={4} mb={2}
-          borderRadius="full"
-          border={`1.5px solid ${fitoterapiaTxt}88`}
-          color={fitoterapiaTxt}
-          fontSize={{ base: "md", md: "lg" }}
-          fontFamily="'EB Garamond', serif"
-          letterSpacing="0.06em"
-          bg={`${fitoterapiaBg}22`}
-          cursor="pointer"
-          textDecoration="none"
-          transition="all 0.2s"
-          _hover={{ bg: `${fitoterapiaBg}44`, borderColor: fitoterapiaTxt }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
-            <path d="M160-120v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-758v84q-72 26-116 88.5T240-438q0 45 14.5 85t43.5 71l22 22v-100h80v240H160Zm400-2v-84q72-26 116-88.5T720-438q0-45-14.5-85T662-594l-22-22v100h-80v-240h240v80H690l16 14q52 46 73 105t21 119q0 111-66.5 197.5T560-122Z"/>
-          </svg>
-          Explorar cursos de Fitoterapia
-        </Box>
-
         {/* BUSCADOR */}
-        <Box w="100%" maxW="500px" mx="auto" mt={3} mb={20} position="relative">
+        <Box w="100%" maxW="500px" mx="auto" mt={3} mb={{base:10, md: 20}} position="relative">
           <Box
             position="absolute" left="18px" top="50%"
             transform="translateY(-50%)"
@@ -769,33 +743,7 @@ const FitoterapiaRecursos = () => {
         </Box>
 
       {/* FOOTER */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.10)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text
-          color="rgba(255,255,255,0.40)" fontSize="xs"
-          letterSpacing="0.05em" textAlign="center"
-        >
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
 
       {/* MODAL */}
       {selected && (

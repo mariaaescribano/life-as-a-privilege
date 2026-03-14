@@ -62,9 +62,13 @@ const EditableCard = (props:{
           },
         });
 
-        if(response.data)
+        if(response.data === true)
         {
           setColor("green.500");
+        }
+        else
+        {
+          setColor("red.500");
         }
 
       }
@@ -107,7 +111,6 @@ const EditableCard = (props:{
 
     } catch (error) {
       console.log(error);
-      setText(""); // si falla, dejamos vacío
     }
   };
 
@@ -164,7 +167,7 @@ const EditableCard = (props:{
             {props.consejo && (
               <Flex justify="center" align="center" mb={4}>
                 <Flex
-                  w="85%"
+                  w="100%"
                   bg="rgba(255,255,255,0.15)"
                   border="1px solid rgba(255,255,255,0.2)"
                   p={3}

@@ -48,7 +48,7 @@ const SEFIROT: Sefira[] = [
     description: 'La fuerza disciplinada del poder y el juicio. Representa la voluntad de eliminar lo innecesario, la valentía y la capacidad de transformar a través de la claridad.',
   },
   {
-    key: 'tipharet', number: 6, spanishName: 'BELLEZA', hebrewName: 'Tipharet', x: 200, y: 370,
+    key: 'tipharet', number: 6, spanishName: 'BELLEZA', hebrewName: 'Tiferet', x: 200, y: 370,
     description: 'El corazón del árbol y centro del equilibrio. Representa la armonía entre todos los opuestos, la compasión consciente y la conexión con el yo superior.',
   },
   {

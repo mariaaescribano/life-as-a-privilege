@@ -9,8 +9,8 @@ export class CabalaService {
   async postRespuesta(body: Respuesta): Promise<boolean> {
     try {
       const db = this.databaseService.getClient();
-      await db.from('cabala').delete().eq('userid', body.userId).eq('pregid', body.idPregunta);
-      const { error } = await db.from('cabala').insert({ userid: body.userId, pregid: body.idPregunta, respuesta: body.respuesta });
+      await db.from('cabala').delete().eq('idUser', body.userId).eq('idPregunta', body.idPregunta);
+      const { error } = await db.from('cabala').insert({ idUser: body.userId, idPregunta: body.idPregunta, respuesta: body.respuesta });
       if (error) throw error;
       return true;
     } catch (error) {
@@ -22,7 +22,7 @@ export class CabalaService {
   async getRespuestaDePregunta(pregId: string, userId: string): Promise<Respuesta> {
     try {
       const { data, error } = await this.databaseService.getClient()
-        .from('cabala').select('*').eq('userid', userId).eq('pregid', pregId);
+        .from('cabala').select('*').eq('idUser', userId).eq('idPregunta', pregId);
       if (error) throw error;
       return data?.[0];
     } catch (error) {

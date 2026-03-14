@@ -728,7 +728,7 @@ const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
         _focus={{ outline: "none" }}
       >
         {!imgError ? (
-          <Image src="/img/yinyang.png" alt="TCM" w="100%" h="100%"
+          <Image src="/img/tcm/yinyang.png" alt="TCM" w="100%" h="100%"
             objectFit="cover" onError={() => setImgError(true)} draggable={false} />
         ) : (
           <Box color={tcmTxt} opacity={0.5}>
@@ -1100,7 +1100,7 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
           >
             {!imgError ? (
               <Image
-                src="/img/lengua.png"
+                src="/img/tcm/lengua.png"
                 alt=""
                 w="100%" h="100%"
                 objectFit="cover"

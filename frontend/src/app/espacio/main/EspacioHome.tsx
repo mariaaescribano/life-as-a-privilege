@@ -166,7 +166,7 @@ const EspacioHome = () => {
                 borderRadius="full"
                 overflow="hidden"
                 boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 45px rgba(107,196,200,1), 0 0 90px rgba(107,196,200,0.55), 0 0 140px rgba(107,196,200,0.25)"
-                border="5px solid rgba(255,255,255,0.85)"
+                border="2px solid rgba(255,255,255,0.85)"
                 zIndex={10}
               >
                 <Image src={img} alt="Centro" w="100%" h="100%" objectFit="cover" />
@@ -224,7 +224,7 @@ const EspacioHome = () => {
                         0 2px 44px ${photo.txt}97
                       `}
                       onClick={() => photo.cursor === "pointer" && navigate(photo.link)}
-                      border={"6px solid " + photo.txt}
+                      border={"4px solid " + photo.txt}
                       animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
                       transition="transform 0.3s ease"
                       _hover={

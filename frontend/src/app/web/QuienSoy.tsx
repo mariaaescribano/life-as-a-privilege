@@ -21,8 +21,8 @@ const glassCard = {
 };
 
 const libros: Libro[] = [
-  { title: "Life as a Privilege",          descripcion: "Entiende al ser humano, al milagro de la naturaleza y al universo de manera holística.",            img: "/libros/img/book.png",   link: "/libros/pdfs/book.pdf"   },
-  { title: "Chinese Medicine", descripcion: "Una recopilación completa y holística de esta medicina, tradición y ciencia.",                       img: "/libros/img/tcm.png",    link: "/libros/pdfs/tcm.pdf"    },
+  { title: "Life as a Privilege",          descripcion: "Entiende al ser Humano, al milagro de la naturaleza y al universo de manera holística.",            img: "/libros/img/book.png",   link: "/libros/pdfs/book.pdf"   },
+  { title: "Chinese Medicine", descripcion: "Una recopilación completa y holística de esta medicina y tradición.",                       img: "/libros/img/tcm.png",    link: "/libros/pdfs/tcm.pdf"    },
   { title: "The Kabbalah",                 descripcion: "Una recopilación del antiguo misticismo judío enfocado al crecimiento personal.",         img: "/libros/img/cabala.png", link: "/libros/pdfs/cabala.pdf" },
 ];
 
@@ -120,7 +120,7 @@ const QuienSoy = () => {
                 lineHeight="1.9"
                 letterSpacing="0.02em"
               >
-                Mi propósito es descubrir la Verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
+                Mi propósito es descubrir la Verdad profunda del ser humano, más allá de religiones, tradiciones y culturas, entendiendo que todas contienen fragmentos de ella.
               </Text>
               <Flex justify={{ base: "center", md: "flex-end" }} mt={5}>
                 <Box

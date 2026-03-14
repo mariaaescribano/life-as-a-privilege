@@ -64,6 +64,7 @@ export default function CabalaEspacio() {
         onClose={() => setSefiraAbierta(null)}
         size="xl"
         scrollBehavior="inside"
+        isCentered
       >
         <ModalOverlay bg="rgba(0,0,0,0.82)" backdropFilter="blur(4px)" />
         <ModalContent
@@ -72,7 +73,9 @@ export default function CabalaEspacio() {
           borderRadius="2xl"
           overflow="hidden"
           boxShadow={`0 0 60px ${cabalaTxt}33, 0 12px 40px rgba(0,0,0,0.7)`}
-          mx={4}
+          mx={{ base: 4, md: "auto" }}
+          my="auto"
+          maxW={{ base: "calc(100% - 2rem)", md: "xl" }}
           fontFamily="'EB Garamond', serif"
         >
           <ModalCloseButton color={cabalaTxt} top={3} right={3} />

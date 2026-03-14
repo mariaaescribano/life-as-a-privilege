@@ -261,11 +261,10 @@ const Welcome = () => {
               textShadow="0 1px 5px rgba(0,60,50,0.3)"
             >
               <br />
-              Mi propósito es descubrir la verdad profunda del ser humano más allá de religiones, tradiciones y culturas, basándome en que todas son fragmentos de una verdad mayor.
+                Mi propósito es descubrir la Verdad profunda del ser humano, más allá de religiones, tradiciones y culturas, entendiendo que todas contienen fragmentos de ella.
               <br />
               <br />
-              “La Vida como Privilegio” no es solo un título, es una invitación. La Vidano es únicamente lo que sucede, sino la forma en que decidimos mirarla cada día. Esta es una oportunidad para cambiar la perspectiva y transformar tu realidad.
-            </Text>
+              “La Vida como Privilegio” es una forma de mirar, una posibilidad de elegir cómo vivir. Esta plataforma te invita a redescubrir al ser Humano como un ser digno y como parte de algo más grande.</Text>
             <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
               <Box
                 as="button"

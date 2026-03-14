@@ -18,7 +18,7 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       titulo: "Resumen de las etapas de la Vida",
       foto: "/img/np/neuropsicologia1Foto.jpg",
       descripcion:
-        "Entiende el porqué de tus hábitos diarios, de tus enfados, frustraciones y dolores, para transformarlos en el impulso que te libere del pasado. Un viaje desde el vínculo materno hasta la madurez, que te lleva a comprender cómo tus experiencias tempranas moldean quién eres hoy.",
+        "Entiende cómo tu familia de origen formó la base de los patrones que hoy moldean tu vida. Desde una nueva mirada, comprende cómo, sin darte cuenta, creas la realidad en la que vives.",
       precio: null,
       numLecciones: 10,
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,

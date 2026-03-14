@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box, Flex, Text, Input, Textarea, Button,
 } from "@chakra-ui/react";
@@ -31,6 +31,16 @@ const inputStyle = {
 const Contacto = () => {
   const [form, setForm] = useState({ nombre: "", email: "", titulo: "", mensaje: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
+  const [serverSlow, setServerSlow] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setServerSlow(true), 8000);
+    fetch(`${API_URL}/contact/ping`).finally(() => {
+      clearTimeout(timer);
+      setServerSlow(false);
+    });
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -41,11 +51,15 @@ const Contacto = () => {
     if (!form.nombre || !form.email || !form.titulo || !form.mensaje) return;
     setStatus("sending");
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 90000);
       const res = await fetch(`${API_URL}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
       if (!res.ok) throw new Error();
       setStatus("ok");
       setForm({ nombre: "", email: "", titulo: "", mensaje: "" });
@@ -198,6 +212,12 @@ const Contacto = () => {
                     {...inputStyle}
                   />
                 </Box>
+
+                {serverSlow && status === "idle" && (
+                  <Text color="rgba(255,220,100,0.9)" fontSize="sm" textAlign="center">
+                    El servidor está iniciando, puede tardar unos segundos...
+                  </Text>
+                )}
 
                 {status === "error" && (
                   <Text color="rgba(255,150,150,0.9)" fontSize="sm" textAlign="center">

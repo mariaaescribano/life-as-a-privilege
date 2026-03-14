@@ -20,7 +20,7 @@ export const tcmCursos: ModalidadInfo = {
       titulo: "Los fundamentos",
       foto: "/img/tcm/tcm_curso1.jpg",
       descripcion:
-        "Comprende el funcionamiento del ser humano y el origen de sus desequilibrios desde la medicina tradicional china y su visión taoísta. Descubre los cinco elementos, el yin y el yang, y cómo aplicarlos en tu vida diaria.",
+        "Descubre la filosofía de la medicina china, los Cinco Elementos y su influencia en el cuerpo Humano, el Yin y el Yang y el diagnóstico de la lengua.",
       precio: null,
       numLecciones: 24,
       icon: <TCMIcon size={{ base: "40px", md: "50px" }} />,

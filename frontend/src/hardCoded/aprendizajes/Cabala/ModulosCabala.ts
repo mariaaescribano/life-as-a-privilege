@@ -47,7 +47,7 @@ export const modulosCabala: ModuloContenido[] = [
         link:`${basePath}/cabala2`,
         linkAnterior:`${basePath}/cabala1`,
         linkNext:`${basePath}/cabala3`,
-        descripcion:"Tikun Olam nos enseña que la reparación del universo comienza con nuestro amor propio y respeto hacia los demás.",
+        descripcion:"Tikkun Olam nos enseña que la reparación del universo comienza con nuestro amor propio y respeto hacia los demás.",
         video:"7QcXrDyqGjI",
         letra: tikunOlamLetra,
         detalles: detalles,

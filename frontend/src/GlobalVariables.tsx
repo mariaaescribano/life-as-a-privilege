@@ -57,7 +57,7 @@ export function AstrologiaIcon({ size = { base: "24px", md: "24px" } }: { size?:
     </Box>
   );
 }
-export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu Vida, comprende su propósito y utilízalos conscientemente para dejar de hacerte daño y de autosabotearte."
+export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu Vida, comprende su propósito y utilízalos conscientemente para dejar de hacerte daño."
 
 // TCM
 export const tcmNom = "Medicina China";
@@ -78,7 +78,7 @@ export function TCMIcon({ size = { base: "24px", md: "24px" } }: { size?: string
     </Box>
   );
 }
-export const tcmDescrip = "Comprende el funcionamiento del ser humano y el origen de sus desequilibrios desde la medicina tradicional china y su visión taoísta."
+export const tcmDescrip = "Comprende el funcionamiento del ser Humano y el origen de sus desequilibrios desde la medicina milenaria de Oriente."
 
 // Nutrición
 export const nutricionNom = "Nutrición";
@@ -100,7 +100,7 @@ export function AyurvedaIcon({ size = "24px"}) {
    <svg xmlns="http://www.w3.org/2000/svg" height={size ?? "24px"} viewBox="0 -960 960 960" width={size ?? "24px"} fill={ayurvedaTxt}><path d="M272-160q-30 0-51-21t-21-51q0-21 12-39.5t32-26.5l156-62v-90q-54 63-125.5 96.5T120-320v-80q68 0 123.5-28T344-508l54-64q12-14 28-21t34-7h40q18 0 34 7t28 21l54 64q45 52 100.5 80T840-400v80q-83 0-154.5-33.5T560-450v90l156 62q20 8 32 26.5t12 39.5q0 30-21 51t-51 21H400v-20q0-26 17-43t43-17h120q9 0 14.5-5.5T600-260q0-9-5.5-14.5T580-280H460q-42 0-71 29t-29 71v20h-88Zm151.5-503.5Q400-687 400-720t23.5-56.5Q447-800 480-800t56.5 23.5Q560-753 560-720t-23.5 56.5Q513-640 480-640t-56.5-23.5Z"/></svg>
   );
 }
-export const ayurvedaDescrip= "Descubre, desde la sabiduría ancestral de Oriente, tu constitución y cómo influye en tu Vida, tus gustos y tus desequilibrios.";
+export const ayurvedaDescrip= "Descubre, desde la sabiduría ancestral de la India, tu constitución y cómo influye en tu Vida y en tus desequilibrios.";
 
 // Fitoterapia
 export const fitoterapiaNom = "Fitoterapia";
@@ -136,7 +136,7 @@ export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: str
     </Box>
   );
 }
-export const cabalaDescrip="Explora la sabiduría de la Cábala y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia.";
+export const cabalaDescrip="Explora la sabiduría mística y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia.";
 
 // Espacio personal
 export function EspacioPersonalIcon({ color = "white", size = "50px", shadow = true }) {

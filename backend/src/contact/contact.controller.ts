@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { ContactService } from './contact.service';
 
 export class ContactDto {
@@ -11,6 +11,12 @@ export class ContactDto {
 @Controller('contact')
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
+
+  @Get('ping')
+  @HttpCode(HttpStatus.OK)
+  ping() {
+    return { ok: true };
+  }
 
   @Post()
   @HttpCode(HttpStatus.OK)

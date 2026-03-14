@@ -59,13 +59,13 @@ export const preguntasCabala: Record<SefiraKey, Pregunta[]> = {
     },
     {
       idPregunta: "cab_chesed_3",
-      pregunta: "¿Puedes recibir con gracia? ¿Qué sientes cuando alguien te da algo: un cumplido, un favor, un regalo?",
+      pregunta: "¿Puedes recibir? ¿Qué sientes cuando alguien te da algo: un cumplido, un favor, un regalo?",
     },
   ],
   geburah: [
     {
       idPregunta: "cab_geburah_1",
-      pregunta: "¿Qué necesitas eliminar de tu vida que sabes que ya no te sirve y que sigues manteniendo por miedo o costumbre?",
+      pregunta: "¿Qué necesitas eliminar de tu Vida que sabes que ya no te sirve y que sigues manteniendo por miedo o costumbre?",
       consejo: "Gevurah no destruye por destruir. Poda lo que agota para que pueda crecer lo que nutre.",
     },
     {
@@ -80,17 +80,17 @@ export const preguntasCabala: Record<SefiraKey, Pregunta[]> = {
   tipharet: [
     {
       idPregunta: "cab_tiferet_1",
-      pregunta: "¿Hay armonía entre lo que piensas, lo que sientes y lo que haces en tu vida cotidiana? ¿Dónde hay más desconexión?",
-      consejo: "Tiferet es el corazón del árbol: el lugar donde todo se integra. La paz interna viene de actuar en coherencia.",
+      pregunta: "¿Hay armonía entre lo que piensas, lo que sientes y lo que haces en tu Vida cotidiana? ¿Dónde hay más desconexión?",
+      consejo: "A veces pensamos una cosa, sentimos otra y hacemos una diferente.",
     },
-    {
-      idPregunta: "cab_tiferet_2",
-      pregunta: "¿Qué te produce una sensación genuina de belleza o de significado? ¿Con qué frecuencia lo tienes en tu vida?",
-    },
-    {
-      idPregunta: "cab_tiferet_3",
-      pregunta: "¿Eres capaz de estar en el centro sin ser arrastrado por los extremos? ¿Cuándo pierdes ese centro y qué lo provoca?",
-    },
+    // {
+    //   idPregunta: "cab_tiferet_2",
+    //   pregunta: "¿Qué te produce una sensación genuina de belleza o de significado? ¿Con qué frecuencia lo tienes en tu vida?",
+    // },
+    // {
+    //   idPregunta: "cab_tiferet_3",
+    //   pregunta: "¿Eres capaz de estar en el centro sin ser arrastrado por los extremos? ¿Cuándo pierdes ese centro y qué lo provoca?",
+    // },
   ],
   netzach: [
     {
@@ -115,26 +115,18 @@ export const preguntasCabala: Record<SefiraKey, Pregunta[]> = {
     },
     {
       idPregunta: "cab_hod_2",
-      pregunta: "¿Tu mente analítica te ayuda a actuar, o la usas para paralizarte con el análisis excesivo?",
-    },
-    {
-      idPregunta: "cab_hod_3",
       pregunta: "¿Cómo te comunicas cuando algo te duele o te incomoda? ¿Lo expresas, lo callas o lo distorsionas?",
     },
   ],
   yesod: [
     {
       idPregunta: "cab_yesod_1",
-      pregunta: "¿Qué patrones se repiten en tu vida una y otra vez, aunque cambien los escenarios o las personas?",
-      consejo: "Yesod es el filtro inconsciente. Lo que se repite no es mala suerte: es un patrón que pide ser visto.",
+      pregunta: "¿Qué patrones se repiten en tu Vida una y otra vez, aunque cambien los escenarios o las personas?",
+      consejo: "Lo que se repite no es mala suerte: es un patrón que pide ser visto.",
     },
     {
       idPregunta: "cab_yesod_2",
       pregunta: "¿Qué imagen tienes de ti mismo que no te pertenece pero que has adoptado como real? ¿De dónde viene?",
-    },
-    {
-      idPregunta: "cab_yesod_3",
-      pregunta: "¿Hay algo que sueñes con frecuencia o que aparezca repetidamente en tu imaginación? ¿Qué crees que quiere decirte?",
     },
   ],
   malkuth: [

@@ -20,7 +20,7 @@ export const cabalaCursos: ModalidadInfo = {
       titulo: "Los fundamentos",
       foto: "/img/cabala/cabala.png",
       descripcion:
-        "Explora la sabiduría de la Cábala y descubre qué te desequilibra para transformarlo y vivir desde la conexión con tu esencia.",
+        "Explora la sabiduría de la Cábala y descubre la estructura de la creación según el Árbol de la Vida.",
       precio: null,
       numLecciones: 12,
       icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />,

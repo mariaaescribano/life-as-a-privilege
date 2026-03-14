@@ -164,6 +164,7 @@ export default function VideoLessonPage() {
               <Box
                 as="button"
                 flexShrink={0}
+                boxShadow={GLOW}
                 display={{ base: "none", md: "flex" }}
                 disabled={!datos.linkAnterior}
                 onClick={() => datos.linkAnterior && navigate(datos.linkAnterior)}
@@ -190,7 +191,7 @@ export default function VideoLessonPage() {
                 aspectRatio={16 / 9}
                 borderRadius="2xl"
                 overflow="hidden"
-                boxShadow="0 8px 40px rgba(0,0,0,0.45), 0 0 30px rgba(107,196,200,0.3)"
+                boxShadow={GLOW}
               >
                 <iframe
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -208,6 +209,7 @@ export default function VideoLessonPage() {
                 disabled={!datos.linkNext}
                 onClick={() => datos.linkNext && navigate(datos.linkNext)}
                 w="52px" h="52px"
+                boxShadow={GLOW}
                 borderRadius="full"
                 border="2px solid rgba(255,255,255,0.55)"
                 color="white"
@@ -238,6 +240,7 @@ export default function VideoLessonPage() {
                 onClick={() => datos.linkAnterior && navigate(datos.linkAnterior)}
                 w="44px" h="44px"
                 borderRadius="full"
+                boxShadow={GLOW}
                 border="2px solid rgba(255,255,255,0.55)"
                 color="white"
                 fontFamily="'EB Garamond', serif"
@@ -267,6 +270,7 @@ export default function VideoLessonPage() {
                 cursor={datos.linkNext ? "pointer" : "not-allowed"}
                 opacity={datos.linkNext ? 1 : 0.25}
                 transition="all 0.2s"
+                boxShadow={GLOW}
                 display="flex" alignItems="center" justifyContent="center"
                 _hover={datos.linkNext ? { bg: "rgba(255,255,255,0.2)", borderColor: "white" } : {}}
               >
@@ -284,6 +288,7 @@ export default function VideoLessonPage() {
                 border={`1px solid ${moduloDatos.color}44`}
                 borderRadius="2xl"
                 px={{ base: 6, md: 10 }}
+                boxShadow={GLOW}
                 py={{ base: 4, md: 6 }}
                 mb={datos.letra ? { base: 4, md: 5 } : 0}
               >
@@ -301,11 +306,12 @@ export default function VideoLessonPage() {
 
             {/* Letra / Transcripción (plegable) */}
             {datos.letra && moduloDatos && (
-              <Box maxW="800px" w="100%">
+              <Box maxW="800px" w="100%" >
                 {/* Cabecera toggle */}
                 <Flex
                   as="button"
                   w="100%"
+                  boxShadow={GLOW}
                   align="center"
                   justify="space-between"
                   px={{ base: 6, md: 10 }}
