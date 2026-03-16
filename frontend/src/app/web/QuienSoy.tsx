@@ -2,6 +2,7 @@ import {
   Box, Flex, Image, SimpleGrid, Text,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 
@@ -124,8 +125,8 @@ const QuienSoy = () => {
               </Text>
               <Flex justify={{ base: "center", md: "flex-end" }} mt={5}>
                 <Box
-                  as="a"
-                  href="/contacto"
+                  as={Link}
+                  to="/contacto"
                   display="inline-flex"
                   alignItems="center"
                   gap={2}

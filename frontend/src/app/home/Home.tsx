@@ -243,7 +243,7 @@ const Home = () => {
                       filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
                     }}
                   >
-                    Recuerda tratarte con paciencia, con Amor y como el er digno que eres. Este camino no es fácil pero merece la pena.
+                    Recuerda tratarte con paciencia, con Amor y como el Ser digno que eres. Este camino no es fácil pero merece la pena.
                   </Text>
                 </VStack>
               </Box>
