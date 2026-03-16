@@ -3,39 +3,13 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-- en user/account cuando se edita algo, que se quede el tick de salvado para indicar al usuario que se ha salvado
-que se ilumine el tick, NO el lapiz
+Necesito que hagas un EspacioPersonal para nutricion,
+este tiene que tener un mini test que calcule elegantemenet peso, altura,
+genero, actividad y te de una estimacion de calorias y como
+deberia de estar distribuido en macros. 
 
-- que en photomandala en version movil, que los circulos esten un poco mas separados entre ellos que tengan un poco mas de radio
-y menos borde 
-
-
-
-- no puede ser el mismo color para responder a las preguntas que de fondo, no se ve bien
-
-- asegurarse de q el footer es correcto
-
-- en mi espacio en movil que los iconos sean mas peques y los bordes mas finos
-
-- que no sea "Ascendente en" + signo, en el caso del ascendente es distinto al de la luna y el sol,
-la preposicion no hace falta
-
-- Explorar el herbario que te lleve a cursos de fitoterapia 
-
-- mirar todos cursos q sean gratis (pero no quites nada de stripe, solo q los cursos de ahora el acceso sea gratis)
-
-- poner card para donaciones
-
-- en version movil, el texto del arboldelavida sale blanco. 
-
-
-xxx falta poner el video iframe de fuego --> metal
-
-xxx revisar preg de cabala
-
-
-
-
+Muestralo elegantemente, asignando los mismos iconos y colores
+de recursos a los macronutrientes. 
 
 
 

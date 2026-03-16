@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import SiteHeader from "../../global/SiteHeader";
@@ -302,8 +303,8 @@ const PlanetTeaserModal = ({
 
         {/* Botón Contactar */}
         <Box
-          as="a"
-          href="/contacto"
+          as={Link}
+          to="/contacto"
           px={8} py={3}
           borderRadius="full"
           border={`1.5px solid ${astrologiaTxt}66`}
@@ -930,8 +931,8 @@ export default function AstrologiaEspacio() {
           © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
         </Text>
         <Text
-          as="a"
-          href="/contacto"
+          as={Link}
+          to="/contacto"
           color="rgba(255,255,255,0.4)"
           fontSize="xs"
           letterSpacing="0.05em"

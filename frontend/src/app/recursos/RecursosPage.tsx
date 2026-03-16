@@ -4,10 +4,12 @@ import {
   fitoterapiaNom,
   tcmNomLink,
   cabalaNom,
+  nutricionNomLink,
 } from "../../GlobalVariables";
 import TCMrecursos from "../../components/recursos/tcm/TCMrecursos";
 import FitoterapiaRecursos from "../../components/recursos/fitoterapia/FitoterapiaRecursos";
 import CabalaRecursos from "../../components/recursos/cabala/CabalaRecursos";
+import NutricionRecursos from "../../components/recursos/nutricion/NutricionRecursos";
 
 export default function RecursosPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
@@ -21,6 +23,8 @@ export default function RecursosPage() {
         return FitoterapiaRecursos;
       case cabalaNom:
         return CabalaRecursos;
+      case nutricionNomLink:
+        return NutricionRecursos;
       default:
         return null;
     }

@@ -65,7 +65,7 @@ const disciplines: Discipline[] = [
     name: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
-    renderIcon: (size) => <NutricionIcon size={size} />,
+    renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
     desc: nutricionDescrip,
     link: "/aprendizaje/modulosPage/" + nutricionNom,
     available:false

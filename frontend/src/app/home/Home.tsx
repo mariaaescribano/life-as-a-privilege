@@ -74,7 +74,7 @@ const disciplines: Discipline[] = [
   {
     name: nutricionNom, bg: nutricionBg, txt: nutricionTxt,
     description: nutricionDescrip,
-    renderIcon: (s) => <NutricionIcon size={s} />,
+    renderIcon: (s) => <NutricionIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + nutricionNom,
     linkAprendizaje: "/aprendizaje/cursosModalidad/" + nutricionNom,
     available:false

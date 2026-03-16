@@ -160,7 +160,7 @@ export const modulosCabala: ModuloContenido[] = [
         nom: "2.8 Malkhut",
         link:`${basePath}/cabala11`,
         linkAnterior:`${basePath}/cabala10`,
-        linkNext:`${basePath}/cabala12`,
+        linkNext:"",
         descripcion:"Malkhut manifiesta la energía divina en la materia, recordándonos que todo es sagrado.",
         video:"zmBsovd2dKk", 
         letra: malkhutLetra,

@@ -12,13 +12,14 @@ import {
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
+import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -41,8 +42,8 @@ export default function VideoLessonPage() {
         return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "44px", md: "44px" }}/> };
       case tcmNomLink:
         return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon size={{ base: "44px", md: "44px" }} /> };
-      case "nutricion":
-        return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size="44px" /> };
+      case nutricionNomLink:
+        return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "44px", md: "44px" }}  /> };
       case "ayurveda":
         return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size="44px" /> };
       case fitoterapiaNom:
@@ -87,8 +88,12 @@ export default function VideoLessonPage() {
         setdatos(getModuleByTitle(submoduloId!, modulosAstrologia));
       }
       else if(moduloId === cabalaNom)
-      { 
+      {
         setdatos(getModuleByTitle(submoduloId!, modulosCabala));
+      }
+      else if(moduloId === nutricionNomLink)
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosNutricion));
       }
     }
   }, [moduloId, submoduloId]);

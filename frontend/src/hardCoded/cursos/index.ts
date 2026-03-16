@@ -1,10 +1,11 @@
-import { neuropsicologiaNom, astrologiaNom, tcmNomLink, fitoterapiaNom, cabalaNom } from "../../GlobalVariables";
+import { neuropsicologiaNom, astrologiaNom, tcmNomLink, fitoterapiaNom, cabalaNom, nutricionNomLink } from "../../GlobalVariables";
 import type { ModalidadInfo } from "./cursos.type";
 import { neuropsicologiaCursos } from "./NeuropsicologiaCursos";
 import { astrologiaCursos } from "./AstrologiaCursos";
 import { tcmCursos } from "./TCMCursos";
 import { fitoterapiaCursos } from "./FitoterapiaCursos";
 import { cabalaCursos } from "./CabalaCursos";
+import { nutricionCursos } from "./NutricionCursos";
 
 export type { Curso, ModalidadInfo } from "./cursos.type";
 
@@ -14,4 +15,5 @@ export const cursosData: Record<string, ModalidadInfo> = {
   [tcmNomLink]: tcmCursos,
   [fitoterapiaNom]: fitoterapiaCursos,
   [cabalaNom]: cabalaCursos,
+  [nutricionNomLink]: nutricionCursos,
 };

@@ -13,7 +13,7 @@ import {
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
@@ -21,6 +21,7 @@ import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
+import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { cursosData } from "../../hardCoded/cursos";
 import type { ModuloContenido } from "../../dtos/aprendizaje.type";
 
@@ -30,6 +31,7 @@ const modulosPorModalidad: Record<string, ModuloContenido[]> = {
   [tcmNomLink]: modulostcm,
   [fitoterapiaNom]: modulosFitoterapia,
   [cabalaNom]: modulosCabala,
+  [nutricionNomLink]: modulosNutricion,
 };
 
 export default function ModulesPage() {
@@ -67,8 +69,8 @@ export default function ModulesPage() {
         return { nom: titulo || astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
       case tcmNomLink:
         return { nom: titulo || tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
-      case "nutricion":
-        return { nom: titulo || nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon /> };
+      case nutricionNomLink:
+        return { nom: titulo || nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case "ayurveda":
         return { nom: titulo || ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
       case fitoterapiaNom:
