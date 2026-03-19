@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ContactModal } from "../../components/global/ContactModal";
+import { SaberMasButton } from "../../components/global/SaberMasButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -15,7 +17,7 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
-import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
+import { modulostcmFundamentos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
@@ -33,26 +35,32 @@ export default function VideoLessonPage() {
   }, []);
 
   const getModuloDatos = (): Modulo => {
+    const nom = moduloId ?? "";
     switch (moduloId) {
       case neuropsicologiaNom:
-        return { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
+        return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case "fisiologia":
-        return { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
+        return { nom: fisiologiaNom, nomModalidad: nom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
       case astrologiaNom:
-        return { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "44px", md: "44px" }}/> };
+        return { nom: astrologiaNom, nomModalidad: nom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "44px", md: "44px" }}/> };
       case tcmNomLink:
-        return { nom: tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon size={{ base: "44px", md: "44px" }} /> };
+        return { nom: tcmNom, nomModalidad: nom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon size={{ base: "44px", md: "44px" }} /> };
       case nutricionNomLink:
-        return { nom: nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "44px", md: "44px" }}  /> };
+        return { nom: nutricionNom, nomModalidad: nom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "44px", md: "44px" }}  /> };
       case "ayurveda":
-        return { nom: ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size="44px" /> };
+        return { nom: ayurvedaNom, nomModalidad: nom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size="44px" /> };
       case fitoterapiaNom:
-        return { nom: fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "44px", md: "44px" }}  /> };
+        return { nom: fitoterapiaNom, nomModalidad: nom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "44px", md: "44px" }}  /> };
       case cabalaNom:
-        return { nom: cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "44px", md: "44px" }} /> };
+        return { nom: cabalaNom, nomModalidad: nom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "44px", md: "44px" }} /> };
       default:
-        return { nom: "", bgColor: "", color: "", icon: null };
+        return { nom: "", nomModalidad: "", bgColor: "", color: "", icon: null };
     }
+  };
+
+  const getModulosPageLink = (): string => {
+    if (!moduloId || !datos?.cursoId) return "";
+    return `/aprendizaje/modulosPage/${moduloId}/${datos.cursoId}`;
   };
 
   // SUBMODULOS
@@ -77,7 +85,7 @@ export default function VideoLessonPage() {
       }
       else if(moduloId === tcmNomLink)
       { 
-        setdatos(getModuleByTitle(submoduloId!, modulostcm));
+        setdatos(getModuleByTitle(submoduloId!, modulostcmFundamentos));
       }
       else if(moduloId === fitoterapiaNom)
       { 
@@ -97,6 +105,22 @@ export default function VideoLessonPage() {
       }
     }
   }, [moduloId, submoduloId]);
+
+  // Auto-avance al vídeo siguiente cuando YouTube termina
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+        if (data.event === "onStateChange" && data.info === 0 && datos?.linkNext) {
+          navigate(datos.linkNext);
+        }
+      } catch {}
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [datos, navigate]);
+
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 
@@ -130,6 +154,7 @@ export default function VideoLessonPage() {
                   >
                     <Flex direction="row" align="center" justify="center" gap={5}>
                       <Box
+                        as="button"
                         borderRadius="full"
                         bg={moduloDatos.bgColor}
                         border={`5px solid ${moduloDatos.color}`}
@@ -140,6 +165,10 @@ export default function VideoLessonPage() {
                         alignItems="center"
                         justifyContent="center"
                         flexShrink={0}
+                        cursor="pointer"
+                        onClick={() => { const link = getModulosPageLink(); if (link) navigate(link); }}
+                        _hover={{ opacity: 0.75, transform: "scale(1.05)" }}
+                        transition="all 0.2s"
                       >
                         {< datos.icon size={{base:"30px", md:"40px"}}/>}
                       </Box>
@@ -200,7 +229,7 @@ export default function VideoLessonPage() {
               >
                 <iframe
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  src={`https://www.youtube.com/embed/${datos.video}`}
+                  src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1`}
                   title="YouTube video player"
                   allowFullScreen
                 />
@@ -370,62 +399,15 @@ export default function VideoLessonPage() {
               </Box>
             )}
             
-            {/* CTA Clases particulares */}
-            {/* {moduloDatos && (
-              <Flex
-                direction="column"
-                align="center"
-                maxW="800px"
-                w="100%"
-                textAlign="center"
-                px={{ base: 6, md: 10 }}
-                pt={{ base: 6, md: 8 }}
-                gap={1}
-              >
-                <Text
-                  fontSize={{ base: "lg", md: "xl" }}
-                  color={moduloDatos.bgColor}
-                  lineHeight="1.8"
-                  textShadow={`0 0 10px ${moduloDatos.color}, 0 2px 14px ${moduloDatos.color}97`}
-                  letterSpacing="0.02em"
-                >
-                  ¿Buscas profundizar y recibir un acompañamiento personalizado?
-                </Text>
-                <Text
-                  fontSize={{ base: "lg", md: "xl" }}
-                  color={moduloDatos.bgColor}
-                  lineHeight="1.8"
-                  textShadow={`0 0 10px ${moduloDatos.color}, 0 2px 14px ${moduloDatos.color}97`}
-                  letterSpacing="0.02em"
-                  fontStyle="italic"
-                  mb={4}
-                >
-                  Pide información sin compromiso.
-                </Text>
-                <Box
-                  as="a"
-                  href="/contacto"
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={2}
-                  px={7} py={2}
-                  borderRadius="full"
-                  border={`2px solid ${moduloDatos.color}88`}
+            {/* ── BOTÓN ¿QUIERES SABER MÁS? ── */}
+            {moduloDatos && (
+              <SaberMasButton
+                  icon={moduloDatos.icon}
                   color={moduloDatos.color}
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }}
-                  fontWeight="600"
-                  bg={moduloDatos.bgColor}
-                  letterSpacing="0.05em"
-                  cursor="pointer"
-                  boxShadow={`0 0 20px ${moduloDatos.color}bb, 0 2px 14px ${moduloDatos.color}77`}
-                  _hover={{ borderColor: moduloDatos.color, boxShadow: `0 0 30px ${moduloDatos.color}dd, 0 4px 18px ${moduloDatos.color}99` }}
-                  transition="all 0.2s"
-                >
-                  Contactar
-                </Box>
-              </Flex>
-            )} */}
+                  bgColor={moduloDatos.bgColor}
+                  onClick={() => setSaberMasOpen(true)}
+                />
+            )}
 
           </Flex>
         </Box>
@@ -433,6 +415,20 @@ export default function VideoLessonPage() {
 
       {/* ── FOOTER ── */}
       <SiteFooter />
+
+      {moduloDatos && (
+        <ContactModal
+          isOpen={saberMasOpen}
+          onClose={() => setSaberMasOpen(false)}
+          title="¿Quieres saber más?"
+          icon={moduloDatos.icon}
+          subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+          bgColor={moduloDatos.bgColor}
+          color={moduloDatos.color}
+          emailSubject={`Quiero saber más — ${moduloDatos.nom}`}
+          showDescription
+        />
+      )}
     </Box>
   );
 }

@@ -13,6 +13,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../../GlobalVariables";
+import SiteFooter from "../../global/Footer";
 
 const ThemePreguntas = () => {
   const { themeId } = useParams<{ themeId: string }>();
@@ -88,30 +89,7 @@ const ThemePreguntas = () => {
       </Box>
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.15)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
     </Box>
   );
 };

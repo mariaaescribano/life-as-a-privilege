@@ -3,13 +3,23 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-Necesito que hagas un EspacioPersonal para nutricion,
-este tiene que tener un mini test que calcule elegantemenet peso, altura,
-genero, actividad y te de una estimacion de calorias y como
-deberia de estar distribuido en macros. 
 
-Muestralo elegantemente, asignando los mismos iconos y colores
-de recursos a los macronutrientes. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,11 +5,13 @@ import {
   tcmNomLink,
   cabalaNom,
   nutricionNomLink,
+  astrologiaNom,
 } from "../../GlobalVariables";
 import TCMrecursos from "../../components/recursos/tcm/TCMrecursos";
 import FitoterapiaRecursos from "../../components/recursos/fitoterapia/FitoterapiaRecursos";
 import CabalaRecursos from "../../components/recursos/cabala/CabalaRecursos";
 import NutricionRecursos from "../../components/recursos/nutricion/NutricionRecursos";
+import AstrologiaRecursos from "../../components/recursos/astrologia/AstrologiaRecursos";
 
 export default function RecursosPage() {
   const { moduloId } = useParams<{ moduloId: string }>();
@@ -25,6 +27,8 @@ export default function RecursosPage() {
         return CabalaRecursos;
       case nutricionNomLink:
         return NutricionRecursos;
+      case astrologiaNom:
+        return AstrologiaRecursos;
       default:
         return null;
     }

@@ -1,10 +1,35 @@
 import {
   Box, Flex, Image, SimpleGrid, Text,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+
+const heartbeat = keyframes`
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.28); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.18); }
+  60%  { transform: scale(1); }
+  100% { transform: scale(1); }
+`;
+
+const useReveal = (threshold = 0.1) => {
+  const [el, setEl] = useState<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [el, threshold]);
+  return { ref: setEl, visible };
+};
 
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -49,6 +74,11 @@ const certificados: Certificado[] = [
 
 const QuienSoy = () => {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const card1Reveal = useReveal(0.1);
+  const card2Reveal = useReveal(0.1);
+  const card3Reveal = useReveal(0.1);
+  const card4Reveal = useReveal(0.05);
+  const card5Reveal = useReveal(0.1);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -77,6 +107,7 @@ const QuienSoy = () => {
 
           {/* ── CARD 1: PRESENTACIÓN ── */}
           <Box
+            ref={card1Reveal.ref}
             w="100%"
             maxW="900px"
             {...glassCard}
@@ -86,6 +117,9 @@ const QuienSoy = () => {
             flexDirection={{ base: "column", md: "row" }}
             alignItems="center"
             gap={{ base: 8, md: 10 }}
+            opacity={card1Reveal.visible ? 1 : 0}
+            transform={card1Reveal.visible ? "translateY(0)" : "translateY(36px)"}
+            transition="opacity 0.7s ease, transform 0.7s ease"
           >
             {/* Foto */}
             <Box
@@ -150,7 +184,13 @@ const QuienSoy = () => {
           </Box>
           
           {/* ── CARD 2: MIS LIBROS ── */}
-          <Box w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
+          <Box
+            ref={card2Reveal.ref}
+            w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}
+            opacity={card2Reveal.visible ? 1 : 0}
+            transform={card2Reveal.visible ? "translateY(0)" : "translateY(36px)"}
+            transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
+          >
             {/* Título sección */}
             <Flex align="center" gap={3} justify="center" mb={{ base: 8, md: 10 }}>
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="34px" h="34px" fill="rgba(255,255,255,0.9)">
@@ -220,6 +260,7 @@ const QuienSoy = () => {
 
           {/* ── CARD DONACIÓN ── */}
           <Box
+            ref={card3Reveal.ref}
             w="100%"
             maxW="900px"
             {...glassCard}
@@ -230,17 +271,21 @@ const QuienSoy = () => {
             alignItems="center"
             textAlign="center"
             gap={6}
+            opacity={card3Reveal.visible ? 1 : 0}
+            transform={card3Reveal.visible ? "translateY(0)" : "translateY(36px)"}
+            transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
           >
             {/* Icono corazón */}
             <Box
-              w="64px" h="64px"
+              w="72px" h="72px"
               borderRadius="full"
-              bg="rgba(255,255,255,0.12)"
-              border="1.5px solid rgba(255,255,255,0.35)"
+              bg="rgba(255, 255, 255, 0.18)"
+              border="1.5px solid rgba(255, 255, 255, 0.4)"
               display="flex" alignItems="center" justifyContent="center"
-              boxShadow="0 0 28px rgba(255,255,255,0.15)"
+              boxShadow="0 0 36px rgba(255, 255, 255, 0.35), 0 0 18px rgba(255,255,255,0.1)"
+              sx={{ animation: `${heartbeat} 1.6s ease-in-out infinite` }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="rgba(255,255,255,0.9)">
+              <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="rgba(255, 255, 255, 0.95)">
                 <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
               </svg>
             </Box>
@@ -297,7 +342,13 @@ const QuienSoy = () => {
           </Box>
 
           {/* ── CARD 3: MIS CERTIFICADOS ── */}
-          <Box w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
+          <Box
+            ref={card4Reveal.ref}
+            w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}
+            opacity={card4Reveal.visible ? 1 : 0}
+            transform={card4Reveal.visible ? "translateY(0)" : "translateY(36px)"}
+            transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
+          >
             <Flex align="center" gap={3} justify="center" mb={{ base: 8, md: 10 }}>
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="34px" h="34px" fill="rgba(255,255,255,0.9)">
                 <path d="M395-475q-35-35-35-85t35-85q35-35 85-35t85 35q35 35 35 85t-35 85q-35 35-85 35t-85-35ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm410-350q70-70 70-170t-70-170q-70-70-170-70t-170 70q-70 70-70 170t70 170q70 70 170 70t170-70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
@@ -335,6 +386,7 @@ const QuienSoy = () => {
 
           {/* ── CARD 4: CIERRE ── */}
           <Box
+            ref={card5Reveal.ref}
             w="100%"
             maxW="900px"
             {...glassCard}
@@ -344,6 +396,9 @@ const QuienSoy = () => {
             alignItems="center"
             justifyContent="center"
             textAlign="center"
+            opacity={card5Reveal.visible ? 1 : 0}
+            transform={card5Reveal.visible ? "translateY(0)" : "translateY(36px)"}
+            transition="opacity 0.7s ease, transform 0.7s ease"
           >
             <Text
               color="rgba(255,255,255,0.9)"

@@ -20,6 +20,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Recursos esenciales para acompañar tu aprendizaje.",
         video:"",
         letra: null,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon:null
       },
@@ -38,6 +39,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"La Cábala es la sabiduría mística que explica el propósito del alma y la unidad de todo con el Ein Sof.",
         video:"h91IKB8GLh4",
         letra: cabalaLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -50,6 +52,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Tikkun Olam nos enseña que la reparación del universo comienza con nuestro amor propio y respeto hacia los demás.",
         video:"7QcXrDyqGjI",
         letra: tikunOlamLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon,
       },
@@ -62,6 +65,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Or y Kli representan las energías masculina y femenina que, al unirse, dan forma al Árbol de la Vida y al universo.",
         video:"6ulm1lcYg6c",
         letra: orkliLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon,
       },
@@ -80,6 +84,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Keter representa la conexión con el Uno y la manifestación del amor propio y la aceptación del plan divino.",
         video:"Y3yz43ypGrQ", 
         letra: ketherLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -92,6 +97,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Chokmah es la sabiduría infinita y Binah la estructura que nos permite vivir coherentemente.",
         video:"IrZ5eZ7QdwA", 
         letra: chokmahLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -104,6 +110,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Chesed es la capacidad de dar con amabilidad y proporcionalidad.",
         video:"yXbpB4AfmRw", 
         letra: chesedLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -116,6 +123,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Gevurah enseña a recibir de forma consciente para crecer.",
         video:"9gATLqT5qFY", 
         letra: geburahLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -128,6 +136,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Tiferet es la armonía y la paz interna que nos permite reconocer desequilibrios.",
         video:"a2oykvOoTB0", 
         letra: tiferetLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -140,6 +149,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Netzach y Hod nos ayudan a gestionar emociones y comunicarlas de manera consciente.",
         video:"PoXe_VzFth8", 
         letra: netzachLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -152,6 +162,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Yesod filtra nuestra percepción del mundo a través del ego, que puede ser un aliado.",
         video:"f1cy0UWBsV8", 
         letra: yesodLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },
@@ -164,6 +175,7 @@ export const modulosCabala: ModuloContenido[] = [
         descripcion:"Malkhut manifiesta la energía divina en la materia, recordándonos que todo es sagrado.",
         video:"zmBsovd2dKk", 
         letra: malkhutLetra,
+        cursoId: "cabala-curso-1",
         detalles: detalles,
         icon: CabalaIcon
       },  

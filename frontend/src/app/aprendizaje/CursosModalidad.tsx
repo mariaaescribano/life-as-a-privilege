@@ -6,6 +6,8 @@ import {
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
+import { ContactModal } from "../../components/global/ContactModal";
+import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
@@ -31,7 +33,7 @@ function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
       borderRadius="2xl"
       boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
       direction="column"
-      p={{ base: 4, md: 5 }}
+      p={{ base: 5, md: 6 }}
     >
       {/* Título */}
       <Text
@@ -98,6 +100,7 @@ export default function CursosModalidad() {
   const modalidad = moduloId ? cursosData[moduloId] : null;
 
   const [detailCurso, setDetailCurso] = useState<Curso | null>(null);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -174,11 +177,32 @@ export default function CursosModalidad() {
               />
             ))}
           </SimpleGrid>
+
+          {/* ── BOTÓN ¿QUIERES SABER MÁS? ── */}
+          <SaberMasButton
+            icon={modalidad.icon}
+            color={modalidad.color}
+            bgColor={modalidad.bgColor}
+            onClick={() => setSaberMasOpen(true)}
+          />
         </Flex>
       </Box>
 
       {/* ── FOOTER ── */}
       <SiteFooter />
+
+      {/* ── MODAL ¿QUIERES SABER MÁS? ── */}
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="¿Quieres saber más?"
+        icon={modalidad.icon}
+        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        bgColor={modalidad.bgColor}
+        color={modalidad.color}
+        emailSubject={`Quiero saber más — ${modalidad.nom}`}
+        showDescription
+      />
 
       {/* ── MODAL DETALLE DEL CURSO ── */}
       <Modal

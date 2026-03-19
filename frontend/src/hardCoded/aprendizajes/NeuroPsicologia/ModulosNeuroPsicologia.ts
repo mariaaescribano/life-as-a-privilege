@@ -20,6 +20,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"El estado de la madre influye a su hijo desde antes del embarazo.",
         video:"-w67yUcj_SM",
         letra: letranp1,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: MadreIcon
       },
@@ -32,6 +33,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"Los padres tienen que ser seres completos antes del nacimiento o cargarán al hijo con su infelicidad y sueños rotos.",
         video:"apYqTnx9kiM",
         letra: letranp2,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: MadreIcon
       },
@@ -50,6 +52,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"La seguridad y el Amor no deberían ser un objetivo a alcanzar dentro de la familia, sino la base desde la que cada hijo comienza su Vida.",
         video:"JqnJlu6L6mc",
         letra: letranp3,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: FamilyIcon
       },
@@ -62,6 +65,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"Los niños se desvalidan a sí mismos antes que desvalidar a sus padres.",
         video:"wRO7-7Z0zsM",
         letra: letranp4,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: FamilyIcon
       },
@@ -80,6 +84,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"En la individualización, la falta de Amor propio de los niños aflora, y la sociedad trata de tacharles de rotos asignándoles enfermedades mentales.",
         video:"MK9lQqogmbY",
         letra: letranp5,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: ChildIcon
       },
@@ -92,6 +97,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"Usamos a los demás para darnos cuenta de lo rotos que ya estamos. Nadie nos rompe el corazón, solo nos muestra dónde lo estaba.",
         video:"CEE_gCwAdDM",
         letra: letranp6,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: ChildIcon
       },
@@ -104,6 +110,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"Atraemos a personas para que nos muestren dónde no nos aceptamos.",
         video:"jmLKf9E-X6A",
         letra: letranp7,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: ChildIcon
       },
@@ -122,6 +129,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"La gran mayoría de los adultos se menosprecian y desvaloran, hundiéndose en la pereza, pensando que por cumplir años condenados a la decadencia.",
         video:"YezjA0ZSK2Y",
         letra: letranp8,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: AdultIcon
       },
@@ -134,6 +142,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"Si te maltratas todos los días, cuando llegues a tu vejez, preferirás olvidar lo que te has hecho a tener que asumir que te has arruinado la Vida.",
         video:"xWWqi6GDH8A",
         letra: letranp9,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: AdultIcon
       },
@@ -146,6 +155,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         descripcion:"Todo tiene un sentido. La Vida nos habla en cada instante. Escúchala y no te abandones. Eres mucho más que un cuerpo físico.",
         video:"TjFVYfroda4",
         letra: letranp10,
+        cursoId: "etapasVida",
         detalles: detalles,
         icon: AdultIcon
       },

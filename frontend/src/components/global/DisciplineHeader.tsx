@@ -8,9 +8,10 @@ interface DisciplineHeaderProps {
   color: string;
   maxW?: string;
   mb?:any;
+  onIconClick?: () => void;
 }
 
-export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 } }: DisciplineHeaderProps) {
+export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 }, onIconClick }: DisciplineHeaderProps) {
 
   return (
     <Box
@@ -36,6 +37,10 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px", 
           alignItems="center"
           justifyContent="center"
           flexShrink={0}
+          onClick={onIconClick}
+          cursor={onIconClick ? "pointer" : "default"}
+          _hover={onIconClick ? { opacity: 0.75, transform: "scale(1.05)" } : {}}
+          transition="all 0.2s"
         >
           {icon}
         </Box>

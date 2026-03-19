@@ -7,6 +7,7 @@ export type Detalles = {
 
 export type Submodulo = {
   id:string;
+  cursoId: string;
   nom: string;
   link:string;
   descripcion: string;
@@ -26,6 +27,7 @@ export type ModuloContenido = {
 
 export type Modulo = {
   nom: string;
+  nomModalidad: string;
   bgColor: string;
   color: string;
   icon: any;

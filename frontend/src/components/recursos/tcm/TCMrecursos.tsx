@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Collapse, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import { tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
@@ -8,6 +8,7 @@ import type { TCMElementData } from "./TCMElementModal";
 import TCMArrowModal from "./TCMArrowModal";
 import type { ArrowRelation } from "./TCMArrowModal";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
+import SiteFooter from "../../global/Footer";
 
 
 /* ─── Estilos de las tarjetas principales ─── */
@@ -695,7 +696,7 @@ const circleStyle = (iconColor: string, bgColor: string) => ({
 /* ═══════════════════════════════════════════
    TARJETA IZQUIERDA — foto circular yin/yang
 ═══════════════════════════════════════════ */
-const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
+const LeftCard = ({ onOpen, isSelected }: { onOpen: () => void; isSelected?: boolean }) => {
   const [imgError, setImgError] = useState(false);
   return (
     <Box
@@ -720,7 +721,7 @@ const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
         borderRadius="full" overflow="hidden"
         w={{ base: "165px", md: "195px", lg: "215px" }}
         h={{ base: "165px", md: "195px", lg: "215px" }}
-        boxShadow="0 4px 16px rgba(0,0,0,0.28), 0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.22)"
+        boxShadow={isSelected ? "0 4px 16px rgba(0,0,0,0.28), 0 0 48px rgba(255,255,255,0.95), 0 0 90px rgba(255,255,255,0.60)" : "0 4px 16px rgba(0,0,0,0.28), 0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.22)"}
         cursor="pointer" bg="transparent" p={0}
         display="flex" alignItems="center" justifyContent="center" flexShrink={0}
         sx={{ transition: "transform 0.28s ease, box-shadow 0.28s ease" }}
@@ -746,7 +747,7 @@ const LeftCard = ({ onOpen }: { onOpen: () => void }) => {
 /* ═══════════════════════════════════════════
    TARJETA DERECHA — Wu Xing pentagrama
 ═══════════════════════════════════════════ */
-const WuXingCard = ({ onSelectElement }: { onSelectElement: (el: TCMElementData) => void }) => {
+const WuXingCard = ({ onSelectElement, selectedElement }: { onSelectElement: (el: TCMElementData) => void; selectedElement?: TCMElementData | null }) => {
   return (
     <Box
       flex="1" bg={CARD_BG} border={`1px solid ${CARD_BORDER}`}
@@ -773,21 +774,26 @@ const WuXingCard = ({ onSelectElement }: { onSelectElement: (el: TCMElementData)
               fill="none" stroke={`${tcmTxt}14`} strokeWidth="0.7" />
           </svg>
 
-          {ELEMENTS.map((el) => (
-            <Box key={el.id} position="absolute" left={el.leftPct} top={el.topPct}
-              w="22%" sx={{ aspectRatio: "1" }}
-              display="flex" alignItems="center" justifyContent="center">
-              <Box
-                {...circleStyle(el.iconColor, el.iconColor)}
-                cursor="pointer" color={el.bgColor}
-                _hover={{ transform: "scale(1.18)", boxShadow: `0 4px 20px rgba(0,0,0,0.50), 0 0 40px ${el.iconColor}ff, 0 0 80px ${el.iconColor}88, 0 0 120px ${el.iconColor}44`, filter: "brightness(1.5) saturate(1.35)" }}
-                onClick={() => onSelectElement(el)}
-                title={el.name}
-              >
-                {el.icon}
+          {ELEMENTS.map((el) => {
+            const isActive = selectedElement?.id === el.id;
+            return (
+              <Box key={el.id} position="absolute" left={el.leftPct} top={el.topPct}
+                w="22%" sx={{ aspectRatio: "1" }}
+                display="flex" alignItems="center" justifyContent="center">
+                <Box
+                  {...circleStyle(el.iconColor, el.iconColor)}
+                  cursor="pointer" color={el.bgColor}
+                  boxShadow={`0 4px 20px rgba(0,0,0,0.45), 0 0 28px ${el.iconColor}cc, 0 0 55px ${el.iconColor}66, 0 0 85px ${el.iconColor}33`}
+                  filter={isActive ? "brightness(1.6) saturate(1.4)" : undefined}
+                  _hover={{ transform: "scale(1.18)", boxShadow: `0 4px 20px rgba(0,0,0,0.50), 0 0 40px ${el.iconColor}ff, 0 0 80px ${el.iconColor}88, 0 0 120px ${el.iconColor}44`, filter: "brightness(1.5) saturate(1.35)" }}
+                  onClick={() => onSelectElement(el)}
+                  title={el.name}
+                >
+                  {el.icon}
+                </Box>
               </Box>
-            </Box>
-          ))}
+            );
+          })}
         </Box>
       </Box>
     </Box>
@@ -952,32 +958,35 @@ const TCMOptionModal = ({
         maxH="90vh"
         overflowY="auto"
         borderRadius="24px"
-        bg="white"
-        boxShadow="0 32px 80px rgba(0,0,0,0.55)"
+        bg={tcmBg}
+        border="1px solid rgba(255,255,255,0.25)"
+        boxShadow="0 32px 80px rgba(0,0,0,0.65)"
         sx={{
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
           "&::-webkit-scrollbar": { width: "4px" },
-          "&::-webkit-scrollbar-thumb": { background: "rgba(0,0,0,0.18)", borderRadius: "999px" },
+          "&::-webkit-scrollbar-thumb": { background: `${tcmTxt}44`, borderRadius: "999px" },
         }}
       >
         <Box
           as="button"
           position="absolute" top="13px" right="13px"
           w="34px" h="34px" borderRadius="full"
-          bg="rgba(0,0,0,0.06)" border="1px solid rgba(0,0,0,0.12)"
+          bg={`${tcmTxt}18`} border={`1px solid ${tcmTxt}35`}
           display="flex" alignItems="center" justifyContent="center"
-          color="rgba(0,0,0,0.45)" fontSize="15px" fontWeight="700"
+          color={tcmTxt} fontSize="15px" fontWeight="700"
           cursor="pointer"
-          _hover={{ bg: "rgba(0,0,0,0.10)" }}
+          _hover={{ bg: `${tcmTxt}30` }}
           onClick={onClose}
         >✕</Box>
 
         <Box px={{ base: 6, md: 10 }} pt={10} pb={10}>
-          <Text color="rgba(0,0,0,0.85)" fontSize={{ base: "2xl", md: "3xl" }}
+          <Text color={tcmTxt} fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1.25" mb={5}>
             {option.label}
           </Text>
-          <Box h="1px" bg="rgba(0,0,0,0.10)" mb={5} />
-          <Text color="rgba(0,0,0,0.75)" fontSize={{ base: "lg", md: "xl" }}
+          <Box h="1px" bg={`${tcmTxt}28`} mb={5} />
+          <Text color={`${tcmTxt}dd`} fontSize={{ base: "lg", md: "xl" }}
             lineHeight="1.88" fontFamily="'EB Garamond', serif">
             {option.description}
           </Text>
@@ -1222,125 +1231,6 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
   );
 };
 
-// const TriTablesCard2 = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
-//   const [imgError, setImgError]  = useState(false);
-//   const [photoOpen, setPhotoOpen] = useState(false);
-
-//   return (
-//     <>
-//     <Box
-//       bg={CARD_BG} border={`1px solid ${CARD_BORDER}`}
-//       borderRadius="2xl"
-//       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-//       boxShadow={CARD_SHADOW}
-//       p={{ base: 6, md: 8 }}
-//     >
-//       {/* ── Título — arriba del todo ── */}
-//       <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
-//         fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
-//         El diagnóstico del pulso
-//       </Text>
-//       <Text color={`${tcmTxt}80`} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
-//         letterSpacing="0.08em" fontFamily="'EB Garamond', serif" mb={8}>
-//         Los pulsos revelan el estado de los órganos
-//       </Text>
-
-//       <Flex
-//         direction={{ base: "column", md: "row" }}
-//         gap={{ base: 7, md: 9 }}
-//         align={{ base: "stretch", md: "flex-start" }}
-//       >
-//         {/* ── Columna izquierda: foto ── */}
-//         <Box flexShrink={0} w={{ base: "100%", md: "34%" }}>
-//           <Box
-//             borderRadius="xl" overflow="hidden"
-//             w="100%"
-//             sx={{ aspectRatio: "4/3", cursor: imgError ? "default" : "zoom-in" }}
-//             bg="rgba(107,4,4,0.30)"
-//             border={`1px solid ${CARD_BORDER}`}
-//             boxShadow={GLOW_BLUE}
-//             minH="180px"
-//             display="flex" alignItems="center" justifyContent="center"
-//             onClick={() => { if (!imgError) setPhotoOpen(true); }}
-//           >
-//             {!imgError ? (
-//               <Image
-//                 src="/img/pulso.png"
-//                 alt=""
-//                 w="100%" h="100%"
-//                 objectFit="cover"
-//                 onError={() => setImgError(true)}
-//                 draggable={false}
-//               />
-//             ) : (
-//               <Box color={tcmTxt} opacity={0.3}>
-//                 <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-//                   <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-//                 </svg>
-//               </Box>
-//             )}
-//           </Box>
-//         </Box>
-
-//         {/* ── Columna derecha: 3 tablas ── */}
-//         <Flex flex="1" gap={{ base: 3, md: 4 }} direction={{ base: "column", sm: "row" }} align="flex-start">
-//           {PULSE_TABLES.map((table) => (
-//             <Box key={table.header} flex="1" w={{ base: "100%", sm: "auto" }}>
-//               {/* Cabecera de tabla */}
-//               <Box
-//                 bg={tcmTxt}
-//                 borderTopRadius="lg"
-//                 px={3} py={3}
-//                 textAlign="center"
-//               >
-//                 <Text color="#3d0000" fontWeight="700" fontSize="xl"
-//                   fontFamily="'EB Garamond', serif" letterSpacing="0.14em">
-//                   {table.header}
-//                 </Text>
-//               </Box>
-
-//               {/* Opciones */}
-//               <Flex direction="column">
-//                 {table.options.map((opt, idx) => (
-//                   <Box
-//                     key={idx}
-//                     as="button"
-//                     w="100%"
-//                     px={3} py={3}
-//                     bg={idx % 2 === 0 ? `${tcmTxt}30` : `${tcmTxt}1c`}
-//                     borderLeft={`1px solid ${tcmTxt}45`}
-//                     borderRight={`1px solid ${tcmTxt}45`}
-//                     borderBottom={`1px solid ${tcmTxt}30`}
-//                     borderBottomRadius={idx === table.options.length - 1 ? "lg" : "0"}
-//                     textAlign="left"
-//                     cursor="pointer"
-//                     _hover={{ bg: `${tcmTxt}50` }}
-//                     sx={{
-//                       backdropFilter: "blur(8px)",
-//                       WebkitBackdropFilter: "blur(8px)",
-//                       transition: "background 0.18s ease",
-//                     }}
-//                     onClick={() => onSelect(opt)}
-//                   >
-//                     <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }}
-//                       fontFamily="'EB Garamond', serif" lineHeight="1.4"
-//                       sx={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-//                       {opt.label}
-//                     </Text>
-//                   </Box>
-//                 ))}
-//               </Flex>
-//             </Box>
-//           ))}
-//         </Flex>
-//       </Flex>
-//     </Box>
-
-//     {photoOpen && <PhotoModal src="/img/pulso.png" onClose={() => setPhotoOpen(false)} />}
-//     </>
-//   );
-// };
-
 // #region main
 
 const TCMPage = () => {
@@ -1354,6 +1244,8 @@ const TCMPage = () => {
   const tablesReveal   = useReveal();
   const ctaReveal      = useReveal();
   const navigate       = useNavigate();
+  const [searchParams]  = useSearchParams();
+  const isCincoElementos = searchParams.get("curso") === "cincoelementos";
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
@@ -1378,68 +1270,85 @@ const TCMPage = () => {
           title={tcmNom}
           bgColor={tcmBg}
           color={tcmTxt}
+          onIconClick={() => navigate(isCincoElementos ? "/aprendizaje/modulosPage/medicinachina/tcm-curso-2" : "/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}
         />
 
        
 
-        {/* ── FILA 1: foto + pentagrama ── */}
-        <Box
-          ref={cardsReveal.ref}
-          w="100%" maxW="960px"
-          pb={{ base: 5, md: 7 }}
-          opacity={cardsReveal.visible ? 1 : 0}
-          transform={cardsReveal.visible ? "none" : "translateY(22px)"}
-          transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
-        >
-          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align="stretch">
-            <LeftCard onOpen={() => setModalOpen(true)} />
-            <WuXingCard onSelectElement={setSelectedElement} />
-          </Flex>
-        </Box>
+        {isCincoElementos ? (
+          <>
+            {/* ── FILA 1: Yin/Yang + Pentagrama ── */}
+            <Box
+              ref={cardsReveal.ref}
+              w="100%" maxW="960px"
+              pb={{ base: 5, md: 7 }}
+              opacity={cardsReveal.visible ? 1 : 0}
+              transform={cardsReveal.visible ? "none" : "translateY(22px)"}
+              transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
+            >
+              <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align="stretch">
+                <LeftCard onOpen={() => setModalOpen(true)} isSelected={modalOpen} />
+                <WuXingCard onSelectElement={setSelectedElement} selectedElement={selectedElement} />
+              </Flex>
+            </Box>
 
-        {/* ── FILA 2: ciclos ── */}
-        <Box
-          ref={cycles1Reveal.ref}
-          w="100%" maxW="960px"
-          pb={{ base: 5, md: 7 }}
-          opacity={cycles1Reveal.visible ? 1 : 0}
-          transform={cycles1Reveal.visible ? "none" : "translateY(22px)"}
-          transition="opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s"
-        >
-          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align="stretch">
+            {/* ── FILA 2: Ciclos ── */}
+            <Box
+              ref={cycles1Reveal.ref}
+              w="100%" maxW="960px"
+              pb={{ base: 5, md: 7 }}
+              opacity={cycles1Reveal.visible ? 1 : 0}
+              transform={cycles1Reveal.visible ? "none" : "translateY(22px)"}
+              transition="opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s"
+            >
+              <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align="stretch">
+                <CycleCard
+                  title="El Ciclo Generador 相生"
+                  chinese="" subtitle=""
+                  connections={[[2,3],[3,4],[4,5],[5,1],[1,2]]}
+                  relations={SHEN_RELATIONS}
+                  onSelectRelation={setSelectedRelation}
+                />
+                <CycleCard
+                  title="El Ciclo Controlador 相克"
+                  chinese="" subtitle=""
+                  connections={[[1,3],[3,5],[5,2],[2,4],[4,1]]}
+                  relations={KE_RELATIONS}
+                  onSelectRelation={setSelectedRelation}
+                />
+              </Flex>
+            </Box>
+          </>
+        ) : (
+          <>
+            {/* ── FUNDAMENTOS: solo pentagrama ── */}
+              <Box
+                ref={cardsReveal.ref}
+                w="100%" maxW="960px"
+                pb={{ base: 5, md: 7 }}
+                opacity={cardsReveal.visible ? 1 : 0}
+                transform={cardsReveal.visible ? "none" : "translateY(22px)"}
+                transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
+              >
+                <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align="stretch">
+                  <LeftCard onOpen={() => setModalOpen(true)} />
+                  <WuXingCard onSelectElement={setSelectedElement} />
+                </Flex>
+              </Box>
 
-            <CycleCard
-              title="El Ciclo Generador 相生"
-              chinese=""
-              subtitle=""
-              connections={[[2,3],[3,4],[4,5],[5,1],[1,2]]}
-              relations={SHEN_RELATIONS}
-              onSelectRelation={setSelectedRelation}
-            />
-
-            <CycleCard
-              title="El Ciclo Controlador 相克"
-              chinese=""
-              subtitle=""
-              connections={[[1,3],[3,5],[5,2],[2,4],[4,1]]}
-              relations={KE_RELATIONS}
-              onSelectRelation={setSelectedRelation}
-            />
-
-          </Flex>
-        </Box>
-
-        {/* ── FILA 3: tablas ── */}
-        <Box
-          ref={tablesReveal.ref}
-          w="100%" maxW="960px"
-          pb={{ base: 5, md: 7 }}
-          opacity={tablesReveal.visible ? 1 : 0}
-          transform={tablesReveal.visible ? "none" : "translateY(22px)"}
-          transition="opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s"
-        >
-          <TriTablesCard onSelect={setSelectedOption} />
-        </Box>
+            {/* ── FUNDAMENTOS: Diagnóstico de la lengua ── */}
+            <Box
+              ref={tablesReveal.ref}
+              w="100%" maxW="960px"
+              pb={{ base: 5, md: 7 }}
+              opacity={tablesReveal.visible ? 1 : 0}
+              transform={tablesReveal.visible ? "none" : "translateY(22px)"}
+              transition="opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s"
+            >
+              <TriTablesCard onSelect={setSelectedOption} />
+            </Box>
+          </>
+        )}
 
         {/* <Box
           ref={tables2Reveal.ref}
@@ -1462,8 +1371,8 @@ const TCMPage = () => {
             gap={3}
             px={{ base: 5, md: 6 }}
             py={3}
-            bg={`${tcmBg}55`}
-            border={`1px solid ${tcmTxt}22`}
+            bg={`${tcmBg}cc`}
+            border={`1px solid ${tcmTxt}55`}
             borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
             cursor="pointer"
             onClick={() => setDisclaimerOpen((o) => !o)}
@@ -1471,13 +1380,13 @@ const TCMPage = () => {
             sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
           >
             <Flex align="center" gap={2.5}>
-              <Box color={`${tcmTxt}88`} flexShrink={0}>
+              <Box color={tcmTxt} flexShrink={0}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
                   <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
                 </svg>
               </Box>
               <Text
-                color={`${tcmTxt}99`}
+                color={tcmTxt}
                 fontSize="md"
                 letterSpacing="0.12em"
                 textTransform="uppercase"
@@ -1487,7 +1396,7 @@ const TCMPage = () => {
               </Text>
             </Flex>
             <Text
-              color={`${tcmTxt}66`}
+              color={tcmTxt}
               fontSize="sm"
               transition="transform 0.22s"
               transform={disclaimerOpen ? "rotate(180deg)" : "rotate(0deg)"}
@@ -1499,14 +1408,14 @@ const TCMPage = () => {
             <Box
               px={{ base: 5, md: 6 }}
               py={4}
-              bg={`${tcmBg}33`}
-              border={`1px solid ${tcmTxt}22`}
+              bg={`${tcmBg}cc`}
+              border={`1px solid ${tcmTxt}55`}
               borderTop="none"
               borderRadius="0 0 xl xl"
               sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
             >
               <Text
-                color={`${tcmTxt}cc`}
+                color={tcmTxt}
                 fontSize={{ base: "lg", md: "xl" }}
                 lineHeight="1.85"
                 letterSpacing="0.02em"
@@ -1546,7 +1455,7 @@ const TCMPage = () => {
               letterSpacing="0.12em"
               textShadow="0 2px 8px rgba(0,0,0,0.2)"
               boxShadow="0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)"
-              onClick={() => navigate("/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}
+              onClick={() => navigate(isCincoElementos ? "/aprendizaje/modulosPage/medicinachina/tcm-curso-2" : "/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}
               _hover={{
                 bg: {tcmBg},
                 borderColor: "white",
@@ -1564,26 +1473,7 @@ const TCMPage = () => {
         </Box>
 
         {/* ── FOOTER ── */}
-        <Box as="footer" w="100%" borderTop="1px solid rgba(255,255,255,0.11)"
-          px={{ base: 6, md: 16 }} py={{ base: 8, md: 10 }}>
-          <Text color="rgba(255,255,255,0.42)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-            © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-          </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-        </Box>
+        <SiteFooter />
 
       </Flex>
 

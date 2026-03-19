@@ -166,7 +166,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
           position="absolute"
           w="100%"
           h="100%"
-          backgroundImage="url('/img/life.png')"
+          backgroundImage="url('/img/icono/life.png')"
           backgroundSize="90%"
           backgroundPosition="center"
           backgroundRepeat="no-repeat"

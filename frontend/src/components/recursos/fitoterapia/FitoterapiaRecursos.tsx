@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Collapse, Flex, Grid, HStack, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
@@ -517,6 +518,7 @@ const useReveal = () => {
 // #region main
 
 const FitoterapiaRecursos = () => {
+  const navigate = useNavigate();
   const [selected, setSelected]   = useState<Planta | null>(null);
   const [search, setSearch]       = useState("");
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
@@ -595,6 +597,7 @@ const FitoterapiaRecursos = () => {
           title={fitoterapiaNom}
           bgColor={fitoterapiaBg}
           color={fitoterapiaTxt}
+          onIconClick={() => navigate("/aprendizaje/modulosPage/Fitoterapia/fito-curso-1")}
         />
 
         {/* BUSCADOR */}

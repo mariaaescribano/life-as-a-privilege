@@ -12,6 +12,7 @@ import {
 } from "../../../GlobalVariables";
 import { plantas, type Planta } from "../../recursos/fitoterapia/PlantasData";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
+import SiteFooter from "../../global/Footer";
 
 const CARD_COLOR  = fitoterapiaTxt;
 const MODAL_COLOR = fitoterapiaBg;
@@ -659,33 +660,7 @@ export default function FitoterapiaEspacio() {
       </Flex>
 
       {/* FOOTER */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.10)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text
-          color="rgba(255,255,255,0.40)" fontSize="xs"
-          letterSpacing="0.05em" textAlign="center"
-        >
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
 
       {/* MODAL */}
       {selected && (

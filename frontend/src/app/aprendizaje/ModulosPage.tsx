@@ -4,7 +4,7 @@ import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -17,7 +17,7 @@ import {
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
-import { modulostcm } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
+import { modulostcmFundamentos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
@@ -28,7 +28,7 @@ import type { ModuloContenido } from "../../dtos/aprendizaje.type";
 const modulosPorModalidad: Record<string, ModuloContenido[]> = {
   [neuropsicologiaNom]: modulosNeuroPsicologia,
   [astrologiaNom]: modulosAstrologia,
-  [tcmNomLink]: modulostcm,
+  [tcmNomLink]: modulostcmFundamentos,
   [fitoterapiaNom]: modulosFitoterapia,
   [cabalaNom]: modulosCabala,
   [nutricionNomLink]: modulosNutricion,
@@ -37,6 +37,7 @@ const modulosPorModalidad: Record<string, ModuloContenido[]> = {
 export default function ModulesPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
   const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -60,25 +61,26 @@ export default function ModulesPage() {
   const getModuloDatos = (): Modulo => {
     const titulo = getCursoTitulo();
     const modulos = getModulosParaCurso();
+    const nomMod = modalidadId ?? "";
     switch (modalidadId) {
       case "fisiologia":
-        return { nom: titulo || fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
+        return { nom: titulo || fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
       case neuropsicologiaNom:
-        return { nom: titulo || neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case astrologiaNom:
-        return { nom: titulo || astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
+        return { nom: titulo || astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
       case tcmNomLink:
-        return { nom: titulo || tcmNom, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || tcmNom, nomModalidad: nomMod, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
       case nutricionNomLink:
-        return { nom: titulo || nutricionNom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case "ayurveda":
-        return { nom: titulo || ayurvedaNom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
+        return { nom: titulo || ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
       case fitoterapiaNom:
-        return { nom: titulo || fitoterapiaNom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos };
+        return { nom: titulo || fitoterapiaNom, nomModalidad: nomMod, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos };
       case cabalaNom:
-        return { nom: titulo || cabalaNom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || cabalaNom, nomModalidad: nomMod, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       default:
-        return { nom: "", bgColor: "", color: "", icon: null };
+        return { nom: "", nomModalidad: "", bgColor: "", color: "", icon: null };
     }
   };
 
@@ -113,6 +115,7 @@ export default function ModulesPage() {
               title={moduloDatos.nom}
               bgColor={moduloDatos.bgColor}
               color={moduloDatos.color}
+              onIconClick={() => navigate(`/aprendizaje/cursosModalidad/${moduloDatos.nomModalidad}`)}
             />
 
             {/* Módulos directos — sin card contenedor */}

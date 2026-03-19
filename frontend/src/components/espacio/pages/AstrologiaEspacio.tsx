@@ -18,6 +18,7 @@ import {
 } from "../../../GlobalVariables";
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
+import SiteFooter from "../../global/Footer";
 
 /* ══════════════════════════════════════════════
    SIGNOS DEL ZODIACO
@@ -346,15 +347,15 @@ const ZodiacModal = ({
   onClear: () => void;
 }) => {
   const meta = FIELD_META[field];
-  const [mode] = useState<"info" | "select">(currentSign ? "info" : "select");
+  const showInfo = !!currentSign;
   const [letraOpen, setLetraOpen] = useState(false);
   const signData = currentSign ? ZODIAC_SIGNS.find((s) => s.name === currentSign) : null;
   const info = currentSign ? SIGN_INFO[field][currentSign] : null;
   const signIndex = currentSign ? ZODIAC_SIGNS.findIndex((s) => s.name === currentSign) : -1;
   const submoduleData = signIndex >= 0
-    ? field === "ascendente" ? modulosAstrologia[1]?.submodules[signIndex]
-    : field === "sol"        ? modulosAstrologia[2]?.submodules[signIndex]
-    : field === "luna"       ? modulosAstrologia[3]?.submodules[signIndex]
+    ? field === "ascendente" ? modulosAstrologia[2]?.submodules[signIndex]
+    : field === "sol"        ? modulosAstrologia[3]?.submodules[signIndex]
+    : field === "luna"       ? modulosAstrologia[4]?.submodules[signIndex]
     : null
     : null;
 
@@ -401,7 +402,7 @@ const ZodiacModal = ({
 
         <Box position="relative" zIndex={1} px={6} py={7} display="flex" flexDirection="column" gap={4} overflowY="auto" flex="1">
 
-          {mode === "info" && signData && info ? (
+          {showInfo && signData && info ? (
             <>
               <Box
                 bg={astrologiaBg}
@@ -757,7 +758,6 @@ export default function AstrologiaEspacio() {
   const handleSelect = async (sign: string) => {
     if (!openModal || !userId || saving) return;
     const field = openModal;
-    setOpenModal(null);
     setSaving(true);
     try {
       await axios.post(`${API_URL}/astrologia/${field}`, { userId, [field]: sign });
@@ -926,25 +926,7 @@ export default function AstrologiaEspacio() {
         </Flex>
       </Box>
 
-      <Box as="footer" borderTop={`1px solid ${astrologiaTxt}14`} px={{ base: 6, md: 16 }} py={{ base: 8, md: 10 }}>
-        <Text color={`${astrologiaTxt}2a`} fontSize="xs" letterSpacing="0.05em" textAlign="center">
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as={Link}
-          to="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+     <SiteFooter />
 
       {/* Modal interactivo (Sol · Luna · Ascendente) */}
       {openModal && (

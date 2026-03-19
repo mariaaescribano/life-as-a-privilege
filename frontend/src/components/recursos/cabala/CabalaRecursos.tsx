@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
@@ -221,6 +222,7 @@ function CabalaModal({
    PÁGINA PRINCIPAL
 ════════════════════════════════════════════ */
 export default function CabalaRecursos() {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<{ sub: Submodulo; name: string } | null>(null);
 
   useEffect(() => {
@@ -249,6 +251,7 @@ export default function CabalaRecursos() {
             title={cabalaNom}
             bgColor={cabalaBg}
             color={cabalaTxt}
+            onIconClick={() => navigate("/aprendizaje/modulosPage/Cábala/cabala-curso-1")}
           />
 
           {/* ── Árbol de la Vida ── */}

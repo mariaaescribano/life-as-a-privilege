@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
@@ -667,6 +668,7 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
 // MAIN PAGE
 // ─────────────────────────────────────────
 export default function NutricionRecursos() {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<ModalData | null>(null);
 
   useEffect(() => {
@@ -691,6 +693,7 @@ export default function NutricionRecursos() {
             title={nutricionNom}
             bgColor={BG}
             color={TXT}
+            onIconClick={() => navigate("/aprendizaje/modulosPage/nutricion/nut-curso-1")}
           />
 
           <CarbohidratosCard onSelect={setSelected} />

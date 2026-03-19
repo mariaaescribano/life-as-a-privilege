@@ -6,6 +6,7 @@ import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { API_URL, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
+import { ContactModal } from "../../global/ContactModal";
 import {
   RECS_CONSTITUCIONES,
   RECS_ELEMENTOS,
@@ -13,6 +14,7 @@ import {
   type Recs,
 } from "../data/tcmRecommendations";
 import { getTheme } from "../data/tcmTheme";
+import SiteFooter from "../../global/Footer";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -568,6 +570,7 @@ export default function TCMespacio() {
   const navigate = useNavigate();
   const [tcmData, setTcmData] = useState<TcmData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [diagModalOpen, setDiagModalOpen] = useState(false);
 
   const fetchData = () => {
     const userId = sessionStorage.getItem("userId");
@@ -689,6 +692,40 @@ export default function TCMespacio() {
                 </SimpleGrid>
               </Box>
 
+              {/* ══ BOTÓN DIAGNÓSTICO COMPLETO ══ */}
+              <Flex justify="center" w="100%" maxW="900px">
+                <Flex
+                  as="button"
+                  align="center"
+                  justify="center"
+                  direction="row"
+                  gap={3}
+                  px={{ base: 8, md: 12 }}
+                  py={{ base: 3, md: 4 }}
+                  borderRadius="full"
+                  border="2px solid rgba(255,255,255,0.7)"
+                  bg={tcmBg}
+                  cursor="pointer"
+                  color={tcmTxt}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  letterSpacing="0.12em"
+                  textShadow="0 2px 8px rgba(0,0,0,0.2)"
+                  boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+                  onClick={() => setDiagModalOpen(true)}
+                  _hover={{
+                    transform: "translateY(-2px)",
+                  }}
+                  transition="all 0.25s ease"
+                >
+                  <Box w="26px" h="26px" flexShrink={0} filter={`drop-shadow(0 0 6px ${tcmTxt}88)`}>
+                    <TCMIcon size="26px" />
+                  </Box>
+                  <Text>Solicitar diagnóstico completo</Text>
+                </Flex>
+              </Flex>
+
               {/* ══ SECCIÓN 1: CONSTITUCIÓN ══ */}
               <ResultSection
                 testNum={1}
@@ -736,35 +773,18 @@ export default function TCMespacio() {
       </Box>
 
       {/* ── FOOTER ── */}
-      <Box
-        as="footer"
-        borderTop="1px solid rgba(255,255,255,0.1)"
-        px={{ base: 6, md: 16 }}
-        py={{ base: 8, md: 10 }}
-      >
-        <Text
-          color="rgba(255,255,255,0.38)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          textAlign="center"
-        >
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
-        </Text>
-        <Text
-          as="a"
-          href="/contacto"
-          color="rgba(255,255,255,0.4)"
-          fontSize="xs"
-          letterSpacing="0.05em"
-          display="block"
-          textAlign="center"
-          mt={1}
-          textDecoration="underline"
-          cursor="pointer"
-        >
-          Contactar
-        </Text>
-      </Box>
+      <SiteFooter />
+
+      <ContactModal
+        isOpen={diagModalOpen}
+        onClose={() => setDiagModalOpen(false)}
+        title="Diagnóstico completo"
+        subtitle="Déjame tus datos y me pondré en contacto contigo para ofrecerte un diagnóstico personalizado de Medicina China."
+        bgColor={tcmBg}
+        color={tcmTxt}
+        emailSubject="Solicitud de diagnóstico completo TCM"
+        showDescription={false}
+      />
     </Box>
   );
 }

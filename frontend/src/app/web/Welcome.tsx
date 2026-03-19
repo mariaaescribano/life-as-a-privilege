@@ -12,6 +12,8 @@ import {
   neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, nutricionDescrip, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
+  EspacioPersonalIcon,
+  AprendizajeIcon,
 } from "../../GlobalVariables";
 
 type Discipline = {
@@ -118,6 +120,7 @@ const useReveal = (threshold = 0.15) => {
 const Welcome = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<Discipline | null>(null);
+  const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
   const presentacionReveal = useReveal();
   const disciplinasReveal = useReveal(0.05);
@@ -331,7 +334,7 @@ const Welcome = () => {
               onClick={() => setSelected(d)}
               opacity={disciplinasReveal.visible ? 1 : 0}
               transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-              transition={`opacity 0.5s ease ${i * 0.09}s, transform 0.5s ease ${i * 0.09}s, box-shadow 0.22s ease`}
+              transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s, box-shadow 0.22s ease`}
               _hover={{
                 boxShadow: "0 18px 45px rgba(107,196,200,0.75), 0 4px 14px rgba(107,196,200,0.45)",
               }}
@@ -405,34 +408,36 @@ const Welcome = () => {
       {/* ── FOOTER ── */}
       <SiteFooter />
 
-      {/* ── MODAL ── */}
-      {selected && (
+      {/* ── MODAL ESPACIO (login requerido) ── */}
+      {showEspacioModal && (
         <Box
           position="fixed"
-          top="0"
-          left="0"
-          right="0"
-          bottom="0"
-          zIndex="1000"
+          inset={0}
+          zIndex={1100}
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bg="rgba(0,0,0,0.5)"
-          sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-          onClick={() => setSelected(null)}
+          bg="rgba(0,0,0,0.65)"
+          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+          onClick={() => setShowEspacioModal(false)}
+          px={{ base: 5, md: 10 }}
         >
           <Box
-            bg={selected.bg}
-            borderRadius="3xl"
-            pt={14}
-            pb={10}
-            px={{ base: 8, md: 14 }}
-            maxW="480px"
-            w="90%"
-            position="relative"
-            boxShadow="0 28px 80px rgba(0,0,0,0.4)"
-            textAlign="center"
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            bg="rgba(0,90,80,0.92)"
+            border="1px solid rgba(255,255,255,0.3)"
+            sx={{ backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}
+            borderRadius="3xl"
+            boxShadow="0 28px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.1)"
+            p={{ base: 10, md: 14 }}
+            maxW="420px"
+            w="100%"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={6}
+            textAlign="center"
+            position="relative"
           >
             {/* Botón cerrar */}
             <Box
@@ -443,94 +448,216 @@ const Welcome = () => {
               w="32px"
               h="32px"
               borderRadius="full"
-              bg="rgba(0,0,0,0.08)"
+              bg="rgba(255,255,255,0.1)"
               border="none"
               cursor="pointer"
               display="flex"
               alignItems="center"
               justifyContent="center"
-              color={selected.txt}
+              color="white"
               fontSize="18px"
               fontWeight="bold"
-              _hover={{ bg: "rgba(0,0,0,0.18)" }}
+              _hover={{ bg: "rgba(255,255,255,0.22)" }}
               transition="background 0.18s"
-              onClick={() => setSelected(null)}
+              onClick={() => setShowEspacioModal(false)}
             >
               ✕
             </Box>
 
-            {/* Icono grande */}
-            <Flex justify="center" mb={6}>
-              <Box
-                bg={selected.bg}
-                borderRadius="full"
-                p="12px"
-                border={`5px solid ${selected.txt}`}
-                boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
-                w="96px"
-                h="96px"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                {selected.renderIcon("52px")}
-              </Box>
-            </Flex>
+            {/* Logo */}
+            <Image
+              src="/img/icono/life.png"
+              alt="Life as a Privilege"
+              w="110px"
+              objectFit="contain"
+              filter="drop-shadow(0 4px 12px rgba(255, 255, 255, 0.35))"
+            />
 
+            {/* Mensaje */}
+            <Text
+              color="white"
+              fontSize={{ base: "lg", md: "xl" }}
+              fontFamily="'EB Garamond', serif"
+              lineHeight="1.75"
+              letterSpacing="0.02em"
+              textShadow="0 1px 6px rgba(255, 255, 255, 0.3)"
+            >
+              Crea una cuenta o iniciar sesión para acceder al{" "}
+              <Box as="span" fontWeight="700">Espacio Personal de crecimiento</Box>
+            </Text>
+
+            {/* Botón login */}
+            <Box
+              as="button"
+              onClick={() => navigate("/logIn")}
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "lg", md: "xl" }}
+              letterSpacing="0.12em"
+              px={10}
+              py={3}
+              borderRadius="full"
+              border="2px solid rgba(255,255,255,0.65)"
+              bg="rgba(255,255,255,0.14)"
+              cursor="pointer"
+              boxShadow="0 0 28px rgba(107,196,200,0.5), 0 2px 12px rgba(0,0,0,0.25)"
+              _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white", boxShadow: "0 0 40px rgba(107,196,200,0.8)" }}
+              transition="all 0.22s ease"
+            >
+              Iniciar sesión →
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* ── MODAL ── */}
+      {selected && (
+        <Box
+          position="fixed"
+          inset={0}
+          zIndex={1000}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          bg="rgba(0,0,0,0.6)"
+          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+          onClick={() => setSelected(null)}
+          px={{ base: 5, md: 10 }}
+        >
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            bg={selected.bg + "e8"}
+            border={`1.5px solid ${selected.txt}55`}
+            sx={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
+            borderRadius="2xl"
+            boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selected.txt}22`}
+            p={{ base: 8, md: 12 }}
+            maxW="560px"
+            w="100%"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={6}
+            position="relative"
+          >
+            {/* X */}
+            <Box
+              position="absolute"
+              top={4}
+              right={5}
+              as="button"
+              onClick={() => setSelected(null)}
+              color={selected.txt}
+              fontSize="xl"
+              cursor="pointer"
+              bg={selected.txt + "22"}
+              borderRadius="full"
+              w="36px"
+              h="36px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              _hover={{ bg: selected.txt + "44" }}
+              transition="background 0.2s"
+            >
+              ✕
+            </Box>
+
+            {/* Icono */}
+            <Box
+              bg={selected.bg}
+              borderRadius="full"
+              w={{ base: "88px", md: "108px" }}
+              h={{ base: "88px", md: "108px" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              border={`3px solid ${selected.txt}`}
+              boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
+            >
+              {selected.renderIcon("52px")}
+            </Box>
+
+            {/* Nombre */}
             <Text
               color={selected.txt}
-              fontWeight="800"
-              fontSize={{ base: "3xl", md: "4xl" }}
-              mb={4}
-              letterSpacing="0.02em"
+              fontSize={{ base: "2xl", md: "3xl" }}
+              fontWeight="700"
+              letterSpacing="0.04em"
+              textAlign="center"
             >
               {selected.name}
             </Text>
 
+            {/* Descripción */}
             <Text
               color={selected.txt}
-              fontSize={{ base: "xl", md: "2xl" }}
-              lineHeight="tall"
-              opacity={0.9}
-              mb={7}
+              fontSize={{ base: "lg", md: "xl" }}
+              textAlign="center"
+              lineHeight="1.9"
+              letterSpacing="0.02em"
+              opacity={0.82}
             >
               {selected.desc}
             </Text>
 
-            <Flex justify="center" direction="column" align="center" gap={2}>
-              <Box
-                as="button"
-                onClick={() => selected.available ? navigate(selected.link) : undefined}
-                color={selected.txt}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "lg", md: "xl" }}
-                letterSpacing="0.12em"
-                px={10}
-                py={3}
-                borderRadius="full"
-                border={`2px solid ${selected.txt}`}
-                bg={selected.available  ? `${selected.txt}18` : `${selected.txt}0a`}
-                cursor={selected.available ? "pointer" : "not-allowed"}
-                opacity={selected.available ? 1 : 0.45}
-                boxShadow={selected.available ? `0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77` : "none"}
-                _hover={selected.available ? { bg: `${selected.txt}33`, transform: "translateY(-2px)", boxShadow: `0 0 30px ${selected.txt}dd, 0 4px 18px ${selected.txt}99` } : {}}
-                transition="all 0.2s ease"
-              >
-                APRENDER
-              </Box>
-              {selected.available == false && (
-                <Text
-                  color={selected.txt}
-                  fontSize="xs"
-                  letterSpacing="0.1em"
-                  opacity={0.6}
-                  fontStyle="italic"
-                >
-                  Próximamente
-                </Text>
-              )}
-            </Flex>
+            {/* Botones */}
+            {(() => {
+              const isAvailable = selected.available === true;
+              return (
+                <Flex direction="column" align="center" gap={3} mt={2}>
+                  <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap">
+                    <Flex
+                      align="center" gap={3}
+                      cursor="pointer"
+                      onClick={() => { setSelected(null); setShowEspacioModal(true); }}
+                      bg={selected.txt + "18"}
+                      border={`1px solid ${selected.txt}66`}
+                      borderRadius="full"
+                      px={{ base: 5, md: 7 }} py={3}
+                      boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
+                      _hover={{ bg: selected.txt + "33", border: `1px solid ${selected.txt}`, boxShadow: `0 0 30px ${selected.txt}dd, 0 4px 18px ${selected.txt}99` }}
+                      transition="all 0.2s"
+                    >
+                      <EspacioPersonalIcon color={selected.txt} size="24px" shadow={false} />
+                      <Text color={selected.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                        Mi Espacio
+                      </Text>
+                    </Flex>
+                    <Flex
+                      align="center" gap={3}
+                      cursor={isAvailable ? "pointer" : "not-allowed"}
+                      onClick={isAvailable ? () => navigate(selected.link) : undefined}
+                      bg={selected.txt + "18"}
+                      border={`1px solid ${selected.txt}66`}
+                      borderRadius="full"
+                      px={{ base: 5, md: 7 }} py={3}
+                      opacity={isAvailable ? 1 : 0.45}
+                      boxShadow={isAvailable ? `0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77` : "none"}
+                      _hover={isAvailable ? { bg: selected.txt + "33", border: `1px solid ${selected.txt}`, boxShadow: `0 0 30px ${selected.txt}dd, 0 4px 18px ${selected.txt}99` } : {}}
+                      transition="all 0.2s"
+                    >
+                      <AprendizajeIcon color={selected.txt} size="30px" shadow={false} />
+                      <Text color={selected.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
+                        Aprender
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  {!isAvailable && (
+                    <Text
+                      color={selected.txt}
+                      fontSize="xs"
+                      letterSpacing="0.1em"
+                      opacity={0.6}
+                      fontStyle="italic"
+                    >
+                      Próximamente
+                    </Text>
+                  )}
+                </Flex>
+              );
+            })()}
           </Box>
         </Box>
       )}
