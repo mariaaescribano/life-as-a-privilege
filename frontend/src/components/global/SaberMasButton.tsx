@@ -2,13 +2,13 @@ import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 
 interface SaberMasButtonProps {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   color: string;
   bgColor: string;
   onClick: () => void;
 }
 
-export function SaberMasButton({ icon, color, bgColor, onClick }: SaberMasButtonProps) {
+export function SaberMasButton({ color, bgColor, onClick }: SaberMasButtonProps) {
   return (
     <Flex justify="center" w="100%" maxW="900px" mt={16}>
       <Box

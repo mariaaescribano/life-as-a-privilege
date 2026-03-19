@@ -20,7 +20,6 @@ export const modulosFitoterapia: ModuloContenido[] = [
         video:"-w67yUcj_SM",
         letra: "",
         cursoId: "fito-curso-1",
-        cursoId: "fito-curso-1",
       detalles: detalles,
         icon: null
       },

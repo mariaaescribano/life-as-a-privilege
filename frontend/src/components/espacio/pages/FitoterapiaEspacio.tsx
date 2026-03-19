@@ -663,7 +663,7 @@ export default function FitoterapiaEspacio() {
       <SolicitarAutoevaluacionButton
         bgColor={fitoterapiaBg}
         color={fitoterapiaTxt}
-        icon={<FitoterapiaIcon size="26px" />}
+        icon={<FitoterapiaIcon size={{ base: "26px", md: "26px" }} />}
         disciplineName="Fitoterapia"
       />
 
