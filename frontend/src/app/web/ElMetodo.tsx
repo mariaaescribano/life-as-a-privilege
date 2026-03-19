@@ -11,7 +11,7 @@ import {
   fitoterapiaBg, fitoterapiaDescrip, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, cabalaDescrip, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
-  neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
+  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
 } from "../../GlobalVariables";
 
 type ModalidadData = {
