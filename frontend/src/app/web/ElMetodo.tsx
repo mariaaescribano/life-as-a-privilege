@@ -28,7 +28,7 @@ const modalidades: ModalidadData[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: neuropsicologiaDescrip,
+    desc: "Entenderemos los orígenes de tus frustraciones sin poner etiquetas al sufrimiento. Sin juicios, encontraremos los patrones que repites y para qué los mantienes.",
   },
   {
     name: astrologiaNom,
