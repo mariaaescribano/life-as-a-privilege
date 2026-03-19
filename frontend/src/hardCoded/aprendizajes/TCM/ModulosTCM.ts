@@ -173,7 +173,7 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
       { 
         id:"tcm0",
         nom: "Recursos a tu disposición",
-        link:`/recursos/` + tcmNomLink,
+        link:`/recursos/` + tcmNomLink + "?curso=cincoelementos",
         linkAnterior:"",
         linkNext:"",
         descripcion:"Recursos esenciales para acompañar tu aprendizaje y profundizar en la Medicina Tradicional China.",

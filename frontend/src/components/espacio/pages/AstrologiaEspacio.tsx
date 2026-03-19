@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import SiteFooter from "../../global/Footer";
+import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 
 /* ══════════════════════════════════════════════
    SIGNOS DEL ZODIACO
@@ -925,6 +926,13 @@ export default function AstrologiaEspacio() {
           )}
         </Flex>
       </Box>
+
+      <SolicitarAutoevaluacionButton
+        bgColor={astrologiaBg}
+        color={astrologiaTxt}
+        icon={<AstrologiaIcon size="26px" />}
+        disciplineName="Astrología"
+      />
 
      <SiteFooter />
 

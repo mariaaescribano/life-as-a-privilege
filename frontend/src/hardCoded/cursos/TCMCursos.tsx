@@ -38,7 +38,7 @@ export const tcmCursos: ModalidadInfo = {
         "Profundiza en los Cinco Elementos y sus correspondencias, los ciclos Generador y Controlador, y cómo se manifiestan en el cuerpo y en la vida cotidiana.",
       precio: null,
       numLecciones: 17,
-      icon: <CincoElementosIcon size={{ base: "40px", md: "50px" }} />,
+      icon: <TCMIcon size={{ base: "40px", md: "50px" }} />,
       modulos: modulostcmCincoElementos,
     },
   ],

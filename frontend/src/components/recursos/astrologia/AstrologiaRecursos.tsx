@@ -312,6 +312,7 @@ export default function AstrologiaRecursos() {
           <DisciplineHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Astrología"
+            subtitle="El Ascendente, el Sol y la Luna"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             maxW="1100px"

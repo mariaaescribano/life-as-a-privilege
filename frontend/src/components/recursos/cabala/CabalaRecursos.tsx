@@ -249,6 +249,7 @@ export default function CabalaRecursos() {
           <DisciplineHeader
             icon={<CabalaIcon size={{ base: "40px", md: "50px" }} />}
             title={cabalaNom}
+            subtitle="Los fundamentos"
             bgColor={cabalaBg}
             color={cabalaTxt}
             onIconClick={() => navigate("/aprendizaje/modulosPage/Cábala/cabala-curso-1")}

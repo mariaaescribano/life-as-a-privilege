@@ -1268,6 +1268,7 @@ const TCMPage = () => {
         <DisciplineHeader
           icon={<TCMIcon size={{base: "40px", md:"50px"}}/>}
           title={tcmNom}
+          subtitle={isCincoElementos ? "Los Cinco Elementos" : "Los fundamentos"}
           bgColor={tcmBg}
           color={tcmTxt}
           onIconClick={() => navigate(isCincoElementos ? "/aprendizaje/modulosPage/medicinachina/tcm-curso-2" : "/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}

@@ -7,6 +7,7 @@ import SiteHeader from "../../global/SiteHeader";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { API_URL, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
+import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 import {
   RECS_CONSTITUCIONES,
   RECS_ELEMENTOS,
@@ -692,40 +693,6 @@ export default function TCMespacio() {
                 </SimpleGrid>
               </Box>
 
-              {/* ══ BOTÓN DIAGNÓSTICO COMPLETO ══ */}
-              <Flex justify="center" w="100%" maxW="900px">
-                <Flex
-                  as="button"
-                  align="center"
-                  justify="center"
-                  direction="row"
-                  gap={3}
-                  px={{ base: 8, md: 12 }}
-                  py={{ base: 3, md: 4 }}
-                  borderRadius="full"
-                  border="2px solid rgba(255,255,255,0.7)"
-                  bg={tcmBg}
-                  cursor="pointer"
-                  color={tcmTxt}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "lg", md: "xl" }}
-                  letterSpacing="0.12em"
-                  textShadow="0 2px 8px rgba(0,0,0,0.2)"
-                  boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-                  onClick={() => setDiagModalOpen(true)}
-                  _hover={{
-                    transform: "translateY(-2px)",
-                  }}
-                  transition="all 0.25s ease"
-                >
-                  <Box w="26px" h="26px" flexShrink={0} filter={`drop-shadow(0 0 6px ${tcmTxt}88)`}>
-                    <TCMIcon size="26px" />
-                  </Box>
-                  <Text>Solicitar diagnóstico completo</Text>
-                </Flex>
-              </Flex>
-
               {/* ══ SECCIÓN 1: CONSTITUCIÓN ══ */}
               <ResultSection
                 testNum={1}
@@ -771,6 +738,13 @@ export default function TCMespacio() {
           )}
         </Flex>
       </Box>
+
+      <SolicitarAutoevaluacionButton
+        bgColor={tcmBg}
+        color={tcmTxt}
+        icon={<TCMIcon size="26px" />}
+        disciplineName="Medicina China"
+      />
 
       {/* ── FOOTER ── */}
       <SiteFooter />

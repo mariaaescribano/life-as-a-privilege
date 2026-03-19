@@ -7,6 +7,7 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { CabalaIcon, cabalaNom, cabalaBg, cabalaTxt } from "../../../GlobalVariables";
+import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 import ArbolDeLaVida, { type Sefira } from "../../global/ArbolDeLaVida";
 import EditableCard from "../components/EditableCard";
 import { preguntasCabala } from "../../../hardCoded/espacio/PreguntasCabala";
@@ -167,6 +168,13 @@ export default function CabalaEspacio() {
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      <SolicitarAutoevaluacionButton
+        bgColor={cabalaBg}
+        color={cabalaTxt}
+        icon={<CabalaIcon size="26px" />}
+        disciplineName="Cábala"
+      />
 
       <SiteFooter />
     </Box>

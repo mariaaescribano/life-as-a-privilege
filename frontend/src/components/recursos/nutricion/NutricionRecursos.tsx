@@ -691,6 +691,7 @@ export default function NutricionRecursos() {
           <DisciplineHeader
             icon={<NutricionIcon size={{ base: "40px", md: "50px" }} />}
             title={nutricionNom}
+            subtitle="Las bases de la nutrición"
             bgColor={BG}
             color={TXT}
             onIconClick={() => navigate("/aprendizaje/modulosPage/nutricion/nut-curso-1")}

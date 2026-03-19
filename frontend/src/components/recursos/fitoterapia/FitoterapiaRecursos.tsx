@@ -595,6 +595,7 @@ const FitoterapiaRecursos = () => {
         <DisciplineHeader
           icon={<FitoterapiaIcon size={{ base: "35px", md: "45px" }} />}
           title={fitoterapiaNom}
+          subtitle="Plantas comunes"
           bgColor={fitoterapiaBg}
           color={fitoterapiaTxt}
           onIconClick={() => navigate("/aprendizaje/modulosPage/Fitoterapia/fito-curso-1")}

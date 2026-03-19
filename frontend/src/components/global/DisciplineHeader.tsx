@@ -4,6 +4,7 @@ import React from "react";
 interface DisciplineHeaderProps {
   icon: React.ReactNode;
   title: string;
+  subtitle?: string;
   bgColor: string;
   color: string;
   maxW?: string;
@@ -11,7 +12,7 @@ interface DisciplineHeaderProps {
   onIconClick?: () => void;
 }
 
-export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 }, onIconClick }: DisciplineHeaderProps) {
+export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 }, onIconClick }: DisciplineHeaderProps) {
 
   return (
     <Box
@@ -44,16 +45,31 @@ export function DisciplineHeader({ icon, title, bgColor, color, maxW = "850px", 
         >
           {icon}
         </Box>
-        <Text
-          color={color}
-          fontSize={{ base: "2xl", md: "5xl" }}
-          fontWeight="700"
-          letterSpacing="0.05em"
-         // textShadow="0 2px 12px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)"
-          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
-        >
-          {title}
-        </Text>
+        <Box>
+          <Text
+            color={color}
+            fontSize={{ base: "2xl", md: "5xl" }}
+            fontWeight="700"
+            letterSpacing="0.05em"
+            filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
+            lineHeight="1.15"
+          >
+            {title}
+          </Text>
+          {subtitle && (
+            <Text
+              color={color}
+              fontSize={{ base: "md", md: "xl" }}
+              fontWeight="500"
+              letterSpacing="0.03em"
+              opacity={0.72}
+              mt={1}
+              filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))"
+            >
+              {subtitle}
+            </Text>
+          )}
+        </Box>
       </Flex>
     </Box>
   );

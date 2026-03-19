@@ -16,20 +16,28 @@ interface ContactModalProps {
   color: string;
   emailSubject: string;
   showDescription?: boolean;
+  showCheckboxes?: boolean;
+  emailOrPhone?: boolean;
+  textareaPlaceholder?: string;
 }
 
 export function ContactModal({
-  isOpen, onClose, title, icon, subtitle, bgColor, color, emailSubject, showDescription = false,
+  isOpen, onClose, title, icon, subtitle, bgColor, color, emailSubject,
+  showDescription = false, showCheckboxes = true, emailOrPhone = false,
+  textareaPlaceholder = "¿En qué puedo ayudarte?",
 }: ContactModalProps) {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [claseParticular, setClaseParticular] = useState(false);
+  const [conocerme, setConocerme] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(false);
 
   const handleClose = () => {
     setNombre(""); setEmail(""); setDescripcion("");
+    setClaseParticular(false); setConocerme(false);
     setSent(false); setError(false);
     onClose();
   };
@@ -37,12 +45,22 @@ export function ContactModal({
   const handleSubmit = async () => {
     if (!nombre.trim() || !email.trim()) return;
     setSending(true); setError(false);
+
+    const opciones: string[] = [];
+    if (claseParticular) opciones.push("Quiero clases particulares");
+    if (conocerme) opciones.push("Quiero conocerme según esta modalidad");
+
+    const partes: string[] = [];
+    if (opciones.length > 0) partes.push(`Interesado en: ${opciones.join(", ")}`);
+    if (descripcion.trim()) partes.push(descripcion.trim());
+    const mensajeFinal = partes.length > 0 ? partes.join("\n\n") : "—";
+
     try {
       await axios.post(`${API_URL}/contact`, {
         nombre: nombre.trim(),
         email: email.trim(),
         titulo: emailSubject,
-        mensaje: descripcion.trim() || "—",
+        mensaje: mensajeFinal,
       });
       setSent(true);
     } catch {
@@ -94,7 +112,8 @@ export function ContactModal({
                 textAlign="center"
                 lineHeight="1.7"
               >
-                Me pondré en contacto contigo pronto.
+                Muy pronto me pondré en contacto contigo.
+                Gracias por tu confianza.
               </Text>
               <Box
                 as="button"
@@ -132,7 +151,7 @@ export function ContactModal({
                     {title}
                   </Text>
                 </Flex>
-                {subtitle && (
+                {/* {subtitle && (
                   <Text
                     color={`${color}cc`}
                     fontSize={{ base: "lg", md: "xl" }}
@@ -142,7 +161,7 @@ export function ContactModal({
                   >
                     {subtitle}
                   </Text>
-                )}
+                )} */}
               </Box>
 
               <Box h="1px" bg={`${color}22`} borderRadius="full" />
@@ -154,15 +173,65 @@ export function ContactModal({
                 {...inputStyle}
               />
               <Input
-                placeholder="Tu email"
-                type="email"
+                placeholder={emailOrPhone ? "Tu email o teléfono" : "Tu email"}
+                type={emailOrPhone ? "text" : "email"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 {...inputStyle}
               />
+
+              {/* ── Checkboxes ── */}
+              {showCheckboxes && (
+                <Flex direction="column" gap={3}>
+                  {[
+                    { label: "Quiero clases particulares", value: claseParticular, set: setClaseParticular },
+                    { label: "Quiero conocerme según esta modalidad", value: conocerme, set: setConocerme },
+                  ].map(({ label, value, set }) => (
+                    <Flex
+                      key={label}
+                      as="button"
+                      type="button"
+                      align="center"
+                      gap={3}
+                      onClick={() => set(!value)}
+                      cursor="pointer"
+                      bg="transparent"
+                      border="none"
+                      p={0}
+                      textAlign="left"
+                    >
+                      <Box
+                        w="20px" h="20px"
+                        flexShrink={0}
+                        borderRadius="5px"
+                        border={`2px solid ${value ? color : `${color}55`}`}
+                        bg={value ? color : "transparent"}
+                        display="flex" alignItems="center" justifyContent="center"
+                        transition="all 0.18s"
+                      >
+                        {value && (
+                          <Box as="span" color={bgColor} fontSize="12px" fontWeight="900" lineHeight={1}>
+                            ✓
+                          </Box>
+                        )}
+                      </Box>
+                      <Text
+                        color={value ? color : `${color}99`}
+                        fontSize={{ base: "md", md: "lg" }}
+                        fontFamily="'EB Garamond', serif"
+                        fontWeight={value ? "600" : "400"}
+                        transition="all 0.18s"
+                      >
+                        {label}
+                      </Text>
+                    </Flex>
+                  ))}
+                </Flex>
+              )}
+
               {showDescription && (
                 <Textarea
-                  placeholder="¿Qué te gustaría saber? (opcional)"
+                  placeholder={textareaPlaceholder}
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
                   rows={3}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 
 import ThemeSection from "../../../components/espacio/components/ThemeSection";
@@ -14,6 +14,7 @@ import {
   neuropsicologiaTxt,
 } from "../../../GlobalVariables";
 import SiteFooter from "../../global/Footer";
+import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 
 const ThemePreguntas = () => {
   const { themeId } = useParams<{ themeId: string }>();
@@ -62,7 +63,6 @@ const ThemePreguntas = () => {
             alignItems="center"
             px={{ base: 5, md: 10, lg: 16 }}
             pt={{ base: 10, md: 14 }}
-            pb={{ base: 14, md: 20 }}
           >
             <DisciplineHeader
               icon={theme.icon}
@@ -84,6 +84,13 @@ const ThemePreguntas = () => {
                 />
               ))}
             </VStack>
+
+            <SolicitarAutoevaluacionButton
+              bgColor={neuropsicologiaBg}
+              color={neuropsicologiaTxt}
+              icon={<NeuropsicologiaIcon size="26px" />}
+              disciplineName="Neuropsicología"
+            />
           </Flex>
         )}
       </Box>
