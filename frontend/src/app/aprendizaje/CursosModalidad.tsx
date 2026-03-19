@@ -43,6 +43,8 @@ function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
         letterSpacing="0.04em"
         lineHeight="1.2"
         mb={"10px"}
+        mt="5px"
+       // textAlign="center"
         style={{ textShadow: `1px 2px 8px ${color}66` }}
       >
         {curso.titulo}

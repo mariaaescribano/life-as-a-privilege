@@ -19,7 +19,7 @@ export const nutricionCursos: ModalidadInfo = {
       id: "nut-curso-1",
       cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-1",
       titulo: "Las bases de la nutrición",
-      foto: "/img/nutricion/nutricion.jpg",
+      foto: "/img/nutri/nutriFotoCurso1.png",
       descripcion:
         "Entiende qué hay más allá de los alimentos que consumimos cada día y toma las riendas de tu claridad mental transformando tu dieta.",
       precio: null,

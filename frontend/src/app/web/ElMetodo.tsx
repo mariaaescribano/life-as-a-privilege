@@ -215,6 +215,7 @@ export default function ElMetodo() {
           px={{ base: 8, md: 14 }}
           py={{ base: 8, md: 10 }}
           display="flex"
+          mt="10px"
           flexDirection={{ base: "column", md: "row" }}
           alignItems="center"
           gap={{ base: 6, md: 10 }}
@@ -244,7 +245,7 @@ export default function ElMetodo() {
             textShadow="0 2px 14px rgba(0,80,70,0.4)"
           >
             EL MÉTODO DE<br />
-            <Box as="span" fontStyle="italic">
+            <Box as="span" fontStyle="italic" display="block" mt={2}>
               LIFE AS A PRIVILEGE
             </Box>
           </Text>

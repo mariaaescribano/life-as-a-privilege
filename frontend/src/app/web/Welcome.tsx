@@ -14,6 +14,7 @@ import {
   tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
   EspacioPersonalIcon,
   AprendizajeIcon,
+  nutricionNomLink,
 } from "../../GlobalVariables";
 
 type Discipline = {
@@ -69,8 +70,8 @@ const disciplines: Discipline[] = [
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
     desc: nutricionDescrip,
-    link: "/aprendizaje/modulosPage/" + nutricionNom,
-    available:false
+    link: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
+    available:true
   },
   {
     name: ayurvedaNom,
@@ -175,7 +176,7 @@ const Welcome = () => {
           </Box>
 
           {/* Texto */}
-          <Box flex="1" textAlign={{ base: "center", md: "left" }}>
+          <Box flex="1" mt={{ base: "10px", md: "30px" }} textAlign={{ base: "center", md: "left" }}>
             <Text
               color="white"
               fontSize={{ base: "3xl", md: "4xl", lg: "4xl" }}
@@ -196,7 +197,7 @@ const Welcome = () => {
             >
               Es una plataforma gratuita que integra conocimientos ancestrales para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación personal.
             </Text>
-            <Box mt={5} display="flex" justifyContent={{ base: "center", md: "flex-end" }}>
+            <Box mt={{ base: "30px", md: "20px" }}  display="flex" justifyContent={{ base: "center", md: "flex-end" }}>
               <Flex
                 as="button"
                 onClick={() => navigate("/elMetodo")}
@@ -269,7 +270,7 @@ const Welcome = () => {
           </Box>
 
           {/* Texto */}
-          <Box flex="1" textAlign={{ base: "center", md: "left" }} display="flex" flexDirection="column">
+          <Box flex="1" mt={{ base: "10px", md: "20px" }} textAlign={{ base: "center", md: "left" }} display="flex" flexDirection="column">
             <Text
               color="white"
               fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
@@ -278,7 +279,7 @@ const Welcome = () => {
               letterSpacing="0.04em"
               lineHeight="1.2"
               textShadow="0 2px 10px rgba(0,60,50,0.5)"
-              mb={3}
+              mb={{ base: 0, md: 3 }}
             >
               María Escribano
             </Text>
@@ -509,8 +510,8 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 6px rgba(255, 255, 255, 0.3)"
             >
-              Crea una cuenta o iniciar sesión para acceder al{" "}
-              <Box as="span" fontWeight="700">Espacio Personal de crecimiento</Box>
+              Crea una cuenta o inicia sesión
+              {/* <Box as="span" fontWeight="700">Espacio Personal de crecimiento</Box> */}
             </Text>
 
             {/* Botón login */}

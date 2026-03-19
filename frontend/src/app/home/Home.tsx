@@ -11,6 +11,7 @@ import {
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
+  nutricionNomLink,
   EspacioPersonalIcon, AprendizajeIcon,
   fisiologiaDescrip,
   neuropsicologiaDescrip,
@@ -75,9 +76,9 @@ const disciplines: Discipline[] = [
     name: nutricionNom, bg: nutricionBg, txt: nutricionTxt,
     description: nutricionDescrip,
     renderIcon: (s) => <NutricionIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + nutricionNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + nutricionNom,
-    available:false
+    linkEspacio: "/espacio/questions/" + nutricionNomLink,
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
+    available:true
   },
   {
     name: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt,
