@@ -105,6 +105,36 @@ export class TcmService {
     }
   }
 
+  /* GET — respuestas individuales de un test */
+  async getRespuestas(
+    userId: string,
+    testNum: number,
+  ): Promise<
+    Array<{
+      seccion: string;
+      pregunta_idx: number;
+      pregunta: string;
+      respuesta: number;
+    }>
+  > {
+    try {
+      const { data, error } = await this.databaseService
+        .getClient()
+        .from('tcm_respuestas')
+        .select('seccion, pregunta_idx, pregunta, respuesta')
+        .eq('user_id', userId)
+        .eq('test_num', testNum)
+        .order('seccion', { ascending: true })
+        .order('pregunta_idx', { ascending: true });
+
+      if (error) throw error;
+      return data ?? [];
+    } catch (error) {
+      console.error('Error en getRespuestas:', error);
+      return [];
+    }
+  }
+
   /* GET — datos TCM de un usuario */
   async getTcmData(userId: string): Promise<{
     userId: string;

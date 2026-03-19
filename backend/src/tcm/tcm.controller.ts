@@ -53,6 +53,17 @@ export class TcmController {
     );
   }
 
+  /* GET /tcm/respuestas/:userId/:testNum
+     Devuelve las respuestas individuales de un test para un usuario.
+     MUST be declared BEFORE @Get(':userId') to avoid route conflicts. */
+  @Get('respuestas/:userId/:testNum')
+  async getRespuestas(
+    @Param('userId') userId: string,
+    @Param('testNum') testNum: string,
+  ) {
+    return await this.tcmService.getRespuestas(userId, parseInt(testNum, 10));
+  }
+
   /* GET /tcm/:userId
      Devuelve los datos TCM del usuario (constitución, elemento, desequilibrio) */
   @Get(':userId')

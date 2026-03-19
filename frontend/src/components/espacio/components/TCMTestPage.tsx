@@ -6,6 +6,7 @@ import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteHeader from "../../global/SiteHeader";
 import { API_URL, EspacioPersonalIcon, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
 import { getTheme } from "../data/tcmTheme";
+import { generateTcmPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -690,7 +691,48 @@ export default function TCMTestPage({
               </Box>}
             </Box>
           )}
-           {/* ── VOLVER A MI ESPACIO ── */}
+           {/* ── DESCARGAR PDF ── */}
+              {showResults && tcmField && (
+                <Flex justify="center" mt={4}>
+                  <Box
+                    as="button"
+                    onClick={() => {
+                      const testNum =
+                        tcmField === "constitucion" ? 1 : tcmField === "elemento" ? 2 : 3;
+                      const respuestasFlat: TcmRespuesta[] = secciones.flatMap((sec, si) =>
+                        sec.preguntas.map((pregunta, qi) => ({
+                          seccion: sec.nombre,
+                          pregunta_idx: qi,
+                          pregunta,
+                          respuesta: answers[si][qi] ?? 0,
+                        }))
+                      );
+                      const resultado = secciones[totals.indexOf(Math.max(...totals))]?.nombre;
+                      generateTcmPdf(testNum, respuestasFlat, resultado);
+                    }}
+                    px={8}
+                    py={3}
+                    borderRadius="full"
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    fontWeight="600"
+                    letterSpacing="0.08em"
+                    border="1.5px solid rgba(218,113,113,0.6)"
+                    bg="transparent"
+                    color="#da7171"
+                    cursor="pointer"
+                    transition="all 0.22s"
+                    _hover={{
+                      boxShadow: "0 0 16px rgba(218,113,113,0.35)",
+                      borderColor: "#da7171",
+                    }}
+                  >
+                    Descargar mis respuestas
+                  </Box>
+                </Flex>
+              )}
+
+              {/* ── VOLVER A MI ESPACIO ── */}
               {backToSpaceLink && (
                 <Flex justify="center" mt={8}>
                   <Box

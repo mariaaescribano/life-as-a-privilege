@@ -249,27 +249,29 @@ const Home = () => {
                     as="button"
                     onClick={() => navigate("/elMetodo")}
                     align="center"
-                    gap={2}
-                    mt={3}
-                    px={6}
-                    py="9px"
+                    gap={3}
+                    mt={4}
+                    px={{ base: 7, md: 9 }}
+                    py={{ base: "12px", md: "14px" }}
                     borderRadius="full"
-                    border="1px solid rgba(255,255,255,0.38)"
-                    bg="rgba(255,255,255,0.09)"
+                    border="1.5px solid rgba(255,255,255,0.55)"
+                    bg="rgba(255,255,255,0.12)"
                     cursor="pointer"
-                    _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "rgba(255,255,255,0.7)" }}
+                    _hover={{ bg: "rgba(255,255,255,0.22)", borderColor: "rgba(255,255,255,0.85)" }}
                     transition="all 0.22s ease"
+                    boxShadow="0 4px 20px rgba(255,255,255,0.1)"
                   >
-                    <Image src="/img/icono/life.png" alt="" h="22px" objectFit="contain" />
+                    <Image src="/img/icono/life.png" alt="" h={{ base: "26px", md: "30px" }} objectFit="contain" />
                     <Text
-                      color="rgba(255,255,255,0.9)"
+                      color="white"
                       fontFamily="'EB Garamond', serif"
-                      fontWeight="600"
-                      fontSize="sm"
-                      letterSpacing="0.16em"
+                      fontWeight="700"
+                      fontSize={{ base: "lg", md: "xl" }}
+                      letterSpacing="0.14em"
                     >
                       El Método
                     </Text>
+                    <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1">→</Text>
                   </Flex>
                 </VStack>
               </Box>
@@ -397,28 +399,6 @@ const Home = () => {
 
             </Box>
 
-            {/* ── ENLACE EL MÉTODO ── */}
-            <Flex justify="center" pt={2} pb={4}>
-              <Box
-                as="button"
-                onClick={() => navigate("/elMetodo")}
-                color="rgba(255,255,255,0.9)"
-                fontFamily="'EB Garamond', serif"
-                fontWeight="600"
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.15em"
-                px={8}
-                py="10px"
-                borderRadius="full"
-                border="1px solid rgba(255,255,255,0.4)"
-                bg="rgba(255,255,255,0.08)"
-                cursor="pointer"
-                _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.7)" }}
-                transition="all 0.22s ease"
-              >
-                EL MÉTODO →
-              </Box>
-            </Flex>
 
             {/* ── BANNERS PRODUCTOS & REELS ── */}
             {/* <Flex gap={{ base: 5, md: 7 }} direction={{ base: "column", md: "row" }}>

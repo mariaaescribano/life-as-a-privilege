@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ const SiteFooter = () => {
         © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
       </Text>
       <Flex justify="center" gap={6} mt={3} flexWrap="wrap" alignItems="center">
+        <Flex align="center" gap={6} flexWrap="wrap" justify="center">
         <Flex
           align="center"
           gap="6px"
@@ -94,6 +95,32 @@ const SiteFooter = () => {
           </svg>
           Donar
         </Box>
+        </Flex>
+      </Flex>
+
+      <Flex justify="center" mt={6}>
+        <Flex
+          as="button"
+          align="center"
+          gap="8px"
+          cursor="pointer"
+          opacity={0.75}
+          _hover={{ opacity: 1 }}
+          transition="opacity 0.2s"
+          onClick={() => navigate("/elmetodo")}
+        >
+          <Image src="/img/icono/life.png" alt="Life as a Privilege" h="32px" objectFit="contain" />
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="400"
+            fontSize="sm"
+            letterSpacing="0.14em"
+            fontStyle="italic"
+          >
+            El Método
+          </Text>
+        </Flex>
       </Flex>
     </Box>
   );

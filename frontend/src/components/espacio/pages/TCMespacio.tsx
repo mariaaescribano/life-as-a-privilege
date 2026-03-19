@@ -16,6 +16,7 @@ import {
 } from "../data/tcmRecommendations";
 import { getTheme } from "../data/tcmTheme";
 import SiteFooter from "../../global/Footer";
+import { generateTcmPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -276,6 +277,7 @@ type ResultSectionProps = {
   navigate: (path: string) => void;
   useElementColor?: boolean;
   onSaberMas: () => void;
+  onDownloadPdf?: () => void;
 };
 
 const ResultSection = ({
@@ -290,6 +292,7 @@ const ResultSection = ({
   navigate,
   useElementColor,
   onSaberMas,
+  onDownloadPdf,
 }: ResultSectionProps) => {
   const locked = !result;
   const rec = result ? recs[result] : null;
@@ -543,7 +546,31 @@ const ResultSection = ({
             >
               Quiero saber más
             </Box>
-             <Box
+            {onDownloadPdf && (
+              <Box
+                as="button"
+                onClick={onDownloadPdf}
+                px={7}
+                py={2.5}
+                borderRadius="full"
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "sm", md: "md" }}
+                fontWeight="600"
+                letterSpacing="0.08em"
+                border="1.5px solid rgba(218,113,113,0.6)"
+                bg="transparent"
+                color="#da7171"
+                cursor="pointer"
+                transition="all 0.2s"
+                _hover={{
+                  boxShadow: "0 0 16px rgba(218,113,113,0.35)",
+                  borderColor: "#da7171",
+                }}
+              >
+                Descargar PDF
+              </Box>
+            )}
+            <Box
               as="button"
               onClick={() => navigate(testLink)}
               px={7}
@@ -629,6 +656,19 @@ export default function TCMespacio() {
   const constitucion = tcmData?.constitucion ?? null;
   const elemento = tcmData?.elemento ?? null;
   const desequilibrio = tcmData?.desequilibrio ?? null;
+
+  const handleDownloadPdf = async (testNum: number, resultado: string | null) => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId || !resultado) return;
+    try {
+      const { data } = await axios.get<TcmRespuesta[]>(
+        `${API_URL}/tcm/respuestas/${userId}/${testNum}`
+      );
+      generateTcmPdf(testNum, data, resultado);
+    } catch (e) {
+      console.error("Error al descargar respuestas PDF:", e);
+    }
+  };
 
   return (
     <Box
@@ -736,6 +776,7 @@ export default function TCMespacio() {
                 videos={VIDEOS_CONSTITUCION}
                 navigate={navigate}
                 onSaberMas={() => setSaberMasOpen(true)}
+                onDownloadPdf={constitucion ? () => handleDownloadPdf(1, constitucion) : undefined}
               />
 
               {/* ══ SECCIÓN 2: ELEMENTO ══ */}
@@ -751,6 +792,7 @@ export default function TCMespacio() {
                 navigate={navigate}
                 useElementColor
                 onSaberMas={() => setSaberMasOpen(true)}
+                onDownloadPdf={elemento ? () => handleDownloadPdf(2, elemento) : undefined}
               />
 
               {/* ══ SECCIÓN 3: DESEQUILIBRIO ══ */}
@@ -766,6 +808,7 @@ export default function TCMespacio() {
                 navigate={navigate}
                 useElementColor
                 onSaberMas={() => setSaberMasOpen(true)}
+                onDownloadPdf={desequilibrio ? () => handleDownloadPdf(3, desequilibrio) : undefined}
               />
             </>
           )}
