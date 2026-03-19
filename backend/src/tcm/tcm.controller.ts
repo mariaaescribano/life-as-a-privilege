@@ -29,6 +29,30 @@ export class TcmController {
     return await this.tcmService.saveDesequilibrio(body.userId, body.desequilibrio);
   }
 
+  /* POST /tcm/respuestas
+     Body: { userId, testNum, respuestas: [{seccion, preguntaIdx, pregunta, respuesta}] }
+     Guarda todas las respuestas individuales de un test */
+  @Post('respuestas')
+  async saveRespuestas(
+    @Body()
+    body: {
+      userId: string;
+      testNum: number;
+      respuestas: Array<{
+        seccion: string;
+        preguntaIdx: number;
+        pregunta: string;
+        respuesta: number;
+      }>;
+    },
+  ) {
+    return await this.tcmService.saveRespuestas(
+      body.userId,
+      body.testNum,
+      body.respuestas,
+    );
+  }
+
   /* GET /tcm/:userId
      Devuelve los datos TCM del usuario (constitución, elemento, desequilibrio) */
   @Get(':userId')

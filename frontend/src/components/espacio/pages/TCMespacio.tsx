@@ -275,6 +275,7 @@ type ResultSectionProps = {
   videos: Record<string, string | undefined>;
   navigate: (path: string) => void;
   useElementColor?: boolean;
+  onSaberMas: () => void;
 };
 
 const ResultSection = ({
@@ -288,6 +289,7 @@ const ResultSection = ({
   videos,
   navigate,
   useElementColor,
+  onSaberMas,
 }: ResultSectionProps) => {
   const locked = !result;
   const rec = result ? recs[result] : null;
@@ -511,9 +513,37 @@ const ResultSection = ({
             );
           })()}
 
-          {/* Botón rehacer test */}
-          <Flex justify="center" mt={2}>
+          {/* Botones rehacer + quiero saber más */}
+          <Flex justify="center" direction="column" align="center" gap={4} mt={4} wrap="wrap">
             <Box
+              as="button"
+              onClick={onSaberMas}
+              px={{ base: 7, md: 10 }}
+              py={{ base: 3, md: 4 }}
+              borderRadius="full"
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="700"
+              letterSpacing="0.1em"
+              fontStyle="italic"
+              border={`2px solid ${tcmTxt}`}
+              bg={tcmTxt}
+              color={tcmBg}
+              cursor="pointer"
+              transition="all 0.25s"
+              boxShadow={`0 0 28px ${tcmTxt}55, 0 4px 16px rgba(0,0,0,0.25)`}
+              _hover={{
+                bg: "white",
+                borderColor: "white",
+                color: tcmBg,
+                boxShadow: `0 0 44px ${tcmTxt}88, 0 6px 24px rgba(0,0,0,0.3)`,
+                transform: "translateY(-2px)",
+              }}
+              _active={{ transform: "translateY(0)" }}
+            >
+              Quiero saber más
+            </Box>
+             <Box
               as="button"
               onClick={() => navigate(testLink)}
               px={7}
@@ -572,6 +602,7 @@ export default function TCMespacio() {
   const [tcmData, setTcmData] = useState<TcmData | null>(null);
   const [loading, setLoading] = useState(true);
   const [diagModalOpen, setDiagModalOpen] = useState(false);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   const fetchData = () => {
     const userId = sessionStorage.getItem("userId");
@@ -703,8 +734,8 @@ export default function TCMespacio() {
                 recs={RECS_CONSTITUCIONES}
                 descriptions={DESC_CONSTITUCION}
                 videos={VIDEOS_CONSTITUCION}
-
                 navigate={navigate}
+                onSaberMas={() => setSaberMasOpen(true)}
               />
 
               {/* ══ SECCIÓN 2: ELEMENTO ══ */}
@@ -719,6 +750,7 @@ export default function TCMespacio() {
                 videos={VIDEOS_ELEMENTO}
                 navigate={navigate}
                 useElementColor
+                onSaberMas={() => setSaberMasOpen(true)}
               />
 
               {/* ══ SECCIÓN 3: DESEQUILIBRIO ══ */}
@@ -733,6 +765,7 @@ export default function TCMespacio() {
                 videos={VIDEOS_DESEQUILIBRIO}
                 navigate={navigate}
                 useElementColor
+                onSaberMas={() => setSaberMasOpen(true)}
               />
             </>
           )}
@@ -748,6 +781,20 @@ export default function TCMespacio() {
 
       {/* ── FOOTER ── */}
       <SiteFooter />
+
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="Autoevaluación personalizada"
+        icon={<TCMIcon size="24px" />}
+        bgColor={tcmBg}
+        color={tcmTxt}
+        emailSubject="Solicitud de autoevaluación personalizada — TCM"
+        showDescription={true}
+        showCheckboxes={false}
+        emailOrPhone={true}
+        textareaPlaceholder="¿Te gustaría contarme algo por adelantado?"
+      />
 
       <ContactModal
         isOpen={diagModalOpen}

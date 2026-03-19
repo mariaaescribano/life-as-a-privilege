@@ -71,14 +71,15 @@ export function ContactModal({
   };
 
   const inputStyle = {
-    bg: `${bgColor}cc`,
-    border: `1px solid ${color}44`,
+    bg: "rgba(255,255,255,0.08)",
+    border: `1px solid ${color}77`,
     color: color,
     borderRadius: "xl",
     fontFamily: "'EB Garamond', serif",
     fontSize: { base: "md", md: "lg" },
-    _placeholder: { color: `${color}55` },
-    _focus: { borderColor: `${color}99`, boxShadow: `0 0 0 1px ${color}55` },
+    _placeholder: { color: `${color}66` },
+    _focus: { borderColor: color, boxShadow: `0 0 0 1px ${color}55` },
+    _hover: { borderColor: `${color}bb` },
   };
 
   return (

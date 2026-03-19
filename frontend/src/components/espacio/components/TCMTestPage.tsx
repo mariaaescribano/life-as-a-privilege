@@ -311,9 +311,9 @@ export default function TCMTestPage({
     };
     localStorage.setItem(localStorageKey, JSON.stringify(result));
 
-    if (tcmField && primaryNombre) {
-      const userId = sessionStorage.getItem("userId");
-      if (userId) {
+    const userId = sessionStorage.getItem("userId");
+    if (userId) {
+      if (tcmField && primaryNombre) {
         try {
           await axios.post(`${API_URL}/tcm/${tcmField}`, {
             userId,
@@ -321,6 +321,24 @@ export default function TCMTestPage({
           });
         } catch (e) {
           console.error("Error al guardar resultado TCM:", e);
+        }
+      }
+
+      // Guardar respuestas individuales
+      if (tcmField) {
+        const testNum = tcmField === "constitucion" ? 1 : tcmField === "elemento" ? 2 : 3;
+        const respuestas = secciones.flatMap((sec, si) =>
+          sec.preguntas.map((pregunta, qi) => ({
+            seccion: sec.nombre,
+            preguntaIdx: qi,
+            pregunta,
+            respuesta: answers[si][qi] ?? 0,
+          }))
+        );
+        try {
+          await axios.post(`${API_URL}/tcm/respuestas`, { userId, testNum, respuestas });
+        } catch (e) {
+          console.error("Error al guardar respuestas TCM:", e);
         }
       }
     }
@@ -448,23 +466,27 @@ export default function TCMTestPage({
             <Box
               as="button"
               onClick={allAnswered ? handleShowResults : undefined}
-              px={10}
-              py={4}
+              px={{ base: 10, md: 14 }}
+              py={{ base: 4, md: 5 }}
               borderRadius="full"
               fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="600"
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontWeight="700"
               letterSpacing="0.1em"
-              border={`1.5px solid ${allAnswered ? "rgba(218,113,113,0.6)" : "rgba(218,113,113,0.18)"}`}
-              bg={allAnswered ? tcmBg : "rgba(107,4,4,0.2)"}
-              color={allAnswered ? "white" : "rgba(255,255,255,0.25)"}
+              fontStyle="italic"
+              border={`2px solid ${allAnswered ? tcmTxt : "rgba(218,113,113,0.18)"}`}
+              bg={allAnswered ? tcmTxt : "rgba(107,4,4,0.2)"}
+              color={allAnswered ? tcmBg : "rgba(255,255,255,0.25)"}
               cursor={allAnswered ? "pointer" : "not-allowed"}
-              transition="all 0.22s"
-              boxShadow={allAnswered ? "0 0 20px rgba(218,113,113,0.15)" : "none"}
+              transition="all 0.28s"
+              boxShadow={allAnswered ? `0 0 40px ${tcmTxt}66, 0 4px 24px rgba(0,0,0,0.3)` : "none"}
+              transform={allAnswered ? "scale(1)" : "scale(0.97)"}
               _hover={allAnswered ? {
-                bg: "rgba(107,4,4,0.8)",
-                borderColor: tcmTxt,
-                boxShadow: "0 0 32px rgba(218,113,113,0.3)",
+                bg: "white",
+                borderColor: "white",
+                color: tcmBg,
+                boxShadow: `0 0 60px ${tcmTxt}99, 0 6px 32px rgba(0,0,0,0.35)`,
+                transform: "translateY(-3px) scale(1.03)",
               } : {}}
             >
               Ver mis resultados

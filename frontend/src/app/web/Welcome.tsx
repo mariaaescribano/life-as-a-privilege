@@ -171,7 +171,7 @@ const Welcome = () => {
         >
           {/* Logo */}
           <Box flexShrink={0} w={{ base: "140px", md: "170px" }} alignSelf="center">
-            <Image src="/img/life.png" alt="Life as a Privilege" w="100%" objectFit="contain" />
+            <Image src="/img/icono/life.png" alt="Life as a Privilege" w="100%" objectFit="contain" />
           </Box>
 
           {/* Texto */}
@@ -196,6 +196,33 @@ const Welcome = () => {
             >
               Es una plataforma gratuita que integra conocimientos ancestrales para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación personal.
             </Text>
+            <Box mt={5} display="flex" justifyContent={{ base: "center", md: "flex-end" }}>
+              <Flex
+                as="button"
+                onClick={() => navigate("/elMetodo")}
+                align="center"
+                gap={2}
+                px={6}
+                py="9px"
+                borderRadius="full"
+                border="1px solid rgba(255,255,255,0.38)"
+                bg="rgba(255,255,255,0.09)"
+                cursor="pointer"
+                _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "rgba(255,255,255,0.7)" }}
+                transition="all 0.22s ease"
+              >
+                <Image src="/img/icono/life.png" alt="" h="22px" objectFit="contain" />
+                <Text
+                  color="rgba(255,255,255,0.9)"
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="600"
+                  fontSize="sm"
+                  letterSpacing="0.16em"
+                >
+                  El Método →
+                </Text>
+              </Flex>
+            </Box>
           </Box>
         </Box>
       </Flex>
@@ -232,7 +259,7 @@ const Welcome = () => {
             alignSelf={{ base: "center", md: "flex-start" }}
           >
             <Image
-              src="/img/me.jpg"
+              src="/img/me/me.jpg"
               alt="María Escribano"
               w="100%"
               h="100%"

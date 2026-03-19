@@ -65,6 +65,46 @@ export class TcmService {
     return this.upsertField(userId, 'desequilibrio', desequilibrio);
   }
 
+  /* POST — guardar todas las respuestas de un test */
+  async saveRespuestas(
+    userId: string,
+    testNum: number,
+    respuestas: Array<{
+      seccion: string;
+      preguntaIdx: number;
+      pregunta: string;
+      respuesta: number;
+    }>,
+  ): Promise<boolean> {
+    try {
+      const db = this.databaseService.getClient();
+
+      // Borrar respuestas previas del mismo usuario y test
+      await db
+        .from('tcm_respuestas')
+        .delete()
+        .eq('user_id', userId)
+        .eq('test_num', testNum);
+
+      const rows = respuestas.map((r) => ({
+        user_id: userId,
+        test_num: testNum,
+        seccion: r.seccion,
+        pregunta_idx: r.preguntaIdx,
+        pregunta: r.pregunta,
+        respuesta: r.respuesta,
+      }));
+
+      const { error } = await db.from('tcm_respuestas').insert(rows);
+      if (error) throw error;
+
+      return true;
+    } catch (error) {
+      console.error('Error en saveRespuestas:', error);
+      return false;
+    }
+  }
+
   /* GET — datos TCM de un usuario */
   async getTcmData(userId: string): Promise<{
     userId: string;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import { useNavigate } from "react-router-dom";
 import {
@@ -243,8 +243,34 @@ const Home = () => {
                       filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
                     }}
                   >
-                    Recuerda tratarte con paciencia, con Amor y como el Ser digno que eres. Este camino no es fácil pero merece la pena.
+                    Recuerda tratarte con paciencia, con Amor y como el Ser digno que eres.
                   </Text>
+                  <Flex
+                    as="button"
+                    onClick={() => navigate("/elMetodo")}
+                    align="center"
+                    gap={2}
+                    mt={3}
+                    px={6}
+                    py="9px"
+                    borderRadius="full"
+                    border="1px solid rgba(255,255,255,0.38)"
+                    bg="rgba(255,255,255,0.09)"
+                    cursor="pointer"
+                    _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "rgba(255,255,255,0.7)" }}
+                    transition="all 0.22s ease"
+                  >
+                    <Image src="/img/icono/life.png" alt="" h="22px" objectFit="contain" />
+                    <Text
+                      color="rgba(255,255,255,0.9)"
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="600"
+                      fontSize="sm"
+                      letterSpacing="0.16em"
+                    >
+                      El Método
+                    </Text>
+                  </Flex>
                 </VStack>
               </Box>
 
@@ -370,6 +396,29 @@ const Home = () => {
               </Grid>
 
             </Box>
+
+            {/* ── ENLACE EL MÉTODO ── */}
+            <Flex justify="center" pt={2} pb={4}>
+              <Box
+                as="button"
+                onClick={() => navigate("/elMetodo")}
+                color="rgba(255,255,255,0.9)"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="600"
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.15em"
+                px={8}
+                py="10px"
+                borderRadius="full"
+                border="1px solid rgba(255,255,255,0.4)"
+                bg="rgba(255,255,255,0.08)"
+                cursor="pointer"
+                _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.7)" }}
+                transition="all 0.22s ease"
+              >
+                EL MÉTODO →
+              </Box>
+            </Flex>
 
             {/* ── BANNERS PRODUCTOS & REELS ── */}
             {/* <Flex gap={{ base: 5, md: 7 }} direction={{ base: "column", md: "row" }}>
