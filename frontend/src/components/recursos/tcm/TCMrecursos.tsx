@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Collapse, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import { tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
+import { ContactModal } from "../../global/ContactModal";
 import TCMElementModal from "./TCMElementModal";
 import type { TCMElementData } from "./TCMElementModal";
 import TCMArrowModal from "./TCMArrowModal";
@@ -1239,6 +1240,7 @@ const TCMPage = () => {
   const [selectedRelation, setSelectedRelation] = useState<ArrowRelation | null>(null);
   const [selectedOption, setSelectedOption] = useState<TCMTableOption | null>(null);
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
   const cardsReveal    = useReveal();
   const cycles1Reveal  = useReveal();
   const tablesReveal   = useReveal();
@@ -1429,6 +1431,19 @@ const TCMPage = () => {
           </Collapse>
         </Box>
 
+        {/* ── SABER MÁS ── */}
+        <Flex justify="center" w="100%" py={4}>
+          <Box as="button" onClick={() => setSaberMasOpen(true)}
+            px={8} py={3} borderRadius="full" bg="transparent"
+            border={`1.5px solid ${tcmTxt}66`} color={tcmTxt}
+            fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
+            fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
+            _hover={{ bg: `${tcmTxt}14`, borderColor: tcmTxt }}
+          >
+            ¿Quieres saber más?
+          </Box>
+        </Flex>
+
         {/* ── SIGUE APRENDIENDO ── */}
         <Box
           ref={ctaReveal.ref}
@@ -1479,6 +1494,18 @@ const TCMPage = () => {
       </Flex>
 
       {/* ── MODALES — al nivel raíz para evitar problemas de stacking context ── */}
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="¿Quieres saber más?"
+        icon={<TCMIcon size="24px" />}
+        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        bgColor={tcmBg}
+        color={tcmTxt}
+        emailSubject={`Quiero saber más — ${tcmNom}`}
+        showDescription
+      />
+
       {modalOpen && <TCMInfoModal onClose={() => setModalOpen(false)} />}
       {selectedElement && <TCMElementModal element={selectedElement} onClose={() => setSelectedElement(null)} />}
       {selectedRelation && <TCMArrowModal relation={selectedRelation} onClose={() => setSelectedRelation(null)} />}

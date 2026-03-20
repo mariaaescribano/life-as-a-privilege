@@ -4,13 +4,13 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
 import {
-  astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmTxt,
-  nutricionBg, nutricionDescrip, NutricionIcon, nutricionNom, nutricionTxt,
-  fitoterapiaBg, fitoterapiaDescrip, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
-  cabalaBg, cabalaDescrip, CabalaIcon, cabalaNom, cabalaTxt,
-  fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
+  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  tcmBg, TCMIcon, tcmNom, tcmTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
+  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
+  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
+  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
 } from "../../GlobalVariables";
 
@@ -20,64 +20,73 @@ type ModalidadData = {
   txt: string;
   renderIcon: (size: string) => React.ReactNode;
   desc: string;
+  modalDesc: string;
 };
 
 const modalidades: ModalidadData[] = [
-  {
-    name: neuropsicologiaNom,
-    bg: neuropsicologiaBg,
-    txt: neuropsicologiaTxt,
-    renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: "Entenderemos los orígenes de tus frustraciones sin poner etiquetas al sufrimiento. Sin juicios, encontraremos los patrones que repites y para qué los mantienes.",
-  },
   {
     name: astrologiaNom,
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    desc: astrologiaDescrip,
+    desc: "Descubre los arquetipos que guían tu forma de vivir",
+    modalDesc: "A través de tu carta natal, exploraremos los arquetipos que operan en cada área de tu vida y cómo te influyen",
+  },
+  {
+    name: neuropsicologiaNom,
+    bg: neuropsicologiaBg,
+    txt: neuropsicologiaTxt,
+    renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
+    desc: "Identifica los patrones que te mantienen atrapado",
+    modalDesc: "Usando tu carta natal como mapa, exploraremos tu forma única de pensar y sentir, y los mecanismos de adaptación que desarrollaste para sobrevivir. No somos diagnósticos: somos personas que para sobrevivir tuvieron que hacer una adaptación psicológica que ya no sirve",
   },
   {
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={size} />,
-    desc: ayurvedaDescrip,
+    desc: "Conoce tu naturaleza única a través de la medicina india más antigua",
+    modalDesc: "Junto a la psicoterapia, el Ayurveda nos dará herramientas profundas para entender tu naturaleza única y qué hábitos te equilibran o te desequilibran",
   },
   {
     name: tcmNom,
     bg: tcmBg,
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
-    desc: tcmDescrip,
-  },
-  {
-    name: nutricionNom,
-    bg: nutricionBg,
-    txt: nutricionTxt,
-    renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
-    desc: nutricionDescrip,
-  },
-  {
-    name: fitoterapiaNom,
-    bg: fitoterapiaBg,
-    txt: fitoterapiaTxt,
-    renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
-    desc: fitoterapiaDescrip,
-  },
-  {
-    name: cabalaNom,
-    bg: cabalaBg,
-    txt: cabalaTxt,
-    renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
-    desc: cabalaDescrip,
+    desc: "Comprende tus desequilibrios a través de la medicina tradicional china",
+    modalDesc: "Usando la medicina tradicional china, encontraremos qué desequilibrios presentas en este momento de tu vida y los abordaremos con remedios naturales adaptados a ti",
   },
   {
     name: fisiologiaNom,
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
-    desc: fisiologiaDescrip,
+    desc: "Reconcíliate con tu cuerpo entendiéndolo en profundidad",
+    modalDesc: "Con tu constitución y tus desequilibrios ya identificados, es momento de entender cómo funciona tu cuerpo. Nos centraremos en los órganos y sistemas que más te afectan, con explicaciones claras, repitiéndolo las veces que lo necesites para entenderlo",
+  },
+  {
+    name: nutricionNom,
+    bg: nutricionBg,
+    txt: nutricionTxt,
+    renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
+    desc: "«Que tu alimento sea tu medicina y tu medicina tu alimento» — Hipócrates",
+    modalDesc: "Como ya entendemos en profundidad tus desequilibrios, es hora de ver cómo podemos equilibrarnos a través de nuestros hábitos diarios. Esta modalidad no solo abarca la microbiología de la nutrición y su interacción con nuestras células, sino que también hablaremos de los alimentos según la medicina china y la ayurveda",
+  },
+  {
+    name: fitoterapiaNom,
+    bg: fitoterapiaBg,
+    txt: fitoterapiaTxt,
+    renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
+    desc: "Lo que necesitas para sanar, ya existe en la naturaleza",
+    modalDesc: "Exploraremos juntos qué plantas, especias e infusiones ayudan exactamente a tu desequilibrio actual y cómo incorporarlas de forma fácil en tu día a día",
+  },
+  {
+    name: cabalaNom,
+    bg: cabalaBg,
+    txt: cabalaTxt,
+    renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
+    desc: "El camino de vuelta a ti mismo, a través del Árbol de la Vida",
+    modalDesc: "En esta última etapa, llegamos con un largo camino de autoconocimiento recorrido juntos. Usando el Árbol de la Vida y sus caminos, encontraremos cómo equilibrarnos desde adentro, convirtiéndonos en nuestra propia base segura y recordando que somos dignos de amor",
   },
 ];
 
@@ -102,9 +111,10 @@ type MetodoCardProps = {
   delay: number;
   parentVisible: boolean;
   index: number;
+  onClick: () => void;
 };
 
-function MetodoCard({ data, delay, parentVisible, index }: MetodoCardProps) {
+function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardProps) {
   return (
     <Box
       position="relative"
@@ -117,8 +127,10 @@ function MetodoCard({ data, delay, parentVisible, index }: MetodoCardProps) {
       boxShadow="0 8px 28px rgba(107,196,200,0.5), 0 2px 8px rgba(107,196,200,0.25)"
       opacity={parentVisible ? 1 : 0}
       transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.95)"}
-      transition={`opacity 0.65s ease ${delay}s, transform 0.65s ease ${delay}s`}
-      cursor="default"
+      transition={`opacity 0.65s ease ${delay}s, transform 0.65s ease ${delay}s, box-shadow 0.2s ease`}
+      cursor="pointer"
+      onClick={onClick}
+      _hover={{ boxShadow: `0 12px 40px ${data.txt}55, 0 4px 16px ${data.txt}33` }}
       textAlign="center"
       display="flex"
       flexDirection="column"
@@ -187,6 +199,7 @@ export default function ElMetodo() {
   const cardsReveal = useReveal(0.04);
   const pricingReveal = useReveal(0.1);
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -280,7 +293,8 @@ export default function ElMetodo() {
               data={m}
               delay={i * 0.1}
               parentVisible={cardsReveal.visible}
-              index={i}
+              index={i + 1}
+              onClick={() => setSelectedCard(m)}
             />
           ))}
         </Grid>
@@ -435,6 +449,100 @@ export default function ElMetodo() {
           Me interesa
         </Box>
       </Flex>
+
+      {/* ── MODAL MODALIDAD ── */}
+      {selectedCard && (
+        <Box
+          position="fixed"
+          inset={0}
+          zIndex={200}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          bg="rgba(0,0,0,0.6)"
+          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+          onClick={() => setSelectedCard(null)}
+          px={{ base: 5, md: 10 }}
+        >
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            bg={selectedCard.bg + "e8"}
+            border={`1.5px solid ${selectedCard.txt}55`}
+            sx={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
+            borderRadius="2xl"
+            boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selectedCard.txt}22`}
+            p={{ base: 8, md: 12 }}
+            maxW="560px"
+            w="100%"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={6}
+            position="relative"
+          >
+            {/* X */}
+            <Box
+              position="absolute"
+              top={4}
+              right={5}
+              as="button"
+              onClick={() => setSelectedCard(null)}
+              color={selectedCard.txt}
+              fontSize="xl"
+              cursor="pointer"
+              bg={selectedCard.txt + "22"}
+              borderRadius="full"
+              w="36px"
+              h="36px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              _hover={{ bg: selectedCard.txt + "44" }}
+              transition="background 0.2s"
+            >
+              ✕
+            </Box>
+
+            {/* Icono */}
+            <Box
+              bg={selectedCard.bg}
+              borderRadius="full"
+              w={{ base: "88px", md: "108px" }}
+              h={{ base: "88px", md: "108px" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              border={`3px solid ${selectedCard.txt}`}
+              boxShadow={`0 0 20px ${selectedCard.txt}bb, 0 2px 14px ${selectedCard.txt}77`}
+            >
+              {selectedCard.renderIcon("52px")}
+            </Box>
+
+            {/* Nombre */}
+            <Text
+              color={selectedCard.txt}
+              fontSize={{ base: "2xl", md: "3xl" }}
+              fontWeight="700"
+              letterSpacing="0.04em"
+              textAlign="center"
+            >
+              {selectedCard.name}
+            </Text>
+
+            {/* Descripción */}
+            <Text
+              color={selectedCard.txt}
+              fontSize={{ base: "lg", md: "xl" }}
+              textAlign="center"
+              lineHeight="1.9"
+              letterSpacing="0.02em"
+              opacity={0.82}
+            >
+              {selectedCard.modalDesc}
+            </Text>
+          </Box>
+        </Box>
+      )}
 
       <ContactModal
         isOpen={modalOpen}

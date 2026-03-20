@@ -14,6 +14,7 @@ import {
 import { plantas, type Planta } from "./PlantasData";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteFooter from "../../global/Footer";
+import { ContactModal } from "../../global/ContactModal";
 
 const CARD_COLOR  = fitoterapiaTxt;  // #d5ffd5
 const MODAL_COLOR = fitoterapiaBg;   // #0e590d
@@ -523,6 +524,7 @@ const FitoterapiaRecursos = () => {
   const [search, setSearch]       = useState("");
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
   const gridReveal                = useReveal();
   const userId                    = sessionStorage.getItem("userId");
 
@@ -746,8 +748,32 @@ const FitoterapiaRecursos = () => {
           </Collapse>
         </Box>
 
+      <Flex justify="center" w="100%" py={6}>
+        <Box as="button" onClick={() => setSaberMasOpen(true)}
+          px={8} py={3} borderRadius="full" bg="transparent"
+          border={`1.5px solid ${fitoterapiaTxt}66`} color={fitoterapiaTxt}
+          fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
+          fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
+          _hover={{ bg: `${fitoterapiaTxt}14`, borderColor: fitoterapiaTxt }}
+        >
+          ¿Quieres saber más?
+        </Box>
+      </Flex>
+
       {/* FOOTER */}
       <SiteFooter />
+
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="¿Quieres saber más?"
+        icon={<FitoterapiaIcon size={{ base: "24px", md: "24px" }} />}
+        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        bgColor={fitoterapiaBg}
+        color={fitoterapiaTxt}
+        emailSubject={`Quiero saber más — ${fitoterapiaNom}`}
+        showDescription
+      />
 
       {/* MODAL */}
       {selected && (

@@ -4,7 +4,8 @@ import { Box, Collapse, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
+import { ContactModal } from "../../global/ContactModal";
+import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
 
@@ -293,6 +294,7 @@ const RecursosModal = ({
 export default function AstrologiaRecursos() {
   const navigate = useNavigate();
   const [modal, setModal] = useState<Submodulo | null>(null);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   // Módulo de Introducción (índice 1 en modulosAstrologia)
   const introSubmodules = modulosAstrologia[1].submodules;
@@ -509,10 +511,33 @@ export default function AstrologiaRecursos() {
               </Grid>
             </Box>
           </Box>
+          <Flex justify="center" w="100%" pt={4}>
+            <Box as="button" onClick={() => setSaberMasOpen(true)}
+              px={8} py={3} borderRadius="full" bg="transparent"
+              border={`1.5px solid ${astrologiaTxt}66`} color={astrologiaTxt}
+              fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
+              _hover={{ bg: `${astrologiaTxt}14`, borderColor: astrologiaTxt }}
+            >
+              ¿Quieres saber más?
+            </Box>
+          </Flex>
         </Flex>
       </Box>
 
       <SiteFooter />
+
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="¿Quieres saber más?"
+        icon={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
+        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        bgColor={astrologiaBg}
+        color={astrologiaTxt}
+        emailSubject={`Quiero saber más — ${astrologiaNom}`}
+        showDescription
+      />
 
       {modal && (
         <RecursosModal

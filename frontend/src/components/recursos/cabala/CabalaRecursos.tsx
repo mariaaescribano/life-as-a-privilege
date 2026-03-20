@@ -5,6 +5,7 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { CabalaIcon, cabalaBg, cabalaNom, cabalaTxt } from "../../../GlobalVariables";
+import { ContactModal } from "../../global/ContactModal";
 import { modulosCabala } from "../../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
 import ArbolDeLaVida, { type Sefira, type SefiraKey } from "../../global/ArbolDeLaVida";
@@ -224,6 +225,7 @@ function CabalaModal({
 export default function CabalaRecursos() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<{ sub: Submodulo; name: string } | null>(null);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -270,10 +272,34 @@ export default function CabalaRecursos() {
               maxWidth="520px"
             />
           </Box>
+
+          <Flex justify="center" w="100%" pt={4}>
+            <Box as="button" onClick={() => setSaberMasOpen(true)}
+              px={8} py={3} borderRadius="full" bg="transparent"
+              border={`1.5px solid ${GOLD}66`} color={GOLD}
+              fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
+              _hover={{ bg: `${GOLD}14`, borderColor: GOLD }}
+            >
+              ¿Quieres saber más?
+            </Box>
+          </Flex>
         </Flex>
       </Box>
 
       <SiteFooter />
+
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="¿Quieres saber más?"
+        icon={<CabalaIcon size={{ base: "24px", md: "24px" }} />}
+        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        bgColor={cabalaBg}
+        color={cabalaTxt}
+        emailSubject={`Quiero saber más — ${cabalaNom}`}
+        showDescription
+      />
 
       {selected && (
         <CabalaModal

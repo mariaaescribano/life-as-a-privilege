@@ -15,6 +15,7 @@ import { TcmModule } from './tcm/tcm.module';
 import { AstrologiaModule } from './astrologia/astrologia.module';
 import { ContactModule } from './contact/contact.module';
 import { CabalaModule } from './cabala/cabala.module';
+import { NutricionModule } from './nutricion/nutricion.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -38,6 +39,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     AstrologiaModule,
     ContactModule,
     CabalaModule,
+    NutricionModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],

@@ -4,11 +4,13 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
+import { ContactModal } from "../../global/ContactModal";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
 
 const BG  = nutricionBg;
 const TXT = nutricionTxt;
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
+const BASE = "/img/nutri/curso1";
 
 // ─────────────────────────────────────────
 // TYPES
@@ -94,160 +96,106 @@ const IconFats = ({ size = "30px" }: { size?: string }) => (
 // ─────────────────────────────────────────
 const carbosPreferibles: Alimento[] = [
   {
-    id: "carb-1", nom: "Verduras", emoji: "🥦", imgPath: "/img/nutricion/verduras.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~25 kcal" }, { label: "Carbohidratos", valor: "~5 g" },
-      { label: "Fibra", valor: "~2 g" }, { label: "Proteínas", valor: "~1.5 g" }, { label: "Grasas", valor: "~0.2 g" },
-    ],
+    id: "carb-1", nom: "Verduras", emoji: "🥦", imgPath: `${BASE}/verduras.jpg`,
+    descripcion: "Fuente de fibra, vitaminas y energía de calidad.",
+    valores: [{ label: "Calorías", valor: "~25 kcal" }, { label: "Carbohidratos", valor: "~5 g" }, { label: "Fibra soluble", valor: "~0.5 g" }, { label: "Fibra insoluble", valor: "~1.5 g" }, { label: "Proteínas", valor: "~1.5 g" }, { label: "Grasas", valor: "~0.2 g" }],
   },
   {
-    id: "carb-2", nom: "Frutas", emoji: "🍎", imgPath: "/img/nutricion/frutas.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~52 kcal" }, { label: "Carbohidratos", valor: "~14 g" },
-      { label: "Fibra", valor: "~2 g" }, { label: "Proteínas", valor: "~0.5 g" }, { label: "Grasas", valor: "~0.2 g" },
-    ],
+    id: "carb-2", nom: "Frutas", emoji: "🍎", imgPath: `${BASE}/frutas.jpg`,
+    descripcion: "Su fibra es perfecta para permitir que su fructosa sea incorporada en nosotros poco a poco.",
+    valores: [{ label: "Calorías", valor: "~52 kcal" }, { label: "Carbohidratos", valor: "~14 g" }, { label: "Fibra soluble", valor: "~1 g" }, { label: "Fibra insoluble", valor: "~1 g" }, { label: "Proteínas", valor: "~0.5 g" }, { label: "Grasas", valor: "~0.2 g" }],
   },
   {
-    id: "carb-3", nom: "Legumbres", emoji: "🫘", imgPath: "/img/nutricion/legumbres.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~130 kcal" }, { label: "Carbohidratos", valor: "~22 g" },
-      { label: "Fibra", valor: "~8 g" }, { label: "Proteínas", valor: "~8 g" }, { label: "Grasas", valor: "~0.5 g" },
-    ],
+    id: "carb-3", nom: "Legumbres", emoji: "🫘", imgPath: `${BASE}/legumbres.jpg`,
+    descripcion: "A pesar de su mala fama, son de las mejores fuentes de carbohidratos además de venir acompañada de fibra y proteína.",
+    valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Carbohidratos", valor: "~22 g" }, { label: "Fibra soluble", valor: "~3 g" }, { label: "Fibra insoluble", valor: "~5 g" }, { label: "Proteínas", valor: "~8 g" }, { label: "Grasas", valor: "~0.5 g" }],
   },
 ];
 
 const carbosNoBenef: Alimento[] = [
   {
-    id: "carb-4", nom: "Bollos", emoji: "🥐", imgPath: "/img/nutricion/bollos.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~390 kcal" }, { label: "Carbohidratos", valor: "~53 g" },
-      { label: "Fibra", valor: "~1 g" }, { label: "Proteínas", valor: "~7 g" }, { label: "Grasas", valor: "~17 g" },
-    ],
+    id: "carb-4", nom: "Bollos", emoji: "🥐", imgPath: `${BASE}/bollos.jpg`,
+    descripcion: "Su buen sabor es sinónimo de que al cuerpo le cuesta poco digerirlo, por lo tanto se incorpora muy rápido, sobrecargando a nuestros órganos.",
+    valores: [{ label: "Calorías", valor: "~390 kcal" }, { label: "Carbohidratos", valor: "~53 g" }, { label: "Fibra soluble", valor: "~0.2 g" }, { label: "Fibra insoluble", valor: "~0.8 g" }, { label: "G. insaturadas", valor: "~7 g" }, { label: "G. saturadas", valor: "~10 g" }],
   },
   {
-    id: "carb-5", nom: "Azúcar", emoji: "🍬", imgPath: "/img/nutricion/azucar.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~387 kcal" }, { label: "Carbohidratos", valor: "~100 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~0 g" }, { label: "Grasas", valor: "~0 g" },
-    ],
+    id: "carb-5", nom: "Azúcar", emoji: "🍬", imgPath: `${BASE}/azucar.jpg`,
+    descripcion: "Glucosa pura sin ningún nutriente que la acompañe. Se absorbe de forma inmediata, disparando los niveles en sangre y obligando al cuerpo a almacenar el exceso como grasa.",
+    valores: [{ label: "Calorías", valor: "~387 kcal" }, { label: "Carbohidratos", valor: "~100 g" }, { label: "Fibra soluble", valor: "~0 g" }, { label: "Fibra insoluble", valor: "~0 g" }, { label: "Proteínas", valor: "~0 g" }, { label: "Grasas", valor: "~0 g" }],
   },
   {
-    id: "carb-6", nom: "Pan blanco", emoji: "🍞", imgPath: "/img/nutricion/pan_blanco.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~265 kcal" }, { label: "Carbohidratos", valor: "~51 g" },
-      { label: "Fibra", valor: "~2 g" }, { label: "Proteínas", valor: "~9 g" }, { label: "Grasas", valor: "~2 g" },
-    ],
+    id: "carb-6", nom: "Pan blanco", emoji: "🍞", imgPath: `${BASE}/panblanco.jpg`,
+    descripcion: "Al haber perdido la fibra del cereal original, se comporta casi como el azúcar: su glucosa se incorpora muy rápido, sin apenas resistencia.",
+    valores: [{ label: "Calorías", valor: "~265 kcal" }, { label: "Carbohidratos", valor: "~51 g" }, { label: "Fibra soluble", valor: "~0.4 g" }, { label: "Fibra insoluble", valor: "~1.6 g" }, { label: "Proteínas", valor: "~9 g" }, { label: "Grasas", valor: "~2 g" }],
   },
 ];
 
 const proteinasAlimentos: Alimento[] = [
   {
-    id: "prot-1", nom: "Tofu", emoji: "🧱", imgPath: "/img/nutricion/tofu.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~76 kcal" }, { label: "Carbohidratos", valor: "~2 g" },
-      { label: "Fibra", valor: "~0.3 g" }, { label: "Proteínas", valor: "~8 g" }, { label: "Grasas", valor: "~4 g" },
-    ],
+    id: "prot-1", nom: "Tofu", emoji: "🧱", imgPath: `${BASE}/tofu.jpg`,
+    descripcion: "Proteína vegetal completa derivada de la soja. Versátil y suave, es una excelente alternativa a la proteína animal.",
+    valores: [{ label: "Calorías", valor: "~76 kcal" }, { label: "Proteínas", valor: "~8 g" }, { label: "G. insaturadas", valor: "~3 g" }, { label: "G. saturadas", valor: "~0.5 g" }, { label: "Carbohidratos", valor: "~2 g" }, { label: "Fibra soluble", valor: "~0.1 g" }],
   },
   {
-    id: "prot-2", nom: "Soja", emoji: "🫘", imgPath: "/img/nutricion/soja.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~446 kcal" }, { label: "Carbohidratos", valor: "~30 g" },
-      { label: "Fibra", valor: "~9 g" }, { label: "Proteínas", valor: "~36 g" }, { label: "Grasas", valor: "~20 g" },
-    ],
+    id: "prot-2", nom: "Soja", emoji: "🫘", imgPath: `${BASE}/soja.jpg`,
+    descripcion: "Una de las pocas proteínas vegetales completas. Rica en todos los aminoácidos esenciales, además de fibra y grasas saludables.",
+    valores: [{ label: "Calorías", valor: "~446 kcal" }, { label: "Proteínas", valor: "~36 g" }, { label: "G. insaturadas", valor: "~15 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~30 g" }, { label: "Fibra soluble", valor: "~3 g" }],
   },
   {
-    id: "prot-3", nom: "Huevo", emoji: "🥚", imgPath: "/img/nutricion/huevo.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~155 kcal" }, { label: "Carbohidratos", valor: "~1 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~13 g" }, { label: "Grasas", valor: "~11 g" },
-    ],
+    id: "prot-3", nom: "Huevo", emoji: "🥚", imgPath: `${BASE}/huevo.jpg`,
+    descripcion: "Una de las proteínas más completas y biodisponibles que existen. Contiene todos los aminoácidos esenciales en proporciones casi perfectas.",
+    valores: [{ label: "Calorías", valor: "~155 kcal" }, { label: "Proteínas", valor: "~13 g" }, { label: "G. insaturadas", valor: "~6 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~1 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "prot-4", nom: "Pollo", emoji: "🍗", imgPath: "/img/nutricion/pollo.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~165 kcal" }, { label: "Carbohidratos", valor: "~0 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~31 g" }, { label: "Grasas", valor: "~3.6 g" },
-    ],
+    id: "prot-4", nom: "Pollo", emoji: "🍗", imgPath: `${BASE}/pollo.jpg`,
+    descripcion: "Proteína magra por excelencia. Fácil de digerir y con muy poca grasa, ideal para mantener y reconstruir tejido muscular.",
+    valores: [{ label: "Calorías", valor: "~165 kcal" }, { label: "Proteínas", valor: "~31 g" }, { label: "G. insaturadas", valor: "~2 g" }, { label: "G. saturadas", valor: "~1 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "prot-5", nom: "Pescado", emoji: "🐟", imgPath: "/img/nutricion/pescado.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~130 kcal" }, { label: "Carbohidratos", valor: "~0 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~22 g" }, { label: "Grasas", valor: "~4.5 g" },
-    ],
+    id: "prot-5", nom: "Pescado", emoji: "🐟", imgPath: `${BASE}/pescado.jpg`,
+    descripcion: "Proteína de alta calidad combinada con omega-3, que reduce la inflamación y protege el sistema cardiovascular.",
+    valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Proteínas", valor: "~22 g" }, { label: "G. insaturadas", valor: "~3 g" }, { label: "G. saturadas", valor: "~1 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "prot-6", nom: "Guisantes", emoji: "🫛", imgPath: "/img/nutricion/guisantes.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~81 kcal" }, { label: "Carbohidratos", valor: "~14 g" },
-      { label: "Fibra", valor: "~5 g" }, { label: "Proteínas", valor: "~5 g" }, { label: "Grasas", valor: "~0.4 g" },
-    ],
+    id: "prot-6", nom: "Guisantes", emoji: "🫛", imgPath: `${BASE}/guisantes.webp`,
+    descripcion: "Proteína vegetal acompañada de fibra, lo que ralentiza su absorción y ayuda a mantener la saciedad por más tiempo.",
+    valores: [{ label: "Calorías", valor: "~81 kcal" }, { label: "Proteínas", valor: "~5 g" }, { label: "G. insaturadas", valor: "~0.2 g" }, { label: "G. saturadas", valor: "~0.1 g" }, { label: "Carbohidratos", valor: "~14 g" }, { label: "Fibra soluble", valor: "~2 g" }],
   },
 ];
 
 const grasasInsaturadas: Alimento[] = [
   {
-    id: "grasa-1", nom: "Aguacate", emoji: "🥑", imgPath: "/img/nutricion/aguacate.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~160 kcal" }, { label: "Carbohidratos", valor: "~9 g" },
-      { label: "Fibra", valor: "~7 g" }, { label: "Proteínas", valor: "~2 g" }, { label: "Grasas", valor: "~15 g" },
-    ],
+    id: "grasa-1", nom: "Aguacate", emoji: "🥑", imgPath: `${BASE}/aguacate.jpg`,
+    descripcion: "Rico en ácido oleico, el mismo del aceite de oliva. Nutre la membrana celular y tiene un efecto antiinflamatorio natural.",
+    valores: [{ label: "Calorías", valor: "~160 kcal" }, { label: "G. insaturadas", valor: "~13 g" }, { label: "G. saturadas", valor: "~2 g" }, { label: "Proteínas", valor: "~2 g" }, { label: "Fibra soluble", valor: "~2 g" }, { label: "Fibra insoluble", valor: "~5 g" }],
   },
   {
-    id: "grasa-2", nom: "Aceite de oliva", emoji: "🫙", imgPath: "/img/nutricion/aceite_oliva.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~884 kcal" }, { label: "Carbohidratos", valor: "~0 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~0 g" }, { label: "Grasas", valor: "~100 g" },
-    ],
+    id: "grasa-2", nom: "Aceite de oliva", emoji: "🫙", imgPath: `${BASE}/aceite.webp`,
+    descripcion: "Su alto contenido en ácido oleico protege las células y reduce la inflamación crónica. Uno de los pilares de la alimentación saludable.",
+    valores: [{ label: "Calorías", valor: "~884 kcal" }, { label: "G. insaturadas", valor: "~84 g" }, { label: "G. saturadas", valor: "~14 g" }, { label: "Proteínas", valor: "~0 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "grasa-3", nom: "Frutos secos", emoji: "🥜", imgPath: "/img/nutricion/frutos_secos.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~607 kcal" }, { label: "Carbohidratos", valor: "~21 g" },
-      { label: "Fibra", valor: "~7 g" }, { label: "Proteínas", valor: "~14 g" }, { label: "Grasas", valor: "~54 g" },
-    ],
+    id: "grasa-3", nom: "Frutos secos", emoji: "🥜", imgPath: `${BASE}/frutossecos.jpg`,
+    descripcion: "Concentran grasas insaturadas, proteína y fibra en pequeñas dosis. Un snack que nutre de verdad.",
+    valores: [{ label: "Calorías", valor: "~607 kcal" }, { label: "G. insaturadas", valor: "~44 g" }, { label: "G. saturadas", valor: "~7 g" }, { label: "Proteínas", valor: "~14 g" }, { label: "Carbohidratos", valor: "~21 g" }, { label: "Fibra soluble", valor: "~2 g" }],
   },
 ];
 
 const grasasSaturadas: Alimento[] = [
   {
-    id: "grasa-4", nom: "Queso", emoji: "🧀", imgPath: "/img/nutricion/queso.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~360 kcal" }, { label: "Carbohidratos", valor: "~2 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~22 g" }, { label: "Grasas", valor: "~30 g" },
-    ],
+    id: "grasa-4", nom: "Queso", emoji: "🧀", imgPath: `${BASE}/queso.jpg`,
+    descripcion: "Rico en proteína y calcio, pero su grasa saturada en exceso puede dificultar la flexibilidad de las membranas celulares. Con moderación.",
+    valores: [{ label: "Calorías", valor: "~360 kcal" }, { label: "G. insaturadas", valor: "~8 g" }, { label: "G. saturadas", valor: "~20 g" }, { label: "Proteínas", valor: "~22 g" }, { label: "Carbohidratos", valor: "~2 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "grasa-5", nom: "Carne", emoji: "🥩", imgPath: "/img/nutricion/carne.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~250 kcal" }, { label: "Carbohidratos", valor: "~0 g" },
-      { label: "Fibra", valor: "~0 g" }, { label: "Proteínas", valor: "~26 g" }, { label: "Grasas", valor: "~17 g" },
-    ],
+    id: "grasa-5", nom: "Carne", emoji: "🥩", imgPath: `${BASE}/carne.jpg`,
+    descripcion: "Buena fuente de proteína y hierro, pero su grasa saturada en exceso puede comprometer la salud cardiovascular.",
+    valores: [{ label: "Calorías", valor: "~250 kcal" }, { label: "G. insaturadas", valor: "~7 g" }, { label: "G. saturadas", valor: "~10 g" }, { label: "Proteínas", valor: "~26 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "grasa-6", nom: "Bollería", emoji: "🧁", imgPath: "/img/nutricion/bolleria.jpg",
-    descripcion: "descripfutura",
-    valores: [
-      { label: "Calorías", valor: "~450 kcal" }, { label: "Carbohidratos", valor: "~55 g" },
-      { label: "Fibra", valor: "~1 g" }, { label: "Proteínas", valor: "~6 g" }, { label: "Grasas", valor: "~23 g" },
-    ],
+    id: "grasa-6", nom: "Bollería", emoji: "🧁", imgPath: `${BASE}/bolleria.jpg`,
+    descripcion: "Combina carbohidratos de absorción rápida con grasas trans o saturadas. Una combinación que deteriora las células a largo plazo.",
+    valores: [{ label: "Calorías", valor: "~450 kcal" }, { label: "G. insaturadas", valor: "~8 g" }, { label: "G. saturadas", valor: "~12 g" }, { label: "Proteínas", valor: "~6 g" }, { label: "Fibra soluble", valor: "~0.3 g" }, { label: "Fibra insoluble", valor: "~0.7 g" }],
   },
 ];
 
@@ -315,8 +263,7 @@ function AlimentoCirculo({ alimento, grupo, onClick }: { alimento: Alimento; gru
 // MODAL
 // ─────────────────────────────────────────
 function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void }) {
-  const { alimento, grupo } = data;
-  const GIcon = grupo.icon;
+  const { alimento } = data;
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -367,37 +314,29 @@ function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void
         </Box>
 
         <Box px={{ base: 6, md: 9 }} pt={9} pb={8}>
-          {/* Group badge + food title */}
-          <Flex align="center" gap={2} mb={2}>
+          {/* Photo + Title */}
+          <Flex align="center" gap={4} mb={6}>
             <Box
-              w="30px" h="30px" borderRadius="full"
-              bg={TXT + "10"} border={`1px solid ${TXT}22`}
-              display="flex" alignItems="center" justifyContent="center"
+              w={{ base: "72px", md: "84px" }}
+              h={{ base: "72px", md: "84px" }}
+              borderRadius="xl"
+              overflow="hidden"
               flexShrink={0}
+              border={`2px solid ${TXT}33`}
+              boxShadow={`0 4px 14px ${TXT}22`}
             >
-              <GIcon />
+              <Box as="img" src={alimento.imgPath} alt={alimento.nom} w="100%" h="100%" objectFit="cover" />
             </Box>
             <Text
-              color={grupo.color}
-              fontSize={{ base: "xs", md: "sm" }}
+              color={TXT}
+              fontSize={{ base: "2xl", md: "3xl" }}
+              fontWeight="700"
               fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              letterSpacing="0.06em"
-              textTransform="uppercase"
+              lineHeight="1.2"
             >
-              {grupo.label}
+              {alimento.nom}
             </Text>
           </Flex>
-
-          <Text
-            color={TXT}
-            fontSize={{ base: "2xl", md: "3xl" }}
-            fontWeight="700"
-            fontFamily="'EB Garamond', serif"
-            mb={6}
-          >
-            {alimento.nom}
-          </Text>
 
           {/* Description */}
           <Box
@@ -461,27 +400,16 @@ function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void
 // ─────────────────────────────────────────
 // CARD HEADER
 // ─────────────────────────────────────────
-function CardHeader({ icon, title }: { icon: React.ReactNode; title: string }) {
+function CardHeader({ title }: { title: string }) {
   return (
-    <Flex align="center" mb={6} position="relative">
-      {/* Icon left */}
-      <Box
-        w="48px" h="48px" borderRadius="full" flexShrink={0}
-        bg={TXT + "10"} border={`2px solid ${TXT}33`}
-        display="flex" alignItems="center" justifyContent="center"
-      >
-        {icon}
-      </Box>
-      {/* Title truly centered */}
+    <Flex align="center" justify="center" mt={3} mb={6}>
       <Text
-        position="absolute" left="0" right="0"
         textAlign="center"
         color={TXT}
         fontSize={{ base: "xl", md: "2xl" }}
         fontWeight="700"
         fontFamily="'EB Garamond', serif"
         letterSpacing="0.04em"
-        pointerEvents="none"
       >
         {title}
       </Text>
@@ -550,11 +478,11 @@ function CarbohidratosCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
     <Box
       bg={BG} borderRadius="2xl"
       border={`1px solid ${TXT}22`}
-      boxShadow={GLOW}
+      boxShadow={GLOW} mt="10px"
       p={{ base: 5, md: 7 }}
       w="100%" maxW="850px"
     >
-      <CardHeader icon={<IconCarbs />} title="Carbohidratos" />
+      <CardHeader title="Carbohidratos" />
 
       <Flex direction={{ base: "column", md: "row" }} gap={{ base: 0, md: 4 }}>
         {/* Preferibles */}
@@ -598,9 +526,9 @@ function ProteinasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
       p={{ base: 5, md: 7 }}
       w="100%" maxW="850px"
     >
-      <CardHeader icon={<IconProts />} title="Proteínas" />
+      <CardHeader title="Proteínas" />
 
-      <GrupoLabel label="Alimentos de proteínas completas" color="#1565c0" Icon={IconProteina} />
+      {/* <GrupoLabel label="Alimentos de proteínas completas" color="#1565c0" Icon={IconProteina} /> */}
 
       {/* 2 rows of 3 */}
       <Flex direction="column" align="center" gap={4}>
@@ -634,12 +562,12 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
       p={{ base: 5, md: 7 }}
       w="100%" maxW="850px"
     >
-      <CardHeader icon={<IconFats />} title="Grasas" />
+      <CardHeader title="Grasas" />
 
       <Flex direction={{ base: "column", md: "row" }} gap={{ base: 0, md: 4 }}>
         {/* Insaturadas */}
         <Box flex={1}>
-          <GrupoLabel label="Insaturadas" color="#2e7d32" Icon={IconInsaturada} />
+
           <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="nowrap">
             {grasasInsaturadas.map(a => (
               <AlimentoCirculo key={a.id} alimento={a} grupo={grupoInsaturadas} onClick={onSelect} />
@@ -652,7 +580,7 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
 
         {/* Saturadas */}
         <Box flex={1}>
-          <GrupoLabel label="Saturadas" color="#ef6c00" Icon={IconSaturada} />
+
           <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="nowrap">
             {grasasSaturadas.map(a => (
               <AlimentoCirculo key={a.id} alimento={a} grupo={grupoSaturadas} onClick={onSelect} />
@@ -670,6 +598,7 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
 export default function NutricionRecursos() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<ModalData | null>(null);
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -693,17 +622,41 @@ export default function NutricionRecursos() {
             title={nutricionNom}
             subtitle="Las bases de la nutrición"
             bgColor={BG}
-            color={TXT}
+            color={TXT} mb={{ base: 0, md: 0 }}
             onIconClick={() => navigate("/aprendizaje/modulosPage/nutricion/nut-curso-1")}
           />
 
           <CarbohidratosCard onSelect={setSelected} />
           <ProteinasCard     onSelect={setSelected} />
           <GrasasCard        onSelect={setSelected} />
+
+          <Flex justify="center" w="100%" pt={2}>
+            <Box as="button" onClick={() => setSaberMasOpen(true)}
+              px={8} py={3} borderRadius="full" bg="transparent"
+              border={`1.5px solid ${TXT}66`} color={TXT}
+              fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
+              _hover={{ bg: `${TXT}14`, borderColor: TXT }}
+            >
+              ¿Quieres saber más?
+            </Box>
+          </Flex>
         </Flex>
       </Box>
 
       <SiteFooter />
+
+      <ContactModal
+        isOpen={saberMasOpen}
+        onClose={() => setSaberMasOpen(false)}
+        title="¿Quieres saber más?"
+        icon={<NutricionIcon size={{ base: "24px", md: "24px" }} />}
+        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        bgColor={nutricionBg}
+        color={nutricionTxt}
+        emailSubject={`Quiero saber más — ${nutricionNom}`}
+        showDescription
+      />
 
       {selected && (
         <AlimentoModal data={selected} onClose={() => setSelected(null)} />

@@ -2,17 +2,44 @@
 ---------------------------------------------
 USAR OBJ+ID : userId
 ---------------------------------------------
-xxx
 
-Necesito que se salve cada respuesta de los tests de TCM
+En la pagina del Metodo necesito hacer cambios
+Para empezar que cuando se pulse a una de las cajitas, se abra 
+un mensaje modal con el color, el icono de las cajitas (como el que ya existe en Home y Welcome, pero sin botones abajo)
 
+Respecto al orden: Necesito que el primero sea el de Astrologia, tambien te 
+doy ya los textos, en la pantalla : Conoce los arquetipos que usas para vivir, y abierto en el card modal
+"Revisaremos tu carta natal para comprender los arquetipos que usas en cada área de tu Vida"
 
+Luego el de Neuropsicologia, "ENcuentra los patrones en los que estás atrapado", abierto:
+"Usaremos los arquetipos de tu carta natal para entender tu forma única de 
+pensar, para entender lo que viviste y cómo te influye ahora. No somos enfermedades mentales, sino personas 
+que para sobrevivir han tenido que adaptarse mediante el sufrimiento, pero esta adaptación ya no es útil"
 
+EL de Ayurveda, cerrado: "Usando la medicina India más antigua, entiende tu constitución", abierto: "Mientras hacemos psicoterapia, usaremos como herramienta otras modalidades que te ayudarán fuertemente a 
+entenderte mejor y a saber qué patrones seguir y evitar para tener una vida equilibrada con tu naturaleza única"
 
+El siguiente el de TCM, cerrado: -no sé, ayuda- abierto: "Usando la medicina tradicional china, encontraremos qué desequilibrios presentas
+en este momento de tu Vida y los trataremos de sanar con remedios naturales"
 
+EN el de FIsiología cerrado: "Deja de estar enfadado con tu cuerpo y entiéndelo para poder cuidarte con coherencia". 
+abierto: "AHora que ya sabemos tu constitución y tus desequilibrios, es hora de entender 
+cómo funciona tu cuerpo. Nos centraremos específicamente en los órganos/sistemas que tengas desequilibrados 
+y seré yo la que te lo explique las veces que necesites"
 
+El de nutri cerrado: "<<Deja que los alimentos sean tu medicina>>~Hipócrates" 
+abierto: "Como ya entendemos en profundidad tus desequilibrios, es hora de ver cómo podemos equilibrarnos
+a través de nuestros hábitos diarios. Esta modalidad, no solo abarca la microbiología
+de la nutrición y su interacción con nuestras células, sino que también hablaremos de los alimentos según la
+medicina china y la ayurveda"
 
+El de fitoterapia: "La naturaleza nos da exactamente lo que necesitamos" abierto: "Exploraremos juntos qué plantas,
+especias, infusiones ayudan exactamente a tu desequilibrio actual y cómo incorporarlas de forma fácil en tu día a día"
 
+El de Cabala cerrado: "Equilibra tu esencia desde el interior", abierto: "Cuando lleguemos a esta última parte,
+ya tendremos un largo camino de autoconocimiento y AMor largos, por lo que
+es momento de encontrar según el árbol de la vida y sus caminos cómo equilibrarnos desde el interior,
+covirtiendonos a nosotros mismos en bases seguras y recordando que somos dignos de ser amados"
 
 
 
