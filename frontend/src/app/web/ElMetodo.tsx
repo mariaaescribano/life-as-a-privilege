@@ -44,7 +44,7 @@ const modalidades: ModalidadData[] = [
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
-    renderIcon: (size) => <AyurvedaIcon size={size} />,
+    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }}/>,
     desc: "Conoce tu naturaleza única a través de la medicina india más antigua",
     modalDesc: "Junto a la psicoterapia, el Ayurveda nos dará herramientas profundas para entender tu naturaleza única y qué hábitos te equilibran o te desequilibran",
   },

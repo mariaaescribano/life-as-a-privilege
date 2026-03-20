@@ -16,6 +16,7 @@ import Productos from "./app/web/Productos";
 import ReelsPage from "./app/web/Reels";
 import Contacto from "./app/web/Contacto";
 import ElMetodo from "./app/web/ElMetodo";
+import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import UserAccount from "./app/user/UserAccount";
 import TCMTest1 from "./components/espacio/components/TCMTest1";
@@ -53,6 +54,7 @@ export default function App()
       <Route path="/reels" element={<ReelsPage />} />
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
+      <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
