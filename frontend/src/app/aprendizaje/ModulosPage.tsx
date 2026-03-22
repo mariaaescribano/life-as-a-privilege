@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
@@ -24,6 +24,7 @@ import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala
 import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { cursosData } from "../../hardCoded/cursos";
 import type { ModuloContenido } from "../../dtos/aprendizaje.type";
+import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
 
 const modulosPorModalidad: Record<string, ModuloContenido[]> = {
   [neuropsicologiaNom]: modulosNeuroPsicologia,
@@ -32,6 +33,7 @@ const modulosPorModalidad: Record<string, ModuloContenido[]> = {
   [fitoterapiaNom]: modulosFitoterapia,
   [cabalaNom]: modulosCabala,
   [nutricionNomLink]: modulosNutricion,
+  [ayurvedaNomLink]: modulosAyurveda,
 };
 
 export default function ModulesPage() {
@@ -73,8 +75,8 @@ export default function ModulesPage() {
         return { nom: titulo || tcmNom, nomModalidad: nomMod, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
       case nutricionNomLink:
         return { nom: titulo || nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case "ayurveda":
-        return { nom: titulo || ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon /> };
+      case ayurvedaNomLink:
+        return { nom: titulo || ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "40px", md: "50px" }} />, modulos};
       case fitoterapiaNom:
         return { nom: titulo || fitoterapiaNom, nomModalidad: nomMod, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos };
       case cabalaNom:

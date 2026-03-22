@@ -55,10 +55,9 @@ function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
         borderRadius="xl"
         overflow="hidden"
         mb={"10px"}
-        h={{ base: "180px", md: "200px" }}
         boxShadow={`0 6px 24px ${color}44`}
       >
-        <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" />
+        <Image src={curso.foto} alt={curso.titulo} w="100%" h="auto" display="block" />
       </Box>
 
       {/* Precio + Botón */}

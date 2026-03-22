@@ -94,9 +94,10 @@ export function NutricionIcon({ size = { base: "24px", md: "24px" }}) {
 export const nutricionDescrip="Descubre qué hay más allá de los alimentos que consumimos cada día. Entiende, sin rodeos, por qué unos alimentos son saludables y otros pueden perjudicarnos, y toma las riendas de tu claridad mental transformando tu dieta.";
 
 // Ayurveda
-export const ayurvedaNom = "Ayúrveda";
-export const ayurvedaBg = "#ecd5ed";
-export const ayurvedaTxt = "#672d67" ;
+export const ayurvedaNom = "Ayurveda";
+export const ayurvedaNomLink = "ayurveda";
+export const ayurvedaBg = "#ffffff"; // "#ecd5ed";
+export const ayurvedaTxt = "#987e37" ; //"#672d67" ;
 export function AyurvedaIcon({ size = { base: "24px", md: "24px" }}) {
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={ayurvedaTxt}>
@@ -105,6 +106,39 @@ export function AyurvedaIcon({ size = { base: "24px", md: "24px" }}) {
   );
 }
 export const ayurvedaDescrip= "Descubre, desde la sabiduría ancestral de la India, tu constitución y cómo influye en tu Vida y en tus desequilibrios.";
+export const vataColor  = "#7c5cbf";
+export const pittaColor = "#c0522a";
+export const kaphaColor = "#3a8a5c";
+export function VataIcon({ size = "28px", color = vataColor }: { size?: string; color?: string }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} display="block">
+      <path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z" />
+    </Box>
+  );
+}
+export function PittaIcon({ size = "28px", color = pittaColor }: { size?: string; color?: string }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} display="block">
+      <path d="M240-400q0 52 21 98.5t60 81.5q-1-5-1-9v-9q0-32 12-60t35-51l113-111 113 111q23 23 35 51t12 60v9q0 4-1 9 39-35 60-81.5t21-98.5q0-50-18.5-94.5T648-574q-20 13-42 19.5t-45 6.5q-62 0-107.5-41T401-690q-39 33-69 68.5t-50.5 72Q261-513 250.5-475T240-400Zm240 52-57 56q-11 11-17 25t-6 29q0 32 23.5 55t56.5 23q33 0 56.5-23t23.5-55q0-16-6-29.5T537-292l-57-56Zm0-492v132q0 34 23.5 57t57.5 23q18 0 33.5-7.5T622-658l18-22q74 42 117 117t43 163q0 134-93 227T480-80q-134 0-227-93t-93-227q0-129 86.5-245T480-840Z" />
+    </Box>
+  );
+}
+export function KaphaIcon({ size = "28px", color = kaphaColor }: { size?: string; color?: string }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} display="block">
+      <path d="M80-160v-80h230q-22-85-83.5-146.5T80-470q20-5 39.5-7.5T160-480q134 0 227 93t93 227H80Zm480 0q0-42-9-83.5T525-323q42-71 114.5-114T800-480q21 0 40.5 2.5T880-470q-85 22-146 83.5T650-240h230v80H560Zm-80-239q0-65 24-122t66-100.5q42-43.5 98.5-69.5T789-719q-56 35-98 86t-65 114q-44 21-80.5 51.5T480-399Zm-73-75q-12-9-24-17t-25-16q0-6 1-12.5t1-12.5q0-76-24-144t-68-124q66 27 114.5 77.5T457-606q-18 30-31 63.5T407-474Z" />
+    </Box>
+  );
+}
+export function VataIconAyu({ size = "28px" }: { size?: string }) {
+  return <VataIcon size={size} color={ayurvedaTxt} />;
+}
+export function PittaIconAyu({ size = "28px" }: { size?: string }) {
+  return <PittaIcon size={size} color={ayurvedaTxt} />;
+}
+export function KaphaIconAyu({ size = "28px" }: { size?: string }) {
+  return <KaphaIcon size={size} color={ayurvedaTxt} />;
+}
 
 // Fitoterapia
 export const fitoterapiaNom = "Fitoterapia";
@@ -336,6 +370,19 @@ export function RecursosIconFitoterapia({ size = { base: "24px", md: "24px" } })
   );
 }
 
+// export function RecursosIconFitoterapia({ size = { base: "24px", md: "24px" } }) {
+//   return (
+//     <Box
+//       as="svg"
+//       viewBox="0 -960 960 960"
+//       w={size}
+//       h={size}              
+//       fill={fitoterapiaTxt}                    
+//     >
+//       <path d="M270-80q-45 0-77.5-30.5T160-186v-558q0-38 23.5-68t61.5-38l395-78v640l-379 76q-9 2-15 9.5t-6 16.5q0 11 9 18.5t21 7.5h450v-640h80v720H270Zm90-233 200-39v-478l-200 39v478Zm-80 16v-478l-15 3q-11 2-18 9.5t-7 18.5v457q5-2 10.5-3.5T261-293l19-4Zm-40-472v482-482Z"/>
+//     </Box>
+//   );
+// }
 
 // #region np 
 

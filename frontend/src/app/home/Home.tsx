@@ -22,6 +22,7 @@ import {
   fitoterapiaDescrip,
   cabalaDescrip,
   tcmNomLink,
+  ayurvedaNomLink,
 } from "../../GlobalVariables";
 import type { SessionStorageUser } from "../../dtos/user.types";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -83,10 +84,10 @@ const disciplines: Discipline[] = [
   {
     name: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt,
     description: ayurvedaDescrip,
-    renderIcon: (s) => <AyurvedaIcon size={s} />,
+    renderIcon: (s) => <AyurvedaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + ayurvedaNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + ayurvedaNom,
-    available:false
+    linkAprendizaje: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
+    available:true
   },
   {
     name: fitoterapiaNom, bg: fitoterapiaBg, txt: fitoterapiaTxt,
@@ -362,7 +363,6 @@ const Home = () => {
                       transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
                       transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s, box-shadow 0.25s ease`}
                       _hover={{
-                        transform: "translateY(-5px)",
                         boxShadow: "0 18px 45px rgba(107,196,200,0.75), 0 4px 14px rgba(107,196,200,0.45)",
                       }}
                       textAlign="center"

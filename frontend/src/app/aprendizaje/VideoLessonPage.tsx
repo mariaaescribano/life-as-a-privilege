@@ -9,7 +9,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
@@ -22,6 +22,7 @@ import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/Mod
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
+import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -102,6 +103,10 @@ export default function VideoLessonPage() {
       else if(moduloId === nutricionNomLink)
       {
         setdatos(getModuleByTitle(submoduloId!, modulosNutricion));
+      }
+      else if(moduloId === ayurvedaNomLink)
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosAyurveda));
       }
     }
   }, [moduloId, submoduloId]);

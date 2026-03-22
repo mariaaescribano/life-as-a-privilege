@@ -22,6 +22,7 @@ import {
   tcmBg, TCMIcon,
   tcmNomLink,
   tcmTxt,
+  ayurvedaNomLink,
 } from "../../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import SpinnerTurquesa from "../../../components/global/Spinner";
@@ -47,7 +48,7 @@ const EspacioHome = () => {
     { bg: astrologiaBg,      icon: <AstrologiaIcon size={{ base: "38px", md: "58px" }}  />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "pointer" , txt: astrologiaTxt},
     { bg: tcmBg,             icon: <TCMIcon size={{ base: "38px", md: "58px" }} />,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},
     { bg: nutricionBg,       icon: <NutricionIcon size={{ base: "38px", md: "58px" }}  />,                               link: "/espacio/questions/" + nutricionNomLink,   cursor: "pointer",    txt: nutricionTxt },
-    { bg: ayurvedaBg,        icon: <AyurvedaIcon size="58px" />,                                link: "/espacio/questions/" + ayurvedaNom,        cursor: "not-allowed" , txt: ayurvedaTxt},
+    { bg: ayurvedaBg,        icon: <AyurvedaIcon size={{ base: "38px", md: "58px" }} />,             link: "/espacio/questions/" + ayurvedaNomLink,        cursor: "pointer",      txt: ayurvedaTxt},
     { bg: fitoterapiaBg,     icon: <FitoterapiaIcon size={{ base: "38px", md: "58px" }}  />,     link: "/espacio/questions/" + fitoterapiaNom,     cursor: "pointer" , txt: fitoterapiaTxt},
     { bg: cabalaBg,          icon: <CabalaIcon size={{ base: "38px", md: "58px" }}  />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "pointer" , txt: cabalaTxt},
   ];

@@ -15,6 +15,7 @@ import {
   EspacioPersonalIcon,
   AprendizajeIcon,
   nutricionNomLink,
+  ayurvedaNomLink,
 } from "../../GlobalVariables";
 
 type Discipline = {
@@ -34,7 +35,7 @@ const disciplines: Discipline[] = [
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
     desc: fisiologiaDescrip,
-    link: "/aprendizaje/modulosPage/" + fisiologiaNom,
+    link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
     available: false
   },
   {
@@ -77,10 +78,10 @@ const disciplines: Discipline[] = [
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
-    renderIcon: (size) => <AyurvedaIcon size={size} />,
+    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
     desc: ayurvedaDescrip,
-    link: "/aprendizaje/modulosPage/" + ayurvedaNom,
-    available:false
+    link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
+    available:true
   },
   {
     name: fitoterapiaNom,
