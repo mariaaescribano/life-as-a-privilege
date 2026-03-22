@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { NutricionService, NutricionData } from './nutricion.service';
+import { NutricionService } from './nutricion.service';
+import type { NutricionData } from './nutricion.service';
 
 @Controller('nutricion')
 export class NutricionController {
