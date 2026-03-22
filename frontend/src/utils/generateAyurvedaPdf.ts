@@ -12,10 +12,10 @@ export type AyurvedaRespuesta = {
 /* ──────────────────────────────────────────────
    COLORS
 ────────────────────────────────────────────── */
-const PAGE_BG:     [number, number, number] = [26, 10, 30];
-const HEADER_BG:   [number, number, number] = [103, 45, 103];   // #672d67
-const TEXT_COLOR:  [number, number, number] = [236, 213, 237];   // #ecd5ed
-const MUTED_COLOR: [number, number, number] = [160, 120, 160];
+const PAGE_BG:     [number, number, number] = [255, 255, 255];
+const HEADER_BG:   [number, number, number] = [0, 128, 128];     // #008080
+const TEXT_COLOR:  [number, number, number] = [0, 80, 80];
+const MUTED_COLOR: [number, number, number] = [80, 155, 155];
 const VATA_COLOR:  [number, number, number] = [124, 92, 191];
 const PITTA_COLOR: [number, number, number] = [192, 82, 42];
 const KAPHA_COLOR: [number, number, number] = [58, 138, 92];
@@ -31,6 +31,35 @@ const PAGE_W   = 210;
 const CONTENT_W = PAGE_W - MARGIN * 2;
 
 /* ──────────────────────────────────────────────
+   DOSHA SVG PATHS (viewBox: 0 -960 960 960)
+────────────────────────────────────────────── */
+const DOSHA_PATH: Record<string, string> = {
+  vata:  "M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z",
+  pitta: "M240-400q0 52 21 98.5t60 81.5q-1-5-1-9v-9q0-32 12-60t35-51l113-111 113 111q23 23 35 51t12 60v9q0 4-1 9 39-35 60-81.5t21-98.5q0-50-18.5-94.5T648-574q-20 13-42 19.5t-45 6.5q-62 0-107.5-41T401-690q-39 33-69 68.5t-50.5 72Q261-513 250.5-475T240-400Zm240 52-57 56q-11 11-17 25t-6 29q0 32 23.5 55t56.5 23q33 0 56.5-23t23.5-55q0-16-6-29.5T537-292l-57-56Zm0-492v132q0 34 23.5 57t57.5 23q18 0 33.5-7.5T622-658l18-22q74 42 117 117t43 163q0 134-93 227T480-80q-134 0-227-93t-93-227q0-129 86.5-245T480-840Z",
+  kapha: "M80-160v-80h230q-22-85-83.5-146.5T80-470q20-5 39.5-7.5T160-480q134 0 227 93t93 227H80Zm480 0q0-42-9-83.5T525-323q42-71 114.5-114T800-480q21 0 40.5 2.5T880-470q-85 22-146 83.5T650-240h230v80H560Zm-80-239q0-65 24-122t66-100.5q42-43.5 98.5-69.5T789-719q-56 35-98 86t-65 114q-44 21-80.5 51.5T480-399Zm-73-75q-12-9-24-17t-25-16q0-6 1-12.5t1-12.5q0-76-24-144t-68-124q66 27 114.5 77.5T457-606q-18 30-31 63.5T407-474Z",
+};
+
+function svgToPngDataUrl(pathD: string, color: [number, number, number], sizePx: number): Promise<string> {
+  return new Promise((resolve) => {
+    const hex = "#" + color.map(c => c.toString(16).padStart(2, "0")).join("");
+    const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="${sizePx}" height="${sizePx}" fill="${hex}"><path d="${pathD}"/></svg>`;
+    const blob = new Blob([svgStr], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = sizePx;
+      canvas.height = sizePx;
+      canvas.getContext("2d")!.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(""); };
+    img.src = url;
+  });
+}
+
+/* ──────────────────────────────────────────────
    HELPERS
 ────────────────────────────────────────────── */
 function sanitize(text: string): string {
@@ -44,11 +73,18 @@ function splitLines(doc: jsPDF, text: string, maxWidth: number): string[] {
 /* ──────────────────────────────────────────────
    MAIN
 ────────────────────────────────────────────── */
-export function generateAyurvedaPdf(
+export async function generateAyurvedaPdf(
   respuestas: AyurvedaRespuesta[],
   resultado: string,
   scores: { vata: number; pitta: number; kapha: number },
-): void {
+): Promise<void> {
+  const ICON_PX = 48;
+  const ICON_MM = 5;
+  const doshaIcons: Record<string, string> = {};
+  for (const d of ["vata", "pitta", "kapha"] as const) {
+    doshaIcons[d] = await svgToPngDataUrl(DOSHA_PATH[d], DOSHA_COLOR[d], ICON_PX);
+  }
+
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageH = doc.internal.pageSize.getHeight();
   let page = 1;
@@ -131,16 +167,19 @@ export function generateAyurvedaPdf(
     const color = DOSHA_COLOR[dosha];
     const label = dosha.charAt(0).toUpperCase() + dosha.slice(1);
 
+    if (doshaIcons[dosha]) {
+      doc.addImage(doshaIcons[dosha], "PNG", MARGIN, y - ICON_MM + 0.5, ICON_MM, ICON_MM);
+    }
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...color);
-    doc.text(`${label}`, MARGIN, y);
+    doc.text(`${label}`, MARGIN + ICON_MM + 1.5, y);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${count}`, PAGE_W - MARGIN, y, { align: "right" });
 
     // bar background
-    doc.setFillColor(50, 30, 55);
+    doc.setFillColor(200, 230, 230);
     doc.roundedRect(MARGIN + 20, y - 3.5, barW, 4, 1, 1, "F");
     // bar fill
     if (pct > 0) {

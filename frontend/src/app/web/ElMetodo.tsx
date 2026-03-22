@@ -446,7 +446,10 @@ export default function ElMetodo() {
           _active={{ transform: "translateY(0)", bg: "rgba(255,255,255,0.18)" }}
           cursor="pointer"
         >
-          Me interesa
+          <Flex as="span" align="center" gap={3}>
+            <Image src="/img/icono/life.png" h={{ base: "22px", md: "26px" }} objectFit="contain" />
+            Me interesa
+          </Flex>
         </Box>
       </Flex>
 
@@ -548,6 +551,7 @@ export default function ElMetodo() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Me interesa"
+        icon={<Image src="/img/icono/life.png" h="32px" objectFit="contain" />}
         bgColor="#008080"
         color="#ffffff"
         emailSubject="Interés en El Método — Life as a Privilege"

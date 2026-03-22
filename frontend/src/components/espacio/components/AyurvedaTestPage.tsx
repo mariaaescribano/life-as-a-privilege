@@ -84,13 +84,13 @@ export default function AyurvedaTestPage({ onComplete }: { onComplete: () => Pro
             title={ayurvedaNom}
             bgColor={ayurvedaBg}
             color={ayurvedaTxt}
-            maxW="820px"
+            maxW="820px" mb={{ base: 0, md: 0 }}
           />
 
           {/* Instrucciones */}
           <Box
             w="100%" maxW="820px"
-            bg={ayurvedaBg}
+            bg={ayurvedaBg} mt="20px"
             border={`1px solid ${ayurvedaTxt}33`}
             borderRadius="2xl"
             px={{ base: 5, md: 8 }}
@@ -188,7 +188,10 @@ export default function AyurvedaTestPage({ onComplete }: { onComplete: () => Pro
               boxShadow={allAnswered ? `0 0 40px ${ayurvedaTxt}44, 0 4px 24px rgba(0,0,0,0.3)` : "none"}
               _hover={allAnswered ? { boxShadow: `0 0 60px ${ayurvedaTxt}77`, transform: "translateY(-2px)" } : {}}
             >
-              {saving ? "Guardando..." : "Descubrir mi Dosha →"}
+              <Flex as="span" align="center" justify="center" gap={3}>
+                <AyurvedaIcon size={{ base: "22px", md: "26px" }} />
+                {saving ? "Guardando..." : "Descubrir mi Dosha →"}
+              </Flex>
             </Box>
           </Box>
         </Flex>

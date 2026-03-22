@@ -53,9 +53,9 @@ const DOSHA_INFO: Record<Dosha, DoshaInfo> = {
     icon: (size = "28px") => <VataIcon size={size} color={VATA_COLOR} />,
     consejos: [
       { titulo: "Alimentación", texto: "Prioriza alimentos calientes, oleosos y nutritivos. Sopas, guisos, ghee y especias cálidas como jengibre o canela son tus aliados. Evita los alimentos fríos, crudos o muy ligeros." },
-      { titulo: "Rutina y descanso", texto: "Establece horarios fijos para comer, dormir y despertar. La regularidad calma tu naturaleza dispersa. Duerme al menos 8 horas y evita el exceso de estimulación nocturna." },
-      { titulo: "Movimiento", texto: "Opta por ejercicio suave y constante: yoga, caminar, natación tranquila. Evita el ejercicio extenuante o irregular, que agota tu energía." },
-      { titulo: "Mente y emociones", texto: "Practica la meditación y la respiración profunda para calmar el exceso mental. La escritura creativa, la música y el arte canalizan bien tu energía expansiva." },
+      { titulo: "Rutina y descanso", texto: "Establece horarios fijos para comer, dormir y despertar. La regularidad calma tu naturaleza dispersa. Duerme al menos 7 horas y evita el exceso de estimulación nocturna." },
+      { titulo: "Movimiento", texto: "Opta por ejercicios que te hagan enraizarte: yoga, entrenamiento de fuerza, artes marciales. Evita el ejercicio extenuante o irregular, que agota tu energía." },
+      { titulo: "Mente y emociones", texto: "Practica la meditación y la respiración profunda para calmar el exceso mental." },
     ],
   },
   pitta: {
@@ -66,7 +66,7 @@ const DOSHA_INFO: Record<Dosha, DoshaInfo> = {
       "Pitta es la energía de la transformación: intensa, decidida, apasionada y precisa. Las personas Pitta son líderes naturales con gran capacidad de ejecución, pero pueden caer en la irritabilidad, el perfeccionismo y el exceso de calor interno. Su mayor fortaleza es también su mayor reto: la intensidad. Para equilibrarse, Pitta necesita frescor, moderación, actividades que relajen la mente y un entorno sin demasiada competencia.",
     icon: (size = "28px") => <PittaIcon size={size} color={PITTA_COLOR} />,
     consejos: [
-      { titulo: "Alimentación", texto: "Elige alimentos frescos, dulces y de sabor suave. Frutas dulces, verduras de hoja verde, arroz y lácteos frescos te equilibran. Reduce el picante, el alcohol, los alimentos muy salados o ácidos." },
+      { titulo: "Alimentación", texto: "Elige alimentos frescos y de sabor suave. Frutas dulces, verduras de hoja verde y refrescantes. Reduce el picante, el alcohol, los alimentos muy salados o ácidos." },
       { titulo: "Temperatura y entorno", texto: "Evita el calor excesivo: sol directo, saunas o ejercicio intenso a mediodía. Busca entornos frescos, naturales y tranquilos para recuperar el equilibrio." },
       { titulo: "Movimiento", texto: "El deporte moderado y no competitivo es ideal: natación, ciclismo suave, senderismo. Evita entrenar en exceso o convertir el ejercicio en una batalla contigo mismo." },
       { titulo: "Mente y emociones", texto: "Aprende a soltar el control y la perfección. La meditación compasiva, el contacto con la naturaleza y las actividades lúdicas sin objetivo te ayudan a enfriar el fuego interior." },
@@ -80,10 +80,10 @@ const DOSHA_INFO: Record<Dosha, DoshaInfo> = {
       "Kapha es la energía de la estructura: estable, resistente, leal y profundamente afectuosa. Las personas Kapha son constantes, pacientes y tienen una memoria excelente. Su sombra es la tendencia al apego, la lentitud y la resistencia al cambio. Para equilibrarse, Kapha necesita movimiento, estimulación, nuevos retos y una dieta ligera que avive su fuego interno.",
     icon: (size = "28px") => <KaphaIcon size={size} color={KAPHA_COLOR} />,
     consejos: [
-      { titulo: "Alimentación", texto: "Prioriza alimentos ligeros, secos y con especias estimulantes: jengibre, pimienta negra, cúrcuma, mostaza. Reduce los lácteos, los dulces, los fritos y los alimentos pesados o muy oleosos." },
+      { titulo: "Alimentación", texto: "Prioriza alimentos ligeros, poco calóricos y con especias estimulantes: jengibre, pimienta negra, cúrcuma, mostaza. Reduce los lácteos, los dulces, los fritos y los alimentos pesados o muy oleosos." },
       { titulo: "Movimiento", texto: "El movimiento vigoroso y constante es esencial para ti: correr, bailar, deportes de equipo. Muévete cada día aunque no tengas ganas — tu cuerpo lo necesita más que ningún otro dosha." },
       { titulo: "Estimulación mental", texto: "Busca nuevas experiencias, viajes, cursos o proyectos que saquen a Kapha de su zona de confort. El aburrimiento y la monotonía son tus mayores enemigos." },
-      { titulo: "Mente y emociones", texto: "Trabaja el desapego gradual de objetos, hábitos y relaciones que ya no te nutren. La generosidad activa y el voluntariado canalizan muy bien tu energía amorosa y transformadora." },
+      { titulo: "Mente y emociones", texto: "Trabaja el desapego gradual de objetos, hábitos y relaciones que ya no te nutren. La generosidad activa y el voluntariado canalizan muy bien tu energía amorosa y transformadora, pero no olvides de sostenerte a ti mismo primero." },
     ],
   },
 };
@@ -127,31 +127,27 @@ function ResultadoPanel({
         bg={CARD_BG}
         borderRadius="2xl"
         px={{ base: 6, md: 10 }}
-        py={{ base: 6, md: 8 }}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        gap={3}
+        py={{ base: 5, md: 7 }}
         boxShadow={`0 8px 36px ${ACCENT}55`}
       >
-        <Box
-          borderRadius="full"
-          w={{ base: "64px", md: "80px" }}
-          h={{ base: "64px", md: "80px" }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          border={`3px solid ${ACCENT}`}
-          boxShadow={`0 0 20px ${ACCENT}88`}
-        >
-          <AyurvedaIcon size={{ base: "36px", md: "46px" }} />
-        </Box>
-        <Text color={ACCENT} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center">
-          Tu Dosha
-        </Text>
-        <Text color={ACCENT} fontSize="sm" opacity={0.65} textAlign="center">
-          Test realizado el {resultado.fecha}
-        </Text>
+        <Flex align="center" justify="center" gap={4}>
+          <Box
+            borderRadius="full"
+            w={{ base: "52px", md: "64px" }}
+            h={{ base: "52px", md: "64px" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexShrink={0}
+            border={`3px solid ${ACCENT}`}
+            boxShadow={`0 0 20px ${ACCENT}88`}
+          >
+            <AyurvedaIcon size={{ base: "28px", md: "36px" }} />
+          </Box>
+          <Text color={ACCENT} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700">
+            Tu Dosha
+          </Text>
+        </Flex>
       </Box>
 
       {/* Resultado principal */}
@@ -203,14 +199,17 @@ function ResultadoPanel({
         boxShadow={`0 4px 20px ${info.color}33, 0 0 16px ${info.color}22`}
         border={`1px solid ${info.color}33`}
       >
-        <Text color={info.color} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={5} textAlign="center">
-          Consejos para tu Prakriti
-        </Text>
+        <Flex align="center" justify="center" gap={3} mb={5}>
+          <Box flexShrink={0}>{info.icon("24px")}</Box>
+          <Text color={info.color} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em">
+            Consejos para tu Prakriti ~ Constitución
+          </Text>
+        </Flex>
         <Flex direction="column" gap={4}>
           {info.consejos.map((c, i) => (
             <Box key={i} p={{ base: 4, md: 5 }} borderRadius="xl" bg={info.color + "0e"} border={`1px solid ${info.color}30`} borderLeft={`3px solid ${info.color}`}>
               <Text color={info.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={1}>{c.titulo}</Text>
-              <Text color={ACCENT} fontSize={{ base: "sm", md: "md" }} lineHeight="1.85">{c.texto}</Text>
+              <Text color={info.color} fontSize={{ base: "sm", md: "md" }} lineHeight="1.85">{c.texto}</Text>
             </Box>
           ))}
         </Flex>
@@ -226,9 +225,12 @@ function ResultadoPanel({
         py={{ base: 5, md: 7 }}
         boxShadow={`0 4px 20px ${ACCENT}33`}
       >
-        <Text color={ACCENT} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" mb={5} textAlign="center">
-          Distribución de tu Prakriti
-        </Text>
+        <Flex align="center" justify="center" gap={3} mb={5}>
+          <Box flexShrink={0}>{info.icon("24px")}</Box>
+          <Text color={ACCENT} fontSize={{ base: "lg", md: "xl" }} fontWeight="600">
+            Distribución de tu Prakriti ~ Constitución
+          </Text>
+        </Flex>
         <Flex direction="column" gap={4}>
           {(["vata", "pitta", "kapha"] as Dosha[]).map((dosha) => {
             const isWinner = dosha === winner;
@@ -399,6 +401,7 @@ export default function AyurvedaMiEspacio() {
         setSavedResult(res.data);
         const respRes = await axios.get(`${API_URL}/ayurveda/respuestas/${userId}`);
         setSavedRespuestas(respRes.data ?? []);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }} />;
   }
