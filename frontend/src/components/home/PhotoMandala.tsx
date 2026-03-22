@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
@@ -136,7 +136,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
     { name: astrologiaNom,  available:true,     bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
     { name: tcmNom,  available:true, bg: tcmBg,  txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,   link: "/espacio/questions/" + tcmNomLink },
     { name: nutricionNom,  available:true,      bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={{ base: iconSize, md: iconSize }}  />,          link: "/espacio/questions/" + nutricionNomLink },
-    { name: ayurvedaNom,  available:true,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={{ base: iconSize, md: iconSize }} />,                                    link: "/espacio/questions/" + ayurvedaNom },
+    { name: ayurvedaNom,  available:true,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={{ base: iconSize, md: iconSize }} />,                                    link: "/espacio/questions/" + ayurvedaNomLink },
     { name: fitoterapiaNom,  available:true,    bg: fitoterapiaBg,        txt: fitoterapiaTxt,        icon: <FitoterapiaIcon        size={{ base: iconSize, md: iconSize }} />,  link: "/espacio/questions/" + fitoterapiaNom },
     { name: cabalaNom,     available:true,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];

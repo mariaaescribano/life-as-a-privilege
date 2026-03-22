@@ -85,7 +85,7 @@ const disciplines: Discipline[] = [
     name: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt,
     description: ayurvedaDescrip,
     renderIcon: (s) => <AyurvedaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + ayurvedaNom,
+    linkEspacio: "/espacio/questions/" + ayurvedaNomLink,
     linkAprendizaje: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
     available:true
   },

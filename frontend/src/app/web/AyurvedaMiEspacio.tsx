@@ -6,6 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaIcon, ayurvedaBg, ayurvedaTxt, API_URL, VataIcon, PittaIcon, KaphaIcon, vataColor, pittaColor, kaphaColor } from "../../GlobalVariables";
 import { generateAyurvedaPdf, type AyurvedaRespuesta } from "../../utils/generateAyurvedaPdf";
+import AyurvedaTestPage from "../../components/espacio/components/AyurvedaTestPage";
 
 /* ──────────────────────────────────────────────
    COLORES
@@ -377,27 +378,42 @@ export default function AyurvedaMiEspacio() {
   /* ──────────────────────────────────────────────
      RENDER
   ────────────────────────────────────────────── */
+  if (loadingInit) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="private" />
+        <Flex flex="1" justify="center" align="center" minH="60vh">
+          <SpinnerTurquesa fullScreen={false} />
+        </Flex>
+        <SiteFooter />
+      </Box>
+    );
+  }
+
+  if (!savedResult) {
+    return <AyurvedaTestPage onComplete={async () => {
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) return;
+      const res = await axios.get(`${API_URL}/ayurveda/${userId}`);
+      if (res.data) {
+        setSavedResult(res.data);
+        const respRes = await axios.get(`${API_URL}/ayurveda/respuestas/${userId}`);
+        setSavedRespuestas(respRes.data ?? []);
+      }
+    }} />;
+  }
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
-
       <Box flex="1">
-        {loadingInit ? (
-          <Flex justify="center" align="center" minH="60vh">
-            <SpinnerTurquesa fullScreen={false} />
-          </Flex>
-
-        ) : savedResult ? (
-          <ResultadoPanel
-            resultado={savedResult}
-            onDelete={handleDelete}
-            onDownloadPdf={handleDownloadPdf}
-            loadingDelete={loadingDelete}
-          />
-
-        ) : null}
+        <ResultadoPanel
+          resultado={savedResult}
+          onDelete={handleDelete}
+          onDownloadPdf={handleDownloadPdf}
+          loadingDelete={loadingDelete}
+        />
       </Box>
-
       <SiteFooter />
     </Box>
   );
