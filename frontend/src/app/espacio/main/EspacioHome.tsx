@@ -6,7 +6,7 @@ import {
   API_URL,
   astrologiaBg, AstrologiaIcon, astrologiaNom,
   astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom,
+  ayurvedaBg, AyurvedaIcon,
   ayurvedaTxt,
   fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom,
   fitoterapiaTxt,
