@@ -79,17 +79,6 @@ const IconCarbs = ({ size = "30px" }: { size?: string }) => (
   </svg>
 );
 
-const IconProts = ({ size = "30px" }: { size?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={TXT}>
-    <path d="M120-160v-400l200-240h400l200 240v400H80Zm80-80h640v-280H160v280Zm320-350q25 0 42.5-17.5T540-650q0-25-17.5-42.5T480-710q-25 0-42.5 17.5T420-650q0 25 17.5 42.5T480-590ZM80-520h800l-170-200H250L80-520Zm400 0Z"/>
-  </svg>
-);
-
-const IconFats = ({ size = "30px" }: { size?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={TXT}>
-    <path d="M440-80q-117 0-198.5-81.5T160-360q0-56 20.5-104.5t56.5-87.5l183-195 183 195q36 39 56.5 87.5T680-360q0 117-81.5 198.5T440-80Zm0-80q83 0 141.5-58.5T640-360q0-37-13.5-71T587-495L440-650 293-495q-33 33-46.5 67T233-360q0 83 58.5 141.5T440-160Zm0-160Z"/>
-  </svg>
-);
 
 // ─────────────────────────────────────────
 // DATA

@@ -1,13 +1,12 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import {
   AyurvedaIcon, ayurvedaBg, ayurvedaNomLink, ayurvedaTxt,
-  VataIcon, PittaIcon, KaphaIcon,
   VataIconAyu,
   PittaIconAyu,
   KaphaIconAyu,
 } from "../../../GlobalVariables";
 import {
-  letraAyu1, letraAyu2, letraAyu3, letraAyu4,
+  letraAyu1, letraAyu2, letraAyu3,
   letraAyu5, letraAyu6, letraAyu7, letraAyu8,
 } from "./LetraAyurveda";
 
