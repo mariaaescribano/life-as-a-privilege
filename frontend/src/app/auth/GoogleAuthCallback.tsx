@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import SpinnerTurquesa from "../../components/global/Spinner";

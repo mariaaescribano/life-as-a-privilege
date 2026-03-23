@@ -8,7 +8,7 @@ interface SaberMasButtonProps {
   onClick: () => void;
 }
 
-export function SaberMasButton({ color, bgColor, onClick }: SaberMasButtonProps) {
+export function SaberMasButton({ onClick }: SaberMasButtonProps) {
   return (
     <Flex justify="center" w="100%" maxW="900px" mt={16}>
       <Box
