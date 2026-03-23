@@ -225,19 +225,19 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
       bg="rgba(5,40,10,0.60)"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       display="flex"
-      alignItems={{ base: "flex-end", md: "center" }}
+      alignItems="center"
       justifyContent="center"
-      px={{ base: 0, md: 6 }}
-      py={{ base: 0, md: 6 }}
+      px={{ base: 4, md: 6 }}
+      py={{ base: 4, md: 6 }}
       onClick={onClose}
     >
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
-        w={{ base: "90%", md: "640px" }}
-        maxH={{ base: "92vh", md: "88vh" }}
+        w={{ base: "95%", md: "640px" }}
+        maxH={{ base: "88vh", md: "88vh" }}
         overflowY="auto"
-        borderRadius={{ base: "24px 24px 0 0", md: "24px" }}
+        borderRadius="24px"
         bg="#fdf7ee"
         boxShadow="0 32px 80px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.15)"
         sx={{
@@ -646,7 +646,7 @@ const FitoterapiaRecursos = () => {
         <Box
           ref={gridReveal.ref}
           w="100%"
-          pb={{ base: 14, md: 20 }}
+          mb={{ base: 6, md: 8 }}
         >
           {plantasMostradas.length === 0 ? (
             <Flex justify="center" py={16}>
@@ -679,10 +679,9 @@ const FitoterapiaRecursos = () => {
             </Grid>
           )}
         </Box>
-      </Flex>
 
-      {/* AVISO LEGAL — discreto y desplegable */}
-        <Box w="100%" maxW="680px" mx="auto" mt={4} mb={6}>
+        {/* AVISO LEGAL — discreto y desplegable */}
+        <Box w="100%" mt={4} mb={{ base: 14, md: 20 }}>
           <Flex
             as="button"
             w="100%"
@@ -747,14 +746,15 @@ const FitoterapiaRecursos = () => {
             </Box>
           </Collapse>
         </Box>
+      </Flex>
 
       <Flex justify="center" w="100%" py={6}>
         <Box as="button" onClick={() => setSaberMasOpen(true)}
           px={8} py={3} borderRadius="full" bg="transparent"
-          border={`1.5px solid ${fitoterapiaTxt}66`} color={fitoterapiaTxt}
+          border="1.5px solid white" color="white"
           fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
           fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-          _hover={{ bg: `${fitoterapiaTxt}14`, borderColor: fitoterapiaTxt }}
+          _hover={{ bg: "rgba(255,255,255,0.08)" }}
         >
           ¿Quieres saber más?
         </Box>

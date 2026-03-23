@@ -226,7 +226,7 @@ function ResultadoPanel({
         boxShadow={`0 4px 20px ${ACCENT}33`}
       >
         <Flex align="center" justify="center" gap={3} mb={5}>
-          <Box flexShrink={0}>{info.icon("24px")}</Box>
+          <Box flexShrink={0}><AyurvedaIcon size={{ base: "24px", md: "24px" }} /></Box>
           <Text color={ACCENT} fontSize={{ base: "lg", md: "xl" }} fontWeight="600">
             Distribución de tu Prakriti ~ Constitución
           </Text>
@@ -240,8 +240,9 @@ function ResultadoPanel({
               <Box key={dosha}>
                 <Flex justify="space-between" mb={1.5}>
                   <Flex align="center" gap={2}>
+                    <Box flexShrink={0}>{DOSHA_INFO[dosha].icon("20px")}</Box>
                     <Text
-                      color={isWinner ? color : ACCENT + "99"}
+                      color={isWinner ? color : color + "99"}
                       fontSize={{ base: "md", md: "lg" }}
                       fontWeight={isWinner ? "700" : "400"}
                     >

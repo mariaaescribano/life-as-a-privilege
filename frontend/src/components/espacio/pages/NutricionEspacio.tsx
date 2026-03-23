@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
@@ -174,19 +174,19 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
       px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }} w="100%" maxW="780px"
     >
       {/* Header */}
-      <Box mb={5}>
-          <Text color={TXT} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1.1">
-            {label}
+      <Flex justify="space-between" align="center" mb={5}>
+        <Text color={TXT} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1.1">
+          {label}
+        </Text>
+        <Flex gap={2} align="baseline">
+          <Text color={TXT} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1">
+            {grams} g
           </Text>
-          <Flex gap={3} align="baseline" mt={1}>
-            <Text color={TXT} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1">
-              {grams} g
-            </Text>
-            <Text color={TXT + "66"} fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif">
-              {kcal} kcal
-            </Text>
-          </Flex>
-      </Box>
+          <Text color={TXT + "66"} fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif">
+            {kcal} kcal
+          </Text>
+        </Flex>
+      </Flex>
 
       {/* Divider */}
       <Box h="1px" bg={TXT + "18"} mb={5} />
@@ -195,9 +195,15 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
       <Text color={TXT + "77"} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="600" letterSpacing="0.08em" textTransform="uppercase" mb={4}>
         Fuentes recomendadas
       </Text>
-      <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="wrap">
+      <Box
+        display={{ base: "grid", md: "flex" }}
+        gridTemplateColumns={{ base: "repeat(3, 1fr)", md: undefined }}
+        justifyContent={{ md: "center" }}
+        justifyItems={{ base: "center", md: undefined }}
+        gap={{ base: 3, md: 5 }}
+      >
         {alimentos.map(a => <AlimentoCirculo key={a.id} alimento={a} onClick={onSelect} />)}
-      </Flex>
+      </Box>
     </Box>
   );
 }
@@ -213,6 +219,7 @@ export default function NutricionEspacio() {
   const [showForm, setShowForm] = useState(true);
   const [error,    setError]   = useState("");
   const [selected, setSelected] = useState<ModalData | null>(null);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const resultRef = useRef<HTMLDivElement>(null);
   const userId = sessionStorage.getItem("userId");
@@ -389,22 +396,50 @@ export default function NutricionEspacio() {
           )}
 
           {/* INFORMACIÓN IMPORTANTE */}
-          <Box w="100%" maxW="780px" bg={BG} borderRadius="2xl" border={`1px solid ${TXT}22`}
-            boxShadow={GLOW} px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }}
-          >
-            <Text color={TXT} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="700"
-              letterSpacing="0.1em" textTransform="uppercase" mb={3}
+          <Box w="100%" maxW="780px">
+            <Flex
+              as="button"
+              w="100%"
+              align="center"
+              justify="space-between"
+              gap={3}
+              px={{ base: 6, md: 10 }}
+              py={{ base: 4, md: 5 }}
+              bg={BG}
+              border={`1px solid ${TXT}33`}
+              borderRadius={infoOpen ? "2xl 2xl 0 0" : "2xl"}
+              boxShadow={GLOW}
+              cursor="pointer"
+              onClick={() => setInfoOpen((o) => !o)}
+              transition="border-radius 0.2s"
             >
-              Información importante
-            </Text>
-            <Text color={TXT + "cc"} fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif"
-              lineHeight="1.8" fontStyle="italic"
-            >
-              Esto es solo una orientación para conocerse mejor, si deseas una dieta personalizada, contacta con un nutricionista.
-              Si deseas entender más tu cuerpo y profundizar en el efecto de los alimentos en el cuerpo humano, contáctame.
-              <br /><br />
-              Gracias por querer cuidarte con coherencia.
-            </Text>
+              <Text color={TXT} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="700"
+                letterSpacing="0.1em" textTransform="uppercase"
+              >
+                Información importante
+              </Text>
+              <Text color={TXT} fontSize="sm" transition="transform 0.22s"
+                transform={infoOpen ? "rotate(180deg)" : "rotate(0deg)"}
+              >
+                ▾
+              </Text>
+            </Flex>
+            <Collapse in={infoOpen} animateOpacity>
+              <Box
+                px={{ base: 6, md: 10 }} py={{ base: 5, md: 7 }}
+                bg={BG} border={`1px solid ${TXT}33`} borderTop="none"
+                borderRadius="0 0 2xl 2xl" boxShadow={GLOW}
+              >
+                <Text color={TXT + "cc"} fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif"
+                  lineHeight="1.8" fontStyle="italic"
+                >
+                  Esto es solo una orientación para conocerse mejor, si deseas una dieta personalizada, contacta con un nutricionista.
+                  Si deseas entender más tu cuerpo y profundizar en el efecto de los alimentos en el cuerpo humano, contáctame.
+                  <br /><br />
+                  Gracias por querer cuidarte con coherencia.
+                </Text>
+              </Box>
+            </Collapse>
           </Box>
 
         </Flex>

@@ -15,25 +15,25 @@ const detalles: Detalles = { color: ayurvedaTxt, icon: AyurvedaIcon, bgColor: ay
 const basePath = "/aprendizaje/videoLessonPage/" + ayurvedaNomLink;
 
 export const modulosAyurveda: ModuloContenido[] = [
-  // {
-  //   title: "Recursos",
-  //   icon: AyurvedaIcon,
-  //   submodules: [
-  //     {
-  //       id: "ayu-rec",
-  //       nom: "Recursos a tu disposición",
-  //       link: `/recursos/` + ayurvedaNomLink,
-  //       linkAnterior: "",
-  //       linkNext: "",
-  //       descripcion: "",
-  //       video: "",
-  //       letra: null,
-  //       cursoId: "ayu-curso-1",
-  //       detalles: detalles,
-  //       icon: null,
-  //     },
-  //   ],
-  // },
+  {
+    title: "Recursos",
+    icon: AyurvedaIcon,
+    submodules: [
+      {
+        id: "ayu-rec",
+        nom: "Recursos a tu disposición",
+        link: `/recursos/` + ayurvedaNomLink,
+        linkAnterior: "",
+        linkNext: "",
+        descripcion: "",
+        video: "",
+        letra: null,
+        cursoId: "ayu-curso-1",
+        detalles: detalles,
+        icon: null,
+      },
+    ],
+  },
   {
     title: "1. Introducción",
     icon: AyurvedaIcon,
@@ -64,6 +64,12 @@ export const modulosAyurveda: ModuloContenido[] = [
         detalles: detalles,
         icon: AyurvedaIcon,
       },
+    ],
+  },
+  {
+    title: "2. Los Doshas",
+    icon: AyurvedaIcon,
+    submodules: [
       {
         id: "ayu3",
         nom: "Los Doshas",
@@ -77,12 +83,6 @@ export const modulosAyurveda: ModuloContenido[] = [
         detalles: detalles,
         icon: AyurvedaIcon,
       },
-    ],
-  },
-  {
-    title: "2. Los Doshas",
-    icon: AyurvedaIcon,
-    submodules: [
       {
         id: "ayu4",
         nom: "Vata",
@@ -124,7 +124,7 @@ export const modulosAyurveda: ModuloContenido[] = [
       },
       {
         id: "ayu7",
-        nom: "Recapitulación",
+        nom: "Recapitulación de los Doshas",
         link: `${basePath}/ayu7`,
         linkAnterior: `${basePath}/ayu6`,
         linkNext: "",

@@ -221,6 +221,20 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
+            <style>{`
+              @keyframes pathDraw {
+                from { stroke-dashoffset: 600; opacity: 0; }
+                to   { stroke-dashoffset: 0;   opacity: 1; }
+              }
+              @keyframes sefiraAppear {
+                from { opacity: 0; transform: scale(0.2); }
+                to   { opacity: 1; transform: scale(1);   }
+              }
+              @keyframes treePulse {
+                0%,100% { opacity: 0.55; }
+                50%      { opacity: 0.85; }
+              }
+            `}</style>
             {/* Filtro de brillo dorado — reposo */}
             <filter id="sefira-glow" x="-60%" y="-60%" width="220%" height="220%">
               <feGaussianBlur stdDeviation="6" result="blur" />
@@ -255,10 +269,11 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
             </filter>
           </defs>
 
-          {/* Senderos — solo líneas, sin etiquetas */}
-          {PATHS.map(({ num, from, to }) => {
+          {/* Senderos — animados */}
+          {PATHS.map(({ num, from, to }, idx) => {
             const s = sefiraMap[from]
             const e = sefiraMap[to]
+            const len = Math.hypot(e.x - s.x, e.y - s.y)
             return (
               <line
                 key={num}
@@ -266,7 +281,12 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 x2={e.x} y2={e.y}
                 stroke={`${cabalaTxt}55`}
                 strokeWidth="2"
-                style={{ pointerEvents: 'none' }}
+                style={{
+                  pointerEvents: 'none',
+                  strokeDasharray: len + 4,
+                  strokeDashoffset: len + 4,
+                  animation: `pathDraw 0.7s ease ${idx * 0.045}s forwards`,
+                }}
               />
             )
           })}
@@ -289,8 +309,13 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 onClick={() => handleClick(sefira)}
                 onMouseEnter={() => setHovered(sefira.key)}
                 onMouseLeave={() => setHovered(null)}
-                style={{ cursor: 'pointer' }}
                 filter={active ? 'url(#sefira-glow-hover)' : 'url(#sefira-glow)'}
+                style={{
+                  cursor: 'pointer',
+                  opacity: 0,
+                  transformOrigin: `${sefira.x}px ${sefira.y}px`,
+                  animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
+                }}
               >
                 <circle
                   cx={sefira.x} cy={sefira.y} r={R}

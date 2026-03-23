@@ -198,19 +198,19 @@ const PlantModal = ({
       bg="rgba(0,32,10,0.65)"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       display="flex"
-      alignItems={{ base: "flex-end", md: "center" }}
+      alignItems="center"
       justifyContent="center"
-      px={{ base: 0, md: 6 }}
-      py={{ base: 0, md: 6 }}
+      px={{ base: 4, md: 6 }}
+      py={{ base: 4, md: 6 }}
       onClick={onClose}
     >
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
-        w={{ base: "100%", md: "640px" }}
-        maxH={{ base: "92vh", md: "88vh" }}
+        w={{ base: "95%", md: "640px" }}
+        maxH={{ base: "88vh", md: "88vh" }}
         overflowY="auto"
-        borderRadius={{ base: "24px 24px 0 0", md: "24px" }}
+        borderRadius="24px"
         bg="#f8f5ec"
         boxShadow="0 32px 80px rgba(0,0,0,0.50), 0 4px 16px rgba(0,0,0,0.18)"
         sx={{

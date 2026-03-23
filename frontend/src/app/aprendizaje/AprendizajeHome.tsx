@@ -65,17 +65,34 @@ export const AprendizajeHome = () => {
           </Flex>
 
           {/* Tarjetas directas — sin card contenedor */}
-          <SimpleGrid w="100%" columns={{ base: 2, md: 4 }} spacing={{ base: 6, md: 8 }}>
+          <SimpleGrid
+            w="100%"
+            columns={{ base: 2, md: 4 }}
+            spacing={{ base: 6, md: 8 }}
+            sx={{
+              "@keyframes cardFadeUp": {
+                from: { opacity: 0, transform: "translateY(32px) scale(0.96)" },
+                to:   { opacity: 1, transform: "translateY(0)   scale(1)"    },
+              },
+            }}
+          >
             {items.map((item, i) => (
-              <ThemeCard
+              <Box
                 key={i}
-                title={item.title}
-                bgColor={item.bgColor}
-                color={item.color}
-                icon={item.icon}
-                link={item.link}
-                cursor={item.cursor}
-              />
+                style={{
+                  opacity: 0,
+                  animation: `cardFadeUp 0.52s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s forwards`,
+                }}
+              >
+                <ThemeCard
+                  title={item.title}
+                  bgColor={item.bgColor}
+                  color={item.color}
+                  icon={item.icon}
+                  link={item.link}
+                  cursor={item.cursor}
+                />
+              </Box>
             ))}
           </SimpleGrid>
         </Flex>

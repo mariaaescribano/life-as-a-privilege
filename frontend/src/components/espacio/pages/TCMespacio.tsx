@@ -318,7 +318,7 @@ const ResultSection = ({
       // }
     >
       {/* ── Encabezado ── */}
-      <Flex w="100%" align="center" justify="space-between" gap={4} mb={{ base: 6, md: 8 }} flexWrap="wrap">
+      <Flex w="100%" align={{ base: "flex-start", md: "center" }} justify={{ base: "flex-start", md: "space-between" }} gap={4} mb={{ base: 6, md: 8 }} flexDirection={{ base: "column", md: "row" }}>
         <Flex align="center" gap={4}>
           <Box
             w={{ base: "46px", md: "54px" }}
@@ -352,6 +352,7 @@ const ResultSection = ({
             borderRadius="full"
             px={{ base: 4, md: 5 }}
             py={{ base: 1, md: 1.5 }}
+            alignSelf={{ base: "center", md: "auto" }}
             boxShadow={`0 0 20px ${elTheme ? elTheme.accent + "55" : tcmTxt + "55"}, 0 0 8px ${elTheme ? elTheme.accent + "33" : tcmTxt + "33"}`}
           >
             <Flex align="center" gap={2}>

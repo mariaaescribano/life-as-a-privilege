@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
@@ -330,7 +330,6 @@ function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void
               fontSize={{ base: "md", md: "lg" }}
               lineHeight="1.8"
               fontFamily="'EB Garamond', serif"
-              fontStyle="italic"
             >
               {alimento.descripcion}
             </Text>
@@ -381,18 +380,35 @@ function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void
 // ─────────────────────────────────────────
 function CardHeader({ title }: { title: string }) {
   return (
-    <Flex align="center" justify="center" mt={3} mb={6}>
+    <Box mt={3} mb={6}>
+      <Flex align="center" justify="center" mb={3}>
+        <Text
+          textAlign="center"
+          color={TXT}
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="700"
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.04em"
+        >
+          {title}
+        </Text>
+      </Flex>
+      <Box
+        h="1px"
+        bg={`linear-gradient(to right, transparent, ${TXT}55 25%, ${TXT}55 75%, transparent)`}
+        mb={3}
+      />
       <Text
+        color={TXT + "66"}
+        fontSize="xs"
         textAlign="center"
-        color={TXT}
-        fontSize={{ base: "xl", md: "2xl" }}
-        fontWeight="700"
         fontFamily="'EB Garamond', serif"
-        letterSpacing="0.04em"
+        fontStyle="italic"
+        letterSpacing="0.05em"
       >
-        {title}
+        Pulsa sobre cada alimento para ver más
       </Text>
-    </Flex>
+    </Box>
   );
 }
 
@@ -578,6 +594,7 @@ export default function NutricionRecursos() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<ModalData | null>(null);
   const [saberMasOpen, setSaberMasOpen] = useState(false);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -609,13 +626,80 @@ export default function NutricionRecursos() {
           <ProteinasCard     onSelect={setSelected} />
           <GrasasCard        onSelect={setSelected} />
 
+          {/* AVISO LEGAL */}
+          <Box w="100%" mt={4} mb={2}>
+            <Flex
+              as="button"
+              w="100%"
+              align="center"
+              justify="center"
+              gap={3}
+              px={{ base: 5, md: 6 }}
+              py={3}
+              bg={`${BG}55`}
+              border={`1px solid ${TXT}22`}
+              borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
+              cursor="pointer"
+              onClick={() => setDisclaimerOpen((o) => !o)}
+              transition="border-radius 0.2s"
+              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+            >
+              <Flex align="center" gap={2.5}>
+                <Box color={`${TXT}88`} flexShrink={0}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                    <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                  </svg>
+                </Box>
+                <Text
+                  color={`${TXT}99`}
+                  fontSize="md"
+                  letterSpacing="0.12em"
+                  textTransform="uppercase"
+                  fontFamily="'EB Garamond', serif"
+                >
+                  Información importante
+                </Text>
+              </Flex>
+              <Text
+                color={`${TXT}66`}
+                fontSize="sm"
+                transition="transform 0.22s"
+                transform={disclaimerOpen ? "rotate(180deg)" : "rotate(0deg)"}
+              >
+                ▾
+              </Text>
+            </Flex>
+            <Collapse in={disclaimerOpen} animateOpacity>
+              <Box
+                px={{ base: 5, md: 6 }}
+                py={4}
+                bg={`${BG}33`}
+                border={`1px solid ${TXT}22`}
+                borderTop="none"
+                borderRadius="0 0 xl xl"
+                sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+              >
+                <Text
+                  color={`${TXT}cc`}
+                  fontSize={{ base: "lg", md: "xl" }}
+                  lineHeight="1.85"
+                  letterSpacing="0.02em"
+                  fontFamily="'EB Garamond', serif"
+                  fontStyle="italic"
+                >
+                  Esta información es una guía general basada en principios nutricionales reconocidos, pero cada persona es única. En caso de embarazo, lactancia, enfermedad o cualquier patología, consulta siempre con tu médico o nutricionista. Gracias por cuidarte con consciencia.
+                </Text>
+              </Box>
+            </Collapse>
+          </Box>
+
           <Flex justify="center" w="100%" pt={2}>
             <Box as="button" onClick={() => setSaberMasOpen(true)}
               px={8} py={3} borderRadius="full" bg="transparent"
-              border={`1.5px solid ${TXT}66`} color={TXT}
+              border="1.5px solid white" color="white"
               fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
               fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-              _hover={{ bg: `${TXT}14`, borderColor: TXT }}
+              _hover={{ bg: "rgba(255,255,255,0.08)" }}
             >
               ¿Quieres saber más?
             </Box>

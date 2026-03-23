@@ -213,7 +213,7 @@ export default function ElMetodo() {
       bg="#008080"
       fontFamily="'EB Garamond', serif"
     >
-      <SiteHeader variant="public" />
+      <SiteHeader variant="auto" />
 
       {/* ── CABECERA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>

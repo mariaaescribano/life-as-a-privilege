@@ -26,24 +26,24 @@ export function SolicitarAutoevaluacionButton({
           px={{ base: 5, md: 12 }}
           py={{ base: 2, md: 4 }}
           borderRadius="full"
-          border={`3px solid ${color}`}
-          bg={bgColor}
+          border="2px solid white"
+          bg="transparent"
           cursor="pointer"
-          color={color}
+          color="white"
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "md", md: "xl" }}
           letterSpacing="0.12em"
           onClick={() => setIsOpen(true)}
-          _hover={{ transform: "translateY(-2px)" }}
+          _hover={{ transform: "translateY(-2px)", bg: "rgba(255,255,255,0.08)" }}
           transition="all 0.25s ease"
-          boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+          boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 18px rgba(255,255,255,0.15)"}
         >
           <Box
             w={{ base: "20px", md: "26px" }}
             h={{ base: "20px", md: "26px" }}
             flexShrink={0}
-            filter={`drop-shadow(0 0 6px ${color}88)`}
+            filter="drop-shadow(0 0 6px rgba(255,255,255,0.5))"
           >
             {icon}
           </Box>
