@@ -138,6 +138,60 @@ export class UserService {
     return data;
   }
 
+  // --------- Login con Google (encontrar o crear) ---------
+  async findOrCreateGoogleUser({ email, name, img }: { email: string; name: string; img: string | null }) {
+    // Buscar usuario existente por email
+    const { data: existing } = await this.databaseService.getClient()
+      .from('user')
+      .select('*')
+      .eq('email', email);
+
+    if (existing && existing.length > 0) {
+      const user = existing[0];
+      const token = this.authService.generateToken(user.id);
+      return { token, user };
+    }
+
+    // Crear nuevo usuario — manejar conflicto de nombre
+    let finalName = name;
+    const { data: nameCheck } = await this.databaseService.getClient()
+      .from('user')
+      .select('id')
+      .eq('name', finalName);
+    if ((nameCheck?.length ?? 0) > 0) {
+      finalName = `${name}_g`;
+    }
+
+    // Contraseña aleatoria (el usuario de Google nunca la usará)
+    const dummyPass = await hashPassword(randomString());
+
+    let inserted = false;
+    let id = randomString();
+
+    do {
+      try {
+        const { data: rows, error } = await this.databaseService.getClient()
+          .from('user')
+          .insert({ id, name: finalName, email, password: dummyPass, img: img ?? null })
+          .select('*');
+
+        if (error) throw error;
+
+        if (rows && rows.length === 1) {
+          inserted = true;
+          const token = this.authService.generateToken(rows[0].id);
+          return { token, user: rows[0] };
+        }
+      } catch (error: any) {
+        if (error.code === '23505') {
+          id = randomString();
+        } else {
+          throw error;
+        }
+      }
+    } while (!inserted);
+  }
+
   // --------- Eliminar usuario ---------
   async deleteUser(id: string) {
     const { error } = await this.databaseService.getClient()

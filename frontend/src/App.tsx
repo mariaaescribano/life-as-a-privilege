@@ -3,6 +3,7 @@ import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LogIn from "./app/auth/LogIn";
 import SignIn from "./app/auth/SignIn";
+import GoogleAuthCallback from "./app/auth/GoogleAuthCallback";
 import Home from "./app/home/Home";
 import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
 import ModulosPage from "./app/aprendizaje/ModulosPage";
@@ -45,6 +46,7 @@ export default function App()
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
+      <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
 

@@ -13,30 +13,15 @@ YO:
 
 -----------------
 
-vamos a hacer recursos para ayurveda, para el primer curso
-Quiero que en un car elegante esten esos cinco elementos si es posible
-que los conviertas en png , pero la idea es q esten en horizontal, uno al lado de otro. 
-Con un boton abajo a la derecha discreto y elegante que ponag "Ver video" y te lleve al video
-en el que se explican los 5 elementos.
-
-EN otro card abajo, quiero 3 cards uno al lado del otro para indicar los doshas.
-El primero Vatta, con la imagen de eter y aire,
-luego pitta agua y fuego y luego kapha tierra y agua.
-
-Si se pincha que se abra un card modal con la letra escrita en su 
-color y en el titulo que tenga el icono a la izquierda del dosha al q peretenece.
-
-Q este el video en el se habla de ese dosha y una pequeña descrip, con la transcripcion.
-de la letra de ese video.
-
 
 
 
 
 --
 
-- crea un inicio de sesion con google
-
+- ayurveda recursos
+- tcm modulos
+- fisiologia videos y recursos
 
 
 
