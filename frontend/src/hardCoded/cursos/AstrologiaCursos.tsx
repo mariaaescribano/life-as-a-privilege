@@ -6,6 +6,7 @@ import {
   astrologiaNom,
   astrologiaTxt,
 } from "../../GlobalVariables";
+import { modulosAstrologia } from "../aprendizajes/Astrologia/ModulosAstrologia";
 
 export const astroCurso1ID = "astro-curso-1";
 
@@ -25,6 +26,7 @@ export const astrologiaCursos: ModalidadInfo = {
       precio: null,
       numLecciones: 38,
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosAstrologia,
     },
   ],
 };

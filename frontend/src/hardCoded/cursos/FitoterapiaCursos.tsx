@@ -6,6 +6,7 @@ import {
   fitoterapiaNom,
   fitoterapiaTxt,
 } from "../../GlobalVariables";
+import { modulosFitoterapia } from "../aprendizajes/Fitoterapia/ModulosFitoterpia";
 
 export const fitoterapiaCursos: ModalidadInfo = {
   nom: fitoterapiaNom,
@@ -23,6 +24,7 @@ export const fitoterapiaCursos: ModalidadInfo = {
       precio: null,
       numLecciones: 10,
       icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosFitoterapia,
     },
   ],
 };
