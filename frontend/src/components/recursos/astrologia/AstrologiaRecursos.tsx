@@ -5,6 +5,7 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
+import { SaberMasButton } from "../../global/SaberMasButton";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
@@ -511,17 +512,7 @@ export default function AstrologiaRecursos() {
               </Grid>
             </Box>
           </Box>
-          <Flex justify="center" w="100%" pt={4}>
-            <Box as="button" onClick={() => setSaberMasOpen(true)}
-              px={8} py={3} borderRadius="full" bg="transparent"
-              border={`1.5px solid ${astrologiaTxt}66`} color={astrologiaTxt}
-              fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-              _hover={{ bg: `${astrologiaTxt}14`, borderColor: astrologiaTxt }}
-            >
-              ¿Quieres saber más?
-            </Box>
-          </Flex>
+          <SaberMasButton onClick={() => setSaberMasOpen(true)} color={astrologiaTxt} bgColor={astrologiaBg} />
         </Flex>
       </Box>
 

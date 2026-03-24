@@ -10,7 +10,7 @@ interface SaberMasButtonProps {
 
 export function SaberMasButton({ onClick }: SaberMasButtonProps) {
   return (
-    <Flex justify="center" w="100%" maxW="900px" mt={16}>
+    <Flex justify="center" w="100%" maxW="900px" mt={10}>
       <Box
         as="button"
         onClick={onClick}
@@ -42,6 +42,7 @@ export function SaberMasButton({ onClick }: SaberMasButtonProps) {
             fontWeight="600"
             letterSpacing="0.07em"
             lineHeight="1"
+            color="white"
           >
             ¿Quieres saber más?
           </Text>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Collapse, Flex, Grid, HStack, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
+import { SaberMasButton } from "../../global/SaberMasButton";
 import {
   API_URL,
   fitoterapiaBg,
@@ -748,17 +749,7 @@ const FitoterapiaRecursos = () => {
         </Box>
       </Flex>
 
-      <Flex justify="center" w="100%" py={6}>
-        <Box as="button" onClick={() => setSaberMasOpen(true)}
-          px={8} py={3} borderRadius="full" bg="transparent"
-          border="1.5px solid white" color="white"
-          fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
-          fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-          _hover={{ bg: "rgba(255,255,255,0.08)" }}
-        >
-          ¿Quieres saber más?
-        </Box>
-      </Flex>
+      <SaberMasButton onClick={() => setSaberMasOpen(true)} color={fitoterapiaTxt} bgColor={fitoterapiaBg} />
 
       {/* FOOTER */}
       <SiteFooter />

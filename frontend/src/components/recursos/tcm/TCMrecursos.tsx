@@ -4,6 +4,7 @@ import { Box, Collapse, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import { tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
+import { SaberMasButton } from "../../global/SaberMasButton";
 import TCMElementModal from "./TCMElementModal";
 import type { TCMElementData } from "./TCMElementModal";
 import TCMArrowModal from "./TCMArrowModal";
@@ -1432,17 +1433,7 @@ const TCMPage = () => {
         </Box>
 
         {/* ── SABER MÁS ── */}
-        <Flex justify="center" w="100%" py={4}>
-          <Box as="button" onClick={() => setSaberMasOpen(true)}
-            px={8} py={3} borderRadius="full" bg="transparent"
-            border={`1.5px solid ${tcmTxt}66`} color={tcmTxt}
-            fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
-            fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-            _hover={{ bg: `${tcmTxt}14`, borderColor: tcmTxt }}
-          >
-            ¿Quieres saber más?
-          </Box>
-        </Flex>
+        <SaberMasButton onClick={() => setSaberMasOpen(true)} color={tcmTxt} bgColor={tcmBg} />
 
         {/* ── SIGUE APRENDIENDO ── */}
         <Box

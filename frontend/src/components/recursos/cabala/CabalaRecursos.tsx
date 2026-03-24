@@ -6,6 +6,7 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { CabalaIcon, cabalaBg, cabalaNom, cabalaTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
+import { SaberMasButton } from "../../global/SaberMasButton";
 import { modulosCabala } from "../../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
 import ArbolDeLaVida, { type Sefira, type SefiraKey } from "../../global/ArbolDeLaVida";
@@ -273,17 +274,7 @@ export default function CabalaRecursos() {
             />
           </Box>
 
-          <Flex justify="center" w="100%" pt={4}>
-            <Box as="button" onClick={() => setSaberMasOpen(true)}
-              px={8} py={3} borderRadius="full" bg="transparent"
-              border={`1.5px solid ${GOLD}66`} color={GOLD}
-              fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-              _hover={{ bg: `${GOLD}14`, borderColor: GOLD }}
-            >
-              ¿Quieres saber más?
-            </Box>
-          </Flex>
+          <SaberMasButton onClick={() => setSaberMasOpen(true)} color={cabalaTxt} bgColor={cabalaBg} />
         </Flex>
       </Box>
 

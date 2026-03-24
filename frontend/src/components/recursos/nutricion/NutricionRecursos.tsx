@@ -5,6 +5,7 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
+import { SaberMasButton } from "../../global/SaberMasButton";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
 
 const BG  = nutricionBg;
@@ -693,17 +694,7 @@ export default function NutricionRecursos() {
             </Collapse>
           </Box>
 
-          <Flex justify="center" w="100%" pt={2}>
-            <Box as="button" onClick={() => setSaberMasOpen(true)}
-              px={8} py={3} borderRadius="full" bg="transparent"
-              border="1.5px solid white" color="white"
-              fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="600" letterSpacing="0.07em" cursor="pointer" transition="all 0.2s"
-              _hover={{ bg: "rgba(255,255,255,0.08)" }}
-            >
-              ¿Quieres saber más?
-            </Box>
-          </Flex>
+          <SaberMasButton onClick={() => setSaberMasOpen(true)} color={TXT} bgColor={BG} />
         </Flex>
       </Box>
 

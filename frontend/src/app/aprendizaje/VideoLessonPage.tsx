@@ -17,7 +17,7 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
-import { modulostcmFundamentos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
+import { modulostcmFundamentos, modulostcmCincoElementos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
@@ -85,8 +85,8 @@ export default function VideoLessonPage() {
         setdatos(getModuleByTitle(submoduloId!, modulosNeuroPsicologia));
       }
       else if(moduloId === tcmNomLink)
-      { 
-        setdatos(getModuleByTitle(submoduloId!, modulostcmFundamentos));
+      {
+        setdatos(getModuleByTitle(submoduloId!, [...modulostcmFundamentos, ...modulostcmCincoElementos]));
       }
       else if(moduloId === fitoterapiaNom)
       { 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
@@ -16,6 +16,7 @@ import {
   kaphaColor,
 } from "../../../GlobalVariables";
 import {
+  letraAyu2,
   letraAyu5,
   letraAyu6,
   letraAyu7,
@@ -44,9 +45,8 @@ const AguaIcon = ({ color }: { color: string }) => (
 );
 
 const FuegoIcon = ({ color }: { color: string }) => (
-  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 3 C12 9 17 11 17 16 a5 5 0 0 1-10 0 C7 12 11 10 11 6" />
-    <path d="M12 18 a1.5 1.5 0 0 1-1.5-1.5" strokeWidth="1.2" opacity="0.6" />
+  <svg viewBox="0 0 24 24" width="28" height="28" fill={color} xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C12 2 9.5 6 9.5 9.5C9.5 9.5 8 8.5 8 6.5C8 6.5 5 9.5 5 13.5C5 17.6 8.1 21 12 21C15.9 21 19 17.6 19 13.5C19 9 12 2 12 2ZM12 19C10.3 19 9 17.6 9 15.8C9 14.5 9.8 13.4 10.5 12.5C10.5 13.8 11.4 14.8 12.5 15C12.5 15 11.5 13.5 12.5 12C13.5 10.5 14 9 14 9C14 9 16 11 16 13.5C16 16.5 14.2 19 12 19Z" opacity="0.9"/>
   </svg>
 );
 
@@ -139,7 +139,8 @@ function YoutubeEmbed({ videoId, color }: { videoId: string; color: string }) {
       borderRadius="xl"
       overflow="hidden"
       border={`1px solid ${color}30`}
-      h={{ base: "200px", md: "260px" }}
+      w="100%"
+      sx={{ aspectRatio: "16/9" }}
     >
       <iframe
         src={`https://www.youtube.com/embed/${videoId}?rel=0`}
@@ -155,6 +156,159 @@ function YoutubeEmbed({ videoId, color }: { videoId: string; color: string }) {
 }
 
 /* ══════════════════════════════════════════
+   ELEMENTOS MODAL
+══════════════════════════════════════════ */
+function ElementosModal({ onClose }: { onClose: () => void }) {
+  const [letraOpen, setLetraOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handler);
+    };
+  }, [onClose]);
+
+  return (
+    <Box
+      position="fixed" inset={0} zIndex={1000}
+      bg="rgba(0,0,0,0.60)"
+      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+      display="flex" alignItems="center" justifyContent="center"
+      px={{ base: 4, md: 6 }} py={{ base: 4, md: 6 }}
+      onClick={onClose}
+    >
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        position="relative"
+        w={{ base: "95%", md: "620px" }}
+        maxH={{ base: "90vh", md: "88vh" }}
+        overflowY="auto"
+        borderRadius="24px"
+        bg={BG}
+        boxShadow={`0 32px 80px rgba(0,0,0,0.45), 0 0 40px ${ACCENT}30`}
+        border={`1.5px solid ${ACCENT}40`}
+        sx={{
+          "&::-webkit-scrollbar": { width: "5px" },
+          "&::-webkit-scrollbar-thumb": { bg: ACCENT + "44", borderRadius: "full" },
+        }}
+      >
+        <Box
+          as="button" position="absolute" top="14px" right="14px"
+          w="34px" h="34px" borderRadius="full"
+          bg={ACCENT + "12"} border={`1px solid ${ACCENT}30`}
+          display="flex" alignItems="center" justifyContent="center"
+          color={ACCENT} fontSize="15px" fontWeight="700"
+          cursor="pointer" transition="all 0.18s"
+          _hover={{ bg: ACCENT + "22" }}
+          onClick={onClose}
+        >✕</Box>
+
+        <Box px={{ base: 6, md: 10 }} pt={8} pb={9}>
+          {/* Título */}
+          <Flex align="center" gap={3} mb={6}>
+            <AyurvedaIcon size={{ base: "28px", md: "32px" }} />
+            <Text
+              color={ACCENT}
+              fontSize={{ base: "3xl", md: "4xl" }}
+              fontWeight="700"
+              fontFamily="'EB Garamond', serif"
+              lineHeight="1"
+            >
+              Los Cinco Elementos
+            </Text>
+          </Flex>
+
+          {/* Video */}
+          <YoutubeEmbed videoId={ELEMENTOS_VIDEO} color={ACCENT} />
+
+          {/* Descripción */}
+          <Box
+            w="100%"
+            bg={BG}
+            border={`1px solid ${ACCENT}44`}
+            borderRadius="2xl"
+            px={{ base: 6, md: 10 }}
+            boxShadow={GLOW}
+            py={{ base: 4, md: 6 }}
+            mt={{ base: 5, md: 7 }}
+            mb={{ base: 5, md: 7 }}
+          >
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              color={ACCENT}
+              lineHeight="1.8"
+              fontStyle="italic"
+              letterSpacing="0.02em"
+              fontFamily="'EB Garamond', serif"
+            >
+              Según la Ayurveda, toda la naturaleza está compuesta por cinco elementos fundamentales: tierra, agua, fuego, aire y éter. Los seres humanos también estamos formados por estos cinco elementos, que ejercen una influencia directa e inevitable en nuestra vida.
+            </Text>
+          </Box>
+
+          {/* Transcripción plegable */}
+          <Flex
+            as="button"
+            w="100%"
+            boxShadow={GLOW}
+            align="center"
+            justify="space-between"
+            px={{ base: 6, md: 10 }}
+            py={{ base: 3, md: 4 }}
+            bg={BG}
+            border={`1px solid ${ACCENT}44`}
+            borderRadius={letraOpen ? "2xl 2xl 0 0" : "2xl"}
+            cursor="pointer"
+            onClick={() => setLetraOpen((o) => !o)}
+            transition="border-radius 0.2s"
+          >
+            <Text
+              color={ACCENT}
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600"
+              letterSpacing="0.04em"
+              fontFamily="'EB Garamond', serif"
+            >
+              Transcripción
+            </Text>
+            <Text
+              color={ACCENT} fontSize="xl"
+              transition="transform 0.25s"
+              transform={letraOpen ? "rotate(180deg)" : "rotate(0deg)"}
+            >
+              ▾
+            </Text>
+          </Flex>
+          <Collapse in={letraOpen} animateOpacity>
+            <Box
+              px={{ base: 6, md: 10 }}
+              py={{ base: 5, md: 7 }}
+              bg={BG}
+              border={`1px solid ${ACCENT}44`}
+              borderTop="none"
+              borderRadius="0 0 2xl 2xl"
+            >
+              <Text
+                color={ACCENT}
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="2"
+                letterSpacing="0.02em"
+                whiteSpace="pre-wrap"
+                fontFamily="'EB Garamond', serif"
+              >
+                {letraAyu2}
+              </Text>
+            </Box>
+          </Collapse>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+/* ══════════════════════════════════════════
    DOSHA MODAL
 ══════════════════════════════════════════ */
 function DoshaModal({
@@ -164,6 +318,8 @@ function DoshaModal({
   dosha: (typeof DOSHAS)[0];
   onClose: () => void;
 }) {
+  const [letraOpen, setLetraOpen] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -233,49 +389,84 @@ function DoshaModal({
           {/* Video */}
           <YoutubeEmbed videoId={dosha.video} color={dosha.color} />
 
-          {/* Divider */}
-          <Box h="1px" bg={dosha.color + "20"} my={5} />
-
           {/* Descripción */}
-          <Text
-            color={dosha.color}
-            fontSize={{ base: "md", md: "lg" }}
-            lineHeight="1.9"
-            fontFamily="'EB Garamond', serif"
-            mb={5}
-          >
-            {dosha.descripcion}
-          </Text>
-
-          {/* Divider */}
-          <Box h="1px" bg={dosha.color + "20"} mb={4} />
-
-          {/* Transcripción */}
-          <Flex align="center" gap={2} mb={3}>
-            <Box w="3px" h="18px" borderRadius="full" bg={dosha.color} opacity={0.6} />
-            <Text
-              color={dosha.color} fontSize="xs" fontWeight="700"
-              letterSpacing="0.12em" textTransform="uppercase"
-              fontFamily="'EB Garamond', serif" opacity={0.7}
-            >
-              Transcripción
-            </Text>
-          </Flex>
           <Box
-            bg={dosha.color + "08"}
-            border={`1px solid ${dosha.color}20`}
-            borderRadius="xl" px={5} py={4}
+            w="100%"
+            bg={BG}
+            border={`1px solid ${dosha.color}44`}
+            borderRadius="2xl"
+            px={{ base: 6, md: 10 }}
+            boxShadow={GLOW}
+            py={{ base: 4, md: 6 }}
+            mt={{ base: 5, md: 7 }}
+            mb={{ base: 5, md: 7 }}
+          >
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              color={dosha.color}
+              lineHeight="1.8"
+              fontStyle="italic"
+              letterSpacing="0.02em"
+              fontFamily="'EB Garamond', serif"
+            >
+              {dosha.descripcion}
+            </Text>
+          </Box>
+
+          {/* Transcripción plegable */}
+          <Flex
+            as="button"
+            w="100%"
+            boxShadow={GLOW}
+            align="center"
+            justify="space-between"
+            px={{ base: 6, md: 10 }}
+            py={{ base: 3, md: 4 }}
+            bg={BG}
+            border={`1px solid ${dosha.color}44`}
+            borderRadius={letraOpen ? "2xl 2xl 0 0" : "2xl"}
+            cursor="pointer"
+            onClick={() => setLetraOpen((o) => !o)}
+            transition="border-radius 0.2s"
           >
             <Text
               color={dosha.color}
-              fontSize={{ base: "sm", md: "md" }}
-              lineHeight="1.9"
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600"
+              letterSpacing="0.04em"
               fontFamily="'EB Garamond', serif"
-              fontStyle="italic"
             >
-              {dosha.letra}
+              Transcripción
             </Text>
-          </Box>
+            <Text
+              color={dosha.color} fontSize="xl"
+              transition="transform 0.25s"
+              transform={letraOpen ? "rotate(180deg)" : "rotate(0deg)"}
+            >
+              ▾
+            </Text>
+          </Flex>
+          <Collapse in={letraOpen} animateOpacity>
+            <Box
+              px={{ base: 6, md: 10 }}
+              py={{ base: 5, md: 7 }}
+              bg={BG}
+              border={`1px solid ${dosha.color}44`}
+              borderTop="none"
+              borderRadius="0 0 2xl 2xl"
+            >
+              <Text
+                color={dosha.color}
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="2"
+                letterSpacing="0.02em"
+                whiteSpace="pre-wrap"
+                fontFamily="'EB Garamond', serif"
+              >
+                {dosha.letra}
+              </Text>
+            </Box>
+          </Collapse>
         </Box>
       </Box>
     </Box>
@@ -286,7 +477,7 @@ function DoshaModal({
    PÁGINA PRINCIPAL
 ══════════════════════════════════════════ */
 export default function AyurvedaRecursos() {
-  const [videoOpen, setVideoOpen]   = useState(false);
+  const [elementosModalOpen, setElementosModalOpen] = useState(false);
   const [openDosha, setOpenDosha]   = useState<(typeof DOSHAS)[0] | null>(null);
 
   useEffect(() => {
@@ -310,13 +501,14 @@ export default function AyurvedaRecursos() {
           icon={<AyurvedaIcon size={{ base: "35px", md: "45px" }} />}
           title={ayurvedaNom}
           bgColor={BG}
-          color={ACCENT}
+          color={ACCENT} mb={{ base: 0, md: 0 }}
         />
 
         {/* ── Card: Cinco Elementos ── */}
         <Box
           w="100%"
           bg={BG}
+          mt="20px"
           borderRadius="2xl"
           boxShadow={GLOW}
           border={`1px solid ${ACCENT}22`}
@@ -324,8 +516,8 @@ export default function AyurvedaRecursos() {
           py={{ base: 6, md: 8 }}
           position="relative"
         >
-          {/* Título */}
-          <Flex align="center" gap={3} mb={6}>
+          {/* Título centrado */}
+          <Flex align="center" justify="center" gap={3} mb={6}>
             <Box flexShrink={0}>
               <AyurvedaIcon size={{ base: "24px", md: "28px" }} />
             </Box>
@@ -344,7 +536,7 @@ export default function AyurvedaRecursos() {
             justify={{ base: "space-around", md: "center" }}
             gap={{ base: 3, md: 8 }}
             flexWrap={{ base: "wrap", md: "nowrap" }}
-            mb={videoOpen ? 6 : 0}
+            mb={6}
           >
             {ELEMENTOS.map((el) => (
               <Flex key={el.nombre} direction="column" align="center" gap={2}>
@@ -356,13 +548,11 @@ export default function AyurvedaRecursos() {
                   bg={el.color + "0e"}
                   boxShadow={`0 0 16px ${el.color}22`}
                   display="flex" alignItems="center" justifyContent="center"
-                  transition="all 0.2s"
-                  _hover={{ boxShadow: `0 0 24px ${el.color}55`, transform: "translateY(-2px)" }}
                 >
                   <el.Icon color={el.color} />
                 </Box>
                 <Text
-                  color={ACCENT}
+                  color={el.color}
                   fontSize={{ base: "xs", md: "sm" }}
                   fontWeight="600"
                   fontFamily="'EB Garamond', serif"
@@ -374,22 +564,15 @@ export default function AyurvedaRecursos() {
             ))}
           </Flex>
 
-          {/* Video embed (colapsa) */}
-          {videoOpen && (
-            <Box mb={4}>
-              <YoutubeEmbed videoId={ELEMENTOS_VIDEO} color={ACCENT} />
-            </Box>
-          )}
-
-          {/* Botón "Ver video" abajo a la derecha */}
-          <Flex justify="flex-end" mt={5}>
+          {/* Botón "Ver video" → abre modal */}
+          <Flex justify="flex-end" mt={2}>
             <Box
               as="button"
-              onClick={() => setVideoOpen((o) => !o)}
+              onClick={() => setElementosModalOpen(true)}
               display="flex" alignItems="center" gap={2}
               px={4} py={2} borderRadius="full"
               border={`1px solid ${ACCENT}44`}
-              bg={videoOpen ? ACCENT + "14" : "transparent"}
+              bg="transparent"
               color={ACCENT} cursor="pointer"
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "sm", md: "md" }}
@@ -400,7 +583,7 @@ export default function AyurvedaRecursos() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z" />
               </svg>
-              {videoOpen ? "Cerrar video" : "Ver video"}
+              Ver video
             </Box>
           </Flex>
         </Box>
@@ -520,6 +703,11 @@ export default function AyurvedaRecursos() {
       </Flex>
 
       <SiteFooter />
+
+      {/* Modal cinco elementos */}
+      {elementosModalOpen && (
+        <ElementosModal onClose={() => setElementosModalOpen(false)} />
+      )}
 
       {/* Modal del dosha */}
       {openDosha && (
