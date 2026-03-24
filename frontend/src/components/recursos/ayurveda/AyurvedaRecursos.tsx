@@ -244,7 +244,7 @@ function ElementosModal({ onClose }: { onClose: () => void }) {
               letterSpacing="0.02em"
               fontFamily="'EB Garamond', serif"
             >
-              Según la Ayurveda, toda la naturaleza está compuesta por cinco elementos fundamentales: tierra, agua, fuego, aire y éter. Los seres humanos también estamos formados por estos cinco elementos, que ejercen una influencia directa e inevitable en nuestra vida.
+             Conoce los cinco elementos fundamentales que componen toda la naturaleza y la energía vital que los anima.
             </Text>
           </Box>
 

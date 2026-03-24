@@ -36,7 +36,7 @@ const disciplines: Discipline[] = [
     renderIcon: (size) => <FisiologiaIcon size={size} />,
     desc: fisiologiaDescrip,
     link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
-    available: false
+    available: true
   },
   {
     name: neuropsicologiaNom,

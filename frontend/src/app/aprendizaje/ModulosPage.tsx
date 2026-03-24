@@ -16,25 +16,8 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
-import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
-import { modulostcmFundamentos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
-import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
-import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
-import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
-import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { cursosData } from "../../hardCoded/cursos";
 import type { ModuloContenido } from "../../dtos/aprendizaje.type";
-import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
-
-const modulosPorModalidad: Record<string, ModuloContenido[]> = {
-  [neuropsicologiaNom]: modulosNeuroPsicologia,
-  [astrologiaNom]: modulosAstrologia,
-  [tcmNomLink]: modulostcmFundamentos,
-  [fitoterapiaNom]: modulosFitoterapia,
-  [cabalaNom]: modulosCabala,
-  [nutricionNomLink]: modulosNutricion,
-  [ayurvedaNomLink]: modulosAyurveda,
-};
 
 export default function ModulesPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
@@ -57,7 +40,7 @@ export default function ModulesPage() {
       const curso = cursosData[modalidadId]?.cursos.find(c => c.id === cursoId);
       if (curso?.modulos) return curso.modulos;
     }
-    return modulosPorModalidad[modalidadId ?? ""] ?? [];
+    return [];
   };
 
   const getModuloDatos = (): Modulo => {
@@ -65,8 +48,8 @@ export default function ModulesPage() {
     const modulos = getModulosParaCurso();
     const nomMod = modalidadId ?? "";
     switch (modalidadId) {
-      case "fisiologia":
-        return { nom: titulo || fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon />};
+      case fisiologiaNom:
+        return { nom: titulo || fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />, modulos};
       case neuropsicologiaNom:
         return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case astrologiaNom:

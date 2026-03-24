@@ -44,10 +44,10 @@ const disciplines: Discipline[] = [
   {
     name: fisiologiaNom, bg: fisiologiaBg, txt: fisiologiaTxt,
     description: fisiologiaDescrip,
-    renderIcon: (s) => <FisiologiaIcon size={s} />,
+    renderIcon: (s) => <FisiologiaIcon size={{ base: s, md: s }} />,
     linkEspacio: "/espacio/questions/" + fisiologiaNom,
     linkAprendizaje: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
-    available:false
+    available:true
   },
   {
     name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt,

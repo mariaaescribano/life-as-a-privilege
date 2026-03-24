@@ -448,7 +448,7 @@ export default function NutricionEspacio() {
       <SolicitarAutoevaluacionButton
         bgColor={nutricionBg}
         color={nutricionTxt}
-        icon={<NutricionIcon size={{base:"26px", md:"26px"}} />}
+        icon={<NutricionIcon size={{base:"30px", md: "50px"}}  />}
         disciplineName="Nutrición"
       />
 

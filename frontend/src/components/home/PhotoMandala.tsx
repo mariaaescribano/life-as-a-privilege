@@ -131,7 +131,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
   const iconSize    = isXs ? "34px"  : isSm ? "42px"  : isMd ? "48px"  : "48px";
 
   const photos: CirclePhoto[] = [
-    { name: fisiologiaNom,    available:false,  bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + fisiologiaNom },
+    { name: fisiologiaNom,    available:true,  bg: fisiologiaBg,      txt: fisiologiaTxt,      icon: <FisiologiaIcon      size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + fisiologiaNom },
     { name: neuropsicologiaNom, available:true,  bg: neuropsicologiaBg, txt: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: iconSize, md: iconSize }} />,            link: "/espacio/questions/" + neuropsicologiaNom },
     { name: astrologiaNom,  available:true,     bg: astrologiaBg,      txt: astrologiaTxt,      icon: <AstrologiaIcon      size={iconSize} />,                                    link: "/espacio/questions/" + astrologiaNom },
     { name: tcmNom,  available:true, bg: tcmBg,  txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,   link: "/espacio/questions/" + tcmNomLink },

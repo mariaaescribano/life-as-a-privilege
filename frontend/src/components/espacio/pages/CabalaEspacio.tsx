@@ -413,7 +413,7 @@ export default function CabalaEspacio() {
       <SolicitarAutoevaluacionButton
         bgColor={cabalaBg}
         color={cabalaTxt}
-        icon={<CabalaIcon size="26px" />}
+        icon={<CabalaIcon size={{base:"30px", md: "50px"}}  />}
         disciplineName="Cábala"
       />
 

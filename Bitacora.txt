@@ -3,34 +3,13 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-
-YO:
--Revisar coherencia de los cursos de TCM
-
-
-
-- "" con Ayurveda
-
------------------
-
-
-en ayurveda recursos, por favor, cambia el icono para el fuego, las letras de cada elemento ponlas de su color
-y el titulo de los cinco elementos en medio del box.
-SObre el boton que te lleva al video, yo lo que quiero es que te lleve a la pagina de videoLessonPage 
-donde se muestre ese video, pero si no es facil, porq tendrias q buscar el url para redirigirlo, haz que al pulsarlo
-se abr un card modal con el video, la descripcion y la transcripcion (la transcripcion desplegable, esto si q tienes q fijarte en videolessonpage)
-
-Respecto a los cards de abajo de los doshas, estan bien, solo cambia que el trasncricpion del box sea plegable
-
-
-
-
---
-
-- tcm modulos
-- fisiologia videos y recursos
 - pagina de novedades
 - pag para apuntes
+
+
+
+
+
 
 
 

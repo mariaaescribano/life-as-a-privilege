@@ -1,0 +1,121 @@
+import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon } from "../../../GlobalVariables";
+import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7 } from "./LetraFisiologia";
+
+const detalles: Detalles = { color: fisiologiaTxt, icon: FisiologiaIcon, bgColor: fisiologiaBg };
+
+const basePath = "/aprendizaje/videoLessonPage/" + fisiologiaNom;
+
+export const fisioCurso1ID = "fisio-curso-1";
+
+export const modulosFisiologia: ModuloContenido[] = [
+  {
+    title: "1. Hechos de polvo de estrellas",
+    icon: EstrellaIcon,
+    submodules: [
+      {
+        id: "fisio1",
+        nom: "1.1 Hechos de polvo de estrellas",
+        link: `${basePath}/fisio1`,
+        linkAnterior: "",
+        linkNext: `${basePath}/fisio2`,
+        descripcion: "Nuestro cuerpo está hecho de los átomos que las estrellas liberaron al morir.",
+        video: "sBsLNxY2w40",
+        letra: fisio1,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: EstrellaIcon,
+      },
+      {
+        id: "fisio2",
+        nom: "1.2 Las células",
+        link: `${basePath}/fisio2`,
+        linkAnterior: `${basePath}/fisio1`,
+        linkNext: `${basePath}/fisio3`,
+        descripcion: "Una célula es un organismo perfecto que forma parte de un engranaje mayor.",
+        video: "Ikx-VBEAO5c",
+        letra: fisio2,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+      },
+      {
+        id: "fisio3",
+        nom: "1.3 Los órganos",
+        link: `${basePath}/fisio3`,
+        linkAnterior: `${basePath}/fisio2`,
+        linkNext: `${basePath}/fisio4`,
+        descripcion: "Los órganos son asociaciones de células coordinadas por una inteligencia mayor.",
+        video: "M5vsl12Duok",
+        letra: fisio3,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+      },
+    ],
+  },
+  {
+    title: "2. La Inteligencia del Cuerpo",
+    icon: CelulasOrganosIcon,
+    submodules: [
+      {
+        id: "fisio4",
+        nom: "2.1 Las hormonas",
+        link: `${basePath}/fisio4`,
+        linkAnterior: `${basePath}/fisio3`,
+        linkNext: `${basePath}/fisio5`,
+        descripcion: "Las hormonas son mensajes entre órganos que coordinan la vida en nuestro cuerpo.",
+        video: "r1O8j3T3dFE",
+        letra: fisio4,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+      },
+      {
+        id: "fisio5",
+        nom: "2.2 El sistema nervioso",
+        link: `${basePath}/fisio5`,
+        linkAnterior: `${basePath}/fisio4`,
+        linkNext: `${basePath}/fisio6`,
+        descripcion: "El sistema nervioso conecta el cerebro con todo el cuerpo y regula funciones automáticas.",
+        video: "kKQJ8tyx8gY",
+        letra: fisio5,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: SistemaNerviosoIcon,
+      },
+      {
+        id: "fisio6",
+        nom: "2.3 Resumen de nuestros órganos",
+        link: `${basePath}/fisio6`,
+        linkAnterior: `${basePath}/fisio5`,
+        linkNext: `${basePath}/fisio7`,
+        descripcion: "Cada órgano vela por nosotros y su funcionamiento refleja cómo nos tratamos.",
+        video: "MDw7ntVuN4w",
+        letra: fisio6,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+      },
+    ],
+  },
+  {
+    title: "3. El milagro más complejo",
+    icon: MilagroIcon,
+    submodules: [
+      {
+        id: "fisio7",
+        nom: "3.1 El milagro más complejo de la naturaleza",
+        link: `${basePath}/fisio7`,
+        linkAnterior: `${basePath}/fisio6`,
+        linkNext: "",
+        descripcion: "Somos el milagro más asombroso y complejo de la naturaleza.",
+        video: "MxEhUFtVowA",
+        letra: fisio7,
+        cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: MilagroIcon,
+      },
+    ],
+  },
+];

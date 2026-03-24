@@ -88,7 +88,7 @@ const ThemePreguntas = () => {
             <SolicitarAutoevaluacionButton
               bgColor={neuropsicologiaBg}
               color={neuropsicologiaTxt}
-              icon={<NeuropsicologiaIcon size="26px" />}
+              icon={<NeuropsicologiaIcon size={{base:"30px", md: "50px"}}  />}
               disciplineName="Neuropsicología"
             />
           </Flex>

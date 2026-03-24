@@ -930,7 +930,7 @@ export default function AstrologiaEspacio() {
       <SolicitarAutoevaluacionButton
         bgColor={astrologiaBg}
         color={astrologiaTxt}
-        icon={<AstrologiaIcon size="26px" />}
+        icon={<AstrologiaIcon size={{base:"30px", md: "50px"}} />}
         disciplineName="Astrología"
       />
 

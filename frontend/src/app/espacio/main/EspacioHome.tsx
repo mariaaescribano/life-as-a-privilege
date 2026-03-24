@@ -13,7 +13,7 @@ import {
   cabalaBg, CabalaIcon, cabalaNom,
   cabalaTxt,
   EspacioPersonalIcon,
-  fisiologiaBg, FisiologiaIcon, fisiologiaNom,
+  fisiologiaBg, FisiologiaIcon,
   fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom,
   neuropsicologiaTxt,
@@ -43,7 +43,7 @@ const EspacioHome = () => {
   const navigate = useNavigate();
 
   const photos = [
-    { bg: fisiologiaBg,      icon: <FisiologiaIcon size="58px" />,                              link: "/espacio/questions/" + fisiologiaNom,      cursor: "not-allowed" , txt: fisiologiaTxt},
+    { bg: fisiologiaBg,      icon: <FisiologiaIcon size="58px" />,                              link: "/espacio/fisiologia",                      cursor: "pointer"     , txt: fisiologiaTxt},
     { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{ base: "38px", md: "58px" }} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer"  , txt: neuropsicologiaTxt   },
     { bg: astrologiaBg,      icon: <AstrologiaIcon size={{ base: "38px", md: "58px" }}  />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "pointer" , txt: astrologiaTxt},
     { bg: tcmBg,             icon: <TCMIcon size={{ base: "38px", md: "58px" }} />,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},

@@ -23,6 +23,7 @@ import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/Modul
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
+import { modulosFisiologia } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -40,7 +41,7 @@ export default function VideoLessonPage() {
     switch (moduloId) {
       case neuropsicologiaNom:
         return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
-      case "fisiologia":
+      case fisiologiaNom:
         return { nom: fisiologiaNom, nomModalidad: nom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
       case astrologiaNom:
         return { nom: astrologiaNom, nomModalidad: nom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "44px", md: "44px" }}/> };
@@ -107,6 +108,10 @@ export default function VideoLessonPage() {
       else if(moduloId === ayurvedaNomLink)
       {
         setdatos(getModuleByTitle(submoduloId!, modulosAyurveda));
+      }
+      else if(moduloId === fisiologiaNom)
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosFisiologia));
       }
     }
   }, [moduloId, submoduloId]);

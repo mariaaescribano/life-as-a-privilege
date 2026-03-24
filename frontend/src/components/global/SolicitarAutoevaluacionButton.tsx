@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { ContactModal } from "./ContactModal";
 
 interface SolicitarAutoevaluacionButtonProps {
@@ -39,14 +39,14 @@ export function SolicitarAutoevaluacionButton({
           transition="all 0.25s ease"
           boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 18px rgba(255,255,255,0.15)"}
         >
-          <Box
+          {/* <Box
             w={{ base: "20px", md: "26px" }}
             h={{ base: "20px", md: "26px" }}
             flexShrink={0}
             filter="drop-shadow(0 0 6px rgba(255,255,255,0.5))"
           >
             {icon}
-          </Box>
+          </Box> */}
           <Text>Solicitar autoevaluación personalizada</Text>
         </Flex>
       </Flex>

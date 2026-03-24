@@ -819,7 +819,7 @@ export default function TCMespacio() {
       <SolicitarAutoevaluacionButton
         bgColor={tcmBg}
         color={tcmTxt}
-        icon={<TCMIcon size="26px" />}
+        icon={<TCMIcon size={{base:"30px", md: "50px"}}  />}
         disciplineName="Medicina China"
       />
 
