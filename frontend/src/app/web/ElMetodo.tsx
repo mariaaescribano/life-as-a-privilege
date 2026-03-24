@@ -21,7 +21,113 @@ type ModalidadData = {
   renderIcon: (size: string) => React.ReactNode;
   desc: string;
   modalDesc: string;
+  sessions: string[];
 };
+
+// const modalidades: ModalidadData[] = [
+//   {
+//     name: astrologiaNom,
+//     bg: astrologiaBg,
+//     txt: astrologiaTxt,
+//     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
+//     desc: "Descubre los arquetipos que guían tu forma de vivir.",
+//     modalDesc: "A través de tu carta natal, exploraremos los arquetipos que operan en cada área de tu vida y cómo te influyen.",
+//     sessions: [
+//       "1. Veremos el Ascendente, el Sol y la Luna de tu carta astral.",
+//       "2. Se hará una lectura de las primeras seis casas de la carta astral.",
+//       "3. Se hará una lectura de las últimas seis casas de la carta astral.",
+//       "4. Se leerán los planetas y su simbología.",
+//     ],
+//   },
+//   {
+//     name: neuropsicologiaNom,
+//     bg: neuropsicologiaBg,
+//     txt: neuropsicologiaTxt,
+//     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
+//     desc: "Identifica los patrones que te mantienen atrapado.",
+//     modalDesc: "Usando tu carta natal como mapa, exploraremos tu forma única de pensar y sentir, y los mecanismos de adaptación que desarrollaste para sobrevivir. No somos diagnósticos: somos personas que para sobrevivir tuvieron que hacer una adaptación psicológica que ya no sirve.",
+//     sessions: [
+//       "1. La sesión girará entorno a que la persona pueda compartir -hasta dónde se sienta cómodo- la relación entre los arquetipos de su carta astral y su trayectoria en la Vida.",
+//       "2. Primera sesión centrada en la línea de Vida y búsqueda de reconocimiento de patrones.",
+//       "3. Segunda sesión centrada en la línea de Vida y búsqueda de reconocimiento de patrones.",
+//     ],
+//   },
+//   {
+//     name: ayurvedaNom,
+//     bg: ayurvedaBg,
+//     txt: ayurvedaTxt,
+//     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }}/>,
+//     desc: "Conoce tu naturaleza única a través de la medicina india más antigua.",
+//     modalDesc: "Junto a la psicoterapia, el Ayurveda nos dará herramientas profundas para entender tu naturaleza única y qué hábitos te equilibran o te desequilibran.",
+//     sessions: [
+//       "1. En la sesión la persona descubrirá su dosha y haremos una breve explicación de la naturaleza de ese dosha.",
+//       "2. Teniendo en cuenta el dosha de la persona y su vida diaria, veremos cómo encontrar el equilibrio a través de pequeños pero importantes cambios.",
+//       "3. Nos enfocaremos en recetas únicas, especias, gestión emocional y actividades para ese dosha.",
+//     ],
+//   },
+//   {
+//     name: tcmNom,
+//     bg: tcmBg,
+//     txt: tcmTxt,
+//     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
+//     desc: "Comprende tus desequilibrios a través de la medicina tradicional china.",
+//     modalDesc: "Usando la medicina tradicional china, encontraremos qué desequilibrios presentas en este momento de tu vida y los abordaremos con remedios naturales adaptados a ti.",
+//     sessions: [
+//       "1. Se hará un diagnóstico de la lengua en profundidad y se encontrarán los desequilibrios de la persona.",
+//       "2. Se explicará -las veces que la persona necesite- qué ha pasado para que se den esos desequilibrios segun la teoría de los cinco elementos de la medicina china.",
+//       "3. Se dará remedios naturales concretos para que la persona pueda volver a equilibrarse y prevenir la enfermedad.",
+//     ],
+//   },
+//   {
+//     name: fisiologiaNom,
+//     bg: fisiologiaBg,
+//     txt: fisiologiaTxt,
+//     renderIcon: (size) => <FisiologiaIcon size={size} />,
+//     desc: "Reconcíliate con tu cuerpo entendiéndolo en profundidad.",
+//     modalDesc: "Con tu constitución y tus desequilibrios ya identificados, es momento de entender cómo funciona tu cuerpo. Nos centraremos en los órganos y sistemas que más te afectan, con explicaciones claras, repitiéndolo las veces que lo necesites para entenderlo.",
+//     sessions: [
+//       "1. Se explicará -la profundidad dependerá de lo que la persona desee- el funcionamiento de los órganos afectados por ese desequilibrio.",
+//       "2. Se descubrirá cómo los hábitos de la persona pueden transformar su estado actual."
+//     ],
+//   },
+//   {
+//     name: nutricionNom,
+//     bg: nutricionBg,
+//     txt: nutricionTxt,
+//     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
+//     desc: "«Que tu alimento sea tu medicina y tu medicina tu alimento» — Hipócrates.",
+//     modalDesc: "Como ya entendemos en profundidad tus desequilibrios, es hora de ver cómo podemos equilibrarnos a través de nuestros hábitos diarios. Esta modalidad no solo abarca la microbiología de la nutrición y su interacción con nuestras células, sino que también hablaremos de los alimentos según la medicina china y la ayurveda.",
+//     sessions: [
+//       "1. Teniendo en cuenta los desequilibrios, la rutina y el dosha (la constitución), se desarrollará una dieta específica para la condición",
+//       "2. Se verá cómo puede introducir esa dieta en su vida diaria sin que le cueste esfuerzo o mucho dinero.",
+//       "3. Si la persona lo desea, se podrá hacer una sesión para entender los alimentos según la medicina china o la ayúrveda."
+//     ],
+//   },
+//   {
+//     name: fitoterapiaNom,
+//     bg: fitoterapiaBg,
+//     txt: fitoterapiaTxt,
+//     renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
+//     desc: "Lo que necesitas para sanar, ya existe en la naturaleza.",
+//     modalDesc: "Exploraremos juntos qué plantas, especias e infusiones ayudan exactamente a tu desequilibrio actual y cómo incorporarlas de forma fácil en tu día a día.",
+//     sessions: [
+//       "1. Se descubrirá el poder de las plantas y especias. Se verá cómo introducirlas en la vida cotidiana",
+//       "2. Se descubrirá las infusiones, los tés y el café; las propiedades, los efectos en nuestro cuerpo y cómo y cuándo introducirlo."
+//     ],
+//   },
+//   {
+//     name: cabalaNom,
+//     bg: cabalaBg,
+//     txt: cabalaTxt,
+//     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
+//     desc: "El camino de vuelta a ti mismo, a través del Árbol de la Vida.",
+//     modalDesc: "En esta última etapa, llegamos con un largo camino de autoconocimiento recorrido juntos. Usando el Árbol de la Vida y sus caminos, encontraremos cómo equilibrarnos desde adentro, convirtiéndonos en nuestra propia base segura y recordando que somos dignos de amor.",
+//     sessions: [
+//       "1. Se explicará el Árbol de la Vida y cómo la persona puede sacarle provecho en sus circunstancias concretas.",
+//       "2. Se hará un plan, diseñado por la persona pero con ayuda, de cómo quiere encontrar el equilibrio ahora que ya tiene todas estas herramientas."
+//     ],
+//   },
+// ];
 
 const modalidades: ModalidadData[] = [
   {
@@ -30,23 +136,42 @@ const modalidades: ModalidadData[] = [
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
     desc: "Descubre los arquetipos que guían tu forma de vivir.",
-    modalDesc: "A través de tu carta natal, exploraremos los arquetipos que operan en cada área de tu vida y cómo te influyen.",
+    modalDesc:
+      "A través de tu carta natal, exploraremos los arquetipos que se expresan en cada área de tu vida y cómo influyen en tu manera de habitar el mundo.",
+    sessions: [
+      "1. Exploraremos el Ascendente, el Sol y la Luna de tu carta astral.",
+      "2. Haremos una lectura de las primeras seis casas de la carta astral.",
+      "3. Haremos una lectura de las últimas seis casas de la carta astral.",
+      "4. Leeremos los planetas y su simbología.",
+    ],
   },
   {
     name: neuropsicologiaNom,
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: "Identifica los patrones que te mantienen atrapado.",
-    modalDesc: "Usando tu carta natal como mapa, exploraremos tu forma única de pensar y sentir, y los mecanismos de adaptación que desarrollaste para sobrevivir. No somos diagnósticos: somos personas que para sobrevivir tuvieron que hacer una adaptación psicológica que ya no sirve.",
+    desc: "Identifica los patrones que hoy limitan tu forma de vivir.",
+    modalDesc:
+      "Usando tu carta natal como mapa, exploraremos tu forma única de pensar, sentir y vincularte, así como los mecanismos de adaptación que desarrollaste para sobrevivir. Muchas veces, aquello que hoy nos limita fue en otro momento una forma de protegernos.",
+    sessions: [
+      "1. Abriremos un espacio seguro para que puedas compartir, hasta donde te sientas cómodo, la relación entre los arquetipos de tu carta astral y tu historia de vida.",
+      "2. Primera sesión centrada en tu línea de vida y en el reconocimiento de patrones.",
+      "3. Segunda sesión centrada en tu línea de vida y en la profundización de esos patrones.",
+    ],
   },
   {
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
-    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }}/>,
-    desc: "Conoce tu naturaleza única a través de la medicina india más antigua.",
-    modalDesc: "Junto a la psicoterapia, el Ayurveda nos dará herramientas profundas para entender tu naturaleza única y qué hábitos te equilibran o te desequilibran.",
+    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
+    desc: "Conoce tu naturaleza única a través del sistema de medicina tradicional más antiguo de la India.",
+    modalDesc:
+      "Junto a la psicoterapia, el Ayurveda nos ofrecerá herramientas profundas para comprender tu naturaleza única y reconocer qué hábitos te equilibran o te desequilibran.",
+    sessions: [
+      "1. En esta sesión descubrirás tu dosha y haremos una breve explicación de su naturaleza.",
+      "2. Teniendo en cuenta tu dosha y tu vida diaria, veremos cómo recuperar el equilibrio a través de cambios pequeños pero significativos.",
+      "3. Nos enfocaremos en recetas únicas, especias, gestión emocional y actividades alineadas con tu dosha.",
+    ],
   },
   {
     name: tcmNom,
@@ -54,7 +179,13 @@ const modalidades: ModalidadData[] = [
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
     desc: "Comprende tus desequilibrios a través de la medicina tradicional china.",
-    modalDesc: "Usando la medicina tradicional china, encontraremos qué desequilibrios presentas en este momento de tu vida y los abordaremos con remedios naturales adaptados a ti.",
+    modalDesc:
+      "A través de la medicina tradicional china, identificaremos los desequilibrios que atraviesas en este momento y los abordaremos con herramientas naturales adaptadas a ti.",
+    sessions: [
+      "1. Haremos un diagnóstico profundo de la lengua para identificar los desequilibrios presentes.",
+      "2. Te explicaré, las veces que haga falta, cómo se han generado esos desequilibrios según la teoría de los cinco elementos de la medicina tradicional china.",
+      "3. Recibirás remedios naturales concretos para ayudarte a recuperar el equilibrio y prevenir futuros desajustes.",
+    ],
   },
   {
     name: fisiologiaNom,
@@ -62,31 +193,52 @@ const modalidades: ModalidadData[] = [
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
     desc: "Reconcíliate con tu cuerpo entendiéndolo en profundidad.",
-    modalDesc: "Con tu constitución y tus desequilibrios ya identificados, es momento de entender cómo funciona tu cuerpo. Nos centraremos en los órganos y sistemas que más te afectan, con explicaciones claras, repitiéndolo las veces que lo necesites para entenderlo.",
+    modalDesc:
+      "Con tu constitución y tus desequilibrios ya identificados, es momento de comprender cómo funciona tu cuerpo. Nos centraremos en los órganos y sistemas más implicados, con explicaciones claras y tantas veces como necesites para integrarlo de verdad.",
+    sessions: [
+      "1. Explicaremos, con la profundidad que tú desees, el funcionamiento de los órganos afectados por ese desequilibrio.",
+      "2. Descubrirás cómo tus hábitos pueden transformar tu estado actual.",
+    ],
   },
   {
     name: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
-    desc: "«Que tu alimento sea tu medicina y tu medicina tu alimento» — Hipócrates.",
-    modalDesc: "Como ya entendemos en profundidad tus desequilibrios, es hora de ver cómo podemos equilibrarnos a través de nuestros hábitos diarios. Esta modalidad no solo abarca la microbiología de la nutrición y su interacción con nuestras células, sino que también hablaremos de los alimentos según la medicina china y la ayurveda.",
+    desc: "Aprende a equilibrarte a través de una nutrición adaptada a tu cuerpo.",
+    modalDesc:
+      "Ahora que comprendemos en profundidad tus desequilibrios, es momento de trabajar sobre tus hábitos diarios. Esta modalidad integra la base fisiológica de la nutrición y su impacto celular, junto con la visión de los alimentos desde la medicina tradicional china y el Ayurveda.",
+    sessions: [
+      "1. Teniendo en cuenta tus desequilibrios, tu rutina y tu dosha (tu constitución), diseñaremos una alimentación adaptada a tus necesidades actuales.",
+      "2. Veremos cómo incorporar esa alimentación en tu vida diaria de forma realista, sin que suponga demasiado esfuerzo ni un gran gasto económico.",
+      "3. Si lo deseas, podremos dedicar una sesión a comprender los alimentos según la medicina tradicional china o el Ayurveda.",
+    ],
   },
   {
     name: fitoterapiaNom,
     bg: fitoterapiaBg,
     txt: fitoterapiaTxt,
     renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
-    desc: "Lo que necesitas para sanar, ya existe en la naturaleza.",
-    modalDesc: "Exploraremos juntos qué plantas, especias e infusiones ayudan exactamente a tu desequilibrio actual y cómo incorporarlas de forma fácil en tu día a día.",
+    desc: "Lo que necesitas para sanar ya existe en la naturaleza.",
+    modalDesc:
+      "Exploraremos juntos qué plantas, especias e infusiones pueden ayudarte con tu desequilibrio actual y cómo incorporarlas de forma sencilla en tu día a día.",
+    sessions: [
+      "1. Exploraremos el poder de las plantas y las especias, y cómo introducirlas de forma sencilla en tu vida cotidiana.",
+      "2. Descubriremos el mundo de las infusiones, los tés y el café: sus propiedades, sus efectos en el cuerpo y cómo introducirlos fácilmente.",
+    ],
   },
   {
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
-    desc: "El camino de vuelta a ti mismo, a través del Árbol de la Vida.",
-    modalDesc: "En esta última etapa, llegamos con un largo camino de autoconocimiento recorrido juntos. Usando el Árbol de la Vida y sus caminos, encontraremos cómo equilibrarnos desde adentro, convirtiéndonos en nuestra propia base segura y recordando que somos dignos de amor.",
+    desc: "El camino de vuelta a ti, a través del Árbol de la Vida.",
+    modalDesc:
+      "En esta última etapa llegamos después de un largo camino de autoconocimiento recorrido juntos. Usando el Árbol de la Vida y sus caminos, encontraremos nuevas formas de equilibrarte desde dentro, convirtiéndote en tu propia base segura y recordando que eres digno de amor.",
+    sessions: [
+      "1. Te explicaré el Árbol de la Vida y cómo puedes aplicarlo a tus circunstancias concretas.",
+      "2. Diseñaremos juntos un plan para que puedas encontrar el equilibrio con todas las herramientas que ya has integrado en el proceso.",
+    ],
   },
 ];
 
@@ -200,10 +352,15 @@ export default function ElMetodo() {
   const pricingReveal = useReveal(0.1);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
+  const [sessionsOpen, setSessionsOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
+
+  useEffect(() => {
+    setSessionsOpen(false);
+  }, [selectedCard]);
 
   return (
     <Box
@@ -376,7 +533,7 @@ export default function ElMetodo() {
                 Nº de sesiones
               </Text>
               <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700">
-                Variable
+                ~ 27
               </Text>
               <Text color="rgba(255,255,255,0.65)" fontSize="sm" mt={1}>
                 depende de cada proceso
@@ -477,6 +634,8 @@ export default function ElMetodo() {
             p={{ base: 8, md: 12 }}
             maxW="560px"
             w="100%"
+            maxH={{ base: "85vh", md: "90vh" }}
+            overflowY="auto"
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -543,6 +702,78 @@ export default function ElMetodo() {
             >
               {selectedCard.modalDesc}
             </Text>
+
+            {/* Desplegable Las sesiones */}
+            <Box w="100%">
+              {/* Cabecera clicable */}
+              <Box
+                as="button"
+                w="100%"
+                onClick={(e: React.MouseEvent) => { e.stopPropagation(); setSessionsOpen(o => !o); }}
+                bg={selectedCard.txt + "22"}
+                border={`1px solid ${selectedCard.txt}55`}
+                borderRadius={sessionsOpen ? "14px 14px 0 0" : "14px"}
+                px={5}
+                py={3}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                cursor="pointer"
+                transition="background 0.2s, border-radius 0.3s"
+                _hover={{ bg: selectedCard.txt + "33" }}
+                fontFamily="'EB Garamond', serif"
+              >
+                <Flex alignItems="center" gap={2}>
+                  <Box w="20px" h="20px" display="flex" alignItems="center" justifyContent="center" opacity={0.75}>
+                    {selectedCard.renderIcon("18px")}
+                  </Box>
+                  <Text
+                    color={selectedCard.txt}
+                    fontWeight="600"
+                    fontSize={{ base: "md", md: "lg" }}
+                    letterSpacing="0.04em"
+                    fontStyle="italic"
+                  >
+                    Las sesiones...
+                  </Text>
+                </Flex>
+                <Box
+                  color={selectedCard.txt}
+                  fontSize="lg"
+                  style={{ transform: sessionsOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.35s ease" }}
+                >
+                  ▾
+                </Box>
+              </Box>
+
+              {/* Contenido desplegable */}
+              <Box
+                overflow="hidden"
+                style={{
+                  maxHeight: sessionsOpen ? "500px" : "0px",
+                  transition: "max-height 0.45s ease",
+                }}
+                bg={selectedCard.txt + "11"}
+                border={sessionsOpen ? `1px solid ${selectedCard.txt}33` : "none"}
+                borderTop="none"
+                borderRadius="0 0 14px 14px"
+              >
+                <Box px={5} py={4} display="flex" flexDirection="column" gap={2}>
+                  {selectedCard.sessions.map((line, i) => (
+                    <Text
+                      key={i}
+                      color={selectedCard.txt}
+                      opacity={0.85}
+                      fontSize={{ base: "sm", md: "md" }}
+                      lineHeight="1.75"
+                      letterSpacing="0.01em"
+                    >
+                      {line}
+                    </Text>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
           </Box>
         </Box>
       )}
