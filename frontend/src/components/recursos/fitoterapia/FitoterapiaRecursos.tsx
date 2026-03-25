@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Box, Collapse, Flex, Grid, HStack, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
-import { SaberMasButton } from "../../global/SaberMasButton";
 import {
   API_URL,
   fitoterapiaBg,

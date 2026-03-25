@@ -4,7 +4,6 @@ import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 
 const COLOR = "#feffe4";
-const BG    = "#05071a";
 
 const SERVICES = [
   { id: "asc-sol-luna", label: "Conocer mi Ascendente, Sol y Luna en profundidad", price: "5€" },

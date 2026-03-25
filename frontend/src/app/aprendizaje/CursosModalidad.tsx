@@ -187,7 +187,7 @@ export default function CursosModalidad() {
                 }}
                 _active={{ transform: "translateY(0px)" }}
               >
-                <FitoterapiaIcon size="22px" />
+                <FitoterapiaIcon size={{ base: "22px", md: "22px" }} />
                 <Text
                   color={modalidad.color}
                   fontFamily="'EB Garamond', serif"

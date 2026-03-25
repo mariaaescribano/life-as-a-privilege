@@ -1,6 +1,6 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, SistemaNerviosoIcon, neuropsicologiaNom } from "../../../GlobalVariables";
-import { letranp1, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9 } from "./LetraNeuroPsicologia";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom } from "../../../GlobalVariables";
+import { letranp1, letranp10, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 

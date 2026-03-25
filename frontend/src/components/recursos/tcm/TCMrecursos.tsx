@@ -4,7 +4,6 @@ import { Box, Collapse, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import { tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
-import { SaberMasButton } from "../../global/SaberMasButton";
 import TCMElementModal from "./TCMElementModal";
 import type { TCMElementData } from "./TCMElementModal";
 import TCMArrowModal from "./TCMArrowModal";
