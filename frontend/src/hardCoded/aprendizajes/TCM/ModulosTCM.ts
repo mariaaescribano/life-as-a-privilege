@@ -1,4 +1,4 @@
-import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { tcmTxt, TCMIcon, tcmBg, tcmNomLink, CincoElementosIcon, RecursosIconTCM, MouthIcon } from "../../../GlobalVariables";
 import { letratcm1, letratcm10, letratcm11, letratcm12, letratcm13, letratcm14, letratcm15, letratcm16, letratcm17, letratcm18, letratcm19, letratcm2, letratcm20, letratcm21, letratcm22, letratcm23, letratcm24, letratcm3, letratcm4, letratcm5, letratcm6, letratcm7, letratcm8, letratcm9 } from "./LetraTCM";
 
@@ -7,12 +7,19 @@ const detalles: Detalles = { color: tcmTxt, icon: TCMIcon, bgColor: tcmBg };
 const basePath = "/aprendizaje/videoLessonPage/" + tcmNomLink;
 const basePathCurso2 = "/aprendizaje/videoLessonPage/" + tcmNomLink;
 
+const conocerMiDesequilibrio: FloatingButtonConfig = {
+  label: "Conocer mi desequilibrio",
+  action: "espacio-auth",
+  route: "/espacio/questions/" + tcmNomLink,
+};
+
 export const modulostcmFundamentos: ModuloContenido[] = [
   {
     title: "Recursos",
     icon: RecursosIconTCM,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
-      { 
+      {
         id:"tcm0",
         nom: "Recursos a tu disposición",
         link:`/recursos/` + tcmNomLink,
@@ -23,16 +30,17 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: null,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon:null
+        icon: null,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
-
   {
     title: "1. Los fundamentos",
     icon: TCMIcon,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
-      { 
+      {
         id:"tcm1",
         nom: "1.1 El taoísmo",
         link:`${basePath}/tcm1`,
@@ -43,9 +51,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm1,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: TCMIcon
+        icon: TCMIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm2",
         nom: "1.2 El Yin y el Yang",
         link:`${basePath}/tcm2`,
@@ -57,14 +66,16 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         cursoId: "tcm-curso-1",
         detalles: detalles,
         icon: TCMIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
   {
     title: "2. Los Cinco Elementos 五行",
     icon: CincoElementosIcon,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
-      { 
+      {
         id:"tcm3",
         nom: "2.1 Introducción a los Cinco Elementos 五行",
         link:`${basePath}/tcm3`,
@@ -75,9 +86,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm3,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm4",
         nom: "2.2 La Madera 木",
         link:`${basePath}/tcm4`,
@@ -88,9 +100,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm4,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm5",
         nom: "2.3 El Fuego 火",
         link:`${basePath}/tcm5`,
@@ -101,9 +114,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm5,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm6",
         nom: "2.4 La Tierra 土",
         link:`${basePath}/tcm6`,
@@ -114,9 +128,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm6,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm7",
         nom: "2.5 El Metal 金",
         link:`${basePath}/tcm7`,
@@ -127,9 +142,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm7,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm8",
         nom: "2.6 El Agua 水",
         link:`${basePath}/tcm8`,
@@ -140,15 +156,17 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm8,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
   {
     title: "3. El diagnóstico de la lengua",
     icon: MouthIcon,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
-      { 
+      {
         id:"tcm9",
         nom: "3.1 La lengua",
         link:`${basePath}/tcm9`,
@@ -159,9 +177,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm21,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: MouthIcon
+        icon: MouthIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm10",
         nom: "3.2 El color de la lengua",
         link:`${basePath}/tcm10`,
@@ -172,9 +191,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm22,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: MouthIcon
+        icon: MouthIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm11",
         nom: "3.3 La forma de la lengua",
         link:`${basePath}/tcm11`,
@@ -185,9 +205,10 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm23,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: MouthIcon
+        icon: MouthIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
-      { 
+      {
         id:"tcm12",
         nom: "3.4 La capa de la lengua",
         link:`${basePath}/tcm12`,
@@ -198,7 +219,8 @@ export const modulostcmFundamentos: ModuloContenido[] = [
         letra: letratcm24,
         cursoId: "tcm-curso-1",
         detalles: detalles,
-        icon: MouthIcon
+        icon: MouthIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
@@ -208,6 +230,7 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
   {
     title: "Recursos",
     icon: RecursosIconTCM,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
       {
         id: "ce0",
@@ -220,13 +243,15 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: null,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: null
+        icon: null,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
   {
     title: "1. Los Cinco Elementos 五行",
     icon: CincoElementosIcon,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
       {
         id: "tcmce1",
@@ -239,7 +264,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm3,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce2",
@@ -252,7 +278,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm4,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce3",
@@ -265,7 +292,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm5,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce4",
@@ -278,7 +306,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm6,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce5",
@@ -291,7 +320,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm7,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce6",
@@ -304,13 +334,15 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm8,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
   {
     title: "2. El Ciclo Generador 相生",
     icon: CincoElementosIcon,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
       {
         id: "tcmce7",
@@ -323,7 +355,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm9,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce8",
@@ -336,7 +369,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm10,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce9",
@@ -349,7 +383,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm11,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce10",
@@ -362,7 +397,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm12,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce11",
@@ -375,7 +411,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm13,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce12",
@@ -388,13 +425,15 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm14,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },
   {
     title: "3. El Ciclo Controlador 相克",
     icon: CincoElementosIcon,
+    floatingButton: conocerMiDesequilibrio,
     submodules: [
       {
         id: "tcmce13",
@@ -407,7 +446,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm15,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce14",
@@ -420,7 +460,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm16,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce15",
@@ -433,7 +474,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm17,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce16",
@@ -446,7 +488,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm18,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce17",
@@ -459,7 +502,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm19,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
       {
         id: "tcmce18",
@@ -472,7 +516,8 @@ export const modulostcmCincoElementos: ModuloContenido[] = [
         letra: letratcm20,
         cursoId: "tcm-curso-2",
         detalles: detalles,
-        icon: CincoElementosIcon
+        icon: CincoElementosIcon,
+        floatingButton: conocerMiDesequilibrio,
       },
     ],
   },

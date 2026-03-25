@@ -3,6 +3,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
+import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
@@ -122,6 +123,20 @@ export default function ModulesPage() {
 
       {/* ── FOOTER ── */}
       <SiteFooter />
+
+      {/* ── BOTÓN FLOTANTE ── */}
+      {moduloDatos && (() => {
+        const fb = moduloDatos.modulos?.find(m => m.floatingButton)?.floatingButton;
+        return fb ? (
+          <FloatingActionButton
+            config={fb}
+            color={moduloDatos.color}
+            bgColor={moduloDatos.bgColor}
+            icon={moduloDatos.icon}
+            modalityName={moduloDatos.nom}
+          />
+        ) : null;
+      })()}
     </Box>
   );
 }

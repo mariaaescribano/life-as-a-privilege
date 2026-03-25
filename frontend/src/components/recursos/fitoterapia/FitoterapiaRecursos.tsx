@@ -682,7 +682,7 @@ const FitoterapiaRecursos = () => {
         </Box>
 
         {/* AVISO LEGAL — discreto y desplegable */}
-        <Box w="100%" mt={4} mb={{ base: 14, md: 20 }}>
+        <Box w="100%" maxW="600px" mt={4} mb={{ base: 14, md: 20 }} mx="auto">
           <Flex
             as="button"
             w="100%"
@@ -749,7 +749,7 @@ const FitoterapiaRecursos = () => {
         </Box>
       </Flex>
 
-      <SaberMasButton onClick={() => setSaberMasOpen(true)} color={fitoterapiaTxt} bgColor={fitoterapiaBg} />
+      {/* <SaberMasButton onClick={() => setSaberMasOpen(true)} color={fitoterapiaTxt} bgColor={fitoterapiaBg} /> */}
 
       {/* FOOTER */}
       <SiteFooter />

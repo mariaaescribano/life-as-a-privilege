@@ -234,7 +234,7 @@ const modalidades: ModalidadData[] = [
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
     desc: "El camino de vuelta a ti, a través del Árbol de la Vida.",
     modalDesc:
-      "En esta última etapa llegamos después de un largo camino de autoconocimiento recorrido juntos. Usando el Árbol de la Vida y sus caminos, encontraremos nuevas formas de equilibrarte desde dentro, convirtiéndote en tu propia base segura y recordando que eres digno de amor.",
+      "En esta última etapa llegamos después de un largo camino de autoconocimiento recorrido juntos. Usando el Árbol de la Vida y sus caminos, encontraremos nuevas formas de equilibrarte desde dentro, convirtiéndote en tu propia base segura y recordando que eres digno de Amor.",
     sessions: [
       "1. Te explicaré el Árbol de la Vida y cómo puedes aplicarlo a tus circunstancias concretas.",
       "2. Diseñaremos juntos un plan para que puedas encontrar el equilibrio con todas las herramientas que ya has integrado en el proceso.",

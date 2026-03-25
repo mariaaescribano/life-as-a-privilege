@@ -1,14 +1,21 @@
-import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { NutricionIcon, nutricionBg, nutricionNomLink, nutricionTxt } from "../../../GlobalVariables";
 
 const detalles: Detalles = { color: nutricionTxt, icon: NutricionIcon, bgColor: nutricionBg };
 
 const basePath = "/aprendizaje/videoLessonPage/" + nutricionNomLink;
 
+const respetarme: FloatingButtonConfig = {
+  label: "Respetarme",
+  action: "espacio-auth",
+  route: "/espacio/questions/" + nutricionNomLink,
+};
+
 export const modulosNutricion: ModuloContenido[] = [
   {
     title: "Recursos",
     icon: NutricionIcon,
+    floatingButton: respetarme,
     submodules: [
       {
         id: "nut-rec",
@@ -22,12 +29,14 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: null,
+        floatingButton: respetarme,
       },
     ],
   },
   {
     title: "1. Respétate",
     icon: NutricionIcon,
+    floatingButton: respetarme,
     submodules: [
       {
         id: "nut-r1",
@@ -41,12 +50,14 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: NutricionIcon,
+        floatingButton: respetarme,
       },
     ],
   },
   {
     title: "2. Macronutrientes",
     icon: NutricionIcon,
+    floatingButton: respetarme,
     submodules: [
       {
         id: "nut-m1",
@@ -60,6 +71,7 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: NutricionIcon,
+        floatingButton: respetarme,
       },
       {
         id: "nut-m2",
@@ -73,6 +85,7 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: NutricionIcon,
+        floatingButton: respetarme,
       },
       {
         id: "nut-m3",
@@ -86,12 +99,14 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: NutricionIcon,
+        floatingButton: respetarme,
       },
     ],
   },
   {
     title: "3. Micronutrientes",
     icon: NutricionIcon,
+    floatingButton: respetarme,
     submodules: [
       {
         id: "nut-mi1",
@@ -105,6 +120,7 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: NutricionIcon,
+        floatingButton: respetarme,
       },
       {
         id: "nut-mi2",
@@ -118,6 +134,7 @@ export const modulosNutricion: ModuloContenido[] = [
         cursoId: "nut-curso-1",
         detalles: detalles,
         icon: NutricionIcon,
+        floatingButton: respetarme,
       },
     ],
   },

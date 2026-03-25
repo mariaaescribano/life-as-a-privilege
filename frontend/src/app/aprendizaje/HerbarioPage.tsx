@@ -1,0 +1,477 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { Box, Flex, Grid, HStack, Image, Text } from "@chakra-ui/react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import { DisciplineHeader } from "../../components/global/DisciplineHeader";
+import {
+  API_URL, fitoterapiaBg, fitoterapiaTxt,
+  FitoterapiaIcon, FitoterapiaIconOscuro,
+} from "../../GlobalVariables";
+import { plantas, type Planta } from "../../components/recursos/fitoterapia/PlantasData";
+
+const CARD_COLOR  = fitoterapiaTxt;
+const MODAL_COLOR = fitoterapiaBg;
+
+/* ══════════════════════════════════════════════
+   SVG — ESQUINA BOTÁNICA
+══════════════════════════════════════════════ */
+const BotanicalCorner = ({ flip = false }: { flip?: boolean }) => (
+  <Box
+    position="absolute"
+    top={flip ? "auto" : 0} bottom={flip ? 0 : "auto"}
+    left={flip ? "auto" : 0} right={flip ? 0 : "auto"}
+    transform={flip ? "rotate(180deg)" : "none"}
+    opacity={0.18} pointerEvents="none" zIndex={0}
+  >
+    <svg width="170" height="170" viewBox="0 0 170 170" fill="none">
+      <path d="M 10 160 C 22 124 55 88 90 58 C 118 34 142 18 162 8" stroke={fitoterapiaBg} strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M 30 136 C 10 122 8 102 22 92 C 40 104 44 124 30 136 Z" fill={fitoterapiaBg}/>
+      <path d="M 30 136 C 24 116 18 98 22 92" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <path d="M 58 108 C 72 92 74 72 60 62 C 44 72 42 92 58 108 Z" fill={fitoterapiaBg}/>
+      <path d="M 58 108 C 56 90 54 74 60 62" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <path d="M 88 78 C 72 64 70 46 84 38 C 102 48 104 66 88 78 Z" fill={fitoterapiaBg}/>
+      <path d="M 88 78 C 82 62 80 48 84 38" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <path d="M 118 50 C 130 36 134 18 120 10 C 104 18 100 36 118 50 Z" fill={fitoterapiaBg}/>
+      <path d="M 118 50 C 116 34 114 20 120 10" stroke={fitoterapiaBg} strokeWidth="0.9" fill="none"/>
+      <circle cx="10" cy="158" r="5.5" fill={fitoterapiaBg}/>
+      <circle cx="5"  cy="148" r="4"   fill={fitoterapiaBg}/>
+      <circle cx="18" cy="149" r="4"   fill={fitoterapiaBg}/>
+      <circle cx="6"  cy="138" r="2.5" fill={fitoterapiaBg} opacity="0.7"/>
+      <circle cx="162" cy="9"  r="4"   fill={fitoterapiaBg}/>
+      <circle cx="158" cy="4"  r="2.8" fill={fitoterapiaBg} opacity="0.8"/>
+      <circle cx="167" cy="5"  r="2.5" fill={fitoterapiaBg} opacity="0.7"/>
+    </svg>
+  </Box>
+);
+
+/* ══════════════════════════════════════════════
+   SVG — ABEJITA
+══════════════════════════════════════════════ */
+const BeeDecoration = ({ size = 52, opacity = 0.13, style = {} }: { size?: number; opacity?: number; style?: React.CSSProperties }) => (
+  <Box position="absolute" pointerEvents="none" zIndex={0} style={{ opacity, ...style }}>
+    <svg width={size} height={size} viewBox="0 0 52 52" fill="none">
+      <ellipse cx="16" cy="19" rx="11" ry="6" fill={fitoterapiaBg} opacity={0.55} transform="rotate(-30 16 19)"/>
+      <ellipse cx="36" cy="19" rx="11" ry="6" fill={fitoterapiaBg} opacity={0.55} transform="rotate(30 36 19)"/>
+      <ellipse cx="26" cy="32" rx="9" ry="12" fill={fitoterapiaBg}/>
+      <rect x="17.5" y="28" width="17" height="3.5" rx="1.75" fill="white" opacity={0.45}/>
+      <rect x="17.5" y="34" width="17" height="3.5" rx="1.75" fill="white" opacity={0.38}/>
+      <circle cx="26" cy="19" r="6" fill={fitoterapiaBg}/>
+      <circle cx="23.5" cy="18.5" r="1.2" fill="white" opacity={0.7}/>
+      <circle cx="28.5" cy="18.5" r="1.2" fill="white" opacity={0.7}/>
+      <path d="M23 14 C21 10 17 8 16 5" stroke={fitoterapiaBg} strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="15.5" cy="4.5" r="2.2" fill={fitoterapiaBg}/>
+      <path d="M29 14 C31 10 35 8 36 5" stroke={fitoterapiaBg} strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="36.5" cy="4.5" r="2.2" fill={fitoterapiaBg}/>
+      <path d="M26 44 L24 49 L26 47 L28 49 Z" fill={fitoterapiaBg}/>
+    </svg>
+  </Box>
+);
+
+/* ══════════════════════════════════════════════
+   SVG — DIVIDER
+══════════════════════════════════════════════ */
+const BotanicalDivider = ({ color }: { color: string }) => (
+  <Flex align="center" gap={3} my={6}>
+    <Box flex="1" h="1px" bg={color} opacity={0.2} />
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <path d="M10 1 C5 6 5 14 10 19 C15 14 15 6 10 1 Z" fill={color} opacity="0.45"/>
+      <path d="M1 10 C6 5 14 5 19 10 C14 15 6 15 1 10 Z" fill={color} opacity="0.3"/>
+    </svg>
+    <Box flex="1" h="1px" bg={color} opacity={0.2} />
+  </Flex>
+);
+
+/* ══════════════════════════════════════════════
+   YOUTUBE EMBED
+══════════════════════════════════════════════ */
+const getEmbedUrl = (url: string): string => {
+  const short = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (short) return `https://www.youtube.com/embed/${short[1]}?rel=0`;
+  const long = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+  if (long) return `https://www.youtube.com/embed/${long[1]}?rel=0`;
+  return url;
+};
+
+const YoutubePlayer = ({ videoUrl, color }: { videoUrl?: string; color: string }) => {
+  const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
+  return (
+    <Box mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${color}30`} bg={color + "0d"}
+      h={{ base: "210px", md: "270px" }} display="flex" alignItems="center" justifyContent="center"
+    >
+      {embedUrl ? (
+        <iframe src={embedUrl} width="100%" height="100%"
+          style={{ border: "none", display: "block" }}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen title="Vídeo de la planta"
+        />
+      ) : (
+        <Flex direction="column" align="center" justify="center" gap={4} w="100%" h="100%">
+          <Box w="66px" h="66px" borderRadius="full" bg={color + "18"} border={`1.5px solid ${color}35`}
+            display="flex" alignItems="center" justifyContent="center"
+          >
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M10 7.5v13l11-6.5-11-6.5z" fill={color} opacity="0.65"/>
+              <path d="M22 5 C18 7 17 12 19 16 C22 13 23 9 22 5 Z" fill={color} opacity="0.30"/>
+            </svg>
+          </Box>
+          <Text color={color} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.65} letterSpacing="0.04em">
+            Vídeo próximamente
+          </Text>
+        </Flex>
+      )}
+    </Box>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   SECCIÓN MODAL
+══════════════════════════════════════════════ */
+const SeccionModal = ({ titulo, color, textMid, children }: { titulo: string; color: string; textMid: string; children: React.ReactNode }) => (
+  <Box mb={2}>
+    <Flex align="center" gap={2} mb={3}>
+      <Box w="3px" h="20px" borderRadius="full" bg={color} opacity={0.7} />
+      <Text color={textMid} fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
+        letterSpacing="0.12em" textTransform="uppercase" fontFamily="'EB Garamond', serif"
+      >
+        {titulo}
+      </Text>
+    </Flex>
+    {children}
+  </Box>
+);
+
+/* ══════════════════════════════════════════════
+   MODAL DE PLANTA
+══════════════════════════════════════════════ */
+const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [onClose]);
+
+  const textDark     = fitoterapiaBg;
+  const textMid      = "#2d7a2b";
+  const accentBg     = MODAL_COLOR + "12";
+  const accentBorder = MODAL_COLOR + "40";
+
+  return (
+    <Box position="fixed" inset={0} zIndex={1000}
+      bg="rgba(5,40,10,0.60)"
+      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+      display="flex" alignItems="center" justifyContent="center"
+      px={{ base: 4, md: 6 }} py={{ base: 4, md: 6 }}
+      onClick={onClose}
+    >
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        position="relative"
+        w={{ base: "95%", md: "640px" }}
+        maxH={{ base: "88vh", md: "88vh" }}
+        overflowY="auto"
+        borderRadius="24px"
+        bg="#fdf7ee"
+        boxShadow="0 32px 80px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.15)"
+        sx={{
+          "&::-webkit-scrollbar": { width: "5px" },
+          "&::-webkit-scrollbar-track": { bg: "transparent" },
+          "&::-webkit-scrollbar-thumb": { bg: MODAL_COLOR + "55", borderRadius: "full" },
+        }}
+      >
+        <BotanicalCorner />
+        <BotanicalCorner flip />
+        <BeeDecoration size={62} opacity={0.11} style={{ top: "22%", right: "12px" }} />
+        <BeeDecoration size={40} opacity={0.08} style={{ top: "55%", left: "18px", transform: "rotate(-15deg) scaleX(-1)" }} />
+        <BeeDecoration size={30} opacity={0.07} style={{ bottom: "18%", right: "60px", transform: "rotate(10deg)" }} />
+
+        <Box position="relative" zIndex={2} px={{ base: 6, md: 10 }} pt={10} pb={10}>
+          {/* Cerrar */}
+          <Box as="button" position="absolute" top="14px" right="14px"
+            w="34px" h="34px" borderRadius="full"
+            bg="rgba(30,74,24,0.08)" border="1px solid rgba(30,74,24,0.18)"
+            display="flex" alignItems="center" justifyContent="center"
+            color={textMid} fontSize="16px" fontWeight="700"
+            cursor="pointer" transition="all 0.18s"
+            _hover={{ bg: "rgba(30,74,24,0.18)" }}
+            onClick={onClose}
+          >
+            ✕
+          </Box>
+
+          {/* Nombre */}
+          <Box textAlign="center" mb={6}>
+            <HStack spacing={3} align="center" alignItems="center" justifyContent="center">
+              <FitoterapiaIconOscuro />
+              <Text color={textDark} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
+                fontFamily="'EB Garamond', serif" letterSpacing="0.03em" lineHeight="1.1"
+              >
+                {planta.nombre}
+              </Text>
+            </HStack>
+            <Text color={textMid} fontSize={{ base: "sm", md: "md" }}
+              fontStyle="italic" letterSpacing="0.06em" mt={1} opacity={0.8}
+            >
+              {planta.nombreCientifico}
+            </Text>
+          </Box>
+
+          <YoutubePlayer videoUrl={planta.videoUrl} color={MODAL_COLOR} />
+          <BotanicalDivider color={MODAL_COLOR} />
+
+          <Text color={textDark} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" opacity={0.85}>
+            {planta.uso}
+          </Text>
+
+          <BotanicalDivider color={MODAL_COLOR} />
+
+          <SeccionModal titulo="Beneficios" color={MODAL_COLOR} textMid={textMid}>
+            <Flex direction="column" gap={2}>
+              {planta.beneficios.map((b, i) => (
+                <Flex key={i} gap={3} align="flex-start">
+                  <Box mt="9px" w="8px" h="8px" borderRadius="full" bg={MODAL_COLOR} flexShrink={0} opacity={0.65} />
+                  <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.85}>{b}</Text>
+                </Flex>
+              ))}
+            </Flex>
+          </SeccionModal>
+
+          <BotanicalDivider color={MODAL_COLOR} />
+
+          <SeccionModal titulo="Forma de uso" color={MODAL_COLOR} textMid={textMid}>
+            <Box bg={accentBg} border={`1px solid ${accentBorder}`} borderRadius="xl" px={5} py={4}>
+              <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" opacity={0.88}>
+                {planta.formaDeUso}
+              </Text>
+            </Box>
+          </SeccionModal>
+
+          {planta.datosCuriosos && planta.datosCuriosos.length > 0 && (
+            <>
+              <BotanicalDivider color={MODAL_COLOR} />
+              <SeccionModal titulo="Datos curiosos" color={MODAL_COLOR} textMid={textMid}>
+                <Flex direction="column" gap={3}>
+                  {planta.datosCuriosos.map((d, i) => (
+                    <Flex key={i} gap={3} align="flex-start">
+                      <Box flexShrink={0} mt="3px" w="22px" h="22px" borderRadius="full"
+                        bg={MODAL_COLOR + "20"} border={`1px solid ${MODAL_COLOR}55`}
+                        display="flex" alignItems="center" justifyContent="center" fontSize="10px"
+                      >
+                        <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
+                          <path d="M5 0 L6.18 3.82 L10 5 L6.18 6.18 L5 10 L3.82 6.18 L0 5 L3.82 3.82 Z" fill={MODAL_COLOR} opacity="0.8"/>
+                        </svg>
+                      </Box>
+                      <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.85}>{d}</Text>
+                    </Flex>
+                  ))}
+                </Flex>
+              </SeccionModal>
+            </>
+          )}
+
+          {planta.precauciones && planta.precauciones.length > 0 && (
+            <>
+              <BotanicalDivider color="#b05a2a" />
+              <SeccionModal titulo="Precauciones" color="#b05a2a" textMid="#8a3e18">
+                <Box bg="rgba(176,90,42,0.08)" border="1px solid rgba(176,90,42,0.28)" borderRadius="xl" px={5} py={4}>
+                  <Flex direction="column" gap={2}>
+                    {planta.precauciones.map((p, i) => (
+                      <Flex key={i} gap={3} align="flex-start">
+                        <Text flexShrink={0} mt="-1px" fontSize="14px" color="#b05a2a" lineHeight="1.8">⚠</Text>
+                        <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.85}>{p}</Text>
+                      </Flex>
+                    ))}
+                  </Flex>
+                </Box>
+              </SeccionModal>
+            </>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   SVG — CORAZONES
+══════════════════════════════════════════════ */
+const HeartIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+const HeartIconFilled = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+
+/* ══════════════════════════════════════════════
+   CARD DE PLANTA
+══════════════════════════════════════════════ */
+function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite }: {
+  planta: Planta; isFavorite: boolean; onOpen: () => void;
+  onToggleFavorite: () => void; showFavorite: boolean;
+}) {
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <Flex
+      align="center"
+      gap={{ base: 3, md: 4 }}
+      bg={fitoterapiaBg}
+      border="1px solid rgba(255,255,255,0.30)"
+      sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
+      borderRadius="2xl"
+      px={{ base: 4, md: 5 }}
+      py={{ base: 4, md: 4 }}
+      boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+      cursor="pointer"
+      onClick={onOpen}
+      transition="all 0.22s ease"
+      _hover={{ transform: "translateY(-12px)" }}
+    >
+      <Box
+        w={{ base: "74px", md: "86px" }} h={{ base: "74px", md: "86px" }}
+        borderRadius="xl" overflow="hidden" flexShrink={0}
+        bg={CARD_COLOR + "28"} border={`2px solid ${CARD_COLOR}50`}
+        display="flex" alignItems="center" justifyContent="center"
+      >
+        {!imgError ? (
+          <Image src={planta.foto} alt={planta.nombre} w="100%" h="100%" objectFit="cover" onError={() => setImgError(true)} />
+        ) : (
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M18 3 C11 9 8 18 10 27 C16 29 26 24 30 16 C33 9 27 3 18 3 Z" fill={CARD_COLOR} opacity="0.7"/>
+            <path d="M18 3 C18 15 16 23 10 27" stroke="white" strokeWidth="1.2" fill="none" opacity="0.5"/>
+          </svg>
+        )}
+      </Box>
+
+      <Box flex="1" minW={0}>
+        <Text color="white" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.02em" lineHeight="1.2">
+          {planta.nombre}
+        </Text>
+        <Text color="rgba(255,255,255,0.48)" fontSize="xs" fontStyle="italic" letterSpacing="0.04em" mt="4px">
+          {planta.nombreCientifico}
+        </Text>
+      </Box>
+
+      {showFavorite && (
+        <Box
+          as="button"
+          w={{ base: "42px", md: "46px" }} h={{ base: "42px", md: "46px" }}
+          borderRadius="full"
+          bg={CARD_COLOR + "20"} border={`1.5px solid ${CARD_COLOR}60`}
+          display="flex" alignItems="center" justifyContent="center"
+          color={CARD_COLOR} flexShrink={0}
+          transition="all 0.22s ease"
+          _hover={{ transform: "scale(1.15)" }}
+          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onToggleFavorite(); }}
+          cursor="pointer"
+        >
+          {isFavorite ? <HeartIconFilled /> : <HeartIcon />}
+        </Box>
+      )}
+    </Flex>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   PÁGINA
+══════════════════════════════════════════════ */
+export default function HerbarioPage() {
+  const navigate = useNavigate();
+  const [selected, setSelected]   = useState<Planta | null>(null);
+  const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
+  const userId = sessionStorage.getItem("userId");
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
+
+  /* Cargar favoritos */
+  useEffect(() => {
+    if (!userId) return;
+    axios.get(`${API_URL}/fitoterapia/${userId}`)
+      .then((res) => {
+        const ids: number[] = (res.data || []).map((f: { idPlanta: number }) => f.idPlanta);
+        setFavoritos(new Set(ids));
+      })
+      .catch(() => {});
+  }, [userId]);
+
+  /* Toggle favorito */
+  const toggleFavorite = async (plantaId: number) => {
+    if (!userId) return;
+    const esFavorito = favoritos.has(plantaId);
+    try {
+      if (esFavorito) {
+        await axios.delete(`${API_URL}/fitoterapia/${userId}/${plantaId}`);
+        setFavoritos((prev) => { const n = new Set(prev); n.delete(plantaId); return n; });
+      } else {
+        await axios.post(`${API_URL}/fitoterapia`, { idPlanta: plantaId, idUser: userId });
+        setFavoritos((prev) => new Set(prev).add(plantaId));
+      }
+    } catch (e) {
+      console.error("Error al gestionar favorito", e);
+    }
+  };
+
+  /* Favoritos primero */
+  const plantasMostradas = useMemo(() =>
+    [...plantas].sort((a, b) => {
+      const aFav = favoritos.has(a.id) ? 0 : 1;
+      const bFav = favoritos.has(b.id) ? 0 : 1;
+      return aFav - bFav;
+    }),
+  [favoritos]);
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="auto" />
+
+      <Box flex="1">
+        <Flex
+          direction="column" alignItems="center"
+          px={{ base: 5, md: 10, lg: 16 }}
+          pt={{ base: 10, md: 14 }}
+          pb={{ base: 14, md: 20 }}
+          gap={{ base: 4, md: 5 }}
+        >
+          <DisciplineHeader
+            icon={<FitoterapiaIcon size={{ base: "40px", md: "50px" }} />}
+            title="Herbario"
+            bgColor={fitoterapiaBg}
+            color={fitoterapiaTxt}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Fitoterapia")}
+          />
+
+          <Grid
+            w="100%" maxW="900px"
+            templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }}
+            gap={{ base: 3, md: 4 }}
+          >
+            {plantasMostradas.map((p) => (
+              <PlantCard
+                key={p.id} planta={p}
+                isFavorite={favoritos.has(p.id)}
+                onOpen={() => setSelected(p)}
+                onToggleFavorite={() => toggleFavorite(p.id)}
+                showFavorite={!!userId}
+              />
+            ))}
+          </Grid>
+        </Flex>
+      </Box>
+
+      <SiteFooter />
+
+      {selected && <PlantModal planta={selected} onClose={() => setSelected(null)} />}
+    </Box>
+  );
+}

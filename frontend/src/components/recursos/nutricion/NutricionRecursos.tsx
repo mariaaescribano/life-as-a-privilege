@@ -682,7 +682,7 @@ export default function NutricionRecursos() {
               >
                 <Text
                   color={`${TXT}cc`}
-                  fontSize={{ base: "lg", md: "xl" }}
+                  fontSize={{ base: "sm", md: "md" }}
                   lineHeight="1.85"
                   letterSpacing="0.02em"
                   fontFamily="'EB Garamond', serif"

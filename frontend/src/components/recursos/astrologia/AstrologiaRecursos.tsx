@@ -6,6 +6,7 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
 import { SaberMasButton } from "../../global/SaberMasButton";
+import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
@@ -536,6 +537,13 @@ export default function AstrologiaRecursos() {
           onClose={() => setModal(null)}
         />
       )}
+
+      <FloatingActionButton
+        config={{ label: "Servicios Astrológicos", action: "astrologia-services" }}
+        color={astrologiaTxt}
+        bgColor={astrologiaBg}
+        icon={<AstrologiaIcon size="22px" />}
+      />
     </Box>
   );
 }

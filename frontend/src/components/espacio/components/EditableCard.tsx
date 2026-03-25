@@ -140,10 +140,11 @@ const EditableCard = (props:{
         bg={props.bgColor}
         cursor="pointer"
         transition="all 0.2s"
+        userSelect="none"
         _hover={{ transform: "translateY(-2px)" }}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" color={props.color} >
+        <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" color={props.color} userSelect="none">
           {props.pregunta}
         </Text>
 

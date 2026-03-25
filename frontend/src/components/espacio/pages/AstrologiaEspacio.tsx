@@ -20,6 +20,7 @@ import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import SiteFooter from "../../global/Footer";
 import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
+import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 
 /* ══════════════════════════════════════════════
    SIGNOS DEL ZODIACO
@@ -339,13 +340,14 @@ const PlanetTeaserModal = ({
    MODAL — SELECTOR / INFORMACIÓN (Sol · Luna · Asc)
 ══════════════════════════════════════════════ */
 const ZodiacModal = ({
-  field, currentSign, onClose, onSelect, onClear,
+  field, currentSign, onClose, onSelect, onClear, saving,
 }: {
   field: SignField;
   currentSign: string | null;
   onClose: () => void;
   onSelect: (sign: string) => void;
   onClear: () => void;
+  saving?: boolean;
 }) => {
   const meta = FIELD_META[field];
   const showInfo = !!currentSign;
@@ -400,6 +402,18 @@ const ZodiacModal = ({
             </svg>
           </Box>
         </Box>
+
+        {/* ── Spinner overlay al guardar ── */}
+        {saving && (
+          <Box
+            position="absolute" inset="0" zIndex={10}
+            borderRadius="2xl"
+            bg="rgba(0,0,0,0.45)"
+            display="flex" alignItems="center" justifyContent="center"
+          >
+            <SpinnerTurquesa size={44} thickness={4} fullScreen={false} />
+          </Box>
+        )}
 
         <Box position="relative" zIndex={1} px={6} py={7} display="flex" flexDirection="column" gap={4} overflowY="auto" flex="1">
 
@@ -944,6 +958,7 @@ export default function AstrologiaEspacio() {
           onClose={() => setOpenModal(null)}
           onSelect={handleSelect}
           onClear={handleClear}
+          saving={saving}
         />
       )}
 
@@ -954,6 +969,13 @@ export default function AstrologiaEspacio() {
           onClose={() => setTeaserPlanet(null)}
         />
       )}
+
+      <FloatingActionButton
+        config={{ label: "Servicios Astrológicos", action: "astrologia-services" }}
+        color={astrologiaTxt}
+        bgColor={astrologiaBg}
+        icon={<AstrologiaIcon size="22px" />}
+      />
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon } from "../../../GlobalVariables";
 import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7 } from "./LetraFisiologia";
 
@@ -8,10 +8,17 @@ const basePath = "/aprendizaje/videoLessonPage/" + fisiologiaNom;
 
 export const fisioCurso1ID = "fisio-curso-1";
 
+const conocerMiCuerpo: FloatingButtonConfig = {
+  label: "Conocer mi cuerpo",
+  action: "espacio-auth",
+  route: "/espacio/fisiologia",
+};
+
 export const modulosFisiologia: ModuloContenido[] = [
   {
     title: "1. Hechos de polvo de estrellas",
     icon: EstrellaIcon,
+    floatingButton: conocerMiCuerpo,
     submodules: [
       {
         id: "fisio1",
@@ -25,6 +32,7 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: EstrellaIcon,
+        floatingButton: conocerMiCuerpo,
       },
       {
         id: "fisio2",
@@ -38,6 +46,7 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
       },
       {
         id: "fisio3",
@@ -51,12 +60,14 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
       },
     ],
   },
   {
     title: "2. La Inteligencia del Cuerpo",
     icon: CelulasOrganosIcon,
+    floatingButton: conocerMiCuerpo,
     submodules: [
       {
         id: "fisio4",
@@ -70,6 +81,7 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
       },
       {
         id: "fisio5",
@@ -83,6 +95,7 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: SistemaNerviosoIcon,
+        floatingButton: conocerMiCuerpo,
       },
       {
         id: "fisio6",
@@ -96,12 +109,14 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
       },
     ],
   },
   {
     title: "3. El milagro más complejo",
     icon: MilagroIcon,
+    floatingButton: conocerMiCuerpo,
     submodules: [
       {
         id: "fisio7",
@@ -115,6 +130,7 @@ export const modulosFisiologia: ModuloContenido[] = [
         cursoId: fisioCurso1ID,
         detalles: detalles,
         icon: MilagroIcon,
+        floatingButton: conocerMiCuerpo,
       },
     ],
   },

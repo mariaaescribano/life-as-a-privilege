@@ -11,6 +11,7 @@ import TCMArrowModal from "./TCMArrowModal";
 import type { ArrowRelation } from "./TCMArrowModal";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteFooter from "../../global/Footer";
+import { letratcm4, letratcm5, letratcm6, letratcm7, letratcm8 } from "../../../hardCoded/aprendizajes/TCM/LetraTCM";
 
 
 /* ─── Estilos de las tarjetas principales ─── */
@@ -73,6 +74,7 @@ export const ELEMENTS: TCMElementData[] = [
       { label: "Nutrición", value: "Sabores ácidos naturales · Limón · Vinagre · Menta · Albahaca · Perejil · Té verde" },
 
       { label: "Consejos", value: "Estirar el cuerpo · Movimiento diario · Expresar el enfado con conciencia · Establecer límites sanos" },],
+    letra: letratcm4,
     },
   {
     id: 2, name: "Fuego", chinese: "火",
@@ -98,6 +100,7 @@ export const ELEMENTS: TCMElementData[] = [
       { label: "Nutrición", value: "Pepino · Melón · Lechuga · Cacao · Quinoa · Cereza · Granada · Infusión de muérdago" },
 
       { label: "Consejos", value: "Prioriza amistades · Meditación diaria · Bailar · Ejercicio cardiovascular consciente" },],
+    letra: letratcm5,
   },
   {
     id: 3, name: "Tierra", chinese: "土",
@@ -124,6 +127,7 @@ export const ELEMENTS: TCMElementData[] = [
 
       { label: "Consejos", value: "Da cariño sin abandonarte · Presencia al comer · Yoga · Jardinería · Masaje" },
     ],
+    letra: letratcm6,
   },
   {
     id: 4, name: "Metal", chinese: "金",
@@ -149,6 +153,7 @@ export const ELEMENTS: TCMElementData[] = [
     { label: "Nutrición", value: "Ajo · Cebolla · Setas · Champiñones · Peras · Manzanas · Miel · Arroz · Té de jengibre" },
 
     { label: "Consejos", value: "Crear rituales con significado · Respiración consciente · Pilates · Procesar el dolor acumulado" },],
+    letra: letratcm7,
   },
   {
     id: 5, name: "Agua", chinese: "水",
@@ -175,6 +180,7 @@ export const ELEMENTS: TCMElementData[] = [
 
     { label: "Consejos", value: "No sobretrabajar · Evitar café y exceso de crudos · Elegir fuentes conscientes · Practicar silencio y meditación · Tai chi · Entrenamiento de fuerza · Terapia para integrar traumas" },
     ],
+    letra: letratcm8,
   },
 ];
 
@@ -1228,7 +1234,7 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
       </Flex>
     </Box>
 
-    {photoOpen && <PhotoModal src="/img/lengua.png" onClose={() => setPhotoOpen(false)} />}
+    {photoOpen && <PhotoModal src="/img/tcm/lengua.png" onClose={() => setPhotoOpen(false)} />}
   </>
   );
 };
@@ -1432,9 +1438,6 @@ const TCMPage = () => {
           </Collapse>
         </Box>
 
-        {/* ── SABER MÁS ── */}
-        <SaberMasButton onClick={() => setSaberMasOpen(true)} color={tcmTxt} bgColor={tcmBg} />
-
         {/* ── SIGUE APRENDIENDO ── */}
         <Box
           ref={ctaReveal.ref}
@@ -1478,6 +1481,9 @@ const TCMPage = () => {
             </Flex>
           </Flex>
         </Box>
+
+        {/* ── SABER MÁS ── */}
+        {/* <SaberMasButton onClick={() => setSaberMasOpen(true)} color={tcmTxt} bgColor={tcmBg} /> */}
 
         {/* ── FOOTER ── */}
         <SiteFooter />

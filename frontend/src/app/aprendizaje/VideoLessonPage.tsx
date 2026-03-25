@@ -3,6 +3,7 @@ import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
+import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -425,6 +426,17 @@ export default function VideoLessonPage() {
 
       {/* ── FOOTER ── */}
       <SiteFooter />
+
+      {/* ── BOTÓN FLOTANTE ── */}
+      {datos?.floatingButton && moduloDatos && (
+        <FloatingActionButton
+          config={datos.floatingButton}
+          color={moduloDatos.color}
+          bgColor={moduloDatos.bgColor}
+          icon={<datos.icon size="22px" />}
+          modalityName={moduloDatos.nom}
+        />
+      )}
 
       {moduloDatos && (
         <ContactModal

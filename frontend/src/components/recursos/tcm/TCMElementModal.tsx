@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 
 /* ═══════════════════════════════════════════
    TIPOS
@@ -18,6 +18,7 @@ export type TCMElementData = {
   description: string;
   fields: TCMElementField[];  // dinámico: tantos como se pasen
   video?: string;        // ID de YouTube — e.g. "dQw4w9WgXcQ"
+  letra?: string;        // transcripción del vídeo
 };
 
 /* ═══════════════════════════════════════════
@@ -114,6 +115,7 @@ const TCMElementModal = ({
   onClose: () => void;
 }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [letraOpen, setLetraOpen] = useState(false);
   const toggle = (i: number) => setOpenIndex(prev => (prev === i ? null : i));
 
   useEffect(() => {
@@ -260,6 +262,73 @@ const TCMElementModal = ({
               />
             ))}
           </Flex>
+
+          {/* ── Transcripción ── */}
+          {element.letra && (
+            <Box mt={4}>
+              <Flex
+                as="button"
+                w="100%"
+                align="center"
+                justify="space-between"
+                px={4}
+                py={2.5}
+                bg={element.bgColor}
+                border={`1px solid ${element.iconColor}44`}
+                borderRadius={letraOpen ? "xl xl 0 0" : "xl"}
+                cursor="pointer"
+                onClick={() => setLetraOpen(!letraOpen)}
+                transition="border-radius 0.2s"
+              >
+                <Text
+                  color={element.iconColor}
+                  fontSize={{ base: "xs", md: "sm" }}
+                  fontWeight="600"
+                  fontFamily="'EB Garamond', serif"
+                  letterSpacing="0.08em"
+                  textTransform="uppercase"
+                >
+                  Transcripción
+                </Text>
+                <Text
+                  color={element.iconColor}
+                  fontSize="xl"
+                  transition="transform 0.25s"
+                  transform={letraOpen ? "rotate(180deg)" : "rotate(0deg)"}
+                >
+                  ▾
+                </Text>
+              </Flex>
+              <Collapse in={letraOpen} animateOpacity>
+                <Box
+                  px={4}
+                  py={4}
+                  bg={element.bgColor}
+                  border={`1px solid ${element.iconColor}44`}
+                  borderTop="none"
+                  borderRadius="0 0 xl xl"
+                  maxH="280px"
+                  overflowY="auto"
+                  sx={{
+                    "&::-webkit-scrollbar": { width: "4px" },
+                    "&::-webkit-scrollbar-track": { background: "transparent" },
+                    "&::-webkit-scrollbar-thumb": { background: element.iconColor + "55", borderRadius: "999px" },
+                  }}
+                >
+                  <Text
+                    color={`${element.iconColor}cc`}
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontFamily="'EB Garamond', serif"
+                    lineHeight="1.9"
+                    letterSpacing="0.02em"
+                    whiteSpace="pre-wrap"
+                  >
+                    {element.letra}
+                  </Text>
+                </Box>
+              </Collapse>
+            </Box>
+          )}
 
         </Box>
       </Box>

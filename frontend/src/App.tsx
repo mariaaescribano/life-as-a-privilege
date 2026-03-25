@@ -9,6 +9,7 @@ import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
 import ModulosPage from "./app/aprendizaje/ModulosPage";
 import VideoLessonPage from "./app/aprendizaje/VideoLessonPage";
 import CursosModalidad from "./app/aprendizaje/CursosModalidad";
+import HerbarioPage from "./app/aprendizaje/HerbarioPage";
 import EspacioHome from "./app/espacio/main/EspacioHome";
 import ExpandablePage from "./app/espacio/main/ThemePreguntas";
 import QuienSoy from "./app/web/QuienSoy";
@@ -71,6 +72,7 @@ export default function App()
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
       <Route path="/aprendizaje/cursosModalidad/:moduloId" element={<CursosModalidad />} />
+      <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
       <Route path="/aprendizaje/modulosPage/:modalidadId/:cursoId" element={<ModulosPage />} />
       <Route path="/aprendizaje/videoLessonPage/:moduloId/:submoduloId" element={<VideoLessonPage />} />
 

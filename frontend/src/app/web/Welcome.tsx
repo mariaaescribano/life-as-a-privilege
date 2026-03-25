@@ -12,7 +12,6 @@ import {
   neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, nutricionDescrip, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
-  EspacioPersonalIcon,
   AprendizajeIcon,
   nutricionNomLink,
   ayurvedaNomLink,
@@ -296,7 +295,7 @@ const Welcome = () => {
                 Mi propósito es descubrir la Verdad profunda del ser humano, más allá de religiones, tradiciones y culturas, entendiendo que todas contienen fragmentos de ella.
               <br />
               <br />
-              “La Vida como Privilegio” es una forma de mirar, una posibilidad de elegir cómo vivir. Esta plataforma te invita a redescubrir al ser Humano como un ser digno y como parte de algo más grande.</Text>
+              “La Vida como Privilegio” es una forma de mirar, una posibilidad de elegir cómo vivir. Esta plataforma te invita a redescubrir al ser Humano como el ser digno que es y su interrelación con la naturaleza.</Text>
             <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
               <Box
                 as="button"
@@ -631,47 +630,28 @@ const Welcome = () => {
               {selected.desc}
             </Text>
 
-            {/* Botones */}
+            {/* Botón APRENDER */}
             {(() => {
               const isAvailable = selected.available === true;
               return (
                 <Flex direction="column" align="center" gap={3} mt={2}>
-                  <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap">
-                    <Flex
-                      align="center" gap={3}
-                      cursor="pointer"
-                      onClick={() => { setSelected(null); setShowEspacioModal(true); }}
-                      bg={selected.txt + "18"}
-                      border={`1px solid ${selected.txt}66`}
-                      borderRadius="full"
-                      px={{ base: 5, md: 7 }} py={3}
-                      boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
-                      _hover={{ bg: selected.txt + "33", border: `1px solid ${selected.txt}`, boxShadow: `0 0 30px ${selected.txt}dd, 0 4px 18px ${selected.txt}99` }}
-                      transition="all 0.2s"
-                    >
-                      <EspacioPersonalIcon color={selected.txt} size="24px" shadow={false} />
-                      <Text color={selected.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
-                        Mi Espacio
-                      </Text>
-                    </Flex>
-                    <Flex
-                      align="center" gap={3}
-                      cursor={isAvailable ? "pointer" : "not-allowed"}
-                      onClick={isAvailable ? () => navigate(selected.link) : undefined}
-                      bg={selected.txt + "18"}
-                      border={`1px solid ${selected.txt}66`}
-                      borderRadius="full"
-                      px={{ base: 5, md: 7 }} py={3}
-                      opacity={isAvailable ? 1 : 0.45}
-                      boxShadow={isAvailable ? `0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77` : "none"}
-                      _hover={isAvailable ? { bg: selected.txt + "33", border: `1px solid ${selected.txt}`, boxShadow: `0 0 30px ${selected.txt}dd, 0 4px 18px ${selected.txt}99` } : {}}
-                      transition="all 0.2s"
-                    >
-                      <AprendizajeIcon color={selected.txt} size="30px" shadow={false} />
-                      <Text color={selected.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}>
-                        Aprender
-                      </Text>
-                    </Flex>
+                  <Flex
+                    align="center" gap={3}
+                    cursor={isAvailable ? "pointer" : "not-allowed"}
+                    onClick={isAvailable ? () => navigate(selected.link) : undefined}
+                    bg={selected.txt + "18"}
+                    border={`1px solid ${selected.txt}66`}
+                    borderRadius="full"
+                    px={{ base: 10, md: 14 }} py={3}
+                    opacity={isAvailable ? 1 : 0.45}
+                    boxShadow={isAvailable ? `0 0 10px ${selected.txt}55, 0 2px 8px ${selected.txt}33` : "none"}
+                    _hover={isAvailable ? { bg: selected.txt + "33", border: `1px solid ${selected.txt}`, boxShadow: `0 0 18px ${selected.txt}88, 0 4px 12px ${selected.txt}55` } : {}}
+                    transition="all 0.2s"
+                  >
+                    <AprendizajeIcon color={selected.txt} size="30px" shadow={false} />
+                    <Text color={selected.txt} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} letterSpacing="0.1em">
+                      APRENDER
+                    </Text>
                   </Flex>
                   {!isAvailable && (
                     <Text

@@ -11,6 +11,7 @@ import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
+import { fitoterapiaNom, FitoterapiaIcon } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -160,7 +161,46 @@ export default function CursosModalidad() {
             title={modalidad.nom}
             bgColor={modalidad.bgColor}
             color={modalidad.color}
+            mb={moduloId === fitoterapiaNom ? { base: 6, md: 7 } : undefined}
           />
+
+          {/* ── HERBARIO (solo Fitoterapia) ── */}
+          {moduloId === fitoterapiaNom && (
+            <Flex justify="center" mb={{ base: 6, md: 7 }}>
+              <Flex
+                as="button"
+                align="center"
+                gap={3}
+                px={{ base: 7, md: 10 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={modalidad.bgColor}
+                border={`1.5px solid ${modalidad.color}88`}
+                 boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/aprendizaje/herbario")}
+                _hover={{
+                  boxShadow: `0 6px 24px rgba(0,0,0,0.3), 0 0 20px ${modalidad.color}66`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${modalidad.color}cc`,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <FitoterapiaIcon size="22px" />
+                <Text
+                  color={modalidad.color}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  letterSpacing="0.08em"
+                  lineHeight="1"
+                >
+                  Herbario
+                </Text>
+              </Flex>
+            </Flex>
+          )}
 
           <SimpleGrid
             w="100%"

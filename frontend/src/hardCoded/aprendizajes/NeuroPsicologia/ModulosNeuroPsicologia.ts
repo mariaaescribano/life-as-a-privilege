@@ -1,17 +1,24 @@
-import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom } from "../../../GlobalVariables";
-import { letranp1, letranp10, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9 } from "./LetraNeuroPsicologia";
+import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, SistemaNerviosoIcon, neuropsicologiaNom } from "../../../GlobalVariables";
+import { letranp1, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 
 const basePath = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom;
 
+const quieroEntenderme: FloatingButtonConfig = {
+  label: "Quiero entenderme",
+  action: "espacio-auth",
+  route: "/espacio/questions/" + neuropsicologiaNom,
+};
+
 export const modulosNeuroPsicologia: ModuloContenido[] = [
   {
     title: "1. La madre y el niño",
     icon: MadreIcon,
+    floatingButton: quieroEntenderme,
     submodules: [
-      { 
+      {
         id:"np1",
         nom: "1.1 El vínculo entre la madre y el hijo",
         link:`${basePath}/np1`,
@@ -22,9 +29,10 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp1,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: MadreIcon
+        icon: MadreIcon,
+        floatingButton: quieroEntenderme,
       },
-      { 
+      {
         id:"np2",
         nom: "1.2 El nacimiento y la insuficiencia",
         link:`${basePath}/np2`,
@@ -35,15 +43,17 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp2,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: MadreIcon
+        icon: MadreIcon,
+        floatingButton: quieroEntenderme,
       },
     ],
   },
   {
     title: "2. La Infancia",
     icon: FamilyIcon,
+    floatingButton: quieroEntenderme,
     submodules: [
-      { 
+      {
         id:"np3",
         nom: "2.1 Los primeros años de Vida",
         link:`${basePath}/np3`,
@@ -54,9 +64,10 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp3,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: FamilyIcon
+        icon: FamilyIcon,
+        floatingButton: quieroEntenderme,
       },
-      { 
+      {
         id:"np4",
         nom: "2.2 Las figuras de apego y el autoabandono",
         link:`${basePath}/np4`,
@@ -67,15 +78,17 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp4,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: FamilyIcon
+        icon: FamilyIcon,
+        floatingButton: quieroEntenderme,
       },
     ],
   },
   {
     title: "3. El adulto joven",
     icon: ChildIcon,
+    floatingButton: quieroEntenderme,
     submodules: [
-      { 
+      {
         id:"np5",
         nom: "3.1 Los trastornos y la adolescencia",
         link:`${basePath}/np5`,
@@ -86,9 +99,10 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp5,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: ChildIcon
+        icon: ChildIcon,
+        floatingButton: quieroEntenderme,
       },
-      { 
+      {
         id:"np6",
         nom: "3.2 El corazón ya estaba roto",
         link:`${basePath}/np6`,
@@ -99,9 +113,10 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp6,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: ChildIcon
+        icon: ChildIcon,
+        floatingButton: quieroEntenderme,
       },
-      { 
+      {
         id:"np7",
         nom: "3.3 Amigos y proyecciones",
         link:`${basePath}/np7`,
@@ -112,15 +127,17 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp7,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: ChildIcon
+        icon: ChildIcon,
+        floatingButton: quieroEntenderme,
       },
     ],
   },
   {
     title: "4. El adulto",
     icon: AdultIcon,
+    floatingButton: quieroEntenderme,
     submodules: [
-      { 
+      {
         id:"np8",
         nom: "4.1 La adultez, la decadencia y el bucle del sinsentido",
         link:`${basePath}/np8`,
@@ -131,9 +148,10 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp8,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: AdultIcon
+        icon: AdultIcon,
+        floatingButton: quieroEntenderme,
       },
-      { 
+      {
         id:"np9",
         nom: "4.2 La vejez y el olvido",
         link:`${basePath}/np9`,
@@ -144,9 +162,10 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp9,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: AdultIcon
+        icon: AdultIcon,
+        floatingButton: quieroEntenderme,
       },
-      { 
+      {
         id:"np10",
         nom: "4.3 Mirada desde la espiritualidad práctica",
         link:`${basePath}/np10`,
@@ -157,8 +176,147 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         letra: letranp10,
         cursoId: "etapasVida",
         detalles: detalles,
-        icon: AdultIcon
+        icon: AdultIcon,
+        floatingButton: quieroEntenderme,
       },
     ],
   },
 ];
+
+
+//  {
+//     title: "5. Más allá de la Esquizofrenia",
+//     icon: SistemaNerviosoIcon,
+//     submodules: [
+//       {
+//         id:"np11",
+//         nom: "5.1 Esquizofrénicos",
+//         link:`${basePath}/np11`,
+//         linkAnterior:"",
+//         linkNext:`${basePath}/np12`,
+//         descripcion:"No existen esquizofrénicos, existen personas que desarrollaron una estrategia para sobrevivir a un mundo que percibieron como hostil.",
+//         video:"",
+//         letra: letranp11,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np12",
+//         nom: "5.2 El entorno familiar",
+//         link:`${basePath}/np12`,
+//         linkAnterior:`${basePath}/np11`,
+//         linkNext:`${basePath}/np13`,
+//         descripcion:"Una esquizofrenia no se desarrolla de la noche a la mañana. Son años de sufrimiento silenciado en un entorno de abandono insostenible.",
+//         video:"",
+//         letra: letranp12,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np13",
+//         nom: "5.3 La genética",
+//         link:`${basePath}/np13`,
+//         linkAnterior:`${basePath}/np12`,
+//         linkNext:`${basePath}/np14`,
+//         descripcion:"La esquizofrenia no se hereda tal cual. Lo que se hereda es una genética predispuesta al sufrimiento.",
+//         video:"",
+//         letra: letranp13,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np14",
+//         nom: "5.4 Las sustancias como refugio",
+//         link:`${basePath}/np14`,
+//         linkAnterior:`${basePath}/np13`,
+//         linkNext:`${basePath}/np15`,
+//         descripcion:"Las adicciones nunca son el problema, sino la solución. El problema es la herida no sanada que impulsa a buscar una salida desesperada.",
+//         video:"",
+//         letra: letranp14,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np15",
+//         nom: "5.5 La realidad construida",
+//         link:`${basePath}/np15`,
+//         linkAnterior:`${basePath}/np14`,
+//         linkNext:`${basePath}/np16`,
+//         descripcion:"Todos construimos nuestra realidad. Cuando alguien ha vivido en aislamiento, inventar una realidad propia es una respuesta completamente normal.",
+//         video:"",
+//         letra: letranp15,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np16",
+//         nom: "5.6 El cerebro",
+//         link:`${basePath}/np16`,
+//         linkAnterior:`${basePath}/np15`,
+//         linkNext:`${basePath}/np17`,
+//         descripcion:"El desequilibrio neuronal no es la causa de la esquizofrenia. Primero aparecen las voces; después, se producen cambios en la dopamina.",
+//         video:"",
+//         letra: letranp16,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np17",
+//         nom: "5.7 Las Voces",
+//         link:`${basePath}/np17`,
+//         linkAnterior:`${basePath}/np16`,
+//         linkNext:`${basePath}/np18`,
+//         descripcion:"Todos tenemos voces en la cabeza. La diferencia está en si somos capaces de controlarlas. ¿Para qué necesitan esas voces? ¿De qué les protegen?",
+//         video:"",
+//         letra: letranp17,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np18",
+//         nom: "5.8 La relación con las voces",
+//         link:`${basePath}/np18`,
+//         linkAnterior:`${basePath}/np17`,
+//         linkNext:`${basePath}/np19`,
+//         descripcion:"No se trata de eliminar las voces, sino de darles su lugar sin ser su marioneta. Convertirlas en una herramienta para conocerse a uno mismo.",
+//         video:"",
+//         letra: letranp18,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np19",
+//         nom: "5.9 Autodañarse y lealtad a los padres",
+//         link:`${basePath}/np19`,
+//         linkAnterior:`${basePath}/np18`,
+//         linkNext:`${basePath}/np20`,
+//         descripcion:"Los niños aprenden que los malos son ellos mismos. Esa percepción internalizada lleva a alimentar voces que justifican el propio dolor.",
+//         video:"",
+//         letra: letranp19,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//       {
+//         id:"np20",
+//         nom: "5.10 Las pastillas",
+//         link:`${basePath}/np20`,
+//         linkAnterior:`${basePath}/np19`,
+//         linkNext:"",
+//         descripcion:"El medicamento tiene que ser una ayuda puntual, no una forma de vida. Apagar a la persona solo incrementa su profunda sensación de inutilidad.",
+//         video:"",
+//         letra: letranp20,
+//         cursoId: "masAllaEsquizofrenia",
+//         detalles: detalles,
+//         icon: SistemaNerviosoIcon
+//       },
+//     ],
+//   },

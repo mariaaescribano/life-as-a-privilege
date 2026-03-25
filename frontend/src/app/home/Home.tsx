@@ -520,8 +520,8 @@ const Home = () => {
                       borderRadius="full"
                       px={{ base: 5, md: 7 }} py={3}
                       opacity={isAvailable ? 1 : 0.45}
-                      boxShadow={isAvailable ? `0 0 20px ${selectedDisc.txt}bb, 0 2px 14px ${selectedDisc.txt}77` : "none"}
-                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 30px ${selectedDisc.txt}dd, 0 4px 18px ${selectedDisc.txt}99` } : {}}
+                      boxShadow={isAvailable ? `0 0 8px ${selectedDisc.txt}55` : "none"}
+                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 14px ${selectedDisc.txt}88` } : {}}
                       transition="all 0.2s"
                     >
                       <EspacioPersonalIcon color={selectedDisc.txt} size="24px" shadow={false}/>
@@ -542,8 +542,8 @@ const Home = () => {
                       borderRadius="full"
                       px={{ base: 5, md: 7 }} py={3}
                       opacity={isAvailable ? 1 : 0.45}
-                      boxShadow={isAvailable ? `0 0 20px ${selectedDisc.txt}bb, 0 2px 14px ${selectedDisc.txt}77` : "none"}
-                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 30px ${selectedDisc.txt}dd, 0 4px 18px ${selectedDisc.txt}99` } : {}}
+                      boxShadow={isAvailable ? `0 0 8px ${selectedDisc.txt}55` : "none"}
+                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 14px ${selectedDisc.txt}88` } : {}}
                       transition="all 0.2s"
                     >
                       <AprendizajeIcon color={selectedDisc.txt} size="30px" shadow={false} />

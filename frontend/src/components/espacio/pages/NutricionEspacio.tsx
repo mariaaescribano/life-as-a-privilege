@@ -401,9 +401,9 @@ export default function NutricionEspacio() {
               as="button"
               w="100%"
               align="center"
-              justify="space-between"
+              justify="center"
               gap={3}
-              px={{ base: 6, md: 10 }}
+              px={{ base: 5, md: 6 }}
               py={{ base: 4, md: 5 }}
               bg={BG}
               border={`1px solid ${TXT}33`}
@@ -413,8 +413,13 @@ export default function NutricionEspacio() {
               onClick={() => setInfoOpen((o) => !o)}
               transition="border-radius 0.2s"
             >
-              <Text color={TXT} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="700"
-                letterSpacing="0.1em" textTransform="uppercase"
+              <Box color={`${TXT}88`} flexShrink={0}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                  <path d="M480-280q17 0 28.5-11.5T520-320v-160q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480v160q0 17 11.5 28.5T480-280Zm0-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                </svg>
+              </Box>
+              <Text color={`${TXT}99`} fontSize="md" fontFamily="'EB Garamond', serif"
+                fontWeight="700" letterSpacing="0.1em" textTransform="uppercase"
               >
                 Información importante
               </Text>

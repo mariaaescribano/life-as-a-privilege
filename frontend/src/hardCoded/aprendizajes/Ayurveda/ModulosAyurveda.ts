@@ -1,4 +1,4 @@
-import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
+import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import {
   AyurvedaIcon, ayurvedaBg, ayurvedaNomLink, ayurvedaTxt,
   VataIconAyu,
@@ -14,10 +14,17 @@ const detalles: Detalles = { color: ayurvedaTxt, icon: AyurvedaIcon, bgColor: ay
 
 const basePath = "/aprendizaje/videoLessonPage/" + ayurvedaNomLink;
 
+const conocerMiDosha: FloatingButtonConfig = {
+  label: "Conocer mi dosha",
+  action: "espacio-auth",
+  route: "/espacio/questions/" + ayurvedaNomLink,
+};
+
 export const modulosAyurveda: ModuloContenido[] = [
   {
     title: "Recursos",
     icon: AyurvedaIcon,
+    floatingButton: conocerMiDosha,
     submodules: [
       {
         id: "ayu-rec",
@@ -31,12 +38,14 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: null,
+        floatingButton: conocerMiDosha,
       },
     ],
   },
   {
     title: "1. Introducción",
     icon: AyurvedaIcon,
+    floatingButton: conocerMiDosha,
     submodules: [
       {
         id: "ayu-i1",
@@ -50,6 +59,7 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: AyurvedaIcon,
+        floatingButton: conocerMiDosha,
       },
       {
         id: "ayu-i2",
@@ -63,12 +73,14 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: AyurvedaIcon,
+        floatingButton: conocerMiDosha,
       },
     ],
   },
   {
     title: "2. Los Doshas",
     icon: AyurvedaIcon,
+    floatingButton: conocerMiDosha,
     submodules: [
       {
         id: "ayu3",
@@ -82,6 +94,7 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: AyurvedaIcon,
+        floatingButton: conocerMiDosha,
       },
       {
         id: "ayu4",
@@ -95,6 +108,7 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: VataIconAyu,
+        floatingButton: conocerMiDosha,
       },
       {
         id: "ayu5",
@@ -108,6 +122,7 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: PittaIconAyu,
+        floatingButton: conocerMiDosha,
       },
       {
         id: "ayu6",
@@ -121,6 +136,7 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: KaphaIconAyu,
+        floatingButton: conocerMiDosha,
       },
       {
         id: "ayu7",
@@ -134,6 +150,7 @@ export const modulosAyurveda: ModuloContenido[] = [
         cursoId: "ayu-curso-1",
         detalles: detalles,
         icon: AyurvedaIcon,
+        floatingButton: conocerMiDosha,
       },
     ],
   },

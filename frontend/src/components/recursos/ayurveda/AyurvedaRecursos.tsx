@@ -531,15 +531,17 @@ export default function AyurvedaRecursos() {
             </Text>
           </Flex>
 
-          {/* Elementos en horizontal */}
+          {/* Elementos en horizontal — móvil: 3+2 centrado, desktop: fila */}
           <Flex
-            justify={{ base: "space-around", md: "center" }}
+            justify="center"
             gap={{ base: 3, md: 8 }}
             flexWrap={{ base: "wrap", md: "nowrap" }}
+            maxW={{ base: "230px", md: "none" }}
+            mx={{ base: "auto", md: "unset" }}
             mb={6}
           >
             {ELEMENTOS.map((el) => (
-              <Flex key={el.nombre} direction="column" align="center" gap={2}>
+              <Flex key={el.nombre} direction="column" align="center" gap={2} w={{ base: "62px", md: "auto" }}>
                 <Box
                   w={{ base: "62px", md: "76px" }}
                   h={{ base: "62px", md: "76px" }}

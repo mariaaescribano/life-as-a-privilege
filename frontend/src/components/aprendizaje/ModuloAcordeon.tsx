@@ -10,11 +10,18 @@ const GLOW_HOVER = "0 8px 24px rgba(0,0,0,0.28), 0 0 32px rgba(107,196,200,1)";
 
 export function ModuloAcordeon(props:{
   title:string, bgColor:string, color:string,
-  submodules: Submodulo[], icon:any
+  submodules: Submodulo[], icon:any,
+  onToggle?: (isOpen: boolean) => void,
 }) {
 
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleToggle = () => {
+    const next = !open;
+    setOpen(next);
+    props.onToggle?.(next);
+  };
 
   return (
     <Box w="100%" maxW="800px" mx="auto" mb={5}>
@@ -28,7 +35,7 @@ export function ModuloAcordeon(props:{
         borderRadius="2xl"
         boxShadow={GLOW}
         cursor="pointer"
-        onClick={() => setOpen(!open)}
+        onClick={handleToggle}
         transition="all 0.25s"
         _hover={{ transform: "translateY(-3px)", boxShadow: GLOW_HOVER }}
       >
