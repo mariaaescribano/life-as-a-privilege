@@ -362,6 +362,15 @@ export default function ElMetodo() {
     setSessionsOpen(false);
   }, [selectedCard]);
 
+  useEffect(() => {
+    if (selectedCard) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [selectedCard]);
+
   return (
     <Box
       minH="100vh"
@@ -519,7 +528,7 @@ export default function ElMetodo() {
                 Precio por sesión
               </Text>
               <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700">
-                10 €
+                20 €
               </Text>
             </Box>
             <Box
@@ -542,7 +551,7 @@ export default function ElMetodo() {
           </Flex>
 
           {/* Texto acompañamiento */}
-          <Text
+          {/* <Text
             color="rgba(255,255,255,0.88)"
             fontSize={{ base: "md", md: "lg" }}
             lineHeight="1.9"
@@ -551,6 +560,17 @@ export default function ElMetodo() {
             mb={6}
           >
             Este método incluye <strong>seguimiento personalizado</strong> y acompañamiento cercano durante todo el proceso. El número de sesiones no está predefinido: cada camino es único y se respeta su propio ritmo.
+          </Text> */}
+
+          <Text
+            color="rgba(255,255,255,0.88)"
+            fontSize={{ base: "md", md: "lg" }}
+            lineHeight="1.9"
+            letterSpacing="0.015em"
+            textAlign="center"
+            mb={6}
+          >
+            Aunque mi experiencia es corta, <strong>tengo plena confianza en mi capacidad para acompañarte</strong>. Gracias por tu confianza y por tu tiempo.
           </Text>
 
           {/* Mensaje sobre el precio */}

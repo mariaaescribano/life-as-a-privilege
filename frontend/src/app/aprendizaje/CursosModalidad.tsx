@@ -35,6 +35,7 @@ function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
       boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
       direction="column"
       p={{ base: 5, md: 6 }}
+      h="100%"
     >
       {/* Título */}
       <Text
@@ -51,14 +52,26 @@ function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
         {curso.titulo}
       </Text>
 
-      {/* Foto */}
+      {/* Foto — ratio 16:9 (YouTube thumbnail) */}
       <Box
         borderRadius="xl"
         overflow="hidden"
         mb={"10px"}
-        boxShadow={`0 6px 24px ${color}44`}
+        position="relative"
+        paddingBottom="56.25%"
+        boxShadow={`0 6px 28px ${bgColor}cc, 0 2px 10px ${bgColor}88`}
       >
-        <Image src={curso.foto} alt={curso.titulo} w="100%" h="auto" display="block" />
+        <Image
+          src={curso.foto}
+          alt={curso.titulo}
+          position="absolute"
+          top="0"
+          left="0"
+          w="100%"
+          h="100%"
+          objectFit="cover"
+          display="block"
+        />
       </Box>
 
       {/* Precio + Botón */}
@@ -217,6 +230,7 @@ export default function CursosModalidad() {
             {modalidad.cursos.map((curso, i) => (
               <Box
                 key={curso.id}
+                h="100%"
                 style={{
                   opacity: 0,
                   animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,

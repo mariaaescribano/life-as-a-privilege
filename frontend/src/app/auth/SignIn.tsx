@@ -257,7 +257,7 @@ export default function SignIn() {
                 color="white"
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
-                fontSize={{ base: "lg", md: "xl" }}
+                fontSize={{ base: "md", md: "lg" }}
                 letterSpacing="0.18em"
                 px={12}
                 py="12px"

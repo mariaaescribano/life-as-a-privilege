@@ -47,7 +47,7 @@ export function SolicitarAutoevaluacionButton({
           >
             {icon}
           </Box> */}
-          <Text>Solicitar autoevaluación personalizada</Text>
+          <Text>Solicitar evaluación personalizada</Text>
         </Flex>
       </Flex>
 
