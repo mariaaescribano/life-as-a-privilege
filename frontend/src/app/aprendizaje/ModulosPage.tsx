@@ -53,6 +53,8 @@ export default function ModulesPage() {
         return { nom: titulo || fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />, modulos};
       case neuropsicologiaNom:
         return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+      case neuropsicologiaNom + "cursoEsq":
+        return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case astrologiaNom:
         return { nom: titulo || astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
       case tcmNomLink:
@@ -105,16 +107,32 @@ export default function ModulesPage() {
             />
 
             {/* Módulos directos — sin card contenedor */}
-            <Box w="100%" maxW="850px">
+            <Box
+              w="100%"
+              maxW="850px"
+              sx={{
+                "@keyframes moduloSlideIn": {
+                  from: { opacity: 0, transform: "translateX(-28px)" },
+                  to:   { opacity: 1, transform: "translateX(0)"     },
+                },
+              }}
+            >
               {moduloDatos.modulos.map((mod, i) => (
-                <ModuloAcordeon
+                <Box
                   key={i}
-                  title={mod.title}
-                  bgColor={moduloDatos.bgColor}
-                  color={moduloDatos.color}
-                  submodules={mod.submodules}
-                  icon={mod.icon}
-                />
+                  style={{
+                    opacity: 0,
+                    animation: `moduloSlideIn 0.48s cubic-bezier(0.22,1,0.36,1) ${i * 0.09}s forwards`,
+                  }}
+                >
+                  <ModuloAcordeon
+                    title={mod.title}
+                    bgColor={moduloDatos.bgColor}
+                    color={moduloDatos.color}
+                    submodules={mod.submodules}
+                    icon={mod.icon}
+                  />
+                </Box>
               ))}
             </Box>
           </Flex>

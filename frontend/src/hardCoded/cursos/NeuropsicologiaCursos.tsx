@@ -6,7 +6,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../GlobalVariables";
-import { modulosNeuroPsicologia } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia, modulosEsquizofrenia } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
   nom: neuropsicologiaNom,
@@ -25,6 +25,18 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
       cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom +"/etapasVida",
       modulos: modulosNeuroPsicologia,
+    },
+    {
+      id: "esquizofrenia",
+      titulo: "Más allá de la esquizofrenia",
+      foto: "/img/np/esq.jpg",
+      descripcion:
+        "La esquizofrenia no es lo que nos habían hecho creer. La esquizofrenia es una manifestación caótica de un profundo dolor no sanado ni legitimado.",
+      precio: null,
+      numLecciones: 10,
+      icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/esquizofrenia",
+      modulos: modulosEsquizofrenia,
     },
   ],
 };

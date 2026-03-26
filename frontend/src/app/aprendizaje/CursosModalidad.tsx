@@ -207,15 +207,28 @@ export default function CursosModalidad() {
             maxW="900px"
             columns={{ base: 1, md: 2 }}
             spacing={{ base: 5, md: 6 }}
+            sx={{
+              "@keyframes cursoCardIn": {
+                from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+              },
+            }}
           >
-            {modalidad.cursos.map((curso) => (
-              <CursoCard
+            {modalidad.cursos.map((curso, i) => (
+              <Box
                 key={curso.id}
-                curso={curso}
-                bgColor={modalidad.bgColor}
-                color={modalidad.color}
-                onVerDetalle={() => setDetailCurso(curso)}
-              />
+                style={{
+                  opacity: 0,
+                  animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
+                }}
+              >
+                <CursoCard
+                  curso={curso}
+                  bgColor={modalidad.bgColor}
+                  color={modalidad.color}
+                  onVerDetalle={() => setDetailCurso(curso)}
+                />
+              </Box>
             ))}
           </SimpleGrid>
 

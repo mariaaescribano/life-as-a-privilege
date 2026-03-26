@@ -5,7 +5,7 @@ import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
-import { modulosNeuroPsicologia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia, modulosEsquizofrenia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import {
@@ -41,6 +41,8 @@ export default function VideoLessonPage() {
     const nom = moduloId ?? "";
     switch (moduloId) {
       case neuropsicologiaNom:
+        return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
+      case neuropsicologiaNom + "cursoEsq":
         return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case fisiologiaNom:
         return { nom: fisiologiaNom, nomModalidad: nom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
@@ -83,8 +85,12 @@ export default function VideoLessonPage() {
   useEffect(() => {
     if (moduloId && submoduloId) {
       if(moduloId === neuropsicologiaNom)
-      { 
+      {
         setdatos(getModuleByTitle(submoduloId!, modulosNeuroPsicologia));
+      }
+      else if(moduloId === neuropsicologiaNom + "cursoEsq")
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosEsquizofrenia));
       }
       else if(moduloId === tcmNomLink)
       {

@@ -1,4 +1,6 @@
 import { neuropsicologiaNom, astrologiaNom, tcmNomLink, fitoterapiaNom, cabalaNom, nutricionNomLink, ayurvedaNomLink, fisiologiaNom } from "../../GlobalVariables";
+
+export const neuropsicologiaEsqNom = neuropsicologiaNom + "cursoEsq";
 import type { ModalidadInfo } from "./cursos.type";
 import { neuropsicologiaCursos } from "./NeuropsicologiaCursos";
 import { astrologiaCursos } from "./AstrologiaCursos";
@@ -13,6 +15,7 @@ export type { Curso, ModalidadInfo } from "./cursos.type";
 
 export const cursosData: Record<string, ModalidadInfo> = {
   [neuropsicologiaNom]: neuropsicologiaCursos,
+  [neuropsicologiaEsqNom]: neuropsicologiaCursos,
   [astrologiaNom]: astrologiaCursos,
   [tcmNomLink]: tcmCursos,
   [fitoterapiaNom]: fitoterapiaCursos,
