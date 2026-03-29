@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContactModal } from "../../components/global/ContactModal";
@@ -141,6 +141,18 @@ export default function VideoLessonPage() {
   }, [datos, navigate]);
 
   const [saberMasOpen, setSaberMasOpen] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+
+  const changeSpeed = (rate: number) => {
+    setSpeed(rate);
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func: "setPlaybackRate", args: [rate] }),
+      "*"
+    );
+  };
 
   const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 
@@ -248,6 +260,7 @@ export default function VideoLessonPage() {
                 boxShadow={GLOW}
               >
                 <iframe
+                  ref={iframeRef}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1`}
                   title="YouTube video player"
@@ -279,6 +292,37 @@ export default function VideoLessonPage() {
               >
                 →
               </Box>
+            </Flex>
+
+            {/* Velocidad de reproducción */}
+            <Flex
+              alignSelf="center"
+              gap={1}
+              mb={{ base: 4, md: 6 }}
+              bg="rgba(0,0,0,0.45)"
+              borderRadius="full"
+              px={3} py="6px"
+              border="1px solid rgba(255,255,255,0.18)"
+            >
+              {SPEEDS.map((rate) => (
+                <Box
+                  key={rate}
+                  as="button"
+                  onClick={() => changeSpeed(rate)}
+                  px="10px" py="4px"
+                  borderRadius="full"
+                  fontSize={{ base: "12px", md: "13px" }}
+                  fontWeight="700"
+                  letterSpacing="0.04em"
+                  cursor="pointer"
+                  color={speed === rate ? "#1a1a1a" : "rgba(255,255,255,0.80)"}
+                  bg={speed === rate ? "white" : "transparent"}
+                  transition="all 0.18s ease"
+                  _hover={{ color: speed === rate ? "#1a1a1a" : "white", bg: speed === rate ? "white" : "rgba(255,255,255,0.12)" }}
+                >
+                  {rate === 1 ? "1×" : `${rate}×`}
+                </Box>
+              ))}
             </Flex>
 
             {/* Flechas debajo — solo móvil */}
