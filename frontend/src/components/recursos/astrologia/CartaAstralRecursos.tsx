@@ -118,6 +118,11 @@ const PlanetCircle = ({ planet, onClick, size }: { planet: Planet; onClick: () =
 const PlanetModal = ({ submodule, planet, onClose }: { submodule: Submodulo; planet: Planet; onClose: () => void }) => {
   const [letraOpen, setLetraOpen] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
   return (
     <Box
       position="fixed" inset="0" zIndex={1000}

@@ -12,6 +12,22 @@ import { gestionaError } from "../../GlobalHelper";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import SiteFooter from "../../components/global/Footer";
 
+const GoogleIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 48 48">
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+  </svg>
+);
+
+const EmailIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2"/>
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+  </svg>
+);
+
 export default function LogIn() {
   const navigate = useNavigate();
 
@@ -19,6 +35,7 @@ export default function LogIn() {
   const [contra, setcontra] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -75,7 +92,7 @@ export default function LogIn() {
       setLoading(false);
     }
   }
-  
+
   const validarInicioSesion = () => {
     if (name === "" || contra === "") {
       setmessage({
@@ -94,6 +111,27 @@ export default function LogIn() {
       return () => clearTimeout(timer);
     }
   }, [message]);
+
+  const authButtonStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 3,
+    w: "100%",
+    py: "13px",
+    px: 6,
+    borderRadius: "full",
+    border: "1.5px solid rgba(255,255,255,0.4)",
+    bg: "rgba(255,255,255,0.08)",
+    color: "white",
+    fontFamily: "'EB Garamond', serif",
+    fontWeight: "600",
+    fontSize: { base: "lg", md: "xl" } as any,
+    letterSpacing: "0.06em",
+    cursor: "pointer",
+    _hover: { bg: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.7)" },
+    transition: "all 0.25s ease",
+  };
 
   return (
     <Box
@@ -150,176 +188,179 @@ export default function LogIn() {
             px={{ base: 8, md: 12 }}
             py={{ base: 10, md: 12 }}
           >
-          <Text
-            color="white"
-            fontSize={{ base: "3xl", md: "4xl" }}
-            fontWeight="700"
-            letterSpacing="0.05em"
-            lineHeight="1.2"
-            textShadow="0 2px 10px rgba(0,100,90,0.4)"
-            mb={8}
-            textAlign="center"
-          >
-            Iniciar sesión
-          </Text>
-
-          <VStack spacing={5} align="stretch">
-            {/* Nombre / Email */}
-            <Box>
-              <Text
-                color="rgba(255,255,255,0.75)"
-                fontSize="xs"
-                letterSpacing="0.1em"
-                mb={2}
-                fontWeight="600"
-              >
-                NOMBRE O EMAIL
-              </Text>
-              <Input
-                value={name}
-                onChange={(e) => setname(e.target.value)}
-                bg="rgba(255,255,255,0.08)"
-                border="1px solid rgba(255,255,255,0.32)"
-                color="white"
-                borderRadius="xl"
-                size="lg"
-                _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                _hover={{ border: "1px solid rgba(255,255,255,0.6)" }}
-                _focus={{
-                  border: "1px solid rgba(255,255,255,0.85)",
-                  boxShadow: "0 0 0 1px rgba(255,255,255,0.25)",
-                  bg: "rgba(255,255,255,0.13)",
-                  outline: "none",
-                }}
-              />
-            </Box>
-
-            {/* Contraseña */}
-            <Box>
-              <Text
-                color="rgba(255,255,255,0.75)"
-                fontSize="xs"
-                letterSpacing="0.1em"
-                mb={2}
-                fontWeight="600"
-              >
-                CONTRASEÑA
-              </Text>
-              <Input
-                type="password"
-                value={contra}
-                onChange={(e) => setcontra(e.target.value)}
-                bg="rgba(255,255,255,0.08)"
-                border="1px solid rgba(255,255,255,0.32)"
-                color="white"
-                borderRadius="xl"
-                size="lg"
-                _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                _hover={{ border: "1px solid rgba(255,255,255,0.6)" }}
-                _focus={{
-                  border: "1px solid rgba(255,255,255,0.85)",
-                  boxShadow: "0 0 0 1px rgba(255,255,255,0.25)",
-                  bg: "rgba(255,255,255,0.13)",
-                  outline: "none",
-                }}
-              />
-            </Box>
-
             <Text
-              onClick={() => navigate("/signIn")}
+              color="white"
+              fontSize={{ base: "3xl", md: "4xl" }}
+              fontWeight="700"
+              letterSpacing="0.05em"
+              lineHeight="1.2"
+              textShadow="0 2px 10px rgba(0,100,90,0.4)"
+              mb={8}
               textAlign="center"
-              color="rgba(255,255,255,0.6)"
-              fontWeight="500"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.02em"
-              cursor="pointer"
-              _hover={{ color: "white" }}
-              transition="color 0.2s"
-              mt={1}
             >
-              ¿No tienes una cuenta? Regístrate
+              Iniciar sesión
             </Text>
 
-            {message && (
-              <SuccessErrorMessage
-                soy={message.soy}
-                title={message.title}
-                description={message.description}
-                onClick={() => setmessage(null)}
-              />
-            )}
+            <VStack spacing={4} align="stretch">
 
-            <Flex justify="center" mt={2}>
+              {/* ── BOTÓN GOOGLE ── */}
               <Box
                 as="button"
-                onClick={loading ? undefined : validarInicioSesion}
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "lg", md: "xl" }}
-                letterSpacing="0.18em"
-                px={12}
-                py="12px"
-                borderRadius="full"
-                border="1.5px solid rgba(255,255,255,0.6)"
-                bg="rgba(255,255,255,0.12)"
-                cursor={loading ? "not-allowed" : "pointer"}
-                opacity={loading ? 0.55 : 1}
-                textShadow="0 1px 6px rgba(0,0,0,0.2)"
-                boxShadow="0 4px 20px rgba(0,0,0,0.15)"
-                _hover={loading ? {} : {
-                  bg: "rgba(255,255,255,0.25)",
-                  borderColor: "white",
-                  boxShadow: "0 8px 28px rgba(0,0,0,0.22)",
-                  transform: "translateY(-1px)",
-                }}
-                transition="all 0.25s ease"
-                w="100%"
+                onClick={() => { window.location.href = `${API_URL}/auth/google`; }}
+                {...authButtonStyle}
               >
-                ENTRAR
+                <GoogleIcon />
+                Continuar con Google
               </Box>
-            </Flex>
 
-            {/* ── SEPARADOR ── */}
-            <Flex align="center" gap={3} my={1}>
-              <Box flex="1" h="1px" bg="rgba(255,255,255,0.2)" />
-              <Text color="rgba(255,255,255,0.45)" fontSize="sm">o</Text>
-              <Box flex="1" h="1px" bg="rgba(255,255,255,0.2)" />
-            </Flex>
+              {/* ── BOTÓN EMAIL ── */}
+              <Box
+                as="button"
+                onClick={() => setShowForm(!showForm)}
+                {...authButtonStyle}
+                border="1.5px solid rgba(255,255,255,0.25)"
+                bg={showForm ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.05)"}
+              >
+                <EmailIcon />
+                Continuar con email
+              </Box>
 
-            {/* ── BOTÓN GOOGLE ── */}
-            <Box
-              as="button"
-              onClick={() => { window.location.href = `${API_URL}/auth/google`; }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              gap={3}
-              w="100%"
-              py="12px"
-              px={6}
-              borderRadius="full"
-              border="1.5px solid rgba(255,255,255,0.4)"
-              bg="rgba(255,255,255,0.08)"
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "lg", md: "xl" }}
-              letterSpacing="0.08em"
-              cursor="pointer"
-              _hover={{ bg: "rgba(255,255,255,0.16)", borderColor: "rgba(255,255,255,0.7)" }}
-              transition="all 0.25s ease"
-            >
-              <svg width="20" height="20" viewBox="0 0 48 48">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-              </svg>
-              Continuar con Google
-            </Box>
-          </VStack>
-        </Box>
+              {/* ── FORMULARIO (se despliega) ── */}
+              {showForm && (
+                <VStack spacing={5} align="stretch" pt={2}>
+                  <Flex align="center" gap={3}>
+                    <Box flex="1" h="1px" bg="rgba(255,255,255,0.18)" />
+                    <Text color="rgba(255,255,255,0.4)" fontSize="xs" letterSpacing="0.1em">CON EMAIL Y CONTRASEÑA</Text>
+                    <Box flex="1" h="1px" bg="rgba(255,255,255,0.18)" />
+                  </Flex>
+
+                  {/* Nombre / Email */}
+                  <Box>
+                    <Text
+                      color="rgba(255,255,255,0.75)"
+                      fontSize="xs"
+                      letterSpacing="0.1em"
+                      mb={2}
+                      fontWeight="600"
+                    >
+                      NOMBRE O EMAIL
+                    </Text>
+                    <Input
+                      value={name}
+                      onChange={(e) => setname(e.target.value)}
+                      bg="rgba(255,255,255,0.08)"
+                      border="1px solid rgba(255,255,255,0.32)"
+                      color="white"
+                      borderRadius="xl"
+                      size="lg"
+                      _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                      _hover={{ border: "1px solid rgba(255,255,255,0.6)" }}
+                      _focus={{
+                        border: "1px solid rgba(255,255,255,0.85)",
+                        boxShadow: "0 0 0 1px rgba(255,255,255,0.25)",
+                        bg: "rgba(255,255,255,0.13)",
+                        outline: "none",
+                      }}
+                    />
+                  </Box>
+
+                  {/* Contraseña */}
+                  <Box>
+                    <Text
+                      color="rgba(255,255,255,0.75)"
+                      fontSize="xs"
+                      letterSpacing="0.1em"
+                      mb={2}
+                      fontWeight="600"
+                    >
+                      CONTRASEÑA
+                    </Text>
+                    <Input
+                      type="password"
+                      value={contra}
+                      onChange={(e) => setcontra(e.target.value)}
+                      bg="rgba(255,255,255,0.08)"
+                      border="1px solid rgba(255,255,255,0.32)"
+                      color="white"
+                      borderRadius="xl"
+                      size="lg"
+                      _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                      _hover={{ border: "1px solid rgba(255,255,255,0.6)" }}
+                      _focus={{
+                        border: "1px solid rgba(255,255,255,0.85)",
+                        boxShadow: "0 0 0 1px rgba(255,255,255,0.25)",
+                        bg: "rgba(255,255,255,0.13)",
+                        outline: "none",
+                      }}
+                    />
+                  </Box>
+
+                  {message && (
+                    <SuccessErrorMessage
+                      soy={message.soy}
+                      title={message.title}
+                      description={message.description}
+                      onClick={() => setmessage(null)}
+                    />
+                  )}
+
+                  <Box
+                    as="button"
+                    onClick={loading ? undefined : validarInicioSesion}
+                    color="white"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="700"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    letterSpacing="0.18em"
+                    px={12}
+                    py="12px"
+                    borderRadius="full"
+                    border="1.5px solid rgba(255,255,255,0.6)"
+                    bg="rgba(255,255,255,0.12)"
+                    cursor={loading ? "not-allowed" : "pointer"}
+                    opacity={loading ? 0.55 : 1}
+                    textShadow="0 1px 6px rgba(0,0,0,0.2)"
+                    boxShadow="0 4px 20px rgba(0,0,0,0.15)"
+                    _hover={loading ? {} : {
+                      bg: "rgba(255,255,255,0.25)",
+                      borderColor: "white",
+                      boxShadow: "0 8px 28px rgba(0,0,0,0.22)",
+                      transform: "translateY(-1px)",
+                    }}
+                    transition="all 0.25s ease"
+                    w="100%"
+                  >
+                    ENTRAR
+                  </Box>
+                </VStack>
+              )}
+
+              {!showForm && message && (
+                <SuccessErrorMessage
+                  soy={message.soy}
+                  title={message.title}
+                  description={message.description}
+                  onClick={() => setmessage(null)}
+                />
+              )}
+
+              <Text
+                onClick={() => navigate("/signIn")}
+                textAlign="center"
+                color="rgba(255,255,255,0.6)"
+                fontWeight="500"
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.02em"
+                cursor="pointer"
+                _hover={{ color: "white" }}
+                transition="color 0.2s"
+                mt={2}
+              >
+                ¿No tienes una cuenta? Regístrate
+              </Text>
+
+            </VStack>
+          </Box>
         </VStack>
       </Flex>
 

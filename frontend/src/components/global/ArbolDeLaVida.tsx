@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { cabalaBg, cabalaTxt } from '../../GlobalVariables'
 
@@ -99,6 +99,11 @@ const sefiraMap = Object.fromEntries(SEFIROT.map(s => [s.key, s])) as Record<Sef
 
 /* ─── Modal ────────────────────────────────────────────── */
 function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
   return (
     <Box
       position="fixed" inset="0" zIndex={1000}

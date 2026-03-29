@@ -206,7 +206,13 @@ const PlanetTeaserModal = ({
 }: {
   planet: Planet;
   onClose: () => void;
-}) => (
+}) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
   <Box
     position="fixed" inset="0" zIndex={1000}
     display="flex" alignItems="center" justifyContent="center"
@@ -334,7 +340,8 @@ const PlanetTeaserModal = ({
       </Box>
     </Box>
   </Box>
-);
+  );
+};
 
 /* ══════════════════════════════════════════════
    MODAL — SELECTOR / INFORMACIÓN (Sol · Luna · Asc)
@@ -353,6 +360,11 @@ const ZodiacModal = ({
   const showInfo = !!currentSign;
   const [letraOpen, setLetraOpen] = useState(false);
   const signData = currentSign ? ZODIAC_SIGNS.find((s) => s.name === currentSign) : null;
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
   const info = currentSign ? SIGN_INFO[field][currentSign] : null;
   const signIndex = currentSign ? ZODIAC_SIGNS.findIndex((s) => s.name === currentSign) : -1;
   const submoduleData = signIndex >= 0

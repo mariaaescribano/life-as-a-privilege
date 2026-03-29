@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,13 @@ interface LoginRequiredModalProps {
 
 export function LoginRequiredModal({ isOpen, onClose }: LoginRequiredModalProps) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = ""; };
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

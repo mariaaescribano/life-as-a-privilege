@@ -5,25 +5,7 @@ USAR OBJ+ID : userId
 
 - sol en cancer y leo 
 
-Vamos a hacer una pagina para los recursos de Carta Astral (el curso)
-para empezar, quiero un box card que sea "Obtén tu cart Astral" puede ser plegable.
-Va a tener dentro varios pasos, 1 la direccion a esta web https://carta-natal.es/carta.php
-que se pueda copiar (q tenag un boton) y q haya una frase o algo diciendo "Pega esta web en tu navegador"
-y el siguient paso que sea 2. Rellena los datos 3. Ya lo tienes! con la foto la de img/astrologia/curo0.png pero como que centrada para que solo se vea lo del medio
-
-
-Ese es el apartado que puede ser plegable
-
-Luego abajo quiero un card como el que hay en AstrologiaEspacio,
-es decir todos los planetas cada uno con su circulo y ordenados en forma circular,
-pero dentro NO puede estar la foto del usuario, sino esta la de img/astrologia/curo0.png pero como que centrada para que solo se vea lo del medio
-
-Cuando se pinche en cada planeta quiero que salga un card, tambien como el que hay en astrologiaMiEspacio, pero que sea con el titulo del video arriba, 
-abajo el video del respectivo planeta que puedes coger de los modulos
-y abajo la descripcion y transcripcion como en VideoLessonPage
-
-
-
+CAMBIOS
 
 
 CONECTANDO CON SUPABASE
