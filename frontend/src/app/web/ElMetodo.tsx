@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -347,6 +348,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
 }
 
 export default function ElMetodo() {
+  const navigate = useNavigate();
   const headerReveal = useReveal(0.05);
   const cardsReveal = useReveal(0.04);
   const pricingReveal = useReveal(0.1);
@@ -501,6 +503,15 @@ export default function ElMetodo() {
             ¿Cómo funciona?
           </Text>
 
+          {/* Separador */}
+          <Box
+            h="1px"
+            mx="auto"
+            w={{ base: "60%", md: "40%" }}
+            mb={8}
+            bgGradient="linear(to-r, transparent, rgba(255,255,255,0.45), transparent)"
+          />
+
           {/* Info sesiones */}
           <Flex
             direction={{ base: "column", md: "row" }}
@@ -592,6 +603,38 @@ export default function ElMetodo() {
               El precio es <strong>económico</strong> porque creo que el camino de la consciencia no tiene que ser un lujo para unos pocos, sino un <strong>derecho del pueblo</strong>. Quiero que cualquier persona interesada pueda acceder, independientemente de su situación económica.
             </Text>
           </Box>
+
+          {/* ── Botón Quién soy ── */}
+          <Flex justify={{ base: "center", md: "flex-end" }} mt={6}>
+            <Box
+              as="button"
+              onClick={() => navigate("/quienSoy")}
+              display="flex"
+              alignItems="center"
+              gap={2}
+              color="rgba(255,255,255,0.62)"
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "md", md: "lg" }}
+              fontStyle="italic"
+              letterSpacing="0.04em"
+              cursor="pointer"
+              bg="transparent"
+              sx={{
+                border: "none",
+                borderBottom: "1px solid rgba(255,255,255,0.25)",
+                paddingBottom: "2px",
+                transition: "all 0.22s ease",
+                "&:hover": {
+                  color: "white",
+                  borderBottomColor: "rgba(255,255,255,0.7)",
+                },
+              }}
+            >
+              Conocer a la creadora
+              <Box as="span" fontSize="sm" opacity={0.8}>→</Box>
+            </Box>
+          </Flex>
+
         </Box>
       </Flex>
 
