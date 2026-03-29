@@ -13,6 +13,7 @@ import FitoterapiaRecursos from "../../components/recursos/fitoterapia/Fitoterap
 import CabalaRecursos from "../../components/recursos/cabala/CabalaRecursos";
 import NutricionRecursos from "../../components/recursos/nutricion/NutricionRecursos";
 import AstrologiaRecursos from "../../components/recursos/astrologia/AstrologiaRecursos";
+import CartaAstralRecursos from "../../components/recursos/astrologia/CartaAstralRecursos";
 import AyurvedaRecursos from "../../components/recursos/ayurveda/AyurvedaRecursos";
 
 export default function RecursosPage() {
@@ -31,6 +32,8 @@ export default function RecursosPage() {
         return NutricionRecursos;
       case astrologiaNom:
         return AstrologiaRecursos;
+      case "CartaAstral":
+        return CartaAstralRecursos;
       case ayurvedaNomLink:
         return AyurvedaRecursos;
       default:

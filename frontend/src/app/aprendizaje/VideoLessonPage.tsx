@@ -20,7 +20,7 @@ import {
 } from "../../GlobalVariables";
 import { modulostcmFundamentos, modulostcmCincoElementos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
-import { modulosAstrologia } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
+import { modulosAstrologia, modulosAstrologiaCurso0 } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
@@ -101,8 +101,11 @@ export default function VideoLessonPage() {
         setdatos(getModuleByTitle(submoduloId!, modulosFitoterapia));
       }
       else if(moduloId === astrologiaNom)
-      { 
-        setdatos(getModuleByTitle(submoduloId!, modulosAstrologia));
+      {
+        setdatos(
+          getModuleByTitle(submoduloId!, modulosAstrologiaCurso0) ??
+          getModuleByTitle(submoduloId!, modulosAstrologia)
+        );
       }
       else if(moduloId === cabalaNom)
       {

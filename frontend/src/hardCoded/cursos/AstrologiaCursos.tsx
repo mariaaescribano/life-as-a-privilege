@@ -6,8 +6,9 @@ import {
   astrologiaNom,
   astrologiaTxt,
 } from "../../GlobalVariables";
-import { modulosAstrologia } from "../aprendizajes/Astrologia/ModulosAstrologia";
+import { modulosAstrologia, modulosAstrologiaCurso0 } from "../aprendizajes/Astrologia/ModulosAstrologia";
 
+export const astroCurso0ID = "astro-curso-0";
 export const astroCurso1ID = "astro-curso-1";
 
 export const astrologiaCursos: ModalidadInfo = {
@@ -16,6 +17,17 @@ export const astrologiaCursos: ModalidadInfo = {
   color: astrologiaTxt,
   icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
+    {
+      id: astroCurso0ID,
+      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso0ID,
+      titulo: "La Carta Natal",
+      foto: "/img/astrologia/curso0.png",
+      descripcion: "El primer paso para entenderte: descubrir tu carta natal y el significado de los planetas que hay en ella.",
+      precio: null,
+      numLecciones: 13,
+      icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosAstrologiaCurso0,
+    },
     {
       id: astroCurso1ID,
       cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso1ID,
