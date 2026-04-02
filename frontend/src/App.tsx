@@ -20,6 +20,7 @@ import Contacto from "./app/web/Contacto";
 import ElMetodo from "./app/web/ElMetodo";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
+import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
 import UserAccount from "./app/user/UserAccount";
 import TCMTest1 from "./components/espacio/components/TCMTest1";
 import TCMTest2 from "./components/espacio/components/TCMTest2";
@@ -71,6 +72,7 @@ export default function App()
       <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
+      <Route path="/aprendizaje/nuevosCursos" element={<NuevosCursosPage />} />
       <Route path="/aprendizaje/cursosModalidad/:moduloId" element={<CursosModalidad />} />
       <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
       <Route path="/aprendizaje/modulosPage/:modalidadId/:cursoId" element={<ModulosPage />} />

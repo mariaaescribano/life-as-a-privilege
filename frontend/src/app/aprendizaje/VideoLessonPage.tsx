@@ -22,7 +22,8 @@ import { modulostcmFundamentos, modulostcmCincoElementos } from "../../hardCoded
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
 import { modulosAstrologia, modulosAstrologiaCurso0 } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
-import { modulosNutricion } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
+import { modulosCabala2 } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala2";
+import { modulosNutricion, modulosMicrobiota } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
 import { modulosFisiologia } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 
@@ -115,11 +116,17 @@ export default function VideoLessonPage() {
       }
       else if(moduloId === cabalaNom)
       {
-        setdatos(getModuleByTitle(submoduloId!, modulosCabala));
+        setdatos(
+          getModuleByTitle(submoduloId!, modulosCabala) ??
+          getModuleByTitle(submoduloId!, modulosCabala2)
+        );
       }
       else if(moduloId === nutricionNomLink)
       {
-        setdatos(getModuleByTitle(submoduloId!, modulosNutricion));
+        setdatos(
+          getModuleByTitle(submoduloId!, modulosNutricion) ??
+          getModuleByTitle(submoduloId!, modulosMicrobiota)
+        );
       }
       else if(moduloId === ayurvedaNomLink)
       {

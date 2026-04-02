@@ -11,6 +11,7 @@ import {
 import TCMrecursos from "../../components/recursos/tcm/TCMrecursos";
 import FitoterapiaRecursos from "../../components/recursos/fitoterapia/FitoterapiaRecursos";
 import CabalaRecursos from "../../components/recursos/cabala/CabalaRecursos";
+import CabalaRecursos2 from "../../components/recursos/cabala/CabalaRecursos2";
 import NutricionRecursos from "../../components/recursos/nutricion/NutricionRecursos";
 import AstrologiaRecursos from "../../components/recursos/astrologia/AstrologiaRecursos";
 import CartaAstralRecursos from "../../components/recursos/astrologia/CartaAstralRecursos";
@@ -28,6 +29,8 @@ export default function RecursosPage() {
         return FitoterapiaRecursos;
       case cabalaNom:
         return CabalaRecursos;
+      case cabalaNom + "-camino":
+        return CabalaRecursos2;
       case nutricionNomLink:
         return NutricionRecursos;
       case astrologiaNom:

@@ -228,6 +228,42 @@ const Welcome = () => {
         </Box>
       </Flex>
 
+      {/* ── BOTÓN NUEVOS CURSOS ── */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 12 }}>
+        <Flex
+          as="button"
+          onClick={() => navigate("/aprendizaje/nuevosCursos")}
+          align="center"
+          gap={3}
+          px={{ base: 8, md: 12 }}
+          py={{ base: "14px", md: "16px" }}
+          borderRadius="full"
+          border="1.5px solid rgba(255,255,255,0.55)"
+          bg="rgba(255,255,255,0.10)"
+          cursor="pointer"
+          boxShadow="0 0 28px rgba(72,192,181,0.65), 0 0 70px rgba(72,192,181,0.28), 0 4px 18px rgba(0,0,0,0.2)"
+          _hover={{
+            bg: "rgba(255,255,255,0.20)",
+            borderColor: "rgba(255,255,255,0.85)",
+            boxShadow: "0 0 44px rgba(72,192,181,0.9), 0 0 90px rgba(72,192,181,0.45), 0 6px 26px rgba(0,0,0,0.25)",
+            transform: "translateY(-2px)",
+          }}
+          transition="all 0.25s ease"
+        >
+          <Image src="/img/icono/life.png" alt="" h={{ base: "28px", md: "34px" }} objectFit="contain" />
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "xl", md: "2xl" }}
+            letterSpacing="0.12em"
+            style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))" }}
+          >
+            Nuevos Cursos
+          </Text>
+        </Flex>
+      </Flex>
+
       {/* ── CARD PRESENTACIÓN ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
         <Box

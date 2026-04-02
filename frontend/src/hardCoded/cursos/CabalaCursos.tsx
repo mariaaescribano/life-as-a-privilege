@@ -7,6 +7,7 @@ import {
   cabalaTxt,
 } from "../../GlobalVariables";
 import { modulosCabala } from "../aprendizajes/Cabala/ModulosCabala";
+import { modulosCabala2 } from "../aprendizajes/Cabala/ModulosCabala2";
 
 export const cabalaCursos: ModalidadInfo = {
   nom: cabalaNom,
@@ -25,6 +26,18 @@ export const cabalaCursos: ModalidadInfo = {
       numLecciones: 12,
       icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />,
       modulos: modulosCabala,
+    },
+    {
+      id: "cabala-curso-2",
+      cursoLink: "/aprendizaje/modulosPage/" + cabalaNom + "/cabala-curso-2",
+      titulo: "El Árbol de la Vida como camino",
+      foto: "/img/cabala/arbolvidacurso.png",
+      descripcion:
+        "Cada sephirot del Árbol de la Vida es una herramienta para nuestro crecimiento y autoconocimiento.",
+      precio: null,
+      numLecciones: 12,
+      icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />,
+      modulos: modulosCabala2,
     },
   ],
 };
