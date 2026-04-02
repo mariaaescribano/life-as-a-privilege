@@ -7,7 +7,7 @@ const detalles: Detalles = { color: cabalaTxt, icon: CabalaIcon, bgColor: cabala
 const basePath = "/aprendizaje/videoLessonPage/" + cabalaNom;
 
 const misDesequilibriosVitales: FloatingButtonConfig = {
-  label: "Mis desequilibrios vitales",
+  label: "Encontrar mis desequilibrios",
   action: "espacio-auth",
   route: "/espacio/questions/" + cabalaNom,
 };

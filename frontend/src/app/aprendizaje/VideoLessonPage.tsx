@@ -5,7 +5,7 @@ import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
-import { modulosNeuroPsicologia, modulosEsquizofrenia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import {
@@ -43,6 +43,8 @@ export default function VideoLessonPage() {
       case neuropsicologiaNom:
         return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case neuropsicologiaNom + "cursoEsq":
+        return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
+      case neuropsicologiaNom + "cursoAnx":
         return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case fisiologiaNom:
         return { nom: fisiologiaNom, nomModalidad: nom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
@@ -92,6 +94,10 @@ export default function VideoLessonPage() {
       {
         setdatos(getModuleByTitle(submoduloId!, modulosEsquizofrenia));
       }
+      else if(moduloId === neuropsicologiaNom + "cursoAnx")
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosAnorexia));
+      }
       else if(moduloId === tcmNomLink)
       {
         setdatos(getModuleByTitle(submoduloId!, [...modulostcmFundamentos, ...modulostcmCincoElementos]));
@@ -126,28 +132,46 @@ export default function VideoLessonPage() {
     }
   }, [moduloId, submoduloId]);
 
-  // Auto-avance al vídeo siguiente cuando YouTube termina
+  const [saberMasOpen, setSaberMasOpen] = useState(false);
+  const [speed, setSpeed] = useState(() => {
+    const s = parseFloat(sessionStorage.getItem("videoSpeed") ?? "1");
+    return isNaN(s) ? 1 : s;
+  });
+  const [shouldAutoplay, setShouldAutoplay] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const val = sessionStorage.getItem("videoAutoplay") === "1";
+    sessionStorage.removeItem("videoAutoplay");
+    setShouldAutoplay(val);
+  }, [moduloId, submoduloId]);
+
+  // Auto-avance al vídeo siguiente cuando YouTube termina; aplica velocidad guardada al cargar
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       try {
         const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+        if (data.event === "onReady") {
+          iframeRef.current?.contentWindow?.postMessage(
+            JSON.stringify({ event: "command", func: "setPlaybackRate", args: [speed] }),
+            "*"
+          );
+        }
         if (data.event === "onStateChange" && data.info === 0 && datos?.linkNext) {
+          sessionStorage.setItem("videoAutoplay", "1");
           navigate(datos.linkNext);
         }
       } catch {}
     };
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [datos, navigate]);
-
-  const [saberMasOpen, setSaberMasOpen] = useState(false);
-  const [speed, setSpeed] = useState(1);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  }, [datos, navigate, speed]);
 
   const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
   const changeSpeed = (rate: number) => {
     setSpeed(rate);
+    sessionStorage.setItem("videoSpeed", String(rate));
     iframeRef.current?.contentWindow?.postMessage(
       JSON.stringify({ event: "command", func: "setPlaybackRate", args: [rate] }),
       "*"
@@ -262,7 +286,7 @@ export default function VideoLessonPage() {
                 <iframe
                   ref={iframeRef}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1`}
+                  src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1${shouldAutoplay ? "&autoplay=1" : ""}`}
                   title="YouTube video player"
                   allowFullScreen
                 />

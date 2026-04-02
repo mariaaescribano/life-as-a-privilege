@@ -6,7 +6,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../GlobalVariables";
-import { modulosNeuroPsicologia, modulosEsquizofrenia } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
   nom: neuropsicologiaNom,
@@ -37,6 +37,18 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
       cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/esquizofrenia",
       modulos: modulosEsquizofrenia,
+    },
+    {
+      id: "anorexia",
+      titulo: "El enigma de la anorexia",
+      foto: "/img/np/anorexia.png",
+      descripcion:
+        "Comprende la esencia de la enfermedad mental con la tasa de mortalidad más elevada. Entiende la realidad de alguien con anorexia.",
+      precio: null,
+      numLecciones: 10,
+      icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
+      modulos: modulosAnorexia,
     },
   ],
 };

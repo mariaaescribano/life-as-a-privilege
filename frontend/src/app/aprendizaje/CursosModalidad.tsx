@@ -123,17 +123,13 @@ export default function CursosModalidad() {
 
   if (!modalidad) {
     return (
-      <Box
-        minH="100vh"
-        bg="#008080"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        fontFamily="'EB Garamond', serif"
-      >
-        <Text color="white" fontSize="xl">
-          Modalidad no encontrada.
-        </Text>
+      <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="auto" />
+        <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+          <Text color="white" fontSize="xl">
+            Modalidad no encontrada.
+          </Text>
+        </Box>
       </Box>
     );
   }

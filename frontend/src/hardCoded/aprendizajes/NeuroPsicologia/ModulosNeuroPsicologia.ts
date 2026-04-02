@@ -1,11 +1,12 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom, EsqComprenderIcon, EsqOrigenIcon, EsqBiologiaIcon, EsqVocesIcon } from "../../../GlobalVariables";
-import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20 } from "./LetraNeuroPsicologia";
+import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom, EsqComprenderIcon, EsqOrigenIcon, EsqBiologiaIcon, EsqVocesIcon, AnxEntornoIcon, AnxComidaIcon, AnxSanacionIcon } from "../../../GlobalVariables";
+import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp25, letranp26, letranp27, letranp28, letranp29, letranp30 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 
 const basePath = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom;
 const basePathEsq = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoEsq";
+const basePathAnx = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoAnx";
 
 
 
@@ -188,7 +189,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
 
 export const modulosEsquizofrenia: ModuloContenido[] = [
   {
-    title: "1. Comprendiendo la Esquizofrenia",
+    title: "1. Comprendiendo la esquizofrenia",
     icon: EsqComprenderIcon,
     floatingButton: quieroEntenderme,
     submodules: [
@@ -351,6 +352,177 @@ export const modulosEsquizofrenia: ModuloContenido[] = [
         cursoId: "esquizofrenia",
         detalles: detalles,
         icon: EsqVocesIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+];
+
+export const modulosAnorexia: ModuloContenido[] = [
+  {
+    title: "1. Comprende la anorexia",
+    icon: EsqComprenderIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id:"anx1",
+        nom: "1.1 El objetivo de la anorexia",
+        link:`${basePathAnx}/anx1`,
+        linkAnterior:"",
+        linkNext:`${basePathAnx}/anx2`,
+        descripcion:"La anorexia es la manifestación de un amor propio nulo y un vacío interior más doloroso que el hambre.",
+        video:"eaHYrbcHR8Y",
+        letra: letranp21,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: EsqComprenderIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id:"anx2",
+        nom: "1.2 El cuerpo como campo de batalla",
+        link:`${basePathAnx}/anx2`,
+        linkAnterior:`${basePathAnx}/anx1`,
+        linkNext:`${basePathAnx}/anx3`,
+        descripcion:"Para las anoréxicas, adelgazar es sinónimo de fuerza. Convierten la delgadez en la prueba de que son capaces.",
+        video:"kZl-EEIneGY",
+        letra: letranp22,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: EsqComprenderIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id:"anx3",
+        nom: "1.3 Por qué nunca es suficiente",
+        link:`${basePathAnx}/anx3`,
+        linkAnterior:`${basePathAnx}/anx2`,
+        linkNext:`${basePathAnx}/anx4`,
+        descripcion:"Las anoréxicas se convencen de que no pueden vivir como un humano más y van más allá de sus límites.",
+        video:"_60yPtalzq8",
+        letra: letranp23,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: EsqComprenderIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id:"anx4",
+        nom: "1.4 La falsa superioridad",
+        link:`${basePathAnx}/anx4`,
+        linkAnterior:`${basePathAnx}/anx3`,
+        linkNext:`${basePathAnx}/anx5`,
+        descripcion:"Detrás de la máscara de superioridad hay un miedo profundo a ser ordinaria, a no ser suficiente.",
+        video:"Ho5Ypv4wuUo",
+        letra: letranp24,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: EsqComprenderIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+  {
+    title: "2. El entorno",
+    icon: AnxEntornoIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id:"anx5",
+        nom: "2.1 La familia de las anoréxicas",
+        link:`${basePathAnx}/anx5`,
+        linkAnterior:`${basePathAnx}/anx4`,
+        linkNext:`${basePathAnx}/anx6`,
+        descripcion:"El entorno familiar no les ha dado una validación real, dejándolas con un vacío y sin permiso para expresar su malestar.",
+        video:"unl356Iggu0",
+        letra: letranp25,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: AnxEntornoIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id:"anx6",
+        nom: "2.2 La respuesta del entorno",
+        link:`${basePathAnx}/anx6`,
+        linkAnterior:`${basePathAnx}/anx5`,
+        linkNext:`${basePathAnx}/anx7`,
+        descripcion:"El reconocimiento del entorno es temporal. Al no llegar a la raíz, la enfermedad se convierte en el secreto vergonzoso de la familia.",
+        video:"vcn2rSxylBc",
+        letra: letranp26,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: AnxEntornoIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id:"anx7",
+        nom: "2.3 La culpa en la anorexia",
+        link:`${basePathAnx}/anx7`,
+        linkAnterior:`${basePathAnx}/anx6`,
+        linkNext:`${basePathAnx}/anx8`,
+        descripcion:"Se sienten responsables del bienestar de sus padres y se castigan por no ser suficientemente perfectas.",
+        video:"7IQfEQOGFds",
+        letra: letranp27,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: AnxEntornoIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+  {
+    title: "3. La percepción de la comida",
+    icon: AnxComidaIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id:"anx8",
+        nom: "3.1 El hambre como seguridad",
+        link:`${basePathAnx}/anx8`,
+        linkAnterior:`${basePathAnx}/anx7`,
+        linkNext:`${basePathAnx}/anx9`,
+        descripcion:"Aguantar el hambre se convierte en la única forma de sentirse fuertes y capaces. El control es una búsqueda desesperada de seguridad.",
+        video:"RgGVLOLmomY",
+        letra: letranp28,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: AnxComidaIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id:"anx9",
+        nom: "3.2 El comer en la anorexia",
+        link:`${basePathAnx}/anx9`,
+        linkAnterior:`${basePathAnx}/anx8`,
+        linkNext:`${basePathAnx}/anx10`,
+        descripcion:"El problema no es la comida en sí, sino la asociación que hacen entre comer y la angustia.",
+        video:"8rCggU5B2Xc",
+        letra: letranp29,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: AnxComidaIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+  {
+    title: "4. La sanación",
+    icon: AnxSanacionIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id:"anx10",
+        nom: "4.1 La sanación de una anorexia",
+        link:`${basePathAnx}/anx10`,
+        linkAnterior:`${basePathAnx}/anx9`,
+        linkNext:"",
+        descripcion:"Solo cuando se aceptan a sí mismas, con todo lo que son, pueden empezar a sanar de verdad.",
+        video:"g-iozAbqOsU",
+        letra: letranp30,
+        cursoId: "anorexia",
+        detalles: detalles,
+        icon: AnxSanacionIcon,
         floatingButton: quieroEntenderme,
       },
     ],
