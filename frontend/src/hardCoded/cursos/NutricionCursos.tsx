@@ -1,6 +1,7 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import {
+  FitoterapiaIcon,
   NutricionIcon,
   nutricionBg,
   nutricionNom,
@@ -8,6 +9,7 @@ import {
   nutricionTxt,
 } from "../../GlobalVariables";
 import { modulosNutricion, modulosMicrobiota } from "../aprendizajes/Nutricion/ModulosNutricion";
+import { modulosFitoterapia } from "../aprendizajes/Fitoterapia/ModulosFitoterpia";
 
 export const nutricionCursos: ModalidadInfo = {
   nom: nutricionNom,
@@ -38,6 +40,18 @@ export const nutricionCursos: ModalidadInfo = {
       numLecciones: 10,
       icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosMicrobiota,
+    },
+    {
+      id: "fito-curso-1",
+      cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/fito-curso-1",
+      titulo: "Plantas comunes",
+      foto: "/img/fitoterapia/especias.jpg",
+      descripcion:
+        "Descubre las propiedades beneficiosas de las especias comunes, disponibles en cualquier supermercado.",
+      precio: null,
+      numLecciones: 10,
+      icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} color={nutricionTxt} />,
+      modulos: modulosFitoterapia,
     },
   ],
 };

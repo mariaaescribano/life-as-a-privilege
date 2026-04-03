@@ -9,7 +9,6 @@ import {
   neuropsicologiaNom,
   astrologiaNom,
   tcmNomLink,
-  fitoterapiaNom,
   cabalaNom,
   nutricionNomLink,
   ayurvedaNomLink,
@@ -18,16 +17,22 @@ import {
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
-// Orden cronológico de disciplinas — el usuario puede reordenar luego
-const MODALIDAD_ORDER = [
-  neuropsicologiaNom,
-  astrologiaNom,
-  tcmNomLink,
-  fitoterapiaNom,
-  nutricionNomLink,
-  ayurvedaNomLink,
-  fisiologiaNom,
-  cabalaNom,
+const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
+  { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // Microbiota
+  { modalidadKey: neuropsicologiaNom,    cursoId: "anorexia"        }, // Anorexia
+  { modalidadKey: cabalaNom,             cursoId: "cabala-curso-2"  }, // Árbol de la Vida
+  { modalidadKey: neuropsicologiaNom,    cursoId: "esquizofrenia"   }, // Esquizofrenia
+  { modalidadKey: neuropsicologiaNom,    cursoId: "etapasVida"      },
+  { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-1"     },
+  { modalidadKey: cabalaNom,             cursoId: "cabala-curso-1"  },
+  { modalidadKey: astrologiaNom,         cursoId: "astro-curso-2"   },
+  { modalidadKey: astrologiaNom,         cursoId: "astro-curso-0"   },
+  { modalidadKey: astrologiaNom,         cursoId: "astro-curso-1"   },
+  { modalidadKey: tcmNomLink,            cursoId: "tcm-curso-1"     },
+  { modalidadKey: tcmNomLink,            cursoId: "tcm-curso-2"     },
+  { modalidadKey: nutricionNomLink,      cursoId: "fito-curso-1"    },
+  { modalidadKey: ayurvedaNomLink,       cursoId: "ayu-curso-1"     },
+  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-1"   },
 ];
 
 interface CourseEntry {
@@ -36,10 +41,12 @@ interface CourseEntry {
 }
 
 function buildCourseList(): CourseEntry[] {
-  return MODALIDAD_ORDER.flatMap((nomLink) => {
-    const modalidad = cursosData[nomLink];
+  return COURSE_ORDER.flatMap(({ modalidadKey, cursoId }) => {
+    const modalidad = cursosData[modalidadKey];
     if (!modalidad) return [];
-    return modalidad.cursos.map((curso) => ({ curso, modalidad }));
+    const curso = modalidad.cursos.find((c) => c.id === cursoId);
+    if (!curso) return [];
+    return [{ curso, modalidad }];
   });
 }
 
@@ -248,8 +255,8 @@ export default function NuevosCursosPage() {
           direction="column"
           alignItems="center"
           px={{ base: 5, md: 10, lg: 16 }}
-          pt={{ base: 20, md: 24 }}
-          pb={{ base: 28, md: 24 }}
+          pt={{ base: 10, md: 14 }}
+          pb={{ base: 14, md: 20 }}
           gap={{ base: 5, md: 6 }}
         >
           <NuevosCursosHeader />

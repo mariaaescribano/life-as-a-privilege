@@ -6,7 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  fitoterapiaBg, fitoterapiaDescrip, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
+  culturaBg, culturaDescrip, CulturaIcon, culturaNom, culturaTxt,
   cabalaBg, cabalaDescrip, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -83,12 +83,12 @@ const disciplines: Discipline[] = [
     available:true
   },
   {
-    name: fitoterapiaNom,
-    bg: fitoterapiaBg,
-    txt: fitoterapiaTxt,
-    renderIcon: (size) => <FitoterapiaIcon size={{ base: size, md: size }} />,
-    desc: fitoterapiaDescrip,
-    link: "/aprendizaje/cursosModalidad/" + fitoterapiaNom,
+    name: culturaNom,
+    bg: culturaBg,
+    txt: culturaTxt,
+    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
+    desc: culturaDescrip,
+    link: "/aprendizaje/cursosModalidad/" + culturaNom,
     available:true
   },
   {

@@ -11,7 +11,7 @@ import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
-import { fitoterapiaNom, FitoterapiaIcon } from "../../GlobalVariables";
+import { nutricionNomLink, NutricionIcon } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -170,33 +170,54 @@ export default function CursosModalidad() {
             title={modalidad.nom}
             bgColor={modalidad.bgColor}
             color={modalidad.color}
-            mb={moduloId === fitoterapiaNom ? { base: 6, md: 7 } : undefined}
+            mb={moduloId === nutricionNomLink ? { base: 6, md: 7 } : undefined}
           />
 
-          {/* ── HERBARIO (solo Fitoterapia) ── */}
-          {moduloId === fitoterapiaNom && (
-            <Flex justify="center" mb={{ base: 6, md: 7 }}>
+          {/* ── HERBARIO + ALIMENTOS (solo Nutrición) ── */}
+          {moduloId === nutricionNomLink && (
+            <Flex justify="center" gap={{ base: 3, md: 4 }} mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
+              {/* Herbario */}
               <Flex
                 as="button"
                 align="center"
-                gap={3}
-                px={{ base: 7, md: 10 }}
+                justify="center"
+                gap={2}
+                flex="1"
+                px={{ base: 4, md: 8 }}
                 py={{ base: 3, md: 4 }}
                 borderRadius="full"
                 bg={modalidad.bgColor}
                 border={`1.5px solid ${modalidad.color}88`}
-                 boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
                 cursor="pointer"
                 transition="all 0.22s ease"
                 onClick={() => navigate("/aprendizaje/herbario")}
                 _hover={{
-                  boxShadow: `0 6px 24px rgba(0,0,0,0.3), 0 0 20px ${modalidad.color}66`,
+                  boxShadow: `0 6px 24px rgba(0,0,0,0.12), 0 0 20px ${modalidad.color}44`,
                   transform: "translateY(-2px)",
-                  border: `1.5px solid ${modalidad.color}cc`,
+                  border: `1.5px solid ${modalidad.color}aa`,
+                  opacity: 0.88,
                 }}
                 _active={{ transform: "translateY(0px)" }}
               >
-                <FitoterapiaIcon size={{ base: "22px", md: "22px" }} />
+                {/* Abejita SVG con colores de nutrición */}
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <svg width="22" height="22" viewBox="0 0 52 52" fill="none">
+                    <ellipse cx="16" cy="19" rx="11" ry="6" fill={modalidad.color} opacity={0.55} transform="rotate(-30 16 19)"/>
+                    <ellipse cx="36" cy="19" rx="11" ry="6" fill={modalidad.color} opacity={0.55} transform="rotate(30 36 19)"/>
+                    <ellipse cx="26" cy="32" rx="9" ry="12" fill={modalidad.color}/>
+                    <rect x="17.5" y="28" width="17" height="3.5" rx="1.75" fill={modalidad.bgColor} opacity={0.45}/>
+                    <rect x="17.5" y="34" width="17" height="3.5" rx="1.75" fill={modalidad.bgColor} opacity={0.38}/>
+                    <circle cx="26" cy="19" r="6" fill={modalidad.color}/>
+                    <circle cx="23.5" cy="18.5" r="1.2" fill={modalidad.bgColor} opacity={0.7}/>
+                    <circle cx="28.5" cy="18.5" r="1.2" fill={modalidad.bgColor} opacity={0.7}/>
+                    <path d="M23 14 C21 10 17 8 16 5" stroke={modalidad.color} strokeWidth="1.6" strokeLinecap="round"/>
+                    <circle cx="15.5" cy="4.5" r="2.2" fill={modalidad.color}/>
+                    <path d="M29 14 C31 10 35 8 36 5" stroke={modalidad.color} strokeWidth="1.6" strokeLinecap="round"/>
+                    <circle cx="36.5" cy="4.5" r="2.2" fill={modalidad.color}/>
+                    <path d="M26 44 L24 49 L26 47 L28 49 Z" fill={modalidad.color}/>
+                  </svg>
+                </Box>
                 <Text
                   color={modalidad.color}
                   fontFamily="'EB Garamond', serif"
@@ -206,6 +227,36 @@ export default function CursosModalidad() {
                   lineHeight="1"
                 >
                   Herbario
+                </Text>
+              </Flex>
+
+              {/* Alimentos */}
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                flex="1"
+                px={{ base: 4, md: 8 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={modalidad.bgColor}
+                border={`1.5px solid ${modalidad.color}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="default"
+                transition="all 0.22s ease"
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <NutricionIcon size={{ base: "22px", md: "22px" }} />
+                <Text
+                  color={modalidad.color}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  letterSpacing="0.08em"
+                  lineHeight="1"
+                >
+                  Alimentos
                 </Text>
               </Flex>
             </Flex>

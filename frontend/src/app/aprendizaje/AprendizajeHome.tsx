@@ -7,7 +7,7 @@ import {
   AprendizajeIcon,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
-  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
+  culturaBg, CulturaIcon, culturaNom, culturaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -24,7 +24,7 @@ export const AprendizajeHome = () => {
     { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "60px", md: "70px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
     { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "60px", md: "70px" }}  />,   link: "/aprendizaje/cursosModalidad/" + nutricionNomLink, cursor: "pointer" },
     { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "60px", md: "70px" }}  />,      link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,  cursor: "pointer" },
-    { title: fitoterapiaNom,      bgColor: fitoterapiaBg,     color: fitoterapiaTxt,  icon: <FitoterapiaIcon size={{ base: "60px", md: "70px" }} />,   link: "/aprendizaje/cursosModalidad/" + fitoterapiaNom,  cursor: "pointer" },
+    { title: culturaNom,           bgColor: culturaBg,         color: culturaTxt,      icon: <CulturaIcon size={{ base: "60px", md: "70px" }} />,       link: "/aprendizaje/cursosModalidad/" + culturaNom,      cursor: "pointer" },
     { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
   ];
 

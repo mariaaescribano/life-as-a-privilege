@@ -15,18 +15,18 @@ export const neuropsicologiaCursos: ModalidadInfo = {
   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
     {
-      id: "etapasVida",
-      titulo: "Resumen de las etapas de la Vida",
-      foto: "/img/np/neuropsicologia1Foto.jpg",
+      id: "anorexia",
+      titulo: "El enigma de la anorexia",
+      foto: "/img/np/anorexia.png",
       descripcion:
-        "Entiende cómo tu familia de origen formó la base de los patrones que hoy moldean tu vida. Desde una nueva mirada, comprende cómo, sin darte cuenta, creas la realidad en la que vives.",
+        "Comprende la esencia de la enfermedad mental con la tasa de mortalidad más elevada. Entiende la realidad de alguien con anorexia.",
       precio: null,
       numLecciones: 10,
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom +"/etapasVida",
-      modulos: modulosNeuroPsicologia,
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
+      modulos: modulosAnorexia,
     },
-    {
+      {
       id: "esquizofrenia",
       titulo: "Más allá de la esquizofrenia",
       foto: "/img/np/esq.jpg",
@@ -39,16 +39,16 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       modulos: modulosEsquizofrenia,
     },
     {
-      id: "anorexia",
-      titulo: "El enigma de la anorexia",
-      foto: "/img/np/anorexia.png",
+      id: "etapasVida",
+      titulo: "Resumen de las etapas de la Vida",
+      foto: "/img/np/neuroPsicologiafoto1.png",
       descripcion:
-        "Comprende la esencia de la enfermedad mental con la tasa de mortalidad más elevada. Entiende la realidad de alguien con anorexia.",
+        "Entiende cómo tu familia de origen formó la base de los patrones que hoy moldean tu vida. Desde una nueva mirada, comprende cómo, sin darte cuenta, creas la realidad en la que vives.",
       precio: null,
       numLecciones: 10,
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
-      modulos: modulosAnorexia,
-    },
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom +"/etapasVida",
+      modulos: modulosNeuroPsicologia,
+    }, 
   ],
 };

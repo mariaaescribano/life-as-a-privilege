@@ -26,6 +26,7 @@ import TCMTest1 from "./components/espacio/components/TCMTest1";
 import TCMTest2 from "./components/espacio/components/TCMTest2";
 import TCMTest3 from "./components/espacio/components/TCMTest3";
 import FisiologiaEspacio from "./components/espacio/pages/FisiologiaEspacio";
+import FitoterapiaEspacio from "./components/espacio/pages/FitoterapiaEspacio";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -69,6 +70,7 @@ export default function App()
 
       <Route path="/espacio/espacioHome" element={<PrivateRoute><EspacioHome /></PrivateRoute>} />
       <Route path="/espacio/fisiologia" element={<PrivateRoute><FisiologiaEspacio /></PrivateRoute>} />
+      <Route path="/espacio/herbario" element={<PrivateRoute><FitoterapiaEspacio /></PrivateRoute>} />
       <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />

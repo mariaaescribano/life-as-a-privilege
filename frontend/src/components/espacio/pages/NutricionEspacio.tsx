@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
@@ -210,6 +211,7 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function NutricionEspacio() {
+  const navigate = useNavigate();
   const [peso,     setPeso]    = useState("");
   const [altura,   setAltura]  = useState("");
   const [edad,     setEdad]    = useState("");
@@ -288,6 +290,57 @@ export default function NutricionEspacio() {
             icon={<NutricionIcon size={{ base: "40px", md: "50px" }} />}
             title={nutricionNom} bgColor={BG} color={TXT} mb={{ base: 0, md: 0 }}
           />
+
+          {/* ── Herbario ── */}
+          <Flex
+            as="button"
+            align="center"
+            gap={3}
+            px={{ base: 7, md: 10 }}
+            py={{ base: 3, md: 4 }}
+            borderRadius="full"
+            bg={BG}
+            border={`1.5px solid ${TXT}88`}
+            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+            cursor="pointer"
+            transition="all 0.22s ease"
+            onClick={() => navigate("/espacio/herbario")}
+            _hover={{
+              boxShadow: `0 6px 24px rgba(0,0,0,0.12), 0 0 20px ${TXT}44`,
+              transform: "translateY(-2px)",
+              border: `1.5px solid ${TXT}aa`,
+              opacity: 0.88,
+            }}
+            _active={{ transform: "translateY(0px)" }}
+          >
+            <Box display="flex" alignItems="center" flexShrink={0}>
+              <svg width="22" height="22" viewBox="0 0 52 52" fill="none">
+                <ellipse cx="16" cy="19" rx="11" ry="6" fill={TXT} opacity={0.55} transform="rotate(-30 16 19)"/>
+                <ellipse cx="36" cy="19" rx="11" ry="6" fill={TXT} opacity={0.55} transform="rotate(30 36 19)"/>
+                <ellipse cx="26" cy="32" rx="9" ry="12" fill={TXT}/>
+                <rect x="17.5" y="28" width="17" height="3.5" rx="1.75" fill={BG} opacity={0.45}/>
+                <rect x="17.5" y="34" width="17" height="3.5" rx="1.75" fill={BG} opacity={0.38}/>
+                <circle cx="26" cy="19" r="6" fill={TXT}/>
+                <circle cx="23.5" cy="18.5" r="1.2" fill={BG} opacity={0.7}/>
+                <circle cx="28.5" cy="18.5" r="1.2" fill={BG} opacity={0.7}/>
+                <path d="M23 14 C21 10 17 8 16 5" stroke={TXT} strokeWidth="1.6" strokeLinecap="round"/>
+                <circle cx="15.5" cy="4.5" r="2.2" fill={TXT}/>
+                <path d="M29 14 C31 10 35 8 36 5" stroke={TXT} strokeWidth="1.6" strokeLinecap="round"/>
+                <circle cx="36.5" cy="4.5" r="2.2" fill={TXT}/>
+                <path d="M26 44 L24 49 L26 47 L28 49 Z" fill={TXT}/>
+              </svg>
+            </Box>
+            <Text
+              color={TXT}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "lg", md: "xl" }}
+              letterSpacing="0.08em"
+              lineHeight="1"
+            >
+              Herbario
+            </Text>
+          </Flex>
 
           {/* ── Form ── */}
           {showForm && (

@@ -10,6 +10,7 @@ import { modulosAstrologia, modulosAstrologiaCurso0 } from "../aprendizajes/Astr
 
 export const astroCurso0ID = "astro-curso-0";
 export const astroCurso1ID = "astro-curso-1";
+export const astroCurso2ID = "astro-curso-2";
 
 export const astrologiaCursos: ModalidadInfo = {
   nom: astrologiaNom,
@@ -40,5 +41,16 @@ export const astrologiaCursos: ModalidadInfo = {
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
       modulos: modulosAstrologia,
     },
+    // {
+    //   id: astroCurso2ID,
+    //   cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso2ID,
+    //   titulo: "Los Arquetipos",
+    //   foto: "/img/astrologia/arquetipos.png",
+    //   descripcion: "Descubre los doce arquetipos del zodiaco y la energía que cada signo ha venido a integrar en esta Vida.",
+    //   precio: null,
+    //   numLecciones: 12,
+    //   icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
+    //   modulos: modulosArquetipos,
+    // },
   ],
 };

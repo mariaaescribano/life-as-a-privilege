@@ -1,5 +1,5 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { RecursosIconFitoterpia, fitoterapiaBg, FitoterapiaIcon, fitoterapiaTxt, fitoterapiaNom } from "../../../GlobalVariables";
+import { fitoterapiaBg, FitoterapiaIcon, fitoterapiaTxt, fitoterapiaNom } from "../../../GlobalVariables";
 
 const detalles: Detalles = { color: fitoterapiaTxt, icon: FitoterapiaIcon, bgColor: fitoterapiaBg };
 
@@ -8,31 +8,10 @@ const basePath = "/aprendizaje/videoLessonPage/" + fitoterapiaNom;
 const herbario: FloatingButtonConfig = {
   label: "Herbario",
   action: "route",
-  route: "/recursos/" + fitoterapiaNom,
+  route: "/aprendizaje/herbario",
 };
 
 export const modulosFitoterapia: ModuloContenido[] = [
-  {
-    title: "Recursos",
-    icon: RecursosIconFitoterpia,
-    floatingButton: herbario,
-    submodules: [
-      {
-        id: "ft1",
-        nom: "Recursos a tu disposición",
-        link: `/recursos/` + fitoterapiaNom,
-        linkAnterior: "",
-        linkNext: "",
-        descripcion: "",
-        video: "-w67yUcj_SM",
-        letra: "",
-        cursoId: "fito-curso-1",
-        detalles: detalles,
-        icon: null,
-        floatingButton: herbario,
-      },
-    ],
-  },
   {
     title: "Plantas",
     icon: FitoterapiaIcon,

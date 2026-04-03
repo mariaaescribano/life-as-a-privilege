@@ -621,11 +621,6 @@ export default function AyurvedaRecursos() {
                 py={{ base: 5, md: 6 }}
                 cursor="pointer"
                 transition="all 0.22s ease"
-                _hover={{
-                  transform: "translateY(-6px)",
-                  boxShadow: `0 10px 32px ${dosha.color}44`,
-                  borderColor: dosha.color + "80",
-                }}
                 onClick={() => setOpenDosha(dosha)}
               >
                 {/* Dosha header */}
@@ -687,16 +682,25 @@ export default function AyurvedaRecursos() {
                   {dosha.descripcion}
                 </Text>
 
-                {/* Indicador "ver más" */}
+                {/* Botón "Ver vídeo" */}
                 <Flex justify="flex-end" mt={3}>
-                  <Text
-                    color={dosha.color} fontSize="xs"
+                  <Box
+                    display="flex" alignItems="center" gap={2}
+                    px={4} py={2} borderRadius="full"
+                    border={`1px solid ${dosha.color}44`}
+                    bg="transparent"
+                    color={dosha.color} cursor="pointer"
                     fontFamily="'EB Garamond', serif"
-                    fontWeight="600" letterSpacing="0.06em"
-                    opacity={0.6}
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="600" letterSpacing="0.05em"
+                    transition="all 0.2s"
+                    _hover={{ bg: dosha.color + "14", borderColor: dosha.color + "88" }}
                   >
-                    Ver más →
-                  </Text>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    Ver vídeo
+                  </Box>
                 </Flex>
               </Box>
             ))}

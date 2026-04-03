@@ -336,7 +336,7 @@ const ObtenerCartaCard = () => {
             style={{ textShadow: `0 0 14px ${astrologiaTxt}cc, 0 0 28px ${astrologiaTxt}66` }}
             textAlign="left"
           >
-            Obtén tu Carta Astral
+            Obtén tu Carta Astral (Gratis)
           </Text>
         </Flex>
         <Text
@@ -580,7 +580,7 @@ export default function CartaAstralRecursos() {
           <DisciplineHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Carta Astral"
-            subtitle="Recursos del curso"
+            subtitle="Astrología"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             maxW="1100px"
