@@ -6,8 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import {
-  API_URL, nutricionBg, nutricionTxt,
-  NutricionIcon, FitoterapiaIcon,
+  API_URL, nutricionBg, nutricionTxt, FitoterapiaIcon,
 } from "../../GlobalVariables";
 import { plantas, type Planta } from "../../components/recursos/fitoterapia/PlantasData";
 

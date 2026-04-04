@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL, CulturaIcon, culturaBg, culturaTxt, culturaNom } from "../../../GlobalVariables";
+import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../../GlobalVariables";
 import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 
 const BG   = nutricionBg;

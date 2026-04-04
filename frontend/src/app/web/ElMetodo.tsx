@@ -9,7 +9,7 @@ import {
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  culturaBg, CulturaIcon, culturaNom, culturaTxt, culturaDescrip,
+  culturaBg, CulturaIcon, culturaNom, culturaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,

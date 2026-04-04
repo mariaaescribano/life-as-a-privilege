@@ -5,7 +5,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { celulasCuerpoData, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import { celulasCuerpoData, type Celula, type SistemaOrgano } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const BG  = fisiologiaBg;
 const TXT = fisiologiaTxt;

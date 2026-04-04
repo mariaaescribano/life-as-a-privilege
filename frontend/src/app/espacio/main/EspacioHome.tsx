@@ -8,7 +8,7 @@ import {
   astrologiaTxt,
   ayurvedaBg, AyurvedaIcon,
   ayurvedaTxt,
-  culturaBg, CulturaIcon, culturaNom,
+  culturaBg, CulturaIcon,
   culturaTxt,
   cabalaBg, CabalaIcon, cabalaNom,
   cabalaTxt,
