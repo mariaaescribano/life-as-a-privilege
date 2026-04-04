@@ -6,38 +6,6 @@ USAR OBJ+ID : userId
 - sol en cancer y leo 
 
 
-- Cada vez que se salte al siguiente video, antes de cagar el video, que se le aplique la velocidad seleccionada de
-abajo
-
-
-
-arquetipo de virgo: <iframe width="560" height="315" src="https://www.youtube.com/embed/EsqJdFXF6rc?si=PqwCwsYalge7eLYq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-aries: <iframe width="560" height="315" src="https://www.youtube.com/embed/7dHr8neqv1M?si=IAoE3cNq9xEnpBl9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-tauro: <iframe width="560" height="315" src="https://www.youtube.com/embed/YJ_0_NIqYlE?si=LHlr9pHkDpp2KU2O" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-géminis: <iframe width="560" height="315" src="https://www.youtube.com/embed/vlqrSkmcNI4?si=b9C26QIrvxX6x3zM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-sagitario: <iframe width="560" height="315" src="https://www.youtube.com/embed/RklEbyEKiCA?si=7udFd7p77KZtes7B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-leo: <iframe width="560" height="315" src="https://www.youtube.com/embed/G22JpImwcds?si=SV4A7jCTw-fUAok4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-cancer: <iframe width="560" height="315" src="https://www.youtube.com/embed/uvWbJVmgB_A?si=lxFKZFBAmJizFfRe" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-capricornio: <iframe width="560" height="315" src="https://www.youtube.com/embed/KUma6gkGZUw?si=8Cub8vmmc9BZ6Pc_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-acuario: <iframe width="560" height="315" src="https://www.youtube.com/embed/eYa6vXhPBpQ?si=85UhfZiiWPEX-kPW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-piscis: <iframe width="560" height="315" src="https://www.youtube.com/embed/3oHiu6jwFRM?si=P1pO3iRZfEg8Cfa5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-libra: <iframe width="560" height="315" src="https://www.youtube.com/embed/z6Bla9iPkyg?si=1F2TU2OufzE4dYUp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-escorpio: <iframe width="560" height="315" src="https://www.youtube.com/embed/QJgz9bMkfBw?si=8ZxDUgq6RME1Ni5F" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-
-
 
 
 

@@ -26,11 +26,11 @@ export const capasIntestinoData = [
     titulo:      "Capa 1: Mucosa",
     color:       "#48C0B5",
     glow:        "rgba(72,192,181,0.45)",
-    foto:        "/img/nutri/microbiota/capa1.png",
+    foto:        "/img/nutri/microbiotaRecursos/capa2.webp",
     descripciones: [
-      "Descripción 1 de la capa mucosa — rellena este texto.",
-      "Descripción 2 de la capa mucosa — rellena este texto.",
-      "Descripción 3 de la capa mucosa — rellena este texto.",
+      "Es la capa más interna, en contacto directo con los alimentos y el contenido intestinal.",
+      "Produce moco protector que actúa como barrera frente a bacterias, toxinas y agentes dañinos.",
+      "Contiene las vellosidades intestinales responsables de la absorción de nutrientes hacia el torrente sanguíneo.",
     ],
   },
   {
@@ -38,11 +38,11 @@ export const capasIntestinoData = [
     titulo:      "Capa 2: Submucosa",
     color:       "#C06B9B",
     glow:        "rgba(192,107,155,0.45)",
-    foto:        "/img/nutri/microbiota/capa2.png",
+    foto:        "/img/nutri/microbiotaRecursos/capa2.webp",
     descripciones: [
-      "Descripción 1 de la submucosa — rellena este texto.",
-      "Descripción 2 de la submucosa — rellena este texto.",
-      "Descripción 3 de la submucosa — rellena este texto.",
+      "Tejido conectivo rico en vasos sanguíneos y linfáticos que transportan los nutrientes absorbidos.",
+      "Alberga el plexo de Meissner, parte del sistema nervioso entérico que regula la secreción intestinal.",
+      "Contiene glándulas que producen enzimas digestivas y moco adicional para proteger la mucosa.",
     ],
   },
   {
@@ -50,20 +50,14 @@ export const capasIntestinoData = [
     titulo:      "Capa 3: Muscular",
     color:       "#7B6EC8",
     glow:        "rgba(123,110,200,0.45)",
-    foto:        "/img/nutri/microbiota/capa3.png",
+    foto:        "/img/nutri/microbiotaRecursos/capa3.webp",
     descripciones: [
-      "Descripción 1 de la capa muscular — rellena este texto.",
-      "Descripción 2 de la capa muscular — rellena este texto.",
-      "Descripción 3 de la capa muscular — rellena este texto.",
+      "Formada por dos capas de músculo liso: una circular interna y otra longitudinal externa.",
+      "Sus contracciones coordinadas generan el peristaltismo, que mueve el contenido a lo largo del intestino.",
+      "Entre ambas capas se encuentra el plexo de Auerbach, que controla y regula los movimientos intestinales.",
     ],
   },
 ];
-
-// ═══════════════════════════════════════════════════
-// DATOS EDITABLES — QUÉ COMER
-// ═══════════════════════════════════════════════════
-const queComerTexto  = "Aquí irá el texto que me pasarás sobre qué comer para balancear la microbiota.";
-const queComerFoto   = "/img/nutri/microbiota/quecomer-texto.png";
 
 // ─────────────────────────────────────────
 // CARD WRAPPER
@@ -79,7 +73,7 @@ function Card({
 }) {
   return (
     <Box
-      bg="white"
+      bg={BG}
       borderRadius="2xl"
       boxShadow={GLOW}
       p={{ base: 5, md: 8 }}
@@ -163,7 +157,7 @@ function CardProbioticos() {
             border={`2px solid ${TXT}33`}
           >
             <Image
-              src="/img/nutri/microbiota/probiotico.png"
+              src="/img/nutri/microbiotaRecursos/probiotico.jpg"
               alt="Probiótico"
               w="100%"
               h="100%"
@@ -191,7 +185,7 @@ function CardProbioticos() {
             border={`2px solid ${TXT}33`}
           >
             <Image
-              src="/img/nutri/microbiota/prebiotico.png"
+              src="/img/nutri/microbiotaRecursos/prebiotico.jpeg"
               alt="Prebiótico"
               w="100%"
               h="100%"
@@ -214,12 +208,12 @@ function CardProbioticos() {
 // CARD 2 — QUÉ COMER
 // ─────────────────────────────────────────
 const comerFotos = [
-  { src: "/img/nutri/microbiota/comer1.png", label: "Alimento 1" },
-  { src: "/img/nutri/microbiota/comer2.png", label: "Alimento 2" },
-  { src: "/img/nutri/microbiota/comer3.png", label: "Alimento 3" },
-  { src: "/img/nutri/microbiota/comer4.png", label: "Alimento 4" },
-  { src: "/img/nutri/microbiota/comer5.png", label: "Alimento 5" },
-  { src: "/img/nutri/microbiota/comer6.png", label: "Alimento 6" },
+  { src: "/img/nutri/microbiotaRecursos/chukrut.jpg",  label: "Chukrut" },
+  { src: "/img/nutri/microbiotaRecursos/kefir.webp",   label: "Kéfir" },
+  { src: "/img/nutri/microbiotaRecursos/kimchi.jpg",   label: "Kimchi" },
+  { src: "/img/nutri/microbiotaRecursos/miso.webp",    label: "Miso" },
+  { src: "/img/nutri/microbiotaRecursos/verduras.jpg", label: "Verduras" },
+  { src: "/img/nutri/microbiotaRecursos/yogur.jpg",    label: "Yogur" },
 ];
 
 function FotoCirculo({ src, label }: { src: string; label: string }) {
@@ -250,6 +244,14 @@ function FotoCirculo({ src, label }: { src: string; label: string }) {
           }
         />
       </Box>
+      <Text
+        color={TXT}
+        fontSize={{ base: "xs", md: "sm" }}
+        fontWeight="600"
+        textAlign="center"
+      >
+        {label}
+      </Text>
     </Flex>
   );
 }
@@ -263,53 +265,6 @@ function CardQueComer() {
         ))}
       </Grid>
 
-      {/* Sección texto + foto */}
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        align={{ base: "flex-start", md: "center" }}
-        gap={{ base: 4, md: 6 }}
-        mt={8}
-        pt={6}
-        borderTop={`1px solid ${TXT}22`}
-      >
-        {/* Icono nutrición izquierda */}
-        <Box flexShrink={0} display="flex" alignItems="flex-start" pt="2px">
-          <NutricionIcon size={{ base: "30px", md: "36px" }} />
-        </Box>
-
-        {/* Texto */}
-        <Text
-          color={TXT}
-          fontSize={{ base: "sm", md: "md" }}
-          lineHeight="1.8"
-          flex={1}
-        >
-          {queComerTexto}
-        </Text>
-
-        {/* Foto */}
-        <Box
-          flexShrink={0}
-          w={{ base: "100%", md: "200px" }}
-          borderRadius="xl"
-          overflow="hidden"
-          border={`2px solid ${TXT}33`}
-          bg={BG}
-        >
-          <Image
-            src={queComerFoto}
-            alt="Qué comer"
-            w="100%"
-            h={{ base: "160px", md: "140px" }}
-            objectFit="cover"
-            fallback={
-              <Flex w="100%" h={{ base: "160px", md: "140px" }} align="center" justify="center">
-                <Text color={TXT} opacity={0.5} fontSize="xs">Foto</Text>
-              </Flex>
-            }
-          />
-        </Box>
-      </Flex>
     </Card>
   );
 }
@@ -377,26 +332,48 @@ function CapaModal({ capa, onClose }: { capa: typeof capasIntestinoData[0]; onCl
         </Box>
 
         <Box px={{ base: 6, md: 8 }} py={7}>
-          {/* Descripciones en boxes con shadow */}
-          <Flex direction="column" gap={4} mb={7}>
-            {capa.descripciones.map((desc, i) => (
-              <Box
-                key={i}
-                bg={BG}
-                borderRadius="xl"
-                px={5}
-                py={4}
-                border={`1.5px solid ${capa.color}44`}
-                boxShadow={`0 3px 12px ${capa.color}22`}
-              >
-                <Flex gap={3} align="flex-start">
+          {/* Box único: puntos + foto, sin fondo verde */}
+          <Box
+            borderRadius="2xl"
+            border={`1.5px solid ${capa.color}33`}
+            boxShadow={`0 4px 20px ${capa.color}18`}
+            overflow="hidden"
+          >
+            {/* Foto */}
+            <Box>
+              <Image
+                src={capa.foto}
+                alt={capa.titulo}
+                w="100%"
+                h={{ base: "200px", md: "240px" }}
+                objectFit="cover"
+                fallback={
+                  <Flex w="100%" h={{ base: "200px", md: "240px" }} align="center" justify="center" bg="gray.50">
+                    <Text color={TXT} opacity={0.5} fontSize="sm">{capa.titulo} — foto pendiente</Text>
+                  </Flex>
+                }
+              />
+            </Box>
+
+            {/* Descripciones */}
+            <Flex direction="column" gap={0}>
+              {capa.descripciones.map((desc, i) => (
+                <Flex
+                  key={i}
+                  gap={3}
+                  align="flex-start"
+                  px={5}
+                  py={4}
+                  borderTop={i === 0 ? `1px solid ${capa.color}22` : `1px solid ${capa.color}18`}
+                >
                   <Box
                     bg={capa.color}
                     color="white"
                     borderRadius="full"
-                    w="24px" h="24px" minW="24px"
+                    w="22px" h="22px" minW="22px"
                     display="flex" alignItems="center" justifyContent="center"
-                    fontSize="xs" fontWeight="700" mt="1px"
+                    fontSize="xs" fontWeight="700" mt="2px"
+                    flexShrink={0}
                   >
                     {i + 1}
                   </Box>
@@ -404,24 +381,8 @@ function CapaModal({ capa, onClose }: { capa: typeof capasIntestinoData[0]; onCl
                     {desc}
                   </Text>
                 </Flex>
-              </Box>
-            ))}
-          </Flex>
-
-          {/* Foto */}
-          <Box borderRadius="xl" overflow="hidden" border={`2px solid ${capa.color}44`} bg={BG}>
-            <Image
-              src={capa.foto}
-              alt={capa.titulo}
-              w="100%"
-              h={{ base: "200px", md: "260px" }}
-              objectFit="cover"
-              fallback={
-                <Flex w="100%" h={{ base: "200px", md: "260px" }} align="center" justify="center">
-                  <Text color={TXT} opacity={0.5} fontSize="sm">{capa.titulo} — foto pendiente</Text>
-                </Flex>
-              }
-            />
+              ))}
+            </Flex>
           </Box>
         </Box>
       </Box>
@@ -433,6 +394,7 @@ function CapaModal({ capa, onClose }: { capa: typeof capasIntestinoData[0]; onCl
 // CARD 3 — EL INTESTINO
 // ─────────────────────────────────────────
 function CardIntestino() {
+  const [capaSeleccionada, setCapaSeleccionada] = useState(capasIntestinoData[1]);
   const [capaAbierta, setCapaAbierta] = useState<typeof capasIntestinoData[0] | null>(null);
 
   return (
@@ -443,7 +405,7 @@ function CardIntestino() {
           gap={{ base: 6, md: 8 }}
           align={{ base: "center", md: "stretch" }}
         >
-          {/* Foto izquierda */}
+          {/* Foto izquierda — cambia según la capa seleccionada */}
           <Box
             borderRadius="xl"
             overflow="hidden"
@@ -451,17 +413,19 @@ function CardIntestino() {
             w={{ base: "100%", md: "55%" }}
             aspectRatio="4/3"
             bg={BG}
-            border={`2px solid ${TXT}33`}
+            border={`2px solid ${capaSeleccionada.color}55`}
+            boxShadow={`0 4px 18px ${capaSeleccionada.glow}`}
+            transition="border-color 0.3s, box-shadow 0.3s"
           >
             <Image
-              src="/img/nutri/microbiota/intestino.png"
-              alt="El intestino"
+              src={capaSeleccionada.foto}
+              alt={capaSeleccionada.titulo}
               w="100%"
               h="100%"
               objectFit="cover"
               fallback={
                 <Flex w="100%" h="100%" align="center" justify="center" minH="180px">
-                  <Text color={TXT} opacity={0.5} fontSize="sm">Foto intestino</Text>
+                  <Text color={TXT} opacity={0.5} fontSize="sm">{capaSeleccionada.titulo}</Text>
                 </Flex>
               }
             />
@@ -473,7 +437,7 @@ function CardIntestino() {
               <Box
                 key={capa.label}
                 as="button"
-                onClick={() => setCapaAbierta(capa)}
+                onClick={() => { setCapaSeleccionada(capa); setCapaAbierta(capa); }}
                 bg={capa.color}
                 color="white"
                 px={6}
@@ -483,7 +447,9 @@ function CardIntestino() {
                 fontSize={{ base: "md", md: "lg" }}
                 letterSpacing="0.08em"
                 boxShadow={`0 4px 18px ${capa.glow}`}
-                _hover={{ opacity: 0.88, transform: "translateY(-2px)" }}
+                opacity={capaSeleccionada.label === capa.label ? 1 : 0.7}
+                transform={capaSeleccionada.label === capa.label ? "scale(1.03)" : "scale(1)"}
+                _hover={{ opacity: 0.88, transform: "translateY(-2px) scale(1.03)" }}
                 transition="all 0.2s"
                 textAlign="center"
               >
@@ -505,9 +471,9 @@ function CardIntestino() {
 // CARD 4 — EJE INTESTINO-CEREBRO
 // ─────────────────────────────────────────
 const ejeFotos = [
-  { src: "/img/nutri/microbiota/eje1.png", label: "Foto 1" },
-  { src: "/img/nutri/microbiota/eje2.png", label: "Foto 2" },
-  { src: "/img/nutri/microbiota/eje3.png", label: "Foto 3" },
+  { src: "/img/nutri/microbiotaRecursos/vagusnerve1.webp", label: "Nervio vago 1" },
+  { src: "/img/nutri/microbiotaRecursos/vagusnerve2.webp", label: "Nervio vago 2" },
+  { src: "/img/nutri/microbiotaRecursos/vagusnerve3.jpg",  label: "Nervio vago 3" },
 ];
 
 function CardEjeIntestinoCerebro() {
@@ -579,7 +545,7 @@ function CardEstroboloma() {
           border={`2px solid ${TXT}33`}
         >
           <Image
-            src="/img/nutri/microbiota/estroboloma.png"
+            src="/img/nutri/microbiotaRecursos/estrobolome.png"
             alt="Estroboloma"
             w="100%"
             h="100%"
