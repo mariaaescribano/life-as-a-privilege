@@ -155,14 +155,18 @@ export default function VideoLessonPage() {
 
   // Auto-avance al vídeo siguiente cuando YouTube termina; aplica velocidad guardada al cargar
   useEffect(() => {
+    let speedApplied = false;
     const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== "https://www.youtube.com") return;
       try {
         const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-        if (data.event === "onReady") {
+        // Aplica la velocidad al primer mensaje de YouTube (player inicializado)
+        if (!speedApplied) {
           iframeRef.current?.contentWindow?.postMessage(
             JSON.stringify({ event: "command", func: "setPlaybackRate", args: [speed] }),
             "*"
           );
+          speedApplied = true;
         }
         if (data.event === "onStateChange" && data.info === 0 && datos?.linkNext) {
           sessionStorage.setItem("videoAutoplay", "1");
@@ -291,6 +295,7 @@ export default function VideoLessonPage() {
                 boxShadow={GLOW}
               >
                 <iframe
+                  key={datos.video}
                   ref={iframeRef}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1${shouldAutoplay ? "&autoplay=1" : ""}`}

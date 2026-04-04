@@ -42,7 +42,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         link:`${basePath}/np2`,
         linkAnterior:`${basePath}/np1`,
         linkNext:`${basePath}/np3`,
-        descripcion:"Los padres tienen que ser seres completos antes del nacimiento o cargarán al hijo con su infelicidad y sueños rotos.",
+        descripcion:"Los padres tienen que ser seres completos antes del nacimiento o cargarán al hijo con su infelicidad y frustración.",
         video:"apYqTnx9kiM",
         letra: letranp2,
         cursoId: "etapasVida",

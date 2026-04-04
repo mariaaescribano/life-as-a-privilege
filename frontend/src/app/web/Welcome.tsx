@@ -195,7 +195,7 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,100,90,0.25)"
             >
-              Es una plataforma gratuita que integra psicología, conocimientos ancestrales y ciencia para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación personal.
+              Es una plataforma gratuita que integra psicología, conocimientos ancestrales y ciencia para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación.
             </Text>
             <Box mt={{ base: "30px", md: "20px" }}  display="flex" justifyContent={{ base: "center", md: "flex-end" }}>
               <Flex

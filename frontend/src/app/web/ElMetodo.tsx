@@ -181,7 +181,7 @@ const modalidades: ModalidadData[] = [
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
     desc: "Comprende tus desequilibrios a través de la medicina tradicional china.",
     modalDesc:
-      "A través de la medicina tradicional china, identificaremos los desequilibrios que atraviesas en este momento y los abordaremos con herramientas naturales adaptadas a ti.",
+      "A través de la medicina tradicional china y su teoría de los Cinco Elementos, identificaremos los desequilibrios que atraviesas en este momento y los abordaremos con herramientas naturales adaptadas a ti.",
     sessions: [
       "1. Haremos un diagnóstico profundo de la lengua para identificar los desequilibrios presentes.",
       "2. Te explicaré, las veces que haga falta, cómo se han generado esos desequilibrios según la teoría de los cinco elementos de la medicina tradicional china.",
@@ -222,7 +222,7 @@ const modalidades: ModalidadData[] = [
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
     desc: "Profundiza en las grandes filosofías y aprende de ellas para crear la tuya propia.",
     modalDesc:
-      culturaDescrip,
+      "Profundiza en las grandes filosofías, podemos centrarnos en la que prefieras, pero el objetivo es encontrar inspiración para crear tu propia filosofía que te acompañe día a día.",
     sessions: [
       "1. Exploraremos las grandes filosofías de la Antigüedad y los pensadores que sentaron las bases del pensamiento occidental.",
       "2. Nos adentraremos en las filosofías del Renacimiento, la Edad Media y la Ilustración, y cómo transformaron la visión del mundo.",

@@ -243,7 +243,7 @@ export const modulosAstrologiaCurso0: ModuloContenido[] = [
         link: `${basePath}/c0-mercurio`,
         linkAnterior: `${basePath}/c0-luna`,
         linkNext: `${basePath}/c0-venus`,
-        descripcion: "Mercurio habla de cómo opera tu mente, cómo te comunicas y dónde despiertas más curiosidad.",
+        descripcion: "Mercurio habla de cómo opera tu mente, cómo te comunicas y dónde tienes más curiosidad.",
         video: "6hYtw96mym0",
         letra: astro5,
         detalles: detalles,

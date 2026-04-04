@@ -231,11 +231,12 @@ const TCMElementModal = ({
           {/* ── Descripción ── */}
           <Box
             bg={element.bgColor + "18"}
-            borderLeft={`3px solid ${element.bgColor}55`}
-            borderRadius="0 xl xl 0"
+            border={`1px solid ${element.bgColor}30`}
+            borderRadius="xl"
             px={{ base: 4, md: 6 }}
             py={{ base: 4, md: 5 }}
             mb={6}
+            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
           >
             <Text
               color={element.bgColor}

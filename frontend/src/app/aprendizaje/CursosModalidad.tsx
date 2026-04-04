@@ -11,7 +11,7 @@ import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
-import { nutricionNomLink, NutricionIcon } from "../../GlobalVariables";
+import { nutricionNomLink, NutricionIcon, tcmNomLink, tcmBg, tcmTxt } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -22,10 +22,11 @@ interface CursoCardProps {
   curso: Curso;
   bgColor: string;
   color: string;
+  disciplina: string;
   onVerDetalle: () => void;
 }
 
-function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
+function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCardProps) {
   const label = curso.precio === null ? "Gratis" : `${curso.precio.toFixed(2).replace(".", ",")} €`;
 
   return (
@@ -34,23 +35,31 @@ function CursoCard({ curso, bgColor, color, onVerDetalle }: CursoCardProps) {
       borderRadius="2xl"
       boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
       direction="column"
-      p={{ base: 5, md: 6 }}
+      p={{ base: 6, md: 8 }}
       h="100%"
     >
       {/* Título */}
-      <Text
-        color={color}
-        fontSize={{ base: "2xl", md: "2xl" }}
-        fontWeight="700"
-        letterSpacing="0.04em"
-        lineHeight="1.2"
-        mb={"10px"}
-        mt="5px"
-       // textAlign="center"
-        style={{ textShadow: `1px 2px 8px ${color}66` }}
-      >
-        {curso.titulo}
-      </Text>
+      <Box mt="3px" mb={"10px"}>
+        <Text
+          color={color}
+          fontSize={{ base: "2xl", md: "2xl" }}
+          fontWeight="700"
+          letterSpacing="0.04em"
+          lineHeight="1.2"
+          style={{ textShadow: `1px 2px 8px ${color}66` }}
+        >
+          {curso.titulo}
+        </Text>
+        <Text
+          color={`${color}88`}
+          fontSize={{ base: "sm", md: "md" }}
+          fontWeight="500"
+          letterSpacing="0.08em"
+          mt={1}
+        >
+          {disciplina}
+        </Text>
+      </Box>
 
       {/* Foto — ratio 16:9 (YouTube thumbnail) */}
       <Box
@@ -170,8 +179,139 @@ export default function CursosModalidad() {
             title={modalidad.nom}
             bgColor={modalidad.bgColor}
             color={modalidad.color}
-            mb={moduloId === nutricionNomLink ? { base: 6, md: 7 } : undefined}
+            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink) ? { base: 6, md: 7 } : undefined}
           />
+
+          {/* ── TESTS (solo Medicina China) ── */}
+          {moduloId === tcmNomLink && (
+            <Flex justify="center" gap={{ base: 2, md: 4 }} mb={{ base: 6, md: 7 }} w="100%" maxW="900px" flexWrap={{ base: "wrap", md: "nowrap" }}>
+              {/* Test 1: Constitución */}
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                flex="1"
+                px={{ base: 3, md: 6 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={tcmBg}
+                border={`1.5px solid ${tcmTxt}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/tcm/test/1?guest=true")}
+                _hover={{
+                  boxShadow: `0 0 20px ${tcmTxt}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${tcmTxt}aa`,
+                  opacity: 0.88,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
+                    <path d="M343.5-743.5Q320-767 320-800t23.5-56.5Q367-880 400-880t56.5 23.5Q480-833 480-800t-23.5 56.5Q433-720 400-720t-56.5-23.5ZM731-269q29-29 29-71t-29-71q-29-29-71-29t-71 29q-29 29-29 71t29 71q29 29 71 29t71-29ZM864-80 756-188q-22 14-46 21t-50 7q-75 0-127.5-52.5T480-340q0-75 52.5-127.5T660-520q75 0 127.5 52.5T840-340q0 26-7 50t-21 46l108 108-56 56Zm-424 0v-121q15 24 35.5 44t44.5 36v41h-80Zm-160 0v-520q-61-5-121-14.5T40-640l20-80q84 23 168.5 31.5T400-680q87 0 171.5-8.5T740-720l20 80q-59 16-119 25.5T520-600v41q-54 35-87 92.5T400-340v10q0 5 1 10h-41v240h-80Z"/>
+                  </svg>
+                </Box>
+                <Text
+                  color={tcmTxt}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "md", md: "xl" }}
+                  letterSpacing="0.06em"
+                  lineHeight="1.2"
+                  textAlign="center"
+                >
+                  Constitución
+                </Text>
+              </Flex>
+
+              {/* Test 2: Elemento */}
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                flex="1"
+                px={{ base: 3, md: 6 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={tcmBg}
+                border={`1.5px solid ${tcmTxt}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/tcm/test/2?guest=true")}
+                _hover={{
+                  boxShadow: `0 0 20px ${tcmTxt}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${tcmTxt}aa`,
+                  opacity: 0.88,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
+                    <path d="M480-480Zm0 360q-18 0-34.5-6.5T416-146L148-415q-35-35-51.5-80T80-589q0-103 67-177t167-74q48 0 90.5 19t75.5 53q32-34 74.5-53t90.5-19q100 0 167.5 74T880-590q0 49-17 94t-51 80L543-146q-13 13-29 19.5t-34 6.5Zm40-520q10 0 19 5t14 13l68 102h166q7-17 10.5-34.5T801-590q-2-69-46-118.5T645-758q-31 0-59.5 12T536-711l-27 29q-5 6-13 9.5t-16 3.5q-8 0-16-3.5t-14-9.5l-27-29q-21-23-49-36t-60-13q-66 0-110 50.5T160-590q0 18 3 35.5t10 34.5h187q10 0 19 5t14 13l35 52 54-162q4-12 14.5-20t23.5-8Zm12 130-54 162q-4 12-15 20t-24 8q-10 0-19-5t-14-13l-68-102H236l237 237q2 2 3.5 2.5t3.5.5q2 0 3.5-.5t3.5-2.5l236-237H600q-10 0-19-5t-15-13l-34-52Z"/>
+                  </svg>
+                </Box>
+                <Text
+                  color={tcmTxt}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "md", md: "xl" }}
+                  letterSpacing="0.06em"
+                  lineHeight="1.2"
+                  textAlign="center"
+                >
+                  Elemento
+                </Text>
+              </Flex>
+
+              {/* Test 3: Desequilibrio */}
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                flex="1"
+                px={{ base: 3, md: 6 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={tcmBg}
+                border={`1.5px solid ${tcmTxt}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/tcm/test/3?guest=true")}
+                _hover={{
+                  boxShadow: `0 0 20px ${tcmTxt}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${tcmTxt}aa`,
+                  opacity: 0.88,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
+                    <path d="M824-120 636-308q-41 32-90.5 50T440-240q-90 0-162.5-44T163-400h98q34 37 79.5 58.5T440-320q100 0 170-70t70-170q0-100-70-170t-170-70q-94 0-162.5 63.5T201-580h-80q8-127 99.5-213.5T440-880q134 0 227 93t93 227q0 56-18 105.5T692-364l188 188-56 56ZM397-400l-63-208-52 148H80v-60h160l66-190h60l61 204 43-134h60l60 120h30v60h-67l-47-94-50 154h-59Z"/>
+                  </svg>
+                </Box>
+                <Text
+                  color={tcmTxt}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "md", md: "xl" }}
+                  letterSpacing="0.06em"
+                  lineHeight="1.2"
+                  textAlign="center"
+                >
+                  Desequilibrio
+                </Text>
+              </Flex>
+            </Flex>
+          )}
 
           {/* ── HERBARIO + ALIMENTOS (solo Nutrición) ── */}
           {moduloId === nutricionNomLink && (
@@ -287,6 +427,7 @@ export default function CursosModalidad() {
                   curso={curso}
                   bgColor={modalidad.bgColor}
                   color={modalidad.color}
+                  disciplina={modalidad.nom}
                   onVerDetalle={() => setDetailCurso(curso)}
                 />
               </Box>
@@ -337,7 +478,7 @@ export default function CursosModalidad() {
           fontFamily="'EB Garamond', serif"
         >
           <ModalCloseButton color={modalidad.color} top={4} right={4} />
-          <ModalBody px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
+          <ModalBody px={{ base: 6, md: 10 }} py={{ base: 8, md: 11 }}>
             {detailCurso && (
               <Box>
                 {/* Título */}
@@ -347,7 +488,7 @@ export default function CursosModalidad() {
                   fontWeight="700"
                   letterSpacing="0.05em"
                   lineHeight="1.2"
-                  mb={8}
+                  mt="15px" mb={7}
                   style={{ textShadow: `1px 2px 10px ${modalidad.color}77` }}
                 >
                   {detailCurso.titulo}

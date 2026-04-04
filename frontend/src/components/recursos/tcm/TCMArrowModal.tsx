@@ -164,13 +164,12 @@ const TCMArrowModal = ({
 
           {/* ── Descripción ── */}
           <Box
-            sx={{
-              borderLeft: `3px solid`,
-              borderImageSource: `linear-gradient(180deg, ${relation.color1}88, ${relation.color2}88)`,
-              borderImageSlice: 1,
-            }}
-            pl={{ base: 4, md: 5 }}
-            py={1}
+            bg="rgba(0,0,0,0.06)"
+            border="1px solid rgba(0,0,0,0.10)"
+            borderRadius="xl"
+            px={{ base: 4, md: 6 }}
+            py={{ base: 4, md: 5 }}
+            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
           >
             <Text
               color="rgba(10,5,5,0.80)"

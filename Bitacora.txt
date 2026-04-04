@@ -6,24 +6,10 @@ USAR OBJ+ID : userId
 - sol en cancer y leo 
 
 
-- http://localhost:5173/recursos/CartaAstral aqui añade Obten tu Carta Astral (Gratis), añade el gratis,
-en Carta Astral, quiero que abajo en vez de Recursos del curso, pomgas Astrología
 
-- quiero que se guarde cuando el usuario pinche una velocidad y que se añada a los videos
-(que sea coeherente con lo que hay elegido previamente)
+Que se guarde cuando pasas de video la velocidad previa y se aplique al video 
 
--cuando se acabe un video, cuando llegue al final (aunque el usuario no lo haya visto entero) que salte al siguiente video y empiece
-
-- en http://localhost:5173/recursos/medicinachina quiero que cambies el header, arriba pongas Los fundamentos y abajo medicina China
-
-- no dejes \n en las transcripciones (es decir, en las letras)
-
-- en Plantas comunes en el curso, quita lo de recursos y borra la pagina de Fitoterapia. Y el icono de Plantas pon el de fitoterapia pero con el color de nutritxt
-
--pon el color de fondo en recursos de microbiota (el color 08080) y pon el disciplineheader real, no la copia q has hecho, pero
-sí manten los textos
-
-- en recursos de ayurveda, quita el que los cards de los doshas tengan hover y ponles abajo a la derecha en vez de Ver más el Ver vídeo (como el de arriba, pero con los colores del dosha)
+- en cursosModalidades en las cards modales, deja mas espacio por arriba (mt en el titulo) y por abajo mb abajo del boton de Acceder y del mensaje del rpecio (gratis o numero)
 
 
 
@@ -33,11 +19,8 @@ sí manten los textos
 
 
 
-
-
-
-
-
+IDEAS CURSOS
+DOshas en profundidad: habitos y desequilibrios psicologicos
 
 
 

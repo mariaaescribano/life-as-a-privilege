@@ -44,6 +44,7 @@ export type Modulo = {
   icon: any;
   cursor?: string;
   modulos?: ModuloContenido[];
+  disciplina?: string;
 };
 
 export type ModuloDesdeHome = {

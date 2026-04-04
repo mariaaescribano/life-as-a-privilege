@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteHeader from "../../global/SiteHeader";
 import { API_URL, EspacioPersonalIcon, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
@@ -266,6 +266,8 @@ export default function TCMTestPage({
   backToSpaceLink,
 }: TCMTestPageProps) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isGuest = searchParams.get("guest") === "true";
   const maxPerQ = Math.max(...scaleValues);
 
   const [answers, setAnswers] = useState<(number | null)[][]>(
@@ -310,7 +312,9 @@ export default function TCMTestPage({
         max: s.preguntas.length * maxPerQ,
       })),
     };
-    localStorage.setItem(localStorageKey, JSON.stringify(result));
+    if (!isGuest) {
+      localStorage.setItem(localStorageKey, JSON.stringify(result));
+    }
 
     const userId = sessionStorage.getItem("userId");
     if (userId) {
@@ -370,6 +374,7 @@ export default function TCMTestPage({
           <DisciplineHeader
             icon={pageIcon ?? <TCMIcon size={{ base: "36px", md: "52px" }} />}
             title={pageTitle}
+            subtitle="Medicina China"
             bgColor={tcmBg}
             color={tcmTxt}
             maxW="820px"
@@ -732,8 +737,37 @@ export default function TCMTestPage({
                 </Flex>
               )}
 
+              {/* ── VOLVER (guest) ── */}
+              {isGuest && (
+                <Flex justify="center" mt={8}>
+                  <Box
+                    as="button"
+                    onClick={() => navigate("/aprendizaje/cursosModalidad/medicinachina")}
+                    display="flex"
+                    alignItems="center"
+                    gap={3}
+                    px={8}
+                    py={3}
+                    borderRadius="full"
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    fontWeight="600"
+                    letterSpacing="0.08em"
+                    border={`1.5px solid ${tcmTxt}`}
+                    bg={tcmBg}
+                    color={tcmTxt}
+                    cursor="pointer"
+                    transition="all 0.22s"
+                    boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                    _hover={{ bg: `${tcmBg}dd` }}
+                  >
+                    ← Volver a Medicina China
+                  </Box>
+                </Flex>
+              )}
+
               {/* ── VOLVER A MI ESPACIO ── */}
-              {backToSpaceLink && (
+              {backToSpaceLink && !isGuest && (
                 <Flex justify="center" mt={8}>
                   <Box
                     as="button"

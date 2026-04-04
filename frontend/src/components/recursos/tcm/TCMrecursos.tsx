@@ -635,11 +635,21 @@ const TCMInfoModal = ({ onClose }: { onClose: () => void }) => {
           </Box>
 
           {/* Texto resumido */}
-          <Text color={textColor} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.88"
-            fontFamily="'EB Garamond', serif"
-            sx={{ transition: "color 0.38s ease" }}>
-            {content.text}
-          </Text>
+          <Box
+            bg={isDark ? "rgba(255,255,255,0.06)" : "rgba(107,4,4,0.05)"}
+            border={isDark ? "1px solid rgba(255,255,255,0.13)" : "1px solid rgba(107,4,4,0.13)"}
+            borderRadius="xl"
+            px={{ base: 4, md: 6 }}
+            py={{ base: 4, md: 5 }}
+            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+            sx={{ transition: "background-color 0.38s ease, border-color 0.38s ease" }}
+          >
+            <Text color={textColor} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.88"
+              fontFamily="'EB Garamond', serif"
+              sx={{ transition: "color 0.38s ease" }}>
+              {content.text}
+            </Text>
+          </Box>
         </Box>
 
         {/* Toggle — siempre visible, fuera del área desplazable */}

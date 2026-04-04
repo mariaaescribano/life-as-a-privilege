@@ -89,7 +89,7 @@ export const modulosFisiologia: ModuloContenido[] = [
         link: `${basePath}/fisio5`,
         linkAnterior: `${basePath}/fisio4`,
         linkNext: `${basePath}/fisio6`,
-        descripcion: "El sistema nervioso conecta el cerebro con todo el cuerpo y regula funciones automáticas.",
+        descripcion: "El sistema nervioso conecta el cerebro con todo el cuerpo y regula funciones.",
         video: "kKQJ8tyx8gY",
         letra: fisio5,
         cursoId: fisioCurso1ID,

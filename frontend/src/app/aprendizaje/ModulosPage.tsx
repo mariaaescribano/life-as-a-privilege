@@ -50,25 +50,25 @@ export default function ModulesPage() {
     const nomMod = modalidadId ?? "";
     switch (modalidadId) {
       case fisiologiaNom:
-        return { nom: titulo || fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />, modulos};
+        return { nom: titulo || fisiologiaNom, disciplina: fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />, modulos};
       case neuropsicologiaNom:
-        return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case neuropsicologiaNom + "cursoEsq":
-        return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case neuropsicologiaNom + "cursoAnx":
-        return { nom: titulo || neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case astrologiaNom:
-        return { nom: titulo || astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
+        return { nom: titulo || astrologiaNom, disciplina: astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
       case tcmNomLink:
-        return { nom: titulo || tcmNom, nomModalidad: nomMod, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || tcmNom, disciplina: tcmNom, nomModalidad: nomMod, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
       case nutricionNomLink:
-        return { nom: titulo || nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || nutricionNom, disciplina: nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case ayurvedaNomLink:
-        return { nom: titulo || ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "40px", md: "50px" }} />, modulos};
+        return { nom: titulo || ayurvedaNom, disciplina: ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "40px", md: "50px" }} />, modulos};
       case fitoterapiaNom:
-        return { nom: titulo || fitoterapiaNom, nomModalidad: nomMod, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos };
+        return { nom: titulo || fitoterapiaNom, disciplina: fitoterapiaNom, nomModalidad: nomMod, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos };
       case cabalaNom:
-        return { nom: titulo || cabalaNom, nomModalidad: nomMod, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return { nom: titulo || cabalaNom, disciplina: cabalaNom, nomModalidad: nomMod, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       default:
         return { nom: "", nomModalidad: "", bgColor: "", color: "", icon: null };
     }
@@ -103,6 +103,7 @@ export default function ModulesPage() {
             <DisciplineHeader
               icon={moduloDatos.icon}
               title={moduloDatos.nom}
+              subtitle={moduloDatos.disciplina !== moduloDatos.nom ? moduloDatos.disciplina : undefined}
               bgColor={moduloDatos.bgColor}
               color={moduloDatos.color}
               onIconClick={() => navigate(`/aprendizaje/cursosModalidad/${moduloDatos.nomModalidad}`)}
