@@ -10,8 +10,8 @@ export const turquesa = "#48C0B5";
 
 // Fisiología
 export const fisiologiaNom = "Fisiología";
-export const fisiologiaBg = "#e6d7ff";
-export const fisiologiaTxt = "#34106d";
+export const fisiologiaBg = "#d4c4ef";
+export const fisiologiaTxt = "#5319b1";
 export function FisiologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } })  {
   return (
     <Box
@@ -164,7 +164,7 @@ export const nutricionDescrip="Descubre qué hay más allá de los alimentos que
 export const ayurvedaNom = "Ayurveda";
 export const ayurvedaNomLink = "ayurveda";
 export const ayurvedaBg = "#ffffff"; // "#ecd5ed";
-export const ayurvedaTxt = "#987e37" ; //"#672d67" ;
+export const ayurvedaTxt = "#a27908" ; //"#672d67" ;
 export function AyurvedaIcon({ size = { base: "24px", md: "24px" }}) {
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={ayurvedaTxt}>
@@ -235,7 +235,7 @@ export function CulturaIcon({ size = { base: "24px", md: "24px" } }: { size?: st
     </Box>
   );
 }
-export const culturaDescrip = "Conoce la sabiduría de los grandes filósofos, maravíllate con la historia y la cultura general";
+export const culturaDescrip = "Conoce la sabiduría de los grandes filósofos, maravíllate con la historia y la cultura general.";
 
 // Cábala
 export const cabalaNom = "Cábala";
@@ -729,10 +729,26 @@ export function AscendenteIcon({ size = { base: "24px", md: "24px" }}) {
       as="svg"
       viewBox="0 -960 960 960"
       w={size}
-      h={size}           
-      fill={astrologiaTxt}                    
+      h={size}
+      fill={astrologiaTxt}
     >
       <path d="M440-727 256-544l-56-56 280-280 280 280-56 57-184-184v287h-80v-287Zm0 487v-120h80v120h-80Zm0 160v-80h80v80h-80Z"/>
+    </Box>
+  );
+}
+
+export function InflamIcon({ size = { base: "24px", md: "24px" }, color = "white" }: { size?: string | { base: string; md: string }; color?: string }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={size} h={size} fill={color}>
+      <path d="m480-336 128-184H494l80-280H360v320h120v144ZM400-80v-320H280v-480h400l-80 280h160L400-80Zm80-400H360h120Z"/>
+    </Box>
+  );
+}
+
+export function CerebroIcon({ size = { base: "24px", md: "24px" }, color = "white" }: { size?: string | { base: string; md: string }; color?: string }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={size} h={size} fill={color}>
+      <path d="M360-80q-25 0-42.5-17.5T300-140v-40h-20q-42 0-71-29t-29-71v-20q-42 0-71-29t-29-71v-40q0-25 17.5-42.5T140-500h20v-80h-20q-25 0-42.5-17.5T80-640v-40q0-42 29-71t71-29v-20q0-42 29-71t71-29h20v-40q0-25 17.5-42.5T360-980h240q25 0 42.5 17.5T660-920v40h20q42 0 71 29t29 71v20q42 0 71 29t29 71v40q0 25-17.5 42.5T820-580h-20v80h20q25 0 42.5 17.5T880-440v40q0 42-29 71t-71 29v20q0 42-29 71t-71 29h-20v40q0 25-17.5 42.5T600-80H360Zm0-80h240v-80h-80q-17 0-28.5-11.5T480-280q0-17 11.5-28.5T520-320h80v-80h-80q-17 0-28.5-11.5T480-440q0-17 11.5-28.5T520-480h80v-80h-80q-17 0-28.5-11.5T480-600q0-17 11.5-28.5T520-640h80v-80H360v80h80q17 0 28.5 11.5T480-600q0 17-11.5 28.5T440-560h-80v80h80q17 0 28.5 11.5T480-440q0 17-11.5 28.5T440-400h-80v80h80q17 0 28.5 11.5T480-280q0 17-11.5 28.5T440-240h-80v80Zm-80-80v-40h-20q-8 0-14-6t-6-14v-40h-20q-8 0-14-6t-6-14v-40h40v20h20v40h20v100ZM220-500h20v-80h-20q-8 0-14-6t-6-14v-40h-20q-8 0-14-6t-6-14v-40h40v20h20v40h20v-20h20q0-8 0-14v-46h-20q-8 0-14-6t-6-14v-40h40v20h60v-80H220q-8 0-14 6t-6 14v20h-20q-8 0-14 6t-6 14v40h20v80H160v40q0 8 6 14t14 6h40Zm520 0h40q8 0 14-6t6-14v-40h-20v-80h20v-40q0-8-6-14t-14-6h-60v80h60v20h-20q0 8 0 14v46h-20v-20h-40v40q0 8 6 14t14 6h20v20h20v-40h-20v20Zm0 160v-100h20v-40h20v-20h20v40q0 8-6 14t-14 6h-20v40h-20v40h20q8 0 14-6t6-14v-40h40v40q0 8-6 14t-14 6h-20v40h-40Zm-560 0h40v-40h-20q-8 0-14-6t-6-14v-40h-20q-8 0-14-6t-6-14v-40h40v20h20v40h20v100ZM360-160Zm240 0Z"/>
     </Box>
   );
 }

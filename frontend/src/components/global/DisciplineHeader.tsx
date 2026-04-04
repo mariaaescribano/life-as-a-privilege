@@ -10,31 +10,32 @@ interface DisciplineHeaderProps {
   maxW?: string;
   mb?:any;
   onIconClick?: () => void;
+  compact?: boolean;
 }
 
-export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 }, onIconClick }: DisciplineHeaderProps) {
+export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW = "850px", mb={ base: 10, md: 12 }, onIconClick, compact = false }: DisciplineHeaderProps) {
 
   return (
     <Box
       bg={bgColor}
       borderRadius="2xl"
       boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-      px={{ base: 8, md: 14 }}
-      py={{ base: 8, md: 12 }}
+      px={compact ? { base: 6, md: 10 } : { base: 8, md: 14 }}
+      py={compact ? { base: 5, md: 7 } : { base: 8, md: 12 }}
       w="100%"
       maxW={maxW}
       mb= {mb}
     >
-      <Flex direction="row" align="center" justify="center" gap={5}>
+      <Flex direction="row" align="center" justify="center" gap={compact ? 4 : 5}>
         <Box
           borderRadius="full"
           bg={bgColor}
-          border={`5px solid ${color}`}
+          border={`${compact ? 4 : 5}px solid ${color}`}
           boxShadow={`0 0 22px ${color}77, 0 0 55px ${color}28`}
-          w={{ base: "60px", md: "72px" }}
-          h={{ base: "60px", md: "72px" }}
+          w={compact ? { base: "44px", md: "54px" } : { base: "60px", md: "72px" }}
+          h={compact ? { base: "44px", md: "54px" } : { base: "60px", md: "72px" }}
           display="flex"
-          p="5px"
+          p={compact ? "4px" : "5px"}
           alignItems="center"
           justifyContent="center"
           flexShrink={0}
@@ -48,7 +49,7 @@ export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW =
         <Box>
           <Text
             color={color}
-            fontSize={{ base: "2xl", md: "5xl" }}
+            fontSize={compact ? { base: "xl", md: "3xl" } : { base: "2xl", md: "5xl" }}
             fontWeight="700"
             letterSpacing="0.05em"
             filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"

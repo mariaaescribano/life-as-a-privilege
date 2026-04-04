@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:commons.wikimedia.org)",
+      "Bash(curl -L --max-time 60 -o c:/Users/maria/aprogs/life-as-a-privilege/frontend/public/img/fisio/celulas/celulas-t.png https://upload.wikimedia.org/wikipedia/commons/6/62/Healthy_Human_T_Cell.jpg)",
+      "Bash(curl -L --max-time 60 -o __TRACKED_VAR__/celulas-b.png https://upload.wikimedia.org/wikipedia/commons/4/46/Human_B_Lymphocyte_-_NIAID.jpg)",
+      "Bash(curl -L --max-time 60 -o c:/Users/maria/aprogs/life-as-a-privilege/frontend/public/img/fisio/celulas/t-citotoxicas.png https://upload.wikimedia.org/wikipedia/commons/a/aa/Killer_T_cells_surround_a_cancer_cell.png)",
+      "Bash(curl -L --max-time 60 -o __TRACKED_VAR__/neuronas.png https://upload.wikimedia.org/wikipedia/commons/7/70/Neuron_in_tissue_culture.jpg)",
+      "Bash(curl -L --max-time 60 -o c:/Users/maria/aprogs/life-as-a-privilege/frontend/public/img/fisio/celulas/astrocitos.png https://upload.wikimedia.org/wikipedia/commons/7/7e/Astrocyte_-_cultutures_-_GFAP.jpg)",
+      "Bash(curl -L --max-time 60 -o __TRACKED_VAR__/microglia.png https://upload.wikimedia.org/wikipedia/commons/d/d6/Fluorescently_Labeled_Microglia_in_a_Coronal_Brain_Section_from_a_C57_Mouse.jpg)",
+      "Bash(curl -L --max-time 60 -o c:/Users/maria/aprogs/life-as-a-privilege/frontend/public/img/fisio/celulas/baston.png https://upload.wikimedia.org/wikipedia/commons/f/f7/Organization_of_rod_photoreceptors_in_the_mammalian_retina.png)",
+      "Bash(curl -L --max-time 60 -o __TRACKED_VAR__/cono.png https://upload.wikimedia.org/wikipedia/commons/3/3d/Rrods_and_cones_of_the_primate_retina.jpg)",
+      "Bash(curl -L --max-time 60 -o c:/Users/maria/aprogs/life-as-a-privilege/frontend/public/img/fisio/celulas/ovulo.png https://upload.wikimedia.org/wikipedia/commons/d/d6/OVOCITO_M2._Polar_body_1._DIC_microscopy..png)",
+      "Bash(curl -L --max-time 60 -o __TRACKED_VAR__/sertoli.png https://upload.wikimedia.org/wikipedia/commons/5/56/Spermatogenesis_%2801%29.jpg)",
+      "Bash(curl -L --max-time 60 -o c:/Users/maria/aprogs/life-as-a-privilege/frontend/public/img/fisio/celulas/leydig.png https://upload.wikimedia.org/wikipedia/commons/d/d3/Leydig_cells.JPG)",
+      "Bash(curl -L --max-time 60 -o __TRACKED_VAR__/cancerosas.png https://upload.wikimedia.org/wikipedia/commons/0/09/Fluorescence_microscopy_of_the_oral_cancer_cells.jpg)"
     ]
   }
 }

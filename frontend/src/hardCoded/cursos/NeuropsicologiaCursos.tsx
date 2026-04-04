@@ -41,7 +41,7 @@ export const neuropsicologiaCursos: ModalidadInfo = {
     {
       id: "etapasVida",
       titulo: "Resumen de las etapas de la Vida",
-      foto: "/img/np/neuroPsicologiafoto1.png",
+      foto: "/img/np/neuroPsicologiafoto1.jpg",
       descripcion:
         "Entiende cómo tu familia de origen formó la base de los patrones que hoy moldean tu vida. Desde una nueva mirada, comprende cómo, sin darte cuenta, creas la realidad en la que vives.",
       precio: null,

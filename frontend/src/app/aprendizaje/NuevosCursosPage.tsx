@@ -18,6 +18,8 @@ import {
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
+  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-2"   }, // La Inflamación
+  { modalidadKey: astrologiaNom,         cursoId: "astro-curso-2"   }, // Los Arquetipos
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // Microbiota
   { modalidadKey: neuropsicologiaNom,    cursoId: "anorexia"        }, // Anorexia
   { modalidadKey: cabalaNom,             cursoId: "cabala-curso-2"  }, // Árbol de la Vida
@@ -25,7 +27,6 @@ const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
   { modalidadKey: neuropsicologiaNom,    cursoId: "etapasVida"      },
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-1"     },
   { modalidadKey: cabalaNom,             cursoId: "cabala-curso-1"  },
-  { modalidadKey: astrologiaNom,         cursoId: "astro-curso-2"   },
   { modalidadKey: astrologiaNom,         cursoId: "astro-curso-0"   },
   { modalidadKey: astrologiaNom,         cursoId: "astro-curso-1"   },
   { modalidadKey: tcmNomLink,            cursoId: "tcm-curso-1"     },

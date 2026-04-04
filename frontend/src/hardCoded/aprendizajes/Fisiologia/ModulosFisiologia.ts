@@ -1,12 +1,13 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon } from "../../../GlobalVariables";
-import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7 } from "./LetraFisiologia";
+import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon, InflamIcon, CerebroIcon } from "../../../GlobalVariables";
+import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7, inflam1, inflam2, inflam3, inflam4, inflam5, inflam6, inflam7, inflam8 } from "./LetraFisiologia";
 
 const detalles: Detalles = { color: fisiologiaTxt, icon: FisiologiaIcon, bgColor: fisiologiaBg };
 
 const basePath = "/aprendizaje/videoLessonPage/" + fisiologiaNom;
 
 export const fisioCurso1ID = "fisio-curso-1";
+export const fisioCurso2ID = "fisio-curso-2";
 
 const conocerMiCuerpo: FloatingButtonConfig = {
   label: "Conocer mi cuerpo",
@@ -128,6 +129,142 @@ export const modulosFisiologia: ModuloContenido[] = [
         video: "MxEhUFtVowA",
         letra: fisio7,
         cursoId: fisioCurso1ID,
+        detalles: detalles,
+        icon: MilagroIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+    ],
+  },
+];
+
+export const modulosFisiologiaInflamacion: ModuloContenido[] = [
+  {
+    title: "1. La Inflamación",
+    icon: CelulasOrganosIcon,
+    floatingButton: conocerMiCuerpo,
+    submodules: [
+      {
+        id: "inflam1",
+        nom: "1.1 Qué es la inflamación",
+        link: `${basePath}/inflam1`,
+        linkAnterior: "",
+        linkNext: `${basePath}/inflam2`,
+        descripcion: "La inflamación es la señal que usa el cuerpo para coordinar su defensa.",
+        video: "WS0908UOSWU",
+        letra: inflam1,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "inflam2",
+        nom: "1.2 La inflamación crónica",
+        link: `${basePath}/inflam2`,
+        linkAnterior: `${basePath}/inflam1`,
+        linkNext: `${basePath}/inflam3`,
+        descripcion: "Cuando el sistema inmunitario no se apaga, el cuerpo vive en alerta constante.",
+        video: "goeZW-BP90w",
+        letra: inflam2,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+    ],
+  },
+  {
+    title: "2. Las Causas",
+    icon: InflamIcon,
+    floatingButton: conocerMiCuerpo,
+    submodules: [
+      {
+        id: "inflam3",
+        nom: "2.1 El cortisol y el azúcar",
+        link: `${basePath}/inflam3`,
+        linkAnterior: `${basePath}/inflam2`,
+        linkNext: `${basePath}/inflam4`,
+        descripcion: "El cortisol eleva el azúcar en sangre, desencadenando una cadena de estrés metabólico.",
+        video: "6CRUMl31iBg",
+        letra: inflam3,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: InflamIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "inflam4",
+        nom: "2.2 El sueño",
+        link: `${basePath}/inflam4`,
+        linkAnterior: `${basePath}/inflam3`,
+        linkNext: `${basePath}/inflam5`,
+        descripcion: "Mientras dormimos el cuerpo se limpia; sin ese descanso, la inflamación aumenta.",
+        video: "t_yWGGi94Kw",
+        letra: inflam4,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: InflamIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "inflam5",
+        nom: "2.3 La microbiota",
+        link: `${basePath}/inflam5`,
+        linkAnterior: `${basePath}/inflam4`,
+        linkNext: `${basePath}/inflam6`,
+        descripcion: "Una microbiota dañada puede abrir el intestino a bacterias que activan la inflamación.",
+        video: "H9LVchILDtU",
+        letra: inflam5,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+    ],
+  },
+  {
+    title: "3. Los Síntomas y la Solución",
+    icon: MilagroIcon,
+    floatingButton: conocerMiCuerpo,
+    submodules: [
+      {
+        id: "inflam6",
+        nom: "3.1 Los síntomas",
+        link: `${basePath}/inflam6`,
+        linkAnterior: `${basePath}/inflam5`,
+        linkNext: `${basePath}/inflam7`,
+        descripcion: "La hinchazón, el dolor articular y el acné son señales de inflamación crónica.",
+        video: "vXO8q8fck3Y",
+        letra: inflam6,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: CelulasOrganosIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "inflam7",
+        nom: "3.2 El cerebro inflamado",
+        link: `${basePath}/inflam7`,
+        linkAnterior: `${basePath}/inflam6`,
+        linkNext: `${basePath}/inflam8`,
+        descripcion: "Las citoquinas pueden llegar al cerebro y alterar su equilibrio, causando niebla mental.",
+        video: "FzoxTVmRx50",
+        letra: inflam7,
+        cursoId: fisioCurso2ID,
+        detalles: detalles,
+        icon: CerebroIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "inflam8",
+        nom: "3.3 Cómo reducir la inflamación",
+        link: `${basePath}/inflam8`,
+        linkAnterior: `${basePath}/inflam7`,
+        linkNext: "",
+        descripcion: "Dieta, ejercicio, sueño y aire libre son tus herramientas antiinflamatorias diarias.",
+        video: "_hce0vJ2edY",
+        letra: inflam8,
+        cursoId: fisioCurso2ID,
         detalles: detalles,
         icon: MilagroIcon,
         floatingButton: conocerMiCuerpo,

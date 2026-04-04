@@ -1,35 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import {
-  Brain, Heart, Shield, Droplets, Droplet, Layers, Activity,
-  Circle, Moon, Sun,
-} from "lucide-react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { celulasCuerpoData, type Celula, type SistemaOrgano } from "../../hardCoded/espacio/CelulasCuerpoData";
+import { celulasCuerpoData, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const BG  = fisiologiaBg;
 const TXT = fisiologiaTxt;
-
-const ICON_SIZE_CARD  = 22;
-const ICON_SIZE_MODAL = 26;
-
-const ICON_MAP = (size: number): Record<string, React.ReactNode> => ({
-  layers:   <Layers   size={size} />,
-  bone:     <Activity size={size} />,
-  activity: <Activity size={size} />,
-  droplets: <Droplets size={size} />,
-  droplet:  <Droplet  size={size} />,
-  heart:    <Heart    size={size} />,
-  circle:   <Circle   size={size} />,
-  shield:   <Shield   size={size} />,
-  brain:    <Brain    size={size} />,
-  moon:     <Moon     size={size} />,
-  sun:      <Sun      size={size} />,
-});
 
 /* ─────────────────────────────────────────
    CARD DE CÉLULA
@@ -109,11 +88,9 @@ function CelulaCard({ celula, onClick }: { celula: Celula; onClick: () => void }
 ───────────────────────────────────────── */
 function CelulaModal({
   celula,
-  sistema,
   onClose,
 }: {
   celula: Celula;
-  sistema: SistemaOrgano;
   onClose: () => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
@@ -128,8 +105,6 @@ function CelulaModal({
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
-
-  const iconModal = ICON_MAP(ICON_SIZE_MODAL)[sistema.iconKey];
 
   return (
     <Box
@@ -187,22 +162,8 @@ function CelulaModal({
         </Box>
 
         <Box px={{ base: 6, md: 8 }} pt={8} pb={8}>
-          {/* Título: icono + nombre */}
-          <Flex align="center" gap={3} mb={5}>
-            <Box
-              color={TXT}
-              bg={TXT + "18"}
-              borderRadius="full"
-              w={{ base: "44px", md: "52px" }}
-              h={{ base: "44px", md: "52px" }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              border={`2px solid ${TXT}44`}
-              flexShrink={0}
-            >
-              {iconModal}
-            </Box>
+          {/* Título */}
+          <Box mb={5}>
             <Text
               color={TXT}
               fontSize={{ base: "xl", md: "2xl" }}
@@ -213,7 +174,7 @@ function CelulaModal({
             >
               {celula.nombre}
             </Text>
-          </Flex>
+          </Box>
 
           {/* Foto */}
           <Box
@@ -306,15 +267,14 @@ export default function CelulasCuerpoPage() {
         >
           <DisciplineHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "50px" }} />}
-            title={fisiologiaNom}
-            subtitle="Las células de tu cuerpo"
+            title="Las células de tu cuerpo"
+            subtitle={fisiologiaNom}
             bgColor={BG}
-            color={TXT}
+            color={TXT} mb={{ base: 2, md: 5 }}
             onIconClick={() => navigate("/aprendizaje/cursosModalidad/" + fisiologiaNom)}
           />
 
           {celulasCuerpoData.map((sistema) => {
-            const iconCard = ICON_MAP(ICON_SIZE_CARD)[sistema.iconKey];
             return (
               <Box
                 key={sistema.id}
@@ -327,21 +287,7 @@ export default function CelulasCuerpoPage() {
                 boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
               >
                 {/* Cabecera del sistema */}
-                <Flex align="center" gap={3} mb={{ base: 4, md: 5 }}>
-                  <Box
-                    color={TXT}
-                    bg={TXT + "18"}
-                    borderRadius="full"
-                    w={{ base: "40px", md: "46px" }}
-                    h={{ base: "40px", md: "46px" }}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    border={`2px solid ${TXT}44`}
-                    flexShrink={0}
-                  >
-                    {iconCard}
-                  </Box>
+                <Box mb={{ base: 4, md: 5 }}>
                   <Text
                     color={TXT}
                     fontSize={{ base: "xl", md: "2xl" }}
@@ -351,7 +297,7 @@ export default function CelulasCuerpoPage() {
                   >
                     {sistema.nombre}
                   </Text>
-                </Flex>
+                </Box>
 
                 {/* Grid de células — 3 por fila */}
                 <SimpleGrid
@@ -377,7 +323,6 @@ export default function CelulasCuerpoPage() {
       {selected && (
         <CelulaModal
           celula={selected.celula}
-          sistema={selected.sistema}
           onClose={() => setSelected(null)}
         />
       )}

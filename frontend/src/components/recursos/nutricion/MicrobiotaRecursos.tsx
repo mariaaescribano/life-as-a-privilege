@@ -639,7 +639,7 @@ export default function MicrobiotaRecursos() {
 
   return (
     <Box minH="100vh" bg="#008080" fontFamily="'EB Garamond', serif">
-      <SiteHeader />
+      <SiteHeader variant={"auto"} />
       <Flex
         direction="column"
         align="center"

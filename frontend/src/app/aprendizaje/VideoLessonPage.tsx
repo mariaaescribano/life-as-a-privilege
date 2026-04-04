@@ -21,12 +21,12 @@ import {
 } from "../../GlobalVariables";
 import { modulostcmFundamentos, modulostcmCincoElementos } from "../../hardCoded/aprendizajes/TCM/ModulosTCM";
 import { modulosFitoterapia } from "../../hardCoded/aprendizajes/Fitoterapia/ModulosFitoterpia";
-import { modulosAstrologia, modulosAstrologiaCurso0 } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
+import { modulosAstrologia, modulosAstrologiaCurso0, modulosArquetipos } from "../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import { modulosCabala2 } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala2";
 import { modulosNutricion, modulosMicrobiota } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
-import { modulosFisiologia } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
+import { modulosFisiologia, modulosFisiologiaInflamacion } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -106,7 +106,8 @@ export default function VideoLessonPage() {
       {
         setdatos(
           getModuleByTitle(submoduloId!, modulosAstrologiaCurso0) ??
-          getModuleByTitle(submoduloId!, modulosAstrologia)
+          getModuleByTitle(submoduloId!, modulosAstrologia) ??
+          getModuleByTitle(submoduloId!, modulosArquetipos)
         );
       }
       else if(moduloId === cabalaNom)
@@ -130,7 +131,10 @@ export default function VideoLessonPage() {
       }
       else if(moduloId === fisiologiaNom)
       {
-        setdatos(getModuleByTitle(submoduloId!, modulosFisiologia));
+        setdatos(
+          getModuleByTitle(submoduloId!, modulosFisiologia) ??
+          getModuleByTitle(submoduloId!, modulosFisiologiaInflamacion)
+        );
       }
     }
   }, [moduloId, submoduloId]);
@@ -206,11 +210,12 @@ export default function VideoLessonPage() {
             {/* Cabecera */}
             {moduloDatos && (
               <DisciplineHeader
-                icon={<datos.icon size={{ base: "30px", md: "40px" }} />}
+                icon={<datos.icon size={{ base: "28px", md: "34px" }} />}
                 title={datos.nom}
                 bgColor={moduloDatos.bgColor}
                 color={moduloDatos.color}
                 onIconClick={() => { const link = getModulosPageLink(); if (link) navigate(link); }}
+                compact
               />
             )}
 

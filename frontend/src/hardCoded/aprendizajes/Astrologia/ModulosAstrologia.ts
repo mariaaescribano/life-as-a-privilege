@@ -7,6 +7,7 @@ import {
   luna1, luna2, luna3, luna4, luna5, luna6, luna7, luna8, luna9, luna10, luna11, luna12,
   astro1, astro2, astro3, astro4, astro5, astro6, astro7, astro8, astro9, astro10, astro11, astro12
 } from "./LetraAstrologia";
+import { arq1, arq2, arq3, arq4, arq5, arq6, arq7, arq8, arq9, arq10, arq11, arq12 } from "./LetraArquetipos";
 
 const detalles: Detalles = { color: astrologiaTxt, icon: AstrologiaIcon, bgColor: astrologiaBg };
 
@@ -129,6 +130,28 @@ export const modulosAstrologia: ModuloContenido[] = [
       { id: "luna10", nom: "Luna en ♑︎ Capricornio", link: `${basePath}/luna10`, linkAnterior: `${basePath}/luna9`,  linkNext: `${basePath}/luna11`, descripcion: "La Luna en Capricornio aprende a reprimir sus emociones y a buscar valor a través del esfuerzo y la responsabilidad.",  video: "vSqpdFimvV0", letra: luna10, detalles: detalles, icon: MoonIcon, cursoId: "astro-curso-1", floatingButton: serviciosAstrologicos },
       { id: "luna11", nom: "Luna en ♒︎ Acuario",     link: `${basePath}/luna11`, linkAnterior: `${basePath}/luna10`, linkNext: `${basePath}/luna12`, descripcion: "La Luna en Acuario desarrolla distancia emocional y apego evitativo para proteger su libertad.",                         video: "N2t3zsuQXNw", letra: luna11, detalles: detalles, icon: MoonIcon, cursoId: "astro-curso-1", floatingButton: serviciosAstrologicos },
       { id: "luna12", nom: "Luna en ♓︎ Piscis",      link: `${basePath}/luna12`, linkAnterior: `${basePath}/luna11`, linkNext: "",                  descripcion: "La Luna en Piscis es profundamente sensible y empática, pero necesita aprender a poner límites emocionales.",             video: "Tca57If-0NI", letra: luna12, detalles: detalles, icon: MoonIcon, cursoId: "astro-curso-1", floatingButton: serviciosAstrologicos },
+    ],
+  },
+];
+
+export const modulosArquetipos: ModuloContenido[] = [
+  {
+    title: "Los Arquetipos",
+    icon: AstrologiaIcon,
+    floatingButton: serviciosAstrologicos,
+    submodules: [
+      { id: "arq1",  nom: "Arquetipo ♈︎ Aries",       link: `${basePath}/arq1`,  linkAnterior: "",               linkNext: `${basePath}/arq2`,  descripcion: "El primer arquetipo: impulso, independencia y la energía que acaba de llegar al mundo.",                          video: "7dHr8neqv1M", letra: arq1,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq2",  nom: "Arquetipo ♉︎ Tauro",       link: `${basePath}/arq2`,  linkAnterior: `${basePath}/arq1`,  linkNext: `${basePath}/arq3`,  descripcion: "El arquetipo de la materia: conectado a los sentidos, la seguridad y los ciclos naturales.",                    video: "YJ_0_NIqYlE", letra: arq2,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq3",  nom: "Arquetipo ♊︎ Géminis",     link: `${basePath}/arq3`,  linkAnterior: `${basePath}/arq2`,  linkNext: `${basePath}/arq4`,  descripcion: "El signo dual que busca ser consciente de que todo es uno y aprender a profundizar.",                             video: "vlqrSkmcNI4", letra: arq3,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq4",  nom: "Arquetipo ♋︎ Cáncer",      link: `${basePath}/arq4`,  linkAnterior: `${basePath}/arq3`,  linkNext: `${basePath}/arq5`,  descripcion: "Conectado al hogar y a la familia, aprende a nutrirse a sí mismo para poder nutrir a otros.",                    video: "uvWbJVmgB_A", letra: arq4,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq5",  nom: "Arquetipo ♌︎ Leo",         link: `${basePath}/arq5`,  linkAnterior: `${basePath}/arq4`,  linkNext: `${basePath}/arq6`,  descripcion: "El Rey del zodiaco que debe aprender a reconocerse sin depender del reflejo externo.",                            video: "G22JpImwcds", letra: arq5,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq6",  nom: "Arquetipo ♍︎ Virgo",       link: `${basePath}/arq6`,  linkAnterior: `${basePath}/arq5`,  linkNext: `${basePath}/arq7`,  descripcion: "El gran analítico del zodiaco, aprende a soltar el control y confiar en sus dones al servicio de algo mayor.",    video: "EsqJdFXF6rc", letra: arq6,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq7",  nom: "Arquetipo ♎︎ Libra",       link: `${basePath}/arq7`,  linkAnterior: `${basePath}/arq6`,  linkNext: `${basePath}/arq8`,  descripcion: "Busca la armonía y la belleza, pero necesita aprender a sostenerse a sí mismo.",                                  video: "z6Bla9iPkyg", letra: arq7,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq8",  nom: "Arquetipo ♏︎ Escorpio",    link: `${basePath}/arq8`,  linkAnterior: `${basePath}/arq7`,  linkNext: `${basePath}/arq9`,  descripcion: "El transformador profundo que muere y renace, capaz de ver lo que otros no ven.",                                 video: "QJgz9bMkfBw", letra: arq8,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq9",  nom: "Arquetipo ♐︎ Sagitario",   link: `${basePath}/arq9`,  linkAnterior: `${basePath}/arq8`,  linkNext: `${basePath}/arq10`, descripcion: "El buscador de verdad que necesita independencia, aventura y sentido de propósito.",                              video: "RklEbyEKiCA", letra: arq9,  detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq10", nom: "Arquetipo ♑︎ Capricornio", link: `${basePath}/arq10`, linkAnterior: `${basePath}/arq9`,  linkNext: `${basePath}/arq11`, descripcion: "El arquetipo de la responsabilidad que construye para dejar un legado a futuras generaciones.",                    video: "KUma6gkGZUw", letra: arq10, detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq11", nom: "Arquetipo ♒︎ Acuario",     link: `${basePath}/arq11`, linkAnterior: `${basePath}/arq10`, linkNext: `${basePath}/arq12`, descripcion: "El rebelde futurista que busca su individualidad dentro de la humanidad.",                                          video: "eYa6vXhPBpQ", letra: arq11, detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
+      { id: "arq12", nom: "Arquetipo ♓︎ Piscis",      link: `${basePath}/arq12`, linkAnterior: `${basePath}/arq11`, linkNext: "",                  descripcion: "El arquetipo del sacrificio y la trascendencia, con un corazón que siente el sufrimiento del mundo.",              video: "3oHiu6jwFRM", letra: arq12, detalles: detalles, icon: AstrologiaIcon, cursoId: "astro-curso-2", floatingButton: serviciosAstrologicos },
     ],
   },
 ];

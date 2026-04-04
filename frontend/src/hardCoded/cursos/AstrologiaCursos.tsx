@@ -6,11 +6,12 @@ import {
   astrologiaNom,
   astrologiaTxt,
 } from "../../GlobalVariables";
-import { modulosAstrologia, modulosAstrologiaCurso0 } from "../aprendizajes/Astrologia/ModulosAstrologia";
+import { modulosAstrologia, modulosAstrologiaCurso0, modulosArquetipos } from "../aprendizajes/Astrologia/ModulosAstrologia";
 
 export const astroCurso0ID = "astro-curso-0";
 export const astroCurso1ID = "astro-curso-1";
 export const astroCurso2ID = "astro-curso-2";
+export const astroCurso3ID = "astro-curso-3";
 
 export const astrologiaCursos: ModalidadInfo = {
   nom: astrologiaNom,
@@ -18,6 +19,17 @@ export const astrologiaCursos: ModalidadInfo = {
   color: astrologiaTxt,
   icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
+    {
+      id: astroCurso2ID,
+      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso2ID,
+      titulo: "Los Arquetipos",
+      foto: "/img/astrologia/arqFoto.png",
+      descripcion: "Entiende los arquetipos de la Astrología para un conocimiento más profundo y completo.",
+      precio: null,
+      numLecciones: 12,
+      icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosArquetipos,
+    },
     {
       id: astroCurso0ID,
       cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso0ID,
@@ -41,16 +53,6 @@ export const astrologiaCursos: ModalidadInfo = {
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
       modulos: modulosAstrologia,
     },
-    // {
-    //   id: astroCurso2ID,
-    //   cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso2ID,
-    //   titulo: "Los Arquetipos",
-    //   foto: "/img/astrologia/arquetipos.png",
-    //   descripcion: "Descubre los doce arquetipos del zodiaco y la energía que cada signo ha venido a integrar en esta Vida.",
-    //   precio: null,
-    //   numLecciones: 12,
-    //   icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
-    //   modulos: modulosArquetipos,
-    // },
+ 
   ],
 };

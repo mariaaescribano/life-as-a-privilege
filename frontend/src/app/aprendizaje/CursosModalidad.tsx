@@ -373,7 +373,6 @@ export default function CursosModalidad() {
                 transition="all 0.22s ease"
                 onClick={() => navigate("/espacio/celulas-cuerpo")}
                 _hover={{
-                  boxShadow: `0 0 20px ${fisiologiaTxt}44`,
                   transform: "translateY(-2px)",
                   border: `1.5px solid ${fisiologiaTxt}aa`,
                   opacity: 0.88,
@@ -606,7 +605,7 @@ export default function CursosModalidad() {
                   fontWeight="700"
                   letterSpacing="0.05em"
                   lineHeight="1.2"
-                  mt="15px" mb={7}
+                  mt={{ base: "10px", md: "25px" }} mb={7}
                   style={{ textShadow: `1px 2px 10px ${modalidad.color}77` }}
                 >
                   {detailCurso.titulo}
@@ -672,7 +671,7 @@ export default function CursosModalidad() {
                   borderTop={`1px solid ${modalidad.color}33`}
                   pt={5}
                   gap={4}
-                  flexWrap="wrap"
+                  flexWrap="wrap" mb="10px"
                 >
                   <Text
                     color={modalidad.color}

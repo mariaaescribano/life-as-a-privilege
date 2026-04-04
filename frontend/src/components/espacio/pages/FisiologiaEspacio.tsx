@@ -94,7 +94,7 @@ const FisiologiaEspacio = () => {
             transition="all 0.22s ease"
             onClick={() => navigate("/espacio/celulas-cuerpo")}
             _hover={{
-              boxShadow: `0 6px 24px rgba(0,0,0,0.12), 0 0 20px ${fisiologiaTxt}44`,
+              
               transform: "translateY(-2px)",
               border: `1.5px solid ${fisiologiaTxt}aa`,
               opacity: 0.88,

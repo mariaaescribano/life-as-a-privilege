@@ -1,7 +1,7 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { fisioCurso1ID, modulosFisiologia } from "../aprendizajes/Fisiologia/ModulosFisiologia";
+import { fisioCurso1ID, fisioCurso2ID, modulosFisiologia, modulosFisiologiaInflamacion } from "../aprendizajes/Fisiologia/ModulosFisiologia";
 
 export const fisiologiaCursos: ModalidadInfo = {
   nom: fisiologiaNom,
@@ -19,6 +19,17 @@ export const fisiologiaCursos: ModalidadInfo = {
       numLecciones: 7,
       icon: <FisiologiaIcon size={{ base: "20px", md: "30px" }} />,
       modulos: modulosFisiologia,
+    },
+    {
+      id: fisioCurso2ID,
+      cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso2ID,
+      titulo: "La inflamación crónica",
+      foto: "/img/fisio/inflam.png",
+      descripcion: "En este curso descubrirás la inflamación y sus efectos en tu cuerpo.",
+      precio: null,
+      numLecciones: 8,
+      icon: <FisiologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosFisiologiaInflamacion,
     },
   ],
 };
