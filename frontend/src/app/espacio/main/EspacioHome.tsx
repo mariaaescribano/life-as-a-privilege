@@ -49,7 +49,7 @@ const EspacioHome = () => {
     { bg: tcmBg,             icon: <TCMIcon size={{ base: "38px", md: "58px" }} />,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},
     { bg: nutricionBg,       icon: <NutricionIcon size={{ base: "38px", md: "58px" }}  />,                               link: "/espacio/questions/" + nutricionNomLink,   cursor: "pointer",    txt: nutricionTxt },
     { bg: ayurvedaBg,        icon: <AyurvedaIcon size={{ base: "38px", md: "58px" }} />,             link: "/espacio/questions/" + ayurvedaNomLink,        cursor: "pointer",      txt: ayurvedaTxt},
-    { bg: culturaBg,         icon: <CulturaIcon size={{ base: "38px", md: "58px" }}  />,         link: "/espacio/questions/" + culturaNom,         cursor: "pointer" , txt: culturaTxt},
+    { bg: culturaBg,         icon: <CulturaIcon size={{ base: "38px", md: "58px" }}  />,         link: "/aprendizaje/cursosModalidad/cultura",     cursor: "pointer" , txt: culturaTxt},
     { bg: cabalaBg,          icon: <CabalaIcon size={{ base: "38px", md: "58px" }}  />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "pointer" , txt: cabalaTxt},
   ];
 

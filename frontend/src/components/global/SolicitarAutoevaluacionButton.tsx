@@ -54,7 +54,7 @@ export function SolicitarAutoevaluacionButton({
       <ContactModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        title="Autoevaluación personalizada"
+        title="Evaluación personalizada"
         icon={icon}
         bgColor={bgColor}
         color={color}

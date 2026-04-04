@@ -584,7 +584,7 @@ export default function CartaAstralRecursos() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             maxW="1100px"
-            onIconClick={() => navigate("/aprendizaje/modulosPage/Astrología/astro-curso-0")}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Astrología")}
           />
 
           {/* Card plegable: Obtén tu Carta Astral */}

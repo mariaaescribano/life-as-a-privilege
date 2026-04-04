@@ -11,7 +11,7 @@ import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
-import { nutricionNomLink, NutricionIcon, tcmNomLink, tcmBg, tcmTxt } from "../../GlobalVariables";
+import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNomLink, tcmBg, tcmTxt, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, fisiologiaNom, FisiologiaIcon, fisiologiaTxt } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -179,7 +179,7 @@ export default function CursosModalidad() {
             title={modalidad.nom}
             bgColor={modalidad.bgColor}
             color={modalidad.color}
-            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink) ? { base: 6, md: 7 } : undefined}
+            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink || moduloId === fisiologiaNom) ? { base: 6, md: 7 } : undefined}
           />
 
           {/* ── TESTS (solo Medicina China) ── */}
@@ -313,9 +313,93 @@ export default function CursosModalidad() {
             </Flex>
           )}
 
-          {/* ── HERBARIO + ALIMENTOS (solo Nutrición) ── */}
+          {/* ── TEST DOSHAS (solo Ayurveda) ── */}
+          {moduloId === ayurvedaNomLink && (
+            <Flex justify="center" mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                px={{ base: 6, md: 10 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={ayurvedaBg}
+                border={`1.5px solid ${ayurvedaTxt}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/aprendizaje/test-doshas")}
+                _hover={{
+                  boxShadow: `0 0 20px ${ayurvedaTxt}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${ayurvedaTxt}aa`,
+                  opacity: 0.88,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <AyurvedaIcon size={{ base: "22px", md: "22px" }} />
+                </Box>
+                <Text
+                  color={ayurvedaTxt}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  letterSpacing="0.08em"
+                  lineHeight="1"
+                >
+                  Test de los Doshas
+                </Text>
+              </Flex>
+            </Flex>
+          )}
+
+          {/* ── CÉLULAS DEL CUERPO (solo Fisiología) ── */}
+          {moduloId === fisiologiaNom && (
+            <Flex justify="center" mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                px={{ base: 6, md: 10 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={modalidad.bgColor}
+                border={`1.5px solid ${fisiologiaTxt}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/espacio/celulas-cuerpo")}
+                _hover={{
+                  boxShadow: `0 0 20px ${fisiologiaTxt}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${fisiologiaTxt}aa`,
+                  opacity: 0.88,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <FisiologiaIcon size={{ base: "22px", md: "22px" }} />
+                </Box>
+                <Text
+                  color={fisiologiaTxt}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  letterSpacing="0.08em"
+                  lineHeight="1"
+                >
+                  Las células de tu cuerpo
+                </Text>
+              </Flex>
+            </Flex>
+          )}
+
+          {/* ── HERBARIO + ALIMENTOS + CALCULAR (solo Nutrición) ── */}
           {moduloId === nutricionNomLink && (
-            <Flex justify="center" gap={{ base: 3, md: 4 }} mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
+            <Flex justify="center" gap={{ base: 2, md: 3 }} mb={{ base: 6, md: 7 }} w="100%" maxW="900px" flexWrap={{ base: "wrap", md: "nowrap" }}>
               {/* Herbario */}
               <Flex
                 as="button"
@@ -333,30 +417,15 @@ export default function CursosModalidad() {
                 transition="all 0.22s ease"
                 onClick={() => navigate("/aprendizaje/herbario")}
                 _hover={{
-                  boxShadow: `0 6px 24px rgba(0,0,0,0.12), 0 0 20px ${modalidad.color}44`,
+                  boxShadow: `0 0 20px ${modalidad.color}44`,
                   transform: "translateY(-2px)",
                   border: `1.5px solid ${modalidad.color}aa`,
                   opacity: 0.88,
                 }}
                 _active={{ transform: "translateY(0px)" }}
               >
-                {/* Abejita SVG con colores de nutrición */}
                 <Box flexShrink={0} display="flex" alignItems="center">
-                  <svg width="22" height="22" viewBox="0 0 52 52" fill="none">
-                    <ellipse cx="16" cy="19" rx="11" ry="6" fill={modalidad.color} opacity={0.55} transform="rotate(-30 16 19)"/>
-                    <ellipse cx="36" cy="19" rx="11" ry="6" fill={modalidad.color} opacity={0.55} transform="rotate(30 36 19)"/>
-                    <ellipse cx="26" cy="32" rx="9" ry="12" fill={modalidad.color}/>
-                    <rect x="17.5" y="28" width="17" height="3.5" rx="1.75" fill={modalidad.bgColor} opacity={0.45}/>
-                    <rect x="17.5" y="34" width="17" height="3.5" rx="1.75" fill={modalidad.bgColor} opacity={0.38}/>
-                    <circle cx="26" cy="19" r="6" fill={modalidad.color}/>
-                    <circle cx="23.5" cy="18.5" r="1.2" fill={modalidad.bgColor} opacity={0.7}/>
-                    <circle cx="28.5" cy="18.5" r="1.2" fill={modalidad.bgColor} opacity={0.7}/>
-                    <path d="M23 14 C21 10 17 8 16 5" stroke={modalidad.color} strokeWidth="1.6" strokeLinecap="round"/>
-                    <circle cx="15.5" cy="4.5" r="2.2" fill={modalidad.color}/>
-                    <path d="M29 14 C31 10 35 8 36 5" stroke={modalidad.color} strokeWidth="1.6" strokeLinecap="round"/>
-                    <circle cx="36.5" cy="4.5" r="2.2" fill={modalidad.color}/>
-                    <path d="M26 44 L24 49 L26 47 L28 49 Z" fill={modalidad.color}/>
-                  </svg>
+                  <FitoterapiaIcon size="22px" color={nutricionTxt} />
                 </Box>
                 <Text
                   color={modalidad.color}
@@ -377,14 +446,21 @@ export default function CursosModalidad() {
                 justify="center"
                 gap={2}
                 flex="1"
-                px={{ base: 4, md: 8 }}
+                px={{ base: 4, md: 6 }}
                 py={{ base: 3, md: 4 }}
                 borderRadius="full"
                 bg={modalidad.bgColor}
                 border={`1.5px solid ${modalidad.color}88`}
                 boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="default"
+                cursor="pointer"
                 transition="all 0.22s ease"
+                onClick={() => navigate("/aprendizaje/alimentos")}
+                _hover={{
+                  boxShadow: `0 0 20px ${modalidad.color}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${modalidad.color}aa`,
+                  opacity: 0.88,
+                }}
                 _active={{ transform: "translateY(0px)" }}
               >
                 <NutricionIcon size={{ base: "22px", md: "22px" }} />
@@ -397,6 +473,48 @@ export default function CursosModalidad() {
                   lineHeight="1"
                 >
                   Alimentos
+                </Text>
+              </Flex>
+
+              {/* Calcular necesidades */}
+              <Flex
+                as="button"
+                align="center"
+                justify="center"
+                gap={2}
+                flex="1"
+                px={{ base: 4, md: 6 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                bg={modalidad.bgColor}
+                border={`1.5px solid ${modalidad.color}88`}
+                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                cursor="pointer"
+                transition="all 0.22s ease"
+                onClick={() => navigate("/aprendizaje/calcular-necesidades")}
+                _hover={{
+                  boxShadow: `0 0 20px ${modalidad.color}44`,
+                  transform: "translateY(-2px)",
+                  border: `1.5px solid ${modalidad.color}aa`,
+                  opacity: 0.88,
+                }}
+                _active={{ transform: "translateY(0px)" }}
+              >
+                <Box flexShrink={0} display="flex" alignItems="center">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill={modalidad.color}>
+                    <path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-56 56-56-42-42-56 56-56-56-42 42 56 56-56 56 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+                  </svg>
+                </Box>
+                <Text
+                  color={modalidad.color}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "md", md: "lg" }}
+                  letterSpacing="0.06em"
+                  lineHeight="1.1"
+                  textAlign="center"
+                >
+                  Calcular necesidades
                 </Text>
               </Flex>
             </Flex>

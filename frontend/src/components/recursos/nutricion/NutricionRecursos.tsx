@@ -620,7 +620,7 @@ export default function NutricionRecursos() {
             subtitle="Las bases de la nutrición"
             bgColor={BG}
             color={TXT} mb={{ base: 0, md: 0 }}
-            onIconClick={() => navigate("/aprendizaje/modulosPage/nutricion/nut-curso-1")}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
           />
 
           <CarbohidratosCard onSelect={setSelected} />

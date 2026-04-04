@@ -12,7 +12,8 @@ import {
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
-  nutricionNomLink
+  nutricionNomLink,
+  culturaNomLink,
 } from "../../GlobalVariables";
 
 const MotionBox = motion(Box);
@@ -137,7 +138,7 @@ const PhotoMandala = (props: { fotoCentro?: string }) => {
     { name: tcmNom,  available:true, bg: tcmBg,  txt: tcmTxt,             icon: <TCMIcon             size={{ base: iconSize, md: iconSize }} />,   link: "/espacio/questions/" + tcmNomLink },
     { name: nutricionNom,  available:true,      bg: nutricionBg,       txt: nutricionTxt,       icon: <NutricionIcon       size={{ base: iconSize, md: iconSize }}  />,          link: "/espacio/questions/" + nutricionNomLink },
     { name: ayurvedaNom,  available:true,       bg: ayurvedaBg,        txt: ayurvedaTxt,        icon: <AyurvedaIcon        size={{ base: iconSize, md: iconSize }} />,                                    link: "/espacio/questions/" + ayurvedaNomLink },
-    { name: culturaNom,      available:true,    bg: culturaBg,            txt: culturaTxt,            icon: <CulturaIcon            size={{ base: iconSize, md: iconSize }} />,  link: "/espacio/questions/" + culturaNom },
+    { name: culturaNom,      available:true,    bg: culturaBg,            txt: culturaTxt,            icon: <CulturaIcon            size={{ base: iconSize, md: iconSize }} />,  link: "/aprendizaje/cursosModalidad/" + culturaNomLink },
     { name: cabalaNom,     available:true,      bg: cabalaBg,          txt: cabalaTxt,          icon: <CabalaIcon          size={iconSize} />,                                    link: "/espacio/questions/" + cabalaNom },
   ];
 

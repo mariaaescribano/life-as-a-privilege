@@ -1,9 +1,9 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { fitoterapiaBg, FitoterapiaIcon, fitoterapiaTxt, fitoterapiaNom } from "../../../GlobalVariables";
+import { FitoterapiaIcon, nutricionBg, nutricionTxt, nutricionNomLink } from "../../../GlobalVariables";
 
-const detalles: Detalles = { color: fitoterapiaTxt, icon: FitoterapiaIcon, bgColor: fitoterapiaBg };
+const detalles: Detalles = { color: nutricionTxt, icon: FitoterapiaIcon, bgColor: nutricionBg };
 
-const basePath = "/aprendizaje/videoLessonPage/" + fitoterapiaNom;
+const basePath = "/aprendizaje/videoLessonPage/" + nutricionNomLink;
 
 const herbario: FloatingButtonConfig = {
   label: "Herbario",

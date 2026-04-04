@@ -10,6 +10,9 @@ import ModulosPage from "./app/aprendizaje/ModulosPage";
 import VideoLessonPage from "./app/aprendizaje/VideoLessonPage";
 import CursosModalidad from "./app/aprendizaje/CursosModalidad";
 import HerbarioPage from "./app/aprendizaje/HerbarioPage";
+import AlimentosPage from "./app/aprendizaje/AlimentosPage";
+import CalcularNecesidadesPage from "./app/aprendizaje/CalcularNecesidadesPage";
+import TestDoshasPage from "./app/aprendizaje/TestDoshasPage";
 import EspacioHome from "./app/espacio/main/EspacioHome";
 import ExpandablePage from "./app/espacio/main/ThemePreguntas";
 import QuienSoy from "./app/web/QuienSoy";
@@ -27,6 +30,7 @@ import TCMTest2 from "./components/espacio/components/TCMTest2";
 import TCMTest3 from "./components/espacio/components/TCMTest3";
 import FisiologiaEspacio from "./components/espacio/pages/FisiologiaEspacio";
 import FitoterapiaEspacio from "./components/espacio/pages/FitoterapiaEspacio";
+import CelulasCuerpoPage from "./app/espacio/CelulasCuerpoPage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -71,12 +75,18 @@ export default function App()
       <Route path="/espacio/espacioHome" element={<PrivateRoute><EspacioHome /></PrivateRoute>} />
       <Route path="/espacio/fisiologia" element={<PrivateRoute><FisiologiaEspacio /></PrivateRoute>} />
       <Route path="/espacio/herbario" element={<PrivateRoute><FitoterapiaEspacio /></PrivateRoute>} />
+      <Route path="/espacio/celulas-cuerpo" element={<CelulasCuerpoPage />} />
       <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
       <Route path="/aprendizaje/nuevosCursos" element={<NuevosCursosPage />} />
       <Route path="/aprendizaje/cursosModalidad/:moduloId" element={<CursosModalidad />} />
       <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
+      <Route path="/aprendizaje/herbario/favoritos" element={<PrivateRoute><HerbarioPage favoritesOnly /></PrivateRoute>} />
+      <Route path="/aprendizaje/alimentos" element={<AlimentosPage />} />
+      <Route path="/aprendizaje/alimentos/favoritos" element={<PrivateRoute><AlimentosPage favoritesOnly /></PrivateRoute>} />
+      <Route path="/aprendizaje/calcular-necesidades" element={<CalcularNecesidadesPage />} />
+      <Route path="/aprendizaje/test-doshas" element={<TestDoshasPage />} />
       <Route path="/aprendizaje/modulosPage/:modalidadId/:cursoId" element={<ModulosPage />} />
       <Route path="/aprendizaje/videoLessonPage/:moduloId/:submoduloId" element={<VideoLessonPage />} />
 

@@ -320,7 +320,7 @@ export default function AstrologiaRecursos() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             maxW="1100px"
-            onIconClick={() => navigate("/aprendizaje/modulosPage/Astrología/astro-curso-1")}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Astrología")}
           />
 
           {/* Card grande con fondo espacial */}

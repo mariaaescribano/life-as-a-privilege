@@ -6,7 +6,7 @@ import type { Submodulo } from "../../dtos/aprendizaje.type";
 import { useNavigate } from "react-router-dom";
 
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
-const GLOW_HOVER = "0 8px 24px rgba(0,0,0,0.28), 0 0 32px rgba(107,196,200,1)";
+const GLOW_HOVER = "0 0 32px rgba(107,196,200,1)";
 
 export function ModuloAcordeon(props:{
   title:string, bgColor:string, color:string,
@@ -40,7 +40,7 @@ export function ModuloAcordeon(props:{
         _hover={{ transform: "translateY(-3px)", boxShadow: GLOW_HOVER }}
       >
         <HStack>
-          {< props.icon />}
+          {< props.icon color={props.color} />}
           <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
             {props.title}
           </Text>

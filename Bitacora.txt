@@ -7,9 +7,7 @@ USAR OBJ+ID : userId
 
 
 
-Que se guarde cuando pasas de video la velocidad previa y se aplique al video 
 
-- en cursosModalidades en las cards modales, deja mas espacio por arriba (mt en el titulo) y por abajo mb abajo del boton de Acceder y del mensaje del rpecio (gratis o numero)
 
 
 
@@ -20,7 +18,11 @@ Que se guarde cuando pasas de video la velocidad previa y se aplique al video
 
 
 IDEAS CURSOS
-DOshas en profundidad: habitos y desequilibrios psicologicos
+DOshas en profundidad: habitos y desequilibrios psicologicos 
+
+
+
+
 
 
 

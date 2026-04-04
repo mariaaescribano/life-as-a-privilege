@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Box, Flex, Grid, HStack, Image, Text } from "@chakra-ui/react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
-import {
-  API_URL, nutricionBg, nutricionTxt,
-  NutricionIcon, FitoterapiaIcon,
-} from "../../GlobalVariables";
-import { plantas, type Planta } from "../../components/recursos/fitoterapia/PlantasData";
+import { NutricionIcon, nutricionBg, nutricionTxt, API_URL } from "../../GlobalVariables";
+import { alimentos, type Alimento } from "../../components/recursos/nutricion/AlimentosData";
 
 const CARD_COLOR  = nutricionTxt;
 const MODAL_COLOR = nutricionBg;
@@ -17,8 +14,6 @@ const MODAL_COLOR = nutricionBg;
 /* ══════════════════════════════════════════════
    SVG — ESQUINA BOTÁNICA
 ══════════════════════════════════════════════ */
-const DECO_COLOR = nutricionTxt;
-
 const BotanicalCorner = ({ flip = false }: { flip?: boolean }) => (
   <Box
     position="absolute"
@@ -28,45 +23,22 @@ const BotanicalCorner = ({ flip = false }: { flip?: boolean }) => (
     opacity={0.18} pointerEvents="none" zIndex={0}
   >
     <svg width="170" height="170" viewBox="0 0 170 170" fill="none">
-      <path d="M 10 160 C 22 124 55 88 90 58 C 118 34 142 18 162 8" stroke={DECO_COLOR} strokeWidth="2.2" strokeLinecap="round"/>
-      <path d="M 30 136 C 10 122 8 102 22 92 C 40 104 44 124 30 136 Z" fill={DECO_COLOR}/>
-      <path d="M 30 136 C 24 116 18 98 22 92" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <path d="M 58 108 C 72 92 74 72 60 62 C 44 72 42 92 58 108 Z" fill={DECO_COLOR}/>
-      <path d="M 58 108 C 56 90 54 74 60 62" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <path d="M 88 78 C 72 64 70 46 84 38 C 102 48 104 66 88 78 Z" fill={DECO_COLOR}/>
-      <path d="M 88 78 C 82 62 80 48 84 38" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <path d="M 118 50 C 130 36 134 18 120 10 C 104 18 100 36 118 50 Z" fill={DECO_COLOR}/>
-      <path d="M 118 50 C 116 34 114 20 120 10" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <circle cx="10" cy="158" r="5.5" fill={DECO_COLOR}/>
-      <circle cx="5"  cy="148" r="4"   fill={DECO_COLOR}/>
-      <circle cx="18" cy="149" r="4"   fill={DECO_COLOR}/>
-      <circle cx="6"  cy="138" r="2.5" fill={DECO_COLOR} opacity="0.7"/>
-      <circle cx="162" cy="9"  r="4"   fill={DECO_COLOR}/>
-      <circle cx="158" cy="4"  r="2.8" fill={DECO_COLOR} opacity="0.8"/>
-      <circle cx="167" cy="5"  r="2.5" fill={DECO_COLOR} opacity="0.7"/>
-    </svg>
-  </Box>
-);
-
-/* ══════════════════════════════════════════════
-   SVG — ABEJITA
-══════════════════════════════════════════════ */
-const BeeDecoration = ({ size = 52, opacity = 0.13, style = {} }: { size?: number; opacity?: number; style?: React.CSSProperties }) => (
-  <Box position="absolute" pointerEvents="none" zIndex={0} style={{ opacity, ...style }}>
-    <svg width={size} height={size} viewBox="0 0 52 52" fill="none">
-      <ellipse cx="16" cy="19" rx="11" ry="6" fill={DECO_COLOR} opacity={0.55} transform="rotate(-30 16 19)"/>
-      <ellipse cx="36" cy="19" rx="11" ry="6" fill={DECO_COLOR} opacity={0.55} transform="rotate(30 36 19)"/>
-      <ellipse cx="26" cy="32" rx="9" ry="12" fill={DECO_COLOR}/>
-      <rect x="17.5" y="28" width="17" height="3.5" rx="1.75" fill="white" opacity={0.45}/>
-      <rect x="17.5" y="34" width="17" height="3.5" rx="1.75" fill="white" opacity={0.38}/>
-      <circle cx="26" cy="19" r="6" fill={DECO_COLOR}/>
-      <circle cx="23.5" cy="18.5" r="1.2" fill="white" opacity={0.7}/>
-      <circle cx="28.5" cy="18.5" r="1.2" fill="white" opacity={0.7}/>
-      <path d="M23 14 C21 10 17 8 16 5" stroke={DECO_COLOR} strokeWidth="1.6" strokeLinecap="round"/>
-      <circle cx="15.5" cy="4.5" r="2.2" fill={DECO_COLOR}/>
-      <path d="M29 14 C31 10 35 8 36 5" stroke={DECO_COLOR} strokeWidth="1.6" strokeLinecap="round"/>
-      <circle cx="36.5" cy="4.5" r="2.2" fill={DECO_COLOR}/>
-      <path d="M26 44 L24 49 L26 47 L28 49 Z" fill={DECO_COLOR}/>
+      <path d="M 10 160 C 22 124 55 88 90 58 C 118 34 142 18 162 8" stroke={nutricionTxt} strokeWidth="2.2" strokeLinecap="round"/>
+      <path d="M 30 136 C 10 122 8 102 22 92 C 40 104 44 124 30 136 Z" fill={nutricionTxt}/>
+      <path d="M 30 136 C 24 116 18 98 22 92" stroke={nutricionTxt} strokeWidth="0.9" fill="none"/>
+      <path d="M 58 108 C 72 92 74 72 60 62 C 44 72 42 92 58 108 Z" fill={nutricionTxt}/>
+      <path d="M 58 108 C 56 90 54 74 60 62" stroke={nutricionTxt} strokeWidth="0.9" fill="none"/>
+      <path d="M 88 78 C 72 64 70 46 84 38 C 102 48 104 66 88 78 Z" fill={nutricionTxt}/>
+      <path d="M 88 78 C 82 62 80 48 84 38" stroke={nutricionTxt} strokeWidth="0.9" fill="none"/>
+      <path d="M 118 50 C 130 36 134 18 120 10 C 104 18 100 36 118 50 Z" fill={nutricionTxt}/>
+      <path d="M 118 50 C 116 34 114 20 120 10" stroke={nutricionTxt} strokeWidth="0.9" fill="none"/>
+      <circle cx="10" cy="158" r="5.5" fill={nutricionTxt}/>
+      <circle cx="5"  cy="148" r="4"   fill={nutricionTxt}/>
+      <circle cx="18" cy="149" r="4"   fill={nutricionTxt}/>
+      <circle cx="6"  cy="138" r="2.5" fill={nutricionTxt} opacity="0.7"/>
+      <circle cx="162" cy="9"  r="4"   fill={nutricionTxt}/>
+      <circle cx="158" cy="4"  r="2.8" fill={nutricionTxt} opacity="0.8"/>
+      <circle cx="167" cy="5"  r="2.5" fill={nutricionTxt} opacity="0.7"/>
     </svg>
   </Box>
 );
@@ -86,46 +58,19 @@ const BotanicalDivider = ({ color }: { color: string }) => (
 );
 
 /* ══════════════════════════════════════════════
-   YOUTUBE EMBED
+   SVG — CORAZONES
 ══════════════════════════════════════════════ */
-const getEmbedUrl = (url: string): string => {
-  const short = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-  if (short) return `https://www.youtube.com/embed/${short[1]}?rel=0`;
-  const long = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
-  if (long) return `https://www.youtube.com/embed/${long[1]}?rel=0`;
-  return url;
-};
-
-const YoutubePlayer = ({ videoUrl, color }: { videoUrl?: string; color: string }) => {
-  const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
-  return (
-    <Box mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${color}30`} bg={color + "0d"}
-      h={{ base: "210px", md: "270px" }} display="flex" alignItems="center" justifyContent="center"
-    >
-      {embedUrl ? (
-        <iframe src={embedUrl} width="100%" height="100%"
-          style={{ border: "none", display: "block" }}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen title="Vídeo de la planta"
-        />
-      ) : (
-        <Flex direction="column" align="center" justify="center" gap={4} w="100%" h="100%">
-          <Box w="66px" h="66px" borderRadius="full" bg={color + "18"} border={`1.5px solid ${color}35`}
-            display="flex" alignItems="center" justifyContent="center"
-          >
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M10 7.5v13l11-6.5-11-6.5z" fill={color} opacity="0.65"/>
-              <path d="M22 5 C18 7 17 12 19 16 C22 13 23 9 22 5 Z" fill={color} opacity="0.30"/>
-            </svg>
-          </Box>
-          <Text color={color} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.65} letterSpacing="0.04em">
-            Vídeo próximamente
-          </Text>
-        </Flex>
-      )}
-    </Box>
-  );
-};
+const HeartIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+const HeartIconFilled = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
 
 /* ══════════════════════════════════════════════
    SECCIÓN MODAL
@@ -145,9 +90,9 @@ const SeccionModal = ({ titulo, color, textMid, children }: { titulo: string; co
 );
 
 /* ══════════════════════════════════════════════
-   MODAL DE PLANTA
+   MODAL DE ALIMENTO
 ══════════════════════════════════════════════ */
-const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }) => {
+const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () => void }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -159,8 +104,8 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
-  const textDark     = nutricionTxt;
-  const textMid      = "#2b5e25";
+  const textDark = nutricionTxt;
+  const textMid  = "#2b5e25";
   const accentBg     = MODAL_COLOR + "12";
   const accentBorder = MODAL_COLOR + "40";
 
@@ -189,9 +134,6 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
       >
         <BotanicalCorner />
         <BotanicalCorner flip />
-        <BeeDecoration size={62} opacity={0.11} style={{ top: "22%", right: "12px" }} />
-        <BeeDecoration size={40} opacity={0.08} style={{ top: "55%", left: "18px", transform: "rotate(-15deg) scaleX(-1)" }} />
-        <BeeDecoration size={30} opacity={0.07} style={{ bottom: "18%", right: "60px", transform: "rotate(10deg)" }} />
 
         <Box position="relative" zIndex={2} px={{ base: 6, md: 10 }} pt={10} pb={10}>
           {/* Cerrar */}
@@ -209,35 +151,58 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
 
           {/* Nombre */}
           <Box textAlign="center" mb={6}>
-            <HStack spacing={3} align="center" alignItems="center" justifyContent="center">
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={{ base: "28px", md: "34px" }} viewBox="0 -960 960 960" w={{ base: "28px", md: "34px" }} fill={nutricionTxt}>
-                <path d="m720-600-32 28q-14 13-33 13t-33-11q-14-11-19-28t1-36l16-50-34-20q-16-9-22.5-26t-1.5-34q5-17 20-26.5t34-9.5h40l12-38q6-19 20.5-30.5T720-880q17 0 31.5 11.5T772-838l12 38h40q19 0 33.5 9.5T878-764q7 18 0 35t-22 25l-36 20 16 50q6 19 1 36.5T818-570q-15 11-33.5 11T752-572l-32-28Zm28.5-91.5Q760-703 760-720t-11.5-28.5Q737-760 720-760t-28.5 11.5Q680-737 680-720t11.5 28.5Q703-680 720-680t28.5-11.5ZM552-244q23 60-15 112T430-80q-33 0-62.5-17T324-142q-83 12-137.5-42.5T142-324q-30-17-46-46.5T80-438q0-61 55.5-98.5T244-552l62 26q20-31 53-50.5t71-21.5v-82h60v90q37 11 61 34.5t41 65.5h88v60h-82q-2 38-20.5 71T528-306l24 62Zm-248 24q0-27 4.5-52.5T322-322q-23 11-49.5 15.5T220-304q0 39 22.5 61.5T304-220Zm-74-164q32 0 56.5-8t63.5-32l-120-50q-29-12-49.5.5T160-434q0 26 17 38t53 12Zm200 224q25 0 40.5-17.5T478-214l-54-136q-19 32-29.5 64T384-228q0 33 11.5 50.5T430-160Zm66-222q10-10 16-26.5t6-34.5q0-32-21-54t-52-22q-18 0-34 6t-27 17l78 36 34 78Zm-174 60Z"/>
+            <Flex align="center" justify="center" gap={3} mb={2}>
+              <Box
+                px={3} py={1} borderRadius="full"
+                bg={alimento.tipo === "fruta" ? "#fce8d5" : "#d8f0d5"}
+                border={`1px solid ${alimento.tipo === "fruta" ? "#e8a87055" : "#7bb87055"}`}
+              >
+                <Text
+                  fontSize="xs" fontWeight="700" letterSpacing="0.12em"
+                  textTransform="uppercase"
+                  color={alimento.tipo === "fruta" ? "#b05a20" : "#2b6b2b"}
+                  fontFamily="'EB Garamond', serif"
+                >
+                  {alimento.tipo}
+                </Text>
               </Box>
+            </Flex>
+            <Flex align="center" justify="center" gap={2} mt={1}>
+              <NutricionIcon size={{ base: "28px", md: "34px" }} />
               <Text color={textDark} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
                 fontFamily="'EB Garamond', serif" letterSpacing="0.03em" lineHeight="1.1"
               >
-                {planta.nombre}
+                {alimento.nombre}
               </Text>
-            </HStack>
+            </Flex>
             <Text color={textMid} fontSize={{ base: "sm", md: "md" }}
               fontStyle="italic" letterSpacing="0.06em" mt={1} opacity={0.8}
             >
-              {planta.nombreCientifico}
+              {alimento.nombreCientifico}
             </Text>
           </Box>
 
-          <YoutubePlayer videoUrl={planta.videoUrl} color={MODAL_COLOR} />
+          {/* Foto */}
+          <Box mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${MODAL_COLOR}30`}
+            h={{ base: "180px", md: "240px" }} display="flex" alignItems="center" justifyContent="center"
+            bg={MODAL_COLOR + "18"}
+          >
+            <Image src={alimento.foto} alt={alimento.nombre} w="100%" h="100%" objectFit="cover" display="block"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
+          </Box>
+
           <BotanicalDivider color={nutricionTxt} />
 
           <Text color={textDark} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" opacity={0.85}>
-            {planta.uso}
+            {alimento.uso}
           </Text>
 
           <BotanicalDivider color={nutricionTxt} />
 
           <SeccionModal titulo="Beneficios" color={nutricionTxt} textMid={textMid}>
             <Flex direction="column" gap={2}>
-              {planta.beneficios.map((b, i) => (
+              {alimento.beneficios.map((b, i) => (
                 <Flex key={i} gap={3} align="flex-start">
                   <Box mt="9px" w="8px" h="8px" borderRadius="full" bg={nutricionTxt} flexShrink={0} opacity={0.65} />
                   <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.85}>{b}</Text>
@@ -248,20 +213,20 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
 
           <BotanicalDivider color={nutricionTxt} />
 
-          <SeccionModal titulo="Forma de uso" color={nutricionTxt} textMid={textMid}>
+          <SeccionModal titulo="Cómo consumirlo" color={nutricionTxt} textMid={textMid}>
             <Box bg={accentBg} border={`1px solid ${accentBorder}`} borderRadius="xl" px={5} py={4}>
               <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" opacity={0.88}>
-                {planta.formaDeUso}
+                {alimento.formaDeUso}
               </Text>
             </Box>
           </SeccionModal>
 
-          {planta.datosCuriosos && planta.datosCuriosos.length > 0 && (
+          {alimento.datosCuriosos && alimento.datosCuriosos.length > 0 && (
             <>
               <BotanicalDivider color={nutricionTxt} />
               <SeccionModal titulo="Datos curiosos" color={nutricionTxt} textMid={textMid}>
                 <Flex direction="column" gap={3}>
-                  {planta.datosCuriosos.map((d, i) => (
+                  {alimento.datosCuriosos.map((d, i) => (
                     <Flex key={i} gap={3} align="flex-start">
                       <Box flexShrink={0} mt="3px" w="22px" h="22px" borderRadius="full"
                         bg={nutricionTxt + "20"} border={`1px solid ${nutricionTxt}55`}
@@ -279,13 +244,13 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
             </>
           )}
 
-          {planta.precauciones && planta.precauciones.length > 0 && (
+          {alimento.precauciones && alimento.precauciones.length > 0 && (
             <>
               <BotanicalDivider color="#b05a2a" />
               <SeccionModal titulo="Precauciones" color="#b05a2a" textMid="#8a3e18">
                 <Box bg="rgba(176,90,42,0.08)" border="1px solid rgba(176,90,42,0.28)" borderRadius="xl" px={5} py={4}>
                   <Flex direction="column" gap={2}>
-                    {planta.precauciones.map((p, i) => (
+                    {alimento.precauciones.map((p, i) => (
                       <Flex key={i} gap={3} align="flex-start">
                         <Text flexShrink={0} mt="-1px" fontSize="14px" color="#b05a2a" lineHeight="1.8">⚠</Text>
                         <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.85}>{p}</Text>
@@ -303,26 +268,11 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
 };
 
 /* ══════════════════════════════════════════════
-   SVG — CORAZONES
+   CARD DE ALIMENTO
 ══════════════════════════════════════════════ */
-const HeartIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-);
-const HeartIconFilled = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-);
-
-/* ══════════════════════════════════════════════
-   CARD DE PLANTA
-══════════════════════════════════════════════ */
-function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite }: {
-  planta: Planta; isFavorite: boolean; onOpen: () => void;
-  onToggleFavorite: () => void; showFavorite: boolean;
+function AlimentoCard({ alimento, onOpen, isFavorite, onToggleFavorite, showFavorite }: {
+  alimento: Alimento; onOpen: () => void;
+  isFavorite?: boolean; onToggleFavorite?: () => void; showFavorite?: boolean;
 }) {
   const [imgError, setImgError] = useState(false);
 
@@ -349,21 +299,35 @@ function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite 
         display="flex" alignItems="center" justifyContent="center"
       >
         {!imgError ? (
-          <Image src={planta.foto} alt={planta.nombre} w="100%" h="100%" objectFit="cover" onError={() => setImgError(true)} />
+          <Image src={alimento.foto} alt={alimento.nombre} w="100%" h="100%" objectFit="cover" onError={() => setImgError(true)} />
         ) : (
           <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <path d="M18 3 C11 9 8 18 10 27 C16 29 26 24 30 16 C33 9 27 3 18 3 Z" fill={CARD_COLOR} opacity="0.7"/>
-            <path d="M18 3 C18 15 16 23 10 27" stroke="white" strokeWidth="1.2" fill="none" opacity="0.5"/>
+            <path d="M18 4 C12 8 9 15 11 24 C17 28 26 24 30 16 C33 9 26 3 18 4 Z" fill={CARD_COLOR} opacity="0.7"/>
+            <circle cx="18" cy="10" r="3" fill={CARD_COLOR} opacity="0.4"/>
           </svg>
         )}
       </Box>
 
       <Box flex="1" minW={0}>
-        <Text color={nutricionTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.02em" lineHeight="1.2">
-          {planta.nombre}
-        </Text>
-        <Text color={nutricionTxt + "88"} fontSize="xs" fontStyle="italic" letterSpacing="0.04em" mt="4px">
-          {planta.nombreCientifico}
+        <Flex align="center" gap={2} mb="2px">
+          <Text color={nutricionTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.02em" lineHeight="1.2">
+            {alimento.nombre}
+          </Text>
+          <Box
+            px={2} py="1px" borderRadius="full"
+            bg={alimento.tipo === "fruta" ? "#fce8d5" : "#d8f0d5"}
+            flexShrink={0}
+          >
+            <Text
+              fontSize="9px" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase"
+              color={alimento.tipo === "fruta" ? "#b05a20" : "#2b6b2b"}
+            >
+              {alimento.tipo}
+            </Text>
+          </Box>
+        </Flex>
+        <Text color={nutricionTxt + "88"} fontSize="xs" fontStyle="italic" letterSpacing="0.04em">
+          {alimento.nombreCientifico}
         </Text>
       </Box>
 
@@ -377,7 +341,7 @@ function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite 
           color={CARD_COLOR} flexShrink={0}
           transition="all 0.22s ease"
           _hover={{ transform: "scale(1.15)" }}
-          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onToggleFavorite(); }}
+          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onToggleFavorite?.(); }}
           cursor="pointer"
         >
           {isFavorite ? <HeartIconFilled /> : <HeartIcon />}
@@ -390,51 +354,43 @@ function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite 
 /* ══════════════════════════════════════════════
    PÁGINA
 ══════════════════════════════════════════════ */
-export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
+export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
   const navigate = useNavigate();
-  const [selected, setSelected]   = useState<Planta | null>(null);
+  const [selected, setSelected] = useState<Alimento | null>(null);
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
   const userId = sessionStorage.getItem("userId");
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
-  /* Cargar favoritos */
   useEffect(() => {
     if (!userId) return;
-    axios.get(`${API_URL}/fitoterapia/${userId}`)
-      .then((res) => {
-        const ids: number[] = (res.data || []).map((f: { idPlanta: number }) => f.idPlanta);
+    axios.get(`${API_URL}/alimentos/${userId}`)
+      .then(res => {
+        const ids: number[] = (res.data || []).map((f: { idAlimento: number }) => f.idAlimento);
         setFavoritos(new Set(ids));
       })
       .catch(() => {});
   }, [userId]);
 
-  /* Toggle favorito */
-  const toggleFavorite = async (plantaId: number) => {
+  const toggleFavorite = async (id: number) => {
     if (!userId) return;
-    const esFavorito = favoritos.has(plantaId);
+    const esFavorito = favoritos.has(id);
     try {
       if (esFavorito) {
-        await axios.delete(`${API_URL}/fitoterapia/${userId}/${plantaId}`);
-        setFavoritos((prev) => { const n = new Set(prev); n.delete(plantaId); return n; });
+        await axios.delete(`${API_URL}/alimentos/${userId}/${id}`);
+        setFavoritos(prev => { const n = new Set(prev); n.delete(id); return n; });
       } else {
-        await axios.post(`${API_URL}/fitoterapia`, { idPlanta: plantaId, idUser: userId });
-        setFavoritos((prev) => new Set(prev).add(plantaId));
+        await axios.post(`${API_URL}/alimentos`, { idAlimento: id, idUser: userId });
+        setFavoritos(prev => new Set(prev).add(id));
       }
     } catch (e) {
       console.error("Error al gestionar favorito", e);
     }
   };
 
-  /* Favoritos primero / solo favoritos */
-  const plantasMostradas = useMemo(() => {
-    if (favoritesOnly) return plantas.filter(p => favoritos.has(p.id));
-    return [...plantas].sort((a, b) => {
-      const aFav = favoritos.has(a.id) ? 0 : 1;
-      const bFav = favoritos.has(b.id) ? 0 : 1;
-      return aFav - bFav;
-    });
-  }, [favoritos, favoritesOnly]);
+  const alimentosMostrados = favoritesOnly
+    ? alimentos.filter(a => favoritos.has(a.id))
+    : alimentos;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -449,18 +405,18 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
           gap={{ base: 4, md: 5 }}
         >
           <DisciplineHeader
-            icon={<FitoterapiaIcon size={{ base: "40px", md: "50px" }} color={nutricionTxt} />}
-            title={favoritesOnly ? "Mis plantas favoritas" : "Herbario"}
+            icon={<NutricionIcon size={{ base: "40px", md: "50px" }} />}
+            title={favoritesOnly ? "Mis alimentos favoritos" : "Alimentos"}
             bgColor={nutricionBg}
             color={nutricionTxt}
             onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
           />
 
-          {favoritesOnly && plantasMostradas.length === 0 && (
+          {favoritesOnly && alimentosMostrados.length === 0 && (
             <Text color="rgba(255,255,255,0.75)" fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic" textAlign="center" mt={4}
             >
-              Aún no tienes plantas marcadas como favoritas.
+              Aún no tienes alimentos marcados como favoritos.
             </Text>
           )}
 
@@ -469,12 +425,12 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
             templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }}
             gap={{ base: 3, md: 4 }}
           >
-            {plantasMostradas.map((p) => (
-              <PlantCard
-                key={p.id} planta={p}
-                isFavorite={favoritos.has(p.id)}
-                onOpen={() => setSelected(p)}
-                onToggleFavorite={() => toggleFavorite(p.id)}
+            {alimentosMostrados.map((a) => (
+              <AlimentoCard
+                key={a.id} alimento={a}
+                onOpen={() => setSelected(a)}
+                isFavorite={favoritos.has(a.id)}
+                onToggleFavorite={() => toggleFavorite(a.id)}
                 showFavorite={!!userId}
               />
             ))}
@@ -484,7 +440,7 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
 
       <SiteFooter />
 
-      {selected && <PlantModal planta={selected} onClose={() => setSelected(null)} />}
+      {selected && <AlimentoModal alimento={selected} onClose={() => setSelected(null)} />}
     </Box>
   );
 }

@@ -1289,7 +1289,7 @@ const TCMPage = () => {
           subtitle={tcmNom}
           bgColor={tcmBg}
           color={tcmTxt}
-          onIconClick={() => navigate(isCincoElementos ? "/aprendizaje/modulosPage/medicinachina/tcm-curso-2" : "/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}
+          onIconClick={() => navigate("/aprendizaje/cursosModalidad/medicinachina")}
         />
 
        

@@ -829,7 +829,7 @@ export default function TCMespacio() {
       <ContactModal
         isOpen={saberMasOpen}
         onClose={() => setSaberMasOpen(false)}
-        title="Autoevaluación personalizada"
+        title="Evaluación personalizada"
         icon={<TCMIcon size="24px" />}
         bgColor={tcmBg}
         color={tcmTxt}

@@ -3,10 +3,12 @@ import { Box, Collapse, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
+import { useNavigate } from "react-router-dom";
 import {
   AyurvedaIcon,
   ayurvedaBg,
   ayurvedaNom,
+  ayurvedaNomLink,
   ayurvedaTxt,
   VataIcon,
   PittaIcon,
@@ -477,6 +479,7 @@ function DoshaModal({
    PÁGINA PRINCIPAL
 ══════════════════════════════════════════ */
 export default function AyurvedaRecursos() {
+  const navigate = useNavigate();
   const [elementosModalOpen, setElementosModalOpen] = useState(false);
   const [openDosha, setOpenDosha]   = useState<(typeof DOSHAS)[0] | null>(null);
 
@@ -502,6 +505,7 @@ export default function AyurvedaRecursos() {
           title={ayurvedaNom}
           bgColor={BG}
           color={ACCENT} mb={{ base: 0, md: 0 }}
+          onIconClick={() => navigate("/aprendizaje/cursosModalidad/" + ayurvedaNomLink)}
         />
 
         {/* ── Card: Cinco Elementos ── */}

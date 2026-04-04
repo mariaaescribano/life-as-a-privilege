@@ -22,9 +22,18 @@ const DOSHA_CONFIG: Record<Dosha, { label: string; color: string; icon: React.Re
 
 const DOSHAS: Dosha[] = ["vata", "pitta", "kapha"];
 
-export default function AyurvedaTestPage({ onComplete }: { onComplete: () => Promise<void> }) {
+type GuestResult = { dosha: Dosha; scores: Record<Dosha, number> };
+
+export default function AyurvedaTestPage({
+  onComplete,
+  isGuest = false,
+}: {
+  onComplete?: () => Promise<void>;
+  isGuest?: boolean;
+}) {
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
   const [saving, setSaving] = useState(false);
+  const [guestResult, setGuestResult] = useState<GuestResult | null>(null);
 
   const allAnswered = answers.every((a) => a !== null);
   const answered = answers.filter((a) => a !== null).length;
@@ -36,6 +45,12 @@ export default function AyurvedaTestPage({ onComplete }: { onComplete: () => Pro
     const scores = { vata: 0, pitta: 0, kapha: 0 };
     answers.forEach((a) => { if (a) scores[a]++; });
     const dosha = (Object.keys(scores) as Dosha[]).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+
+    if (isGuest) {
+      setGuestResult({ dosha, scores });
+      setSaving(false);
+      return;
+    }
 
     const respuestas = preguntasAyurveda.map((p, i) => ({
       preguntaIdx: i,
@@ -60,15 +75,126 @@ export default function AyurvedaTestPage({ onComplete }: { onComplete: () => Pro
     }
 
     try {
-      await onComplete();
+      await onComplete?.();
     } finally {
       setSaving(false);
     }
   };
 
+  if (guestResult) {
+    const total = preguntasAyurveda.length;
+    const cfg = DOSHA_CONFIG[guestResult.dosha];
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="auto" />
+        <Box flex="1">
+          <Flex
+            direction="column"
+            alignItems="center"
+            gap={{ base: 4, md: 5 }}
+            px={{ base: 5, md: 10, lg: 16 }}
+            pt={{ base: 10, md: 14 }}
+            pb={{ base: 14, md: 20 }}
+          >
+            <DisciplineHeader
+              icon={<AyurvedaIcon size={{ base: "36px", md: "52px" }} />}
+              title={ayurvedaNom}
+              subtitle="Test de los Doshas"
+              bgColor={ayurvedaBg}
+              color={ayurvedaTxt}
+              maxW="820px" mb={{ base: 0, md: 0 }}
+            />
+
+            {/* Resultado principal */}
+            <Box
+              w="100%" maxW="820px"
+              bg={ayurvedaBg}
+              border={`2px solid ${cfg.color}55`}
+              borderRadius="2xl"
+              px={{ base: 5, md: 8 }}
+              py={{ base: 6, md: 8 }}
+              boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 32px ${cfg.color}55`}
+              textAlign="center"
+            >
+              <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
+                Tu Dosha principal es
+              </Text>
+              <Flex align="center" justify="center" gap={3} mb={5}>
+                <Box>{DOSHA_CONFIG[guestResult.dosha].icon && React.cloneElement(DOSHA_CONFIG[guestResult.dosha].icon as React.ReactElement<any>, { size: "38px" })}</Box>
+                <Text color={cfg.color} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em" fontStyle="italic">
+                  {cfg.label}
+                </Text>
+              </Flex>
+
+              {/* Barras de puntuación */}
+              {DOSHAS.map((d) => {
+                const pct = Math.round((guestResult.scores[d] / total) * 100);
+                const dc = DOSHA_CONFIG[d];
+                return (
+                  <Box key={d} mb={3} textAlign="left">
+                    <Flex justify="space-between" mb={1}>
+                      <Text color={dc.color} fontWeight="600" fontSize="md">{dc.label}</Text>
+                      <Text color={dc.color} fontWeight="600" fontSize="md">{guestResult.scores[d]} / {total}</Text>
+                    </Flex>
+                    <Box bg={`${dc.color}22`} borderRadius="full" h="8px" overflow="hidden">
+                      <Box bg={dc.color} h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.6s ease" />
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+
+            {/* Botones */}
+            <Flex gap={4} flexWrap="wrap" justify="center" mt={2}>
+              <Box
+                as="button"
+                onClick={() => window.print()}
+                px={{ base: 8, md: 12 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "lg", md: "xl" }}
+                fontWeight="700"
+                letterSpacing="0.08em"
+                bg={ayurvedaTxt}
+                color={ayurvedaBg}
+                cursor="pointer"
+                transition="all 0.22s"
+                boxShadow={`0 4px 20px ${ayurvedaTxt}44`}
+                _hover={{ opacity: 0.88, transform: "translateY(-2px)" }}
+              >
+                Descargar PDF
+              </Box>
+              <Box
+                as="button"
+                onClick={() => { setGuestResult(null); setAnswers(preguntasAyurveda.map(() => null)); }}
+                px={{ base: 8, md: 12 }}
+                py={{ base: 3, md: 4 }}
+                borderRadius="full"
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "lg", md: "xl" }}
+                fontWeight="700"
+                letterSpacing="0.08em"
+                border={`2px solid ${ayurvedaTxt}55`}
+                bg="transparent"
+                color={ayurvedaTxt}
+                cursor="pointer"
+                transition="all 0.22s"
+                _hover={{ opacity: 0.88, transform: "translateY(-2px)", borderColor: ayurvedaTxt }}
+              >
+                Recalcular
+              </Box>
+            </Flex>
+          </Flex>
+        </Box>
+        <SiteFooter />
+      </Box>
+    );
+  }
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
-      <SiteHeader variant="private" />
+      <SiteHeader variant={isGuest ? "auto" : "private"} />
 
       <Box flex="1">
         <Flex

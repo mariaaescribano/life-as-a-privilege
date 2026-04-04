@@ -10,7 +10,7 @@ import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
-  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
+  FitoterapiaIcon,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -62,11 +62,14 @@ export default function ModulesPage() {
       case tcmNomLink:
         return { nom: titulo || tcmNom, disciplina: tcmNom, nomModalidad: nomMod, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
       case nutricionNomLink:
-        return { nom: titulo || nutricionNom, disciplina: nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "40px", md: "50px" }} />, modulos };
+        return {
+          nom: titulo || nutricionNom, disciplina: nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, modulos,
+          icon: cursoId === "fito-curso-1"
+            ? <FitoterapiaIcon size={{ base: "40px", md: "50px" }} color={nutricionTxt} />
+            : <NutricionIcon size={{ base: "40px", md: "50px" }} />,
+        };
       case ayurvedaNomLink:
         return { nom: titulo || ayurvedaNom, disciplina: ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "40px", md: "50px" }} />, modulos};
-      case fitoterapiaNom:
-        return { nom: titulo || fitoterapiaNom, disciplina: fitoterapiaNom, nomModalidad: nomMod, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} />, modulos };
       case cabalaNom:
         return { nom: titulo || cabalaNom, disciplina: cabalaNom, nomModalidad: nomMod, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       default:

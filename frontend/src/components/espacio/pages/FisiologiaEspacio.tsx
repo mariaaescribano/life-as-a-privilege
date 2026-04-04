@@ -11,6 +11,7 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt } from "../../../GlobalVariables";
+import { useNavigate } from "react-router-dom";
 import { organosFisiologia, type Organo } from "../../../hardCoded/espacio/OrganosFisiologia";
 
 const ORGAN_ICONS: Record<string, React.ReactNode> = {
@@ -25,6 +26,7 @@ const ORGAN_ICONS: Record<string, React.ReactNode> = {
 };
 
 const FisiologiaEspacio = () => {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [organo, setOrgano] = useState<Organo | null>(null);
   const [pregIdx, setPregIdx] = useState(0);
@@ -73,7 +75,46 @@ const FisiologiaEspacio = () => {
             bgColor={fisiologiaBg}
             color={fisiologiaTxt}
             maxW="900px"
+            mb={{ base: 5, md: 6 }}
           />
+
+          {/* Botón: Las células de tu cuerpo */}
+          <Flex
+            as="button"
+            align="center"
+            gap={3}
+            px={{ base: 7, md: 10 }}
+            py={{ base: 3, md: 4 }}
+            mb={{ base: 6, md: 8 }}
+            borderRadius="full"
+            bg={fisiologiaBg}
+            border={`1.5px solid ${fisiologiaTxt}88`}
+            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+            cursor="pointer"
+            transition="all 0.22s ease"
+            onClick={() => navigate("/espacio/celulas-cuerpo")}
+            _hover={{
+              boxShadow: `0 6px 24px rgba(0,0,0,0.12), 0 0 20px ${fisiologiaTxt}44`,
+              transform: "translateY(-2px)",
+              border: `1.5px solid ${fisiologiaTxt}aa`,
+              opacity: 0.88,
+            }}
+            _active={{ transform: "translateY(0px)" }}
+          >
+            <Box display="flex" alignItems="center" flexShrink={0}>
+              <FisiologiaIcon size="22px" />
+            </Box>
+            <Text
+              color={fisiologiaTxt}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "lg", md: "xl" }}
+              letterSpacing="0.08em"
+              lineHeight="1"
+            >
+              Las células de tu cuerpo
+            </Text>
+          </Flex>
         </Flex>
 
         {/* Grid de cards */}

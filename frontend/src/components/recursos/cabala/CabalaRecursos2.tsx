@@ -247,7 +247,7 @@ export default function CabalaRecursos2() {
             subtitle="El Árbol de la Vida como camino"
             bgColor={cabalaBg}
             color={cabalaTxt}
-            onIconClick={() => navigate("/aprendizaje/modulosPage/Cábala/cabala-curso-2")}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Cábala")}
           />
 
           {/* ── Árbol de la Vida ── */}

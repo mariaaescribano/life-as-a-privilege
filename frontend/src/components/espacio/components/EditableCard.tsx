@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   Collapse,
   Flex,
-  IconButton,
   Text,
   Textarea,
-  VStack
 } from "@chakra-ui/react";
-import { CheckIcon, ChevronDown, Eye, EyeOff, Pencil } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { API_URL, turquesa } from "../../../GlobalVariables";
 import axios from "axios";
 import type { Respuesta } from "../../../dtos/respuesta.type";
@@ -22,111 +21,54 @@ const EditableCard = (props:{
 
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState<string | null>(null);
-  const [color, setColor] = useState<string | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [saveColor, setSaveColor] = useState<string | null>(null);
 
-  const toggleEdit = () => {
-    setIsOpen(true);
-    setIsEditing(true);
-    setIsVisible(true);
-
-    setTimeout(() => {
-      textareaRef.current?.focus();
-    }, 0);
-  };
-
-  const subeRespuesta = async() =>
-  {
-    let userId =  sessionStorage.getItem("userId");
-
-    if(!userId) navigate("/");
-    else
-    {
-      let pregunta: Respuesta = {
+  const subeRespuesta = async () => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) navigate("/");
+    else {
+      const pregunta: Respuesta = {
         idPregunta: props.idPregunta,
-        userId: userId,
-        respuesta: text ?? ""
+        userId,
+        respuesta: text ?? "",
       };
-
-      try
-      {
+      try {
         const response = await axios.post(
-        `${API_URL}/${props.apiPath ?? "respuesta"}`,
-        pregunta,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if(response.data === true)
-        {
-          setColor("green.500");
-        }
-        else
-        {
-          setColor("red.500");
-        }
-
-      }
-      catch(error)
-      {
-        setColor("red.500");
-        console.log(error)
+          `${API_URL}/${props.apiPath ?? "respuesta"}`,
+          pregunta,
+          { headers: { "Content-Type": "application/json" } }
+        );
+        setSaveColor(response.data === true ? "green.500" : "red.500");
+      } catch (error) {
+        setSaveColor("red.500");
+        console.log(error);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    if (color != null) {
-      const timer = setTimeout(() => {
-        setColor(null)
-      }, 3000);
-
-      return () => clearTimeout(timer); 
+    if (saveColor != null) {
+      const timer = setTimeout(() => setSaveColor(null), 3000);
+      return () => clearTimeout(timer);
     }
-  }, [color]); 
+  }, [saveColor]);
 
-  const toggleSave = () => {
-    setIsEditing(false);
-    setIsVisible(false);
-    subeRespuesta();
-  };
-
-  // llama a por la respuesta previamente guardada (si existe)
   const getRespuesta = async () => {
     try {
       const response = await axios.get(
         `${API_URL}/${props.apiPath ?? "respuesta"}/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
-        { headers: { 'Content-Type': 'application/json' } }
+        { headers: { "Content-Type": "application/json" } }
       );
-
-      if(response.data)
-      {
-        setText(response.data?.respuesta);
-      }
-
+      if (response.data) setText(response.data?.respuesta);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if(isOpen == true)
-    {
-      getRespuesta();
-    }
+    if (isOpen) getRespuesta();
   }, [isOpen]);
-
-  useEffect(() => {
-    if(isVisible == false)
-    {
-      setIsEditing(false);
-    }
-  }, [isVisible]);
 
   return (
     <Box w="100%">
@@ -160,11 +102,7 @@ const EditableCard = (props:{
 
       <Collapse in={isOpen} animateOpacity>
         <Box mt={3} pl={3}>
-          <Box
-            borderRadius="3xl"
-            bg={props.bgColor}
-            p={5}
-          >
+          <Box borderRadius="3xl" bg={props.bgColor} p={5}>
             {props.consejo && (
               <Flex justify="center" align="center" mb={4}>
                 <Flex
@@ -183,54 +121,38 @@ const EditableCard = (props:{
               </Flex>
             )}
 
-            <Flex gap={4}>
-              <Textarea
-                ref={textareaRef}
-                value={text ? (isVisible ? text : "•".repeat(text?.length)) : ""}
-                onChange={(e) => isEditing ? setText(e.target.value) : ""}
-                isReadOnly={!isEditing}
-                resize="none"
-                minH="140px"
+            <Textarea
+              value={text ?? ""}
+              onChange={(e) => setText(e.target.value)}
+              resize="none"
+              minH="140px"
+              color={props.color}
+              borderRadius="2xl"
+              border="1px solid rgba(255,255,255,0.2)"
+              bg="rgba(0,0,0,0.18)"
+              fontSize={{ base: "md", md: "lg" }}
+              _hover={{ cursor: "text" }}
+              _focus={{
+                borderColor: turquesa,
+                boxShadow: "0 0 0 3px rgba(0, 128, 128, 0.3)",
+              }}
+            />
+
+            <Flex justify="flex-end" mt={3}>
+              <Button
+                onClick={subeRespuesta}
+                bg={saveColor ?? "rgba(255,255,255,0.15)"}
                 color={props.color}
-                borderRadius="2xl"
-                border="1px solid rgba(255,255,255,0.2)"
-                bg={!isVisible ? "rgba(0,0,0,0.18)" : "rgba(0,0,0,0.28)"}
-                _hover={{ cursor: isEditing ? "text" : "default" }}
-                _focus={{
-                  borderColor: turquesa,
-                  boxShadow: "0 0 0 3px rgba(0, 128, 128, 0.3)",
-                }}
-              />
-              <VStack>
-                <IconButton
-                  aria-label="Ver"
-                  icon={isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                  borderRadius="full"
-                  bg="rgba(255,255,255,0.15)"
-                  color={props.color}
-                  _hover={{ bg: "rgba(255,255,255,0.28)" }}
-                  onClick={() => setIsVisible(!isVisible)}
-                />
-                <IconButton
-                  aria-label="Editar"
-                  icon={<Pencil size={18} />}
-                  borderRadius="full"
-                  bg="rgba(255,255,255,0.15)"
-                  color={props.color}
-                  _hover={{ bg: "rgba(255,255,255,0.28)" }}
-                  onClick={toggleEdit}
-                />
-                <IconButton
-                  aria-label="Guardar"
-                  disabled={!isEditing || color != null}
-                  icon={<CheckIcon size={18} />}
-                  borderRadius="full"
-                  bg={color ?? "rgba(255,255,255,0.15)"}
-                  color={props.color}
-                  _hover={isEditing ? { bg: "rgba(255,255,255,0.28)" } : {}}
-                  onClick={toggleSave}
-                />
-              </VStack>
+                border="1px solid rgba(255,255,255,0.3)"
+                borderRadius="full"
+                px={6}
+                fontWeight="700"
+                letterSpacing="0.04em"
+                _hover={{ bg: "rgba(255,255,255,0.28)" }}
+                transition="all 0.2s"
+              >
+                Guardar
+              </Button>
             </Flex>
           </Box>
         </Box>

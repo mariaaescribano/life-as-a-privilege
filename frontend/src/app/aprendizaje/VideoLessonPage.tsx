@@ -3,6 +3,7 @@ import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
+import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
@@ -11,7 +12,7 @@ import SiteFooter from "../../components/global/Footer";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
-  fitoterapiaBg, FitoterapiaIcon, fitoterapiaNom, fitoterapiaTxt,
+  FitoterapiaIcon,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
@@ -57,8 +58,6 @@ export default function VideoLessonPage() {
         return { nom: nutricionNom, nomModalidad: nom, bgColor: nutricionBg, color: nutricionTxt, icon: <NutricionIcon size={{ base: "44px", md: "44px" }}  /> };
       case "ayurveda":
         return { nom: ayurvedaNom, nomModalidad: nom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "44px", md: "44px" }} /> };
-      case fitoterapiaNom:
-        return { nom: fitoterapiaNom, nomModalidad: nom, bgColor: fitoterapiaBg, color: fitoterapiaTxt, icon: <FitoterapiaIcon size={{ base: "44px", md: "44px" }}  /> };
       case cabalaNom:
         return { nom: cabalaNom, nomModalidad: nom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "44px", md: "44px" }} /> };
       default:
@@ -103,10 +102,6 @@ export default function VideoLessonPage() {
       {
         setdatos(getModuleByTitle(submoduloId!, [...modulostcmFundamentos, ...modulostcmCincoElementos]));
       }
-      else if(moduloId === fitoterapiaNom)
-      { 
-        setdatos(getModuleByTitle(submoduloId!, modulosFitoterapia));
-      }
       else if(moduloId === astrologiaNom)
       {
         setdatos(
@@ -125,7 +120,8 @@ export default function VideoLessonPage() {
       {
         setdatos(
           getModuleByTitle(submoduloId!, modulosNutricion) ??
-          getModuleByTitle(submoduloId!, modulosMicrobiota)
+          getModuleByTitle(submoduloId!, modulosMicrobiota) ??
+          getModuleByTitle(submoduloId!, modulosFitoterapia)
         );
       }
       else if(moduloId === ayurvedaNomLink)
@@ -209,48 +205,13 @@ export default function VideoLessonPage() {
           >
             {/* Cabecera */}
             {moduloDatos && (
-              <Box
-                    bg={moduloDatos.bgColor}
-                    borderRadius="2xl"
-                    boxShadow={GLOW}
-                    px={{ base: 8, md: 14 }}
-                    py={{ base: 8, md: 8 }}
-                    w="100%"
-                    maxW={"850px"}
-                    mb={{ base: 10, md: 12 }}
-                  >
-                    <Flex direction="row" align="center" justify="center" gap={5}>
-                      <Box
-                        as="button"
-                        borderRadius="full"
-                        bg={moduloDatos.bgColor}
-                        border={`5px solid ${moduloDatos.color}`}
-                        boxShadow={`0 0 22px ${moduloDatos.color}77, 0 0 55px ${moduloDatos.color}28`}
-                        w={{ base: "60px", md: "72px" }}
-                        h={{ base: "60px", md: "72px" }}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        flexShrink={0}
-                        cursor="pointer"
-                        onClick={() => { const link = getModulosPageLink(); if (link) navigate(link); }}
-                        _hover={{ opacity: 0.75, transform: "scale(1.05)" }}
-                        transition="all 0.2s"
-                      >
-                        {< datos.icon size={{base:"30px", md:"40px"}}/>}
-                      </Box>
-                      <Text
-                        color={moduloDatos.color}
-                        fontSize={{ base: "lg", md: "2xl" }}
-                        fontWeight="700"
-                        letterSpacing="0.05em"
-                        textShadow="0 2px 8px rgba(0,0,0,0.3)"
-                        filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))"
-                      >
-                        {datos.nom}
-                      </Text>
-                    </Flex>
-                  </Box>
+              <DisciplineHeader
+                icon={<datos.icon size={{ base: "30px", md: "40px" }} />}
+                title={datos.nom}
+                bgColor={moduloDatos.bgColor}
+                color={moduloDatos.color}
+                onIconClick={() => { const link = getModulosPageLink(); if (link) navigate(link); }}
+              />
             )}
 
             {/* Video + flechas laterales (desktop) */}
