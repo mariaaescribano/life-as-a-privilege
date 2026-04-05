@@ -59,7 +59,7 @@ export const modulosCabala2: ModuloContenido[] = [
         link: `${basePath}/cabala2-2`,
         linkAnterior: `${basePath}/cabala2-1`,
         linkNext: `${basePath}/cabala2-3`,
-        descripcion: "Chokmah es la capacidad de ver lo que de verdad está pasando antes de clasificarlo, habitando el presente para recibir lo que la Vida tiene para nosotros.",
+        descripcion: "Chokmah es la capacidad de ver lo que de verdad está pasando antes de clasificarlo.",
         video: "2V4qoHx2sHE",
         letra: chokmah2Letra,
         cursoId: "cabala-curso-2",

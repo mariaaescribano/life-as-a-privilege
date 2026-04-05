@@ -1,5 +1,5 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon, InflamIcon, CerebroIcon } from "../../../GlobalVariables";
+import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon, InflamIcon } from "../../../GlobalVariables";
 import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7, inflam1, inflam2, inflam3, inflam4, inflam5, inflam6, inflam7, inflam8 } from "./LetraFisiologia";
 
 const detalles: Detalles = { color: fisiologiaTxt, icon: FisiologiaIcon, bgColor: fisiologiaBg };
@@ -238,7 +238,7 @@ export const modulosFisiologiaInflamacion: ModuloContenido[] = [
         letra: inflam6,
         cursoId: fisioCurso2ID,
         detalles: detalles,
-        icon: CelulasOrganosIcon,
+        icon: MilagroIcon,
         floatingButton: conocerMiCuerpo,
       },
       {
@@ -252,7 +252,7 @@ export const modulosFisiologiaInflamacion: ModuloContenido[] = [
         letra: inflam7,
         cursoId: fisioCurso2ID,
         detalles: detalles,
-        icon: CerebroIcon,
+        icon: SistemaNerviosoIcon,
         floatingButton: conocerMiCuerpo,
       },
       {

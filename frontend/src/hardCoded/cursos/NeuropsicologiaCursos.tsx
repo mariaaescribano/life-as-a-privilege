@@ -19,7 +19,7 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       titulo: "El enigma de la anorexia",
       foto: "/img/np/anorexia.png",
       descripcion:
-        "Comprende la esencia de la manifestación del sufrimiento con la tasa de mortalidad más elevada. Entiende la realidad de alguien con anorexia.",
+        "Comprende la esencia de la manifestación del sufrimiento con la tasa de mortalidad más elevada. Entiende cómo las anoréxicas ven la realidad y por qué no tiene nada que ver con las redes sociales.",
       precio: null,
       numLecciones: 10,
       icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,

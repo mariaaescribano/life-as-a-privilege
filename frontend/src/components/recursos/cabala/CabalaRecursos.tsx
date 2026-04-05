@@ -45,6 +45,7 @@ function CabalaModal({
   onClose: () => void;
 }) {
   const [letraOpen, setLetraOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -136,11 +137,15 @@ function CabalaModal({
 
           {/* Descripción */}
           <Box
-            bg={GOLD + "12"}
-            borderLeft={`3px solid ${GOLD}66`}
-            borderRadius="0 xl xl 0"
-            px={{ base: 4, md: 6 }} py={{ base: 4, md: 5 }}
+            w="100%"
+            bg={BG}
+            border={`1px solid ${GOLD}44`}
+            borderRadius="2xl"
+            px={{ base: 5, md: 8 }}
+            py={{ base: 4, md: 6 }}
             mb={7}
+            boxShadow={`0 4px 24px ${GOLD}30, 0 1px 6px rgba(0,0,0,0.10)`}
+            transition="box-shadow 0.2s"
           >
             <Text
               color={GOLD}
@@ -148,6 +153,7 @@ function CabalaModal({
               lineHeight="1.9"
               fontFamily="'EB Garamond', serif"
               fontStyle="italic"
+              letterSpacing="0.02em"
             >
               {sub.descripcion}
             </Text>
@@ -251,11 +257,11 @@ export default function CabalaRecursos() {
         >
           <DisciplineHeader
             icon={<CabalaIcon size={{ base: "40px", md: "50px" }} />}
-            title={cabalaNom}
-            subtitle="Los fundamentos"
+            title="Los fundamentos"
+            subtitle={cabalaNom}
             bgColor={cabalaBg}
             color={cabalaTxt}
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Cábala")}
+            onIconClick={() => navigate("/aprendizaje/modulosPage/Cábala/cabala-curso-1")}
           />
 
           {/* ── Árbol de la Vida ── */}

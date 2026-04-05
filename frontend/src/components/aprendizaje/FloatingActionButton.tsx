@@ -65,11 +65,11 @@ export function FloatingActionButton({
           borderRadius="full"
           bg={bgColor}
           border={`1.5px solid ${color}88`}
-          boxShadow={`0 4px 18px rgba(0,0,0,0.25), 0 0 12px ${color}44`}
+          boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)`}
           cursor="pointer"
           transition="all 0.22s ease"
           _hover={{
-            boxShadow: `0 6px 24px rgba(0,0,0,0.32), 0 0 20px ${color}66`,
+            boxShadow: `0 6px 28px rgba(0,0,0,0.32), 0 0 32px rgba(107,196,200,1)`,
             transform: "translateY(-2px)",
             border: `1.5px solid ${color}cc`,
           }}

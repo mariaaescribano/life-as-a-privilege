@@ -127,7 +127,7 @@ export const alimentos: Alimento[] = [
     nombre: "Limón",
     nombreCientifico: "Citrus limon",
     tipo: "fruta",
-    foto: "/img/alimentos/limon.jpg",
+    foto: "/img/alimentos/limon.png",
     uso: "Fruta alcalinizante y depurativa que estimula el hígado, favorece la digestión y protege el sistema inmunitario.",
     beneficios: [
       "Muy rico en vitamina C",
@@ -171,7 +171,7 @@ export const alimentos: Alimento[] = [
     nombre: "Papaya",
     nombreCientifico: "Carica papaya",
     tipo: "fruta",
-    foto: "/img/alimentos/papaya.jpg",
+    foto: "/img/alimentos/papaya.webp",
     uso: "Fruta tropical con la enzima papaína, potente digestiva que descompone proteínas y calma la inflamación intestinal.",
     beneficios: [
       "Contiene papaína, enzima digestiva proteolítica",

@@ -1,5 +1,5 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { NutricionIcon, nutricionBg, nutricionNomLink, nutricionTxt } from "../../../GlobalVariables";
+import { IntestinoIcon, NutricionIcon, nutricionBg, nutricionNomLink, nutricionTxt } from "../../../GlobalVariables";
 import { MicrobiotaIconMicro, MicrobiotaIconEje, MicrobiotaIconMujer, MicrobiotaIconDecisiones } from "./MicrobiotaIcons";
 
 const detalles: Detalles = { color: nutricionTxt, icon: NutricionIcon, bgColor: nutricionBg };
@@ -66,7 +66,7 @@ export const modulosNutricion: ModuloContenido[] = [
         link: `${basePath}/nut-m1`,
         linkAnterior: `${basePath}/nut-r1`,
         linkNext: `${basePath}/nut-m2`,
-        descripcion: "Entiende qué son las proteínas, para qué las necesita tu cuerpo y cuáles son las mejores fuentes para mantener tu salud y energía.",
+        descripcion: "Nuestras células usan los amino ácidos de las proteínas para sus diversas funciones.",
         video: "BU2DpV82oqM",
         letra: "Las proteínas son de vital importancia, cuando nuestra dieta carece de ellas nuestro cuerpo decae y bastante rápido, nos sentimos lentos, pesados y se nos olvidan las cosas. Entendamos por qué ocurre esto. Imaginemos a las proteínas como collares de perlas. Cada perla es distinta y única. Cada célula usa las perlas de la proteína para hacer sus propios collares. Estos collares son las enzimas. Las enzimas son las que mantienen la correcta regulación de la célula. Por eso, para respetar a tu cuerpo y a todas las células que te forman, que trabajan por y para ti, asegúrate de tomar suficiente proteína.",
         cursoId: "nut-curso-1",
@@ -80,7 +80,7 @@ export const modulosNutricion: ModuloContenido[] = [
         link: `${basePath}/nut-m2`,
         linkAnterior: `${basePath}/nut-m1`,
         linkNext: `${basePath}/nut-m3`,
-        descripcion: "Aprende a distinguir los carbohidratos que te nutren de los que te desgastan, y cómo elegirlos para sostener tu energía a lo largo del día.",
+        descripcion: "La fibra cambia nuestra digestión y hace que las células tengan una disponibilidad eficiente de glucosa.",
         video: "n2cRzyINYDE",
         letra: "Las células y por extensión, nosotros, necesitamos glucosa. Por el bien de todos nuestros órganos y de nuestras neuronas, queremos que esa glucosa se incorpore en nosotros poco a poco, para no sobrecargarnos y hacernos daño. Entonces, ¿cómo podemos absorber la glucosa más lentamente? Muy sencillo, eligiendo alimentos con fibra, esta es la razón por la que las verduras, frutas y productos integrales son saludables. Si elegimos bollería o harinas blancas, esto nos sobrecargará, porque no podemos usar toda esa glucosa a la vez. Esto deteriorará a nuestras neuronas y obligará a que la glucosa que no ha podido ser usada se almacene en forma de grasa.",
         cursoId: "nut-curso-1",
@@ -94,7 +94,7 @@ export const modulosNutricion: ModuloContenido[] = [
         link: `${basePath}/nut-m3`,
         linkAnterior: `${basePath}/nut-m2`,
         linkNext: `${basePath}/nut-mi1`,
-        descripcion: "Rompe con los mitos sobre las grasas y descubre cuáles son esenciales para tu cerebro, tus hormonas y tu bienestar general.",
+        descripcion: "Nuestras células se reconstruyen con grasas, por eso elige grasas insaturadas para que sean más flexibles y eficientes.",
         video: "CuoVBfewgiQ",
         letra: "Los tipos de grasas que existen son un arma de doble filo porque pueden protegernos o causar un deterioro temprano. Las células tienen una membrana que las protege y les permite comunicarse. Las células usan las grasas de nuestra dieta para reconstruir esta membrana. Si elegimos grasas insaturadas, como el aguacate, el aceite de oliva, los frutos secos, nuestras células serán más eficientes y estarán mejor protegidas. En cambio, si se reconstruyen con grasas trans o saturadas, serán más lentas, torpes e incluso nuestro cuerpo las puede percibir como enemigos.",
         cursoId: "nut-curso-1",
@@ -115,7 +115,7 @@ export const modulosNutricion: ModuloContenido[] = [
         link: `${basePath}/nut-mi1`,
         linkAnterior: `${basePath}/nut-m3`,
         linkNext: `${basePath}/nut-mi2`,
-        descripcion: "Descubre el papel fundamental de las vitaminas en tu salud, cuáles necesitas y cómo obtenerlas de forma natural a través de tu alimentación.",
+        descripcion: "Las vitaminas activan a las células. Sin vitaminas no puede haber vida.",
         video: "djMQ-EIifZc",
         letra: "Siempre nos han dicho que las vitaminas son necesarias, pero nadie nos ha explicado por qué. Aquí por fin lo entenderás. Recordemos que las células crean enzimas usando las proteínas de nuestra dieta, pero estas enzimas no están activadas, necesitan vitaminas para activarse, sin vitaminas esas enzimas no pueden hacer su función y por lo tanto, no podemos reconstruirnos ni mejorarnos. Sin vitaminas nos deterioramos, envejecemos y perdemos funciones que creíamos estables.",
         cursoId: "nut-curso-1",
@@ -129,7 +129,7 @@ export const modulosNutricion: ModuloContenido[] = [
         link: `${basePath}/nut-mi2`,
         linkAnterior: `${basePath}/nut-mi1`,
         linkNext: "",
-        descripcion: "Comprende qué minerales necesita tu cuerpo para funcionar en equilibrio y cómo una carencia puede afectar tu energía, tu ánimo y tu salud.",
+        descripcion: "Los minerales son las herramientas de tus células. Sin minerales no hay vitalidad.",
         video: "7KN0sqwUO0E",
         letra: "Los minerales son muy importantes también, porque son las herramientas que usan las enzimas. Sin minerales, a pesar de que la enzima esté activa, no puede trabajar, por lo que nos deterioramos y nos sentimos más cansados y lentos. En conclusión, la enzima usa las vitaminas para activarse y los minerales para trabajar.",
         cursoId: "nut-curso-1",
@@ -195,8 +195,7 @@ export const modulosMicrobiota: ModuloContenido[] = [
         link: `${basePath}/mic-2`,
         linkAnterior: `${basePath}/mic-1`,
         linkNext: `${basePath}/mic-3`,
-        descripcion: "Entiende la relación entre los probióticos y los prebióticos y por qué son fundamentales para tu bienestar.",
-        video: "enkevPOa7Qc",
+        descripcion: "Entiende la relación entre los probióticos y los prebióticos.",       video: "enkevPOa7Qc",
         letra: "Los probióticos es el nombre que reciben las bacterias vivas de nuestro interior, estas necesitan alimentarse, y lo hacen a través de los prebióticos. Es decir, los probióticos comen prebióticos y cuando estos son digeridos, se generan cadenas cortas de ácidos grasos, o para resumir short chain fatty acids. Estas sustancias son brutalmente buenas para nuestro bienestar y funcionamiento.",
         cursoId: "nut-curso-2",
         detalles: detalles,
@@ -235,7 +234,7 @@ export const modulosMicrobiota: ModuloContenido[] = [
   },
   {
     title: "3. El intestino",
-    icon: NutricionIcon,
+    icon: IntestinoIcon,
     floatingButton: respetarme,
     submodules: [
       {
@@ -249,7 +248,7 @@ export const modulosMicrobiota: ModuloContenido[] = [
         letra: "Nuestra microbiota más importante vive en el intestino grueso que está formado por 3 capas. La primera capa está hecha con mucosa, es muy importante porque sostiene a nuestra microbiota y protege a las células que forman el intestino grueso. La segunda capa está formada por células que se juntan a través de pequeñas conjunciones que solo se abren cuando hay nutrientes, por ejemplo, para permitir el paso de glucosa. El problema está en que dependiendo de los alimentos que comamos, nuestra barrera puede inflamarse, lo que hace que estas conjunciones se separen involuntariamente y permitan el paso al interior de nuestro cuerpo a bacterias que no deberían de salir del intestino. Por suerte, el cuerpo es muy inteligente y tenemos una tercera capa, donde vive una parte del sistema inmunitario, listo para impedir que bacterias malas entren. Pero, este sistema puede fallar, por ello, para hacer a nuestra microbiota y por extensión a nuestro intestino, más fuerte, come mucha fibra.",
         cursoId: "nut-curso-2",
         detalles: detalles,
-        icon: NutricionIcon,
+        icon: IntestinoIcon,
         floatingButton: respetarme,
       },
     ],

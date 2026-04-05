@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../../GlobalVariables";
+import { NutricionIcon, CalculadoraIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../../GlobalVariables";
 import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 
 const BG   = nutricionBg;
@@ -287,8 +287,13 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
           px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }} pb={{ base: 14, md: 20 }}
         >
           <DisciplineHeader
-            icon={<NutricionIcon size={{ base: "40px", md: "50px" }} />}
-            title={nutricionNom} bgColor={BG} color={TXT} mb={{ base: 0, md: 0 }}
+            icon={isGuest
+              ? <CalculadoraIcon size={{ base: "35px", md: "45px" }} />
+              : <NutricionIcon size={{ base: "35px", md: "45px" }} />
+            }
+            title={isGuest ? "Calcular necesidades" : nutricionNom}
+            bgColor={BG} color={TXT} mb={{ base: 0, md: 0 }}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
           />
 
           {/* ── Accesos rápidos favoritos ── */}

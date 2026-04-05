@@ -8,7 +8,6 @@ import {
   AyurvedaIcon,
   ayurvedaBg,
   ayurvedaNom,
-  ayurvedaNomLink,
   ayurvedaTxt,
   VataIcon,
   PittaIcon,
@@ -185,7 +184,8 @@ function ElementosModal({ onClose }: { onClose: () => void }) {
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
-        w={{ base: "95%", md: "620px" }}
+        w={{ base: "95%", md: "90%" }}
+        maxW="600px"
         maxH={{ base: "90vh", md: "88vh" }}
         overflowY="auto"
         borderRadius="24px"
@@ -505,12 +505,12 @@ export default function AyurvedaRecursos() {
           title={ayurvedaNom}
           bgColor={BG}
           color={ACCENT} mb={{ base: 0, md: 0 }}
-          onIconClick={() => navigate("/aprendizaje/cursosModalidad/" + ayurvedaNomLink)}
+          onIconClick={() => navigate("/aprendizaje/modulosPage/ayurveda/ayu-curso-1")}
         />
 
         {/* ── Card: Cinco Elementos ── */}
         <Box
-          w="100%"
+          w={{ base: "100%", md: "60%" }}
           bg={BG}
           mt="20px"
           borderRadius="2xl"

@@ -21,7 +21,7 @@ export const cabalaCursos: ModalidadInfo = {
       titulo: "Los fundamentos",
       foto: "/img/cabala/cabala.png",
       descripcion:
-        "Explora la sabiduría de la Cábala y descubre la estructura de la creación según el Árbol de la Vida.",
+        "Introducción a la sabiduría de la Cábala y su teoría más importante, el Árbol de la Vida.",
       precio: null,
       numLecciones: 12,
       icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />,
@@ -33,7 +33,7 @@ export const cabalaCursos: ModalidadInfo = {
       titulo: "El Árbol de la Vida como camino",
       foto: "/img/cabala/arbolvidacurso.png",
       descripcion:
-        "Cada sephirot del Árbol de la Vida es una herramienta para nuestro crecimiento y autoconocimiento.",
+        "Cada dimensión (sephirot) del Árbol de la Vida es una herramienta para nuestro crecimiento y autoconocimiento.",
       precio: null,
       numLecciones: 12,
       icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />,

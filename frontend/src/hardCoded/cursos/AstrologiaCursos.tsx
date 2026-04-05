@@ -33,9 +33,9 @@ export const astrologiaCursos: ModalidadInfo = {
     {
       id: astroCurso0ID,
       cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso0ID,
-      titulo: "La Carta Natal",
+      titulo: "La Carta Natal y los Planetas",
       foto: "/img/astrologia/curso0.png",
-      descripcion: "El primer paso para entenderte: descubrir tu carta natal y el significado de los planetas que hay en ella.",
+      descripcion: "El primer paso para entenderte: descubrir tu carta natal y los arquetipos de los planetas.",
       precio: null,
       numLecciones: 13,
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,

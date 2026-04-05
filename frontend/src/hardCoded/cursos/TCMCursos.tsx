@@ -34,7 +34,7 @@ export const tcmCursos: ModalidadInfo = {
       titulo: "Los Cinco Elementos",
       foto: "/img/tcm/5elem.jpg",
       descripcion:
-        "Profundiza en los ciclos Generador y Controlador de los Cinco Elementos y cómo se manifiestan en el cuerpo humano y en la vida cotidiana.",
+        "Este curso es una introducción de los ciclos de los Cinco Elementos y su manifestación en la fisiología y en el emocional.",
       precio: null,
       numLecciones: 17,
       icon: <TCMIcon size={{ base: "40px", md: "50px" }} />,

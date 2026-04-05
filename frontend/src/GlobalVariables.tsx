@@ -83,6 +83,20 @@ export function EstrellaIcon({ size = { base: "24px", md: "24px" } }: { size?: s
     </Box>
   );
 }
+export function BioelectricidadIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box
+      as="svg"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      fill={fisiologiaTxt}
+      w={size}
+      h={size}
+    >
+      <path d="M87-556q26-140 135.5-232T480-880q74 0 139.5 24T737-788q-14 26-22.5 44.5T703-709q-44-42-101-66.5T480-800q-101 0-181 56.5T183-599q-27-1-52.5 10T87-556ZM480-80q-148 0-257.5-92T87-404q17 22 42.5 33.5T183-360q36 88 116 144t181 56q133 0 226.5-93.5T800-480q0-17-1.5-34t-5.5-34q11 4 22.5 6t24.5 2q9 0 18-1t17-3q2 16 3.5 31.5T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80ZM336-496l84-84-85-85-42 42 43 42-43 43 43 42Zm447.5-127.5Q760-647 760-680q0-27 15-57.5T840-840q50 72 65 102.5t15 57.5q0 33-23.5 56.5T840-600q-33 0-56.5-23.5ZM625-495l43-43-43-43 42-42-42-42-85 85 85 85Zm-145 75q-26 0-50.5 6T383-397l-143-83q0-16-8-30t-22-22q-22-12-45.5-5.5T128-510q-12 22-5.5 45.5T150-428q14 8 30 8t30-8l119 69q-17 17-30.5 36.5T276-280h66q21-36 57-58t81-22q45 0 81 22t57 58h66q-24-62-78.5-101T480-420Zm0-60Z"/>
+    </Box>
+  );
+}
 export const fisiologiaDescrip = "Redescubre tu cuerpo como el milagro que es. Comprende su funcionamiento y transforma el enfado y la frustración en Amor y respeto."
 
 
@@ -158,6 +172,22 @@ export function NutricionIcon({ size = { base: "24px", md: "24px" }}) {
       <path d="M640-80q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170T640-80Zm0-80q66 0 113-47t47-113q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 66 47 113t113 47Zm-480 0q-33 0-56.5-23.5T80-240v-304q0-8 1.5-16t4.5-16l80-184h-6q-17 0-28.5-11.5T120-800v-40q0-17 11.5-28.5T160-880h280q17 0 28.5 11.5T480-840v40q0 17-11.5 28.5T440-760h-6l66 152q-19 10-36 21t-32 25l-84-198h-96l-92 216v304h170q5 21 13.5 41.5T364-160H160Zm480-440q-42 0-71-29t-29-71q0-42 29-71t71-29v200q0-42 29-71t71-29q42 0 71 29t29 71H640Z"/></Box>
     );
 }
+export function IntestinoIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={nutricionTxt}>
+      <path d="M423.5-743.5Q400-767 400-800t23.5-56.5Q447-880 480-880t56.5 23.5Q560-833 560-800t-23.5 56.5Q513-720 480-720t-56.5-23.5ZM360-80v-520H120v-80h720v80H600v520h-80v-240h-80v240h-80Z"/>
+    </Box>
+  );
+}
+export function CalculadoraIcon() {
+  return (
+    <Box flexShrink={0} display="flex" alignItems="center">
+      <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill={nutricionTxt}>
+        <path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-56 56-56-42-42-56 56-56-56-42 42 56 56-56 56 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+      </svg>
+    </Box>
+  );
+}
 export const nutricionDescrip="Descubre qué hay más allá de los alimentos que consumimos cada día. Entiende, sin rodeos, por qué unos alimentos son saludables y otros pueden perjudicarnos, y toma las riendas de tu claridad mental transformando tu dieta.";
 
 // Ayurveda
@@ -211,7 +241,7 @@ export function KaphaIconAyu({ size = "28px" }: { size?: string }) {
 export const fitoterapiaNom = "Fitoterapia";
 export const fitoterapiaBg = "#0e590d";
 export const fitoterapiaTxt = "#d5ffd5";
-export function FitoterapiaIcon({ size = { base: "30px", md: "24px" }, color = fitoterapiaTxt }: { size?: string | { base: string; md: string }; color?: string }) {
+export function FitoterapiaIcon({ size = { base: "30px", md: "24px" }, color = nutricionTxt }: { size?: string | { base: string; md: string }; color?: string }) {
   return (
    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color}><path d="m720-600-32 28q-14 13-33 13t-33-11q-14-11-19-28t1-36l16-50-34-20q-16-9-22.5-26t-1.5-34q5-17 20-26.5t34-9.5h40l12-38q6-19 20.5-30.5T720-880q17 0 31.5 11.5T772-838l12 38h40q19 0 33.5 9.5T878-764q7 18 0 35t-22 25l-36 20 16 50q6 19 1 36.5T818-570q-15 11-33.5 11T752-572l-32-28Zm28.5-91.5Q760-703 760-720t-11.5-28.5Q737-760 720-760t-28.5 11.5Q680-737 680-720t11.5 28.5Q703-680 720-680t28.5-11.5ZM552-244q23 60-15 112T430-80q-33 0-62.5-17T324-142q-83 12-137.5-42.5T142-324q-30-17-46-46.5T80-438q0-61 55.5-98.5T244-552l62 26q20-31 53-50.5t71-21.5v-82h60v90q37 11 61 34.5t41 65.5h88v60h-82q-2 38-20.5 71T528-306l24 62Zm-248 24q0-27 4.5-52.5T322-322q-23 11-49.5 15.5T220-304q0 39 22.5 61.5T304-220Zm-74-164q32 0 56.5-8t63.5-32l-120-50q-29-12-49.5.5T160-434q0 26 17 38t53 12Zm200 224q25 0 40.5-17.5T478-214l-54-136q-19 32-29.5 64T384-228q0 33 11.5 50.5T430-160Zm66-222q10-10 16-26.5t6-34.5q0-32-21-54t-52-22q-18 0-34 6t-27 17l78 36 34 78Zm-174 60Z"/></Box>
   );
@@ -737,7 +767,7 @@ export function AscendenteIcon({ size = { base: "24px", md: "24px" }}) {
   );
 }
 
-export function InflamIcon({ size = { base: "24px", md: "24px" }, color = "white" }: { size?: string | { base: string; md: string }; color?: string }) {
+export function InflamIcon({ size = { base: "24px", md: "24px" }, color = fisiologiaTxt }: { size?: string | { base: string; md: string }; color?: string }) {
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={size} h={size} fill={color}>
       <path d="m480-336 128-184H494l80-280H360v320h120v144ZM400-80v-320H280v-480h400l-80 280h160L400-80Zm80-400H360h120Z"/>
@@ -745,13 +775,7 @@ export function InflamIcon({ size = { base: "24px", md: "24px" }, color = "white
   );
 }
 
-export function CerebroIcon({ size = { base: "24px", md: "24px" }, color = "white" }: { size?: string | { base: string; md: string }; color?: string }) {
-  return (
-    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={size} h={size} fill={color}>
-      <path d="M360-80q-25 0-42.5-17.5T300-140v-40h-20q-42 0-71-29t-29-71v-20q-42 0-71-29t-29-71v-40q0-25 17.5-42.5T140-500h20v-80h-20q-25 0-42.5-17.5T80-640v-40q0-42 29-71t71-29v-20q0-42 29-71t71-29h20v-40q0-25 17.5-42.5T360-980h240q25 0 42.5 17.5T660-920v40h20q42 0 71 29t29 71v20q42 0 71 29t29 71v40q0 25-17.5 42.5T820-580h-20v80h20q25 0 42.5 17.5T880-440v40q0 42-29 71t-71 29v20q0 42-29 71t-71 29h-20v40q0 25-17.5 42.5T600-80H360Zm0-80h240v-80h-80q-17 0-28.5-11.5T480-280q0-17 11.5-28.5T520-320h80v-80h-80q-17 0-28.5-11.5T480-440q0-17 11.5-28.5T520-480h80v-80h-80q-17 0-28.5-11.5T480-600q0-17 11.5-28.5T520-640h80v-80H360v80h80q17 0 28.5 11.5T480-600q0 17-11.5 28.5T440-560h-80v80h80q17 0 28.5 11.5T480-440q0 17-11.5 28.5T440-400h-80v80h80q17 0 28.5 11.5T480-280q0 17-11.5 28.5T440-240h-80v80Zm-80-80v-40h-20q-8 0-14-6t-6-14v-40h-20q-8 0-14-6t-6-14v-40h40v20h20v40h20v100ZM220-500h20v-80h-20q-8 0-14-6t-6-14v-40h-20q-8 0-14-6t-6-14v-40h40v20h20v40h20v-20h20q0-8 0-14v-46h-20q-8 0-14-6t-6-14v-40h40v20h60v-80H220q-8 0-14 6t-6 14v20h-20q-8 0-14 6t-6 14v40h20v80H160v40q0 8 6 14t14 6h40Zm520 0h40q8 0 14-6t6-14v-40h-20v-80h20v-40q0-8-6-14t-14-6h-60v80h60v20h-20q0 8 0 14v46h-20v-20h-40v40q0 8 6 14t14 6h20v20h20v-40h-20v20Zm0 160v-100h20v-40h20v-20h20v40q0 8-6 14t-14 6h-20v40h-20v40h20q8 0 14-6t6-14v-40h40v40q0 8-6 14t-14 6h-20v40h-40Zm-560 0h40v-40h-20q-8 0-14-6t-6-14v-40h-20q-8 0-14-6t-6-14v-40h40v20h20v40h20v100ZM360-160Zm240 0Z"/>
-    </Box>
-  );
-}
+
 
 
 

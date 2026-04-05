@@ -4,12 +4,13 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
+import { IntestinoIcon, NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
 import {
   MicrobiotaIconMicro,
   MicrobiotaIconEje,
   MicrobiotaIconMujer,
 } from "../../../hardCoded/aprendizajes/Nutricion/MicrobiotaIcons";
+import { BrainIcon } from "lucide-react";
 
 const BG   = nutricionBg;
 const TXT  = nutricionTxt;
@@ -26,35 +27,38 @@ export const capasIntestinoData = [
     titulo:      "Capa 1: Mucosa",
     color:       "#48C0B5",
     glow:        "rgba(72,192,181,0.45)",
-    foto:        "/img/nutri/microbiotaRecursos/capa2.webp",
+    foto:        "/img/nutri/microbiotaRecursos/capa1.webp",
     descripciones: [
-      "Es la capa más interna, en contacto directo con los alimentos y el contenido intestinal.",
-      "Produce moco protector que actúa como barrera frente a bacterias, toxinas y agentes dañinos.",
-      "Contiene las vellosidades intestinales responsables de la absorción de nutrientes hacia el torrente sanguíneo.",
+      "Es la primera barrera en contacto con los alimentos y la microbiota intestinal.",
+      "Está formada por una capa de moco que protege el epitelio y sirve de hábitat para muchas bacterias beneficiosas.",
+      "Una dieta baja en fibra puede hacer que algunas bacterias degraden este moco, debilitando la barrera intestinal.",
+      "Ciertas bacterias beneficiosas ayudan a mantener y regenerar esta capa.",
     ],
   },
   {
     label:       "Capa 2",
-    titulo:      "Capa 2: Submucosa",
+    titulo:      "Capa 2: Epitelio intestinal",
     color:       "#C06B9B",
     glow:        "rgba(192,107,155,0.45)",
     foto:        "/img/nutri/microbiotaRecursos/capa2.webp",
     descripciones: [
-      "Tejido conectivo rico en vasos sanguíneos y linfáticos que transportan los nutrientes absorbidos.",
-      "Alberga el plexo de Meissner, parte del sistema nervioso entérico que regula la secreción intestinal.",
-      "Contiene glándulas que producen enzimas digestivas y moco adicional para proteger la mucosa.",
+      "Formada por células epiteliales unidas por uniones estrechas (tight junctions) que regulan el paso selectivo de sustancias.",
+      "Actúa como una barrera física que permite el paso de nutrientes y bloquea microorganismos y toxinas.",
+      "Cuando estas uniones se alteran, puede aumentar la permeabilidad intestinal.",
+      "Incluye células especializadas que producen moco y participan en la defensa del intestino.",
     ],
   },
   {
     label:       "Capa 3",
-    titulo:      "Capa 3: Muscular",
+    titulo:      "Capa 3: Sistema inmunitario",
     color:       "#7B6EC8",
     glow:        "rgba(123,110,200,0.45)",
     foto:        "/img/nutri/microbiotaRecursos/capa3.webp",
     descripciones: [
-      "Formada por dos capas de músculo liso: una circular interna y otra longitudinal externa.",
-      "Sus contracciones coordinadas generan el peristaltismo, que mueve el contenido a lo largo del intestino.",
-      "Entre ambas capas se encuentra el plexo de Auerbach, que controla y regula los movimientos intestinales.",
+      "Compuesta por células del sistema inmunitario que protegen frente a patógenos.",
+      "Forma parte del tejido linfoide asociado al intestino (GALT).",
+      "Las células inmunitarias se comunican mediante citoquinas, que regulan la inflamación.",
+      "Un desequilibrio en esta respuesta puede favorecer la inflamación y afectar la integridad de la barrera intestinal.",
     ],
   },
 ];
@@ -110,22 +114,25 @@ function VerVideoBtn({ route }: { route: string }) {
   const navigate = useNavigate();
   return (
     <Flex justify="flex-end" mt={5}>
-      <Box
+      <Flex
         as="button"
+        align="center"
+        gap={1}
         onClick={() => navigate(route)}
-        bg={TXT}
-        color="white"
-        px={6}
-        py={3}
-        borderRadius="full"
+        color={TXT}
+        fontFamily="'EB Garamond', serif"
+        fontSize={{ base: "md", md: "lg" }}
         fontWeight="600"
-        fontSize={{ base: "sm", md: "md" }}
-        boxShadow={`0 2px 12px ${TXT}55`}
-        _hover={{ opacity: 0.85, transform: "translateY(-1px)" }}
-        transition="all 0.2s"
+        textDecoration="underline"
+        textUnderlineOffset="3px"
+        _hover={{ opacity: 0.7 }}
+        transition="opacity 0.2s"
+        bg="transparent"
+        border="none"
+        cursor="pointer"
       >
-        Ver video
-      </Box>
+        Ver vídeo →
+      </Flex>
     </Flex>
   );
 }
@@ -135,19 +142,19 @@ function VerVideoBtn({ route }: { route: string }) {
 // ─────────────────────────────────────────
 function CardProbioticos() {
   return (
-    <Card
-      title="Probióticos y Prebióticos"
-      titleIcon={<MicrobiotaIconMicro />}
-    >
+    <Card>
       <Grid
         templateColumns={{ base: "1fr", md: "1fr 1fr" }}
         gap={{ base: 5, md: 6 }}
       >
         {/* Probiótico */}
         <Flex direction="column" align="center" gap={3}>
-          <Text color={TXT} fontWeight="600" fontSize={{ base: "md", md: "lg" }}>
-            Probiótico
-          </Text>
+          <Flex align="center" gap={2}>
+            <MicrobiotaIconMicro />
+            <Text color={TXT} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} fontFamily="'EB Garamond', serif">
+              Probiótico
+            </Text>
+          </Flex>
           <Box
             borderRadius="xl"
             overflow="hidden"
@@ -173,7 +180,7 @@ function CardProbioticos() {
 
         {/* Prebiótico */}
         <Flex direction="column" align="center" gap={3}>
-          <Text color={TXT} fontWeight="600" fontSize={{ base: "md", md: "lg" }}>
+          <Text color={TXT} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} fontFamily="'EB Garamond', serif">
             Prebiótico
           </Text>
           <Box
@@ -257,14 +264,35 @@ function FotoCirculo({ src, label }: { src: string; label: string }) {
 }
 
 function CardQueComer() {
+  const navigate = useNavigate();
   return (
-    <Card title="Qué comer para balancear la microbiota">
+    <Card title="Qué comer para balancear la microbiota" titleIcon={<NutricionIcon />}>
       <Grid templateColumns="repeat(3, 1fr)" gap={{ base: 4, md: 6 }} justifyItems="center">
         {comerFotos.map((f) => (
           <FotoCirculo key={f.src} src={f.src} label={f.label} />
         ))}
       </Grid>
-
+      <Flex justify="flex-end" mt={5}>
+        <Flex
+          as="button"
+          align="center"
+          gap={1}
+          onClick={() => navigate(`${BASE}/mic-4`)}
+          color={TXT}
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="600"
+          textDecoration="underline"
+          textUnderlineOffset="3px"
+          _hover={{ opacity: 0.7 }}
+          transition="opacity 0.2s"
+          bg="transparent"
+          border="none"
+          cursor="pointer"
+        >
+          Ver vídeo →
+        </Flex>
+      </Flex>
     </Card>
   );
 }
@@ -339,48 +367,19 @@ function CapaModal({ capa, onClose }: { capa: typeof capasIntestinoData[0]; onCl
             boxShadow={`0 4px 20px ${capa.color}18`}
             overflow="hidden"
           >
-            {/* Foto */}
-            <Box>
-              <Image
-                src={capa.foto}
-                alt={capa.titulo}
-                w="100%"
-                h={{ base: "200px", md: "240px" }}
-                objectFit="cover"
-                fallback={
-                  <Flex w="100%" h={{ base: "200px", md: "240px" }} align="center" justify="center" bg="gray.50">
-                    <Text color={TXT} opacity={0.5} fontSize="sm">{capa.titulo} — foto pendiente</Text>
-                  </Flex>
-                }
-              />
-            </Box>
-
             {/* Descripciones */}
             <Flex direction="column" gap={0}>
               {capa.descripciones.map((desc, i) => (
-                <Flex
+                <Box
                   key={i}
-                  gap={3}
-                  align="flex-start"
                   px={5}
                   py={4}
                   borderTop={i === 0 ? `1px solid ${capa.color}22` : `1px solid ${capa.color}18`}
                 >
-                  <Box
-                    bg={capa.color}
-                    color="white"
-                    borderRadius="full"
-                    w="22px" h="22px" minW="22px"
-                    display="flex" alignItems="center" justifyContent="center"
-                    fontSize="xs" fontWeight="700" mt="2px"
-                    flexShrink={0}
-                  >
-                    {i + 1}
-                  </Box>
                   <Text color={TXT} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
                     {desc}
                   </Text>
-                </Flex>
+                </Box>
               ))}
             </Flex>
           </Box>
@@ -399,35 +398,23 @@ function CardIntestino() {
 
   return (
     <>
-      <Card title="El intestino y sus capas">
+      <Card title="El intestino y sus capas" titleIcon={<IntestinoIcon/>}>
         <Flex
           direction={{ base: "column", md: "row" }}
           gap={{ base: 6, md: 8 }}
           align={{ base: "center", md: "stretch" }}
         >
-          {/* Foto izquierda — cambia según la capa seleccionada */}
+          {/* Foto intestino */}
           <Box
-            borderRadius="xl"
             overflow="hidden"
             flexShrink={0}
-            w={{ base: "100%", md: "55%" }}
-            aspectRatio="4/3"
-            bg={BG}
-            border={`2px solid ${capaSeleccionada.color}55`}
-            boxShadow={`0 4px 18px ${capaSeleccionada.glow}`}
-            transition="border-color 0.3s, box-shadow 0.3s"
+            w={{ base: "100%", md: "75%" }}
           >
             <Image
-              src={capaSeleccionada.foto}
-              alt={capaSeleccionada.titulo}
+              src="/img/nutri/microbiotaRecursos/intest.jpg"
+              alt="El intestino"
               w="100%"
-              h="100%"
-              objectFit="cover"
-              fallback={
-                <Flex w="100%" h="100%" align="center" justify="center" minH="180px">
-                  <Text color={TXT} opacity={0.5} fontSize="sm">{capaSeleccionada.titulo}</Text>
-                </Flex>
-              }
+              display="block"
             />
           </Box>
 
@@ -458,6 +445,7 @@ function CardIntestino() {
             ))}
           </Flex>
         </Flex>
+        <VerVideoBtn route={`${BASE}/mic-5`} />
       </Card>
 
       {capaAbierta && (
@@ -477,121 +465,130 @@ const ejeFotos = [
 ];
 
 function CardEjeIntestinoCerebro() {
+  const navigate = useNavigate();
   return (
     <Card
-      title="Eje intestino-cerebro"
-      titleIcon={<MicrobiotaIconEje />}
     >
-      <Grid
-        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-        gap={{ base: 5, md: 6 }}
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        gap={{ base: 6, md: 0 }}
+        align="flex-start"
       >
-        {ejeFotos.map((f) => (
+        {/* Primera foto */}
+        <Flex direction="column" gap={3} flexShrink={0} w={{ base: "100%", md: "calc(50% - 25px)" }}>
+          <Flex align="center" gap={2}>
+            <BrainIcon />
+            <Text color={TXT} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} fontFamily="'EB Garamond', serif">
+              Eje Intestino-Cerebro
+            </Text>
+          </Flex>
           <Box
-            key={f.src}
             borderRadius="xl"
             overflow="hidden"
+            w="100%"
             aspectRatio="3/4"
             bg={BG}
-            border={`2px solid ${TXT}33`}
           >
             <Image
-              src={f.src}
-              alt={f.label}
+              src={ejeFotos[0].src}
+              alt={ejeFotos[0].label}
               w="100%"
               h="100%"
               objectFit="cover"
               fallback={
                 <Flex w="100%" h="100%" align="center" justify="center" minH="160px">
-                  <Text color={TXT} opacity={0.5} fontSize="sm">{f.label}</Text>
+                  <Text color={TXT} opacity={0.5} fontSize="sm">{ejeFotos[0].label}</Text>
                 </Flex>
               }
             />
           </Box>
-        ))}
-      </Grid>
-    </Card>
-  );
-}
+          <Flex
+            as="button"
+            align="center"
+            gap={1}
+            onClick={() => navigate(`${BASE}/mic-7`)}
+            color={TXT}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight="600"
+            textDecoration="underline"
+            textUnderlineOffset="3px"
+            _hover={{ opacity: 0.7 }}
+            transition="opacity 0.2s"
+            bg="transparent"
+            border="none"
+            cursor="pointer"
+          >
+            ← Ver vídeo 
+          </Flex>
+        </Flex>
 
-// ─────────────────────────────────────────
-// CARD 5 — ESTROBOLOMA
-// ─────────────────────────────────────────
-const estrobolonaTextos = [
-  "El hígado gestiona las hormonas y las envía al intestino.",
-  "Si la microbiota está desequilibrada, los estrógenos serán reabsorbidos y pasarán a la circulación.",
-  "Se pueden ocasionar problemas como endometriosis, miomas, cánceres y dolores menstruales.",
-];
-
-function CardEstroboloma() {
-  return (
-    <Card
-      title="Estroboloma"
-      titleIcon={<MicrobiotaIconMujer />}
-    >
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        gap={{ base: 6, md: 8 }}
-        align={{ base: "center", md: "stretch" }}
-      >
-        {/* Foto izquierda */}
+        {/* Raya vertical */}
         <Box
-          borderRadius="xl"
-          overflow="hidden"
+          display={{ base: "none", md: "flex" }}
+          w="1px"
+          bg={`${TXT}33`}
+          mx={6}
           flexShrink={0}
-          w={{ base: "100%", md: "42%" }}
-          aspectRatio="3/4"
-          bg={BG}
-          border={`2px solid ${TXT}33`}
-        >
-          <Image
-            src="/img/nutri/microbiotaRecursos/estrobolome.png"
-            alt="Estroboloma"
-            w="100%"
-            h="100%"
-            objectFit="cover"
-            fallback={
-              <Flex w="100%" h="100%" align="center" justify="center" minH="200px">
-                <Text color={TXT} opacity={0.5} fontSize="sm">Foto estroboloma</Text>
-              </Flex>
-            }
-          />
-        </Box>
+          alignSelf="stretch"
+        />
+        <Box display={{ base: "block", md: "none" }} h="1px" bg={`${TXT}33`} />
 
-        {/* Text boxes derecha */}
-        <Flex direction="column" justify="center" gap={4} flex={1}>
-          {estrobolonaTextos.map((txt, i) => (
-            <Box
-              key={i}
-              bg={BG}
-              borderRadius="xl"
-              px={5}
-              py={4}
-              border={`1.5px solid ${TXT}33`}
-              boxShadow={`0 2px 8px ${TXT}1a`}
-            >
-              <Flex gap={3} align="flex-start">
-                <Box
-                  bg={TXT}
-                  color="white"
-                  borderRadius="full"
-                  w="26px" h="26px" minW="26px"
-                  display="flex" alignItems="center" justifyContent="center"
-                  fontSize="sm" fontWeight="700" mt="1px"
-                >
-                  {i + 1}
-                </Box>
-                <Text color={TXT} fontSize={{ base: "sm", md: "md" }} lineHeight="1.5">
-                  {txt}
-                </Text>
-              </Flex>
-            </Box>
-          ))}
+        {/* Estroboloma */}
+        <Flex direction="column" align="flex-start" gap={3} w={{ base: "100%", md: "calc(50% - 25px)" }} flexShrink={0}>
+          <Flex align="center" gap={2}>
+            <MicrobiotaIconMujer />
+            <Text color={TXT} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} fontFamily="'EB Garamond', serif">
+              Estroboloma
+            </Text>
+          </Flex>
+          <Box
+            borderRadius="xl"
+            overflow="hidden"
+            w="100%"
+            aspectRatio="3/4"
+            bg={BG}
+          >
+            <Image
+              src="/img/nutri/microbiotaRecursos/estrobolome.png"
+              alt="Estroboloma"
+              w="100%"
+              h="100%"
+              objectFit="cover"
+              fallback={
+                <Flex w="100%" h="100%" align="center" justify="center" minH="200px">
+                  <Text color={TXT} opacity={0.5} fontSize="sm">Foto estroboloma</Text>
+                </Flex>
+              }
+            />
+          </Box>
+          <Flex
+            as="button"
+            align="center"
+            justify="flex-end"
+            gap={1}
+            onClick={() => navigate(`${BASE}/mic-6`)}
+            color={TXT}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight="600"
+            textDecoration="underline"
+            textUnderlineOffset="3px"
+            _hover={{ opacity: 0.7 }}
+            transition="opacity 0.2s"
+            bg="transparent"
+            border="none"
+            cursor="pointer"
+            w="100%"
+          >
+            Ver vídeo →
+          </Flex>
         </Flex>
       </Flex>
     </Card>
   );
 }
+
 
 // ─────────────────────────────────────────
 // MAIN COMPONENT
@@ -606,13 +603,13 @@ export default function MicrobiotaRecursos() {
   return (
     <Box minH="100vh" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant={"auto"} />
-      <Flex
-        direction="column"
-        align="center"
-        px={{ base: 4, md: 8 }}
-        pt={{ base: 6, md: 10 }}
-        pb={{ base: 12, md: 16 }}
-      >
+       <Flex
+          direction="column"
+          alignItems="center"
+          px={{ base: 5, md: 10, lg: 16 }}
+          pt={{ base: 10, md: 14 }}
+          pb={{ base: 14, md: 20 }}
+        >
         <DisciplineHeader
           icon={<NutricionIcon size={{ base: "36px", md: "44px" }} />}
           title="La Microbiota"
@@ -627,7 +624,38 @@ export default function MicrobiotaRecursos() {
         <CardQueComer />
         <CardIntestino />
         <CardEjeIntestinoCerebro />
-        <CardEstroboloma />
+
+        {/* Botón Seguir aprendiendo */}
+        <Flex justify="center" mt={{ base: 6, md: 8 }}>
+          <Flex
+            as="button"
+            align="center"
+            gap={3}
+            px={{ base: 8, md: 12 }}
+            py={{ base: 3, md: 4 }}
+            borderRadius="full"
+            border="2px solid rgba(255,255,255,0.7)"
+            bg={BG}
+            cursor="pointer"
+            color={TXT}
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "lg", md: "xl" }}
+            letterSpacing="0.12em"
+            textShadow="0 2px 8px rgba(0,0,0,0.2)"
+            boxShadow={GLOW}
+            onClick={() => navigate("/aprendizaje/modulosPage/nutricion/nut-curso-2")}
+            _hover={{
+              borderColor: "white",
+            }}
+            transition="all 0.25s ease"
+          >
+            <Box flexShrink={0}>
+              <NutricionIcon size={{ base: "24px", md: "28px" }} />
+            </Box>
+            Seguir aprendiendo
+          </Flex>
+        </Flex>
       </Flex>
       <SiteFooter />
     </Box>

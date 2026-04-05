@@ -405,7 +405,7 @@ export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly
           gap={{ base: 4, md: 5 }}
         >
           <DisciplineHeader
-            icon={<NutricionIcon size={{ base: "40px", md: "50px" }} />}
+            icon={<NutricionIcon size={{ base: "35px", md: "45px" }} />}
             title={favoritesOnly ? "Mis alimentos favoritos" : "Alimentos"}
             bgColor={nutricionBg}
             color={nutricionTxt}

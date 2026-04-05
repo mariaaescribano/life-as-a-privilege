@@ -179,7 +179,7 @@ export default function CursosModalidad() {
             title={modalidad.nom}
             bgColor={modalidad.bgColor}
             color={modalidad.color}
-            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink || moduloId === fisiologiaNom) ? { base: 6, md: 7 } : undefined}
+            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink /*|| moduloId === fisiologiaNom*/) ? { base: 6, md: 7 } : undefined}
           />
 
           {/* ── TESTS (solo Medicina China) ── */}
@@ -356,7 +356,7 @@ export default function CursosModalidad() {
           )}
 
           {/* ── CÉLULAS DEL CUERPO (solo Fisiología) ── */}
-          {moduloId === fisiologiaNom && (
+          {/* {moduloId === fisiologiaNom && (
             <Flex justify="center" mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
               <Flex
                 as="button"
@@ -394,7 +394,7 @@ export default function CursosModalidad() {
                 </Text>
               </Flex>
             </Flex>
-          )}
+          )} */}
 
           {/* ── HERBARIO + ALIMENTOS + CALCULAR (solo Nutrición) ── */}
           {moduloId === nutricionNomLink && (

@@ -236,7 +236,7 @@ const TCMElementModal = ({
             px={{ base: 4, md: 6 }}
             py={{ base: 4, md: 5 }}
             mb={6}
-            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+            boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${element.iconColor}cc`}
           >
             <Text
               color={element.bgColor}

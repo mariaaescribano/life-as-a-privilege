@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteHeader from "../../global/SiteHeader";
@@ -11,6 +12,7 @@ import {
   vataColor, pittaColor, kaphaColor,
 } from "../../../GlobalVariables";
 import { preguntasAyurveda } from "../../../hardCoded/espacio/PreguntasAyurveda";
+import { generateAyurvedaPdf } from "../../../utils/generateAyurvedaPdf";
 
 type Dosha = "vata" | "pitta" | "kapha";
 
@@ -31,6 +33,7 @@ export default function AyurvedaTestPage({
   onComplete?: () => Promise<void>;
   isGuest?: boolean;
 }) {
+  const navigate = useNavigate();
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
   const [saving, setSaving] = useState(false);
   const [guestResult, setGuestResult] = useState<GuestResult | null>(null);
@@ -97,12 +100,13 @@ export default function AyurvedaTestPage({
             pb={{ base: 14, md: 20 }}
           >
             <DisciplineHeader
-              icon={<AyurvedaIcon size={{ base: "36px", md: "52px" }} />}
+              icon={<AyurvedaIcon size={{ base: "35px", md: "45px" }} />}
               title={ayurvedaNom}
               subtitle="Test de los Doshas"
               bgColor={ayurvedaBg}
               color={ayurvedaTxt}
               maxW="820px" mb={{ base: 0, md: 0 }}
+              onIconClick={() => navigate("/aprendizaje/cursosModalidad/ayurveda")}
             />
 
             {/* Resultado principal */}
@@ -148,7 +152,14 @@ export default function AyurvedaTestPage({
             <Flex gap={4} flexWrap="wrap" justify="center" mt={2}>
               <Box
                 as="button"
-                onClick={() => window.print()}
+                onClick={() => {
+                  const respuestas = answers.map((dosha, idx) => ({
+                    pregunta_idx: idx,
+                    pregunta: preguntasAyurveda[idx].pregunta,
+                    dosha_elegida: dosha!,
+                  }));
+                  generateAyurvedaPdf(respuestas, guestResult.dosha, guestResult.scores);
+                }}
                 px={{ base: 8, md: 12 }}
                 py={{ base: 3, md: 4 }}
                 borderRadius="full"
@@ -156,12 +167,13 @@ export default function AyurvedaTestPage({
                 fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="700"
                 letterSpacing="0.08em"
-                bg={ayurvedaTxt}
-                color={ayurvedaBg}
+                bg={ayurvedaBg}
+                color={ayurvedaTxt}
+                border={`1.5px solid ${ayurvedaTxt}60`}
                 cursor="pointer"
                 transition="all 0.22s"
-                boxShadow={`0 4px 20px ${ayurvedaTxt}44`}
-                _hover={{ opacity: 0.88, transform: "translateY(-2px)" }}
+                boxShadow={`0 4px 20px ${ayurvedaTxt}22`}
+                _hover={{ opacity: 0.88, transform: "translateY(-2px)", borderColor: ayurvedaTxt }}
               >
                 Descargar PDF
               </Box>
@@ -206,11 +218,12 @@ export default function AyurvedaTestPage({
           pb={{ base: 14, md: 20 }}
         >
           <DisciplineHeader
-            icon={<AyurvedaIcon size={{ base: "36px", md: "52px" }} />}
+            icon={<AyurvedaIcon size={{ base: "35px", md: "45px" }} />}
             title={ayurvedaNom}
             bgColor={ayurvedaBg}
             color={ayurvedaTxt}
             maxW="820px" mb={{ base: 0, md: 0 }}
+            onIconClick={() => navigate("/aprendizaje/cursosModalidad/ayurveda")}
           />
 
           {/* Instrucciones */}

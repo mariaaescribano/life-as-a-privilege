@@ -155,8 +155,7 @@ const QuienSoy = () => {
                 lineHeight="1.9"
                 letterSpacing="0.02em"
               >
-                Mi propósito es descubrir la Verdad profunda del ser humano, más allá de religiones, tradiciones y culturas, entendiendo que todas contienen fragmentos de ella.
-              </Text>
+                Mi propósito es profundizar en la naturaleza humana, usando psicología, filosofía, ciencias biológicas y sabidurías ancestrales para ello.             </Text>
               <Flex justify={{ base: "center", md: "flex-end" }} mt={5}>
                 <Box
                   as={Link}

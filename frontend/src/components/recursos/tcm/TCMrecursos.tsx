@@ -18,6 +18,7 @@ const CARD_BG     = tcmBg;
 const textoColor     = tcmTxt;
 const CARD_BORDER = "rgba(255,255,255,0.45)";
 const CARD_SHADOW = "0 8px 36px rgba(107,196,200,0.45)";
+const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 
 /* ═══════════════════════════════════════════
    ICONOS (Material Symbols · fill="currentColor")
@@ -1075,7 +1076,7 @@ const PhotoModal = ({ src, onClose }: { src: string; onClose: () => void }) => {
 /* ═══════════════════════════════════════════
    CARD — TABLAS A / B / C + FOTO
 ═══════════════════════════════════════════ */
-const VIDEO_IDS = ["tcm22", "tcm23", "tcm24"];
+const VIDEO_IDS = ["tcm10", "tcm11", "tcm12"];
 
 const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
   const [imgError, setImgError]   = useState(false);
@@ -1391,6 +1392,7 @@ const TCMPage = () => {
             px={{ base: 5, md: 6 }}
             py={3}
             bg={`${tcmBg}cc`}
+            boxShadow={GLOW}
             border={`1px solid ${tcmTxt}55`}
             borderRadius={disclaimerOpen ? "xl xl 0 0" : "xl"}
             cursor="pointer"
@@ -1473,12 +1475,12 @@ const TCMPage = () => {
               fontSize={{ base: "lg", md: "xl" }}
               letterSpacing="0.12em"
               textShadow="0 2px 8px rgba(0,0,0,0.2)"
-              boxShadow="0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)"
+              boxShadow={GLOW}
               onClick={() => navigate(isCincoElementos ? "/aprendizaje/modulosPage/medicinachina/tcm-curso-2" : "/aprendizaje/modulosPage/medicinachina/tcm-curso-1")}
               _hover={{
                 bg: {tcmBg},
                 borderColor: "white",
-                boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
+
                 transform: "translateY(-2px)",
               }}
               transition="all 0.25s ease"

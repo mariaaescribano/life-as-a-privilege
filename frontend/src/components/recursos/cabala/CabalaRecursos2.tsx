@@ -130,23 +130,28 @@ function CabalaModal2({
           )}
 
           {/* Descripción */}
-          <Box
-            bg={GOLD + "12"}
-            borderLeft={`3px solid ${GOLD}66`}
-            borderRadius="0 xl xl 0"
-            px={{ base: 4, md: 6 }} py={{ base: 4, md: 5 }}
-            mb={7}
-          >
-            <Text
-              color={GOLD}
-              fontSize={{ base: "md", md: "lg" }}
-              lineHeight="1.9"
-              fontFamily="'EB Garamond', serif"
-              fontStyle="italic"
-            >
-              {sub.descripcion}
-            </Text>
-          </Box>
+         <Box
+                    w="100%"
+                    bg={BG}
+                    border={`1px solid ${GOLD}44`}
+                    borderRadius="2xl"
+                    px={{ base: 5, md: 8 }}
+                    py={{ base: 4, md: 6 }}
+                    mb={7}
+                    boxShadow={`0 4px 24px ${GOLD}30, 0 1px 6px rgba(0,0,0,0.10)`}
+                    transition="box-shadow 0.2s"
+                  >
+                    <Text
+                      color={GOLD}
+                      fontSize={{ base: "md", md: "lg" }}
+                      lineHeight="1.9"
+                      fontFamily="'EB Garamond', serif"
+                      fontStyle="italic"
+                      letterSpacing="0.02em"
+                    >
+                      {sub.descripcion}
+                    </Text>
+                  </Box>
 
           {/* Transcripción plegable */}
           {parrafos.length > 0 && (
@@ -243,8 +248,8 @@ export default function CabalaRecursos2() {
         >
           <DisciplineHeader
             icon={<CabalaIcon size={{ base: "40px", md: "50px" }} />}
-            title={cabalaNom}
-            subtitle="El Árbol de la Vida como camino"
+            title="El Árbol de la Vida como camino"
+            subtitle={cabalaNom}
             bgColor={cabalaBg}
             color={cabalaTxt}
             onIconClick={() => navigate("/aprendizaje/cursosModalidad/Cábala")}

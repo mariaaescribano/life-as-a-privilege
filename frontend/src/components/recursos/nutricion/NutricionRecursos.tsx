@@ -127,9 +127,9 @@ const proteinasAlimentos: Alimento[] = [
     valores: [{ label: "Calorías", valor: "~155 kcal" }, { label: "Proteínas", valor: "~13 g" }, { label: "G. insaturadas", valor: "~6 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~1 g" }, { label: "Fibra", valor: "~0 g" }],
   },
   {
-    id: "prot-4", nom: "Pollo", emoji: "🍗", imgPath: `${BASE}/pollo.jpg`,
-    descripcion: "Proteína magra por excelencia. Fácil de digerir y con muy poca grasa, ideal para mantener y reconstruir tejido muscular.",
-    valores: [{ label: "Calorías", valor: "~165 kcal" }, { label: "Proteínas", valor: "~31 g" }, { label: "G. insaturadas", valor: "~2 g" }, { label: "G. saturadas", valor: "~1 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }],
+    id: "prot-4", nom: "Legumbres", emoji: "🫘", imgPath: `${BASE}/legumbres.jpg`,
+    descripcion: "Proteína vegetal completa acompañada de fibra, hierro y carbohidratos de absorción lenta. Pilares de la alimentación sostenible y la salud intestinal.",
+    valores: [{ label: "Calorías", valor: "~116 kcal" }, { label: "Proteínas", valor: "~9 g" }, { label: "G. insaturadas", valor: "~0.3 g" }, { label: "G. saturadas", valor: "~0.1 g" }, { label: "Carbohidratos", valor: "~20 g" }, { label: "Fibra soluble", valor: "~7 g" }],
   },
   {
     id: "prot-5", nom: "Pescado", emoji: "🐟", imgPath: `${BASE}/pescado.jpg`,
@@ -467,6 +467,7 @@ function GrupoLabel({ label, color, Icon }: { label: string; color: string; Icon
 // CARBOHIDRATOS CARD
 // ─────────────────────────────────────────
 function CarbohidratosCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
+  const navigate = useNavigate();
   const grupoPreferibles: GrupoInfo = { label: "Preferibles", color: "#2e7d32", icon: IconPreferable };
   const grupoNoBenef: GrupoInfo     = { label: "No beneficiosos", color: "#c62828", icon: IconNoBeneficioso };
 
@@ -504,6 +505,28 @@ function CarbohidratosCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
           </Flex>
         </Box>
       </Flex>
+
+      <Flex justify="flex-end" mt={5}>
+        <Flex
+          as="button"
+          align="center"
+          gap={1}
+          onClick={() => navigate("/aprendizaje/videoLessonPage/nutricion/nut-m2")}
+          color={TXT}
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="600"
+          textDecoration="underline"
+          textUnderlineOffset="3px"
+          _hover={{ opacity: 0.7 }}
+          transition="opacity 0.2s"
+          bg="transparent"
+          border="none"
+          cursor="pointer"
+        >
+          Ver vídeo →
+        </Flex>
+      </Flex>
     </Box>
   );
 }
@@ -512,6 +535,7 @@ function CarbohidratosCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
 // PROTEÍNAS CARD
 // ─────────────────────────────────────────
 function ProteinasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
+  const navigate = useNavigate();
   const grupo: GrupoInfo = { label: "Alimentos de proteínas completas", color: "#1565c0", icon: IconProteina };
 
   return (
@@ -523,8 +547,6 @@ function ProteinasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
       w="100%" maxW="850px"
     >
       <CardHeader title="Proteínas" />
-
-      {/* <GrupoLabel label="Alimentos de proteínas completas" color="#1565c0" Icon={IconProteina} /> */}
 
       {/* 2 rows of 3 */}
       <Flex direction="column" align="center" gap={4}>
@@ -539,6 +561,28 @@ function ProteinasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
           ))}
         </Flex>
       </Flex>
+
+      <Flex justify="flex-end" mt={5}>
+        <Flex
+          as="button"
+          align="center"
+          gap={1}
+          onClick={() => navigate("/aprendizaje/videoLessonPage/nutricion/nut-m1")}
+          color={TXT}
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="600"
+          textDecoration="underline"
+          textUnderlineOffset="3px"
+          _hover={{ opacity: 0.7 }}
+          transition="opacity 0.2s"
+          bg="transparent"
+          border="none"
+          cursor="pointer"
+        >
+          Ver vídeo →
+        </Flex>
+      </Flex>
     </Box>
   );
 }
@@ -547,6 +591,7 @@ function ProteinasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
 // GRASAS CARD
 // ─────────────────────────────────────────
 function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
+  const navigate = useNavigate();
   const grupoInsaturadas: GrupoInfo = { label: "Insaturadas", color: "#2e7d32", icon: IconInsaturada };
   const grupoSaturadas: GrupoInfo   = { label: "Saturadas",   color: "#ef6c00", icon: IconSaturada };
 
@@ -563,7 +608,6 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
       <Flex direction={{ base: "column", md: "row" }} gap={{ base: 0, md: 4 }}>
         {/* Insaturadas */}
         <Box flex={1}>
-
           <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="nowrap">
             {grasasInsaturadas.map(a => (
               <AlimentoCirculo key={a.id} alimento={a} grupo={grupoInsaturadas} onClick={onSelect} />
@@ -576,13 +620,34 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
 
         {/* Saturadas */}
         <Box flex={1}>
-
           <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="nowrap">
             {grasasSaturadas.map(a => (
               <AlimentoCirculo key={a.id} alimento={a} grupo={grupoSaturadas} onClick={onSelect} />
             ))}
           </Flex>
         </Box>
+      </Flex>
+
+      <Flex justify="flex-end" mt={5}>
+        <Flex
+          as="button"
+          align="center"
+          gap={1}
+          onClick={() => navigate("/aprendizaje/videoLessonPage/nutricion/nut-m3")}
+          color={TXT}
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="600"
+          textDecoration="underline"
+          textUnderlineOffset="3px"
+          _hover={{ opacity: 0.7 }}
+          transition="opacity 0.2s"
+          bg="transparent"
+          border="none"
+          cursor="pointer"
+        >
+          Ver vídeo →
+        </Flex>
       </Flex>
     </Box>
   );
@@ -616,8 +681,8 @@ export default function NutricionRecursos() {
         >
           <DisciplineHeader
             icon={<NutricionIcon size={{ base: "40px", md: "50px" }} />}
-            title={nutricionNom}
-            subtitle="Las bases de la nutrición"
+            title="Las bases de la nutrición"
+            subtitle={nutricionNom}
             bgColor={BG}
             color={TXT} mb={{ base: 0, md: 0 }}
             onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
@@ -628,7 +693,7 @@ export default function NutricionRecursos() {
           <GrasasCard        onSelect={setSelected} />
 
           {/* AVISO LEGAL */}
-          <Box w="100%" mt={4} mb={2}>
+          <Box w="100%" maxW="680px" mb="50px" mx="auto" mt={2}>
             <Flex
               as="button"
               w="100%"

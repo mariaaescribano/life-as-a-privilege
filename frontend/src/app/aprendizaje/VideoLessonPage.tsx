@@ -154,18 +154,19 @@ export default function VideoLessonPage() {
 
   // Auto-avance al vídeo siguiente cuando YouTube termina; aplica velocidad guardada al cargar
   useEffect(() => {
-    let speedApplied = false;
+    const applySpeed = () => {
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: "command", func: "setPlaybackRate", args: [speed] }),
+        "*"
+      );
+    };
     const handleMessage = (event: MessageEvent) => {
       if (event.origin !== "https://www.youtube.com") return;
       try {
         const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-        // Aplica la velocidad al primer mensaje de YouTube (player inicializado)
-        if (!speedApplied) {
-          iframeRef.current?.contentWindow?.postMessage(
-            JSON.stringify({ event: "command", func: "setPlaybackRate", args: [speed] }),
-            "*"
-          );
-          speedApplied = true;
+        // Aplica velocidad cuando el player está listo y al comenzar a reproducir
+        if (data.event === "onReady" || (data.event === "onStateChange" && data.info === 1)) {
+          applySpeed();
         }
         if (data.event === "onStateChange" && data.info === 0 && datos?.linkNext) {
           sessionStorage.setItem("videoAutoplay", "1");
@@ -266,6 +267,12 @@ export default function VideoLessonPage() {
                   src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1${shouldAutoplay ? "&autoplay=1" : ""}`}
                   title="YouTube video player"
                   allowFullScreen
+                  onLoad={() => {
+                    iframeRef.current?.contentWindow?.postMessage(
+                      JSON.stringify({ event: "listening" }),
+                      "*"
+                    );
+                  }}
                 />
               </Box>
 
@@ -482,7 +489,7 @@ export default function VideoLessonPage() {
       <SiteFooter />
 
       {/* ── BOTÓN FLOTANTE ── */}
-      {datos?.floatingButton && moduloDatos && (
+      {datos?.floatingButton && moduloDatos && moduloId !== fisiologiaNom && (
         <FloatingActionButton
           config={datos.floatingButton}
           color={moduloDatos.color}

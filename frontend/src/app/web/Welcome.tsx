@@ -328,10 +328,10 @@ const Welcome = () => {
               textShadow="0 1px 5px rgba(0,60,50,0.3)"
             >
               <br />
-                Mi propósito es descubrir la Verdad profunda del ser humano, más allá de religiones, tradiciones y culturas, entendiendo que todas contienen fragmentos de ella.
+                  Mi propósito es profundizar en la naturaleza humana, usando psicología, filosofía, ciencias biológicas y sabidurías ancestrales para ello.
               <br />
               <br />
-              “La Vida como Privilegio” es una forma de mirar, una posibilidad de elegir cómo vivir. Esta plataforma te invita a redescubrir al ser Humano como el ser digno que es y su interrelación con la naturaleza.</Text>
+              “La Vida como Privilegio” es una forma de mirar, una posibilidad de elegir cómo vivir. Esta plataforma te invita a redescubrir al ser Humano como el ser digno que es.</Text>
             <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
               <Box
                 as="button"
