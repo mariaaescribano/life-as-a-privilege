@@ -220,6 +220,7 @@ export default function UserAccount() {
   const [name,  setName]  = useState("");
   const [email, setEmail] = useState("");
 
+  const [loading,    setLoading]    = useState(true);
   const [editing,    setEditing]    = useState<Field | null>(null);
   const [savedField, setSavedField] = useState<Field | null>(null);
   const [error,         setError]         = useState("");
@@ -240,7 +241,8 @@ export default function UserAccount() {
         setEmail(u.email ?? "");
         // La contraseña NO viene del backend (está hasheada). Se muestra siempre como ••••••••
       })
-      .catch(() => setError("Error al cargar los datos"));
+      .catch(() => setError("Error al cargar los datos"))
+      .finally(() => setLoading(false));
   }, []);
 
   // Guardar un campo
@@ -351,6 +353,12 @@ export default function UserAccount() {
 
   // ── Render ────────────────────────────────────────────────────────────────
 
+  if (loading) return (
+    <Flex minH="100vh" bg="#008080" justify="center" align="center">
+      <Spinner />
+    </Flex>
+  );
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080">
       <SiteHeader variant="private" userImg={img} />
@@ -364,6 +372,7 @@ export default function UserAccount() {
           py={{ base: 8, md: 12 }}
           boxShadow="0 8px 48px rgba(0,0,0,0.25)"
         >
+          <>
 
           {/* ── Foto ── */}
           <Flex direction="column" align="center" mb={10}>
@@ -476,6 +485,7 @@ export default function UserAccount() {
               </Flex>
             )}
           </Flex>
+          </>
         </Box>
       </Flex>
     </Box>

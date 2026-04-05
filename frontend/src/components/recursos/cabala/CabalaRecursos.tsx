@@ -45,7 +45,6 @@ function CabalaModal({
   onClose: () => void;
 }) {
   const [letraOpen, setLetraOpen] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.style.overflow = "hidden";

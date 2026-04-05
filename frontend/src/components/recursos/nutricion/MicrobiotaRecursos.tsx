@@ -7,7 +7,6 @@ import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { IntestinoIcon, NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
 import {
   MicrobiotaIconMicro,
-  MicrobiotaIconEje,
   MicrobiotaIconMujer,
 } from "../../../hardCoded/aprendizajes/Nutricion/MicrobiotaIcons";
 import { BrainIcon } from "lucide-react";

@@ -11,7 +11,7 @@ import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
-import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNomLink, tcmBg, tcmTxt, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, fisiologiaNom, FisiologiaIcon, fisiologiaTxt } from "../../GlobalVariables";
+import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNomLink, tcmBg, tcmTxt, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 

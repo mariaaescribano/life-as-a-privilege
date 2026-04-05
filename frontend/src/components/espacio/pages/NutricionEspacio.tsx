@@ -288,7 +288,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
         >
           <DisciplineHeader
             icon={isGuest
-              ? <CalculadoraIcon size={{ base: "35px", md: "45px" }} />
+              ? <CalculadoraIcon />
               : <NutricionIcon size={{ base: "35px", md: "45px" }} />
             }
             title={isGuest ? "Calcular necesidades" : nutricionNom}
