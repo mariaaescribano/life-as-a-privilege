@@ -1,7 +1,7 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { fisioCurso1ID, fisioCurso2ID, fisioCurso3ID, modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer } from "../aprendizajes/Fisiologia/ModulosFisiologia";
+import { fisioCurso1ID, fisioCurso2ID, fisioCurso3ID, fisioCurso4ID, modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion } from "../aprendizajes/Fisiologia/ModulosFisiologia";
 
 export const fisiologiaCursos: ModalidadInfo = {
   nom: fisiologiaNom,
@@ -21,10 +21,21 @@ export const fisiologiaCursos: ModalidadInfo = {
       modulos: modulosFisiologia,
     },
     {
+      id: fisioCurso4ID,
+      cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso4ID,
+      titulo: "La meditación y el cerebro",
+      foto: "/img/fisio/medit.png",
+      descripcion: "Descubre cómo la meditación transforma físicamente tu cuerpo, incrementa la neuroplasticidad y te permite ser tu mejor versión cuando quieras.",
+      precio: null,
+      numLecciones: 7,
+      icon: <FisiologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosFisiologiaMeditacion,
+    },
+    {
       id: fisioCurso3ID,
       cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso3ID,
       titulo: "La fisiología del cáncer",
-      foto: "/img/fisio/cancer.png",
+      foto: "/img/fisio/fisioCancer.png",
       descripcion: "Entiende qué es el cáncer desde dentro: cómo mutan las células, cómo crece un tumor y qué puedes hacer tú para prevenirlo.",
       precio: null,
       numLecciones: 11,
@@ -42,5 +53,6 @@ export const fisiologiaCursos: ModalidadInfo = {
       icon: <FisiologiaIcon size={{ base: "20px", md: "30px" }} />,
       modulos: modulosFisiologiaInflamacion,
     },
+   
   ],
 };

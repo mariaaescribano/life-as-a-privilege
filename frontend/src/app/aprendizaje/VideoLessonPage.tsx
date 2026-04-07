@@ -26,7 +26,7 @@ import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala
 import { modulosCabala2 } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala2";
 import { modulosNutricion, modulosMicrobiota } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
-import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
+import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 import { modulosCultura } from "../../hardCoded/aprendizajes/Cultura/ModulosCultura";
 
 export default function VideoLessonPage() {
@@ -137,7 +137,8 @@ export default function VideoLessonPage() {
         setdatos(
           getModuleByTitle(submoduloId!, modulosFisiologia) ??
           getModuleByTitle(submoduloId!, modulosFisiologiaInflamacion) ??
-          getModuleByTitle(submoduloId!, modulosFisiologiaCancer)
+          getModuleByTitle(submoduloId!, modulosFisiologiaCancer) ??
+          getModuleByTitle(submoduloId!, modulosFisiologiaMeditacion)
         );
       }
       else if(moduloId === culturaNomLink)

@@ -24,5 +24,6 @@ export const cursosData: Record<string, ModalidadInfo> = {
   [nutricionNomLink]: nutricionCursos,
   [ayurvedaNomLink]: ayurvedaCursos,
   [fisiologiaNom]: fisiologiaCursos,
+  [culturaNom]: culturaCursos,
   [culturaNomLink]: culturaCursos,
 };
