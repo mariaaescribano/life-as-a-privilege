@@ -1,0 +1,11 @@
+export const letraCul1 = "Baruch Spinoza fue un filósofo del siglo XVII nacido en Ámsterdam. Desafió las creencias religiosas dominantes de su tiempo y por ello fue excomulgado de su comunidad judía. Su obra principal, La Ética demostrada según el orden geométrico, transformó la filosofía moderna e influyó en grandes mentes como Nietzsche y Einstein.";
+
+export const letraCul2 = "Einstein dijo que si existía un Dios, ese era el Dios de Spinoza. Spinoza, influenciado por la cábala judía y por las ciencias biológicas, llegó a la conclusión de que solo existe una sustancia infinita y todo lo que existe es una expresión de esa única realidad. Spinoza rechazó a Dios como un ser personal y juzgador, y lo definió como el universo entero.";
+
+export const letraCul3 = "Spinoza decía que no existe el libre albedrío. Aseguraba que, al ignorar las causas de nuestros deseos y, por extensión, de nuestras acciones, no somos realmente libres. Estamos sometidos e influenciados por causas desconocidas que guían nuestras decisiones desde las sombras. Estas causas nunca llegaremos a entenderlas por completo, porque nosotros, como humanos, somos solo una parte de esa cadena infinita de causas que forma la realidad.";
+
+export const letraCul4 = "Spinoza promovía el estudio de la naturaleza, porque defendía que cuanto más uno conoce y entiende, más libertad tiene. De esta forma uno no se deja arrastrar por impulsos o supuestas necesidades físicas, sino que es capaz de entenderlas y vivir en armonía con la verdadera naturaleza usando la razón.";
+
+export const letraCul5 = "Spinoza hablaba del Conatus, cuyo significado es el impulso básico de todo ser a querer ser mejor de lo que ya es. Es la lucha por su supervivencia y por la elevación mental y moral. Defiende que si queremos entender de qué energía se tiñen nuestros impulsos básicos, debemos comprender las emociones para así no ser dominados por ellas.";
+
+export const letraCul6 = "Spinoza defendía que el objetivo de la vida es vivir según la armonía de la naturaleza y alcanzar la paz interior. Para ello, promovía un amor intelectual a Dios, al que definía como el orden de las cosas. Cuanto más entendamos racionalmente a Dios, más podremos entendernos a nosotros mismos y con ello alcanzar una serenidad nacida desde la comprensión.";

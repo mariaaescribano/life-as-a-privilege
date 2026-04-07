@@ -1,4 +1,4 @@
-import { neuropsicologiaNom, astrologiaNom, tcmNomLink, cabalaNom, nutricionNomLink, ayurvedaNomLink, fisiologiaNom, culturaNom } from "../../GlobalVariables";
+import { neuropsicologiaNom, astrologiaNom, tcmNomLink, cabalaNom, nutricionNomLink, ayurvedaNomLink, fisiologiaNom, culturaNom, culturaNomLink } from "../../GlobalVariables";
 
 export const neuropsicologiaEsqNom = neuropsicologiaNom + "cursoEsq";
 export const neuropsicologiaAnxNom = neuropsicologiaNom + "cursoAnx";
@@ -24,5 +24,5 @@ export const cursosData: Record<string, ModalidadInfo> = {
   [nutricionNomLink]: nutricionCursos,
   [ayurvedaNomLink]: ayurvedaCursos,
   [fisiologiaNom]: fisiologiaCursos,
-  [culturaNom]: culturaCursos,
+  [culturaNomLink]: culturaCursos,
 };

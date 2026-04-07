@@ -13,6 +13,7 @@ import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
+  culturaBg, CulturaIcon, culturaNom, culturaNomLink, culturaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
@@ -25,7 +26,8 @@ import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala
 import { modulosCabala2 } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala2";
 import { modulosNutricion, modulosMicrobiota } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
-import { modulosFisiologia, modulosFisiologiaInflamacion } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
+import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
+import { modulosCultura } from "../../hardCoded/aprendizajes/Cultura/ModulosCultura";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -59,6 +61,8 @@ export default function VideoLessonPage() {
         return { nom: ayurvedaNom, nomModalidad: nom, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "44px", md: "44px" }} /> };
       case cabalaNom:
         return { nom: cabalaNom, nomModalidad: nom, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "44px", md: "44px" }} /> };
+      case culturaNomLink:
+        return { nom: culturaNom, nomModalidad: nom, bgColor: culturaBg, color: culturaTxt, icon: <CulturaIcon size={{ base: "44px", md: "44px" }} /> };
       default:
         return { nom: "", nomModalidad: "", bgColor: "", color: "", icon: null };
     }
@@ -132,8 +136,13 @@ export default function VideoLessonPage() {
       {
         setdatos(
           getModuleByTitle(submoduloId!, modulosFisiologia) ??
-          getModuleByTitle(submoduloId!, modulosFisiologiaInflamacion)
+          getModuleByTitle(submoduloId!, modulosFisiologiaInflamacion) ??
+          getModuleByTitle(submoduloId!, modulosFisiologiaCancer)
         );
+      }
+      else if(moduloId === culturaNomLink)
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosCultura));
       }
     }
   }, [moduloId, submoduloId]);

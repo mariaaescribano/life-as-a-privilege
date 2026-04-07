@@ -12,6 +12,7 @@ import {
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   FitoterapiaIcon,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
+  culturaBg, CulturaIcon, culturaNom, culturaNomLink, culturaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
@@ -72,6 +73,8 @@ export default function ModulesPage() {
         return { nom: titulo || ayurvedaNom, disciplina: ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "40px", md: "50px" }} />, modulos};
       case cabalaNom:
         return { nom: titulo || cabalaNom, disciplina: cabalaNom, nomModalidad: nomMod, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+      case culturaNomLink:
+        return { nom: titulo || culturaNom, disciplina: culturaNom, nomModalidad: nomMod, bgColor: culturaBg, color: culturaTxt, icon: <CulturaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       default:
         return { nom: "", nomModalidad: "", bgColor: "", color: "", icon: null };
     }
