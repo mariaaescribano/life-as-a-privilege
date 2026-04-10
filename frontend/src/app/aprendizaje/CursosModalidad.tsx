@@ -11,7 +11,7 @@ import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
-import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNomLink, tcmBg, tcmTxt, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon } from "../../GlobalVariables";
+import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNomLink, tcmBg, tcmTxt, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, culturaBg, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -179,7 +179,7 @@ export default function CursosModalidad() {
             title={modalidad.nom}
             bgColor={modalidad.bgColor}
             color={modalidad.color}
-            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink /*|| moduloId === fisiologiaNom*/) ? { base: 6, md: 7 } : undefined}
+            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink || moduloId === astrologiaNom || moduloId === culturaNom || moduloId === culturaNomLink /*|| moduloId === fisiologiaNom*/) ? { base: 6, md: 7 } : undefined}
           />
 
           {/* ── TESTS (solo Medicina China) ── */}
@@ -354,6 +354,59 @@ export default function CursosModalidad() {
               </Flex>
             </Flex>
           )}
+
+          {/* ── CARTAS DE PERSONAJES HISTÓRICOS (Astrología + Cultura) ── */}
+          {(moduloId === astrologiaNom || moduloId === culturaNom || moduloId === culturaNomLink) && (() => {
+            const isAstro = moduloId === astrologiaNom;
+            const bg = isAstro ? astrologiaBg : culturaBg;
+            const txt = isAstro ? astrologiaTxt : culturaTxt;
+            const icon = isAstro
+              ? <AstrologiaIcon size={{ base: "22px", md: "22px" }} />
+              : <CulturaIcon size={{ base: "22px", md: "22px" }} />;
+            return (
+              <Flex justify="center" mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
+                <Flex
+                  as="a"
+                  href="https://docs.google.com/document/d/1OWQUl5Nz2AgzDow4O1-PQKoakzDwEo9KwY9qOk6QKWg/edit?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  align="center"
+                  justify="center"
+                  gap={2}
+                  px={{ base: 6, md: 10 }}
+                  py={{ base: 3, md: 4 }}
+                  borderRadius="full"
+                  bg={bg}
+                  border={`1.5px solid ${txt}88`}
+                  boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+                  cursor="pointer"
+                  transition="all 0.22s ease"
+                  _hover={{
+                    boxShadow: `0 0 20px ${txt}44`,
+                    transform: "translateY(-2px)",
+                    border: `1.5px solid ${txt}aa`,
+                    opacity: 0.88,
+                  }}
+                  _active={{ transform: "translateY(0px)" }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Box flexShrink={0} display="flex" alignItems="center">
+                    {icon}
+                  </Box>
+                  <Text
+                    color={txt}
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="700"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    letterSpacing="0.08em"
+                    lineHeight="1"
+                  >
+                    Cartas de Personajes Históricos
+                  </Text>
+                </Flex>
+              </Flex>
+            );
+          })()}
 
           {/* ── CÉLULAS DEL CUERPO (solo Fisiología) ── */}
           {/* {moduloId === fisiologiaNom && (

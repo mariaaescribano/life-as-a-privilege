@@ -84,47 +84,6 @@ const BotanicalDivider = ({ color }: { color: string }) => (
   </Flex>
 );
 
-/* ══════════════════════════════════════════════
-   YOUTUBE EMBED
-══════════════════════════════════════════════ */
-const getEmbedUrl = (url: string): string => {
-  const short = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-  if (short) return `https://www.youtube.com/embed/${short[1]}?rel=0`;
-  const long = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
-  if (long) return `https://www.youtube.com/embed/${long[1]}?rel=0`;
-  return url;
-};
-
-const YoutubePlayer = ({ videoUrl, color }: { videoUrl?: string; color: string }) => {
-  const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
-  return (
-    <Box mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${color}30`} bg={color + "0d"}
-      h={{ base: "210px", md: "270px" }} display="flex" alignItems="center" justifyContent="center"
-    >
-      {embedUrl ? (
-        <iframe src={embedUrl} width="100%" height="100%"
-          style={{ border: "none", display: "block" }}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen title="Vídeo de la planta"
-        />
-      ) : (
-        <Flex direction="column" align="center" justify="center" gap={4} w="100%" h="100%">
-          <Box w="66px" h="66px" borderRadius="full" bg={color + "18"} border={`1.5px solid ${color}35`}
-            display="flex" alignItems="center" justifyContent="center"
-          >
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M10 7.5v13l11-6.5-11-6.5z" fill={color} opacity="0.65"/>
-              <path d="M22 5 C18 7 17 12 19 16 C22 13 23 9 22 5 Z" fill={color} opacity="0.30"/>
-            </svg>
-          </Box>
-          <Text color={color} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.65} letterSpacing="0.04em">
-            Vídeo próximamente
-          </Text>
-        </Flex>
-      )}
-    </Box>
-  );
-};
 
 /* ══════════════════════════════════════════════
    SECCIÓN MODAL
@@ -225,7 +184,14 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
             </Text>
           </Box>
 
-          <YoutubePlayer videoUrl={planta.videoUrl} color={MODAL_COLOR} />
+          <Box mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${MODAL_COLOR}30`}
+            h={{ base: "180px", md: "240px" }} display="flex" alignItems="center" justifyContent="center"
+            bg={MODAL_COLOR + "18"}
+          >
+            <Image src={planta.foto} alt={planta.nombre} w="100%" h="100%" objectFit="cover" display="block"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+            />
+          </Box>
           <BotanicalDivider color={nutricionTxt} />
 
           <Text color={textDark} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" opacity={0.85}>

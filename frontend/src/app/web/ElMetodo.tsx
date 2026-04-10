@@ -439,7 +439,7 @@ export default function ElMetodo() {
               mt={4}
               textShadow="0 1px 6px rgba(0,60,50,0.3)"
             >
-              Una integración de sabidurías ancestrales, psicología y ciencias modernas para acompañar al ser Humano en su proceso de autoconocimiento, desde una visión holística y profunda.
+              Terapia holística orientada a guiar a la persona desde la dignidad a través de las disciplinas siguientes...
             </Text>
           </Box>
         </Box>

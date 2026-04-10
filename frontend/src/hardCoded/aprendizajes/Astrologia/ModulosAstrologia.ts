@@ -304,8 +304,8 @@ export const modulosAstrologiaCurso0: ModuloContenido[] = [
       },
     ],
   },
-  {
-    title: "3. Los planetas transpersonales",
+    {
+    title: "3. Los planetas sociales",
     icon: PlanetIcon,
     floatingButton: serviciosAstrologicos,
     submodules: [
@@ -337,9 +337,16 @@ export const modulosAstrologiaCurso0: ModuloContenido[] = [
         cursoId: "astro-curso-0",
         floatingButton: serviciosAstrologicos,
       },
+    ],
+  },
+  {
+    title: "4. Los planetas transpersonales",
+    icon: PlanetIcon,
+    floatingButton: serviciosAstrologicos,
+    submodules: [
       {
         id: "c0-urano",
-        nom: "3.3 Urano",
+        nom: "4.1 Urano",
         link: `${basePath}/c0-urano`,
         linkAnterior: `${basePath}/c0-saturno`,
         linkNext: `${basePath}/c0-neptuno`,
@@ -353,7 +360,7 @@ export const modulosAstrologiaCurso0: ModuloContenido[] = [
       },
       {
         id: "c0-neptuno",
-        nom: "3.4 Neptuno",
+        nom: "4.2 Neptuno",
         link: `${basePath}/c0-neptuno`,
         linkAnterior: `${basePath}/c0-urano`,
         linkNext: `${basePath}/c0-pluton`,
@@ -367,7 +374,7 @@ export const modulosAstrologiaCurso0: ModuloContenido[] = [
       },
       {
         id: "c0-pluton",
-        nom: "3.5 Plutón",
+        nom: "4.3 Plutón",
         link: `${basePath}/c0-pluton`,
         linkAnterior: `${basePath}/c0-neptuno`,
         linkNext: "",

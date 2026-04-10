@@ -13,11 +13,15 @@ import {
   nutricionNomLink,
   ayurvedaNomLink,
   fisiologiaNom,
+  culturaNomLink,
 } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
+  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-4"   }, // La meditación y el cerebro
+  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-3"   }, // La fisiología del cáncer
+  { modalidadKey: culturaNomLink,        cursoId: "cul-curso-1"     }, // Spinoza
   { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-2"   }, // La Inflamación
   { modalidadKey: astrologiaNom,         cursoId: "astro-curso-2"   }, // Los Arquetipos
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // Microbiota
