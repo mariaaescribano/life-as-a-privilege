@@ -14,18 +14,18 @@ export const neuropsicologiaCursos: ModalidadInfo = {
   color: neuropsicologiaTxt,
   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
-    {
-      id: "anorexia",
-      titulo: "El enigma de la anorexia",
-      foto: "/img/np/anorexia.png",
-      descripcion:
-        "Comprende la esencia de la manifestación del sufrimiento con la tasa de mortalidad más elevada. Entiende cómo las anoréxicas ven la realidad y por qué no tiene nada que ver con las redes sociales.",
-      precio: null,
-      numLecciones: 10,
-      icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
-      modulos: modulosAnorexia,
-    },
+    // {
+    //   id: "anorexia",
+    //   titulo: "El enigma de la anorexia",
+    //   foto: "/img/np/anorexia.png",
+    //   descripcion:
+    //     "Comprende la esencia de la manifestación del sufrimiento con la tasa de mortalidad más elevada. Entiende cómo las anoréxicas ven la realidad y por qué no tiene nada que ver con las redes sociales.",
+    //   precio: null,
+    //   numLecciones: 10,
+    //   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
+    //   cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
+    //   modulos: modulosAnorexia,
+    // },
       {
       id: "esquizofrenia",
       titulo: "Más allá de la esquizofrenia",

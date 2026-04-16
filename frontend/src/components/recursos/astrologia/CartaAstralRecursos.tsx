@@ -7,6 +7,7 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
 import { SaberMasButton } from "../../global/SaberMasButton";
+import { SubscribeBox } from "../../global/SubscribeBox";
 import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
 import { modulosAstrologiaCurso0 } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
@@ -51,9 +52,9 @@ const PLANET_SUB: Record<string, Submodulo> = {
   marte:      modulosAstrologiaCurso0[2].submodules[5],
   jupiter:    modulosAstrologiaCurso0[3].submodules[0],
   saturno:    modulosAstrologiaCurso0[3].submodules[1],
-  urano:      modulosAstrologiaCurso0[3].submodules[2],
-  neptuno:    modulosAstrologiaCurso0[3].submodules[3],
-  pluton:     modulosAstrologiaCurso0[3].submodules[4],
+  urano:      modulosAstrologiaCurso0[4].submodules[0],
+  neptuno:    modulosAstrologiaCurso0[4].submodules[1],
+  pluton:     modulosAstrologiaCurso0[4].submodules[2],
 };
 
 /* ══════════════════════════════════════════════
@@ -494,22 +495,19 @@ const ObtenerCartaCard = () => {
             </Flex>
 
             {/* Imagen centrada */}
-            <Box
-              borderRadius="xl"
-              overflow="hidden"
-              border={`1px solid ${astrologiaTxt}22`}
-              boxShadow={`0 4px 24px rgba(0,0,0,0.55), 0 0 24px ${astrologiaTxt}18`}
-              h={{ base: "200px", md: "280px" }}
-              w="100%"
-            >
+            <Flex justify="center">
               <Box
                 as="img"
                 src="/img/astrologia/curso0.png"
                 alt="Carta Astral"
-                w="100%" h="100%"
-                style={{ objectFit: "cover", objectPosition: "center center" }}
+                maxH={{ base: "200px", md: "280px" }}
+                maxW="100%"
+                borderRadius="xl"
+                border={`1px solid ${astrologiaTxt}22`}
+                boxShadow={`0 4px 24px rgba(0,0,0,0.55), 0 0 24px ${astrologiaTxt}18`}
+                style={{ objectFit: "contain" }}
               />
-            </Box>
+            </Flex>
           </Box>
         </Box>
       </Collapse>
@@ -583,8 +581,7 @@ export default function CartaAstralRecursos() {
             subtitle="Astrología"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
-            maxW="1100px"
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Astrología")}
+            onIconClick={() => navigate("/aprendizaje/modulosPage/Astrología/astro-curso-0")}
           />
 
           {/* Card plegable: Obtén tu Carta Astral */}
@@ -710,6 +707,7 @@ export default function CartaAstralRecursos() {
           </Box>
 
           <SaberMasButton onClick={() => setSaberMasOpen(true)} color={astrologiaTxt} bgColor={astrologiaBg} />
+          <SubscribeBox />
         </Flex>
       </Box>
 

@@ -147,7 +147,7 @@ export const modulosNeuroPsicologia: ModuloContenido[] = [
         link:`${basePath}/np8`,
         linkAnterior:`${basePath}/np7`,
         linkNext:`${basePath}/np9`,
-        descripcion:"La gran mayoría de los adultos se menosprecian y desvaloran, hundiéndose en la pereza, pensando que por cumplir años condenados a la decadencia.",
+        descripcion:"La gran mayoría de los adultos se menosprecian y desvaloran, hundiéndose en la pereza, pensando que por cumplir años están condenados a la decadencia.",
         video:"YezjA0ZSK2Y",
         letra: letranp8,
         cursoId: "etapasVida",
@@ -258,7 +258,7 @@ export const modulosEsquizofrenia: ModuloContenido[] = [
       },
       {
         id:"esq5",
-        nom: "2.3 Autodañarse y lealtad a los padres",
+        nom: "2.3 Autodaño y lealtad a los padres",
         link:`${basePathEsq}/esq5`,
         linkAnterior:`${basePathEsq}/esq4`,
         linkNext:`${basePathEsq}/esq6`,

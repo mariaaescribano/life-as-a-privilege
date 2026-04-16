@@ -65,7 +65,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       {isPrivate ? (
         /* ── Navegación privada ── */
         <Flex align="center" gap={{ base: 4, md: 6 }}>
-          <Flex
+          {/* <Flex
             align="center" gap={2} cursor="pointer"
             onClick={() => navigate("/espacio/espacioHome")}
             color="rgba(255,255,255,0.85)"
@@ -84,7 +84,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             >
               Mi Espacio
             </Text>
-          </Flex>
+          </Flex> */}
 
           <Flex
             align="center" gap={2} cursor="pointer"
@@ -202,51 +202,73 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         //       Reels
         //     </Text>
         //   </Flex>
-        
-        <Flex align="center" gap={{ base: 3, md: 6 }}>
+
+        // <Flex align="center" gap={{ base: 3, md: 6 }}>
+        //   <Flex
+        //     align="center" gap={2} cursor="pointer"
+        //     onClick={() => navigate("/logIn")}
+        //     color="rgba(255,255,255,0.85)"
+        //     _hover={{ color: "white" }}
+        //     transition="color 0.2s"
+        //   >
+        //     <LoginIcon size="28px" color="currentColor" />
+        //     <Text
+        //       display={{ base: "none", md: "block" }}
+        //       fontSize={{ base: "md", md: "lg" }}
+        //       fontWeight="500"
+        //       letterSpacing="0.04em"
+        //       textShadow="0 1px 4px rgba(0,80,70,0.5)"
+        //       style={{
+        //           filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+        //         }}
+        //     >
+        //       Inicio de sesión
+        //     </Text>
+        //   </Flex>
+
+        //   <Box
+        //     as="button"
+        //     onClick={() => navigate("/signIn")}
+        //     color="white"
+        //     fontWeight="600"
+        //     fontSize={{ base: "md", md: "lg" }}
+        //     letterSpacing="0.04em"
+        //     px={{ base: 4, md: 6 }}
+        //     py={{ base: "8px", md: "10px" }}
+        //     borderRadius="full"
+        //     border="1.5px solid rgba(255,255,255,0.6)"
+        //     bg="rgba(255,255,255,0.12)"
+        //     cursor="pointer"
+        //     _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
+        //     transition="all 0.2s"
+        //     style={{
+        //           filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+        //         }}
+        //   >
+        //     Registrarse
+        //   </Box>
+        // </Flex>
+        <Flex align="center" gap={{ base: 4, md: 6 }}>
           <Flex
             align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/logIn")}
+            onClick={() => navigate("/aprendizaje/aprendizajeHome")}
             color="rgba(255,255,255,0.85)"
             _hover={{ color: "white" }}
             transition="color 0.2s"
           >
-            <LoginIcon size="28px" color="currentColor" />
+            <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
             <Text
               display={{ base: "none", md: "block" }}
               fontSize={{ base: "md", md: "lg" }}
               fontWeight="500"
               letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
               style={{
-                  filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                }}
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
             >
-              Inicio de sesión
+              Aprendizajes
             </Text>
           </Flex>
-
-          <Box
-            as="button"
-            onClick={() => navigate("/signIn")}
-            color="white"
-            fontWeight="600"
-            fontSize={{ base: "md", md: "lg" }}
-            letterSpacing="0.04em"
-            px={{ base: 4, md: 6 }}
-            py={{ base: "8px", md: "10px" }}
-            borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.6)"
-            bg="rgba(255,255,255,0.12)"
-            cursor="pointer"
-            _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-            transition="all 0.2s"
-            style={{
-                  filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                }}
-          >
-            Registrarse
-          </Box>
         </Flex>
       )}
     </Flex>

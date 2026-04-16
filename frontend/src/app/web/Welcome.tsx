@@ -3,6 +3,7 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { SubscribeBox } from "../../components/global/SubscribeBox";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -440,33 +441,9 @@ const Welcome = () => {
       </Box>
 
 
-      {/* ── BOTÓN ENTRAR ── */}
-      <Flex justify="center" py={{ base: 12, md: 16 }}>
-        <Box
-          as="button"
-          onClick={() => navigate("/logIn")}
-          color="white"
-          fontFamily="'EB Garamond', serif"
-          fontWeight="700"
-          fontSize={{ base: "xl", md: "2xl" }}
-          letterSpacing="0.2em"
-          px={{ base: 14, md: 20 }}
-          py={{ base: 4, md: 5 }}
-          borderRadius="full"
-          border="2px solid rgba(255,255,255,0.7)"
-          bg="rgba(255,255,255,0.12)"
-          cursor="pointer"
-          textShadow="0 2px 8px rgba(0,0,0,0.2)"
-          boxShadow="0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)"
-          _hover={{
-            bg: "rgba(255,255,255,0.25)",
-            borderColor: "white",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
-          }}
-          transition="all 0.25s ease"
-        >
-          ENTRAR
-        </Box>
+      {/* ── SUSCRIPCIÓN ── */}
+      <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 8, md: 12 }}>
+        <SubscribeBox />
       </Flex>
 
       {/* ── FOOTER ── */}

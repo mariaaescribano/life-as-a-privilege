@@ -1,5 +1,6 @@
 import React from "react";
 import TCMTestPage from "./TCMTestPage";
+import { RECS_CONSTITUCIONES } from "../data/tcmRecommendations";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
@@ -146,6 +147,7 @@ export default function TCMTest1() {
       savePrimaryKey="primaryConstitution"
       monoColor={true}
       showInterpretacion={false}
+      recsMap={RECS_CONSTITUCIONES}
       backToSpaceLink="/espacio/questions/medicinachina"
     />
   );

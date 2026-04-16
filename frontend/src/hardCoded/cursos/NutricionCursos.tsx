@@ -35,7 +35,7 @@ export const nutricionCursos: ModalidadInfo = {
       titulo: "La Microbiota",
       foto: "/img/nutri/microbiotacurso.png",
       descripcion:
-        "Conoce el ecosistema invisible que vive en ti, cómo influye en tu bienestar, tus emociones y tus decisiones, y aprende a cuidarlo cada día.",
+        "Conoce el ecosistema invisible que vive en ti, cómo influye en tu bienestar, tus emociones y tus decisiones. Aprende a cuidarlo y a cuidarte.",
       precio: null,
       numLecciones: 10,
       icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,

@@ -10,6 +10,7 @@ import TCMArrowModal from "./TCMArrowModal";
 import type { ArrowRelation } from "./TCMArrowModal";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteFooter from "../../global/Footer";
+import { SubscribeBox } from "../../global/SubscribeBox";
 import { letratcm4, letratcm5, letratcm6, letratcm7, letratcm8 } from "../../../hardCoded/aprendizajes/TCM/LetraTCM";
 
 
@@ -642,7 +643,6 @@ const TCMInfoModal = ({ onClose }: { onClose: () => void }) => {
             borderRadius="xl"
             px={{ base: 4, md: 6 }}
             py={{ base: 4, md: 5 }}
-            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
             sx={{ transition: "background-color 0.38s ease, border-color 0.38s ease" }}
           >
             <Text color={textColor} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.88"
@@ -1495,6 +1495,10 @@ const TCMPage = () => {
 
         {/* ── SABER MÁS ── */}
         {/* <SaberMasButton onClick={() => setSaberMasOpen(true)} color={tcmTxt} bgColor={tcmBg} /> */}
+
+        <Flex justify="center" w="100%" px={{ base: 5, md: 10 }} pb={{ base: 10, md: 14 }}>
+          <SubscribeBox />
+        </Flex>
 
         {/* ── FOOTER ── */}
         <SiteFooter />

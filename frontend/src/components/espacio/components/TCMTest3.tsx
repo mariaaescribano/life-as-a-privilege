@@ -1,6 +1,7 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
 import TCMTestPage from "./TCMTestPage";
+import { RECS_DESEQUILIBRIOS } from "../data/tcmRecommendations";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
@@ -151,7 +152,8 @@ export default function TCMTest3() {
       resultadoEtiqueta="Actual"
       localStorageKey="tcm_test3_result"
       savePrimaryKey="primaryDesequilibrio"
-       backToSpaceLink="/espacio/questions/medicinachina"
+      recsMap={RECS_DESEQUILIBRIOS}
+      backToSpaceLink="/espacio/questions/medicinachina"
     />
   );
 }

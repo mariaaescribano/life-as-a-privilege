@@ -94,7 +94,8 @@ function splitLines(
 export function generateTcmPdf(
   testNum: number,
   respuestas: TcmRespuesta[],
-  resultado?: string
+  resultado?: string,
+  consejo?: string
 ): void {
   const testInfo = TCM_TESTS[testNum];
   if (!testInfo) return;
@@ -178,6 +179,33 @@ export function generateTcmPdf(
     doc.setTextColor(...CHOSEN_COLOR);
     doc.text(sanitize(resultado), MARGIN + 52, y + 2);
     y += 14;
+  }
+
+  /* ── consejo / advice ── */
+  if (consejo) {
+    ensureSpace(30);
+    // box background
+    const consejoLines = splitLines(doc, consejo, CONTENT_W - 12);
+    const boxH = consejoLines.length * 5.5 + 20;
+    ensureSpace(boxH);
+    doc.setDrawColor(...HEADER_COLOR);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(MARGIN, y - 2, CONTENT_W, boxH, 3, 3, "S");
+    // title
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(...CHOSEN_COLOR);
+    doc.text(sanitize("Tu consejo personalizado"), MARGIN + 6, y + 6);
+    y += 14;
+    // body
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...TEXT_COLOR);
+    consejoLines.forEach((line) => {
+      doc.text(line, MARGIN + 6, y);
+      y += 5.5;
+    });
+    y += 10;
   }
 
   /* ── thin separator ── */
@@ -281,4 +309,156 @@ export function generateTcmPdf(
   drawPageNum(page);
 
   doc.save(`tcm_test${testNum}_respuestas.pdf`);
+}
+
+/* ══════════════════════════════════════════════
+   CONSEJOS PDF GENERATOR
+══════════════════════════════════════════════ */
+export function generateTcmConsejosPdf(
+  testNum: number,
+  resultado: string,
+  recs: { infusiones: string[]; hierbas: string[]; estiloDeVida: string[]; nutricion: string[] },
+  interpretacion?: string
+): void {
+  const testInfo = TCM_TESTS[testNum];
+  if (!testInfo) return;
+
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const pageH = doc.internal.pageSize.getHeight();
+  let page = 1;
+
+  const fillBackground = () => {
+    doc.setFillColor(...PAGE_BG);
+    doc.rect(0, 0, PAGE_W, pageH, "F");
+  };
+
+  const drawPageNum = (p: number) => {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...MUTED_COLOR);
+    doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
+  };
+
+  const drawHeader = () => {
+    doc.setFillColor(...HEADER_COLOR);
+    doc.rect(0, 0, PAGE_W, 22, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Life as a Privilege  ·  TCM", MARGIN, 10);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(220, 240, 240);
+    doc.text(sanitize("Consejos personalizados"), MARGIN, 17);
+  };
+
+  let y = 0;
+  const ensureSpace = (needed: number) => {
+    if (y + needed > pageH - 14) {
+      drawPageNum(page);
+      doc.addPage();
+      page++;
+      fillBackground();
+      drawHeader();
+      y = 30;
+    }
+  };
+
+  /* ═══════════════════ PAGE 1 ═══════════════════ */
+  fillBackground();
+  drawHeader();
+  y = 30;
+
+  /* ── title ── */
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(...TEXT_COLOR);
+  const titleLines = splitLines(doc, "Tus consejos personalizados", CONTENT_W);
+  titleLines.forEach((line) => {
+    doc.text(line, MARGIN, y);
+    y += 7;
+  });
+  y += 2;
+
+  /* ── resultado ── */
+  ensureSpace(14);
+  doc.setDrawColor(...HEADER_COLOR);
+  doc.setLineWidth(0.4);
+  doc.roundedRect(MARGIN, y - 4, CONTENT_W, 11, 2, 2, "S");
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...MUTED_COLOR);
+  doc.text("Resultado predominante:", MARGIN + 3, y + 2);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...CHOSEN_COLOR);
+  doc.text(sanitize(resultado), MARGIN + 52, y + 2);
+  y += 14;
+
+  /* ── interpretación ── */
+  if (interpretacion) {
+    const iLines = splitLines(doc, interpretacion, CONTENT_W - 8);
+    const boxH = iLines.length * 5 + 12;
+    ensureSpace(boxH);
+    doc.setDrawColor(...HEADER_COLOR);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(MARGIN, y - 2, CONTENT_W, boxH, 3, 3, "S");
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9.5);
+    doc.setTextColor(...TEXT_COLOR);
+    y += 6;
+    iLines.forEach((line) => {
+      doc.text(line, MARGIN + 4, y);
+      y += 5;
+    });
+    y += 10;
+  }
+
+  /* ── categories ── */
+  const categories: Array<{ key: keyof typeof recs; label: string }> = [
+    { key: "infusiones", label: "Infusiones" },
+    { key: "hierbas", label: "Hierbas" },
+    { key: "nutricion", label: "Nutrición" },
+    { key: "estiloDeVida", label: "Estilo de vida" },
+  ];
+
+  for (const cat of categories) {
+    const items = recs[cat.key];
+    if (!items || items.length === 0) continue;
+
+    /* section title */
+    ensureSpace(12);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(...SECTION_COLOR);
+    doc.text(sanitize(cat.label), MARGIN, y);
+    y += 2;
+    doc.setDrawColor(...SECTION_COLOR);
+    doc.setLineWidth(0.25);
+    doc.line(MARGIN, y, MARGIN + 35, y);
+    y += 6;
+
+    /* items */
+    for (const item of items) {
+      const lines = splitLines(doc, item, CONTENT_W - 8);
+      ensureSpace(lines.length * 5 + 4);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9.5);
+      doc.setTextColor(...TEXT_COLOR);
+
+      // bullet
+      doc.setFillColor(...CHOSEN_COLOR);
+      doc.circle(MARGIN + 2, y - 1.2, 1, "F");
+
+      lines.forEach((line, li) => {
+        doc.text(line, MARGIN + 6, y + li * 5);
+      });
+      y += lines.length * 5 + 2;
+    }
+
+    y += 5;
+  }
+
+  drawPageNum(page);
+  doc.save(`tcm_test${testNum}_consejos.pdf`);
 }

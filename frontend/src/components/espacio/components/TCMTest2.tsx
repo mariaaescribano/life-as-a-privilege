@@ -1,6 +1,7 @@
 import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import TCMTestPage from "./TCMTestPage";
+import { RECS_ELEMENTOS } from "../data/tcmRecommendations";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
@@ -161,7 +162,8 @@ export default function TCMTest2() {
       resultadoEtiqueta="Tu Terreno"
       localStorageKey="tcm_test2_result"
       savePrimaryKey="primaryElemento"
-       backToSpaceLink="/espacio/questions/medicinachina"
+      recsMap={RECS_ELEMENTOS}
+      backToSpaceLink="/espacio/questions/medicinachina"
     />
   );
 }

@@ -3,6 +3,7 @@ import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
+import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
@@ -492,12 +493,15 @@ export default function VideoLessonPage() {
             
             {/* ── BOTÓN ¿QUIERES SABER MÁS? ── */}
             {moduloDatos && (
-              <SaberMasButton
-                  icon={moduloDatos.icon}
-                  color={moduloDatos.color}
-                  bgColor={moduloDatos.bgColor}
-                  onClick={() => setSaberMasOpen(true)}
-                />
+              <>
+                <SaberMasButton
+                    icon={moduloDatos.icon}
+                    color={moduloDatos.color}
+                    bgColor={moduloDatos.bgColor}
+                    onClick={() => setSaberMasOpen(true)}
+                  />
+                <SubscribeBox />
+              </>
             )}
 
           </Flex>
@@ -510,7 +514,7 @@ export default function VideoLessonPage() {
       {/* ── BOTÓN FLOTANTE ── */}
       {datos?.floatingButton && moduloDatos && moduloId !== fisiologiaNom && (
         <FloatingActionButton
-          config={datos.floatingButton}
+          config={{ ...datos.floatingButton, action: datos.floatingButton.action === "astrologia-services" ? "astrologia-services" : "modal" }}
           color={moduloDatos.color}
           bgColor={moduloDatos.bgColor}
           icon={<datos.icon size="22px" />}

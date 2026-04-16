@@ -188,7 +188,7 @@ export function CalculadoraIcon() {
     </Box>
   );
 }
-export const nutricionDescrip="Descubre qué hay más allá de los alimentos que consumimos cada día. Entiende, sin rodeos, por qué unos alimentos son saludables y otros pueden perjudicarnos, y toma las riendas de tu claridad mental transformando tu dieta.";
+export const nutricionDescrip="Descubre qué hay más allá de los alimentos que consumimos cada día. Entiende, sin rodeos, por qué unos alimentos son saludables y otros pueden perjudicarnos. Toma las riendas de tu claridad mental transformando tu dieta.";
 
 // Ayurveda
 export const ayurvedaNom = "Hinduismo";

@@ -156,7 +156,7 @@ export default function ModulesPage() {
         const fb = moduloDatos.modulos?.find(m => m.floatingButton)?.floatingButton;
         return fb ? (
           <FloatingActionButton
-            config={fb}
+            config={{ ...fb, action: fb.action === "astrologia-services" ? "astrologia-services" : "modal" }}
             color={moduloDatos.color}
             bgColor={moduloDatos.bgColor}
             icon={moduloDatos.icon}

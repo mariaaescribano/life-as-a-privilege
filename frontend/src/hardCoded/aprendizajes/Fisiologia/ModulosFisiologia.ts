@@ -604,20 +604,6 @@ export const modulosFisiologiaEjercicio: ModuloContenido[] = [
         icon: EquilibrioIcon,
         floatingButton: conocerMiCuerpo,
       },
-      {
-        id: "ejer2",
-        nom: "1.2 El sistema ventricular del oído",
-        link: `${basePath}/ejer2`,
-        linkAnterior: `${basePath}/ejer1`,
-        linkNext: `${basePath}/ejer3`,
-        descripcion: "El sistema ventricular del oído colabora con el cerebelo en los procesos de equilibrio y coordinación.",
-        video: "xxx",
-        letra: ejer2,
-        cursoId: fisioCurso5ID,
-        detalles: detalles,
-        icon: EquilibrioIcon,
-        floatingButton: conocerMiCuerpo,
-      },
     ],
   },
   {
@@ -641,7 +627,7 @@ export const modulosFisiologiaEjercicio: ModuloContenido[] = [
       },
       {
         id: "ejer4",
-        nom: "2.2 El síndrome metabólico",
+        nom: "2.2 El músculo cambia tu metabolismo",
         link: `${basePath}/ejer4`,
         linkAnterior: `${basePath}/ejer3`,
         linkNext: `${basePath}/ejer5`,
@@ -655,7 +641,7 @@ export const modulosFisiologiaEjercicio: ModuloContenido[] = [
       },
       {
         id: "ejer5",
-        nom: "2.3 El músculo y el cerebro",
+        nom: "2.3 El músculo crea conexiones neuronales",
         link: `${basePath}/ejer5`,
         linkAnterior: `${basePath}/ejer4`,
         linkNext: `${basePath}/ejer6`,

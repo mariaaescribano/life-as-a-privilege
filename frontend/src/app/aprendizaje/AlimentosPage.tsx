@@ -183,14 +183,13 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
           </Box>
 
           {/* Foto */}
-          <Box mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${MODAL_COLOR}30`}
-            h={{ base: "180px", md: "240px" }} display="flex" alignItems="center" justifyContent="center"
-            bg={MODAL_COLOR + "18"}
+          <Flex mb={5} borderRadius="xl" overflow="hidden" border={`1px solid ${MODAL_COLOR}30`}
+            justify="center" bg={MODAL_COLOR + "18"}
           >
-            <Image src={alimento.foto} alt={alimento.nombre} w="100%" h="100%" objectFit="cover" display="block"
+            <Image src={alimento.foto} alt={alimento.nombre} maxH={{ base: "200px", md: "260px" }} maxW="100%" objectFit="contain" display="block"
               onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
-          </Box>
+          </Flex>
 
           <BotanicalDivider color={nutricionTxt} />
 

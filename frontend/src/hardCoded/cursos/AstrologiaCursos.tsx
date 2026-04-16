@@ -20,15 +20,16 @@ export const astrologiaCursos: ModalidadInfo = {
   icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
     {
-      id: astroCurso2ID,
-      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso2ID,
-      titulo: "Los Arquetipos",
-      foto: "/img/astrologia/arqFoto.png",
-      descripcion: "Entiende los arquetipos de la Astrología para un conocimiento más profundo y completo.",
+      id: astroCurso1ID,
+      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso1ID,
+      titulo: "El Ascendente, el Sol y la Luna",
+      foto: "/img/astrologia/astro.png",
+      descripcion:
+        "Entiende los arquetipos de tu Ascendente, de tu Sol y de tu Luna.",
       precio: null,
-      numLecciones: 12,
+      numLecciones: 38,
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
-      modulos: modulosArquetipos,
+      modulos: modulosAstrologia,
     },
     {
       id: astroCurso0ID,
@@ -42,17 +43,15 @@ export const astrologiaCursos: ModalidadInfo = {
       modulos: modulosAstrologiaCurso0,
     },
     {
-      id: astroCurso1ID,
-      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso1ID,
-      titulo: "El Ascendente, el Sol y la Luna",
-      foto: "/img/astrologia/astro.png",
-      descripcion:
-        "Entiende los arquetipos de tu Ascendente, de tu Sol y de tu Luna.",
+      id: astroCurso2ID,
+      cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso2ID,
+      titulo: "Los Arquetipos",
+      foto: "/img/astrologia/arqFoto.png",
+      descripcion: "Entiende los arquetipos de la Astrología para un conocimiento más profundo y completo.",
       precio: null,
-      numLecciones: 38,
+      numLecciones: 12,
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
-      modulos: modulosAstrologia,
+      modulos: modulosArquetipos,
     },
- 
   ],
 };

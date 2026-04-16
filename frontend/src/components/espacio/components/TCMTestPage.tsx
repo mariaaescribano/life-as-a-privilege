@@ -6,7 +6,8 @@ import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteHeader from "../../global/SiteHeader";
 import { API_URL, EspacioPersonalIcon, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
 import { getTheme } from "../data/tcmTheme";
-import { generateTcmPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
+import { generateTcmPdf, generateTcmConsejosPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
+import type { Recs } from "../../espacio/data/tcmRecommendations";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -45,6 +46,7 @@ export interface TCMTestPageProps {
   monoColor?: boolean;
   showInterpretacion?: boolean;
   backToSpaceLink?: string;
+  recsMap?: Record<string, Recs>;
 }
 
 /* ══════════════════════════════════════════════
@@ -264,6 +266,7 @@ export default function TCMTestPage({
   monoColor = false,
   showInterpretacion = true,
   backToSpaceLink,
+  recsMap,
 }: TCMTestPageProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -481,19 +484,13 @@ export default function TCMTestPage({
               letterSpacing="0.1em"
               fontStyle="italic"
               border={`2px solid ${allAnswered ? tcmTxt : "rgba(218,113,113,0.18)"}`}
-              bg={allAnswered ? tcmTxt : "rgba(107,4,4,0.2)"}
-              color={allAnswered ? tcmBg : "rgba(255,255,255,0.25)"}
+              bg={allAnswered ? tcmBg : "rgba(107,4,4,0.2)"}
+              color={allAnswered ? tcmTxt : "rgba(255,255,255,0.25)"}
               cursor={allAnswered ? "pointer" : "not-allowed"}
               transition="all 0.28s"
               boxShadow={allAnswered ? `0 0 40px ${tcmTxt}66, 0 4px 24px rgba(0,0,0,0.3)` : "none"}
               transform={allAnswered ? "scale(1)" : "scale(0.97)"}
-              _hover={allAnswered ? {
-                bg: "white",
-                borderColor: "white",
-                color: tcmBg,
-                boxShadow: `0 0 60px ${tcmTxt}99, 0 6px 32px rgba(0,0,0,0.35)`,
-                transform: "translateY(-3px) scale(1.03)",
-              } : {}}
+              _hover={{}}
             >
               Ver mis resultados
             </Box>
@@ -696,11 +693,15 @@ export default function TCMTestPage({
               </Box>}
             </Box>
           )}
-           {/* ── DESCARGAR PDF ── */}
+           {/* ── DESCARGAR RESPUESTAS ── */}
               {showResults && tcmField && (
-                <Flex justify="center" mt={4}>
+                <Flex justify="center" mt={6}>
                   <Box
                     as="button"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={2}
                     onClick={() => {
                       const testNum =
                         tcmField === "constitucion" ? 1 : tcmField === "elemento" ? 2 : 3;
@@ -712,30 +713,153 @@ export default function TCMTestPage({
                           respuesta: answers[si][qi] ?? 0,
                         }))
                       );
-                      const resultado = secciones[totals.indexOf(Math.max(...totals))]?.nombre;
-                      generateTcmPdf(testNum, respuestasFlat, resultado);
+                      const maxIdx = totals.indexOf(Math.max(...totals));
+                      const resultado = secciones[maxIdx]?.nombre;
+                      const consejo = interpretaciones[maxIdx]?.descripcion;
+                      generateTcmPdf(testNum, respuestasFlat, resultado, consejo);
                     }}
-                    px={8}
-                    py={3}
+                    px={{ base: 8, md: 10 }}
+                    py={{ base: 3, md: 4 }}
                     borderRadius="full"
                     fontFamily="'EB Garamond', serif"
                     fontSize={{ base: "lg", md: "xl" }}
-                    fontWeight="600"
+                    fontWeight="700"
                     letterSpacing="0.08em"
-                    border="1.5px solid rgba(218,113,113,0.6)"
-                    bg="transparent"
-                    color="#da7171"
+                    border={`2px solid ${tcmTxt}`}
+                    bg={tcmBg}
+                    color={tcmTxt}
                     cursor="pointer"
                     transition="all 0.22s"
-                    _hover={{
-                      boxShadow: "0 0 16px rgba(218,113,113,0.35)",
-                      borderColor: "#da7171",
-                    }}
+                    boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${tcmTxt}33`}
+                    _hover={{}}
                   >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
+                      <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                    </svg>
                     Descargar mis respuestas
                   </Box>
                 </Flex>
               )}
+
+              {/* ── CONSEJOS PERSONALIZADOS ── */}
+              {showResults && recsMap && tcmField && (() => {
+                const maxIdx = totals.indexOf(Math.max(...totals));
+                const resultadoNombre = secciones[maxIdx]?.nombre;
+                if (!resultadoNombre) return null;
+                const recs = recsMap[resultadoNombre];
+                if (!recs) return null;
+
+                const categories = [
+                  { key: "infusiones", label: "Infusiones" },
+                  { key: "hierbas", label: "Hierbas" },
+                  { key: "nutricion", label: "Nutrición" },
+                  { key: "estiloDeVida", label: "Estilo de vida" },
+                ] as const;
+
+                return (
+                  <Box w="100%" maxW="820px" mt={8}>
+                    {/* Header */}
+                    <Box
+                      bg={tcmBg}
+                      border={`1px solid ${tcmTxt}35`}
+                      borderRadius="2xl"
+                      px={{ base: 5, md: 8 }}
+                      py={{ base: 5, md: 6 }}
+                      mb={4}
+                      boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+                    >
+                      <Text
+                        color={tcmTxt}
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        fontWeight="700"
+                        letterSpacing="0.08em"
+                        textAlign="center"
+                        fontFamily="'EB Garamond', serif"
+                      >
+                        Tus consejos personalizados
+                      </Text>
+                    </Box>
+
+                    <Flex direction="column" gap={4}>
+                      {categories.map(({ key, label }) => {
+                        const items = recs[key as keyof Recs];
+                        if (!items || items.length === 0) return null;
+                        return (
+                          <Box
+                            key={key}
+                            bg={tcmBg}
+                            border={`1px solid ${tcmTxt}22`}
+                            borderRadius="2xl"
+                            px={{ base: 5, md: 7 }}
+                            py={{ base: 5, md: 6 }}
+                            boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 14px rgba(218,113,113,0.12)"}
+                          >
+                            <Text
+                              color={tcmTxt}
+                              fontSize={{ base: "xl", md: "2xl" }}
+                              fontWeight="700"
+                              fontFamily="'EB Garamond', serif"
+                              letterSpacing="0.06em"
+                              mb={4}
+                            >
+                              {label}
+                            </Text>
+                            <Flex direction="column" gap={2}>
+                              {items.map((item, j) => (
+                                <Flex key={j} align="flex-start" gap={2.5}>
+                                  <Text color={`${tcmTxt}66`} fontSize="md" mt="2px" flexShrink={0}>·</Text>
+                                  <Text
+                                    color="rgba(255,255,255,0.82)"
+                                    fontSize={{ base: "md", md: "lg" }}
+                                    fontFamily="'EB Garamond', serif"
+                                    lineHeight="1.7"
+                                  >
+                                    {item}
+                                  </Text>
+                                </Flex>
+                              ))}
+                            </Flex>
+                          </Box>
+                        );
+                      })}
+                    </Flex>
+
+                    {/* Descargar consejos */}
+                    <Flex justify="center" mt={6}>
+                      <Box
+                        as="button"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        gap={2}
+                        onClick={() => {
+                          const testNum = tcmField === "constitucion" ? 1 : tcmField === "elemento" ? 2 : 3;
+                          generateTcmConsejosPdf(testNum, resultadoNombre, recs, interpretaciones[maxIdx]?.descripcion);
+                        }}
+                        px={{ base: 8, md: 10 }}
+                        py={{ base: 3, md: 4 }}
+                        borderRadius="full"
+                        fontFamily="'EB Garamond', serif"
+                        fontSize={{ base: "lg", md: "xl" }}
+                        fontWeight="700"
+                        letterSpacing="0.08em"
+                        border={`2px solid ${tcmTxt}`}
+                        bg={tcmBg}
+                        color={tcmTxt}
+                        cursor="pointer"
+                        transition="all 0.22s"
+                        boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${tcmTxt}33`}
+                        _hover={{}}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
+                          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                        </svg>
+                        Descargar consejos
+                      </Box>
+                    </Flex>
+                  </Box>
+                );
+              })()}
 
               {/* ── VOLVER (guest) ── */}
               {isGuest && (

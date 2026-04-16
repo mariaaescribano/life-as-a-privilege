@@ -8,6 +8,7 @@ import SiteFooter from "../../components/global/Footer";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
+import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso } from "../../hardCoded/cursos";
@@ -223,7 +224,7 @@ export default function CursosModalidad() {
                   lineHeight="1.2"
                   textAlign="center"
                 >
-                  Constitución
+                  Test constitución
                 </Text>
               </Flex>
 
@@ -265,7 +266,7 @@ export default function CursosModalidad() {
                   lineHeight="1.2"
                   textAlign="center"
                 >
-                  Elemento
+                  Test elemento
                 </Text>
               </Flex>
 
@@ -307,7 +308,7 @@ export default function CursosModalidad() {
                   lineHeight="1.2"
                   textAlign="center"
                 >
-                  Desequilibrio
+                  Test desequilibrio
                 </Text>
               </Flex>
             </Flex>
@@ -611,6 +612,8 @@ export default function CursosModalidad() {
             bgColor={modalidad.bgColor}
             onClick={() => setSaberMasOpen(true)}
           />
+
+          <SubscribeBox />
         </Flex>
       </Box>
 

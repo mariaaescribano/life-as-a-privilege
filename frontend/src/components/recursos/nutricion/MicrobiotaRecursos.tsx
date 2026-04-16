@@ -610,13 +610,12 @@ export default function MicrobiotaRecursos() {
           pb={{ base: 14, md: 20 }}
         >
         <DisciplineHeader
-          icon={<NutricionIcon size={{ base: "36px", md: "44px" }} />}
+          icon={<NutricionIcon size={{ base: "28px", md: "34px" }} />}
           title="La Microbiota"
-          subtitle={nutricionNom}
           bgColor={BG}
           color={TXT}
-          mb={{ base: 8, md: 10 }}
-          onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
+          compact
+          onIconClick={() => navigate("/aprendizaje/modulosPage/nutricion/nut-curso-2")}
         />
 
         <CardProbioticos />

@@ -7,6 +7,7 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { NutricionIcon, CalculadoraIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../../GlobalVariables";
 import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
+import { generateNutricionPdf } from "../../../utils/generateNutricionPdf";
 
 const BG   = nutricionBg;
 const TXT  = nutricionTxt;
@@ -49,7 +50,7 @@ function calcular(peso: number, altura: number, edad: number, genero: Genero, fa
 // ── Food data ──────────────────────────────────────────────────────────────
 const proteinasAlimentos: Alimento[] = [
   { id: "p1", nom: "Huevo",     emoji: "🥚", imgPath: BASE+"/huevo.jpg",      descripcion: "Una de las proteínas más completas y biodisponibles que existen. Contiene todos los aminoácidos esenciales en proporciones casi perfectas.",    valores: [{ label: "Calorías", valor: "~155 kcal" }, { label: "Proteínas", valor: "~13 g" }, { label: "G. insaturadas", valor: "~6 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~1 g" }, { label: "Fibra", valor: "~0 g" }] },
-  { id: "p2", nom: "Pollo",     emoji: "🍗", imgPath: BASE+"/pollo.jpg",      descripcion: "Proteína magra por excelencia. Fácil de digerir y con muy poca grasa, ideal para mantener y reconstruir tejido muscular.",                     valores: [{ label: "Calorías", valor: "~165 kcal" }, { label: "Proteínas", valor: "~31 g" }, { label: "G. insaturadas", valor: "~2 g" }, { label: "G. saturadas", valor: "~1 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }] },
+  { id: "p2", nom: "Legumbres",  emoji: "🫘", imgPath: BASE+"/legumbres.jpg",  descripcion: "Fuente excelente de proteína vegetal combinada con fibra y carbohidratos complejos. Lentejas, garbanzos y alubias son básicos de una dieta equilibrada.", valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Proteínas", valor: "~9 g" }, { label: "G. insaturadas", valor: "~0.3 g" }, { label: "G. saturadas", valor: "~0.1 g" }, { label: "Carbohidratos", valor: "~22 g" }, { label: "Fibra", valor: "~8 g" }] },
   { id: "p3", nom: "Pescado",   emoji: "🐟", imgPath: BASE+"/pescado.jpg",    descripcion: "Proteína de alta calidad combinada con omega-3, que reduce la inflamación y protege el sistema cardiovascular.",                               valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Proteínas", valor: "~22 g" }, { label: "G. insaturadas", valor: "~3 g" }, { label: "G. saturadas", valor: "~1 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }] },
   { id: "p4", nom: "Tofu",      emoji: "🧱", imgPath: BASE+"/tofu.jpg",       descripcion: "Proteína vegetal completa derivada de la soja. Versátil y suave, es una excelente alternativa a la proteína animal.",                           valores: [{ label: "Calorías", valor: "~76 kcal" }, { label: "Proteínas", valor: "~8 g" }, { label: "G. insaturadas", valor: "~3 g" }, { label: "G. saturadas", valor: "~0.5 g" }, { label: "Carbohidratos", valor: "~2 g" }, { label: "Fibra soluble", valor: "~0.1 g" }] },
   { id: "p5", nom: "Soja",      emoji: "🫘", imgPath: BASE+"/soja.jpg",       descripcion: "Una de las pocas proteínas vegetales completas. Rica en todos los aminoácidos esenciales, además de fibra y grasas saludables.",                  valores: [{ label: "Calorías", valor: "~446 kcal" }, { label: "Proteínas", valor: "~36 g" }, { label: "G. insaturadas", valor: "~15 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~30 g" }, { label: "Fibra soluble", valor: "~3 g" }] },
@@ -440,13 +441,22 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                   Esta estimación es orientativa. Las necesidades reales varían según la composición corporal y el metabolismo individual.
                 </Text>
                 <Flex gap={3} flexWrap="wrap" justify="center">
-                  {isGuest && (
-                    <Box as="button" onClick={() => window.print()}
+                  {result && (
+                    <Box as="button" onClick={() => generateNutricionPdf(result, {
+                        peso, altura, edad, genero,
+                        actividad: actIdx !== null ? ACTIVIDADES[actIdx].label : "",
+                      })}
                       px={6} py={2} borderRadius="full" bg={TXT}
                       color={BG} fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="700" cursor="pointer"
                       _hover={{ opacity: 0.88 }} transition="all 0.18s"
                       boxShadow={`0 3px 12px ${TXT}44`}
-                    >Descargar PDF</Box>
+                      display="flex" alignItems="center" gap={2}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                      </svg>
+                      Descargar PDF
+                    </Box>
                   )}
                   <Box as="button" onClick={handleRecalcular}
                     px={6} py={2} borderRadius="full" border={`1px solid ${TXT}44`} bg={TXT + "0a"}

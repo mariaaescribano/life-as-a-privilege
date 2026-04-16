@@ -6,6 +6,7 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
 import { SaberMasButton } from "../../global/SaberMasButton";
+import { SubscribeBox } from "../../global/SubscribeBox";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
 
 const BG  = nutricionBg;
@@ -606,8 +607,9 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
       <CardHeader title="Grasas" />
 
       <Flex direction={{ base: "column", md: "row" }} gap={{ base: 0, md: 4 }}>
-        {/* Insaturadas */}
+        {/* Insaturadas — Preferibles */}
         <Box flex={1}>
+          <GrupoLabel label="Preferibles" color="#2e7d32" Icon={IconPreferable} />
           <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="nowrap">
             {grasasInsaturadas.map(a => (
               <AlimentoCirculo key={a.id} alimento={a} grupo={grupoInsaturadas} onClick={onSelect} />
@@ -618,8 +620,9 @@ function GrasasCard({ onSelect }: { onSelect: (d: ModalData) => void }) {
         <VerticalDivider />
         <HorizontalDivider />
 
-        {/* Saturadas */}
+        {/* Saturadas — No beneficiosos */}
         <Box flex={1}>
+          <GrupoLabel label="No beneficiosos" color="#c62828" Icon={IconNoBeneficioso} />
           <Flex justify="center" gap={{ base: 3, md: 5 }} flexWrap="nowrap">
             {grasasSaturadas.map(a => (
               <AlimentoCirculo key={a.id} alimento={a} grupo={grupoSaturadas} onClick={onSelect} />
@@ -760,6 +763,7 @@ export default function NutricionRecursos() {
           </Box>
 
           <SaberMasButton onClick={() => setSaberMasOpen(true)} color={TXT} bgColor={BG} />
+          <SubscribeBox />
         </Flex>
       </Box>
 
