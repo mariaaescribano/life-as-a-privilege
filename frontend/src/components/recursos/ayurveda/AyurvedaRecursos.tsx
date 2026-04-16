@@ -501,10 +501,12 @@ export default function AyurvedaRecursos() {
         gap={{ base: 6, md: 8 }}
       >
         <DisciplineHeader
-          icon={<AyurvedaIcon size={{ base: "35px", md: "45px" }} />}
+          icon={<AyurvedaIcon size={{ base: "28px", md: "34px" }} />}
           title={ayurvedaNom}
           bgColor={BG}
-          color={ACCENT} mb={{ base: 0, md: 0 }}
+          color={ACCENT}
+          compact
+          mb="10px"
           onIconClick={() => navigate("/aprendizaje/modulosPage/ayurveda/ayu-curso-1")}
         />
 
@@ -512,7 +514,6 @@ export default function AyurvedaRecursos() {
         <Box
           w={{ base: "100%", md: "60%" }}
           bg={BG}
-          mt="20px"
           borderRadius="2xl"
           boxShadow={GLOW}
           border={`1px solid ${ACCENT}22`}
@@ -620,7 +621,7 @@ export default function AyurvedaRecursos() {
                 bg={BG}
                 borderRadius="2xl"
                 border={`1.5px solid ${dosha.color}40`}
-                boxShadow={`0 4px 20px ${dosha.color}22`}
+                boxShadow={GLOW} 
                 px={{ base: 5, md: 6 }}
                 py={{ base: 5, md: 6 }}
                 cursor="pointer"

@@ -1,5 +1,5 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { CulturaIcon, culturaBg, culturaNomLink, culturaTxt } from "../../../GlobalVariables";
+import { CulturaIcon, FisicaIcon, EstrellaCirculoIcon, CorazonIcon, culturaBg, culturaNomLink, culturaTxt } from "../../../GlobalVariables";
 import {
   letraFis1, letraFis2, letraFis3, letraFis4,
 } from "./LetraFisica";
@@ -11,7 +11,7 @@ const basePath = "/aprendizaje/videoLessonPage/" + culturaNomLink;
 export const modulosFisica: ModuloContenido[] = [
   {
     title: "1. El universo y la energía",
-    icon: CulturaIcon,
+    icon: FisicaIcon,
     submodules: [
       {
         id: "cul-f1",
@@ -24,7 +24,7 @@ export const modulosFisica: ModuloContenido[] = [
         letra: letraFis1,
         cursoId: "cul-curso-2",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: EstrellaCirculoIcon,
       },
       {
         id: "cul-f2",
@@ -37,13 +37,13 @@ export const modulosFisica: ModuloContenido[] = [
         letra: letraFis2,
         cursoId: "cul-curso-2",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: FisicaIcon,
       },
     ],
   },
   {
     title: "2. La materia somos nosotros",
-    icon: CulturaIcon,
+    icon: FisicaIcon,
     submodules: [
       {
         id: "cul-f3",
@@ -56,7 +56,7 @@ export const modulosFisica: ModuloContenido[] = [
         letra: letraFis3,
         cursoId: "cul-curso-2",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: FisicaIcon,
       },
       {
         id: "cul-f4",
@@ -69,7 +69,7 @@ export const modulosFisica: ModuloContenido[] = [
         letra: letraFis4,
         cursoId: "cul-curso-2",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: CorazonIcon,
       },
     ],
   },

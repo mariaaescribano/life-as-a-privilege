@@ -1,5 +1,5 @@
 import type { Detalles, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { CulturaIcon, culturaBg, culturaNomLink, culturaTxt } from "../../../GlobalVariables";
+import { CulturaIcon, culturaBg, culturaNomLink, culturaTxt, SpinozaFiloIcon } from "../../../GlobalVariables";
 import {
   letraCul1, letraCul2, letraCul3, letraCul4, letraCul5, letraCul6,
 } from "./LetraCultura";
@@ -30,7 +30,7 @@ export const modulosCultura: ModuloContenido[] = [
   },
     {
     title: "2. La filosofía de Spinoza",
-    icon: CulturaIcon,
+    icon: SpinozaFiloIcon,
     submodules: [
       {
         id: "cul-s2",
@@ -43,7 +43,7 @@ export const modulosCultura: ModuloContenido[] = [
         letra: letraCul2,
         cursoId: "cul-curso-1",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: SpinozaFiloIcon,
       },
       {
         id: "cul-s3",
@@ -56,7 +56,7 @@ export const modulosCultura: ModuloContenido[] = [
         letra: letraCul3,
         cursoId: "cul-curso-1",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: SpinozaFiloIcon,
       },
       {
         id: "cul-s4",
@@ -69,7 +69,7 @@ export const modulosCultura: ModuloContenido[] = [
         letra: letraCul4,
         cursoId: "cul-curso-1",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: SpinozaFiloIcon,
       },
       {
         id: "cul-s5",
@@ -82,7 +82,7 @@ export const modulosCultura: ModuloContenido[] = [
         letra: letraCul5,
         cursoId: "cul-curso-1",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: SpinozaFiloIcon,
       },
       {
         id: "cul-s6",
@@ -95,7 +95,7 @@ export const modulosCultura: ModuloContenido[] = [
         letra: letraCul6,
         cursoId: "cul-curso-1",
         detalles: detalles,
-        icon: CulturaIcon,
+        icon: SpinozaFiloIcon,
       },
     ],
   },

@@ -13,8 +13,11 @@ import {
 } from "../../../GlobalVariables";
 import { preguntasAyurveda } from "../../../hardCoded/espacio/PreguntasAyurveda";
 import { generateAyurvedaPdf } from "../../../utils/generateAyurvedaPdf";
+import { DOSHA_CONSEJOS } from "../../../hardCoded/espacio/DoshaConsejos";
+import { generateDoshaConsejosPdf } from "../../../utils/generateDoshaConsejosPdf";
 
 type Dosha = "vata" | "pitta" | "kapha";
+const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 
 const DOSHA_CONFIG: Record<Dosha, { label: string; color: string; icon: React.ReactNode }> = {
   vata:  { label: "Vata",  color: vataColor,  icon: <VataIcon  size="22px" color={vataColor}  /> },
@@ -117,7 +120,7 @@ export default function AyurvedaTestPage({
               borderRadius="2xl"
               px={{ base: 5, md: 8 }}
               py={{ base: 6, md: 8 }}
-              boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 32px ${cfg.color}55`}
+              boxShadow={GLOW}
               textAlign="center"
             >
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
@@ -172,7 +175,7 @@ export default function AyurvedaTestPage({
                 border={`1.5px solid ${ayurvedaTxt}60`}
                 cursor="pointer"
                 transition="all 0.22s"
-                boxShadow={`0 4px 20px ${ayurvedaTxt}22`}
+                boxShadow={GLOW}
                 _hover={{ opacity: 0.88, transform: "translateY(-2px)", borderColor: ayurvedaTxt }}
               >
                 Descargar PDF
@@ -197,6 +200,139 @@ export default function AyurvedaTestPage({
                 Recalcular
               </Box>
             </Flex>
+
+            {/* Consejos personalizados */}
+            {(() => {
+              const recs = DOSHA_CONSEJOS[guestResult.dosha];
+              if (!recs) return null;
+              const dc = DOSHA_CONFIG[guestResult.dosha];
+              const categories = [
+                { key: "alimentacion" as const, label: "Alimentación" },
+                { key: "hierbas" as const, label: "Hierbas" },
+                { key: "estiloDeVida" as const, label: "Estilo de vida" },
+                { key: "evitar" as const, label: "Evitar" },
+              ];
+              return (
+                <Box w="100%" maxW="820px" mt={4}>
+                  <Box
+                    bg={ayurvedaBg}
+                    border={`1px solid ${ayurvedaTxt}35`}
+                    borderRadius="2xl"
+                    px={{ base: 5, md: 8 }}
+                    py={{ base: 5, md: 6 }}
+                    mb={4}
+                    boxShadow={GLOW}
+                  >
+                    <Text
+                      color={ayurvedaTxt}
+                      fontSize={{ base: "2xl", md: "3xl" }}
+                      fontWeight="700"
+                      letterSpacing="0.08em"
+                      textAlign="center"
+                      fontFamily="'EB Garamond', serif"
+                    >
+                      Tus consejos personalizados
+                    </Text>
+                  </Box>
+
+                  {/* Descripción */}
+                  <Box
+                    bg={ayurvedaBg}
+                    border={`1px solid ${ayurvedaTxt}22`}
+                    borderRadius="2xl"
+                    px={{ base: 5, md: 7 }}
+                    py={{ base: 5, md: 6 }}
+                    mb={4}
+                    boxShadow={GLOW}
+                  >
+                    <Text
+                      color={`${ayurvedaTxt}cc`}
+                      fontSize={{ base: "md", md: "lg" }}
+                      fontFamily="'EB Garamond', serif"
+                      lineHeight="1.8"
+                      fontStyle="italic"
+                      textAlign="center"
+                    >
+                      {recs.descripcion}
+                    </Text>
+                  </Box>
+
+                  <Flex direction="column" gap={4}>
+                    {categories.map(({ key, label }) => {
+                      const items = recs[key];
+                      if (!items || items.length === 0) return null;
+                      return (
+                        <Box
+                          key={key}
+                          bg={ayurvedaBg}
+                          border={`1px solid ${ayurvedaTxt}22`}
+                          borderRadius="2xl"
+                          px={{ base: 5, md: 7 }}
+                          py={{ base: 5, md: 6 }}
+                          boxShadow={GLOW}
+                        >
+                          <Text
+                            color={ayurvedaTxt}
+                            fontSize={{ base: "xl", md: "2xl" }}
+                            fontWeight="700"
+                            fontFamily="'EB Garamond', serif"
+                            letterSpacing="0.06em"
+                            mb={4}
+                          >
+                            {label}
+                          </Text>
+                          <Flex direction="column" gap={2}>
+                            {items.map((item, j) => (
+                              <Flex key={j} align="flex-start" gap={2.5}>
+                                <Text color={`${ayurvedaTxt}66`} fontSize="md" mt="2px" flexShrink={0}>·</Text>
+                                <Text
+                                  color={`${ayurvedaTxt}cc`}
+                                  fontSize={{ base: "md", md: "lg" }}
+                                  fontFamily="'EB Garamond', serif"
+                                  lineHeight="1.7"
+                                >
+                                  {item}
+                                </Text>
+                              </Flex>
+                            ))}
+                          </Flex>
+                        </Box>
+                      );
+                    })}
+                  </Flex>
+
+                  {/* Descargar consejos */}
+                  <Flex justify="center" mt={6}>
+                    <Box
+                      as="button"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={2}
+                      onClick={() => generateDoshaConsejosPdf(guestResult.dosha, recs)}
+                      px={{ base: 8, md: 10 }}
+                      py={{ base: 3, md: 4 }}
+                      borderRadius="full"
+                      fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "lg", md: "xl" }}
+                      fontWeight="700"
+                      letterSpacing="0.08em"
+                      border={`2px solid ${ayurvedaTxt}`}
+                      bg={ayurvedaBg}
+                      color={ayurvedaTxt}
+                      cursor="pointer"
+                      transition="all 0.22s"
+                      boxShadow={GLOW}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                      </svg>
+                      Descargar consejos
+                    </Box>
+                  </Flex>
+                </Box>
+              );
+            })()}
           </Flex>
         </Box>
         <SiteFooter />
@@ -234,7 +370,7 @@ export default function AyurvedaTestPage({
             borderRadius="2xl"
             px={{ base: 5, md: 8 }}
             py={{ base: 5, md: 7 }}
-            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+            boxShadow={GLOW}
           >
             <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={3}>
               Descubre tu Dosha
@@ -254,7 +390,7 @@ export default function AyurvedaTestPage({
               borderRadius="2xl"
               px={{ base: 5, md: 8 }}
               py={{ base: 5, md: 7 }}
-              boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+              boxShadow={GLOW}
               transition="border-color 0.3s"
             >
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7" mb={4}>
@@ -324,8 +460,8 @@ export default function AyurvedaTestPage({
               color={allAnswered ? ayurvedaTxt : `${ayurvedaTxt}44`}
               cursor={allAnswered ? "pointer" : "not-allowed"}
               transition="all 0.28s"
-              boxShadow={allAnswered ? `0 0 40px ${ayurvedaTxt}44, 0 4px 24px rgba(0,0,0,0.3)` : "none"}
-              _hover={allAnswered ? { boxShadow: `0 0 60px ${ayurvedaTxt}77`, transform: "translateY(-2px)" } : {}}
+              boxShadow={allAnswered ? GLOW : "none"}
+              _hover={{}}
             >
               <Flex as="span" align="center" justify="center" gap={3}>
                 <AyurvedaIcon size={{ base: "22px", md: "26px" }} />

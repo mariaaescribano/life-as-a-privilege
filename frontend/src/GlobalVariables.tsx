@@ -299,7 +299,36 @@ export function CulturaIcon({ size = { base: "24px", md: "24px" } }: { size?: st
     </Box>
   );
 }
-export const culturaDescrip = "Conoce la sabiduría de los grandes filósofos, maravíllate con la historia y la cultura general.";
+export const culturaDescrip = "Conoce la sabiduría de los grandes filósofos y profundiza en distintas disciplinas. Descubre más allá de lo que te han contado.";
+export function SpinozaFiloIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={culturaTxt}>
+      <path d="M180-520q-26 0-43-17t-17-43q0-26 17-43t43-17q26 0 43 17t17 43q0 26-17 43t-43 17ZM120-80v-200H80v-160q0-17 11.5-28.5T120-480h120q17 0 28.5 11.5T280-440v160h-40v120h320v-200h-70q-71 0-120.5-49.5T320-530q0-53 28.5-94.5T422-686q11-65 60.5-109.5T600-840q68 0 117.5 44.5T778-686q45 20 73.5 61.5T880-530q0 71-49.5 120.5T710-360h-70v200h200v80H120Zm370-360h220q38 0 64-26t26-64q0-27-14.5-49T746-612l-42-18-6-44q-6-37-33.5-61.5T600-760q-37 0-64.5 24.5T502-674l-6 44-42 18q-25 11-39.5 33T400-530q0 38 26 64t64 26Zm110-160Z"/>
+    </Box>
+  );
+}
+
+export function EstrellaCirculoIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={culturaTxt}>
+      <path d="m320-240 160-122 160 122-60-198 160-114H544l-64-208-64 208H220l160 114-60 198ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+    </Box>
+  );
+}
+export function CorazonIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={culturaTxt}>
+      <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
+    </Box>
+  );
+}
+export function FisicaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={culturaTxt}>
+      <path d="m280-80 160-300-320-40 480-460h80L520-580l320 40L360-80h-80Zm222-247 161-154-269-34 63-117-160 154 268 33-63 118Zm-22-153Z"/>
+    </Box>
+  );
+}
 
 // Cábala
 export const cabalaNom = "Cábala";

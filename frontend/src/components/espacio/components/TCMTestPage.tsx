@@ -19,6 +19,8 @@ export interface TCMSeccion {
   dominio?: string;
 }
 
+ const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
+
 export interface TCMInterpretacion {
   nombre: string;
   subtitulo?: string;
@@ -488,7 +490,7 @@ export default function TCMTestPage({
               color={allAnswered ? tcmTxt : "rgba(255,255,255,0.25)"}
               cursor={allAnswered ? "pointer" : "not-allowed"}
               transition="all 0.28s"
-              boxShadow={allAnswered ? `0 0 40px ${tcmTxt}66, 0 4px 24px rgba(0,0,0,0.3)` : "none"}
+              boxShadow={allAnswered ? GLOW : "none"}
               transform={allAnswered ? "scale(1)" : "scale(0.97)"}
               _hover={{}}
             >
@@ -498,7 +500,7 @@ export default function TCMTestPage({
 
           {/* ── RESULTADOS ── */}
           {showResults && (
-            <Box ref={resultsRef} boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"} w="100%" maxW="820px" mt={12}>
+            <Box ref={resultsRef} boxShadow={GLOW} w="100%" maxW="820px" mt={12}>
 
               {/* Puntuaciones */}
               <Box
@@ -508,7 +510,7 @@ export default function TCMTestPage({
                 px={{ base: 5, md: 8 }}
                 py={{ base: 6, md: 8 }}
                 mb={5}
-                boxShadow="0 4px 24px rgba(0,0,0,0.25), 0 0 18px rgba(107,4,4,0.38)"
+                boxShadow={GLOW}
               >
                 <Text
                   color={tcmTxt}
@@ -730,7 +732,7 @@ export default function TCMTestPage({
                     color={tcmTxt}
                     cursor="pointer"
                     transition="all 0.22s"
-                    boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${tcmTxt}33`}
+                    boxShadow={GLOW}
                     _hover={{}}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -750,64 +752,69 @@ export default function TCMTestPage({
                 if (!recs) return null;
 
                 const categories = [
-                  { key: "infusiones", label: "Infusiones" },
-                  { key: "hierbas", label: "Hierbas" },
-                  { key: "nutricion", label: "Nutrición" },
-                  { key: "estiloDeVida", label: "Estilo de vida" },
+                  { key: "infusiones", label: "Infusiones", icon: "M480-80q-134 0-227-93t-93-227q0-7 .5-14t1.5-14L60-560h200l100 80h40l100-80h200l-34 120h78v80h-96q-3 17-9 42t-14 50l95 68-48 66-100-72q-45 72-119.5 114T480-80Zm0-80q75 0 137.5-40T714-310l-74 52 24-66 18-56H278l18 56 24 66-74-52q34 70 96.5 110T480-160Zm-184-400h368l-24-80H320l-24 80Zm184 180Z" },
+                  { key: "hierbas", label: "Hierbas", icon: "M440-690v-100q0-42 29-71t71-29h100v100q0 42-29 71t-71 29H440ZM220-450q-58 0-99-41t-41-99v-140h140q58 0 99 41t41 99v140H220ZM640-90q-39 0-74.5-12T501-135l-33 33q-11 11-28 11t-28-11q-11-11-11-28t11-28l33-33q-21-29-33-64.5T400-330q0-100 70-170.5T640-571h241v241q0 100-70.5 170T640-90Z" },
+                  { key: "nutricion", label: "Nutrici\u00f3n", icon: "M160-120v-640q0-33 23.5-56.5T240-840h480q33 0 56.5 23.5T800-760v640L480-240 160-120Zm80-122 240-74 240 74v-518H240v518Zm240-74L240-242v0-518h480v518L480-316Z" },
+                  { key: "estiloDeVida", label: "Estilo de vida", icon: "M480-480ZM363-120H200q-33 0-56.5-23.5T120-200v-163q38 0 66-26t32-64H120v-107q0-33 23.5-56.5T200-640h163q0-38 26-66t64-32v-102h107q0 42 28.5 71t70.5 29q42 0 70.5-29t28.5-71h107v102q38 4 64 32t26 66h163q33 0 56.5 23.5T1200-560v107h-98q4 36 32 64t66 26v163q0 33-23.5 56.5T1120-120H957q0-42-28.5-70.5T858-219q-42 0-70.5 28.5T759-120H601q0-42-28.5-70.5T502-219q-42 0-70.5 28.5T403-120H363Z" },
                 ] as const;
+
+                const elTheme = getTheme(resultadoNombre);
 
                 return (
                   <Box w="100%" maxW="820px" mt={8}>
-                    {/* Header */}
-                    <Box
-                      bg={tcmBg}
-                      border={`1px solid ${tcmTxt}35`}
-                      borderRadius="2xl"
-                      px={{ base: 5, md: 8 }}
-                      py={{ base: 5, md: 6 }}
-                      mb={4}
-                      boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
+                    <Text
+                      color={tcmTxt}
+                      fontSize={{ base: "2xl", md: "3xl" }}
+                      fontWeight="700"
+                      letterSpacing="0.08em"
+                      mb={5}
+                      textAlign="center"
+                      fontFamily="'EB Garamond', serif"
                     >
-                      <Text
-                        color={tcmTxt}
-                        fontSize={{ base: "2xl", md: "3xl" }}
-                        fontWeight="700"
-                        letterSpacing="0.08em"
-                        textAlign="center"
-                        fontFamily="'EB Garamond', serif"
-                      >
-                        Tus consejos personalizados
-                      </Text>
-                    </Box>
+                      Tus consejos personalizados
+                    </Text>
 
                     <Flex direction="column" gap={4}>
-                      {categories.map(({ key, label }) => {
+                      {categories.map(({ key, label, icon }) => {
                         const items = recs[key as keyof Recs];
                         if (!items || items.length === 0) return null;
                         return (
                           <Box
                             key={key}
                             bg={tcmBg}
-                            border={`1px solid ${tcmTxt}22`}
+                            border={`1px solid ${elTheme.accent}44`}
                             borderRadius="2xl"
                             px={{ base: 5, md: 7 }}
                             py={{ base: 5, md: 6 }}
-                            boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 14px rgba(218,113,113,0.12)"}
+                            boxShadow={GLOW}
                           >
-                            <Text
-                              color={tcmTxt}
-                              fontSize={{ base: "xl", md: "2xl" }}
-                              fontWeight="700"
-                              fontFamily="'EB Garamond', serif"
-                              letterSpacing="0.06em"
-                              mb={4}
-                            >
-                              {label}
-                            </Text>
+                            <Flex align="center" gap={2.5} mb={4}>
+                              <Box
+                                w="32px" h="32px" borderRadius="full"
+                                bg={`${elTheme.accent}18`}
+                                border={`1px solid ${elTheme.accent}44`}
+                                display="flex" alignItems="center" justifyContent="center"
+                                color={elTheme.accent}
+                                flexShrink={0}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+                                  <path d={icon} />
+                                </svg>
+                              </Box>
+                              <Text
+                                color={elTheme.accent}
+                                fontSize={{ base: "xl", md: "2xl" }}
+                                fontWeight="700"
+                                fontFamily="'EB Garamond', serif"
+                                letterSpacing="0.06em"
+                              >
+                                {label}
+                              </Text>
+                            </Flex>
                             <Flex direction="column" gap={2}>
                               {items.map((item, j) => (
                                 <Flex key={j} align="flex-start" gap={2.5}>
-                                  <Text color={`${tcmTxt}66`} fontSize="md" mt="2px" flexShrink={0}>·</Text>
+                                  <Text color={`${elTheme.accent}88`} fontSize="md" mt="2px" flexShrink={0}>·</Text>
                                   <Text
                                     color="rgba(255,255,255,0.82)"
                                     fontSize={{ base: "md", md: "lg" }}
@@ -848,8 +855,9 @@ export default function TCMTestPage({
                         color={tcmTxt}
                         cursor="pointer"
                         transition="all 0.22s"
-                        boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${tcmTxt}33`}
-                        _hover={{}}
+                        boxShadow={GLOW}
+                        _hover={{
+                        }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
                           <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
