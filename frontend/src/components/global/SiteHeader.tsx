@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { AprendizajeIcon, EspacioPersonalIcon } from "../../GlobalVariables";
+import { AprendizajeIcon } from "../../GlobalVariables";
 
 type SiteHeaderProps = {
   /**
