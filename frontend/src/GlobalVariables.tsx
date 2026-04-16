@@ -191,7 +191,7 @@ export function CalculadoraIcon() {
 export const nutricionDescrip="Descubre qué hay más allá de los alimentos que consumimos cada día. Entiende, sin rodeos, por qué unos alimentos son saludables y otros pueden perjudicarnos, y toma las riendas de tu claridad mental transformando tu dieta.";
 
 // Ayurveda
-export const ayurvedaNom = "Ayurveda";
+export const ayurvedaNom = "Hinduismo";
 export const ayurvedaNomLink = "ayurveda";
 export const ayurvedaBg = "#ffffff"; // "#ecd5ed";
 export const ayurvedaTxt = "#a27908" ; //"#672d67" ;
@@ -202,7 +202,7 @@ export function AyurvedaIcon({ size = { base: "24px", md: "24px" }}) {
     </Box>
   );
 }
-export const ayurvedaDescrip= "Descubre, desde la sabiduría ancestral de la India, tu constitución y cómo influye en tu Vida y en tus desequilibrios.";
+export const ayurvedaDescrip= "Redescubre al ser humano, desde la sabiduría ancestral de la India, como un ser holístico e interconectado con la naturaleza.";
 export const vataColor  = "#7c5cbf";
 export const pittaColor = "#c0522a";
 export const kaphaColor = "#3a8a5c";
@@ -258,6 +258,22 @@ export function FisioEjercicioIcon({ size = { base: "24px", md: "24px" } }: { si
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={fisiologiaTxt}>
       <path d="m536-84-56-56 142-142-340-340-142 142-56-56 56-58-56-56 84-84-56-58 56-56 58 56 84-84 56 56 58-56 56 56-142 142 340 340 142-142 56 56-56 58 56 56-84 84 56 58-56 56-58-56-84 84-56-56-58 56Z"/>
+    </Box>
+  );
+}
+
+export function EquilibrioIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={fisiologiaTxt}>
+      <path d="M80-120v-80h360v-447q-26-9-45-28t-28-45H240l120 280q0 50-41 85t-99 35q-58 0-99-35t-41-85l120-280h-80v-80h247q12-35 43-57.5t70-22.5q39 0 70 22.5t43 57.5h247v80h-80l120 280q0 50-41 85t-99 35q-58 0-99-35t-41-85l120-280H593q-9 26-28 45t-45 28v447h360v80H80Zm585-320h150l-75-174-75 174Zm-520 0h150l-75-174-75 174Zm335-280q17 0 28.5-11.5T520-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760q0 17 11.5 28.5T480-720Z"/>
+    </Box>
+  );
+}
+
+export function CardioIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={fisiologiaTxt}>
+      <path d="M520-40v-240l-84-80-40 176-276-56 16-80 192 40 64-324-72 28v136h-80v-188l158-68q35-15 51.5-19.5T480-720q21 0 39 11t29 29l40 64q26 42 70.5 69T760-520v80q-66 0-123.5-27.5T540-540l-24 120 84 80v300h-80Zm-36.5-723.5Q460-787 460-820t23.5-56.5Q507-900 540-900t56.5 23.5Q620-853 620-820t-23.5 56.5Q573-740 540-740t-56.5-23.5Z"/>
     </Box>
   );
 }

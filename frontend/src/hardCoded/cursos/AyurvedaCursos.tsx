@@ -8,6 +8,7 @@ import {
   ayurvedaTxt,
 } from "../../GlobalVariables";
 import { modulosAyurveda } from "../aprendizajes/Ayurveda/ModulosAyurveda";
+import { modulosChakras } from "../aprendizajes/Ayurveda/ModulosChakras";
 
 export const ayurvedaCursos: ModalidadInfo = {
   nom: ayurvedaNom,
@@ -26,6 +27,18 @@ export const ayurvedaCursos: ModalidadInfo = {
       numLecciones: 9,
       icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosAyurveda,
+    },
+    {
+      id: "ayu-curso-2",
+      cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-2",
+      titulo: "Los Chakras",
+      foto: "/img/ayurveda/chakras.png",
+      descripcion:
+        "Conoce y comprende a los 7 chakras para hacerte cargo de ellos y, por extensión, de ti mismo.",
+      precio: null,
+      numLecciones: 9,
+      icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosChakras,
     },
   ],
 };

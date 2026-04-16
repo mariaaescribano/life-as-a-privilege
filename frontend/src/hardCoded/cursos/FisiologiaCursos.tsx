@@ -1,7 +1,7 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { fisioCurso1ID, fisioCurso2ID, fisioCurso3ID, fisioCurso4ID, modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion } from "../aprendizajes/Fisiologia/ModulosFisiologia";
+import { fisioCurso1ID, fisioCurso2ID, fisioCurso3ID, fisioCurso4ID, fisioCurso5ID, modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion, modulosFisiologiaEjercicio } from "../aprendizajes/Fisiologia/ModulosFisiologia";
 
 export const fisiologiaCursos: ModalidadInfo = {
   nom: fisiologiaNom,
@@ -9,6 +9,17 @@ export const fisiologiaCursos: ModalidadInfo = {
   color: fisiologiaTxt,
   icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
+    {
+      id: fisioCurso5ID,
+      cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso5ID,
+      titulo: "El ejercicio, el cerebro y el cuerpo",
+      foto: "/img/fisio/ejercicio.jpg",
+      descripcion: "Descubre cómo el equilibrio, la fuerza y el cardio transforman tu cerebro, fortalecen tu cuerpo y mejoran tu vida desde dentro.",
+      precio: null,
+      numLecciones: 7,
+      icon: <FisiologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosFisiologiaEjercicio,
+    },
     {
       id: fisioCurso1ID,
       cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso1ID,

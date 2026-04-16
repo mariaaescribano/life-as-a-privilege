@@ -1,6 +1,7 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
-import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon, InflamIcon, FisioComidaIcon, FisioEjercicioIcon } from "../../../GlobalVariables";
+import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon, InflamIcon, FisioComidaIcon, FisioEjercicioIcon, EquilibrioIcon, CardioIcon } from "../../../GlobalVariables";
 import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7, inflam1, inflam2, inflam3, inflam4, inflam5, inflam6, inflam7, inflam8, cancer1, cancer2, cancer3, cancer4, cancer5, cancer6, cancer7, cancer8, cancer9, cancer10, cancer11, med1, med2, med3, med4, med5, med6, med7 } from "./LetraFisiologia";
+import { ejer1, ejer2, ejer3, ejer4, ejer5, ejer6, ejer7 } from "./LetraEjercicio";
 
 const detalles: Detalles = { color: fisiologiaTxt, icon: FisiologiaIcon, bgColor: fisiologiaBg };
 
@@ -10,6 +11,7 @@ export const fisioCurso1ID = "fisio-curso-1";
 export const fisioCurso2ID = "fisio-curso-2";
 export const fisioCurso3ID = "fisio-curso-3";
 export const fisioCurso4ID = "fisio-curso-4";
+export const fisioCurso5ID = "fisio-curso-5";
 
 const conocerMiCuerpo: FloatingButtonConfig = {
   label: "Conocer mi cuerpo",
@@ -576,6 +578,128 @@ export const modulosFisiologiaMeditacion: ModuloContenido[] = [
         cursoId: fisioCurso4ID,
         detalles: detalles,
         icon: SistemaNerviosoIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+    ],
+  },
+];
+
+export const modulosFisiologiaEjercicio: ModuloContenido[] = [
+  {
+    title: "1. El equilibrio",
+    icon: EquilibrioIcon,
+    floatingButton: conocerMiCuerpo,
+    submodules: [
+      {
+        id: "ejer1",
+        nom: "1.1 El equilibrio",
+        link: `${basePath}/ejer1`,
+        linkAnterior: "",
+        linkNext: `${basePath}/ejer3`,
+        descripcion: "Practicar equilibrio hace más grande tu cerebro, mejora tu propiocepción y afina tus reflejos y concentración.",
+        video: "bU-1t1Sk-5U",
+        letra: ejer1,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: EquilibrioIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "ejer2",
+        nom: "1.2 El sistema ventricular del oído",
+        link: `${basePath}/ejer2`,
+        linkAnterior: `${basePath}/ejer1`,
+        linkNext: `${basePath}/ejer3`,
+        descripcion: "El sistema ventricular del oído colabora con el cerebelo en los procesos de equilibrio y coordinación.",
+        video: "xxx",
+        letra: ejer2,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: EquilibrioIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+    ],
+  },
+  {
+    title: "2. La fuerza",
+    icon: FisioEjercicioIcon,
+    floatingButton: conocerMiCuerpo,
+    submodules: [
+      {
+        id: "ejer3",
+        nom: "2.1 El músculo",
+        link: `${basePath}/ejer3`,
+        linkAnterior: `${basePath}/ejer1`,
+        linkNext: `${basePath}/ejer4`,
+        descripcion: "El músculo es nuestro seguro de vida: al retarlo con peso, fortaleces huesos, cartílagos y músculos a la vez.",
+        video: "kx2B3lItOGE",
+        letra: ejer3,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: FisioEjercicioIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "ejer4",
+        nom: "2.2 El síndrome metabólico",
+        link: `${basePath}/ejer4`,
+        linkAnterior: `${basePath}/ejer3`,
+        linkNext: `${basePath}/ejer5`,
+        descripcion: "Tener músculo regula la glucosa en tu cuerpo, previniendo derrames cerebrales, paros cardiacos y diabetes.",
+        video: "wvWwuJ7M1DM",
+        letra: ejer4,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: FisioEjercicioIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "ejer5",
+        nom: "2.3 El músculo y el cerebro",
+        link: `${basePath}/ejer5`,
+        linkAnterior: `${basePath}/ejer4`,
+        linkNext: `${basePath}/ejer6`,
+        descripcion: "Entrenar libera enzimas que crean conexiones neuronales y neurotransmisores como la serotonina, la dopamina y las endorfinas.",
+        video: "pvGF_E-Teic",
+        letra: ejer5,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: SistemaNerviosoIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+      {
+        id: "ejer6",
+        nom: "2.4 No entrenar",
+        link: `${basePath}/ejer6`,
+        linkAnterior: `${basePath}/ejer5`,
+        linkNext: `${basePath}/ejer7`,
+        descripcion: "Cuando no entrenas, la miostatina le dice a tus músculos que desaparezcan porque no hacen falta.",
+        video: "UmWrXik1igs",
+        letra: ejer6,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: FisioEjercicioIcon,
+        floatingButton: conocerMiCuerpo,
+      },
+    ],
+  },
+  {
+    title: "3. El cardio",
+    icon: CardioIcon,
+    floatingButton: conocerMiCuerpo,
+    submodules: [
+      {
+        id: "ejer7",
+        nom: "3.1 El cardio",
+        link: `${basePath}/ejer7`,
+        linkAnterior: `${basePath}/ejer6`,
+        linkNext: "",
+        descripcion: "El cardio oxigena órganos y cerebro, crea más conexiones neuronales que la fuerza y sus efectos se comparan con los antidepresivos.",
+        video: "SwSAfh8O8GU",
+        letra: ejer7,
+        cursoId: fisioCurso5ID,
+        detalles: detalles,
+        icon: CardioIcon,
         floatingButton: conocerMiCuerpo,
       },
     ],

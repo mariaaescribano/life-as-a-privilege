@@ -26,8 +26,10 @@ import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala
 import { modulosCabala2 } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala2";
 import { modulosNutricion, modulosMicrobiota } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
-import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
+import { modulosChakras } from "../../hardCoded/aprendizajes/Ayurveda/ModulosChakras";
+import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion, modulosFisiologiaEjercicio } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 import { modulosCultura } from "../../hardCoded/aprendizajes/Cultura/ModulosCultura";
+import { modulosFisica } from "../../hardCoded/aprendizajes/Cultura/ModulosFisica";
 
 export default function VideoLessonPage() {
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
@@ -130,7 +132,10 @@ export default function VideoLessonPage() {
       }
       else if(moduloId === ayurvedaNomLink)
       {
-        setdatos(getModuleByTitle(submoduloId!, modulosAyurveda));
+        setdatos(
+          getModuleByTitle(submoduloId!, modulosAyurveda) ??
+          getModuleByTitle(submoduloId!, modulosChakras)
+        );
       }
       else if(moduloId === fisiologiaNom)
       {
@@ -138,12 +143,16 @@ export default function VideoLessonPage() {
           getModuleByTitle(submoduloId!, modulosFisiologia) ??
           getModuleByTitle(submoduloId!, modulosFisiologiaInflamacion) ??
           getModuleByTitle(submoduloId!, modulosFisiologiaCancer) ??
-          getModuleByTitle(submoduloId!, modulosFisiologiaMeditacion)
+          getModuleByTitle(submoduloId!, modulosFisiologiaMeditacion) ??
+          getModuleByTitle(submoduloId!, modulosFisiologiaEjercicio)
         );
       }
       else if(moduloId === culturaNomLink)
       {
-        setdatos(getModuleByTitle(submoduloId!, modulosCultura));
+        setdatos(
+          getModuleByTitle(submoduloId!, modulosCultura) ??
+          getModuleByTitle(submoduloId!, modulosFisica)
+        );
       }
     }
   }, [moduloId, submoduloId]);

@@ -138,12 +138,12 @@ const modalidades: ModalidadData[] = [
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
     desc: "Descubre los arquetipos que guían tu forma de vivir.",
     modalDesc:
-      "A través de tu carta natal, exploraremos los arquetipos que se expresan en cada área de tu vida y cómo influyen en tu manera de habitar el mundo.",
+      "A través de tu carta natal, exploraremos los arquetipos que se expresan en cada área de tu vida y cómo influyen en tu manera de vivir.",
     sessions: [
       "1. Exploraremos el Ascendente, el Sol y la Luna de tu carta astral.",
-      "2. Haremos una lectura de las primeras seis casas de la carta astral.",
-      "3. Haremos una lectura de las últimas seis casas de la carta astral.",
-      "4. Leeremos los planetas y su simbología.",
+      "2. Lectura completa de la carta I",
+      "3. Lectura completa de la carta II",
+      "4. Lectura completa de la carta III",
     ],
   },
   {
@@ -156,8 +156,9 @@ const modalidades: ModalidadData[] = [
       "Usando tu carta natal como mapa, exploraremos tu forma única de pensar, sentir y vincularte, así como los mecanismos de adaptación que desarrollaste para sobrevivir. Muchas veces, aquello que hoy nos limita fue en otro momento una forma de protegernos.",
     sessions: [
       "1. Abriremos un espacio seguro para que puedas compartir, hasta donde te sientas cómodo, la relación entre los arquetipos de tu carta astral y tu historia de vida.",
-      "2. Primera sesión centrada en tu línea de vida y en el reconocimiento de patrones.",
-      "3. Segunda sesión centrada en tu línea de vida y en la profundización de esos patrones.",
+      "2. Cronología de Vida I",
+      "3. Cronología de Vida II",
+      "4. Patrones relacionados encontrados en la cronología de Vida y en la carta astral"
     ],
   },
   {
@@ -165,13 +166,14 @@ const modalidades: ModalidadData[] = [
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
-    desc: "Conoce tu naturaleza única a través del sistema de medicina tradicional más antiguo de la India.",
+    desc: "Entiende al ser humano desde el hinduismo y conoce tu naturaleza única a través del sistema de medicina tradicional más antiguo de la India, la Ayurveda.",
     modalDesc:
       "Junto a la psicoterapia, el Ayurveda nos ofrecerá herramientas profundas para comprender tu naturaleza única y reconocer qué hábitos te equilibran o te desequilibran.",
     sessions: [
-      "1. En esta sesión descubrirás tu dosha y haremos una breve explicación de su naturaleza.",
-      "2. Teniendo en cuenta tu dosha y tu vida diaria, veremos cómo recuperar el equilibrio a través de cambios pequeños pero significativos.",
-      "3. Nos enfocaremos en recetas únicas, especias, gestión emocional y actividades alineadas con tu dosha.",
+      "1. El ser humano y los chakras en el Hinduismo",
+      "2. En esta sesión descubrirás tu dosha y haremos una breve explicación de su naturaleza.",
+      "3. Teniendo en cuenta tu dosha y tu vida diaria, veremos cómo recuperar el equilibrio a través de cambios pequeños pero significativos.",
+      "4. Nos enfocaremos en recetas únicas, especias, gestión emocional y actividades alineadas con tu dosha.",
     ],
   },
   {
@@ -183,7 +185,7 @@ const modalidades: ModalidadData[] = [
     modalDesc:
       "A través de la medicina tradicional china y su teoría de los Cinco Elementos, identificaremos los desequilibrios que atraviesas en este momento y los abordaremos con herramientas naturales adaptadas a ti.",
     sessions: [
-      "1. Haremos un diagnóstico profundo de la lengua para identificar los desequilibrios presentes.",
+      "1. Haremos un diagnóstico de la lengua para identificar los desequilibrios presentes.",
       "2. Te explicaré, las veces que haga falta, cómo se han generado esos desequilibrios según la teoría de los cinco elementos de la medicina tradicional china.",
       "3. Recibirás remedios naturales concretos para ayudarte a recuperar el equilibrio y prevenir futuros desajustes.",
     ],
@@ -540,7 +542,7 @@ export default function ElMetodo() {
                 Precio por sesión
               </Text>
               <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700">
-                20 €
+                10 €
               </Text>
             </Box>
             <Box
