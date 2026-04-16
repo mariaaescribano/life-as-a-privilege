@@ -151,6 +151,37 @@ const Welcome = () => {
       {/* ── HEADER ── */}
       <SiteHeader variant="public" />
 
+      {/* ── FRASE ── */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
+        <Box
+          w={{ base: "100%", md: "80%" }}
+          textAlign="center"
+          py={{ base: 5, md: 6 }}
+          px={{ base: 6, md: 10 }}
+          bg="rgba(255,255,255,0.10)"
+          border="1px solid rgba(255,255,255,0.30)"
+          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+          borderRadius="xl"
+          boxShadow="0 4px 24px rgba(107,196,200,0.25)"
+        >
+          <Flex align="center" justify="center" gap={{ base: 3, md: 5 }}>
+            <Image src="/img/icono/life.png" alt="" h={{ base: "32px", md: "44px" }} objectFit="contain" />
+            <Text
+              color="white"
+              fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+              fontWeight="400"
+              fontStyle="italic"
+              letterSpacing="0.08em"
+              textShadow="0 2px 10px rgba(0,100,90,0.35)"
+              fontFamily="'EB Garamond', serif"
+            >
+              No es espiritualidad, es dignidad humana
+            </Text>
+            <Image src="/img/icono/life.png" alt="" h={{ base: "32px", md: "44px" }} objectFit="contain" />
+          </Flex>
+        </Box>
+      </Flex>
+
       {/* ── CARD BIENVENIDA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
         <Box
