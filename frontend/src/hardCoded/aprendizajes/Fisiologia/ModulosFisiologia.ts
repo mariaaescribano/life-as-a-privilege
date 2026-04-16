@@ -1,7 +1,7 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt, EstrellaIcon, CelulasOrganosIcon, MilagroIcon, SistemaNerviosoIcon, InflamIcon, FisioComidaIcon, FisioEjercicioIcon, EquilibrioIcon, CardioIcon } from "../../../GlobalVariables";
 import { fisio1, fisio2, fisio3, fisio4, fisio5, fisio6, fisio7, inflam1, inflam2, inflam3, inflam4, inflam5, inflam6, inflam7, inflam8, cancer1, cancer2, cancer3, cancer4, cancer5, cancer6, cancer7, cancer8, cancer9, cancer10, cancer11, med1, med2, med3, med4, med5, med6, med7 } from "./LetraFisiologia";
-import { ejer1, ejer2, ejer3, ejer4, ejer5, ejer6, ejer7 } from "./LetraEjercicio";
+import { ejer1, ejer3, ejer4, ejer5, ejer6, ejer7 } from "./LetraEjercicio";
 
 const detalles: Detalles = { color: fisiologiaTxt, icon: FisiologiaIcon, bgColor: fisiologiaBg };
 

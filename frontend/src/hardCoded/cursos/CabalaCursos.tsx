@@ -7,7 +7,7 @@ import {
   cabalaTxt,
 } from "../../GlobalVariables";
 import { modulosCabala } from "../aprendizajes/Cabala/ModulosCabala";
-import { modulosCabala2 } from "../aprendizajes/Cabala/ModulosCabala2";
+
 
 export const cabalaCursos: ModalidadInfo = {
   nom: cabalaNom,

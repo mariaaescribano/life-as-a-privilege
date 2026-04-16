@@ -4,7 +4,7 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { IntestinoIcon, NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
+import { IntestinoIcon, NutricionIcon, nutricionBg, nutricionTxt } from "../../../GlobalVariables";
 import {
   MicrobiotaIconMicro,
   MicrobiotaIconMujer,

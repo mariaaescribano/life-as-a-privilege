@@ -205,7 +205,6 @@ export default function AyurvedaTestPage({
             {(() => {
               const recs = DOSHA_CONSEJOS[guestResult.dosha];
               if (!recs) return null;
-              const dc = DOSHA_CONFIG[guestResult.dosha];
               const categories = [
                 { key: "alimentacion" as const, label: "Alimentación" },
                 { key: "hierbas" as const, label: "Hierbas" },
