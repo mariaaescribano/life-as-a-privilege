@@ -48,21 +48,47 @@ export const AprendizajeHome = () => {
           pb={{ base: 14, md: 20 }}
         >
           {/* Título */}
-          <Flex align="center" gap={3} mb={{ base: 8, md: 10 }}>
-            <AprendizajeIcon color="rgba(255,255,255,0.9)" size="47px" />
-            <Text
-              color="white"
-              fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-              fontWeight="700"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-              letterSpacing="0.05em"
-              textShadow="0 2px 10px rgba(0,100,90,0.4)"
-            >
-              Aprendizajes
-            </Text>
-          </Flex>
+          <Box
+            bg="rgba(255,255,255,0.22)"
+            border="1px solid rgba(255,255,255,0.45)"
+            sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+            borderRadius="2xl"
+            boxShadow="0 8px 36px rgba(107,196,200,0.45)"
+            px={{ base: 6, md: 10 }}
+            py={{ base: 5, md: 7 }}
+            w="100%"
+            maxW="850px"
+            mb={{ base: 10, md: 12 }}
+          >
+            <Flex direction="row" align="center" justify="center" gap={5}>
+              <Box
+                borderRadius="full"
+                bg="rgba(255,255,255,0.18)"
+                border="5px solid rgba(255,255,255,0.7)"
+                boxShadow="0 0 22px rgba(255,255,255,0.45), 0 0 55px rgba(107,196,200,0.25)"
+                w={{ base: "60px", md: "72px" }}
+                h={{ base: "60px", md: "72px" }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                flexShrink={0}
+                overflow="hidden"
+                p="6px"
+              >
+                <AprendizajeIcon color="white" size="44px" shadow={false} />
+              </Box>
+              <Text
+                color="white"
+                fontSize={{ base: "2xl", md: "5xl" }}
+                fontWeight="700"
+                letterSpacing="0.05em"
+                filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
+                lineHeight="1.15"
+              >
+                Cursos
+              </Text>
+            </Flex>
+          </Box>
 
           {/* Tarjetas directas — sin card contenedor */}
           <SimpleGrid

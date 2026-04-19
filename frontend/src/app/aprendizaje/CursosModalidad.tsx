@@ -694,31 +694,6 @@ export default function CursosModalidad() {
                   {detailCurso.descripcion}
                 </Text>
 
-                {/* Lecciones */}
-                <Flex
-                    align="center"
-                    justify="center"
-                    gap={3}
-                    bg={`${modalidad.color}12`}
-                    border={`1px solid ${modalidad.color}30`}
-                    borderRadius="3xl"
-                    px={5}
-                    py={4}
-                    mb={6}
-                    >
-                    <Text fontSize="xl" lineHeight="1">
-                        {detailCurso.icon}
-                    </Text>
-                    <Text
-                        color={modalidad.color}
-                        fontSize={{ base: "lg", md: "xl" }}
-                        fontWeight="600"
-                        letterSpacing="0.03em"
-                        lineHeight="1"        // asegura que el texto esté centrado verticalmente
-                    >
-                        {detailCurso.numLecciones} lecciones incluidas
-                    </Text>
-                    </Flex>
 
                 {/* Precio + Botón */}
                 <Flex

@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { AprendizajeIcon } from "../../GlobalVariables";
+import { AprendizajeIcon, LibrosIcon } from "../../GlobalVariables";
+
+const VideosIcon = ({ size = "28px", color = "currentColor" }: { size?: string; color?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} style={{
+    filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+  }}>
+    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h480q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm0-80h480v-480H160v480Zm0 0v-480 480Z"/>
+  </svg>
+);
 
 type SiteHeaderProps = {
   /**
@@ -79,6 +87,27 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
 
           <Flex
             align="center" gap={2} cursor="pointer"
+            onClick={() => navigate("/videos")}
+            color="rgba(255,255,255,0.85)"
+            _hover={{ color: "white" }}
+            transition="color 0.2s"
+          >
+            <VideosIcon color="currentColor" size="28px" />
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="500"
+              letterSpacing="0.04em"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
+            >
+              Vídeos
+            </Text>
+          </Flex>
+
+          <Flex
+            align="center" gap={2} cursor="pointer"
             onClick={() => navigate("/aprendizaje/aprendizajeHome")}
             color="rgba(255,255,255,0.85)"
             _hover={{ color: "white" }}
@@ -94,7 +123,28 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
                 filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
               }}
             >
-              Aprendizajes
+              Cursos
+            </Text>
+          </Flex>
+
+          <Flex
+            align="center" gap={2} cursor="pointer"
+            onClick={() => navigate("/libros")}
+            color="rgba(255,255,255,0.85)"
+            _hover={{ color: "white" }}
+            transition="color 0.2s"
+          >
+            <LibrosIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="500"
+              letterSpacing="0.04em"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
+            >
+              Libros
             </Text>
           </Flex>
 
@@ -242,6 +292,27 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         <Flex align="center" gap={{ base: 4, md: 6 }}>
           <Flex
             align="center" gap={2} cursor="pointer"
+            onClick={() => navigate("/videos")}
+            color="rgba(255,255,255,0.85)"
+            _hover={{ color: "white" }}
+            transition="color 0.2s"
+          >
+            <VideosIcon color="currentColor" size="28px" />
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="500"
+              letterSpacing="0.04em"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
+            >
+              Vídeos
+            </Text>
+          </Flex>
+
+          <Flex
+            align="center" gap={2} cursor="pointer"
             onClick={() => navigate("/aprendizaje/aprendizajeHome")}
             color="rgba(255,255,255,0.85)"
             _hover={{ color: "white" }}
@@ -257,7 +328,28 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
                 filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
               }}
             >
-              Aprendizajes
+              Cursos
+            </Text>
+          </Flex>
+
+          <Flex
+            align="center" gap={2} cursor="pointer"
+            onClick={() => navigate("/libros")}
+            color="rgba(255,255,255,0.85)"
+            _hover={{ color: "white" }}
+            transition="color 0.2s"
+          >
+            <LibrosIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="500"
+              letterSpacing="0.04em"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
+            >
+              Libros
             </Text>
           </Flex>
         </Flex>

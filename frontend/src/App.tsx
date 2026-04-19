@@ -19,6 +19,9 @@ import QuienSoy from "./app/web/QuienSoy";
 import Productos from "./app/web/Productos";
 // import ProductoDetalle from "./app/web/ProductoDetalle";
 import ReelsPage from "./app/web/Reels";
+import VideosPage from "./app/web/VideosPage";
+import VideoPage from "./app/web/VideoPage";
+import LibrosPage from "./app/web/LibrosPage";
 import Contacto from "./app/web/Contacto";
 import ElMetodo from "./app/web/ElMetodo";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
@@ -62,6 +65,9 @@ export default function App()
       {/* <Route path="/productos/:id" element={<ProductoDetalle />} /> */}
 
       <Route path="/reels" element={<ReelsPage />} />
+      <Route path="/videos" element={<VideosPage />} />
+      <Route path="/videos/:videoId" element={<VideoPage />} />
+      <Route path="/libros" element={<LibrosPage />} />
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />

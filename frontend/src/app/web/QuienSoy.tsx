@@ -33,24 +33,17 @@ const useReveal = (threshold = 0.1) => {
 
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
-type Libro = { title: string; descripcion: string; img: string; link: string };
 type Certificado = { img: string };
 
 const GLOW     = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 const GLOW_HV  = "0 8px 24px rgba(0,0,0,0.28), 0 0 32px rgba(107,196,200,1)";
 const glassCard = {
-  bg: "rgba(255,255,255,0.12)",
-  border: "1px solid rgba(255,255,255,0.35)",
-  sx: { backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" },
+  bg: "rgba(255,255,255,0.22)",
+  border: "1px solid rgba(255,255,255,0.45)",
+  sx: { backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" },
   borderRadius: "2xl",
   boxShadow: GLOW,
 };
-
-const libros: Libro[] = [
-  { title: "Life as a Privilege",          descripcion: "Entiende al ser Humano, al milagro de la naturaleza y al universo de manera holística.",            img: "/libros/img/book.png",   link: "/libros/pdfs/book.pdf"   },
-  { title: "Chinese Medicine", descripcion: "Una recopilación completa y holística de esta medicina y tradición.",                       img: "/libros/img/tcm.png",    link: "/libros/pdfs/tcm.pdf"    },
-  { title: "The Kabbalah",                 descripcion: "Una recopilación del antiguo misticismo judío enfocado al crecimiento personal.",         img: "/libros/img/cabala.png", link: "/libros/pdfs/cabala.pdf" },
-];
 
 const certificados: Certificado[] = [
   { img: "/certificados/0.png"  }, 
@@ -75,7 +68,6 @@ const certificados: Certificado[] = [
 const QuienSoy = () => {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const card1Reveal = useReveal(0.1);
-  const card2Reveal = useReveal(0.1);
   const card3Reveal = useReveal(0.1);
   const card4Reveal = useReveal(0.05);
   const card5Reveal = useReveal(0.1);
@@ -182,81 +174,6 @@ const QuienSoy = () => {
             </Box>
           </Box>
           
-          {/* ── CARD 2: MIS LIBROS ── */}
-          <Box
-            ref={card2Reveal.ref}
-            w="100%" maxW="900px" {...glassCard} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}
-            opacity={card2Reveal.visible ? 1 : 0}
-            transform={card2Reveal.visible ? "translateY(0)" : "translateY(36px)"}
-            transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
-          >
-            {/* Título sección */}
-            <Flex align="center" gap={3} justify="center" mb={{ base: 8, md: 10 }}>
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="34px" h="34px" fill="rgba(255,255,255,0.9)">
-                <path d="M480-160q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740v484q51-32 107-48t113-16q36 0 70.5 6t69.5 18v-480q15 5 29.5 10.5T898-752q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm80-200v-380l200-200v400L560-360Zm-160 65v-396q-33-14-68.5-21.5T260-720q-37 0-72 7t-68 21v397q35-13 69.5-19t70.5-6q36 0 70.5 6t69.5 19Zm0 0v-396 396Z"/>
-              </Box>
-              <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" letterSpacing="0.05em" textShadow="0 2px 10px rgba(0,100,90,0.4)">
-                Mis Libros
-              </Text>
-            </Flex>
-
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 6, md: 8 }}>
-              {libros.map((libro, i) => (
-                <Box
-                  key={i}
-                  borderRadius="2xl"
-                  overflow="hidden"
-                  bg="rgba(255,255,255,0.1)"
-                  border="1px solid rgba(255,255,255,0.28)"
-                  boxShadow={GLOW}
-                  display="flex"
-                  flexDirection="column"
-                >
-                  <Box overflow="hidden" h={{ base: "280px", md: "340px" }}>
-                    <Image
-                      src={libro.img}
-                      alt={libro.title}
-                      w="100%"
-                      h="100%"
-                      objectFit="cover"
-                    />
-                  </Box>
-                  <Box p={5} flex="1" display="flex" flexDirection="column" gap={3}>
-                    <Text color="white" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.03em">
-                      {libro.title}
-                    </Text>
-                    <Text color="rgba(255,255,255,0.75)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" flex="1">
-                      {libro.descripcion}
-                    </Text>
-                    <Box
-                      as="a"
-                      href={libro.link}
-                      download
-                      display="inline-flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      gap={2}
-                      px={5} py={2}
-                      borderRadius="full"
-                      border="2px solid rgba(255,255,255,0.55)"
-                      color="white"
-                      fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "md", md: "lg" }}
-                      fontWeight="600"
-                      bg="transparent"
-                      letterSpacing="0.05em"
-                      cursor="pointer"
-                      _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
-                      transition="all 0.2s"
-                    >
-                      ↓ Descargar
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
-            </SimpleGrid>
-          </Box>
-
           {/* ── CARD DONACIÓN ── */}
           <Box
             ref={card3Reveal.ref}

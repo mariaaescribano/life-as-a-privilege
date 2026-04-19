@@ -58,7 +58,7 @@ export function SubscribeBox() {
           mb={2}
           textShadow="0 2px 8px rgba(0,0,0,0.3)"
         >
-          ¡No te pierdas ningún curso!
+          ¡No te pierdas nada!
         </Text>
         <Text
           color="rgba(255,255,255,0.65)"
@@ -67,7 +67,7 @@ export function SubscribeBox() {
           mb={6}
           lineHeight="1.6"
         >
-          Suscríbete y recibe un email cuando haya uno nuevo
+          Suscríbete y recibe un email cuando haya contenido nuevo
         </Text>
 
         {status === "ok" ? (

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
 import {
+  AprendizajeIcon,
   neuropsicologiaNom,
   astrologiaNom,
   tcmNomLink,
@@ -90,12 +91,7 @@ function NuevosCursosHeader() {
           overflow="hidden"
           p="6px"
         >
-          <Image
-            src="/img/icono/life.png"
-            w="100%"
-            h="100%"
-            objectFit="contain"
-          />
+          <AprendizajeIcon color="white" size="44px" />
         </Box>
         <Box>
           <Text
