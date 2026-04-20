@@ -97,11 +97,11 @@ export function BioelectricidadIcon({ size = { base: "24px", md: "24px" } }: { s
     </Box>
   );
 }
-export const fisiologiaDescrip = "Redescubre tu cuerpo como el milagro que es. Comprende su funcionamiento y transforma el enfado y la frustración en Amor y respeto."
+export const fisiologiaDescrip = "No tenemos un cuerpo, somos un cuerpo. Redescúbrete como el milagro que eres. Comprendente tu naturaleza intrínseca y transforma el enfado y la frustración en Amor y respeto."
 
 
 // Neuropsicología
-export const neuropsicologiaNom = "Neuropsicología";
+export const neuropsicologiaNom = "Psicología";
 export const neuropsicologiaBg = "#daa889";
 export const neuropsicologiaTxt = "#5e2d10";
 export function NeuropsicologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
@@ -118,7 +118,7 @@ export function NeuropsicologiaIcon({ size = { base: "24px", md: "24px" } }: { s
     </Box>
   );
 }
-export const neuropsicologiaDescrip = "Entiende el porqué de tus hábitos diarios, de tus enfados, frustraciones y dolores, para transformarlos en el impulso que te libere del pasado."
+export const neuropsicologiaDescrip = "Entiende el porqué de tus hábitos diarios, de tus enfados, frustraciones y dolores, para transformarlos en el impulso que te libere del pasado y te acerquen a tu corazón."
 
 // Astrología
 export const astrologiaNom = "Astrología";
@@ -138,7 +138,7 @@ export function AstrologiaIcon({ size = { base: "24px", md: "24px" } }: { size?:
     </Box>
   );
 }
-export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu Vida, comprende su propósito y utilízalos conscientemente para dejar de hacerte daño."
+export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada área de tu Vida, comprende sus propósitos y utilízalos conscientemente para dejar de hacerte daño."
 
 // TCM
 export const tcmNom = "Medicina China";

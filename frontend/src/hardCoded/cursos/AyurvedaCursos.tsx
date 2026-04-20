@@ -23,7 +23,7 @@ export const ayurvedaCursos: ModalidadInfo = {
       titulo: "Introducción al Ayurveda",
       foto: "/img/ayurveda/ayucurso1.png",
       descripcion:
-        "Descubre la medicina tradicional india, comprende los doshas y tu constitución para aprender a respetarte y cuidarte según tu naturaleza y tu esencia única.",
+        "La medicina tradicional india, los doshas y tu constitución única para respetarte y cuidarte según tu naturaleza y tu esencia.",
       precio: null,
       numLecciones: 9,
       icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
@@ -35,7 +35,7 @@ export const ayurvedaCursos: ModalidadInfo = {
       titulo: "Los Chakras",
       foto: "/img/ayurveda/chakras.png",
       descripcion:
-        "Conoce y comprende a los 7 chakras para hacerte cargo de ellos y, por extensión, de ti mismo.",
+        "Los 7 chakras explicados para que puedas hacerte cargo de ellos y, por extensión, de ti mismo.",
       precio: null,
       numLecciones: 9,
       icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
@@ -44,10 +44,10 @@ export const ayurvedaCursos: ModalidadInfo = {
     {
       id: "ayu-curso-3",
       cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-3",
-      titulo: "El sentido de la vida y el karma",
+      titulo: "El karma de la herida",
       foto: "/img/ayurveda/karma.png",
       descripcion:
-        "Comprende por qué reencarnamos, qué es el karma y cómo las personas y situaciones que nos duelen son espejos que nos señalan las heridas que vinimos a sanar.",
+        "Reencarnamos para sanar. El karma y las personas que nos duelen son espejos que señalan las heridas que vinimos a recordar.",
       precio: null,
       numLecciones: 7,
       icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,

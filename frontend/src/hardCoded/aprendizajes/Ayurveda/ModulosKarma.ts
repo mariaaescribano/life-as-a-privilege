@@ -10,7 +10,7 @@ const detalles: Detalles = { color: ayurvedaTxt, icon: AyurvedaIcon, bgColor: ay
 const basePath = "/aprendizaje/videoLessonPage/" + ayurvedaNomLink;
 
 const explorarMisHeridas: FloatingButtonConfig = {
-  label: "Explorar mis heridas",
+  label: "Transformar mis heridas",
   action: "espacio-auth",
   route: "/espacio/questions/" + ayurvedaNomLink,
 };

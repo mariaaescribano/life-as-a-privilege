@@ -441,7 +441,7 @@ export default function ElMetodo() {
               mt={4}
               textShadow="0 1px 6px rgba(0,60,50,0.3)"
             >
-              Terapia holística orientada a guiar a la persona, desde la dignidad y el respeto propio, a través de las disciplinas siguientes...
+              Terapia holística orientada a guiar a la persona, desde la dignidad y el respeto propio, a través de las disciplinas siguientes para un camino completo de autoconocimiento y regeneración...
             </Text>
           </Box>
         </Box>

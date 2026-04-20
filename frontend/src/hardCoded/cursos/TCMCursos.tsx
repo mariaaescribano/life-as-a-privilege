@@ -22,7 +22,7 @@ export const tcmCursos: ModalidadInfo = {
       titulo: "Los fundamentos",
       foto: "/img/tcm/tcm_curso1.jpg",
       descripcion:
-        "Descubre la filosofía de la medicina china, los Cinco Elementos y su influencia en el cuerpo Humano, el Yin y el Yang y el diagnóstico de la lengua.",
+        "La filosofía de la medicina china: los Cinco Elementos y su influencia en el cuerpo Humano, el Yin y el Yang y el diagnóstico de la lengua.",
       precio: null,
       numLecciones: 9,
       icon: <TCMIcon size={{ base: "40px", md: "50px" }} />,
@@ -34,7 +34,7 @@ export const tcmCursos: ModalidadInfo = {
       titulo: "Los Cinco Elementos",
       foto: "/img/tcm/5elem.jpg",
       descripcion:
-        "Este curso es una introducción de los ciclos de los Cinco Elementos y su manifestación en la fisiología y en el emocional.",
+        "Los ciclos de los Cinco Elementos y su manifestación en la fisiología y en el emocional.",
       precio: null,
       numLecciones: 17,
       icon: <TCMIcon size={{ base: "40px", md: "50px" }} />,

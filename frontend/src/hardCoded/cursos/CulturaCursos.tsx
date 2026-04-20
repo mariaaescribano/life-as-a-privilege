@@ -22,7 +22,7 @@ export const culturaCursos: ModalidadInfo = {
       titulo: "Spinoza",
       foto: "/img/cultura/spinoza.png",
       descripcion:
-        "Descubre quién fue Spinoza, su visión de Dios y por qué influenció tanto a personas como Einstein.",
+        "Quién fue Spinoza, su visión de Dios y por qué influenció a personas como Einstein.",
       precio: null,
       numLecciones: 6,
       icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,
@@ -34,7 +34,7 @@ export const culturaCursos: ModalidadInfo = {
       titulo: "La física en el ser humano",
       foto: "/img/cultura/fisica.png",
       descripcion:
-        "Descubre cómo la realidad a la que estamos acostumbrados es, en verdad, un milagro de la física cuántica.",
+        "La realidad a la que estamos acostumbrados es, en verdad, un milagro de la física cuántica.",
       precio: null,
       numLecciones: 4,
       icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,

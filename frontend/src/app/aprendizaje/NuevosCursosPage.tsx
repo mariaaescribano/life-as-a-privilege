@@ -20,6 +20,8 @@ import {
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
+  { modalidadKey: ayurvedaNomLink,       cursoId: "ayu-curso-3"     }, // El sentido de la vida y el karma
+  { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-3"     }, // Las grasas
   { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-5"   }, // El ejercicio, el cerebro y el cuerpo
   { modalidadKey: culturaNomLink,        cursoId: "cul-curso-2"     }, // La física en el ser humano
   { modalidadKey: ayurvedaNomLink,       cursoId: "ayu-curso-2"     }, // Los Chakras
@@ -70,11 +72,11 @@ function NuevosCursosHeader() {
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       borderRadius="2xl"
       boxShadow="0 8px 36px rgba(107,196,200,0.45)"
-      px={{ base: 8, md: 14 }}
-      py={{ base: 8, md: 12 }}
+      px={{ base: 6, md: 10 }}
+      py={{ base: 5, md: 7 }}
       w="100%"
       maxW="850px"
-      mb={{ base: 10, md: 12 }}
+      mb={0}
     >
       <Flex direction="row" align="center" justify="center" gap={5}>
         <Box
@@ -93,18 +95,16 @@ function NuevosCursosHeader() {
         >
           <AprendizajeIcon color="white" size="44px" />
         </Box>
-        <Box>
-          <Text
-            color="white"
-            fontSize={{ base: "2xl", md: "5xl" }}
-            fontWeight="700"
-            letterSpacing="0.05em"
-            filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
-            lineHeight="1.15"
-          >
-            Nuevos Cursos
-          </Text>
-        </Box>
+        <Text
+          color="white"
+          fontSize={{ base: "2xl", md: "5xl" }}
+          fontWeight="700"
+          letterSpacing="0.05em"
+          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
+          lineHeight="1.15"
+        >
+          Nuevos Cursos
+        </Text>
       </Flex>
     </Box>
   );
@@ -261,7 +261,7 @@ export default function NuevosCursosPage() {
           px={{ base: 5, md: 10, lg: 16 }}
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
-          gap={{ base: 5, md: 6 }}
+          gap={{ base: 10, md: 12 }}
         >
           <NuevosCursosHeader />
 

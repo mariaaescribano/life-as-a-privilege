@@ -133,7 +133,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
-        w={{ base: "95%", md: "640px" }}
+        w={{ base: "95%", md: "520px" }}
         maxH={{ base: "88vh", md: "88vh" }}
         overflowY="auto"
         borderRadius="24px"

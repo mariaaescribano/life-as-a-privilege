@@ -19,12 +19,24 @@ export const nutricionCursos: ModalidadInfo = {
   icon: <NutricionIcon size={{ base: "35px", md: "45px" }}  />,
   cursos: [
     {
+      id: "nut-curso-3",
+      cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-3",
+      titulo: "Las grasas",
+      foto: "/img/nutri/grasasCurso.png",
+      descripcion:
+        "Las grasas que eliges construyen tus células y tus neuronas, y determinan tu claridad mental, tu energía y tus defensas.",
+      precio: null,
+      numLecciones: 6,
+      icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosGrasas,
+    },
+    {
       id: "nut-curso-1",
       cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-1",
       titulo: "Las bases de la nutrición",
       foto: "/img/nutri/nutriFotoCurso1.png",
       descripcion:
-        "Entiende qué hay más allá de los alimentos que consumimos cada día y toma las riendas de tu claridad mental transformando tu dieta.",
+        "Qué hay más allá de los alimentos que consumimos cada día. Toma las riendas de tu claridad mental transformando tu dieta.",
       precio: null,
       numLecciones: 6,
       icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
@@ -36,23 +48,11 @@ export const nutricionCursos: ModalidadInfo = {
       titulo: "La Microbiota",
       foto: "/img/nutri/microbiotacurso.png",
       descripcion:
-        "Conoce el ecosistema invisible que vive en ti, cómo influye en tu bienestar, tus emociones y tus decisiones. Aprende a cuidarlo y a cuidarte.",
+        "El ecosistema invisible que vive en ti influye en tu bienestar, tus emociones y tus decisiones. Cuidarlo es cuidarte.",
       precio: null,
       numLecciones: 10,
       icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosMicrobiota,
-    },
-    {
-      id: "nut-curso-3",
-      cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-3",
-      titulo: "Las grasas",
-      foto: "/img/nutri/grasasCurso.png",
-      descripcion:
-        "Descubre cómo las grasas que eliges construyen tus células y tus neuronas, y por qué determinan tu claridad mental, tu energía y tus defensas.",
-      precio: null,
-      numLecciones: 6,
-      icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
-      modulos: modulosGrasas,
     },
     // {
     //   id: "fito-curso-1",

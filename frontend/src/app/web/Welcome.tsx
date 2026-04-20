@@ -208,7 +208,7 @@ const Welcome = () => {
           </Box>
 
           {/* Texto */}
-          <Box flex="1" mt={{ base: "10px", md: "30px" }} textAlign={{ base: "center", md: "left" }}>
+          <Box flex="1" textAlign={{ base: "center", md: "left" }}>
             <Text
               color="white"
               fontSize={{ base: "3xl", md: "4xl", lg: "4xl" }}
