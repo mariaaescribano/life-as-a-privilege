@@ -229,46 +229,28 @@ const Welcome = () => {
             >
               Es una plataforma gratuita que integra psicología, conocimientos ancestrales y ciencia para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación.
             </Text>
-            <Box mt={{ base: "30px", md: "20px" }}  display="flex" justifyContent={{ base: "center", md: "flex-end" }}>
-              <Flex
-                as="button"
-                onClick={() => navigate("/elMetodo")}
-                align="center"
-                gap={2}
-                px={6}
-                py="9px"
-                borderRadius="full"
-                border="1px solid rgba(255,255,255,0.38)"
-                bg="rgba(255,255,255,0.09)"
-                cursor="pointer"
-                _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "rgba(255,255,255,0.7)" }}
-                transition="all 0.22s ease"
-              >
-                <Image src="/img/icono/life.png" alt="" h="22px" objectFit="contain" />
-                <Text
-                  color="rgba(255,255,255,0.9)"
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="600"
-                  fontSize="sm"
-                  letterSpacing="0.16em"
-                >
-                  El Método →
-                </Text>
-              </Flex>
-            </Box>
           </Box>
         </Box>
       </Flex>
 
-      {/* ── BOTÓN NUEVOS CURSOS ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 12 }}>
+      {/* ── BOTONES NUEVOS CURSOS + EL MÉTODO ── */}
+      <Flex
+        justify="center"
+        align="center"
+        gap={{ base: 3, md: 5 }}
+        px={{ base: 4, md: 10, lg: 16 }}
+        pt={{ base: 10, md: 12 }}
+        flexWrap="nowrap"
+      >
         <Flex
           as="button"
           onClick={() => navigate("/aprendizaje/nuevosCursos")}
+          justify="center"
           align="center"
-          gap={3}
-          px={{ base: 8, md: 12 }}
-          py={{ base: "14px", md: "16px" }}
+          gap={{ base: 2, md: 3 }}
+          px={{ base: 3, md: 10 }}
+          py={{ base: "12px", md: "16px" }}
+          w={{ base: "48%", md: "320px" }}
           borderRadius="full"
           border="1.5px solid rgba(255,255,255,0.55)"
           bg="rgba(255,255,255,0.10)"
@@ -282,16 +264,58 @@ const Welcome = () => {
           }}
           transition="all 0.25s ease"
         >
-          <Image src="/img/icono/life.png" alt="" h={{ base: "28px", md: "34px" }} objectFit="contain" />
+          <Box display={{ base: "flex", md: "none" }} alignItems="center" justifyContent="center" flexShrink={0}>
+            <AprendizajeIcon color="white" size="26px" shadow={false} />
+          </Box>
+          <Box display={{ base: "none", md: "flex" }} alignItems="center" justifyContent="center" flexShrink={0}>
+            <AprendizajeIcon color="white" size="34px" shadow={false} />
+          </Box>
           <Text
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "xl", md: "2xl" }}
-            letterSpacing="0.12em"
+            fontSize={{ base: "md", md: "2xl" }}
+            letterSpacing={{ base: "0.06em", md: "0.12em" }}
             style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))" }}
+            whiteSpace="nowrap"
           >
             Nuevos Cursos
+          </Text>
+        </Flex>
+
+        <Flex
+          as="button"
+          onClick={() => navigate("/elMetodo")}
+          justify="center"
+          align="center"
+          gap={{ base: 2, md: 3 }}
+          px={{ base: 3, md: 10 }}
+          py={{ base: "12px", md: "16px" }}
+          w={{ base: "48%", md: "320px" }}
+          borderRadius="full"
+          border="1.5px solid rgba(255,255,255,0.55)"
+          bg="rgba(255,255,255,0.10)"
+          cursor="pointer"
+          boxShadow="0 0 28px rgba(72,192,181,0.65), 0 0 70px rgba(72,192,181,0.28), 0 4px 18px rgba(0,0,0,0.2)"
+          _hover={{
+            bg: "rgba(255,255,255,0.20)",
+            borderColor: "rgba(255,255,255,0.85)",
+            boxShadow: "0 0 44px rgba(72,192,181,0.9), 0 0 90px rgba(72,192,181,0.45), 0 6px 26px rgba(0,0,0,0.25)",
+            transform: "translateY(-2px)",
+          }}
+          transition="all 0.25s ease"
+        >
+          <Image src="/img/icono/life.png" alt="" h={{ base: "26px", md: "34px" }} objectFit="contain" flexShrink={0} />
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "md", md: "2xl" }}
+            letterSpacing={{ base: "0.06em", md: "0.12em" }}
+            style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))" }}
+            whiteSpace="nowrap"
+          >
+            El Método
           </Text>
         </Flex>
       </Flex>

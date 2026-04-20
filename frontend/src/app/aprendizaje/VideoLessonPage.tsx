@@ -26,8 +26,10 @@ import { modulosAstrologia, modulosAstrologiaCurso0, modulosArquetipos } from ".
 import { modulosCabala } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import { modulosCabala2 } from "../../hardCoded/aprendizajes/Cabala/ModulosCabala2";
 import { modulosNutricion, modulosMicrobiota } from "../../hardCoded/aprendizajes/Nutricion/ModulosNutricion";
+import { modulosGrasas } from "../../hardCoded/aprendizajes/Nutricion/ModulosGrasas";
 import { modulosAyurveda } from "../../hardCoded/aprendizajes/Ayurveda/ModulosAyurveda";
 import { modulosChakras } from "../../hardCoded/aprendizajes/Ayurveda/ModulosChakras";
+import { modulosKarma } from "../../hardCoded/aprendizajes/Ayurveda/ModulosKarma";
 import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion, modulosFisiologiaEjercicio } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 import { modulosCultura } from "../../hardCoded/aprendizajes/Cultura/ModulosCultura";
 import { modulosFisica } from "../../hardCoded/aprendizajes/Cultura/ModulosFisica";
@@ -128,6 +130,7 @@ export default function VideoLessonPage() {
         setdatos(
           getModuleByTitle(submoduloId!, modulosNutricion) ??
           getModuleByTitle(submoduloId!, modulosMicrobiota) ??
+          getModuleByTitle(submoduloId!, modulosGrasas) ??
           getModuleByTitle(submoduloId!, modulosFitoterapia)
         );
       }
@@ -135,7 +138,8 @@ export default function VideoLessonPage() {
       {
         setdatos(
           getModuleByTitle(submoduloId!, modulosAyurveda) ??
-          getModuleByTitle(submoduloId!, modulosChakras)
+          getModuleByTitle(submoduloId!, modulosChakras) ??
+          getModuleByTitle(submoduloId!, modulosKarma)
         );
       }
       else if(moduloId === fisiologiaNom)

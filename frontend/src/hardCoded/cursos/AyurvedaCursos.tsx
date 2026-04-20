@@ -9,6 +9,7 @@ import {
 } from "../../GlobalVariables";
 import { modulosAyurveda } from "../aprendizajes/Ayurveda/ModulosAyurveda";
 import { modulosChakras } from "../aprendizajes/Ayurveda/ModulosChakras";
+import { modulosKarma } from "../aprendizajes/Ayurveda/ModulosKarma";
 
 export const ayurvedaCursos: ModalidadInfo = {
   nom: ayurvedaNom,
@@ -39,6 +40,18 @@ export const ayurvedaCursos: ModalidadInfo = {
       numLecciones: 9,
       icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosChakras,
+    },
+    {
+      id: "ayu-curso-3",
+      cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-3",
+      titulo: "El sentido de la vida y el karma",
+      foto: "/img/ayurveda/karma.png",
+      descripcion:
+        "Comprende por qué reencarnamos, qué es el karma y cómo las personas y situaciones que nos duelen son espejos que nos señalan las heridas que vinimos a sanar.",
+      precio: null,
+      numLecciones: 7,
+      icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosKarma,
     },
   ],
 };

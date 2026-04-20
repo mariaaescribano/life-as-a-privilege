@@ -9,6 +9,7 @@ import {
   nutricionTxt,
 } from "../../GlobalVariables";
 import { modulosNutricion, modulosMicrobiota } from "../aprendizajes/Nutricion/ModulosNutricion";
+import { modulosGrasas } from "../aprendizajes/Nutricion/ModulosGrasas";
 // import { modulosFitoterapia } from "../aprendizajes/Fitoterapia/ModulosFitoterpia";
 
 export const nutricionCursos: ModalidadInfo = {
@@ -40,6 +41,18 @@ export const nutricionCursos: ModalidadInfo = {
       numLecciones: 10,
       icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosMicrobiota,
+    },
+    {
+      id: "nut-curso-3",
+      cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-3",
+      titulo: "Las grasas",
+      foto: "/img/nutri/grasasCurso.png",
+      descripcion:
+        "Descubre cómo las grasas que eliges construyen tus células y tus neuronas, y por qué determinan tu claridad mental, tu energía y tus defensas.",
+      precio: null,
+      numLecciones: 6,
+      icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosGrasas,
     },
     // {
     //   id: "fito-curso-1",
