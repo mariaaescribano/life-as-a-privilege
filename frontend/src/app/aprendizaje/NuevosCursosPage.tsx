@@ -20,6 +20,7 @@ import {
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
+  { modalidadKey: neuropsicologiaNom,    cursoId: "anorexia"        }, // Anorexia
   { modalidadKey: ayurvedaNomLink,       cursoId: "ayu-curso-3"     }, // El sentido de la vida y el karma
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-3"     }, // Las grasas
   { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-5"   }, // El ejercicio, el cerebro y el cuerpo
@@ -31,7 +32,6 @@ const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
   { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-2"   }, // La Inflamación
   { modalidadKey: astrologiaNom,         cursoId: "astro-curso-2"   }, // Los Arquetipos
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // Microbiota
-  { modalidadKey: neuropsicologiaNom,    cursoId: "anorexia"        }, // Anorexia
   // { modalidadKey: cabalaNom,             cursoId: "cabala-curso-2"  }, // Árbol de la Vida
   { modalidadKey: neuropsicologiaNom,    cursoId: "esquizofrenia"   }, // Esquizofrenia
   { modalidadKey: neuropsicologiaNom,    cursoId: "etapasVida"      },

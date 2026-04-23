@@ -6,7 +6,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../GlobalVariables";
-import { modulosNeuroPsicologia, modulosEsquizofrenia } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
   nom: neuropsicologiaNom,
@@ -14,18 +14,18 @@ export const neuropsicologiaCursos: ModalidadInfo = {
   color: neuropsicologiaTxt,
   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
-    // {
-    //   id: "anorexia",
-    //   titulo: "El enigma de la anorexia",
-    //   foto: "/img/np/anorexia.png",
-    //   descripcion:
-    //     "Comprende la esencia de la manifestación del sufrimiento con la tasa de mortalidad más elevada. Entiende cómo las anoréxicas ven la realidad y por qué no tiene nada que ver con las redes sociales.",
-    //   precio: null,
-    //   numLecciones: 10,
-    //   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-    //   cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
-    //   modulos: modulosAnorexia,
-    // },
+    {
+      id: "anorexia",
+      titulo: "ANOREXIA: el infierno hacia la autovalía",
+      foto: "/img/np/anorexia.png",
+      descripcion:
+        "1 de cada 100 chicas jóvenes tiene anorexia. 1 de cada 10 muere o se suicida. Ya basta.",
+      precio: null,
+      numLecciones: 10,
+      icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
+      modulos: modulosAnorexia,
+    },
       {
       id: "esquizofrenia",
       titulo: "Más allá de la esquizofrenia",
