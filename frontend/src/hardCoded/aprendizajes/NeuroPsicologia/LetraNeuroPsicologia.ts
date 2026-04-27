@@ -46,8 +46,6 @@ export const letranp23 = "Las anoréxicas viven pensando que no son suficienteme
 
 export const letranp24 = "Las anoréxicas interiorizan que no son suficientes. Se convencen de que no pueden vivir como un humano más, por lo que van más allá de su deber, trabajando hasta a veces literalmente el desmayo. Piensan que si les queda energía es que no han cumplido con lo que tenían que hacer.";
 
-export const letranp25 = "Las anoréxicas sienten una inadecuación tan profunda que han tenido que aprender a llevar una máscara de superioridad. Tienen miedo de no llegar a ser lo que se espera de ellas. Tienen miedo a ser normales o mediocres. Por ello, se vuelcan hacia la dieta. No porque busquen adelgazar. Lo que buscan es demostrar que pueden conseguir cosas que los demás no pueden. Eso es lo que las hace sentirse mejor.";
-
 export const letranp26 = "Las anoréxicas se sienten bien por estar enfermas. Creen que adelgazar las hace más valorables y especiales. Tienen que eliminar estas creencias y darse cuenta de que estar delgada no es sinónimo de que todo va a estar bien y de que todo está bajo control.";
 
 export const letranp27 = "A las anoréxicas no se les ha enseñado a que se vean como las personas valiosas que son. Al carecer esa seguridad han encontrado seguridad reprimiendo las necesidades de su cuerpo. Es decir, si son capaces de aguantar el hambre, significa que son fuertes, resistentes y poderosas, que son capaces.";

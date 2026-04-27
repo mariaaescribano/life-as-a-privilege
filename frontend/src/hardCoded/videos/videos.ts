@@ -14,4 +14,11 @@ export const videos: Video[] = [
     descripcion: "Usa tu naturaleza intrínseca para ser tu mejor versión",
     video: "5gTDzZC3HsM",
   },
+  {
+    id: "carta-astral-einstein",
+    titulo: "Leyendo la carta astral de Einstein",
+    foto: "/img/videos/einsteinCartAstral.png",
+    descripcion: "Un recorrido por la carta astral de Albert Einstein.",
+    video: "-CgjqTOi8u4",
+  },
 ];

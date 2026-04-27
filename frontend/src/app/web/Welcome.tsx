@@ -124,6 +124,7 @@ const Welcome = () => {
   const [selected, setSelected] = useState<Discipline | null>(null);
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
+  const videoReveal = useReveal();
   const presentacionReveal = useReveal();
   const disciplinasReveal = useReveal(0.05);
 
@@ -229,6 +230,39 @@ const Welcome = () => {
             >
               Es una plataforma gratuita que integra psicología, conocimientos ancestrales y ciencia para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación.
             </Text>
+          </Box>
+        </Box>
+      </Flex>
+
+      {/* ── VÍDEO DE INTRODUCCIÓN ── */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 12 }}>
+        <Box
+          ref={videoReveal.ref}
+          w={{ base: "100%", md: "55%" }}
+          maxW="560px"
+          bg="rgba(255,255,255,0.22)"
+          border="1px solid rgba(255,255,255,0.45)"
+          sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+          borderRadius="2xl"
+          boxShadow="0 8px 36px rgba(107,196,200,0.45)"
+          p={{ base: 3, md: 4 }}
+          opacity={videoReveal.visible ? 1 : 0}
+          transform={videoReveal.visible ? "none" : "translateY(40px)"}
+          transition="opacity 0.7s ease, transform 0.7s ease"
+        >
+          <Box
+            aspectRatio={16 / 9}
+            borderRadius="xl"
+            overflow="hidden"
+            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.6)"
+          >
+            <iframe
+              src="https://www.youtube.com/embed/r5nL_GmnCGQ"
+              title="Introducción a Life as a Privilege"
+              style={{ width: "100%", height: "100%", border: 0 }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
           </Box>
         </Box>
       </Flex>

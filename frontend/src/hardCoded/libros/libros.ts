@@ -23,18 +23,18 @@ export const apuntes: Apunte[] = [
   { id: "sistema-inmunitario", titulo: "El Sistema Inmunitario", link: gdocView("1UOpCrxQuTTcLG0lq7V6Aos6xfCT9tZgzCEQgH6a5fpk"), img: "/libros/img/inmune.png" },
   { id: "fitoterapia",         titulo: "Fitoterapia",            link: gdocView("1JBn6dVp4KIq-c3bs9s0g9PzfquN6XBwHjCsqaESZowg"), img: "/libros/img/fitoterapia.png" },
   { id: "ayurveda",            titulo: "Ayurveda",               link: gdocView("12T_p-IaR6Do51qG3FtdxDbjrFquwqsoiVcgGFIbUEiQ"), img: "/libros/img/ayurveda.png"  },
-  { id: "anatomia-fisiologia", titulo: "Anatomía y fisiología",  link: gdocView("1y72scww-IyPVD4YM4et40EvqGgSXStVtfh3KRKfKdL4"), img: "/libros/img/filo.png"  },
+  { id: "anatomia-fisiologia", titulo: "Anatomía y fisiología",  link: gdocView("1y72scww-IyPVD4YM4et40EvqGgSXStVtfh3KRKfKdL4"), img: "/libros/img/fisioAnatomiaLibro.png"  },
   { id: "psicosomatica",       titulo: "Psicosomática",          link: gdocView("1YwWFiVsOdNNTwsw_qJ1KqYWRFjdDDY3vTakgjhKHx6M"), img: "/libros/img/psicosomatica.png" },
   {
     id: "chinese-medicine",
     titulo: "Chinese Medicine",
-    link: gdocView("https://docs.google.com/document/d/1fggEor2rorUyUEdLkHzF7qAUg8TWJlutOOSOMlDzLXg/edit?usp=sharing"),
+    link: gdocView("1fggEor2rorUyUEdLkHzF7qAUg8TWJlutOOSOMlDzLXg"),
     img: "/libros/img/tcm.png",
   },
   {
     id: "the-kabbalah",
     titulo: "The Kabbalah",
-    link: gdocView("https://docs.google.com/document/d/1fHl67LYbyQeyXCmkwC3RRWCaiojxHIZJCRKP1VgOOmU/edit?usp=sharing"),
+    link: gdocView("1fHl67LYbyQeyXCmkwC3RRWCaiojxHIZJCRKP1VgOOmU"),
     img: "/libros/img/cabala.png",
   },
 ];
@@ -43,8 +43,8 @@ export const libros: Libro[] = [
   {
     id: "life-as-a-privilege",
     titulo: "Life as a Privilege",
-    link: gdocView("https://docs.google.com/document/d/10m8G4a9x-a7r4ri3UsislWH-IvBH4hzj6IBK6g_JMNA/edit?usp=sharing"),
+    link: gdocView("10m8G4a9x-a7r4ri3UsislWH-IvBH4hzj6IBK6g_JMNA"),
     img: "/libros/img/book.png",
   },
- 
+
 ];

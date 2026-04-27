@@ -1,6 +1,6 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom, EsqComprenderIcon, EsqOrigenIcon, EsqBiologiaIcon, EsqVocesIcon, AnxEntornoIcon, AnxComidaIcon, AnxSanacionIcon } from "../../../GlobalVariables";
-import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp25, letranp26, letranp27, letranp28, letranp29, letranp30 } from "./LetraNeuroPsicologia";
+import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp26, letranp27, letranp28, letranp29, letranp30 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 
@@ -383,24 +383,10 @@ export const modulosAnorexia: ModuloContenido[] = [
         nom: "1.2 La insuficiencia en la anorexia",
         link:`${basePathAnx}/anx2`,
         linkAnterior:`${basePathAnx}/anx1`,
-        linkNext:`${basePathAnx}/anx3`,
+        linkNext:`${basePathAnx}/anx4`,
         descripcion:"Nunca es suficiente porque ellas mismas no se sienten suficientes.",
         video:"kgDWFW6UhTM",
         letra: letranp24,
-        cursoId: "anorexia",
-        detalles: detalles,
-        icon: EsqComprenderIcon,
-        floatingButton: quieroEntenderme,
-      },
-      {
-        id:"anx3",
-        nom: "1.3 La falsa superioridad en la anorexia",
-        link:`${basePathAnx}/anx3`,
-        linkAnterior:`${basePathAnx}/anx2`,
-        linkNext:`${basePathAnx}/anx4`,
-        descripcion:"Detrás de la máscara de superioridad hay un miedo profundo a no ser queridas.",
-        video:"ab3VGxq0B5E",
-        letra: letranp25,
         cursoId: "anorexia",
         detalles: detalles,
         icon: EsqComprenderIcon,
@@ -417,7 +403,7 @@ export const modulosAnorexia: ModuloContenido[] = [
         id:"anx4",
         nom: "2.1 La familia de las anoréxicas",
         link:`${basePathAnx}/anx4`,
-        linkAnterior:`${basePathAnx}/anx3`,
+        linkAnterior:`${basePathAnx}/anx2`,
         linkNext:`${basePathAnx}/anx5`,
         descripcion:"Sus familias les dan lujos, pero ellas piensan que no son suficientes, por lo que no entienden por qué los tienen.",
         video:"CkxrBYCeYCE",
