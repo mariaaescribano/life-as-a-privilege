@@ -84,7 +84,7 @@ function VideoCard({ video }: VideoCardProps) {
       gap={3}
       h="100%"
     >
-      {/* Título arriba a la izquierda */}
+      {/* Título arriba a la izquierda — altura fija de 2 líneas para alinear fotos */}
       <Text
         color="white"
         fontSize={{ base: "xl", md: "2xl" }}
@@ -94,21 +94,26 @@ function VideoCard({ video }: VideoCardProps) {
         filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
         alignSelf="flex-start"
         mb={{ base: 3, md: 4 }}
+        noOfLines={2}
+        minH={{ base: "calc(2 * 1.2 * 1.25rem)", md: "calc(2 * 1.2 * 1.5rem)" }}
+        w="100%"
       >
         {video.titulo}
       </Text>
 
-      {/* Foto */}
+      {/* Foto — aspect ratio fijo 16/9 para que todas ocupen lo mismo */}
       <Box
         borderRadius="xl"
         overflow="hidden"
         boxShadow="0 8px 32px rgba(107,196,200,0.55), 0 3px 14px rgba(107,196,200,0.33)"
+        aspectRatio={16 / 9}
+        w="100%"
       >
         <Image
           src={video.foto}
           alt={video.titulo}
           w="100%"
-          h="auto"
+          h="100%"
           display="block"
           objectFit="cover"
         />

@@ -44,9 +44,11 @@ const OpinionesSection: React.FC = () => {
       pb={{ base: 4, md: 6 }}
     >
       <Flex direction="column" align="center" w="100%">
+        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" mb={{ base: 8, md: 10 }} />
+
         <Flex align="center" justify="center" gap={3} mb={{ base: 6, md: 8 }}>
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "28px", md: "36px" }} h={{ base: "28px", md: "36px" }} fill="white" flexShrink={0}>
-            <path d="M580-240q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM280-560q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 320q-33 0-56.5-23.5T200-320v-200q0-33 23.5-56.5T280-600q33 0 56.5 23.5T360-520v200q0 33-23.5 56.5T280-240Zm300 0q-33 0-56.5-23.5T500-320v-200q0-33 23.5-56.5T580-600q33 0 56.5 23.5T660-520v200q0 33-23.5 56.5T580-240Z"/>
+            <path d="M240-400h122l200-200q9-9 13.5-20.5T580-643q0-11-5-21.5T562-684l-36-38q-9-9-20-13.5t-23-4.5q-11 0-22.5 4.5T440-722L240-522v122Zm280-243-37-37 37 37ZM300-460v-38l101-101 20 18 18 20-101 101h-38Zm121-121 18 20-38-38 20 18Zm26 181h273v-80H527l-80 80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/>
           </Box>
           <Text
             color="white"
@@ -82,15 +84,6 @@ const OpinionesSection: React.FC = () => {
               transform={reveal.visible ? "translateY(0)" : "translateY(28px)"}
               transition={`opacity 0.6s ease ${i * 0.12}s, transform 0.6s ease ${i * 0.12}s`}
             >
-              <Text
-                color="white"
-                fontSize="3xl"
-                lineHeight="1"
-                opacity={0.55}
-                fontFamily="'EB Garamond', serif"
-              >
-                “
-              </Text>
               <Text
                 color="rgba(255,255,255,0.92)"
                 fontSize={{ base: "md", md: "lg" }}
