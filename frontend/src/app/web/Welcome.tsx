@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
+import OpinionesSection from "../../components/welcome/OpinionesSection";
 import {
   astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -529,6 +530,9 @@ const Welcome = () => {
         </Grid>
       </Box>
 
+
+      {/* ── OPINIONES ── */}
+      <OpinionesSection />
 
       {/* ── SUSCRIPCIÓN ── */}
       <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 8, md: 12 }}>

@@ -18,6 +18,7 @@ import { CabalaModule } from './cabala/cabala.module';
 import { NutricionModule } from './nutricion/nutricion.module';
 import { AyurvedaModule } from './ayurveda/ayurveda.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
+import { OpinionModule } from './opinion/opinion.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -44,6 +45,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     NutricionModule,
     AyurvedaModule,
     SubscribeModule,
+    OpinionModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],

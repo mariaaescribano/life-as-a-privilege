@@ -23,6 +23,7 @@ import VideosPage from "./app/web/VideosPage";
 import VideoPage from "./app/web/VideoPage";
 import LibrosPage from "./app/web/LibrosPage";
 import Contacto from "./app/web/Contacto";
+import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
@@ -69,6 +70,7 @@ export default function App()
       <Route path="/videos/:videoId" element={<VideoPage />} />
       <Route path="/libros" element={<LibrosPage />} />
       <Route path="/contacto" element={<Contacto />} />
+      <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
