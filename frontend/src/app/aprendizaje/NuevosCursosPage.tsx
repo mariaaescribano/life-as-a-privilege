@@ -163,13 +163,15 @@ function CourseCard({ entry }: CourseCardProps) {
       <Box
         borderRadius="xl"
         overflow="hidden"
+        w="100%"
+        aspectRatio={16 / 9}
         boxShadow={`0 8px 32px ${modalidad.color}55, 0 3px 14px ${modalidad.color}33`}
       >
         <Image
           src={curso.foto}
           alt={curso.titulo}
           w="100%"
-          h="auto"
+          h="100%"
           display="block"
           objectFit="cover"
         />
