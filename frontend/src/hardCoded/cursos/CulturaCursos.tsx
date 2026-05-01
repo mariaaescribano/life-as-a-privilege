@@ -4,11 +4,8 @@ import {
   CulturaIcon,
   culturaBg,
   culturaNom,
-  culturaNomLink,
   culturaTxt,
 } from "../../GlobalVariables";
-import { modulosCultura } from "../aprendizajes/Cultura/ModulosCultura";
-import { modulosFisica } from "../aprendizajes/Cultura/ModulosFisica";
 
 export const culturaCursos: ModalidadInfo = {
   nom: culturaNom,

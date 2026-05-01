@@ -8,8 +8,6 @@ import {
   ayurvedaTxt,
 } from "../../GlobalVariables";
 import { modulosAyurveda } from "../aprendizajes/Ayurveda/ModulosAyurveda";
-import { modulosChakras } from "../aprendizajes/Ayurveda/ModulosChakras";
-import { modulosKarma } from "../aprendizajes/Ayurveda/ModulosKarma";
 
 export const ayurvedaCursos: ModalidadInfo = {
   nom: ayurvedaNom,

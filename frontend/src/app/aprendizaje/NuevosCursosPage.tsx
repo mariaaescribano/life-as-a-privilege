@@ -14,7 +14,6 @@ import {
   nutricionNomLink,
   ayurvedaNomLink,
   fisiologiaNom,
-  culturaNomLink,
 } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";

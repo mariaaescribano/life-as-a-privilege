@@ -6,7 +6,7 @@ import {
   astrologiaNom,
   astrologiaTxt,
 } from "../../GlobalVariables";
-import { modulosAstrologia, modulosAstrologiaCurso0, modulosArquetipos } from "../aprendizajes/Astrologia/ModulosAstrologia";
+import { modulosAstrologia, modulosAstrologiaCurso0 } from "../aprendizajes/Astrologia/ModulosAstrologia";
 
 export const astroCurso0ID = "astro-curso-0";
 export const astroCurso1ID = "astro-curso-1";

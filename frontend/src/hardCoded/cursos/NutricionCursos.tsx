@@ -8,8 +8,7 @@ import {
   nutricionNomLink,
   nutricionTxt,
 } from "../../GlobalVariables";
-import { modulosNutricion, modulosMicrobiota } from "../aprendizajes/Nutricion/ModulosNutricion";
-import { modulosGrasas } from "../aprendizajes/Nutricion/ModulosGrasas";
+import { modulosNutricion } from "../aprendizajes/Nutricion/ModulosNutricion";
 // import { modulosFitoterapia } from "../aprendizajes/Fitoterapia/ModulosFitoterpia";
 
 export const nutricionCursos: ModalidadInfo = {

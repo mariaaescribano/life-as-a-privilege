@@ -1,7 +1,7 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { fisioCurso1ID, fisioCurso2ID, fisioCurso3ID, fisioCurso4ID, fisioCurso5ID, modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion, modulosFisiologiaEjercicio } from "../aprendizajes/Fisiologia/ModulosFisiologia";
+import { fisioCurso1ID, modulosFisiologia } from "../aprendizajes/Fisiologia/ModulosFisiologia";
 
 export const fisiologiaCursos: ModalidadInfo = {
   nom: fisiologiaNom,

@@ -6,7 +6,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../GlobalVariables";
-import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia, modulosEsenciales, modulosDepresion } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosEsquizofrenia, modulosEsenciales, modulosDepresion } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
   nom: neuropsicologiaNom,
