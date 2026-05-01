@@ -7,7 +7,7 @@ import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
-import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia, modulosDepresion, modulosEsenciales } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import {
@@ -53,6 +53,10 @@ export default function VideoLessonPage() {
       case neuropsicologiaNom + "cursoEsq":
         return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case neuropsicologiaNom + "cursoAnx":
+        return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
+      case neuropsicologiaNom + "cursoDep":
+        return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
+      case neuropsicologiaNom + "cursoEs":
         return { nom: neuropsicologiaNom, nomModalidad: nom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "44px", md: "44px" }} /> };
       case fisiologiaNom:
         return { nom: fisiologiaNom, nomModalidad: nom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size="44px" /> };
@@ -105,6 +109,14 @@ export default function VideoLessonPage() {
       else if(moduloId === neuropsicologiaNom + "cursoAnx")
       {
         setdatos(getModuleByTitle(submoduloId!, modulosAnorexia));
+      }
+      else if(moduloId === neuropsicologiaNom + "cursoDep")
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosDepresion));
+      }
+      else if(moduloId === neuropsicologiaNom + "cursoEs")
+      {
+        setdatos(getModuleByTitle(submoduloId!, modulosEsenciales));
       }
       else if(moduloId === tcmNomLink)
       {

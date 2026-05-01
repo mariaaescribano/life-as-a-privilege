@@ -136,7 +136,7 @@ const modalidades: ModalidadData[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    desc: "Descubre los arquetipos que guían tu forma de vivir.",
+    desc: "Descubre los arquetipos que guían tu forma de vivir. Descubre tu esencia, tus dones y los procesos que vienes a transitar.",
     modalDesc:
       "A través de tu carta natal, exploraremos los arquetipos que se expresan en cada área de tu vida y cómo influyen en tu manera de vivir.",
     sessions: [
@@ -151,7 +151,7 @@ const modalidades: ModalidadData[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: "Identifica los patrones que hoy limitan tu forma de vivir.",
+    desc: "Identifica los patrones que hoy limitan tu forma de vivir. La psicología te ofrece herramientas para entender qué historias internas sostienen tus bloqueos.",
     modalDesc:
       "Usando tu carta natal como mapa, exploraremos tu forma única de pensar, sentir y vincularte, así como los mecanismos de adaptación que desarrollaste para sobrevivir. Muchas veces, aquello que hoy nos limita fue en otro momento una forma de protegernos.",
     sessions: [

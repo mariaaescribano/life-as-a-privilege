@@ -32,14 +32,16 @@ export default function ModulesPage() {
 
   const getCursoTitulo = (): string => {
     if (!modalidadId || !cursoId) return "";
-    const modalidad = cursosData[modalidadId];
+    const normalizedId = modalidadId.startsWith(neuropsicologiaNom) ? neuropsicologiaNom : modalidadId;
+    const modalidad = cursosData[normalizedId];
     if (!modalidad) return "";
     return modalidad.cursos.find((c) => c.id === cursoId)?.titulo ?? "";
   };
 
   const getModulosParaCurso = (): ModuloContenido[] => {
     if (modalidadId && cursoId) {
-      const curso = cursosData[modalidadId]?.cursos.find(c => c.id === cursoId);
+      const normalizedId = modalidadId.startsWith(neuropsicologiaNom) ? neuropsicologiaNom : modalidadId;
+      const curso = cursosData[normalizedId]?.cursos.find(c => c.id === cursoId);
       if (curso?.modulos) return curso.modulos;
     }
     return [];
@@ -57,6 +59,10 @@ export default function ModulesPage() {
       case neuropsicologiaNom + "cursoEsq":
         return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case neuropsicologiaNom + "cursoAnx":
+        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+      case neuropsicologiaNom + "cursoDep":
+        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
+      case neuropsicologiaNom + "cursoEs":
         return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case astrologiaNom:
         return { nom: titulo || astrologiaNom, disciplina: astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };

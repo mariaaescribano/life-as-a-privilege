@@ -387,7 +387,7 @@ const Welcome = () => {
             alignSelf={{ base: "center", md: "flex-start" }}
           >
             <Image
-              src="/img/me/me.jpg"
+              src="/img/me/me.png"
               alt="María Escribano"
               w="100%"
               h="100%"

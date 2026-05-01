@@ -356,8 +356,8 @@ export default function CursosModalidad() {
             </Flex>
           )}
 
-          {/* ── CARTAS DE PERSONAJES HISTÓRICOS (Astrología + Cultura) ── */}
-          {(moduloId === astrologiaNom || moduloId === culturaNom || moduloId === culturaNomLink) && (() => {
+          {/* ── CARTAS DE PERSONAJES HISTÓRICOS (Astrología) ── */}
+          {moduloId === astrologiaNom && (() => {
             const isAstro = moduloId === astrologiaNom;
             const bg = isAstro ? astrologiaBg : culturaBg;
             const txt = isAstro ? astrologiaTxt : culturaTxt;

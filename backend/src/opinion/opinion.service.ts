@@ -31,7 +31,6 @@ export class OpinionService {
       const { data, error } = await this.databaseService.getClient()
         .from('opinion')
         .select('id, nombre, texto, created_at')
-        .eq('aprobada', true)
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data ?? [];

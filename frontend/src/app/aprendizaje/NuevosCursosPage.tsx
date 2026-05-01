@@ -20,21 +20,9 @@ import {
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
-  { modalidadKey: neuropsicologiaNom,    cursoId: "anorexia"        }, // Anorexia
-  { modalidadKey: ayurvedaNomLink,       cursoId: "ayu-curso-3"     }, // El sentido de la vida y el karma
-  { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-3"     }, // Las grasas
-  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-5"   }, // El ejercicio, el cerebro y el cuerpo
-  { modalidadKey: culturaNomLink,        cursoId: "cul-curso-2"     }, // La física en el ser humano
-  { modalidadKey: ayurvedaNomLink,       cursoId: "ayu-curso-2"     }, // Los Chakras
-  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-4"   }, // La meditación y el cerebro
-  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-3"   }, // La fisiología del cáncer
-  { modalidadKey: culturaNomLink,        cursoId: "cul-curso-1"     }, // Spinoza
-  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-2"   }, // La Inflamación
-  { modalidadKey: astrologiaNom,         cursoId: "astro-curso-2"   }, // Los Arquetipos
-  { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // Microbiota
-  // { modalidadKey: cabalaNom,             cursoId: "cabala-curso-2"  }, // Árbol de la Vida
+  { modalidadKey: neuropsicologiaNom,    cursoId: "esenciales"      }, // Esenciales
+  { modalidadKey: neuropsicologiaNom,    cursoId: "depresion"       }, // La depresión está en tu Vida
   { modalidadKey: neuropsicologiaNom,    cursoId: "esquizofrenia"   }, // Esquizofrenia
-  { modalidadKey: neuropsicologiaNom,    cursoId: "etapasVida"      },
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-1"     },
   { modalidadKey: cabalaNom,             cursoId: "cabala-curso-1"  },
   { modalidadKey: astrologiaNom,         cursoId: "astro-curso-0"   },

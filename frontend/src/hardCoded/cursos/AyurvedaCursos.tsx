@@ -29,29 +29,29 @@ export const ayurvedaCursos: ModalidadInfo = {
       icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosAyurveda,
     },
-    {
-      id: "ayu-curso-2",
-      cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-2",
-      titulo: "Los Chakras",
-      foto: "/img/ayurveda/chakras.png",
-      descripcion:
-        "Los 7 chakras explicados para que puedas hacerte cargo de ellos y, por extensión, de ti mismo.",
-      precio: null,
-      numLecciones: 9,
-      icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
-      modulos: modulosChakras,
-    },
-    {
-      id: "ayu-curso-3",
-      cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-3",
-      titulo: "El karma de la herida",
-      foto: "/img/ayurveda/karma.png",
-      descripcion:
-        "Reencarnamos para sanar. El karma y las personas que nos duelen son espejos que señalan las heridas que vinimos a recordar.",
-      precio: null,
-      numLecciones: 7,
-      icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
-      modulos: modulosKarma,
-    },
+    // {
+    //   id: "ayu-curso-2",
+    //   cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-2",
+    //   titulo: "Los Chakras",
+    //   foto: "/img/ayurveda/chakras.png",
+    //   descripcion:
+    //     "Los 7 chakras explicados para que puedas hacerte cargo de ellos y, por extensión, de ti mismo.",
+    //   precio: null,
+    //   numLecciones: 9,
+    //   icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
+    //   modulos: modulosChakras,
+    // },
+    // {
+    //   id: "ayu-curso-3",
+    //   cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-3",
+    //   titulo: "El karma de la herida",
+    //   foto: "/img/ayurveda/karma.png",
+    //   descripcion:
+    //     "Reencarnamos para sanar. El karma y las personas que nos duelen son espejos que señalan las heridas que vinimos a recordar.",
+    //   precio: null,
+    //   numLecciones: 7,
+    //   icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
+    //   modulos: modulosKarma,
+    // },
   ],
 };
