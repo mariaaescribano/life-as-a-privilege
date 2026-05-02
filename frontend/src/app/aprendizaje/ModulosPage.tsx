@@ -62,8 +62,6 @@ export default function ModulesPage() {
         return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case neuropsicologiaNom + "cursoDep":
         return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case neuropsicologiaNom + "cursoEs":
-        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
       case astrologiaNom:
         return { nom: titulo || astrologiaNom, disciplina: astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
       case tcmNomLink:

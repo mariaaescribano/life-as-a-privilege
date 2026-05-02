@@ -6,7 +6,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../GlobalVariables";
-import { modulosEsquizofrenia, modulosEsenciales, modulosDepresion } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosEsquizofrenia, modulosDepresion } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
   nom: neuropsicologiaNom,
@@ -14,18 +14,6 @@ export const neuropsicologiaCursos: ModalidadInfo = {
   color: neuropsicologiaTxt,
   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
-    {
-      id: "esenciales",
-      titulo: "Esenciales",
-      foto: "/img/np/esenciales.png",
-      descripcion:
-        "Las claves esenciales para entenderte a ti mismo y comenzar a sanar desde la raíz.",
-      precio: null,
-      numLecciones: 5,
-      icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/esenciales",
-      modulos: modulosEsenciales,
-    },
     {
       id: "depresion",
       titulo: "La depresión está en tu Vida",

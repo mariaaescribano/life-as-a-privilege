@@ -1,6 +1,6 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom, EsqComprenderIcon, EsqOrigenIcon, EsqBiologiaIcon, EsqVocesIcon, AnxEntornoIcon, AnxComidaIcon, AnxSanacionIcon } from "../../../GlobalVariables";
-import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp26, letranp27, letranp28, letranp29, letranp30, letrad1, letrad2, letrad3, letrad4, letrad5, letres1, letres2, letres3, letres4, letres5 } from "./LetraNeuroPsicologia";
+import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp26, letranp27, letranp28, letranp29, letranp30, letrad1, letrad3, letrad4, letrad5 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 
@@ -8,7 +8,6 @@ const basePath = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom;
 const basePathEsq = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoEsq";
 const basePathAnx = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoAnx";
 const basePathDep = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoDep";
-const basePathEs = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoEs";
 
 
 
@@ -360,105 +359,6 @@ export const modulosEsquizofrenia: ModuloContenido[] = [
   },
 ];
 
-export const modulosEsenciales: ModuloContenido[] = [
-  {
-    title: "1. El corazón herido",
-    icon: EsqComprenderIcon,
-    floatingButton: quieroEntenderme,
-    submodules: [
-      {
-        id: "es1",
-        nom: "1.1 Nadie te rompe el corazón",
-        link: `${basePathEs}/es1`,
-        linkAnterior: "",
-        linkNext: `${basePathEs}/es2`,
-        descripcion:
-          "Las parejas no rompen el corazón: rompen la coraza con la que escondíamos nuestras heridas.",
-        video: "ElCSVyx_3OI",
-        letra: letres1,
-        cursoId: "esenciales",
-        detalles: detalles,
-        icon: EsqComprenderIcon,
-        floatingButton: quieroEntenderme,
-      },
-      {
-        id: "es2",
-        nom: "1.2 Las personas como tirita",
-        link: `${basePathEs}/es2`,
-        linkAnterior: `${basePathEs}/es1`,
-        linkNext: `${basePathEs}/es3`,
-        descripcion:
-          "Cuando alguien vive en tu cabeza, lo estás usando para no sentir tu propio dolor.",
-        video: "DkkYekK0l_4",
-        letra: letres2,
-        cursoId: "esenciales",
-        detalles: detalles,
-        icon: EsqComprenderIcon,
-        floatingButton: quieroEntenderme,
-      },
-    ],
-  },
-  {
-    title: "2. Las emociones que negamos",
-    icon: EsqVocesIcon,
-    floatingButton: quieroEntenderme,
-    submodules: [
-      {
-        id: "es3",
-        nom: "2.1 Los dos tipos de enfado",
-        link: `${basePathEs}/es3`,
-        linkAnterior: `${basePathEs}/es2`,
-        linkNext: `${basePathEs}/es4`,
-        descripcion:
-          "Hay un enfado que defiende, y otro que te pide cambiar algo de tu Vida.",
-        video: "ckq1T6GHBMk",
-        letra: letres3,
-        cursoId: "esenciales",
-        detalles: detalles,
-        icon: EsqVocesIcon,
-        floatingButton: quieroEntenderme,
-      },
-      {
-        id: "es4",
-        nom: "2.2 La ansiedad no existe",
-        link: `${basePathEs}/es4`,
-        linkAnterior: `${basePathEs}/es3`,
-        linkNext: `${basePathEs}/es5`,
-        descripcion:
-          "La ansiedad es la bola de nieve de las emociones que llevas años negando.",
-        video: "gZdcd-LqASU",
-        letra: letres4,
-        cursoId: "esenciales",
-        detalles: detalles,
-        icon: EsqVocesIcon,
-        floatingButton: quieroEntenderme,
-      },
-    ],
-  },
-  {
-    title: "3. Sigue luchando por ti",
-    icon: AnxSanacionIcon,
-    floatingButton: quieroEntenderme,
-    submodules: [
-      {
-        id: "es5",
-        nom: "3.1 Estar vivo es un acto de valentía",
-        link: `${basePathEs}/es5`,
-        linkAnterior: `${basePathEs}/es4`,
-        linkNext: "",
-        descripcion:
-          "Mereces el Amor y el apoyo que llevas tanto tiempo anhelando. Deja de abandonarte.",
-        video: "0Lpk6bIHeRY",
-        letra: letres5,
-        cursoId: "esenciales",
-        detalles: detalles,
-        icon: AnxSanacionIcon,
-        floatingButton: quieroEntenderme,
-      },
-    ],
-  },
-];
-
 export const modulosDepresion: ModuloContenido[] = [
   {
     title: "1. Comprende la depresión",
@@ -466,29 +366,14 @@ export const modulosDepresion: ModuloContenido[] = [
     floatingButton: quieroEntenderme,
     submodules: [
       {
-        id: "dep1",
-        nom: "1.1 La depresión es un dolor congelado",
-        link: `${basePathDep}/dep1`,
-        linkAnterior: "",
-        linkNext: `${basePathDep}/dep2`,
-        descripcion:
-          "Detrás de la tristeza crónica hay un duelo que nunca encontró un espacio seguro para ser expresado.",
-        video: "aMIUtZTRprg",
-        letra: letrad2,
-        cursoId: "depresion",
-        detalles: detalles,
-        icon: EsqComprenderIcon,
-        floatingButton: quieroEntenderme,
-      },
-      {
         id: "dep2",
-        nom: "1.2 La depresión es etiquetar el sufrimiento",
+        nom: "1.1 La depresión es etiquetar el sufrimiento",
         link: `${basePathDep}/dep2`,
         linkAnterior: `${basePathDep}/dep1`,
         linkNext: `${basePathDep}/dep3`,
         descripcion:
           "La depresión no es una enfermedad: es la medicalización del dolor que no se ha podido expresar.",
-        video: "wWoYQEk8zBk",
+        video: "DBf9tvfj-pU",
         letra: letrad1,
         cursoId: "depresion",
         detalles: detalles,
@@ -510,7 +395,7 @@ export const modulosDepresion: ModuloContenido[] = [
         linkNext: `${basePathDep}/dep4`,
         descripcion:
           "La depresión no se hereda en los genes: se aprende en casa, viendo a unos padres que tampoco supieron ser felices.",
-        video: "NSRxhlmPHEw",
+        video: "7qu3iuxDPBQ",
         letra: letrad3,
         cursoId: "depresion",
         detalles: detalles,
@@ -525,7 +410,7 @@ export const modulosDepresion: ModuloContenido[] = [
         linkNext: `${basePathDep}/dep5`,
         descripcion:
           "El enfado no expresado se convierte en tristeza. El sistema saca provecho de esa represión.",
-        video: "34zn9ECzCAo",
+        video: "tajDKxIatXE",
         letra: letrad4,
         cursoId: "depresion",
         detalles: detalles,
@@ -547,7 +432,7 @@ export const modulosDepresion: ModuloContenido[] = [
         linkNext: "",
         descripcion:
           "El entorno presiona al depresivo para que esté feliz, y acaba sintiéndose triste por estar triste y avergonzado de estar avergonzado.",
-        video: "R3_L3pXQIEM",
+        video: "WEtoFsTiqfU",
         letra: letrad5,
         cursoId: "depresion",
         detalles: detalles,
