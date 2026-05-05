@@ -4,8 +4,10 @@ import {
   CulturaIcon,
   culturaBg,
   culturaNom,
+  culturaNomLink,
   culturaTxt,
 } from "../../GlobalVariables";
+import { modulosFisica } from "../aprendizajes/Cultura/ModulosFisica";
 
 export const culturaCursos: ModalidadInfo = {
   nom: culturaNom,
@@ -25,17 +27,17 @@ export const culturaCursos: ModalidadInfo = {
     //   icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,
     //   modulos: modulosCultura,
     // },
-    // {
-    //   id: "cul-curso-2",
-    //   cursoLink: "/aprendizaje/modulosPage/" + culturaNomLink + "/cul-curso-2",
-    //   titulo: "La física en el ser humano",
-    //   foto: "/img/cultura/fisica.png",
-    //   descripcion:
-    //     "La realidad a la que estamos acostumbrados es, en verdad, un milagro de la física cuántica.",
-    //   precio: null,
-    //   numLecciones: 4,
-    //   icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,
-    //   modulos: modulosFisica,
-    // },
+    {
+      id: "cul-curso-2",
+      cursoLink: "/aprendizaje/modulosPage/" + culturaNomLink + "/cul-curso-2",
+      titulo: "La física en el ser humano",
+      foto: "/img/cultura/fisica.jpg",
+      descripcion:
+        "La realidad a la que estamos acostumbrados es, en verdad, un milagro de la física cuántica.",
+      precio: null,
+      numLecciones: 4,
+      icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosFisica,
+    },
   ],
 };
