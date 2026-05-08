@@ -35,6 +35,7 @@ import TCMTest3 from "./components/espacio/components/TCMTest3";
 import FisiologiaEspacio from "./components/espacio/pages/FisiologiaEspacio";
 import FitoterapiaEspacio from "./components/espacio/pages/FitoterapiaEspacio";
 import CelulasCuerpoPage from "./app/espacio/CelulasCuerpoPage";
+import { ExitIntentSubscribeModal } from "./components/global/ExitIntentSubscribeModal";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -53,6 +54,7 @@ export default function App()
   return (
     <>
     <ScrollToTop />
+    <ExitIntentSubscribeModal />
     <Routes>
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />

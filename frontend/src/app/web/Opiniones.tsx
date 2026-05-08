@@ -171,15 +171,15 @@ function DejarOpinionBox() {
     <Box
       {...GLASS}
       w="100%"
-      maxW="850px"
-      px={{ base: 6, md: 10 }}
-      py={{ base: 8, md: 10 }}
+      maxW="640px"
+      px={{ base: 5, md: 7 }}
+      py={{ base: 6, md: 7 }}
     >
-      <Flex align="center" justify="center" gap={3} mb={2}>
-        <OpinionesIcon color="white" size="34px" />
+      <Flex align="center" justify="center" gap={3} mb={4}>
+        <OpinionesIcon color="white" size="28px" />
         <Text
           color="white"
-          fontSize={{ base: "2xl", md: "3xl" }}
+          fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           letterSpacing="0.05em"
           filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
