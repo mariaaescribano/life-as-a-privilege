@@ -10,8 +10,6 @@ import { modulosAstrologia, modulosAstrologiaCurso0 } from "../aprendizajes/Astr
 
 export const astroCurso0ID = "astro-curso-0";
 export const astroCurso1ID = "astro-curso-1";
-export const astroCurso2ID = "astro-curso-2";
-export const astroCurso3ID = "astro-curso-3";
 
 export const astrologiaCursos: ModalidadInfo = {
   nom: astrologiaNom,
@@ -42,16 +40,5 @@ export const astrologiaCursos: ModalidadInfo = {
       icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
       modulos: modulosAstrologiaCurso0,
     },
-    // {
-    //   id: astroCurso2ID,
-    //   cursoLink: "/aprendizaje/modulosPage/" + astrologiaNom + "/" + astroCurso2ID,
-    //   titulo: "Los Arquetipos",
-    //   foto: "/img/astrologia/arqFoto.png",
-    //   descripcion: "Entiende los arquetipos de la Astrología para un conocimiento más profundo y completo.",
-    //   precio: null,
-    //   numLecciones: 12,
-    //   icon: <AstrologiaIcon size={{ base: "20px", md: "30px" }} />,
-    //   modulos: modulosArquetipos,
-    // },
   ],
 };

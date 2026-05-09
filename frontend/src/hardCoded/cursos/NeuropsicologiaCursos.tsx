@@ -6,7 +6,7 @@ import {
   neuropsicologiaNom,
   neuropsicologiaTxt,
 } from "../../GlobalVariables";
-import { modulosEsquizofrenia, modulosDepresion } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
+import { modulosEsquizofrenia, modulosDepresion, modulosPadresHeridos } from "../aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 
 export const neuropsicologiaCursos: ModalidadInfo = {
   nom: neuropsicologiaNom,
@@ -14,6 +14,18 @@ export const neuropsicologiaCursos: ModalidadInfo = {
   color: neuropsicologiaTxt,
   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
+    {
+      id: "padresHeridos",
+      titulo: "Padres heridos, bebés heridos",
+      foto: "/img/np/padresheridos.png",
+      descripcion:
+        "Las heridas no sanadas de los padres se imprimen en el sistema nervioso del hijo. Entiende cómo, para hacerte responsable de sanarte.",
+      precio: null,
+      numLecciones: 6,
+      icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
+      cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/padresHeridos",
+      modulos: modulosPadresHeridos,
+    },
     {
       id: "depresion",
       titulo: "La depresión está en tu Vida",
@@ -26,19 +38,7 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/depresion",
       modulos: modulosDepresion,
     },
-    // {
-    //   id: "anorexia",
-    //   titulo: "ANOREXIA: el infierno hacia la autovalía",
-    //   foto: "/img/np/anorexia.png",
-    //   descripcion:
-    //     "1 de cada 100 chicas jóvenes tiene anorexia. 1 de cada 10 muere o se suicida. Ya basta.",
-    //   precio: null,
-    //   numLecciones: 10,
-    //   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-    //   cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/anorexia",
-    //   modulos: modulosAnorexia,
-    // },
-      {
+    {
       id: "esquizofrenia",
       titulo: "Más allá de la esquizofrenia",
       foto: "/img/np/esq.jpg",
@@ -50,17 +50,5 @@ export const neuropsicologiaCursos: ModalidadInfo = {
       cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom + "/esquizofrenia",
       modulos: modulosEsquizofrenia,
     },
-    // {
-    //   id: "etapasVida",
-    //   titulo: "Resumen de las etapas de la Vida",
-    //   foto: "/img/np/neuroPsicologiafoto1.jpg",
-    //   descripcion:
-    //     "Entiende cómo tu familia de origen formó la base de los patrones que hoy moldean tu vida. Desde una nueva mirada, comprende cómo, sin darte cuenta, creas la realidad en la que vives.",
-    //   precio: null,
-    //   numLecciones: 10,
-    //   icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />,
-    //   cursoLink: "/aprendizaje/modulosPage/" + neuropsicologiaNom +"/etapasVida",
-    //   modulos: modulosNeuroPsicologia,
-    // },
   ],
 };

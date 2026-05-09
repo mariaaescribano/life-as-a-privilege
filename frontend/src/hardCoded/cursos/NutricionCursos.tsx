@@ -1,15 +1,13 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import {
-  // FitoterapiaIcon,
   NutricionIcon,
   nutricionBg,
   nutricionNom,
   nutricionNomLink,
   nutricionTxt,
 } from "../../GlobalVariables";
-import { modulosNutricion } from "../aprendizajes/Nutricion/ModulosNutricion";
-// import { modulosFitoterapia } from "../aprendizajes/Fitoterapia/ModulosFitoterpia";
+import { modulosNutricion, modulosMicrobiota } from "../aprendizajes/Nutricion/ModulosNutricion";
 
 export const nutricionCursos: ModalidadInfo = {
   nom: nutricionNom,
@@ -17,18 +15,18 @@ export const nutricionCursos: ModalidadInfo = {
   color: nutricionTxt,
   icon: <NutricionIcon size={{ base: "35px", md: "45px" }}  />,
   cursos: [
-    // {
-    //   id: "nut-curso-3",
-    //   cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-3",
-    //   titulo: "Las grasas",
-    //   foto: "/img/nutri/grasasCurso.png",
-    //   descripcion:
-    //     "Las grasas que eliges construyen tus células y tus neuronas, y determinan tu claridad mental, tu energía y tus defensas.",
-    //   precio: null,
-    //   numLecciones: 6,
-    //   icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
-    //   modulos: modulosGrasas,
-    // },
+    {
+      id: "nut-curso-2",
+      cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-2",
+      titulo: "La Microbiota",
+      foto: "/img/nutri/microbiota.png",
+      descripcion:
+        "El ecosistema invisible que influye en tu bienestar, tus emociones y tus decisiones. Cuidarlo es cuidarte.",
+      precio: null,
+      numLecciones: 6,
+      icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosMicrobiota,
+    },
     {
       id: "nut-curso-1",
       cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-1",
@@ -41,29 +39,5 @@ export const nutricionCursos: ModalidadInfo = {
       icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
       modulos: modulosNutricion,
     },
-    // {
-    //   id: "nut-curso-2",
-    //   cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/nut-curso-2",
-    //   titulo: "La Microbiota",
-    //   foto: "/img/nutri/microbiotacurso.png",
-    //   descripcion:
-    //     "El ecosistema invisible que vive en ti influye en tu bienestar, tus emociones y tus decisiones. Cuidarlo es cuidarte.",
-    //   precio: null,
-    //   numLecciones: 10,
-    //   icon: <NutricionIcon size={{ base: "35px", md: "45px" }} />,
-    //   modulos: modulosMicrobiota,
-    // },
-    // {
-    //   id: "fito-curso-1",
-    //   cursoLink: "/aprendizaje/modulosPage/" + nutricionNomLink + "/fito-curso-1",
-    //   titulo: "Plantas comunes",
-    //   foto: "/img/fitoterapia/especias.jpg",
-    //   descripcion:
-    //     "Descubre las propiedades beneficiosas de las especias comunes, disponibles en cualquier supermercado.",
-    //   precio: null,
-    //   numLecciones: 10,
-    //   icon: <FitoterapiaIcon size={{ base: "35px", md: "45px" }} color={nutricionTxt} />,
-    //   modulos: modulosFitoterapia,
-    // },
   ],
 };

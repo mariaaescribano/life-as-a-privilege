@@ -1,6 +1,6 @@
 import type { Detalles, FloatingButtonConfig, ModuloContenido } from "../../../dtos/aprendizaje.type";
 import { neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt, MadreIcon, AdultIcon, ChildIcon, FamilyIcon, neuropsicologiaNom, EsqComprenderIcon, EsqOrigenIcon, EsqBiologiaIcon, EsqVocesIcon, AnxEntornoIcon, AnxComidaIcon, AnxSanacionIcon } from "../../../GlobalVariables";
-import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp26, letranp27, letranp28, letranp29, letranp30, letrad1, letrad3, letrad4, letrad5 } from "./LetraNeuroPsicologia";
+import { letranp1, letranp2, letranp3, letranp4, letranp5, letranp6, letranp7, letranp8, letranp9, letranp10, letranp11, letranp12, letranp13, letranp14, letranp15, letranp16, letranp17, letranp18, letranp19, letranp20, letranp21, letranp22, letranp23, letranp24, letranp26, letranp27, letranp28, letranp29, letranp30, letrad1, letrad3, letrad4, letrad5, letrapad1, letrapad2, letrapad3, letrapad4, letrapad5, letrapad6 } from "./LetraNeuroPsicologia";
 
 const detalles: Detalles = { color: neuropsicologiaTxt, icon: NeuropsicologiaIcon, bgColor: neuropsicologiaBg };
 
@@ -8,6 +8,7 @@ const basePath = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom;
 const basePathEsq = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoEsq";
 const basePathAnx = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoAnx";
 const basePathDep = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoDep";
+const basePathPad = "/aprendizaje/videoLessonPage/" + neuropsicologiaNom + "cursoPad";
 
 
 
@@ -594,6 +595,114 @@ export const modulosAnorexia: ModuloContenido[] = [
         cursoId: "anorexia",
         detalles: detalles,
         icon: AnxSanacionIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+];
+
+export const modulosPadresHeridos: ModuloContenido[] = [
+  {
+    title: "1. La madre forma al hijo",
+    icon: MadreIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id: "pad1",
+        nom: "1.1 Tu madre forma tu cerebro",
+        link: `${basePathPad}/pad1`,
+        linkAnterior: "",
+        linkNext: `${basePathPad}/pad2`,
+        descripcion: "La madre nos forma literalmente: el bebé reconoce y prefiere lo que ella vivió, sintió y se dijo a sí misma durante el embarazo.",
+        video: "GyyidbcMylc",
+        letra: letrapad1,
+        cursoId: "padresHeridos",
+        detalles: detalles,
+        icon: MadreIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id: "pad2",
+        nom: "1.2 El embarazo y las heridas no sanadas",
+        link: `${basePathPad}/pad2`,
+        linkAnterior: `${basePathPad}/pad1`,
+        linkNext: `${basePathPad}/pad3`,
+        descripcion: "Durante el embarazo la madre revive sus traumas. Lo que no se ha trabajado se imprime en el sistema nervioso del hijo.",
+        video: "gKg_Z8qqGDc",
+        letra: letrapad2,
+        cursoId: "padresHeridos",
+        detalles: detalles,
+        icon: MadreIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+  {
+    title: "2. La herencia emocional",
+    icon: FamilyIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id: "pad3",
+        nom: "2.1 La insuficiencia heredada",
+        link: `${basePathPad}/pad3`,
+        linkAnterior: `${basePathPad}/pad2`,
+        linkNext: `${basePathPad}/pad4`,
+        descripcion: "Cuando los padres ponen su felicidad fuera de sí, el hijo carga toda la vida con una insuficiencia que no le pertenece.",
+        video: "KKe4J5oEUAY",
+        letra: letrapad3,
+        cursoId: "padresHeridos",
+        detalles: detalles,
+        icon: FamilyIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id: "pad4",
+        nom: "2.2 Por qué la gente no cambia",
+        link: `${basePathPad}/pad4`,
+        linkAnterior: `${basePathPad}/pad3`,
+        linkNext: `${basePathPad}/pad5`,
+        descripcion: "La respuesta de los cuidadores moldea el sistema límbico y los circuitos prefrontales: regular emociones de adulto depende de cómo te trataron de niño.",
+        video: "gUG5dYTDTLU",
+        letra: letrapad4,
+        cursoId: "padresHeridos",
+        detalles: detalles,
+        icon: FamilyIcon,
+        floatingButton: quieroEntenderme,
+      },
+    ],
+  },
+  {
+    title: "3. El niño se sacrifica",
+    icon: ChildIcon,
+    floatingButton: quieroEntenderme,
+    submodules: [
+      {
+        id: "pad5",
+        nom: "3.1 Priorizar a los padres por encima de uno mismo",
+        link: `${basePathPad}/pad5`,
+        linkAnterior: `${basePathPad}/pad4`,
+        linkNext: `${basePathPad}/pad6`,
+        descripcion: "Un niño maltratado no deja de querer a sus padres, deja de quererse a sí mismo. Necesita glorificarles para sobrevivir.",
+        video: "FXt8at8HY7Y",
+        letra: letrapad5,
+        cursoId: "padresHeridos",
+        detalles: detalles,
+        icon: ChildIcon,
+        floatingButton: quieroEntenderme,
+      },
+      {
+        id: "pad6",
+        nom: "3.2 El niño abandona lo que sus padres no gestionan",
+        link: `${basePathPad}/pad6`,
+        linkAnterior: `${basePathPad}/pad5`,
+        linkNext: "",
+        descripcion: "Lo que los padres no saben sostener emocionalmente, el niño lo abandona de sí. Esas conexiones neuronales le acompañan toda la vida.",
+        video: "b8Dq2TJ72ek",
+        letra: letrapad6,
+        cursoId: "padresHeridos",
+        detalles: detalles,
+        icon: ChildIcon,
         floatingButton: quieroEntenderme,
       },
     ],

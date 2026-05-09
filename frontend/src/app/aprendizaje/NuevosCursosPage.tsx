@@ -20,6 +20,9 @@ import {
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
+  { modalidadKey: neuropsicologiaNom,    cursoId: "padresHeridos"   }, // Padres heridos, bebés heridos
+  { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // La Microbiota
+  { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-4"   }, // La neurociencia de la meditación
   { modalidadKey: culturaNomLink,        cursoId: "cul-curso-2"     },
   { modalidadKey: neuropsicologiaNom,    cursoId: "depresion"       }, // La depresión está en tu Vida
   { modalidadKey: neuropsicologiaNom,    cursoId: "esquizofrenia"   }, // Esquizofrenia

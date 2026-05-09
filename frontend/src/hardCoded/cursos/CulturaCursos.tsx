@@ -15,18 +15,6 @@ export const culturaCursos: ModalidadInfo = {
   color: culturaTxt,
   icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,
   cursos: [
-    // {
-    //   id: "cul-curso-1",
-    //   cursoLink: "/aprendizaje/modulosPage/" + culturaNomLink + "/cul-curso-1",
-    //   titulo: "Spinoza",
-    //   foto: "/img/cultura/spinoza.png",
-    //   descripcion:
-    //     "Quién fue Spinoza, su visión de Dios y por qué influenció a personas como Einstein.",
-    //   precio: null,
-    //   numLecciones: 6,
-    //   icon: <CulturaIcon size={{ base: "35px", md: "45px" }} />,
-    //   modulos: modulosCultura,
-    // },
     {
       id: "cul-curso-2",
       cursoLink: "/aprendizaje/modulosPage/" + culturaNomLink + "/cul-curso-2",
