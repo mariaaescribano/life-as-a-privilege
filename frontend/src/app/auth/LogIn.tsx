@@ -157,24 +157,26 @@ export default function LogIn() {
       >
         <VStack w={{ base: "100%", sm: "460px" }} spacing={4} align="stretch">
 
-          {/* ── AVISO ── */}
+          {/* ── AVISO PARTICIPANTE ── */}
           <Box
-            bg="rgba(255,255,255,0.07)"
-            border="1px solid rgba(255,255,255,0.2)"
-            sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+            bg="rgba(255,255,255,0.12)"
+            border="1px solid rgba(255,255,255,0.32)"
+            sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
             borderRadius="xl"
-            px={{ base: 3, md: 4 }}
+            px={{ base: 4, md: 5 }}
             py={5}
             textAlign="center"
           >
             <Text
-              color="rgba(255,255,255,0.76)"
-              fontSize={{ base: "lg", md: "xl" }}
-              lineHeight="1.85"
-              fontStyle="italic"
+              color="white"
+              fontSize={{ base: "md", md: "lg" }}
+              lineHeight="1.7"
+              fontWeight="600"
+              letterSpacing="0.015em"
             >
-              Por favor, si algo no responde a la primera, inténtalo de nuevo ~
-              gracias por tu paciencia
+              Para entrar a los materiales y cursos grabados
+              <br />
+              tienes que ser participante del Método.
             </Text>
           </Box>
 
@@ -343,21 +345,6 @@ export default function LogIn() {
                   onClick={() => setmessage(null)}
                 />
               )}
-
-              <Text
-                onClick={() => navigate("/signIn")}
-                textAlign="center"
-                color="rgba(255,255,255,0.6)"
-                fontWeight="500"
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.02em"
-                cursor="pointer"
-                _hover={{ color: "white" }}
-                transition="color 0.2s"
-                mt={2}
-              >
-                ¿No tienes una cuenta? Regístrate
-              </Text>
 
             </VStack>
           </Box>

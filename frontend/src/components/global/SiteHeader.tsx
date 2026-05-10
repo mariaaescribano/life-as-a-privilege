@@ -11,6 +11,14 @@ const VideosIcon = ({ size = "28px", color = "currentColor" }: { size?: string; 
   </svg>
 );
 
+const LoginIcon = ({ size = "28px", color = "currentColor" }: { size?: string; color?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} style={{
+    filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+  }}>
+    <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+  </svg>
+);
+
 type SiteHeaderProps = {
   /**
    * "public"  → logo a /, botones Inicio de sesión / Registrarse
@@ -350,6 +358,27 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               }}
             >
               Libros
+            </Text>
+          </Flex>
+
+          <Flex
+            align="center" gap={2} cursor="pointer"
+            onClick={() => navigate("/logIn")}
+            color="rgba(255,255,255,0.85)"
+            _hover={{ color: "white" }}
+            transition="color 0.2s"
+          >
+            <LoginIcon color="currentColor" size="28px" />
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="500"
+              letterSpacing="0.04em"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
+            >
+              Iniciar sesión
             </Text>
           </Flex>
         </Flex>
