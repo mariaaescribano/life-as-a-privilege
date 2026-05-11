@@ -6,6 +6,14 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { Glifo } from "../../components/metodo/Glifo";
+import {
+  ZODIAC_SIGNS,
+  CASAS,
+  CUERPOS,
+  type CuerpoKey,
+  type Cuerpo,
+} from "../../components/metodo/astrologiaData";
 import {
   API_URL,
   astrologiaBg,
@@ -13,83 +21,48 @@ import {
   AstrologiaIcon,
 } from "../../GlobalVariables";
 
-const ZODIAC_SIGNS = [
-  { name: "Aries",       symbol: "♈" },
-  { name: "Tauro",       symbol: "♉" },
-  { name: "Géminis",     symbol: "♊" },
-  { name: "Cáncer",      symbol: "♋" },
-  { name: "Leo",         symbol: "♌" },
-  { name: "Virgo",       symbol: "♍" },
-  { name: "Libra",       symbol: "♎" },
-  { name: "Escorpio",    symbol: "♏" },
-  { name: "Sagitario",   symbol: "♐" },
-  { name: "Capricornio", symbol: "♑" },
-  { name: "Acuario",     symbol: "♒" },
-  { name: "Piscis",      symbol: "♓" },
-];
+/* ─────────── Tipos y helpers ─────────── */
 
-const CASAS = Array.from({ length: 12 }, (_, i) => i + 1);
-
-type CuerpoKey =
-  | "ascendente"
-  | "sol"        | "luna"      | "mercurio"  | "venus"   | "marte"
-  | "jupiter"    | "saturno"   | "urano"     | "neptuno" | "pluton"
-  | "quiron"     | "nodoNorte" | "nodoSur";
-
-interface Cuerpo {
-  key: CuerpoKey;
-  label: string;
-  symbol: string;
-  color: string;
-  conCasa: boolean; // Ascendente define la casa 1, no se elige casa
+interface Valor {
+  signo?: string;
+  casa?: number;
+  profundizadoSigno?: boolean;
+  profundizadoCasa?: boolean;
 }
 
-// Símbolos Unicode + colores característicos
-const CUERPOS: Cuerpo[] = [
-  { key: "ascendente", label: "Ascendente", symbol: "↑", color: "#feffe4", conCasa: false },
-  { key: "sol",        label: "Sol",        symbol: "☉", color: "#FFD97D", conCasa: true  },
-  { key: "luna",       label: "Luna",       symbol: "☽", color: "#C8C8E8", conCasa: true  },
-  { key: "mercurio",   label: "Mercurio",   symbol: "☿", color: "#A8B8C8", conCasa: true  },
-  { key: "venus",      label: "Venus",      symbol: "♀", color: "#FFB8D0", conCasa: true  },
-  { key: "marte",      label: "Marte",      symbol: "♂", color: "#FF7055", conCasa: true  },
-  { key: "jupiter",    label: "Júpiter",    symbol: "♃", color: "#FFBA60", conCasa: true  },
-  { key: "saturno",    label: "Saturno",    symbol: "♄", color: "#E0CC80", conCasa: true  },
-  { key: "urano",      label: "Urano",      symbol: "♅", color: "#80EFD8", conCasa: true  },
-  { key: "neptuno",    label: "Neptuno",    symbol: "♆", color: "#6090FF", conCasa: true  },
-  { key: "pluton",     label: "Plutón",     symbol: "♇", color: "#B080E0", conCasa: true  },
-  { key: "quiron",     label: "Quirón",     symbol: "⚷", color: "#C8B070", conCasa: true  },
-  { key: "nodoNorte",  label: "Nodo Norte", symbol: "☊", color: "#7BB8E0", conCasa: true  },
-  { key: "nodoSur",    label: "Nodo Sur",   symbol: "☋", color: "#C8806A", conCasa: true  },
-];
+type CartaData = Partial<Record<CuerpoKey, Valor>>;
 
-type CartaData = Partial<Record<CuerpoKey, { signo?: string; casa?: number }>>;
+const valorOf = (carta: CartaData, key: CuerpoKey): Valor => carta[key] || {};
 
-const valorOf = (carta: CartaData, key: CuerpoKey) => carta[key] || {};
+function esCuerpoCompleto(c: Cuerpo, v: Valor): boolean {
+  if (!v.signo) return false;
+  if (!v.profundizadoSigno) return false;
+  if (c.conCasa) {
+    if (v.casa == null) return false;
+    if (!v.profundizadoCasa) return false;
+  }
+  return true;
+}
 
-// SVG glifo del planeta (texto Unicode renderizado como serif)
-const Glifo = ({ symbol, color, size = 30 }: { symbol: string; color: string; size?: number }) => (
-  <svg
-    viewBox="0 0 36 36"
-    width={size}
-    height={size}
-    style={{ flexShrink: 0, filter: `drop-shadow(0 0 8px ${color}99)` }}
-  >
-    <text
-      x="18"
-      y="27"
-      textAnchor="middle"
-      fontSize="26"
-      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
-      fill={color}
-    >
-      {symbol}
-      {"︎"}
+// Índice del primer cuerpo no completado (-1 si todos completados)
+function siguienteCuerpoIndex(carta: CartaData): number {
+  for (let i = 0; i < CUERPOS.length; i++) {
+    if (!esCuerpoCompleto(CUERPOS[i], valorOf(carta, CUERPOS[i].key))) return i;
+  }
+  return -1;
+}
+
+/* Glifo zodiacal para los símbolos de signo dentro del selector */
+const ZodiacGlyph = ({ symbol, size = 22, color = "currentColor" }: { symbol: string; size?: number; color?: string }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={color} style={{ flexShrink: 0 }}>
+    <text x="12" y="19" textAnchor="middle" fontSize="19"
+          fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
+      {symbol}{"︎"}
     </text>
   </svg>
 );
 
-// Fondo espacial: degradado cósmico base + foto de estrellas encima + velo translúcido.
-// El degradado garantiza un fondo bonito aunque la imagen tarde en cargar.
+/* Fondo espacial reutilizado */
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
   <Box
     position="absolute"
@@ -117,25 +90,9 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
   </Box>
 );
 
-// Glifo zodiacal (texto Unicode como SVG) — para los signos en la lista
-const ZodiacGlyph = ({ symbol, size = 22, color = "currentColor" }: { symbol: string; size?: number; color?: string }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={color} style={{ flexShrink: 0 }}>
-    <text
-      x="12"
-      y="19"
-      textAnchor="middle"
-      fontSize="19"
-      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
-    >
-      {symbol}
-      {"︎"}
-    </text>
-  </svg>
-);
-
 type PickerState = { key: CuerpoKey; campo: "signo" | "casa" } | null;
 
-// Botón "Profundizar signo / casa" — abre la página de desarrollo
+/* Botón "Profundizar" */
 const ProfundizarBtn = ({
   label,
   color,
@@ -183,6 +140,8 @@ const ProfundizarBtn = ({
   </Box>
 );
 
+/* ─────────── PÁGINA ─────────── */
+
 export default function MetodoAstrologiaPlanetas() {
   const navigate = useNavigate();
   const [carta, setCarta] = useState<CartaData>({});
@@ -192,7 +151,6 @@ export default function MetodoAstrologiaPlanetas() {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingData = useRef<CartaData | null>(null);
 
-  // Carga inicial: intenta BD, fallback a localStorage
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -207,14 +165,12 @@ export default function MetodoAstrologiaPlanetas() {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
-        // Gating: si no tiene link_carta aún, esta página está bloqueada.
         if (!res.data?.link_carta) {
           navigate("/metodo/astrologia", { replace: true });
           return;
         }
         if (res.data?.data) setCarta(res.data.data);
       } catch {
-        // Si BD falla, mejor mandar a la página principal por seguridad.
         navigate("/metodo/astrologia", { replace: true });
         return;
       } finally {
@@ -232,11 +188,11 @@ export default function MetodoAstrologiaPlanetas() {
           [campo]: campo === "casa" ? (valor ? Number(valor) : undefined) : (valor || undefined),
         },
       };
-      // Si los dos campos quedan vacíos, limpia la entrada
       const entry = next[key];
-      if (entry && !entry.signo && entry.casa == null) delete next[key];
+      if (entry && !entry.signo && entry.casa == null && !entry.profundizadoSigno && !entry.profundizadoCasa) {
+        delete next[key];
+      }
 
-      // Debounce el PATCH al backend: solo dispara 1.5s después del último cambio
       pendingData.current = next;
       if (saveTimer.current) clearTimeout(saveTimer.current);
       saveTimer.current = setTimeout(() => {
@@ -250,17 +206,6 @@ export default function MetodoAstrologiaPlanetas() {
     });
   };
 
-  // Si el usuario sale de la página con un PATCH pendiente, lo enviamos antes.
-  useEffect(() => {
-    return () => {
-      if (saveTimer.current) clearTimeout(saveTimer.current);
-      if (pendingData.current) {
-        void guardarEnBd(pendingData.current);
-        pendingData.current = null;
-      }
-    };
-  }, []);
-
   const guardarEnBd = async (data: CartaData) => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
@@ -273,11 +218,22 @@ export default function MetodoAstrologiaPlanetas() {
         { headers: { Authorization: `Bearer ${token}` } },
       );
     } catch {
-      // Silencioso: la app sigue funcionando con localStorage
+      // Silencioso
     } finally {
       setSaving(false);
     }
   };
+
+  // Antes de salir, manda el PATCH pendiente
+  useEffect(() => {
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+      if (pendingData.current) {
+        void guardarEnBd(pendingData.current);
+        pendingData.current = null;
+      }
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -287,14 +243,11 @@ export default function MetodoAstrologiaPlanetas() {
     );
   }
 
+  const siguienteIdx = siguienteCuerpoIndex(carta);
+  const todoCompletado = siguienteIdx === -1;
+
   return (
-    <Box
-      minH="100vh"
-      display="flex"
-      flexDirection="column"
-      bg="#008080"
-      fontFamily="'EB Garamond', serif"
-    >
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       {/* ── CABECERA ── */}
@@ -307,137 +260,128 @@ export default function MetodoAstrologiaPlanetas() {
           space
           mb={0}
           prev={{ label: "← Volver a mi carta", onClick: () => navigate("/metodo/astrologia") }}
-          next={{ label: "Siguiente disciplina →", onClick: () => {}, disabled: true }}
+          next={{
+            label: todoCompletado ? "Continuar a Psicología →" : "Completa primero la carta",
+            onClick: () => navigate("/metodo/psicologia"),
+            disabled: !todoCompletado,
+          }}
         />
       </Flex>
 
-      {/* Subtítulo */}
+      {/* Aviso de orden */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={4}>
-        <Text
-          color={`${astrologiaTxt}cc`}
-          fontSize={{ base: "md", md: "lg" }}
-          lineHeight="1.7"
-          fontStyle="italic"
-          letterSpacing="0.015em"
-          textAlign="center"
-          maxW="700px"
+        <Box
+          px={5}
+          py={2.5}
+          borderRadius="full"
+          bg={`${astrologiaTxt}14`}
+          border={`1px solid ${astrologiaTxt}44`}
+          boxShadow={`0 0 16px ${astrologiaTxt}22`}
         >
-          Indica el signo y la casa de cada planeta para empezar a integrar tus arquetipos.
-        </Text>
+          <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.08em" fontStyle="italic" textAlign="center">
+            ✦ Hay que ir por orden — elige signo, casa y profundiza para desbloquear el siguiente.
+          </Text>
+        </Box>
       </Flex>
 
       {/* ── GRID DE PLANETAS ── */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} py={{ base: 10, md: 14 }}>
+      <Box px={{ base: 5, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
         <Grid
           templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
           gap={{ base: 5, md: 6 }}
         >
-          {CUERPOS.map((c) => {
-            const valor = carta[c.key] || {};
+          {CUERPOS.map((c, index) => {
+            const valor = valorOf(carta, c.key);
+            const desbloqueado = index <= siguienteIdx || (todoCompletado);
+            const esActual = index === siguienteIdx;
+            const bloqueado = !desbloqueado;
+            const completo = esCuerpoCompleto(c, valor);
+
+            // Glow intensificado cuando es el cuerpo "actual"
+            const borderColor = bloqueado
+              ? `${c.color}22`
+              : esActual
+              ? c.color
+              : `${c.color}66`;
+            const boxShadow = bloqueado
+              ? "none"
+              : esActual
+              ? `0 0 36px ${c.color}cc, 0 0 80px ${c.color}88, 0 0 140px ${c.color}55`
+              : `0 0 22px ${c.color}55, 0 0 60px ${c.color}33`;
+
             return (
               <Box
                 key={c.key}
                 position="relative"
                 borderRadius="2xl"
                 overflow="hidden"
-                border={`1.5px solid ${c.color}99`}
-                boxShadow={`0 0 24px ${c.color}88, 0 0 60px ${c.color}55, 0 0 120px ${c.color}33`}
+                border={`${esActual ? 2 : 1.5}px solid ${borderColor}`}
+                boxShadow={boxShadow}
+                opacity={bloqueado ? 0.4 : 1}
+                filter={bloqueado ? "grayscale(0.45)" : "none"}
+                pointerEvents={bloqueado ? "none" : "auto"}
+                transition="all 0.3s ease"
               >
                 <SpaceBg overlay="rgba(8,13,30,0.65)" />
 
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}>
 
-                {/* Cabecera del box: icono + nombre */}
-                <Flex align="center" gap={3} mb={3}>
-                  <Box
-                    w="44px"
-                    h="44px"
-                    borderRadius="full"
-                    bg={`${c.color}1f`}
-                    border={`1px solid ${c.color}55`}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    flexShrink={0}
-                  >
-                    <Glifo symbol={c.symbol} color={c.color} size={28} />
-                  </Box>
-                  <Text
-                    color={c.color}
-                    fontSize={{ base: "lg", md: "xl" }}
-                    fontWeight="700"
-                    letterSpacing="0.05em"
-                    filter={`drop-shadow(0 1px 4px ${c.color}55)`}
-                  >
-                    {c.label}
-                  </Text>
-                </Flex>
-
-                {/* Línea separadora */}
-                <Box
-                  h="1px"
-                  mb={4}
-                  bgGradient={`linear(to-r, ${c.color}66, transparent)`}
-                />
-
-                {/* Selectores custom */}
-                <Flex direction={c.conCasa ? { base: "column", sm: "row" } : "column"} gap={3}>
-                  <Box flex="1">
-                    <Text color={`${c.color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600">
-                      SIGNO
-                    </Text>
+                  {/* Cabecera del box: icono + nombre + número de orden */}
+                  <Flex align="center" gap={3} mb={3}>
                     <Box
-                      as="button"
-                      onClick={() => setPicker({ key: c.key, campo: "signo" })}
-                      w="100%"
-                      px={4}
-                      py={2.5}
-                      borderRadius="lg"
-                      bg="rgba(8,13,30,0.55)"
+                      w="44px"
+                      h="44px"
+                      borderRadius="full"
+                      bg={`${c.color}1f`}
                       border={`1px solid ${c.color}55`}
-                      color={valor.signo ? c.color : `${c.color}88`}
-                      fontFamily="'EB Garamond', serif"
-                      fontSize="md"
-                      letterSpacing="0.04em"
-                      textAlign="left"
-                      cursor="pointer"
                       display="flex"
                       alignItems="center"
-                      justifyContent="space-between"
-                      gap={2}
-                      transition="all 0.2s"
-                      boxShadow={`0 0 16px ${c.color}22, inset 0 0 12px ${c.color}10`}
-                      _hover={{ borderColor: `${c.color}aa`, boxShadow: `0 0 22px ${c.color}44, inset 0 0 12px ${c.color}18` }}
+                      justifyContent="center"
+                      flexShrink={0}
                     >
-                      <Flex align="center" gap={2}>
-                        {valor.signo && (
-                          <ZodiacGlyph
-                            symbol={ZODIAC_SIGNS.find((s) => s.name === valor.signo)?.symbol || ""}
-                            size={18}
-                            color={c.color}
-                          />
-                        )}
-                        <Text as="span">{valor.signo || "Elegir…"}</Text>
-                      </Flex>
-                      <Text as="span" fontSize="xs" opacity={0.7}>▾</Text>
+                      <Glifo symbol={c.symbol} color={c.color} size={28} />
                     </Box>
-                  </Box>
+                    <Text
+                      color={c.color}
+                      fontSize={{ base: "lg", md: "xl" }}
+                      fontWeight="700"
+                      letterSpacing="0.05em"
+                      filter={`drop-shadow(0 1px 4px ${c.color}55)`}
+                      flex="1"
+                    >
+                      {c.label}
+                    </Text>
+                    {completo && (
+                      <Box
+                        as="span"
+                        color={c.color}
+                        fontSize="lg"
+                        title="Completado"
+                        opacity={0.85}
+                      >
+                        ✓
+                      </Box>
+                    )}
+                  </Flex>
 
-                  {c.conCasa && (
-                    <Box w={{ base: "100%", sm: "130px" }}>
+                  <Box h="1px" mb={4} bgGradient={`linear(to-r, ${c.color}66, transparent)`} />
+
+                  {/* Selectores */}
+                  <Flex direction={c.conCasa ? { base: "column", sm: "row" } : "column"} gap={3}>
+                    <Box flex="1">
                       <Text color={`${c.color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600">
-                        CASA
+                        SIGNO
                       </Text>
                       <Box
                         as="button"
-                        onClick={() => setPicker({ key: c.key, campo: "casa" })}
+                        onClick={() => setPicker({ key: c.key, campo: "signo" })}
                         w="100%"
                         px={4}
                         py={2.5}
                         borderRadius="lg"
                         bg="rgba(8,13,30,0.55)"
                         border={`1px solid ${c.color}55`}
-                        color={valor.casa != null ? c.color : `${c.color}88`}
+                        color={valor.signo ? c.color : `${c.color}88`}
                         fontFamily="'EB Garamond', serif"
                         fontSize="md"
                         letterSpacing="0.04em"
@@ -451,43 +395,80 @@ export default function MetodoAstrologiaPlanetas() {
                         boxShadow={`0 0 16px ${c.color}22, inset 0 0 12px ${c.color}10`}
                         _hover={{ borderColor: `${c.color}aa`, boxShadow: `0 0 22px ${c.color}44, inset 0 0 12px ${c.color}18` }}
                       >
-                        <Text as="span">{valor.casa != null ? `Casa ${valor.casa}` : "—"}</Text>
+                        <Flex align="center" gap={2}>
+                          {valor.signo && (
+                            <ZodiacGlyph
+                              symbol={ZODIAC_SIGNS.find((s) => s.name === valor.signo)?.symbol || ""}
+                              size={18}
+                              color={c.color}
+                            />
+                          )}
+                          <Text as="span">{valor.signo || "Elegir…"}</Text>
+                        </Flex>
                         <Text as="span" fontSize="xs" opacity={0.7}>▾</Text>
                       </Box>
                     </Box>
-                  )}
-                </Flex>
 
-                {/* Botones para profundizar (signo / casa) */}
-                <Flex
-                  mt={5}
-                  gap={3}
-                  justify={c.conCasa ? "space-between" : "center"}
-                  direction={{ base: "column", sm: "row" }}
-                >
-                  <ProfundizarBtn
-                    label="Profundizar signo"
-                    color={c.color}
-                    enabled={!!valor.signo}
-                    onClick={() => navigate(`/metodo/astrologia/${c.key}/signo`)}
-                  />
-                  {c.conCasa && (
+                    {c.conCasa && (
+                      <Box w={{ base: "100%", sm: "130px" }}>
+                        <Text color={`${c.color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600">
+                          CASA
+                        </Text>
+                        <Box
+                          as="button"
+                          onClick={() => setPicker({ key: c.key, campo: "casa" })}
+                          w="100%"
+                          px={4}
+                          py={2.5}
+                          borderRadius="lg"
+                          bg="rgba(8,13,30,0.55)"
+                          border={`1px solid ${c.color}55`}
+                          color={valor.casa != null ? c.color : `${c.color}88`}
+                          fontFamily="'EB Garamond', serif"
+                          fontSize="md"
+                          letterSpacing="0.04em"
+                          textAlign="left"
+                          cursor="pointer"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          gap={2}
+                          transition="all 0.2s"
+                          boxShadow={`0 0 16px ${c.color}22, inset 0 0 12px ${c.color}10`}
+                          _hover={{ borderColor: `${c.color}aa`, boxShadow: `0 0 22px ${c.color}44, inset 0 0 12px ${c.color}18` }}
+                        >
+                          <Text as="span">{valor.casa != null ? `Casa ${valor.casa}` : "—"}</Text>
+                          <Text as="span" fontSize="xs" opacity={0.7}>▾</Text>
+                        </Box>
+                      </Box>
+                    )}
+                  </Flex>
+
+                  {/* Botones profundizar */}
+                  <Flex mt={5} gap={3} justify={c.conCasa ? "space-between" : "center"} direction={{ base: "column", sm: "row" }}>
                     <ProfundizarBtn
-                      label="Profundizar casa"
+                      label={valor.profundizadoSigno ? "Profundizar signo ✓" : "Profundizar signo"}
                       color={c.color}
-                      enabled={valor.casa != null}
-                      onClick={() => navigate(`/metodo/astrologia/${c.key}/casa`)}
-                      align="right"
+                      enabled={!!valor.signo}
+                      onClick={() => navigate(`/metodo/astrologia/${c.key}/signo`)}
                     />
-                  )}
-                </Flex>
+                    {c.conCasa && (
+                      <ProfundizarBtn
+                        label={valor.profundizadoCasa ? "Profundizar casa ✓" : "Profundizar casa"}
+                        color={c.color}
+                        enabled={valor.casa != null}
+                        onClick={() => navigate(`/metodo/astrologia/${c.key}/casa`)}
+                        align="right"
+                      />
+                    )}
+                  </Flex>
+
                 </Box>
               </Box>
             );
           })}
         </Grid>
 
-        {/* Indicador discreto de guardado */}
         <Flex justify="center" mt={6}>
           <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.1em" fontStyle="italic">
             {saving ? "Guardando…" : "Tus cambios se guardan automáticamente."}
@@ -528,7 +509,6 @@ export default function MetodoAstrologiaPlanetas() {
             >
               <SpaceBg overlay="rgba(8,13,30,0.7)" />
 
-              {/* Botón X */}
               <Box position="absolute" top={3} right={3} zIndex={2}>
                 <Box
                   as="button"
@@ -547,14 +527,12 @@ export default function MetodoAstrologiaPlanetas() {
                   _hover={{ color: color, borderColor: color, bg: "rgba(0,0,0,0.7)" }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor">
-                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
                   </svg>
                 </Box>
               </Box>
 
-              {/* Contenido */}
               <Box position="relative" zIndex={1} px={6} py={7} display="flex" flexDirection="column" gap={4} overflowY="auto">
-                {/* Cabecera del modal */}
                 <Flex align="center" gap={3}>
                   <Box
                     w="48px"
@@ -583,7 +561,6 @@ export default function MetodoAstrologiaPlanetas() {
 
                 <Box h="1px" bgGradient={`linear(to-r, ${color}66, transparent)`} />
 
-                {/* Lista de signos */}
                 {esSigno && (
                   <Box maxH="56vh" overflowY="auto" px={1}>
                     {ZODIAC_SIGNS.map((s) => {
@@ -632,7 +609,6 @@ export default function MetodoAstrologiaPlanetas() {
                   </Box>
                 )}
 
-                {/* Grid de casas */}
                 {!esSigno && (
                   <Grid templateColumns="repeat(4, 1fr)" gap={2.5}>
                     {CASAS.map((n) => {
@@ -665,7 +641,6 @@ export default function MetodoAstrologiaPlanetas() {
                   </Grid>
                 )}
 
-                {/* Limpiar */}
                 {(esSigno ? !!valorOf(carta, picker.key).signo : valorOf(carta, picker.key).casa != null) && (
                   <Flex justify="flex-end">
                     <Box

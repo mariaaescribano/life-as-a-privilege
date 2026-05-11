@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Glifo } from "../../components/metodo/Glifo";
 import { cuerpoByKey, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { API_URL } from "../../GlobalVariables";
 
 /* Fondo espacial reutilizado */
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
@@ -43,8 +45,35 @@ export default function MetodoAstrologiaProfundizar() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
-    if (!userId) { navigate("/welcome"); return; }
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) { navigate("/welcome"); return; }
     if (!cuerpo) { navigate("/metodo/astrologia/planetas", { replace: true }); return; }
+
+    // Marca este apartado como profundizado en BD
+    (async () => {
+      try {
+        const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = res.data?.data || {};
+        const existente = data[cuerpo.key] || {};
+        const flag = campo === "signo" ? "profundizadoSigno" : "profundizadoCasa";
+        // Solo escribir si aún no está marcado (evita PATCH innecesario)
+        if (!existente[flag]) {
+          const nextData = {
+            ...data,
+            [cuerpo.key]: { ...existente, [flag]: true },
+          };
+          await axios.patch(
+            `${API_URL}/metodo-astrologia/${userId}`,
+            { data: nextData },
+            { headers: { Authorization: `Bearer ${token}` } },
+          );
+        }
+      } catch {
+        // Silencioso: si BD falla, el flag no se persiste pero la UI sigue
+      }
+    })();
   }, []);
 
   if (!cuerpo) return null;
