@@ -8,6 +8,7 @@ import {
   ayurvedaTxt,
 } from "../../GlobalVariables";
 import { modulosAyurveda } from "../aprendizajes/Ayurveda/ModulosAyurveda";
+import { modulosChakras } from "../aprendizajes/Ayurveda/ModulosChakras";
 
 export const ayurvedaCursos: ModalidadInfo = {
   nom: ayurvedaNom,
@@ -15,6 +16,18 @@ export const ayurvedaCursos: ModalidadInfo = {
   color: ayurvedaTxt,
   icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
   cursos: [
+    {
+      id: "ayu-curso-2",
+      cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-2",
+      titulo: "Los Chakras",
+      foto: "/img/ayurveda/chakras.png",
+      descripcion:
+        "Los siete chakras: dónde el cuerpo y el alma se encuentran. Conócelos uno a uno.",
+      precio: null,
+      numLecciones: 9,
+      icon: <AyurvedaIcon size={{ base: "35px", md: "45px" }} />,
+      modulos: modulosChakras,
+    },
     {
       id: "ayu-curso-1",
       cursoLink: "/aprendizaje/modulosPage/" + ayurvedaNomLink + "/ayu-curso-1",
