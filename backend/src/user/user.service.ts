@@ -111,6 +111,8 @@ export class UserService {
 
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
+    // Cuando se ejecute el ALTER TABLE para añadir metodo_suscrito/metodo_fecha_compra,
+    // se pueden incluir en el select.
     const { data, error } = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, img')
@@ -190,6 +192,37 @@ export class UserService {
         }
       }
     } while (!inserted);
+  }
+
+  // --------- Marcar usuario como suscrito al Método ---------
+  async marcarSuscritoMetodo(id: string) {
+    // Intenta persistir el estado en BD. Si las columnas metodo_* aún no existen
+    // (ALTER TABLE pendiente), no rompe el flujo: solo envía el email y devuelve
+    // los datos básicos del usuario.
+    const tryUpdate = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        metodo_suscrito: true,
+        metodo_fecha_compra: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select('id, name, email')
+      .single();
+
+    if (tryUpdate.error) {
+      console.warn('[user.service] update metodo_* falló (¿columnas no creadas?):', tryUpdate.error.message);
+      // Fallback: leer datos básicos del usuario para poder enviar email igualmente.
+      const { data, error } = await this.databaseService.getClient()
+        .from('user')
+        .select('id, name, email')
+        .eq('id', id)
+        .single();
+      if (error || !data) throw new NotFoundException('Usuario no encontrado');
+      return data;
+    }
+
+    if (!tryUpdate.data) throw new NotFoundException('Usuario no encontrado');
+    return tryUpdate.data;
   }
 
   // --------- Eliminar usuario ---------

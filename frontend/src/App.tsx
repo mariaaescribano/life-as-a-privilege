@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LogIn from "./app/auth/LogIn";
+import SignIn from "./app/auth/SignIn";
 import GoogleAuthCallback from "./app/auth/GoogleAuthCallback";
 import Home from "./app/home/Home";
 import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
@@ -24,6 +25,7 @@ import LibrosPage from "./app/web/LibrosPage";
 import Contacto from "./app/web/Contacto";
 import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
+import CheckoutMetodo from "./app/web/CheckoutMetodo";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -58,6 +60,7 @@ export default function App()
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
+      <Route path="/signIn" element={<SignIn />} />
       <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
@@ -72,6 +75,7 @@ export default function App()
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
+      <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

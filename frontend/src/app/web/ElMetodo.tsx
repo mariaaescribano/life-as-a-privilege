@@ -4,7 +4,6 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
-import { WaitlistModal } from "../../components/global/WaitlistModal";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -640,9 +639,21 @@ export default function ElMetodo() {
   const headerReveal = useReveal(0.05);
   const cardsReveal = useReveal(0.04);
   const pricingReveal = useReveal(0.1);
-  const [modalOpen, setModalOpen] = useState(false);
   const [dudasOpen, setDudasOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
+
+  const handleApuntarme = () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+
+    if (!userId || !token) {
+      navigate("/signIn?next=/checkoutMetodo");
+      return;
+    }
+    // Cuando exista metodo_suscrito en BD, aquí se puede consultar /user/me
+    // y redirigir a /home si ya está suscrito.
+    navigate("/checkoutMetodo");
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -979,7 +990,7 @@ export default function ElMetodo() {
       >
         <Box
           as="button"
-          onClick={() => setModalOpen(true)}
+          onClick={handleApuntarme}
           px={{ base: 10, md: 14 }}
           py={{ base: 4, md: 5 }}
           borderRadius="full"
@@ -1262,11 +1273,6 @@ export default function ElMetodo() {
           </Box>
         </Box>
       )}
-
-      <WaitlistModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />
 
       <ContactModal
         isOpen={dudasOpen}

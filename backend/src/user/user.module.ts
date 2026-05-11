@@ -9,5 +9,6 @@ import { GoogleController } from 'src/auth/google.controller';
   imports: [AuthModule],
   controllers: [UserController, GoogleController],
   providers: [UserService, DatabaseService],
+  exports: [UserService],
 })
 export class UsersModule {}

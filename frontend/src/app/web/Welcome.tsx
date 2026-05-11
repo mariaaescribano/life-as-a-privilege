@@ -29,15 +29,17 @@ type Discipline = {
   available:boolean;
 };
 
+// Orden del Método: Astrología → Psicología → Hinduismo → TCM →
+// Fisiología → Nutrición → Cultura → Cábala
 const disciplines: Discipline[] = [
   {
-    name: fisiologiaNom,
-    bg: fisiologiaBg,
-    txt: fisiologiaTxt,
-    renderIcon: (size) => <FisiologiaIcon size={size} />,
-    desc: fisiologiaDescrip,
-    link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
-    available: true
+    name: astrologiaNom,
+    bg: astrologiaBg,
+    txt: astrologiaTxt,
+    renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
+    desc: astrologiaDescrip,
+    link: "/aprendizaje/cursosModalidad/" + astrologiaNom,
+    available:true
   },
   {
     name: neuropsicologiaNom,
@@ -49,12 +51,12 @@ const disciplines: Discipline[] = [
     available:true
   },
   {
-    name: astrologiaNom,
-    bg: astrologiaBg,
-    txt: astrologiaTxt,
-    renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    desc: astrologiaDescrip,
-    link: "/aprendizaje/cursosModalidad/" + astrologiaNom,
+    name: ayurvedaNom,
+    bg: ayurvedaBg,
+    txt: ayurvedaTxt,
+    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
+    desc: ayurvedaDescrip,
+    link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
     available:true
   },
   {
@@ -67,21 +69,21 @@ const disciplines: Discipline[] = [
     available:true
   },
   {
+    name: fisiologiaNom,
+    bg: fisiologiaBg,
+    txt: fisiologiaTxt,
+    renderIcon: (size) => <FisiologiaIcon size={size} />,
+    desc: fisiologiaDescrip,
+    link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
+    available: true
+  },
+  {
     name: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
     desc: nutricionDescrip,
     link: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
-    available:true
-  },
-  {
-    name: ayurvedaNom,
-    bg: ayurvedaBg,
-    txt: ayurvedaTxt,
-    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
-    desc: ayurvedaDescrip,
-    link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
     available:true
   },
   {

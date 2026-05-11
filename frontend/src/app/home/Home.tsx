@@ -1,165 +1,94 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Image, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
-import SiteHeader from "../../components/global/SiteHeader";
+import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import {
-  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  culturaBg, CulturaIcon, culturaNom, culturaTxt,
-  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
-  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
-  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmTxt,
-  nutricionNomLink,
-  EspacioPersonalIcon, AprendizajeIcon,
-  fisiologiaDescrip,
-  neuropsicologiaDescrip,
-  astrologiaDescrip,
-  tcmDescrip,
-  nutricionDescrip,
-  ayurvedaDescrip,
-  culturaDescrip,
-  cabalaDescrip,
-  tcmNomLink,
-  ayurvedaNomLink,
-} from "../../GlobalVariables";
-import type { SessionStorageUser } from "../../dtos/user.types";
-import SpinnerTurquesa from "../../components/global/Spinner";
-import PhotoMandala from "../../components/home/PhotoMandala";
+import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import {
+  API_URL,
+  astrologiaBg, AstrologiaIcon, astrologiaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaTxt,
+  cabalaBg, CabalaIcon, cabalaTxt,
+  culturaBg, CulturaIcon, culturaTxt,
+  fisiologiaBg, FisiologiaIcon, fisiologiaTxt,
+  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt,
+  nutricionBg, NutricionIcon, nutricionTxt,
+  tcmBg, TCMIcon, tcmTxt,
+} from "../../GlobalVariables";
 
-type Discipline = {
-  name: string;
-  bg: string;
-  txt: string;
-  description: string;
-  renderIcon: (size: string) => React.ReactNode;
-  linkEspacio: string;
-  linkAprendizaje: string;
-  available:boolean;
-};
+const popIn = keyframes`
+  from { opacity: 0; transform: scale(0.2); }
+  to   { opacity: 1; transform: scale(1); }
+`;
 
-const disciplines: Discipline[] = [
-  {
-    name: fisiologiaNom, bg: fisiologiaBg, txt: fisiologiaTxt,
-    description: fisiologiaDescrip,
-    renderIcon: (s) => <FisiologiaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + fisiologiaNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
-    available:true
-  },
-  {
-    name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt,
-    description: neuropsicologiaDescrip,
-    renderIcon: (s) => <NeuropsicologiaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + neuropsicologiaNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom,
-    available:true
-  },
-  {
-    name: astrologiaNom, bg: astrologiaBg, txt: astrologiaTxt,
-    description: astrologiaDescrip,
-    renderIcon: (s) => <AstrologiaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + astrologiaNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + astrologiaNom,
-    available:true
-  },
-  {
-    name: tcmNom, bg: tcmBg, txt: tcmTxt,
-    description: tcmDescrip,
-    renderIcon: (s) => <TCMIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + tcmNomLink,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + tcmNomLink,
-    available:true
-  },
-  {
-    name: nutricionNom, bg: nutricionBg, txt: nutricionTxt,
-    description: nutricionDescrip,
-    renderIcon: (s) => <NutricionIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + nutricionNomLink,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
-    available:true
-  },
-  {
-    name: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt,
-    description: ayurvedaDescrip,
-    renderIcon: (s) => <AyurvedaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + ayurvedaNomLink,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
-    available:true
-  },
-  {
-    name: culturaNom, bg: culturaBg, txt: culturaTxt,
-    description: culturaDescrip,
-    renderIcon: (s) => <CulturaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + culturaNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + culturaNom,
-    available:true
-  },
-  {
-    name: cabalaNom, bg: cabalaBg, txt: cabalaTxt,
-    description: cabalaDescrip,
-    renderIcon: (s) => <CabalaIcon size={{ base: s, md: s }} />,
-    linkEspacio: "/espacio/questions/" + cabalaNom,
-    linkAprendizaje: "/aprendizaje/cursosModalidad/" + cabalaNom,
-    available:true
-  },
+// Orden del Método: Astrología → Psicología → Hinduismo → TCM →
+// Fisiología → Nutrición → Cultura → Cábala
+const disciplines = [
+  { bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon },
+  { bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon },
+  { bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon },
+  { bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon },
+  { bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
+  { bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon },
+  { bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon },
+  { bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon },
 ];
-
-const useReveal = (threshold = 0.1) => {
-  const [el, setEl] = useState<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [el, threshold]);
-  return { ref: setEl, visible };
-};
-
-const glassCard = {
-  bg: "rgba(255,255,255,0.14)",
-  border: "1px solid rgba(255,255,255,0.38)",
-  sx: { backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" },
-  borderRadius: "2xl",
-  boxShadow: "0 8px 40px rgba(107,196,200,0.45)",
-};
 
 const Home = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<SessionStorageUser | null>(null);
-  const [selectedDisc, setSelectedDisc] = useState<Discipline | null>(null);
 
-  const bienvenidaReveal = useReveal();
-  const mandalaReveal = useReveal(0.05);
-  const disciplinasReveal = useReveal(0.04);
+  const [img, setImg] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [name, setName] = useState<string>("");
 
-  const iconSizeMiEspacio   = useBreakpointValue({ base: "34px", md: "52px" }) ?? "52px";
-  const iconSizeAprendizaje = useBreakpointValue({ base: "30px", md: "42px" }) ?? "42px";
-  const iconSizeCard        = useBreakpointValue({ base: "30px", md: "42px" }) ?? "42px";
-  const cardIconBox         = useBreakpointValue({ base: "56px", md: "72px" }) ?? "72px";
-  const cardIconTop         = useBreakpointValue({ base: "-28px", md: "-36px" }) ?? "-36px";
+  const radius        = useBreakpointValue({ base: 130, sm: 165, md: 220, lg: 280, xl: 320 });
+  const containerSize = useBreakpointValue({ base: "340px", sm: "420px", md: "560px", lg: "700px", xl: "800px" });
+  const centerSize    = useBreakpointValue({ base: "130px", md: "180px", lg: "220px", xl: "260px" });
+  const circleSize    = useBreakpointValue({ base: "80px", md: "108px", lg: "130px" });
+  const iconSize      = useBreakpointValue({ base: "44px", md: "60px", lg: "72px" });
+  const numberSize    = useBreakpointValue({ base: "26px", md: "32px", lg: "38px" });
 
   useEffect(() => {
-    if (user == null) {
-      const userId = sessionStorage.getItem("userId");
-      const img = sessionStorage.getItem("img");
-      const name = sessionStorage.getItem("name");
-      if (userId && img && name) {
-        setUser({ userId, name, img });
-      } else {
-        navigate("/");
-      }
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) {
+      navigate("/");
+      return;
     }
-  }, [user]);
+    if (img == null) {
+      const stored = sessionStorage.getItem("img");
+      setImg(stored);
+    }
+    setName(sessionStorage.getItem("name") || "");
+  }, []);
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const userId = sessionStorage.getItem("userId");
+    const token  = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      navigate("/");
+      return;
+    }
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      formData.append("userId", userId);
+      const res  = await fetch(`${API_URL}/upload/profile-pic`, { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.url) {
+        const freshUrl = `${data.url}?v=${Date.now()}`;
+        sessionStorage.setItem("img", freshUrl);
+        setImg(freshUrl);
+      }
+    } finally {
+      setUploading(false);
+    }
+  };
 
-  // #region return
+  const angleStep = (2 * Math.PI) / disciplines.length;
 
   return (
     <Box
@@ -169,448 +98,250 @@ const Home = () => {
       bg="#008080"
       fontFamily="'EB Garamond', serif"
     >
-      {/* ── HEADER ── */}
-      <SiteHeader variant="private" userImg={user?.img} />
+      <SiteHeader variant="private" userImg={img ?? undefined} />
 
-      {/* ── MAIN ── */}
-      <Box flex="1">
-        {user && (
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+        {img != null ? (
           <Flex
             direction="column"
-            gap={{ base: 14, md: 20 }}
-            px={{ base: 5, md: 10, lg: 16 }}
-            pt={{ base: 10, md: 14 }}
-            pb={{ base: 14, md: 20 }}
+            alignItems="center"
+            justifyContent="center"
+            py={{ base: 8, md: 10 }}
+            px={{ base: 5, md: 10 }}
+            w="100%"
           >
-
-            {/* ── FILA: BIENVENIDA + MANDALA ── */}
-            <Flex
-              direction={{ base: "column", md: "row" }}
-              gap={{ base: 14, md: 6 }}
-              align="stretch"
+            {/* ── SALUDO ── */}
+            <Text
+              color="white"
+              fontSize={{ base: "3xl", md: "5xl" }}
+              fontWeight="700"
+              letterSpacing="0.05em"
+              textAlign="center"
+              lineHeight="1.15"
+              textShadow="0 2px 14px rgba(0,80,70,0.45)"
+              mb={3}
             >
-              {/* CARD 1: BIENVENIDA */}
+              Bienvenida{name ? `, ${name}` : ""}
+            </Text>
+            <Text
+              color="rgba(255,255,255,0.88)"
+              fontSize={{ base: "lg", md: "2xl" }}
+              fontStyle="italic"
+              textAlign="center"
+              letterSpacing="0.04em"
+              textShadow="0 1px 8px rgba(0,60,50,0.35)"
+              mb={{ base: 6, md: 8 }}
+            >
+              Este es el camino de vuelta a ti.
+            </Text>
+
+            {/* ── BOX INFORMATIVO ── */}
+            <Box
+              w={{ base: "100%", md: "78%", lg: "64%" }}
+              bg="rgba(255,255,255,0.14)"
+              border="1px solid rgba(255,255,255,0.35)"
+              sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+              borderRadius="2xl"
+              boxShadow="0 8px 36px rgba(107,196,200,0.4)"
+              px={{ base: 6, md: 8 }}
+              py={{ base: 5, md: 6 }}
+              mb={{ base: 10, md: 12 }}
+              display="flex"
+              flexDirection={{ base: "column", md: "row" }}
+              alignItems="center"
+              gap={{ base: 4, md: 6 }}
+            >
               <Box
-                ref={bienvenidaReveal.ref}
-                flex="1"
-                position="relative"
-                overflow="hidden"
-                {...glassCard}
-                px={{ base: 8, md: 10 }}
-                py={{ base: 12, md: 14 }}
+                flexShrink={0}
+                w={{ base: "62px", md: "72px" }}
+                h={{ base: "62px", md: "72px" }}
+                borderRadius="full"
+                bg="rgba(255,255,255,0.2)"
+                border="1px solid rgba(255,255,255,0.4)"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                opacity={bienvenidaReveal.visible ? 1 : 0}
-                transform={bienvenidaReveal.visible ? "none" : "translateY(28px)"}
-                transition="opacity 0.75s ease, transform 0.75s ease"
+                p={2}
               >
-                <Box
-                  position="absolute" top="50%" left="50%"
-                  transform="translate(-50%, -50%)"
-                  w="90%" h="90%"
-                  backgroundImage="url('/img/extras/flor.png')"
-                  backgroundSize="contain" backgroundPosition="center"
-                  backgroundRepeat="no-repeat" opacity={0.13}
-                  zIndex={0} pointerEvents="none"
+                <Image
+                  src="/img/icono/life.png"
+                  alt="Life as a Privilege"
+                  w="100%"
+                  h="100%"
+                  objectFit="contain"
+                  filter="drop-shadow(0 2px 8px rgba(255,255,255,0.35))"
                 />
-                <VStack spacing={5} zIndex={1} position="relative" w="80%" align="center">
-                  <Text
-                    color="white" fontWeight="700"
-                    fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-                    textAlign="center" letterSpacing="0.06em" lineHeight="1.2"
-                    style={{
-                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                    }}
-                  >
-                    Bienvenid@, {user.name}
-                  </Text>
-                  <Text
-                    color="rgba(255,255,255,0.88)"
-                    mt="15px"
-                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                    textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
-                    //textShadow="0 1px 5px rgba(0,100,90,0.25)"
-                    style={{
-                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                    }}
-                  >
-                    Este es tu espacio para aprender e integrar distintas modalidades en las que serás capaz de identificar tus bloqueos y tus trampas.
-                  </Text>
-                  <Text
-                    color="rgba(255,255,255,0.88)"
-                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                    textAlign="center" lineHeight="1.9" letterSpacing="0.02em"
-                    style={{
-                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                    }}
-                  >
-                    Recuerda tratarte con paciencia, con Amor y como el Ser digno que eres.
-                  </Text>
-                  <Flex
-                    as="button"
-                    onClick={() => navigate("/elMetodo")}
-                    align="center"
-                    gap={3}
-                    mt={4}
-                    px={{ base: 7, md: 9 }}
-                    py={{ base: "12px", md: "14px" }}
-                    borderRadius="full"
-                    border="1.5px solid rgba(255,255,255,0.55)"
-                    bg="rgba(255,255,255,0.12)"
-                    cursor="pointer"
-                    _hover={{ bg: "rgba(255,255,255,0.22)", borderColor: "rgba(255,255,255,0.85)" }}
-                    transition="all 0.22s ease"
-                    boxShadow="0 4px 20px rgba(255,255,255,0.1)"
-                  >
-                    <Image src="/img/icono/life.png" alt="" h={{ base: "26px", md: "30px" }} objectFit="contain" />
-                    <Text
-                      color="white"
-                      fontFamily="'EB Garamond', serif"
-                      fontWeight="700"
-                      fontSize={{ base: "lg", md: "xl" }}
-                      letterSpacing="0.14em"
-                    >
-                      El Método
-                    </Text>
-                    <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1">→</Text>
-                  </Flex>
-                </VStack>
               </Box>
-
-              {/* CARD 2: PHOTO MANDALA */}
-              <Box
-                ref={mandalaReveal.ref}
+              <Text
+                color="rgba(255,255,255,0.92)"
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="1.7"
+                letterSpacing="0.015em"
+                textAlign={{ base: "center", md: "left" }}
                 flex="1"
-                position="relative"
-                border="1px solid rgba(255,255,255,0.38)"
-                borderRadius="2xl"
-                boxShadow="0 8px 40px rgba(107,196,200,0.45)"
-                px={{ base: 6, md: 6 }}
-                py={{ base: 8, md: 10 }}
-                display="flex" flexDirection="column" alignItems="center" gap={4}
-                opacity={mandalaReveal.visible ? 1 : 0}
-                transform={mandalaReveal.visible ? "none" : "translateY(28px)"}
-                transition="opacity 0.75s ease 0.12s, transform 0.75s ease 0.12s"
-                bg="rgba(255,255,255,0.14)"
-                sx={{
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
-                }}
               >
-                <Flex align="center" gap={3}>
-                  <EspacioPersonalIcon color="rgba(255,255,255,0.9)" size={iconSizeMiEspacio} />
-                  <Text
-                    color="white" fontSize={{ base: "xl", md: "4xl", lg: "5xl" }}
-                    fontWeight="700" letterSpacing="0.05em"
-                    style={{
-                      filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                    }} textAlign="center"
-                  >
-                    Mi Espacio
-                  </Text>
-                </Flex>
-                <PhotoMandala fotoCentro={user.img} />
-              </Box>
-            </Flex>
+                Las modalidades se irán abriendo una a una a medida que recorras el camino.
+              </Text>
+            </Box>
 
-            {/* ── BOTÓN NUEVOS CURSOS ── */}
-            <Flex justify="center">
-              <Flex
-                as="button"
-                onClick={() => navigate("/aprendizaje/nuevosCursos")}
-                align="center"
-                gap={3}
-                px={{ base: 8, md: 12 }}
-                py={{ base: "14px", md: "16px" }}
-                borderRadius="full"
-                border="1.5px solid rgba(255,255,255,0.55)"
-                bg="rgba(255,255,255,0.10)"
-                cursor="pointer"
-                boxShadow="0 0 28px rgba(72,192,181,0.65), 0 0 70px rgba(72,192,181,0.28), 0 4px 18px rgba(0,0,0,0.2)"
-                _hover={{
-                  bg: "rgba(255,255,255,0.20)",
-                  borderColor: "rgba(255,255,255,0.85)",
-                  boxShadow: "0 0 44px rgba(72,192,181,0.9), 0 0 90px rgba(72,192,181,0.45), 0 6px 26px rgba(0,0,0,0.25)",
-                  transform: "translateY(-2px)",
-                }}
-                transition="all 0.25s ease"
-              >
-                <Image src="/img/icono/life.png" alt="" h={{ base: "28px", md: "34px" }} objectFit="contain" />
-                <Text
-                  color="white"
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "xl", md: "2xl" }}
-                  letterSpacing="0.12em"
-                  style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))" }}
-                >
-                  Nuevos Cursos
-                </Text>
-              </Flex>
-            </Flex>
-
-            {/* ── CARD 3: APRENDIZAJES ── */}
+            {/* Mandala */}
             <Box
-              ref={disciplinasReveal.ref}
-              w="100%"
-              {...glassCard}
-              px={{ base: 6, md: 12 }}
-              py={{ base: 10, md: 14 }}
+              position="relative"
+              w={containerSize}
+              h={containerSize}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: "url('/img/icono/life.png')",
+                  backgroundSize: "100%",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  opacity: 0.1,
+                  zIndex: 0,
+                },
+              }}
             >
-              <Flex align="center" justify="center" gap={3} mb={{ base: 10, md: 14 }}>
-                <AprendizajeIcon color="rgba(255,255,255,0.9)" size={iconSizeAprendizaje} />
-                <Text
-                  color="white"
-                  fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.06em"
-                  textShadow="0 2px 10px rgba(7, 19, 17, 0.4)" 
-                  textAlign="center"
-                >
-                  Aprendizajes
-                </Text>
-              </Flex>
-
-              <Grid
-                templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-                gap={{ base: 10, md: 12 }}
+              {/* Centro: foto del usuario, clic para cambiarla */}
+              <Box
+                position="absolute"
+                w={centerSize}
+                h={centerSize}
+                borderRadius="full"
+                overflow="hidden"
+                boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 50px rgba(107,196,200,1), 0 0 100px rgba(107,196,200,0.55)"
+                border="2px solid rgba(255,255,255,0.85)"
+                zIndex={10}
               >
-                {disciplines.map((d, i) => {
-                  const isSelected = selectedDisc?.name === d.name;
-                  return (
+                <Image src={img} alt="Tu foto" w="100%" h="100%" objectFit="cover" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  style={{
+                    position: "absolute", top: 0, left: 0,
+                    width: "100%", height: "100%",
+                    opacity: 0, cursor: "pointer",
+                  }}
+                />
+                {uploading && (
+                  <Box
+                    position="absolute"
+                    top={0} left={0}
+                    w="100%" h="100%"
+                    bg="rgba(0,0,0,0.55)"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    zIndex={20}
+                  >
+                    <SpinnerTurquesa fullScreen={false} size={44} thickness={4} />
+                  </Box>
+                )}
+              </Box>
+
+              {/* Disciplinas alrededor — todas bloqueadas */}
+              {disciplines.map((d, index) => {
+                const angle = angleStep * index - Math.PI / 2;
+                const x = Math.cos(angle) * (radius ?? 200);
+                const y = Math.sin(angle) * (radius ?? 200);
+                const delay = `${index * 0.18}s`;
+                const number = index + 1;
+                const Icon = d.Icon;
+                return (
+                  <Box
+                    key={index}
+                    position="absolute"
+                    transform={`translate(${x}px, ${y}px)`}
+                    w={circleSize}
+                    h={circleSize}
+                  >
                     <Box
-                      key={i}
+                      cursor="not-allowed"
+                      w="100%"
+                      h="100%"
+                      borderRadius="full"
+                      overflow="visible"
                       position="relative"
-                      mt={{ base: "34px", md: "42px" }}
-                      pt={{ base: "38px", md: "46px" }}
-                      pb={{ base: 5, md: 7 }}
-                      px={{ base: 3, md: 5 }}
-                      bg={d.bg}
-                      border="1px solid rgba(255,255,255,0.38)"
-                      sx={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-                      borderRadius="2xl"
-                      boxShadow={isSelected
-                        ? "0 0 0 3px white, 0 8px 32px rgba(255,255,255,0.35), 0 0 40px rgba(107,196,200,0.7)"
-                        : "0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"}
-                      cursor="pointer"
-                      onClick={() => setSelectedDisc(d)}
-                      opacity={disciplinasReveal.visible ? 1 : 0}
-                      transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-                      transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s, box-shadow 0.25s ease`}
-                      _hover={{
-                        boxShadow: "0 18px 45px rgba(107,196,200,0.75), 0 4px 14px rgba(107,196,200,0.45)",
-                      }}
-                      textAlign="center"
+                      opacity={0.45}
+                      animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
+                      filter="grayscale(0.25)"
                     >
-                      {/* Icono sobresaliente — bg con color contraste */}
+                      {/* Círculo principal con icono */}
                       <Box
-                        position="absolute"
-                        top={cardIconTop} left="50%"
-                        transform="translateX(-50%)"
-                        bg={d.bg}
+                        w="100%"
+                        h="100%"
                         borderRadius="full"
-                        p={{ base: "6px", md: "8px" }}
-                        border={"4px solid "+ d.txt}
-                        boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-                        w={cardIconBox} h={cardIconBox}
-                        display="flex" alignItems="center" justifyContent="center"
+                        overflow="hidden"
+                        border={`4px solid ${d.txt}`}
+                        boxShadow={`
+                          0 0 50px ${d.txt}77,
+                          0 2px 30px ${d.txt}55
+                        `}
+                        bg={d.bg}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
                       >
-                        {d.renderIcon(iconSizeCard)}
+                        <Icon size={{ base: iconSize, md: iconSize }} />
                       </Box>
 
-                      <Text
-                        color={d.txt}
-                        textShadow="0 2px 8px rgba(0,0,0,0.5)"
-                        fontWeight="700"
-                        fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
-                        letterSpacing="0.03em"
-                        lineHeight="short"
+                      {/* Badge con número */}
+                      <Box
+                        position="absolute"
+                        top="-8px"
+                        right="-8px"
+                        w={numberSize}
+                        h={numberSize}
+                        borderRadius="full"
+                        bg="white"
+                        border={`2px solid ${d.txt}`}
+                        boxShadow={`0 2px 10px ${d.txt}88, 0 4px 14px rgba(0,0,0,0.25)`}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        opacity={1}
                       >
-                        {d.name}
-                      </Text>
+                        <Text
+                          color={d.txt}
+                          fontSize={{ base: "sm", md: "md", lg: "lg" }}
+                          fontWeight="800"
+                          fontFamily="'EB Garamond', serif"
+                          lineHeight="1"
+                        >
+                          {number}
+                        </Text>
+                      </Box>
                     </Box>
-                  );
-                })}
-              </Grid>
-
+                  </Box>
+                );
+              })}
             </Box>
 
-
-            {/* ── BANNERS PRODUCTOS & REELS ── */}
-            {/* <Flex gap={{ base: 5, md: 7 }} direction={{ base: "column", md: "row" }}>
-              <ProductosBanner maxW="unset" w="100%" compact />
-              <ReelsBanner    maxW="unset" w="100%" compact />
-            </Flex> */}
-
+            {/* Aviso bajo el mandala */}
+            <Text
+              mt={{ base: 8, md: 10 }}
+              color="rgba(255,255,255,0.8)"
+              fontSize={{ base: "md", md: "lg" }}
+              textAlign="center"
+              fontStyle="italic"
+              letterSpacing="0.04em"
+              maxW="640px"
+              px={6}
+              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.4))" }}
+            >
+              Tu camino comenzará pronto. Las disciplinas se irán abriendo en orden a medida que avances en el Método.
+            </Text>
           </Flex>
+        ) : (
+          <SpinnerTurquesa />
         )}
-
-        {!user && <SpinnerTurquesa />}
       </Box>
 
-      {/* ── MODAL DISCIPLINA ── */}
-      {selectedDisc && (
-        <Box
-          position="fixed"
-          inset={0}
-          zIndex={200}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          bg="rgba(0,0,0,0.6)"
-          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
-          onClick={() => setSelectedDisc(null)}
-          px={{ base: 5, md: 10 }}
-        >
-          {/* Card */}
-          <Box
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            bg={selectedDisc.bg + "e8"}
-            border={`1.5px solid ${selectedDisc.txt}55`}
-            sx={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
-            borderRadius="2xl"
-            boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selectedDisc.txt}22`}
-            p={{ base: 8, md: 12 }}
-            maxW="560px"
-            w="100%"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            gap={6}
-            position="relative"
-          >
-            {/* X */}
-            <Box
-              position="absolute"
-              top={4}
-              right={5}
-              as="button"
-              onClick={() => setSelectedDisc(null)}
-              color={selectedDisc.txt}
-              fontSize="xl"
-              cursor="pointer"
-              bg={selectedDisc.txt + "22"}
-              borderRadius="full"
-              w="36px"
-              h="36px"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              _hover={{ bg: selectedDisc.txt + "44" }}
-              transition="background 0.2s"
-            >
-              ✕
-            </Box>
-
-            {/* Icono */}
-            <Box
-              bg={selectedDisc.bg}
-              borderRadius="full"
-              w={{ base: "88px", md: "108px" }}
-              h={{ base: "88px", md: "108px" }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              border={`3px solid ${selectedDisc.txt}`}
-              boxShadow={`0 0 20px ${selectedDisc.txt}bb, 0 2px 14px ${selectedDisc.txt}77`}
-            >
-              {selectedDisc.renderIcon("52px")}
-            </Box>
-
-            {/* Nombre */}
-            <Text
-              color={selectedDisc.txt}
-              fontSize={{ base: "2xl", md: "3xl" }}
-              fontWeight="700"
-              letterSpacing="0.04em"
-              textAlign="center"
-            >
-              {selectedDisc.name}
-            </Text>
-
-            {/* Descripción */}
-            <Text
-              color={selectedDisc.txt}
-              fontSize={{ base: "lg", md: "xl" }}
-              textAlign="center"
-              lineHeight="1.9"
-              letterSpacing="0.02em"
-              opacity={0.82}
-            >
-              {selectedDisc.description}
-            </Text>
-
-            {/* Botones */}
-            {(() => {
-              const isAvailable = selectedDisc.available === true;
-              return (
-                <Flex direction="column" align="center" gap={3} mt={2}>
-                  <Flex gap={{ base: 4, md: 6 }} justify="center" wrap="wrap">
-                    <Flex
-                      align="center" gap={3}
-                      cursor={isAvailable ? "pointer" : "not-allowed"}
-                      onClick={isAvailable ? () => navigate(selectedDisc.linkEspacio) : undefined}
-                      bg={selectedDisc.txt + "18"}
-                      border={`1px solid ${selectedDisc.txt}66`}
-                      borderRadius="full"
-                      px={{ base: 5, md: 7 }} py={3}
-                      opacity={isAvailable ? 1 : 0.45}
-                      boxShadow={isAvailable ? `0 0 8px ${selectedDisc.txt}55` : "none"}
-                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 14px ${selectedDisc.txt}88` } : {}}
-                      transition="all 0.2s"
-                    >
-                      <EspacioPersonalIcon color={selectedDisc.txt} size="24px" shadow={false}/>
-                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}
-                      //  style={{
-                      //   filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                      // }}
-                      >
-                        Mi Espacio
-                      </Text>
-                    </Flex>
-                    <Flex
-                      align="center" gap={3}
-                      cursor={isAvailable ? "pointer" : "not-allowed"}
-                      onClick={isAvailable ? () => navigate(selectedDisc.linkAprendizaje) : undefined}
-                      bg={selectedDisc.txt + "18"}
-                      border={`1px solid ${selectedDisc.txt}66`}
-                      borderRadius="full"
-                      px={{ base: 5, md: 7 }} py={3}
-                      opacity={isAvailable ? 1 : 0.45}
-                      boxShadow={isAvailable ? `0 0 8px ${selectedDisc.txt}55` : "none"}
-                      _hover={isAvailable ? { bg: selectedDisc.txt + "33", border: `1px solid ${selectedDisc.txt}`, boxShadow: `0 0 14px ${selectedDisc.txt}88` } : {}}
-                      transition="all 0.2s"
-                    >
-                      <AprendizajeIcon color={selectedDisc.txt} size="30px" shadow={false} />
-                      <Text color={selectedDisc.txt} fontWeight="600" fontSize={{ base: "lg", md: "xl" }}
-                      // style={{
-                      //   filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-                      // }}
-                      >
-                        Aprendizaje
-                      </Text>
-                    </Flex>
-                  </Flex>
-                  {!isAvailable && (
-                    <Text
-                      color={selectedDisc.txt}
-                      fontSize="xs"
-                      letterSpacing="0.1em"
-                      opacity={0.6}
-                      fontStyle="italic"
-                    >
-                      Próximamente
-                    </Text>
-                  )}
-                </Flex>
-              );
-            })()}
-          </Box>
-        </Box>
-      )}
-
-      {/* ── FOOTER ── */}
       <SiteFooter />
     </Box>
   );

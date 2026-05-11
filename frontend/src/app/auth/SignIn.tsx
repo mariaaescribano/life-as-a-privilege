@@ -1,4 +1,4 @@
-// LogIn.tsx
+// SignIn.tsx
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Input, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { API_URL } from "../../GlobalVariables";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
 import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
-import type { LoginUser } from "../../dtos/user.types";
+import type { CreateUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import SiteFooter from "../../components/global/Footer";
@@ -28,14 +28,15 @@ const EmailIcon = () => (
   </svg>
 );
 
-export default function LogIn() {
+export default function SignIn() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
 
-  const [name, setname] = useState<string>("");
-  const [contra, setcontra] = useState<string>("");
-  const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [contra, setContra] = useState<string>("");
+  const [message, setMessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -43,76 +44,73 @@ export default function LogIn() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-   const inicioSesion = async () =>
-  {
+  const registrar = async () => {
     setLoading(true);
-    try
-    {
-      let body: LoginUser = {
-        name: name,
-        password: contra
-      };
+    try {
+      const body: CreateUser = { name, email, password: contra };
 
-      const response = await axios.post(
-      `${API_URL}/user/logIn`,
-      body,
-      {
-        headers: {
-        'Content-Type': 'application/json',
-        },
+      const response = await axios.post(`${API_URL}/user/signIn`, body, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.data != null) {
+        sessionStorage.setItem("userId", response.data.user.id);
+        sessionStorage.setItem("name", response.data.user.name);
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("img", "/img/icono/noImg.png");
+
+        setMessage({
+          soy: 1,
+          title: "¡Cuenta creada!",
+          description: "Continuamos en un instante...",
+        });
       }
-      );
-
-      if(response.data!= null)
-      {
-        sessionStorage.setItem("userId", response.data?.user.id)
-        sessionStorage.setItem("name", response.data?.user.name)
-        sessionStorage.setItem("token", response.data?.token)
-
-        const res = await fetch(API_URL+`/upload/profile-pic/${response.data?.user.id}`);
-        const data = await res.json();
-
-        sessionStorage.setItem(
-          "img",
-          data.url && data.url !=""
-            ? data.url
-            : "/img/icono/noImg.png"
-        );
-
-        setmessage({
-          soy : 1,
-          title: "Bienvenido",
-          description: "Lo estamos preparando para ti"
-        })
-      }
-    }
-    catch (err:any) {
-      let error = gestionaError(err);
-      setmessage(error)
-    }
-    finally {
+    } catch (err: any) {
+      setMessage(gestionaError(err));
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
-  const validarInicioSesion = () => {
-    if (name === "" || contra === "") {
-      setmessage({
+  const validarRegistro = () => {
+    if (name === "" || email === "" || contra === "") {
+      setMessage({
         soy: 2,
         title: "Faltan datos",
         description: "Rellena todos los campos",
       });
-    } else {
-      inicioSesion();
+      return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setMessage({
+        soy: 2,
+        title: "Email no válido",
+        description: "Introduce un email correcto",
+      });
+      return;
+    }
+    if (contra.length < 4) {
+      setMessage({
+        soy: 2,
+        title: "Contraseña muy corta",
+        description: "Usa al menos 4 caracteres",
+      });
+      return;
+    }
+    registrar();
   };
 
   useEffect(() => {
     if (message?.soy === 1) {
-      const timer = setTimeout(() => navigate(next, { replace: true }), 3000);
+      const timer = setTimeout(() => navigate(next, { replace: true }), 1800);
       return () => clearTimeout(timer);
     }
   }, [message]);
+
+  const continuarConGoogle = () => {
+    sessionStorage.setItem("postAuthNext", next);
+    window.location.href = `${API_URL}/auth/google`;
+  };
 
   const authButtonStyle = {
     display: "flex",
@@ -136,30 +134,13 @@ export default function LogIn() {
   };
 
   return (
-    <Box
-      minH="100vh"
-      display="flex"
-      flexDirection="column"
-      bg="#008080"
-      fontFamily="'EB Garamond', serif"
-    >
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       {loading && <SpinnerTurquesa />}
 
-      {/* ── HEADER ── */}
       <SiteHeader variant="public" />
 
-      {/* ── CARD LOGIN ── */}
-      <Flex
-        flex="1"
-        align="flex-start"
-        justify="center"
-        px={{ base: 5, md: 10 }}
-        pt={{ base: 7, md: 10 }}
-        pb={{ base: 12, md: 16 }}
-      >
+      <Flex flex="1" align="flex-start" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 7, md: 10 }} pb={{ base: 12, md: 16 }}>
         <VStack w={{ base: "100%", sm: "460px" }} spacing={4} align="stretch">
-
-          {/* ── AVISO PARTICIPANTE ── */}
           <Box
             bg="rgba(255,255,255,0.12)"
             border="1px solid rgba(255,255,255,0.32)"
@@ -169,16 +150,10 @@ export default function LogIn() {
             py={5}
             textAlign="center"
           >
-            <Text
-              color="white"
-              fontSize={{ base: "md", md: "lg" }}
-              lineHeight="1.7"
-              fontWeight="600"
-              letterSpacing="0.015em"
-            >
-              Para entrar a los materiales y cursos grabados
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontWeight="600" letterSpacing="0.015em">
+              Crea tu cuenta para empezar
               <br />
-              tienes que ser participante del Método.
+              tu camino con el Método.
             </Text>
           </Box>
 
@@ -202,25 +177,15 @@ export default function LogIn() {
               mb={8}
               textAlign="center"
             >
-              Iniciar sesión
+              Crear cuenta
             </Text>
 
             <VStack spacing={4} align="stretch">
-
-              {/* ── BOTÓN GOOGLE ── */}
-              <Box
-                as="button"
-                onClick={() => {
-                  sessionStorage.setItem("postAuthNext", next);
-                  window.location.href = `${API_URL}/auth/google`;
-                }}
-                {...authButtonStyle}
-              >
+              <Box as="button" onClick={continuarConGoogle} {...authButtonStyle}>
                 <GoogleIcon />
                 Continuar con Google
               </Box>
 
-              {/* ── BOTÓN EMAIL ── */}
               <Box
                 as="button"
                 onClick={() => setShowForm(!showForm)}
@@ -232,29 +197,23 @@ export default function LogIn() {
                 Continuar con email
               </Box>
 
-              {/* ── FORMULARIO (se despliega) ── */}
               {showForm && (
                 <VStack spacing={5} align="stretch" pt={2}>
                   <Flex align="center" gap={3}>
                     <Box flex="1" h="1px" bg="rgba(255,255,255,0.18)" />
-                    <Text color="rgba(255,255,255,0.4)" fontSize="xs" letterSpacing="0.1em">CON EMAIL Y CONTRASEÑA</Text>
+                    <Text color="rgba(255,255,255,0.4)" fontSize="xs" letterSpacing="0.1em">
+                      CON EMAIL Y CONTRASEÑA
+                    </Text>
                     <Box flex="1" h="1px" bg="rgba(255,255,255,0.18)" />
                   </Flex>
 
-                  {/* Nombre / Email */}
                   <Box>
-                    <Text
-                      color="rgba(255,255,255,0.75)"
-                      fontSize="xs"
-                      letterSpacing="0.1em"
-                      mb={2}
-                      fontWeight="600"
-                    >
-                      NOMBRE O EMAIL
+                    <Text color="rgba(255,255,255,0.75)" fontSize="xs" letterSpacing="0.1em" mb={2} fontWeight="600">
+                      NOMBRE
                     </Text>
                     <Input
                       value={name}
-                      onChange={(e) => setname(e.target.value)}
+                      onChange={(e) => setName(e.target.value)}
                       bg="rgba(255,255,255,0.08)"
                       border="1px solid rgba(255,255,255,0.32)"
                       color="white"
@@ -271,21 +230,38 @@ export default function LogIn() {
                     />
                   </Box>
 
-                  {/* Contraseña */}
                   <Box>
-                    <Text
-                      color="rgba(255,255,255,0.75)"
-                      fontSize="xs"
-                      letterSpacing="0.1em"
-                      mb={2}
-                      fontWeight="600"
-                    >
+                    <Text color="rgba(255,255,255,0.75)" fontSize="xs" letterSpacing="0.1em" mb={2} fontWeight="600">
+                      EMAIL
+                    </Text>
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      bg="rgba(255,255,255,0.08)"
+                      border="1px solid rgba(255,255,255,0.32)"
+                      color="white"
+                      borderRadius="xl"
+                      size="lg"
+                      _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                      _hover={{ border: "1px solid rgba(255,255,255,0.6)" }}
+                      _focus={{
+                        border: "1px solid rgba(255,255,255,0.85)",
+                        boxShadow: "0 0 0 1px rgba(255,255,255,0.25)",
+                        bg: "rgba(255,255,255,0.13)",
+                        outline: "none",
+                      }}
+                    />
+                  </Box>
+
+                  <Box>
+                    <Text color="rgba(255,255,255,0.75)" fontSize="xs" letterSpacing="0.1em" mb={2} fontWeight="600">
                       CONTRASEÑA
                     </Text>
                     <Input
                       type="password"
                       value={contra}
-                      onChange={(e) => setcontra(e.target.value)}
+                      onChange={(e) => setContra(e.target.value)}
                       bg="rgba(255,255,255,0.08)"
                       border="1px solid rgba(255,255,255,0.32)"
                       color="white"
@@ -307,13 +283,13 @@ export default function LogIn() {
                       soy={message.soy}
                       title={message.title}
                       description={message.description}
-                      onClick={() => setmessage(null)}
+                      onClick={() => setMessage(null)}
                     />
                   )}
 
                   <Box
                     as="button"
-                    onClick={loading ? undefined : validarInicioSesion}
+                    onClick={loading ? undefined : validarRegistro}
                     color="white"
                     fontFamily="'EB Garamond', serif"
                     fontWeight="700"
@@ -337,7 +313,7 @@ export default function LogIn() {
                     transition="all 0.25s ease"
                     w="100%"
                   >
-                    ENTRAR
+                    REGISTRARME
                   </Box>
                 </VStack>
               )}
@@ -347,14 +323,14 @@ export default function LogIn() {
                   soy={message.soy}
                   title={message.title}
                   description={message.description}
-                  onClick={() => setmessage(null)}
+                  onClick={() => setMessage(null)}
                 />
               )}
 
               <Flex justify="center" pt={2}>
                 <Text
                   as="button"
-                  onClick={() => navigate(`/signIn${next !== "/home" ? `?next=${encodeURIComponent(next)}` : ""}`)}
+                  onClick={() => navigate(`/logIn${next !== "/home" ? `?next=${encodeURIComponent(next)}` : ""}`)}
                   color="rgba(255,255,255,0.75)"
                   fontSize="sm"
                   letterSpacing="0.04em"
@@ -362,16 +338,14 @@ export default function LogIn() {
                   cursor="pointer"
                   _hover={{ color: "white", textDecoration: "underline" }}
                 >
-                  ¿No tienes cuenta? Crear cuenta
+                  ¿Ya tienes cuenta? Iniciar sesión
                 </Text>
               </Flex>
-
             </VStack>
           </Box>
         </VStack>
       </Flex>
 
-      {/* ── FOOTER ── */}
       <SiteFooter />
     </Box>
   );

@@ -194,22 +194,39 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             </Text>
           </Flex> */}
 
-          {avatarSrc && (
-            <Box
-              w={{ base: "36px", md: "42px" }}
-              h={{ base: "36px", md: "42px" }}
-              borderRadius="full"
-              overflow="hidden"
-              border="2px solid rgba(255,255,255,0.55)"
-              flexShrink={0}
-              cursor="pointer"
-              onClick={() => navigate("/user/account")}
-              _hover={{ border: "2px solid white" }}
-              transition="border 0.2s"
+          <Flex
+            align="center" gap={2} cursor="pointer"
+            onClick={() => navigate("/user/account")}
+            color="rgba(255,255,255,0.85)"
+            _hover={{ color: "white" }}
+            transition="color 0.2s"
+          >
+            {avatarSrc ? (
+              <Box
+                w={{ base: "32px", md: "36px" }}
+                h={{ base: "32px", md: "36px" }}
+                borderRadius="full"
+                overflow="hidden"
+                border="2px solid rgba(255,255,255,0.55)"
+                flexShrink={0}
+              >
+                <Image src={avatarSrc} w="100%" h="100%" objectFit="cover" />
+              </Box>
+            ) : (
+              <LoginIcon color="currentColor" size="28px" />
+            )}
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="500"
+              letterSpacing="0.04em"
+              style={{
+                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
+              }}
             >
-              <Image src={avatarSrc} w="100%" h="100%" objectFit="cover" />
-            </Box>
-          )}
+              Mi cuenta
+            </Text>
+          </Flex>
         </Flex>
       ) : (
         /* ── Navegación pública ── */
