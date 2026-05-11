@@ -37,7 +37,7 @@ export default function CheckoutMetodo() {
       setMessage({
         soy: 1,
         title: "¡Pago realizado!",
-        description: "Te hemos enviado un email de bienvenida.",
+        description: "Tu acceso al Método ya está activo.",
       });
     } catch (err: any) {
       setMessage(gestionaError(err));

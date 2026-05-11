@@ -26,6 +26,8 @@ import Contacto from "./app/web/Contacto";
 import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
 import CheckoutMetodo from "./app/web/CheckoutMetodo";
+import MetodoAstrologia from "./app/metodo/MetodoAstrologia";
+import MetodoAstrologiaPlanetas from "./app/metodo/MetodoAstrologiaPlanetas";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -76,6 +78,8 @@ export default function App()
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
+      <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

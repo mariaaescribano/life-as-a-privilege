@@ -20,6 +20,7 @@ import { AyurvedaModule } from './ayurveda/ayurveda.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
 import { OpinionModule } from './opinion/opinion.module';
 import { MailModule } from './mail/mail.module';
+import { MetodoAstrologiaModule } from './metodoAstrologia/metodoAstrologia.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -48,6 +49,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     SubscribeModule,
     OpinionModule,
     MailModule,
+    MetodoAstrologiaModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
+import { AvisoInicialModal } from "../../components/metodo/AvisoInicialModal";
+import axios from "axios";
 import {
   API_URL,
   astrologiaBg, AstrologiaIcon, astrologiaTxt,
@@ -41,6 +43,47 @@ const Home = () => {
   const [img, setImg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState<string>("");
+  const [avisoOpen, setAvisoOpen] = useState(false);
+
+  const irAstrologia = async () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      navigate("/welcome");
+      return;
+    }
+    try {
+      const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data?.aviso_visto) {
+        navigate("/metodo/astrologia");
+      } else {
+        setAvisoOpen(true);
+      }
+    } catch {
+      // Si la BD falla, mostramos el aviso (camino seguro)
+      setAvisoOpen(true);
+    }
+  };
+
+  const confirmarAviso = async () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    setAvisoOpen(false);
+    if (userId && token) {
+      try {
+        await axios.patch(
+          `${API_URL}/metodo-astrologia/${userId}`,
+          { aviso_visto: true },
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+      } catch {
+        // Silencioso: el flag se persistirá la próxima vez si BD vuelve
+      }
+    }
+    navigate("/metodo/astrologia");
+  };
 
   const radius        = useBreakpointValue({ base: 130, sm: 165, md: 220, lg: 280, xl: 320 });
   const containerSize = useBreakpointValue({ base: "340px", sm: "420px", md: "560px", lg: "700px", xl: "800px" });
@@ -121,7 +164,7 @@ const Home = () => {
               textShadow="0 2px 14px rgba(0,80,70,0.45)"
               mb={3}
             >
-              Bienvenida{name ? `, ${name}` : ""}
+              Te damos la bienvenida{name ? `, ${name}` : ""}
             </Text>
             <Text
               color="rgba(255,255,255,0.88)"
@@ -244,7 +287,7 @@ const Home = () => {
                 )}
               </Box>
 
-              {/* Disciplinas alrededor — todas bloqueadas */}
+              {/* Disciplinas alrededor — solo Astrología abierta */}
               {disciplines.map((d, index) => {
                 const angle = angleStep * index - Math.PI / 2;
                 const x = Math.cos(angle) * (radius ?? 200);
@@ -252,6 +295,9 @@ const Home = () => {
                 const delay = `${index * 0.18}s`;
                 const number = index + 1;
                 const Icon = d.Icon;
+                // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
+                const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
+                const abierta = index === 0; // Astrología
                 return (
                   <Box
                     key={index}
@@ -261,15 +307,18 @@ const Home = () => {
                     h={circleSize}
                   >
                     <Box
-                      cursor="not-allowed"
+                      onClick={abierta ? irAstrologia : undefined}
+                      cursor={abierta ? "pointer" : "not-allowed"}
                       w="100%"
                       h="100%"
                       borderRadius="full"
                       overflow="visible"
                       position="relative"
-                      opacity={0.45}
+                      opacity={abierta ? 1 : 0.45}
                       animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
-                      filter="grayscale(0.25)"
+                      filter={abierta ? "none" : "grayscale(0.25)"}
+                      transition="transform 0.2s ease, filter 0.2s ease"
+                      _hover={abierta ? { transform: "scale(1.06)" } : undefined}
                     >
                       {/* Círculo principal con icono */}
                       <Box
@@ -299,15 +348,15 @@ const Home = () => {
                         h={numberSize}
                         borderRadius="full"
                         bg="white"
-                        border={`2px solid ${d.txt}`}
-                        boxShadow={`0 2px 10px ${d.txt}88, 0 4px 14px rgba(0,0,0,0.25)`}
+                        border={`2px solid ${badgeColor}`}
+                        boxShadow={`0 2px 10px ${badgeColor}88, 0 4px 14px rgba(0,0,0,0.25)`}
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                         opacity={1}
                       >
                         <Text
-                          color={d.txt}
+                          color={badgeColor}
                           fontSize={{ base: "sm", md: "md", lg: "lg" }}
                           fontWeight="800"
                           fontFamily="'EB Garamond', serif"
@@ -343,6 +392,8 @@ const Home = () => {
       </Box>
 
       <SiteFooter />
+
+      <AvisoInicialModal isOpen={avisoOpen} onConfirm={confirmarAviso} />
     </Box>
   );
 };
