@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -42,6 +42,9 @@ export default function MetodoAstrologiaProfundizar() {
   const { planetaKey, campo } = useParams<{ planetaKey: string; campo: "signo" | "casa" }>();
   const cuerpo = cuerpoByKey(planetaKey || "");
 
+  // Guardamos la promesa del PATCH para esperarla al volver a planetas
+  const profundizadoPromise = useRef<Promise<void> | null>(null);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -49,8 +52,9 @@ export default function MetodoAstrologiaProfundizar() {
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!cuerpo) { navigate("/metodo/astrologia/planetas", { replace: true }); return; }
 
-    // Marca este apartado como profundizado en BD
-    (async () => {
+    // Marca este apartado como profundizado en BD. Guardamos la promesa
+    // para que el botón "Volver a planetas" pueda esperarla antes de navegar.
+    profundizadoPromise.current = (async () => {
       try {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -58,7 +62,6 @@ export default function MetodoAstrologiaProfundizar() {
         const data = res.data?.data || {};
         const existente = data[cuerpo.key] || {};
         const flag = campo === "signo" ? "profundizadoSigno" : "profundizadoCasa";
-        // Solo escribir si aún no está marcado (evita PATCH innecesario)
         if (!existente[flag]) {
           const nextData = {
             ...data,
@@ -75,6 +78,15 @@ export default function MetodoAstrologiaProfundizar() {
       }
     })();
   }, []);
+
+  const volverAPlanetas = async () => {
+    // Espera a que el PATCH de profundizado termine antes de navegar,
+    // para que la página de planetas vea el flag al recargar datos.
+    if (profundizadoPromise.current) {
+      try { await profundizadoPromise.current; } catch { /* ignore */ }
+    }
+    navigate("/metodo/astrologia/planetas");
+  };
 
   if (!cuerpo) return null;
 
@@ -98,7 +110,7 @@ export default function MetodoAstrologiaProfundizar() {
             color={cuerpo.color}
             space
             mb={0}
-            prev={{ label: "← Volver a planetas", onClick: () => navigate("/metodo/astrologia/planetas") }}
+            prev={{ label: "← Volver a planetas", onClick: () => { void volverAPlanetas(); } }}
           />
 
           {/* ── Box con el texto profundo (fondo estrellado) ── */}

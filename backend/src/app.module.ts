@@ -21,6 +21,7 @@ import { SubscribeModule } from './subscribe/subscribe.module';
 import { OpinionModule } from './opinion/opinion.module';
 import { MailModule } from './mail/mail.module';
 import { MetodoAstrologiaModule } from './metodoAstrologia/metodoAstrologia.module';
+import { MetodoPsicologiaModule } from './metodoPsicologia/metodoPsicologia.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -50,6 +51,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     OpinionModule,
     MailModule,
     MetodoAstrologiaModule,
+    MetodoPsicologiaModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],
