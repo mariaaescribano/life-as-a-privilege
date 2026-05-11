@@ -145,17 +145,13 @@ export function MetodoStepHeader({
 
         {/* Botones contextuales */}
         {(prev || next) && (
-          <Flex justify="space-between" gap={3} direction={{ base: "column", sm: "row" }}>
-            {prev ? (
-              <StepBtn {...prev} color={color} />
-            ) : (
-              <Box w={{ base: "100%", sm: "1px" }} />
-            )}
-            {next ? (
-              <StepBtn {...next} color={color} />
-            ) : (
-              <Box w={{ base: "100%", sm: "1px" }} />
-            )}
+          <Flex
+            justify={prev && next ? "space-between" : "center"}
+            gap={3}
+            direction={{ base: "column", sm: "row" }}
+          >
+            {prev && <StepBtn {...prev} color={color} />}
+            {next && <StepBtn {...next} color={color} />}
           </Flex>
         )}
       </Box>
