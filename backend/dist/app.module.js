@@ -23,6 +23,10 @@ const tcm_module_1 = require("./tcm/tcm.module");
 const astrologia_module_1 = require("./astrologia/astrologia.module");
 const contact_module_1 = require("./contact/contact.module");
 const cabala_module_1 = require("./cabala/cabala.module");
+const nutricion_module_1 = require("./nutricion/nutricion.module");
+const ayurveda_module_1 = require("./ayurveda/ayurveda.module");
+const subscribe_module_1 = require("./subscribe/subscribe.module");
+const opinion_module_1 = require("./opinion/opinion.module");
 exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
@@ -48,6 +52,10 @@ exports.AppModule = AppModule = __decorate([
             astrologia_module_1.AstrologiaModule,
             contact_module_1.ContactModule,
             cabala_module_1.CabalaModule,
+            nutricion_module_1.NutricionModule,
+            ayurveda_module_1.AyurvedaModule,
+            subscribe_module_1.SubscribeModule,
+            opinion_module_1.OpinionModule,
         ],
         providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],
