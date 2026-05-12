@@ -342,9 +342,133 @@ Traes lo intangible a lo tangible, a veces a través del arte, pero siempre de u
 };
 
 /**
- * Textos por (planeta, casa) — se rellenan más adelante.
+ * Textos por (planeta, casa) — se muestran cuando el usuario ha elegido casa.
  */
-export const TEXTOS_CASA: Partial<Record<CuerpoKey, Partial<Record<number, string>>>> = {};
+export const TEXTOS_CASA: Partial<Record<CuerpoKey, Partial<Record<number, string>>>> = {
+  sol: {
+    1: `Desde muy pequeño te han apoyado para ser tú mismo y expresar tu individualidad. Viviste acontecimientos importantes en la primera etapa de tu vida y, a menudo, desde joven buscas prestigio. A lo largo de la vida sueles esforzarte por estar en el centro de la atención.
+
+Necesitas que tu vida tenga sentido y propósito, y no te conformas con "lo que ya está hecho", salvo, quizá, para cumplir con las expectativas familiares. Tiendes a romper con las estructuras impuestas por la educación o la sociedad, y prefieres no apoyarte en precedentes familiares para sentirte seguro, importante o construir tu identidad. Necesitas encontrar tu propio lugar en la vida y que se te respete y se te quiera por quien eres y por lo que eres capaz de hacer. Funcionas con autonomía respecto a los demás.
+
+Te identificas fuertemente con tu cuerpo físico y con tu apariencia; puedes tener dificultades para aceptar la enfermedad, la debilidad o el envejecimiento, y obsesionarte con ello.
+
+Eres un líder natural, con una presencia que irradia energía e inspira a otros. Energético, pionero, valiente, voluntarioso, seguro, extrovertido, espontáneo, optimista (según el signo), ambicioso, digno e individualista. Sueles mostrarte tal como eres. Tienes talento para resolver problemas y no funcionas bien bajo la autoridad de otros. Buscas reconocimiento para tener libertad de actuar a tu manera, y puedes tender a no escuchar demasiado a los demás.
+
+Tu energía es casi magnética: atrae a la gente y la influye. De algún modo, ejerces tu autoridad natural casi por instinto, para satisfacer tu deseo de reconocimiento.
+
+Como esta posición amplifica tu sentido de identidad y lo proyecta con fuerza y corazón, tienes que cuidar de no confundir quién eres realmente con lo que proyectas hacia fuera.
+
+El peligro de esta posición es que, si no aprendes a canalizar tu energía, tu forma de expresarte, tus necesidades y tu poder, puedes acabar volviéndote amargo o cínico.`,
+
+    2: `Tu reto heroico aquí es encontrar una sensación de seguridad dentro de ti mismo; tienes que volverte autosuficiente. Necesitas cultivar valores, recursos y habilidades para alcanzar una verdadera sensación de individualidad. Tienes que redefinir qué significa "seguridad" para ti, porque sueles focalizarte mucho en los recursos, las finanzas y la estabilidad material. Es importante que valores tu identidad y no te apoyes en soportes externos para avanzar.
+
+Tu trabajo es convertirte en proveedor para ti mismo y para los demás. Muchas veces vienes de orígenes modestos o humildes, pero al asumir la responsabilidad de tu Sol puedes llegar mucho más lejos que tus antepasados. También puedes orientarte a asegurarles una buena posición social a tus hijos.
+
+Hay un riesgo de obsesionarte con la ganancia material y creer que tu valor depende de lo que poseas, ya sean bienes, ideas o poder sobre otros. Tu sentido de poder y dignidad puede quedar amarrado a tener una base económica sólida, y puede que muestres tus logros de un modo algo ostentoso para reforzar un sentido interno de identidad que, en realidad, no termina de sentirse estable.
+
+Disfrutas compartiendo lo que tienes. Eres generoso con el dinero, aunque sueles esperar alguna forma de reconocimiento a cambio. Necesitas sentirte especial.
+
+Puedes manejar el dinero de otros, y tus propios recursos pueden acabar perteneciendo a otros. Te gusta rodearte de lujo y de gente importante.
+
+Puede haber una pérdida temprana de apoyos o de seres queridos, codicia y, sobre todo, incapacidad para reconocer tu propio valor personal.`,
+
+    3: `Tienes que cultivar y reconocer tus propios pensamientos y puntos de vista, en lugar de limitarte a absorber los del entorno. Estás bien posicionado para brillar en lo intelectual o en cualquier ámbito relacionado con la comunicación.
+
+Mantienes muchas relaciones diversas y positivas con tu entorno. Tu sensación de seguridad y dignidad suele depender del refuerzo intelectual y de sentirte escuchado. Te sientes más vivo cuando aprendes y compartes conocimiento. Te gustan los viajes y tienes interés por lo espiritual o lo filosófico.
+
+Observador, optimista, científico y flexible: necesitas ser escuchado y reconocido, independientemente de lo que piense tu entorno. Estás muy conectado con lo que te rodea, con una inteligencia relacional y verbal marcada. Necesitas aprender y enseñar; el conocimiento te estimula.
+
+Vas de un interés a otro, con muchas actividades diversas. Tienes talento para coordinar contactos y organizar redes de gente. Puedes ser imparcial y confiado, o a veces arrogante y dominante. Es habitual que te preocupes por los hermanos.
+
+No sueles casarte, pero puedes mantener relaciones largas siempre que conserves libertad de movimiento.`,
+
+    4: `Tienes que honrar a tu familia, y la forma de hacerlo es ayudándola a evolucionar a través de tu propia evolución personal. El autoconocimiento es fundamental, porque necesitas definirte en relación con la familia.
+
+La familia pesa mucho, y normalmente uno de los padres es una figura muy importante que pide ser sanada y trascendida; tú mismo tienes que convertirte en ese padre o madre internamente. Es posible que ese progenitor te haya hecho sentir pequeño, inferior, débil o insignificante, o que estuviera ausente, sea como sea, debes buscar esa figura dentro de ti.
+
+Con la madurez te conviertes en alguien seguro, nutritivo y que emana sabiduría. Si no maduras, puedes volverte excesivamente quejica y repetir patrones familiares. Por lo general, tu sentido de identidad se fortalece en la segunda mitad de la vida.
+
+Necesitas definir tu propia identidad para diferenciarte de tu familia y de tu entorno, sin negar que también formas parte de ellos. Si no lo haces, corres el riesgo de convertirte en una prolongación no identificada de tu linaje, o de irte al extremo opuesto y rechazar de plano todo lo que viene de tu entorno y tu familia. El mejor camino es el equilibrio entre los dos extremos.
+
+Tienes una necesidad clara de seguridad y autoprotección. Las mujeres con esta posición suelen buscar la independencia a través de apoyarse en otros. El autoconocimiento profundo es esencial; lo que consigues hacia fuera importa menos que lo que contribuye a tu crecimiento interior.
+
+Hacerte cargo de tu casa te nutre, por eso es muy importante que tengas todo en orden en casa, en lo físico y en lo simbólico, para sentirte bien, aunque encontrar tu verdadero hogar puede llevarte tiempo. Aunque te cueste dejar entrar a otros en tu espacio, cuando lo haces, te aseguras de que no les falte nada.
+
+Cuidado, porque puedes quedarte a la sombra de uno de los padres y trabajar con o para él/ella, o huir de casa muy joven. Las tragedias familiares (muerte parental, divorcios, conflictos por herencias) se viven con mucho dolor. También pueden aparecer estilos de vida poco lícitos, relaciones difíciles o problemas con los suegros.`,
+
+    5: `Necesitas ser amado por aquello que te hace único, sentirte especial y reconocido. Eres creativo, generoso, alegre, juguetón, con sentido del humor, fuerte, popular e indulgente contigo mismo. Vives con pasión y buscas disfrutar de los placeres de la vida.
+
+Necesitas causas o actividades que le den sentido a tu vida y te hagan sentir vivo; sin eso, tu salud física y mental puede resentirse. Alguna forma de expresión creativa te da una base sólida para tu empoderamiento interno. Sueles creer que tú puedes hacer las cosas mejor que como las han hecho otros.
+
+El romance es esencial para sentirte vivo y bien, y además te sube la autoestima, aunque tu tendencia a los enamoramientos fugaces puede dificultarte mantener una relación a largo plazo. En realidad, lo que muchas veces te enamora es tu propio reflejo en el otro.
+
+Los hijos son otra parte fundamental de tu vida, porque te permiten extender tu sentido de identidad de forma creativa y expandir tu influencia y tu poder. Eso sí, corres el riesgo de vivir indirectamente a través de ellos, proyectando en ellos tus sueños y frustraciones.
+
+Necesitas ser el centro de atención y te cuesta tolerar las situaciones en las que pasas desapercibido. Buscas un círculo social de amistades de élite que refuerce tu reputación y tu fama. Eres organizado, excelente anfitrión, y te atraen el teatro, la enseñanza, el arte, el deporte y las actividades especulativas.
+
+Puedes preferir llamar la atención de forma negativa antes que ser ignorado, y puedes explotar a otros para conseguirlo. Cuidado con el juego y la especulación.`,
+
+    6: `Tienes que aprender cómo funcionan las cosas y cómo encaja cada pieza en su sitio en el mundo. Tu camino hacia la sabiduría está en lo cotidiano, con una conciencia casi zen.
+
+Tienes que cuidar tu salud física y mental, aprendiendo que mente y cuerpo no están separados, sino que son uno. La disciplina y el trabajo son fundamentales. Sueles concentrarte profundamente en lo que haces, y necesitas que tu trabajo sea útil y ayude a otros. Eso te hace muy eficaz en profesiones de servicio, medicina, higiene y áreas similares.
+
+Sueles tener tus propios métodos, que se diferencian de los de los demás y pueden generar fricción en el trabajo, pero al final acabas imponiendo tu enfoque con éxito. También tienes que prestar atención a mejorar tu propia calidad de vida, porque esta posición puede empujarte al sobre-sacrificio o a una preocupación excesiva por los demás. La rutina es importante y te ancla.`,
+
+    7: `Necesitas las relaciones para descubrirte a ti mismo, lo que te pone en riesgo de dependencia. Necesitas tener gente alrededor y a menudo eliges profesiones que faciliten las relaciones interpersonales.
+
+Funcionas mejor en asociación y puedes apoyarte en otros para conseguir tus objetivos. Eres popular porque tratas de mantener la armonía allá a donde vas.
+
+Tienes que tener cuidado con proyectar tu Sol en los demás: eso puede llevarte a buscar adoración, a no ser tú mismo y a depender de otros para sentirte apoyado y reconocido. Cuando proyectas tu Sol fuera, te queda una sensación de vacío. Necesitas cultivar una relación fuerte y sana contigo mismo. Recuerda que vales y tu opinión es importante.
+
+Sueles ser pacífico, refinado, indeciso, caprichoso y un punto perezoso. Detrás de una apariencia generosa pueden asomar a veces tendencias egoístas. El matrimonio es importante para ti y muchas veces buscas sacarle algún beneficio, aunque puede llegar tarde en la vida.`,
+
+    8: `Buscas la profundidad y los aspectos ocultos o oscuros de la vida, y sueles ser una persona compleja. Te has encarnado para resolver conflictos con los demás y con tu propia sombra. Buena parte de tu vida se juega en el inconsciente, lo que hace inevitable la transformación, y el proceso es difícil si te resistes.
+
+Tienes que trascender el ego y trabajar en la superación de ti mismo. Anhelas autosuficiencia y, a la vez, atraes de forma natural el apoyo de otros; si no equilibras bien esto, puedes caer en la dependencia o en la proyección. Los traumas de infancia o los encuentros tempranos con la muerte pueden pesarte, y la muerte suele marcar tu vida; esta posición puede indicar viudedad. También puedes vivir miedo u obsesión con la muerte hasta que maduras.
+
+Tiendes a romper con los valores tradicionales y a menudo eres poco compasivo con la debilidad o el fracaso. No te gusta lo ordinario y prefieres una vida interior y reflexiva. Otros te confían secretos, posesiones o finanzas; sueles verte implicado en secretos familiares, y puedes recibir herencias o gestionar recursos ajenos. El sexo es importante para ti, pero puede ser fuente de conflicto por muchas razones.
+
+Eres agudo, magnético, intuitivo, serio, vengativo y obsesivo, con un fuerte interés por todo lo oculto o misterioso. Muchos con esta posición son excelentes investigadores, porque profundizar es natural para vosotros.`,
+
+    9: `Tienes que encontrar tu propia filosofía de vida mientras aprendes de las filosofías de otros. Hay en ti un interés fuerte por entender el "por qué" y el "para qué" de la Vida.
+
+Los viajes largos (literales o simbólicos) son importantes, pero tienes que cuidarte de no perder conexión con el momento presente. Necesitas diferenciarte desarrollando una personalidad ejemplar e inspirando a otros a abrir su mente. Sueles ser un excelente profesor o mentor.
+
+Tienes una mente muy abierta y te atraen el derecho, las lenguas, la filosofía, la espiritualidad, la religión y el conocimiento elevado. Sueles llevarte bien con casi todo el mundo. Entusiasta, optimista, expansivo y honesto, en general te sientes afortunado.
+
+Puedes haber nacido en el extranjero, casarte con alguien extranjero (posiblemente conocido viajando), tener un progenitor de otro país o viajar al extranjero.`,
+
+    10: `Esta posición indica un fuerte ascenso social respecto a tu familia de origen. Sueles ser el miembro más destacado de tu familia, alcanzando reconocimiento por mérito propio en lugar de por apoyo familiar.
+
+Puedes adquirir posesiones, puestos o relaciones que, a primera vista, parecerían imposibles dado tu origen, y a menudo creas negocios o iniciativas que resultan inusuales en relación con tu trasfondo.
+
+Necesitas visibilidad, porque tu identidad se expresa a través de tu vida pública y tu estatus social. Sueles crear tu propia escuela, sistema o forma de hacer las cosas, dejando una huella duradera y despertando admiración. El signo concreto te dirá en qué área buscas ese reconocimiento.
+
+Normalmente te reconocen por tu reputación profesional y te van bien la política, el liderazgo o los roles que requieran autoridad. Necesitas cumplir tu propósito vocacional y que se te reconozca por ello. Los problemas aparecen si persigues todos tus logros solo para ganarte la aprobación parental. En mujeres, esta energía puede proyectarse a veces como ser "la esposa de" en lugar de ser reconocida individualmente.`,
+
+    11: `Sueles trabajar con organizaciones sociales o colectivos, y normalmente consigues lo que te propones. Sociable hacia fuera, pero solitario por dentro, buscas reconocimiento a través de pertenecer a un grupo o de aportar dentro de él.
+
+Eres ambicioso y te mueve la idea de cambiar la sociedad, pero tienes que desarrollar tu individualidad para no acabar diluido en el grupo. Eres recursivo, superas las dificultades y atraes ayuda de los demás con naturalidad. Los amigos, colegas y clientes juegan un papel muy importante en tu vida, y te traen admiración, apoyo y experiencias positivas. Tus conexiones sociales suelen ser amplias y de largo alcance.
+
+Eres excéntrico, revolucionario, progresista y rebelde.
+
+Cuidado porque puede ser que intentes aprovecharte de los amigos o dominar la dinámica del grupo, lo que termina generando conflictos colectivos o frustración cuando los objetivos no se cumplen.`,
+
+    12: `Una parte de ti está encarnada en el mundo material; la otra vive en el plano espiritual. Puedes hacer grandes esfuerzos por mantener una imagen sólida y firme, y volverte hiper-racional, intentando controlar o reprimir el desbordamiento del inconsciente colectivo.
+
+A veces te auto-saboteas para no sentir, y puedes necesitar periodos de aislamiento o retiro para limpiarte. Eres sensible a lo que los demás quieren de ti, lo que puede generarte inseguridad, ya que sus expectativas no siempre coinciden con tus propios deseos.
+
+Aunque seas sociable, sueles sentirte muy solo. Tiendes a brillar de forma silenciosa o en círculos pequeños, y puedes quedarte a la sombra de otros o trabajar de forma anónima, sobre todo antes de los 30. Tu vida a menudo transcurre entre bambalinas o en soledad.
+
+Esta es la casa del sacrificio, así que estás llamado a poner tu Sol al servicio de algo más grande que tu identidad personal, frecuentemente trabajando por el bien de la humanidad. Hay un vínculo psíquico o kármico con el padre, y un compromiso de alma con sanar la línea paterna y el principio masculino.
+
+Buscas tranquilidad y prefieres no complicarte la vida, pero las dificultades suelen aparecer a la hora de alcanzar tus metas. Eres tolerante y humilde, pero puede faltarte autoconocimiento y sentido de tu propio valor. Necesitas explorar y entenderte, y te beneficia conectar con grupos espirituales o esotéricos.
+
+A menudo tienes talento para la actuación o las artes escénicas.
+
+Puedes vivir experiencias de confinamiento o trabajar en instituciones como hospitales, cárceles o centros psiquiátricos. Puedes volverte crédulo, autocompasivo o desarrollar vicios.`,
+  },
+};
 
 export function getTextoSigno(planetaKey: string, signo: string): string | null {
   return TEXTOS_SIGNO[planetaKey as CuerpoKey]?.[signo] ?? null;
