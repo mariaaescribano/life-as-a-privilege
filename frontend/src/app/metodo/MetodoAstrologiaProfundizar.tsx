@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Glifo } from "../../components/metodo/Glifo";
 import { cuerpoByKey, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { getTextoSigno, getTextoCasa } from "../../components/metodo/astrologiaTextos";
 import { API_URL } from "../../GlobalVariables";
 
 /* Fondo espacial reutilizado */
@@ -37,6 +39,30 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
   </Box>
 );
 
+// Renderiza un texto con markdown ligero: **texto** se convierte en negrita
+// con el color del planeta. Conserva los saltos de línea originales (gracias
+// al whiteSpace: "pre-wrap" del Text contenedor).
+function renderConNegritas(texto: string, color: string): React.ReactNode {
+  const partes = texto.split(/(\*\*[^*]+\*\*)/g);
+  return partes.map((parte, i) => {
+    if (parte.startsWith("**") && parte.endsWith("**")) {
+      return (
+        <span
+          key={i}
+          style={{
+            fontWeight: 700,
+            color,
+            textShadow: `0 0 8px ${color}55`,
+          }}
+        >
+          {parte.slice(2, -2)}
+        </span>
+      );
+    }
+    return <React.Fragment key={i}>{parte}</React.Fragment>;
+  });
+}
+
 export default function MetodoAstrologiaProfundizar() {
   const navigate = useNavigate();
   const { planetaKey, campo } = useParams<{ planetaKey: string; campo: "signo" | "casa" }>();
@@ -44,6 +70,8 @@ export default function MetodoAstrologiaProfundizar() {
 
   // Guardamos la promesa del PATCH para esperarla al volver a planetas
   const profundizadoPromise = useRef<Promise<void> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [valor, setValor] = useState<{ signo?: string; casa?: number }>({});
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -52,8 +80,7 @@ export default function MetodoAstrologiaProfundizar() {
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!cuerpo) { navigate("/metodo/astrologia/planetas", { replace: true }); return; }
 
-    // Marca este apartado como profundizado en BD. Guardamos la promesa
-    // para que el botón "Volver a planetas" pueda esperarla antes de navegar.
+    // Carga el estado actual y, si hace falta, marca este apartado como profundizado.
     profundizadoPromise.current = (async () => {
       try {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
@@ -61,6 +88,8 @@ export default function MetodoAstrologiaProfundizar() {
         });
         const data = res.data?.data || {};
         const existente = data[cuerpo.key] || {};
+        setValor({ signo: existente.signo, casa: existente.casa });
+
         const flag = campo === "signo" ? "profundizadoSigno" : "profundizadoCasa";
         if (!existente[flag]) {
           const nextData = {
@@ -75,6 +104,8 @@ export default function MetodoAstrologiaProfundizar() {
         }
       } catch {
         // Silencioso: si BD falla, el flag no se persiste pero la UI sigue
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -88,12 +119,24 @@ export default function MetodoAstrologiaProfundizar() {
     navigate("/metodo/astrologia/planetas");
   };
 
+  if (loading) {
+    return (
+      <Box minH="100vh" bg="#008080">
+        <SpinnerTurquesa />
+      </Box>
+    );
+  }
   if (!cuerpo) return null;
 
   const esSigno = campo === "signo";
   const titulo = esSigno
     ? `Astrología: ${cuerpo.label}`
     : `Astrología: ${cuerpo.label} Casa`;
+
+  // Recupera el texto guardado para el signo/casa elegido por el usuario
+  const textoMostrado = esSigno
+    ? (valor.signo ? getTextoSigno(cuerpo.key, valor.signo) : null)
+    : (valor.casa != null ? getTextoCasa(cuerpo.key, valor.casa) : null);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -125,17 +168,29 @@ export default function MetodoAstrologiaProfundizar() {
             <SpaceBg overlay="rgba(8,13,30,0.7)" />
 
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} py={{ base: 9, md: 12 }}>
-              {/* Aquí irá el texto que vas a pasar — placeholder por ahora */}
-              <Text
-                color={`${cuerpo.color}cc`}
-                fontSize={{ base: "md", md: "lg" }}
-                lineHeight="2"
-                letterSpacing="0.015em"
-                fontStyle="italic"
-                textAlign="center"
-              >
-                [Pega aquí el texto de profundización para <strong>{titulo}</strong>.]
-              </Text>
+              {textoMostrado ? (
+                <Text
+                  color={`${cuerpo.color}e6`}
+                  fontSize={{ base: "md", md: "lg" }}
+                  lineHeight="1.9"
+                  letterSpacing="0.015em"
+                  textAlign="left"
+                  style={{ whiteSpace: "pre-wrap" }}
+                >
+                  {renderConNegritas(textoMostrado, cuerpo.color)}
+                </Text>
+              ) : (
+                <Text
+                  color={`${cuerpo.color}aa`}
+                  fontSize={{ base: "md", md: "lg" }}
+                  lineHeight="1.8"
+                  letterSpacing="0.015em"
+                  fontStyle="italic"
+                  textAlign="center"
+                >
+                  El texto de profundización para esta combinación aún no está disponible. María lo añadirá pronto.
+                </Text>
+              )}
             </Box>
           </Box>
 

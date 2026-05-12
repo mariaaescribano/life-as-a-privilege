@@ -256,7 +256,7 @@ export default function MetodoAstrologia() {
               )}
 
               {/* ── ESTADO A — formulario ── */}
-              {!yaSolicitado && (
+              {!yaConPdf && !yaSolicitado && (
                 <Flex direction="column" gap={5}>
                   <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                         style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
