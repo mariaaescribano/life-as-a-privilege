@@ -1,7 +1,7 @@
 import React from "react";
 import type { ModalidadInfo } from "./cursos.type";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { fisioCurso1ID, fisioCurso4ID, modulosFisiologia, modulosFisiologiaMeditacion } from "../aprendizajes/Fisiologia/ModulosFisiologia";
+import { fisioCurso1ID, fisioCurso3ID, fisioCurso4ID, modulosFisiologia, modulosFisiologiaCancer, modulosFisiologiaMeditacion } from "../aprendizajes/Fisiologia/ModulosFisiologia";
 
 export const fisiologiaCursos: ModalidadInfo = {
   nom: fisiologiaNom,
@@ -9,6 +9,17 @@ export const fisiologiaCursos: ModalidadInfo = {
   color: fisiologiaTxt,
   icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />,
   cursos: [
+    {
+      id: fisioCurso3ID,
+      cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso3ID,
+      titulo: "La fisiología del cáncer",
+      foto: "/img/fisio/fisiocancer.png",
+      descripcion: "Comprende cómo tus células mutan hasta convertirse en cáncer y descubre las posibles causas fisiológicas.",
+      precio: null,
+      numLecciones: 9,
+      icon: <FisiologiaIcon size={{ base: "20px", md: "30px" }} />,
+      modulos: modulosFisiologiaCancer,
+    },
     {
       id: fisioCurso4ID,
       cursoLink: "/aprendizaje/modulosPage/" + fisiologiaNom + "/" + fisioCurso4ID,
