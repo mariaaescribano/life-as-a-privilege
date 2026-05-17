@@ -231,7 +231,7 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 5px rgba(0,100,90,0.25)"
             >
-              Es una plataforma gratuita que integra psicología, conocimientos ancestrales y ciencia para ofrecer una visión holística del ser Humano y acompañar su proceso de autoconocimiento y transformación.
+              Sistema de redescubrimiento humano que integra psicología, ciencia y conocimientos ancestrales para ofrecer una visión holística del ser y acompañar procesos de autoconocimiento, compasión y transformación personal.
             </Text>
           </Box>
         </Box>

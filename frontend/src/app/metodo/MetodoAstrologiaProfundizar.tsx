@@ -175,7 +175,10 @@ export default function MetodoAstrologiaProfundizar() {
                   lineHeight="1.9"
                   letterSpacing="0.015em"
                   textAlign="left"
-                  style={{ whiteSpace: "pre-wrap" }}
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    textShadow: `0 0 8px ${cuerpo.color}77, 0 0 20px ${cuerpo.color}44`,
+                  }}
                 >
                   {renderConNegritas(textoMostrado, cuerpo.color)}
                 </Text>
