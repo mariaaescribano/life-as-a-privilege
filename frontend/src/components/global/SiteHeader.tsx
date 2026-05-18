@@ -1,23 +1,6 @@
-import React, { useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import React from "react";
+import { Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { AprendizajeIcon, LibrosIcon } from "../../GlobalVariables";
-
-const VideosIcon = ({ size = "28px", color = "currentColor" }: { size?: string; color?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} style={{
-    filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-  }}>
-    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h480q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm0-80h480v-480H160v480Zm0 0v-480 480Z"/>
-  </svg>
-);
-
-const LoginIcon = ({ size = "28px", color = "currentColor" }: { size?: string; color?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={color} style={{
-    filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-  }}>
-    <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
-  </svg>
-);
 
 type SiteHeaderProps = {
   /**
@@ -34,16 +17,12 @@ type SiteHeaderProps = {
   userImg?: string;
 };
 
-const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
+const SiteHeader = ({ variant }: SiteHeaderProps) => {
   const navigate = useNavigate();
-
-  // Leemos sessionStorage una vez al montar, como fallback del avatar
-  const [sessionImg] = useState<string | null>(() => sessionStorage.getItem("img"));
 
   const hasSession = !!sessionStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   const logoTarget = isPrivate ? "/home" : "/";
-  const avatarSrc  = userImg ?? sessionImg;
 
   return (
     <Flex
@@ -59,347 +38,53 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       borderBottom="1px solid rgba(255,255,255,0.12)"
     >
       {/* Logo */}
-      <Image
-        src="/img/icono/life.png"
-        h={{ base: "56px", md: "70px" }}
-        objectFit="contain"
+      <Flex
+        direction="column"
+        align="center"
         cursor="pointer"
         onClick={() => navigate(logoTarget)}
         _hover={{ opacity: 0.85 }}
         transition="opacity 0.2s"
-      />
+        gap="2px"
+      >
+        <Image
+          src="/img/icono/life.png"
+          h={{ base: "56px", md: "70px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 20px rgba(255,255,255,0.38)) drop-shadow(0 0 42px rgba(180,255,245,0.28))" }}
+        />
+        <Text
+          color="rgba(255,255,255,0.85)"
+          fontFamily="'EB Garamond', serif"
+          fontWeight="600"
+          fontSize={{ base: "9px", md: "11px" }}
+          letterSpacing="0.18em"
+          textShadow="0 0 8px rgba(255,255,255,0.55), 0 0 16px rgba(255,255,255,0.3)"
+          whiteSpace="nowrap"
+        >
+          LIFE AS A PRIVILEGE
+        </Text>
+      </Flex>
 
-      {isPrivate ? (
-        /* ── Navegación privada ── */
-        <Flex align="center" gap={{ base: 4, md: 6 }}>
-          {/* <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/espacio/espacioHome")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <EspacioPersonalIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Mi Espacio
-            </Text>
-          </Flex> */}
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/videos")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <VideosIcon color="currentColor" size="28px" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Vídeos
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/aprendizaje/aprendizajeHome")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Cursos
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/libros")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <LibrosIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Libros
-            </Text>
-          </Flex>
-
-          {/* <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/productos")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <ProductosNaturalesIcon size="28px" color="currentColor" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
-            >
-              Productos
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/reels")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <ReelsIcon size="28px" color="currentColor" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              textShadow="0 1px 4px rgba(0,80,70,0.5)"
-            >
-              Reels
-            </Text>
-          </Flex> */}
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/user/account")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            {avatarSrc ? (
-              <Box
-                w={{ base: "32px", md: "36px" }}
-                h={{ base: "32px", md: "36px" }}
-                borderRadius="full"
-                overflow="hidden"
-                border="2px solid rgba(255,255,255,0.55)"
-                flexShrink={0}
-              >
-                <Image src={avatarSrc} w="100%" h="100%" objectFit="cover" />
-              </Box>
-            ) : (
-              <LoginIcon color="currentColor" size="28px" />
-            )}
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Mi cuenta
-            </Text>
-          </Flex>
-        </Flex>
-      ) : (
-        /* ── Navegación pública ── */
-        // <Flex align="center" gap={{ base: 3, md: 6 }}>
-        //   <Flex
-        //     align="center" gap={2} cursor="pointer"
-        //     onClick={() => navigate("/productos")}
-        //     color="rgba(255,255,255,0.85)"
-        //     _hover={{ color: "white" }}
-        //     transition="color 0.2s"
-        //   >
-        //     <ProductosNaturalesIcon size="28px" color="currentColor" />
-        //     <Text
-        //       display={{ base: "none", md: "block" }}
-        //       fontSize={{ base: "md", md: "lg" }}
-        //       fontWeight="500"
-        //       letterSpacing="0.04em"
-        //       textShadow="0 1px 4px rgba(0,80,70,0.5)"
-        //     >
-        //       Productos
-        //     </Text>
-        //   </Flex>
-
-        //   <Flex
-        //     align="center" gap={2} cursor="pointer"
-        //     onClick={() => navigate("/reels")}
-        //     color="rgba(255,255,255,0.85)"
-        //     _hover={{ color: "white" }}
-        //     transition="color 0.2s"
-        //   >
-        //     <ReelsIcon size="28px" color="currentColor" />
-        //     <Text
-        //       display={{ base: "none", md: "block" }}
-        //       fontSize={{ base: "md", md: "lg" }}
-        //       fontWeight="500"
-        //       letterSpacing="0.04em"
-        //       textShadow="0 1px 4px rgba(0,80,70,0.5)"
-        //     >
-        //       Reels
-        //     </Text>
-        //   </Flex>
-
-        // <Flex align="center" gap={{ base: 3, md: 6 }}>
-        //   <Flex
-        //     align="center" gap={2} cursor="pointer"
-        //     onClick={() => navigate("/logIn")}
-        //     color="rgba(255,255,255,0.85)"
-        //     _hover={{ color: "white" }}
-        //     transition="color 0.2s"
-        //   >
-        //     <LoginIcon size="28px" color="currentColor" />
-        //     <Text
-        //       display={{ base: "none", md: "block" }}
-        //       fontSize={{ base: "md", md: "lg" }}
-        //       fontWeight="500"
-        //       letterSpacing="0.04em"
-        //       textShadow="0 1px 4px rgba(0,80,70,0.5)"
-        //       style={{
-        //           filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-        //         }}
-        //     >
-        //       Inicio de sesión
-        //     </Text>
-        //   </Flex>
-
-        //   <Box
-        //     as="button"
-        //     onClick={() => navigate("/signIn")}
-        //     color="white"
-        //     fontWeight="600"
-        //     fontSize={{ base: "md", md: "lg" }}
-        //     letterSpacing="0.04em"
-        //     px={{ base: 4, md: 6 }}
-        //     py={{ base: "8px", md: "10px" }}
-        //     borderRadius="full"
-        //     border="1.5px solid rgba(255,255,255,0.6)"
-        //     bg="rgba(255,255,255,0.12)"
-        //     cursor="pointer"
-        //     _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-        //     transition="all 0.2s"
-        //     style={{
-        //           filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-        //         }}
-        //   >
-        //     Registrarse
-        //   </Box>
-        // </Flex>
-        <Flex align="center" gap={{ base: 4, md: 6 }}>
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/videos")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <VideosIcon color="currentColor" size="28px" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Vídeos
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/aprendizaje/aprendizajeHome")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <AprendizajeIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Cursos
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/libros")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <LibrosIcon color="currentColor" size={{ base: "28px", md: "32px" } as any} />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Libros
-            </Text>
-          </Flex>
-
-          <Flex
-            align="center" gap={2} cursor="pointer"
-            onClick={() => navigate("/logIn")}
-            color="rgba(255,255,255,0.85)"
-            _hover={{ color: "white" }}
-            transition="color 0.2s"
-          >
-            <LoginIcon color="currentColor" size="28px" />
-            <Text
-              display={{ base: "none", md: "block" }}
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="500"
-              letterSpacing="0.04em"
-              style={{
-                filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
-              }}
-            >
-              Iniciar sesión
-            </Text>
-          </Flex>
-        </Flex>
-      )}
+      {/* El recorrido (texto navegable) */}
+      <Text
+        as="button"
+        onClick={() => navigate("/elMetodo")}
+        color="white"
+        fontFamily="'EB Garamond', serif"
+        fontWeight="600"
+        fontSize={{ base: "md", md: "xl" }}
+        letterSpacing="0.16em"
+        textTransform="uppercase"
+        textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+        cursor="pointer"
+        bg="transparent"
+        border="none"
+        _hover={{ color: "white", textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
+        transition="text-shadow 0.25s ease"
+      >
+        El recorrido
+      </Text>
     </Flex>
   );
 };

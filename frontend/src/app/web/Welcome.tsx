@@ -129,10 +129,14 @@ const Welcome = () => {
   const bienvenidaReveal = useReveal();
   const videoReveal = useReveal();
   const presentacionReveal = useReveal();
+  const disciplinasTitleReveal = useReveal(0.2);
   const disciplinasReveal = useReveal(0.05);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -156,297 +160,285 @@ const Welcome = () => {
       <SiteHeader variant="public" />
 
       {/* ── FRASE ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
-        <Box
-          w={{ base: "100%", md: "80%" }}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 20 }}>
+        <Text
+          color="white"
           textAlign="center"
-          py={{ base: 5, md: 6 }}
-          px={{ base: 6, md: 10 }}
-          bg="rgba(255,255,255,0.10)"
-          border="1px solid rgba(255,255,255,0.30)"
-          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          borderRadius="xl"
-          boxShadow="0 4px 24px rgba(107,196,200,0.25)"
+          fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
+          fontWeight="400"
+          letterSpacing="0.06em"
+          lineHeight="1.4"
+          textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4), 0 0 60px rgba(180,255,245,0.35)"
+          fontFamily="'EB Garamond', serif"
+          maxW={{ base: "100%", md: "85%" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
-          <Flex align="center" justify="center" gap={{ base: 3, md: 5 }}>
-            <Image src="/img/icono/life.png" alt="" h={{ base: "32px", md: "44px" }} objectFit="contain" />
-            <Text
-              color="white"
-              fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
-              fontWeight="400"
-              fontStyle="italic"
-              letterSpacing="0.08em"
-              textShadow="0 2px 10px rgba(0,100,90,0.35)"
-              fontFamily="'EB Garamond', serif"
-            >
-              No es espiritualidad, es dignidad humana
-            </Text>
-            <Image src="/img/icono/life.png" alt="" h={{ base: "32px", md: "44px" }} objectFit="contain" />
-          </Flex>
-        </Box>
+          Un camino para entenderte: tus patrones, tu historia y tus células.
+        </Text>
       </Flex>
 
-      {/* ── CARD BIENVENIDA ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
+      {/* ── LOGO SEPARADOR ── */}
+      <Flex justify="center" pt={{ base: 8, md: 10 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "60px", md: "80px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          transition="opacity 1s ease 0.45s, transform 1s ease 0.45s"
+        />
+      </Flex>
+
+      {/* ── BIENVENIDA ── */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 6, md: 8 }}>
         <Box
           ref={bienvenidaReveal.ref}
           w={{ base: "100%", md: "80%" }}
-          bg="rgba(255,255,255,0.22)"
-          border="1px solid rgba(255,255,255,0.45)"
-          sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-          borderRadius="2xl"
-          boxShadow="0 8px 36px rgba(107,196,200,0.45)"
-          px={{ base: 8, md: 14 }}
-          py={{ base: 8, md: 10 }}
           display="flex"
-          flexDirection={{ base: "column", md: "row" }}
+          flexDirection="column"
           alignItems="center"
-          gap={{ base: 6, md: 10 }}
+          textAlign="center"
           opacity={bienvenidaReveal.visible ? 1 : 0}
           transform={bienvenidaReveal.visible ? "none" : "translateX(-50px)"}
           transition="opacity 0.7s ease, transform 0.7s ease"
         >
-          {/* Logo */}
-          <Box flexShrink={0} w={{ base: "140px", md: "170px" }} alignSelf="center">
-            <Image src="/img/icono/life.png" alt="Life as a Privilege" w="100%" objectFit="contain" />
-          </Box>
-
-          {/* Texto */}
-          <Box flex="1" textAlign={{ base: "center", md: "left" }}>
-            <Text
-              color="white"
-              fontSize={{ base: "3xl", md: "4xl", lg: "4xl" }}
-              fontWeight="700"
-              letterSpacing="0.05em"
-              lineHeight="1.2"
-              textShadow="0 2px 10px rgba(0,100,90,0.35)"
-              mb={3}
-            >
-              LIFE AS A PRIVILEGE
-            </Text>
-            <Text
-              color="rgba(255,255,255,0.85)"
-              fontSize={{ base: "md", md: "2xl" }}
-              lineHeight="1.9"
-              letterSpacing="0.02em"
-              textShadow="0 1px 5px rgba(0,100,90,0.25)"
-            >
-              Sistema de redescubrimiento humano que integra psicología, ciencia y conocimientos ancestrales para ofrecer una visión holística del ser y acompañar procesos de autoconocimiento, compasión y transformación personal.
-            </Text>
-          </Box>
-        </Box>
-      </Flex>
-
-      {/* ── VÍDEO DE INTRODUCCIÓN ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 12 }}>
-        <Box
-          ref={videoReveal.ref}
-          w={{ base: "100%", md: "55%" }}
-          maxW="560px"
-          bg="rgba(255,255,255,0.22)"
-          border="1px solid rgba(255,255,255,0.45)"
-          sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-          borderRadius="2xl"
-          boxShadow="0 8px 36px rgba(107,196,200,0.45)"
-          p={{ base: 3, md: 4 }}
-          opacity={videoReveal.visible ? 1 : 0}
-          transform={videoReveal.visible ? "none" : "translateY(40px)"}
-          transition="opacity 0.7s ease, transform 0.7s ease"
-        >
-          <Box
-            aspectRatio={16 / 9}
-            borderRadius="xl"
-            overflow="hidden"
-            boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.6)"
-          >
-            <iframe
-              src="https://www.youtube.com/embed/r5nL_GmnCGQ"
-              title="Introducción a Life as a Privilege"
-              style={{ width: "100%", height: "100%", border: 0 }}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </Box>
-        </Box>
-      </Flex>
-
-      {/* ── BOTONES NUEVOS CURSOS + EL MÉTODO ── */}
-      <Flex
-        justify="center"
-        align="center"
-        gap={{ base: 3, md: 5 }}
-        px={{ base: 4, md: 10, lg: 16 }}
-        pt={{ base: 10, md: 12 }}
-        flexWrap="nowrap"
-      >
-        <Flex
-          as="button"
-          onClick={() => navigate("/aprendizaje/nuevosCursos")}
-          justify="center"
-          align="center"
-          gap={{ base: 2, md: 3 }}
-          px={{ base: 3, md: 10 }}
-          py={{ base: "12px", md: "16px" }}
-          w={{ base: "48%", md: "320px" }}
-          borderRadius="full"
-          border="1.5px solid rgba(255,255,255,0.55)"
-          bg="rgba(255,255,255,0.10)"
-          cursor="pointer"
-          boxShadow="0 0 28px rgba(72,192,181,0.65), 0 0 70px rgba(72,192,181,0.28), 0 4px 18px rgba(0,0,0,0.2)"
-          _hover={{
-            bg: "rgba(255,255,255,0.20)",
-            borderColor: "rgba(255,255,255,0.85)",
-            boxShadow: "0 0 44px rgba(72,192,181,0.9), 0 0 90px rgba(72,192,181,0.45), 0 6px 26px rgba(0,0,0,0.25)",
-            transform: "translateY(-2px)",
-          }}
-          transition="all 0.25s ease"
-        >
-          <Box display={{ base: "flex", md: "none" }} alignItems="center" justifyContent="center" flexShrink={0}>
-            <AprendizajeIcon color="white" size="26px" shadow={false} />
-          </Box>
-          <Box display={{ base: "none", md: "flex" }} alignItems="center" justifyContent="center" flexShrink={0}>
-            <AprendizajeIcon color="white" size="34px" shadow={false} />
-          </Box>
           <Text
             color="white"
-            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
             fontWeight="700"
-            fontSize={{ base: "md", md: "2xl" }}
-            letterSpacing={{ base: "0.06em", md: "0.12em" }}
-            style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))" }}
-            whiteSpace="nowrap"
+            letterSpacing="0.06em"
+            lineHeight="1.2"
+            textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+            mb={1}
           >
-            Nuevos Cursos
+            LIFE AS A PRIVILEGE
           </Text>
-        </Flex>
+          <Text
+            color="rgba(255,255,255,0.85)"
+            fontSize={{ base: "sm", md: "md" }}
+            fontStyle="italic"
+            fontWeight="400"
+            letterSpacing="0.05em"
+            fontFamily="'EB Garamond', serif"
+            textShadow="0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)"
+            mb={6}
+          >
+            La Vida como Privilegio
+          </Text>
+          <Text
+            color="white"
+            fontSize={{ base: "md", md: "2xl" }}
+            lineHeight="1.9"
+            letterSpacing="0.02em"
+            textShadow="0 0 12px rgba(255,255,255,0.6), 0 0 28px rgba(255,255,255,0.3)"
+            maxW={{ base: "100%", md: "90%" }}
+          >
+            Ciencia y conocimiento tradicional en un recorrido con principio y final, no en una suscripción eterna.
+          </Text>
+        </Box>
+      </Flex>
 
+      {/* ── BOTÓN EL RECORRIDO ── */}
+      <Flex
+        ref={videoReveal.ref}
+        justify="center"
+        align="center"
+        gap={{ base: 3, md: 4 }}
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 10, md: 12 }}
+        opacity={videoReveal.visible ? 1 : 0}
+        transform={videoReveal.visible ? "none" : "translateY(40px)"}
+        transition="opacity 0.7s ease, transform 0.7s ease"
+      >
+        <Box
+          h="1px"
+          w={{ base: "32px", md: "70px" }}
+          bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
+          boxShadow="0 0 8px rgba(255,255,255,0.5)"
+        />
         <Flex
           as="button"
           onClick={() => navigate("/elMetodo")}
-          justify="center"
           align="center"
-          gap={{ base: 2, md: 3 }}
-          px={{ base: 3, md: 10 }}
-          py={{ base: "12px", md: "16px" }}
-          w={{ base: "48%", md: "320px" }}
+          justify="center"
+          gap={{ base: 3, md: 4 }}
+          px={{ base: 8, md: 12 }}
+          py={{ base: "14px", md: "18px" }}
           borderRadius="full"
-          border="1.5px solid rgba(255,255,255,0.55)"
-          bg="rgba(255,255,255,0.10)"
+          border="1px solid rgba(255,255,255,0.55)"
+          bg="rgba(255,255,255,0.08)"
           cursor="pointer"
-          boxShadow="0 0 28px rgba(72,192,181,0.65), 0 0 70px rgba(72,192,181,0.28), 0 4px 18px rgba(0,0,0,0.2)"
+          boxShadow="0 0 16px rgba(255,255,255,0.35), 0 0 36px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.18)"
           _hover={{
-            bg: "rgba(255,255,255,0.20)",
-            borderColor: "rgba(255,255,255,0.85)",
-            boxShadow: "0 0 44px rgba(72,192,181,0.9), 0 0 90px rgba(72,192,181,0.45), 0 6px 26px rgba(0,0,0,0.25)",
-            transform: "translateY(-2px)",
+            bg: "rgba(255,255,255,0.18)",
+            borderColor: "rgba(255,255,255,0.9)",
+            boxShadow: "0 0 26px rgba(255,255,255,0.55), 0 0 54px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
+            transform: "translateY(-1px)",
           }}
           transition="all 0.25s ease"
         >
-          <Image src="/img/icono/life.png" alt="" h={{ base: "26px", md: "34px" }} objectFit="contain" flexShrink={0} />
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h={{ base: "30px", md: "38px" }}
+            objectFit="contain"
+            flexShrink={0}
+            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
+          />
           <Text
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "md", md: "2xl" }}
-            letterSpacing={{ base: "0.06em", md: "0.12em" }}
-            style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.35))" }}
-            whiteSpace="nowrap"
+            fontSize={{ base: "lg", md: "2xl" }}
+            letterSpacing="0.18em"
+            textTransform="uppercase"
+            textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
           >
-            El Método
+            El recorrido
           </Text>
+          <Box
+            as="span"
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "lg", md: "2xl" }}
+            style={{ textShadow: "0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)" }}
+          >
+            →
+          </Box>
         </Flex>
+        <Box
+          h="1px"
+          w={{ base: "32px", md: "70px" }}
+          bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
+          boxShadow="0 0 8px rgba(255,255,255,0.5)"
+        />
       </Flex>
 
-      {/* ── CARD PRESENTACIÓN ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
-        <Box
-          ref={presentacionReveal.ref}
-          w={{ base: "100%", md: "80%" }}
-          bg="rgba(255,255,255,0.22)"
-          border="1px solid rgba(255,255,255,0.45)"
-          sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-          borderRadius="2xl"
-          boxShadow="0 8px 36px rgba(107,196,200,0.45)"
-          px={{ base: 8, md: 14 }}
-          py={{ base: 8, md: 10 }}
-          display="flex"
-          flexDirection={{ base: "column", md: "row" }}
-          alignItems={{ base: "center", md: "stretch" }}
-          gap={{ base: 6, md: 10 }}
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "none" : "translateX(50px)"}
-          transition="opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s"
-        >
-          {/* Foto */}
-          <Box
-            flexShrink={0}
-            w={{ base: "200px", md: "300px" }}
-            h={{ base: "260px", md: "380px" }}
-            borderRadius="xl"
-            mt={{ base: "0px", md: "10px" }}
-            overflow="hidden"
-            boxShadow="0 20px 50px rgba(0,0,0,0.35), 0 4px 16px rgba(0,0,0,0.2)"
-            alignSelf={{ base: "center", md: "flex-start" }}
-          >
-            <Image
-              src="/img/me/me.png"
-              alt="María Escribano"
-              w="100%"
-              h="100%"
-              objectFit="cover"
-              objectPosition="center top"
-            />
-          </Box>
+      {/* ── SEPARADOR DE ZONAS ── */}
+      <Flex justify="center" pt={{ base: 16, md: 20 }}>
+        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+      </Flex>
 
-          {/* Texto */}
-          <Box flex="1" mt={{ base: "10px", md: "20px" }} textAlign={{ base: "center", md: "left" }} display="flex" flexDirection="column">
-            <Text
-              color="white"
-              fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
-              fontWeight="700"
-              fontFamily="'EB Garamond', serif"
-              letterSpacing="0.04em"
-              lineHeight="1.2"
-              textShadow="0 2px 10px rgba(0,60,50,0.5)"
-              mb={{ base: 0, md: 3 }}
-            >
-              María Escribano
-            </Text>
-            <Text
-              color="rgba(255,255,255,0.88)"
-              fontSize={{ base: "md", md: "xl" }}
-              fontFamily="'EB Garamond', serif"
-              lineHeight="1.9"
-              letterSpacing="0.02em"
-              textShadow="0 1px 5px rgba(0,60,50,0.3)"
-            >
-              <br />
-                  Mi propósito es profundizar en la naturaleza humana, usando psicología, filosofía, ciencias biológicas y sabidurías ancestrales para ello.
-              <br />
-              <br />
-              “La Vida como Privilegio” es una forma de mirar, una posibilidad de elegir cómo vivir. Esta plataforma te invita a redescubrir al ser Humano como el ser digno que es.</Text>
-            <Flex justify={{ base: "center", md: "flex-end" }} mt="auto" pt={6}>
-              <Box
-                as="button"
-                onClick={() => navigate("/quienSoy")}
-                color="white"
-                fontWeight="600"
-                fontSize="sm"
-                letterSpacing="0.06em"
-                px={6}
-                py="10px"
-                borderRadius="full"
-                border="1.5px solid rgba(255,255,255,0.6)"
-                bg="rgba(255,255,255,0.12)"
-                cursor="pointer"
-                _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
-                transition="all 0.2s"
-              >
-                Conoce más →
-              </Box>
-            </Flex>
-          </Box>
+      {/* ── PRESENTACIÓN ── */}
+      <Flex
+        ref={presentacionReveal.ref}
+        direction="column"
+        align="center"
+        textAlign="center"
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 16, md: 20 }}
+        gap={{ base: 5, md: 7 }}
+      >
+        {/* Foto */}
+        <Box
+          maxW={{ base: "260px", md: "340px" }}
+          borderRadius="2xl"
+          overflow="hidden"
+          boxShadow="0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(255,255,255,0.25), 0 0 60px rgba(180,255,245,0.2)"
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "scale(1)" : "scale(0.85)"}
+          transition="opacity 0.8s ease, transform 0.8s ease"
+        >
+          <Image
+            src="/img/me/me.png"
+            alt="María Escribano"
+            w="100%"
+            h="auto"
+            display="block"
+          />
         </Box>
+
+        {/* Nombre */}
+        <Text
+          color="white"
+          fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+          fontWeight="700"
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.04em"
+          lineHeight="1.2"
+          textShadow="0 0 14px rgba(255,255,255,0.65), 0 0 30px rgba(255,255,255,0.35), 0 0 60px rgba(180,255,245,0.3)"
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
+        >
+          María Escribano
+        </Text>
+
+        {/* Descripción */}
+        <Text
+          color="rgba(255,255,255,0.92)"
+          fontSize={{ base: "md", md: "xl" }}
+          fontFamily="'EB Garamond', serif"
+          lineHeight="1.9"
+          letterSpacing="0.02em"
+          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          maxW={{ base: "100%", md: "70%" }}
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
+        >
+          Ingeniera informática, 21 años. No existía lo que he construido: un camino donde la psicología, la biología y los saberes ancestrales se combinan en vez de pelearse. Ahora son aliados.
+        </Text>
+
+        {/* Botón Conoce más */}
+        <Flex
+          align="center"
+          gap={3}
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.7s ease 0.75s, transform 0.7s ease 0.75s"
+          mt={2}
+        >
+          <Box
+            h="1px"
+            w={{ base: "32px", md: "56px" }}
+            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
+            boxShadow="0 0 8px rgba(255,255,255,0.5)"
+          />
+          <Flex
+            as="button"
+            onClick={() => navigate("/quienSoy")}
+            align="center"
+            gap={2}
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "sm", md: "md" }}
+            letterSpacing="0.18em"
+            textTransform="uppercase"
+            px={{ base: 7, md: 9 }}
+            py={{ base: "10px", md: "12px" }}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.55)"
+            bg="rgba(255,255,255,0.08)"
+            cursor="pointer"
+            boxShadow="0 0 16px rgba(255,255,255,0.35), 0 0 36px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.18)"
+            textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
+            _hover={{
+              bg: "rgba(255,255,255,0.18)",
+              borderColor: "rgba(255,255,255,0.9)",
+              boxShadow: "0 0 26px rgba(255,255,255,0.55), 0 0 54px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
+              transform: "translateY(-1px)",
+            }}
+            transition="all 0.25s ease"
+          >
+            Conoce más
+            <Box as="span" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: "0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)" }}>
+              →
+            </Box>
+          </Flex>
+          <Box
+            h="1px"
+            w={{ base: "32px", md: "56px" }}
+            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
+            boxShadow="0 0 8px rgba(255,255,255,0.5)"
+          />
+        </Flex>
       </Flex>
 
       {/* ── BANNERS PRODUCTOS & REELS ── */}
@@ -465,11 +457,46 @@ const Welcome = () => {
         </Flex>
       </Flex> */}
 
+      {/* ── SEPARADOR + TÍTULO DISCIPLINAS ── */}
+      <Flex
+        ref={disciplinasTitleReveal.ref}
+        direction="column"
+        align="center"
+        pt={{ base: 16, md: 20 }}
+        gap={{ base: 7, md: 10 }}
+      >
+        <Box
+          w="100%"
+          maxW="500px"
+          h="1px"
+          bg="rgba(255,255,255,0.15)"
+          opacity={disciplinasTitleReveal.visible ? 1 : 0}
+          transform={disciplinasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
+          transition="opacity 0.8s ease, transform 0.8s ease"
+        />
+        <Text
+          color="rgba(255,255,255,0.85)"
+          fontFamily="'EB Garamond', serif"
+          fontStyle="italic"
+          fontWeight="400"
+          fontSize={{ base: "lg", md: "2xl" }}
+          letterSpacing="0.12em"
+          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          textAlign="center"
+          px={{ base: 5, md: 10 }}
+          opacity={disciplinasTitleReveal.visible ? 1 : 0}
+          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
+        >
+          Las 8 disciplinas…
+        </Text>
+      </Flex>
+
       {/* ── CARDS DE DISCIPLINAS ── */}
       <Box
         ref={disciplinasReveal.ref}
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 16, md: 24 }}
+        pt={{ base: 8, md: 12 }}
         pb={{ base: 10, md: 14 }}
       >
         <Grid
@@ -486,15 +513,12 @@ const Welcome = () => {
               px={{ base: 3, md: 5 }}
               bg={d.bg}
               borderRadius="2xl"
-              boxShadow="0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
+              boxShadow="0 0 18px rgba(255,255,255,0.35), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
               cursor="pointer"
               onClick={() => setSelected(d)}
               opacity={disciplinasReveal.visible ? 1 : 0}
               transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-              transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s, box-shadow 0.22s ease`}
-              _hover={{
-                boxShadow: "0 18px 45px rgba(107,196,200,0.75), 0 4px 14px rgba(107,196,200,0.45)",
-              }}
+              transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`}
               textAlign="center"
             >
               {/* Icono que sobresale por arriba */}
@@ -532,6 +556,11 @@ const Welcome = () => {
         </Grid>
       </Box>
 
+
+      {/* ── SEPARADOR DE ZONAS ── */}
+      <Flex justify="center" pt={{ base: 14, md: 18 }}>
+        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+      </Flex>
 
       {/* ── OPINIONES ── */}
       <OpinionesSection />

@@ -1,11 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 
+const useReveal = (threshold = 0.15) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+};
+
 export function SubscribeBox() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "ok" | "invalid">("idle");
+  const reveal = useReveal(0.15);
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -27,8 +44,16 @@ export function SubscribeBox() {
   }, [status]);
 
   return (
-    <Flex direction="column" align="center" w="100%" maxW="900px" mt={10} gap={{ base: 8, md: 10 }}>
-      <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+    <Flex ref={reveal.ref} direction="column" align="center" w="100%" maxW="900px" mt={10} gap={{ base: 8, md: 10 }}>
+      <Box
+        w="100%"
+        maxW="500px"
+        h="1px"
+        bg="rgba(255,255,255,0.15)"
+        opacity={reveal.visible ? 1 : 0}
+        transform={reveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
+        transition="opacity 0.8s ease, transform 0.8s ease"
+      />
 
       <Box
         w="100%"
@@ -40,6 +65,10 @@ export function SubscribeBox() {
         py={{ base: 8, md: 10 }}
         sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
         textAlign="center"
+        boxShadow="0 0 16px rgba(255,255,255,0.22), 0 0 38px rgba(255,255,255,0.12), 0 0 70px rgba(180,255,245,0.12)"
+        opacity={reveal.visible ? 1 : 0}
+        transform={reveal.visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)"}
+        transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
       >
         <Image
           src="/img/icono/life.png"
@@ -47,7 +76,8 @@ export function SubscribeBox() {
           objectFit="contain"
           mx="auto"
           mb={4}
-          opacity={0.85}
+          opacity={0.9}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.6)) drop-shadow(0 0 22px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.22))" }}
         />
         <Text
           color="white"
@@ -56,7 +86,7 @@ export function SubscribeBox() {
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.08em"
           mb={2}
-          textShadow="0 2px 8px rgba(0,0,0,0.3)"
+          textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.22)"
         >
           ¡No te pierdas nada!
         </Text>
@@ -131,6 +161,13 @@ export function SubscribeBox() {
               fontWeight="700"
               letterSpacing="0.08em"
               cursor="pointer"
+              boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 30px rgba(255,255,255,0.15)"
+              textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)"
+              _hover={{
+                bg: "rgba(255,255,255,0.22)",
+                borderColor: "white",
+                boxShadow: "0 0 22px rgba(255,255,255,0.45), 0 0 44px rgba(180,255,245,0.25)",
+              }}
               transition="all 0.2s"
               whiteSpace="nowrap"
             >
