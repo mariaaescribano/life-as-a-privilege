@@ -149,7 +149,7 @@ export default function CursosModalidad() {
         <SiteHeader variant="auto" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
           <Text color="white" fontSize="xl">
-            Modalidad no encontrada.
+            Disciplina en construcción.
           </Text>
         </Box>
       </Box>

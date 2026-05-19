@@ -22,6 +22,7 @@ import ReelsPage from "./app/web/Reels";
 import VideosPage from "./app/web/VideosPage";
 import VideoPage from "./app/web/VideoPage";
 import LibrosPage from "./app/web/LibrosPage";
+import DescargarLibroPage from "./app/web/DescargarLibroPage";
 import Contacto from "./app/web/Contacto";
 import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
@@ -78,6 +79,7 @@ export default function App()
       <Route path="/videos" element={<VideosPage />} />
       <Route path="/videos/:videoId" element={<VideoPage />} />
       <Route path="/libros" element={<LibrosPage />} />
+      <Route path="/libros/descargar" element={<DescargarLibroPage />} />
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />

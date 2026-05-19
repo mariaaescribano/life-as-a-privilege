@@ -137,8 +137,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="600"
-            fontSize={{ base: "md", md: "xl" }}
-            letterSpacing="0.16em"
+            fontSize={{ base: "xs", md: "xl" }}
+            letterSpacing={{ base: "0.1em", md: "0.16em" }}
             textTransform="uppercase"
             textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
             cursor="pointer"
@@ -160,8 +160,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="600"
-            fontSize={{ base: "md", md: "xl" }}
-            letterSpacing="0.16em"
+            fontSize={{ base: "xs", md: "xl" }}
+            letterSpacing={{ base: "0.1em", md: "0.16em" }}
             textTransform="uppercase"
             textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
             cursor="pointer"

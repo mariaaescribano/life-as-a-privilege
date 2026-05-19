@@ -173,6 +173,8 @@ export default function UserAccount() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" userImg={img} />
 
+      <Box flex="1" display="flex" flexDirection="column" transform="scale(0.9)" transformOrigin="top center">
+
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
@@ -457,6 +459,8 @@ export default function UserAccount() {
           </Flex>
         </VStack>
       </Flex>
+
+      </Box>
     </Box>
   );
 }

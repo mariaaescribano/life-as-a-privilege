@@ -21,7 +21,6 @@ export interface LibroPago {
   img?: string;
 }
 
-const gdocView = (id: string) => `https://docs.google.com/document/d/${id}/view`;
 const drivePdf = (id: string) => `https://drive.google.com/uc?export=download&id=${id}`;
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 

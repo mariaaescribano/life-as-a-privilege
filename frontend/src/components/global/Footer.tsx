@@ -71,6 +71,29 @@ const SiteFooter = () => {
         </Box>
         <Box
           as="a"
+          href="https://www.instagram.com/lifeasaprivilege"
+          target="_blank"
+          rel="noopener noreferrer"
+          display="inline-flex"
+          alignItems="center"
+          gap="6px"
+          color="rgba(255,255,255,0.65)"
+          fontSize="sm"
+          letterSpacing="0.05em"
+          cursor="pointer"
+          textDecoration="none"
+          transition="color 0.2s"
+          _hover={{ color: "white" }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="15px" width="15px" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+          Instagram
+        </Box>
+        <Box
+          as="a"
           href={DONATION_LINK}
           target="_blank"
           rel="noopener noreferrer"

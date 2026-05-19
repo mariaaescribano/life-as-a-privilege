@@ -46,6 +46,7 @@ export default function MaterialesGratuitos() {
       link: "/aprendizaje/aprendizajeHome",
       renderIcon: () => <AprendizajeIcon color="white" size="52px" shadow={false} />,
     },
+    //Cajita "Todos los cursos" desactivada temporalmente para v1
     {
       titulo: "Todos los cursos",
       delay: 0.3,
@@ -131,7 +132,7 @@ export default function MaterialesGratuitos() {
         flex={1}
         justify="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 11, md: 16 }}
+        pt={{ base: 20, md: 24 }}
         pb={{ base: 24, md: 32 }}
       >
         <Grid

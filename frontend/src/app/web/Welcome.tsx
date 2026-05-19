@@ -14,7 +14,7 @@ import {
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
-  AprendizajeIcon,
+  // AprendizajeIcon, // comentado: el botón APRENDER está desactivado para v1
   nutricionNomLink,
   ayurvedaNomLink,
 } from "../../GlobalVariables";
@@ -753,7 +753,7 @@ const Welcome = () => {
               {selected.desc}
             </Text>
 
-            {/* Botón APRENDER */}
+            {/* Botón APRENDER — desactivado temporalmente para v1, mostramos solo "Próximamente"
             {(() => {
               const isAvailable = selected.available === true;
               return (
@@ -790,6 +790,18 @@ const Welcome = () => {
                 </Flex>
               );
             })()}
+            */}
+            {/* <Text
+              color={selected.txt}
+              fontSize="sm"
+              letterSpacing="0.14em"
+              opacity={0.7}
+              fontStyle="italic"
+              mt={2}
+              textTransform="uppercase"
+            >
+              Próximamente
+            </Text> */}
           </Box>
         </Box>
       )}

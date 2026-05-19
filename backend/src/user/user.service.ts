@@ -111,8 +111,14 @@ export class UserService {
 
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
-    // Cuando se ejecute el ALTER TABLE para añadir metodo_suscrito/metodo_fecha_compra,
-    // se pueden incluir en el select.
+    const full = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra')
+      .eq('id', id)
+      .single();
+    if (full.data) return full.data;
+
+    // Fallback si las columnas metodo_* aún no existen (ALTER TABLE pendiente).
     const { data, error } = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, img')

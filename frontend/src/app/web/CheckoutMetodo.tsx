@@ -80,6 +80,8 @@ export default function CheckoutMetodo() {
 
       <SiteHeader variant="auto" />
 
+      <Box flex="1" display="flex" flexDirection="column" transform="scale(0.9)" transformOrigin="top center">
+
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
@@ -312,6 +314,8 @@ export default function CheckoutMetodo() {
 
         </Flex>
       </Flex>
+
+      </Box>
 
       <SiteFooter />
     </Box>

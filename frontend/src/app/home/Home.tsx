@@ -6,6 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { AvisoInicialModal } from "../../components/metodo/AvisoInicialModal";
+import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import axios from "axios";
 import {
   API_URL,
@@ -44,14 +45,15 @@ const Home = () => {
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState<string>("");
   const [avisoOpen, setAvisoOpen] = useState(false);
+  const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(null);
+  const [pagoOpen, setPagoOpen] = useState(false);
+  const [pagoLoading, setPagoLoading] = useState(false);
+  const [verificandoPago, setVerificandoPago] = useState(false);
 
-  const irAstrologia = async () => {
+  const continuarAstrologia = async () => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    if (!userId || !token) {
-      navigate("/welcome");
-      return;
-    }
+    if (!userId || !token) return;
     try {
       const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -64,6 +66,57 @@ const Home = () => {
     } catch {
       // Si la BD falla, mostramos el aviso (camino seguro)
       setAvisoOpen(true);
+    }
+  };
+
+  const irAstrologia = async () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      navigate("/welcome");
+      return;
+    }
+    if (!metodoSuscrito) {
+      setPagoOpen(true);
+      return;
+    }
+    await continuarAstrologia();
+  };
+
+  const [pagoError, setPagoError] = useState<string | null>(null);
+
+  const pagarMetodo = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      navigate("/welcome");
+      return;
+    }
+    setPagoLoading(true);
+    setPagoError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/metodo/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+        return;
+      }
+      console.error("[pagarMetodo] respuesta sin url:", res.data);
+      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoLoading(false);
+    } catch (err: any) {
+      console.error("[pagarMetodo] error:", err?.response?.status, err?.response?.data || err?.message);
+      const status = err?.response?.status;
+      const reason =
+        status === 404
+          ? "Endpoint no encontrado — reinicia el backend para cargar la nueva ruta."
+          : status === 401
+          ? "Sesión expirada. Vuelve a iniciar sesión."
+          : err?.response?.data?.message || err?.message || "Error desconocido";
+      setPagoError(reason);
+      setPagoLoading(false);
     }
   };
 
@@ -95,6 +148,7 @@ const Home = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
     if (!userId) {
       navigate("/");
       return;
@@ -104,6 +158,49 @@ const Home = () => {
       setImg(stored);
     }
     setName(sessionStorage.getItem("name") || "");
+
+    const url = new URL(window.location.href);
+    const metodoPagado = url.searchParams.get("metodo_pagado");
+
+    const cargarSuscripcion = async () => {
+      try {
+        const me = await axios.get(`${API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const suscrito = !!me.data?.metodo_suscrito;
+        setMetodoSuscrito(suscrito);
+        return suscrito;
+      } catch {
+        setMetodoSuscrito(false);
+        return false;
+      }
+    };
+
+    if (metodoPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("metodo_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/metodo/verify`, {
+          params: { session_id: metodoPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          if (res.data?.ok) {
+            setMetodoSuscrito(true);
+            await continuarAstrologia();
+          } else {
+            await cargarSuscripcion();
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else {
+      cargarSuscripcion();
+    }
   }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +240,7 @@ const Home = () => {
     >
       <SiteHeader variant="private" userImg={img ?? undefined} />
 
-      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+      <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform="scale(0.7)" transformOrigin="top center">
         {img != null ? (
           <Flex
             direction="column"
@@ -382,6 +479,14 @@ const Home = () => {
       <SiteFooter />
 
       <AvisoInicialModal isOpen={avisoOpen} onConfirm={confirmarAviso} />
+      <PagoMetodoModal
+        isOpen={pagoOpen}
+        onClose={() => { setPagoOpen(false); setPagoError(null); }}
+        onPagar={pagarMetodo}
+        loading={pagoLoading}
+        error={pagoError}
+      />
+      {verificandoPago && <SpinnerTurquesa />}
     </Box>
   );
 };

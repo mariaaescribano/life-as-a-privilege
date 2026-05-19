@@ -136,6 +136,8 @@ export default function SignIn() {
 
       <SiteHeader variant="public" />
 
+      <Box flex="1" display="flex" flexDirection="column" transform="scale(0.8)" transformOrigin="top center">
+
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
@@ -308,6 +310,8 @@ export default function SignIn() {
           </Flex>
         </VStack>
       </Flex>
+
+      </Box>
 
       <SiteFooter />
     </Box>

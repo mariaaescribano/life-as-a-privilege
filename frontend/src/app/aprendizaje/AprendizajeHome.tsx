@@ -117,7 +117,7 @@ export const AprendizajeHome = () => {
         flex={1}
         justify="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 11, md: 16 }}
+        pt={{ base: 20, md: 24 }}
         pb={{ base: 24, md: 32 }}
       >
         <Box ref={cardsReveal.ref} w="100%" maxW="960px">
