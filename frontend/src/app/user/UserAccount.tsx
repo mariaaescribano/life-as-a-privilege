@@ -41,7 +41,7 @@ const DeleteIcon = ({ size = "20px" }: { size?: string }) => (
   </svg>
 );
 
-// Spinner inline (no deps externas)
+// Spinner inline
 const Spinner = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -69,25 +69,21 @@ type FieldRowProps = {
   savedField: Field | null;
 };
 
-// ── Fila de campo — definida FUERA del componente principal ───────────────────
+// ── Fila de campo ────────────────────────────────────────────────────────────
 
 function FieldRow({ label, field, value, editing, setEditing, onSave, savedField }: FieldRowProps) {
   const isPass = field === "password";
 
-  // showPass es LOCAL a esta fila — no afecta al padre ni a otras filas
   const [showPass, setShowPass] = useState(false);
   const [draft,    setDraft]    = useState(isPass ? "" : value);
 
   const isEditing = editing === field;
   const justSaved = savedField === field;
 
-  // Cuando llegan los datos del back (nombre/email), sincroniza el draft
   useEffect(() => {
     if (!isPass) setDraft(value);
   }, [value]);
 
-  // Al abrir edición: nombre/email pre-rellena, contraseña empieza vacía
-  // Al cerrar edición: resetea showPass
   useEffect(() => {
     if (isEditing) {
       setDraft(isPass ? "" : value);
@@ -97,28 +93,39 @@ function FieldRow({ label, field, value, editing, setEditing, onSave, savedField
   }, [isEditing]);
 
   const inputStyle = {
-    bg: "rgba(255,255,255,0.10)",
-    border: "1px solid rgba(255,255,255,0.30)",
+    bg: "rgba(255,255,255,0.06)",
+    border: "1px solid rgba(255,255,255,0.28)",
     color: "white",
-    borderRadius: "xl",
-    fontSize: { base: "md", md: "lg" },
+    borderRadius: "full",
+    fontSize: { base: "md", md: "lg" } as any,
+    px: 5,
+    py: 3,
+    h: "auto" as any,
+    textAlign: "center" as const,
+    fontFamily: "'EB Garamond', serif",
+    letterSpacing: "0.04em",
+    boxShadow: "0 0 10px rgba(255,255,255,0.12)",
+    _placeholder: { color: "rgba(255,255,255,0.4)" },
+    _hover: { border: "1px solid rgba(255,255,255,0.55)" },
     _focus: {
-      border: "1px solid rgba(255,255,255,0.80)",
-      boxShadow: "none",
-      bg: "rgba(255,255,255,0.15)",
+      border: "1px solid rgba(255,255,255,0.85)",
+      boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
+      bg: "rgba(255,255,255,0.12)",
       outline: "none",
     },
-    _placeholder: { color: "rgba(255,255,255,0.45)" },
   };
 
   return (
     <Box w="100%">
       <Text
         fontSize={{ base: "xs", md: "sm" }}
-        color="rgba(255,255,255,0.55)"
-        letterSpacing="0.08em"
+        color="rgba(255,255,255,0.78)"
+        letterSpacing="0.18em"
         textTransform="uppercase"
-        mb={1}
+        fontWeight="600"
+        mb={2}
+        textAlign="center"
+        textShadow="0 0 8px rgba(255,255,255,0.35)"
       >
         {label}
       </Text>
@@ -138,44 +145,44 @@ function FieldRow({ label, field, value, editing, setEditing, onSave, savedField
             flex={1}
           />
         ) : (
-          // En display: contraseña siempre muestra puntos fijos (el valor real no llega del back)
           <Text
             flex={1}
             color="white"
             fontSize={{ base: "md", md: "lg" }}
             letterSpacing={isPass ? "0.18em" : "0.02em"}
             fontFamily={isPass ? "monospace" : undefined}
+            textAlign="center"
+            textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
           >
             {isPass ? "••••••••" : value}
           </Text>
         )}
 
-        {/* ojo — solo visible cuando se está editando la contraseña */}
         {isPass && isEditing && (
           <Box
             as="button"
-            color="rgba(255,255,255,0.60)"
+            color="rgba(255,255,255,0.65)"
             _hover={{ color: "white" }}
             cursor="pointer"
             onClick={() => setShowPass(p => !p)}
             flexShrink={0}
+            transition="color 0.2s"
           >
             <EyeIcon open={showPass} />
           </Box>
         )}
 
-        {/* editar / confirmar */}
         {isEditing ? (
           <Box
             as="button"
-            color={justSaved ? turquesa : "rgba(255,255,255,0.75)"}
+            color={justSaved ? turquesa : "rgba(255,255,255,0.8)"}
             _hover={{ color: turquesa }}
             cursor="pointer"
             onClick={() => onSave(field, draft)}
             flexShrink={0}
             title="Confirmar"
             transition="color 0.2s, filter 0.2s"
-            style={justSaved ? { filter: `drop-shadow(0 0 6px ${turquesa})` } : {}}
+            style={justSaved ? { filter: `drop-shadow(0 0 8px ${turquesa})` } : { filter: "drop-shadow(0 0 6px rgba(255,255,255,0.4))" }}
           >
             <CheckIcon />
           </Box>
@@ -183,7 +190,7 @@ function FieldRow({ label, field, value, editing, setEditing, onSave, savedField
           <Box
             color={turquesa}
             flexShrink={0}
-            style={{ filter: `drop-shadow(0 0 8px ${turquesa})` }}
+            style={{ filter: `drop-shadow(0 0 10px ${turquesa}) drop-shadow(0 0 22px ${turquesa}55)` }}
             transition="color 0.3s, filter 0.3s"
           >
             <CheckIcon />
@@ -191,20 +198,19 @@ function FieldRow({ label, field, value, editing, setEditing, onSave, savedField
         ) : (
           <Box
             as="button"
-            color="rgba(255,255,255,0.45)"
-            _hover={{ color: turquesa }}
+            color="rgba(255,255,255,0.55)"
+            _hover={{ color: "white" }}
             cursor="pointer"
             onClick={() => setEditing(field)}
             flexShrink={0}
             title="Editar"
             transition="color 0.3s, filter 0.3s"
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.3))" }}
           >
             <EditIcon />
           </Box>
         )}
       </Flex>
-
-      <Box h="1px" bg="rgba(255,255,255,0.12)" mt={3} />
     </Box>
   );
 }
@@ -226,10 +232,10 @@ export default function UserAccount() {
   const [error,         setError]         = useState("");
   const [uploading,     setUploading]     = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
 
-  // Cargar datos del usuario al montar
   useEffect(() => {
     if (!userId) { navigate("/welcome"); return; }
     fetch(`${API_URL}/user/me`, {
@@ -239,15 +245,14 @@ export default function UserAccount() {
       .then(u => {
         setName(u.name   ?? "");
         setEmail(u.email ?? "");
-        // La contraseña NO viene del backend (está hasheada). Se muestra siempre como ••••••••
       })
       .catch(() => setError("Error al cargar los datos"))
       .finally(() => setLoading(false));
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
   }, []);
 
-  // Guardar un campo
   const handleSave = async (field: Field, value: string) => {
-    // Contraseña: si no se escribe nada nuevo, simplemente cierra el modo edición
     if (!value.trim()) { setEditing(null); return; }
     setError("");
     try {
@@ -267,9 +272,7 @@ export default function UserAccount() {
         sessionStorage.setItem("name", updated.name ?? value);
       }
       if (field === "email") setEmail(updated.email ?? value);
-      // password: no se actualiza el estado local (el hash nunca viaja al front)
 
-      // Tick iluminado durante 2 s
       setSavedField(field);
       setTimeout(() => setSavedField(null), 2000);
     } catch {
@@ -279,13 +282,11 @@ export default function UserAccount() {
     }
   };
 
-  // Cerrar sesión
   const handleLogout = () => {
     sessionStorage.clear();
     navigate("/welcome");
   };
 
-  // Eliminar cuenta
   const handleDelete = async () => {
     try {
       await fetch(`${API_URL}/user/${userId}`, {
@@ -299,7 +300,6 @@ export default function UserAccount() {
     }
   };
 
-  // Subir foto
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -324,35 +324,6 @@ export default function UserAccount() {
     }
   };
 
-  // ── Estilos reutilizables ─────────────────────────────────────────────────
-
-  const glass = {
-    bg: "rgba(255,255,255,0.10)",
-    border: "1px solid rgba(255,255,255,0.22)",
-    sx: { backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" },
-    borderRadius: "2xl",
-  };
-
-  const actionBtn = (color: string) => ({
-    display: "flex" as const,
-    alignItems: "center" as const,
-    gap: "8px",
-    cursor: "pointer",
-    color,
-    fontWeight: "500",
-    fontSize: { base: "sm", md: "md" },
-    letterSpacing: "0.03em",
-    px: 4,
-    py: "10px",
-    borderRadius: "full",
-    border: `1.5px solid ${color}`,
-    bg: "transparent",
-    transition: "all 0.2s",
-    _hover: { bg: `${color}22` },
-  });
-
-  // ── Render ────────────────────────────────────────────────────────────────
-
   if (loading) return (
     <Flex minH="100vh" bg="#008080" justify="center" align="center">
       <Spinner />
@@ -360,73 +331,115 @@ export default function UserAccount() {
   );
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" userImg={img} />
 
-      <Flex flex={1} justify="center" align="flex-start" px={{ base: 4, md: 8 }} py={{ base: 10, md: 16 }}>
-        <Box
-          {...glass}
-          w="100%"
-          maxW="520px"
-          px={{ base: 6, md: 10 }}
-          py={{ base: 8, md: 12 }}
-          boxShadow="0 8px 48px rgba(0,0,0,0.25)"
+      {/* ── MANDALA SEPARADOR ── */}
+      <Flex justify="center" pt={{ base: 10, md: 14 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "60px", md: "80px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
+        />
+      </Flex>
+
+      {/* ── TÍTULO ── */}
+      <Flex
+        direction="column"
+        align="center"
+        textAlign="center"
+        px={{ base: 5, md: 10 }}
+        pt={{ base: 8, md: 10 }}
+        gap={{ base: 3, md: 4 }}
+      >
+        <Text
+          color="white"
+          fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
+          fontWeight="700"
+          letterSpacing="0.1em"
+          lineHeight="1.1"
+          textTransform="uppercase"
+          textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          <>
+          Mi cuenta
+        </Text>
+      </Flex>
+
+      {/* ── FOTO + CAMPOS + ACCIONES ── */}
+      <Flex flex={1} justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }}>
+        <Flex
+          direction="column"
+          w={{ base: "100%", sm: "460px" }}
+          gap={10}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(28px)"}
+          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
+        >
 
           {/* ── Foto ── */}
-          <Flex direction="column" align="center" mb={10}>
-            <Box position="relative" mb={4}>
-              <Box
-                w={{ base: "100px", md: "130px" }}
-                h={{ base: "100px", md: "130px" }}
-                borderRadius="full"
-                overflow="hidden"
-                border={`3px solid ${uploading ? "rgba(255,255,255,0.3)" : turquesa}`}
-                boxShadow={`0 0 0 4px rgba(72,192,181,0.25)`}
-                cursor={uploading ? "default" : "pointer"}
-                onClick={() => !uploading && fileRef.current?.click()}
-                transition="box-shadow 0.2s, border 0.2s"
-                _hover={uploading ? {} : { boxShadow: `0 0 0 6px rgba(72,192,181,0.40)` }}
-                position="relative"
-              >
-                {uploading ? (
-                  // Spinner centrado mientras se sube
-                  <Flex
-                    w="100%"
-                    h="100%"
-                    align="center"
-                    justify="center"
-                    bg="rgba(0,0,0,0.45)"
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    zIndex={2}
-                  >
-                    <Spinner />
-                  </Flex>
-                ) : null}
+          <Flex direction="column" align="center" gap={3}>
+            <Box
+              w={{ base: "130px", md: "160px" }}
+              h={{ base: "130px", md: "160px" }}
+              borderRadius="full"
+              overflow="hidden"
+              border="2px solid rgba(255,255,255,0.85)"
+              boxShadow="0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.3), 0 0 100px rgba(180,255,245,0.28)"
+              cursor={uploading ? "default" : "pointer"}
+              onClick={() => !uploading && fileRef.current?.click()}
+              transition="box-shadow 0.25s"
+              _hover={uploading ? {} : { boxShadow: "0 0 34px rgba(255,255,255,0.75), 0 0 70px rgba(180,255,245,0.45), 0 0 120px rgba(180,255,245,0.35)" }}
+              position="relative"
+            >
+              {uploading && (
+                <Flex
+                  w="100%"
+                  h="100%"
+                  align="center"
+                  justify="center"
+                  bg="rgba(0,0,0,0.45)"
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  zIndex={2}
+                >
+                  <Spinner />
+                </Flex>
+              )}
 
-                {img ? (
-                  <Image src={img} w="100%" h="100%" objectFit="cover" />
-                ) : (
-                  <Flex w="100%" h="100%" align="center" justify="center" bg="rgba(255,255,255,0.08)">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="rgba(255,255,255,0.4)">
-                      <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
-                    </svg>
-                  </Flex>
-                )}
-              </Box>
+              {img ? (
+                <Image src={img} w="100%" h="100%" objectFit="cover" />
+              ) : (
+                <Flex w="100%" h="100%" align="center" justify="center" bg="rgba(255,255,255,0.08)">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="56px" viewBox="0 -960 960 960" width="56px" fill="rgba(255,255,255,0.5)">
+                    <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+                  </svg>
+                </Flex>
+              )}
             </Box>
 
-            <Text color="rgba(255,255,255,0.55)" fontSize="xs" letterSpacing="0.06em">
+            <Text
+              color="rgba(255,255,255,0.65)"
+              fontSize="sm"
+              letterSpacing="0.06em"
+              fontStyle="italic"
+              textShadow="0 0 8px rgba(255,255,255,0.3)"
+            >
               {uploading ? "Subiendo…" : "Toca la foto para cambiarla"}
             </Text>
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} />
           </Flex>
 
           {/* ── Campos ── */}
-          <VStack spacing={6} align="stretch" mb={10}>
+          <VStack spacing={6} align="stretch">
             <FieldRow
               label="Nombre"   field="name"     value={name}
               editing={editing} setEditing={setEditing}
@@ -444,49 +457,152 @@ export default function UserAccount() {
             />
           </VStack>
 
-          {/* ── Error ── */}
           {error && (
-            <Text color="#ff8080" fontSize="sm" textAlign="center" mb={4}>{error}</Text>
+            <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
+              {error}
+            </Text>
           )}
 
           {/* ── Acciones ── */}
-          <Flex direction="column" gap={3} align="stretch">
-            <Box
+          <Flex direction="column" gap={4} align="center" pt={4}>
+            <Flex
               as="button"
-              {...actionBtn("rgba(255,255,255,0.75)")}
               onClick={handleLogout}
-              justifyContent="center"
+              align="center"
+              justify="center"
+              gap={2}
+              px={{ base: 7, md: 9 }}
+              py={{ base: "10px", md: "12px" }}
+              borderRadius="full"
+              border="1px solid rgba(255,255,255,0.5)"
+              bg="rgba(255,255,255,0.06)"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.16em"
+              textTransform="uppercase"
+              cursor="pointer"
+              boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 28px rgba(255,255,255,0.12)"
+              textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)"
+              _hover={{
+                bg: "rgba(255,255,255,0.16)",
+                borderColor: "rgba(255,255,255,0.85)",
+                boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
+              }}
+              transition="all 0.25s ease"
             >
-              <LogoutIcon /> Cerrar sesión
-            </Box>
+              <Box as="span" style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.45))" }}>
+                <LogoutIcon />
+              </Box>
+              Cerrar sesión
+            </Flex>
 
             {!confirmDelete ? (
-              <Box
+              <Flex
                 as="button"
-                {...actionBtn("#ff6b6b")}
                 onClick={() => setConfirmDelete(true)}
-                justifyContent="center"
+                align="center"
+                justify="center"
+                gap={2}
+                px={{ base: 6, md: 8 }}
+                py={{ base: "8px", md: "10px" }}
+                borderRadius="full"
+                border="1px solid rgba(255,130,130,0.55)"
+                bg="rgba(255,130,130,0.05)"
+                color="rgba(255,160,160,0.85)"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="500"
+                fontSize={{ base: "xs", md: "sm" }}
+                letterSpacing="0.12em"
+                textTransform="uppercase"
+                fontStyle="italic"
+                cursor="pointer"
+                boxShadow="0 0 10px rgba(255,130,130,0.18)"
+                _hover={{
+                  bg: "rgba(255,130,130,0.14)",
+                  borderColor: "rgba(255,150,150,0.85)",
+                  color: "rgba(255,200,200,1)",
+                  boxShadow: "0 0 16px rgba(255,130,130,0.4)",
+                }}
+                transition="all 0.25s ease"
               >
                 <DeleteIcon /> Eliminar cuenta
-              </Box>
+              </Flex>
             ) : (
-              <Flex direction="column" gap={2} align="center" {...glass} p={4}>
-                <Text color="white" fontSize="sm" textAlign="center" mb={1}>
+              <Flex direction="column" align="center" gap={3} pt={2}>
+                <Text
+                  color="rgba(255,200,200,0.95)"
+                  fontSize={{ base: "sm", md: "md" }}
+                  textAlign="center"
+                  fontStyle="italic"
+                  textShadow="0 0 8px rgba(255,150,150,0.35)"
+                  maxW="320px"
+                  lineHeight="1.6"
+                >
                   ¿Estás segura? Esta acción no se puede deshacer.
                 </Text>
                 <Flex gap={3}>
-                  <Box as="button" {...actionBtn("#ff6b6b")} onClick={handleDelete} fontSize="sm">
+                  <Flex
+                    as="button"
+                    onClick={handleDelete}
+                    align="center"
+                    justify="center"
+                    px={6}
+                    py="9px"
+                    borderRadius="full"
+                    border="1px solid rgba(255,130,130,0.7)"
+                    bg="rgba(255,130,130,0.12)"
+                    color="rgba(255,200,200,1)"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="600"
+                    fontSize="sm"
+                    letterSpacing="0.12em"
+                    textTransform="uppercase"
+                    cursor="pointer"
+                    boxShadow="0 0 14px rgba(255,130,130,0.32)"
+                    _hover={{
+                      bg: "rgba(255,130,130,0.22)",
+                      borderColor: "rgba(255,160,160,1)",
+                      boxShadow: "0 0 22px rgba(255,130,130,0.5)",
+                    }}
+                    transition="all 0.25s ease"
+                  >
                     Sí, eliminar
-                  </Box>
-                  <Box as="button" {...actionBtn("rgba(255,255,255,0.60)")} onClick={() => setConfirmDelete(false)} fontSize="sm">
+                  </Flex>
+                  <Flex
+                    as="button"
+                    onClick={() => setConfirmDelete(false)}
+                    align="center"
+                    justify="center"
+                    px={6}
+                    py="9px"
+                    borderRadius="full"
+                    border="1px solid rgba(255,255,255,0.45)"
+                    bg="rgba(255,255,255,0.05)"
+                    color="white"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="500"
+                    fontSize="sm"
+                    letterSpacing="0.12em"
+                    textTransform="uppercase"
+                    cursor="pointer"
+                    boxShadow="0 0 10px rgba(255,255,255,0.18)"
+                    textShadow="0 0 8px rgba(255,255,255,0.35)"
+                    _hover={{
+                      bg: "rgba(255,255,255,0.14)",
+                      borderColor: "rgba(255,255,255,0.8)",
+                      boxShadow: "0 0 16px rgba(255,255,255,0.35)",
+                    }}
+                    transition="all 0.25s ease"
+                  >
                     Cancelar
-                  </Box>
+                  </Flex>
                 </Flex>
               </Flex>
             )}
           </Flex>
-          </>
-        </Box>
+        </Flex>
       </Flex>
     </Box>
   );

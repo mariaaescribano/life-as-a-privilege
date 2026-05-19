@@ -123,7 +123,8 @@ const OpinionesSection: React.FC = () => {
             fontFamily="'EB Garamond', serif"
             fontWeight="600"
             fontSize={{ base: "md", md: "lg" }}
-            letterSpacing="0.06em"
+            letterSpacing="0.14em"
+            textTransform="uppercase"
             px={7}
             py="10px"
             borderRadius="full"

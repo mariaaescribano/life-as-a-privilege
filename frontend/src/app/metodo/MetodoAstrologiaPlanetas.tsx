@@ -110,14 +110,14 @@ const ProfundizarBtn = ({
     as="button"
     onClick={enabled ? onClick : undefined}
     disabled={!enabled}
-    px={4}
-    py={2}
+    px={5}
+    py={2.5}
     borderRadius="lg"
     bg="transparent"
     border={`1px solid ${enabled ? color + "77" : color + "22"}`}
     color={enabled ? color : `${color}55`}
     fontFamily="'EB Garamond', serif"
-    fontSize="sm"
+    fontSize={{ base: "md", md: "lg" }}
     letterSpacing="0.06em"
     fontStyle="italic"
     cursor={enabled ? "pointer" : "not-allowed"}
@@ -126,13 +126,14 @@ const ProfundizarBtn = ({
     justifyContent={align === "right" ? "flex-end" : "flex-start"}
     gap={2}
     transition="all 0.2s"
-    boxShadow={enabled ? `0 0 14px ${color}22` : "none"}
-    _hover={enabled ? { borderColor: color, boxShadow: `0 0 18px ${color}55`, color: color } : undefined}
+    boxShadow={enabled ? `0 0 10px rgba(255,255,255,0.2), 0 0 22px ${color}33` : "none"}
+    textShadow={enabled ? `0 0 10px rgba(255,255,255,0.45), 0 0 22px ${color}55` : "none"}
+    _hover={enabled ? { borderColor: color, boxShadow: `0 0 16px rgba(255,255,255,0.4), 0 0 30px ${color}66`, color: color } : undefined}
     title={enabled ? undefined : "Elige primero para profundizar"}
   >
     <Text as="span">{label}</Text>
-    <Box as="span" display="inline-flex" alignItems="center">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <Box as="span" display="inline-flex" alignItems="center" style={{ filter: enabled ? `drop-shadow(0 0 6px rgba(255,255,255,0.45))` : "none" }}>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M7 17L17 7" />
         <path d="M8 7h9v9" />
       </svg>
@@ -268,22 +269,6 @@ export default function MetodoAstrologiaPlanetas() {
         />
       </Flex>
 
-      {/* Aviso de orden */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={4}>
-        <Box
-          px={5}
-          py={2.5}
-          borderRadius="full"
-          bg={`${astrologiaTxt}14`}
-          border={`1px solid ${astrologiaTxt}44`}
-          boxShadow={`0 0 16px ${astrologiaTxt}22`}
-        >
-          <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.08em" fontStyle="italic" textAlign="center">
-            ✦ Hay que ir por orden — elige signo, casa y profundiza para desbloquear el siguiente.
-          </Text>
-        </Box>
-      </Flex>
-
       {/* ── GRID DE PLANETAS ── */}
       <Box px={{ base: 5, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
         <Grid
@@ -343,10 +328,10 @@ export default function MetodoAstrologiaPlanetas() {
                     </Box>
                     <Text
                       color={c.color}
-                      fontSize={{ base: "lg", md: "xl" }}
+                      fontSize={{ base: "2xl", md: "3xl" }}
                       fontWeight="700"
-                      letterSpacing="0.05em"
-                      filter={`drop-shadow(0 1px 4px ${c.color}55)`}
+                      letterSpacing="0.06em"
+                      style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.32), 0 0 56px ${c.color}66` }}
                       flex="1"
                     >
                       {c.label}
@@ -369,7 +354,14 @@ export default function MetodoAstrologiaPlanetas() {
                   {/* Selectores */}
                   <Flex direction={c.conCasa ? { base: "column", sm: "row" } : "column"} gap={3}>
                     <Box flex="1">
-                      <Text color={`${c.color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600">
+                      <Text
+                        color={`${c.color}cc`}
+                        fontSize="xs"
+                        letterSpacing="0.16em"
+                        mb={1.5}
+                        fontWeight="600"
+                        style={{ textShadow: `0 0 8px rgba(255,255,255,0.35), 0 0 16px ${c.color}55` }}
+                      >
                         SIGNO
                       </Text>
                       <Box
@@ -383,7 +375,7 @@ export default function MetodoAstrologiaPlanetas() {
                         border={`1px solid ${c.color}55`}
                         color={valor.signo ? c.color : `${c.color}88`}
                         fontFamily="'EB Garamond', serif"
-                        fontSize="md"
+                        fontSize="lg"
                         letterSpacing="0.04em"
                         textAlign="left"
                         cursor="pointer"
@@ -393,13 +385,14 @@ export default function MetodoAstrologiaPlanetas() {
                         gap={2}
                         transition="all 0.2s"
                         boxShadow={`0 0 16px ${c.color}22, inset 0 0 12px ${c.color}10`}
+                        textShadow={valor.signo ? `0 0 10px rgba(255,255,255,0.45), 0 0 22px ${c.color}55` : "none"}
                         _hover={{ borderColor: `${c.color}aa`, boxShadow: `0 0 22px ${c.color}44, inset 0 0 12px ${c.color}18` }}
                       >
                         <Flex align="center" gap={2}>
                           {valor.signo && (
                             <ZodiacGlyph
                               symbol={ZODIAC_SIGNS.find((s) => s.name === valor.signo)?.symbol || ""}
-                              size={18}
+                              size={22}
                               color={c.color}
                             />
                           )}
@@ -411,7 +404,14 @@ export default function MetodoAstrologiaPlanetas() {
 
                     {c.conCasa && (
                       <Box w={{ base: "100%", sm: "130px" }}>
-                        <Text color={`${c.color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600">
+                        <Text
+                          color={`${c.color}cc`}
+                          fontSize="xs"
+                          letterSpacing="0.16em"
+                          mb={1.5}
+                          fontWeight="600"
+                          style={{ textShadow: `0 0 8px rgba(255,255,255,0.35), 0 0 16px ${c.color}55` }}
+                        >
                           CASA
                         </Text>
                         <Box
@@ -425,7 +425,7 @@ export default function MetodoAstrologiaPlanetas() {
                           border={`1px solid ${c.color}55`}
                           color={valor.casa != null ? c.color : `${c.color}88`}
                           fontFamily="'EB Garamond', serif"
-                          fontSize="md"
+                          fontSize="lg"
                           letterSpacing="0.04em"
                           textAlign="left"
                           cursor="pointer"
@@ -435,6 +435,7 @@ export default function MetodoAstrologiaPlanetas() {
                           gap={2}
                           transition="all 0.2s"
                           boxShadow={`0 0 16px ${c.color}22, inset 0 0 12px ${c.color}10`}
+                          textShadow={valor.casa != null ? `0 0 10px rgba(255,255,255,0.45), 0 0 22px ${c.color}55` : "none"}
                           _hover={{ borderColor: `${c.color}aa`, boxShadow: `0 0 22px ${c.color}44, inset 0 0 12px ${c.color}18` }}
                         >
                           <Text as="span">{valor.casa != null ? `Casa ${valor.casa}` : "—"}</Text>
@@ -447,14 +448,14 @@ export default function MetodoAstrologiaPlanetas() {
                   {/* Botones profundizar */}
                   <Flex mt={5} gap={3} justify={c.conCasa ? "space-between" : "center"} direction={{ base: "column", sm: "row" }}>
                     <ProfundizarBtn
-                      label={valor.profundizadoSigno ? "Profundizar signo ✓" : "Profundizar signo"}
+                      label={valor.profundizadoSigno ? "Ver signo ✓" : "Ver signo"}
                       color={c.color}
                       enabled={!!valor.signo}
                       onClick={() => navigate(`/metodo/astrologia/${c.key}/signo`)}
                     />
                     {c.conCasa && (
                       <ProfundizarBtn
-                        label={valor.profundizadoCasa ? "Profundizar casa ✓" : "Profundizar casa"}
+                        label={valor.profundizadoCasa ? "Ver casa ✓" : "Ver casa"}
                         color={c.color}
                         enabled={valor.casa != null}
                         onClick={() => navigate(`/metodo/astrologia/${c.key}/casa`)}

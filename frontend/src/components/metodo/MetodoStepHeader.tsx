@@ -54,17 +54,22 @@ const StepBtn = ({ label, color, onClick, disabled }: StepButton & { color: stri
     px={{ base: 5, md: 7 }}
     py={2.5}
     borderRadius="full"
-    bg="transparent"
-    border={`1px solid ${disabled ? color + "22" : color + "77"}`}
-    color={disabled ? `${color}44` : color}
+    bg="rgba(255,255,255,0.04)"
+    border={`1px solid ${disabled ? color + "22" : "rgba(255,255,255,0.4)"}`}
+    color={disabled ? `${color}44` : "white"}
     fontFamily="'EB Garamond', serif"
     fontSize={{ base: "sm", md: "md" }}
     letterSpacing="0.05em"
     fontStyle="italic"
     cursor={disabled ? "not-allowed" : "pointer"}
-    transition="all 0.2s"
-    boxShadow={disabled ? "none" : `0 0 14px ${color}33`}
-    _hover={disabled ? undefined : { borderColor: color, boxShadow: `0 0 22px ${color}66` }}
+    transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease"
+    boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}22`}
+    textShadow={disabled ? "none" : "0 0 6px rgba(255,255,255,0.3)"}
+    _hover={disabled ? undefined : {
+      bg: "rgba(255,255,255,0.12)",
+      borderColor: "rgba(255,255,255,0.75)",
+      boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px rgba(180,255,245,0.2), 0 0 30px ${color}44`,
+    }}
     whiteSpace="nowrap"
   >
     {label}
@@ -94,8 +99,8 @@ export function MetodoStepHeader({
       border={`1px solid ${color}33`}
       boxShadow={
         space
-          ? `0 0 28px ${color}33, 0 0 72px ${color}1f`
-          : `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${color}55`
+          ? `0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(255,255,255,0.16), 0 0 90px rgba(180,255,245,0.18), 0 0 28px ${color}33, 0 0 72px ${color}1f`
+          : `0 4px 20px rgba(0,0,0,0.22), 0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(255,255,255,0.14), 0 0 22px ${color}55`
       }
     >
       {space && <SpaceBg />}
@@ -107,7 +112,7 @@ export function MetodoStepHeader({
             borderRadius="full"
             bg={bgColor}
             border={`5px solid ${color}`}
-            boxShadow={`0 0 22px ${color}77, 0 0 55px ${color}28`}
+            boxShadow={`0 0 14px rgba(255,255,255,0.5), 0 0 32px rgba(255,255,255,0.25), 0 0 22px ${color}77, 0 0 55px ${color}28`}
             w={{ base: "60px", md: "72px" }}
             h={{ base: "60px", md: "72px" }}
             display="flex"
@@ -125,7 +130,7 @@ export function MetodoStepHeader({
             letterSpacing="0.05em"
             lineHeight="1.15"
             style={{
-              textShadow: space ? `0 0 12px ${color}77` : "1px 1px 3px rgba(0,0,0,0.25)",
+              textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
             }}
           >
             {title}

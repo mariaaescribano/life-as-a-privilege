@@ -121,7 +121,7 @@ export function SubscribeBox() {
             </Text>
           </Flex>
         ) : (
-          <Flex direction="column" align="center" gap={4}>
+          <Flex direction="column" align="center" gap={{ base: 8, md: 10 }}>
             <Input
               value={email}
               onChange={(e) => { setEmail(e.target.value); if (status === "invalid") setStatus("idle"); }}
@@ -159,7 +159,8 @@ export function SubscribeBox() {
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "md", md: "lg" }}
               fontWeight="700"
-              letterSpacing="0.08em"
+              letterSpacing="0.16em"
+              textTransform="uppercase"
               cursor="pointer"
               boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 30px rgba(255,255,255,0.15)"
               textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)"

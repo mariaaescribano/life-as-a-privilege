@@ -43,7 +43,7 @@ const EspacioHome = () => {
   const navigate = useNavigate();
 
   // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
-  // Fisiología → Nutrición → Cultura → Cábala
+  // Fisiología → Nutrición → Cábala → Cultura
   const photos = [
     { bg: astrologiaBg,      icon: <AstrologiaIcon size={{ base: "38px", md: "58px" }}  />,                              link: "/espacio/questions/" + astrologiaNom,      cursor: "pointer" , txt: astrologiaTxt},
     { bg: neuropsicologiaBg, icon: <NeuropsicologiaIcon size={{ base: "38px", md: "58px" }} />, link: "/espacio/questions/" + neuropsicologiaNom, cursor: "pointer"  , txt: neuropsicologiaTxt   },
@@ -51,8 +51,8 @@ const EspacioHome = () => {
     { bg: tcmBg,             icon: <TCMIcon size={{ base: "38px", md: "58px" }} />,              link: "/espacio/questions/" + tcmNomLink,         cursor: "pointer" , txt: tcmTxt},
     { bg: fisiologiaBg,      icon: <FisiologiaIcon size={{ base: "38px", md: "58px" }}  />,                              link: "/espacio/fisiologia",                      cursor: "pointer"     , txt: fisiologiaTxt},
     { bg: nutricionBg,       icon: <NutricionIcon size={{ base: "38px", md: "58px" }}  />,                               link: "/espacio/questions/" + nutricionNomLink,   cursor: "pointer",    txt: nutricionTxt },
-    { bg: culturaBg,         icon: <CulturaIcon size={{ base: "38px", md: "58px" }}  />,         link: "/aprendizaje/cursosModalidad/cultura",     cursor: "pointer" , txt: culturaTxt},
     { bg: cabalaBg,          icon: <CabalaIcon size={{ base: "38px", md: "58px" }}  />,                                  link: "/espacio/questions/" + cabalaNom,          cursor: "pointer" , txt: cabalaTxt},
+    { bg: culturaBg,         icon: <CulturaIcon size={{ base: "38px", md: "58px" }}  />,         link: "/aprendizaje/cursosModalidad/cultura",     cursor: "pointer" , txt: culturaTxt},
   ];
 
   const angleStep = (2 * Math.PI) / photos.length;

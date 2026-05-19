@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, Tooltip, useBreakpointValue } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -33,8 +33,8 @@ const disciplines = [
   { bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon },
   { bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
   { bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon },
-  { bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon },
   { bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon },
+  { bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon },
 ];
 
 const Home = () => {
@@ -158,74 +158,25 @@ const Home = () => {
               color="white"
               fontSize={{ base: "3xl", md: "5xl" }}
               fontWeight="700"
-              letterSpacing="0.05em"
+              letterSpacing="0.06em"
               textAlign="center"
               lineHeight="1.15"
-              textShadow="0 2px 14px rgba(0,80,70,0.45)"
+              textShadow="0 0 18px rgba(255,255,255,0.75), 0 0 38px rgba(255,255,255,0.45), 0 0 70px rgba(180,255,245,0.35)"
               mb={3}
             >
               Te damos la bienvenida{name ? `, ${name}` : ""}
             </Text>
             <Text
-              color="rgba(255,255,255,0.88)"
+              color="rgba(255,255,255,0.92)"
               fontSize={{ base: "lg", md: "2xl" }}
               fontStyle="italic"
               textAlign="center"
               letterSpacing="0.04em"
-              textShadow="0 1px 8px rgba(0,60,50,0.35)"
-              mb={{ base: 6, md: 8 }}
+              textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3)"
+              mb={{ base: 12, md: 16 }}
             >
               Este es el camino de vuelta a ti.
             </Text>
-
-            {/* ── BOX INFORMATIVO ── */}
-            <Box
-              w={{ base: "100%", md: "78%", lg: "64%" }}
-              bg="rgba(255,255,255,0.14)"
-              border="1px solid rgba(255,255,255,0.35)"
-              sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-              borderRadius="2xl"
-              boxShadow="0 8px 36px rgba(107,196,200,0.4)"
-              px={{ base: 6, md: 8 }}
-              py={{ base: 5, md: 6 }}
-              mb={{ base: 10, md: 12 }}
-              display="flex"
-              flexDirection={{ base: "column", md: "row" }}
-              alignItems="center"
-              gap={{ base: 4, md: 6 }}
-            >
-              <Box
-                flexShrink={0}
-                w={{ base: "62px", md: "72px" }}
-                h={{ base: "62px", md: "72px" }}
-                borderRadius="full"
-                bg="rgba(255,255,255,0.2)"
-                border="1px solid rgba(255,255,255,0.4)"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                p={2}
-              >
-                <Image
-                  src="/img/icono/life.png"
-                  alt="Life as a Privilege"
-                  w="100%"
-                  h="100%"
-                  objectFit="contain"
-                  filter="drop-shadow(0 2px 8px rgba(255,255,255,0.35))"
-                />
-              </Box>
-              <Text
-                color="rgba(255,255,255,0.92)"
-                fontSize={{ base: "md", md: "lg" }}
-                lineHeight="1.7"
-                letterSpacing="0.015em"
-                textAlign={{ base: "center", md: "left" }}
-                flex="1"
-              >
-                Las modalidades se irán abriendo una a una a medida que recorras el camino.
-              </Text>
-            </Box>
 
             {/* Mandala */}
             <Box
@@ -256,8 +207,8 @@ const Home = () => {
                 h={centerSize}
                 borderRadius="full"
                 overflow="hidden"
-                boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 50px rgba(107,196,200,1), 0 0 100px rgba(107,196,200,0.55)"
-                border="2px solid rgba(255,255,255,0.85)"
+                boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 32px rgba(255,255,255,0.7), 0 0 70px rgba(255,255,255,0.35), 0 0 110px rgba(180,255,245,0.3)"
+                border="2px solid rgba(255,255,255,0.9)"
                 zIndex={10}
               >
                 <Image src={img} alt="Tu foto" w="100%" h="100%" objectFit="cover" />
@@ -298,6 +249,95 @@ const Home = () => {
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
                 const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
                 const abierta = index === 0; // Astrología
+
+                const disciplinaCircle = (
+                  <Box
+                    onClick={abierta ? irAstrologia : undefined}
+                    cursor={abierta ? "pointer" : "not-allowed"}
+                    w="100%"
+                    h="100%"
+                    borderRadius="full"
+                    overflow="visible"
+                    position="relative"
+                    opacity={abierta ? 1 : 0.5}
+                    animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
+                    filter={abierta ? "none" : "grayscale(0.35)"}
+                    transition="transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease"
+                    _hover={abierta ? { transform: "scale(1.06)" } : { opacity: 0.75 }}
+                  >
+                    {/* Círculo principal con icono */}
+                    <Box
+                      w="100%"
+                      h="100%"
+                      borderRadius="full"
+                      overflow="hidden"
+                      border={`4px solid ${d.txt}`}
+                      boxShadow={abierta
+                        ? `0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.3), 0 0 90px rgba(180,255,245,0.28), 0 0 60px ${d.txt}88, 0 2px 30px ${d.txt}55`
+                        : `0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 0 40px ${d.txt}55, 0 2px 24px ${d.txt}33`}
+                      bg={d.bg}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      position="relative"
+                    >
+                      <Icon size={{ base: iconSize, md: iconSize }} />
+
+                      {/* Overlay candado en las disciplinas bloqueadas */}
+                      {!abierta && (
+                        <Box
+                          position="absolute"
+                          inset={0}
+                          bg="rgba(0,40,40,0.55)"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          sx={{ backdropFilter: "blur(2px)" }}
+                        >
+                          <Box
+                            as="svg"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -960 960 960"
+                            w={{ base: "30px", md: "42px", lg: "50px" }}
+                            h={{ base: "30px", md: "42px", lg: "50px" }}
+                            fill="white"
+                            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.65)) drop-shadow(0 0 18px rgba(255,255,255,0.35))" }}
+                          >
+                            <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+
+                    {/* Badge con número */}
+                    <Box
+                      position="absolute"
+                      top="-8px"
+                      right="-8px"
+                      w={numberSize}
+                      h={numberSize}
+                      borderRadius="full"
+                      bg="white"
+                      border={`2px solid ${badgeColor}`}
+                      boxShadow={`0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3), 0 2px 10px ${badgeColor}88, 0 4px 14px rgba(0,0,0,0.25)`}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      opacity={1}
+                    >
+                      <Text
+                        color={badgeColor}
+                        fontSize={{ base: "sm", md: "md", lg: "lg" }}
+                        fontWeight="800"
+                        fontFamily="'EB Garamond', serif"
+                        lineHeight="1"
+                      >
+                        {number}
+                      </Text>
+                    </Box>
+                  </Box>
+                );
+
                 return (
                   <Box
                     key={index}
@@ -306,85 +346,33 @@ const Home = () => {
                     w={circleSize}
                     h={circleSize}
                   >
-                    <Box
-                      onClick={abierta ? irAstrologia : undefined}
-                      cursor={abierta ? "pointer" : "not-allowed"}
-                      w="100%"
-                      h="100%"
-                      borderRadius="full"
-                      overflow="visible"
-                      position="relative"
-                      opacity={abierta ? 1 : 0.45}
-                      animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
-                      filter={abierta ? "none" : "grayscale(0.25)"}
-                      transition="transform 0.2s ease, filter 0.2s ease"
-                      _hover={abierta ? { transform: "scale(1.06)" } : undefined}
-                    >
-                      {/* Círculo principal con icono */}
-                      <Box
-                        w="100%"
-                        h="100%"
-                        borderRadius="full"
-                        overflow="hidden"
-                        border={`4px solid ${d.txt}`}
-                        boxShadow={`
-                          0 0 50px ${d.txt}77,
-                          0 2px 30px ${d.txt}55
-                        `}
-                        bg={d.bg}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
+                    {abierta ? (
+                      disciplinaCircle
+                    ) : (
+                      <Tooltip
+                        label="El Recorrido se hace en orden — por favor, completa la disciplina anterior."
+                        placement="top"
+                        hasArrow
+                        bg="rgba(0,40,40,0.95)"
+                        color="white"
+                        fontFamily="'EB Garamond', serif"
+                        fontSize="sm"
+                        letterSpacing="0.03em"
+                        px={4}
+                        py={3}
+                        maxW="260px"
+                        textAlign="center"
+                        borderRadius="lg"
+                        boxShadow="0 0 18px rgba(255,255,255,0.25), 0 6px 20px rgba(0,0,0,0.35)"
+                        openDelay={150}
                       >
-                        <Icon size={{ base: iconSize, md: iconSize }} />
-                      </Box>
-
-                      {/* Badge con número */}
-                      <Box
-                        position="absolute"
-                        top="-8px"
-                        right="-8px"
-                        w={numberSize}
-                        h={numberSize}
-                        borderRadius="full"
-                        bg="white"
-                        border={`2px solid ${badgeColor}`}
-                        boxShadow={`0 2px 10px ${badgeColor}88, 0 4px 14px rgba(0,0,0,0.25)`}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        opacity={1}
-                      >
-                        <Text
-                          color={badgeColor}
-                          fontSize={{ base: "sm", md: "md", lg: "lg" }}
-                          fontWeight="800"
-                          fontFamily="'EB Garamond', serif"
-                          lineHeight="1"
-                        >
-                          {number}
-                        </Text>
-                      </Box>
-                    </Box>
+                        {disciplinaCircle}
+                      </Tooltip>
+                    )}
                   </Box>
                 );
               })}
             </Box>
-
-            {/* Aviso bajo el mandala */}
-            <Text
-              mt={{ base: 8, md: 10 }}
-              color="rgba(255,255,255,0.8)"
-              fontSize={{ base: "md", md: "lg" }}
-              textAlign="center"
-              fontStyle="italic"
-              letterSpacing="0.04em"
-              maxW="640px"
-              px={6}
-              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.4))" }}
-            >
-              Tu camino comenzará pronto. Las disciplinas se irán abriendo en orden a medida que avances en el Método.
-            </Text>
           </Flex>
         ) : (
           <SpinnerTurquesa />

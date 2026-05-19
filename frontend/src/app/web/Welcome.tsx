@@ -87,21 +87,21 @@ const disciplines: Discipline[] = [
     available:true
   },
   {
-    name: culturaNom,
-    bg: culturaBg,
-    txt: culturaTxt,
-    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-    desc: culturaDescrip,
-    link: "/aprendizaje/cursosModalidad/" + culturaNom,
-    available:true
-  },
-  {
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
     desc: cabalaDescrip,
     link: "/aprendizaje/cursosModalidad/" + cabalaNom,
+    available:true
+  },
+  {
+    name: culturaNom,
+    bg: culturaBg,
+    txt: culturaTxt,
+    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
+    desc: culturaDescrip,
+    link: "/aprendizaje/cursosModalidad/" + culturaNom,
     available:true
   },
 ];
@@ -427,7 +427,7 @@ const Welcome = () => {
             }}
             transition="all 0.25s ease"
           >
-            Conoce más
+            Conocer a la creadora
             <Box as="span" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: "0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)" }}>
               →
             </Box>
@@ -566,7 +566,7 @@ const Welcome = () => {
       <OpinionesSection />
 
       {/* ── SUSCRIPCIÓN ── */}
-      <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 8, md: 12 }}>
+      <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 24, md: 32 }}>
         <SubscribeBox />
       </Flex>
 
@@ -659,7 +659,8 @@ const Welcome = () => {
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "lg", md: "xl" }}
-              letterSpacing="0.12em"
+              letterSpacing="0.16em"
+              textTransform="uppercase"
               px={10}
               py={3}
               borderRadius="full"

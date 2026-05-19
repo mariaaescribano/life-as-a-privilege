@@ -1,5 +1,5 @@
-import React from "react";
-import { Flex, Image, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 type SiteHeaderProps = {
@@ -17,12 +17,14 @@ type SiteHeaderProps = {
   userImg?: string;
 };
 
-const SiteHeader = ({ variant }: SiteHeaderProps) => {
+const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const navigate = useNavigate();
+  const [sessionImg] = useState<string | null>(() => sessionStorage.getItem("img"));
 
   const hasSession = !!sessionStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   const logoTarget = isPrivate ? "/home" : "/";
+  const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.png";
 
   return (
     <Flex
@@ -66,25 +68,75 @@ const SiteHeader = ({ variant }: SiteHeaderProps) => {
         </Text>
       </Flex>
 
-      {/* El recorrido (texto navegable) */}
-      <Text
-        as="button"
-        onClick={() => navigate("/elMetodo")}
-        color="white"
-        fontFamily="'EB Garamond', serif"
-        fontWeight="600"
-        fontSize={{ base: "md", md: "xl" }}
-        letterSpacing="0.16em"
-        textTransform="uppercase"
-        textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-        cursor="pointer"
-        bg="transparent"
-        border="none"
-        _hover={{ color: "white", textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
-        transition="text-shadow 0.25s ease"
-      >
-        El recorrido
-      </Text>
+      {/* Enlace derecha — HOME + avatar si está logueado, El recorrido si público */}
+      {isPrivate ? (
+        <Flex align="center" gap={{ base: 4, md: 6 }}>
+          <Text
+            as="button"
+            onClick={() => navigate("/home")}
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "md", md: "xl" }}
+            letterSpacing="0.16em"
+            textTransform="uppercase"
+            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+            cursor="pointer"
+            bg="transparent"
+            border="none"
+            _hover={{ color: "white", textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
+            transition="text-shadow 0.25s ease"
+          >
+            Home
+          </Text>
+          <Box
+            as="button"
+            onClick={() => navigate("/user/account")}
+            w={{ base: "48px", md: "56px" }}
+            h={{ base: "48px", md: "56px" }}
+            borderRadius="full"
+            overflow="hidden"
+            border="2px solid rgba(255,255,255,0.7)"
+            bg="rgba(255,255,255,0.08)"
+            cursor="pointer"
+            boxShadow="0 0 12px rgba(255,255,255,0.45), 0 0 28px rgba(255,255,255,0.22), 0 0 50px rgba(180,255,245,0.2)"
+            transition="border-color 0.25s ease, box-shadow 0.25s ease"
+            _hover={{
+              borderColor: "white",
+              boxShadow: "0 0 18px rgba(255,255,255,0.7), 0 0 42px rgba(180,255,245,0.4)",
+            }}
+            flexShrink={0}
+            p={0}
+          >
+            <Image
+              src={avatarSrc}
+              alt="Mi cuenta"
+              w="100%"
+              h="100%"
+              objectFit="cover"
+            />
+          </Box>
+        </Flex>
+      ) : (
+        <Text
+          as="button"
+          onClick={() => navigate("/elMetodo")}
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontWeight="600"
+          fontSize={{ base: "md", md: "xl" }}
+          letterSpacing="0.16em"
+          textTransform="uppercase"
+          textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+          cursor="pointer"
+          bg="transparent"
+          border="none"
+          _hover={{ color: "white", textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
+          transition="text-shadow 0.25s ease"
+        >
+          El recorrido
+        </Text>
+      )}
     </Flex>
   );
 };

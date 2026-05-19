@@ -183,7 +183,7 @@ export default function MetodoAstrologia() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 30px ${astrologiaTxt}33, 0 0 80px ${astrologiaTxt}1f`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 90px rgba(180,255,245,0.16), 0 0 30px ${astrologiaTxt}33, 0 0 80px ${astrologiaTxt}1f`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.65)" />
 
@@ -193,11 +193,12 @@ export default function MetodoAstrologia() {
               {yaConPdf && (
                 <Flex direction="column" align="center" gap={6}>
                   <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 12px ${astrologiaTxt}77` }}>
+                        style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${astrologiaTxt}55` }}>
                     Tu carta astral está lista
                   </Text>
-                  <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px">
-                    Descárgala, léela con calma y, cuando estés lista, continúa al siguiente paso para indicar tus arquetipos.
+                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px"
+                        style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
+                    Descárgala, léela con calma y, cuando estés listo, continúa al siguiente paso para indicar tus arquetipos.
                   </Text>
                   <Box
                     as="a"
@@ -213,10 +214,8 @@ export default function MetodoAstrologia() {
                     fontSize={{ base: "lg", md: "xl" }}
                     fontWeight="700"
                     letterSpacing="0.08em"
-                    boxShadow={`0 0 24px ${astrologiaTxt}99, 0 0 56px ${astrologiaTxt}55`}
+                    boxShadow={`0 0 10px rgba(255,255,255,0.28), 0 0 26px rgba(255,255,255,0.14), 0 0 18px ${astrologiaTxt}88, 0 0 42px ${astrologiaTxt}44`}
                     cursor="pointer"
-                    transition="all 0.22s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${astrologiaTxt}, 0 0 80px ${astrologiaTxt}77` }}
                   >
                     Descargar mi carta (PDF)
                   </Box>
@@ -236,20 +235,23 @@ export default function MetodoAstrologia() {
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    boxShadow={`0 0 22px ${astrologiaTxt}55`}
+                    boxShadow={`0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22), 0 0 22px ${astrologiaTxt}55`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill={astrologiaTxt}>
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill={astrologiaTxt}
+                         style={{ filter: `drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 0 14px ${astrologiaTxt}88)` }}>
                       <path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Z"/>
-                    </svg>
+                    </Box>
                   </Box>
                   <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 10px ${astrologiaTxt}66` }}>
+                        style={{ textShadow: `0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.28), 0 0 50px ${astrologiaTxt}55` }}>
                     Tu carta está en proceso
                   </Text>
-                  <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center" maxW="600px">
+                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center" maxW="600px"
+                        style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
                     María personalmente leerá tu carta y te dirá los arquetipos para que puedas continuar. Hasta entonces tienes que esperar, lo sentimos.
                   </Text>
-                  <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" textAlign="center" fontStyle="italic" maxW="540px">
+                  <Text color={`${astrologiaTxt}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" textAlign="center" fontStyle="italic" maxW="540px"
+                        style={{ textShadow: `0 0 8px rgba(255,255,255,0.3)` }}>
                     Mientras tanto, recuerda que tienes los cursos y libros gratuitos.
                   </Text>
                 </Flex>
@@ -259,10 +261,11 @@ export default function MetodoAstrologia() {
               {!yaConPdf && !yaSolicitado && (
                 <Flex direction="column" gap={5}>
                   <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
+                        style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
                     Tu Carta Astral
                   </Text>
-                  <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto">
+                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto"
+                        style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
                     Necesitamos tus datos de nacimiento para que María pueda leer tu carta.
                   </Text>
 
