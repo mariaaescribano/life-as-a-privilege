@@ -160,19 +160,19 @@ const Welcome = () => {
       <SiteHeader variant="public" />
 
       {/* ── FRASE ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 20 }}>
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
         <Text
           color="white"
           textAlign="center"
-          fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
+          fontSize={{ base: "md", md: "xl", lg: "2xl" }}
           fontWeight="400"
           letterSpacing="0.06em"
           lineHeight="1.4"
-          textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4), 0 0 60px rgba(180,255,245,0.35)"
+          textShadow="0 0 13px rgba(255,255,255,0.7), 0 0 27px rgba(255,255,255,0.4), 0 0 54px rgba(180,255,245,0.35)"
           fontFamily="'EB Garamond', serif"
-          maxW={{ base: "100%", md: "85%" }}
+          maxW={{ base: "100%", md: "78%" }}
           opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(20px)"}
+          transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
           Un camino para entenderte: tus patrones, tu historia y tus células.
@@ -180,13 +180,13 @@ const Welcome = () => {
       </Flex>
 
       {/* ── LOGO SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 8, md: 10 }}>
+      <Flex justify="center" pt={{ base: 7, md: 9 }}>
         <Image
           src="/img/icono/life.png"
           alt=""
-          h={{ base: "60px", md: "80px" }}
+          h={{ base: "54px", md: "72px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.78)) drop-shadow(0 0 24px rgba(255,255,255,0.42)) drop-shadow(0 0 47px rgba(180,255,245,0.32))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.45s, transform 1s ease 0.45s"
@@ -194,10 +194,10 @@ const Welcome = () => {
       </Flex>
 
       {/* ── BIENVENIDA ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 6, md: 8 }}>
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 5, md: 7 }}>
         <Box
           ref={bienvenidaReveal.ref}
-          w={{ base: "100%", md: "80%" }}
+          w={{ base: "100%", md: "78%" }}
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -208,36 +208,36 @@ const Welcome = () => {
         >
           <Text
             color="white"
-            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
             fontWeight="700"
             letterSpacing="0.06em"
             lineHeight="1.2"
-            textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+            textShadow="0 0 16px rgba(255,255,255,0.85), 0 0 34px rgba(255,255,255,0.55), 0 0 63px rgba(180,255,245,0.45)"
             mb={1}
           >
             LIFE AS A PRIVILEGE
           </Text>
           <Text
             color="rgba(255,255,255,0.85)"
-            fontSize={{ base: "sm", md: "md" }}
+            fontSize={{ base: "xs", md: "sm" }}
             fontStyle="italic"
             fontWeight="400"
             letterSpacing="0.05em"
             fontFamily="'EB Garamond', serif"
-            textShadow="0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)"
-            mb={6}
+            textShadow="0 0 9px rgba(255,255,255,0.7), 0 0 20px rgba(255,255,255,0.4)"
+            mb={5}
           >
             La Vida como Privilegio
           </Text>
           <Text
             color="white"
-            fontSize={{ base: "md", md: "2xl" }}
+            fontSize={{ base: "sm", md: "xl" }}
             lineHeight="1.9"
             letterSpacing="0.02em"
-            textShadow="0 0 12px rgba(255,255,255,0.6), 0 0 28px rgba(255,255,255,0.3)"
-            maxW={{ base: "100%", md: "90%" }}
+            textShadow="0 0 11px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)"
+            maxW={{ base: "100%", md: "88%" }}
           >
-            Ciencia y conocimiento tradicional en un recorrido con principio y final, no en una suscripción eterna.
+            Ciencia y conocimiento tradicional en un recorrido con principio y final.
           </Text>
         </Box>
       </Flex>
@@ -319,11 +319,6 @@ const Welcome = () => {
         />
       </Flex>
 
-      {/* ── SEPARADOR DE ZONAS ── */}
-      <Flex justify="center" pt={{ base: 16, md: 20 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
-      </Flex>
-
       {/* ── PRESENTACIÓN ── */}
       <Flex
         ref={presentacionReveal.ref}
@@ -336,10 +331,10 @@ const Welcome = () => {
       >
         {/* Foto */}
         <Box
-          maxW={{ base: "260px", md: "340px" }}
+          maxW={{ base: "234px", md: "306px" }}
           borderRadius="2xl"
           overflow="hidden"
-          boxShadow="0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(255,255,255,0.25), 0 0 60px rgba(180,255,245,0.2)"
+          boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "scale(1)" : "scale(0.85)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
@@ -356,14 +351,14 @@ const Welcome = () => {
         {/* Nombre */}
         <Text
           color="white"
-          fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+          fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
           fontWeight="700"
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.04em"
           lineHeight="1.2"
-          textShadow="0 0 14px rgba(255,255,255,0.65), 0 0 30px rgba(255,255,255,0.35), 0 0 60px rgba(180,255,245,0.3)"
+          textShadow="0 0 13px rgba(255,255,255,0.65), 0 0 27px rgba(255,255,255,0.35), 0 0 54px rgba(180,255,245,0.3)"
           opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
         >
           María Escribano
@@ -372,7 +367,7 @@ const Welcome = () => {
         {/* Descripción */}
         <Text
           color="rgba(255,255,255,0.92)"
-          fontSize={{ base: "md", md: "xl" }}
+          fontSize={{ base: "sm", md: "lg" }}
           fontFamily="'EB Garamond', serif"
           lineHeight="1.9"
           letterSpacing="0.02em"
@@ -457,35 +452,25 @@ const Welcome = () => {
         </Flex>
       </Flex> */}
 
-      {/* ── SEPARADOR + TÍTULO DISCIPLINAS ── */}
+      {/* ── TÍTULO DISCIPLINAS ── */}
       <Flex
         ref={disciplinasTitleReveal.ref}
         direction="column"
         align="center"
         pt={{ base: 16, md: 20 }}
-        gap={{ base: 7, md: 10 }}
       >
-        <Box
-          w="100%"
-          maxW="500px"
-          h="1px"
-          bg="rgba(255,255,255,0.15)"
-          opacity={disciplinasTitleReveal.visible ? 1 : 0}
-          transform={disciplinasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
-          transition="opacity 0.8s ease, transform 0.8s ease"
-        />
         <Text
           color="rgba(255,255,255,0.85)"
           fontFamily="'EB Garamond', serif"
           fontStyle="italic"
           fontWeight="400"
-          fontSize={{ base: "lg", md: "2xl" }}
+          fontSize={{ base: "md", md: "xl" }}
           letterSpacing="0.12em"
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          textShadow="0 0 9px rgba(255,255,255,0.45), 0 0 20px rgba(255,255,255,0.22)"
           textAlign="center"
           px={{ base: 5, md: 10 }}
           opacity={disciplinasTitleReveal.visible ? 1 : 0}
-          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
+          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
         >
           Las 8 disciplinas…
@@ -496,12 +481,12 @@ const Welcome = () => {
       <Box
         ref={disciplinasReveal.ref}
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 8, md: 12 }}
-        pb={{ base: 10, md: 14 }}
+        pt={{ base: 7, md: 11 }}
+        pb={{ base: 9, md: 13 }}
       >
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 10, md: 12 }}
+          gap={{ base: 14, md: 18 }}
         >
           {disciplines.map((d, i) => (
             <Box
@@ -513,7 +498,6 @@ const Welcome = () => {
               px={{ base: 3, md: 5 }}
               bg={d.bg}
               borderRadius="2xl"
-              boxShadow="0 0 18px rgba(255,255,255,0.35), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
               cursor="pointer"
               onClick={() => setSelected(d)}
               opacity={disciplinasReveal.visible ? 1 : 0}
@@ -558,8 +542,8 @@ const Welcome = () => {
 
 
       {/* ── SEPARADOR DE ZONAS ── */}
-      <Flex justify="center" pt={{ base: 14, md: 18 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+      <Flex justify="center" pt={{ base: 12, md: 16 }}>
+        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.18)" />
       </Flex>
 
       {/* ── OPINIONES ── */}

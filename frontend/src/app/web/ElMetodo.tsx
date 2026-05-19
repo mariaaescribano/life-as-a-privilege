@@ -4,6 +4,7 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
+import { BookCallModal } from "../../components/global/BookCallModal";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -18,6 +19,7 @@ import {
 type ContenidoSeccion = {
   titulo: string;
   items: string[];
+  aviso?: string;
 };
 
 type ModalidadData = {
@@ -146,28 +148,23 @@ const modalidades: ModalidadData[] = [
       "A través de tu carta natal, exploraremos los arquetipos que se expresan en cada área de tu vida y cómo influyen en tu manera de vivir.",
     contenido: [
       {
-        titulo: "Lectura de carta",
+        titulo: "Lectura de la Carta Astral",
         items: [
           "Lectura completa de tu carta astral, entregada en PDF para que puedas volver a ella siempre que la necesites.",
         ],
       },
       {
-        titulo: "Materiales",
+        titulo: "Arquetipos",
         items: [
           "Material para profundizar en cada arquetipo y comprender su simbología.",
         ],
       },
       {
-        titulo: "Preguntas guiadas",
+        titulo: "Sesiones",
         items: [
-          "Preguntas para integrar los arquetipos en alta frecuencia y aplicarlos a tu vida diaria.",
+          "5 sesiones para asentar los arquetipos en profundidad y poder dialogar sobre ellos con calma.",
         ],
-      },
-      {
-        titulo: "Sesiones individuales",
-        items: [
-          "1 o 2 sesiones individuales conmigo para resolver dudas y acompañar tu proceso de comprensión.",
-        ],
+        aviso: "Se cobra aparte",
       },
     ],
   },
@@ -176,31 +173,28 @@ const modalidades: ModalidadData[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: "Identifica los patrones que hoy limitan tu forma de vivir. La psicología te ofrece herramientas para entender qué historias internas sostienen tus bloqueos.",
+    desc: "Tu carta astral cobra vida en tu historia, integrada paso a paso a través de la Psicoterapia Breve.",
     modalDesc:
       "Usando tu carta natal como mapa, exploraremos tu forma única de pensar, sentir y vincularte, así como los mecanismos de adaptación que desarrollaste para sobrevivir. Muchas veces, aquello que hoy nos limita fue en otro momento una forma de protegernos.",
     contenido: [
       {
         titulo: "Mapa de vida",
-        items: ["Material disponible para elaborar tu propio mapa de vida."],
+        items: [
+          "Material guiado para elaborar tu propio mapa de vida y reconocer los hilos que la atraviesan.",
+        ],
       },
       {
         titulo: "Cronología de vida",
         items: [
-          "Exploramos juntos tu historia personal para reconocer los patrones que la atraviesan.",
+          "Exploramos juntos tu historia personal junto a tu carta astral para integrar lo que has vivido con quien eres.",
         ],
       },
       {
-        titulo: "Sesiones de integración",
+        titulo: "Psicoterapia Breve",
         items: [
-          "2 o 3 sesiones para integrar lo que revela tu carta astral con lo que has vivido, con el propósito de elevarlo a alta frecuencia.",
+          "16 a 20 sesiones de Psicoterapia Breve, 2 o 3 veces por semana, para que el trabajo terapéutico sea profundo y realmente sanador.",
         ],
-      },
-      {
-        titulo: "Psicoterapia breve",
-        items: [
-          "16 a 20 sesiones basadas en la técnica de Psicoterapia breve, realizadas 2 o 3 veces por semana para que la terapia sea realmente sanadora.",
-        ],
+        aviso: "Se cobra aparte",
       },
     ],
   },
@@ -214,29 +208,22 @@ const modalidades: ModalidadData[] = [
       "Junto a la psicoterapia, el Ayurveda nos ofrecerá herramientas profundas para comprender tu naturaleza única y reconocer qué hábitos te equilibran o te desequilibran.",
     contenido: [
       {
-        titulo: "Cursos grabados",
+        titulo: "Cursos para profundizar",
         items: [
-          "Curso grabado para comprender los chakras.",
-          "Curso grabado sobre el cuerpo humano según el Ayurveda.",
-          "Curso grabado sobre los doshas en profundidad: psicología, constitución y nutrición.",
-          "Curso grabado sobre los secretos de la nutrición ayurvédica.",
+          "Más de cinco cursos grabados accesibles a tu ritmo, para que los revises tantas veces como necesites.",
         ],
       },
       {
-        titulo: "Materiales",
+        titulo: "Tu dosha",
         items: [
-          "Material de apoyo que acompaña a cada curso para asentar lo aprendido.",
+          "Comprende tu dosha desde sus tres dimensiones esenciales: psicología, constitución y nutrición adecuada.",
         ],
       },
       {
-        titulo: "Test del dosha",
+        titulo: "Material",
         items: [
-          "Test para descubrir tu dosha y comprender tu naturaleza única.",
+          "Material complementario y estructurado, diseñado para asentar lo aprendido e integrarlo en tu día a día.",
         ],
-      },
-      {
-        titulo: "Sesiones individuales",
-        items: ["1 o 2 sesiones individuales para resolver cualquier duda."],
       },
     ],
   },
@@ -558,15 +545,14 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
   return (
     <Box
       position="relative"
-      mt="46px"
-      pt="54px"
-      pb={8}
-      px={{ base: 5, md: 7 }}
+      mt="42px"
+      pt="46px"
+      pb={{ base: 5, md: 7 }}
+      px={{ base: 3, md: 5 }}
       bg={data.bg}
       borderRadius="2xl"
-      boxShadow="0 0 18px rgba(255,255,255,0.35), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 8px 28px rgba(107,196,200,0.55), 0 2px 8px rgba(107,196,200,0.3)"
       opacity={parentVisible ? 1 : 0}
-      transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.95)"}
+      transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
       transition={`opacity 0.65s ease ${delay}s, transform 0.65s ease ${delay}s`}
       cursor="pointer"
       onClick={onClick}
@@ -578,7 +564,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
       {/* Icono flotante */}
       <Box
         position="absolute"
-        top="-38px"
+        top="-36px"
         left="50%"
         transform="translateX(-50%)"
         bg={data.bg}
@@ -586,13 +572,13 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
         p="8px"
         border={`4px solid ${data.txt}`}
         boxShadow={`0 0 20px ${data.txt}bb, 0 2px 14px ${data.txt}77`}
-        w="76px"
-        h="76px"
+        w="72px"
+        h="72px"
         display="flex"
         alignItems="center"
         justifyContent="center"
       >
-        {data.renderIcon("44px")}
+        {data.renderIcon("42px")}
       </Box>
 
       {/* Número + título */}
@@ -600,20 +586,20 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
         <Text
           color={data.txt}
           fontWeight="700"
-          fontSize={{ base: "xl", md: "2xl" }}
+          fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
           opacity={0.6}
-          letterSpacing="0.04em"
+          letterSpacing="0.03em"
           lineHeight="short"
         >
           {index}.
         </Text>
         <Text
           color={data.txt}
+          filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.4))"
           fontWeight="700"
-          fontSize={{ base: "xl", md: "2xl" }}
-          letterSpacing="0.04em"
+          fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
+          letterSpacing="0.03em"
           lineHeight="short"
-          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.3))"
         >
           {data.name}
         </Text>
@@ -631,6 +617,7 @@ export default function ElMetodo() {
   const comunidadReveal = useReveal(0.15);
   const botonesReveal = useReveal(0.1);
   const [dudasOpen, setDudasOpen] = useState(false);
+  const [bookCallOpen, setBookCallOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -675,9 +662,9 @@ export default function ElMetodo() {
         <Image
           src="/img/icono/life.png"
           alt=""
-          h={{ base: "70px", md: "95px" }}
+          h={{ base: "63px", md: "86px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.78)) drop-shadow(0 0 23px rgba(255,255,255,0.42)) drop-shadow(0 0 47px rgba(180,255,245,0.32))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -691,49 +678,49 @@ export default function ElMetodo() {
         align="center"
         textAlign="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 8, md: 10 }}
+        pt={{ base: 7, md: 9 }}
         mb="10px"
-        gap={{ base: 4, md: 6 }}
+        gap={{ base: 4, md: 5 }}
       >
         <Text
           color="white"
-          fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
+          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
           letterSpacing="0.08em"
           lineHeight="1.1"
-          textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+          textShadow="0 0 16px rgba(255,255,255,0.85), 0 0 34px rgba(255,255,255,0.55), 0 0 63px rgba(180,255,245,0.45)"
           opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transform={headerReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.85s ease, transform 0.85s ease"
         >
           EL RECORRIDO
         </Text>
         <Text
           color="rgba(255,255,255,0.85)"
-          fontSize={{ base: "sm", md: "md" }}
+          fontSize={{ base: "xs", md: "sm" }}
           fontStyle="italic"
           fontWeight="400"
           letterSpacing="0.05em"
-          textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+          textShadow="0 0 9px rgba(255,255,255,0.55), 0 0 20px rgba(255,255,255,0.3)"
           opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(16px)"}
+          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s"
         >
           de Life as a Privilege
         </Text>
         <Text
           color="white"
-          fontSize={{ base: "md", md: "xl" }}
+          fontSize={{ base: "sm", md: "lg" }}
           lineHeight="1.95"
           letterSpacing="0.015em"
-          textShadow="0 0 12px rgba(255,255,255,0.5), 0 0 28px rgba(255,255,255,0.25)"
-          maxW={{ base: "100%", md: "75%" }}
-          mt={{ base: 2, md: 4 }}
+          textShadow="0 0 11px rgba(255,255,255,0.5), 0 0 25px rgba(255,255,255,0.25)"
+          maxW={{ base: "100%", md: "70%" }}
+          mt={{ base: 2, md: 3 }}
           opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(16px)"}
+          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Recorrido integral orientado a guiar a la persona, desde la dignidad y el respeto propio, a través de 8 disciplinas que componen un redescubrimiento completo de autoconocimiento y regeneración.
+          Ocho disciplinas, un orden. De la autocompasión a la ciencia, con el amor propio como consecuencia.
         </Text>
       </Flex>
 
@@ -780,8 +767,8 @@ export default function ElMetodo() {
         pb={{ base: 6, md: 10 }}
       >
         <Grid
-          templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
-          gap={{ base: 12, md: 14 }}
+          templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+          gap={{ base: 14, md: 18 }}
         >
           {modalidades.map((m, i) => (
             <MetodoCard
@@ -813,12 +800,12 @@ export default function ElMetodo() {
       >
         <Text
           color="white"
-          fontSize={{ base: "3xl", md: "5xl" }}
+          fontSize={{ base: "2xl", md: "4xl" }}
           fontWeight="700"
           letterSpacing="0.06em"
-          textShadow="0 0 16px rgba(255,255,255,0.7), 0 0 34px rgba(255,255,255,0.4), 0 0 60px rgba(180,255,245,0.35)"
+          textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4), 0 0 54px rgba(180,255,245,0.35)"
           opacity={pricingReveal.visible ? 1 : 0}
-          transform={pricingReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transform={pricingReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
           ¿Cómo funciona?
@@ -1124,9 +1111,8 @@ export default function ElMetodo() {
             bg: "rgba(255,255,255,0.2)",
             borderColor: "white",
             boxShadow: "0 0 34px rgba(255,255,255,0.6), 0 0 70px rgba(180,255,245,0.45), 0 8px 24px rgba(0,0,0,0.25)",
-            transform: "translateY(-2px)",
           }}
-          transition="all 0.25s ease"
+          transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
         >
           <Image
             src="/img/icono/life.png"
@@ -1149,53 +1135,113 @@ export default function ElMetodo() {
           </Text>
         </Flex>
 
-        {/* Tengo dudas (botón pequeño secundario) */}
+        {/* Agendar llamada + Tengo dudas (botones secundarios) */}
         <Flex
-          as="button"
-          onClick={() => setDudasOpen(true)}
+          direction={{ base: "column", md: "row" }}
           align="center"
           justify="center"
-          gap={2}
-          px={{ base: 5, md: 7 }}
-          py={{ base: "7px", md: "9px" }}
-          borderRadius="full"
-          border="1px solid rgba(255,255,255,0.5)"
-          bg="rgba(255,255,255,0.06)"
-          cursor="pointer"
-          boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
-          _hover={{
-            bg: "rgba(255,255,255,0.16)",
-            borderColor: "rgba(255,255,255,0.85)",
-            boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
-          }}
-          transition="all 0.25s ease"
+          gap={{ base: 4, md: 6 }}
         >
-          <Box
-            as="svg"
-            viewBox="0 0 24 24"
-            w={{ base: "14px", md: "16px" }}
-            h={{ base: "14px", md: "16px" }}
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            flexShrink={0}
-            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}
+          {/* Agendar llamada gratuita */}
+          <Flex
+            as="button"
+            onClick={() => setBookCallOpen(true)}
+            align="center"
+            justify="center"
+            gap={2}
+            px={{ base: 5, md: 7 }}
+            py={{ base: "7px", md: "9px" }}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.5)"
+            bg="rgba(255,255,255,0.06)"
+            cursor="pointer"
+            boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
+            _hover={{
+              bg: "rgba(255,255,255,0.16)",
+              borderColor: "rgba(255,255,255,0.85)",
+              boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
+            }}
+            transition="all 0.25s ease"
           >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </Box>
-          <Text
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="500"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.04em"
-            fontStyle="italic"
-            textShadow="0 0 8px rgba(255,255,255,0.45), 0 0 18px rgba(255,255,255,0.22)"
+            <Box
+              as="svg"
+              viewBox="0 0 24 24"
+              w={{ base: "14px", md: "16px" }}
+              h={{ base: "14px", md: "16px" }}
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </Box>
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="500"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.04em"
+              fontStyle="italic"
+              textShadow="0 0 8px rgba(255,255,255,0.45), 0 0 18px rgba(255,255,255,0.22)"
+            >
+              Agendar llamada gratuita (20 min)
+            </Text>
+          </Flex>
+
+          {/* Tengo dudas (botón pequeño secundario) */}
+          <Flex
+            as="button"
+            onClick={() => setDudasOpen(true)}
+            align="center"
+            justify="center"
+            gap={2}
+            px={{ base: 5, md: 7 }}
+            py={{ base: "7px", md: "9px" }}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.5)"
+            bg="rgba(255,255,255,0.06)"
+            cursor="pointer"
+            boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
+            _hover={{
+              bg: "rgba(255,255,255,0.16)",
+              borderColor: "rgba(255,255,255,0.85)",
+              boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
+            }}
+            transition="all 0.25s ease"
           >
-            Tengo dudas
-          </Text>
+            <Box
+              as="svg"
+              viewBox="0 0 24 24"
+              w={{ base: "14px", md: "16px" }}
+              h={{ base: "14px", md: "16px" }}
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </Box>
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="500"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.04em"
+              fontStyle="italic"
+              textShadow="0 0 8px rgba(255,255,255,0.45), 0 0 18px rgba(255,255,255,0.22)"
+            >
+              Tengo dudas
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
 
@@ -1281,18 +1327,6 @@ export default function ElMetodo() {
                 </Box>
               </Box>
 
-              {/* Tagline pequeño */}
-              <Text
-                color={selectedCard.txt}
-                opacity={0.55}
-                fontSize="xs"
-                letterSpacing="0.32em"
-                textTransform="uppercase"
-                fontWeight="600"
-              >
-                — Disciplina del Método —
-              </Text>
-
               {/* Nombre — gigante */}
               <Text
                 color={selectedCard.txt}
@@ -1314,7 +1348,7 @@ export default function ElMetodo() {
                 opacity={0.7}
               />
 
-              {/* Frase introductoria (la que estaba fuera) */}
+              {/* Frase en cursiva */}
               <Text
                 color={selectedCard.txt}
                 fontSize={{ base: "lg", md: "2xl" }}
@@ -1326,19 +1360,6 @@ export default function ElMetodo() {
                 maxW="640px"
               >
                 {selectedCard.desc}
-              </Text>
-
-              {/* Descripción */}
-              <Text
-                color={selectedCard.txt}
-                fontSize={{ base: "md", md: "xl" }}
-                textAlign="center"
-                lineHeight="1.95"
-                letterSpacing="0.015em"
-                opacity={0.85}
-                maxW="640px"
-              >
-                {selectedCard.modalDesc}
               </Text>
             </Flex>
 
@@ -1358,64 +1379,87 @@ export default function ElMetodo() {
               <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${selectedCard.txt}55)`} />
             </Flex>
 
-            {/* SECCIONES DE CONTENIDO ── cada apartado en su propio box ── */}
+            {/* SECCIONES DE CONTENIDO — siempre 3 en una línea */}
             <Grid
-              templateColumns={{
-                base: "1fr",
-                md: "repeat(2, 1fr)",
-              }}
-              gap={{ base: 4, md: 5 }}
+              templateColumns="repeat(3, 1fr)"
+              gap={{ base: 2, md: 4 }}
             >
               {selectedCard.contenido.map((seccion, i) => (
-                <Box
+                <Flex
                   key={i}
-                  bg={selectedCard.txt + "12"}
-                  border={`1px solid ${selectedCard.txt}40`}
+                  direction="column"
+                  bg={selectedCard.txt + "10"}
+                  border={`1px solid ${selectedCard.txt}33`}
                   borderRadius="xl"
-                  p={{ base: 5, md: 5 }}
+                  p={{ base: 3, md: 5 }}
                   position="relative"
+                  cursor="default"
+                  userSelect="text"
+                  gap={{ base: 2, md: 3 }}
                 >
-                  {/* Cabecera de sección */}
-                  <Flex align="center" gap={3} mb={3}>
-                    <Box
-                      w="40px"
-                      h="40px"
-                      borderRadius="lg"
-                      bg={selectedCard.txt + "22"}
-                      border={`1px solid ${selectedCard.txt}44`}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      flexShrink={0}
-                    >
-                      <SectionIcon titulo={seccion.titulo} color={selectedCard.txt} />
-                    </Box>
-                    <Text
-                      color={selectedCard.txt}
-                      fontSize={{ base: "lg", md: "lg" }}
-                      fontWeight="700"
-                      letterSpacing="0.03em"
-                    >
-                      {seccion.titulo}
-                    </Text>
-                  </Flex>
+                  {/* Cabecera de sección — solo título */}
+                  <Text
+                    color={selectedCard.txt}
+                    fontSize={{ base: "sm", sm: "md", md: "lg" }}
+                    fontWeight="700"
+                    letterSpacing="0.04em"
+                    lineHeight="1.25"
+                    textAlign="center"
+                    style={{ textShadow: `0 0 12px ${selectedCard.txt}cc, 0 0 26px ${selectedCard.txt}88, 0 0 50px ${selectedCard.txt}55` }}
+                  >
+                    {seccion.titulo}
+                  </Text>
 
                   {/* Items */}
-                  <Flex direction="column" gap={2.5}>
+                  <Flex direction="column" gap={{ base: 1.5, md: 2.5 }} flex="1">
                     {seccion.items.map((item, j) => (
                       <Text
                         key={j}
                         color={selectedCard.txt}
                         opacity={0.88}
-                        fontSize={{ base: "sm", md: "md" }}
-                        lineHeight="1.75"
+                        fontSize={{ base: "xs", md: "sm" }}
+                        lineHeight={{ base: "1.55", md: "1.7" }}
                         letterSpacing="0.01em"
                       >
                         {item}
                       </Text>
                     ))}
                   </Flex>
-                </Box>
+
+                  {/* Aviso (p.ej. "Se cobra aparte") */}
+                  {seccion.aviso && (
+                    <Flex
+                      align="center"
+                      gap={{ base: 1.5, md: 2 }}
+                      mt={1}
+                      pt={{ base: 2, md: 3 }}
+                      borderTop={`1px dashed ${selectedCard.txt}44`}
+                    >
+                      <Box
+                        as="svg"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 -960 960 960"
+                        w={{ base: "12px", md: "14px" }}
+                        h={{ base: "12px", md: "14px" }}
+                        fill={selectedCard.txt}
+                        opacity={0.85}
+                        flexShrink={0}
+                      >
+                        <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/>
+                      </Box>
+                      <Text
+                        color={selectedCard.txt}
+                        fontSize={{ base: "2xs", md: "xs" }}
+                        letterSpacing="0.06em"
+                        fontStyle="italic"
+                        opacity={0.85}
+                        lineHeight="1.3"
+                      >
+                        {seccion.aviso}
+                      </Text>
+                    </Flex>
+                  )}
+                </Flex>
               ))}
             </Grid>
           </Box>
@@ -1432,6 +1476,11 @@ export default function ElMetodo() {
         showCheckboxes={false}
         showDescription={true}
         textareaPlaceholder="Escribe aquí tu consulta..."
+      />
+
+      <BookCallModal
+        isOpen={bookCallOpen}
+        onClose={() => setBookCallOpen(false)}
       />
 
       <SiteFooter />

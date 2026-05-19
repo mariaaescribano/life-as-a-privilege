@@ -1,249 +1,164 @@
-import React, { useEffect } from "react";
-import { Box, Flex, Text, Image, SimpleGrid } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { LibrosIcon } from "../../GlobalVariables";
 import { apuntes, libros, type Apunte, type Libro } from "../../hardCoded/libros/libros";
 
-const GLASS = {
-  bg: "rgba(255,255,255,0.22)",
-  border: "1px solid rgba(255,255,255,0.45)",
-  sx: { backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" },
-  borderRadius: "2xl",
-  boxShadow: "0 8px 36px rgba(107,196,200,0.45)",
+const useReveal = (threshold = 0.05) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
 };
 
-function LibrosHeader() {
+function DescargarBtn({ href }: { href: string }) {
   return (
-    <Box
-      {...GLASS}
-      px={{ base: 6, md: 10 }}
-      py={{ base: 5, md: 7 }}
-      w="100%"
-      maxW="850px"
-      mb={0}
-    >
-      <Flex direction="row" align="center" justify="center" gap={5}>
-        <Box
-          borderRadius="full"
-          bg="rgba(255,255,255,0.18)"
-          border="5px solid rgba(255,255,255,0.7)"
-          boxShadow="0 0 22px rgba(255,255,255,0.45), 0 0 55px rgba(107,196,200,0.25)"
-          w={{ base: "60px", md: "72px" }}
-          h={{ base: "60px", md: "72px" }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexShrink={0}
-          overflow="hidden"
-          p="6px"
-        >
-          <LibrosIcon color="white" size="44px" />
-        </Box>
-        <Text
-          color="white"
-          fontSize={{ base: "2xl", md: "5xl" }}
-          fontWeight="700"
-          letterSpacing="0.05em"
-          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
-          lineHeight="1.15"
-        >
-          Libros
-        </Text>
-      </Flex>
-    </Box>
-  );
-}
-
-function LeerButton({ href, size = "md" }: { href: string; size?: "sm" | "md" }) {
-  return (
-    <Box
+    <Flex
       as="a"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      display="inline-flex"
-      alignItems="center"
-      justifyContent="center"
+      align="center"
+      justify="center"
       gap={2}
-      px={size === "sm" ? 5 : 7}
-      py={size === "sm" ? "8px" : "10px"}
+      px={{ base: 5, md: 6 }}
+      py={{ base: "8px", md: "10px" }}
       borderRadius="full"
-      border="2px solid rgba(255,255,255,0.55)"
+      border="1px solid rgba(255,255,255,0.5)"
+      bg="rgba(255,255,255,0.06)"
+      cursor="pointer"
       color="white"
       fontFamily="'EB Garamond', serif"
-      fontSize={size === "sm" ? { base: "sm", md: "md" } : { base: "md", md: "lg" }}
       fontWeight="600"
-      bg="transparent"
-      letterSpacing="0.05em"
-      cursor="pointer"
+      fontSize="xs"
+      letterSpacing="0.16em"
+      textTransform="uppercase"
       textDecoration="none"
-      _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
-      transition="all 0.2s"
+      boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 28px rgba(255,255,255,0.12)"
+      textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)"
+      _hover={{
+        bg: "rgba(255,255,255,0.16)",
+        borderColor: "rgba(255,255,255,0.85)",
+        boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.28)",
+      }}
+      transition="all 0.25s ease"
+      whiteSpace="nowrap"
+      alignSelf="flex-start"
     >
-      Leer →
-    </Box>
+      Descargar PDF
+      <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+        ↓
+      </Box>
+    </Flex>
   );
 }
 
-function ApuntesBox({ items }: { items: Apunte[] }) {
-  return (
-    <Box
-      {...GLASS}
-      w="100%"
-      maxW="850px"
-      px={{ base: 6, md: 10 }}
-      py={{ base: 8, md: 10 }}
-    >
-      <Flex align="center" justify="center" gap={3} mb={{ base: 6, md: 8 }}>
-        <LibrosIcon color="white" size="34px" />
-        <Text
-          color="white"
-          fontSize={{ base: "2xl", md: "3xl" }}
-          fontWeight="700"
-          letterSpacing="0.05em"
-          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
-        >
-          Apuntes
-        </Text>
-      </Flex>
+type Item = { id: string; img?: string; titulo: string; link: string };
 
-      {items.length === 0 ? (
-        <Text color="rgba(255,255,255,0.75)" textAlign="center" fontStyle="italic">
-          Próximamente.
-        </Text>
-      ) : (
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 6 }}>
-          {items.map((apunte) => (
-            <Flex
-              key={apunte.id}
-              direction="row"
-              align="center"
-              gap={{ base: 4, md: 5 }}
-              bg="rgba(255,255,255,0.10)"
-              border="1px solid rgba(255,255,255,0.28)"
-              borderRadius="xl"
-              boxShadow="0 2px 12px rgba(180,230,235,0.20), 0 0 10px rgba(107,196,200,0.22)"
-              p={{ base: 4, md: 5 }}
-            >
-              {apunte.img && (
-                <Box
-                  overflow="hidden"
-                  w={{ base: "110px", md: "130px" }}
-                  aspectRatio={1}
-                  flexShrink={0}
-                  borderRadius="lg"
-                >
-                  <Image
-                    src={apunte.img}
-                    alt={apunte.titulo}
-                    w="100%"
-                    h="100%"
-                    objectFit="cover"
-                    objectPosition="center"
-                  />
-                </Box>
-              )}
-              <Flex direction="column" gap={3} flex="1" minW={0}>
-                <Text
-                  color="white"
-                  fontSize={{ base: "lg", md: "xl" }}
-                  fontWeight="600"
-                  letterSpacing="0.03em"
-                  lineHeight="1.3"
-                >
-                  {apunte.titulo}
-                </Text>
-                <Box>
-                  <LeerButton href={apunte.link} size="sm" />
-                </Box>
-              </Flex>
-            </Flex>
-          ))}
-        </SimpleGrid>
+const LINE = "1px solid rgba(255,255,255,0.22)";
+
+function BookCell({ item, i, total, visible }: { item: Item; i: number; total: number; visible: boolean }) {
+  const lastRowStart3 = total - ((total % 3) || 3);
+  const lastRowStart2 = total - ((total % 2) || 2);
+
+  return (
+    <Flex
+      direction="row"
+      align="center"
+      gap={{ base: 4, md: 5 }}
+      px={{ base: 5, md: 7 }}
+      py={{ base: 6, md: 8 }}
+      opacity={visible ? 1 : 0}
+      transform={visible ? "translateY(0)" : "translateY(20px)"}
+      transition={`opacity 0.6s ease ${(i % 9) * 0.07}s, transform 0.6s ease ${(i % 9) * 0.07}s`}
+      sx={{
+        "@media (max-width: 639px)": {
+          borderBottom: i < total - 1 ? LINE : "none",
+        },
+        "@media (min-width: 640px) and (max-width: 1023.98px)": {
+          borderRight: i % 2 === 0 ? LINE : "none",
+          borderBottom: i < lastRowStart2 ? LINE : "none",
+        },
+        "@media (min-width: 1024px)": {
+          borderRight: i % 3 !== 2 ? LINE : "none",
+          borderBottom: i < lastRowStart3 ? LINE : "none",
+        },
+      }}
+    >
+      {/* Foto */}
+      {item.img && (
+        <Box
+          flexShrink={0}
+          w={{ base: "90px", md: "110px" }}
+          aspectRatio={1}
+          borderRadius="lg"
+          overflow="hidden"
+          boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 32px rgba(255,255,255,0.14), 0 4px 16px rgba(0,0,0,0.22)"
+        >
+          <Image
+            src={item.img}
+            alt={item.titulo}
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            objectPosition="center"
+          />
+        </Box>
       )}
-    </Box>
-  );
-}
 
-function MisLibrosBox({ items }: { items: Libro[] }) {
-  return (
-    <Box
-      {...GLASS}
-      w="100%"
-      maxW="850px"
-      px={{ base: 6, md: 10 }}
-      py={{ base: 8, md: 10 }}
-    >
-      <Flex align="center" justify="center" gap={3} mb={{ base: 6, md: 8 }}>
-        <LibrosIcon color="white" size="34px" />
+      {/* Título + botón debajo */}
+      <Flex direction="column" gap={3} flex="1" minW={0}>
         <Text
           color="white"
-          fontSize={{ base: "2xl", md: "3xl" }}
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
           fontWeight="700"
-          letterSpacing="0.05em"
-          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
+          letterSpacing="0.04em"
+          lineHeight="1.3"
+          textShadow="0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)"
         >
-          Mis Libros
+          {item.titulo}
         </Text>
+        <DescargarBtn href={item.link} />
       </Flex>
-
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 6 }}>
-        {items.map((libro) => (
-          <Flex
-            key={libro.id}
-            direction="row"
-            align="center"
-            gap={{ base: 4, md: 5 }}
-            bg="rgba(255,255,255,0.10)"
-            border="1px solid rgba(255,255,255,0.28)"
-            borderRadius="2xl"
-            boxShadow="0 2px 12px rgba(180,230,235,0.20), 0 0 12px rgba(107,196,200,0.25)"
-            p={{ base: 4, md: 5 }}
-          >
-            {libro.img && (
-              <Box
-                overflow="hidden"
-                w={{ base: "120px", md: "140px" }}
-                aspectRatio={1}
-                flexShrink={0}
-                borderRadius="lg"
-              >
-                <Image
-                  src={libro.img}
-                  alt={libro.titulo}
-                  w="100%"
-                  h="100%"
-                  objectFit="cover"
-                  objectPosition="center"
-                />
-              </Box>
-            )}
-            <Flex direction="column" gap={3} flex="1" minW={0}>
-              <Text
-                color="white"
-                fontWeight="700"
-                fontSize={{ base: "lg", md: "xl" }}
-                letterSpacing="0.03em"
-                lineHeight="1.3"
-              >
-                {libro.titulo}
-              </Text>
-              <Box>
-                <LeerButton href={libro.link} size="sm" />
-              </Box>
-            </Flex>
-          </Flex>
-        ))}
-      </SimpleGrid>
-    </Box>
+    </Flex>
   );
 }
 
 export default function LibrosPage() {
+  const [mounted, setMounted] = useState(false);
+  const gridReveal = useReveal(0.04);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
   }, []);
+
+  const apuntesItems: Item[] = (apuntes as Apunte[]).map(a => ({
+    id: a.id,
+    img: a.img,
+    titulo: a.titulo,
+    link: a.link,
+  }));
+  const librosItems: Item[] = (libros as Libro[]).map(l => ({
+    id: l.id,
+    img: l.img,
+    titulo: l.titulo,
+    link: l.link,
+  }));
+
+  // Todo en una sola lista
+  const allItems: Item[] = [...librosItems, ...apuntesItems];
 
   return (
     <Box
@@ -255,20 +170,81 @@ export default function LibrosPage() {
     >
       <SiteHeader variant="auto" />
 
-      <Box flex="1">
-        <Flex
-          direction="column"
-          alignItems="center"
-          px={{ base: 5, md: 10, lg: 16 }}
-          pt={{ base: 10, md: 14 }}
-          pb={{ base: 14, md: 20 }}
-          gap={{ base: 10, md: 12 }}
+      {/* ── MANDALA SEPARADOR ── */}
+      <Flex justify="center" pt={{ base: 10, md: 14 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "48px", md: "64px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
+        />
+      </Flex>
+
+      {/* ── TÍTULO ── */}
+      <Flex
+        direction="column"
+        align="center"
+        textAlign="center"
+        px={{ base: 5, md: 10 }}
+        pt={{ base: 6, md: 8 }}
+        gap={{ base: 3, md: 4 }}
+      >
+        <Text
+          color="white"
+          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+          fontWeight="700"
+          letterSpacing="0.1em"
+          lineHeight="1.1"
+          textTransform="uppercase"
+          textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(255,255,255,0.55), 0 0 56px rgba(180,255,245,0.45)"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          <LibrosHeader />
-          <ApuntesBox items={apuntes} />
-          <MisLibrosBox items={libros} />
-        </Flex>
-      </Box>
+          Libros
+        </Text>
+        <Text
+          color="rgba(255,255,255,0.88)"
+          fontSize={{ base: "sm", md: "lg" }}
+          fontStyle="italic"
+          letterSpacing="0.05em"
+          lineHeight="1.5"
+          textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.28)"
+          maxW={{ base: "100%", md: "512px" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(13px)"}
+          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
+        >
+          Libros y apuntes para acompañar el camino
+        </Text>
+      </Flex>
+
+      {/* ── PLANTILLA 3 EN RAYA ── */}
+      <Flex
+        flex={1}
+        justify="center"
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 11, md: 16 }}
+        pb={{ base: 24, md: 32 }}
+      >
+        <Box ref={gridReveal.ref} w="100%" maxW="880px">
+          <Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}>
+            {allItems.map((item, i) => (
+              <BookCell
+                key={item.id}
+                item={item}
+                i={i}
+                total={allItems.length}
+                visible={gridReveal.visible}
+              />
+            ))}
+          </Grid>
+        </Box>
+      </Flex>
 
       <SiteFooter />
     </Box>

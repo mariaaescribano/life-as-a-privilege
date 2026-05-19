@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type SiteHeaderProps = {
   /**
@@ -19,12 +19,24 @@ type SiteHeaderProps = {
 
 const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sessionImg] = useState<string | null>(() => sessionStorage.getItem("img"));
 
   const hasSession = !!sessionStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   const logoTarget = isPrivate ? "/home" : "/";
   const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.png";
+
+  const path = location.pathname.toLowerCase();
+  const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
+  const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
+
+  const underlineStyles = {
+    textDecoration: "underline",
+    textDecorationColor: "rgba(255,255,255,0.55)",
+    textUnderlineOffset: "6px",
+    sx: { textDecorationThickness: "1.5px" },
+  } as const;
 
   return (
     <Flex
@@ -118,24 +130,54 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           </Box>
         </Flex>
       ) : (
-        <Text
-          as="button"
-          onClick={() => navigate("/elMetodo")}
-          color="white"
-          fontFamily="'EB Garamond', serif"
-          fontWeight="600"
-          fontSize={{ base: "md", md: "xl" }}
-          letterSpacing="0.16em"
-          textTransform="uppercase"
-          textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-          cursor="pointer"
-          bg="transparent"
-          border="none"
-          _hover={{ color: "white", textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
-          transition="text-shadow 0.25s ease"
-        >
-          El recorrido
-        </Text>
+        <Flex align="center" gap={{ base: 4, md: 7 }}>
+          <Text
+            as="button"
+            onClick={() => navigate("/elMetodo")}
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "md", md: "xl" }}
+            letterSpacing="0.16em"
+            textTransform="uppercase"
+            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+            cursor="pointer"
+            bg="transparent"
+            border="none"
+            {...(isRecorridoPage ? underlineStyles : {})}
+            _hover={{
+              color: "white",
+              textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
+              ...(isRecorridoPage ? { textDecorationColor: "white" } : {}),
+            }}
+            transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
+          >
+            El recorrido
+          </Text>
+          <Text
+            as="button"
+            onClick={() => navigate("/materiales")}
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "md", md: "xl" }}
+            letterSpacing="0.16em"
+            textTransform="uppercase"
+            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+            cursor="pointer"
+            bg="transparent"
+            border="none"
+            {...(isMaterialesPage ? underlineStyles : {})}
+            _hover={{
+              color: "white",
+              textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
+              ...(isMaterialesPage ? { textDecorationColor: "white" } : {}),
+            }}
+            transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
+          >
+            Materiales
+          </Text>
+        </Flex>
       )}
     </Flex>
   );

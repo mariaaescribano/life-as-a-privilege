@@ -25,6 +25,7 @@ import LibrosPage from "./app/web/LibrosPage";
 import Contacto from "./app/web/Contacto";
 import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
+import MaterialesGratuitos from "./app/web/MaterialesGratuitos";
 import CheckoutMetodo from "./app/web/CheckoutMetodo";
 import MetodoAstrologia from "./app/metodo/MetodoAstrologia";
 import MetodoAstrologiaPlanetas from "./app/metodo/MetodoAstrologiaPlanetas";
@@ -80,6 +81,7 @@ export default function App()
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
+      <Route path="/materiales" element={<MaterialesGratuitos />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />

@@ -94,9 +94,9 @@ const OpinionesSection: React.FC = () => {
                 color="rgba(255,255,255,0.92)"
                 fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.7"
-                fontStyle="italic"
                 fontFamily="'EB Garamond', serif"
                 noOfLines={6}
+                flex="1"
               >
                 {op.texto}
               </Text>
@@ -105,7 +105,7 @@ const OpinionesSection: React.FC = () => {
                 fontSize={{ base: "md", md: "lg" }}
                 fontWeight="700"
                 letterSpacing="0.04em"
-                mt={1}
+                mt="auto"
                 fontFamily="'EB Garamond', serif"
                 textShadow="0 1px 5px rgba(0,60,50,0.3)"
               >
