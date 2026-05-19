@@ -38,14 +38,14 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
       border={`1px solid ${color}55`}
       boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.14), 0 0 90px rgba(180,255,245,0.16), 0 0 36px ${color}55, 0 4px 22px rgba(0,0,0,0.22)`}
       direction="column"
-      p={{ base: 6, md: 7 }}
+      p={{ base: 7, md: 8 }}
       h="100%"
     >
       {/* Título */}
-      <Box mt="3px" mb={"8px"}>
+      <Box mt="3px" mb={"10px"}>
         <Text
           color={color}
-          fontSize={{ base: "xl", md: "2xl" }}
+          fontSize={{ base: "2xl", md: "3xl" }}
           fontWeight="700"
           letterSpacing="0.04em"
           lineHeight="1.25"
@@ -587,9 +587,9 @@ export default function CursosModalidad() {
 
           <SimpleGrid
             w="100%"
-            maxW="1200px"
-            columns={{ base: 1, md: 3 }}
-            spacing={{ base: 5, md: 6 }}
+            maxW="1280px"
+            columns={{ base: 1, md: 2, xl: 3 }}
+            spacing={{ base: 5, md: 5 }}
             sx={{
               "@keyframes cursoCardIn": {
                 from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },

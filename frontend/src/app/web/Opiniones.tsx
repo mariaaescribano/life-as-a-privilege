@@ -49,7 +49,7 @@ const textareaStyles = {
   py: 4,
 };
 
-function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[]; loading: boolean; listReveal: { ref: React.RefObject<HTMLDivElement>; visible: boolean } }) {
+function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[]; loading: boolean; listReveal: { ref: React.RefObject<HTMLDivElement | null>; visible: boolean } }) {
   return (
     <Box ref={listReveal.ref} w="100%" maxW="950px" mx="auto">
       {loading ? (
@@ -118,7 +118,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
   );
 }
 
-function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLDivElement>; visible: boolean } }) {
+function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLDivElement | null>; visible: boolean } }) {
   const [form, setForm] = useState({ nombre: "", texto: "", email: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
 

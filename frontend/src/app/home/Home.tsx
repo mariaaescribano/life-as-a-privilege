@@ -281,7 +281,7 @@ const Home = () => {
                       justifyContent="center"
                       position="relative"
                     >
-                      <Icon size={{ base: iconSize, md: iconSize }} />
+                      <Icon size={{ base: iconSize ?? "44px", md: iconSize ?? "60px" }} />
 
                       {/* Overlay candado en las disciplinas bloqueadas */}
                       {!abierta && (

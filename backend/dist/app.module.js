@@ -30,6 +30,7 @@ const opinion_module_1 = require("./opinion/opinion.module");
 const mail_module_1 = require("./mail/mail.module");
 const metodoAstrologia_module_1 = require("./metodoAstrologia/metodoAstrologia.module");
 const metodoPsicologia_module_1 = require("./metodoPsicologia/metodoPsicologia.module");
+const booking_module_1 = require("./booking/booking.module");
 exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
@@ -62,6 +63,7 @@ exports.AppModule = AppModule = __decorate([
             mail_module_1.MailModule,
             metodoAstrologia_module_1.MetodoAstrologiaModule,
             metodoPsicologia_module_1.MetodoPsicologiaModule,
+            booking_module_1.BookingModule,
         ],
         providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],

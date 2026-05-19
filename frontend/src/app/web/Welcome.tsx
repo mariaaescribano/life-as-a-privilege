@@ -6,18 +6,19 @@ import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import OpinionesSection from "../../components/welcome/OpinionesSection";
 import {
-  astrologiaBg, astrologiaDescrip, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, ayurvedaDescrip, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
-  culturaBg, culturaDescrip, CulturaIcon, culturaNom, culturaTxt,
-  cabalaBg, cabalaDescrip, CabalaIcon, cabalaNom, cabalaTxt,
-  fisiologiaBg, fisiologiaDescrip, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
-  neuropsicologiaBg, neuropsicologiaDescrip, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, nutricionDescrip, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, tcmDescrip, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
+  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  culturaBg, CulturaIcon, culturaNom, culturaTxt,
+  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
+  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
+  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
+  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
   AprendizajeIcon,
   nutricionNomLink,
   ayurvedaNomLink,
 } from "../../GlobalVariables";
+import { welcomeDisciplinas } from "../../data/welcomeDisciplinas";
 
 type Discipline = {
   name: string;
@@ -37,72 +38,72 @@ const disciplines: Discipline[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    desc: astrologiaDescrip,
+    desc: welcomeDisciplinas.astrologia.desc,
     link: "/aprendizaje/cursosModalidad/" + astrologiaNom,
-    available:true
+    available: true,
   },
   {
     name: neuropsicologiaNom,
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: neuropsicologiaDescrip,
+    desc: welcomeDisciplinas.psicologia.desc,
     link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom,
-    available:true
+    available: true,
   },
   {
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
-    desc: ayurvedaDescrip,
+    desc: welcomeDisciplinas.ayurveda.desc,
     link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
-    available:true
+    available: true,
   },
   {
     name: tcmNom,
     bg: tcmBg,
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
-    desc: tcmDescrip,
+    desc: welcomeDisciplinas.tcm.desc,
     link: "/aprendizaje/cursosModalidad/" + tcmNomLink,
-    available:true
+    available: true,
   },
   {
     name: fisiologiaNom,
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
-    desc: fisiologiaDescrip,
+    desc: welcomeDisciplinas.fisiologia.desc,
     link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
-    available: true
+    available: true,
   },
   {
     name: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
-    desc: nutricionDescrip,
+    desc: welcomeDisciplinas.nutricion.desc,
     link: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
-    available:true
+    available: true,
   },
   {
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
-    desc: cabalaDescrip,
+    desc: welcomeDisciplinas.cabala.desc,
     link: "/aprendizaje/cursosModalidad/" + cabalaNom,
-    available:true
+    available: true,
   },
   {
     name: culturaNom,
     bg: culturaBg,
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-    desc: culturaDescrip,
+    desc: welcomeDisciplinas.cultura.desc,
     link: "/aprendizaje/cursosModalidad/" + culturaNom,
-    available:true
+    available: true,
   },
 ];
 

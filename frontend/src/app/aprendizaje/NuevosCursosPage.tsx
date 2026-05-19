@@ -93,16 +93,16 @@ function CourseCard({ entry }: { entry: CourseEntry }) {
       border={`1px solid ${modalidad.color}55`}
       boxShadow={`0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(255,255,255,0.16), 0 0 90px rgba(180,255,245,0.18), 0 0 36px ${modalidad.color}66, 0 4px 22px rgba(0,0,0,0.22)`}
       direction="column"
-      p={{ base: 6, md: 7 }}
-      gap={4}
+      p={{ base: 7, md: 8 }}
+      gap={5}
       h="100%"
     >
       {/* Top: icon + título + modalidad */}
-      <Flex align="center" gap={3.5}>
+      <Flex align="center" gap={4}>
         <Box
           flexShrink={0}
-          w={{ base: "54px", md: "60px" }}
-          h={{ base: "54px", md: "60px" }}
+          w={{ base: "60px", md: "68px" }}
+          h={{ base: "60px", md: "68px" }}
           borderRadius="full"
           bg={`${modalidad.color}1c`}
           border={`1.5px solid ${modalidad.color}88`}
@@ -116,7 +116,7 @@ function CourseCard({ entry }: { entry: CourseEntry }) {
         <Box flex={1}>
           <Text
             color={modalidad.color}
-            fontSize={{ base: "lg", md: "xl" }}
+            fontSize={{ base: "xl", md: "2xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
             lineHeight="1.2"
@@ -126,12 +126,12 @@ function CourseCard({ entry }: { entry: CourseEntry }) {
           </Text>
           <Text
             color={`${modalidad.color}cc`}
-            fontSize="xs"
+            fontSize="sm"
             fontWeight="500"
             letterSpacing="0.14em"
             opacity={0.85}
             textTransform="uppercase"
-            mt="4px"
+            mt="5px"
             style={{ textShadow: `0 0 8px ${modalidad.color}55` }}
           >
             {modalidad.nom}
@@ -281,10 +281,10 @@ export default function NuevosCursosPage() {
         pt={{ base: 11, md: 16 }}
         pb={{ base: 24, md: 32 }}
       >
-        <Box ref={cardsReveal.ref} w="100%" maxW="960px">
+        <Box ref={cardsReveal.ref} w="100%" maxW="1280px">
           <SimpleGrid
-            columns={{ base: 1, md: 3 }}
-            spacing={{ base: 6, md: 6 }}
+            columns={{ base: 1, md: 2, xl: 3 }}
+            spacing={{ base: 5, md: 5 }}
           >
             {courses.map((entry, i) => (
               <Box
