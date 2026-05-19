@@ -1,12 +1,37 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { PaymentService } from './payment.service';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Controller('payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Post('create-intent')
-  createPaymentIntent(@Body() body: { amount: number }) {
-   // return this.paymentService.createPaymentIntent(body.amount);
+  @Post('simulate-method')
+  @UseGuards(JwtAuthGuard)
+  async simulateMethodPurchase(@Req() req: any) {
+    return await this.paymentService.simulateMethodPurchase(req.user.userId);
+  }
+
+  @Post('metodo/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createMetodoCheckout(@Req() req: any) {
+    return await this.paymentService.createMetodoCheckout(req.user.userId);
+  }
+
+  @Get('metodo/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyMetodoCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyMetodoCheckout(sessionId, req.user.userId);
+  }
+
+  @Post('libros/checkout')
+  async createLibroCheckout(@Body() body: { libroId?: string }) {
+    if (!body?.libroId) throw new BadRequestException('libroId requerido');
+    return await this.paymentService.createLibroCheckout(body.libroId);
+  }
+
+  @Get('libros/verify')
+  async verifyLibroCheckout(@Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyLibroCheckout(sessionId);
   }
 }

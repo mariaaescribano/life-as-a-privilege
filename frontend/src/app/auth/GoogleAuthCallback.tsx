@@ -18,7 +18,10 @@ export default function GoogleAuthCallback() {
       sessionStorage.setItem("userId", userId);
       sessionStorage.setItem("name",   name);
       sessionStorage.setItem("img",    img && img !== "" ? img : "/img/icono/noImg.png");
-      navigate("/home", { replace: true });
+
+      const next = sessionStorage.getItem("postAuthNext");
+      sessionStorage.removeItem("postAuthNext");
+      navigate(next || "/home", { replace: true });
     } else {
       navigate("/logIn", { replace: true });
     }

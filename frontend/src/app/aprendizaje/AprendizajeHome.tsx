@@ -1,10 +1,9 @@
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import {
-  AprendizajeIcon,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   culturaBg, CulturaIcon, culturaNom, culturaTxt,
@@ -16,99 +15,122 @@ import {
   nutricionNomLink,
 } from "../../GlobalVariables";
 
+const useReveal = (threshold = 0.05) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+};
+
 export const AprendizajeHome = () => {
-  const items = [
-    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "60px", md: "70px" }}/>,     link:  "/aprendizaje/cursosModalidad/" + fisiologiaNom,  cursor: "pointer" },
-    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "60px", md: "70px" }} />, link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom, cursor: "pointer"},
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="70px" />,                             link: "/aprendizaje/cursosModalidad/" + astrologiaNom,    cursor: "pointer" },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "60px", md: "70px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
-    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "60px", md: "70px" }}  />,   link: "/aprendizaje/cursosModalidad/" + nutricionNomLink, cursor: "pointer" },
-    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "60px", md: "70px" }}  />,      link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,  cursor: "pointer" },
-    { title: culturaNom,           bgColor: culturaBg,         color: culturaTxt,      icon: <CulturaIcon size={{ base: "60px", md: "70px" }} />,       link: "/aprendizaje/cursosModalidad/" + culturaNom,      cursor: "pointer" },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="70px" />,                                 link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
-  ];
+  const [mounted, setMounted] = useState(false);
+  const cardsReveal = useReveal(0.04);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
   }, []);
+
+  // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
+  // Fisiología → Nutrición → Cábala → Cultura
+  const items = [
+    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="58px" />,                             link: "/aprendizaje/cursosModalidad/" + astrologiaNom,    cursor: "pointer" },
+    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "50px", md: "58px" }} />, link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom, cursor: "pointer"},
+    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "50px", md: "58px" }}  />,      link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,  cursor: "pointer" },
+    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "50px", md: "58px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
+    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "50px", md: "58px" }}/>,     link:  "/aprendizaje/cursosModalidad/" + fisiologiaNom,  cursor: "pointer" },
+    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "50px", md: "58px" }}  />,   link: "/aprendizaje/cursosModalidad/" + nutricionNomLink, cursor: "pointer" },
+    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="58px" />,                                 link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
+    { title: culturaNom,           bgColor: culturaBg,         color: culturaTxt,      icon: <CulturaIcon size={{ base: "50px", md: "58px" }} />,       link: "/aprendizaje/cursosModalidad/" + culturaNom,      cursor: "pointer" },
+  ];
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
 
-      {/* ── HEADER ── */}
-      <SiteHeader variant="private" />
+      <SiteHeader variant="auto" />
 
-      {/* ── MAIN ── */}
-      <Box flex="1">
-        <Flex
-          direction="column"
-          alignItems="center"
-          px={{ base: 5, md: 10, lg: 16 }}
-          pt={{ base: 10, md: 14 }}
-          pb={{ base: 14, md: 20 }}
+      {/* ── MANDALA SEPARADOR ── */}
+      <Flex justify="center" pt={{ base: 10, md: 14 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "48px", md: "64px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
+        />
+      </Flex>
+
+      {/* ── TÍTULO ── */}
+      <Flex
+        direction="column"
+        align="center"
+        textAlign="center"
+        px={{ base: 5, md: 10 }}
+        pt={{ base: 6, md: 8 }}
+        gap={{ base: 3, md: 4 }}
+      >
+        <Text
+          color="white"
+          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+          fontWeight="700"
+          letterSpacing="0.1em"
+          lineHeight="1.1"
+          textTransform="uppercase"
+          textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(255,255,255,0.55), 0 0 56px rgba(180,255,245,0.45)"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          {/* Título */}
-          <Box
-            bg="rgba(255,255,255,0.22)"
-            border="1px solid rgba(255,255,255,0.45)"
-            sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-            borderRadius="2xl"
-            boxShadow="0 8px 36px rgba(107,196,200,0.45)"
-            px={{ base: 6, md: 10 }}
-            py={{ base: 5, md: 7 }}
-            w="100%"
-            maxW="850px"
-            mb={{ base: 10, md: 12 }}
-          >
-            <Flex direction="row" align="center" justify="center" gap={5}>
-              <Box
-                borderRadius="full"
-                bg="rgba(255,255,255,0.18)"
-                border="5px solid rgba(255,255,255,0.7)"
-                boxShadow="0 0 22px rgba(255,255,255,0.45), 0 0 55px rgba(107,196,200,0.25)"
-                w={{ base: "60px", md: "72px" }}
-                h={{ base: "60px", md: "72px" }}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                flexShrink={0}
-                overflow="hidden"
-                p="6px"
-              >
-                <AprendizajeIcon color="white" size="44px" shadow={false} />
-              </Box>
-              <Text
-                color="white"
-                fontSize={{ base: "2xl", md: "5xl" }}
-                fontWeight="700"
-                letterSpacing="0.05em"
-                filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
-                lineHeight="1.15"
-              >
-                Cursos
-              </Text>
-            </Flex>
-          </Box>
+          Disciplinas
+        </Text>
+        <Text
+          color="rgba(255,255,255,0.88)"
+          fontSize={{ base: "sm", md: "lg" }}
+          fontStyle="italic"
+          letterSpacing="0.05em"
+          lineHeight="1.5"
+          textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.28)"
+          maxW={{ base: "100%", md: "512px" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(13px)"}
+          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
+        >
+          Ocho puntos de vista. Un ser humano.
+        </Text>
+      </Flex>
 
-          {/* Tarjetas directas — sin card contenedor */}
+      {/* ── GRID DE DISCIPLINAS ── */}
+      <Flex
+        flex={1}
+        justify="center"
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 20, md: 24 }}
+        pb={{ base: 24, md: 32 }}
+      >
+        <Box ref={cardsReveal.ref} w="100%" maxW="960px">
           <SimpleGrid
-            w="100%"
             columns={{ base: 2, md: 4 }}
-            spacing={{ base: 6, md: 8 }}
-            sx={{
-              "@keyframes cardFadeUp": {
-                from: { opacity: 0, transform: "translateY(32px) scale(0.96)" },
-                to:   { opacity: 1, transform: "translateY(0)   scale(1)"    },
-              },
-            }}
+            spacing={{ base: 5, md: 6 }}
           >
             {items.map((item, i) => (
               <Box
                 key={i}
-                style={{
-                  opacity: 0,
-                  animation: `cardFadeUp 0.52s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s forwards`,
-                }}
+                opacity={cardsReveal.visible ? 1 : 0}
+                transform={cardsReveal.visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.95)"}
+                transition={`opacity 0.6s ease ${i * 0.08}s, transform 0.6s ease ${i * 0.08}s`}
               >
                 <ThemeCard
                   title={item.title}
@@ -121,10 +143,9 @@ export const AprendizajeHome = () => {
               </Box>
             ))}
           </SimpleGrid>
-        </Flex>
-      </Box>
+        </Box>
+      </Flex>
 
-      {/* ── FOOTER ── */}
       <SiteFooter />
     </Box>
   );

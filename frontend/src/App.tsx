@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LogIn from "./app/auth/LogIn";
+import SignIn from "./app/auth/SignIn";
 import GoogleAuthCallback from "./app/auth/GoogleAuthCallback";
 import Home from "./app/home/Home";
 import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
@@ -21,9 +22,17 @@ import ReelsPage from "./app/web/Reels";
 import VideosPage from "./app/web/VideosPage";
 import VideoPage from "./app/web/VideoPage";
 import LibrosPage from "./app/web/LibrosPage";
+import DescargarLibroPage from "./app/web/DescargarLibroPage";
 import Contacto from "./app/web/Contacto";
 import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
+import MaterialesGratuitos from "./app/web/MaterialesGratuitos";
+import CheckoutMetodo from "./app/web/CheckoutMetodo";
+import MetodoAstrologia from "./app/metodo/MetodoAstrologia";
+import MetodoAstrologiaPlanetas from "./app/metodo/MetodoAstrologiaPlanetas";
+import MetodoAstrologiaProfundizar from "./app/metodo/MetodoAstrologiaProfundizar";
+import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
+import MetodoPsicologiaEtapa from "./app/metodo/MetodoPsicologiaEtapa";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -58,6 +67,7 @@ export default function App()
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
+      <Route path="/signIn" element={<SignIn />} />
       <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
@@ -69,9 +79,17 @@ export default function App()
       <Route path="/videos" element={<VideosPage />} />
       <Route path="/videos/:videoId" element={<VideoPage />} />
       <Route path="/libros" element={<LibrosPage />} />
+      <Route path="/libros/descargar" element={<DescargarLibroPage />} />
       <Route path="/contacto" element={<Contacto />} />
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
+      <Route path="/materiales" element={<MaterialesGratuitos />} />
+      <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
+      <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
+      <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:etapaKey" element={<PrivateRoute><MetodoPsicologiaEtapa /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

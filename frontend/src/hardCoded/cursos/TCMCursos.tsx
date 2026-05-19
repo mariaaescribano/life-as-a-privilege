@@ -32,7 +32,7 @@ export const tcmCursos: ModalidadInfo = {
       id: "tcm-curso-2",
       cursoLink: "/aprendizaje/modulosPage/" + tcmNomLink + "/tcm-curso-2",
       titulo: "Los Cinco Elementos",
-      foto: "/img/tcm/5elem.png",
+      foto: "/img/tcm/tcm_curso1.jpg",
       descripcion:
         "Los ciclos de los Cinco Elementos y su manifestación en la fisiología y en el emocional.",
       precio: null,

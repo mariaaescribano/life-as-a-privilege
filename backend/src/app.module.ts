@@ -19,6 +19,10 @@ import { NutricionModule } from './nutricion/nutricion.module';
 import { AyurvedaModule } from './ayurveda/ayurveda.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
 import { OpinionModule } from './opinion/opinion.module';
+import { MailModule } from './mail/mail.module';
+import { MetodoAstrologiaModule } from './metodoAstrologia/metodoAstrologia.module';
+import { MetodoPsicologiaModule } from './metodoPsicologia/metodoPsicologia.module';
+import { BookingModule } from './booking/booking.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -46,6 +50,10 @@ export const uploadFolder = join(process.cwd(), 'img');
     AyurvedaModule,
     SubscribeModule,
     OpinionModule,
+    MailModule,
+    MetodoAstrologiaModule,
+    MetodoPsicologiaModule,
+    BookingModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],

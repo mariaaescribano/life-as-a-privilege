@@ -32,31 +32,35 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
 
   return (
     <Flex
-      bg={bgColor} gap={3}
+      bg={bgColor}
+      gap={4}
       borderRadius="2xl"
-      boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+      border={`1px solid ${color}55`}
+      boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.14), 0 0 90px rgba(180,255,245,0.16), 0 0 36px ${color}55, 0 4px 22px rgba(0,0,0,0.22)`}
       direction="column"
-      p={{ base: 6, md: 8 }}
+      p={{ base: 7, md: 8 }}
       h="100%"
     >
       {/* Título */}
       <Box mt="3px" mb={"10px"}>
         <Text
           color={color}
-          fontSize={{ base: "2xl", md: "2xl" }}
+          fontSize={{ base: "2xl", md: "3xl" }}
           fontWeight="700"
           letterSpacing="0.04em"
-          lineHeight="1.2"
-          style={{ textShadow: `1px 2px 8px ${color}66` }}
+          lineHeight="1.25"
+          style={{ textShadow: `0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.28), 0 0 50px ${color}55` }}
         >
           {curso.titulo}
         </Text>
         <Text
-          color={`${color}88`}
-          fontSize={{ base: "sm", md: "md" }}
+          color={`${color}bb`}
+          fontSize={{ base: "xs", md: "sm" }}
           fontWeight="500"
-          letterSpacing="0.08em"
-          mt={1}
+          letterSpacing="0.14em"
+          textTransform="uppercase"
+          mt={2}
+          style={{ textShadow: `0 0 8px rgba(255,255,255,0.35), 0 0 18px ${color}44` }}
         >
           {disciplina}
         </Text>
@@ -66,10 +70,11 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
       <Box
         borderRadius="xl"
         overflow="hidden"
-        mb={"10px"}
+        mb={"6px"}
         position="relative"
         paddingBottom="56.25%"
-        boxShadow={`0 6px 28px ${bgColor}cc, 0 2px 10px ${bgColor}88`}
+        boxShadow={`0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 6px 28px ${color}66`}
+        border={`1px solid ${color}55`}
       >
         <Image
           src={curso.foto}
@@ -85,8 +90,14 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
       </Box>
 
       {/* Precio + Botón */}
-      <Flex align="center" justify="space-between" gap={3}>
-        <Text color={color} fontSize={{ base: "xl", md: "xl" }} fontWeight="700" lineHeight="1">
+      <Flex align="center" justify="space-between" gap={3} mt="auto">
+        <Text
+          color={color}
+          fontSize={{ base: "2xl", md: "2xl" }}
+          fontWeight="700"
+          lineHeight="1"
+          style={{ textShadow: `0 0 10px rgba(255,255,255,0.5), 0 0 22px ${color}66` }}
+        >
           {label}
         </Text>
 
@@ -97,16 +108,17 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
           bg={color}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
-          fontSize="lg"
-          letterSpacing="0.08em"
-          px={7}
-          py="12px"
+          fontSize="md"
+          letterSpacing="0.14em"
+          textTransform="uppercase"
+          px={6}
+          py="11px"
           borderRadius="full"
           cursor="pointer"
           flexShrink={0}
-          _hover={{ opacity: 0.88, transform: "translateY(-1px)" }}
-          transition="all 0.2s"
-          boxShadow={`0 4px 16px ${color}44`}
+          boxShadow={`0 0 14px rgba(255,255,255,0.3), 0 4px 18px ${color}66`}
+          _hover={{ boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 6px 24px ${color}88` }}
+          transition="box-shadow 0.25s ease"
         >
           Acceder →
         </Box>
@@ -137,7 +149,7 @@ export default function CursosModalidad() {
         <SiteHeader variant="auto" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
           <Text color="white" fontSize="xl">
-            Modalidad no encontrada.
+            Disciplina en construcción.
           </Text>
         </Box>
       </Box>
@@ -575,9 +587,9 @@ export default function CursosModalidad() {
 
           <SimpleGrid
             w="100%"
-            maxW="900px"
-            columns={{ base: 1, md: 2 }}
-            spacing={{ base: 5, md: 6 }}
+            maxW="1280px"
+            columns={{ base: 1, md: 2, xl: 3 }}
+            spacing={{ base: 5, md: 5 }}
             sx={{
               "@keyframes cursoCardIn": {
                 from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },

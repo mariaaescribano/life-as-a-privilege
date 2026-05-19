@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +30,7 @@ const SiteFooter = () => {
           onClick={() => navigate("/contacto")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="currentColor">
-            <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/>
+            <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
           </svg>
           Contactar
         </Flex>
@@ -71,6 +71,29 @@ const SiteFooter = () => {
         </Box>
         <Box
           as="a"
+          href="https://www.instagram.com/lifeasaprivilege"
+          target="_blank"
+          rel="noopener noreferrer"
+          display="inline-flex"
+          alignItems="center"
+          gap="6px"
+          color="rgba(255,255,255,0.65)"
+          fontSize="sm"
+          letterSpacing="0.05em"
+          cursor="pointer"
+          textDecoration="none"
+          transition="color 0.2s"
+          _hover={{ color: "white" }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="15px" width="15px" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+          Instagram
+        </Box>
+        <Box
+          as="a"
           href={DONATION_LINK}
           target="_blank"
           rel="noopener noreferrer"
@@ -98,30 +121,6 @@ const SiteFooter = () => {
         </Flex>
       </Flex>
 
-      <Flex justify="center" mt={6}>
-        <Flex
-          as="button"
-          align="center"
-          gap="8px"
-          cursor="pointer"
-          opacity={0.75}
-          _hover={{ opacity: 1 }}
-          transition="opacity 0.2s"
-          onClick={() => navigate("/elmetodo")}
-        >
-          <Image src="/img/icono/life.png" alt="Life as a Privilege" h="32px" objectFit="contain" />
-          <Text
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="400"
-            fontSize="sm"
-            letterSpacing="0.14em"
-            fontStyle="italic"
-          >
-            El Método
-          </Text>
-        </Flex>
-      </Flex>
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Image, SimpleGrid } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
 import {
-  AprendizajeIcon,
   neuropsicologiaNom,
   astrologiaNom,
   tcmNomLink,
@@ -27,8 +26,8 @@ const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-2"     }, // La Microbiota
   { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-4"   }, // La neurociencia de la meditación
   { modalidadKey: culturaNomLink,        cursoId: "cul-curso-2"     },
-  { modalidadKey: neuropsicologiaNom,    cursoId: "depresion"       }, // La depresión está en tu Vida
-  { modalidadKey: neuropsicologiaNom,    cursoId: "esquizofrenia"   }, // Esquizofrenia
+  { modalidadKey: neuropsicologiaNom,    cursoId: "depresion"       },
+  { modalidadKey: neuropsicologiaNom,    cursoId: "esquizofrenia"   },
   { modalidadKey: nutricionNomLink,      cursoId: "nut-curso-1"     },
   { modalidadKey: cabalaNom,             cursoId: "cabala-curso-1"  },
   { modalidadKey: astrologiaNom,         cursoId: "astro-curso-0"   },
@@ -55,63 +54,26 @@ function buildCourseList(): CourseEntry[] {
   });
 }
 
-// ────────────────────────────────
-// HEADER
-// ────────────────────────────────
-function NuevosCursosHeader() {
-  return (
-    <Box
-      bg="rgba(255,255,255,0.22)"
-      border="1px solid rgba(255,255,255,0.45)"
-      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
-      borderRadius="2xl"
-      boxShadow="0 8px 36px rgba(107,196,200,0.45)"
-      px={{ base: 6, md: 10 }}
-      py={{ base: 5, md: 7 }}
-      w="100%"
-      maxW="850px"
-      mb={0}
-    >
-      <Flex direction="row" align="center" justify="center" gap={5}>
-        <Box
-          borderRadius="full"
-          bg="rgba(255,255,255,0.18)"
-          border="5px solid rgba(255,255,255,0.7)"
-          boxShadow="0 0 22px rgba(255,255,255,0.45), 0 0 55px rgba(107,196,200,0.25)"
-          w={{ base: "60px", md: "72px" }}
-          h={{ base: "60px", md: "72px" }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexShrink={0}
-          overflow="hidden"
-          p="6px"
-        >
-          <AprendizajeIcon color="white" size="44px" />
-        </Box>
-        <Text
-          color="white"
-          fontSize={{ base: "2xl", md: "5xl" }}
-          fontWeight="700"
-          letterSpacing="0.05em"
-          filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))"
-          lineHeight="1.15"
-        >
-          Nuevos Cursos
-        </Text>
-      </Flex>
-    </Box>
-  );
-}
+const useReveal = (threshold = 0.05) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+};
 
 // ────────────────────────────────
 // COURSE CARD
 // ────────────────────────────────
-interface CourseCardProps {
-  entry: CourseEntry;
-}
-
-function CourseCard({ entry }: CourseCardProps) {
+function CourseCard({ entry }: { entry: CourseEntry }) {
   const { curso, modalidad } = entry;
   const navigate = useNavigate();
   const label =
@@ -131,34 +93,49 @@ function CourseCard({ entry }: CourseCardProps) {
     <Flex
       bg={modalidad.bgColor}
       borderRadius="2xl"
-      boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
+      border={`1px solid ${modalidad.color}55`}
+      boxShadow={`0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(255,255,255,0.16), 0 0 90px rgba(180,255,245,0.18), 0 0 36px ${modalidad.color}66, 0 4px 22px rgba(0,0,0,0.22)`}
       direction="column"
-      p={{ base: 5, md: 6 }}
-      gap={3}
+      p={{ base: 7, md: 8 }}
+      gap={5}
       h="100%"
     >
       {/* Top: icon + título + modalidad */}
-      <Flex align="center" gap={3}>
-        <Box flexShrink={0}>{modalidad.icon}</Box>
-        <Box>
+      <Flex align="center" gap={4}>
+        <Box
+          flexShrink={0}
+          w={{ base: "60px", md: "68px" }}
+          h={{ base: "60px", md: "68px" }}
+          borderRadius="full"
+          bg={`${modalidad.color}1c`}
+          border={`1.5px solid ${modalidad.color}88`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          boxShadow={`0 0 12px rgba(255,255,255,0.35), 0 0 26px ${modalidad.color}55`}
+        >
+          {modalidad.icon}
+        </Box>
+        <Box flex={1}>
           <Text
             color={modalidad.color}
-            fontSize={{ base: "xl", md: "xl" }}
+            fontSize={{ base: "xl", md: "2xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
             lineHeight="1.2"
-            style={{ textShadow: `1px 2px 8px ${modalidad.color}66` }}
+            style={{ textShadow: `0 0 10px rgba(255,255,255,0.5), 0 0 22px ${modalidad.color}66` }}
           >
             {curso.titulo}
           </Text>
           <Text
-            color={modalidad.color}
-            fontSize={{ base: "sm", md: "sm" }}
+            color={`${modalidad.color}cc`}
+            fontSize="sm"
             fontWeight="500"
-            letterSpacing="0.06em"
-            opacity={0.7}
+            letterSpacing="0.14em"
+            opacity={0.85}
             textTransform="uppercase"
-            mt="2px"
+            mt="5px"
+            style={{ textShadow: `0 0 8px ${modalidad.color}55` }}
           >
             {modalidad.nom}
           </Text>
@@ -171,7 +148,8 @@ function CourseCard({ entry }: CourseCardProps) {
         overflow="hidden"
         w="100%"
         aspectRatio={16 / 9}
-        boxShadow={`0 8px 32px ${modalidad.color}55, 0 3px 14px ${modalidad.color}33`}
+        boxShadow={`0 8px 26px ${modalidad.color}55, 0 0 18px rgba(255,255,255,0.25)`}
+        border={`1px solid ${modalidad.color}55`}
       >
         <Image
           src={curso.foto}
@@ -183,24 +161,14 @@ function CourseCard({ entry }: CourseCardProps) {
         />
       </Box>
 
-      {/* Descripción */}
-      <Text
-        color={`${modalidad.color}cc`}
-        fontSize={{ base: "md", md: "md" }}
-        lineHeight="1.8"
-        letterSpacing="0.02em"
-        flex="1"
-      >
-        {curso.descripcion}
-      </Text>
-
       {/* Bottom: price + button */}
       <Flex align="center" justify="space-between" gap={3} mt="auto">
         <Text
           color={modalidad.color}
-          fontSize={{ base: "xl", md: "xl" }}
+          fontSize={{ base: "2xl", md: "2xl" }}
           fontWeight="700"
           lineHeight="1"
+          style={{ textShadow: `0 0 10px rgba(255,255,255,0.5), 0 0 22px ${modalidad.color}77` }}
         >
           {label}
         </Text>
@@ -212,16 +180,17 @@ function CourseCard({ entry }: CourseCardProps) {
           bg={modalidad.color}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
-          fontSize="lg"
-          letterSpacing="0.08em"
-          px={7}
-          py="12px"
+          fontSize="md"
+          letterSpacing="0.14em"
+          textTransform="uppercase"
+          px={6}
+          py="11px"
           borderRadius="full"
           cursor="pointer"
           flexShrink={0}
-          _hover={{ opacity: 0.88, transform: "translateY(-1px)" }}
-          transition="all 0.2s"
-          boxShadow={`0 4px 16px ${modalidad.color}44`}
+          _hover={{ boxShadow: `0 0 22px rgba(255,255,255,0.4), 0 6px 22px ${modalidad.color}88` }}
+          transition="box-shadow 0.25s ease"
+          boxShadow={`0 0 14px rgba(255,255,255,0.3), 0 4px 16px ${modalidad.color}55`}
         >
           Acceder →
         </Box>
@@ -234,8 +203,13 @@ function CourseCard({ entry }: CourseCardProps) {
 // PAGE
 // ────────────────────────────────
 export default function NuevosCursosPage() {
+  const [mounted, setMounted] = useState(false);
+  const cardsReveal = useReveal(0.04);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
   }, []);
 
   const courses = buildCourseList();
@@ -250,44 +224,85 @@ export default function NuevosCursosPage() {
     >
       <SiteHeader variant="auto" />
 
-      <Box flex="1">
-        <Flex
-          direction="column"
-          alignItems="center"
-          px={{ base: 5, md: 10, lg: 16 }}
-          pt={{ base: 10, md: 14 }}
-          pb={{ base: 14, md: 20 }}
-          gap={{ base: 10, md: 12 }}
-        >
-          <NuevosCursosHeader />
+      {/* ── MANDALA SEPARADOR ── */}
+      <Flex justify="center" pt={{ base: 10, md: 14 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "48px", md: "64px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
+        />
+      </Flex>
 
+      {/* ── TÍTULO ── */}
+      <Flex
+        direction="column"
+        align="center"
+        textAlign="center"
+        px={{ base: 5, md: 10 }}
+        pt={{ base: 6, md: 8 }}
+        gap={{ base: 3, md: 4 }}
+      >
+        <Text
+          color="white"
+          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+          fontWeight="700"
+          letterSpacing="0.1em"
+          lineHeight="1.1"
+          textTransform="uppercase"
+          textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(255,255,255,0.55), 0 0 56px rgba(180,255,245,0.45)"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
+        >
+          Todos los cursos
+        </Text>
+        <Text
+          color="rgba(255,255,255,0.88)"
+          fontSize={{ base: "sm", md: "lg" }}
+          fontStyle="italic"
+          letterSpacing="0.05em"
+          lineHeight="1.5"
+          textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.28)"
+          maxW={{ base: "100%", md: "512px" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(13px)"}
+          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
+        >
+          Material introductorio y complementario para cada disciplina
+        </Text>
+      </Flex>
+
+      <Flex
+        flex={1}
+        justify="center"
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 20, md: 24 }}
+        pb={{ base: 24, md: 32 }}
+      >
+        <Box ref={cardsReveal.ref} w="100%" maxW="1280px">
           <SimpleGrid
-            w="100%"
-            maxW="850px"
-            columns={{ base: 1, md: 2 }}
-            spacing={{ base: 5, md: 6 }}
-            sx={{
-              "@keyframes cursoCardIn": {
-                from: { opacity: 0, transform: "translateY(40px) scale(0.97)" },
-                to: { opacity: 1, transform: "translateY(0) scale(1)" },
-              },
-            }}
+            columns={{ base: 1, md: 2, xl: 3 }}
+            spacing={{ base: 5, md: 5 }}
           >
             {courses.map((entry, i) => (
               <Box
                 key={`${entry.modalidad.nom}-${entry.curso.id}`}
                 h="100%"
-                style={{
-                  opacity: 0,
-                  animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s forwards`,
-                }}
+                opacity={cardsReveal.visible ? 1 : 0}
+                transform={cardsReveal.visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.95)"}
+                transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
               >
                 <CourseCard entry={entry} />
               </Box>
             ))}
           </SimpleGrid>
-        </Flex>
-      </Box>
+        </Box>
+      </Flex>
 
       <SiteFooter />
     </Box>
