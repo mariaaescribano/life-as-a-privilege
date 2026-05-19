@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 import * as nodemailer from 'nodemailer';
 
 const FILE_PATH = join(__dirname, '..', '..', 'data', 'subscribers.txt');
-const NOTIFY_EMAIL = 'mariaescribanoarce3@gmail.com';
+const NOTIFY_EMAIL = 'darkcake141@gmail.com';
 
 @Injectable()
 export class SubscribeService {

@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer';
 import { DatabaseService } from 'src/database.service';
 import { BookingDto } from './booking.controller';
 
-const NOTIFY_EMAIL = 'mariaescribanoarce3@gmail.com';
+const NOTIFY_EMAIL = 'darkcake141@gmail.com';
 
 @Injectable()
 export class BookingService {

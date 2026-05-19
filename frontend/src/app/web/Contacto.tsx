@@ -172,7 +172,7 @@ const Contacto = () => {
           {status === "ok" ? (
             <Flex direction="column" align="center" textAlign="center" py={8} gap={5}>
               <Box
-                fontSize="6xl"
+                color="white"
                 sx={{
                   animation: "heartbeat 1.2s ease-in-out infinite",
                   "@keyframes heartbeat": {
@@ -183,7 +183,9 @@ const Contacto = () => {
                   filter: "drop-shadow(0 0 14px rgba(255,180,180,0.8)) drop-shadow(0 0 30px rgba(255,180,180,0.4))",
                 }}
               >
-                ♥
+                <svg xmlns="http://www.w3.org/2000/svg" height="72px" viewBox="0 -960 960 960" width="72px" fill="currentColor">
+                  <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+                </svg>
               </Box>
               <Text
                 color="white"

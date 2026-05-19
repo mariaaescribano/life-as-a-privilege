@@ -442,7 +442,7 @@ export default function ElMetodo() {
       >
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 14, md: 18 }}
+          gap={{ base: 4, md: 18 }}
         >
           {modalidades.map((m, i) => (
             <MetodoCard
@@ -1053,10 +1053,10 @@ export default function ElMetodo() {
               <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${selectedCard.txt}55)`} />
             </Flex>
 
-            {/* SECCIONES DE CONTENIDO — siempre 3 en una línea */}
+            {/* SECCIONES DE CONTENIDO — apiladas en móvil, 3 columnas en tablet+ */}
             <Grid
-              templateColumns="repeat(3, 1fr)"
-              gap={{ base: 2, md: 4 }}
+              templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+              gap={{ base: 3, md: 4 }}
             >
               {selectedCard.contenido.map((seccion, i) => (
                 <Flex
@@ -1079,7 +1079,6 @@ export default function ElMetodo() {
                     letterSpacing="0.04em"
                     lineHeight="1.25"
                     textAlign="center"
-                    style={{ textShadow: `0 0 12px ${selectedCard.txt}cc, 0 0 26px ${selectedCard.txt}88, 0 0 50px ${selectedCard.txt}55` }}
                   >
                     {seccion.titulo}
                   </Text>

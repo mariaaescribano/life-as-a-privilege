@@ -487,7 +487,7 @@ const Welcome = () => {
       >
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 14, md: 18 }}
+          gap={{ base: 4, md: 18 }}
         >
           {disciplines.map((d, i) => (
             <Box

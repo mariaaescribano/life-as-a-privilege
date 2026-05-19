@@ -20,7 +20,7 @@ export class ContactService {
     try {
       await transporter.sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
-        to: 'mariaescribanoarce3@gmail.com',
+        to: 'darkcake141@gmail.com',
         replyTo: dto.email,
         subject: `[Contacto web] ${dto.titulo}`,
         html: `

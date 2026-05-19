@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { apuntes, libros, type Apunte, type Libro } from "../../hardCoded/libros/libros";
+import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
+
+const PRECIO_LIBRO_PAGO = "5 €";
 
 const useReveal = (threshold = 0.05) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -20,7 +22,15 @@ const useReveal = (threshold = 0.05) => {
   return { ref, visible };
 };
 
-function DescargarBtn({ href }: { href: string }) {
+function DescargarBtn({
+  href,
+  label = "Descargar PDF",
+  icon = "↓",
+}: {
+  href: string;
+  label?: string;
+  icon?: string;
+}) {
   return (
     <Flex
       as="a"
@@ -54,17 +64,101 @@ function DescargarBtn({ href }: { href: string }) {
       whiteSpace="nowrap"
       alignSelf="flex-start"
     >
-      Descargar PDF
+      {label}
       <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
-        ↓
+        {icon}
       </Box>
     </Flex>
   );
 }
 
 type Item = { id: string; img?: string; titulo: string; link: string };
+type PaidItem = Item & { descripcion: string };
 
 const LINE = "1px solid rgba(255,255,255,0.22)";
+
+function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; total: number; visible: boolean }) {
+  const lastRowStart2 = total - ((total % 2) || 2);
+
+  return (
+    <Flex
+      direction="row"
+      align="center"
+      gap={{ base: 5, md: 7 }}
+      px={{ base: 5, md: 8 }}
+      py={{ base: 7, md: 10 }}
+      opacity={visible ? 1 : 0}
+      transform={visible ? "translateY(0)" : "translateY(20px)"}
+      transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
+      sx={{
+        "@media (max-width: 639px)": {
+          borderBottom: i < total - 1 ? LINE : "none",
+        },
+        "@media (min-width: 640px)": {
+          borderRight: i % 2 === 0 ? LINE : "none",
+          borderBottom: i < lastRowStart2 ? LINE : "none",
+        },
+      }}
+    >
+      {item.img && (
+        <Box
+          flexShrink={0}
+          w={{ base: "150px", md: "210px" }}
+          aspectRatio={1}
+          borderRadius="lg"
+          overflow="hidden"
+          boxShadow="0 0 22px rgba(255,255,255,0.34), 0 0 48px rgba(255,255,255,0.18), 0 6px 22px rgba(0,0,0,0.3)"
+        >
+          <Image
+            src={item.img}
+            alt={item.titulo}
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            objectPosition="center"
+          />
+        </Box>
+      )}
+
+      <Flex direction="column" gap={{ base: 2, md: 3 }} flex="1" minW={0}>
+        <Text
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "lg", md: "xl" }}
+          fontWeight="700"
+          letterSpacing="0.04em"
+          lineHeight="1.25"
+          textShadow="0 0 12px rgba(255,255,255,0.45), 0 0 26px rgba(255,255,255,0.22)"
+        >
+          {item.titulo}
+        </Text>
+        <Text
+          color="rgba(255,255,255,0.82)"
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "sm", md: "md" }}
+          fontStyle="italic"
+          lineHeight="1.5"
+          textShadow="0 0 6px rgba(255,255,255,0.18)"
+        >
+          {item.descripcion}
+        </Text>
+        <Flex align="center" gap={{ base: 3, md: 4 }} mt={{ base: 1, md: 2 }} flexWrap="wrap">
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight="700"
+            letterSpacing="0.08em"
+            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.28)"
+          >
+            {PRECIO_LIBRO_PAGO}
+          </Text>
+          <DescargarBtn href={item.link} label="Comprar" icon="→" />
+        </Flex>
+      </Flex>
+    </Flex>
+  );
+}
 
 function BookCell({ item, i, total, visible }: { item: Item; i: number; total: number; visible: boolean }) {
   const lastRowStart3 = total - ((total % 3) || 3);
@@ -156,6 +250,13 @@ export default function LibrosPage() {
     titulo: l.titulo,
     link: l.link,
   }));
+  const paidItems: PaidItem[] = (librosPago as LibroPago[]).map(p => ({
+    id: p.id,
+    img: p.img,
+    titulo: p.titulo,
+    link: p.link,
+    descripcion: p.descripcion,
+  }));
 
   // Todo en una sola lista
   const allItems: Item[] = [...librosItems, ...apuntesItems];
@@ -223,16 +324,42 @@ export default function LibrosPage() {
         </Text>
       </Flex>
 
+      {/* ── SECCIÓN LIBROS DE PAGO ── */}
+      {paidItems.length > 0 && (
+        <Flex
+          justify="center"
+          w="100%"
+          px={{ base: 5, md: 10, lg: 16 }}
+          pt={{ base: 11, md: 16 }}
+          pb={{ base: 4, md: 6 }}
+        >
+          <Box w="100%" maxW="1080px" mx="auto">
+            <Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }}>
+              {paidItems.map((item, i) => (
+                <PaidBookCell
+                  key={item.id}
+                  item={item}
+                  i={i}
+                  total={paidItems.length}
+                  visible={mounted}
+                />
+              ))}
+            </Grid>
+          </Box>
+        </Flex>
+      )}
+
       {/* ── PLANTILLA 3 EN RAYA ── */}
       <Flex
         flex={1}
         justify="center"
+        w="100%"
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 11, md: 16 }}
         pb={{ base: 24, md: 32 }}
       >
-        <Box ref={gridReveal.ref} w="100%" maxW="880px">
-          <Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}>
+        <Box ref={gridReveal.ref} w="100%" maxW="880px" mx="auto">
+          <Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }} justifyContent="center">
             {allItems.map((item, i) => (
               <BookCell
                 key={item.id}
