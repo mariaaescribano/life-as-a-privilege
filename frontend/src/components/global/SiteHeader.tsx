@@ -44,7 +44,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       align="center"
       justify="space-between"
       px={{ base: 5, md: 12 }}
-      py={{ base: 2, md: 4 }}
+      pt={{ base: 2, md: 4 }}
+      pb={{ base: "13px", md: 4 }}
       bg="#008080"
       position="sticky"
       top="0"

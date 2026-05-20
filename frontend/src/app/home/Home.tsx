@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text, Tooltip, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, Tooltip, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -40,6 +40,7 @@ const disciplines = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [img, setImg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -217,12 +218,21 @@ const Home = () => {
       formData.append("file", e.target.files[0]);
       formData.append("userId", userId);
       const res  = await fetch(`${API_URL}/upload/profile-pic`, { method: "POST", body: formData });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      if (data.url) {
-        const freshUrl = `${data.url}?v=${Date.now()}`;
-        sessionStorage.setItem("img", freshUrl);
-        setImg(freshUrl);
-      }
+      if (!data.url) throw new Error("Sin URL devuelta");
+      const freshUrl = `${data.url}?v=${Date.now()}`;
+      sessionStorage.setItem("img", freshUrl);
+      setImg(freshUrl);
+    } catch (err) {
+      toast({
+        title: "No se pudo subir la foto",
+        description: "Inténtalo de nuevo en un momento.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } finally {
       setUploading(false);
     }

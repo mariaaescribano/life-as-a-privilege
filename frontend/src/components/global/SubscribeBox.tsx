@@ -21,19 +21,25 @@ const useReveal = (threshold = 0.15) => {
 
 export function SubscribeBox() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "ok" | "invalid">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "invalid" | "error">("idle");
   const reveal = useReveal(0.15);
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (status === "loading") return;
     if (!email || !isValidEmail(email)) {
       setStatus("invalid");
       return;
     }
-    axios.post(`${API_URL}/subscribe`, { email }).catch(() => {});
-    setStatus("ok");
-    setEmail("");
+    setStatus("loading");
+    try {
+      await axios.post(`${API_URL}/subscribe`, { email });
+      setStatus("ok");
+      setEmail("");
+    } catch (err) {
+      setStatus("error");
+    }
   };
 
   // Reset to idle after 3 seconds of success
@@ -147,9 +153,15 @@ export function SubscribeBox() {
                 Introduce un email válido
               </Text>
             )}
+            {status === "error" && (
+              <Text color="rgba(255,150,150,0.9)" fontSize="sm" fontFamily="'EB Garamond', serif">
+                No se pudo enviar. Inténtalo de nuevo en un momento.
+              </Text>
+            )}
             <Box
               as="button"
               onClick={handleSubmit}
+              disabled={status === "loading"}
               px={{ base: 8, md: 10 }}
               py="12px"
               borderRadius="full"
@@ -161,10 +173,11 @@ export function SubscribeBox() {
               fontWeight="700"
               letterSpacing="0.16em"
               textTransform="uppercase"
-              cursor="pointer"
+              cursor={status === "loading" ? "not-allowed" : "pointer"}
+              opacity={status === "loading" ? 0.6 : 1}
               boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 30px rgba(255,255,255,0.15)"
               textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)"
-              _hover={{
+              _hover={status === "loading" ? {} : {
                 bg: "rgba(255,255,255,0.22)",
                 borderColor: "white",
                 boxShadow: "0 0 22px rgba(255,255,255,0.45), 0 0 44px rgba(180,255,245,0.25)",
@@ -172,7 +185,7 @@ export function SubscribeBox() {
               transition="all 0.2s"
               whiteSpace="nowrap"
             >
-              Suscribirme
+              {status === "loading" ? "Enviando…" : "Suscribirme"}
             </Box>
           </Flex>
         )}

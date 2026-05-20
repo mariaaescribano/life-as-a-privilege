@@ -170,7 +170,7 @@ const Contacto = () => {
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
           {status === "ok" ? (
-            <Flex direction="column" align="center" textAlign="center" py={8} gap={5}>
+            <Flex direction="column" align="center" textAlign="center" py={8} gap={5} w="80%" mx="auto">
               <Box
                 color="white"
                 sx={{
@@ -236,7 +236,7 @@ const Contacto = () => {
               </Flex>
             </Flex>
           ) : (
-            <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5}>
+            <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5} w="80%" mx="auto">
 
               <Box>
                 <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">

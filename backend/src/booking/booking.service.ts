@@ -3,7 +3,6 @@ import * as nodemailer from 'nodemailer';
 import { DatabaseService } from 'src/database.service';
 import { BookingDto } from './booking.controller';
 
-const NOTIFY_EMAIL = 'darkcake141@gmail.com';
 
 @Injectable()
 export class BookingService {
@@ -61,13 +60,19 @@ export class BookingService {
       },
     });
 
+    const notifyEmail = process.env.NOTIFY_EMAIL;
+    if (!notifyEmail) {
+      console.warn('[BookingService] NOTIFY_EMAIL no configurado — no se envía notificación');
+      return;
+    }
+
     const temaHtml = dto.tema?.trim()
       ? `<p><strong>Tema a tratar:</strong><br>${dto.tema.replace(/\n/g, '<br>')}</p>`
       : '';
 
     await transporter.sendMail({
       from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
-      to: NOTIFY_EMAIL,
+      to: notifyEmail,
       replyTo: dto.email,
       subject: `Nueva reserva — ${dto.fecha} ${dto.slot}`,
       html: `

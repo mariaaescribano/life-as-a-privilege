@@ -7,9 +7,17 @@ import { AuthService } from './auth.service';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || "b7f9c2d1e6a8f4b3c9d7e0f1a2b3c4d5", 
-      signOptions: { expiresIn: '24h' },
+    JwtModule.registerAsync({
+      useFactory: () => {
+        const secret = process.env.JWT_SECRET;
+        if (!secret) {
+          throw new Error('JWT_SECRET no está configurado en el entorno');
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: '24h' },
+        };
+      },
     }),
   ],
   providers: [AuthService],

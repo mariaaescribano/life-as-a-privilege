@@ -17,10 +17,15 @@ export class ContactService {
       },
     });
 
+    const notifyEmail = process.env.NOTIFY_EMAIL;
+    if (!notifyEmail) {
+      throw new InternalServerErrorException('NOTIFY_EMAIL no está configurado');
+    }
+
     try {
       await transporter.sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
-        to: 'darkcake141@gmail.com',
+        to: notifyEmail,
         replyTo: dto.email,
         subject: `[Contacto web] ${dto.titulo}`,
         html: `

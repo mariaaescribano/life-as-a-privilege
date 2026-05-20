@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
@@ -95,6 +95,7 @@ const LINE = "1px solid rgba(255,255,255,0.22)";
 function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; total: number; visible: boolean }) {
   const lastRowStart2 = total - ((total % 2) || 2);
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const handleComprar = async () => {
     if (loading) return;
@@ -111,7 +112,14 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
       window.location.href = data.url;
     } catch (err) {
       console.error("Error iniciando checkout:", err);
-      alert("No se pudo iniciar el pago. Inténtalo de nuevo en un momento.");
+      toast({
+        title: "No se pudo iniciar el pago",
+        description: "Inténtalo de nuevo en un momento.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       setLoading(false);
     }
   };
@@ -152,6 +160,8 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
             h="100%"
             objectFit="cover"
             objectPosition="center"
+            loading="lazy"
+            decoding="async"
           />
         </Box>
       )}
@@ -243,6 +253,8 @@ function BookCell({ item, i, total, visible }: { item: Item; i: number; total: n
             h="100%"
             objectFit="cover"
             objectPosition="center"
+            loading="lazy"
+            decoding="async"
           />
         </Box>
       )}
@@ -366,7 +378,7 @@ export default function LibrosPage() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Libros y apuntes para acompañar el camino
+          Más de 40 ibros y apuntes para acompañar tu camino
         </Text>
       </Flex>
 

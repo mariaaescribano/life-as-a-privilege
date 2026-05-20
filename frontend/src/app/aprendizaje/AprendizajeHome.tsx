@@ -44,14 +44,14 @@ export const AprendizajeHome = () => {
   // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
   // Fisiología → Nutrición → Cábala → Cultura
   const items = [
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size="58px" />,                             link: "/aprendizaje/cursosModalidad/" + astrologiaNom,    cursor: "pointer" },
-    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "50px", md: "58px" }} />, link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom, cursor: "pointer"},
-    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "50px", md: "58px" }}  />,      link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,  cursor: "pointer" },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "50px", md: "58px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
-    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "50px", md: "58px" }}/>,     link:  "/aprendizaje/cursosModalidad/" + fisiologiaNom,  cursor: "pointer" },
-    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "50px", md: "58px" }}  />,   link: "/aprendizaje/cursosModalidad/" + nutricionNomLink, cursor: "pointer" },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size="58px" />,                                 link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
-    { title: culturaNom,           bgColor: culturaBg,         color: culturaTxt,      icon: <CulturaIcon size={{ base: "50px", md: "58px" }} />,       link: "/aprendizaje/cursosModalidad/" + culturaNom,      cursor: "pointer" },
+    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     link: "/aprendizaje/cursosModalidad/" + astrologiaNom,    cursor: "pointer" },
+    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "48px" }} />, link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom, cursor: "pointer"},
+    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,  cursor: "pointer" },
+    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
+    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "40px", md: "48px" }}/>,     link:  "/aprendizaje/cursosModalidad/" + fisiologiaNom,  cursor: "pointer" },
+    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "40px", md: "48px" }}  />,   link: "/aprendizaje/cursosModalidad/" + nutricionNomLink, cursor: "pointer" },
+    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
+    { title: culturaNom,           bgColor: culturaBg,         color: culturaTxt,      icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,       link: "/aprendizaje/cursosModalidad/" + culturaNom,      cursor: "pointer" },
   ];
 
   return (

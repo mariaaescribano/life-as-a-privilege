@@ -4,7 +4,6 @@ import { dirname, join } from 'path';
 import * as nodemailer from 'nodemailer';
 
 const FILE_PATH = join(__dirname, '..', '..', 'data', 'subscribers.txt');
-const NOTIFY_EMAIL = 'darkcake141@gmail.com';
 
 @Injectable()
 export class SubscribeService {
@@ -27,10 +26,16 @@ export class SubscribeService {
       },
     });
 
+    const notifyEmail = process.env.NOTIFY_EMAIL;
+    if (!notifyEmail) {
+      console.warn('[SubscribeService] NOTIFY_EMAIL no configurado — no se envía notificación');
+      return;
+    }
+
     try {
       await transporter.sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
-        to: NOTIFY_EMAIL,
+        to: notifyEmail,
         subject: 'Nuevo suscriptor',
         html: `<p>Nuevo suscriptor: <strong>${email}</strong></p>`,
       });

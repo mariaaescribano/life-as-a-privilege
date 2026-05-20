@@ -275,7 +275,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
           letterSpacing="0.03em"
           lineHeight="short"
         >
-          {data.name}
+          {data.name === "Medicina China" ? "Med. China" : data.name}
         </Text>
       </Flex>
     </Box>
