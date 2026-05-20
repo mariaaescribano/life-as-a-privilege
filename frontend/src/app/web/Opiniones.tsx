@@ -411,7 +411,7 @@ export default function Opiniones() {
       <Flex
         justify="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 11, md: 16 }}
+        pt={{ base: 20, md: 16 }}
       >
         <OpinionesList opiniones={opiniones} loading={loading} listReveal={listReveal} />
       </Flex>
