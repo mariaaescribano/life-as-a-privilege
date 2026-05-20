@@ -866,7 +866,6 @@ export default function ElMetodo() {
 
             {/* HERO ── icono + título + descripción ── */}
             <Flex direction="column" align="center" gap={{ base: 4, md: 6 }} pt={{ base: 2, md: 4 }}>
-              {/* Halo decorativo + icono */}
               <Box position="relative" display="flex" alignItems="center" justifyContent="center">
                 <Box
                   position="absolute"
@@ -891,7 +890,6 @@ export default function ElMetodo() {
                 </Box>
               </Box>
 
-              {/* Nombre — gigante */}
               <Text
                 color={selectedCard.txt}
                 fontSize={{ base: "3xl", md: "5xl" }}
@@ -904,7 +902,6 @@ export default function ElMetodo() {
                 {selectedCard.name}
               </Text>
 
-              {/* Línea decorativa */}
               <Box
                 w="80px"
                 h="2px"
@@ -912,7 +909,6 @@ export default function ElMetodo() {
                 opacity={0.7}
               />
 
-              {/* Frase en cursiva */}
               <Text
                 color={selectedCard.txt}
                 fontSize={{ base: "lg", md: "2xl" }}
@@ -943,28 +939,22 @@ export default function ElMetodo() {
               <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${selectedCard.txt}55)`} />
             </Flex>
 
-            {/* SECCIONES DE CONTENIDO — apiladas en móvil, 3 columnas en tablet+ */}
-            <Grid
-              templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-              gap={{ base: 3, md: 4 }}
-            >
+            {/* SECCIONES DE CONTENIDO — sin boxes, separadas por líneas horizontales */}
+            <Flex direction="column">
               {selectedCard.contenido.map((seccion, i) => (
                 <Flex
                   key={i}
                   direction="column"
-                  bg={selectedCard.txt + "10"}
-                  border={`1px solid ${selectedCard.txt}33`}
-                  borderRadius="xl"
-                  p={{ base: 3, md: 5 }}
-                  position="relative"
+                  py={{ base: 5, md: 6 }}
+                  gap={{ base: 3, md: 4 }}
                   cursor="default"
                   userSelect="text"
-                  gap={{ base: 2, md: 3 }}
+                  borderTop={i === 0 ? "none" : `1px solid ${selectedCard.txt}33`}
                 >
-                  {/* Cabecera de sección — solo título */}
+                  {/* Título de sección */}
                   <Text
                     color={selectedCard.txt}
-                    fontSize={{ base: "sm", sm: "md", md: "lg" }}
+                    fontSize={{ base: "md", md: "lg" }}
                     fontWeight="700"
                     letterSpacing="0.04em"
                     lineHeight="1.25"
@@ -974,15 +964,16 @@ export default function ElMetodo() {
                   </Text>
 
                   {/* Items */}
-                  <Flex direction="column" gap={{ base: 1.5, md: 2.5 }} flex="1">
+                  <Flex direction="column" gap={{ base: 2, md: 2.5 }} flex="1">
                     {seccion.items.map((item, j) => (
                       <Text
                         key={j}
                         color={selectedCard.txt}
                         opacity={0.88}
-                        fontSize={{ base: "xs", md: "sm" }}
-                        lineHeight={{ base: "1.55", md: "1.7" }}
+                        fontSize={{ base: "sm", md: "md" }}
+                        lineHeight={{ base: "1.6", md: "1.7" }}
                         letterSpacing="0.01em"
+                        textAlign="center"
                       >
                         {item}
                       </Text>
@@ -993,10 +984,9 @@ export default function ElMetodo() {
                   {seccion.aviso && (
                     <Flex
                       align="center"
+                      justify="center"
                       gap={{ base: 1.5, md: 2 }}
                       mt={1}
-                      pt={{ base: 2, md: 3 }}
-                      borderTop={`1px dashed ${selectedCard.txt}44`}
                     >
                       <Box
                         as="svg"
@@ -1024,7 +1014,7 @@ export default function ElMetodo() {
                   )}
                 </Flex>
               ))}
-            </Grid>
+            </Flex>
           </Box>
         </Box>
       )}
