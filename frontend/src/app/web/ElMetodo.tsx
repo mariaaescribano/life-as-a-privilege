@@ -622,8 +622,7 @@ export default function ElMetodo() {
           ].map((c) => (
             <Box
               key={c.titulo}
-              bg="rgba(255,255,255,0.07)"
-              border="1px solid rgba(255,255,255,0.22)"
+              bg="transparent"
               borderRadius="xl"
               px={{ base: 4, md: 4 }}
               py={{ base: 5, md: 6 }}
@@ -632,8 +631,6 @@ export default function ElMetodo() {
               flexDirection="column"
               alignItems="center"
               gap={{ base: 2.5, md: 3 }}
-              boxShadow="0 0 12px rgba(255,255,255,0.16), 0 0 28px rgba(255,255,255,0.08)"
-              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
               opacity={comunidadReveal.visible ? 1 : 0}
               transform={comunidadReveal.visible ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)"}
               transition={`opacity 0.7s ease ${c.delay}s, transform 0.7s ease ${c.delay}s`}
@@ -642,13 +639,9 @@ export default function ElMetodo() {
               <Box
                 w={{ base: "38px", md: "42px" }}
                 h={{ base: "38px", md: "42px" }}
-                borderRadius="full"
-                bg="rgba(255,255,255,0.10)"
-                border="1px solid rgba(255,255,255,0.3)"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                boxShadow="0 0 10px rgba(255,255,255,0.28)"
               >
                 <Box
                   as="svg"

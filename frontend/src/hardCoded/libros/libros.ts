@@ -70,7 +70,7 @@ export const librosPago: LibroPago[] = [
   {
     id: "life-as-a-privilege",
     titulo: "Life as a Privilege",
-    descripcion: "El libro fundacional del método. Una invitación a entender la vida como un camino de despertar a través de la medicina integrativa, la consciencia y el cuerpo.",
+    descripcion: "El libro fundacional del método. Una invitación a entender la Vida como un camino de despertar.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1YKcYYSjxZudK112Ohsn4pSK449nCwLgk"),
     img: "/libros/img/book.png",
@@ -78,7 +78,7 @@ export const librosPago: LibroPago[] = [
   {
     id: "chinese-medicine",
     titulo: "Chinese Medicine",
-    descripcion: "Una recopilación profunda de los principios de la medicina tradicional china: meridianos, energía, los cinco elementos y diagnóstico.",
+    descripcion: "Una recopilación profunda de los principios de la medicina tradicional china.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1lX1ahYlzjFaWvuk-tlhS3ar5f_ht7Ww3"),
     img: "/libros/img/tcm.png",
@@ -86,7 +86,7 @@ export const librosPago: LibroPago[] = [
   {
     id: "the-kabbalah",
     titulo: "The Kabbalah",
-    descripcion: "Una introducción a los misterios de la Cábala: el árbol de la vida, las sefirot y la sabiduría esotérica judía.",
+    descripcion: "Una introducción a los misterios de la Cábala: el árbol de la vida y las sefirot.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1hFXw_92WF82V0kS6C1nlkW6ZR0zpixKX"),
     img: "/libros/img/cabala.png",
@@ -94,7 +94,7 @@ export const librosPago: LibroPago[] = [
   {
     id: "psicosomatica",
     titulo: "Psicosomática (Jose Luis Marín)",
-    descripcion: "Cómo las emociones, los traumas y la mente moldean el cuerpo. Una mirada a la enfermedad como mensaje y a la sanación como integración.",
+    descripcion: "Cómo las emociones, los traumas y la mente nos enferman.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1uzpahRZoDr47SefN83pELg4urj61GkNE"),
     img: "/libros/img/psicosomatica.png",
@@ -102,7 +102,7 @@ export const librosPago: LibroPago[] = [
   {
     id: "fisiologia",
     titulo: "Fisiología",
-    descripcion: "Los fundamentos de cómo funciona el cuerpo humano: sistemas, procesos y la inteligencia que los gobierna.",
+    descripcion: "Los fundamentos de cómo funciona el cuerpo humano.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1vzgDPnQcuChl-5sm2Wv_iTiY2NcR_SjV"),
     img: "/libros/img/fisiologia(pago).png",

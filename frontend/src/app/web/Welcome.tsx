@@ -294,8 +294,8 @@ const Welcome = () => {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "lg", md: "2xl" }}
-            letterSpacing="0.18em"
+            fontSize={{ base: "sm", md: "2xl" }}
+            letterSpacing={{ base: "0.14em", md: "0.18em" }}
             textTransform="uppercase"
             textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
           >
@@ -306,7 +306,7 @@ const Welcome = () => {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "lg", md: "2xl" }}
+            fontSize={{ base: "sm", md: "2xl" }}
             style={{ textShadow: "0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)" }}
           >
             →
@@ -404,10 +404,10 @@ const Welcome = () => {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="600"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.18em"
+            fontSize={{ base: "xs", md: "md" }}
+            letterSpacing={{ base: "0.14em", md: "0.18em" }}
             textTransform="uppercase"
-            px={{ base: 7, md: 9 }}
+            px={{ base: 5, md: 9 }}
             py={{ base: "10px", md: "12px" }}
             borderRadius="full"
             border="1px solid rgba(255,255,255,0.55)"
@@ -534,7 +534,7 @@ const Welcome = () => {
                 letterSpacing="0.03em"
                 lineHeight="short"
               >
-                {d.name}
+                {d.name === "Medicina China" ? "Med. China" : d.name}
               </Text>
             </Box>
           ))}

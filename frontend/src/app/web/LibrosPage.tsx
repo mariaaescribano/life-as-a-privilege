@@ -377,7 +377,7 @@ export default function LibrosPage() {
             justify="center"
             w="100%"
             px={{ base: 5, md: 10, lg: 16 }}
-            pt={{ base: 11, md: 16 }}
+            pt={{ base: 20, md: 28 }}
             pb={{ base: 4, md: 6 }}
           >
             <Box w="100%" maxW="1080px" mx="auto">

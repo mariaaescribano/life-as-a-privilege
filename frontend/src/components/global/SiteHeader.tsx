@@ -44,7 +44,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       align="center"
       justify="space-between"
       px={{ base: 5, md: 12 }}
-      py={{ base: 3, md: 4 }}
+      py={{ base: 2, md: 4 }}
       bg="#008080"
       position="sticky"
       top="0"
@@ -63,7 +63,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       >
         <Image
           src="/img/icono/life.png"
-          h={{ base: "56px", md: "70px" }}
+          h={{ base: "40px", md: "70px" }}
           objectFit="contain"
           style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 20px rgba(255,255,255,0.38)) drop-shadow(0 0 42px rgba(180,255,245,0.28))" }}
         />
@@ -71,7 +71,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           color="rgba(255,255,255,0.85)"
           fontFamily="'EB Garamond', serif"
           fontWeight="600"
-          fontSize={{ base: "9px", md: "11px" }}
+          fontSize={{ base: "7px", md: "11px" }}
           letterSpacing="0.18em"
           textShadow="0 0 8px rgba(255,255,255,0.55), 0 0 16px rgba(255,255,255,0.3)"
           whiteSpace="nowrap"
