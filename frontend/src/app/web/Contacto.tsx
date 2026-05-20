@@ -316,9 +316,10 @@ const Contacto = () => {
                   type="submit"
                   align="center"
                   justify="center"
-                  gap={{ base: 3, md: 4 }}
-                  px={{ base: 10, md: 14 }}
+                  gap={{ base: 2, md: 4 }}
+                  px={{ base: 6, md: 14 }}
                   py={{ base: "14px", md: "16px" }}
+                  flexShrink={0}
                   borderRadius="full"
                   border="1.5px solid rgba(255,255,255,0.6)"
                   bg="rgba(255,255,255,0.10)"
@@ -337,7 +338,7 @@ const Contacto = () => {
                   <Image
                     src="/img/icono/life.png"
                     alt=""
-                    h={{ base: "26px", md: "32px" }}
+                    h={{ base: "20px", md: "32px" }}
                     objectFit="contain"
                     flexShrink={0}
                     style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
@@ -346,10 +347,11 @@ const Contacto = () => {
                     color="white"
                     fontFamily="'EB Garamond', serif"
                     fontWeight="700"
-                    fontSize={{ base: "md", md: "xl" }}
-                    letterSpacing="0.2em"
+                    fontSize={{ base: "sm", md: "xl" }}
+                    letterSpacing={{ base: "0.12em", md: "0.2em" }}
                     textTransform="uppercase"
                     textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
+                    whiteSpace="nowrap"
                   >
                     {status === "sending" ? "Enviando…" : "Enviar mensaje"}
                   </Text>

@@ -6,12 +6,6 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Post('simulate-method')
-  @UseGuards(JwtAuthGuard)
-  async simulateMethodPurchase(@Req() req: any) {
-    return await this.paymentService.simulateMethodPurchase(req.user.userId);
-  }
-
   @Post('metodo/checkout')
   @UseGuards(JwtAuthGuard)
   async createMetodoCheckout(@Req() req: any) {

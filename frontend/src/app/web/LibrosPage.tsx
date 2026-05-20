@@ -378,7 +378,7 @@ export default function LibrosPage() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Más de 40 ibros y apuntes para acompañar tu camino
+          Más de 40 libros para acompañar tu camino
         </Text>
       </Flex>
 

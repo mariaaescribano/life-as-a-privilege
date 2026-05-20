@@ -148,7 +148,7 @@ export default function CursosModalidad() {
       <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-          <Text color="white" fontSize="xl">
+          <Text color="white" fontSize="xl" fontStyle="italic">
             Disciplina en construcción.
           </Text>
         </Box>

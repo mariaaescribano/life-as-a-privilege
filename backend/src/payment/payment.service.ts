@@ -15,14 +15,6 @@ export class PaymentService {
     this.stripe = new Stripe(key);
   }
 
-  async simulateMethodPurchase(userId: string) {
-    const user = await this.userService.marcarSuscritoMetodo(userId);
-    return {
-      success: true,
-      user,
-    };
-  }
-
   async createMetodoCheckout(userId: string) {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 

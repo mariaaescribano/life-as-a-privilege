@@ -257,7 +257,7 @@ const Welcome = () => {
       >
         <Box
           h="1px"
-          w={{ base: "32px", md: "70px" }}
+          w={{ base: "18px", md: "70px" }}
           bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
           boxShadow="0 0 8px rgba(255,255,255,0.5)"
         />
@@ -266,9 +266,10 @@ const Welcome = () => {
           onClick={() => navigate("/elMetodo")}
           align="center"
           justify="center"
-          gap={{ base: 3, md: 4 }}
-          px={{ base: 8, md: 12 }}
+          gap={{ base: 2, md: 4 }}
+          px={{ base: 5, md: 12 }}
           py={{ base: "14px", md: "18px" }}
+          flexShrink={0}
           borderRadius="full"
           border="1px solid rgba(255,255,255,0.55)"
           bg="rgba(255,255,255,0.08)"
@@ -298,6 +299,7 @@ const Welcome = () => {
             letterSpacing={{ base: "0.14em", md: "0.18em" }}
             textTransform="uppercase"
             textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
+            whiteSpace="nowrap"
           >
             El recorrido
           </Text>
@@ -314,7 +316,7 @@ const Welcome = () => {
         </Flex>
         <Box
           h="1px"
-          w={{ base: "32px", md: "70px" }}
+          w={{ base: "18px", md: "70px" }}
           bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
           boxShadow="0 0 8px rgba(255,255,255,0.5)"
         />
@@ -392,7 +394,7 @@ const Welcome = () => {
         >
           <Box
             h="1px"
-            w={{ base: "32px", md: "56px" }}
+            w={{ base: "16px", md: "56px" }}
             bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
             boxShadow="0 0 8px rgba(255,255,255,0.5)"
           />
@@ -405,10 +407,12 @@ const Welcome = () => {
             fontFamily="'EB Garamond', serif"
             fontWeight="600"
             fontSize={{ base: "xs", md: "md" }}
-            letterSpacing={{ base: "0.14em", md: "0.18em" }}
+            letterSpacing={{ base: "0.08em", md: "0.18em" }}
             textTransform="uppercase"
-            px={{ base: 5, md: 9 }}
+            whiteSpace="nowrap"
+            px={{ base: 4, md: 9 }}
             py={{ base: "10px", md: "12px" }}
+            flexShrink={0}
             borderRadius="full"
             border="1px solid rgba(255,255,255,0.55)"
             bg="rgba(255,255,255,0.08)"
@@ -430,7 +434,7 @@ const Welcome = () => {
           </Flex>
           <Box
             h="1px"
-            w={{ base: "32px", md: "56px" }}
+            w={{ base: "16px", md: "56px" }}
             bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
             boxShadow="0 0 8px rgba(255,255,255,0.5)"
           />
