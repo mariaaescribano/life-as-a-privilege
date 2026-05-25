@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { AvisoInicialModal } from "../../components/metodo/AvisoInicialModal";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
+import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
 import {
   API_URL,
@@ -50,6 +51,7 @@ const Home = () => {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
+  const [comicOpen, setComicOpen] = useState(false);
 
   const continuarAstrologia = async () => {
     const userId = sessionStorage.getItem("userId");
@@ -121,6 +123,32 @@ const Home = () => {
     }
   };
 
+  /* TEST PAGO — START (eliminar antes de producción) */
+  const pagarMetodoTest = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      navigate("/welcome");
+      return;
+    }
+    setPagoLoading(true);
+    setPagoError(null);
+    try {
+      await axios.post(
+        `${API_URL}/payment/metodo/test`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setMetodoSuscrito(true);
+      setPagoOpen(false);
+    } catch (err: any) {
+      console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
+      setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
+    } finally {
+      setPagoLoading(false);
+    }
+  };
+  /* TEST PAGO — END */
+
   const confirmarAviso = async () => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
@@ -139,12 +167,13 @@ const Home = () => {
     navigate("/metodo/astrologia");
   };
 
-  const radius        = useBreakpointValue({ base: 130, sm: 165, md: 220, lg: 280, xl: 320 });
-  const containerSize = useBreakpointValue({ base: "340px", sm: "420px", md: "560px", lg: "700px", xl: "800px" });
-  const centerSize    = useBreakpointValue({ base: "130px", md: "180px", lg: "220px", xl: "260px" });
-  const circleSize    = useBreakpointValue({ base: "80px", md: "108px", lg: "130px" });
-  const iconSize      = useBreakpointValue({ base: "44px", md: "60px", lg: "72px" });
-  const numberSize    = useBreakpointValue({ base: "26px", md: "32px", lg: "38px" });
+  const radius        = useBreakpointValue({ base: 125, sm: 155, md: 220, lg: 280, xl: 320 });
+  const containerSize = useBreakpointValue({ base: "320px", sm: "400px", md: "560px", lg: "700px", xl: "800px" });
+  const centerSize    = useBreakpointValue({ base: "115px", sm: "140px", md: "180px", lg: "220px", xl: "260px" });
+  const circleSize    = useBreakpointValue({ base: "75px", sm: "89px", md: "108px", lg: "130px" });
+  const iconSize      = useBreakpointValue({ base: "38px", sm: "48px", md: "60px", lg: "72px" });
+  const numberSize    = useBreakpointValue({ base: "24px", sm: "28px", md: "32px", lg: "38px" });
+  const mandalaScale  = useBreakpointValue({ base: "none", md: "scale(0.7)" });
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -250,13 +279,14 @@ const Home = () => {
     >
       <SiteHeader variant="private" userImg={img ?? undefined} />
 
-      <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform="scale(0.7)" transformOrigin="top center">
+      <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform={mandalaScale} transformOrigin="top center">
         {img != null ? (
           <Flex
             direction="column"
             alignItems="center"
             justifyContent="center"
-            py={{ base: 8, md: 10 }}
+            pt={{ base: 8, md: 10 }}
+            pb={{ base: 20, md: 10 }}
             px={{ base: 5, md: 10 }}
             w="100%"
           >
@@ -280,9 +310,9 @@ const Home = () => {
               textAlign="center"
               letterSpacing="0.04em"
               textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3)"
-              mb={{ base: 12, md: 16 }}
+              mb={{ base: 10, md: 8 }}
             >
-              Este es el camino de vuelta a ti.
+              Este es el recorrido para empezar el camino de vuelta a ti.
             </Text>
 
             {/* Mandala */}
@@ -493,10 +523,67 @@ const Home = () => {
         isOpen={pagoOpen}
         onClose={() => { setPagoOpen(false); setPagoError(null); }}
         onPagar={pagarMetodo}
+        /* TEST PAGO — START */
+        onPagoTest={pagarMetodoTest}
+        /* TEST PAGO — END */
         loading={pagoLoading}
         error={pagoError}
       />
       {verificandoPago && <SpinnerTurquesa />}
+
+      {/* Botón flotante "El inicio de todo" — siempre visible */}
+      <Box
+        as="button"
+        onClick={() => setComicOpen(true)}
+          position="fixed"
+          bottom={{ base: 4, md: 6 }}
+          right={{ base: 4, md: 6 }}
+          zIndex={50}
+          px={{ base: 4, md: 5 }}
+          py={{ base: 2.5, md: 3 }}
+          borderRadius="full"
+          bg="rgba(0,40,40,0.55)"
+          border="1px solid rgba(255,255,255,0.55)"
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="600"
+          letterSpacing="0.04em"
+          cursor="pointer"
+          boxShadow="0 0 18px rgba(255,255,255,0.25), 0 0 38px rgba(180,255,245,0.18), 0 6px 24px rgba(0,0,0,0.35)"
+          transition="all 0.25s ease"
+          _hover={{
+            transform: "translateY(-2px)",
+            bg: "rgba(0,60,60,0.7)",
+            boxShadow: "0 0 28px rgba(255,255,255,0.45), 0 0 60px rgba(180,255,245,0.3), 0 8px 28px rgba(0,0,0,0.4)",
+          }}
+          display="inline-flex"
+          alignItems="center"
+          gap={3}
+          sx={{ backdropFilter: "blur(6px)" }}
+        >
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h={{ base: "22px", md: "26px" }}
+            objectFit="contain"
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55))" }}
+          />
+          <Box as="span">El inicio de todo</Box>
+          <Box
+            as="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 -960 960 960"
+            w={{ base: "20px", md: "22px" }}
+            h={{ base: "20px", md: "22px" }}
+            fill="white"
+            style={{ filter: "drop-shadow(0 0 5px rgba(255,255,255,0.55))" }}
+          >
+            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+          </Box>
+        </Box>
+
+      <ComicUniversoModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
     </Box>
   );
 };

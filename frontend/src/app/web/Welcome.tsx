@@ -176,7 +176,7 @@ const Welcome = () => {
           transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
-          Un camino para entenderte: tus patrones, tu historia y tus células.
+          Un recorrido para entenderte: tus patrones, tu historia y tus células.
         </Text>
       </Flex>
 
@@ -380,7 +380,7 @@ const Welcome = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
         >
-          Ingeniera informática, 21 años. No existía lo que he construido: un camino donde la psicología, la biología y los saberes ancestrales se combinan en vez de pelearse. Ahora son aliados.
+          Ingeniera informática, 21 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos ancestrales se combinan en vez de pelearse. Ahora son aliados.
         </Text>
 
         {/* Botón Conoce más */}

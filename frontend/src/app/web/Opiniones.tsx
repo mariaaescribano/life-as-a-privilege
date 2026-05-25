@@ -403,7 +403,7 @@ export default function Opiniones() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Experiencias de quienes ya están en el camino
+          Experiencias de quienes ya están en el recorrido
         </Text>
       </Flex>
 

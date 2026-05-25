@@ -51,7 +51,7 @@ export function AvisoInicialModal({ isOpen, onConfirm }: AvisoInicialModalProps)
               lineHeight="1.85"
               letterSpacing="0.015em"
             >
-              Vas a empezar un camino de transformación intenso y muy distinto a lo que te
+              Vas a empezar un recorrido de transformación intenso y muy distinto a lo que te
               habías encontrado antes. Por favor, <strong>cómprate una libreta</strong> para
               apuntar y llevar un diario, responder preguntas… <strong>a mano</strong>. Es
               importante que así sea para que el inconsciente fluya y este proceso sea más

@@ -18,6 +18,14 @@ export class PaymentController {
     return await this.paymentService.verifyMetodoCheckout(sessionId, req.user.userId);
   }
 
+  /* TEST PAGO — START (eliminar antes de producción) */
+  @Post('metodo/test')
+  @UseGuards(JwtAuthGuard)
+  async testPagoMetodo(@Req() req: any) {
+    return await this.paymentService.testMarcarPagado(req.user.userId);
+  }
+  /* TEST PAGO — END */
+
   @Post('libros/checkout')
   async createLibroCheckout(@Body() body: { libroId?: string }) {
     if (!body?.libroId) throw new BadRequestException('libroId requerido');

@@ -1,6 +1,263 @@
 import type { CuerpoKey } from "./astrologiaData";
 
 /**
+ * Textos de Quirón — el mismo texto aplica tanto al signo como a la casa
+ * (Casa 1 = Aries, Casa 2 = Tauro, …, Casa 12 = Piscis).
+ * Se referencian desde TEXTOS_SIGNO y TEXTOS_CASA más abajo.
+ */
+const QUIRON_TEXTS: Record<number, string> = {
+  1: `Duele moverse, duele iniciar, duele hacer "lo que yo quiero".
+
+Hay una memoria de nacimiento muy traumática, con la implicación de que no tienes valor. En los primeros años, has experimentado una fuerte represión y agresión.
+
+Los comienzos están teñidos de inhibición o fracaso.
+
+Has aprendido a suprimir tu impulso y tu valentía, y esto se ha convertido en ira que debes aprender a liberar para no hacerte daño a ti mismo; o, por el contrario, puedes ser muy valiente e individualista, aunque te duela cada vez que pasas a la acción.
+
+Para huir de esto, puedes tratar de fusionarte con tu pareja o sobreadaptarte a ella.
+
+Hay una profunda sensación de que hay algo en ti que los demás rechazan.
+
+Tu propia imagen te duele; puedes haber tenido defectos físicos y que estos hayan sido señalados y criticados.
+
+Debes aprender a descubrir que eres valiente y fuerte, a dirigir tu vida como tú quieres, y a amar o aceptar tu imagen.
+
+Parte de tu camino es ayudar a los demás dado que tienes mucha empatía debido a que vives constantemente con dolor.`,
+
+  2: `Las necesidades físicas y básicas te causan dolor; incluso puede resultarte difícil disfrutar o sentir placer en la Vida. Tiendes a vivir desconectado del cuerpo y puedes tener problemas con la comida.
+
+No sientes que haya estabilidad o abundancia en la vida; desde la infancia has vivido y percibido la escasez. Ves que otros tienen abundancia y piensas que tú no la tienes porque no eres digno. A menudo te cuesta ganar dinero, y si lo tienes, no sientes que sea suficiente. No te sientes nada bien en tu cuerpo físico.
+
+Puedes volverte económicamente dependiente de otra persona, lo que te impide independizarte. Si la abundancia te llega, puedes no creerla y sabotearla, o conformarte con menos. Si ganas mucho, aun así vives constantemente con dolor, miedo y sensación de carencia.
+
+Debes sanar el sentimiento de no ser digno y aprender a tratarte con Amor, conectando con tus necesidades y satisfaciéndolas, cuidando tu cuerpo… Debes ser persistente. Necesitas descubrir lo que es valioso dentro de ti mismo y, de ese modo, comprender que puedes generar abundancia.`,
+
+  3: `Duele la mente asociativa y exploradora. Muchos de estos nativos no hablan (pueden tener problemas físicos del habla), o no paran de hablar como forma de sobrecompensación (se explican en exceso o hacen preguntas sin parar y no integran la información).
+
+La herida viene de la infancia, cuando comenzaste a tener curiosidad, comunicación y percepción de la propia inteligencia; normalmente la herida se activa con un hermano o durante la primera fase de la escuela. Es una herida de comunicación porque no fuiste escuchado o no fuiste comprendido, y cargas con el sentimiento de que eres estúpido; experimentas mucha soledad y aislamiento.
+
+Puedes tener dificultades de aprendizaje.
+
+Puede haber un secreto que no cuentas por el dolor que causa, y necesita ser dicho.
+
+Puedes tener problemas en el quinto chakra (chakra garganta) y en la tiroides.
+
+Creces cuando desarrollas formas de comunicación alternativas, no tradicionales, por ejemplo el lenguaje corporal. Tienes un don para la comunicación y para entender lo que es diferente.`,
+
+  4: `El dolor fue abierto en la infancia: no sientes raíces ni refugio. Duele autosostenerte porque sientes que no tienes cimientos. Tienes mucha soledad en tu interior.
+
+En casa no se te tuvo en cuenta, o había muchas peleas, o abandono… Heredaste una herida familiar y puedes sacrificarte por el linaje.
+
+No quieres ir a lo profundo ni meditar porque ir a tu interior y sentir a tu niño interior te conecta con tu dolor. Sientes que hay algo en ti que no merece ser nutrido.
+
+Para escapar de esto, puedes trabajar en exceso y así, no pasar tiempo en casa ni con la familia. Te mantienes en un hacer constante para escapar del dolor; no importa lo que consigas, porque no aliviará el dolor.
+
+Si te mantienes aquí, nunca te independizarás de tu familia y vivirás bajo lo que te han dicho que eres, en vez de desde tu esencia real.
+
+Al sentirte tan vacío, puedes buscar constantemente a alguien que te nutra, pero igualmente siempre te sientes abandonado y no amado. Incluso cuando las cosas te van bien, te saboteas a ti mismo porque vuelves a conectar con la falta de amor en la que creciste. Mientras huyas del dolor, atraerás experiencias más dolorosas.
+
+Tu don es cuidar y nutrir a los que se sienten solos, ayudándolos a sentirse seguros (huérfanos o errantes, consejeros familiares, nutricionistas…). Puedes sentir mucho amor si sanas a tu niño interior.`,
+
+  5: `Te atacaron cuando fuiste un niño juguetón; no se te permitió ser espontáneo ni divertirte. No había permiso para ser tú, y tuviste que construir una imagen con la que presentarte ante los demás.
+
+La herida se abre cuando te muestras, cuando te expresas, cuando los demás te ven, y esto crea mucha vergüenza porque cargas con una profunda falta de reconocimiento. Vives con el dolor de sentir que la imagen que muestras no coincide con tu esencia. Suprimes tu creatividad; no llevas a la forma lo que imaginas y creas en tu mente.
+
+Cuando te tomas la vida a la ligera, te duele, por eso a menudo te vuelves muy serio y aburrido.
+
+El romance y divertirse puede incomodarte (o por el contrario, hacerlo en exceso). Puedes tener problemas con los hijos: no poder tenerlos, perderlos…
+
+Puedes disolverte en lo colectivo y llevar tu vida hacia donde el grupo quiere que vayas; o te obsesionas con recibir aplausos y te disfrazas para conseguirlos.
+
+Tienes un don para sanar a niños (reales y simbólicos); puedes ser terapeuta infantil, pediatra… Tu creatividad debe expresarse porque también es tu don; tienes que expresarla, aunque te duela.`,
+
+  6: `Sientes culpa y te duele estar en la Tierra con sus hábitos, rutinas, el aplazamiento del placer… No quieres estar encarnado; puedes vivir con alguna enfermedad desde la infancia o sentir que tu cuerpo es débil.
+
+Puedes no encontrar disfrute en el trabajo; prefieres huir para no conectar con lo que está mal y a menudo tienes problemas en el primer chakra porque no confías en la Vida.
+
+Cargas con una herida de imperfección que te hace sentir culpable. Has sido criticado; hagas lo que hagas, siempre está mal o es insuficiente.
+
+Los hábitos de la infancia fueron tóxicos para ti, o no podías seguirlos y te sentías mal.
+
+Si sobrecompensabas has podido volverte superperfecto y completamente autoexigente. Puedes imponerte hábitos que te hacen daño: rigidez.
+
+Tienes la sensación de que estás constantemente preocupándote por los demás y de que no sirves para nada. Vives con mucha inseguridad en el trabajo; puedes no sentirte valorado.
+
+Tienes que abordar la percepción de la imperfección interna porque tu don es saber hacer las cosas muy bien. Debes aceptar el dolor de estar encarnado en la Tierra. Construir hábitos y rutinas que te sanen.
+
+Muy buena posición para enfermeros, cuidadores, veterinarios, médicos de familia, los que ayudan a los trabajadores, sanadores naturales…`,
+
+  7: `Duele relacionarse uno a uno. Las relaciones son dolorosas e incómodas.
+
+La herida se activa al sentirte rechazado o abandonado porque sientes que hay algo mal en ti. A menudo sueles desear dominar (aunque lo proyectes en la otra persona y pienses que es el otro el que te quiere dominar). Esta posición crea dolor en las relaciones románticas.
+
+Puedes compensarlo en exceso volviéndote muy dócil y viviendo en función de la pareja para no ser abandonado; olvidas tu individualidad, pero eso no impide que la herida siga manifestándose en las relaciones.
+
+Puedes preferir quedarte solo para evitar todo esto, pero igualmente tienes problemas con parejas, cónyuges, etc., en todas las formas de relación, y crees que la otra persona siempre tiene la culpa, como si tú no tuvieras nada que ver.
+
+Lo que no ves o aceptas de ti, lo atraes a través de personas heridas por la soledad y el abandono; pero lo que ves es tuyo, proyectado sobre el otro. De hecho, a menudo te sientes fuertemente atraído por personas muy heridas.
+
+Debes tomar conciencia de tu dolor y de lo que haces para que las relaciones no funcionen. De lo contrario, cuanto mejor estén en una relación, más la sabotearás. Debes aprender a disfrutar estar con otro a pesar del miedo al rechazo y al abandono.
+
+Buena posición para terapeuta: podrás ver fácilmente las heridas de los demás, también consejeros matrimoniales y trabajos que ayuden a otro a sentirse apoyado y acogido.
+
+El don consiste en que te compartas sin que te pierdas.`,
+
+  8: `De niño absorbiste la energía psíquica, el resentimiento, la manipulación, el sufrimiento y la toxicidad de los padres.
+
+Sientes que hay algo mal en ti. Tienes miedo del miedo, del sexo, de las emociones, de la muerte, de la oscuridad… Y vives con mucho drama interno.
+
+Suele indicar algo muy traumático, a menudo sexual, en la infancia. Pudo haber violencia o ataque en el espacio de mayor intimidad por parte de alguien con quien había un fuerte vínculo y que era percibido como todopoderoso. La energía sexual está herida porque hay una asociación entre sexo y dolor.
+
+También puede haber habido la intrusión de un extraño que violó e invadió tu espacio de intimidad, y esto creó una gran impotencia y terror hacia las figuras de autoridad.
+
+En algunos casos, indica impotencia ante la muerte o ante la idea de la muerte, llevando a la persona a "anclarse" en el control.
+
+Hay un sentimiento de que la sombra es muy destructiva. Vives una lucha entre la idea de que si usas tu poder, hieres a los demás, y si no lo usas, los demás te hieren a ti.
+
+Te volviste controlador o buscas parejas muy controladoras, posesivas… También tiendes a repetir lo peor de la relación de tus padres.
+
+Para huir de esto, puedes no querer intimidad con otro, centrándote solo en lo físico y material, en las posesiones; de este modo niegas tu sombra y tu capacidad de transformación.
+
+Tu don es el poder, la capacidad de transformación y regeneración. La intimidad puede ser una gran herramienta para transformarte y acercarte a ti. Puedes ser muy bueno como terapeuta sexual y en todo lo relacionado con la muerte, la sombra y lo oculto.`,
+
+  9: `La herida se activa cuando se da la oportunidad de expansión y de confianza, por eso a menudo falta la confianza en la Vida y en los demás.
+
+Hay dolor espiritual y una búsqueda constante de "por qué estoy aquí" a la vez que la constante certeza "estar aquí para vivir dolor y entender el sentido de este dolor".
+
+En la infancia, experimentaste dolor a causa de las creencias y dogmas a tu alrededor (pudiste haber sido herido por una figura religiosa o por la idea de Dios).
+
+Puedes, debido a tu enfado con Dios, volverte ateo racional, pero de esa manera no puedes encontrar el sentido de la vida, y de esa manera también sufres. Es probable que estés desconectado de tu intuición. Puedes rechazar lo heredado y buscar tu propio dogma, pero siempre encuentras decepción y dolor.
+
+Has tenido experiencias dolorosas en viajes o aventuras, por eso tiendes a preferir quedarte con lo familiar.
+
+Buscar terapias o religiones que te ayuden a escapar del dolor es contraproducente. Debes aceptar el dolor, liberarte de las expectativas y dejar de huir.
+
+Tu don es seguir experimentando, explorando y buscando a pesar del dolor; vulnerabilidad y compasión. Puedes ser astrólogo, profesor universitario, abogado, maestro espiritual.`,
+
+  10: `El dolor reside en la sensación de incapacidad, en una profunda sensación de no poder lograr las cosas, y en la ira que sientes al no recibir reconocimiento.
+
+Sueles tener problemas relacionados con el trabajo porque no puedes encontrar un trabajo que te haga feliz. Cumplir metas te resulta difícil porque te causa dolor.
+
+En la infancia, las primeras experiencias de independencia fueron dolorosas; pudiste haberte sentido incapaz, juzgado, pequeño. Pudiste haber sido duramente juzgado por el padre o la madre (o por una figura muy poderosa). Nadie te enseñó a volar, o lo hicieron desde su propia inseguridad y fracaso; o fuiste sobreprotegido y "castrado" al hacerte sentir inútil.
+
+Puedes no sentirte capacitado para madurar, buscando que otros te nutran y cuiden, porque volar solo te duele.
+
+Tienes tendencia al autosabotaje porque no quieres conocer ni aceptar tu miedo al rechazo, ni la inseguridad y los miedos que sientes; pero solo haciendo esto podrás descubrir lo que verdaderamente quieres hacer en el mundo.
+
+Puedes quedarte atrapado en lo que la familia esperaba de ti y sentirte terrible; o, por ira, convertirte en fracasado. Necesitas sanar tu relación con la familia.
+
+Tu don es ayudar a otros a descubrir su rol y lugar en el mundo.`,
+
+  11: `Dolor desde la infancia con amigos y grupos de personas, normalmente porque fuiste diferente y te mostraste tal como eras (a veces demasiado rebelde y confrontativo que no tiene que ser malo, tal vez fuese una defensa contra las circunstancias), y esto probablemente causó rechazo (porque a quienes te estabas enfrentando no querían cambiar a pesar de estar haciéndolo mal o estar haciendo daño).
+
+Sientes mucha soledad y miedo al abandono; no te sientes parte de la humanidad, te sientes como "extraterrestre".
+
+Puedes sentir dolor por todo el dolor colectivo: por los grupos excluidos, por la deforestación… o simplemente porque a los demás no les importa lo que a ti te importa.
+
+Debido a todo esto, puede no gustarte tener amigos ni estar en grupos, no sabes socializar y te puedes volver arrogante y radical; o te duele tanto no tener una tribu y sentirte tan solo que te disfrazas para ser como los demás, pero sigues sintiéndote solo porque no encuentras a nadie como tú, y en el proceso te pierdes a ti mismo.
+
+Necesitas trabajar el sentimiento de abandono y aislamiento. Comprende que es el dolor lo que nos une como humanidad.
+
+Tu don es sanar problemas colectivos y grupales, de las sociedades; el gran servidor de los grupos.`,
+
+  12: `El dolor viene de la gestación (las experiencias de la madre que quedaron registradas en tu memoria celular inconsciente) y se suma a los dolores que tu alma ya venía cargando, creando una profunda tristeza.
+
+Hay terror a conectar con tu inconsciente y tus emociones; tratas de apagarlas y controlarlas internamente. Suele haber un sentimiento de culpa desde el que te condenas a la infelicidad, como si sintieras que no tienes derecho a ser feliz.
+
+Inconscientemente, haces tuyo el dolor del árbol familiar (haces tuyas las heridas de tus antepasados). El trabajo de sanación con el árbol genealógico y el período de gestación es esencial.
+
+Además, te duele ser uno con el Todo (por la memoria gestacional); no hay memoria de fusión armoniosa. Incluso en la unidad viviste la dualidad; no hay recuerdos de conexión, y eso hace que la herida del abandono sea muy profunda.
+
+Necesitas conectar con lo profundo, pero cuando lo haces, el dolor se activa y sientes que no es posible. Puedes tratar de escapar a través de drogas, meditaciones… pero eso no te ayuda porque sigues sintiendo separación.
+
+Debido a todo esto, puedes escapar de lo espiritual y volverte terrenal, lógico, racional y centrado en el hacer, pero eso también duele porque la desconexión permanece. Eres ordenado, controlador, rígido; cuanto más controlas, más cosas dolorosas te pasan.
+
+Puedes no tolerar la sensación de vacío en la meditación. Hay que tener en cuenta que conectas con el dolor del inconsciente colectivo y tienes que aprender a diferenciar lo que es tuyo para hacerte cargo de ello. Te disocias de tu herida y puedes mantenerte ocupado salvando a los heridos o a gente que no quiere ser salvada.
+
+Debes aprender a confiar en la Vida aunque duela; tienes que rendirte y soltar, renunciar al control.
+
+El don está relacionado con el servicio a la humanidad y con ayudar a sanar las heridas de los demás manteniéndote consciente de las propias.`,
+};
+
+/**
+ * Textos del Nodo Norte — Casa N = Signo N (Aries=1 … Piscis=12).
+ * Se referencian desde TEXTOS_SIGNO y TEXTOS_CASA más abajo.
+ */
+const NODO_NORTE_TEXTS: Record<number, string> = {
+  1: `Vienes a descubrir tu sentido de identidad y a reclamar tu derecho a ser quien quieras ser, aunque te resulta difícil saber quién eres porque no sabes escucharte a ti mismo. Debes descubrir qué quieres para tu Vida y aprender a avanzar sin necesitar a otra persona; debes emprender e iniciar cosas por tu cuenta.
+
+Pierdes oportunidades y crecimiento evolutivo cuando buscas la aprobación externa, o cambias tu decisión porque los demás no la aprueban. Ten en cuenta que el universo te traerá personas que se opongan a tus decisiones como prueba para que luches por ti mismo.`,
+
+  2: `La lección del alma es construir estabilidad material (autosuficiencia material y emocional) usando los propios recursos, sin depender de los demás. Debes aprender también a disfrutar del cuerpo y de la Vida, y a soltar el drama.`,
+
+  3: `Debes ser capaz de comunicarte con cualquier persona, hablándole a cada una en su propio lenguaje (no literalmente de idiomas, pero puede ser que te gusten).
+
+La lección es compartir la información y tus experiencias junto con tu síntesis y tu verdad. Pero debes abrirte a aprender de todos y no sentir que sabes más que los demás, debes aprender a escuchar. Estás destinado a convertirte en un maestro que adapta su lenguaje para que todos puedan entender.`,
+
+  4: `Debes aprender a conectar con tu mundo emocional interno, construir tu templo interior y asumir la responsabilidad de tus emociones.
+
+Debes crear y cuidar tu propia familia, tener hijos (pueden ser simbólicos; plantas, animales…) y cuidarlos. Pero antes de poder hacer esto, tienes que ser tu propia familia y cuidar a tu niño interior. Con esta posición, es aconsejable hacer trabajo de sanación con el árbol genealógico.`,
+
+  5: `Vienes a conectar con tu esencia, a descubrir y desarrollar tus capacidades creativas (para convertirte en artista aunque no tienes que trabajar de esto).
+
+Debes ser leal a tu creatividad y a tus sueños, y a materializar tu destino en la realidad y no solo en tu imaginación.
+
+Cuando no estás abrazando tu creatividad, o bien no empiezas a materializar tus ideas, o no las terminas porque buscas la perfección, sientes que te faltan los materiales necesarios (debes aprender a manifestar con lo que tienes disponible), o porque constantemente se te ocurren nuevas ideas.
+
+Es esencial que aprendas a gestionar tu mente y dejes de necesitar a los grupos; debes convertirte en solista y tomar el control de tu vida. Esto no significa que dejes de tener amigos, sino que tu prioridad sea seguir a tu corazón.`,
+
+  6: `La lección reside en posponer la gratificación personal en favor del servicio a los demás, el esfuerzo personal y el sacrificio. El tiempo que debes darte está destinado a cuidar tu mente, cuerpo y a sanar, aceptando las limitaciones del mundo terrenal y de la encarnación, y encontrando orden en la realidad. Debes encontrar el equilibrio entre cuidarte a ti mismo y cuidar a los demás.
+
+Tendrás que vivir en contacto con la enfermedad, ya sea propia (necesitas autoanálisis para ponerte en orden y sanar) o de personas cercanas (en este último caso, la vida te está forzando a trabajar en el servicio).
+
+Sueles tener capacidades sanadoras. Debes aprender a desarrollar una mente analítica, pero no controladora.`,
+
+  7: `Vienes a transformar un yo individualista y egoísta en uno que tenga en cuenta a la otra persona y se relacione de forma equilibrada. Debes aprender a "estar en pareja" sin relacionarte desde intereses personales o del ego. Debes aprender a ceder. Debes descubrir que así es como te expandes y como crece tu felicidad. Por lo general, o no tienes pareja, o tienes muchas parejas, pero sin calidad.`,
+
+  8: `Vienes a aprender a mirarte a ti mismo, a conocer y sanar tu sombra y tus traumas. Debes regenerarte y convertirte en el ave fénix.
+
+Debes aprender a vivir en fusión con el otro, la sexualidad tántrica… Debes ser generoso y aprender a recibir del otro, y a generar recursos a través de alianzas con los demás. Debes encontrar el equilibrio entre lo material y lo espiritual.`,
+
+  9: `Vienes a descubrir tu propia forma de pensar, a entender que las respuestas no están en la información sino en la experiencia, a ser optimista y a abrirte a la vida. Debes profundizar, no dispersarte. Debes encontrar tus propias creencias y no quedarte con las heredadas. Para ello, debes explorar lo más alejado de tu entorno natural. Después tendrás que aprender a comunicar tus visiones personales. Debes aprender a meditar para encontrar tus propias respuestas en tu interior.`,
+
+  10: `Vienes a aprender a salir al mundo para desarrollar tu individualidad, encontrar tu vocación y madurar. Tu alma viene a convertirse en una autoridad responsable en el mundo profesional y social. Debes convertirte en un líder magnánimo y responsable que no abuse de su poder. En ningún caso el objetivo es la búsqueda del poder personal.`,
+
+  11: `Vienes a compartir con los demás, profundizando los vínculos de amistad; vienes a convertirte en un ser social. Estás destinado a aportar tu potencial creativo al colectivo, aprendiendo a escuchar a los demás y siendo humilde. Debes conectar también con intereses e ideales que vayan más allá de ti mismo (entendiendo que hay cosas en el mundo más importantes que el "yo"). Con esta posición, es más importante ser auténtico que ser aplaudido, y debes aceptar la posible ausencia de aplausos. Puedes crecer a través del grupo; allí puedes observarte, soltando las fantasías que tienes sobre ti mismo y alcanzando ideales más altos.`,
+
+  12: `Vienes a cultivar tu conexión espiritual, a profundizar el autoconocimiento expandiendo tu nivel de conciencia, y a trascender el plano material y concreto de la realidad. Debes sentir a pesar del miedo causado por el caos y la falta de estructura. Si quieres ayudar, debes hacerlo a través de la compasión, no a través de arreglar, resolver o esforzarte.`,
+};
+
+/**
+ * Textos del Nodo Sur — Casa N = Signo N (Aries=1 … Piscis=12).
+ * Se referencian desde TEXTOS_SIGNO y TEXTOS_CASA más abajo.
+ */
+const NODO_SUR_TEXTS: Record<number, string> = {
+  1: `Estás centrado en ti mismo porque vienes de haber desarrollado tu individualidad; la otra persona es simplemente un medio para lograr tus fines.`,
+
+  2: `Estás fuertemente apegado a la estabilidad y rechazas el cambio. Vienes de la autosuficiencia y del apego a la seguridad material y al dinero, que te impidió depender de los demás. Vives centrado en tus necesidades y evitas mirarte a ti mismo.`,
+
+  3: `Hiperactividad mental y pensamiento disperso. Has sido comunicador, pero de información externa, no propia. No profundizas; pasas de una superficie a otra. Tus creencias se basan en los pensamientos de otros, los que te rodearon en la infancia.`,
+
+  4: `Apego a las raíces; viviste centrado en la familia (hijos y antepasados) y no saliste al mundo a vivir tu propia vida. Sabes construir refugio, pero aún no has reconocido que el verdadero refugio está dentro de ti, no en una casa o una familia. Puedes vivir atrapado en cuestiones familiares. Debes examinar por qué no quieres "enfrentarte" al mundo y por qué temes a tu poder personal.`,
+
+  5: `Viviste centrado en ti mismo, en tu individualidad, y en ser y sentirte especial. Eres muy creativo. Puede costarte verte objetivamente y puedes tener una fantasía sobre quién eres. Te cuesta aceptar que eres una persona más; sientes que eres el centro del mundo. Puedes ser exigente en las amistades, cuando en realidad viniste aquí a dar luz a otros y permitirles ser.`,
+
+  6: `Vives desde un apego a la mente lógica y racional, y desde el no parar nunca (trabajas en exceso). Te ocupas de acciones mundanas y de servir a los demás. No crees en nada espiritual ni místico. No quieres conectar, y te anestesias ayudando a los demás.`,
+
+  7: `Aprendiste a compartir y a vivir como parte de una pareja. A menudo vienes de una historia de entregarte a los demás, lo que ahora hace que te pierdas a ti mismo. Ahora te resulta difícil estar solo y tomar tus propias decisiones porque te mueves según lo que los demás quieren y te dejas influenciar por ellos.`,
+
+  8: `Estás acostumbrado a estar apegado a los demás, a través de quienes pudiste satisfacer tus deseos y te pagaban todo lo que deseabas. Por eso, ahora dudas de tus propios valores, recursos y de tu capacidad para sostenerte de forma independiente. Puedes estar atrapado en tus deseos en lugar de en tus necesidades. Estás acostumbrado al drama.`,
+
+  9: `Tienes una mente intuitiva desarrollada y traes apego a buscar y a ser libre para moverte. Puedes aislarte si no encuentras a alguien que piense como tú. Hay apego a tus creencias.`,
+
+  10: `Vienes de haber tenido mucho poder, y muchos se anestesian a través del trabajo. Todavía necesitas tener autoridad y lograr cosas en el mundo; sigues buscando reconocimiento. Es común que tengas bloqueos profesionales.`,
+
+  11: `Ya has desarrollado mucha creatividad mental y has vivido a través de la mente y del mundo de las ideas. Estás acostumbrado a estar en grupos y prefieres estar con gente. Hay una tendencia a no desarrollar o priorizar la individualidad. Estás apegado a sentirte diferente, pero no eres auténtico.`,
+
+  12: `Has sido experto en la experiencia espiritual y no funcionas bien en el mundo. Estás acostumbrado a vivir en tu mundo interior, desconectado de lo ordinario y lo real (lo que puede asustarte mucho).`,
+};
+
+/**
  * Textos por (planeta, signo) — se muestran en la página de profundizar
  * cuando el usuario ha elegido un signo concreto para ese planeta.
  */
@@ -1013,6 +1270,387 @@ En la madurez puedes alcanzar la aceptación a través de la sabiduría espiritu
 
 Cuidado con la autonegación, la evasión de la responsabilidad, dejarte arrastrar por una emocionalidad excesiva.`,
   },
+
+  saturno: {
+    Aries: `Debes aprender autosuficiencia, independencia y el uso responsable de la iniciativa personal. Las personas con esta posición a menudo han tenido figuras parentales autoritarias —abuelos, madres o padres— que han impuesto límites severos. Estas experiencias tempranas te obligan a aprender a manejar los impulsos, afirmarte y cultivar la paciencia.
+
+Te has visto obligado a depender de ti mismo desde una edad temprana, por ello has desarrollado resiliencia, resistencia y la capacidad de navegar la vida de forma independiente.
+
+Te cuesta estar subordinado, prefieres actuar bajo tus propios términos y a menudo necesitas definir tus propios límites antes de respetar los de los demás. Comenzar nuevos proyectos o iniciativas puede resultarte difícil, y los resultados pueden tardar en manifestarse. Sin embargo, una vez que te concentras, tienes una excelente capacidad de concentración y determinación.
+
+Esta posición a menudo se manifiesta en carreras o actividades que requieren disciplina, valor y resistencia, como los deportes de élite, el ámbito militar o roles de liderazgo. A pesar de tu fortaleza, te importa el cómo te perciben los demás y puedes moverte por miedos o inseguridades inconscientes.
+
+Cuidado porque puede darse un comportamiento defensivo, egocentrismo, necesidad constante de justificar tus acciones y falta de consideración hacia los demás. También pueden aparecer problemas físicos como dolores de cabeza.`,
+
+    Tauro: `Vienes a construir tu propia seguridad financiera, emocional y material. Las personas con esta posición a menudo experimentan miedo a la pérdida —ya sea de dinero, recursos o estabilidad— lo que puede hacerte cauteloso, disciplinado y conservador en tu enfoque de la vida. Tiendes a apoyarte en la planificación cuidadosa, la paciencia y la adhesión a reglas y estructuras para mantener el control y reducir el riesgo.
+
+Tienes un fuerte impulso por asegurar recursos y evitar la escasez. Puedes economizar, dudar en tomar riesgos o temer cambios que puedan amenazar la estabilidad. Trabajas de manera constante y metódica, demostrando una paciencia notable y habilidades prácticas. Puedes ser terco, posesivo y lento para adaptarte, a menudo priorizando el control sobre la espontaneidad o el placer.
+
+Puedes tener dificultad para conectar con las necesidades corporales, disfrutar de los placeres sensoriales o permitirte la alegría. Pueden existir creencias arraigadas sobre la indignidad o el control, a menudo derivadas de la influencia parental, que limitan la abundancia emocional y material.
+
+Esta posición enseña lecciones de paciencia, gestión práctica de los recursos y fe en el flujo natural de la vida. La verdadera paz interior llega al equilibrar el control con la confianza, cultivar la seguridad sin aferrarte y permitirte experimentar la alegría y la abundancia dentro de límites realistas.`,
+
+    Géminis: `Vienes a desarrollar responsabilidad emocional, comunicación y aprendizaje práctico. Las personas con esta posición a menudo experimentan un fuerte enfoque en los estudios, los diplomas y el conocimiento como fuentes de seguridad, a veces a expensas de la conexión emocional o las relaciones personales. Los desafíos tempranos pueden incluir retrasos en el habla, dificultades en la escuela o conflictos con hermanos o vecinos, lo que a menudo te exige asumir responsabilidades dentro de la familia.
+
+Una necesidad de estructurar el pensamiento, reflexionar cuidadosamente y abordar los problemas de forma lógica. Eres adaptable, sistemático y capaz de razonar, escribir y organizar ideas, aunque a veces tu pensamiento puede ser lento o cauteloso.
+
+El conocimiento y el aprendizaje a menudo se priorizan sobre los vínculos emocionales o el compromiso.
+
+Prosperas cuando tus estudios son prácticos y aplicables a la vida real, buscando beneficios tangibles de las búsquedas intelectuales. Pueden aparecer timidez, dudas sobre ti mismo, pensamiento crítico excesivo o miedo a lo nuevo y desconocido. Pueden surgir dificultades para expresar ideas o sentirte adecuado en entornos sociales o académicos.
+
+Tienes el potencial para desarrollar habilidades de escritura y comunicación, capacidad para expresar ideas con claridad y aprender con disciplina.
+
+El verdadero crecimiento viene de equilibrar el rigor mental con la flexibilidad y aprender a navegar las realidades sociales y emocionales junto con las búsquedas intelectuales. Debes hacerte cargo de tu emocional y no vivir desde tu mente, desconectado de tu corazón.`,
+
+    Cáncer: `Las personas con esta posición a menudo tienen entornos familiares austeros, emocionalmente distantes o rígidos, que inhiben la expresión emocional y crean experiencias tempranas de soledad y privación afectiva. Es posible que te hayas sentido obligado a asumir la responsabilidad de la seguridad emocional de tu familia, aprendiendo desde joven a reprimir la vulnerabilidad y la autoexpresión.
+
+Dificultad para acceder y expresar sentimientos, vulnerabilidad o intimidad. Puede haber miedo a dejar entrar a otros o mostrar debilidad.
+
+Un fuerte sentido de obligación hacia la familia, a veces sobreidentificándote con brindar apoyo o cuidado a expensas de tus necesidades personales. Es común un enfoque rígido sobre la pertenencia y el respeto dentro del hogar.
+
+Debes aprender a construir seguridad emocional personal y autorrespeto. Esta posición exige que desarrolles recursos internos en lugar de depender de la validación externa.
+
+Vulnerabilidad a patrones emocionales tóxicos, miedo al abandono, melancolía, sentimientos de inadecuación y dificultades para pedir ayuda. También puede haber deudas kármicas con miembros de la familia. Las tendencias de salud pueden incluir problemas de nutrición, retención de líquidos o estrés psicosomático relacionado con la represión emocional.
+
+Debes aprender la importancia de la responsabilidad emocional, el autocuidado y la creación de seguridad desde adentro. Te desafía a equilibrar el deber hacia la familia con la autopreservación, a superar el miedo a la intimidad y a desarrollar resiliencia a través de la madurez emocional y la autosuficiencia.`,
+
+    Leo: `En la infancia, no fuiste valorado ni reconocido como un ser único. Cargas con sentimientos de inferioridad y aislamiento.
+
+Es una posición difícil porque restringe la manifestación de la individualidad.
+
+Puedes desear desesperadamente la fama, el reconocimiento y el liderazgo. Careces de sentido del humor y eres estricto y restrictivo como padre/madre y en las relaciones románticas. Debes aprender a canalizar tu potencial y permanecer en un plano menos prominente, dejar de darte tanta importancia.
+
+Puedes ser bueno organizando asuntos relacionados con el mundo del arte o de la juventud.
+
+Debes aprender a disfrutar de la vida. Karma que involucra a tus hijos. Problemas de espalda y corazón.`,
+
+    Virgo: `Tienes disciplina, responsabilidad, precisión y gestión para los detalles, a menudo influenciado por una figura paterna estricta y dogmática.
+
+La vida temprana puede involucrar a un padre obsesionado con la limpieza, la salud, el trabajo y "cómo deben hacerse las cosas", lo que inculca un fuerte sentido del deber, sobrerresponsabilidad y perfeccionismo. Estas experiencias pueden generar sentimientos de inadecuación, ansiedad o la necesidad de controlar tanto el entorno interno como el externo.
+
+Tienes un fuerte enfoque en la organización, las rutinas, la salud y los detalles. El miedo al caos —tanto interno como externo— impulsa la meticulosidad y la autodisciplina.
+
+Eres paciente, trabajador, preciso y orientado al detalle. Excelente en tareas estructuradas y en la resolución práctica de problemas, aunque puedes sobrecargarte innecesariamente.
+
+Tiendes a internalizar la culpa, la ansiedad y el miedo, lo que conduce a una autocrítica implacable. Puedes tener dificultades con la relajación, la espontaneidad y el humor, apareciendo a menudo como austero, serio o melancólico.
+
+Puedes tener problemas digestivos que suele ser somatización, dolencias relacionadas con la tensión o estrés manifestado en rigidez corporal. Puede producirse obsesión con la dieta o la salud.
+
+Puede darse que seas excesivamente crítico, controlador, temeroso de lo desconocido, sobrecargado de responsabilidad y propenso a sermonear o imponer estándares a ti mismo y a los demás.
+
+En última instancia, Saturno en Virgo enseña lecciones para equilibrar la responsabilidad con el autocuidado, distinguir lo importante de lo trivial y transformar el perfeccionismo y el miedo en disciplina constructiva. Desarrollar el sentido del humor, la flexibilidad y el discernimiento es clave para integrar esta energía de manera efectiva.`,
+
+    Libra: `Abordas las asociaciones con cautela, buscando equilibrio, justicia y colaboración en lugar de dependencia emocional o vínculos. La vida temprana o las influencias kármicas pueden crear lecciones sobre la justicia, los límites y el uso apropiado de las asociaciones para el crecimiento mutuo más que para la seguridad o ganancia personal.
+
+Enfoque en la igualdad, la colaboración y la equidad en las asociaciones. No eres impulsivo ni emocionalmente dependiente, y puedes retrasar el compromiso hasta sentirte seguro de la compatibilidad.
+
+Tiendes a probar o evaluar a los demás antes de comprometerte plenamente. Eres cuidadoso con la inversión emocional, a menudo proyectas miedos o inseguridades sobre tu pareja.
+
+Serio, disciplinado e imparcial, con principios sólidos y deseo de resultados medibles en las relaciones más que resultados idealizados.
+
+Los matrimonios o las asociaciones pueden ocurrir más tarde en la vida, a menudo con personas mayores o más serias, o con personas conectadas a través de deudas kármicas.
+
+Puedes parecer frío, exigente, insincero, excesivamente crítico o carente de compasión. Las vulnerabilidades físicas pueden incluir problemas en los riñones o la zona lumbar.
+
+En general, Saturno en Libra enseña lecciones sobre relaciones responsables, equilibradas y justas. Fomenta el autoconocimiento, la evaluación cuidadosa de los demás y el desarrollo de la imparcialidad, la integridad y las habilidades de asociación. Debes aprender a manejar miedos y proyecciones en los vínculos sociales o íntimos.`,
+
+    Escorpio: `Tu figura paterna fue ausente emocionalmente y fue muy controladora.
+
+Tienes una gran intensidad emocional y pesadas cargas emocionales. Altas exigencias y poca paciencia con la pereza o el descuido. Fuerte fuerza de voluntad. Debes aprender a ser sutil.
+
+Puede proporcionar una armadura para descender al propio infierno o al de los demás, lo cual es poderoso pero también peligroso, ya que puede conducir al aislamiento emocional.
+
+Tienes problemas debidos a la represión o frustración sexual. Responsabilidad en asuntos ocultos y en cuestiones relacionadas con herencias o finanzas de otras personas.
+
+Cuidado porque puede darse venganza, estreñimiento, descalcificación, cálculos biliares y artritis.`,
+
+    Sagitario: `Exceso de reglas que restringen la energía de Sagitario.
+
+Los códigos morales, la religión, la filosofía y la educación superior son muy importantes; también suele haber interés en las ciencias ocultas.
+
+Disciplina mental y gran poder de concentración, con orgullo por ello (muy tenaz en los estudios).
+
+Puedes tener una visión crítica y estricta sobre cómo funciona la sociedad.
+
+Resalta una necesidad de reconocimiento que se origina en la infancia, a partir del deseo y la necesidad de que los padres valoraran quién eras, pero no lo hicieron. Debido a esto, te esfuerzas por lograr cosas para demostrarles a tus padres y a ti mismo de lo que eres capaz.
+
+Puedes ser indeciso, resentido, rígido, dogmático o tener tendencias de "gurú". Puedes tener problemas circulatorios. Puedes tener desconfianza hacia lo que viene de lejos, incluido lo divino, puede darte miedo viajar.`,
+
+    Capricornio: `La figura paterna es importante y pesada.
+
+Máxima ambición, especialmente en la carrera y el estatus. Creencia de que quienes se esfuerzan merecen tener éxito.
+
+No disfrutas de la comunicación ni de la socialización, y si lo haces, es para alcanzar objetivos.
+
+Eres muy organizado, siempre necesitas que todo sea práctico. Te presentas como austero, digno, serio, tradicional, capaz de sacrificio, paciente, rígido y desconfiado, pero esto no significa que seas así.
+
+Autosuficiente, con tendencia a madurar temprano. Piensas que todos deberían ser como tú. Debes desarrollar la tolerancia y el sentido del humor.
+
+Puede darse que seas dictatorial, sin escrúpulos, egoísta y excesivamente solitario. Si no te valoras o te rigidizas, puedes somatizar a través de problemas óseos y articulares.`,
+
+    Acuario: `Las ideas están profundamente arraigadas y provienen de experiencias pasadas; por lo tanto, aunque intentas encontrar el futuro y te abres a nuevas teorías, te cuesta mucho cambiar tu punto de vista y permaneces excesivamente inmerso en el pasado.
+
+Debes asimilar y enseñar nuevos conocimientos conectándolos con la tradición; puedes crear estructuras para integrar lo nuevo. Te sientes responsable de la sociedad y buscas elevar la conciencia para que la sociedad mejore. Recuerda que la ignorancia o el dolor de la sociedad no son tu responsabilidad, con trabajarte a ti mismo tienes suficiente.
+
+Tus reglas y tradiciones son poco convencionales. Curioso, ávido de aprender y capaz de descartar cosas para buscar otras nuevas prematuramente. Te resulta muy difícil interactuar con grupos y te defiendes de las personas a través del distanciamiento social.
+
+Puede darse que seas dominante, que deseas que todos se muevan según tus reglas. Puedes tener frialdad, insensibilidad, orgullo intelectual y soledad. Precaución con la energía vital y la circulación.`,
+
+    Piscis: `Tienes sentimientos de abandono y soledad; sientes que el mundo te carga de negatividad. Te encuentras con problemas cuyo origen no comprendes y, sin embargo, no puedes evitarlos y los experimentas como cargas.
+
+Puedes revivir el pasado con demasiada frecuencia y con intensidad excesiva.
+
+Es más fácil comprender a los demás que a uno mismo; puede haber baja autoestima o inseguridad, y siempre existe una necesidad de soledad y descanso para intentar comprenderte. Debes evitar el victimismo, que puede conducir a la depresión y a enfermedades nerviosas o psicosomáticas.
+
+Sientes que la paz solo puede alcanzarse a través del trabajo y el sacrificio, y que si no haces lo que se debe hacer, vendrá el castigo; esto se debe a una sensación de falta de protección. Tendencia a ayudar a los más vulnerables.
+
+En los mejores casos, una vez maduro gozas de profunda comprensión espiritual, eres capaz de crear estructuras tangibles de lo intangible. Aceptas los finales.
+
+Pueden darse miedos profundos, ansiedad, problemas nerviosos derivados del inconsciente y obsesión con los errores del pasado. Puedes tomarte la Vida demasiado en serio y bloquear la magia por miedo. Puedes tener una sensación de que todos conspiran contra ti y que no se puede hacer nada contra las dificultades de la Vida.`,
+  },
+
+  urano: {
+    Aries: `Pertenecéis a una generación de sembradores de semillas para reformas sociales y científicas.
+
+Sois pioneros en las áreas en las que participáis, hacéis cambios constantemente y volvéis a empezar. Independientes, ingeniosos, con tendencia a la hostilidad y un sentido muy particular de la moralidad.
+
+Podéis ser demasiado rebeldes, imprudentes, fanáticos y carentes de autocontrol.`,
+
+    Tauro: `Cambios estables aunque no pacíficos ni calmados. Mutaciones en el ADN.
+
+Cambios en el concepto de valor y en la relación con la naturaleza. Cambia el concepto de sensualidad.
+
+Pertenecéis a una generación de reformadores económicos.
+
+Buscáis nuevas formas de ser práctico, interés en nuevos negocios, recursos naturales…
+
+Muchos de vosotros tenéis grandes cualidades musicales y artísticas. Normalmente sois magnéticos y atractivos.
+
+Si no sois conscientes, podéis tener problemas económicos, matrimoniales, celos y terquedad.`,
+
+    Géminis: `Pertenecéis a una generación de mentes brillantes, genialidad y locura; originales, generáis nuevos conceptos educativos y literarios, en medios y comunicación… Desarrolláis nuevos métodos de enseñanza.
+
+Sois brillantes, inventivos; su inquietud os impide seguir una idea hasta el final, pero captáis nuevas ideas con facilidad. Tenéis un nivel muy alto de energía mental.
+
+Os podéis sentir desconectados de otras generaciones.
+
+Pueden darse casos de comunicación abrupta, pensamiento poco práctico, dificultades con familiares y estudios.`,
+
+    Cáncer: `Pertenecéis a una generación que busca libertad emocional y liberación de la autoridad parental o nacional.
+
+Veis a vuestros padres como iguales en lugar de figuras de autoridad e intentáis tener un hogar lleno de amigos; esto puede llevar a la vida comunal. Si elegís un hogar más tradicional, estará lleno de dispositivos electrónicos caseros. También podéis cortar completamente las relaciones con sus padres. Tenéis una percepción diferente de lo que significa la herencia.
+
+Esta posición a menudo resulta en padres solteros o divorciados; también son probables los cambios de residencia.
+
+Gusto por el vagabundeo. Esta posición a menudo trae percepción psíquica.
+
+**Afligido:** Podéis tener grandes altibajos emocionales, irracionalidad.`,
+
+    Leo: `Revolución sexual y moral, artística y "rítmica". Rompe creencias sólidas sobre élites, realeza…
+
+Tenéis gran confianza en vuestras ideas, ego prominente, necesitáis ser o sentiros diferentes y especiales. Aún así, puede tener una percepción especialmente sensible de la humanidad. Fuerte determinación que le lleva a derrocar lo que no le gusta.
+
+Hijos fuera del matrimonio, nuevas y liberales formas de criar a los hijos.
+
+**Afligido:** Destructivos, indisciplinados, muy dogmáticos.`,
+
+    Virgo: `Las mujeres comienzan a trabajar.
+
+Nuevas formas de hacer las cosas en los campos médico y tecnológico.
+
+Nuevas ideas sobre los métodos de trabajo y la salud, así como invenciones electrónicas que fueron revolucionarias en sí mismas. Nuevos paradigmas de cómo nos relacionamos con nuestro cuerpo.
+
+Enfoque práctico en el trabajo, facilidad para obtener el apoyo de los compañeros de trabajo, buenos con los avances técnicos.
+
+Interés por la ecología, los productos naturales… Capacidad de abordar el cambio a través del análisis y la practicidad.
+
+**Afligido:** Problemas de salud inusuales, inestabilidad e inquietud en el trabajo.`,
+
+    Libra: `Transformación en las relaciones y la convivencia; el matrimonio se vuelve menos importante que la relación misma. Necesitáis sentir igualdad y equilibrio en las relaciones: ser uno mismo mientras se relaciona con los demás. Revolución a través del divorcio o los matrimonios entre personas del mismo sexo, más libertad. Utopías relacionales.
+
+Preocupado por las motivaciones de las personas, tenéis nuevos conceptos de justicia. Atracción por la novedad en arquitectura, sociedad y arte. A través del encanto, puede expresar ideas extravagantes sin resultar ofensivo.
+
+**Afligido:** Demasiado independientes y podéis experimentar muchas rupturas emocionales.`,
+
+    Escorpio: `Tiempo de cambios radicales, muerte, regeneración de las raíces de la civilización.
+
+Intensidad emocional que suele surgir abruptamente. A menudo fascinantes y muy atractivos sexualmente. Atracción por lo oculto y la parapsicología. Aceptáis como desafíos todos los reajustes que se harán desde la infancia. Liberación sexual y liberación de los impulsos arraigados en el inconsciente.
+
+Psicoterapia. Sexo en línea.
+
+**Afligido:** Celos, posesividad, violencia, venganza, rebeldía.`,
+
+    Sagitario: `Regeneración de las religiones, la filosofía, la educación…
+
+Buscáis libertad de sus sentidos y expresión. Búsqueda de equilibrio entre la metafísica y la física, lo paranormal y lo científico. No aceptáis límites ni dogmas. Necesidad de viajar y lo hacéis de forma repentina.
+
+**Afligido:** Agnóstico, rebelde, muy nervioso.`,
+
+    Capricornio: `Cambios en los gobiernos y las estructuras de poder. Cambia la forma en que se organiza como sociedad y cómo ser padres (más libertad y más responsabilidad). Os rebeláis contra lo establecido, pero sentís que debéis obedecer.
+
+Buscáis un futuro mejor a través de cambios gubernamentales… sin embargo, todavía lucháis por dejar ir el pasado y basáis lo nuevo en tradiciones antiguas. Líderes magnéticos. Interés en todo lo relacionado con la tierra y sus recursos.
+
+Internet, teléfonos móviles, realidad virtual.
+
+Si no encontráis el equilibrio, esta posición trae mucha tensión interior y todo puede dirigirse a cumplir la ambición personal.`,
+
+    Acuario: `Cambios en la percepción, apertura de la intuición, cambios en las esperanzas.
+
+Penetrantes, inventivos, deseáis cambiarlo todo para mejor, pero a menudo sois excéntricos en vuestro enfoque. Estáis abiertos a todo lo nuevo; podéis permanecer algo aislados o independientes, aunque disfrutéis trabajando con personas.
+
+Explosión de redes, innovación, globalización cultural y social. Nuevos modelos relacionales basados más en la amistad que en el compromiso a largo plazo. Menos jerarquías.
+
+**Afligido:** Revolucionarios, falta de practicidad.`,
+
+    Piscis: `Revolución respecto al subconsciente.
+
+Buenas intenciones en el corazón a pesar de la variabilidad. Intuitivos, idealistas, místicos, con tendencia a entrar o escapar a mundos diferentes. Los asuntos espirituales son más importantes que los materiales. Transformáis la energía de Piscis en algo objetivo y racional sin perder su componente trascendente. Aspiráis a que todos comprendan lo invisible; popularizaréis la espiritualidad tras haber sido críticos con ella, o haberla negado por completo.
+
+**Afligido:** Sistema nervioso excesivamente sensible, incapaz de relajarse en ningún nivel; alcohol, drogas y sexo.`,
+
+    // Casa 1 de Urano pendiente — usuario aún no la ha enviado
+  },
+
+  neptuno: {
+    Aries: `Vuestra fuerza motriz son los sueños; buscaréis de manera heroica. Será la búsqueda de la compasión universal; "buscaréis almas que salvar". Sois luchadores con una misión divina (Gandhi) y escritores con imaginación sin límites.`,
+
+    Tauro: `Esta generación tiene un gran idealismo, pero al mismo tiempo será muy concreta y práctica. Incorporaréis todas vuestras ideas y nuevas visiones a vuestra vida cotidiana, preocupándoos por el embellecimiento del entorno físico y la armonía en las relaciones sociales. Tenéis un gran sentido estético que se manifestará en diferentes áreas, especialmente en la música, la arquitectura y la escultura. Además, buscaréis alcanzar una buena posición económica y dominar la gestión de los recursos; vuestra imaginación e intuición siempre estarán orientadas a encontrar soluciones a vuestros problemas cotidianos.
+
+Otorga una visión romántica de la naturaleza y su belleza, y profesáis el humanismo o el altruismo en el ámbito material.`,
+
+    Géminis: `Tenéis una imaginación muy activa y desarrolláis nuevas teorías sobre el mercado, el comercio, los viajes y las comunicaciones. Podéis ser escritores notables debido a vuestra gran capacidad inventiva y vuestra sensibilidad para transmitir. Podéis tener interés en las ciencias esotéricas, asumiendo siempre una actitud intelectual. Sois inquisitivos, curiosos y argumentativos.`,
+
+    Cáncer: `Una generación muy emocional y sentimental. Tenéis un fuerte apego a vuestra tierra (patriotismo), a vuestra familia, a vuestro hogar, y tenéis una actitud protectora y abnegada hacia los demás. Uno de los problemas de esta posición es que vuestras fantasías no os permiten percibir correctamente vuestra realidad. Vínculo casi indestructible con la madre.`,
+
+    Leo: `Una generación romántica, idealista y artística. Os atrae todo lo que está lleno de vida, color y dramatismo. Idealizáis a las personas que amáis y, para no sentiros decepcionados, debéis tener cuidado de no proyectar vuestras fantasías sobre quienes os rodean. Os cuesta aceptar la autoridad de los demás.`,
+
+    Virgo: `Llegan nuevos conceptos sobre las condiciones laborales y el cuidado del cuerpo y la salud. Estos nativos viven una lucha interna entre la emoción y la razón; podéis ser bastante estrictos en vuestra forma de pensar y tajantes con los conceptos del bien y del mal. Debéis tener cuidado con derribar viejas ideas sin tener otras nuevas con las que reemplazarlas.`,
+
+    Libra: `La pareja es el redentor. Psicodelia. Idealizáis la paz, la justicia y la civilización. Los vínculos son neptunianos, con idealización y derramamiento de deseos de redención. Relaciones adictivas; el otro es vuestra droga y vuestra vía de escape. Buscáis la perfección sobrenatural en el otro — decepción. El uso social de las drogas. Tendéis a ser bastante perezosos.`,
+
+    Escorpio: `La energía oscura como moda. Sentirse inundados por lo colectivo. Drogas: cocaína y estimulantes sexuales. Obsesión con el poder. Sanación del inconsciente.`,
+
+    Sagitario: `Búsqueda del conocimiento místico, expansión de la conciencia; buscáis al gurú (extranjero) o la iniciación; migraciones por motivos religiosos. Insatisfacción permanente porque vislumbráis el mundo perfecto que no coincide con el real. Cuidado con el autoengaño.`,
+
+    Capricornio: `Descubrís la estructura invisible; necesitáis materializar vuestras "alucinaciones". Conciencia de los marginados y del sufrimiento generado por el sistema social (el fundador de la Cruz Roja). Estructuras de ayuda mutua. Hay que trabajar para lograr gran sentido de la responsabilidad y la autodisciplina, e intentaréis dar una aplicación práctica tanto a vuestras emociones como a vuestras fantasías.`,
+
+    Acuario: `La mente como vehículo del espíritu, reinvención de la espiritualidad, los gurús llegan a su fin.
+
+Tendréis gran intuición e inspiración para crear cosas nuevas a todos los niveles. El progreso científico será muy notable en este período y la invención de máquinas y aparatos para modernizar la vida sorprenderá por su originalidad. Tenéis una actitud despegada, capacidad para comprender lo abstracto, y una gran creatividad que se manifestará de forma práctica e inteligente.`,
+
+    Piscis: `Sensibles e intuitivos. La identidad se asocia al Uno, el trance en el que os descubrís más allá de vuestro ego. Disuelve las pertenencias. Compasión. Tenéis que trabajar los límites. El lado negativo son las reacciones defensivas frente a lo neptuniano para evitar la disolución — aislamiento. Adicciones. También tendréis talento musical y artístico que será vuestro principal vehículo de expresión para vuestras ideas y sentimientos. Cualidades espirituales como la compasión y la abnegación por los demás se ponen de moda.`,
+  },
+
+  pluton: {
+    // Plutón en Aries, Tauro, Géminis — pendientes (usuario no los ha enviado)
+
+    Cáncer: `Gran patriotismo. Fuerte necesidad de seguridad y de madurar emocionalmente.
+
+"Mato por los míos" o "la familia me mata". Nacionalismos.
+
+Aquí Plutón activa la intuición y los instintos, y a pesar del patriotismo buscará romper con las tradiciones.
+
+Resentidos y morbosos.`,
+
+    Leo: `Durante este período, además del lanzamiento de la primera bomba atómica, el ocio y el entretenimiento se expandieron enormemente. Nació toda una cultura en torno al entretenimiento y se desarrolló una industria para satisfacerla.
+
+Hubo un gran auge del cine y los actores se convirtieron en auténticas estrellas: famosos y admirados. Al mismo tiempo, apareció la televisión.
+
+También hubo un apogeo del Ego: el concepto de individuo comenzó a dominar sobre lo colectivo, produciendo una profunda transformación de los valores relacionados con la persona.
+
+Muy creativos. Juegan con su poder.`,
+
+    Virgo: `Adictos al trabajo. El poder reside en su profesión o virtuosismo. O bien huyen del caos o lo integran. "O estás conmigo o estás fuera".
+
+Profundizan para entender los detalles de las cosas y los sistemas. Les cuesta entenderse a sí mismos y comprometerse. Impulsos sexuales cambiantes. El sector servicios se activa (Virgo).
+
+Se produce una verdadera revolución en la medicina, con descubrimientos importantes que mejoran la calidad de vida y la longevidad. Se presta más atención a cómo la dieta y la higiene influyen en la salud. Durante estos años se curan muchas enfermedades y se descubren nuevas vacunas.`,
+
+    Libra: `Destruye los modelos de relación, así como los conceptos de belleza y armonía.
+
+El divorcio aparece como la "muerte" de una relación.
+
+Estas personas tenéis un contacto profundo con la muerte dentro de las relaciones. Los vínculos son siempre poderosos e intensos: podéis buscarlos o evitarlos.
+
+Se producen luchas de poder en las relaciones. El poder debe darse a la relación en sí, no a los individuos.
+
+No podéis tener relaciones como las de vuestros padres o abuelos.`,
+
+    Escorpio: `Os lleva a tomar conciencia del mundo que habéis creado y os confronta con su miseria.
+
+Sensación de tocar fondo, con crisis profundas y radicales en todas las áreas.
+
+Fuerte atracción por las formas más oscuras del poder. Tendréis que transformar una sociedad agonizante, y para ello buscaréis las causas del desastre que la humanidad ha creado.
+
+Estáis marcados por el trauma.
+
+Ruptura radical con el pasado y con lo heredado. No cambiaréis las reglas: cambiaréis el juego.
+
+Podéis volveros destructivos y despiadados.`,
+
+    Sagitario: `Gran necesidad de libertad personal. Visión filosófica y humanística de la vida.
+
+Entusiastas, versátiles, con una fe fuerte —a veces excesiva— en la naturaleza humana.
+
+Pueden surgir conflictos entre religiones o civilizaciones; cuidado con el fanatismo.
+
+Queréis un mundo mejor cueste lo que cueste. Mentes muy abiertas, en búsqueda constante de formas de mejorar las cosas. Mochileros, exploradores. Renovación de la iglesia, las publicaciones, las agencias de viajes y la educación superior.`,
+
+    Capricornio: `Generación muy fuerte, poderosa.
+
+Perseverancia, eficacia, capacidad de liderazgo. Necesidad de retirar la figura paterna de las posiciones de autoridad, tanto social como personalmente. Nuevas reglas, nuevos límites y nuevas formas de establecerlos. Rebelión contra las limitaciones impuestas.`,
+
+    Acuario: `Intentáis liberar al colectivo de las estructuras de poder. Los viejos modelos de Capricornio llegarán a su fin. Un nuevo orden social.`,
+
+    Piscis: `Descubriréis que la realidad es una ilusión.
+
+La última vez que Plutón estuvo ahí, comenzó la pesca industrial; empezamos a matar los océanos.`,
+  },
+
+  quiron: {
+    Aries: QUIRON_TEXTS[1],
+    Tauro: QUIRON_TEXTS[2],
+    Géminis: QUIRON_TEXTS[3],
+    Cáncer: QUIRON_TEXTS[4],
+    Leo: QUIRON_TEXTS[5],
+    Virgo: QUIRON_TEXTS[6],
+    Libra: QUIRON_TEXTS[7],
+    Escorpio: QUIRON_TEXTS[8],
+    Sagitario: QUIRON_TEXTS[9],
+    Capricornio: QUIRON_TEXTS[10],
+    Acuario: QUIRON_TEXTS[11],
+    Piscis: QUIRON_TEXTS[12],
+  },
+
+  nodoNorte: {
+    Aries: NODO_NORTE_TEXTS[1],
+    Tauro: NODO_NORTE_TEXTS[2],
+    Géminis: NODO_NORTE_TEXTS[3],
+    Cáncer: NODO_NORTE_TEXTS[4],
+    Leo: NODO_NORTE_TEXTS[5],
+    Virgo: NODO_NORTE_TEXTS[6],
+    Libra: NODO_NORTE_TEXTS[7],
+    Escorpio: NODO_NORTE_TEXTS[8],
+    Sagitario: NODO_NORTE_TEXTS[9],
+    Capricornio: NODO_NORTE_TEXTS[10],
+    Acuario: NODO_NORTE_TEXTS[11],
+    Piscis: NODO_NORTE_TEXTS[12],
+  },
+
+  nodoSur: {
+    Aries: NODO_SUR_TEXTS[1],
+    Tauro: NODO_SUR_TEXTS[2],
+    Géminis: NODO_SUR_TEXTS[3],
+    Cáncer: NODO_SUR_TEXTS[4],
+    Leo: NODO_SUR_TEXTS[5],
+    Virgo: NODO_SUR_TEXTS[6],
+    Libra: NODO_SUR_TEXTS[7],
+    Escorpio: NODO_SUR_TEXTS[8],
+    Sagitario: NODO_SUR_TEXTS[9],
+    Capricornio: NODO_SUR_TEXTS[10],
+    Acuario: NODO_SUR_TEXTS[11],
+    Piscis: NODO_SUR_TEXTS[12],
+  },
 };
 
 /**
@@ -1771,6 +2409,913 @@ Eres capaz de convertir a tus enemigos en aliados, aunque cualquier adversario a
 Esta posición suele aportar resiliencia en cuestiones de salud, ya que estás bien cuidada y te recuperas eficazmente cuando lo necesitas.
 
 Esta posición fomenta el crecimiento espiritual, la fortaleza interior y la capacidad de elevarte por encima de las dificultades a través de la fe, la autoconciencia y la conexión con una verdad superior.`,
+  },
+
+  saturno: {
+    1: `Fuiste obligado a crecer demasiado pronto. Esto puede deberse a que la madre no pudo lidiar con sus circunstancias, o a que el niño sintió la necesidad de cuidar de sus padres. Como resultado, parte de tu infancia se perdió. Estás profundamente marcado por fuertes autoexigencias internas que te empujan a asumir responsabilidades y a trabajar duro desde muy joven.
+
+A menudo hay una ausencia del padre, ya sea literal o simbólica, o una fuerte desconexión emocional con él. Puedes buscar la figura paterna y no encontrarla. Esto genera una profunda sensación de que la vida es difícil, dura y llena de obstáculos, como si estuvieras constantemente remando contra la corriente y superando resistencias. Aunque esto sea en parte una percepción, así es como vives y se manifiesta la vida para ti.
+
+Tiendes a protegerte mucho porque cargas con un fuerte miedo al fracaso, a no ser capaz, a no alcanzar tus metas y, especialmente, a que los demás lo noten. Este miedo puede conducir a comportamientos retraídos o al uso de máscaras que impiden que los demás te vean realmente. Existe un fuerte miedo a ser percibido como "estúpido" o inadecuado, por lo que a menudo refuerzas una apariencia de dignidad, austeridad, seriedad o incluso frialdad como forma de defensa.
+
+A pesar de esto, puedes desarrollar gran determinación, disciplina, ambición y claridad sobre lo que quieres en la vida, a menudo como una manera de demostrar tu valor al mundo y sentirte aceptable. Tus comienzos tienden a ser lentos, pesados y laboriosos, con un tono pesimista y una sensación o miedo persistente al fracaso.
+
+Siendo Saturno un planeta lento, tus procesos llevan tiempo, y normalmente vives mucho mejor una vez que maduras, especialmente en la segunda mitad de la vida, que comienza alrededor de los 42-44 años. La maestría de Saturno se manifiesta verdaderamente solo en esta etapa posterior de la Vida.
+
+Cuando Saturno está cerca del Ascendente, puede haber habido complicaciones para la madre o resistencia a nivel del alma, a menudo reflejadas en partos difíciles: largos, dolorosos, o una sensación de resistencia o miedo a encarnar. Este patrón puede repetirse a lo largo de la vida en todo lo que emprendes: las cosas comienzan lentamente y con resistencia, pero si perseveras, eventualmente puedes lograr lo que te propones.
+
+En la infancia, puedes haber experimentado privaciones, escasez o un entorno inseguro que te obligó a estar constantemente alerta y en modo de protección. A menudo no pudiste desarrollar tu creatividad libremente, o cargaste con responsabilidades inapropiadas para tu edad. Te viste obligado a madurar y crecer demasiado rápido.
+
+Debido a esto, es muy importante que hagas trabajo de niño interior, ayudando al niño interior a comprender que tiene permiso para existir, para jugar, para disfrutar sin responsabilidad y para divertirse por el simple hecho de divertirse. La compasión hacia tu niño interior ayuda a reducir el pesado autojuicio que cargas y a suavizar la máscara defensiva de falsa arrogancia, frialdad o distancia emocional que oculta tu inseguridad y timidez.
+
+El peso del padre o las figuras de autoridad es muy fuerte en tu psique, creando a menudo una sensación de castración o inhibición que te impide mostrarte auténticamente. Este es un tema central que necesitas trabajar. Tiendes a evitar el conflicto y la confrontación, a suprimir tu enojo y a tener dificultades para establecer límites, por lo que debe prestarse especial atención a cómo contienes y gestionas tu ira.
+
+Físicamente, sueles ser delgado, huesudo o de apariencia angular.
+
+La lección de maestría de Saturno es aprender a asumir la responsabilidad de ti mismo sin dramatizar la vida: cuanto más te sobreexigas, más duro y difícil harás tu propio camino. Si maduras e integras las lecciones de Saturno, la segunda mitad de la vida puede ser significativamente mejor y más plena.`,
+
+    2: `Vienes de un linaje marcado por fuertes temas de escasez, avaricia, privación o serias dificultades en torno al dinero y los recursos. El alma viene a trabajar la maestría de generar recursos enfrentándose a profundos miedos de carencia y de perder lo conseguido.
+
+A menudo hay una profunda identificación entre la autoestima y las posesiones materiales: soy lo que tengo; necesito tener para sentirme válido. Cuando la autoestima no se integra internamente, permaneces atrapado en los patrones repetitivos del árbol familiar: escasez, miedo y obsesión por la pérdida. Cuanto más te aferres a lo que tienes por miedo, más probable es que lo pierdas.
+
+Suele haber una fuerte necesidad de seguridad financiera, lo que puede llevarte a elegir caminos muy estables pero limitantes (por ejemplo, convertirte en funcionario), a veces a costa de cortar tu verdadero potencial de maestría. La lección más profunda no es simplemente buscar seguridad, sino ocuparte de la manifestación de tus dones y talentos, confiando en que el ciclo mayor de la vida se ocupará del resto.
+
+Estos nativos suelen cargar con sentimientos profundos de inadecuación: ¿Qué hago en este mundo? ¡Y encima tengo que pagar por vivir!
+
+Tu tarea es descubrir, desde tu propia perspectiva interior, quién eres y qué espacio puedes y estás destinado a ocupar: el que verdaderamente te corresponde. El apoyo externo suele ser escaso; no estás destinado a ser sostenido económicamente por otros, ni a desempeñar el papel de la "mujer mantenida" o del hijo cuyos padres lo proveen todo. El camino es solitario, gradual y requiere consolidación y estructura construidas paso a paso.
+
+Los padres son frecuentemente experimentados como escasos, avaros o emocional y materialmente limitados, a veces obligando al nativo a trabajar a una edad muy temprana para ayudar a la familia.
+
+Estos individuos deben cultivar la paz interior y aprender a no esperar la validación del exterior. Tu educación a menudo careció del permiso para disfrutar de la vida y careció de abundancia, sin embargo, paradójicamente, puede ayudarte a desarrollar habilidades y talentos valiosos.
+
+Rechazar la materia por completo —decir que el dinero o las cosas materiales no importan— en realidad descalifica al mundo material y a menudo oculta envidia, juicio o dura condena hacia las personas que son abundantes. Este conflicto interno "me encantaría vivir de otra manera, pero rechazo la abundancia" te condena a una vida de austeridad nacida del deseo no resuelto.
+
+Las comparaciones del tipo "logran más que yo en menos tiempo" son comunes pero engañosas. La lección es seguir tu propio camino y confiar en que, con el tiempo, llegarán los frutos. Esta es una posición que madura lentamente y exige trabajo, perseverancia y tiempo.
+
+Una polaridad de esta posición es la acumulación extrema: convertirte en una persona avara que reúne grandes cantidades de dinero sin sentirse nunca segura, satisfecha o libre de ansiedad. Otros desvaloran completamente la vida material, adoptando una actitud de humildad forzada mientras proyectan su propia avaricia y juzgan el éxito material en los demás. En ambos casos, hay una falta de confianza en el propio valor y en la propia capacidad para navegar el mundo material.
+
+El verdadero desafío es descubrir el valor personal desde dentro; esto no se puede lograr mientras la mirada permanezca centrada en la validación externa o las posesiones. Las dificultades económicas están destinadas a empujar a estos nativos a desarrollar sus capacidades y potenciales. Cuando Saturno está bien integrado, el alma proporciona los recursos necesarios para descansar en la estabilidad material, aunque no necesariamente de la manera en que el ego lo imagina.
+
+Tus herramientas para generar dinero son el orden, la responsabilidad, el realismo, la perseverancia, la paciencia y la disciplina. Sin embargo, debes tener cuidado de no malvenderte solo para obtener seguridad, ni caer en la adicción al trabajo.
+
+La maestría de Saturno en Casa 2 es la abundancia: no solo la abundancia material, sino la capacidad de disfrutarla sin miedo, culpa o autocondena.`,
+
+    3: `Vives una vida marcada por profundos sentimientos de inadecuación y una fuerte necesidad de comprender la realidad a un nivel profundo, algo que no se te satisfizo en la infancia. En lugar de ser escuchado, fuiste un niño juzgado, descartado o hecho sentir que estaba "fuera de lugar", comenzando dentro de su propia familia. No sabían responder tus preguntas y tu curiosidad, por lo que se te instó a callarte. Esto genera una intensa soledad y una sensación persistente de ser incomprendido, acompañada por la creencia de que algo está mal contigo por ser diferente o "raro".
+
+Tu expresión fue negada o ignorada, y tus intentos de comunicarte no fueron comprendidos ni validados. En algunos casos, puede haber habido limitaciones reales que afectaron la comunicación o el aprendizaje, o una sobrecarga mental que el niño no supo manejar. Como resultado, las dificultades de comunicación pueden surgir desde temprano. Los años escolares suelen ser problemáticos, traumáticos y vívidos como con un período de exilio y profunda soledad, acompañados por la pregunta existencial: "¿Qué hago aquí?"
+
+Hubo poca o ninguna estimulación de tus capacidades mentales o de tu habilidad natural para profundizar, y la energía curiosa e interrogadora del niño fue a menudo castrada por el entorno. Esta falta de estímulo refuerza la sensación de estar solo con tu mente y tus preguntas.
+
+Con frecuencia, o no tienes hermanos, eres el hijo mayor, o te ves obligado a asumir el papel del mayor, cargando con responsabilidades por los hermanos menores. En otros casos, un hermano es experimentado como una carga o una limitación. En todos los escenarios, eres empujado a crecer demasiado rápido.
+
+Por todo esto, puedes parecer distante, arrogante o lejano. Sin embargo, esto suele ser un mecanismo de defensa: como no fuiste libre de comunicarte en la infancia o fuiste repetidamente malinterpretado, temes que si te expresas abiertamente, tus palabras puedan ser usadas en tu contra.
+
+Para compensar la profunda inseguridad en torno a tu inteligencia y habilidades comunicativas, a menudo cultivas un estilo mental y verbal muy exacto, preciso, concreto y eficiente. No te interesa perder el tiempo y prefieres ir directo al grano. Alternativamente, algunos pueden reaccionar criticando a los intelectuales o desvalorizando las búsquedas mentales.
+
+También puede haber desafíos con el pensamiento lógico o racional, especialmente al principio de la vida. La invitación de Saturno aquí es desarrollar una mente profunda y sólida y una capacidad madura de comunicación —estructurada, lógica y fundamentada— al tiempo que redescubres el placer de aprender y de la exploración mental.
+
+La maestría de Saturno en Casa 3 es convertirte en un verdadero maestro comunicador —alguien que puede transmitir información compleja de manera clara y comprensible— y también un maestro de la escucha, capaz de presencia profunda y comprensión genuina.`,
+
+    4: `Tuviste un peso considerable durante la primera mitad de la vida. Estos individuos a menudo sienten una falta de hogar, familia y seguridad emocional, generando una profunda soledad y una sensación persistente de inadecuación.
+
+Una poderosa figura de autoridad —a menudo fría y distante— deja el mensaje: "tienes que hacer lo que se debe hacer". Eres educado con fundamentos restrictivos desde el nacimiento, con poco o ningún permiso para el vínculo emocional o para que tu niño interior se exprese libremente. Esta posición conlleva implicaciones kármicas relacionadas con el linaje familiar, llevando a menudo a una baja autoestima y al miedo al fracaso.
+
+La familia se experimenta frecuentemente como problemática. Algunos huyen, intentando ir lo más lejos posible, mientras que otros asumen la carga de la familia, intentando poner orden. El entorno hogareño puede ser restrictivo, carente, frío y limitante, sin apoyo, inculcando el miedo de que se encontrarán condiciones similares en el mundo más amplio.
+
+A menudo te sientes no amado y percibes la vida como poco solidaria, lo que dificulta echar raíces y sentirte en casa. Compras adquisiciones materiales para sentirte en el hogar y luego te arrepientes porque el vacío sigue ahí.
+
+La tarea de desarrollo aquí es el trabajo emocional: aprender a procesar y sostener tus propias emociones, abordando los profundos sentimientos de inadecuación. Puede estar presente el karma con el padre o la línea paterna, manifestándose a menudo como ausencia, desconexión o exigencias excesivas. En el mejor de los casos, el progenitor enseña paciencia y disciplina, pero normalmente hay alguna forma de desapego o falta de guía.
+
+A menudo te sientes sin raíces, solo, inseguro e incapaz. Tu entorno temprano fue probablemente restrictivo y carente de apoyo —emocional, material o ambos— lo que refuerza la sensación de que no eres lo suficientemente bueno. Para contrarrestar esto, debes cultivar la fuerza interior y los cimientos sólidos, recordando que eres digno de amor. Cuando se logra esto, nada externo puede socavar esta estabilidad interna.
+
+Otro desafío es la creación de un refugio seguro y estable. Estos individuos a menudo desconfían de su capacidad para asegurarlo y pueden compensar acumulando propiedades o asumiendo responsabilidades domésticas. Incluso con trabajo interno, muchos no encuentran su lugar o misión de vida hasta la segunda mitad de la vida.
+
+La maestría de Saturno en Casa 4 es construir un hogar que sea un verdadero santuario: un espacio donde puedas sentirte seguro, nutrido y emocionalmente sostenido. Esto requiere aprender a volverte hacia adentro, habitar tus emociones y cuidar de tu niño interior, que a menudo está congelado y solo. El hogar debe convertirse en un templo de descanso y sanación, no en una prisión, y este proceso lleva tiempo, paciencia y autosuficiencia.`,
+
+    5: `Tienes profundos desafíos en la expresión de la individualidad y la creatividad. Te da miedo mostrar quién eres verdaderamente, derivado de experiencias tempranas de ser juzgado por ser diferente. Existe un miedo generalizado de que si los demás ven tu esencia, será criticada o rechazada.
+
+Desde la infancia, no se te permitió ser niño; tu espontaneidad natural, tu carácter juguetón y tu inocencia fueron juzgados cuando estos rasgos eran perfectamente apropiados. Como resultado, aprendes a esconder y enmascarar tu verdadero ser para protegerte.
+
+Esta posición dificulta conectar plenamente con el niño interior, por lo que es necesaria la estructura para permitir que la creatividad emerja con seguridad. El tiempo libre puede sentirse como una carga o un deber en lugar de una oportunidad para el disfrute, y aprender a divertirte verdaderamente se convierte en una tarea crítica del desarrollo.
+
+Románticamente, a menudo luchas porque temes el ridículo, lo que te lleva a una extrema cautela e incluso a la parálisis al expresar afecto.
+
+Puedes tener dificultad para tener hijos, vínculos tensos entre padres e hijos, o miedo a no gustar o que sea un compromiso demasiado grande. De forma más amplia, esto se extiende a todas las formas de creación: proyectos, emprendimientos personales o autoexpresión.
+
+La maestría de Saturno en Casa 5 reside en permitir que tus proyectos y expresiones creativas nazcan, aunque los demás no los entiendan o aprueben. Debes aprender a crear sin buscar validación externa, confiando en el flujo orgánico desde tu corazón y tu centro. Desbloquear tu creatividad implica abrazarte y mostrarte tal como eres, sin esperar aplausos o aprobación.`,
+
+    6: `Tienes una fuerte creencia de que tienes que ser útil para sentir que mereces el amor de tu familia.
+
+Tienes necesidad de mantener todo limpio, organizado y bajo control como una forma de gestionar el caos interno o externo. Requieres rutina y estructura, pero a menudo te conviertes en esclavo inconsciente de ella, agotándote en el proceso. Hay una sensación generalizada: "Estoy cansado, pero he hecho lo que tenía que hacer". El descanso solo llega una vez que todas las tareas están completadas.
+
+Tiendes a ser hipercrítico, altamente responsable, trabajador y concienzudo. Sin embargo, la autoexigencia excesiva a menudo conduce a la somatización en el cuerpo, particularmente en los huesos, la piel y las articulaciones, reflejando la presión internalizada por ser perfecto.
+
+Tu necesidad de ser funcional y útil para sentirte amado significa que rara vez se te permitió tiempo para procesar sentimientos: tenías que actuar, contribuir y no "causar problemas". Esto puede crear una vida entera de esfuerzo por el reconocimiento en el trabajo, a menudo acompañada de frustración.
+
+La salud es un área crítica de atención. Tus presiones y altas exigencias pueden manifestarse a través del agotamiento, enfermedades relacionadas con el estrés o hábitos compulsivos de salud. Debes aprender a equilibrar la mente, la emoción y el cuerpo, ya que tu orden interno fue a menudo perturbado en la infancia. La estructura que creas para ti mismo —aunque protectora— también puede sentirse como una carga pesada, generando tensión y miedo a cualquier cosa fuera de la rutina o lo familiar.
+
+En el trabajo y el servicio, eres diligente y preciso, pero puedes luchar con el perfeccionismo, ser excesivamente crítico con los colegas y temer la inadecuación. Existe la necesidad de abrirte a nuevas formas de hacer las cosas, de liberar las rutinas estrictas y de integrar un enfoque más flexible de la vida.
+
+La maestría de Saturno en Casa 6 reside en comprender el verdadero propósito del servicio. No se trata solo de completar tareas o de ser "útil", sino de nutrirte a ti mismo y a los demás a través de la acción consciente y deliberada. Aprender a calmar al crítico interno y a moderar las autoexpectativas te permite trabajar con conciencia, eficiencia y plenitud en lugar de compulsión y agotamiento.`,
+
+    7: `Tienes miedos y desafíos en las relaciones, las asociaciones y los vínculos sociales. Estos individuos a menudo luchan por abrirse y comprometerse plenamente, saboteando con frecuencia las relaciones. Puedes fijarte en defectos pequeños de tu pareja, criticar excesivamente y proyectar tus propios miedos y límites culpando al otro, creando conflictos que en última instancia son una forma de mantener el control y evitar la vulnerabilidad.
+
+A menudo te quejas de las limitaciones percibidas impuestas por la pareja, mientras inconscientemente impones tus propias restricciones y las justificas culpando al otro. Hay una fuerte atracción hacia figuras de autoridad o parejas mayores, a veces como una forma de mantener una sensación de pequeñez o inferioridad: "Son tan grandes que yo nunca podría alcanzarlos". Esto puede indicar relaciones kármicas con parejas de vidas pasadas.
+
+La expresión emocional puede estar enmascarada o restringida, ya sea construyendo una personalidad fría y distante o buscando validación a través del esfuerzo y el servicio. Estos individuos temen la dependencia, pero aun así pueden encontrarse atrapados en dinámicas codependientes, ya sea como el dependiente o como el que impone la dependencia. Las relaciones rara vez son iguales, y la intimidad puede sentirse arriesgada o amenazante.
+
+Desde la infancia, las figuras de autoridad influyen fuertemente en tu sensación de seguridad, dejándote incierto sobre si alguien realmente te amará y compartirá la vida contigo. Para dominar esta posición, la soledad es esencial. Aprender a estar solo previene la proyección, fomenta el autoconocimiento y te permite entrar en relaciones de verdadera paridad y equilibrio.
+
+Otros patrones comunes incluyen: buscar relaciones "seguras" pero sin pasión para evitar el riesgo emocional; elegir parejas mayores o controladoras que simultáneamente ofrecen seguridad y refuerzan los sentimientos de pequeñez o dependencia; experimentar asociaciones tardías o atracción hacia parejas que te abandonan, obligándote a la introspección y al autoentendimiento; conformarte con relaciones basadas en la apariencia social, el estatus o el éxito externo, que en última instancia traen insatisfacción; dificultades legales, contractuales o comerciales relacionadas con las asociaciones.
+
+La maestría de Saturno en Casa 7 reside en aprender a sentirte cómodo en la soledad, comprender y asumir tus propios límites y miedos, y luego involucrarte en asociaciones equilibradas, maduras y profundamente auténticas. Al desarrollar primero la autosuficiencia y la claridad, puedes crear relaciones seguras y duraderas que reflejen igualdad y crecimiento mutuo.`,
+
+    8: `Sientes recelo ante la intimidad: "No quiero que nadie me conozca verdaderamente". Eres naturalmente desconfiado y te resulta extremadamente difícil abrirte o permitir la cercanía genuina. Luchas por revelarte verdaderamente y a menudo evitas ver al otro plenamente. En cambio, creas estructuras mentales sobre quién crees que es el otro, como una forma de evitar la conexión más profunda y el reconocimiento de las heridas del otro.
+
+Existe un profundo miedo inconsciente al fracaso, al abandono, al rechazo o a perder lo que has logrado en la vida. A menudo intentas controlar la vida y las emociones para evitar enfrentarte a tu propia sombra: tus miedos no reconocidos y sentimientos oscuros. Esto puede manifestarse como bloqueos sexuales, falta de libido o experiencias sexuales superficiales. Te proteges rigurosamente para evitar revivir viejas heridas, y tu rigidez sirve como escudo contra el dolor emocional.
+
+La soledad es un sello distintivo de esta posición. Hay miedo a la vulnerabilidad, a fusionarte demasiado estrechamente con otro y a perder la individualidad o las posesiones. Estos miedos se extienden a emociones como la ira, la envidia o los impulsos instintivos. Debido a esto, a menudo te resulta muy difícil abrirte, y tu rigidez en torno al trauma refuerza una sensación de aislamiento.
+
+También pueden surgir desafíos prácticos o mundanos en áreas como herencias, impuestos o divorcios, y algunos pueden trabajar gestionando las finanzas de otros. Las luchas económicas a menudo reflejan una profunda frustración emocional o sexual.
+
+La maestría de Saturno en Casa 8 reside en la aceptación de la muerte, la transformación y la regeneración. El verdadero crecimiento proviene de descender bajo la superficie de la vida, confrontar la sombra y rendir la necesidad de control. Esto permite acceder a un poder personal más profundo y a la capacidad de mostrarte auténticamente a los demás. Al hacerlo, puedes experimentar verdadera intimidad y fusión.`,
+
+    9: `Fuiste criado bajo creencias religiosas dogmáticas o con una percepción de un Dios punitivo y tiránico, que puede tener raíces kármicas de vidas pasadas.
+
+Tienes miedo al castigo divino y un profundo sentido de culpa. Existe un miedo persistente a no ser lo suficientemente bueno, a fallar ante los ojos de una autoridad superior, y a veces incluso resentimiento hacia Dios, sintiendo ira o frustración con la injusticia percibida.
+
+Eres altamente cauteloso y temes asumir riesgos, creando una tendencia a sobrecontrolar tu futuro o evitar experiencias aventureras o expansivas. Los viajes o las experiencias de aprendizaje pueden sentirse pesados o engorrosos, aunque también llevan un gran potencial de maestría y transformación personal. Una estrategia protectora es el escepticismo o el ateísmo, creando distancia emocional de la autoridad espiritual o religiosa.
+
+Puedes pensar que lo que eres no es suficiente para la vida. Esto puede manifestarse en estructuras rígidas, adherencia estricta a las reglas o intentos de controlar los resultados, a menudo a expensas de la espontaneidad, el asombro y la alegría de la vida.
+
+La maestría de Saturno en Casa 9 reside en crear una espiritualidad personal y auténtica que sea amable, significativa y liberadora. Implica liberar la culpa, confiar en la intuición, abrazar las sorpresas de la vida y permitir que el corazón y el alma guíen las decisiones.`,
+
+    10: `Tienes un profundo miedo al fracaso y a ser percibido como un fracasado. Eres altamente sensible a la crítica y deseas fuertemente el reconocimiento externo. Te sientes obligado a alcanzar posiciones socialmente respetadas, estatus y éxito profesional, a través de un trabajo sólido, reconocido y respetado. La disciplina, el trabajo duro y la dirección son esenciales; el éxito llega a través del esfuerzo sostenido y la perseverancia.
+
+La vida puede sentirse cíclica, con obstáculos repetidos y una sensación de estancamiento. En su expresión más baja, las relaciones con las figuras de autoridad pueden ser conflictivas, reflejando temas no resueltos de la infancia. La baja autoestima a menudo se origina en los primeros años, haciendo necesario encontrar un sentido de individualidad y esencia personal que pueda integrarse en la vida profesional y social.
+
+Existe un vínculo kármico con la madre o una fuerte influencia de la figura materna. Tu impulso puede provenir de honrar a la madre o de rebelarte contra sus expectativas, lo que puede crear conflicto interno. La madre puede haber sido percibida como fría, exigente o carente de calidez emocional. En el mejor de los casos, la madre modela la paciencia y la disciplina, permitiendo al niño internalizar lecciones positivas.
+
+Eres altamente susceptible a cómo te perciben los demás. Tu ego busca el reconocimiento como competente, capaz y fuerte. Puedes juzgar el éxito según el estatus social, la carrera o los logros externos.
+
+Debes trabajar muy duro para alcanzar tus metas. El logro profesional máximo ocurre a menudo más tarde en la vida, alrededor de los 59-60 años. El mal uso del poder o la rápida pérdida de los logros conseguidos con esfuerzo también es posible si no se aprenden las lecciones.
+
+Sin maduración, estos individuos pueden experimentar conflicto con la autoridad o desarrollar una necesidad excesiva de reconocimiento para compensar la baja autoestima infantil. Pueden rechazar completamente la autoridad o volverse excesivamente sumisos. Algunos pueden volverse rígidos, controladores o autoritarios para enmascarar la vulnerabilidad, mientras que otros viven bajo una constante ansiedad sobre lo que los demás piensan.
+
+La maestría de Saturno en Casa 10 reside en descubrir una vocación o trayectoria profesional que se alinee con la expresión de tu esencia y alma, en lugar de las necesidades impulsadas por el ego. Al integrar la disciplina, la paciencia y el propósito auténtico, puedes lograr un impacto duradero en la sociedad y convertirte en un "gran maestro de la vida".`,
+
+    11: `Tienes dinámicas complejas con grupos, amistades y redes sociales. Estos individuos sienten simultáneamente la necesidad de pertenecer y la necesidad de permanecer independientes.
+
+Puedes juzgar al grupo a la vez que sientes que debes participar, porque una parte de ti teme el abandono o el rechazo. Aprender a dejar de sobrejuzgar a los demás y aceptar los vínculos sociales es una tarea clave del desarrollo.
+
+Las amistades no son inmediatas, tardas mucho en de verdad llamar a alguien "amigo". Durante este tiempo, pones a prueba la lealtad y la confianza. Una vez que aceptas a un amigo, eres devoto y protector, aunque puede permanecer una desconfianza latente. Los límites emocionales y la intimidad también son desafiantes, a menudo conectados con heridas kármicas y experiencias de vidas pasadas de abandono.
+
+Puedes sentirte más cómodo con individuos mayores y experimentados que te inspiran y te ayudan a navegar los conflictos internos y el juicio. La integración social puede ser difícil, al igual que el descubrimiento de las metas y aspiraciones personales. Puede surgir frustración por sentir que no puedes alcanzar tus ambiciones, aunque a menudo tienes un talento natural para estructurar caminos para alcanzar objetivos.
+
+La maestría reside en contribuir a los grupos manteniendo la individualidad. Debes ofrecer tus dones únicos sin perder tu sentido de identidad, encontrando el equilibrio entre las necesidades personales y la participación colectiva. Debes ser cauteloso de no enfatizar en exceso el ser diferente o superior, y evitar proyectar actitudes críticas o intolerantes sobre los demás.`,
+
+    12: `Tienes un profundo miedo de perder el control. Tratas de ser frío porque tienes emociones intensas que deseas que no se noten. Hay una fuerte resistencia a liberar el ego, esto puede venir de experiencias de vidas pasadas.
+
+Debes navegar el inconsciente colectivo de manera saludable y sanadora, lo cual puede ser desafiante. El escepticismo, la paranoia inconsciente y el miedo a que algo pueda destruir repentinamente tu vida son comunes. Estos miedos te llevan a evitar la intimidad, a permanecer distraído o a escapar.
+
+Las experiencias prenatales o de la vida temprana, especialmente por influencia de la madre, pueden transmitir miedo y reforzar la necesidad de control.
+
+El control rígido puede parecer protector, pero en última instancia limita el crecimiento. Aunque intentes escapar de las responsabilidades o las presiones externas, debes aprender a hacerte cargo de tu vida. A veces la vida impone restricciones, y esto puede servir como un maestro profundo.
+
+Desafíos como la enfermedad, el confinamiento o el aislamiento pueden servir como experiencias transformadoras, enseñándote los límites del ego y fomentando la resiliencia espiritual y emocional. Al abrazar este proceso, puedes alcanzar una profunda sensación de conexión, humildad y libertad interior.
+
+La maestría reside en aceptar que nada puede ser controlado completamente. El verdadero crecimiento emerge de la humildad, de aprender a enfrentar los miedos y de comprender que el control rígido no proporciona estructura o seguridad real.`,
+  },
+
+  urano: {
+    1: `Eres original e inventivo. Debes encontrar tu propia verdad y tu propio camino, incluso donde no parece existir ninguno. Por encima de todo, te defines por tu necesidad de libertad e independencia. Si te sientes restringido, encuentras falsedad o percibes estructuras limitantes, tiendes a cortar lazos rápida y decisivamente.
+
+Necesitas que te dejen solo para experimentar y así descubrir quién eres verdaderamente y cuáles pueden ser tus aspiraciones auténticas. Sin embargo, estas aspiraciones pueden convertirse en obsesiones, y puedes terminar trastornando tu propia vida por detalles menores.
+
+A menudo cambias de dirección, intereses o rumbo de vida repetidamente. Puede haber un impulso exagerado hacia el cambio: una tendencia a pensar: "Esto está mal, cambiémoslo todo". Esta reacción a veces puede ser extrema.
+
+No sigues naturalmente las reglas, los grupos o las identidades colectivas. No te defines a través de roles sociales. De hecho, seguir a otros te incomoda y puede bloquear tu crecimiento personal. Prefieres liderar antes que seguir, y si te encuentras en una posición subordinada, puedes reaccionar internamente con irritación, sintiendo que deberías estar por encima de la situación.
+
+Emocionalmente, puedes parecer distante o frío. Este desapego te ayuda a mantener la independencia y a evitar ser influenciado por otros. Pero cuidado, puede darse que busques estar en desacuerdo simplemente por el placer de ser diferente. También puedes volverte arrogante, creyéndote el único poseedor de la verdad única.
+
+Si no maduras emocional y psicológicamente, puedes permanecer crónicamente inquieto e insatisfecho, contigo mismo y con la vida en general. Tu personalidad puede experimentar cambios abruptos, haciéndote parecer impredecible o poco fiable a veces.
+
+A menudo hay algo "eléctrico" en ti: en tu mirada, tu cabello, tu presencia o tu apariencia general. Tu estilo puede ser inusual o llamativo. Puedes cultivar consciente o inconscientemente una imagen distintiva.
+
+Si Urano está muy cerca del Ascendente, o fuertemente situado al nacer o en los primeros años de vida, algo marcadamente inusual o inesperado puede haber ocurrido alrededor del momento del nacimiento. Puedes haber experimentado un cambio repentino y disruptivo en la primera infancia. El evento no tiene que ser objetivamente dramático, pero se experimenta subjetivamente como intenso, abrupto y transformador.
+
+Internamente, experimentas poderosos movimientos hacia la auto-renovación. Cuando abrazas el cambio conscientemente en lugar de reactivamente, puedes sentir una profunda sensación de liberación y satisfacción.`,
+
+    2: `Tienes un poderoso deseo de independencia que te empuja a crecer más allá de los valores tradicionales. Vives sin dar mucha importancia a lo que otros consideran fundamental. El dinero te importa principalmente porque puede comprar libertad, no porque busques seguridad, estatus o acumulación por sí mismos.
+
+No quieres sentirte aprisionado por la necesidad de estabilidad material. De hecho, la idea de trabajar únicamente por dinero puede sentirse asfixiante. Si eliges una trayectoria profesional motivada solo por la ganancia financiera, es probable que te sientas profundamente insatisfecho. Tu conflicto interno a menudo suena como: "No quiero trabajar solo para aumentar mi cuenta bancaria, lo que hago tiene que servir a algo más grande". Cuando tu trabajo contribuye a la humanidad, la innovación o el progreso colectivo, te sientes más alineado.
+
+Normalmente prefieres el autoempleo o los emprendimientos independientes, ya que estar subordinado a otros puede sentirse restrictivo. Financieramente, esta posición a menudo trae fluctuaciones. Los ingresos rara vez son completamente estables o se obtienen a través de caminos convencionales. Pueden estar conectados con nuevas tecnologías, innovación, campos electrónicos o actividades no convencionales. Son comunes los períodos de altibajos.
+
+Curiosamente, cuanto más niegas tu necesidad de libertad e intentas forzarte a salarios fijos o seguridad financiera rígida, más estrés experimentas. La inestabilidad financiera tiende a intensificarse cuando intentas conformarte a modelos tradicionales de estabilidad. Debes aceptar que para ti, la abundancia es móvil y dinámica en lugar de fija y predecible.
+
+Si no has desarrollado conscientemente tu propio sistema de valores, la vida puede entregar sacudidas económicas abruptas que te obliguen a reevaluar lo que verdaderamente importa. Estas "sacudidas uranianas" a menudo te empujan a salir del sistema y redefinir tus prioridades. Las crisis en torno a la seguridad material pueden convertirse en catalizadores de un despertar personal.
+
+Estás destinado a construir un sistema de valores profundamente personal y original. Tu originalidad, inventiva, apertura e intuición son recursos que debes aprender a valorar y monetizar de formas auténticas.
+
+Cuando alineas tus ingresos con tu individualidad, el equilibrio se vuelve posible, especialmente cuando pones tus recursos al servicio de algo mayor que tú mismo. Sin embargo, tiendes a infravalorar tus propios logros. Puedes minimizar lo que ganas o creas, como si el éxito material fuera de algún modo secundario o irrelevante.`,
+
+    3: `Tienes una poderosa necesidad de encontrar tu propia forma de comprender el mundo. Estos individuos buscan continuamente su propia perspectiva, ignorando a menudo o intentando liberarse de los marcos mentales que les fueron enseñados en la infancia. No aceptas fácilmente las interpretaciones heredadas de la realidad. En cambio, cuestionas, reinterpretas y a veces desafías abiertamente lo que percibes como obsoleto o falso. A menudo te sientes obligado a señalar lo que está mal en tu entorno.
+
+Tu mente es ágil, rápida e intuitiva. Captas conceptos rápidamente, especialmente cuando has elegido personalmente el tema de estudio. Sin embargo, si el aprendizaje se siente impuesto, aparece la resistencia. Cuando es autodirigida, tu capacidad intelectual es notable: combinas originalidad con claridad y fuertes habilidades de resolución de problemas. Tu ángulo de percepción es consistentemente diferente al de los demás. En el ámbito de las ideas, tiendes a estar adelantado a tu tiempo.
+
+Tu pensamiento rara vez es lineal. Opera a través de saltos, asociaciones, destellos y percepciones repentinas. Debido a esto, otros pueden tener dificultades para seguir tu mapa mental. Tu estilo de comunicación es a menudo inusual: puedes depender mucho de la metáfora, el lenguaje no verbal, las conexiones inesperadas o los cambios abruptos de tema que tienen perfecto sentido para ti pero no siempre para tus oyentes.
+
+La inquietud es común. Necesitas movimiento mental, variedad y estimulación. Incluso dentro de un solo tema, exploras múltiples ángulos. Este constante movimiento interno puede generar tensión mental si no se gestiona conscientemente. Debes aprender a disciplinar y educar tu mente; de lo contrario, pueden desarrollarse tensión nerviosa o pensamiento disperso.
+
+En muchos casos, experimentas cambios significativos durante la infancia: mudanzas repentinas, cambios de entorno o eventos desestabilizadores que te dejan sintiéndote desplazado o psicológicamente perturbado. Puede haber habido disrupciones abruptas que dieron forma a tu temprana percepción del mundo. Como resultado, puedes cargar con una sutil sensación de no pertenecer plenamente.
+
+Las relaciones con los hermanos son a menudo inusuales, distantes, inestables o marcadas por cambios repentinos. La dinámica con los hermanos puede sentirse impredecible o tensa. Los cambios frecuentes de entorno, especialmente las mudanzas, son comunes a lo largo de la vida. Incluso los viajes cortos pueden traer experiencias extrañas, inesperadas o disruptivas.
+
+En su mejor expresión, traes un pensamiento visionario, independencia intelectual y una forma revolucionaria de comunicarte. Pero requiere arraigo consciente. La lección no es simplemente pensar diferente, sino construir una mente que sea a la vez libre y estable.`,
+
+    4: `Puedes sentirte como "la oveja negra de la familia". Eres la persona que se diferencia de su clan, que no continúa la tradición, que instintivamente se resiste a vivir como vivió su familia. Desde una edad temprana, te sientes diferente.
+
+En muchos casos, hay una fuerte sensación de desarraigo. El hogar puede haberse sentido impredecible y disfuncional, un lugar donde uno nunca sabía qué podría pasar a continuación. Esto puede crear hiperalerta desde la infancia: un sistema nervioso que aprendió a permanecer en guardia.
+
+Puede haber habido una falta de contención emocional: insuficiente afecto físico, seguridad o cuidado consistente. Como resultado, pueden desarrollarse una profunda inseguridad interior y una sensación generalizada de desorientación. Puedes pasar gran parte de la vida intentando descubrir lo que verdaderamente significa "hogar".
+
+Los cambios repentinos frecuentes en la familia de origen son comunes: mudanzas abruptas, separaciones, disrupciones o cambios dramáticos en el entorno doméstico. Incluso más tarde en la vida, puede haber mudanzas repentinas o cambios radicales en el espacio vital, incluidas renovaciones impulsivas o elecciones domésticas poco convencionales.
+
+Uno o ambos padres pueden haber sido excéntricos, erráticos, emocionalmente no disponibles, desbordados o físicamente ausentes. En algunos casos, los padres pueden haber aparecido y desaparecido de manera impredecible, o pueden haberse sentido aprisionados por la paternidad y, por lo tanto, incapaces de proporcionar un apego estable.
+
+Es común una profunda ambivalencia sobre las raíces. Puedes temer establecerte, porque temes perderte algo mejor en otra parte. Incluso si estableces un hogar estable, pueden haber interrupciones, llevando a un movimiento renovado o a una reestructuración.
+
+Necesitas total libertad dentro de tu entorno doméstico para sentirte a gusto. Los espacios abiertos, las grandes terrazas, el acceso al aire fresco: la amplitud física calma tu sistema nervioso. Tu hogar puede funcionar como un lugar de reunión para amigos cercanos, que son tratados como familia elegida. No es inusual que organices actividades no convencionales, vivas en arreglos comunales o prefieras estilos de vida alternativos.
+
+Psicológicamente, tu tarea es construir tus propios cimientos internos. Esto a menudo requiere sanar prejuicios heredados, inestabilidad emocional y patrones familiares inconscientes. Debes redefinir conscientemente lo que significa la seguridad: no como rigidez, sino como estabilidad interna.`,
+
+    5: `Tienes una necesidad inconsciente pero poderosa de expresar la originalidad y la innovación. La creación es fundamental para ti y debes respetarla. Estás casi obligado a crear, y no de manera convencional. Necesitas generar algo únicamente tuyo.
+
+La inspiración golpea repentinamente, como un rayo. Tus intereses creativos pueden surgir abruptamente y desaparecer con la misma rapidez. Cualquier cosa que produzcas puede sentirse diferente, innovadora o adelantada a su tiempo. A pesar de esto, sueles sentir que podría haber sido mejor. Tienes un impulso inquieto de reinventar continuamente cómo y qué proyectas en el mundo.
+
+Si esta energía creativa se reprime —si te vuelves excesivamente rígido, temeroso o con miedo a la crítica— puedes perder vitalidad y sentirte desconectado de tu chispa interior. A un nivel más profundo, puede haber un miedo oculto: "Si la gente ve verdaderamente lo diferente que soy, no me amarán". Esto crea una tensión sutil entre la necesidad de destacar y la necesidad de ser aceptado. Debes redirigir estos pensamientos y recordar que quien verdaderamente te ame, te amará precisamente porque lo es.
+
+Tu vida interior es un constante juego de renovación: experimentar con la identidad, la estética y los modos de autoexpresión. Debes actualizar regularmente la forma en que te muestras al mundo.
+
+Las relaciones románticas son a menudo no convencionales, exóticas o intelectualmente estimulantes. Te enamoras súbita e intensamente, y puedes desenamorarte con la misma rapidez cuando la emoción se desvanece o se instala la previsibilidad. Para ti, el estancamiento emocional puede sentirse asfixiante. Las relaciones que pierden espontaneidad corren el riesgo de finales abruptos.
+
+Tener hijos puede desencadenar ambivalencia. Por un lado, puedes apoyar enfoques progresistas e innovadores de la educación y fomentar la libertad y la individualidad en tus hijos. Por otro lado, la paternidad/maternidad puede sentirse inconscientemente como una pérdida de libertad o una forma de encarcelamiento. En algunos casos, esto puede llevar a la distancia emocional, la inconsistencia o incluso el abandono.
+
+También puedes experimentar extremos en empresas especulativas, como el mercado de valores: ganancias repentinas o pérdidas repentinas.
+
+A medida que maduras, te sientes cada vez más atraído por lo que otros consideran extraño, excéntrico o vanguardista. Tu plenitud creativa a menudo reside en explorar lo que está adelantado a tu tiempo.`,
+
+    6: `Tu Vida cotidiana es un campo de despertar.
+
+Todo en el entorno externo —compañeros de trabajo, rutinas, obligaciones, incluso irritaciones menores— actúa como un espejo. Lo que observas afuera refleja algo no resuelto dentro de ti. Si comprendes esto y trabajas a un nivel profundo de autoconciencia, esta posición se vuelve profundamente transformadora. Si no lo haces, el cuerpo habla.
+
+Eres altamente propenso a síntomas psicosomáticos: problemas físicos que son difíciles de diagnosticar y que a menudo aparecen cuando te sientes atrapado, incómodo, sobrecontrolado o privado de libertad. Estas dolencias pueden funcionar inconscientemente como una forma de detener situaciones que no puedes confrontar conscientemente. La ansiedad, el pensamiento obsesivo, la hiperactividad mental y la tensión nerviosa.
+
+Tu sistema nervioso es un punto débil. Tiende a sobrestimularse por el pensamiento excesivo o el estrés. También puede haber una tendencia hacia las alergias o los desequilibrios relacionados con el estrés. Por esta razón, te beneficias enormemente de comprender que la mente, el cuerpo y las emociones funcionan como un sistema integrado.
+
+Te sientes naturalmente atraído por la medicina alternativa, las terapias holísticas y los enfoques innovadores que conectan la salud mental y física.
+
+Los límites son una lección central de vida. Debes aprender a poner límites cuando algo se siente aprisionante, pero sin reaccionar explosivamente. La tendencia puede ser soportar la incomodidad hasta reaccionar súbitamente de manera desproporcionada. Por ejemplo, puedes sentirte controlado, internalizarlo y luego explotar en lugar de afirmar tus necesidades con calma antes. La tarea más profunda es reconocer lo que estás atrayendo a tu vida y cómo refleja áreas donde aún no has asumido la responsabilidad de ti mismo.
+
+Luchas con las rutinas impuestas. Los horarios obligatorios, las jerarquías rígidas y la microgestión se sienten asfixiantes. El entorno laboral creará tensión constantemente si no se te da autonomía sobre tu tiempo y métodos. No toleras fácilmente a los jefes. Sin embargo, si te dicen lo que se necesita hacer pero te permiten libertad sobre cómo y cuándo hacerlo, rindes mucho mejor.
+
+Necesitas entusiasmo en tus tareas. La rutina sin sentido es tóxica para ti. Incluso las tareas domésticas diarias pueden convertirse en una fuente de rebeldía a menos que encuentres formas de innovar o hacerlas más atractivas.
+
+Eres excepcionalmente original al resolver problemas, especialmente los problemas de otras personas. Piensas de maneras alternativas y futuristas y a menudo encuentras soluciones no convencionales que otros pasan por alto. La colaboración funciona mejor que la subordinación; te va bien intercambiando ideas con iguales en lugar de ser controlado desde arriba.
+
+Aprende a escuchar al cuerpo antes de que tenga que gritar.`,
+
+    7: `Te define un fuerte deseo de asociaciones no convencionales. Estos individuos no están interesados en relaciones basadas en la conformidad, el miedo a la soledad o las expectativas sociales. Para permanecer con alguien, la relación debe sentirse estimulante, creativa, honesta y viva.
+
+No puedes sentirte fusionado o dependiente de tu pareja. Necesitas espacio, intereses separados y una identidad que exista fuera de la relación. Ser conocido meramente como "la pareja de alguien" se siente asfixiante. Tu individualidad debe permanecer intacta.
+
+A menudo hay una herida subyacente en torno al abandono. Paradójicamente, la profunda necesidad de independencia puede coexistir con el miedo a ser abandonado. Si la libertad no se integra conscientemente en la relación, pueden ocurrir separaciones repentinas: divorcios, rupturas abruptas o incluso viudez en algunos casos. Los finales tienden a ser inesperados y disruptivos.
+
+Puedes sentirte atraído por parejas inusuales, excéntricas, brillantes, inestables o emocionalmente impredecibles. A veces "te enamoras del genio loco". La atracción puede llegar súbita e intensamente, y desaparecer con la misma rapidez si la relación se vuelve estancada o predecible.
+
+En general, las relaciones mejoran significativamente después de la madurez emocional. Una vez que sabes quién eres y qué tipo de espacio requieres, las asociaciones se vuelven más estables, no porque se vuelvan convencionales, sino porque se vuelven auténticas. Sin embargo, incluso entonces, la relación debe evolucionar contigo. Sueles tener períodos de renovación, reestructuración o crisis en las asociaciones.
+
+Los finales repentinos, las crisis relacionales y la insatisfacción son temas comunes si el crecimiento y la libertad no se honran conscientemente.
+
+En tu interacción con el público o la sociedad en general, puedes aportar ideas frescas y modelos relacionales innovadores. Puedes ganar reputación como rebelde en el amor o pionero de nuevas estructuras de asociación. A veces te conviertes en un ejemplo al que otros miran: un líder que redefine cómo pueden funcionar las relaciones.
+
+La libertad debe coexistir con las relaciones, o las relaciones se romperán.`,
+
+    8: `Experimentas transiciones repentinas e irreversibles a lo largo de las diferentes fases de la vida. Los capítulos importantes de la vida a menudo terminan de manera abrupta e inesperada. En algunos casos, esta posición también puede indicar una muerte súbita o inesperada.
+
+Tienes pasiones e intereses oscuros y sexuales que pueden sentirse como impulsos intensos, crudos o desestabilizadores. Puedes experimentar estos instintos como limitantes o potencialmente destructivos, llevándote a un deseo interno de purificación, autodominio o transformación radical.
+
+A veces este impulso te empuja a ponerte a prueba a través de situaciones extremas, creando consciente o inconscientemente crisis para demostrar que puedes superar tus deseos, miedos o compulsiones. La vida puede sentirse como una serie de transformaciones diseñadas para forzar la evolución psicológica.
+
+Sexualmente, esta posición puede manifestarse a través de un amplio espectro: desde el deseo intenso y desinhibido hasta el desapego emocional o incluso la frialdad. A menudo hay una profunda necesidad de redefinir la sexualidad de manera personal y no convencional. Para algunos, esto puede incluir explorar expresiones alternativas de la intimidad o dinámicas no tradicionales. Sin embargo, en última instancia, suele haber un impulso subyacente de trascender los impulsos instintivos e integrar la sexualidad en un nivel superior de conciencia.
+
+Existe una fuerte tendencia a mirar bajo la superficie de la existencia, buscando leyes ocultas, verdades más profundas o principios absolutos que rigen la vida. Los intereses pueden incluir temas como la metafísica, las ciencias ocultas, la física, la astrología o la psicología. Las preguntas en torno a la muerte, la transformación y lo que hay más allá de la realidad material son comunes. Te sientes atraído por comprender las estructuras invisibles del poder y la vida.
+
+Puedes tener cambios financieros a través de herencias, matrimonio, asociaciones o bienes conjuntos. Son posibles ganancias o pérdidas repentinas. Curiosamente, a menudo dejas atrás más de lo que recibes —simbólicamente y a veces materialmente—, ya que tu vida tiende a transformar no solo a ti mismo sino también a tu entorno.
+
+Hay un gran potencial para la auto-renovación radical. Estos individuos pueden "destruir" versiones antiguas de sí mismos para reinventar quiénes son. Cuando se maneja conscientemente, esto se convierte en una poderosa capacidad de renacimiento psicológico en lugar de crisis.
+
+Sin embargo, debes ser cauteloso con el mal uso del poder: ya sea emocional, sexual, financiero o psicológico. Debes integrar las energías intensas que viven en ti para convertirlas en un camino de profunda transformación y liberación del condicionamiento inconsciente.`,
+
+    9: `Tienes una fuerte aversión a los sistemas establecidos, la ortodoxia o las creencias impuestas. Estos individuos no se sienten cómodos siguiendo filosofías tradicionales simplemente porque son ampliamente aceptadas. En cambio, buscas una filosofía personal: una que sea auténtica, liberadora y capaz de expandir tus horizontes.
+
+Tu búsqueda de toda la vida es descubrir la verdad a tu manera. Esta búsqueda continúa a lo largo de tu vida, deconstruyendo constantemente lo conocido para llegar a algo nuevo, algo más expansivo. Necesitas libertad de pensamiento y no puedes tolerar sentirte controlado, instruido o presionado ideológicamente.
+
+Tu visión del mundo es progresista. Tiendes a apoyar la innovación en la educación, la ley, la religión y las estructuras sociales. A menudo estás adelantado a tu tiempo en tus creencias y puedes desafiar sistemas obsoletos.
+
+Sin embargo, tus filosofías a veces pueden volverse demasiado abstractas o poco prácticas. Si eres capaz de aterrizar tus ideas y traducir lo abstracto en acción concreta, puedes convertirte en un pensador altamente original, incluso un filósofo o visionario. En la mejor expresión de esta posición, puedes funcionar como un reformador inspirado o una mente profética. Si no se equilibra, tu desapego intelectual puede convertirse en escepticismo o frialdad emocional.
+
+A menudo hay una sensación de ser un "excéntrico divino": alguien iluminado por una visión no convencional. Tu comprensión puede sentirse repentina, intuitiva y revolucionaria, en lugar de gradual o metódica.
+
+Los viajes juegan un papel significativo en tu evolución. Los viajes de larga distancia, las culturas extranjeras y las experiencias aventureras pueden desencadenar profundos cambios de vida. A través de los viajes, puedes descubrir nuevas perspectivas que transforman toda tu visión del mundo e incluso alteran el curso de tu vida. Los viajes rara vez son superficiales para ti: tienden a ser catalíticos.`,
+
+    10: `Tienes una fuerte necesidad de contribuir con algo nuevo y significativo a la sociedad. Estos individuos no se sienten satisfechos trabajando únicamente por dinero o gratificación personal. Tu vida profesional debe tener un propósito más amplio: necesita alinearse con tus valores e idealmente beneficiar a otros.
+
+No puedes tolerar trabajar en entornos donde estás fundamentalmente en desacuerdo con los principios o políticas de la empresa. Si hay un conflicto de valores, a menudo te irás. La autenticidad en tu carrera es esencial. Necesitas consonancia entre tus ideales personales y la organización para la que trabajas.
+
+Tu trayectoria profesional rara vez es convencional. Puedes experimentar cambios repentinos e inesperados en la dirección de tu carrera. Sin embargo, a diferencia de las disrupciones puramente externas, estos cambios a veces pueden ser elegidos conscientemente, impulsados por tu necesidad de renovación y alineación.
+
+Puedes pasar de un trabajo a otro en busca de mayor significado, innovación o estimulación intelectual. Una vez que logras lo que estabas buscando, puedes sentirte obligado a transformar la situación nuevamente, comenzando de nuevo en lugar de permanecer estático.
+
+Necesitas reconocer que necesitas libertad y originalidad, sino la vida puede desencadenar cambios abruptos en tu estatus profesional o social. Los cambios repentinos en la carrera son comunes con esta posición, especialmente si la libertad interior está reprimida.
+
+Aunque puedas desear el reconocimiento, la fama no siempre se logra. Paradójicamente, aunque quieres ser reconocido por tu originalidad, tu camino a menudo prioriza la innovación sobre la visibilidad.
+
+El trabajo es más gratificante cuando sirve a la sociedad de alguna manera. Los roles rutinarios y puramente impulsados por las ganancias tienden a sentirse vacíos. Prefieres contribuciones significativas al éxito convencional.
+
+Uno de los padres puede haber sido excéntrico, no convencional, altamente liberal, emocionalmente despegado o impredecible. Esto puede crear una sensación infantil de inestabilidad o falta de protección, a veces descrita como una sensación de insuficiente arraigo o "nido". Tales experiencias pueden moldear tu relación de por vida con la autoridad y la estructura.
+
+Deseas reformar los sistemas desde dentro. Tu vocación a menudo implica innovación, progreso y contribución social, incluso si tu camino no es convencional.`,
+
+    11: `Expresas un profundo deseo de unidad, conciencia colectiva y el sentimiento de que "todos somos uno". En un alto nivel de expresión, eres capaz de verte reflejado en otro ser: una profunda sensación de identificación con la humanidad. Esta conciencia puede sentirse liberadora y expansiva.
+
+Sin embargo, en un nivel inferior de expresión, esta necesidad de unidad puede manifestarse como dependencia de la pertenencia a un grupo o de la validación social. Puede haber un fuerte deseo de pertenecer a un grupo que comparta ideales, visiones u objetivos progresistas similares. Puedes buscar la amistad como una forma de confirmación de identidad. Si la otra persona no cumple con tus estándares, puedes seguir adelante y continuar buscando.
+
+La amistad es central en tu vida. Los amigos a menudo actúan como catalizadores importantes de transformación. En muchos casos, la familia elegida se vuelve tan importante —o incluso más importante— que la familia biológica. A través de las amistades, experimentas cambios y despertares importantes en la vida.
+
+Tienes expectativas muy claras respecto a la amistad. Tiendes a elegir personas que comparten ideales similares o visiones orientadas al futuro, aunque los individuos dentro del grupo pueden no ser necesariamente compatibles entre sí. Eres leal a aquellos que se alinean con tus valores y haces esfuerzos sinceros para no decepcionar o traicionar a tus amigos.
+
+Algunos individuos con esta posición sienten que la humanidad misma es una sola familia unificada, sin ver una separación fundamental entre ellos y los demás. Esta perspectiva universal es parte de tu camino evolutivo.
+
+Necesitas pertenecer a grupos que compartan afinidades, ideales u objetivos colectivos. Dentro de tales grupos, a menudo actúas como innovador, motivador o promotor del cambio. Puedes ser altamente solidario con los movimientos sociales, las causas progresistas o las ideas revolucionarias.
+
+Tus metas, ideales y afiliaciones pueden cambiar súbita e inesperadamente. Puedes cambiar de grupos, comunidades o visiones a largo plazo en un corto período de tiempo. Los viajes en grupo son comunes. Las experiencias colectivas en el extranjero o los viajes compartidos a menudo juegan un papel importante en tu transformación.`,
+
+    12: `Operas a un nivel profundo e inconsciente. Eres capaz de acceder tanto a tu inconsciente personal como al inconsciente colectivo de formas innovadoras e inusuales. Tu intuición puede estar altamente desarrollada, permitiéndote percibir capas sutiles de la realidad, incluidos los patrones del pasado, las posibilidades futuras y las dimensiones ocultas de la experiencia.
+
+Cuando está bien aspectado, esta posición puede indicar profunda sabiduría, compasión y comprensión instintiva. A menudo hay una capacidad casi compulsiva de percibir la totalidad de una situación: intuir lo que otros sienten y empatizar profundamente. En su expresión más elevada, esto puede apoyar la percepción espiritual, la conciencia visionaria o la participación en el conocimiento esotérico. En algunos casos, incluso puede haber atracción hacia sociedades secretas, sistemas ocultos o movimientos clandestinos.
+
+Sin embargo, si está mal integrado, puede haber una tendencia a buscar estados alterados de conciencia para acceder a estas capas más profundas, a veces a través del escapismo o de sustancias. Pueden ocurrir experiencias de disociación, estados de trance o la sensación de estar "fuera del cuerpo". La lección clave es la integración consciente en lugar del escape.
+
+Aunque posees fuertes tendencias independientes, puedes luchar por equilibrar esta necesidad con sentimientos de soledad o abandono. Paradójicamente, puedes sentirte al mismo tiempo altamente autosuficiente y profundamente aislado. A menudo hay una necesidad de retiro periódico: tiempo a solas para la recalibración interna. Si no te permites conscientemente la soledad, la vida puede crear situaciones que fuercen el aislamiento a través de enfermedades, accidentes o eventos inesperados.
+
+La educación de la mente y la integración del ego son esenciales. En esta casa, el ego no es el conductor central; en cambio, dominan los patrones inconscientes. Por lo tanto, la conciencia es clave para evitar la proyección y la atracción inconsciente de situaciones desestabilizadoras.
+
+Durante el embarazo o los primeros períodos gestacionales, pueden ocurrir circunstancias inusuales o inesperadas, particularmente en conexión con cambios repentinos, separaciones o anomalías que afecten a la madre o al niño.
+
+Esta posición, representa el potencial para el despertar espiritual a través de la exploración interna no convencional. Cuando se integra conscientemente, puede indicar una persona que tiende un puente entre el inconsciente personal y el colectivo de formas originales y transformadoras.`,
+  },
+
+  neptuno: {
+    1: `Una parte de ti debe de renunciar al "yo" y aceptar que parte de tu misión es convertirte en reflejo de quienes te rodean y de lo que estos necesitan. Debido a esta falsa fusión, los demás pueden pensar que han encontrado a alguien que realmente los comprende y satisface sus necesidades, hasta que se dan cuenta de que eres así con todo el mundo.
+
+Te disfrazas de lo que el otro necesita. Te moldeas, dependiendo de las circunstancias, a imagen y semejanza de quienes te rodean.
+
+Puedes ser percibido como errante, carente de objetivos que con frecuencia caen en el papel de víctimas: te doy todo lo que creo que quieres para que me ames "como mi madre no me amó". Cuidado con tratar de acoger a pequeños seres heridos para salvarlos.
+
+Tienes muchas posibilidades de caer en adicciones escapistas como las drogas y el alcohol. También sueles tener pocas ganas de vivir; sientes nostalgia de una nada desconocida. Debes tener cuidado con el exceso de fantasía.
+
+En un aspecto más positivo, eres un creador que extrae tus ideas de repente de algún lugar intangible.`,
+
+    2: `Tienes valores alterados relacionados con los valores y el dinero: puedes sentir culpa por lo que posees, pensando que debería pertenecer a todos, o crees que el mundo está en deuda contigo y consideras que lo que otros tienen también debería ser tuyo (aunque no te guste o no te sea de utilidad).
+
+Ambos casos hacen que estés crónicamente insatisfecho y vivir situaciones extrañas e inusuales en torno al dinero.
+
+En el mejor de los casos, descubrirás que tu verdadero tesoro está compuesto por valores internos y te centrarás en ellos, aunque algunos, al descubrir esto, acaban renunciando a todo lo demás.
+
+Tienes tendencia a menospreciar tus dones innatos, lo que te causa más inseguridad que estabilidad. Sin embargo, a medida que maduras puedes convertirte en una persona con grandes habilidades para materializar asuntos relacionados con los recursos (siempre que aceptes tus dones mágicos).
+
+Dotas a tus posesiones de vida emocional.
+
+Es posible que tengas una "profesión neptuniana": actor, artes adivinatorias, moda, terapeutas — por empatía —, artista, marketing…
+
+Es recomendable que practiques actividades físicas (yoga, danza…).`,
+
+    3: `Puede generarte confusión, dispersión e imprecisión mental; te cuesta la mente analítica. En sentido positivo, aunque quizás nunca llegues a ser bueno en el análisis, eres capaz de percibir el mensaje bajo el mensaje.
+
+Puedes engañarte a ti mismo al no registrar mentalmente nada que no sea bello o bueno. También tiendes a creer que estás creando ideas o que tu pensamiento es único cuando, en realidad, lo has robado al asimilarlo de los demás. Aunque esto no resta encanto, si es lo que quieres conseguir, eres capaz de cautivar a tus interlocutores porque puedes evocar, a través del lenguaje, emociones o sentimientos y lo abstracto. También puede dar telepatía.
+
+En el peor de los casos, lleva a problemas mentales, alucinaciones, paranoias…
+
+Es frecuente que tengas dificultades en el primer período de aprendizaje y escolarización debido a problemas de concentración. Más adelante puedes tener una necesidad compulsiva de estudiar, de saber para cruzar los límites de lo conocido, aunque normalmente no lo conseguirás.
+
+Prefieres formas alternativas de expresión como el teatro, la danza, la música…
+
+Sueles sentirte responsable de tus hermanos e incluso de tus vecinos y otras personas cercanas. Respecto a los hermanos, es posible que alguno de ellos sufra alguna disfunción mental o física, tener problemas con las drogas o incluso haber muerto y te sientes de algún modo responsable. O puedes ser hijo único y que nunca aceptes del todo este hecho; puedes inventar compañeros imaginarios para aliviar la soledad que sientes.`,
+
+    4: `En esta posición suele haber un mayor anhelo de Hogar; te resulta muy difícil anclarte, sentir la seguridad del nido o sentir que tienes raíces. Quizás por eso recuerdes situaciones idílicas de la primera infancia (idealización del padre o de la madre), que anclan al sujeto en ese pasado remoto que siempre sale ganando en comparación con su presente, y que no tiene por qué ser cierto.
+
+Es en esa etapa donde se forman tus valores o se establecen las reglas por las que regirás tu conducta y tu vida. Estas son reglas absorbidas de un entorno que no siempre es real y mucho menos útil.
+
+En algunos casos indica que en los primeros años tuviste que compartir espacio porque te criaste en comunas u orfanatos, o por sacrificios hechos a causa de la enfermedad de un progenitor. Incluso puedes haberte criado en un entorno espiritual o esotérico o de algún modo secreto.
+
+Es posible que haya secretos familiares.
+
+Es en la última parte de la vida cuando empezarás la búsqueda del hogar perdido de tu alma. No es extraño que pases el último período de tu vida en aislamiento.
+
+A veces indica herencias inmobiliarias que aumentan de valor cuando se llega a ellas.
+
+Prefieres ver el mar o algún tipo de corriente de agua desde tu hogar. Y tiendes a decorarlo de forma idílica, aunque no le saques uso.`,
+
+    5: `Eres muy creativo y tienes una gran capacidad para expresar lo que otros solo intuyen, de formas nuevas y precisas. Cuidado con intentar impresionar a los demás dándoles lo que esperan en lugar de ofrecer lo que verdaderamente sientes; o sentir que debe sacrificar tu capacidad creativa e incluso el "yo" por los demás (padres, hijos…).
+
+Si otros puntos de la carta te ayudan a definir quién eres y qué quieres, esta posición te llenará de alegría al poder definir libremente y precisamente tu capacidad creativa. Es muy recomendable que dediques parte de tu tiempo a actividades creativas, por ejemplo, fotografía, música, interpretación.
+
+A nivel romántico, sueles enamorarte de manera absolutamente cinematográfica y romántica, con tendencia a idealizar al amado y también con propensión a buscar personas inalcanzables sobre las que depositar ese amor ideal. En la expresión inferior puedes sentir la necesidad de ser rescatado por la persona amada o bien la necesidad de rescatarla.
+
+Si hay hijos, suelen ser una fuente de problemas: es posible que los abandones o que sientas que has sacrificado tu vida por ellos o que los conviertas en los dioses de tu vida; también pueden adoptarlos o tener abortos y dificultades para tenerlos, viviendo estas opciones de formas muy traumáticas.
+
+De niño fuiste especialmente susceptible porque el mundo exterior te impresiona (y te impresionaba).
+
+Puedes ser hedonista, adicto al placer. Cuidado con el juego y la especulación, no va a salir nada bueno.`,
+
+    6: `Eres el ángel de la guarda que se encarga de ayudar a todos y puedes hundirte en los problemas ajenos.
+
+Tu sistema nervioso es extremadamente sensible y tienes más propensión a las invasiones externas (físicas o no) que pueden dañar tu organismo.
+
+Puedes ser hipocondríaco, pregúntate por qué te da miedo enfermar.
+
+Tendrás problemas para recibir diagnósticos adecuados para tus enfermedades, que suelen tener su raíz en las emociones y en los desequilibrios nerviosos.
+
+También marca un crecimiento desordenado y una tendencia a generar pequeños tumores que no necesariamente tienen que ser graves.
+
+En el mejor caso tienes capacidades sanadoras.
+
+Puedes ser el hombro sobre el que lloran tus compañeros de trabajo o la víctima fácil de engaños. Es recomendable que trabajes en áreas "neptunianas": salud alternativa, el mar, fotografía… Debes tener siempre cuidado con las personas que contratas porque eres capaz de ver su potencial, pero no siempre está manifestado, por lo que puedes sentirte engañado al toparte con la realidad.
+
+Durante algunos períodos trabajarás para sociedades secretas o turbias o para personas que no cumplirán tus expectativas económicas.
+
+Vas a ser extremista en el hogar. Si eres obsesivo con la limpieza, a menudo te ocuparás de ella para no prestar atención a las cosas que son verdaderamente importantes. O al contrario y te resulta muy difícil mantener hábitos. Tus rutinas necesitan estar teñidas de espiritualidad.`,
+
+    7: `Experimentarás mucho dolor y una alegría extrema en tus relaciones más formales y debes aprender a sacar lo mejor de esos estados. Debes tener mucho cuidado de no idolatrar a tus parejas, porque la tendencia siempre va hacia el autoengaño que solo ve lo mejor, incluso cuando no existe.
+
+En cualquier caso es una posición complicada porque necesitas amar y estar siempre con personas, ya que esa es la única forma en que te sientes completo; es tu ideal "romántico" que nunca llega a ser plenamente. Puedes perder tu identidad para involucrarte con el otro hasta límites extremos.
+
+La otra cara de esta moneda da lugar al síndrome del eterno salvador que atrae víctimas y personas con problemas graves que en realidad no quieren ser ayudadas.
+
+Siempre necesitas dar y sacrificarte por los demás, pero en cualquier caso terminas con la sensación de que todo tu esfuerzo ni se reconoce ni se recompensa.
+
+En los mejores casos puedes encontrar personas que te ayuden a crecer en tu vida espiritual, tomando conciencia y responsabilidad de tu fragilidad y aceptando que no encontrarán seres perfectos ni relaciones perfectas.
+
+Es común que mantengas tus relaciones, o parte de ellas, en secreto, incluso cuando ya han terminado.`,
+
+    8: `Sientes que el sexo, la intimidad más profunda y la muerte son buenos terrenos donde se pueden trascender los límites. A través del sexo en concreto encuentras un camino perfecto para trascender el yo limitado y fusionarte con el otro; puedes abandonarte por completo y llegar a la entrega absoluta, o renunciar al sexo por no ser suficientemente espiritual o sentirte decepcionado por no alcanzar el sexo que sabes que existe.
+
+Esta posición puede dar lugar a la promiscuidad como manera de aliviar la soledad y la nostalgia.
+
+Las relaciones íntimas pueden servir para sanar y sanarte. Cuidado porque también puede servirte como vía de escape de la realidad.
+
+En cualquier caso, no te olvides que el arquetipo de Neptuno nunca está satisfecho del todo, por lo que lo más probable es que, una vez establecidas las relaciones, te sientas decepcionado o prefieras fantasear antes que disfrutar de lo que tienes.
+
+No es una buena posición para gestionar dinero ajeno y puede provocar problemas con cuestiones de herencias, impuestos…
+
+Es una posición especialmente psíquica que puede dar una fuerte conexión con planos invisibles y una buena comunicación a través de los sueños. Percibes fácilmente la sombra de los otros.
+
+Puedes anhelar la muerte, la fusión y fantasear con el suicidio. En general tu muerte suele estar rodeada de misterio. En algunos casos has vivido o vivirás una tragedia o un proceso cercano a la muerte que marca un hito en tu existencia.`,
+
+    9: `Buscas la trascendencia y la redención a través de filosofías, cultos y diversas creencias espirituales, hasta que después de muchas decepciones acabas tomando una perspectiva global que te muestra a Dios en todo.
+
+Puedes ser presa fácil de cualquier cosa o cualquiera que te prometa las llaves del cielo. Puedes unirte a movimientos que exigen renunciar a algo como tu ego o tus posesiones.
+
+Esto puede volverse positivo siempre que no te quedes en el sectarismo o creas que imitando a un gurú alcanzarás la iluminación, o caigas en la fervorosa creencia de que tus dogmas son los únicos y que ellos son los mensajeros del cielo.
+
+Buscas respuestas absolutas, por eso es normal que termines decepcionado por las filosofías que sigues; lo más sensato es no depositar nunca la fe en algo externo, ni persona ni filosofía — es mejor buscar dentro.
+
+Tienes una mente muy abierta y capacidad de percibir lo que para otros es inalcanzable; tienes una fuerte intuición y la capacidad de expresar lo poético y lo abstracto con facilidad.
+
+Esta posición puede llevarte a escapar a través de los viajes o a buscar en ellos un camino de iluminación. Puedes ir a países míticos para revivir leyendas o encontrar la espiritualidad que necesitas. Cuidado con los engaños en lugares lejanos y con las decepciones con los compañeros de viaje.
+
+Esta posición puede dar lugar a problemas con las drogas, con los suegros y con los lugares de trabajo.`,
+
+    10: `Te cuesta sentirte sólida en el mundo; ser visible activa tu vulnerabilidad, el mundo activa tu soledad.
+
+Esta posición da lugar a varias posibilidades: una es que te conviertas en objeto de idealización y adoración pública (como los actores), o te conviertas en el protagonista de un gran escándalo (debes tener siempre mucho cuidado con tus secretos porque es muy probable que salgan a la luz), o también puedes verte obligado a mantener tu éxito en secreto.
+
+Puedes dedicarte con éxito a una profesión neptuniana (artes, fotografía, sanación…), o convertirte en la sombra de alguien exitoso. Normalmente has tenido dificultades para decidir qué carrera seguir y a menudo puedes sentirte insatisfecho con tu trabajo profesional, o puedes acabar teniendo que renunciar a él por alguna causa mayor, o puedes utilizar tu prominencia social para ayudar a la gente.
+
+Aunque buscas la profesión ideal, sueles vivir tu carrera como un servicio a la sociedad.
+
+Te cuesta aceptar el poder y solo sigues a quienes te resultan carismáticos o misteriosos.
+
+Tu madre solía interpretar el papel de víctima sacrificial o mártir, o de persona hipersensible que puede inconscientemente frenar tu ascenso profesional despertando en ti sentimientos de culpa. Puedes haberla idealizado mucho. O, finalmente, puedes renunciar a la madre y vivir esto como un sacrificio (si la madre no murió ni te abandonó).`,
+
+    11: `Idealista, soñador, eres el chamán del grupo. Encuentras tu unión con el resto de la existencia a través del servicio a los demás. El propósito de tu altruismo es el altruismo, la ayuda voluntaria y desinteresada que ofreces al otro.
+
+Debes tener especial cuidado de no apegarte a grupos que promuevan la consecución de un objetivo común hasta el punto de perderte de vista a ti mismo y acabar engañado y decepcionado de tu causa original (los grupos pueden tratar temas solidarios o esotéricos, o en los peores casos grupos marginales y adictos).
+
+Debes hacerte cargo de tus responsabilidades y no depositarlas en los grupos ni olvidarlas para pensar que las responsabilidades de los demás son tu prioridad.
+
+Normalmente tu grupo de amigos está compuesto por excéntricos, gente extraña, artistas o drogadictos…
+
+Quizás la característica más importante de esta posición es la imprecisión y la dificultad para definir el camino a seguir en la vida y sus objetivos, grandes o pequeños.`,
+
+    12: `Recuerda que los planetas en la casa doce pueden "no mostrarse", a veces porque representan energías que están "prohibidas" en el clan.
+
+Tienes una fuerte hipersensibilidad que te convierte en una esponja y absorbes lo que ocurre en planos invisibles; de hecho tienes más conciencia de lo que ocurre en lo intangible que en el mundo mundano y material.
+
+El problema es que normalmente no sabes qué hacer con estas percepciones y acabas siendo víctima de tu sensibilidad, viéndote abrumado por cosas que para otros pueden parecer normales. Puedes sentirte invadido, confundido, deprimido, culpable… y vivir esto como crisis periódicas que pueden acabar llevándolos al alcohol, las drogas u otras vías de escape igualmente insanas.
+
+También puedes acabar sufriendo trastornos mentales que te impidan distinguir lo real de lo que no lo es, y dejes de vivir esta realidad que te parece opresiva o aburrida en favor de vidas pasadas o mundos lejanos.
+
+Si desarrollas la consciencia, es una posición óptima para acceder a tu inconsciente, recuperar de él información útil y crecer en contacto con tu maestro interior.
+
+Tienes una fuerte tendencia al escapismo y es común que acabes creando un mundo imaginario para esconderte de una realidad que no sabes cómo enfrentar.
+
+Los períodos de retiro y soledad son siempre buenos e incluso necesarios para ti. Debes centrarte y purificar lo que has absorbido de los demás o del inconsciente colectivo.
+
+Será importante que aprendas a ver y disfrutar la belleza, porque experimentas repetidamente la decepción respecto a lo que el mundo y la vida son y muestran, y en esas desilusiones insistes en ver lo peor de lo que existe, sin registrar la belleza que podría ser un pilar para tu crecimiento.
+
+En esta posición los enemigos no son persistentes, aunque perturban mucho mientras están presentes.
+
+Las pruebas más duras que tendrás que vivir vendrán a través de la soledad, el confinamiento por enfermedad o las adicciones; aunque esto también puede darte la oportunidad de un salto de conciencia.
+
+Hay que tener cuidado porque quieres volver al Uno y no quieres estar en la Tierra. Hay secretos familiares.`,
+  },
+
+  pluton: {
+    1: `Puedes mostrar un carácter enigmático y una excesiva confianza en ti mismo y en tus opiniones. Para ti no existen los términos medios; funcionas de manera absoluta, intensa y obsesiva.
+
+El estilo, el destino y la forma en que afrontas la vida es claramente destructivo y constructivo. Lo ideal es que reconozcas tu lado destructivo para no crear acontecimientos que te obliguen a reestructurarte o que empujen indirectamente a otros a poner fin a lo que incomoda. Lo que nunca podrás hacer es vivir superficialmente sin explorar e investigar las zonas más ocultas de tu realidad.
+
+Instintivamente tiendes a destruir (si es necesario de forma despiadada) cuando te sientes en peligro o demasiado vulnerable ante una situación o persona. Si no ves la posibilidad de destruir la fuente del peligro, puedes sacrificarte a ti mismo. En los peores casos puedes incluso hacerlo por placer. Tienes mucho poder personal y debes aprender a usarlo sin caer en el drama.
+
+En cualquier caso, experimentas periódicamente cambios profundos dentro de ti mismo, en tu vida y en cómo abordas la vida. Tu vida es muy intensa y extraña, con "infiernos" personales que construyen tu identidad, especialmente durante los tránsitos. Tienes el poder de regeneración.
+
+Si Plutón está cerca del Ascendente, el nacimiento ha podido ser complicado tanto para el bebé como para la madre. Puede haber habido peligro de muerte.
+
+Normalmente los primeros años de vida fueron traumáticos y dejaron la impresión de que la existencia es una lucha constante donde nadie —ni siquiera la propia vida— está de tu lado. Esto suele otorgarte el aura de solitario.
+
+En realidad no confías en nadie; prefieres permanecer misterioso, incluso invisible, antes que permitir que los demás conozcan una parte de ti que podría dejarte vulnerable. A menudo esto produce un deseo de poder para mantener el control y no estar a merced de los demás. Cuando decides abrirte, lo haces con la intensidad de un volcán.
+
+Tienes un fuerte atractivo sexual o morboso, dotado de una fuerte energía que sabes usar para enfocarse en sus objetivos. Si maduras, tomas conciencia y empiezas a gestionar tu instinto, tu ego y tu sombra.
+
+Debes aprender a ver a los demás porque tiendes a quedarte atrapado en el "yo". También debes tener cuidado con la ira que te mantiene constantemente a la defensiva, que puede originarse en un trauma de nacimiento (una experiencia de vida o muerte) o en encuentros con personas destructivas que abusaron de ti o te violaron, activando sentimientos de impotencia y dejando la huella de que el mundo es peligroso.
+
+Por todo esto, tienes una baja tolerancia a la frustración; posibles problemas hepáticos y bruxismo.`,
+
+    2: `Debes ir más allá del dinero y descubrir qué te impulsa verdaderamente.
+
+Para algunos, las cosas materiales serán una forma de tener poder; para otros, la base de su atractivo. No es extraño que, cuando alguien se identifica plenamente con una de estas ideas y cree haber llegado a la cima, Plutón de repente se lo quite todo y lo arroje al extremo opuesto del abismo. Esto te da la oportunidad de redescubrirte a un nivel más profundo y desde otra perspectiva.
+
+En esta posición, una vez que la persona madura, Plutón en realidad otorga grandes fortalezas como la capacidad de responder a las crisis, una percepción profunda y poderosa de la realidad, un enfoque claro y contundente, y la capacidad de eliminar todo lo no esencial. Estos son los valores que deberías cultivar.
+
+Es común que tus ingresos provengan de campos alternativos: investigación, minería, psicología, parapsicología, etc. Tus mejores períodos económicos pueden estar vinculados a desastres o crisis sociales. También es posible que tus finanzas cambien drásticamente debido a una herencia.
+
+Cuando quieres algo, prefieres no tener nada antes que conformarte con algo diferente. Tampoco escatimas esfuerzos para conseguir lo que quieres.
+
+Hay rigidez en tu percepción del mundo material y apego a él. Te aterra el cambio y no tener abundancia, pero nunca sientes que tienes suficiente y no puedes disfrutar de lo que tienes porque temes perderlo en el futuro. Puedes evitar salir de tu casa (tu refugio) y retraerte en ti mismo.
+
+También puedes temer mirarte a ti mismo y descubrir tu sombra si implica transformación. Por esta razón tiendes a evitar la intimidad con los demás; el sexo solo se valora por el placer físico. No te gusta compartir y solo te sientes tranquilo cuando nada cambia y tienes dinero.
+
+Esta posición puede indicar escasez económica en la infancia: bien porque los padres proyectaron esta creencia tras no lograr el éxito material, bien porque la familia experimentó realmente grandes pérdidas financieras, o bien porque tuviste que trabajar muy duro para obtener cualquier cosa (padres tacaños o padres que menospreciaron sus propios valores y su valía). O bien trabajas en exceso o te aferras a otros que te proporcionan lo que necesitas.
+
+Cuando se gestiona mal, esta posición puede hacer que te vuelvas posesivo, celoso y propenso a cosificar a las personas.`,
+
+    3: `Posees una mente aguda, profunda y penetrante capaz de llegar rápidamente al núcleo de cualquier cosa. Eres excelente para investigaciones que requieren profundidad. A menudo te interesa estudiar y discutir temas que normalmente son tabú.
+
+Te expresas con claridad y de forma directa, y tus palabras pueden ser muy poderosas —llegando a lugares a los que las palabras de otros no llegan— para bien o para mal.
+
+A menudo tienes tendencias mentales extremas. El peligro de una mente plutoniana es que puede volverse obsesiva y autodestructiva, tendiendo a aferrarse a la culpa, la ira, la frustración, el resentimiento y los rencores.
+
+Debes tener cuidado con el poder mental que posees. Si no lo conoces y controlas, puedes dañar a otros, incluso a través del pensamiento. Con la madurez escuchas más y hablas menos.
+
+Eres muy sensible y te sientes herido cuando alguien no comparte tus ideas.
+
+La escolarización y los entornos de la infancia no te dieron una sensación de seguridad. Muchos abandonan los estudios pronto, aunque siguen sintiendo la necesidad de investigar y explorar diferentes temas más adelante en la vida. Aun así, rara vez se sienten intelectualmente satisfechos.
+
+Con los hermanos suele haber competencia, intrigas y, en los peores casos, connotaciones sexuales.
+
+Tu mente nunca está tranquila y a menudo está dispersa, haciendo constantemente preguntas y buscando información para encontrar respuestas fuera de ti mismo. No te conectas contigo mismo hasta que maduras.
+
+Esperas respuestas del exterior y no digieres bien la información porque, entre otras cosas, no escuchas. Cuando no entiendes algo, te angustias.
+
+También desarrollas apego social porque necesitas hablar con otros para obtener información. Hablas mucho; si no lo haces, tu mente se sobrecarga aún más.
+
+Tu pensamiento puede ser destructivo hacia ti mismo y hacia los demás. Plutón aquí hace que los pensamientos sean emocionales e intensos. Debes aprender a meditar y a sanar los traumas infantiles relacionados con hermanos, primos, escuela, etc., y —de nuevo— a escuchar.`,
+
+    4: `Viviste terror, muerte, destrucción en tu hogar y lo cargas en tu interior.
+
+Esta es una de las posiciones más difíciles de Plutón, e indica fuertes traumas vividos en los primeros años que quedan atrapados bajo la superficie y tiñen el subconsciente. Para defenderse, las personas pueden tratar de no sentir nada, manteniendo un frío autocontrol y una rígida disciplina. Sin embargo, finalmente llega un momento en que todo lo que intentaron enterrar emerge.
+
+Mientras tanto vives con un fuerte temor de que algo "desconocido" destruya su paz o a ellos mismos. Vives con un miedo interno e inconsciente, una sensación de que en cualquier momento todo puede ser destruido. No sabes de dónde puede venir; es una memoria de otras vidas y de la infancia. Eres rígido e intentas mantener el control según tu propio mapa.
+
+El hogar que puedes crear no te dará más paz que el que encontraste al nacer. Esto se debe al miedo inconsciente a que tu volcán interno haga erupción, tiendes a ser manipulador e incluso más rígido dentro de tu hogar mientras intentas mantener el control (aquí es donde te sientes más vulnerable).
+
+El mayor regalo de esta posición es la capacidad absoluta de regeneración. En los momentos en que debes activarla, tienes la oportunidad de renacer purificados y con tus traumas transformados.
+
+Normalmente la figura del padre se experimentó como una fuerte autoridad que ocultaba aspectos oscuros o indeseables. El padre puede haber muerto o desaparecido.
+
+Debido a que la cuarta casa también describe cómo terminamos las cosas, estos nativos tienden a poner finales drásticos a situaciones o relaciones.
+
+A menudo son amantes apasionados de la naturaleza y de todo lo que puede descubrirse dentro de ella (buceo, espeleología, etc.).
+
+Hay una tremenda vulnerabilidad en el niño interior, y de ello surge una compulsión por sentirte emocionalmente seguro, que te lleva a controlar lo que sucede en el hogar y en tu mundo interior.
+
+Esperas que otros te nutran emocionalmente y descuidan el auto-nutrirse. Tu vacío emocional parece insaciable. Debes hacerte responsable de tus emociones.
+
+Puede haber habido un progenitor todopoderoso que sobreprotegió y asfixió al niño, suprimiendo su energía solar. Los sentimientos de amor-odio hacia ese progenitor son comunes. A menudo también hay resentimiento hacia los padres.
+
+Es común que hayas tenido un entorno de violencia o abuso dentro del hogar (incluso si fue causado por alguien externo). Uno de los padres puede haber inspirado terror. De niño absorbiste toda esta "basura" emocional y la almacenaste en tu inconsciente.
+
+Esta posición sugiere una energía ancestral destructiva y oscuridad dentro del linaje familiar, junto con heridas emocionales heredadas de abuso, violencia y resentimiento.
+
+Puedes evitar enfrentarte a tu sombra, tu dolor o tu niño interior. Oscilas entre la ira y la culpa con terror al abandono. Debes enfrentarte y hacerte responsable de tus emociones sin victimizarse. Si confrontas a tus demonios, descubrirás tu poder y podrás sanar tu linaje, tu hogar y tu niño interior.
+
+Cuidado porque puedes sentir una culpa tan grande que te lleve a seguir viviendo con tus padres.
+
+Hay un problema importante con la comida y la asociación; usas la comida para destruirte. Tienes un trabajo que hacer porque tienes un agujero emocional insaciable. Debes tomar conciencia de este agujero emocional que nunca se nutre; tienes que auto-nutrirte de manera saludable, tanto física como emocionalmente.
+
+Hay una relación amor-odio con el padre o la madre. Tienes que trabajar el resentimiento hacia los padres; sugiere que no es la primera vez que habéis sido familia. Debe venir de ti hacer el trabajo de perdón, sanación y dejar ir.
+
+Puedes ver a tu niño interior como "malo" o "perverso". Esto genera indignidad y problemas con el merecimiento. La familia te ha hecho creer que eres el villano.
+
+Lo que más deseas es ser parte de la familia, tener un hogar, pero eso es exactamente lo que agita a tus demonios. El apego se manifiesta como un apego a los mandatos familiares o a las lealtades ciegas. Es importante trabajar el resentimiento contra la familia y soltar los mandatos y los apegos. Para encontrar la paz propia. Tienes que recordar que la familia no es para siempre, que debes ser fiel a ti mismo y que tú eres tu verdadera familia.`,
+
+    5: `Eres muy creativo. Puedes ser muy extrovertido y competir por ser el centro de atención. Puedes ser extremadamente individualista.
+
+Al contrario, te puedes volver muy tímido y esconder tu creatividad porque temes no recibir aplausos, no brillar o ser criticado. En esos casos proyectas tu sombra hacia afuera y no soportas a las personas que brillan. Cuando funcionas así, ignoras tu corazón y te adaptas a lo que tu familia o la sociedad reconoce, buscando aplausos o reconocimiento a través de la persona que creas.
+
+Camuflas el ego y experimentas mucha ira, tristeza, frustración y envidia. Luchas entre la necesidad de sentirte especial y un sentimiento de pequeñez. A menudo experimentas crisis creativas que hacen sentirte perdido, insignificante y mediocre. Puedes creer que la vida te impide tener éxito.
+
+Puedes temer tu impulsividad sexual e intentar controlarla hasta reprimirla. Sin embargo, lo más común es que abuses de esta energía, que se vuelve compulsiva. Las conquistas sexuales pueden convertirse en un medio para obtener o demostrar poder.
+
+Para ti es importante demostrar poder como forma de ser amado y protegido. El amor se asocia con el elogio. Los embarazos y nacimientos pueden ser problemáticos con esta posición. Tener hijos puede ser un trauma muy intenso, especialmente al principio. Puedes volverte posesivo con tus hijos.
+
+La lección es descubrir la singularidad esencial dentro de ti mismo, pero a menudo te aferras a ser visto como especial. Tienes un "agujero negro" de necesidades y requieres más deseo, más reconocimiento. Puede haber tristeza porque al niño interior —que pudo haber sido herido en el pasado— no se le permite expresarse. Siempre debes tener cuidado con los excesos y las tendencias autodestructivas.
+
+Eres muy exigente y a menudo te cuesta reconocer las necesidades de tu pareja o de tus hijos. Incluso puedes destruir a tu familia si no te sientes deseado o tratado como realeza.
+
+Si se integra este arquetipo, puedes vivir desde el corazón y avanzar con poder auténtico. Debes sanar los traumas relacionados con no sentirte visto ni reconocido.`,
+
+    6: `Tienes una mente altamente crítica, analítica y enjuiciadora, con una fuerte tendencia hacia la autoexigencia, el perfeccionismo, el control y la utilidad. Necesitas que todo tenga un propósito y sea productivo, empezando por ti mismo. Si sientes que no estás haciendo algo útil o productivo, puedes experimentar culpa, malestar y sensación de inutilidad. A menudo vives con la creencia de que "nada se puede conseguir sin esfuerzo", pero tu verdadera lección es entender que la vida no se trata de un esfuerzo compulsivo, sino de responsabilidad, entendida como la manifestación consciente de tus dones.
+
+Tienes una fuerte tendencia a ayudar a los demás, pero a menudo no de forma completamente desinteresada. Puedes intentar volverte necesario, indispensable o irreemplazable en la vida de otras personas. Detrás de esta disposición a ayudar suele haber una necesidad de control, validación o reconocimiento. Por eso, cuando no recibes la gratitud, la reciprocidad o el reconocimiento que crees merecer, te llenas de ira, frustración, resentimiento, culpa y autocastigo. Tu ira a menudo sale a través del castigo, la frialdad, la crítica, las exigencias excesivas o el retiro emocional.
+
+Tu gran lección es servir sin controlar: ayudar sin invadir, y entender que no estás aquí para corregir o dominar a los demás, sino para apoyarlos. Debes aprender a servir a los demás en lugar de controlarlos.
+
+A menudo tienes una profunda obsesión con el orden, la organización, los detalles y la perfección. Te resulta difícil tolerar que los demás hagan las cosas de forma diferente porque sientes que sabes exactamente cómo debe hacerse algo, en qué orden y en qué momento. Esto puede volverte obsesivo, rígido, controlador y perfeccionista, con dificultad para delegar o relajarte. Tienes miedo de que los demás hagan las cosas "mal" o de forma imperfecta, y ese miedo refuerza tu necesidad de control.
+
+Tu mente puede llegar a estar tan centrada en encontrar errores, corregir defectos y alcanzar un estándar imposible de perfección que acaban paralizándote. Puedes dejar de vivir plenamente porque estás constantemente esperando el momento "adecuado", el método "adecuado" o un estado de perfección que nunca llega. Incluso actividades cotidianas sencillas —como limpiar, ordenar o elegir la ropa— pueden volverse excesivamente importantes, pesadas o problemáticas.
+
+Tiendes a ser hiperracional, desconectándote a menudo de tu intuición, tus emociones y tu sensibilidad interna. Tienes un profundo miedo al caos —especialmente a tu propio caos interno— y esto intensifica tu necesidad de orden y control. Por eso, a menudo reprimes la vulnerabilidad, el deseo, las necesidades emocionales e incluso tu energía sexual. Puedes tener dificultades para aceptar tus propios deseos, tu cuerpo y lo que realmente sientes, hasta que al final todo se acumula y explota.
+
+Cuando alguien se desconecta del corazón desde joven, resulta muy difícil reconectarse más tarde en la vida. En ti, la carga del juicio, la culpa y la autocrítica es a menudo tan intensa que te desconectas del sentir por completo. Esta desconexión suele tener sus raíces en la infancia. Muy a menudo, uno de los padres —o incluso un abuelo— estaba obsesionado con tus defectos, intentando constantemente corregirlo, mejorarlo o señalarle lo que estaba "mal". Esto deja una huella profunda y crea la creencia interna de que eres defectuoso, nunca suficiente, o solo merecedor de amor si eres útil, eficiente o perfecto.
+
+Por esta herida, debes desarrollar humildad: no del tipo que te hace sentir pequeño, inferior o insignificante, sino del tipo que te permite recordar que estás aquí para mejorar continuamente como ser humano sin destruirte a ti mismo en el proceso. Necesitas sanar los traumas que te hacen percibirte como defectuoso o imperfecto.
+
+Una lección importante para ti es aprender a no hacer nada y aun así sentirte en paz, disfrutar del descanso sin culpa, y crear espacios personales donde puedas escucharte a ti mismo y salir de la mente obsesiva. Necesitas aprender a rendirte al vacío y al caos, a silenciar la mente, y a entender que no todo tiene que ser controlado, mejorado o hecho útil. Sí necesitas actuar en la vida, pero debes aprender a hacer más pensando menos de forma compulsiva.
+
+En cuestiones laborales, esta posición a menudo crea extremos. O trabajas de forma muy libre, con independencia y estructuras flexibles, o te conviertes en esclavo absoluto del trabajo. Sueles trabajar muy duro, y a menudo eres excelente en lo que haces por tu profundidad, precisión y meticulosidad. Sin embargo, tu alto nivel de exigencia, tu búsqueda obsesiva de la imperfección, tu mal carácter, tu rigidez y tu tendencia a los extremos pueden dificultar la colaboración.
+
+Puedes tener problemas con la autoridad y a menudo no llevas bien tener jefes, porque tiendes a sentir que podrías hacer el trabajo mejor que quienes están por encima de ti. Esto puede generar luchas de poder, especialmente con tus superiores.
+
+También puedes disociarte en entornos laborales, distanciándote emocionalmente o colocándote "por encima" de las situaciones como mecanismo de defensa. Si tu trabajo deja de inspirarte puedes crear inconscientemente situaciones límite, conflicto o crisis para irte o para ser obligado a salir.
+
+La salud es un área muy importante con esta posición. Tus enfermedades suelen estar conectadas con la ira reprimida, el exceso de trabajo, la represión emocional y la autoagresión. Lo que no te permite sentir —especialmente la ira, el resentimiento, la frustración o la presión interna— tiende a somatizarse en el cuerpo. La enfermedad aparece como una forma de que tomes conciencia del daño que se están haciendo a sí mismos a través del exceso de control, la sobrecarga, el autoataque y la supresión emocional.
+
+Muy a menudo, si no tratas la causa raíz de una enfermedad, la misma enfermedad vuelve una y otra vez. Plutón utiliza el cuerpo como canal para sacar a la superficie toxinas ocultas, emociones enterradas y patrones inconscientes. En ese sentido, la enfermedad se convierte en una señal de que algo más profundo debe ser visto y transformado. Si no enfrentas la herida subyacente, el cuerpo sigue manifestándola hasta que sean capaces de mirarla con honestidad.
+
+También puede haber casos de obsesión con el autocuidado, las rutinas de salud, las dietas o el control corporal. Puede haber accidentes laborales o enfermedades que dejan consecuencias duraderas, de nuevo, como oportunidades para un profundo autodescubrimiento y transformación.
+
+Aun así, eres físicamente fuerte y normalmente tienes una notable capacidad de recuperación y regeneración.
+
+A medida que maduras, puedes volverte increíblemente poderosa en esta casa. Eres capaz de desarrollar la habilidad de cortar lo que está podrido, eliminar lo tóxico y ayudar a otros a ver lo que se está deteriorando o lo que es insano en sus propias vidas. Puedes convertirte en alguien que verdaderamente entiende cómo la mente afecta al cuerpo, y puedes convertirte en sanador profundo, guía o servidor en el sentido más profundo de la palabra, no a través del control, sino a través de la conciencia, el discernimiento y el servicio genuino.`,
+
+    7: `Tienes experiencias profundas de **abandono, traición, herida emocional, abuso, violación o rechazo**, especialmente por parte de quienes se suponía que debían amarte, protegerte o cuidarte en la infancia.
+
+Volcaron en ti su oscuridad y eso te aplastó, dejándote abrumado y profundamente inseguro en las relaciones. A partir de este punto, puedes entrar en un estado de colapso interno en el que sientes que ya no puedes confiar plenamente en nadie. Por todo esto, es posible que usaras mal tu poder en tus primeras relaciones, especialmente las de pareja.
+
+No has tenido permiso de expresar tu ira y cuando lo hacías, eras castigado, rechazado o emocionalmente destruido. Como resultado, aprendes que enfadarte puede llevar al abandono total o a la soledad absoluta.
+
+Una tarea central de sanación para esta posición es **tomar conciencia de que es seguro sentir la ira**, y luego aprender qué hacer con esa ira de forma consciente, madura y constructiva.
+
+Para ti, las relaciones nunca son superficiales. Son siempre una **fuente de transformación, crisis, muerte, renacimiento, cambio y crecimiento**. A través de la pareja, entras en lo que podría llamarse el inframundo: el lugar donde tus traumas enterrados, complejos, heridas y material inconsciente salen a la superficie. Todo lo que ha sido reprimido, ocultado, negado o aparentemente controlado acabará saliendo a la luz a través de la pareja o de las dinámicas relacionales, a menudo de forma abrupta, cruda, intensa y oscura.
+
+Cuanto más niegues estas heridas internas, más violenta y repentinamente tienden a emerger. Las relaciones se sienten como un viaje por el infierno, pero estos son precisamente los viajes de los que estás destinado a aprender. Después de cada explosión emocional, ruptura o colapso, estás llamado a reordenarte, construirte y reconstruirte, idealmente de una forma más limpia, más consciente y más verdadera.
+
+Esta es el área de la vida donde eres más vulnerable, donde más temes ser destruido, abandonado, humillado o emocionalmente aniquilado. Al mismo tiempo, es también el área donde puedes volverte destructivo hacia la otra persona, hacia ti mismo o hacia lo que ambos habéis construido juntos.
+
+Si no reconoces e integras conscientemente tu propia energía plutoniana, tiendes a atraer parejas que encarnan la sombra que se niegan a ver en sí mismos. En otras palabras, si no asumes tu Plutón, a menudo buscas personas que operan en una expresión plutoniana de baja frecuencia para que la vida pueda mostrarles lo que no estás viendo.
+
+Los demás te usan para ver en ti sus propias sombras: agresión, celos, posesividad, control, manipulación, obsesión, luchas de poder, intensidad sexual, dominación y oscuridad emocional. Otros pueden proyectar su inconsciente sobre ti. Recuerda que mucha oscuridad de la que eres culpado no es tuya.
+
+Tienes un profundo deseo de una pareja **equilibrada, igualitaria y significativa**, mientras que al mismo tiempo mantienes un profundo miedo al dolor que las relaciones pueden traer debido a todo lo que ya has sufrido, te han contado o te imaginas. Anhelas la unión, pero también esperas el peligro. Esto crea una contradicción dolorosa: quieres cercanía y equilibrio, pero temes ser herido, destruido, traicionado o abandonado de nuevo.
+
+Debido a este miedo, a menudo no puedes relajarte lo suficiente para disfrutar verdaderamente del amor. En su lugar, intentas **controlar la relación, vigilar a la otra persona o gestionar el campo emocional** con tanta firmeza que acabas generando la misma ruptura que temes. La presión que pones sobre el vínculo puede llegar a ser tan intensa que finalmente se rompe bajo su propio peso.
+
+El poder es uno de los temas centrales de esta posición. Puedes luchar por crear una distribución justa del poder o de la responsabilidad en las relaciones. O bien entregan todo su poder a la pareja, volviéndote dependiente, sumiso o emocionalmente impotente, o bien tomas todo el poder para ti mismo, dominando el vínculo, controlando a la otra persona o dejándola emocionalmente impotente. Ninguno de los dos extremos funciona.
+
+Tus relaciones suelen ser **kármicas, apasionadas, magnéticas e intensas**. La pasión puede ser tan fuerte que puede quemar a la otra persona o quemarte. Puede haber apego obsesivo, profunda carga erótica, codependencia, posesión emocional y poderosos ciclos de atracción y destrucción. Estas no suelen ser relaciones fáciles; son iniciaciones transformadoras.
+
+Puedes tener experiencias tan traumáticas que te hundan en el abismo emocional más oscuro. Estos finales te dan la oportunidad de descubrir tu capacidad de regenerarte o, si resistes al proceso, de acumular fantasmas no resueltos en oscuras habitaciones internas.
+
+Incluso en la mejor expresión de esta posición, las relaciones plutonianas a menudo necesitan **muertes periódicas para renacer**. Algo en la relación —una dinámica, identidad, rol, patrón de apego o contrato emocional— debe morir para que algo más verdadero pueda emerger.
+
+Una expresión muy evolucionada de esta posición acepta e integra la muerte como parte de la vida, no solo la muerte literal, sino también la muerte de los viejos patrones relacionales, la muerte de las viejas identidades y la muerte de la persona a través de la cual te presentas a los demás.
+
+Cuando esta energía es inconsciente, puede haber ciclos en los que uno "mata" al otro psicológica, emocional o simbólicamente, o ambos participan en una destrucción mutua del vínculo. Cuando la posición está más cultivada y trabajada conscientemente, existe una comprensión clara de que las relaciones se mueven a través de muertes cíclicas y reconstrucciones, y que estos ciclos son parte del crecimiento del alma.
+
+La buena noticia es que esta posición te da una notable capacidad para guiar a otros a través de la crisis, la transición, la muerte emocional y la transformación. Como conoces el inframundo tan íntimamente, puedes ayudar a otros a enfrentar sus propias sombras, oscuridad, duelo y demonios internos. Puedes acompañar a las personas a través de finales, colapsos, iniciaciones y procesos de renacimiento. A veces también sirven como espejo o receptáculo en el que otros cuelgan su oscuridad para que finalmente pueda ser vista.
+
+Puedes tener una poderosa influencia en la sociedad, porque eres capaz de confrontar a otros con verdades que a menudo están ocultas, negadas o temidas. Puedes convertirte en catalizadores de una profunda honestidad emocional y de la transformación colectiva.
+
+A medida que maduras, comienzas a buscar **relaciones trascendentes**: vínculos profundos y significativos, pero ya no construidos sobre el drama, las luchas de poder, la codependencia o la guerra emocional. Con el crecimiento, dejas de necesitar la intensidad por sí misma y comienzas a valorar la verdad, la profundidad, la evolución mutua y la intimidad consciente.
+
+Plutón en la séptima casa da un fuerte magnetismo, atracción, intensidad sexual, presencia y temperamento. Estas personas suelen tener un aura cautivadora que atrae a los demás, incluso cuando no lo intentan. Sin embargo, si Plutón está mal aspectado, también puede haber problemas legales, contratos difíciles, enemigos abiertos o adversarios poderosos.
+
+En última instancia, estos nativos deben aprender a **conocerse profundamente y a funcionar de forma independiente**. Necesitan liberarse de la necesidad de que la otra persona los necesite. Deben dejar de dar, sacrificarse o fusionarse simplemente para evitar el abandono. De lo contrario, se llenan lentamente de resentimiento, rabia reprimida y toxicidad emocional.`,
+
+    8: `Vives con una sensación casi constante de **insatisfacción interna** que es extremadamente difícil de superar. Los impulsos con los que todos nacemos se ven aquí exacerbados y exigen que los reconozcas, los integres y los gestiones conscientemente para que estas fuerzas no tomen el control por la fuerza.
+
+Tanto los impulsos sexuales como los aspectos más oscuros de Plutón —incluyendo la malicia, la sombra y las tendencias destructivas— no puedes simplemente negarlos sin consecuencias. Si estas energías se reprimen, tiendes a explotar de forma incontrolada, pero al mismo tiempo, debes evitar convertirte en víctima de estos impulsos o permitir que la vida sea gobernada por pulsiones compulsivas y obsesivas.
+
+Esta posición también otorga **una fuerza de voluntad extraordinaria en las crisis** y la capacidad de inspirar a otros en momentos de desafío. Estos individuos transforman las vidas de aquellos con quienes entran en contacto, para bien o para mal. Sus impulsos son a menudo excesivos y caóticos, especialmente en las áreas más profundas y ocultas de la vida, y esto puede afectar profundamente las relaciones y las interacciones.
+
+Un tema central para Plutón aquí es **la muerte, la impermanencia y la transformación**, tanto literal como simbólica. A menudo estás fascinado con lo que existe antes, durante y después de la muerte, y puedes relacionarlo con ello de forma científica, espiritual o parapsicológica. Puedes encontrar experiencias cercanas a la muerte, ya sea personalmente o a través de seres queridos, lo que te obliga a una profunda reevaluación de prioridades. En algunos casos, esta conciencia puede generar miedo, impotencia o una necesidad excesiva de control.
+
+Eres muy intuitivo, capaz de percibir cosas que otros no pueden y de percibir capas ocultas bajo la superficie. Sin embargo, debes tener cuidado de no abusar o hacer mal uso de este poder perceptivo para beneficio personal o dominación. Rara vez pasas desapercibido; llevas un fuerte magnetismo, a menudo de naturaleza sexual o erótica, y tiendes a necesitar cierto grado de control en tus relaciones e interacciones.
+
+Plutón aquí está asociado con **traumas infantiles, patrones kármicos, abuso de poder o exposición a la violencia o la muerte**. Tales experiencias a menudo conducen al resentimiento, al ocultamiento y al control internalizado, así como al apego al sufrimiento.
+
+Puedes luchar con crisis internas y encontrar difícil disfrutar de lo que tienes. Tu sombra —incluyendo los deseos sexuales y las emociones reprimidas— puede generar miedo, lo que a veces te lleva a juzgarte a ti mismo y a los demás con dureza.
+
+La lección clave es que tu poder de transformación es la más poderosa. La transformación requiere soltar los apegos, especialmente al drama, al control y al miedo. Cuando maduras, puedes liberarte del miedo, alcanzar una profunda comprensión y reconocer tu propio poder de forma sana y consciente. Esto te permite formar relaciones fructíferas, enriquecer a otros y convertirte en psicólogo, sanador o guía natural.
+
+Plutón en la octava casa no se trata de una simple insatisfacción: produce una **profunda conciencia existencial**. Estos individuos son más conscientes de la muerte que de la vida, plenamente conscientes de que todo es impermanente.
+
+Hay una profunda comprensión de la naturaleza efímera de la existencia, que te obliga a un trabajo interno honesto e intenso: reconocer tu sombra, miedos, demonios y compulsiones inconscientes. Cuanto más se nieguen o repriman, más toman el control de la persona, lo que lleva a reacciones explosivas si se ignoran.
+
+Sueles ser compulsivo, repitiendo inconscientemente acciones que te atrapan en ciclos. Sin embargo, en momentos de crisis o catástrofe, te elevas con una fuerza extraordinaria, a veces realizando hazañas aparentemente sobrehumanas. Después de la crisis, debes permitirte llorar y liberar la tensión acumulada. En estos momentos, también te conviertes en inspiración para otros, guiándoles fuera de su propia oscuridad o "cuevas internas". Cualquiera que esté en contacto con alguien con Plutón en la octava casa experimenta un profundo efecto de antes y después: el encuentro es transformador, para bien o para mal.
+
+Esta posición puede manifestarse como destructividad, autodestructividad, comportamiento enjuiciador y percepción crítica extrema, tanto hacia ellos mismos como hacia los demás. Sin embargo, cuando se integra y madura, te conviertes en **maestro de la transformación, la comprensión profunda y la sanación**, capaz de guiarte y guiar a otros a través de las crisis más profundas.`,
+
+    9: `Te sientes diferente a otros y esto es porque posees una capacidad perceptiva única, pero te resulta difícil poner en palabras lo que ves, comprendes o intuyes. Puedes sentir que tu percepción no resuena con las creencias de tu entorno, lo que puede llevarte a aislarte mental, emocional o espiritualmente.
+
+Tiendes a polarizarte de una de estas dos formas:
+
+1. Aferrándote a creencias heredadas o dogmas, a menudo de forma rígida, lo que puede desencadenar la destrucción y construcción a través de crisis, pérdidas y confrontaciones que te obligan a cuestionar o destruir aquello a lo que te aferras.
+
+2. Búsqueda personal intensa, viajando o explorando de forma obsesiva o fanática, buscando un significado más profundo, una verdad última o un sentido coherente de la existencia. En esta búsqueda, puedes oscilar entre los ideales más altos ("el cielo") y los desafíos internos más oscuros ("el infierno").
+
+Buscas respuestas compulsivamente, a veces volviéndote fanático en tu búsqueda de la verdad. Cuando encuentras una explicación o un sistema de creencias que te da significado, puedes aferrarte a ello para evitar más dolor emocional. Sin embargo, esta posición te exige demoler periódicamente las viejas estructuras o creencias falsas, aunque sea dramático o desestabilizador. Evitar este proceso puede conducir a la depresión, a la crisis de fe o a un bloqueo. En un intento de evitar la destrucción de tus creencias, puedes tratar de convencer a otros para que sigan tu dogma, defendiéndolo frente a perspectivas alternativas.
+
+Tu concepto de la divinidad a menudo está teñido por las cualidades oscuras de Plutón. Puedes percibir a Dios o la realidad última como enjuiciador, punitivo o incluso cruel, lo que crea una actitud defensiva y miedo a cometer errores. Esta perspectiva puede llevar a experiencias intensas de sufrimiento o de apego a la lucha, pero también puede intensificar tu capacidad de experimentar y valorar lo positivo o lo transformador.
+
+A veces, puedes ignorar las preguntas más profundas de la vida, evitando los desafíos filosóficos, espirituales o existenciales. Esto puede producir apatía, escepticismo o desapego, dejándote con la sensación de no poder confiar o creer plenamente.
+
+Independientemente del camino, tienes una capacidad intelectual excepcional y una mente muy desarrollada. Sueles ser curioso, enfocado y preparado para explorar los aspectos intangibles, ocultos u oscuros de la realidad, aunque puedes sentirte insatisfecho con lo que sabes.
+
+Los viajes y la exploración —a menudo fuera de los caminos trillados— juegan un papel importante en tu transformación personal. Los viajes físicos a menudo reflejan viajes internos: a medida que exploras el mundo, te transformas a ti mismo, descubriendo significados y propósitos en el camino.
+
+Las relaciones familiares, especialmente con los suegros o la familia extensa, pueden ser traumáticas en algunos casos, reflejando dinámicas ocultas, control o luchas de poder.
+
+A medida que maduras, entiendes que "cuanto más lejos vas hacia afuera, más profundo vas hacia adentro". Tu crecimiento personal requiere ir más allá de la exploración externa hacia el descubrimiento interno, profundizando en tu comprensión espiritual e intelectual.
+
+Debes aprender a escuchar a los demás, a expresar tus percepciones con claridad y a integrar tus experiencias. Finalmente, te das cuenta de que la verdad y el significado que buscas existen dentro de ti mismo, y ya no te sientes frustrado cuando los demás no te comprenden.`,
+
+    10: `Eres autoritario y ambicioso, con una fuerte necesidad de estar al mando y por encima de los demás. Puedes sentir un sentido de misión o propósito que crees que nadie más puede apoyar o ayudar. A menudo te cuesta delegar o colaborar, queriendo que las cosas se hagan exactamente a tu manera.
+
+Tu carrera y vida pública son áreas donde experimentas transformaciones personales importantes y donde tienes el potencial de transformar también a otros. Requieres que tu trabajo y vocación te impliquen apasionadamente, y abordas tu profesión con alta intensidad.
+
+A menudo hay un impulso compulsivo de éxito, reconocimiento y poder, acompañado de un fuerte apego al trabajo y a las metas personales. Esta posición a menudo refleja abuso de poder en vidas pasadas, dejando memoria kármica que da forma a tus experiencias actuales.
+
+Uno o ambos padres pueden haber sido extremadamente exigentes en cuanto a tus logros sin que a ti te interesara, dando gran importancia a su imagen y estableciendo reglas estrictas, a veces duras. Pudiste haber sentido que el fracaso llevaría al abandono, al rechazo o a la destrucción emocional. Tus padres pueden haber sido críticos, controladores o dominantes, a veces forzándote a una profesión o camino.
+
+Como resultado, la supervivencia a menudo significaba desconectarte de tu niño interior, de tus necesidades emocionales y del "templo" dentro de ti mismo. La seguridad emocional se identifica con el éxito profesional, pero por mucho que logres, la herida emocional permanece, llevando al miedo constante al fracaso o a la pérdida. También puedes haber experimentado intimidación, humillación o violencia por parte de figuras de autoridad en la infancia o adolescencia, lo que fomenta la desconfianza y rechazo hacia quienes ocupan posiciones de poder.
+
+Puedes rechazar la autoridad e inconscientemente repetir los mismos patrones de control que experimentaste, intentando dominar, gestionar en exceso o seguir siendo el último en decidir. Luchas con el liderazgo porque tu deseo de estar por encima de los demás entra en conflicto con la necesidad de estimular el crecimiento de los demás o manifestar el potencial colectivo. Puedes cargar con resentimiento hacia los padres o jefes, con el miedo de que el mundo te destruya, y sentirte obligado a afirmar el dominio para protegerse.
+
+A menudo trabajas en exceso, temes el fracaso y sientes culpa por no lograr. Incluso puedes sabotear tu propio éxito para rebelarte contra las expectativas paternas.
+
+Las crisis vocacionales son comunes, destinadas a dirigirte hacia adentro, hacia el autodescubrimiento y la felicidad. La sanación requiere abordar el vacío del niño interior y reconectar con tus motivaciones auténticas.
+
+A medida que maduras, te despegarás del apego compulsivo a las metas y los resultados, entiendes que esto es porque debido a los patrones que siguieron tus padres para cuidarte, si no logras, puedes pensar que no vales.
+
+Llegarás a entender que tu rol social y autoridad tienen un propósito, no meramente para beneficio personal. El verdadero liderazgo emerge cuando guías a otros manteniendo tu propia individualidad, transformando tu esfera profesional y el mundo que te rodea.
+
+Mucho cuidado con destruir absolutamente todo; cuando lo tienes en la sombra, se expresa inconscientemente, y destrozas familias, parejas y empresas. Es muy probable que al menos una vez en la vida te quedes absolutamente sin nada, para que entiendas que esto solo es un juego y dejes de apegarte.
+
+La lección no se trata del poder por sí mismo, sino de permitir que cada persona —incluyéndote a ti mismo— manifieste su mejor potencial. En frecuencias más altas, te conviertes en verdadero líder, capaz de crear realidades, inspirar a otros y usar la autoridad de forma responsable y consciente.`,
+
+    11: `Sientes profundamente que no encajas con los seres humanos, pero a la vez sientes una fuerte necesidad de pertenecer para evitar la soledad.
+
+Desde la infancia, te sentiste traicionado, rechazado, infravalorado o no amado por tus amigos u otros, creando un trauma profundo y un significativo resentimiento interno. Este resentimiento puede llevarte al aislamiento voluntario o, por el contrario, a volverte muy controlador con tus amistades y grupos.
+
+El resto del grupo puede proyectar su propia sombra en ti o tú en ellos.
+
+En general, buscas ser parte de un grupo o algo más grande que tú mismo para dejar un legado que sobreviva a tu propia vida. Tus relaciones con grupos y amistades son los escenarios donde emergen tus traumas más profundos, creando a menudo situaciones desafiantes o incluso perjudiciales para ti mismo y para otros. Puedes sentirte vulnerable y desprotegido.
+
+A menudo hay una atracción particular hacia grupos psicológicos, esotéricos o enfocados en la reforma. También puedes infiltrarte en grupos o convertirte en líder y que aspires a transformar la realidad. Las amistades juegan un papel crucial, serán relaciones intensas, en las cuales es posible que sientas atracciones sexuales con amigos, luchas de poder y pérdidas traumáticas de amigos o miembros del grupo.
+
+Tus metas y motivaciones tienden a cambiar drásticamente a lo largo de la vida, y en ciertos períodos, tus verdaderas intenciones pueden permanecer ocultas. Tus ideales radicales pueden llevarte a percibir como enemigos a quienes no comparten tu visión, resultando a veces en un comportamiento fanático para proteger a los marginados o intentar cambiar la sociedad.
+
+Dentro de este patrón, se pueden observar varias tendencias:
+
+- El individuo rebelde anti-sistema: siempre busca ser diferente, le cuesta compartir, se siente superior y mantiene un profundo resentimiento hacia la realidad, lo que le lleva al aislamiento.
+
+- El conformista al grupo: suprime su singularidad para evitar la exclusión, pero cuanto más se adapta, más solo se siente internamente.
+
+- El individuo saturnizado o ultraconservador: se cierra, se vuelve fanático, no escucha y proyecta su sombra sobre los demás, viviendo más en la mente que en el corazón.
+
+Un miedo central para ti es el abandono y el ser diferente: temes que si los demás notan tu diferencia, serás rechazado o no amado. Por lo tanto, es crucial que conectes con tu corazón y tu creatividad, aprendas a ser auténtico. Debes sanar las heridas de la soledad, la no pertenencia y el resentimiento hacia los demás.
+
+Debes aceptar que eres humano y perteneces a la humanidad. Debes bajar a tierra tus ideales, que no se queden solo en el ámbito mental o imaginativo.
+
+A medida que maduras, te vuelves más selectivo y te unes a grupos con objetivos específicos y propositivos para mejorar la humanidad. En esta etapa, puedes aprovechar plenamente tu poder y transformar la realidad, convirtiéndote a menudo en líder efectivo de grupos y movimientos.`,
+
+    12: `En todas las áreas de tu Vida habrá destrucciones cíclicas que te fuercen a entrar en crisis con propósito de salir transformado. Los temas clave son la fe en la vida, la liberación de los miedos y el aprendizaje de la verdadera entrega. Esta es el área donde confrontar el miedo inconsciente y la oscuridad interna se vuelve esencial, no debes escapar de tu propia oscuridad.
+
+Esta posición a menudo revela traumas y sufrimientos profundos:
+
+- Trauma prenatal: Sentimientos de rabia, abandono, sufrimiento, muerte, traición y resentimiento originados por la madre o por abortos no resueltos en el árbol. Esto crea una desconfianza fundamental en la vida.
+
+- Trauma transgeneracional: Conexión con historias de violencia, abuso, resentimiento, incesto, locura o patrones similares. Puedes permanecer inconscientemente apegado a estas dinámicas y vivir con miedo, lo que da forma a las experiencias de la vida.
+
+- Sombra y oscuridad colectivas: Conexión constante con el trauma inconsciente colectivo, que puede manifestarse en patrones autodestructivos o enfermedades como medio para liberar cargas kármicas.
+
+- Temas a nivel del alma: Resistencia a entregar el control, recuerdos inconscientes de caos, terror e impotencia, llevando a una extrema necesidad de control. La memoria celular de "cuando me rindo, soy destruido" influye fuertemente en tu comportamiento.
+
+Tiendes a negar tu propia sombra porque puedes sentir que es demasiado oscura como para hacerte cargo, pero al rechazar tu sombra, te desconectas de tu poder personal, energía sexual y yo auténtico, proyectándolo sobre los demás.
+
+Tienes un profundo miedo a perder el control, a la energía destructiva, a volverte loco o a ser destruido desde adentro, pero insistes en que los demás nunca vean tu vulnerabilidad. La desconexión emocional es común, pero la obsesión y la intensidad permanecen.
+
+Las manifestaciones extremas pueden incluir tendencias suicidas, escapismo de la vida y la realidad, miedo al cambio y miedo a la vida misma. La supresión de la energía plutoniana puede llevar a pesadillas aterradoras y vívidas, fobias, comportamiento autodestructivo, enfermedad, paranoia, obsesión y ambivalencia hacia la soledad o la compañía dependiendo de cómo se manifieste la sombra.
+
+La negación de Plutón a menudo atrae situaciones o personas que te "destruyen", forzando la transformación. Esto puede incluir enemigos ocultos, encarcelamiento, hospitalización, agresión y violencia. Las crisis existenciales a menudo aparecen cuando se alcanzan las metas, revelando una sensación de vacío interno.
+
+La espiritualidad puede ser negada o mal utilizada como una forma de escape, a veces combinada con aislamiento, victimismo o tendencias salvadoras. Las adicciones también pueden aparecer.
+
+Puedes sentirte abrumado por tu psique y construir muros para protegerte. Sin embargo, esta defensa no solo suprime tus aspectos más oscuros, sino que también puede neutralizar tus dones y fortalezas.
+
+La madurez llega cuando aprendes a confiar a pesar del dolor. Esta es la manifestación más poderosa de Plutón, permitiendo una visión profunda de lo que permanece oculto para los demás. El trabajo de sombra implica reconocer el poder, soltar el resentimiento, el miedo y la ira, y cultivar un apoyo realista: ayudar a otros solo cuando se les pida y cuando seas capaz.
+
+Las lecciones clave incluyen:
+
+- Entregar el ego y el control a una voluntad superior.
+
+- Afrontar los miedos inconscientes en lugar de simplemente proyectarlos.
+
+- Reconocer e integrar la sombra y el poder.
+
+- Aprender a usar el poder psíquico o interno de forma constructiva sin suprimir los dones.
+
+- Desarrollar la práctica espiritual como verdadera transformación, no como escape.`,
+  },
+
+  quiron: {
+    1: QUIRON_TEXTS[1],
+    2: QUIRON_TEXTS[2],
+    3: QUIRON_TEXTS[3],
+    4: QUIRON_TEXTS[4],
+    5: QUIRON_TEXTS[5],
+    6: QUIRON_TEXTS[6],
+    7: QUIRON_TEXTS[7],
+    8: QUIRON_TEXTS[8],
+    9: QUIRON_TEXTS[9],
+    10: QUIRON_TEXTS[10],
+    11: QUIRON_TEXTS[11],
+    12: QUIRON_TEXTS[12],
+  },
+
+  nodoNorte: {
+    1: NODO_NORTE_TEXTS[1],
+    2: NODO_NORTE_TEXTS[2],
+    3: NODO_NORTE_TEXTS[3],
+    4: NODO_NORTE_TEXTS[4],
+    5: NODO_NORTE_TEXTS[5],
+    6: NODO_NORTE_TEXTS[6],
+    7: NODO_NORTE_TEXTS[7],
+    8: NODO_NORTE_TEXTS[8],
+    9: NODO_NORTE_TEXTS[9],
+    10: NODO_NORTE_TEXTS[10],
+    11: NODO_NORTE_TEXTS[11],
+    12: NODO_NORTE_TEXTS[12],
+  },
+
+  nodoSur: {
+    1: NODO_SUR_TEXTS[1],
+    2: NODO_SUR_TEXTS[2],
+    3: NODO_SUR_TEXTS[3],
+    4: NODO_SUR_TEXTS[4],
+    5: NODO_SUR_TEXTS[5],
+    6: NODO_SUR_TEXTS[6],
+    7: NODO_SUR_TEXTS[7],
+    8: NODO_SUR_TEXTS[8],
+    9: NODO_SUR_TEXTS[9],
+    10: NODO_SUR_TEXTS[10],
+    11: NODO_SUR_TEXTS[11],
+    12: NODO_SUR_TEXTS[12],
   },
 };
 

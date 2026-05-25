@@ -14,11 +14,14 @@ interface PagoMetodoModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPagar: () => void;
+  /* TEST PAGO — START */
+  onPagoTest?: () => void;
+  /* TEST PAGO — END */
   loading?: boolean;
   error?: string | null;
 }
 
-export function PagoMetodoModal({ isOpen, onClose, onPagar, loading, error }: PagoMetodoModalProps) {
+export function PagoMetodoModal({ isOpen, onClose, onPagar, onPagoTest, loading, error }: PagoMetodoModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
       <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
@@ -111,6 +114,31 @@ export function PagoMetodoModal({ isOpen, onClose, onPagar, loading, error }: Pa
               >
                 Ahora no
               </Box>
+
+              {/* TEST PAGO — START (eliminar antes de producción) */}
+              {onPagoTest && (
+                <Box
+                  as="button"
+                  onClick={loading ? undefined : onPagoTest}
+                  px={6}
+                  py={3}
+                  borderRadius="full"
+                  bg="rgba(255,200,80,0.18)"
+                  color="#ffe9a8"
+                  border="1px dashed rgba(255,220,140,0.7)"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontWeight="600"
+                  letterSpacing="0.06em"
+                  cursor={loading ? "not-allowed" : "pointer"}
+                  opacity={loading ? 0.5 : 1}
+                  transition="all 0.22s"
+                  _hover={loading ? {} : { bg: "rgba(255,200,80,0.3)", color: "#fff4c8" }}
+                >
+                  Pago test
+                </Box>
+              )}
+              {/* TEST PAGO — END */}
             </Flex>
 
             {error && (

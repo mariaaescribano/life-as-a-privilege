@@ -289,7 +289,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Ocho disciplinas, un orden. De la autocompasión a la ciencia, con el amor propio como consecuencia.
+          Ocho disciplinas, un orden. De la autocompasión a la ciencia, con el Amor propio como consecuencia.
         </Text>
       </Flex>
 
@@ -412,11 +412,11 @@ export default function ElMetodo() {
               20 €
             </Text>
             <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.3)">
-              acceso a los cursos y materiales de esa disciplina
+              Acceso a los cursos y materiales de la disciplina concreta
             </Text>
-            <Text color="rgba(255,255,255,0.6)" fontSize="sm" mt={2} fontStyle="italic" lineHeight="1.55" maxW="320px" mx="auto">
+            {/* <Text color="rgba(255,255,255,0.6)" fontSize="sm" mt={2} fontStyle="italic" lineHeight="1.55" maxW="320px" mx="auto">
               cada pago se realiza por separado: al terminar una disciplina, abonas la siguiente
-            </Text>
+            </Text> */}
           </Box>
 
           <Box
@@ -467,7 +467,7 @@ export default function ElMetodo() {
         pt={{ base: 14, md: 21 }}
         gap={{ base: 8, md: 10 }}
       >
-        <Image
+        {/* <Image
           src="/img/icono/life.png"
           alt=""
           h={{ base: "50px", md: "64px" }}
@@ -476,7 +476,7 @@ export default function ElMetodo() {
           opacity={comunidadReveal.visible ? 1 : 0}
           transform={comunidadReveal.visible ? "scale(1)" : "scale(0.8)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
-        />
+        /> */}
 
         <Grid
           w={{ base: "100%", md: "90%" }}
@@ -583,7 +583,7 @@ export default function ElMetodo() {
       </Flex>
 
       {/* ── Conocer a la creadora ── */}
-      <Flex
+      {/* <Flex
         justify="center"
         align="center"
         gap={{ base: 2, md: 3 }}
@@ -635,7 +635,7 @@ export default function ElMetodo() {
           bg="linear-gradient(to left, transparent, rgba(255,255,255,0.6))"
           boxShadow="0 0 6px rgba(255,255,255,0.4)"
         />
-      </Flex>
+      </Flex> */}
 
       {/* ── SEPARADOR ── */}
       <Flex justify="center" mb={{ base: "25px", md: "35px" }} pt={{ base: 14, md: 21 }}>

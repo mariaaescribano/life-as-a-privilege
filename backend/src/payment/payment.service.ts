@@ -62,6 +62,13 @@ export class PaymentService {
     return { ok: true as const };
   }
 
+  /* TEST PAGO — START (eliminar antes de producción) */
+  async testMarcarPagado(userId: string) {
+    await this.userService.marcarSuscritoMetodo(userId);
+    return { ok: true as const };
+  }
+  /* TEST PAGO — END */
+
   async createLibroCheckout(libroId: string) {
     const libro = findLibroPago(libroId);
     if (!libro) throw new NotFoundException('Libro no encontrado');
