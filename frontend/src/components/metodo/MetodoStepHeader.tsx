@@ -1,11 +1,13 @@
 import React from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 
 interface StepButton {
   label: string;
   onClick: () => void;
   disabled?: boolean;
   icon?: React.ReactNode;
+  /** Texto que aparece al pasar el ratón cuando está deshabilitado. */
+  disabledTooltip?: string;
 }
 
 interface MetodoStepHeaderProps {
@@ -48,39 +50,72 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.62)" }: { overlay?: string }) => (
   </Box>
 );
 
-const StepBtn = ({ label, color, onClick, disabled, icon }: StepButton & { color: string }) => (
-  <Box
-    as="button"
-    onClick={disabled ? undefined : onClick}
-    disabled={disabled}
-    px={{ base: 5, md: 7 }}
-    py={2.5}
-    borderRadius="full"
-    bg="rgba(255,255,255,0.04)"
-    border={`1px solid ${disabled ? color + "22" : "rgba(255,255,255,0.4)"}`}
-    color={disabled ? `${color}44` : "white"}
-    fontFamily="'EB Garamond', serif"
-    fontSize={{ base: "sm", md: "md" }}
-    letterSpacing="0.05em"
-    fontStyle="italic"
-    cursor={disabled ? "not-allowed" : "pointer"}
-    transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease"
-    boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}22`}
-    textShadow={disabled ? "none" : "0 0 6px rgba(255,255,255,0.3)"}
-    _hover={disabled ? undefined : {
-      bg: "rgba(255,255,255,0.12)",
-      borderColor: "rgba(255,255,255,0.75)",
-      boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px rgba(180,255,245,0.2), 0 0 30px ${color}44`,
-    }}
-    whiteSpace="nowrap"
-    display="inline-flex"
-    alignItems="center"
-    gap={2}
-  >
-    {icon}
-    {label}
-  </Box>
-);
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip }: StepButton & { color: string }) => {
+  const btn = (
+    <Box
+      as="button"
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      px={{ base: 2.5, sm: 4, md: 7 }}
+      py={{ base: 1.5, md: 2.5 }}
+      borderRadius="full"
+      bg="rgba(255,255,255,0.04)"
+      border={`1px solid ${disabled ? color + "22" : "rgba(255,255,255,0.4)"}`}
+      color={disabled ? `${color}44` : "white"}
+      fontFamily="'EB Garamond', serif"
+      fontSize={{ base: "xs", sm: "sm", md: "md" }}
+      letterSpacing={{ base: "0.02em", md: "0.05em" }}
+      fontStyle="italic"
+      cursor={disabled ? "not-allowed" : "pointer"}
+      transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease"
+      boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}22`}
+      textShadow={disabled ? "none" : "0 0 6px rgba(255,255,255,0.3)"}
+      _hover={disabled ? undefined : {
+        bg: "rgba(255,255,255,0.12)",
+        borderColor: "rgba(255,255,255,0.75)",
+        boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px rgba(180,255,245,0.2), 0 0 30px ${color}44`,
+      }}
+      whiteSpace="nowrap"
+      display="inline-flex"
+      alignItems="center"
+      gap={{ base: 1, md: 2 }}
+      minW={0}
+      flex="0 1 auto"
+    >
+      {icon}
+      {label}
+    </Box>
+  );
+
+  if (disabled && disabledTooltip) {
+    return (
+      <Tooltip
+        label={disabledTooltip}
+        placement="top"
+        hasArrow
+        bg="rgba(8,13,30,0.95)"
+        color="white"
+        fontFamily="'EB Garamond', serif"
+        fontSize="sm"
+        fontStyle="italic"
+        px={3}
+        py={2}
+        borderRadius="md"
+        border={`1px solid ${color}55`}
+        boxShadow={`0 0 14px ${color}55, 0 6px 20px rgba(0,0,0,0.5)`}
+        sx={{ "--popper-arrow-bg": "rgba(8,13,30,0.95)" }}
+        openDelay={120}
+      >
+        {/* span necesario porque Tooltip no funciona en elementos disabled */}
+        <Box as="span" display="inline-flex" tabIndex={0}>
+          {btn}
+        </Box>
+      </Tooltip>
+    );
+  }
+
+  return btn;
+};
 
 export function MetodoStepHeader({
   icon,
@@ -155,22 +190,22 @@ export function MetodoStepHeader({
           />
         )}
 
-        {/* Botones contextuales */}
+        {/* Botones contextuales — siempre en horizontal */}
         {(prev || next || extra) && (
           <Flex
             justify="space-between"
             align="center"
-            gap={3}
-            direction={{ base: "column", sm: "row" }}
-            wrap="wrap"
+            gap={{ base: 1.5, md: 3 }}
+            direction="row"
+            wrap="nowrap"
           >
-            <Box flex={{ sm: "0 0 auto" }}>
+            <Box>
               {prev && <StepBtn {...prev} color={color} />}
             </Box>
-            <Box flex={{ sm: "0 0 auto" }}>
+            <Box>
               {extra && <StepBtn {...extra} color={color} />}
             </Box>
-            <Box flex={{ sm: "0 0 auto" }}>
+            <Box>
               {next && <StepBtn {...next} color={color} />}
             </Box>
           </Flex>

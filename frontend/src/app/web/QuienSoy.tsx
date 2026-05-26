@@ -60,6 +60,7 @@ const QuienSoy = () => {
   const [mounted, setMounted] = useState(false);
   const presentacionReveal = useReveal(0.12);
   const donacionReveal = useReveal(0.15);
+  const testimonioReveal = useReveal(0.2);
   const certifTitleReveal = useReveal(0.2);
   const certifReveal = useReveal(0.05);
   const cierreReveal = useReveal(0.2);
@@ -311,6 +312,126 @@ const QuienSoy = () => {
         >
           Pago seguro a través de Stripe · Cualquier importe es bienvenido
         </Text>
+      </Flex>
+
+      {/* ── TESTIMONIO ── */}
+      <Flex
+        ref={testimonioReveal.ref}
+        direction="column"
+        align="center"
+        pt={{ base: 16, md: 20 }}
+        gap={{ base: 5, md: 6 }}
+        px={{ base: 5, md: 10, lg: 16 }}
+      >
+        <Box
+          w="100%"
+          maxW="500px"
+          h="1px"
+          bg="rgba(255,255,255,0.15)"
+          opacity={testimonioReveal.visible ? 1 : 0}
+          transform={testimonioReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
+          transition="opacity 0.8s ease, transform 0.8s ease"
+        />
+
+        <Box
+          as="svg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 -960 960 960"
+          w={{ base: "32px", md: "40px" }}
+          h={{ base: "32px", md: "40px" }}
+          fill="rgba(255,255,255,0.85)"
+          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55)) drop-shadow(0 0 18px rgba(180,255,245,0.3))" }}
+          opacity={testimonioReveal.visible ? 1 : 0}
+          transform={testimonioReveal.visible ? "translateY(0)" : "translateY(10px)"}
+          transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
+        >
+          <path d="M580-360q42 0 71-29t29-71v-200H520v200h80q0 17-11.5 28.5T560-420h-20v60h40Zm-240 0q42 0 71-29t29-71v-200H280v200h80q0 17-11.5 28.5T320-420h-20v60h40ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z" />
+        </Box>
+
+        <Text
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontStyle="italic"
+          fontSize={{ base: "lg", md: "2xl" }}
+          lineHeight="1.6"
+          letterSpacing="0.02em"
+          textAlign="center"
+          maxW="700px"
+          textShadow="0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px rgba(180,255,245,0.35)"
+          opacity={testimonioReveal.visible ? 1 : 0}
+          transform={testimonioReveal.visible ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
+        >
+          Brillante, colaboradora, productiva y ética. No podría recomendarla lo suficiente.
+        </Text>
+
+        <Flex
+          direction="column"
+          align="center"
+          gap={1}
+          mt={2}
+          opacity={testimonioReveal.visible ? 1 : 0}
+          transform={testimonioReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          transition="opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s"
+        >
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "md", md: "lg" }}
+            letterSpacing="0.1em"
+            textTransform="uppercase"
+            textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.25)"
+          >
+            Drea Burbank
+          </Text>
+          <Text
+            color="rgba(255,255,255,0.7)"
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            fontSize={{ base: "xs", md: "sm" }}
+            letterSpacing="0.04em"
+            textShadow="0 0 6px rgba(255,255,255,0.25)"
+          >
+            CEO de Savimbo
+          </Text>
+        </Flex>
+
+        <Flex
+          as="a"
+          href="https://www.linkedin.com/in/mar%C3%ADa-escribano-arce-b58a56385/details/recommendations/"
+          target="_blank"
+          rel="noopener noreferrer"
+          align="center"
+          gap={2}
+          mt={3}
+          px={4}
+          py={2}
+          borderRadius="full"
+          border="1px solid rgba(255,255,255,0.35)"
+          bg="rgba(255,255,255,0.04)"
+          color="rgba(255,255,255,0.85)"
+          fontFamily="'EB Garamond', serif"
+          fontStyle="italic"
+          fontSize={{ base: "xs", md: "sm" }}
+          letterSpacing="0.05em"
+          textDecoration="none"
+          opacity={testimonioReveal.visible ? 1 : 0}
+          transform={testimonioReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          transition="opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease"
+          textShadow="0 0 6px rgba(255,255,255,0.25)"
+          _hover={{
+            bg: "rgba(255,255,255,0.12)",
+            borderColor: "rgba(255,255,255,0.7)",
+            color: "white",
+            boxShadow: "0 0 14px rgba(255,255,255,0.35), 0 0 28px rgba(180,255,245,0.22)",
+          }}
+        >
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="14px" h="14px" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+          </Box>
+          Ver carta completa en LinkedIn
+        </Flex>
       </Flex>
 
       {/* ── SEPARADOR + TÍTULO CERTIFICADOS ── */}

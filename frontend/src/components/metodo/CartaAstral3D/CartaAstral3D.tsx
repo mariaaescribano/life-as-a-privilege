@@ -3,7 +3,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
-import { ZODIAC_SIGNS, cuerpoByKey } from "../astrologiaData";
+import { ZODIAC_SIGNS, cuerpoByKey, type CuerpoKey } from "../astrologiaData";
 import { Starfield } from "./Starfield";
 import { ZodiacRing } from "./ZodiacRing";
 import { HousesRing } from "./HousesRing";
@@ -16,6 +16,10 @@ void React;
 interface CartaAstral3DProps {
   carta?: CartaNatal;
   color?: string;
+  /** Si se proporciona, aparece un botón "¿Quieres saber más?" debajo del nombre del planeta enfocado. */
+  onSaberMas?: (cuerpoKey: CuerpoKey) => void;
+  /** Para marcar planetas ya completados (ponemos un ✓ en su etiqueta). */
+  completados?: Partial<Record<CuerpoKey, boolean>>;
 }
 
 const R_ZODIAC_OUTER = 3.4;
@@ -24,7 +28,7 @@ const R_HOUSES_OUTER = 2.82;
 const R_HOUSES_INNER = 2.35;
 const R_PLANETS = 2.05;
 
-export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff" }: CartaAstral3DProps) {
+export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados }: CartaAstral3DProps) {
   const planetasOrdenados = useMemo(() => {
     return [...carta.planetas]
       .filter(p => p.planeta !== "ascendente")
@@ -89,9 +93,116 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff" }: CartaAst
       outline="none"
       sx={{ userSelect: "none" }}
     >
+      {/* ── Controles (flechas + etiqueta) ARRIBA del círculo ── */}
+      <Flex
+        align="center"
+        justify="center"
+        gap={{ base: 4, md: 6 }}
+        w="100%"
+        maxW="520px"
+      >
+        <ArrowButton dir="left"  color={color} onClick={() => stepFocus(-1)} />
+
+        <Flex direction="column" align="center" gap={2} minW={{ base: "160px", md: "220px" }}>
+          {focusedCuerpo && focused && (
+            <>
+              <Flex align="center" gap={2}>
+                <Text
+                  color="white"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="600"
+                  letterSpacing="0.18em"
+                  textTransform="uppercase"
+                  style={{ textShadow: `0 0 10px ${focusedCuerpo.color}cc, 0 0 22px ${focusedCuerpo.color}77` }}
+                >
+                  {focusedCuerpo.label}
+                </Text>
+                {completados?.[focusedCuerpo.key] && (
+                  <Text
+                    color={focusedCuerpo.color}
+                    fontSize="md"
+                    style={{ textShadow: `0 0 8px ${focusedCuerpo.color}` }}
+                  >
+                    ✓
+                  </Text>
+                )}
+              </Flex>
+              {onSaberMas ? (() => {
+                const leido = !!completados?.[focusedCuerpo.key];
+                return (
+                  <Flex
+                    as="button"
+                    onClick={() => onSaberMas(focusedCuerpo.key)}
+                    mt={1}
+                    px={{ base: 4, md: 5 }}
+                    py={{ base: 1.5, md: 2 }}
+                    borderRadius="full"
+                    bg={`${focusedCuerpo.color}10`}
+                    color={focusedCuerpo.color}
+                    border={`1px solid ${focusedCuerpo.color}77`}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "xs", md: "sm" }}
+                    letterSpacing="0.06em"
+                    cursor="pointer"
+                    align="center"
+                    gap={2}
+                    sx={{
+                      transition: "all 0.2s ease",
+                      boxShadow: `0 0 10px ${focusedCuerpo.color}33, 0 0 22px ${focusedCuerpo.color}1f`,
+                      textShadow: `0 0 8px ${focusedCuerpo.color}88, 0 0 18px rgba(255,255,255,0.25)`,
+                      animation: leido ? "none" : "saberMasPulse 2.6s ease-in-out infinite",
+                      "@keyframes saberMasPulse": {
+                        "0%, 100%": { boxShadow: `0 0 10px ${focusedCuerpo.color}33, 0 0 22px ${focusedCuerpo.color}1f` },
+                        "50%":       { boxShadow: `0 0 18px ${focusedCuerpo.color}77, 0 0 36px ${focusedCuerpo.color}44` },
+                      },
+                      _hover: {
+                        bg: `${focusedCuerpo.color}22`,
+                        borderColor: focusedCuerpo.color,
+                        boxShadow: `0 0 22px ${focusedCuerpo.color}99, 0 0 44px ${focusedCuerpo.color}55`,
+                        animation: "none",
+                      },
+                    }}
+                  >
+                    <Text as="span" fontStyle="italic">
+                      {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
+                    </Text>
+                    <Box as="span" display="inline-flex" alignItems="center" opacity={0.95}>
+                      {leido ? (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M5 12h14" />
+                          <path d="M13 6l6 6-6 6" />
+                        </svg>
+                      )}
+                    </Box>
+                  </Flex>
+                );
+              })() : (
+                <Text
+                  color={`${focusedCuerpo.color}ee`}
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "xs", md: "sm" }}
+                  fontStyle="italic"
+                  letterSpacing="0.05em"
+                  style={{ textShadow: `0 0 8px rgba(255,255,255,0.4)` }}
+                >
+                  {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
+                </Text>
+              )}
+            </>
+          )}
+        </Flex>
+
+        <ArrowButton dir="right" color={color} onClick={() => stepFocus(1)}  />
+      </Flex>
+
+      {/* ── Círculo de la carta ── */}
       <Box
         w="100%"
-        maxW="640px"
         position="relative"
         sx={{
           aspectRatio: "1 / 1",
@@ -139,47 +250,6 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff" }: CartaAst
           </EffectComposer>
         </Canvas>
       </Box>
-
-      {/* ── Controles (flechas + etiqueta) fuera del círculo ── */}
-      <Flex
-        align="center"
-        justify="center"
-        gap={{ base: 4, md: 6 }}
-        w="100%"
-        maxW="520px"
-      >
-        <ArrowButton dir="left"  color={color} onClick={() => stepFocus(-1)} />
-
-        <Flex direction="column" align="center" gap={1} minW={{ base: "140px", md: "200px" }}>
-          {focusedCuerpo && focused && (
-            <>
-              <Text
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }}
-                fontWeight="600"
-                letterSpacing="0.18em"
-                textTransform="uppercase"
-                style={{ textShadow: `0 0 10px ${focusedCuerpo.color}cc, 0 0 22px ${focusedCuerpo.color}77` }}
-              >
-                {focusedCuerpo.label}
-              </Text>
-              <Text
-                color={`${focusedCuerpo.color}ee`}
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "xs", md: "sm" }}
-                fontStyle="italic"
-                letterSpacing="0.05em"
-                style={{ textShadow: `0 0 8px rgba(255,255,255,0.4)` }}
-              >
-                {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
-              </Text>
-            </>
-          )}
-        </Flex>
-
-        <ArrowButton dir="right" color={color} onClick={() => stepFocus(1)}  />
-      </Flex>
     </Flex>
   );
 }

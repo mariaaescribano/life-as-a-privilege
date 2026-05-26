@@ -19,6 +19,19 @@ const R2D = 180 / Math.PI;
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
 const USER_AGENT = 'LifeAsAPrivilege/1.0 (contacto@savimbo.com)';
 
+const ZODIAC_NAMES = [
+  'Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo',
+  'Libra', 'Escorpio', 'Sagitario', 'Capricornio', 'Acuario', 'Piscis',
+];
+
+export interface CartaDataEntry {
+  signo?: string;
+  casa?: number;
+  profundizadoSigno?: boolean;
+  profundizadoCasa?: boolean;
+}
+export type CartaData = Partial<Record<CuerpoKey, CartaDataEntry>>;
+
 interface BodyDef {
   key: CuerpoKey;
   body: Astronomy.Body;
@@ -87,6 +100,29 @@ export class CartaNatalService {
     const dt = DateTime.fromISO(`${fecha}T${hora}`, { zone: timezone });
     if (!dt.isValid) return null;
     return dt.toUTC().toJSDate();
+  }
+
+  /**
+   * Pre-llena el `data` del usuario (signos/casas de cada planeta) a partir de la carta calculada.
+   * Respeta los valores que el usuario ya tenga (no sobrescribe).
+   */
+  mergeWithCartaData(existing: CartaData | null | undefined, carta: CartaNatal): CartaData {
+    const result: CartaData = { ...(existing || {}) };
+    for (const p of carta.planetas) {
+      const cur: CartaDataEntry = result[p.planeta] || {};
+      const signo = ZODIAC_NAMES[p.signoIdx];
+      // El ascendente no tiene "casa" (es la cúspide de casa 1 por definición)
+      if (p.planeta === 'ascendente') {
+        result[p.planeta] = { ...cur, signo: cur.signo ?? signo };
+      } else {
+        result[p.planeta] = {
+          ...cur,
+          signo: cur.signo ?? signo,
+          casa: cur.casa ?? p.casa,
+        };
+      }
+    }
+    return result;
   }
 
   /* ── Calcula la carta natal completa ── */

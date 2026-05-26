@@ -111,6 +111,14 @@ export class MetodoAstrologiaService {
       console.warn('[metodoAstrologia.solicitar] error cálculo carta:', err instanceof Error ? err.message : err);
     }
 
+    // Si calculamos la carta, pre-llenamos también el `data` (signos/casas por planeta)
+    // sin sobrescribir lo que el usuario ya hubiese completado.
+    const existingRow = await this.getMetodoAstrologia(userId);
+    const existingData = (existingRow?.data ?? null) as Record<string, any> | null;
+    const data = carta_natal_json
+      ? this.cartaNatalService.mergeWithCartaData(existingData, carta_natal_json)
+      : existingData;
+
     const { error } = await this.databaseService.getClient()
       .from('metodo_astrologia')
       .upsert(
@@ -125,6 +133,7 @@ export class MetodoAstrologiaService {
           longitud,
           timezone,
           carta_natal_json,
+          data,
           solicitud_enviada_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
@@ -216,9 +225,10 @@ export class MetodoAstrologiaService {
         lng: Number(row.longitud),
         timezone: row.timezone,
       });
+      const data = this.cartaNatalService.mergeWithCartaData(row.data ?? null, carta);
       await this.databaseService.getClient()
         .from('metodo_astrologia')
-        .update({ carta_natal_json: carta, updated_at: new Date().toISOString() })
+        .update({ carta_natal_json: carta, data, updated_at: new Date().toISOString() })
         .eq('user_id', userId);
       return carta;
     } catch (err: unknown) {

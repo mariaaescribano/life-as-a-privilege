@@ -11,7 +11,7 @@ interface PlanetProps {
   onClick?: () => void;
 }
 
-const SERIF = "500 130px 'Times New Roman', Georgia, 'DejaVu Serif', serif";
+const SERIF = "500 170px 'Times New Roman', Georgia, 'DejaVu Serif', serif";
 
 function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
   const size = 256;
@@ -75,7 +75,7 @@ export function Planet({ cuerpo, position, focused, onClick }: PlanetProps) {
 
   return (
     <group ref={groupRef} position={position} onClick={onClick}>
-      <sprite ref={spriteRef} scale={[0.55, 0.55, 1]}>
+      <sprite ref={spriteRef} scale={[0.78, 0.78, 1]}>
         <spriteMaterial
           map={glyphTexture}
           transparent

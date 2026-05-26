@@ -2,25 +2,39 @@ import React from "react";
 import { turquesa } from "../../GlobalVariables";
 
 interface SpinnerProps {
-  size?: number;      // tamaño en px
-  thickness?: number; // grosor del borde
-  fullScreen?: boolean; // si ocupa toda la pantalla
+  /** Tamaño del anillo en px. Default: 42 */
+  size?: number;
+  /** Grosor del borde en px. Default: 3 */
+  thickness?: number;
+  /** Si true, ocupa toda la pantalla con overlay. Default: true */
+  fullScreen?: boolean;
+  /** Color personalizado (por defecto, el turquesa del tema) */
+  color?: string;
 }
 
+/**
+ * Spinner unificado de la plataforma:
+ * - anillo sutil con un arco superior animado (rotación lineal continua)
+ * - drop-shadow del color para el característico glow turquesa
+ * - en fullScreen, overlay oscuro con backdrop-blur (no blanco, no agresivo)
+ */
 const SpinnerTurquesa: React.FC<SpinnerProps> = ({
-  size = 60,
-  thickness = 6,
+  size = 42,
+  thickness = 3,
   fullScreen = true,
+  color = turquesa,
 }) => {
-  const spinner = (
+  const ring = (
     <div
       style={{
         width: size,
         height: size,
-        border: `${thickness}px solid `+ {turquesa},
-        borderTop: `${thickness}px solid ${turquesa}`,
+        border: `${thickness}px solid ${color}22`,
+        borderTopColor: color,
         borderRadius: "50%",
-        animation: "spin 0.8s linear infinite",
+        animation: "savimboSpin 0.85s linear infinite",
+        filter: `drop-shadow(0 0 6px ${color}99) drop-shadow(0 0 14px ${color}44)`,
+        boxSizing: "border-box",
       }}
     />
   );
@@ -29,9 +43,9 @@ const SpinnerTurquesa: React.FC<SpinnerProps> = ({
     <>
       <style>
         {`
-          @keyframes spin {
+          @keyframes savimboSpin {
             from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            to   { transform: rotate(360deg); }
           }
         `}
       </style>
@@ -46,11 +60,13 @@ const SpinnerTurquesa: React.FC<SpinnerProps> = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgba(255,255,255,0.6)",
+            background: "rgba(0, 32, 32, 0.28)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
             zIndex: 9999,
           }}
         >
-          {spinner}
+          {ring}
         </div>
       ) : (
         <div
@@ -61,7 +77,7 @@ const SpinnerTurquesa: React.FC<SpinnerProps> = ({
             width: "100%",
           }}
         >
-          {spinner}
+          {ring}
         </div>
       )}
     </>

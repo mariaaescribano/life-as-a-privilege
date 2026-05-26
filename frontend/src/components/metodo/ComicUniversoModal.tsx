@@ -38,98 +38,98 @@ interface Vineta {
 
 const VINETAS: Vineta[] = [
   {
-    src: "/viñetas/viñeta1.png",
+    src: "/viñetas/comicInicio/viñeta1.png",
     paragraphs: [
       "Al principio existía lo infinito.",
       "Luz y sombra, lo femenino y lo masculino, todo unido en fusión. Todos eran Uno, Uno eran todos.",
     ],
   },
   {
-    src: "/viñetas/viñeta2.png",
+    src: "/viñetas/comicInicio/viñeta2.png",
     paragraphs: [
       "Un día, lo infinito quiso saber qué se siente al recibir amor.",
       "Para poder sentirlo, tuvo que hacerse dos. La Cábala lo llama Tzimtzum: la primera contracción, el momento en que lo ilimitado se puso un límite.",
     ],
   },
   {
-    src: "/viñetas/viñeta3.png",
+    src: "/viñetas/comicInicio/viñeta3.png",
     paragraphs: [
       "Así nacieron la vasija que sostiene y la luz que se entrega.",
       "Yang, Or: el portador y dador de luz. Yin, Kli: la energía que recibe, contiene y transforma para crear.",
     ],
   },
   {
-    src: "/viñetas/viñeta4.png",
+    src: "/viñetas/comicInicio/viñeta4.png",
     paragraphs: [
       "Pero lo infinito quería más. Quería experimentarse desde todos los puntos de vista que fuese capaz de imaginar.",
       "Y dentro de ese límite que se había puesto, empezó a presionar hacia fuera.",
     ],
   },
   {
-    src: "/viñetas/viñeta5.png",
+    src: "/viñetas/comicInicio/viñeta5.png",
     paragraphs: [
       "Estalló. La primera expansión.",
       "La ciencia la llama Big Bang y la fecha hace 13.800 millones de años.",
     ],
   },
   {
-    src: "/viñetas/viñeta6.png",
+    src: "/viñetas/comicInicio/viñeta6.png",
     paragraphs: [
       "En los primeros minutos, esa energía se hizo materia.",
       "Miles de millones de partículas distintas. Había un plan. Había un propósito. No había prisa.",
     ],
   },
   {
-    src: "/viñetas/viñeta7.png",
+    src: "/viñetas/comicInicio/viñeta7.png",
     paragraphs: [
       "La materia se buscó a sí misma. Se agrupó en estrellas.",
       "Dentro de ellas, por gravedad, nacieron los elementos pesados: el carbono, el oxígeno, el hierro. Todo lo que hoy existe.",
     ],
   },
   {
-    src: "/viñetas/viñeta8.png",
+    src: "/viñetas/comicInicio/viñeta8.png",
     paragraphs: [
       "Las estrellas murieron y con su polvo nacieron los planetas, la naturaleza y nosotros.",
       "El hierro de tu sangre estuvo dentro de una estrella. Esto no es metáfora.",
     ],
   },
   {
-    src: "/viñetas/viñeta9.png",
+    src: "/viñetas/comicInicio/viñeta9.png",
     paragraphs: [
       "Parte de ese polvo se reunió en planetas. Uno quedó a la distancia justa.",
       "El ayurveda lo había nombrado antes que la geología: cinco elementos —tierra, agua, fuego, aire, éter— combinándose para sostener Vida.",
     ],
   },
   {
-    src: "/viñetas/viñeta10.png",
+    src: "/viñetas/comicInicio/viñeta10.png",
     paragraphs: [
       "Y la materia, en algún momento, empezó a copiarse, duplicarse y expandirse.",
       "Eso somos: un préstamo de polvo de estrellas. Una inversión del Universo. Cada célula que permite que te llames «yo» lleva 13.800 millones de años de historia dentro.",
     ],
   },
   {
-    src: "/viñetas/viñeta11.png",
+    src: "/viñetas/comicInicio/viñeta11.png",
     paragraphs: [
       "Todo lo que ves es una manifestación distinta de Dios. Tú eres parte de lo divino, pero se te ha olvidado.",
       "La Cábala lo llama el exilio de la chispa: la luz que olvidó de dónde venía.",
     ],
   },
   {
-    src: "/viñetas/viñeta12.png",
+    src: "/viñetas/comicInicio/viñeta12.png",
     paragraphs: [
       "No estás aquí por casualidad ni por castigo. No has sido abandonado ni expulsado.",
       "Estás aquí para recordar que eres y estás formado por Amor. Para recordarlo, atravesarás cosas difíciles. Forma parte del camino. Tiene su para qué. No es maldad ni castigo.",
     ],
   },
   {
-    src: "/viñetas/viñeta13.png",
+    src: "/viñetas/comicInicio/viñeta13.png",
     paragraphs: [
       "En el instante exacto en que naciste, el cielo tenía una configuración que no se repetirá.",
       "Esa es tu carta natal. Te dice cómo está dispuesto tu mapa y tu camino para volver a casa.",
     ],
   },
   {
-    src: "/viñetas/viñeta14.png",
+    src: "/viñetas/comicInicio/viñeta14.png",
     paragraphs: [
       "Este recorrido te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y dar sentido a tu dolor.",
       "Obtendrás herramientas que te ayudarán en tu camino, el cual tienes que caminar con tu valentía y fortaleza. Nadie hará por ti lo que tú puedes hacer por ti.",

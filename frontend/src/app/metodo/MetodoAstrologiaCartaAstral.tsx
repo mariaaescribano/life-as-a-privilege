@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
 import axios from "axios";
@@ -11,6 +11,13 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
 import { EditarCuerpoModal } from "../../components/metodo/CartaAstral3D/EditarCuerpoModal";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
+import {
+  SaberMasModal,
+  useCartaPlanetas,
+  valorOf,
+  esCuerpoCompleto,
+} from "../../components/metodo/Planetas";
+import { cuerpoByKey, CUERPOS, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
@@ -34,6 +41,22 @@ export default function MetodoAstrologiaCartaAstral() {
   const [editOpen, setEditOpen] = useState(false);
   const [comicOpen, setComicOpen] = useState(false);
 
+  // Estado de selección de signo/casa por planeta (compartido con /planetas)
+  const { carta: cartaPlanetas, actualizar, todoCompletado } = useCartaPlanetas();
+
+  // Saber más
+  const [saberMasKey, setSaberMasKey] = useState<CuerpoKey | null>(null);
+
+  // Al abrir el modal "Saber más" de un cuerpo, lo marcamos como leído (profundizado)
+  const abrirSaberMas = (k: CuerpoKey) => {
+    setSaberMasKey(k);
+    const cuerpo = cuerpoByKey(k);
+    if (!cuerpo) return;
+    const v = valorOf(cartaPlanetas, k);
+    if (v.signo && !v.profundizadoSigno) actualizar(k, "profundizadoSigno", true);
+    if (cuerpo.conCasa && v.casa != null && !v.profundizadoCasa) actualizar(k, "profundizadoCasa", true);
+  };
+
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
@@ -45,7 +68,6 @@ export default function MetodoAstrologiaCartaAstral() {
 
     (async () => {
       try {
-        // Bloqueo: si no tiene carta hecha por María (link_carta), redirigir
         const estadoRes = await axios.get<{ link_carta?: string | null } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -66,6 +88,16 @@ export default function MetodoAstrologiaCartaAstral() {
     })();
   }, [navigate]);
 
+  const completados = useMemo(() => {
+    const out: Partial<Record<CuerpoKey, boolean>> = {};
+    for (const c of CUERPOS) {
+      out[c.key] = esCuerpoCompleto(c, valorOf(cartaPlanetas, c.key));
+    }
+    return out;
+  }, [cartaPlanetas]);
+
+  const cuerpoSaberMas = saberMasKey ? cuerpoByKey(saberMasKey) : null;
+
   if (loading) {
     return (
       <Box minH="100vh" bg="#008080">
@@ -73,6 +105,13 @@ export default function MetodoAstrologiaCartaAstral() {
       </Box>
     );
   }
+
+  const headerNext = {
+    label: "Psicología →",
+    onClick: () => navigate("/metodo/psicologia"),
+    disabled: !todoCompletado,
+    disabledTooltip: "Lee todos los planetas antes de continuar",
+  };
 
   return (
     <Box
@@ -91,7 +130,7 @@ export default function MetodoAstrologiaCartaAstral() {
         pt={{ base: 8, md: 12 }}
         pb={{ base: 12, md: 16 }}
       >
-        <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={{ base: 6, md: 8 }}>
           <MetodoStepHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Astrología"
@@ -101,7 +140,7 @@ export default function MetodoAstrologiaCartaAstral() {
             mb={0}
             prev={{ label: "← Mi carta", onClick: () => navigate("/metodo/astrologia") }}
             extra={{ label: "Cómic", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={{ label: "Los planetas →", onClick: () => navigate("/metodo/astrologia/planetas") }}
+            next={headerNext}
           />
 
           {/* ── Box estrellado contenedor de la carta ── */}
@@ -124,7 +163,12 @@ export default function MetodoAstrologiaCartaAstral() {
               px={{ base: 4, md: 8 }}
               py={{ base: 8, md: 10 }}
             >
-              <CartaAstral3D color={astrologiaTxt} {...(carta ? { carta } : {})} />
+              <CartaAstral3D
+                color={astrologiaTxt}
+                {...(carta ? { carta } : {})}
+                onSaberMas={abrirSaberMas}
+                completados={completados}
+              />
 
               {carta && (
                 <Box
@@ -158,6 +202,14 @@ export default function MetodoAstrologiaCartaAstral() {
           </Box>
         </Flex>
       </Flex>
+
+      <SaberMasModal
+        isOpen={!!cuerpoSaberMas}
+        onClose={() => setSaberMasKey(null)}
+        cuerpo={cuerpoSaberMas ?? null}
+        signo={cuerpoSaberMas ? valorOf(cartaPlanetas, cuerpoSaberMas.key).signo : undefined}
+        casa={cuerpoSaberMas ? valorOf(cartaPlanetas, cuerpoSaberMas.key).casa : undefined}
+      />
 
       <EditarCuerpoModal
         isOpen={editOpen}

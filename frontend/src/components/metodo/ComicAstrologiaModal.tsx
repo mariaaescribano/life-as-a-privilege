@@ -41,29 +41,92 @@ const VINETAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/viñeta1.png",
     paragraphs: [
-      "Texto provisional de la primera viñeta de astrología.",
-      "Cámbialo cuando tengas el guion definitivo.",
+      "El Sol es la energía que nuestra alma necesita manifestar en su más alta frecuencia.",
+      "No es lo que somos, es a lo que llegamos cuando nos hemos realizado.",
     ],
   },
   {
     src: "/viñetas/astrologia/viñeta2.png",
     paragraphs: [
-      "Texto provisional de la segunda viñeta.",
-      "Aquí va el desarrollo del relato.",
+      "La Luna fue lo que nos cobijó los primeros años de Vida.",
+      "Nuestro más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y donde descansamos.",
     ],
   },
   {
     src: "/viñetas/astrologia/viñeta3.png",
     paragraphs: [
-      "Texto provisional de la tercera viñeta.",
-      "Añade tantos párrafos como quieras por viñeta.",
+      "Mercurio es nuestro tipo de mentalidad.",
+      "Dónde tenemos curiosidad, dónde permanecemos abiertos al cambio y preparados para descubrir cosas nuevas.",
     ],
   },
   {
     src: "/viñetas/astrologia/viñeta4.png",
     paragraphs: [
-      "Texto provisional de la cuarta viñeta.",
-      "El cómic termina invitando a explorar la carta natal en 3D.",
+      "Venus es la energía que nos abre el corazón.",
+      "Cómo disfrutamos de la Vida, dónde y cómo deseamos ser amados.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Marte es la energía que canaliza el deseo hacia la acción.",
+      "Cómo y por qué entramos en acción, nuestra ambición y agresividad.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Júpiter es la expansión, la abundancia, las bendiciones que recibimos, los estudios y la alta consciencia.",
+      "Nuestro estilo de crecimiento, nuestro deseo de trascender los límites y dónde buscamos el sentido de nuestra Vida.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Saturno es la estructura y el autosostenimiento. Nos obliga a hacernos cargo de nosotros.",
+      "Su crecimiento nos hace sentir inseguros, inadecuados y pequeños, pero si le integramos nos convertiremos en Maestros de esa energía.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Urano es la creación sin límites, la originalidad y lo impredecible.",
+      "Dónde queremos más sin valorar lo que ya hay, el futurismo, lo inesperado y la libertad.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Neptuno es la confusión, el anhelo del Amor real y lo intangible.",
+      "Dónde buscamos la fusión con Dios, cómo engañamos a otros y a nosotros. Puede no importarnos la realidad.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Plutón es la bomba nuclear que nos destruye cíclicamente.",
+      "No le vemos venir. Es nuestro miedo más profundo. Es la destrucción total que nos invita a una dolorosa pero necesaria transformación.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "El Nodo Sur es lo que debemos dejar atrás en nuestra Vida porque ya no tiene más para nosotros.",
+      "Es lo que nos resulta fácil y cómodo, dónde queremos permanecer por miedo a lo desconocido y a la incomodidad.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "El Nodo Norte es lo que debemos integrar para convertirnos en quién hemos nacido para ser.",
+      "Nos resulta incómodo porque es lo contrario a lo que estamos acostumbrados.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/viñeta5.png",
+    paragraphs: [
+      "Quirón es la herida más profunda del alma.",
+      "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir con él, y al hacerlo, nos da nuestro mayor don.",
     ],
   },
 ];
