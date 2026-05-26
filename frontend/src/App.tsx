@@ -28,6 +28,7 @@ import ElMetodo from "./app/web/ElMetodo";
 import MaterialesGratuitos from "./app/web/MaterialesGratuitos";
 import CheckoutMetodo from "./app/web/CheckoutMetodo";
 import MetodoAstrologia from "./app/metodo/MetodoAstrologia";
+import MetodoAstrologiaCartaAstral from "./app/metodo/MetodoAstrologiaCartaAstral";
 import MetodoAstrologiaPlanetas from "./app/metodo/MetodoAstrologiaPlanetas";
 import MetodoAstrologiaProfundizar from "./app/metodo/MetodoAstrologiaProfundizar";
 import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
@@ -84,6 +85,7 @@ export default function App()
       <Route path="/materiales" element={<MaterialesGratuitos />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} />
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
       <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />

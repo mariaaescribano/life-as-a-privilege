@@ -23,6 +23,14 @@ const twinkle = keyframes`
   50%      { opacity: 1; }
 `;
 
+const blink = keyframes`
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+`;
+
+const TYPE_SPEED_MS = 24;
+const PARAGRAPH_PAUSE_MS = 420;
+
 interface Vineta {
   src: string;
   paragraphs: string[];
@@ -199,6 +207,32 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
   const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
   const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
 
+  // ── Typewriter ──
+  const totalChars = current.paragraphs.reduce((acc, p) => acc + p.length, 0);
+  const [typed, setTyped] = useState(0);
+  const [lastIndex, setLastIndex] = useState(index);
+
+  // Reset síncrono al cambiar de viñeta — evita que se vea texto residual
+  if (lastIndex !== index) {
+    setLastIndex(index);
+    setTyped(0);
+  }
+
+  useEffect(() => {
+    if (typed >= totalChars) return;
+    let acc = 0;
+    let atBoundary = false;
+    for (let i = 0; i < current.paragraphs.length - 1; i++) {
+      acc += current.paragraphs[i].length;
+      if (typed === acc) { atBoundary = true; break; }
+    }
+    const delay = atBoundary ? PARAGRAPH_PAUSE_MS : TYPE_SPEED_MS;
+    const t = setTimeout(() => setTyped((n) => n + 1), delay);
+    return () => clearTimeout(t);
+  }, [typed, totalChars, current]);
+
+  const skipTyping = () => setTyped(totalChars);
+
   const glowText = `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55`;
   const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
@@ -215,15 +249,30 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
         overflow="hidden"
         minH="100vh"
       >
-        {/* ── Fondo negro a pantalla completa ── */}
+        {/* ── Fondo negro a pantalla completa con cielo estrellado tenue ── */}
         <Box
           position="fixed"
           inset="0"
           pointerEvents="none"
           zIndex={0}
           bg="#050505"
+          overflow="hidden"
           sx={{ backdropFilter: "blur(20px)" }}
-        />
+        >
+          <Box
+            as="img"
+            src="/img/astrologia/space.jpg"
+            alt=""
+            loading="eager"
+            position="absolute"
+            inset="0"
+            w="100%"
+            h="100%"
+            style={{ objectFit: "cover", objectPosition: "center", opacity: 0.6 }}
+          />
+          {/* Capa oscura para que el negro predomine */}
+          <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
+        </Box>
 
         {/* Cerrar */}
         <IconButton
@@ -425,22 +474,50 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
                 zIndex={2}
               />
 
-              <Flex direction="column" gap={4} position="relative" zIndex={2}>
-                {current.paragraphs.map((p, i) => (
-                  <Text
-                    key={i}
-                    color={i === 0 ? astrologiaTxt : `${astrologiaTxt}dd`}
-                    fontSize={{ base: "md", md: "lg" }}
-                    lineHeight="1.85"
-                    letterSpacing="0.02em"
-                    textAlign="center"
-                    fontWeight={i === 0 ? "600" : "400"}
-                    fontStyle={i === 0 ? "normal" : "italic"}
-                    style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
-                  >
-                    {p}
-                  </Text>
-                ))}
+              <Flex
+                direction="column"
+                gap={4}
+                position="relative"
+                zIndex={2}
+                onClick={skipTyping}
+                cursor={typed < totalChars ? "pointer" : "default"}
+              >
+                {current.paragraphs.map((p, i) => {
+                  let consumed = 0;
+                  for (let j = 0; j < i; j++) consumed += current.paragraphs[j].length;
+                  const remaining = Math.max(0, typed - consumed);
+                  if (remaining === 0) return null;
+                  const shown = p.slice(0, remaining);
+                  const isCurrent = remaining < p.length;
+                  return (
+                    <Text
+                      key={i}
+                      color={i === 0 ? astrologiaTxt : `${astrologiaTxt}dd`}
+                      fontSize={{ base: "md", md: "lg" }}
+                      lineHeight="1.85"
+                      letterSpacing="0.02em"
+                      textAlign="center"
+                      fontWeight={i === 0 ? "600" : "400"}
+                      fontStyle={i === 0 ? "normal" : "italic"}
+                      style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
+                    >
+                      {shown}
+                      {isCurrent && (
+                        <Box
+                          as="span"
+                          display="inline-block"
+                          ml="3px"
+                          w="2px"
+                          h="1em"
+                          verticalAlign="text-bottom"
+                          bg={astrologiaTxt}
+                          animation={`${blink} 0.9s steps(1) infinite`}
+                          sx={{ boxShadow: `0 0 8px ${astrologiaTxt}` }}
+                        />
+                      )}
+                    </Text>
+                  );
+                })}
               </Flex>
 
               {/* línea decorativa inferior */}

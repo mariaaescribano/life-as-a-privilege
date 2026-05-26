@@ -220,29 +220,46 @@ export default function MetodoAstrologia() {
                     Descargar mi carta (PDF)
                   </Box>
 
+                  <Box
+                    as="button"
+                    onClick={() => navigate("/metodo/astrologia/cartaAstral")}
+                    mt={2}
+                    px={8}
+                    py={2.5}
+                    borderRadius="full"
+                    bg="transparent"
+                    color={astrologiaTxt}
+                    border={`1.5px solid ${astrologiaTxt}88`}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "md", md: "lg" }}
+                    fontWeight="600"
+                    letterSpacing="0.06em"
+                    cursor="pointer"
+                    sx={{
+                      transition: "all 0.2s ease",
+                      boxShadow: `0 0 10px ${astrologiaTxt}44, 0 0 22px ${astrologiaTxt}22`,
+                      _hover: {
+                        bg: `${astrologiaTxt}1a`,
+                        borderColor: astrologiaTxt,
+                        boxShadow: `0 0 18px ${astrologiaTxt}88, 0 0 38px ${astrologiaTxt}44`,
+                      },
+                    }}
+                  >
+                    Explorar mi carta en 3D →
+                  </Box>
                 </Flex>
               )}
 
               {/* ── ESTADO B — solicitud enviada, esperando lectura ── */}
               {!yaConPdf && yaSolicitado && (
                 <Flex direction="column" align="center" gap={5} py={4}>
-                  <Box
-                    w="64px"
-                    h="64px"
-                    borderRadius="full"
-                    bg={`${astrologiaTxt}1f`}
-                    border={`1.5px solid ${astrologiaTxt}77`}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    boxShadow={`0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22), 0 0 22px ${astrologiaTxt}55`}
-                  >
-                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill={astrologiaTxt}
+                
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 -960 960 960" width="26" fill={astrologiaTxt}
                          style={{ filter: `drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 0 14px ${astrologiaTxt}88)` }}>
                       <path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Z"/>
                     </Box>
-                  </Box>
-                  <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
+               
+                  <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                         style={{ textShadow: `0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.28), 0 0 50px ${astrologiaTxt}55` }}>
                     Tu carta está en proceso
                   </Text>
