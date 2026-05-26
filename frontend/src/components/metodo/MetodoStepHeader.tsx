@@ -5,6 +5,7 @@ interface StepButton {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  icon?: React.ReactNode;
 }
 
 interface MetodoStepHeaderProps {
@@ -17,6 +18,7 @@ interface MetodoStepHeaderProps {
   space?: boolean;     // true → fondo estrellado (foto + overlay cósmico)
   prev?: StepButton;
   next?: StepButton;
+  extra?: StepButton;  // botón opcional adicional (ej: "Cómic")
 }
 
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.62)" }: { overlay?: string }) => (
@@ -46,7 +48,7 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.62)" }: { overlay?: string }) => (
   </Box>
 );
 
-const StepBtn = ({ label, color, onClick, disabled }: StepButton & { color: string }) => (
+const StepBtn = ({ label, color, onClick, disabled, icon }: StepButton & { color: string }) => (
   <Box
     as="button"
     onClick={disabled ? undefined : onClick}
@@ -71,7 +73,11 @@ const StepBtn = ({ label, color, onClick, disabled }: StepButton & { color: stri
       boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px rgba(180,255,245,0.2), 0 0 30px ${color}44`,
     }}
     whiteSpace="nowrap"
+    display="inline-flex"
+    alignItems="center"
+    gap={2}
   >
+    {icon}
     {label}
   </Box>
 );
@@ -86,6 +92,7 @@ export function MetodoStepHeader({
   space = false,
   prev,
   next,
+  extra,
 }: MetodoStepHeaderProps) {
   return (
     <Box
@@ -138,7 +145,7 @@ export function MetodoStepHeader({
         </Flex>
 
         {/* Raya separadora */}
-        {(prev || next) && (
+        {(prev || next || extra) && (
           <Box
             h="1px"
             my={5}
@@ -149,14 +156,23 @@ export function MetodoStepHeader({
         )}
 
         {/* Botones contextuales */}
-        {(prev || next) && (
+        {(prev || next || extra) && (
           <Flex
-            justify={prev && next ? "space-between" : "center"}
+            justify="space-between"
+            align="center"
             gap={3}
             direction={{ base: "column", sm: "row" }}
+            wrap="wrap"
           >
-            {prev && <StepBtn {...prev} color={color} />}
-            {next && <StepBtn {...next} color={color} />}
+            <Box flex={{ sm: "0 0 auto" }}>
+              {prev && <StepBtn {...prev} color={color} />}
+            </Box>
+            <Box flex={{ sm: "0 0 auto" }}>
+              {extra && <StepBtn {...extra} color={color} />}
+            </Box>
+            <Box flex={{ sm: "0 0 auto" }}>
+              {next && <StepBtn {...next} color={color} />}
+            </Box>
           </Flex>
         )}
       </Box>

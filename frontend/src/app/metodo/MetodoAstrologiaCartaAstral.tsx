@@ -1,14 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
+import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { SpaceBg } from "../../components/metodo/SpaceBg";
+import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
-import { astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { EditarCuerpoModal } from "../../components/metodo/CartaAstral3D/EditarCuerpoModal";
+import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
+import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+
+const EyeIcon = () => (
+  <Box
+    as="svg"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    w="16px"
+    h="16px"
+    fill="currentColor"
+    style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}
+  >
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
 
 export default function MetodoAstrologiaCartaAstral() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [carta, setCarta] = useState<CartaNatal | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [comicOpen, setComicOpen] = useState(false);
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -18,7 +42,37 @@ export default function MetodoAstrologiaCartaAstral() {
       return;
     }
     window.scrollTo({ top: 0, behavior: "auto" });
+
+    (async () => {
+      try {
+        // Bloqueo: si no tiene carta hecha por María (link_carta), redirigir
+        const estadoRes = await axios.get<{ link_carta?: string | null } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!estadoRes.data?.link_carta) {
+          navigate("/metodo/astrologia");
+          return;
+        }
+
+        const res = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCarta(res.data ?? null);
+      } catch {
+        setCarta(null);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [navigate]);
+
+  if (loading) {
+    return (
+      <Box minH="100vh" bg="#008080">
+        <SpinnerTurquesa />
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -45,37 +99,77 @@ export default function MetodoAstrologiaCartaAstral() {
             color={astrologiaTxt}
             space
             mb={0}
-            prev={{ label: "← Volver", onClick: () => navigate("/metodo/astrologia") }}
-            next={{ label: "Continuar a los planetas →", onClick: () => navigate("/metodo/astrologia/planetas") }}
+            prev={{ label: "← Mi carta", onClick: () => navigate("/metodo/astrologia") }}
+            extra={{ label: "Cómic", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+            next={{ label: "Los planetas →", onClick: () => navigate("/metodo/astrologia/planetas") }}
           />
 
-          <Flex direction="column" align="center" gap={3} mt={2}>
-            <Text
-              color="white"
-              fontSize={{ base: "2xl", md: "4xl" }}
-              fontWeight="700"
-              letterSpacing="0.06em"
-              textAlign="center"
-              style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${astrologiaTxt}55` }}
-            >
-              Tu universo personal
-            </Text>
-            <Text
-              color={`${astrologiaTxt}cc`}
-              fontSize={{ base: "sm", md: "md" }}
-              fontStyle="italic"
-              lineHeight="1.7"
-              textAlign="center"
-              maxW="540px"
-              style={{ textShadow: `0 0 8px rgba(255,255,255,0.35)` }}
-            >
-              Usa las flechas ← → para recorrer tus planetas
-            </Text>
-          </Flex>
+          {/* ── Box estrellado contenedor de la carta ── */}
+          <Box
+            position="relative"
+            w="100%"
+            borderRadius="2xl"
+            overflow="hidden"
+            border={`1px solid ${astrologiaTxt}44`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 90px rgba(180,255,245,0.16), 0 0 30px ${astrologiaTxt}33, 0 0 80px ${astrologiaTxt}1f`}
+          >
+            <SpaceBg overlay="rgba(8,13,30,0.65)" />
 
-          <CartaAstral3D color={astrologiaTxt} />
+            <Flex
+              position="relative"
+              zIndex={1}
+              direction="column"
+              align="center"
+              gap={{ base: 5, md: 6 }}
+              px={{ base: 4, md: 8 }}
+              py={{ base: 8, md: 10 }}
+            >
+              <CartaAstral3D color={astrologiaTxt} {...(carta ? { carta } : {})} />
+
+              {carta && (
+                <Box
+                  as="button"
+                  onClick={() => setEditOpen(true)}
+                  px={6}
+                  py={2}
+                  borderRadius="full"
+                  bg="transparent"
+                  color={`${astrologiaTxt}cc`}
+                  border={`1px solid ${astrologiaTxt}55`}
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontStyle="italic"
+                  letterSpacing="0.04em"
+                  cursor="pointer"
+                  sx={{
+                    transition: "all 0.2s ease",
+                    _hover: {
+                      bg: `${astrologiaTxt}14`,
+                      borderColor: astrologiaTxt,
+                      color: astrologiaTxt,
+                      boxShadow: `0 0 14px ${astrologiaTxt}44`,
+                    },
+                  }}
+                >
+                  ✎ Ajustar Quirón o nodos
+                </Box>
+              )}
+            </Flex>
+          </Box>
         </Flex>
       </Flex>
+
+      <EditarCuerpoModal
+        isOpen={editOpen}
+        onClose={() => setEditOpen(false)}
+        onUpdated={(nueva) => setCarta(nueva)}
+        color={astrologiaTxt}
+      />
+
+      <ComicAstrologiaModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+      />
 
       <SiteFooter />
     </Box>

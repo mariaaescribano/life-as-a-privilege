@@ -104,10 +104,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff" }: CartaAst
         <Canvas
           camera={{ position: [0, 0, 7], fov: 50 }}
           dpr={[1, 2]}
-          gl={{ antialias: true, alpha: false }}
+          gl={{ antialias: true, alpha: true }}
         >
-          <color attach="background" args={["#050816"]} />
-          <fog attach="fog" args={["#050816", 8, 30]} />
           <ambientLight intensity={0.3} />
 
           <Starfield />

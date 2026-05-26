@@ -6,12 +6,28 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import {
   API_URL,
   astrologiaBg,
   astrologiaTxt,
   AstrologiaIcon,
 } from "../../GlobalVariables";
+
+/* Icono ojo para el botón del cómic */
+const EyeIcon = () => (
+  <Box
+    as="svg"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    w="16px"
+    h="16px"
+    fill="currentColor"
+    style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}
+  >
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
 
 /* Fondo espacial con degradado cósmico de respaldo */
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
@@ -77,6 +93,7 @@ export default function MetodoAstrologia() {
   const [region, setRegion] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [comicAstroOpen, setComicAstroOpen] = useState(false);
 
   // Carga
   useEffect(() => {
@@ -150,9 +167,14 @@ export default function MetodoAstrologia() {
 
   // Etiquetas de los botones del header según estado
   const camposCompletos = !!fecha && !!hora && !!pais.trim() && !!lugar.trim() && !!region.trim();
-  const headerPrev = { label: "← Volver al inicio", onClick: () => navigate("/home") };
+  const headerPrev = { label: "← Volver a Home", onClick: () => navigate("/home") };
+  const headerExtra = {
+    label: "Cómic",
+    onClick: () => setComicAstroOpen(true),
+    icon: <EyeIcon />,
+  };
   const headerNext = yaConPdf
-    ? { label: "Continuar a los planetas →", onClick: () => navigate("/metodo/astrologia/planetas") }
+    ? { label: "Mi carta 3D →", onClick: () => navigate("/metodo/astrologia/cartaAstral") }
     : yaSolicitado
     ? { label: "Esperando lectura…", onClick: () => {}, disabled: true }
     : { label: "Enviar carta →", onClick: () => { void enviarSolicitud(); }, disabled: !camposCompletos || enviando };
@@ -173,6 +195,7 @@ export default function MetodoAstrologia() {
             space
             mb={0}
             prev={headerPrev}
+            extra={headerExtra}
             next={headerNext}
           />
 
@@ -198,7 +221,7 @@ export default function MetodoAstrologia() {
                   </Text>
                   <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px"
                         style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                    Descárgala, léela con calma y, cuando estés listo, continúa al siguiente paso para indicar tus arquetipos.
+                    Descárgala, léela con calma y, cuando estés listo, continúa.
                   </Text>
                   <Box
                     as="a"
@@ -218,34 +241,6 @@ export default function MetodoAstrologia() {
                     cursor="pointer"
                   >
                     Descargar mi carta (PDF)
-                  </Box>
-
-                  <Box
-                    as="button"
-                    onClick={() => navigate("/metodo/astrologia/cartaAstral")}
-                    mt={2}
-                    px={8}
-                    py={2.5}
-                    borderRadius="full"
-                    bg="transparent"
-                    color={astrologiaTxt}
-                    border={`1.5px solid ${astrologiaTxt}88`}
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "md", md: "lg" }}
-                    fontWeight="600"
-                    letterSpacing="0.06em"
-                    cursor="pointer"
-                    sx={{
-                      transition: "all 0.2s ease",
-                      boxShadow: `0 0 10px ${astrologiaTxt}44, 0 0 22px ${astrologiaTxt}22`,
-                      _hover: {
-                        bg: `${astrologiaTxt}1a`,
-                        borderColor: astrologiaTxt,
-                        boxShadow: `0 0 18px ${astrologiaTxt}88, 0 0 38px ${astrologiaTxt}44`,
-                      },
-                    }}
-                  >
-                    Explorar mi carta en 3D →
                   </Box>
                 </Flex>
               )}
@@ -314,6 +309,11 @@ export default function MetodoAstrologia() {
           </Box>
         </Flex>
       </Flex>
+
+      <ComicAstrologiaModal
+        isOpen={comicAstroOpen}
+        onClose={() => setComicAstroOpen(false)}
+      />
 
       <SiteFooter />
     </Box>
