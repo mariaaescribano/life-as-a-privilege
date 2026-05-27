@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { AvisoInicialModal } from "../../components/metodo/AvisoInicialModal";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
+import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
 import {
@@ -51,6 +52,7 @@ const Home = () => {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
+  const [pagoExitoOpen, setPagoExitoOpen] = useState(false);
   const [comicOpen, setComicOpen] = useState(false);
 
   const continuarAstrologia = async () => {
@@ -140,6 +142,7 @@ const Home = () => {
       );
       setMetodoSuscrito(true);
       setPagoOpen(false);
+      setPagoExitoOpen(true);
     } catch (err: any) {
       console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
       setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
@@ -219,7 +222,7 @@ const Home = () => {
         .then(async (res) => {
           if (res.data?.ok) {
             setMetodoSuscrito(true);
-            await continuarAstrologia();
+            setPagoExitoOpen(true);
           } else {
             await cargarSuscripcion();
           }
@@ -312,7 +315,7 @@ const Home = () => {
               textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3)"
               mb={{ base: 10, md: 8 }}
             >
-              Este es el recorrido para empezar el camino de vuelta a ti.
+              Este es «El Recorrido» para empezar el camino de vuelta a ti.
             </Text>
 
             {/* Mandala */}
@@ -487,7 +490,7 @@ const Home = () => {
                       disciplinaCircle
                     ) : (
                       <Tooltip
-                        label="El Recorrido se hace en orden — por favor, completa la disciplina anterior."
+                        label="«El Recorrido» se hace en orden — por favor, completa la disciplina anterior."
                         placement="top"
                         hasArrow
                         bg="rgba(0,40,40,0.95)"
@@ -519,6 +522,7 @@ const Home = () => {
       <SiteFooter />
 
       <AvisoInicialModal isOpen={avisoOpen} onConfirm={confirmarAviso} />
+      <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => setPagoExitoOpen(false)} />
       <PagoMetodoModal
         isOpen={pagoOpen}
         onClose={() => { setPagoOpen(false); setPagoError(null); }}

@@ -177,7 +177,7 @@ export default function MetodoAstrologia() {
     ? { label: "Mi carta 3D →", onClick: () => navigate("/metodo/astrologia/cartaAstral") }
     : yaSolicitado
     ? { label: "Esperando lectura…", onClick: () => {}, disabled: true }
-    : { label: "Enviar carta →", onClick: () => { void enviarSolicitud(); }, disabled: !camposCompletos || enviando };
+    : { label: "Leer carta →", onClick: () => { void enviarSolicitud(); }, disabled: !camposCompletos || enviando };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -302,6 +302,36 @@ export default function MetodoAstrologia() {
                       Enviando…
                     </Text>
                   )}
+
+                  <Flex justify="flex-end" mt={4}>
+                    <Box
+                      as="button"
+                      onClick={() => { if (!enviando) void enviarSolicitud(); }}
+                      disabled={!camposCompletos || enviando}
+                      px={{ base: 7, md: 9 }}
+                      py={{ base: 3, md: 3.5 }}
+                      borderRadius="full"
+                      bg={camposCompletos && !enviando ? astrologiaTxt : `${astrologiaTxt}33`}
+                      color={camposCompletos && !enviando ? "#0a0a1a" : `${astrologiaTxt}aa`}
+                      border={`1px solid ${astrologiaTxt}88`}
+                      fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "md", md: "lg" }}
+                      fontWeight="700"
+                      letterSpacing="0.08em"
+                      cursor={camposCompletos && !enviando ? "pointer" : "not-allowed"}
+                      opacity={camposCompletos && !enviando ? 1 : 0.6}
+                      boxShadow={camposCompletos && !enviando
+                        ? `0 0 18px ${astrologiaTxt}66, 0 0 38px ${astrologiaTxt}33`
+                        : "none"}
+                      transition="all 0.22s"
+                      _hover={camposCompletos && !enviando ? {
+                        transform: "translateY(-2px)",
+                        boxShadow: `0 0 28px ${astrologiaTxt}88, 0 0 58px ${astrologiaTxt}44`,
+                      } : {}}
+                    >
+                      {enviando ? "Enviando…" : "Recibir mi lectura"}
+                    </Box>
+                  </Flex>
                 </Flex>
               )}
 

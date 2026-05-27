@@ -153,7 +153,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             }}
             transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
           >
-            El recorrido
+            El Recorrido
           </Text>
           <Text
             as="button"

@@ -176,7 +176,7 @@ const Welcome = () => {
           transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
-          Un recorrido para entenderte: tus patrones, tu historia y tus células.
+          El Recorrido que buscabas para entenderte: tus patrones, tu historia y tus células.
         </Text>
       </Flex>
 
@@ -301,7 +301,7 @@ const Welcome = () => {
             textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
             whiteSpace="nowrap"
           >
-            El recorrido
+            El Recorrido
           </Text>
           <Box
             as="span"

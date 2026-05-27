@@ -25,7 +25,7 @@ export class PaymentService {
         {
           price_data: {
             currency: 'eur',
-            product_data: { name: 'Astrología — primera disciplina del Recorrido' },
+            product_data: { name: 'Astrología — primera disciplina de «El Recorrido»' },
             unit_amount: 2000,
           },
           quantity: 1,

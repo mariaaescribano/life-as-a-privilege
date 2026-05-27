@@ -125,29 +125,6 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     {error}
                   </Text>
                 )}
-
-                <Box
-                  as="button"
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  mt={1}
-                  px={8}
-                  py={3}
-                  borderRadius="full"
-                  bg="white"
-                  color="#008080"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "lg", md: "xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.07em"
-                  cursor={submitting ? "not-allowed" : "pointer"}
-                  opacity={submitting ? 0.6 : 1}
-                  transition="all 0.22s"
-                  boxShadow="0 4px 20px rgba(255,255,255,0.25)"
-                  _hover={{ opacity: 0.9, transform: "translateY(-1px)" }}
-                >
-                  {submitting ? "Enviando..." : "Apuntarme"}
-                </Box>
               </Flex>
             ) : (
               <Flex direction="column" align="center" gap={4} py={2}>
