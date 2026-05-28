@@ -12,15 +12,16 @@ import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
 import {
   API_URL,
-  astrologiaBg, AstrologiaIcon, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaTxt,
-  cabalaBg, CabalaIcon, cabalaTxt,
-  culturaBg, CulturaIcon, culturaTxt,
-  fisiologiaBg, FisiologiaIcon, fisiologiaTxt,
-  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionTxt,
-  tcmBg, TCMIcon, tcmTxt,
+  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
+  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
+  culturaBg, CulturaIcon, culturaNom, culturaTxt,
+  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
+  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
+  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 
 const popIn = keyframes`
   from { opacity: 0; transform: scale(0.2); }
@@ -29,16 +30,27 @@ const popIn = keyframes`
 
 // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
 // Fisiología → Nutrición → Cultura → Cábala
+// Astrología tiene flujo propio (/metodo/astrologia con aviso_visto). El resto
+// salta directamente a la página del curso correspondiente en aprendizaje.
 const disciplines = [
-  { bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon },
-  { bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon },
-  { bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon },
-  { bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon },
-  { bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
-  { bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon },
-  { bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon },
-  { bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon },
+  { name: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon,      link: "/metodo/astrologia" },
+  { name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon, link: `/aprendizaje/cursosModalidad/${neuropsicologiaNom}` },
+  { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon,        link: `/aprendizaje/cursosModalidad/${ayurvedaNomLink}` },
+  { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon,             link: `/aprendizaje/cursosModalidad/${tcmNomLink}` },
+  { name: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon,      link: `/aprendizaje/cursosModalidad/${fisiologiaNom}` },
+  { name: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon,       link: `/aprendizaje/cursosModalidad/${nutricionNomLink}` },
+  { name: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon,          link: `/aprendizaje/cursosModalidad/${cabalaNom}` },
+  { name: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon,         link: `/aprendizaje/cursosModalidad/${culturaNom}` },
 ];
+
+// Disciplinas habilitadas para navegar desde el mandala. Cualquier disciplina
+// no listada aquí queda con candado y no es clickable.
+const ABIERTAS = new Set<string>([
+  astrologiaNom,
+  neuropsicologiaNom,
+  ayurvedaNom,
+  tcmNom,
+]);
 
 const Home = () => {
   const navigate = useNavigate();
@@ -383,7 +395,7 @@ const Home = () => {
                 )}
               </Box>
 
-              {/* Disciplinas alrededor — solo Astrología abierta */}
+              {/* Disciplinas alrededor — habilitadas según ABIERTAS */}
               {disciplines.map((d, index) => {
                 const angle = angleStep * index - Math.PI / 2;
                 const x = Math.cos(angle) * (radius ?? 200);
@@ -393,11 +405,17 @@ const Home = () => {
                 const Icon = d.Icon;
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
                 const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
-                const abierta = index === 0; // Astrología
+                const abierta = ABIERTAS.has(d.name);
+                const hasBg = hasDisciplinaBg(d.name);
+                // Astrología tiene flujo propio (chequea aviso_visto antes de navegar).
+                // Las demás abiertas saltan directamente a su página.
+                const handleClick = d.name === astrologiaNom
+                  ? irAstrologia
+                  : () => navigate(d.link);
 
                 const disciplinaCircle = (
                   <Box
-                    onClick={abierta ? irAstrologia : undefined}
+                    onClick={abierta ? handleClick : undefined}
                     cursor={abierta ? "pointer" : "not-allowed"}
                     w="100%"
                     h="100%"
@@ -420,13 +438,16 @@ const Home = () => {
                       boxShadow={abierta
                         ? `0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.3), 0 0 90px rgba(180,255,245,0.28), 0 0 60px ${d.txt}88, 0 2px 30px ${d.txt}55`
                         : `0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 0 40px ${d.txt}55, 0 2px 24px ${d.txt}33`}
-                      bg={d.bg}
+                      bg={hasBg ? "transparent" : d.bg}
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
                       position="relative"
                     >
-                      <Icon size={{ base: iconSize ?? "44px", md: iconSize ?? "60px" }} />
+                      {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
+                      <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+                        <Icon size={{ base: iconSize ?? "44px", md: iconSize ?? "60px" }} />
+                      </Box>
 
                       {/* Overlay candado en las disciplinas bloqueadas */}
                       {!abierta && (
@@ -438,6 +459,7 @@ const Home = () => {
                           alignItems="center"
                           justifyContent="center"
                           sx={{ backdropFilter: "blur(2px)" }}
+                          zIndex={2}
                         >
                           <Box
                             as="svg"

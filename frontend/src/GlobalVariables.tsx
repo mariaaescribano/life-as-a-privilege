@@ -143,8 +143,8 @@ export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada �
 // TCM
 export const tcmNom = "Medicina China";
 export const tcmNomLink = "medicinachina";
-export const tcmBg = "#6b0404";
-export const tcmTxt = "#da7171";
+export const tcmTxt = "#6b0404";
+export const tcmBg = "#da7171";
 export function TCMIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
@@ -194,7 +194,7 @@ export const nutricionDescrip="Descubre qué hay más allá de los alimentos que
 export const ayurvedaNom = "Hinduismo";
 export const ayurvedaNomLink = "ayurveda";
 export const ayurvedaBg = "#ffffff"; // "#ecd5ed";
-export const ayurvedaTxt = "#a27908" ; //"#672d67" ;
+export const ayurvedaTxt = "#853e0b" ; //"#672d67" ;
 export function AyurvedaIcon({ size = { base: "24px", md: "24px" }}) {
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill={ayurvedaTxt}>
@@ -332,8 +332,8 @@ export function FisicaIcon({ size = { base: "24px", md: "24px" } }: { size?: str
 
 // Cábala
 export const cabalaNom = "Cábala";
-export const cabalaBg = "#2c1e11";
-export const cabalaTxt = "#cb8e59";
+export const cabalaTxt = "#2c1e11";
+export const cabalaBg = "#cb8e59";
 export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box

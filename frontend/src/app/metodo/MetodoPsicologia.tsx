@@ -16,6 +16,7 @@ import {
 import {
   API_URL,
   neuropsicologiaBg,
+  neuropsicologiaNom,
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
@@ -97,6 +98,7 @@ export default function MetodoPsicologia() {
           title="Psicología"
           bgColor={`${neuropsicologiaBg}dd`}
           color={neuropsicologiaTxt}
+          nom={neuropsicologiaNom}
           mb={0}
           prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/planetas") }}
           next={{

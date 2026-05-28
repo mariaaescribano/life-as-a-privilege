@@ -117,7 +117,7 @@ export const recorridoContenido: Record<
   // 4. MEDICINA CHINA (tcm)
   // ───────────────────────────────────────────────────────────
   tcm: {
-    desc: "Una naturaleza. Un ser humano. Cinco elementos. Aprende su relación.",
+    desc: "Una naturaleza. Un ser humano. Cinco elementos. Descubre su relación.",
     modalDesc:
       "La medicina tradicional china lee el cuerpo a través de cinco elementos (madera, fuego, tierra, metal, agua) y los órganos que los gobiernan. No es metáfora poética: es un sistema de diagnóstico con miles de años de pruebas. Aquí identificamos qué elemento tienes en exceso o defecto y cómo se traduce eso en lo que te pasa.",
     contenido: [

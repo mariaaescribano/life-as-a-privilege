@@ -19,6 +19,7 @@ import {
   ayurvedaNomLink,
 } from "../../GlobalVariables";
 import { welcomeDisciplinas } from "../../data/welcomeDisciplinas";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 
 type Discipline = {
   name: string;
@@ -106,6 +107,7 @@ const disciplines: Discipline[] = [
     available: true,
   },
 ];
+
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -493,55 +495,73 @@ const Welcome = () => {
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
           gap={{ base: 4, md: 18 }}
         >
-          {disciplines.map((d, i) => (
-            <Box
-              key={i}
-              position="relative"
-              mt="42px"
-              pt="46px"
-              pb={{ base: 5, md: 7 }}
-              px={{ base: 3, md: 5 }}
-              bg={d.bg}
-              borderRadius="2xl"
-              cursor="pointer"
-              onClick={() => setSelected(d)}
-              opacity={disciplinasReveal.visible ? 1 : 0}
-              transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-              transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`}
-              textAlign="center"
-            >
-              {/* Icono que sobresale por arriba */}
+          {disciplines.map((d, i) => {
+            const hasBg = hasDisciplinaBg(d.name);
+            return (
               <Box
-                position="absolute"
-                top="-36px"
-                left="50%"
-                transform="translateX(-50%)"
-                bg={d.bg}
-                borderRadius="full"
-                p="8px"
-                border={"4px solid "+ d.txt}
-                boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-                w="72px"
-                h="72px"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
+                key={i}
+                position="relative"
+                mt="42px"
+                pt="46px"
+                pb={{ base: 5, md: 7 }}
+                px={{ base: 3, md: 5 }}
+                bg={hasBg ? "transparent" : d.bg}
+                borderRadius="2xl"
+                cursor="pointer"
+                onClick={() => setSelected(d)}
+                opacity={disciplinasReveal.visible ? 1 : 0}
+                transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
+                transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`}
+                textAlign="center"
+                overflow={hasBg ? "visible" : undefined}
               >
-                {d.renderIcon("42px")}
-              </Box>
+                {/* Fondo propio de la disciplina (estrellas o imagen) — en su
+                    propia capa con overflow:hidden, para que el icono que
+                    sobresale por arriba (top:-36px) no quede recortado. */}
+                {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
 
-              <Text
-                color={d.txt}
-                filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.4))"
-                fontWeight="700"
-                fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
-                letterSpacing="0.03em"
-                lineHeight="short"
-              >
-                {d.name === "Medicina China" ? "Med. China" : d.name}
-              </Text>
-            </Box>
-          ))}
+                {/* Icono que sobresale por arriba */}
+                <Box
+                  position="absolute"
+                  top="-36px"
+                  left="50%"
+                  transform="translateX(-50%)"
+                  bg={hasBg ? "transparent" : d.bg}
+                  borderRadius="full"
+                  p="8px"
+                  border={"4px solid "+ d.txt}
+                  boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
+                  w="72px"
+                  h="72px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  zIndex={2}
+                  overflow={hasBg ? "hidden" : undefined}
+                >
+                  {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
+                  <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+                    {d.renderIcon("42px")}
+                  </Box>
+                </Box>
+
+                <Text
+                  position="relative"
+                  zIndex={1}
+                  color={d.txt}
+                  fontWeight="700"
+                  fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
+                  letterSpacing="0.03em"
+                  lineHeight="short"
+                  textShadow={hasBg
+                    ? `0 1px 3px ${d.bg}f5, 0 0 6px ${d.bg}cc, 0 2px 14px ${d.bg}88`
+                    : "2px 2px 2px rgba(0,0,0,0.4)"}
+                >
+                  {d.name === "Medicina China" ? "Med. China" : d.name}
+                </Text>
+              </Box>
+            );
+          })}
         </Grid>
       </Box>
 
@@ -682,20 +702,18 @@ const Welcome = () => {
         >
           <Box
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            bg={selected.bg + "e8"}
+            bg={hasDisciplinaBg(selected.name) ? "transparent" : selected.bg + "e8"}
             border={`1.5px solid ${selected.txt}55`}
             sx={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
             borderRadius="2xl"
             boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selected.txt}22`}
-            p={{ base: 8, md: 12 }}
             maxW="560px"
             w="100%"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            gap={6}
+            maxH="92vh"
             position="relative"
+            overflow="hidden"
           >
+            {hasDisciplinaBg(selected.name) && <DisciplinaBgLayer nom={selected.name} borderRadius="2xl" blur />}
             {/* X */}
             <Box
               position="absolute"
@@ -715,47 +733,84 @@ const Welcome = () => {
               justifyContent="center"
               _hover={{ bg: selected.txt + "44" }}
               transition="background 0.2s"
+              zIndex={2}
             >
               ✕
             </Box>
 
-            {/* Icono */}
+            {/* Contenido scrollable interno — el modal exterior se queda fijo
+                (con el bg y la X), y aquí dentro se hace scroll si el contenido
+                desborda. Así nunca se corta contra el viewport. */}
             <Box
-              bg={selected.bg}
-              borderRadius="full"
-              w={{ base: "88px", md: "108px" }}
-              h={{ base: "88px", md: "108px" }}
+              p={{ base: 8, md: 12 }}
               display="flex"
+              flexDirection="column"
               alignItems="center"
-              justifyContent="center"
-              border={`3px solid ${selected.txt}`}
-              boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
+              gap={6}
+              position="relative"
+              zIndex={1}
+              maxH="92vh"
+              overflowY="auto"
+              sx={{
+                scrollbarWidth: "thin",
+                "&::-webkit-scrollbar": { width: "6px" },
+                "&::-webkit-scrollbar-thumb": { background: `${selected.txt}55`, borderRadius: "3px" },
+              }}
             >
-              {selected.renderIcon("52px")}
-            </Box>
+              {/* Icono */}
+              <Box
+                bg={hasDisciplinaBg(selected.name) ? "transparent" : selected.bg}
+                borderRadius="full"
+                w={{ base: "88px", md: "108px" }}
+                h={{ base: "88px", md: "108px" }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                border={`3px solid ${selected.txt}`}
+                boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
+                position="relative"
+                zIndex={1}
+                overflow={hasDisciplinaBg(selected.name) ? "hidden" : undefined}
+                flexShrink={0}
+              >
+                {hasDisciplinaBg(selected.name) && <DisciplinaBgLayer nom={selected.name} borderRadius="full" />}
+                <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+                  {selected.renderIcon("52px")}
+                </Box>
+              </Box>
 
-            {/* Nombre */}
-            <Text
-              color={selected.txt}
-              fontSize={{ base: "2xl", md: "3xl" }}
-              fontWeight="700"
-              letterSpacing="0.04em"
-              textAlign="center"
-            >
-              {selected.name}
-            </Text>
+              {/* Nombre */}
+              <Text
+                position="relative"
+                zIndex={1}
+                color={selected.txt}
+                fontSize={{ base: "4xl", md: "5xl" }}
+                fontWeight="700"
+                letterSpacing="0.04em"
+                textAlign="center"
+                textShadow={hasDisciplinaBg(selected.name)
+                  ? `0 1px 3px ${selected.bg}f5, 0 0 8px ${selected.bg}cc, 0 2px 16px ${selected.bg}88, 0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.3)`
+                  : undefined}
+              >
+                {selected.name}
+              </Text>
 
-            {/* Descripción */}
-            <Text
-              color={selected.txt}
-              fontSize={{ base: "lg", md: "xl" }}
-              textAlign="center"
-              lineHeight="1.9"
-              letterSpacing="0.02em"
-              opacity={0.82}
-            >
-              {selected.desc}
-            </Text>
+              {/* Descripción */}
+              <Text
+                position="relative"
+                zIndex={1}
+                color={selected.txt}
+                fontSize={{ base: "xl", md: "2xl" }}
+                textAlign="center"
+                lineHeight="1.9"
+                letterSpacing="0.02em"
+                opacity={0.82}
+                textShadow={hasDisciplinaBg(selected.name)
+                  ? `0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22), 0 1px 4px ${selected.bg}cc`
+                  : undefined}
+              >
+                {selected.desc}
+              </Text>
 
             {/* Botón APRENDER — desactivado temporalmente para v1, mostramos solo "Próximamente"
             {(() => {
@@ -806,6 +861,7 @@ const Welcome = () => {
             >
               Próximamente
             </Text> */}
+            </Box>
           </Box>
         </Box>
       )}

@@ -5,16 +5,57 @@ import {
 } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { DisciplineHeader } from "../../components/global/DisciplineHeader";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ContactModal } from "../../components/global/ContactModal";
 import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
-import type { Curso } from "../../hardCoded/cursos";
-import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNomLink, tcmBg, tcmTxt, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, culturaBg, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
+import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
+
+// Disciplinas que ya tienen página accesible pero aún no tienen cursos en
+// cursosData. Renderizamos la cabecera con su nombre/icono/fondo y un
+// placeholder en lugar del grid de cursos.
+const FALLBACK_MODALIDADES: Record<string, Omit<ModalidadInfo, "cursos">> = {
+  [astrologiaNom]:   { nom: astrologiaNom, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "56px" }} /> },
+  [ayurvedaNomLink]: { nom: ayurvedaNom,   bgColor: ayurvedaBg,   color: ayurvedaTxt,   icon: <AyurvedaIcon size={{ base: "40px", md: "56px" }} /> },
+  [tcmNomLink]:      { nom: tcmNom,        bgColor: tcmBg,        color: tcmTxt,        icon: <TCMIcon size={{ base: "40px", md: "56px" }} /> },
+};
+
+// Iconos pequeños (16-18px) para los botones dentro del header de la disciplina.
+const EyeIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
+const TestConstitucionIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" w="16px" h="16px" viewBox="0 -960 960 960" fill="currentColor">
+    <path d="M343.5-743.5Q320-767 320-800t23.5-56.5Q367-880 400-880t56.5 23.5Q480-833 480-800t-23.5 56.5Q433-720 400-720t-56.5-23.5ZM731-269q29-29 29-71t-29-71q-29-29-71-29t-71 29q-29 29-29 71t29 71q29 29 71 29t71-29ZM864-80 756-188q-22 14-46 21t-50 7q-75 0-127.5-52.5T480-340q0-75 52.5-127.5T660-520q75 0 127.5 52.5T840-340q0 26-7 50t-21 46l108 108-56 56Zm-424 0v-121q15 24 35.5 44t44.5 36v41h-80Zm-160 0v-520q-61-5-121-14.5T40-640l20-80q84 23 168.5 31.5T400-680q87 0 171.5-8.5T740-720l20 80q-59 16-119 25.5T520-600v41q-54 35-87 92.5T400-340v10q0 5 1 10h-41v240h-80Z"/>
+  </Box>
+);
+const TestElementoIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" w="16px" h="16px" viewBox="0 -960 960 960" fill="currentColor">
+    <path d="M480-480Zm0 360q-18 0-34.5-6.5T416-146L148-415q-35-35-51.5-80T80-589q0-103 67-177t167-74q48 0 90.5 19t75.5 53q32-34 74.5-53t90.5-19q100 0 167.5 74T880-590q0 49-17 94t-51 80L543-146q-13 13-29 19.5t-34 6.5Zm40-520q10 0 19 5t14 13l68 102h166q7-17 10.5-34.5T801-590q-2-69-46-118.5T645-758q-31 0-59.5 12T536-711l-27 29q-5 6-13 9.5t-16 3.5q-8 0-16-3.5t-14-9.5l-27-29q-21-23-49-36t-60-13q-66 0-110 50.5T160-590q0 18 3 35.5t10 34.5h187q10 0 19 5t14 13l35 52 54-162q4-12 14.5-20t23.5-8Zm12 130-54 162q-4 12-15 20t-24 8q-10 0-19-5t-14-13l-68-102H236l237 237q2 2 3.5 2.5t3.5.5q2 0 3.5-.5t3.5-2.5l236-237H600q-10 0-19-5t-15-13l-34-52Z"/>
+  </Box>
+);
+const TestDesequilibrioIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" w="16px" h="16px" viewBox="0 -960 960 960" fill="currentColor">
+    <path d="M824-120 636-308q-41 32-90.5 50T440-240q-90 0-162.5-44T163-400h98q34 37 79.5 58.5T440-320q100 0 170-70t70-170q0-100-70-170t-170-70q-94 0-162.5 63.5T201-580h-80q8-127 99.5-213.5T440-880q134 0 227 93t93 227q0 56-18 105.5T692-364l188 188-56 56ZM397-400l-63-208-52 148H80v-60h160l66-190h60l61 204 43-134h60l60 120h30v60h-67l-47-94-50 154h-59Z"/>
+  </Box>
+);
+const DoshasIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" w="16px" h="16px" viewBox="0 -960 960 960" fill="currentColor">
+    <path d="M272-160q-30 0-51-21t-21-51q0-21 12-39.5t32-26.5l156-62v-90q-54 63-125.5 96.5T120-320v-80q68 0 123.5-28T344-508l54-64q12-14 28-21t34-7h40q18 0 34 7t28 21l54 64q45 52 100.5 80T840-400v80q-83 0-154.5-33.5T560-450v90l156 62q20 8 32 26.5t12 39.5q0 30-21 51t-51 21H400v-20q0-26 17-43t43-17h120q9 0 14.5-5.5T600-260q0-9-5.5-14.5T580-280H460q-42 0-71 29t-29 71v20h-88Zm151.5-503.5Q400-687 400-720t23.5-56.5Q447-800 480-800t56.5 23.5Q560-753 560-720t-23.5 56.5Q513-640 480-640t-56.5-23.5Z"/>
+  </Box>
+);
+const CartasIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" w="16px" h="16px" viewBox="0 -960 960 960" fill="currentColor">
+    <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z"/>
+  </Box>
+);
 
 // ────────────────────────────────
 // CURSO CARD
@@ -134,10 +175,43 @@ export default function CursosModalidad() {
   const { moduloId } = useParams<{ moduloId: string }>();
   const navigate = useNavigate();
 
-  const modalidad = moduloId ? cursosData[moduloId] : null;
+  const fromData = moduloId ? cursosData[moduloId] : null;
+  const fallback = moduloId ? FALLBACK_MODALIDADES[moduloId] : null;
+  const modalidad: ModalidadInfo | null =
+    fromData ?? (fallback ? { ...fallback, cursos: [] } : null);
 
   const [detailCurso, setDetailCurso] = useState<Curso | null>(null);
   const [saberMasOpen, setSaberMasOpen] = useState(false);
+  const [ilustracionesHinduismoOpen, setIlustracionesHinduismoOpen] = useState(false);
+
+  // Botones contextuales que entran dentro del header de la disciplina.
+  // Cada disciplina con tests/material extra define los suyos; el resto deja
+  // los 3 slots vacíos y el header sólo muestra icono + título.
+  const headerButtons: { prev?: any; extra?: any; next?: any } = (() => {
+    if (moduloId === tcmNomLink) {
+      return {
+        prev:  { label: "Test constitución",  onClick: () => navigate("/tcm/test/1?guest=true"), icon: <TestConstitucionIcon /> },
+        extra: { label: "Test elemento",      onClick: () => navigate("/tcm/test/2?guest=true"), icon: <TestElementoIcon /> },
+        next:  { label: "Test desequilibrio", onClick: () => navigate("/tcm/test/3?guest=true"), icon: <TestDesequilibrioIcon /> },
+      };
+    }
+    if (moduloId === ayurvedaNomLink) {
+      return {
+        prev:  { label: "Test de los Doshas", onClick: () => navigate("/aprendizaje/test-doshas"), icon: <DoshasIcon /> },
+        extra: { label: "Ilustraciones",      onClick: () => setIlustracionesHinduismoOpen(true), icon: <EyeIcon /> },
+      };
+    }
+    if (moduloId === astrologiaNom) {
+      return {
+        extra: {
+          label: "Cartas de Personajes Históricos",
+          onClick: () => window.open("https://docs.google.com/document/d/1OWQUl5Nz2AgzDow4O1-PQKoakzDwEo9KwY9qOk6QKWg/edit?usp=sharing", "_blank"),
+          icon: <CartasIcon />,
+        },
+      };
+    }
+    return {};
+  })();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -187,239 +261,17 @@ export default function CursosModalidad() {
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
         >
-          <DisciplineHeader
+          <MetodoStepHeader
             icon={modalidad.icon}
             title={modalidad.nom}
-            bgColor={modalidad.bgColor}
+            bgColor={`${modalidad.bgColor}dd`}
             color={modalidad.color}
-            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink || moduloId === astrologiaNom || moduloId === culturaNom || moduloId === culturaNomLink /*|| moduloId === fisiologiaNom*/) ? { base: 6, md: 7 } : undefined}
+            nom={modalidad.nom}
+            prev={headerButtons.prev}
+            extra={headerButtons.extra}
+            next={headerButtons.next}
+            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink || moduloId === astrologiaNom || moduloId === culturaNom || moduloId === culturaNomLink /*|| moduloId === fisiologiaNom*/) ? { base: 6, md: 7 } : { base: 10, md: 12 }}
           />
-
-          {/* ── TESTS (solo Medicina China) ── */}
-          {moduloId === tcmNomLink && (
-            <Flex justify="center" gap={{ base: 2, md: 4 }} mb={{ base: 6, md: 7 }} w="100%" maxW="900px" flexWrap={{ base: "wrap", md: "nowrap" }}>
-              {/* Test 1: Constitución */}
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                flex="1"
-                px={{ base: 3, md: 6 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={tcmBg}
-                border={`1.5px solid ${tcmTxt}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/tcm/test/1?guest=true")}
-                _hover={{
-                  boxShadow: `0 0 20px ${tcmTxt}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${tcmTxt}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <Box flexShrink={0} display="flex" alignItems="center">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
-                    <path d="M343.5-743.5Q320-767 320-800t23.5-56.5Q367-880 400-880t56.5 23.5Q480-833 480-800t-23.5 56.5Q433-720 400-720t-56.5-23.5ZM731-269q29-29 29-71t-29-71q-29-29-71-29t-71 29q-29 29-29 71t29 71q29 29 71 29t71-29ZM864-80 756-188q-22 14-46 21t-50 7q-75 0-127.5-52.5T480-340q0-75 52.5-127.5T660-520q75 0 127.5 52.5T840-340q0 26-7 50t-21 46l108 108-56 56Zm-424 0v-121q15 24 35.5 44t44.5 36v41h-80Zm-160 0v-520q-61-5-121-14.5T40-640l20-80q84 23 168.5 31.5T400-680q87 0 171.5-8.5T740-720l20 80q-59 16-119 25.5T520-600v41q-54 35-87 92.5T400-340v10q0 5 1 10h-41v240h-80Z"/>
-                  </svg>
-                </Box>
-                <Text
-                  color={tcmTxt}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "md", md: "xl" }}
-                  letterSpacing="0.06em"
-                  lineHeight="1.2"
-                  textAlign="center"
-                >
-                  Test constitución
-                </Text>
-              </Flex>
-
-              {/* Test 2: Elemento */}
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                flex="1"
-                px={{ base: 3, md: 6 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={tcmBg}
-                border={`1.5px solid ${tcmTxt}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/tcm/test/2?guest=true")}
-                _hover={{
-                  boxShadow: `0 0 20px ${tcmTxt}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${tcmTxt}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <Box flexShrink={0} display="flex" alignItems="center">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
-                    <path d="M480-480Zm0 360q-18 0-34.5-6.5T416-146L148-415q-35-35-51.5-80T80-589q0-103 67-177t167-74q48 0 90.5 19t75.5 53q32-34 74.5-53t90.5-19q100 0 167.5 74T880-590q0 49-17 94t-51 80L543-146q-13 13-29 19.5t-34 6.5Zm40-520q10 0 19 5t14 13l68 102h166q7-17 10.5-34.5T801-590q-2-69-46-118.5T645-758q-31 0-59.5 12T536-711l-27 29q-5 6-13 9.5t-16 3.5q-8 0-16-3.5t-14-9.5l-27-29q-21-23-49-36t-60-13q-66 0-110 50.5T160-590q0 18 3 35.5t10 34.5h187q10 0 19 5t14 13l35 52 54-162q4-12 14.5-20t23.5-8Zm12 130-54 162q-4 12-15 20t-24 8q-10 0-19-5t-14-13l-68-102H236l237 237q2 2 3.5 2.5t3.5.5q2 0 3.5-.5t3.5-2.5l236-237H600q-10 0-19-5t-15-13l-34-52Z"/>
-                  </svg>
-                </Box>
-                <Text
-                  color={tcmTxt}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "md", md: "xl" }}
-                  letterSpacing="0.06em"
-                  lineHeight="1.2"
-                  textAlign="center"
-                >
-                  Test elemento
-                </Text>
-              </Flex>
-
-              {/* Test 3: Desequilibrio */}
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                flex="1"
-                px={{ base: 3, md: 6 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={tcmBg}
-                border={`1.5px solid ${tcmTxt}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/tcm/test/3?guest=true")}
-                _hover={{
-                  boxShadow: `0 0 20px ${tcmTxt}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${tcmTxt}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <Box flexShrink={0} display="flex" alignItems="center">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill={tcmTxt}>
-                    <path d="M824-120 636-308q-41 32-90.5 50T440-240q-90 0-162.5-44T163-400h98q34 37 79.5 58.5T440-320q100 0 170-70t70-170q0-100-70-170t-170-70q-94 0-162.5 63.5T201-580h-80q8-127 99.5-213.5T440-880q134 0 227 93t93 227q0 56-18 105.5T692-364l188 188-56 56ZM397-400l-63-208-52 148H80v-60h160l66-190h60l61 204 43-134h60l60 120h30v60h-67l-47-94-50 154h-59Z"/>
-                  </svg>
-                </Box>
-                <Text
-                  color={tcmTxt}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "md", md: "xl" }}
-                  letterSpacing="0.06em"
-                  lineHeight="1.2"
-                  textAlign="center"
-                >
-                  Test desequilibrio
-                </Text>
-              </Flex>
-            </Flex>
-          )}
-
-          {/* ── TEST DOSHAS (solo Ayurveda) ── */}
-          {moduloId === ayurvedaNomLink && (
-            <Flex justify="center" mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                px={{ base: 6, md: 10 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={ayurvedaBg}
-                border={`1.5px solid ${ayurvedaTxt}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/aprendizaje/test-doshas")}
-                _hover={{
-                  boxShadow: `0 0 20px ${ayurvedaTxt}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${ayurvedaTxt}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <Box flexShrink={0} display="flex" alignItems="center">
-                  <AyurvedaIcon size={{ base: "22px", md: "22px" }} />
-                </Box>
-                <Text
-                  color={ayurvedaTxt}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "lg", md: "xl" }}
-                  letterSpacing="0.08em"
-                  lineHeight="1"
-                >
-                  Test de los Doshas
-                </Text>
-              </Flex>
-            </Flex>
-          )}
-
-          {/* ── CARTAS DE PERSONAJES HISTÓRICOS (Astrología) ── */}
-          {moduloId === astrologiaNom && (() => {
-            const isAstro = moduloId === astrologiaNom;
-            const bg = isAstro ? astrologiaBg : culturaBg;
-            const txt = isAstro ? astrologiaTxt : culturaTxt;
-            const icon = isAstro
-              ? <AstrologiaIcon size={{ base: "22px", md: "22px" }} />
-              : <CulturaIcon size={{ base: "22px", md: "22px" }} />;
-            return (
-              <Flex justify="center" mb={{ base: 6, md: 7 }} w="100%" maxW="900px">
-                <Flex
-                  as="a"
-                  href="https://docs.google.com/document/d/1OWQUl5Nz2AgzDow4O1-PQKoakzDwEo9KwY9qOk6QKWg/edit?usp=sharing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  align="center"
-                  justify="center"
-                  gap={2}
-                  px={{ base: 6, md: 10 }}
-                  py={{ base: 3, md: 4 }}
-                  borderRadius="full"
-                  bg={bg}
-                  border={`1.5px solid ${txt}88`}
-                  boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                  cursor="pointer"
-                  transition="all 0.22s ease"
-                  _hover={{
-                    boxShadow: `0 0 20px ${txt}44`,
-                    transform: "translateY(-2px)",
-                    border: `1.5px solid ${txt}aa`,
-                    opacity: 0.88,
-                  }}
-                  _active={{ transform: "translateY(0px)" }}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Box flexShrink={0} display="flex" alignItems="center">
-                    {icon}
-                  </Box>
-                  <Text
-                    color={txt}
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="700"
-                    fontSize={{ base: "lg", md: "xl" }}
-                    letterSpacing="0.08em"
-                    lineHeight="1"
-                  >
-                    Cartas de Personajes Históricos
-                  </Text>
-                </Flex>
-              </Flex>
-            );
-          })()}
 
           {/* ── CÉLULAS DEL CUERPO (solo Fisiología) ── */}
           {/* {moduloId === fisiologiaNom && (
@@ -585,37 +437,52 @@ export default function CursosModalidad() {
             </Flex>
           )}
 
-          <SimpleGrid
-            w="100%"
-            maxW="1280px"
-            columns={{ base: 1, md: 2, xl: 3 }}
-            spacing={{ base: 5, md: 5 }}
-            sx={{
-              "@keyframes cursoCardIn": {
-                from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
-                to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
-              },
-            }}
-          >
-            {modalidad.cursos.map((curso, i) => (
-              <Box
-                key={curso.id}
-                h="100%"
-                style={{
-                  opacity: 0,
-                  animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
-                }}
-              >
-                <CursoCard
-                  curso={curso}
-                  bgColor={modalidad.bgColor}
-                  color={modalidad.color}
-                  disciplina={modalidad.nom}
-                  onVerDetalle={() => setDetailCurso(curso)}
-                />
-              </Box>
-            ))}
-          </SimpleGrid>
+          {modalidad.cursos.length > 0 ? (
+            <SimpleGrid
+              w="100%"
+              maxW="1280px"
+              columns={{ base: 1, md: 2, xl: 3 }}
+              spacing={{ base: 5, md: 5 }}
+              sx={{
+                "@keyframes cursoCardIn": {
+                  from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                  to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+                },
+              }}
+            >
+              {modalidad.cursos.map((curso, i) => (
+                <Box
+                  key={curso.id}
+                  h="100%"
+                  style={{
+                    opacity: 0,
+                    animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
+                  }}
+                >
+                  <CursoCard
+                    curso={curso}
+                    bgColor={modalidad.bgColor}
+                    color={modalidad.color}
+                    disciplina={modalidad.nom}
+                    onVerDetalle={() => setDetailCurso(curso)}
+                  />
+                </Box>
+              ))}
+            </SimpleGrid>
+          ) : (
+            <Text
+              color="white"
+              fontSize={{ base: "lg", md: "xl" }}
+              fontStyle="italic"
+              textAlign="center"
+              opacity={0.85}
+              mt={{ base: 4, md: 6 }}
+              mb={{ base: 6, md: 8 }}
+              style={{ textShadow: "0 0 14px rgba(255,255,255,0.35)" }}
+            >
+              Próximamente, cursos disponibles.
+            </Text>
+          )}
 
           {/* ── BOTÓN ¿QUIERES SABER MÁS? ── */}
           <SaberMasButton
@@ -747,6 +614,34 @@ export default function CursosModalidad() {
                 </Flex>
               </Box>
             )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* ── MODAL ILUSTRACIONES HINDUISMO (placeholder) ── */}
+      <Modal
+        isOpen={ilustracionesHinduismoOpen}
+        onClose={() => setIlustracionesHinduismoOpen(false)}
+        isCentered
+        size="md"
+      >
+        <ModalOverlay bg="rgba(0,60,60,0.55)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalContent
+          bg={ayurvedaBg}
+          border={`1px solid ${ayurvedaTxt}55`}
+          borderRadius="2xl"
+          boxShadow="0 16px 60px rgba(0,0,0,0.5)"
+          mx={{ base: 4, md: 0 }}
+          fontFamily="'EB Garamond', serif"
+        >
+          <ModalCloseButton color={ayurvedaTxt} top={3} right={3} />
+          <ModalBody px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }} textAlign="center">
+            <Text color={ayurvedaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={3}>
+              Ilustraciones
+            </Text>
+            <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
+              Próximamente.
+            </Text>
           </ModalBody>
         </ModalContent>
       </Modal>

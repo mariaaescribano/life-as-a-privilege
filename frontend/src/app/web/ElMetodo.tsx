@@ -6,6 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
 import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -112,6 +113,7 @@ type MetodoCardProps = {
 };
 
 function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardProps) {
+  const hasBg = hasDisciplinaBg(data.name);
   return (
     <Box
       position="relative"
@@ -119,7 +121,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
       pt="46px"
       pb={{ base: 5, md: 7 }}
       px={{ base: 3, md: 5 }}
-      bg={data.bg}
+      bg={hasBg ? "transparent" : data.bg}
       borderRadius="2xl"
       opacity={parentVisible ? 1 : 0}
       transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
@@ -131,13 +133,17 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
       flexDirection="column"
       alignItems="center"
     >
+      {/* Fondo propio de la disciplina — capa absoluta clipeada al borderRadius
+          del card, para no recortar el icono que sobresale arriba (top:-36px). */}
+      {hasBg && <DisciplinaBgLayer nom={data.name} borderRadius="2xl" />}
+
       {/* Icono flotante */}
       <Box
         position="absolute"
         top="-36px"
         left="50%"
         transform="translateX(-50%)"
-        bg={data.bg}
+        bg={hasBg ? "transparent" : data.bg}
         borderRadius="full"
         p="8px"
         border={`4px solid ${data.txt}`}
@@ -147,28 +153,38 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
         display="flex"
         alignItems="center"
         justifyContent="center"
+        zIndex={2}
+        overflow={hasBg ? "hidden" : undefined}
       >
-        {data.renderIcon("42px")}
+        {hasBg && <DisciplinaBgLayer nom={data.name} borderRadius="full" />}
+        <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+          {data.renderIcon("42px")}
+        </Box>
       </Box>
 
       {/* Número + título */}
-      <Flex align="baseline" justify="center" gap={2}>
+      <Flex align="baseline" justify="center" gap={2} position="relative" zIndex={1}>
         <Text
           color={data.txt}
           fontWeight="700"
-          fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
-          opacity={0.6}
+          fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
           letterSpacing="0.03em"
           lineHeight="short"
+          textShadow={hasBg
+            ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
+            : undefined}
         >
           {index}.
         </Text>
         <Text
           color={data.txt}
           fontWeight="700"
-          fontSize={{ base: "lg", md: "2xl", lg: "3xl" }}
+          fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
           letterSpacing="0.03em"
           lineHeight="short"
+          textShadow={hasBg
+            ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
+            : undefined}
         >
           {data.name === "Medicina China" ? "Med. China" : data.name}
         </Text>
@@ -825,21 +841,18 @@ export default function ElMetodo() {
         >
           <Box
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            bg={selectedCard.bg + "f0"}
+            bg={hasDisciplinaBg(selectedCard.name) ? "transparent" : selectedCard.bg + "f0"}
             border={`1.5px solid ${selectedCard.txt}66`}
             sx={{ backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)" }}
             borderRadius="3xl"
             boxShadow={`0 12px 60px rgba(0,0,0,0.55), 0 0 0 1px ${selectedCard.txt}33, 0 0 80px ${selectedCard.txt}22`}
-            p={{ base: 7, md: 14 }}
             maxW={{ base: "100%", md: "880px" }}
             w="100%"
-            maxH={{ base: "92vh", md: "92vh" }}
-            overflowY="auto"
-            display="flex"
-            flexDirection="column"
-            gap={{ base: 6, md: 8 }}
+            maxH="92vh"
             position="relative"
+            overflow="hidden"
           >
+            {hasDisciplinaBg(selectedCard.name) && <DisciplinaBgLayer nom={selectedCard.name} borderRadius="3xl" blur />}
             {/* X */}
             <Box
               position="absolute"
@@ -864,8 +877,27 @@ export default function ElMetodo() {
               ✕
             </Box>
 
+            {/* Contenido scrollable interno — el modal exterior se queda fijo
+                (con bg + X). Aquí dentro se hace scroll si el contenido excede
+                el alto del modal. Así nunca se corta contra el viewport. */}
+            <Box
+              p={{ base: 7, md: 14 }}
+              display="flex"
+              flexDirection="column"
+              gap={{ base: 6, md: 8 }}
+              position="relative"
+              zIndex={1}
+              maxH="92vh"
+              overflowY="auto"
+              sx={{
+                scrollbarWidth: "thin",
+                "&::-webkit-scrollbar": { width: "6px" },
+                "&::-webkit-scrollbar-thumb": { background: `${selectedCard.txt}55`, borderRadius: "3px" },
+              }}
+            >
+
             {/* HERO ── icono + título + descripción ── */}
-            <Flex direction="column" align="center" gap={{ base: 4, md: 6 }} pt={{ base: 2, md: 4 }}>
+            <Flex direction="column" align="center" gap={{ base: 4, md: 6 }} pt={{ base: 2, md: 4 }} position="relative" zIndex={1}>
               <Box position="relative" display="flex" alignItems="center" justifyContent="center">
                 <Box
                   position="absolute"
@@ -875,7 +907,7 @@ export default function ElMetodo() {
                   bg={`radial-gradient(circle, ${selectedCard.txt}33 0%, ${selectedCard.txt}00 70%)`}
                 />
                 <Box
-                  bg={selectedCard.bg}
+                  bg={hasDisciplinaBg(selectedCard.name) ? "transparent" : selectedCard.bg}
                   borderRadius="full"
                   w={{ base: "108px", md: "128px" }}
                   h={{ base: "108px", md: "128px" }}
@@ -885,19 +917,26 @@ export default function ElMetodo() {
                   border={`3px solid ${selectedCard.txt}`}
                   boxShadow={`0 0 28px ${selectedCard.txt}cc, 0 4px 20px ${selectedCard.txt}77`}
                   position="relative"
+                  overflow={hasDisciplinaBg(selectedCard.name) ? "hidden" : undefined}
                 >
-                  {selectedCard.renderIcon("64px")}
+                  {hasDisciplinaBg(selectedCard.name) && <DisciplinaBgLayer nom={selectedCard.name} borderRadius="full" />}
+                  <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+                    {selectedCard.renderIcon("64px")}
+                  </Box>
                 </Box>
               </Box>
 
               <Text
                 color={selectedCard.txt}
-                fontSize={{ base: "3xl", md: "5xl" }}
+                fontSize={{ base: "4xl", md: "6xl" }}
                 fontWeight="700"
                 letterSpacing="0.05em"
                 textAlign="center"
                 lineHeight="1.1"
-                filter={`drop-shadow(0 2px 14px ${selectedCard.txt}55)`}
+                textShadow={hasDisciplinaBg(selectedCard.name)
+                  ? `0 1px 3px ${selectedCard.bg}f5, 0 0 8px ${selectedCard.bg}cc, 0 2px 16px ${selectedCard.bg}88, 0 0 16px rgba(255,255,255,0.55), 0 0 36px rgba(255,255,255,0.3)`
+                  : undefined}
+                filter={hasDisciplinaBg(selectedCard.name) ? undefined : `drop-shadow(0 2px 14px ${selectedCard.txt}55)`}
               >
                 {selectedCard.name}
               </Text>
@@ -911,54 +950,69 @@ export default function ElMetodo() {
 
               <Text
                 color={selectedCard.txt}
-                fontSize={{ base: "lg", md: "2xl" }}
+                fontSize={{ base: "xl", md: "3xl" }}
                 fontStyle="italic"
                 textAlign="center"
                 lineHeight="1.7"
                 letterSpacing="0.02em"
                 opacity={0.95}
                 maxW="640px"
+                textShadow={hasDisciplinaBg(selectedCard.name)
+                  ? `0 0 12px rgba(255,255,255,0.5), 0 0 26px rgba(255,255,255,0.25), 0 1px 4px ${selectedCard.bg}cc`
+                  : undefined}
               >
                 {selectedCard.desc}
               </Text>
             </Flex>
 
             {/* Separador antes del contenido */}
-            <Flex align="center" gap={4} mt={{ base: 2, md: 4 }}>
+            <Flex align="center" gap={4} mt={{ base: 2, md: 4 }} position="relative" zIndex={1}>
               <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${selectedCard.txt}55)`} />
               <Text
                 color={selectedCard.txt}
                 opacity={0.7}
-                fontSize="xs"
+                fontSize={{ base: "sm", md: "md" }}
                 letterSpacing="0.32em"
                 textTransform="uppercase"
                 fontWeight="600"
+                textShadow={hasDisciplinaBg(selectedCard.name)
+                  ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
+                  : undefined}
               >
                 Qué incluye
               </Text>
               <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${selectedCard.txt}55)`} />
             </Flex>
 
-            {/* SECCIONES DE CONTENIDO — sin boxes, separadas por líneas horizontales */}
-            <Flex direction="column">
+            {/* SECCIONES DE CONTENIDO — cada una dentro de un panel translúcido
+                claro, estilo cristal, para separarlas visualmente del fondo de
+                la disciplina. Sin hover ni shadow fuerte para no parecer botón. */}
+            <Flex direction="column" gap={{ base: 4, md: 5 }} position="relative" zIndex={1}>
               {selectedCard.contenido.map((seccion, i) => (
                 <Flex
                   key={i}
                   direction="column"
+                  px={{ base: 5, md: 7 }}
                   py={{ base: 5, md: 6 }}
                   gap={{ base: 3, md: 4 }}
                   cursor="default"
                   userSelect="text"
-                  borderTop={i === 0 ? "none" : `1px solid ${selectedCard.txt}33`}
+                  bg="rgba(255,255,255,0.08)"
+                  border="1px solid rgba(255,255,255,0.14)"
+                  borderRadius="xl"
+                  sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
                 >
                   {/* Título de sección */}
                   <Text
                     color={selectedCard.txt}
-                    fontSize={{ base: "md", md: "lg" }}
+                    fontSize={{ base: "lg", md: "2xl" }}
                     fontWeight="700"
                     letterSpacing="0.04em"
                     lineHeight="1.25"
                     textAlign="center"
+                    textShadow={hasDisciplinaBg(selectedCard.name)
+                      ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
+                      : undefined}
                   >
                     {seccion.titulo}
                   </Text>
@@ -970,10 +1024,13 @@ export default function ElMetodo() {
                         key={j}
                         color={selectedCard.txt}
                         opacity={0.88}
-                        fontSize={{ base: "sm", md: "md" }}
+                        fontSize={{ base: "md", md: "lg" }}
                         lineHeight={{ base: "1.6", md: "1.7" }}
                         letterSpacing="0.01em"
                         textAlign="center"
+                        textShadow={hasDisciplinaBg(selectedCard.name)
+                          ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
+                          : undefined}
                       >
                         {item}
                       </Text>
@@ -1002,11 +1059,14 @@ export default function ElMetodo() {
                       </Box>
                       <Text
                         color={selectedCard.txt}
-                        fontSize={{ base: "2xs", md: "xs" }}
+                        fontSize={{ base: "xs", md: "sm" }}
                         letterSpacing="0.06em"
                         fontStyle="italic"
                         opacity={0.85}
                         lineHeight="1.3"
+                        textShadow={hasDisciplinaBg(selectedCard.name)
+                          ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
+                          : undefined}
                       >
                         {seccion.aviso}
                       </Text>
@@ -1015,6 +1075,7 @@ export default function ElMetodo() {
                 </Flex>
               ))}
             </Flex>
+            </Box>
           </Box>
         </Box>
       )}

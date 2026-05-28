@@ -41,16 +41,15 @@ export default function MaterialesGratuitos() {
 
   const cajitas: Cajita[] = [
     {
+      titulo: "Los cursos",
+      delay: 0.3,
+      link: "/aprendizaje/nuevosCursos",
+      renderIcon: () => <AprendizajeIcon color="white" size="52px" shadow={false} />,
+    },
+    {
       titulo: "Disciplinas",
       delay: 0.15,
       link: "/aprendizaje/aprendizajeHome",
-      renderIcon: () => <AprendizajeIcon color="white" size="52px" shadow={false} />,
-    },
-    //Cajita "Todos los cursos" desactivada temporalmente para v1
-    {
-      titulo: "Todos los cursos",
-      delay: 0.3,
-      link: "/aprendizaje/nuevosCursos",
       renderIcon: () => (
         <Image
           src="/img/icono/life.png"
