@@ -1,49 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
-  IconButton,
-  Image,
   Modal,
   ModalBody,
   ModalContent,
   ModalOverlay,
   Text,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { astrologiaTxt } from "../../GlobalVariables";
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-`;
+import { ComicViewer } from "./ComicViewer";
+import type { Vineta } from "./ComicViewer";
 
 const fadeInScale = keyframes`
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 `;
 
-const twinkle = keyframes`
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 1; }
-`;
-
-const blink = keyframes`
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
-`;
-
-const TYPE_SPEED_MS = 24;
-const PARAGRAPH_PAUSE_MS = 420;
-
-interface Vineta {
-  src: string;
-  paragraphs: string[];
-}
-
 // ────────────────────────────────────────────────────────────────────────────
-// CONTENIDO DE LOS 3 SUB-CÓMICS
+// DATOS DE LOS 3 SUB-CÓMICS — solo cambian las viñetas (foto + texto).
+// El frontend del cómic es el mismo (ComicViewer) que usa el del inicio.
 // ────────────────────────────────────────────────────────────────────────────
 
 const VINETAS_PLANETAS: Vineta[] = [
@@ -377,41 +354,6 @@ const SELECTOR_OPTIONS: SelectorOption[] = [
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-
-const Stars = () => {
-  const stars = [
-    { top: "12%", left: "8%",  size: 2, delay: "0s" },
-    { top: "20%", left: "92%", size: 2, delay: "1.4s" },
-    { top: "38%", left: "4%",  size: 3, delay: "0.7s" },
-    { top: "52%", left: "96%", size: 2, delay: "2.1s" },
-    { top: "70%", left: "6%",  size: 2, delay: "1.1s" },
-    { top: "82%", left: "94%", size: 3, delay: "0.4s" },
-    { top: "26%", left: "50%", size: 2, delay: "1.8s" },
-    { top: "88%", left: "48%", size: 2, delay: "2.6s" },
-  ];
-  return (
-    <>
-      {stars.map((s, i) => (
-        <Box
-          key={i}
-          position="absolute"
-          top={s.top}
-          left={s.left}
-          w={`${s.size}px`}
-          h={`${s.size}px`}
-          borderRadius="full"
-          bg="white"
-          animation={`${twinkle} 3.5s ease-in-out ${s.delay} infinite`}
-          boxShadow="0 0 6px rgba(255,255,255,0.85), 0 0 14px rgba(180,255,245,0.55)"
-          pointerEvents="none"
-          zIndex={1}
-        />
-      ))}
-    </>
-  );
-};
-
-// ────────────────────────────────────────────────────────────────────────────
 // Tarjeta del selector — foto arriba, título debajo, look invitador a pinchar.
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -578,137 +520,21 @@ interface ComicAstrologiaModalProps {
 
 export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstrologiaModalProps) {
   const [seccion, setSeccion] = useState<Seccion | null>(null);
-  const [index, setIndex] = useState(0);
-  const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
-  const contentRef = useRef<HTMLDivElement>(null);
-  // Posición inicial del dedo para detectar swipe horizontal (deslizar viñeta).
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
-
-  const vinetas = seccion ? VINETAS_BY_SECCION[seccion] : [];
-  const total = vinetas.length;
-  const current = vinetas[index];
-  const isFirst = index === 0;
-  const isLast = index === total - 1;
 
   // Reinicia al selector cada vez que se abre el modal.
   useEffect(() => {
-    if (isOpen) {
-      setSeccion(null);
-      setIndex(0);
-      setImgFailed({});
-    }
+    if (isOpen) setSeccion(null);
   }, [isOpen]);
 
-  // Al cambiar de viñeta, scroll al inicio.
-  useEffect(() => {
-    if (contentRef.current) contentRef.current.scrollTop = 0;
-  }, [index, seccion]);
+  const elegirSeccion = (s: Seccion) => setSeccion(s);
+  const volverAlSelector = () => setSeccion(null);
 
   const handleComplete = () => {
     if (onComplete) onComplete();
-    // Al terminar el cómic (pulsar el tick / flecha derecha en la última viñeta)
-    // volvemos al menú de ilustraciones en vez de cerrar el modal: el usuario
-    // puede así pasar a otro sub-cómic sin tener que reabrir el modal.
+    // Al terminar el cómic (tick final) volvemos al selector para que el
+    // usuario pueda enlazar con otro sub-cómic sin reabrir el modal.
     volverAlSelector();
   };
-
-  const elegirSeccion = (s: Seccion) => {
-    setSeccion(s);
-    setIndex(0);
-    setImgFailed({});
-  };
-
-  const volverAlSelector = () => {
-    setSeccion(null);
-    setIndex(0);
-  };
-
-  // ── Teclado (solo dentro de un cómic, no en el selector) ──
-  useEffect(() => {
-    if (!isOpen || !seccion) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") {
-        setIndex((i) => {
-          if (i >= total - 1) {
-            handleComplete();
-            return i;
-          }
-          return i + 1;
-        });
-      } else if (e.key === "ArrowLeft") {
-        setIndex((i) => Math.max(i - 1, 0));
-      } else if (e.key === "Escape") {
-        volverAlSelector();
-      }
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, seccion, total]);
-
-  const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
-  const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
-
-  // ── Swipe táctil para pasar viñeta con el dedo ──
-  const onTouchStart = (e: React.TouchEvent) => {
-    const t = e.touches[0];
-    touchStart.current = { x: t.clientX, y: t.clientY };
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStart.current) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - touchStart.current.x;
-    const dy = t.clientY - touchStart.current.y;
-    touchStart.current = null;
-    // Solo cuenta como swipe si el movimiento es claramente horizontal y suficiente.
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx > 0) {
-        // Deslizar a la derecha → viñeta anterior.
-        goPrev();
-      } else {
-        // Deslizar a la izquierda → siguiente (o completa si es la última).
-        if (isLast) handleComplete();
-        else goNext();
-      }
-    }
-  };
-
-  // ── Typewriter — en móvil se muestra el texto entero al instante ──
-  // (el efecto máquina de escribir va lento y frustra la lectura en móvil).
-  const isMobile = useBreakpointValue({ base: true, md: false });
-  const totalChars = current ? current.paragraphs.reduce((acc, p) => acc + p.length, 0) : 0;
-  const [typed, setTyped] = useState(0);
-  const [lastKey, setLastKey] = useState(`${seccion}-${index}`);
-
-  const currentKey = `${seccion}-${index}`;
-  if (lastKey !== currentKey) {
-    setLastKey(currentKey);
-    setTyped(isMobile ? totalChars : 0);
-  }
-
-  useEffect(() => {
-    if (!current) return;
-    if (isMobile) {
-      // En móvil, salto el typewriter: aparece el texto completo de golpe.
-      if (typed < totalChars) setTyped(totalChars);
-      return;
-    }
-    if (typed >= totalChars) return;
-    let acc = 0;
-    let atBoundary = false;
-    for (let i = 0; i < current.paragraphs.length - 1; i++) {
-      acc += current.paragraphs[i].length;
-      if (typed === acc) { atBoundary = true; break; }
-    }
-    const delay = atBoundary ? PARAGRAPH_PAUSE_MS : TYPE_SPEED_MS;
-    const t = setTimeout(() => setTyped((n) => n + 1), delay);
-    return () => clearTimeout(t);
-  }, [typed, totalChars, current, isMobile]);
-
-  const skipTyping = () => setTyped(totalChars);
-
-  const glowText = `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55`;
-  const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
   return (
     <Modal
@@ -717,9 +543,8 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
       size="full"
       isCentered
       // Solo el selector de ilustraciones usa scrollBehavior="inside"
-      // (su layout original). En la vista cómic usamos el patrón de
-      // ComicUniversoModal (overflow:hidden en ModalContent) para que el
-      // scroll del ModalBody se active correctamente.
+      // (su layout original). En la vista cómic, ComicViewer gestiona su
+      // propio scroll dentro del ModalContent (mismo patrón que el de Inicio).
       scrollBehavior={seccion ? undefined : "inside"}
     >
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -732,438 +557,145 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         fontFamily="'EB Garamond', serif"
         // overflow:hidden SOLO en la vista cómic: encaja el ModalContent a
         // 100vh para que el overflowY:auto del ModalBody active el scroll.
-        // En el selector lo dejamos sin clip (como estaba originalmente)
-        // para que las cards en móvil hagan scroll de forma natural.
+        // En el selector lo dejamos sin clip para que las cards en móvil
+        // hagan scroll de forma natural.
         overflow={seccion ? "hidden" : undefined}
         minH="100vh"
       >
-        {/* Fondo espacial */}
-        <Box
-          position="fixed"
-          inset="0"
-          pointerEvents="none"
-          zIndex={0}
-          bg="#050505"
-          overflow="hidden"
-          sx={{ backdropFilter: "blur(20px)" }}
-        >
-          <Box
-            as="img"
-            src="/img/astrologia/space.jpg"
-            alt=""
-            loading="eager"
-            position="absolute"
-            inset="0"
-            w="100%"
-            h="100%"
-            style={{ objectFit: "cover", objectPosition: "center", opacity: 0.6 }}
-          />
-          <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
-        </Box>
-
-        {/* X cerrar — siempre visible */}
-        <IconButton
-          aria-label="Cerrar"
-          onClick={onClose}
-          position="fixed"
-          top={{ base: 3, md: 5 }}
-          right={{ base: 3, md: 5 }}
-          zIndex={10}
-          variant="ghost"
-          color={astrologiaTxt}
-          _hover={{ bg: `${astrologiaTxt}22` }}
-          icon={
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px" fill={astrologiaTxt}>
-              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-            </Box>
-          }
-        />
-
-        {/* Botón "Volver al menú" — solo visible dentro de un cómic */}
-        {seccion && (
-          <IconButton
-            aria-label="Volver al menú"
-            onClick={volverAlSelector}
-            position="fixed"
-            top={{ base: 3, md: 5 }}
-            left={{ base: 3, md: 5 }}
-            zIndex={10}
-            variant="ghost"
-            color={astrologiaTxt}
-            _hover={{ bg: `${astrologiaTxt}22` }}
-            icon={
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill={astrologiaTxt}>
-                <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
-              </Box>
-            }
-          />
-        )}
-
         {/* ── VISTA SELECTOR ── */}
         {!seccion && (
-          <ModalBody
-            position="relative"
-            zIndex={2}
-            w="100%"
-            // Padding superior generoso para dejar hueco al botón X y al título.
-            // Padding inferior + lateral para que en móvil la última card respire.
-            px={{ base: 5, md: 10 }}
-            pt={{ base: 16, md: 14 }}
-            pb={{ base: 10, md: 14 }}
-            // Sin minH ni alineación vertical centrada: en móvil la columna de 3
-            // tarjetas supera 100vh y el centrado provocaba que se cortaran los
-            // bordes sin poder hacer scroll.
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent={{ base: "flex-start", md: "center" }}
-            minH={{ base: "auto", md: "100vh" }}
-            overflowY="auto"
-            overflowX="hidden"
-            sx={{
-              // Permite scroll suave con momentum en iOS.
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "none",
-              "&::-webkit-scrollbar": { display: "none" },
-            }}
-          >
-            <Flex
-              direction="column"
-              align="center"
-              gap={{ base: 8, md: 10 }}
-              w="100%"
-              maxW="1280px"
-              mx="auto"
-              // Aire entre la cruz (cerrar) y el título.
-              mt={{ base: 8, md: 4 }}
-              // Aire después del bloque de tarjetas antes del borde del modal.
-              mb={{ base: 10, md: 8 }}
-            >
-              <Flex direction="column" align="center" gap={2}>
-                <Text
-                  color="white"
-                  fontSize={{ base: "2xl", md: "4xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.2em"
-                  textTransform="uppercase"
-                  textAlign="center"
-                  lineHeight="1.1"
-                  style={{
-                    textShadow: `0 0 14px ${astrologiaTxt}cc, 0 0 32px ${astrologiaTxt}77, 0 0 70px ${astrologiaTxt}44`,
-                  }}
-                >
-                  Ilustraciones de Astrología
-                </Text>
-                <Text
-                  color={`${astrologiaTxt}cc`}
-                  fontSize={{ base: "sm", md: "md" }}
-                  fontStyle="italic"
-                  letterSpacing="0.08em"
-                  textAlign="center"
-                  maxW="520px"
-                >
-                  Elige un capítulo para empezar a leer.
-                </Text>
-              </Flex>
-
-              <Flex
-                direction={{ base: "column", md: "row" }}
-                gap={{ base: 5, md: 6 }}
-                w="100%"
-                justify="center"
-                // En móvil cards centrados horizontalmente (más estrechos que el
-                // ancho del modal); en desktop stretch para que tengan misma altura.
-                align={{ base: "center", md: "stretch" }}
-                wrap="wrap"
-              >
-                {SELECTOR_OPTIONS.map((opt, i) => (
-                  <SelectorCard
-                    key={opt.seccion}
-                    option={opt}
-                    onClick={() => elegirSeccion(opt.seccion)}
-                    delay={`${i * 0.08}s`}
-                  />
-                ))}
-              </Flex>
-            </Flex>
-          </ModalBody>
-        )}
-
-        {/* ── VISTA CÓMIC ── */}
-        {seccion && current && (
           <>
-            <IconButton
-              aria-label="Anterior"
-              onClick={goPrev}
-              isDisabled={isFirst}
+            {/* X cerrar — solo en el selector. En la vista cómic la pinta ComicViewer. */}
+            <Box
+              as="button"
+              aria-label="Cerrar"
+              onClick={onClose}
               position="fixed"
-              left={{ base: 1, md: 6 }}
-              top="50%"
-              transform="translateY(-50%)"
+              top={{ base: 3, md: 5 }}
+              right={{ base: 3, md: 5 }}
               zIndex={10}
-              variant="ghost"
+              p={2}
+              borderRadius="md"
               color={astrologiaTxt}
-              opacity={isFirst ? 0.25 : 1}
-              // En móvil: sin círculo (bg/border/shadow), icono más pequeño,
-              // simplemente flotando sobre la imagen.
-              bg={{ base: "transparent", md: `${astrologiaTxt}10` }}
-              border={{ base: "none", md: `1px solid ${astrologiaTxt}33` }}
-              borderRadius="full"
-              w={{ base: "32px", md: "60px" }}
-              h={{ base: "32px", md: "60px" }}
-              minW={{ base: "32px", md: "60px" }}
-              boxShadow={isFirst
-                ? "none"
-                : { base: "none", md: `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22` }}
-              _hover={isFirst ? {} : {
-                bg: `${astrologiaTxt}22`,
-                borderColor: `${astrologiaTxt}88`,
-                boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
-              }}
-              icon={
-                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
-                  style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
-                  <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-                </Box>
-              }
-            />
+              _hover={{ bg: `${astrologiaTxt}22` }}
+            >
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px" fill={astrologiaTxt}>
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+              </Box>
+            </Box>
 
-            <IconButton
-              aria-label={isLast ? "Continuar a la carta 3D" : "Siguiente"}
-              onClick={isLast ? handleComplete : goNext}
+            {/* Fondo espacial del selector */}
+            <Box
               position="fixed"
-              right={{ base: 1, md: 6 }}
-              top="50%"
-              transform="translateY(-50%)"
-              zIndex={10}
-              variant="ghost"
-              color={astrologiaTxt}
-              bg={{ base: "transparent", md: `${astrologiaTxt}10` }}
-              border={{ base: "none", md: `1px solid ${astrologiaTxt}33` }}
-              borderRadius="full"
-              w={{ base: "32px", md: "60px" }}
-              h={{ base: "32px", md: "60px" }}
-              minW={{ base: "32px", md: "60px" }}
-              boxShadow={{ base: "none", md: `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22` }}
-              _hover={{
-                bg: `${astrologiaTxt}22`,
-                borderColor: `${astrologiaTxt}88`,
-                boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
-              }}
-              icon={
-                isLast ? (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
-                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
-                    <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
-                  </Box>
-                ) : (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
-                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
-                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-                  </Box>
-                )
-              }
-            />
+              inset="0"
+              pointerEvents="none"
+              zIndex={0}
+              bg="#050505"
+              overflow="hidden"
+              sx={{ backdropFilter: "blur(20px)" }}
+            >
+              <Box
+                as="img"
+                src="/img/astrologia/space.jpg"
+                alt=""
+                loading="eager"
+                position="absolute"
+                inset="0"
+                w="100%"
+                h="100%"
+                style={{ objectFit: "cover", objectPosition: "center", opacity: 0.6 }}
+              />
+              <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
+            </Box>
 
             <ModalBody
-              ref={contentRef}
               position="relative"
               zIndex={2}
-              // En móvil padding mínimo a los lados (las flechas son pequeñas y
-              // flotantes sin círculo, así que no necesitan margen reservado).
-              // En desktop conservamos el padding generoso original.
-              px={{ base: 4, md: 24 }}
-              // pt extra para que el contenido no choque con la X de cerrar
-              // (top: 3/5). pb generoso para respirar al final del scroll.
-              pt={{ base: 16, md: 20 }}
-              pb={{ base: 14, md: 18 }}
-              overflowY="auto"
-              minH="100vh"
+              w="100%"
+              px={{ base: 5, md: 10 }}
+              pt={{ base: 16, md: 14 }}
+              pb={{ base: 10, md: 14 }}
               display="flex"
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
+              flexDirection="column"
+              alignItems="center"
+              justifyContent={{ base: "flex-start", md: "center" }}
+              minH={{ base: "auto", md: "100vh" }}
+              overflowY="auto"
+              overflowX="hidden"
               sx={{
-                // safe center: centra verticalmente cuando el contenido cabe,
-                // pero al desbordar alinea arriba para no recortar el inicio
-                // y permite hacer scroll a todo el contenido.
-                alignItems: "safe center",
+                WebkitOverflowScrolling: "touch",
                 scrollbarWidth: "none",
-                msOverflowStyle: "none",
                 "&::-webkit-scrollbar": { display: "none" },
-                touchAction: "pan-y",
               }}
             >
-              <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
-                <Box
-                  key={`img-${seccion}-${index}`}
-                  // Móvil: imagen al 100% del body (mismo ancho que el box de texto).
-                  // Desktop: como antes, más estrecha y centrada para no dominar.
-                  w={{ base: "100%", sm: "75%", md: "60%" }}
-                  maxW={{ base: "100%", md: "440px" }}
-                  aspectRatio={1}
-                  animation={`${fadeIn} 0.5s ease both`}
-                  position="relative"
-                  sx={{
-                    filter: `
-                      drop-shadow(0 0 30px rgba(255,255,255,0.35))
-                      drop-shadow(0 0 60px rgba(180,210,255,0.28))
-                      drop-shadow(0 0 110px ${astrologiaTxt}55)
-                    `,
-                  }}
-                >
-                  {!imgFailed[index] ? (
-                    <Image
-                      src={encodeURI(current.src)}
-                      alt={`Viñeta ${index + 1}`}
-                      w="100%"
-                      h="100%"
-                      objectFit="contain"
-                      onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
-                    />
-                  ) : (
-                    <Flex
-                      w="100%"
-                      h="100%"
-                      align="center"
-                      justify="center"
-                      direction="column"
-                      gap={2}
-                      px={4}
-                      textAlign="center"
-                      bg="rgba(8,13,30,0.55)"
-                      border={`1px dashed ${astrologiaTxt}44`}
-                      borderRadius="2xl"
-                    >
-                      <Text fontSize="4xl">✨</Text>
-                      <Text color={`${astrologiaTxt}cc`} fontSize="sm" fontStyle="italic">
-                        Viñeta {index + 1} próximamente
-                      </Text>
-                    </Flex>
-                  )}
-                </Box>
-
-                <Box
-                  key={`txt-${seccion}-${index}`}
-                  w="100%"
-                  position="relative"
-                  borderRadius="xl"
-                  overflow="hidden"
-                  border={`1px solid ${astrologiaTxt}44`}
-                  px={{ base: 5, md: 8 }}
-                  pt={{ base: 5, md: 7 }}
-                  pb={{ base: 8, md: 9 }}
-                  animation={`${fadeIn} 0.55s ease 0.08s both`}
-                  boxShadow={`0 0 18px ${astrologiaTxt}22, 0 0 40px ${astrologiaTxt}14, inset 0 0 20px rgba(0,0,0,0.35)`}
-                >
-                  <Box
-                    position="absolute"
-                    inset="0"
-                    pointerEvents="none"
-                    zIndex={0}
+              <Flex
+                direction="column"
+                align="center"
+                gap={{ base: 8, md: 10 }}
+                w="100%"
+                maxW="1280px"
+                mx="auto"
+                mt={{ base: 8, md: 4 }}
+                mb={{ base: 10, md: 8 }}
+              >
+                <Flex direction="column" align="center" gap={2}>
+                  <Text
+                    color="white"
+                    fontSize={{ base: "2xl", md: "4xl" }}
+                    fontWeight="700"
+                    letterSpacing="0.2em"
+                    textTransform="uppercase"
+                    textAlign="center"
+                    lineHeight="1.1"
                     style={{
-                      background:
-                        "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
+                      textShadow: `0 0 14px ${astrologiaTxt}cc, 0 0 32px ${astrologiaTxt}77, 0 0 70px ${astrologiaTxt}44`,
                     }}
                   >
-                    <Box
-                      as="img"
-                      src="/img/astrologia/space.jpg"
-                      alt=""
-                      loading="eager"
-                      position="absolute"
-                      inset="0"
-                      w="100%"
-                      h="100%"
-                      style={{ objectFit: "cover", objectPosition: "center", opacity: 0.75 }}
-                    />
-                    <Box position="absolute" inset="0" bg="rgba(8,13,30,0.55)" />
-                  </Box>
-
-                  <Stars />
-
-                  <Box
-                    position="absolute"
-                    top="-1px"
-                    left="15%"
-                    right="15%"
-                    h="1px"
-                    bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
-                    zIndex={2}
-                  />
-
-                  <Flex
-                    direction="column"
-                    gap={4}
-                    position="relative"
-                    zIndex={2}
-                    onClick={skipTyping}
-                    cursor={typed < totalChars ? "pointer" : "default"}
-                  >
-                    {current.paragraphs.map((p, i) => {
-                      let consumed = 0;
-                      for (let j = 0; j < i; j++) consumed += current.paragraphs[j].length;
-                      const remaining = Math.max(0, typed - consumed);
-                      if (remaining === 0) return null;
-                      const shown = p.slice(0, remaining);
-                      const isCurrent = remaining < p.length;
-                      return (
-                        <Text
-                          key={i}
-                          color={i === 0 ? astrologiaTxt : `${astrologiaTxt}dd`}
-                          fontSize={{ base: "md", md: "lg" }}
-                          lineHeight="1.85"
-                          letterSpacing="0.02em"
-                          textAlign="center"
-                          fontWeight={i === 0 ? "600" : "400"}
-                          fontStyle={i === 0 ? "italic" : "normal"}
-                          style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
-                        >
-                          {shown}
-                          {isCurrent && (
-                            <Box
-                              as="span"
-                              display="inline-block"
-                              ml="3px"
-                              w="2px"
-                              h="1em"
-                              verticalAlign="text-bottom"
-                              bg={astrologiaTxt}
-                              animation={`${blink} 0.9s steps(1) infinite`}
-                              sx={{ boxShadow: `0 0 8px ${astrologiaTxt}` }}
-                            />
-                          )}
-                        </Text>
-                      );
-                    })}
-                  </Flex>
-
-                  <Box
-                    position="absolute"
-                    bottom="-1px"
-                    left="15%"
-                    right="15%"
-                    h="1px"
-                    bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
-                    zIndex={2}
-                  />
-
-                  <Text
-                    position="absolute"
-                    bottom={{ base: 2, md: 3 }}
-                    right={{ base: 3, md: 4 }}
-                    color={`${astrologiaTxt}99`}
-                    fontSize={{ base: "xs", md: "sm" }}
-                    fontStyle="italic"
-                    letterSpacing="0.18em"
-                    style={{ textShadow: glowTextSoft }}
-                    zIndex={2}
-                  >
-                    {index + 1} / {total}
+                    Ilustraciones de Astrología
                   </Text>
-                </Box>
+                  <Text
+                    color={`${astrologiaTxt}cc`}
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontStyle="italic"
+                    letterSpacing="0.08em"
+                    textAlign="center"
+                    maxW="520px"
+                  >
+                    Elige un capítulo para empezar a leer.
+                  </Text>
+                </Flex>
+
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  gap={{ base: 5, md: 6 }}
+                  w="100%"
+                  justify="center"
+                  align={{ base: "center", md: "stretch" }}
+                  wrap="wrap"
+                >
+                  {SELECTOR_OPTIONS.map((opt, i) => (
+                    <SelectorCard
+                      key={opt.seccion}
+                      option={opt}
+                      onClick={() => elegirSeccion(opt.seccion)}
+                      delay={`${i * 0.08}s`}
+                    />
+                  ))}
+                </Flex>
               </Flex>
             </ModalBody>
           </>
+        )}
+
+        {/* ── VISTA CÓMIC ── usa el mismo ComicViewer que el cómic del Inicio. */}
+        {seccion && (
+          <ComicViewer
+            key={seccion}
+            vinetas={VINETAS_BY_SECCION[seccion]}
+            onClose={onClose}
+            onComplete={handleComplete}
+            onBack={volverAlSelector}
+          />
         )}
       </ModalContent>
     </Modal>
