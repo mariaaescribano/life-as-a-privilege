@@ -180,6 +180,8 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const contentRef = useRef<HTMLDivElement>(null);
+  // Posición inicial del dedo para detectar swipe horizontal (deslizar viñeta).
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const total = VINETAS.length;
   const current = VINETAS[index];
@@ -212,6 +214,23 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
 
   const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
   const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
+
+  // ── Swipe táctil para pasar viñeta con el dedo ──
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.current.x;
+    const dy = t.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx > 0) goPrev();
+      else goNext();
+    }
+  };
 
   // ── Typewriter ──
   const totalChars = current.paragraphs.reduce((acc, p) => acc + p.length, 0);
@@ -304,27 +323,31 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
           onClick={goPrev}
           isDisabled={isFirst}
           position="fixed"
-          left={{ base: 2, md: 6 }}
+          left={{ base: 1, md: 6 }}
           top="50%"
           transform="translateY(-50%)"
           zIndex={10}
           variant="ghost"
           color={astrologiaTxt}
           opacity={isFirst ? 0.25 : 1}
-          bg={`${astrologiaTxt}10`}
-          border={`1px solid ${astrologiaTxt}33`}
+          // Móvil: sin círculo, icono pequeño flotando. Desktop: círculo con glow.
+          bg={{ base: "transparent", md: `${astrologiaTxt}10` }}
+          border={{ base: "none", md: `1px solid ${astrologiaTxt}33` }}
           borderRadius="full"
-          w={{ base: "44px", md: "60px" }}
-          h={{ base: "44px", md: "60px" }}
-          boxShadow={isFirst ? "none" : `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
+          w={{ base: "32px", md: "60px" }}
+          h={{ base: "32px", md: "60px" }}
+          minW={{ base: "32px", md: "60px" }}
+          boxShadow={isFirst
+            ? "none"
+            : { base: "none", md: `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22` }}
           _hover={isFirst ? {} : {
             bg: `${astrologiaTxt}22`,
             borderColor: `${astrologiaTxt}88`,
             boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
           }}
           icon={
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-              style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
+              style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
               <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
             </Box>
           }
@@ -335,18 +358,19 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
           aria-label={isLast ? "Cerrar" : "Siguiente"}
           onClick={isLast ? onClose : goNext}
           position="fixed"
-          right={{ base: 2, md: 6 }}
+          right={{ base: 1, md: 6 }}
           top="50%"
           transform="translateY(-50%)"
           zIndex={10}
           variant="ghost"
           color={astrologiaTxt}
-          bg={`${astrologiaTxt}10`}
-          border={`1px solid ${astrologiaTxt}33`}
+          bg={{ base: "transparent", md: `${astrologiaTxt}10` }}
+          border={{ base: "none", md: `1px solid ${astrologiaTxt}33` }}
           borderRadius="full"
-          w={{ base: "44px", md: "60px" }}
-          h={{ base: "44px", md: "60px" }}
-          boxShadow={`0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
+          w={{ base: "32px", md: "60px" }}
+          h={{ base: "32px", md: "60px" }}
+          minW={{ base: "32px", md: "60px" }}
+          boxShadow={{ base: "none", md: `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22` }}
           _hover={{
             bg: `${astrologiaTxt}22`,
             borderColor: `${astrologiaTxt}88`,
@@ -354,13 +378,13 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
           }}
           icon={
             isLast ? (
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
+                style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
                 <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
               </Box>
             ) : (
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
+                style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
                 <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
               </Box>
             )
@@ -372,19 +396,24 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
           ref={contentRef}
           position="relative"
           zIndex={2}
-          px={{ base: 14, md: 24 }}
+          // Móvil: padding mínimo para que la imagen llegue al ancho del box de texto.
+          px={{ base: 4, md: 24 }}
           py={{ base: 6, md: 12 }}
           overflowY="auto"
           minH="100vh"
           display="flex"
           alignItems="center"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          sx={{ touchAction: "pan-y" }}
         >
           <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
             {/* Imagen — suelta, con halo de luz alrededor */}
             <Box
               key={`img-${index}`}
-              w={{ base: "85%", sm: "70%", md: "60%" }}
-              maxW="440px"
+              // Móvil: 100% (mismo ancho que el box de texto). Desktop: como antes.
+              w={{ base: "100%", sm: "75%", md: "60%" }}
+              maxW={{ base: "100%", md: "440px" }}
               aspectRatio={1}
               animation={`${fadeIn} 0.5s ease both`}
               position="relative"

@@ -428,8 +428,12 @@ function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
       onClick={onClick}
       position="relative"
       flex="1"
-      minW={{ base: "100%", sm: "280px", md: "300px" }}
-      maxW={{ base: "100%", md: "360px" }}
+      w="100%"
+      // En móvil cada card queda más estrecho (≈300px) para que foto cuadrada
+      // + título quepan juntos en el viewport sin partirse en dos pantallazos.
+      // En desktop recuperamos los anchos generosos para que se vean amplios.
+      minW={{ base: "auto", sm: "280px", md: "300px" }}
+      maxW={{ base: "300px", md: "360px" }}
       borderRadius="2xl"
       overflow="hidden"
       border={`1px solid ${astrologiaTxt}55`}
@@ -576,6 +580,8 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const contentRef = useRef<HTMLDivElement>(null);
+  // Posición inicial del dedo para detectar swipe horizontal (deslizar viñeta).
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const vinetas = seccion ? VINETAS_BY_SECCION[seccion] : [];
   const total = vinetas.length;
@@ -642,6 +648,30 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
   const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
   const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
 
+  // ── Swipe táctil para pasar viñeta con el dedo ──
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.current.x;
+    const dy = t.clientY - touchStart.current.y;
+    touchStart.current = null;
+    // Solo cuenta como swipe si el movimiento es claramente horizontal y suficiente.
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx > 0) {
+        // Deslizar a la derecha → viñeta anterior.
+        goPrev();
+      } else {
+        // Deslizar a la izquierda → siguiente (o completa si es la última).
+        if (isLast) handleComplete();
+        else goNext();
+      }
+    }
+  };
+
   // ── Typewriter ──
   const totalChars = current ? current.paragraphs.reduce((acc, p) => acc + p.length, 0) : 0;
   const [typed, setTyped] = useState(0);
@@ -682,7 +712,9 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        overflow="hidden"
+        // overflow="hidden" eliminado: bloqueaba el scroll del ModalBody en móvil.
+        // El fondo fijo (siguiente Box con position="fixed") no necesita clip;
+        // el ModalBody se ocupa de su propio scroll interno.
         minH="100vh"
       >
         {/* Fondo espacial */}
@@ -752,13 +784,25 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
           <ModalBody
             position="relative"
             zIndex={2}
+            w="100%"
+            // Padding superior generoso para dejar hueco al botón X y al título.
+            // Padding inferior + lateral para que en móvil la última card respire.
             px={{ base: 5, md: 10 }}
-            py={{ base: 10, md: 14 }}
-            minH="100vh"
+            pt={{ base: 16, md: 14 }}
+            pb={{ base: 10, md: 14 }}
+            // Sin minH ni alineación vertical centrada: en móvil la columna de 3
+            // tarjetas supera 100vh y el centrado provocaba que se cortaran los
+            // bordes sin poder hacer scroll.
             display="flex"
+            flexDirection="column"
             alignItems="center"
-            justifyContent="center"
+            justifyContent={{ base: "flex-start", md: "center" }}
+            minH={{ base: "auto", md: "100vh" }}
+            overflowY="auto"
+            overflowX="hidden"
             sx={{
+              // Permite scroll suave con momentum en iOS.
+              WebkitOverflowScrolling: "touch",
               scrollbarWidth: "none",
               "&::-webkit-scrollbar": { display: "none" },
             }}
@@ -796,7 +840,9 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                 gap={{ base: 5, md: 6 }}
                 w="100%"
                 justify="center"
-                align="stretch"
+                // En móvil cards centrados horizontalmente (más estrechos que el
+                // ancho del modal); en desktop stretch para que tengan misma altura.
+                align={{ base: "center", md: "stretch" }}
                 wrap="wrap"
               >
                 {SELECTOR_OPTIONS.map((opt, i) => (
@@ -820,27 +866,32 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               onClick={goPrev}
               isDisabled={isFirst}
               position="fixed"
-              left={{ base: 2, md: 6 }}
+              left={{ base: 1, md: 6 }}
               top="50%"
               transform="translateY(-50%)"
               zIndex={10}
               variant="ghost"
               color={astrologiaTxt}
               opacity={isFirst ? 0.25 : 1}
-              bg={`${astrologiaTxt}10`}
-              border={`1px solid ${astrologiaTxt}33`}
+              // En móvil: sin círculo (bg/border/shadow), icono más pequeño,
+              // simplemente flotando sobre la imagen.
+              bg={{ base: "transparent", md: `${astrologiaTxt}10` }}
+              border={{ base: "none", md: `1px solid ${astrologiaTxt}33` }}
               borderRadius="full"
-              w={{ base: "44px", md: "60px" }}
-              h={{ base: "44px", md: "60px" }}
-              boxShadow={isFirst ? "none" : `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
+              w={{ base: "32px", md: "60px" }}
+              h={{ base: "32px", md: "60px" }}
+              minW={{ base: "32px", md: "60px" }}
+              boxShadow={isFirst
+                ? "none"
+                : { base: "none", md: `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22` }}
               _hover={isFirst ? {} : {
                 bg: `${astrologiaTxt}22`,
                 borderColor: `${astrologiaTxt}88`,
                 boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
               }}
               icon={
-                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                  style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
+                  style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
                   <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
                 </Box>
               }
@@ -850,18 +901,19 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               aria-label={isLast ? "Continuar a la carta 3D" : "Siguiente"}
               onClick={isLast ? handleComplete : goNext}
               position="fixed"
-              right={{ base: 2, md: 6 }}
+              right={{ base: 1, md: 6 }}
               top="50%"
               transform="translateY(-50%)"
               zIndex={10}
               variant="ghost"
               color={astrologiaTxt}
-              bg={`${astrologiaTxt}10`}
-              border={`1px solid ${astrologiaTxt}33`}
+              bg={{ base: "transparent", md: `${astrologiaTxt}10` }}
+              border={{ base: "none", md: `1px solid ${astrologiaTxt}33` }}
               borderRadius="full"
-              w={{ base: "44px", md: "60px" }}
-              h={{ base: "44px", md: "60px" }}
-              boxShadow={`0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
+              w={{ base: "32px", md: "60px" }}
+              h={{ base: "32px", md: "60px" }}
+              minW={{ base: "32px", md: "60px" }}
+              boxShadow={{ base: "none", md: `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22` }}
               _hover={{
                 bg: `${astrologiaTxt}22`,
                 borderColor: `${astrologiaTxt}88`,
@@ -869,13 +921,13 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               }}
               icon={
                 isLast ? (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
+                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
                     <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
                   </Box>
                 ) : (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={astrologiaTxt}
+                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}cc) drop-shadow(0 0 14px ${astrologiaTxt}77)` }}>
                     <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                   </Box>
                 )
@@ -886,23 +938,32 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               ref={contentRef}
               position="relative"
               zIndex={2}
-              px={{ base: 14, md: 24 }}
+              // En móvil padding mínimo a los lados (las flechas son pequeñas y
+              // flotantes sin círculo, así que no necesitan margen reservado).
+              // En desktop conservamos el padding generoso original.
+              px={{ base: 4, md: 24 }}
               py={{ base: 6, md: 12 }}
               overflowY="auto"
               minH="100vh"
               display="flex"
               alignItems="center"
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
               sx={{
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
                 "&::-webkit-scrollbar": { display: "none" },
+                // Mejora el swipe horizontal: el scroll vertical sigue funcionando.
+                touchAction: "pan-y",
               }}
             >
               <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
                 <Box
                   key={`img-${seccion}-${index}`}
-                  w={{ base: "85%", sm: "70%", md: "60%" }}
-                  maxW="440px"
+                  // Móvil: imagen al 100% del body (mismo ancho que el box de texto).
+                  // Desktop: como antes, más estrecha y centrada para no dominar.
+                  w={{ base: "100%", sm: "75%", md: "60%" }}
+                  maxW={{ base: "100%", md: "440px" }}
                   aspectRatio={1}
                   animation={`${fadeIn} 0.5s ease both`}
                   position="relative"

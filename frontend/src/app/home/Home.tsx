@@ -308,12 +308,17 @@ const Home = () => {
             </Text>
             <Text
               color="rgba(255,255,255,0.92)"
-              fontSize={{ base: "lg", md: "2xl" }}
+              // En móvil: clamp() escala el tamaño según el ancho del viewport
+              // para que la frase entre siempre en una sola línea, sea cual
+              // sea el dispositivo (desde 320px hasta tablet).
+              fontSize={{ base: "clamp(0.7rem, 3.4vw, 1.05rem)", md: "2xl" }}
               fontStyle="italic"
               textAlign="center"
-              letterSpacing="0.04em"
+              letterSpacing={{ base: "0.02em", md: "0.04em" }}
+              whiteSpace={{ base: "nowrap", md: "normal" }}
               textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3)"
               mb={{ base: 10, md: 8 }}
+              px={2}
             >
               Este es «El Recorrido» para empezar el camino de vuelta a ti.
             </Text>
@@ -519,6 +524,64 @@ const Home = () => {
         )}
       </Box>
 
+      {/* Botón inline "El inicio de todo" — solo en móvil, debajo del mandala.
+          En desktop usamos el botón flotante de más abajo (no colisiona con nada). */}
+      <Flex
+        display={{ base: "flex", md: "none" }}
+        justify="center"
+        px={5}
+        // Separación generosa: respira respecto al mandala arriba y al footer abajo.
+        pt={{ base: 4, sm: 6 }}
+        pb={{ base: 10, sm: 12 }}
+      >
+        <Box
+          as="button"
+          onClick={() => setComicOpen(true)}
+          px={5}
+          py={3}
+          borderRadius="full"
+          bg="rgba(0,40,40,0.55)"
+          border="1px solid rgba(255,255,255,0.55)"
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontSize="md"
+          fontWeight="600"
+          letterSpacing="0.04em"
+          cursor="pointer"
+          boxShadow="0 0 18px rgba(255,255,255,0.25), 0 0 38px rgba(180,255,245,0.18), 0 6px 24px rgba(0,0,0,0.35)"
+          transition="all 0.25s ease"
+          _hover={{
+            transform: "translateY(-2px)",
+            bg: "rgba(0,60,60,0.7)",
+            boxShadow: "0 0 28px rgba(255,255,255,0.45), 0 0 60px rgba(180,255,245,0.3), 0 8px 28px rgba(0,0,0,0.4)",
+          }}
+          display="inline-flex"
+          alignItems="center"
+          gap={3}
+          sx={{ backdropFilter: "blur(6px)" }}
+        >
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h="22px"
+            objectFit="contain"
+            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55))" }}
+          />
+          <Box as="span">El inicio de todo</Box>
+          <Box
+            as="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 -960 960 960"
+            w="20px"
+            h="20px"
+            fill="white"
+            style={{ filter: "drop-shadow(0 0 5px rgba(255,255,255,0.55))" }}
+          >
+            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+          </Box>
+        </Box>
+      </Flex>
+
       <SiteFooter />
 
       <AvisoInicialModal isOpen={avisoOpen} onConfirm={confirmarAviso} />
@@ -535,7 +598,8 @@ const Home = () => {
       />
       {verificandoPago && <SpinnerTurquesa />}
 
-      {/* Botón flotante "El inicio de todo" — siempre visible */}
+      {/* Botón flotante "El inicio de todo" — solo en desktop (en móvil se
+          renderiza inline debajo del mandala para no chocar con el footer). */}
       <Box
         as="button"
         onClick={() => setComicOpen(true)}
@@ -561,7 +625,7 @@ const Home = () => {
             bg: "rgba(0,60,60,0.7)",
             boxShadow: "0 0 28px rgba(255,255,255,0.45), 0 0 60px rgba(180,255,245,0.3), 0 8px 28px rgba(0,0,0,0.4)",
           }}
-          display="inline-flex"
+          display={{ base: "none", md: "inline-flex" }}
           alignItems="center"
           gap={3}
           sx={{ backdropFilter: "blur(6px)" }}

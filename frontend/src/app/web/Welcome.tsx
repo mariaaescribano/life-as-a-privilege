@@ -380,7 +380,7 @@ const Welcome = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
         >
-          Ingeniera informática, 21 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos ancestrales se combinan en vez de pelearse. Ahora son aliados.
+          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos ancestrales se combinan en vez de pelearse. Ahora son aliados.
         </Text>
 
         {/* Botón Conoce más */}
