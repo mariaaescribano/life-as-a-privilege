@@ -711,7 +711,17 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
   const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="full"
+      isCentered
+      // Solo el selector de ilustraciones usa scrollBehavior="inside"
+      // (su layout original). En la vista cómic usamos el patrón de
+      // ComicUniversoModal (overflow:hidden en ModalContent) para que el
+      // scroll del ModalBody se active correctamente.
+      scrollBehavior={seccion ? undefined : "inside"}
+    >
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
@@ -720,10 +730,11 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        // overflow:hidden encaja el ModalContent a 100vh para que el
-        // overflowY:auto del ModalBody pueda activar su scroll interno.
-        // (Mismo patrón que ComicUniversoModal, que sí scrollea.)
-        overflow="hidden"
+        // overflow:hidden SOLO en la vista cómic: encaja el ModalContent a
+        // 100vh para que el overflowY:auto del ModalBody active el scroll.
+        // En el selector lo dejamos sin clip (como estaba originalmente)
+        // para que las cards en móvil hagan scroll de forma natural.
+        overflow={seccion ? "hidden" : undefined}
         minH="100vh"
       >
         {/* Fondo espacial */}
@@ -805,13 +816,11 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             display="flex"
             flexDirection="column"
             alignItems="center"
+            justifyContent={{ base: "flex-start", md: "center" }}
             minH={{ base: "auto", md: "100vh" }}
             overflowY="auto"
             overflowX="hidden"
             sx={{
-              // safe center en desktop: centra cuando cabe, pero al desbordar
-              // alinea arriba en vez de recortar (permite scroll completo).
-              justifyContent: { base: "flex-start", md: "safe center" },
               // Permite scroll suave con momentum en iOS.
               WebkitOverflowScrolling: "touch",
               scrollbarWidth: "none",
