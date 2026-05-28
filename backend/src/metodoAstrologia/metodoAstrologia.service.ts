@@ -151,6 +151,19 @@ export class MetodoAstrologiaService {
     return { success: true };
   }
 
+  // ── Fuerza el recálculo de la carta natal a partir de los datos ya guardados.
+  // Útil tras un cambio en el algoritmo de cusps (sin tener que reabrir el cuadro de datos). ──
+  async recalcular(userId: string): Promise<{ success: boolean; message?: string; carta?: CartaNatal }> {
+    const row = await this.getMetodoAstrologia(userId);
+    if (!row) return { success: false, message: 'Usuario sin datos de carta' };
+    if (!row.fecha_nacimiento || !row.hora_nacimiento || row.latitud == null || row.longitud == null || !row.timezone) {
+      return { success: false, message: 'Faltan datos de nacimiento (fecha/hora/lat/lng/timezone) para recalcular' };
+    }
+    const carta = await this.calcularYGuardar(userId, row);
+    if (!carta) return { success: false, message: 'No se pudo calcular la carta' };
+    return { success: true, carta };
+  }
+
   // ── Ajuste manual de Quirón / nodos en el JSON cacheado ──
   async setCuerpoManual(userId: string, planeta: CuerpoKey, grado: number): Promise<{ success: boolean; message?: string; carta?: CartaNatal }> {
     if (!CUERPOS_MANUALES.includes(planeta)) {

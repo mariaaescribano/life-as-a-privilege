@@ -5,14 +5,7 @@ USAR OBJ+ID : userId
 
 
 
-
-- google drive y poner que se puedan descargar en pdf 
-- cambiar fotos de algunos cursos
-- cambiar fotos de libros
-- poner instagram
-
-
-
+- encuentra la forma de poder calcular a quiron y los nodos que no incumba el yo tener que escribirlo a mano (quita el botón ese)
 
 
 

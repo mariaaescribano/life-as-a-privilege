@@ -187,7 +187,13 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
   const isLast = index === total - 1;
 
   useEffect(() => {
-    if (isOpen) setIndex(0);
+    if (isOpen) {
+      setIndex(0);
+      // Resetea imgFailed: si en un intento previo (p. ej. antes de subir las
+      // imágenes) alguna falló, sin esto el fallback "próximamente" se queda
+      // pegado aunque las imágenes ya estén accesibles.
+      setImgFailed({});
+    }
   }, [isOpen]);
 
   useEffect(() => {
@@ -498,7 +504,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
                       letterSpacing="0.02em"
                       textAlign="center"
                       fontWeight={i === 0 ? "600" : "400"}
-                      fontStyle={i === 0 ? "normal" : "italic"}
+                      fontStyle={i === 0 ? "italic" : "normal"}
                       style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
                     >
                       {shown}

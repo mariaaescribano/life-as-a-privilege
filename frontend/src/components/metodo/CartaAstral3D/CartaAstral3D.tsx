@@ -52,8 +52,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!focusInside) return;
-      if (e.key === "ArrowLeft")  { e.preventDefault(); stepFocus(-1); }
-      if (e.key === "ArrowRight") { e.preventDefault(); stepFocus(1);  }
+      if (e.key === "ArrowLeft")  { e.preventDefault(); stepFocus(1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); stepFocus(-1);  }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -63,7 +63,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
     return planetasOrdenados.map((p, i) => {
       const c = cuerpoByKey(p.planeta);
       if (!c) return null;
-      const theta = gradoAVisualRad(p.grado, carta.ascendente);
+      const theta = gradoAVisualRad(p.grado, carta.cusps);
       const x = Math.cos(theta) * R_PLANETS;
       const y = Math.sin(theta) * R_PLANETS;
       return (
@@ -76,7 +76,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
         />
       );
     });
-  }, [planetasOrdenados, carta.ascendente, focusedIdx]);
+  }, [planetasOrdenados, carta.cusps, focusedIdx]);
 
   return (
     <Flex
@@ -101,108 +101,135 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
         w="100%"
         maxW="520px"
       >
-        <ArrowButton dir="left"  color={color} onClick={() => stepFocus(-1)} />
+        <ArrowButton dir="left"  color={color} onClick={() => stepFocus(1)} />
 
-        <Flex direction="column" align="center" gap={2} minW={{ base: "160px", md: "220px" }}>
-          {focusedCuerpo && focused && (
-            <>
-              <Flex align="center" gap={2}>
+        <Flex direction="column" align="stretch" gap={2} flex="1" minW={{ base: "180px", md: "260px" }} maxW={{ base: "240px", md: "340px" }}>
+          {focusedCuerpo && focused && (() => {
+            const leido = !!completados?.[focusedCuerpo.key];
+            const c = focusedCuerpo.color;
+            const interactivo = !!onSaberMas;
+
+            const contenido = (
+              <Flex direction="column" align="center" justify="center" gap={1} w="100%" px={interactivo ? { base: 8, md: 10 } : 0}>
                 <Text
                   color="white"
                   fontFamily="'EB Garamond', serif"
                   fontSize={{ base: "md", md: "lg" }}
-                  fontWeight="600"
+                  fontWeight="700"
                   letterSpacing="0.18em"
                   textTransform="uppercase"
-                  style={{ textShadow: `0 0 10px ${focusedCuerpo.color}cc, 0 0 22px ${focusedCuerpo.color}77` }}
+                  lineHeight="1.1"
+                  textAlign="center"
+                  style={{ textShadow: `0 0 10px ${c}cc, 0 0 22px ${c}77` }}
                 >
                   {focusedCuerpo.label}
                 </Text>
-                {completados?.[focusedCuerpo.key] && (
-                  <Text
-                    color={focusedCuerpo.color}
-                    fontSize="md"
-                    style={{ textShadow: `0 0 8px ${focusedCuerpo.color}` }}
-                  >
-                    ✓
-                  </Text>
-                )}
-              </Flex>
-              {onSaberMas ? (() => {
-                const leido = !!completados?.[focusedCuerpo.key];
-                return (
-                  <Flex
-                    as="button"
-                    onClick={() => onSaberMas(focusedCuerpo.key)}
-                    mt={1}
-                    px={{ base: 4, md: 5 }}
-                    py={{ base: 1.5, md: 2 }}
-                    borderRadius="full"
-                    bg={`${focusedCuerpo.color}10`}
-                    color={focusedCuerpo.color}
-                    border={`1px solid ${focusedCuerpo.color}77`}
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "xs", md: "sm" }}
-                    letterSpacing="0.06em"
-                    cursor="pointer"
-                    align="center"
-                    gap={2}
-                    sx={{
-                      transition: "all 0.2s ease",
-                      boxShadow: `0 0 10px ${focusedCuerpo.color}33, 0 0 22px ${focusedCuerpo.color}1f`,
-                      textShadow: `0 0 8px ${focusedCuerpo.color}88, 0 0 18px rgba(255,255,255,0.25)`,
-                      animation: leido ? "none" : "saberMasPulse 2.6s ease-in-out infinite",
-                      "@keyframes saberMasPulse": {
-                        "0%, 100%": { boxShadow: `0 0 10px ${focusedCuerpo.color}33, 0 0 22px ${focusedCuerpo.color}1f` },
-                        "50%":       { boxShadow: `0 0 18px ${focusedCuerpo.color}77, 0 0 36px ${focusedCuerpo.color}44` },
-                      },
-                      _hover: {
-                        bg: `${focusedCuerpo.color}22`,
-                        borderColor: focusedCuerpo.color,
-                        boxShadow: `0 0 22px ${focusedCuerpo.color}99, 0 0 44px ${focusedCuerpo.color}55`,
-                        animation: "none",
-                      },
-                    }}
-                  >
-                    <Text as="span" fontStyle="italic">
-                      {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
-                    </Text>
-                    <Box as="span" display="inline-flex" alignItems="center" opacity={0.95}>
-                      {leido ? (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M5 12h14" />
-                          <path d="M13 6l6 6-6 6" />
-                        </svg>
-                      )}
-                    </Box>
-                  </Flex>
-                );
-              })() : (
                 <Text
-                  color={`${focusedCuerpo.color}ee`}
+                  color={`${c}ee`}
                   fontFamily="'EB Garamond', serif"
                   fontSize={{ base: "xs", md: "sm" }}
                   fontStyle="italic"
                   letterSpacing="0.05em"
-                  style={{ textShadow: `0 0 8px rgba(255,255,255,0.4)` }}
+                  textAlign="center"
+                  style={{ textShadow: `0 0 8px rgba(255,255,255,0.35)` }}
                 >
                   {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
                 </Text>
-              )}
-            </>
-          )}
+              </Flex>
+            );
+
+            const iconoLateral = interactivo ? (
+              <Box
+                position="absolute"
+                right={{ base: 3, md: 3.5 }}
+                top="50%"
+                transform="translateY(-50%)"
+                display="inline-flex"
+                alignItems="center"
+                justifyContent="center"
+                w={{ base: "26px", md: "30px" }}
+                h={{ base: "26px", md: "30px" }}
+                borderRadius="full"
+                bg={leido ? `${c}33` : `${c}22`}
+                color={c}
+                pointerEvents="none"
+                sx={{ boxShadow: `0 0 10px ${c}55` }}
+              >
+                {leido ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="M13 6l6 6-6 6" />
+                  </svg>
+                )}
+              </Box>
+            ) : null;
+
+            if (!interactivo) {
+              return (
+                <Box
+                  position="relative"
+                  px={{ base: 4, md: 5 }}
+                  py={{ base: 3, md: 3.5 }}
+                  borderRadius="xl"
+                  bg={`${c}08`}
+                  border={`1px solid ${c}33`}
+                >
+                  {contenido}
+                </Box>
+              );
+            }
+
+            return (
+              <Box
+                as="button"
+                onClick={() => onSaberMas?.(focusedCuerpo.key)}
+                position="relative"
+                px={{ base: 4, md: 5 }}
+                py={{ base: 3, md: 3.5 }}
+                borderRadius="xl"
+                bg={`${c}12`}
+                border={`1px solid ${c}88`}
+                color={c}
+                cursor="pointer"
+                textAlign="center"
+                sx={{
+                  transition: "all 0.22s ease",
+                  boxShadow: `0 0 14px ${c}33, 0 0 32px ${c}1f, inset 0 0 16px rgba(255,255,255,0.04)`,
+                  animation: leido ? "none" : "saberMasPulse 2.6s ease-in-out infinite",
+                  "@keyframes saberMasPulse": {
+                    "0%, 100%": { boxShadow: `0 0 14px ${c}33, 0 0 32px ${c}1f, inset 0 0 16px rgba(255,255,255,0.04)` },
+                    "50%":       { boxShadow: `0 0 22px ${c}88, 0 0 50px ${c}55, inset 0 0 18px rgba(255,255,255,0.08)` },
+                  },
+                  _hover: {
+                    bg: `${c}22`,
+                    borderColor: c,
+                    transform: "translateY(-1px)",
+                    boxShadow: `0 0 26px ${c}99, 0 0 56px ${c}55, inset 0 0 18px rgba(255,255,255,0.08)`,
+                    animation: "none",
+                  },
+                  _active: { transform: "translateY(0)" },
+                }}
+              >
+                {contenido}
+                {iconoLateral}
+              </Box>
+            );
+          })()}
         </Flex>
 
-        <ArrowButton dir="right" color={color} onClick={() => stepFocus(1)}  />
+        <ArrowButton dir="right" color={color} onClick={() => stepFocus(-1)}  />
       </Flex>
 
       {/* ── Círculo de la carta ── */}
       <Box
-        w="100%"
+        w={{ base: "100%", md: "80%" }}
+        maxW="680px"
+        mx="auto"
+        mt={{ base: 4, md: 8 }}
         position="relative"
         sx={{
           aspectRatio: "1 / 1",
@@ -224,18 +251,16 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           <ZodiacRing
             innerRadius={R_ZODIAC_INNER}
             outerRadius={R_ZODIAC_OUTER}
-            ascendente={carta.ascendente}
+            cusps={carta.cusps}
           />
           <HousesRing
             innerRadius={R_HOUSES_INNER}
             outerRadius={R_HOUSES_OUTER}
-            cusps={carta.cusps}
-            ascendente={carta.ascendente}
           />
           <Aspects
             planetas={carta.planetas}
             aspectos={carta.aspectos}
-            ascendente={carta.ascendente}
+            cusps={carta.cusps}
             radio={R_PLANETS}
           />
           {planetMeshes}

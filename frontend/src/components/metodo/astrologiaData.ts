@@ -41,7 +41,7 @@ export const CUERPOS: Cuerpo[] = [
   { key: "urano",      label: "Urano",      symbol: "♅", color: "#80EFD8", conCasa: true  },
   { key: "neptuno",    label: "Neptuno",    symbol: "♆", color: "#6090FF", conCasa: true  },
   { key: "pluton",     label: "Plutón",     symbol: "♇", color: "#B080E0", conCasa: true  },
-  { key: "quiron",     label: "Quirón",     symbol: "⚷", color: "#C8B070", conCasa: true  },
+  { key: "quiron",     label: "Quirón",     symbol: "⚷", color: "#A8324A", conCasa: true  },
   { key: "nodoNorte",  label: "Nodo Norte", symbol: "☊", color: "#7BB8E0", conCasa: true  },
   { key: "nodoSur",    label: "Nodo Sur",   symbol: "☋", color: "#C8806A", conCasa: true  },
 ];

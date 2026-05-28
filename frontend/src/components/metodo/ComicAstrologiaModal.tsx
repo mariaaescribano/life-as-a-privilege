@@ -18,6 +18,11 @@ const fadeIn = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
+const fadeInScale = keyframes`
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+`;
+
 const twinkle = keyframes`
   0%, 100% { opacity: 0.35; }
   50%      { opacity: 1; }
@@ -36,100 +41,341 @@ interface Vineta {
   paragraphs: string[];
 }
 
-// TODO: sustituir las imágenes en /public/viñetas/astrologia/ y los textos por los definitivos
-const VINETAS: Vineta[] = [
+// ────────────────────────────────────────────────────────────────────────────
+// CONTENIDO DE LOS 3 SUB-CÓMICS
+// ────────────────────────────────────────────────────────────────────────────
+
+const VINETAS_PLANETAS: Vineta[] = [
   {
-    src: "/viñetas/astrologia/viñeta1.png",
+    src: "/viñetas/astrologia/planetas/sol.png",
     paragraphs: [
       "El Sol es la energía que nuestra alma necesita manifestar en su más alta frecuencia.",
       "No es lo que somos, es a lo que llegamos cuando nos hemos realizado.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta2.png",
+    src: "/viñetas/astrologia/planetas/luna.png",
     paragraphs: [
       "La Luna fue lo que nos cobijó los primeros años de Vida.",
       "Nuestro más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y donde descansamos.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta3.png",
+    src: "/viñetas/astrologia/planetas/mercurio.png",
     paragraphs: [
       "Mercurio es nuestro tipo de mentalidad.",
       "Dónde tenemos curiosidad, dónde permanecemos abiertos al cambio y preparados para descubrir cosas nuevas.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta4.png",
+    src: "/viñetas/astrologia/planetas/venus.png",
     paragraphs: [
       "Venus es la energía que nos abre el corazón.",
       "Cómo disfrutamos de la Vida, dónde y cómo deseamos ser amados.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta5.png",
+    src: "/viñetas/astrologia/planetas/marte.png",
     paragraphs: [
       "Marte es la energía que canaliza el deseo hacia la acción.",
       "Cómo y por qué entramos en acción, nuestra ambición y agresividad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta6.png",
+    src: "/viñetas/astrologia/planetas/jupiter.png",
     paragraphs: [
       "Júpiter es la expansión, la abundancia, las bendiciones que recibimos, los estudios y la alta consciencia.",
       "Nuestro estilo de crecimiento, nuestro deseo de trascender los límites y dónde buscamos el sentido de nuestra Vida.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta7.png",
+    src: "/viñetas/astrologia/planetas/saturno.png",
     paragraphs: [
       "Saturno es la estructura y el autosostenimiento. Nos obliga a hacernos cargo de nosotros.",
       "Su crecimiento nos hace sentir inseguros, inadecuados y pequeños, pero si le integramos nos convertiremos en Maestros de esa energía.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta8.png",
+    src: "/viñetas/astrologia/planetas/urano.png",
     paragraphs: [
       "Urano es la creación sin límites, la originalidad y lo impredecible.",
       "Dónde queremos más sin valorar lo que ya hay, el futurismo, lo inesperado y la libertad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta9.png",
+    src: "/viñetas/astrologia/planetas/neptuno.png",
     paragraphs: [
       "Neptuno es la confusión, el anhelo del Amor real y lo intangible.",
       "Dónde buscamos la fusión con Dios, cómo engañamos a otros y a nosotros. Puede no importarnos la realidad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta10.png",
+    src: "/viñetas/astrologia/planetas/pluton.png",
     paragraphs: [
       "Plutón es la bomba nuclear que nos destruye cíclicamente.",
       "No le vemos venir. Es nuestro miedo más profundo. Es la destrucción total que nos invita a una dolorosa pero necesaria transformación.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta11.png",
+    src: "/viñetas/astrologia/planetas/nodoSur.png",
     paragraphs: [
       "El Nodo Sur es lo que debemos dejar atrás en nuestra Vida porque ya no tiene más para nosotros.",
       "Es lo que nos resulta fácil y cómodo, dónde queremos permanecer por miedo a lo desconocido y a la incomodidad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta12.png",
+    src: "/viñetas/astrologia/planetas/nodoNorte.png",
     paragraphs: [
       "El Nodo Norte es lo que debemos integrar para convertirnos en quién hemos nacido para ser.",
       "Nos resulta incómodo porque es lo contrario a lo que estamos acostumbrados.",
     ],
   },
   {
-    src: "/viñetas/astrologia/viñeta13.png",
+    src: "/viñetas/astrologia/planetas/quiron.png",
     paragraphs: [
       "Quirón es la herida más profunda del alma.",
       "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir con él, y al hacerlo, nos da nuestro mayor don.",
     ],
   },
 ];
+
+const VINETAS_SIGNOS: Vineta[] = [
+  {
+    src: "/viñetas/astrologia/signos/aries.png",
+    paragraphs: [
+      "Acaba de nacer. No conoce las reglas.",
+      "Actúa sin ser consciente de que sus actos tienen consecuencias. Cuando rompe la barrera, pierde interés en lo que hay detrás y busca la siguiente.",
+      "Necesita novedad constante, por eso le cuesta acabar lo que empieza. Prefiere pelear antes que aceptar su derrota.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/tauro.png",
+    paragraphs: [
+      "Materializa la energía. Conectado con la naturaleza.",
+      "Vive en los sentidos. Disfruta despacio y trabaja constante. Termina lo que empieza.",
+      "Necesita anclarse en algo sólido y estable. Confunde seguridad con apego a patrones tóxicos.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/geminis.png",
+    paragraphs: [
+      "La inteligencia en alta frecuencia. El ruido si no se pone consciencia.",
+      "Le cuesta el mundo emocional, por eso se queda en lo mental. Piensa antes de sentir.",
+      "No tolera el aburrimiento ni lo ya sabido. Cambia constantemente porque desea novedad.",
+      "Debe aprender a profundizar y a bajar a su corazón.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/cancer.png",
+    paragraphs: [
+      "Necesita sentir para saber quién es.",
+      "Necesita pertenecer. Su identidad viene de dónde viene. Hace familia a aquellos que ama.",
+      "Es vulnerable por dentro. Por eso construye un escudo por fuera. Le cuesta soltar el pasado, incluso cuando duele.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/leo.png",
+    paragraphs: [
+      "Brillante, carismático, encantador. Atrae atención y además la necesita.",
+      "Busca la validación de otros, pero debe aprender a validarse a sí mismo.",
+      "Domina de forma natural. Puede cazar para demostrar su supremacía. Le calma más el halago que la razón.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/virgo.png",
+    paragraphs: [
+      "Analiza, ordena, cuida, sirve.",
+      "Vive sin querer ver su propio caos. Somatiza lo que niega.",
+      "Es el crítico y juzgador más duro consigo mismo y con los demás. Debe poner sus dones al servicio de algo mayor.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/libra.png",
+    paragraphs: [
+      "La diplomacia. Necesita al otro para descubrirse a sí mismo.",
+      "Quiere encajar y ser aceptado en la sociedad. Indeciso. Quiere que otros decidan por él.",
+      "No le gustan las peleas. Recopila datos de todos para evitar enfados.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/escorpio.png",
+    paragraphs: [
+      "Intensidad, profundidad, transformación. Todo o nada.",
+      "Paseos por los infiernos para descubrir su sombra.",
+      "Desea fundirse con el otro. La separación después de la fusión es lo que más le duele.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/sagitario.png",
+    paragraphs: [
+      "El filósofo. Busca el sentido de la Vida. Encuentra el para qué de sus experiencias.",
+      "Nómada por naturaleza. La libertad no se negocia.",
+      "El maestro. El que va más allá.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/capricornio.png",
+    paragraphs: [
+      "La responsabilidad. Desea que lo que construye repercuta positivamente en las siguientes generaciones.",
+      "Espera. Renuncia. Aguanta. Pone el deber antes que el deseo. Planificador meticuloso.",
+      "Por dentro es frágil. No lo va a contar ni quiere que se note. Solo descansa cuando todo lo demás está hecho.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/acuario.png",
+    paragraphs: [
+      "Ama a la humanidad, odia a los humanos.",
+      "Desea pertenecer. No quiere perder su individualidad. Original. Innovador.",
+      "Analiza a todos antes de fiarse. No le gustan los vínculos ni compromisos emocionales.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/signos/piscis.png",
+    paragraphs: [
+      "Debe diferenciar si lo que siente es suyo o si lo ha absorbido sin querer.",
+      "Carga la basura psíquica de otros, debe aprender a liberarse. Ese dolor no es suyo.",
+      "Necesita periodos de soledad. Sensible, dulce. Su gran corazón es rosa.",
+    ],
+  },
+];
+
+const VINETAS_CASAS: Vineta[] = [
+  {
+    src: "/viñetas/astrologia/casas/casa1.png",
+    paragraphs: [
+      "El instante del nacimiento.",
+      "La forma en que nos perciben y nos percibimos. No es lo que somos. Es la herramienta con la que avanzamos hacia el Sol natal.",
+      "También la energía de los inicios.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa2.png",
+    paragraphs: [
+      "El contacto con el mundo tangible.",
+      "Nuestra valía y la que aportamos. Habla de la relación con los recursos y el dinero.",
+      "Revela las capacidades que queremos desarrollar en esta Vida y que nos darán seguridad.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa3.png",
+    paragraphs: [
+      "La comunicación. El pensamiento estructurado.",
+      "Cómo creamos nuestra realidad con palabras. Habla de los hermanos y los vecinos.",
+      "Revela cómo fueron la infancia y los años de escuela.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa4.png",
+    paragraphs: [
+      "La familia de origen y sus raíces.",
+      "El niño interior que sigue viviendo dentro. La seguridad interna. Cómo damos sentido a lo que nos pasa.",
+      "También el hogar que construimos de adultos. Cómo nos nutrimos.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa5.png",
+    paragraphs: [
+      "El niño que fuimos. El romance, la creatividad, el placer.",
+      "La casa de los amantes sin compromiso, de las ideas sin garantía. Los hijos y las creaciones.",
+      "Revela la intensidad con la que necesitamos sentirnos únicos. El signo en el que está es la energía con la que se disfraza el ego.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa6.png",
+    paragraphs: [
+      "Qué hacemos a diario con nuestra energía y nuestro tiempo.",
+      "Rutina, cuidado propio y de otros. Necesidad de orden y limpieza.",
+      "Debes encontrar tu orden interno y aplicarlo, si no, somatizas.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa7.png",
+    paragraphs: [
+      "La pareja. Las relaciones de igualdad. Los socios.",
+      "Muestra cómo vives estas relaciones, qué personas atraes y te atraen.",
+      "Lo que proyectamos en el otro es nuestro. El otro como espejo.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa8.png",
+    paragraphs: [
+      "El territorio de la sombra.",
+      "Lo que tiene poder sobre nosotros sin que lo sepamos. Muerte, intensidad, destrucción, transformación, dolor.",
+      "La fusión con el otro a través del sexo. La muerte del ego.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa9.png",
+    paragraphs: [
+      "La búsqueda de sentido.",
+      "La Vida como algo que vale la pena entender. Filosofías, misticismos, universidades, culturas.",
+      "Los viajes largos que cambian la forma de ver el mundo.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa10.png",
+    paragraphs: [
+      "La vocación, la profesión, el estatus, el perfil público.",
+      "La relación con la autoridad.",
+      "La necesidad de dejar algo que trascienda la propia Vida.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa11.png",
+    paragraphs: [
+      "Los amigos, los grupos, las asociaciones.",
+      "Los anhelos del alma. Salir de la individualidad y conectar con algo mayor.",
+      "En baja frecuencia: necesidad de pertenencia. En alta: consciencia de la red que nos une a todos.",
+    ],
+  },
+  {
+    src: "/viñetas/astrologia/casas/casa12.png",
+    paragraphs: [
+      "Lo trascendental.",
+      "El inconsciente colectivo y lo no digerido por nuestros ancestros. Heridas que se heredan hasta que se sanan.",
+      "Aquí el ego teme su disolución, porque es la vuelta al origen.",
+    ],
+  },
+];
+
+type Seccion = "signos" | "casas" | "planetas";
+
+const VINETAS_BY_SECCION: Record<Seccion, Vineta[]> = {
+  signos: VINETAS_SIGNOS,
+  casas: VINETAS_CASAS,
+  planetas: VINETAS_PLANETAS,
+};
+
+interface SelectorOption {
+  seccion: Seccion;
+  title: string;
+  cover: string;
+  /** Fallback de glifos si la imagen de portada no carga. */
+  glyphs: string[];
+}
+
+const SELECTOR_OPTIONS: SelectorOption[] = [
+  {
+    seccion: "signos",
+    title: "Los Signos",
+    cover: "/viñetas/astrologia/portadasignos.png",
+    glyphs: ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"],
+  },
+  {
+    seccion: "casas",
+    title: "Las Casas",
+    cover: "/viñetas/astrologia/portadacasas.png",
+    glyphs: ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"],
+  },
+  {
+    seccion: "planetas",
+    title: "Los Planetas",
+    cover: "/viñetas/astrologia/portadaplanetas.png",
+    glyphs: ["☉", "☽", "☿", "♀", "♂", "♃", "♄", "♅", "♆", "♇", "⚷"],
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────────
 
 const Stars = () => {
   const stars = [
@@ -164,6 +410,160 @@ const Stars = () => {
   );
 };
 
+// ────────────────────────────────────────────────────────────────────────────
+// Tarjeta del selector — foto arriba, título debajo, look invitador a pinchar.
+// ────────────────────────────────────────────────────────────────────────────
+
+interface SelectorCardProps {
+  option: SelectorOption;
+  onClick: () => void;
+  delay?: string;
+}
+
+function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
+  const [coverFailed, setCoverFailed] = useState(false);
+  return (
+    <Box
+      as="button"
+      onClick={onClick}
+      position="relative"
+      flex="1"
+      minW={{ base: "100%", sm: "280px", md: "300px" }}
+      maxW={{ base: "100%", md: "360px" }}
+      borderRadius="2xl"
+      overflow="hidden"
+      border={`1px solid ${astrologiaTxt}55`}
+      bg="rgba(8,13,30,0.55)"
+      cursor="pointer"
+      fontFamily="'EB Garamond', serif"
+      animation={`${fadeInScale} 0.55s ease ${delay} both`}
+      sx={{
+        backdropFilter: "blur(8px)",
+        transition: "all 0.25s ease",
+        boxShadow: `0 0 18px ${astrologiaTxt}33, 0 0 42px ${astrologiaTxt}1f, inset 0 0 24px rgba(255,255,255,0.04)`,
+        _hover: {
+          transform: "translateY(-4px)",
+          borderColor: astrologiaTxt,
+          boxShadow: `0 0 28px ${astrologiaTxt}99, 0 0 70px ${astrologiaTxt}55, inset 0 0 24px rgba(255,255,255,0.08)`,
+        },
+        _active: { transform: "translateY(-1px)" },
+      }}
+    >
+      {/* Portada del cómic — imagen subida en /viñetas/astrologia/. Si falla, fallback al mosaico. */}
+      <Box
+        position="relative"
+        w="100%"
+        aspectRatio={1}
+        overflow="hidden"
+        borderBottom={`1px solid ${astrologiaTxt}44`}
+        bg="rgba(8,13,30,0.6)"
+      >
+        {!coverFailed ? (
+          <Box
+            as="img"
+            src={encodeURI(option.cover)}
+            alt={option.title}
+            loading="eager"
+            position="absolute"
+            inset="0"
+            w="100%"
+            h="100%"
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            onError={() => setCoverFailed(true)}
+          />
+        ) : (
+          <>
+            <Box
+              as="img"
+              src="/img/astrologia/space.jpg"
+              alt=""
+              loading="eager"
+              position="absolute"
+              inset="0"
+              w="100%"
+              h="100%"
+              style={{ objectFit: "cover", objectPosition: "center", opacity: 0.55 }}
+            />
+            <Box
+              position="absolute"
+              inset="0"
+              style={{
+                background: `radial-gradient(ellipse at center, transparent 0%, rgba(8,13,30,0.7) 75%, rgba(8,13,30,0.95) 100%)`,
+              }}
+            />
+            <Flex position="absolute" inset="0" align="center" justify="center" p={{ base: 4, md: 5 }}>
+              <Flex wrap="wrap" justify="center" align="center" gap={{ base: 2, md: 2.5 }} maxW="200px">
+                {option.glyphs.map((g, i) => (
+                  <Box
+                    key={i}
+                    color={astrologiaTxt}
+                    fontFamily="'Times New Roman', Georgia, serif"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    lineHeight="1"
+                    opacity={0.85}
+                    style={{ textShadow: `0 0 8px ${astrologiaTxt}99, 0 0 18px ${astrologiaTxt}55` }}
+                  >
+                    {g}
+                  </Box>
+                ))}
+              </Flex>
+            </Flex>
+          </>
+        )}
+      </Box>
+
+      {/* Box inferior: título + flecha "pinchar" */}
+      <Flex
+        direction="column"
+        align="center"
+        gap={1}
+        position="relative"
+        py={{ base: 4, md: 5 }}
+        px={3}
+      >
+        <Text
+          color="white"
+          fontSize={{ base: "lg", md: "xl" }}
+          fontWeight="700"
+          letterSpacing="0.18em"
+          textTransform="uppercase"
+          textAlign="center"
+          lineHeight="1.1"
+          style={{
+            textShadow: `0 0 12px ${astrologiaTxt}cc, 0 0 28px ${astrologiaTxt}77`,
+          }}
+        >
+          {option.title}
+        </Text>
+        <Flex
+          align="center"
+          gap={1.5}
+          mt={2}
+          color={astrologiaTxt}
+          fontSize={{ base: "xs", md: "sm" }}
+          letterSpacing="0.18em"
+          textTransform="uppercase"
+          style={{ textShadow: `0 0 10px ${astrologiaTxt}aa` }}
+        >
+          <Text as="span">Leer</Text>
+          <Box
+            as="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 -960 960 960"
+            w="14px"
+            h="14px"
+            fill="currentColor"
+          >
+            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+          </Box>
+        </Flex>
+      </Flex>
+    </Box>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+
 interface ComicAstrologiaModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -172,30 +572,53 @@ interface ComicAstrologiaModalProps {
 }
 
 export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstrologiaModalProps) {
+  const [seccion, setSeccion] = useState<Seccion | null>(null);
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const total = VINETAS.length;
-  const current = VINETAS[index];
+  const vinetas = seccion ? VINETAS_BY_SECCION[seccion] : [];
+  const total = vinetas.length;
+  const current = vinetas[index];
   const isFirst = index === 0;
   const isLast = index === total - 1;
 
+  // Reinicia al selector cada vez que se abre el modal.
   useEffect(() => {
-    if (isOpen) setIndex(0);
+    if (isOpen) {
+      setSeccion(null);
+      setIndex(0);
+      setImgFailed({});
+    }
   }, [isOpen]);
 
+  // Al cambiar de viñeta, scroll al inicio.
   useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 0;
-  }, [index]);
+  }, [index, seccion]);
 
   const handleComplete = () => {
     if (onComplete) onComplete();
-    else onClose();
+    // Al terminar el cómic (pulsar el tick / flecha derecha en la última viñeta)
+    // volvemos al menú de ilustraciones en vez de cerrar el modal: el usuario
+    // puede así pasar a otro sub-cómic sin tener que reabrir el modal.
+    volverAlSelector();
   };
 
+  const elegirSeccion = (s: Seccion) => {
+    setSeccion(s);
+    setIndex(0);
+    setImgFailed({});
+  };
+
+  const volverAlSelector = () => {
+    setSeccion(null);
+    setIndex(0);
+  };
+
+  // ── Teclado (solo dentro de un cómic, no en el selector) ──
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !seccion) return;
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
         setIndex((i) => {
@@ -205,27 +628,33 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
           }
           return i + 1;
         });
-      } else if (e.key === "ArrowLeft") setIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === "ArrowLeft") {
+        setIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === "Escape") {
+        volverAlSelector();
+      }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, total]);
+  }, [isOpen, seccion, total]);
 
   const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
   const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
 
   // ── Typewriter ──
-  const totalChars = current.paragraphs.reduce((acc, p) => acc + p.length, 0);
+  const totalChars = current ? current.paragraphs.reduce((acc, p) => acc + p.length, 0) : 0;
   const [typed, setTyped] = useState(0);
-  const [lastIndex, setLastIndex] = useState(index);
+  const [lastKey, setLastKey] = useState(`${seccion}-${index}`);
 
-  if (lastIndex !== index) {
-    setLastIndex(index);
+  const currentKey = `${seccion}-${index}`;
+  if (lastKey !== currentKey) {
+    setLastKey(currentKey);
     setTyped(0);
   }
 
   useEffect(() => {
+    if (!current) return;
     if (typed >= totalChars) return;
     let acc = 0;
     let atBoundary = false;
@@ -256,6 +685,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         overflow="hidden"
         minH="100vh"
       >
+        {/* Fondo espacial */}
         <Box
           position="fixed"
           inset="0"
@@ -279,6 +709,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
           <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
         </Box>
 
+        {/* X cerrar — siempre visible */}
         <IconButton
           aria-label="Cerrar"
           onClick={onClose}
@@ -296,257 +727,347 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
           }
         />
 
-        <IconButton
-          aria-label="Anterior"
-          onClick={goPrev}
-          isDisabled={isFirst}
-          position="fixed"
-          left={{ base: 2, md: 6 }}
-          top="50%"
-          transform="translateY(-50%)"
-          zIndex={10}
-          variant="ghost"
-          color={astrologiaTxt}
-          opacity={isFirst ? 0.25 : 1}
-          bg={`${astrologiaTxt}10`}
-          border={`1px solid ${astrologiaTxt}33`}
-          borderRadius="full"
-          w={{ base: "44px", md: "60px" }}
-          h={{ base: "44px", md: "60px" }}
-          boxShadow={isFirst ? "none" : `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
-          _hover={isFirst ? {} : {
-            bg: `${astrologiaTxt}22`,
-            borderColor: `${astrologiaTxt}88`,
-            boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
-          }}
-          icon={
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-              style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
-              <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-            </Box>
-          }
-        />
-
-        <IconButton
-          aria-label={isLast ? "Continuar a la carta 3D" : "Siguiente"}
-          onClick={isLast ? handleComplete : goNext}
-          position="fixed"
-          right={{ base: 2, md: 6 }}
-          top="50%"
-          transform="translateY(-50%)"
-          zIndex={10}
-          variant="ghost"
-          color={astrologiaTxt}
-          bg={`${astrologiaTxt}10`}
-          border={`1px solid ${astrologiaTxt}33`}
-          borderRadius="full"
-          w={{ base: "44px", md: "60px" }}
-          h={{ base: "44px", md: "60px" }}
-          boxShadow={`0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
-          _hover={{
-            bg: `${astrologiaTxt}22`,
-            borderColor: `${astrologiaTxt}88`,
-            boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
-          }}
-          icon={
-            isLast ? (
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
-                <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
+        {/* Botón "Volver al menú" — solo visible dentro de un cómic */}
+        {seccion && (
+          <IconButton
+            aria-label="Volver al menú"
+            onClick={volverAlSelector}
+            position="fixed"
+            top={{ base: 3, md: 5 }}
+            left={{ base: 3, md: 5 }}
+            zIndex={10}
+            variant="ghost"
+            color={astrologiaTxt}
+            _hover={{ bg: `${astrologiaTxt}22` }}
+            icon={
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill={astrologiaTxt}>
+                <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
               </Box>
-            ) : (
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
-                style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
-                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-              </Box>
-            )
-          }
-        />
+            }
+          />
+        )}
 
-        <ModalBody
-          ref={contentRef}
-          position="relative"
-          zIndex={2}
-          px={{ base: 14, md: 24 }}
-          py={{ base: 6, md: 12 }}
-          overflowY="auto"
-          minH="100vh"
-          display="flex"
-          alignItems="center"
-          sx={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            "&::-webkit-scrollbar": { display: "none" },
-          }}
-        >
-          <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
-            <Box
-              key={`img-${index}`}
-              w={{ base: "85%", sm: "70%", md: "60%" }}
-              maxW="440px"
-              aspectRatio={1}
-              animation={`${fadeIn} 0.5s ease both`}
-              position="relative"
-              sx={{
-                filter: `
-                  drop-shadow(0 0 30px rgba(255,255,255,0.35))
-                  drop-shadow(0 0 60px rgba(180,210,255,0.28))
-                  drop-shadow(0 0 110px ${astrologiaTxt}55)
-                `,
-              }}
-            >
-              {!imgFailed[index] ? (
-                <Image
-                  src={encodeURI(current.src)}
-                  alt={`Viñeta ${index + 1}`}
-                  w="100%"
-                  h="100%"
-                  objectFit="contain"
-                  onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
-                />
-              ) : (
-                <Flex
-                  w="100%"
-                  h="100%"
-                  align="center"
-                  justify="center"
-                  direction="column"
-                  gap={2}
-                  px={4}
+        {/* ── VISTA SELECTOR ── */}
+        {!seccion && (
+          <ModalBody
+            position="relative"
+            zIndex={2}
+            px={{ base: 5, md: 10 }}
+            py={{ base: 10, md: 14 }}
+            minH="100vh"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            sx={{
+              scrollbarWidth: "none",
+              "&::-webkit-scrollbar": { display: "none" },
+            }}
+          >
+            <Flex direction="column" align="center" gap={{ base: 8, md: 10 }} w="100%" maxW="1280px" mx="auto">
+              <Flex direction="column" align="center" gap={2}>
+                <Text
+                  color="white"
+                  fontSize={{ base: "2xl", md: "4xl" }}
+                  fontWeight="700"
+                  letterSpacing="0.2em"
+                  textTransform="uppercase"
                   textAlign="center"
-                  bg="rgba(8,13,30,0.55)"
-                  border={`1px dashed ${astrologiaTxt}44`}
-                  borderRadius="2xl"
+                  lineHeight="1.1"
+                  style={{
+                    textShadow: `0 0 14px ${astrologiaTxt}cc, 0 0 32px ${astrologiaTxt}77, 0 0 70px ${astrologiaTxt}44`,
+                  }}
                 >
-                  <Text fontSize="4xl">✨</Text>
-                  <Text color={`${astrologiaTxt}cc`} fontSize="sm" fontStyle="italic">
-                    Viñeta {index + 1} próximamente
-                  </Text>
-                </Flex>
-              )}
-            </Box>
-
-            <Box
-              key={`txt-${index}`}
-              w="100%"
-              position="relative"
-              borderRadius="xl"
-              overflow="hidden"
-              border={`1px solid ${astrologiaTxt}44`}
-              px={{ base: 5, md: 8 }}
-              pt={{ base: 5, md: 7 }}
-              pb={{ base: 8, md: 9 }}
-              animation={`${fadeIn} 0.55s ease 0.08s both`}
-              boxShadow={`0 0 18px ${astrologiaTxt}22, 0 0 40px ${astrologiaTxt}14, inset 0 0 20px rgba(0,0,0,0.35)`}
-            >
-              <Box
-                position="absolute"
-                inset="0"
-                pointerEvents="none"
-                zIndex={0}
-                style={{
-                  background:
-                    "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
-                }}
-              >
-                <Box
-                  as="img"
-                  src="/img/astrologia/space.jpg"
-                  alt=""
-                  loading="eager"
-                  position="absolute"
-                  inset="0"
-                  w="100%"
-                  h="100%"
-                  style={{ objectFit: "cover", objectPosition: "center", opacity: 0.75 }}
-                />
-                <Box position="absolute" inset="0" bg="rgba(8,13,30,0.55)" />
-              </Box>
-
-              <Stars />
-
-              <Box
-                position="absolute"
-                top="-1px"
-                left="15%"
-                right="15%"
-                h="1px"
-                bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
-                zIndex={2}
-              />
-
-              <Flex
-                direction="column"
-                gap={4}
-                position="relative"
-                zIndex={2}
-                onClick={skipTyping}
-                cursor={typed < totalChars ? "pointer" : "default"}
-              >
-                {current.paragraphs.map((p, i) => {
-                  let consumed = 0;
-                  for (let j = 0; j < i; j++) consumed += current.paragraphs[j].length;
-                  const remaining = Math.max(0, typed - consumed);
-                  if (remaining === 0) return null;
-                  const shown = p.slice(0, remaining);
-                  const isCurrent = remaining < p.length;
-                  return (
-                    <Text
-                      key={i}
-                      color={i === 0 ? astrologiaTxt : `${astrologiaTxt}dd`}
-                      fontSize={{ base: "md", md: "lg" }}
-                      lineHeight="1.85"
-                      letterSpacing="0.02em"
-                      textAlign="center"
-                      fontWeight={i === 0 ? "600" : "400"}
-                      fontStyle={i === 0 ? "normal" : "italic"}
-                      style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
-                    >
-                      {shown}
-                      {isCurrent && (
-                        <Box
-                          as="span"
-                          display="inline-block"
-                          ml="3px"
-                          w="2px"
-                          h="1em"
-                          verticalAlign="text-bottom"
-                          bg={astrologiaTxt}
-                          animation={`${blink} 0.9s steps(1) infinite`}
-                          sx={{ boxShadow: `0 0 8px ${astrologiaTxt}` }}
-                        />
-                      )}
-                    </Text>
-                  );
-                })}
+                  Ilustraciones de Astrología
+                </Text>
+                <Text
+                  color={`${astrologiaTxt}cc`}
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontStyle="italic"
+                  letterSpacing="0.08em"
+                  textAlign="center"
+                  maxW="520px"
+                >
+                  Elige un capítulo para empezar a leer.
+                </Text>
               </Flex>
 
-              <Box
-                position="absolute"
-                bottom="-1px"
-                left="15%"
-                right="15%"
-                h="1px"
-                bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
-                zIndex={2}
-              />
-
-              <Text
-                position="absolute"
-                bottom={{ base: 2, md: 3 }}
-                right={{ base: 3, md: 4 }}
-                color={`${astrologiaTxt}99`}
-                fontSize={{ base: "xs", md: "sm" }}
-                fontStyle="italic"
-                letterSpacing="0.18em"
-                style={{ textShadow: glowTextSoft }}
-                zIndex={2}
+              <Flex
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 5, md: 6 }}
+                w="100%"
+                justify="center"
+                align="stretch"
+                wrap="wrap"
               >
-                {index + 1} / {total}
-              </Text>
-            </Box>
-          </Flex>
-        </ModalBody>
+                {SELECTOR_OPTIONS.map((opt, i) => (
+                  <SelectorCard
+                    key={opt.seccion}
+                    option={opt}
+                    onClick={() => elegirSeccion(opt.seccion)}
+                    delay={`${i * 0.08}s`}
+                  />
+                ))}
+              </Flex>
+            </Flex>
+          </ModalBody>
+        )}
+
+        {/* ── VISTA CÓMIC ── */}
+        {seccion && current && (
+          <>
+            <IconButton
+              aria-label="Anterior"
+              onClick={goPrev}
+              isDisabled={isFirst}
+              position="fixed"
+              left={{ base: 2, md: 6 }}
+              top="50%"
+              transform="translateY(-50%)"
+              zIndex={10}
+              variant="ghost"
+              color={astrologiaTxt}
+              opacity={isFirst ? 0.25 : 1}
+              bg={`${astrologiaTxt}10`}
+              border={`1px solid ${astrologiaTxt}33`}
+              borderRadius="full"
+              w={{ base: "44px", md: "60px" }}
+              h={{ base: "44px", md: "60px" }}
+              boxShadow={isFirst ? "none" : `0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
+              _hover={isFirst ? {} : {
+                bg: `${astrologiaTxt}22`,
+                borderColor: `${astrologiaTxt}88`,
+                boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
+              }}
+              icon={
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
+                  style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+                  <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+                </Box>
+              }
+            />
+
+            <IconButton
+              aria-label={isLast ? "Continuar a la carta 3D" : "Siguiente"}
+              onClick={isLast ? handleComplete : goNext}
+              position="fixed"
+              right={{ base: 2, md: 6 }}
+              top="50%"
+              transform="translateY(-50%)"
+              zIndex={10}
+              variant="ghost"
+              color={astrologiaTxt}
+              bg={`${astrologiaTxt}10`}
+              border={`1px solid ${astrologiaTxt}33`}
+              borderRadius="full"
+              w={{ base: "44px", md: "60px" }}
+              h={{ base: "44px", md: "60px" }}
+              boxShadow={`0 0 14px ${astrologiaTxt}44, 0 0 32px ${astrologiaTxt}22`}
+              _hover={{
+                bg: `${astrologiaTxt}22`,
+                borderColor: `${astrologiaTxt}88`,
+                boxShadow: `0 0 22px ${astrologiaTxt}66, 0 0 50px ${astrologiaTxt}33`,
+              }}
+              icon={
+                isLast ? (
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
+                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+                    <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
+                  </Box>
+                ) : (
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "30px" }} h={{ base: "24px", md: "30px" }} fill={astrologiaTxt}
+                    style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}88)` }}>
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                  </Box>
+                )
+              }
+            />
+
+            <ModalBody
+              ref={contentRef}
+              position="relative"
+              zIndex={2}
+              px={{ base: 14, md: 24 }}
+              py={{ base: 6, md: 12 }}
+              overflowY="auto"
+              minH="100vh"
+              display="flex"
+              alignItems="center"
+              sx={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                "&::-webkit-scrollbar": { display: "none" },
+              }}
+            >
+              <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
+                <Box
+                  key={`img-${seccion}-${index}`}
+                  w={{ base: "85%", sm: "70%", md: "60%" }}
+                  maxW="440px"
+                  aspectRatio={1}
+                  animation={`${fadeIn} 0.5s ease both`}
+                  position="relative"
+                  sx={{
+                    filter: `
+                      drop-shadow(0 0 30px rgba(255,255,255,0.35))
+                      drop-shadow(0 0 60px rgba(180,210,255,0.28))
+                      drop-shadow(0 0 110px ${astrologiaTxt}55)
+                    `,
+                  }}
+                >
+                  {!imgFailed[index] ? (
+                    <Image
+                      src={encodeURI(current.src)}
+                      alt={`Viñeta ${index + 1}`}
+                      w="100%"
+                      h="100%"
+                      objectFit="contain"
+                      onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
+                    />
+                  ) : (
+                    <Flex
+                      w="100%"
+                      h="100%"
+                      align="center"
+                      justify="center"
+                      direction="column"
+                      gap={2}
+                      px={4}
+                      textAlign="center"
+                      bg="rgba(8,13,30,0.55)"
+                      border={`1px dashed ${astrologiaTxt}44`}
+                      borderRadius="2xl"
+                    >
+                      <Text fontSize="4xl">✨</Text>
+                      <Text color={`${astrologiaTxt}cc`} fontSize="sm" fontStyle="italic">
+                        Viñeta {index + 1} próximamente
+                      </Text>
+                    </Flex>
+                  )}
+                </Box>
+
+                <Box
+                  key={`txt-${seccion}-${index}`}
+                  w="100%"
+                  position="relative"
+                  borderRadius="xl"
+                  overflow="hidden"
+                  border={`1px solid ${astrologiaTxt}44`}
+                  px={{ base: 5, md: 8 }}
+                  pt={{ base: 5, md: 7 }}
+                  pb={{ base: 8, md: 9 }}
+                  animation={`${fadeIn} 0.55s ease 0.08s both`}
+                  boxShadow={`0 0 18px ${astrologiaTxt}22, 0 0 40px ${astrologiaTxt}14, inset 0 0 20px rgba(0,0,0,0.35)`}
+                >
+                  <Box
+                    position="absolute"
+                    inset="0"
+                    pointerEvents="none"
+                    zIndex={0}
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
+                    }}
+                  >
+                    <Box
+                      as="img"
+                      src="/img/astrologia/space.jpg"
+                      alt=""
+                      loading="eager"
+                      position="absolute"
+                      inset="0"
+                      w="100%"
+                      h="100%"
+                      style={{ objectFit: "cover", objectPosition: "center", opacity: 0.75 }}
+                    />
+                    <Box position="absolute" inset="0" bg="rgba(8,13,30,0.55)" />
+                  </Box>
+
+                  <Stars />
+
+                  <Box
+                    position="absolute"
+                    top="-1px"
+                    left="15%"
+                    right="15%"
+                    h="1px"
+                    bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
+                    zIndex={2}
+                  />
+
+                  <Flex
+                    direction="column"
+                    gap={4}
+                    position="relative"
+                    zIndex={2}
+                    onClick={skipTyping}
+                    cursor={typed < totalChars ? "pointer" : "default"}
+                  >
+                    {current.paragraphs.map((p, i) => {
+                      let consumed = 0;
+                      for (let j = 0; j < i; j++) consumed += current.paragraphs[j].length;
+                      const remaining = Math.max(0, typed - consumed);
+                      if (remaining === 0) return null;
+                      const shown = p.slice(0, remaining);
+                      const isCurrent = remaining < p.length;
+                      return (
+                        <Text
+                          key={i}
+                          color={i === 0 ? astrologiaTxt : `${astrologiaTxt}dd`}
+                          fontSize={{ base: "md", md: "lg" }}
+                          lineHeight="1.85"
+                          letterSpacing="0.02em"
+                          textAlign="center"
+                          fontWeight={i === 0 ? "600" : "400"}
+                          fontStyle={i === 0 ? "italic" : "normal"}
+                          style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
+                        >
+                          {shown}
+                          {isCurrent && (
+                            <Box
+                              as="span"
+                              display="inline-block"
+                              ml="3px"
+                              w="2px"
+                              h="1em"
+                              verticalAlign="text-bottom"
+                              bg={astrologiaTxt}
+                              animation={`${blink} 0.9s steps(1) infinite`}
+                              sx={{ boxShadow: `0 0 8px ${astrologiaTxt}` }}
+                            />
+                          )}
+                        </Text>
+                      );
+                    })}
+                  </Flex>
+
+                  <Box
+                    position="absolute"
+                    bottom="-1px"
+                    left="15%"
+                    right="15%"
+                    h="1px"
+                    bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
+                    zIndex={2}
+                  />
+
+                  <Text
+                    position="absolute"
+                    bottom={{ base: 2, md: 3 }}
+                    right={{ base: 3, md: 4 }}
+                    color={`${astrologiaTxt}99`}
+                    fontSize={{ base: "xs", md: "sm" }}
+                    fontStyle="italic"
+                    letterSpacing="0.18em"
+                    style={{ textShadow: glowTextSoft }}
+                    zIndex={2}
+                  >
+                    {index + 1} / {total}
+                  </Text>
+                </Box>
+              </Flex>
+            </ModalBody>
+          </>
+        )}
       </ModalContent>
     </Modal>
   );

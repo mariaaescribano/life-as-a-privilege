@@ -44,4 +44,11 @@ export class MetodoAstrologiaController {
   ) {
     return await this.service.setCuerpoManual(userId, body.planeta, body.grado);
   }
+
+  // Fuerza recálculo de la carta natal a partir de los datos guardados
+  @Post('carta-natal/:userId/recalcular')
+  @UseGuards(JwtAuthGuard)
+  async recalcular(@Param('userId') userId: string) {
+    return await this.service.recalcular(userId);
+  }
 }

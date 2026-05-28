@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { ZODIAC_SIGNS, type Cuerpo } from "../astrologiaData";
 import { Glifo } from "../Glifo";
@@ -23,7 +23,8 @@ const ZodiacGlyph = ({ symbol, size = 28, color }: { symbol: string; size?: numb
   </svg>
 );
 
-function renderConNegritas(texto: string, color: string): React.ReactNode {
+/** Renderiza el contenido inline de un párrafo, aplicando **negritas** del color del cuerpo. */
+function renderInline(texto: string, color: string): React.ReactNode {
   const partes = texto.split(/(\*\*[^*]+\*\*)/g);
   return partes.map((parte, i) => {
     if (parte.startsWith("**") && parte.endsWith("**")) {
@@ -44,7 +45,56 @@ function renderConNegritas(texto: string, color: string): React.ReactNode {
   });
 }
 
+/**
+ * Renderiza un texto largo como bloque de párrafos. Cada línea en blanco
+ * (\n\n) separa párrafos con un margen tight controlado, en vez del enorme
+ * hueco que dejaba whiteSpace="pre-wrap" + lineHeight 1.8. Los \n simples
+ * dentro de un párrafo se conservan como salto de línea.
+ */
+function renderTextoLargo(texto: string, color: string): React.ReactNode {
+  const parrafos = texto.split(/\n\s*\n+/g).map((p) => p.trim()).filter(Boolean);
+  return parrafos.map((parrafo, pi) => (
+    <Text
+      key={pi}
+      color={`${color}ee`}
+      fontSize={{ base: "sm", md: "md" }}
+      lineHeight="1.55"
+      whiteSpace="pre-wrap"
+      textAlign="center"
+      mt={pi === 0 ? 0 : { base: 2.5, md: 3 }}
+      style={{ textShadow: `0 0 8px rgba(255,255,255,0.25)` }}
+    >
+      {renderInline(parrafo, color)}
+    </Text>
+  ));
+}
+
 export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMasModalProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Al abrir / cambiar de cuerpo, vuelve al inicio del contenido.
+  useEffect(() => {
+    if (isOpen && scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [isOpen, cuerpo?.key]);
+
+  // Bloquea el scroll del body mientras el modal esté abierto: el usuario solo
+  // puede hacer scroll dentro del popup, la página de detrás se queda quieta.
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    const prevPaddingRight = document.body.style.paddingRight;
+    // Compensa el ancho del scrollbar para evitar el "salto" lateral del layout.
+    const scrollbarW = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    if (scrollbarW > 0) document.body.style.paddingRight = `${scrollbarW}px`;
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.paddingRight = prevPaddingRight;
+    };
+  }, [isOpen]);
+
   if (!isOpen || !cuerpo) return null;
 
   const color = cuerpo.color;
@@ -65,18 +115,20 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
       bg="rgba(0,0,0,0.72)"
       sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
       onClick={onClose}
-      overflowY="auto"
     >
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
         w="100%"
         maxW="640px"
+        maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }}
         borderRadius="2xl"
         overflow="hidden"
         border={`1px solid ${color}66`}
         boxShadow={`0 0 32px ${color}55, 0 0 80px ${color}28, 0 12px 60px rgba(0,0,0,0.6)`}
         fontFamily="'EB Garamond', serif"
+        display="flex"
+        flexDirection="column"
       >
         <SpaceBg overlay="rgba(8,13,30,0.72)" />
 
@@ -107,7 +159,26 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
           </svg>
         </Box>
 
-        <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+        <Box
+          ref={scrollRef}
+          position="relative"
+          zIndex={1}
+          px={{ base: 6, md: 10 }}
+          py={{ base: 8, md: 10 }}
+          flex="1 1 auto"
+          overflowY="auto"
+          sx={{
+            scrollbarWidth: "thin",
+            scrollbarColor: `${color}55 transparent`,
+            "&::-webkit-scrollbar": { width: "8px" },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": {
+              background: `${color}55`,
+              borderRadius: "8px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": { background: `${color}99` },
+          }}
+        >
 
           {/* ── Bloque SIGNO ── */}
           {signoData ? (
@@ -136,16 +207,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
               </Flex>
 
               {textoSigno ? (
-                <Text
-                  color={`${color}ee`}
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.8"
-                  whiteSpace="pre-wrap"
-                  textAlign="left"
-                  style={{ textShadow: `0 0 8px rgba(255,255,255,0.25)` }}
-                >
-                  {renderConNegritas(textoSigno, color)}
-                </Text>
+                <Box>{renderTextoLargo(textoSigno, color)}</Box>
               ) : (
                 <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
                   Texto de {cuerpo.label} en {signoData.name} aún no disponible.
@@ -195,16 +257,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
                 </Flex>
 
                 {textoCasa ? (
-                  <Text
-                    color={`${color}ee`}
-                    fontSize={{ base: "sm", md: "md" }}
-                    lineHeight="1.8"
-                    whiteSpace="pre-wrap"
-                    textAlign="left"
-                    style={{ textShadow: `0 0 8px rgba(255,255,255,0.25)` }}
-                  >
-                    {renderConNegritas(textoCasa, color)}
-                  </Text>
+                  <Box>{renderTextoLargo(textoCasa, color)}</Box>
                 ) : (
                   <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
                     Texto de {cuerpo.label} en casa {casa} aún no disponible.

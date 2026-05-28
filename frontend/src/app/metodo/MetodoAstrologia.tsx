@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Input, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Select, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -85,8 +85,11 @@ export default function MetodoAstrologia() {
   const [loading, setLoading] = useState(true);
   const [estado, setEstado] = useState<Estado | null>(null);
 
-  // Form state
-  const [fecha, setFecha] = useState("");
+  // Form state — fecha en 3 campos separados para evitar ambigüedades de formato
+  // (los date pickers en algunos locales muestran MM/DD/YYYY y se confunde con DD/MM/YYYY).
+  const [dia, setDia] = useState("");
+  const [mes, setMes] = useState("");
+  const [anio, setAnio] = useState("");
   const [hora, setHora] = useState("");
   const [pais, setPais] = useState("");
   const [lugar, setLugar] = useState("");
@@ -94,6 +97,21 @@ export default function MetodoAstrologia() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comicAstroOpen, setComicAstroOpen] = useState(false);
+
+  const MESES = [
+    { num: "01", nombre: "Enero" },
+    { num: "02", nombre: "Febrero" },
+    { num: "03", nombre: "Marzo" },
+    { num: "04", nombre: "Abril" },
+    { num: "05", nombre: "Mayo" },
+    { num: "06", nombre: "Junio" },
+    { num: "07", nombre: "Julio" },
+    { num: "08", nombre: "Agosto" },
+    { num: "09", nombre: "Septiembre" },
+    { num: "10", nombre: "Octubre" },
+    { num: "11", nombre: "Noviembre" },
+    { num: "12", nombre: "Diciembre" },
+  ];
 
   // Carga
   useEffect(() => {
@@ -118,10 +136,28 @@ export default function MetodoAstrologia() {
 
   const enviarSolicitud = async () => {
     setError(null);
-    if (!fecha || !hora || !pais.trim() || !lugar.trim() || !region.trim()) {
+    if (!dia || !mes || !anio || !hora || !pais.trim() || !lugar.trim() || !region.trim()) {
       setError("Rellena todos los campos para continuar.");
       return;
     }
+    const diaN = parseInt(dia, 10);
+    const mesN = parseInt(mes, 10);
+    const anioN = parseInt(anio, 10);
+    if (!Number.isFinite(diaN) || diaN < 1 || diaN > 31) {
+      setError("Día inválido (1-31).");
+      return;
+    }
+    if (!Number.isFinite(mesN) || mesN < 1 || mesN > 12) {
+      setError("Mes inválido.");
+      return;
+    }
+    if (!Number.isFinite(anioN) || anioN < 1900 || anioN > 2100) {
+      setError("Año inválido (1900-2100).");
+      return;
+    }
+    // Construye fecha YYYY-MM-DD explícitamente: no hay forma de que el back la malinterprete.
+    const fecha = `${anioN.toString().padStart(4, "0")}-${mesN.toString().padStart(2, "0")}-${diaN.toString().padStart(2, "0")}`;
+
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
@@ -166,10 +202,10 @@ export default function MetodoAstrologia() {
   const yaConPdf = !!estado?.link_carta;
 
   // Etiquetas de los botones del header según estado
-  const camposCompletos = !!fecha && !!hora && !!pais.trim() && !!lugar.trim() && !!region.trim();
+  const camposCompletos = !!dia && !!mes && !!anio && !!hora && !!pais.trim() && !!lugar.trim() && !!region.trim();
   const headerPrev = { label: "← Volver a Home", onClick: () => navigate("/home") };
   const headerExtra = {
-    label: "Cómic",
+    label: "Ilustraciones",
     onClick: () => setComicAstroOpen(true),
     icon: <EyeIcon />,
   };
@@ -283,10 +319,118 @@ export default function MetodoAstrologia() {
 
                   <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
 
-                  <Flex direction={{ base: "column", md: "row" }} gap={4}>
-                    <Campo label="Fecha de nacimiento" type="date" value={fecha} onChange={setFecha} color={astrologiaTxt} />
-                    <Campo label="Hora de nacimiento" type="time" value={hora} onChange={setHora} color={astrologiaTxt} />
-                  </Flex>
+                  <Box>
+                    <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
+                      Fecha de nacimiento
+                    </Text>
+                    <Flex gap={3}>
+                      <Box flex="1">
+                        <Input
+                          type="number"
+                          inputMode="numeric"
+                          min={1}
+                          max={31}
+                          value={dia}
+                          onChange={(e) => setDia(e.target.value)}
+                          placeholder="Día"
+                          bg="rgba(8,13,30,0.55)"
+                          border={`1px solid ${astrologiaTxt}44`}
+                          color={astrologiaTxt}
+                          borderRadius="lg"
+                          size="md"
+                          fontFamily="'EB Garamond', serif"
+                          _placeholder={{ color: `${astrologiaTxt}55` }}
+                          _hover={{ borderColor: `${astrologiaTxt}88` }}
+                          _focus={{
+                            borderColor: astrologiaTxt,
+                            boxShadow: `0 0 0 1px ${astrologiaTxt}55, 0 0 14px ${astrologiaTxt}33`,
+                            bg: "rgba(8,13,30,0.7)",
+                          }}
+                        />
+                      </Box>
+                      <Box flex="1.6">
+                        <Select
+                          value={mes}
+                          onChange={(e) => setMes(e.target.value)}
+                          placeholder="Mes"
+                          bg="rgba(8,13,30,0.55)"
+                          border={`1px solid ${astrologiaTxt}44`}
+                          color={astrologiaTxt}
+                          borderRadius="lg"
+                          size="md"
+                          fontFamily="'EB Garamond', serif"
+                          sx={{
+                            "> option": { background: "#0c1230", color: astrologiaTxt },
+                          }}
+                          _hover={{ borderColor: `${astrologiaTxt}88` }}
+                          _focus={{
+                            borderColor: astrologiaTxt,
+                            boxShadow: `0 0 0 1px ${astrologiaTxt}55, 0 0 14px ${astrologiaTxt}33`,
+                            bg: "rgba(8,13,30,0.7)",
+                          }}
+                        >
+                          {MESES.map((m) => (
+                            <option key={m.num} value={m.num}>{m.nombre}</option>
+                          ))}
+                        </Select>
+                      </Box>
+                      <Box flex="1">
+                        <Input
+                          type="number"
+                          inputMode="numeric"
+                          min={1900}
+                          max={2100}
+                          value={anio}
+                          onChange={(e) => setAnio(e.target.value)}
+                          placeholder="Año"
+                          bg="rgba(8,13,30,0.55)"
+                          border={`1px solid ${astrologiaTxt}44`}
+                          color={astrologiaTxt}
+                          borderRadius="lg"
+                          size="md"
+                          fontFamily="'EB Garamond', serif"
+                          _placeholder={{ color: `${astrologiaTxt}55` }}
+                          _hover={{ borderColor: `${astrologiaTxt}88` }}
+                          _focus={{
+                            borderColor: astrologiaTxt,
+                            boxShadow: `0 0 0 1px ${astrologiaTxt}55, 0 0 14px ${astrologiaTxt}33`,
+                            bg: "rgba(8,13,30,0.7)",
+                          }}
+                        />
+                      </Box>
+                    </Flex>
+                    {dia && mes && anio && (
+                      <Text color={`${astrologiaTxt}aa`} fontSize="xs" mt={2} fontStyle="italic" letterSpacing="0.04em">
+                        {dia} de {MESES.find((m) => m.num === mes)?.nombre.toLowerCase()} de {anio}
+                      </Text>
+                    )}
+                  </Box>
+
+                  <Box>
+                    <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
+                      Hora de nacimiento
+                    </Text>
+                    <Input
+                      type="time"
+                      value={hora}
+                      onChange={(e) => setHora(e.target.value)}
+                      bg="rgba(8,13,30,0.55)"
+                      border={`1px solid ${astrologiaTxt}44`}
+                      color={astrologiaTxt}
+                      borderRadius="lg"
+                      size="md"
+                      fontFamily="'EB Garamond', serif"
+                      _hover={{ borderColor: `${astrologiaTxt}88` }}
+                      _focus={{
+                        borderColor: astrologiaTxt,
+                        boxShadow: `0 0 0 1px ${astrologiaTxt}55, 0 0 14px ${astrologiaTxt}33`,
+                        bg: "rgba(8,13,30,0.7)",
+                      }}
+                      sx={{
+                        "::-webkit-calendar-picker-indicator": { filter: "invert(0.9)" },
+                      }}
+                    />
+                  </Box>
                   <Campo label="País" value={pais} onChange={setPais} color={astrologiaTxt} placeholder="Ej: España" />
                   <Flex direction={{ base: "column", md: "row" }} gap={4}>
                     <Campo label="Lugar (ciudad)" value={lugar} onChange={setLugar} color={astrologiaTxt} placeholder="Ej: Madrid" />
@@ -295,12 +439,6 @@ export default function MetodoAstrologia() {
 
                   {error && (
                     <Text color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>
-                  )}
-
-                  {enviando && (
-                    <Text color={`${astrologiaTxt}aa`} fontSize="sm" textAlign="center" fontStyle="italic" mt={2}>
-                      Enviando…
-                    </Text>
                   )}
 
                   <Flex justify="flex-end" mt={4}>

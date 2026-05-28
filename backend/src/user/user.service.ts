@@ -20,19 +20,22 @@ export class UserService {
   constructor(private readonly authService: AuthService, private readonly databaseService: DatabaseService) {}
 
   // --------- Verifica si el nombre o email existen ---------
-  async getNomEmailExist(nom: string, email: string): Promise<boolean> {
+  async getNomEmailExist(nom: string, email: string): Promise<{ nameExists: boolean; emailExists: boolean }> {
     const { data } = await this.databaseService.getClient()
       .from('user')
-      .select('id')
+      .select('name, email')
       .or(`name.eq.${nom},email.eq.${email}`);
-    return (data?.length ?? 0) > 0;
+    const nameExists = (data ?? []).some((u: any) => u.name === nom);
+    const emailExists = (data ?? []).some((u: any) => u.email === email);
+    return { nameExists, emailExists };
   }
 
   // --------- Crear usuario ---------
   async createUser(data: CreateUser) {
     try {
-      const exists = await this.getNomEmailExist(data.name, data.email);
-      if (exists) throw new ConflictException('El usuario ya existe');
+      const { nameExists, emailExists } = await this.getNomEmailExist(data.name, data.email);
+      if (nameExists) throw new ConflictException('Nombre ya existe. Elige otro');
+      if (emailExists) throw new ConflictException('El email ya está registrado');
 
       let inserted = false;
       let id = randomString();

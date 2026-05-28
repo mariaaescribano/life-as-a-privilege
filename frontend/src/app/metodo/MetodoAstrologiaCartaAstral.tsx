@@ -79,7 +79,35 @@ export default function MetodoAstrologiaCartaAstral() {
         const res = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setCarta(res.data ?? null);
+        let cartaCargada = res.data;
+
+        // Cuando cambia el algoritmo (entrada nueva de Quirón, calibración de M0,
+        // fix de cusps, etc.) bump esta clave: cualquier carta guardada antes
+        // disparará un recálculo automático una sola vez por usuario.
+        const CARTA_CALC_VERSION = "v3-chiron-m0-28";
+        const versionKey = `cartaCalcVersion:${userId}`;
+        const tieneQuiron = !!cartaCargada?.planetas.some((p) => p.planeta === "quiron");
+        const needsRefresh =
+          !!cartaCargada &&
+          (!tieneQuiron || localStorage.getItem(versionKey) !== CARTA_CALC_VERSION);
+
+        if (needsRefresh) {
+          try {
+            const rec = await axios.post<{ success: boolean; carta?: CartaNatal }>(
+              `${API_URL}/metodo-astrologia/carta-natal/${userId}/recalcular`,
+              {},
+              { headers: { Authorization: `Bearer ${token}` } },
+            );
+            if (rec.data?.success && rec.data.carta) {
+              cartaCargada = rec.data.carta;
+              localStorage.setItem(versionKey, CARTA_CALC_VERSION);
+            }
+          } catch {
+            // Si falla el recálculo seguimos con la carta antigua.
+          }
+        }
+
+        setCarta(cartaCargada ?? null);
       } catch {
         setCarta(null);
       } finally {
@@ -139,7 +167,7 @@ export default function MetodoAstrologiaCartaAstral() {
             space
             mb={0}
             prev={{ label: "← Mi carta", onClick: () => navigate("/metodo/astrologia") }}
-            extra={{ label: "Cómic", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={headerNext}
           />
 
@@ -170,34 +198,6 @@ export default function MetodoAstrologiaCartaAstral() {
                 completados={completados}
               />
 
-              {carta && (
-                <Box
-                  as="button"
-                  onClick={() => setEditOpen(true)}
-                  px={6}
-                  py={2}
-                  borderRadius="full"
-                  bg="transparent"
-                  color={`${astrologiaTxt}cc`}
-                  border={`1px solid ${astrologiaTxt}55`}
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }}
-                  fontStyle="italic"
-                  letterSpacing="0.04em"
-                  cursor="pointer"
-                  sx={{
-                    transition: "all 0.2s ease",
-                    _hover: {
-                      bg: `${astrologiaTxt}14`,
-                      borderColor: astrologiaTxt,
-                      color: astrologiaTxt,
-                      boxShadow: `0 0 14px ${astrologiaTxt}44`,
-                    },
-                  }}
-                >
-                  ✎ Ajustar Quirón o nodos
-                </Box>
-              )}
             </Flex>
           </Box>
         </Flex>

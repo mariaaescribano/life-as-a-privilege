@@ -34,6 +34,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   };
 
   const handleSubmit = async () => {
+    if (submitting) return;
     setError(null);
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
@@ -117,6 +118,8 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") void handleSubmit(); }}
+                  isDisabled={submitting}
                   {...inputStyle}
                 />
 
@@ -125,6 +128,30 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     {error}
                   </Text>
                 )}
+
+                <Flex justify="center" mt={1}>
+                  <Box
+                    as="button"
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                    px={8}
+                    py={2.5}
+                    borderRadius="full"
+                    bg="white"
+                    color="#008080"
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "md", md: "lg" }}
+                    fontWeight="700"
+                    letterSpacing="0.08em"
+                    cursor={submitting ? "not-allowed" : "pointer"}
+                    opacity={submitting ? 0.6 : 1}
+                    boxShadow="0 4px 24px rgba(255,255,255,0.28)"
+                    transition="all 0.22s"
+                    _hover={submitting ? {} : { transform: "translateY(-2px)", boxShadow: "0 8px 32px rgba(255,255,255,0.4)" }}
+                  >
+                    {submitting ? "Enviando…" : "Avísame"}
+                  </Box>
+                </Flex>
               </Flex>
             ) : (
               <Flex direction="column" align="center" gap={4} py={2}>

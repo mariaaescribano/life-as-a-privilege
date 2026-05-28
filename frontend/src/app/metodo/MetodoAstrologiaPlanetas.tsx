@@ -65,7 +65,7 @@ export default function MetodoAstrologiaPlanetas() {
           space
           mb={0}
           prev={{ label: "← Mi carta 3D", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
-          extra={{ label: "Cómic", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+          extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
           next={{
             label: todoCompletado ? "Continuar a Psicología →" : "Completa primero la carta",
             onClick: () => navigate("/metodo/psicologia"),

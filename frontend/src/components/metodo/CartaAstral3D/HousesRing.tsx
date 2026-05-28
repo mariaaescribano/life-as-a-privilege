@@ -5,11 +5,15 @@ void React;
 interface HousesRingProps {
   innerRadius: number;
   outerRadius: number;
-  cusps: number[];
-  ascendente: number;
 }
 
-function buildTexture(cusps: number[], ascendente: number): THREE.CanvasTexture {
+/**
+ * Render Placidus: las 12 cúspides ocupan posiciones fijas en la carta, cada
+ * una a 30° de ángulo (sumando 360°). La cúspide 1 está a la izquierda (math
+ * angle π), la 4 abajo, la 7 a la derecha, la 10 arriba. Las cúspides
+ * intermedias dividen cada cuadrante en 3 tercios iguales.
+ */
+function buildTexture(): THREE.CanvasTexture {
   const size = 2048;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -32,13 +36,10 @@ function buildTexture(cusps: number[], ascendente: number): THREE.CanvasTexture 
   ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
   ctx.stroke();
 
-  const gradoAAngulo = (g: number) => {
-    const delta = g - ascendente;
-    return Math.PI + (delta * Math.PI) / 180;
-  };
-
+  // 12 cúspides a ángulos fijos (cada 30°). Convención math angle:
+  //  cusp 1 → π (izquierda), cusp 4 → 3π/2 (abajo), cusp 7 → 0 (derecha), cusp 10 → π/2 (arriba)
   for (let i = 0; i < 12; i++) {
-    const a = gradoAAngulo(cusps[i]);
+    const a = Math.PI + i * (Math.PI / 6);
     const isAngular = i === 0 || i === 3 || i === 6 || i === 9;
     ctx.strokeStyle = isAngular ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.22)";
     ctx.lineWidth = isAngular ? 2 : 1;
@@ -48,15 +49,12 @@ function buildTexture(cusps: number[], ascendente: number): THREE.CanvasTexture 
     ctx.stroke();
   }
 
+  // Etiquetas de casa, en el centro de cada arco (chart angle de la cúspide + 15°).
   ctx.font = "500 48px 'EB Garamond', Georgia, serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   for (let i = 0; i < 12; i++) {
-    const next = (i + 1) % 12;
-    const a1 = gradoAAngulo(cusps[i]);
-    let a2 = gradoAAngulo(cusps[next]);
-    if (a2 < a1) a2 += Math.PI * 2;
-    const mid = (a1 + a2) / 2;
+    const mid = Math.PI + i * (Math.PI / 6) + Math.PI / 12;
     const x = cx + Math.cos(mid) * midR;
     const y = cy - Math.sin(mid) * midR;
     ctx.shadowColor = "rgba(255,255,255,0.35)";
@@ -71,8 +69,8 @@ function buildTexture(cusps: number[], ascendente: number): THREE.CanvasTexture 
   return tex;
 }
 
-export function HousesRing({ innerRadius, outerRadius, cusps, ascendente }: HousesRingProps) {
-  const texture = useMemo(() => buildTexture(cusps, ascendente), [cusps, ascendente]);
+export function HousesRing({ innerRadius, outerRadius }: HousesRingProps) {
+  const texture = useMemo(() => buildTexture(), []);
 
   return (
     <mesh>

@@ -11,15 +11,15 @@ void React;
 interface AspectsProps {
   planetas: PosicionPlaneta[];
   aspectos: Aspecto[];
-  ascendente: number;
+  cusps: number[];
   radio: number;
 }
 
-export function Aspects({ planetas, aspectos, ascendente, radio }: AspectsProps) {
+export function Aspects({ planetas, aspectos, cusps, radio }: AspectsProps) {
   const { positions, colors } = useMemo(() => {
     const posMap = new Map<string, THREE.Vector3>();
     for (const p of planetas) {
-      const theta = gradoAVisualRad(p.grado, ascendente);
+      const theta = gradoAVisualRad(p.grado, cusps);
       posMap.set(p.planeta, new THREE.Vector3(Math.cos(theta) * radio, Math.sin(theta) * radio, 0));
     }
     const pos: number[] = [];
@@ -36,7 +36,7 @@ export function Aspects({ planetas, aspectos, ascendente, radio }: AspectsProps)
       positions: new Float32Array(pos),
       colors: new Float32Array(col),
     };
-  }, [planetas, aspectos, ascendente, radio]);
+  }, [planetas, aspectos, cusps, radio]);
 
   if (positions.length === 0) return null;
 

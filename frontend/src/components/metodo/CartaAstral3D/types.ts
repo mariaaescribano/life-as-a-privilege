@@ -43,9 +43,27 @@ export const ORBE_GRADOS: Record<TipoAspecto, number> = {
   sextil: 5,
 };
 
-export function gradoAVisualRad(grado: number, ascendente: number): number {
-  const delta = grado - ascendente;
-  return Math.PI + (delta * Math.PI) / 180;
+/**
+ * Mapea un grado eclíptico a un ángulo de la carta (math angle en 3D), usando un
+ * render tipo Placidus: las 4 cúspides angulares (1, 4, 7, 10) quedan ancladas
+ * a izquierda / abajo / derecha / arriba; el resto de cúspides reparten cada
+ * cuadrante en 3 tercios iguales (30° de carta por casa). El zodíaco dentro de
+ * cada casa se estira/comprime de forma proporcional al span eclíptico de la casa.
+ */
+export function gradoAVisualRad(grado: number, cusps: number[]): number {
+  const lon = ((grado % 360) + 360) % 360;
+  for (let h = 0; h < 12; h++) {
+    const a = cusps[h];
+    const b = cusps[(h + 1) % 12];
+    const span = ((b - a) % 360 + 360) % 360 || 360;
+    const offset = ((lon - a) % 360 + 360) % 360;
+    if (offset < span) {
+      const f = offset / span;
+      // Cusp h en chart angle = π + h·(π/6); cada casa ocupa π/6 de chart angle.
+      return Math.PI + h * (Math.PI / 6) + f * (Math.PI / 6);
+    }
+  }
+  return Math.PI;
 }
 
 export const COLOR_SIGNOS: string[] = [

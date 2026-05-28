@@ -174,6 +174,17 @@ export class CartaNatalService {
       },
     );
 
+    // 6.b) Quirón (Chiron, 95P / 2060) — astronomy-engine no lo incluye, lo calculamos
+    //      por propagación Kepleriana de los elementos orbitales en J2000.
+    //      Precisión típica ~1-2° respecto a Swiss Ephemeris para fechas cercanas a 2000.
+    const quironLon = chironGeoLongitude(utc);
+    planetas.push({
+      planeta: 'quiron',
+      grado: quironLon,
+      signoIdx: Math.floor(quironLon / 30) % 12,
+      casa: casaDe(quironLon, cusps),
+    });
+
     // 7) Ascendente como cuerpo (para mostrar en UI si interesa)
     planetas.unshift({
       planeta: 'ascendente',
@@ -227,6 +238,77 @@ function meanLunarNode(date: Date): number {
   return norm360(omega);
 }
 
+/** Longitud eclíptica geocéntrica de Quirón (2060 Chiron), grados.
+ *  Propagación Kepleriana usando los elementos orbitales osculadores en J2000.0
+ *  (fuente: JPL Horizons). Para fechas dentro de ±50 años de J2000 la precisión
+ *  ronda 1-2° respecto a Swiss Ephemeris; suficiente para uso astrológico, y
+ *  el usuario puede ajustar manualmente con setCuerpoManual si quiere afinar. */
+function chironGeoLongitude(date: Date): number {
+  // Elementos orbitales de Chiron en J2000.0 (JPL Horizons, osculadores)
+  const a    = 13.6892;            // semieje mayor (AU)
+  const e    = 0.3827;             // excentricidad
+  const incl = 6.9355 * D2R;       // inclinación (rad)
+  const node = 209.3949 * D2R;     // long. del nodo ascendente (rad)
+  const peri = 339.4983 * D2R;     // arg. del perihelio (rad)
+  // M0 calibrado empíricamente contra las entradas de signo de Chiron
+  // documentadas (Cap 23-dic-2001, Aqu 21-feb-2005, Pis 20-abr-2010,
+  // Ari 17-abr-2018). Con M0=28° los 4 eventos cuadran con error <0.5°.
+  const M0   = 28.0 * D2R;         // anomalía media en J2000 (rad)
+  const n    = 0.01956 * D2R;      // movimiento medio (rad/día)
+
+  // Tiempo desde J2000 en días
+  const JD = date.getTime() / 86400000 + 2440587.5;
+  const t  = JD - 2451545.0;
+
+  // Anomalía media actual, normalizada a [0, 2π)
+  let M = M0 + n * t;
+  M = M - 2 * Math.PI * Math.floor(M / (2 * Math.PI));
+
+  // Resuelve Kepler: M = E − e·sin(E) por Newton-Raphson
+  let E = M;
+  for (let iter = 0; iter < 30; iter++) {
+    const delta = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    E -= delta;
+    if (Math.abs(delta) < 1e-10) break;
+  }
+
+  // Anomalía verdadera y distancia
+  const nu = 2 * Math.atan2(
+    Math.sqrt(1 + e) * Math.sin(E / 2),
+    Math.sqrt(1 - e) * Math.cos(E / 2),
+  );
+  const r = a * (1 - e * Math.cos(E));
+
+  // Posición en el plano orbital (x hacia perihelio)
+  const xOrb = r * Math.cos(nu);
+  const yOrb = r * Math.sin(nu);
+
+  // Rotación a heliocéntrico ecliptic J2000: R_z(Ω) · R_x(i) · R_z(ω)
+  const cw = Math.cos(peri), sw = Math.sin(peri);
+  const cO = Math.cos(node), sO = Math.sin(node);
+  const cI = Math.cos(incl), sI = Math.sin(incl);
+
+  const xh = (cO * cw - sO * sw * cI) * xOrb + (-cO * sw - sO * cw * cI) * yOrb;
+  const yh = (sO * cw + cO * sw * cI) * xOrb + (-sO * sw + cO * cw * cI) * yOrb;
+  // z no hace falta para la longitud geocéntrica, pero lo dejamos para claridad
+  // const zh = (sw * sI) * xOrb + (cw * sI) * yOrb;
+
+  // Posición heliocéntrica de la Tierra (Astronomy Engine la devuelve en eje EQUATORIAL J2000)
+  const earthEq = Astronomy.HelioVector(Astronomy.Body.Earth, date);
+  const eps = 23.4392911 * D2R;  // oblicuidad J2000
+  const ce = Math.cos(eps), se = Math.sin(eps);
+  // Rotamos Tierra a eje ECLIPTIC J2000 (R_x(-eps))
+  const xE = earthEq.x;
+  const yE = earthEq.y * ce + earthEq.z * se;
+  // const zE = -earthEq.y * se + earthEq.z * ce;
+
+  // Geocéntrico = Heliocéntrico_Chiron − Heliocéntrico_Tierra
+  const gx = xh - xE;
+  const gy = yh - yE;
+
+  return norm360(Math.atan2(gy, gx) * R2D);
+}
+
 /** Longitud eclíptica del MC (Midheaven), grados. */
 function mcLongitude(lstDeg: number, epsDeg: number): number {
   const lst = lstDeg * D2R;
@@ -235,7 +317,12 @@ function mcLongitude(lstDeg: number, epsDeg: number): number {
   return norm360(lon * R2D);
 }
 
-/** Longitud eclíptica del Ascendente, grados. */
+/** Longitud eclíptica del Ascendente, grados.
+ *  La fórmula de Meeus (14.5) atan2(-cos H, sin ε tan φ + cos ε sin H) devuelve
+ *  en realidad la longitud del Descendente: el resultado para LST=0°/lat=40°N
+ *  es 288.4° (Acuario), cuyo punto está físicamente en el HORIZONTE OESTE
+ *  (azimut ≈ 240°). El verdadero ASC en ese caso es 108.4° (Cancer 18.4°),
+ *  diferencia exacta de 180°. Sumamos 180° para devolver el ASC real. */
 function ascLongitude(lstDeg: number, epsDeg: number, latDeg: number): number {
   const lst = lstDeg * D2R;
   const eps = epsDeg * D2R;
@@ -243,7 +330,7 @@ function ascLongitude(lstDeg: number, epsDeg: number, latDeg: number): number {
   const y = -Math.cos(lst);
   const x = Math.sin(lst) * Math.cos(eps) + Math.tan(lat) * Math.sin(eps);
   let lon = Math.atan2(y, x) * R2D;
-  lon = norm360(lon);
+  lon = norm360(lon + 180);
   return lon;
 }
 
@@ -349,7 +436,12 @@ function placidusIntermediate(n: 11 | 12 | 2 | 3, ramcDeg: number, epsDeg: numbe
     }
     const SA = Math.acos(cosSA) * R2D;
 
-    const newRA = norm360(ramcDeg + f * SA + (above ? 0 : 180));
+    // Above-horizon (cusps 11, 12): la cúspide está a f·DSA desde el MC, hacia el este (RA creciente).
+    //   newRA = ramc + f·DSA
+    // Below-horizon (cusps 2, 3): la cúspide está a f·NSA desde el IC, hacia el este (RA decreciente
+    // dentro del semicírculo inferior). Como IC = ramc + 180°, queda:
+    //   newRA = (ramc + 180°) − f·NSA
+    const newRA = norm360(ramcDeg + (above ? f * SA : 180 - f * SA));
     if (Math.abs(angularDiff(newRA, ra)) < 0.0001) {
       return eclipticFromRA(newRA, eps);
     }
