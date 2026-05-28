@@ -404,7 +404,10 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
           zIndex={2}
           // Móvil: padding mínimo para que la imagen llegue al ancho del box de texto.
           px={{ base: 4, md: 24 }}
-          py={{ base: 6, md: 12 }}
+          // pt extra para que el contenido no choque con la X de cerrar
+          // (top: 3/5). pb generoso para respirar al final del scroll.
+          pt={{ base: 16, md: 20 }}
+          pb={{ base: 14, md: 18 }}
           overflowY="auto"
           minH="100vh"
           display="flex"
@@ -418,7 +421,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
             touchAction: "pan-y",
           }}
         >
-          <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" my={{ base: 4, md: 6 }} w="100%">
+          <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
             {/* Imagen — suelta, con halo de luz alrededor */}
             <Box
               key={`img-${index}`}

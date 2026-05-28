@@ -711,7 +711,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
   const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="inside">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
@@ -720,9 +720,10 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        // overflow="hidden" eliminado: bloqueaba el scroll del ModalBody en móvil.
-        // El fondo fijo (siguiente Box con position="fixed") no necesita clip;
-        // el ModalBody se ocupa de su propio scroll interno.
+        // overflow:hidden encaja el ModalContent a 100vh para que el
+        // overflowY:auto del ModalBody pueda activar su scroll interno.
+        // (Mismo patrón que ComicUniversoModal, que sí scrollea.)
+        overflow="hidden"
         minH="100vh"
       >
         {/* Fondo espacial */}
@@ -963,7 +964,10 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               // flotantes sin círculo, así que no necesitan margen reservado).
               // En desktop conservamos el padding generoso original.
               px={{ base: 4, md: 24 }}
-              py={{ base: 6, md: 12 }}
+              // pt extra para que el contenido no choque con la X de cerrar
+              // (top: 3/5). pb generoso para respirar al final del scroll.
+              pt={{ base: 16, md: 20 }}
+              pb={{ base: 14, md: 18 }}
               overflowY="auto"
               minH="100vh"
               display="flex"
@@ -980,7 +984,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                 touchAction: "pan-y",
               }}
             >
-              <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" my={{ base: 4, md: 6 }} w="100%">
+              <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
                 <Box
                   key={`img-${seccion}-${index}`}
                   // Móvil: imagen al 100% del body (mismo ancho que el box de texto).
