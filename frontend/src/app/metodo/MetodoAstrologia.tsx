@@ -264,15 +264,16 @@ export default function MetodoAstrologia() {
                     href={toDriveDownload(estado!.link_carta!)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    px={10}
+                    px={{ base: 5, md: 10 }}
                     py={3}
                     borderRadius="full"
                     bg={astrologiaTxt}
                     color={astrologiaBg}
                     fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "lg", md: "xl" }}
+                    fontSize={{ base: "sm", md: "xl" }}
                     fontWeight="700"
-                    letterSpacing="0.08em"
+                    letterSpacing={{ base: "0.04em", md: "0.08em" }}
+                    whiteSpace="nowrap"
                     boxShadow={`0 0 10px rgba(255,255,255,0.28), 0 0 26px rgba(255,255,255,0.14), 0 0 18px ${astrologiaTxt}88, 0 0 42px ${astrologiaTxt}44`}
                     cursor="pointer"
                     // Texto centrado tipográficamente en el botón.

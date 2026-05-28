@@ -804,11 +804,13 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             display="flex"
             flexDirection="column"
             alignItems="center"
-            justifyContent={{ base: "flex-start", md: "center" }}
             minH={{ base: "auto", md: "100vh" }}
             overflowY="auto"
             overflowX="hidden"
             sx={{
+              // safe center en desktop: centra cuando cabe, pero al desbordar
+              // alinea arriba en vez de recortar (permite scroll completo).
+              justifyContent: { base: "flex-start", md: "safe center" },
               // Permite scroll suave con momentum en iOS.
               WebkitOverflowScrolling: "touch",
               scrollbarWidth: "none",
@@ -965,18 +967,20 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               overflowY="auto"
               minH="100vh"
               display="flex"
-              alignItems="center"
               onTouchStart={onTouchStart}
               onTouchEnd={onTouchEnd}
               sx={{
+                // safe center: centra verticalmente cuando el contenido cabe,
+                // pero al desbordar alinea arriba para no recortar el inicio
+                // y permite hacer scroll a todo el contenido.
+                alignItems: "safe center",
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
                 "&::-webkit-scrollbar": { display: "none" },
-                // Mejora el swipe horizontal: el scroll vertical sigue funcionando.
                 touchAction: "pan-y",
               }}
             >
-              <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
+              <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" my={{ base: 4, md: 6 }} w="100%">
                 <Box
                   key={`img-${seccion}-${index}`}
                   // Móvil: imagen al 100% del body (mismo ancho que el box de texto).

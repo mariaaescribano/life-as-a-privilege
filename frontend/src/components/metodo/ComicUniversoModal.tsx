@@ -408,12 +408,17 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
           overflowY="auto"
           minH="100vh"
           display="flex"
-          alignItems="center"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
-          sx={{ touchAction: "pan-y" }}
+          sx={{
+            // safe center: centra verticalmente cuando el contenido cabe,
+            // pero al desbordar alinea arriba para no recortar el inicio
+            // y permite hacer scroll a todo el contenido.
+            alignItems: "safe center",
+            touchAction: "pan-y",
+          }}
         >
-          <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
+          <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" my={{ base: 4, md: 6 }} w="100%">
             {/* Imagen — suelta, con halo de luz alrededor */}
             <Box
               key={`img-${index}`}
