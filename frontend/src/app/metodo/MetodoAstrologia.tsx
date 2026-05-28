@@ -275,6 +275,13 @@ export default function MetodoAstrologia() {
                     letterSpacing="0.08em"
                     boxShadow={`0 0 10px rgba(255,255,255,0.28), 0 0 26px rgba(255,255,255,0.14), 0 0 18px ${astrologiaTxt}88, 0 0 42px ${astrologiaTxt}44`}
                     cursor="pointer"
+                    // Texto centrado tipográficamente en el botón.
+                    display="inline-flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    textAlign="center"
+                    lineHeight="1"
+                    mx="auto"
                   >
                     Descargar mi carta (PDF)
                   </Box>

@@ -103,14 +103,29 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
       >
         <ArrowButton dir="left"  color={color} onClick={() => stepFocus(1)} />
 
-        <Flex direction="column" align="stretch" gap={2} flex="1" minW={{ base: "180px", md: "260px" }} maxW={{ base: "240px", md: "340px" }}>
+        <Flex
+          direction="column"
+          align="stretch"
+          gap={2}
+          flex="0 0 auto"
+          // Ancho FIJO: el botón no debe cambiar de tamaño al cambiar de planeta.
+          w={{ base: "220px", md: "300px" }}
+        >
           {focusedCuerpo && focused && (() => {
             const leido = !!completados?.[focusedCuerpo.key];
             const c = focusedCuerpo.color;
             const interactivo = !!onSaberMas;
 
             const contenido = (
-              <Flex direction="column" align="center" justify="center" gap={1} w="100%" px={interactivo ? { base: 8, md: 10 } : 0}>
+              <Flex
+                direction="column"
+                align="center"
+                justify="center"
+                gap={1}
+                w="100%"
+                // Padding interno para no chocar con el círculo del icono lateral.
+                px={interactivo ? { base: 8, md: 10 } : 0}
+              >
                 <Text
                   color="white"
                   fontFamily="'EB Garamond', serif"
@@ -120,6 +135,10 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                   textTransform="uppercase"
                   lineHeight="1.1"
                   textAlign="center"
+                  // noOfLines + nowrap: el texto no rompe ni desborda; si fuera
+                  // demasiado largo se trunca con ellipsis manteniendo el tamaño.
+                  noOfLines={1}
+                  w="100%"
                   style={{ textShadow: `0 0 10px ${c}cc, 0 0 22px ${c}77` }}
                 >
                   {focusedCuerpo.label}
@@ -127,10 +146,12 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                 <Text
                   color={`${c}ee`}
                   fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "xs", md: "sm" }}
+                  fontSize={{ base: "2xs", md: "xs" }}
                   fontStyle="italic"
-                  letterSpacing="0.05em"
+                  letterSpacing="0.04em"
                   textAlign="center"
+                  noOfLines={1}
+                  w="100%"
                   style={{ textShadow: `0 0 8px rgba(255,255,255,0.35)` }}
                 >
                   {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
@@ -168,12 +189,17 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
               </Box>
             ) : null;
 
+            // Altura FIJA del botón: nunca cambia entre planetas.
+            const fixedH = { base: "62px", md: "72px" };
+
             if (!interactivo) {
               return (
                 <Box
                   position="relative"
+                  h={fixedH}
+                  display="flex"
+                  alignItems="center"
                   px={{ base: 4, md: 5 }}
-                  py={{ base: 3, md: 3.5 }}
                   borderRadius="xl"
                   bg={`${c}08`}
                   border={`1px solid ${c}33`}
@@ -188,8 +214,10 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                 as="button"
                 onClick={() => onSaberMas?.(focusedCuerpo.key)}
                 position="relative"
+                h={fixedH}
+                display="flex"
+                alignItems="center"
                 px={{ base: 4, md: 5 }}
-                py={{ base: 3, md: 3.5 }}
                 borderRadius="xl"
                 bg={`${c}12`}
                 border={`1px solid ${c}88`}

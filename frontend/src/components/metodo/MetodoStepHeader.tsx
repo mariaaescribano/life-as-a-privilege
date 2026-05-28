@@ -190,24 +190,20 @@ export function MetodoStepHeader({
           />
         )}
 
-        {/* Botones contextuales — siempre en horizontal */}
+        {/* Botones contextuales — wrap centrado.
+            En desktop entran los 3 en una fila; en móvil, si no caben, los que
+            sobren bajan a una segunda fila sin recortarse ni descolocarse. */}
         {(prev || next || extra) && (
           <Flex
-            justify="space-between"
+            justify="center"
             align="center"
-            gap={{ base: 1.5, md: 3 }}
+            gap={{ base: 2, md: 3 }}
             direction="row"
-            wrap="nowrap"
+            wrap="wrap"
           >
-            <Box>
-              {prev && <StepBtn {...prev} color={color} />}
-            </Box>
-            <Box>
-              {extra && <StepBtn {...extra} color={color} />}
-            </Box>
-            <Box>
-              {next && <StepBtn {...next} color={color} />}
-            </Box>
+            {prev && <StepBtn {...prev} color={color} />}
+            {extra && <StepBtn {...extra} color={color} />}
+            {next && <StepBtn {...next} color={color} />}
           </Flex>
         )}
       </Box>

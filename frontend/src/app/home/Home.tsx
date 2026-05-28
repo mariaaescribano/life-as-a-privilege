@@ -530,9 +530,10 @@ const Home = () => {
         display={{ base: "flex", md: "none" }}
         justify="center"
         px={5}
-        // Separación generosa: respira respecto al mandala arriba y al footer abajo.
-        pt={{ base: 4, sm: 6 }}
-        pb={{ base: 10, sm: 12 }}
+        // Separación arriba mínima (el mandala ya tiene su propio margen) y
+        // separación abajo amplia para no pegarse al footer.
+        mt={{ base: -8, sm: -6 }}
+        pb={{ base: 8, sm: 10 }}
       >
         <Box
           as="button"

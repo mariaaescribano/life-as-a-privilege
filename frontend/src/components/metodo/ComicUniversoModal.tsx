@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { astrologiaTxt } from "../../GlobalVariables";
@@ -232,7 +233,8 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
     }
   };
 
-  // ── Typewriter ──
+  // ── Typewriter — en móvil texto al instante (efecto lento frustra la lectura) ──
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const totalChars = current.paragraphs.reduce((acc, p) => acc + p.length, 0);
   const [typed, setTyped] = useState(0);
   const [lastIndex, setLastIndex] = useState(index);
@@ -240,10 +242,14 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
   // Reset síncrono al cambiar de viñeta — evita que se vea texto residual
   if (lastIndex !== index) {
     setLastIndex(index);
-    setTyped(0);
+    setTyped(isMobile ? totalChars : 0);
   }
 
   useEffect(() => {
+    if (isMobile) {
+      if (typed < totalChars) setTyped(totalChars);
+      return;
+    }
     if (typed >= totalChars) return;
     let acc = 0;
     let atBoundary = false;
@@ -254,7 +260,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
     const delay = atBoundary ? PARAGRAPH_PAUSE_MS : TYPE_SPEED_MS;
     const t = setTimeout(() => setTyped((n) => n + 1), delay);
     return () => clearTimeout(t);
-  }, [typed, totalChars, current]);
+  }, [typed, totalChars, current, isMobile]);
 
   const skipTyping = () => setTyped(totalChars);
 

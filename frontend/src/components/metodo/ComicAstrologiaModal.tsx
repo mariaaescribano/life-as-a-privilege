@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { astrologiaTxt } from "../../GlobalVariables";
@@ -672,7 +673,9 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
     }
   };
 
-  // ── Typewriter ──
+  // ── Typewriter — en móvil se muestra el texto entero al instante ──
+  // (el efecto máquina de escribir va lento y frustra la lectura en móvil).
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const totalChars = current ? current.paragraphs.reduce((acc, p) => acc + p.length, 0) : 0;
   const [typed, setTyped] = useState(0);
   const [lastKey, setLastKey] = useState(`${seccion}-${index}`);
@@ -680,11 +683,16 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
   const currentKey = `${seccion}-${index}`;
   if (lastKey !== currentKey) {
     setLastKey(currentKey);
-    setTyped(0);
+    setTyped(isMobile ? totalChars : 0);
   }
 
   useEffect(() => {
     if (!current) return;
+    if (isMobile) {
+      // En móvil, salto el typewriter: aparece el texto completo de golpe.
+      if (typed < totalChars) setTyped(totalChars);
+      return;
+    }
     if (typed >= totalChars) return;
     let acc = 0;
     let atBoundary = false;
@@ -695,7 +703,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
     const delay = atBoundary ? PARAGRAPH_PAUSE_MS : TYPE_SPEED_MS;
     const t = setTimeout(() => setTyped((n) => n + 1), delay);
     return () => clearTimeout(t);
-  }, [typed, totalChars, current]);
+  }, [typed, totalChars, current, isMobile]);
 
   const skipTyping = () => setTyped(totalChars);
 
@@ -807,7 +815,18 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               "&::-webkit-scrollbar": { display: "none" },
             }}
           >
-            <Flex direction="column" align="center" gap={{ base: 8, md: 10 }} w="100%" maxW="1280px" mx="auto">
+            <Flex
+              direction="column"
+              align="center"
+              gap={{ base: 8, md: 10 }}
+              w="100%"
+              maxW="1280px"
+              mx="auto"
+              // Aire entre la cruz (cerrar) y el título.
+              mt={{ base: 8, md: 4 }}
+              // Aire después del bloque de tarjetas antes del borde del modal.
+              mb={{ base: 10, md: 8 }}
+            >
               <Flex direction="column" align="center" gap={2}>
                 <Text
                   color="white"
