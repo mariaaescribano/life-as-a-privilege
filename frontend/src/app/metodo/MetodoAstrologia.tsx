@@ -203,7 +203,7 @@ export default function MetodoAstrologia() {
 
   // Etiquetas de los botones del header según estado
   const camposCompletos = !!dia && !!mes && !!anio && !!hora && !!pais.trim() && !!lugar.trim() && !!region.trim();
-  const headerPrev = { label: "← Volver a Home", onClick: () => navigate("/home") };
+  const headerPrev = { label: "← Home", onClick: () => navigate("/home") };
   const headerExtra = {
     label: "Ilustraciones",
     onClick: () => setComicAstroOpen(true),
