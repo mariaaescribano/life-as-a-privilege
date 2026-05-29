@@ -5,7 +5,13 @@ USAR OBJ+ID : userId
 
 
 
-- encuentra la forma de poder calcular a quiron y los nodos que no incumba el yo tener que escribirlo a mano (quita el botón ese)
+
+
+
+
+
+
+
 
 
 

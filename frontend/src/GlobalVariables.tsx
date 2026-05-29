@@ -10,8 +10,8 @@ export const turquesa = "#48C0B5";
 
 // Fisiología
 export const fisiologiaNom = "Fisiología";
-export const fisiologiaBg = "#d4c4ef";
-export const fisiologiaTxt = "#5319b1";
+export const  fisiologiaTxt= "#d4c4ef";
+export const  fisiologiaBg = "#3b098b";
 export function FisiologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } })  {
   return (
     <Box
@@ -143,8 +143,8 @@ export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada �
 // TCM
 export const tcmNom = "Medicina China";
 export const tcmNomLink = "medicinachina";
-export const tcmTxt = "#6b0404";
-export const tcmBg = "#d8a4a4";
+export const tcmBg = "#6b0404";
+export const  tcmTxt = "#ffa2a2";
 export function TCMIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
@@ -290,8 +290,8 @@ export function FisioComidaIcon({ size = { base: "24px", md: "24px" }}) {
 // Cultura
 export const culturaNom = "Cultura";
 export const culturaNomLink = "cultura";
-export const culturaBg = "#79dcd4";
-export const culturaTxt = "#0c3c3c";
+export const  culturaTxt = "#79dcd4";
+export const  culturaBg= "#0c3c3c";
 export function CulturaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={size} viewBox="0 -960 960 960" w={size} fill={culturaTxt}>
@@ -332,8 +332,8 @@ export function FisicaIcon({ size = { base: "24px", md: "24px" } }: { size?: str
 
 // Cábala
 export const cabalaNom = "Cábala";
-export const cabalaTxt = "#301904";
-export const cabalaBg = "#cb8e59";
+export const cabalaBg = "#3b2612";
+export const cabalaTxt = "#bd814d";
 export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
