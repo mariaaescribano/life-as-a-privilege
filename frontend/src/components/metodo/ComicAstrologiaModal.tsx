@@ -542,10 +542,11 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
       onClose={onClose}
       size="full"
       isCentered
-      // Solo el selector de ilustraciones usa scrollBehavior="inside"
-      // (su layout original). En la vista cómic, ComicViewer gestiona su
-      // propio scroll dentro del ModalContent (mismo patrón que el de Inicio).
-      scrollBehavior={seccion ? undefined : "inside"}
+      // - Vista cómic: "outside" → la página entera del modal scrollea usando
+      //   la scrollbar del navegador (lo que pidió la usuaria).
+      // - Vista selector: "inside" → mantiene el layout original con su
+      //   propio scroll interno.
+      scrollBehavior={seccion ? "outside" : "inside"}
     >
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
@@ -555,11 +556,6 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        // overflow:hidden SOLO en la vista cómic: encaja el ModalContent a
-        // 100vh para que el overflowY:auto del ModalBody active el scroll.
-        // En el selector lo dejamos sin clip para que las cards en móvil
-        // hagan scroll de forma natural.
-        overflow={seccion ? "hidden" : undefined}
         minH="100vh"
       >
         {/* ── VISTA SELECTOR ── */}

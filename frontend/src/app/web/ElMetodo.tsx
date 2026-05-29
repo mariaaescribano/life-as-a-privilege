@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
@@ -114,6 +114,8 @@ type MetodoCardProps = {
 
 function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardProps) {
   const hasBg = hasDisciplinaBg(data.name);
+  const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
+  const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : data.name;
   return (
     <Box
       position="relative"
@@ -186,7 +188,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
             ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
             : undefined}
         >
-          {data.name === "Medicina China" ? "Med. China" : data.name}
+          {displayName}
         </Text>
       </Flex>
     </Box>
@@ -305,7 +307,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Ocho disciplinas, un orden. De la autocompasión a la ciencia, con el Amor propio como consecuencia.
+          Ocho disciplinas, un orden. De la autocompasión a la ciencia.
         </Text>
       </Flex>
 
@@ -933,9 +935,7 @@ export default function ElMetodo() {
                 letterSpacing="0.05em"
                 textAlign="center"
                 lineHeight="1.1"
-                textShadow={hasDisciplinaBg(selectedCard.name)
-                  ? `0 1px 3px ${selectedCard.bg}f5, 0 0 8px ${selectedCard.bg}cc, 0 2px 16px ${selectedCard.bg}88, 0 0 16px rgba(255,255,255,0.55), 0 0 36px rgba(255,255,255,0.3)`
-                  : undefined}
+                textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 8px ${selectedCard.bg}cc, 0 2px 16px ${selectedCard.bg}88, 0 0 16px rgba(255,255,255,0.55), 0 0 36px rgba(255,255,255,0.3)`}
                 filter={hasDisciplinaBg(selectedCard.name) ? undefined : `drop-shadow(0 2px 14px ${selectedCard.txt}55)`}
               >
                 {selectedCard.name}
@@ -957,9 +957,7 @@ export default function ElMetodo() {
                 letterSpacing="0.02em"
                 opacity={0.95}
                 maxW="640px"
-                textShadow={hasDisciplinaBg(selectedCard.name)
-                  ? `0 0 12px rgba(255,255,255,0.5), 0 0 26px rgba(255,255,255,0.25), 0 1px 4px ${selectedCard.bg}cc`
-                  : undefined}
+                textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 8px ${selectedCard.bg}cc, 0 2px 16px ${selectedCard.bg}88, 0 0 12px rgba(255,255,255,0.5), 0 0 26px rgba(255,255,255,0.25)`}
               >
                 {selectedCard.desc}
               </Text>
@@ -975,9 +973,7 @@ export default function ElMetodo() {
                 letterSpacing="0.32em"
                 textTransform="uppercase"
                 fontWeight="600"
-                textShadow={hasDisciplinaBg(selectedCard.name)
-                  ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
-                  : undefined}
+                textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
               >
                 Qué incluye
               </Text>
@@ -1028,9 +1024,7 @@ export default function ElMetodo() {
                         lineHeight={{ base: "1.6", md: "1.7" }}
                         letterSpacing="0.01em"
                         textAlign="center"
-                        textShadow={hasDisciplinaBg(selectedCard.name)
-                          ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
-                          : undefined}
+                        textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
                       >
                         {item}
                       </Text>
@@ -1064,9 +1058,7 @@ export default function ElMetodo() {
                         fontStyle="italic"
                         opacity={0.85}
                         lineHeight="1.3"
-                        textShadow={hasDisciplinaBg(selectedCard.name)
-                          ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
-                          : undefined}
+                        textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
                       >
                         {seccion.aviso}
                       </Text>

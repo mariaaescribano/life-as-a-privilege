@@ -21,21 +21,43 @@ import type { Vineta } from "./ComicViewer";
 
 const VINETAS_ELEMENTOS: Vineta[] = [
   {
-    src: "",
-    paragraphs: [
-      "Próximamente.",
-      "Aquí irán las viñetas de Los Cinco Elementos.",
-    ],
+    src: "/viñetas/tcm/elementos/5tcm.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/elementos/fuegotcm.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/elementos/madera.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/elementos/tierratcm.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/elementos/aguatcm.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/elementos/metaltcm.png",
+    paragraphs: [],
   },
 ];
 
 const VINETAS_YIN_YANG: Vineta[] = [
   {
-    src: "",
-    paragraphs: [
-      "Próximamente.",
-      "Aquí irán las viñetas de El Yin Yang.",
-    ],
+    src: "/viñetas/tcm/yinyang/yinyang.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/yinyang/yin.png",
+    paragraphs: [],
+  },
+  {
+    src: "/viñetas/tcm/yinyang/yang.png",
+    paragraphs: [],
   },
 ];
 
@@ -46,9 +68,9 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
   yin_yang:      VINETAS_YIN_YANG,
 };
 
-const SELECTOR_OPTIONS: { key: Capitulo; title: string }[] = [
-  { key: "los_elementos", title: "Los Cinco Elementos" },
-  { key: "yin_yang",      title: "El Yin Yang" },
+const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
+  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.png" },
+  { key: "yin_yang",      title: "El Yin Yang", cover: "/viñetas/tcm/yinyang/yinyang.png" },
 ];
 
 interface TCMIlustracionesModalProps {
@@ -74,7 +96,7 @@ export function TCMIlustracionesModal({
   const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
+    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
       <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
       <ModalContent
         bg="transparent"
@@ -83,7 +105,6 @@ export function TCMIlustracionesModal({
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        overflow={capitulo ? "hidden" : undefined}
         minH="100vh"
         position="relative"
       >
@@ -207,8 +228,6 @@ export function TCMIlustracionesModal({
                     w="100%"
                     minW={{ base: "auto", sm: "280px", md: "300px" }}
                     maxW={{ base: "300px", md: "360px" }}
-                    py={{ base: 10, md: 14 }}
-                    px={5}
                     borderRadius="2xl"
                     overflow="hidden"
                     border={`1px solid ${tcmTxt}55`}
@@ -228,7 +247,35 @@ export function TCMIlustracionesModal({
                       _active: { transform: "translateY(-1px)" },
                     }}
                   >
-                    <Flex direction="column" align="center" gap={2}>
+                    {opt.cover && (
+                      <Box
+                        position="relative"
+                        w="100%"
+                        aspectRatio={1}
+                        overflow="hidden"
+                        borderBottom={`1px solid ${tcmTxt}44`}
+                        bg="rgba(0,0,0,0.25)"
+                      >
+                        <Box
+                          as="img"
+                          src={encodeURI(opt.cover)}
+                          alt={opt.title}
+                          loading="eager"
+                          position="absolute"
+                          inset="0"
+                          w="100%"
+                          h="100%"
+                          style={{ objectFit: "cover", objectPosition: opt.coverPosition ?? "center" }}
+                        />
+                      </Box>
+                    )}
+                    <Flex
+                      direction="column"
+                      align="center"
+                      gap={1}
+                      py={opt.cover ? { base: 4, md: 5 } : { base: 10, md: 14 }}
+                      px={3}
+                    >
                       <Text
                         color={tcmTxt}
                         fontSize={{ base: "xl", md: "2xl" }}
@@ -279,6 +326,8 @@ export function TCMIlustracionesModal({
             key={capitulo}
             vinetas={vinetas}
             themeColor={tcmTxt}
+            disciplinaBgImage="/img/fondos/tcm.png"
+            disciplinaBgColor={tcmBg}
             onClose={onClose}
             onBack={volverAlSelector}
             onComplete={() => {

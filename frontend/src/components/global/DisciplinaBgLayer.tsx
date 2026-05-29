@@ -56,11 +56,11 @@ const ImageBgLayer = ({
       style={{
         objectFit: "cover",
         objectPosition: "center",
-        // Blur suave para que la foto no compita con el texto. El scale evita
-        // que el desenfoque deje los bordes del contenedor en transparente.
-        // En popups subimos blur (y scale) para mucha más sensación de fondo.
+        // Blur suave para que la foto no compita con el texto. El scale es
+        // justo el necesario para que el desenfoque no deje bordes
+        // transparentes — nunca un zoom agresivo que coma composición.
         filter: strongBlur ? "blur(8px)" : "blur(3px)",
-        transform: strongBlur ? "scale(1.12)" : "scale(1.08)",
+        transform: strongBlur ? "scale(1.05)" : "scale(1.03)",
       }}
     />
     {overlay && (
@@ -83,16 +83,21 @@ export const DisciplinaBgLayer = ({
   borderRadius,
   overlay,
   blur,
+  imageSrc,
 }: {
   nom: string;
   borderRadius?: any;
   overlay?: string;
   blur?: boolean;
+  /** Sustituye la imagen por defecto de la disciplina por otra (mismo
+   *  tratamiento de blur/overlay). Útil cuando un layout concreto pide una
+   *  variante (p.ej. TCM vertical en los boxes de los tests). */
+  imageSrc?: string;
 }) => {
   if (nom === astrologiaNom) {
     return <StarsLayer borderRadius={borderRadius} overlay={overlay} blur={blur} />;
   }
-  const src = DISCIPLINA_BG_IMG[nom];
+  const src = imageSrc ?? DISCIPLINA_BG_IMG[nom];
   if (!src) return null;
   return <ImageBgLayer src={src} borderRadius={borderRadius} overlay={overlay} strongBlur={blur} />;
 };

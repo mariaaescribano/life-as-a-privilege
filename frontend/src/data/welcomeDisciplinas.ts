@@ -46,7 +46,7 @@ export const welcomeDisciplinas: Record<
 
   ayurveda: {
 
-    desc: "Cinco mil años leyendo al ser humano como parte de la naturaleza, no como algo separado de ella.",
+    desc: "Cinco mil años leyendo al ser humano como parte de la naturaleza, puesto que no es algo separado de ella.",
 
   },
 
@@ -54,7 +54,7 @@ export const welcomeDisciplinas: Record<
 
   tcm: {
 
-    desc: "Cinco elementos. Una naturaleza. Un ser humano. Un sistema para entender el origen de tus desequilibrios.",
+    desc: "Cinco elementos. Una naturaleza. Un ser humano. Un sistema de 3000 años para entender el origen de tus desequilibrios.",
 
   },
 
@@ -70,7 +70,7 @@ export const welcomeDisciplinas: Record<
 
   nutricion: {
 
-    desc: "Qué hace cada alimento dentro de ti. Conoce más para temer menos y elegir mejor.",
+    desc: "Qué hace cada alimento dentro de ti. Cómo te reconstruyes con tu alimentación. Conoce más para temer menos y elegir mejor.",
 
   },
 
@@ -86,7 +86,7 @@ export const welcomeDisciplinas: Record<
 
   cultura: {
 
-    desc: "Las grandes filosofías leídas en serio. No para repetirlas, para construir la tuya.",
+    desc: "Las grandes filosofías que marcaron un antes y un después en la historia de la humanidad. Entiéndelas y crea la tuya propia.",
 
   },
 

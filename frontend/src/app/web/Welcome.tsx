@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -135,6 +135,7 @@ const Welcome = () => {
   const disciplinasTitleReveal = useReveal(0.2);
   const disciplinasReveal = useReveal(0.05);
   const [mounted, setMounted] = useState(false);
+  const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -240,7 +241,7 @@ const Welcome = () => {
             textShadow="0 0 11px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)"
             maxW={{ base: "100%", md: "88%" }}
           >
-            Ciencia y conocimiento tradicional en un recorrido con principio y final.
+            Ciencia y conocimiento tradicional en un recorrido con inicio y cierre.
           </Text>
         </Box>
       </Flex>
@@ -382,7 +383,7 @@ const Welcome = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
         >
-          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos ancestrales se combinan en vez de pelearse. Ahora son aliados.
+          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
         </Text>
 
         {/* Botón Conoce más */}
@@ -497,6 +498,7 @@ const Welcome = () => {
         >
           {disciplines.map((d, i) => {
             const hasBg = hasDisciplinaBg(d.name);
+            const displayName = d.name === "Medicina China" && isMobile ? "Med. China" : d.name;
             return (
               <Box
                 key={i}
@@ -557,7 +559,7 @@ const Welcome = () => {
                     ? `0 1px 3px ${d.bg}f5, 0 0 6px ${d.bg}cc, 0 2px 14px ${d.bg}88`
                     : "2px 2px 2px rgba(0,0,0,0.4)"}
                 >
-                  {d.name === "Medicina China" ? "Med. China" : d.name}
+                  {displayName}
                 </Text>
               </Box>
             );
@@ -788,9 +790,7 @@ const Welcome = () => {
                 fontWeight="700"
                 letterSpacing="0.04em"
                 textAlign="center"
-                textShadow={hasDisciplinaBg(selected.name)
-                  ? `0 1px 3px ${selected.bg}f5, 0 0 8px ${selected.bg}cc, 0 2px 16px ${selected.bg}88, 0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.3)`
-                  : undefined}
+                textShadow={`0 1px 3px ${selected.bg}f5, 0 0 8px ${selected.bg}cc, 0 2px 16px ${selected.bg}88, 0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.3)`}
               >
                 {selected.name}
               </Text>
@@ -805,9 +805,7 @@ const Welcome = () => {
                 lineHeight="1.9"
                 letterSpacing="0.02em"
                 opacity={0.82}
-                textShadow={hasDisciplinaBg(selected.name)
-                  ? `0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22), 0 1px 4px ${selected.bg}cc`
-                  : undefined}
+                textShadow={`0 1px 3px ${selected.bg}f5, 0 0 8px ${selected.bg}cc, 0 2px 14px ${selected.bg}88, 0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)`}
               >
                 {selected.desc}
               </Text>

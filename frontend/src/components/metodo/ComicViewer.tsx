@@ -80,6 +80,13 @@ interface ComicViewerProps {
   onBack?: () => void;
   /** Color de acento. Por defecto el de astrología. */
   themeColor?: string;
+  /** Foto de la modalidad. Si se pasa, sustituye al fondo de Astrología
+   *  (estrellas) tanto en el fondo completo (muy blureado + pantalla negra)
+   *  como en el box del texto (poco blureado, brillando con disciplinaBgColor).
+   *  Útil para Ilustraciones de Hinduismo / Medicina China. */
+  disciplinaBgImage?: string;
+  /** Color hex del bg de la disciplina. Se usa para el glow del box de texto. */
+  disciplinaBgColor?: string;
 }
 
 export function ComicViewer({
@@ -88,7 +95,10 @@ export function ComicViewer({
   onComplete,
   onBack,
   themeColor = astrologiaTxt,
+  disciplinaBgImage,
+  disciplinaBgColor,
 }: ComicViewerProps) {
+  const isDisciplinaMode = !!disciplinaBgImage;
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const contentRef = useRef<HTMLDivElement>(null);
@@ -184,28 +194,38 @@ export function ComicViewer({
 
   return (
     <>
-      {/* Fondo espacial a pantalla completa */}
+      {/* Fondo a pantalla completa. La foto cubre TODO el viewport sin dejar
+          huecos en negro: position:fixed + inset:0 + objectFit:cover.
+          - Astrología: foto espacial nítida.
+          - Disciplina mode (Hinduismo / TCM Ilustraciones): foto de la
+            modalidad con blur fuerte + pantalla negra translúcida para crear
+            distinción con la foto nítida del box del texto. */}
       <Box
         position="fixed"
         inset="0"
         pointerEvents="none"
         zIndex={0}
-        bg="#050505"
         overflow="hidden"
-        sx={{ backdropFilter: "blur(20px)" }}
       >
         <Box
           as="img"
-          src="/img/astrologia/space.jpg"
+          src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.jpg"}
           alt=""
           loading="eager"
           position="absolute"
-          inset="0"
-          w="100%"
-          h="100%"
-          style={{ objectFit: "cover", objectPosition: "center", opacity: 0.6 }}
+          top={isDisciplinaMode ? "-30px" : "0"}
+          left={isDisciplinaMode ? "-30px" : "0"}
+          right={isDisciplinaMode ? "-30px" : "0"}
+          bottom={isDisciplinaMode ? "-30px" : "0"}
+          w={isDisciplinaMode ? "calc(100% + 60px)" : "100%"}
+          h={isDisciplinaMode ? "calc(100% + 60px)" : "100%"}
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+            filter: isDisciplinaMode ? "blur(20px)" : undefined,
+          }}
         />
-        <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
+        <Box position="absolute" inset="0" bg={isDisciplinaMode ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.35)"} />
       </Box>
 
       {/* X cerrar */}
@@ -320,32 +340,35 @@ export function ComicViewer({
       />
 
       {/* Contenido scrollable — el scroll vertical ocurre DENTRO del popup
-          (h fija a 100vh + overflowY:auto), nunca a nivel de página. El pt
-          mantiene espacio arriba para no chocar con la X. */}
+          (h fija a 100vh + overflowY:auto), nunca a nivel de página. El py
+          asegura un mt/mb visible siempre (incluso al hacer scroll hasta el
+          extremo) para que el contenido nunca se pegue a los bordes y dé
+          sensación de "popup que se mueve" y no de pantalla rígida. */}
+      {/* Contenedor del contenido: SIN altura fija ni scroll interno. El
+          scroll lo gestiona el contenedor exterior del Modal (Chakra con
+          scrollBehavior="outside") usando la scrollbar real del navegador.
+          El py mantiene siempre mt/mb visibles, también al hacer scroll. */}
       <ModalBody
         ref={contentRef}
         position="relative"
         zIndex={2}
-        px={{ base: 4, md: 24 }}
-        pt={{ base: 16, md: 20 }}
-        pb={{ base: 14, md: 18 }}
-        overflowY="auto"
-        h="100vh"
         display="flex"
+        flexDirection="column"
+        alignItems="center"
+        minH="100vh"
+        px={{ base: 4, md: 24 }}
+        py={{ base: 20, md: 24 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{
-          // safe center: centra cuando cabe, alinea arriba al desbordar.
-          alignItems: "safe center",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          "&::-webkit-scrollbar": { display: "none" },
+          // "safe center": centra cuando el contenido cabe en 100vh; si
+          // rebasa, alinea al top para que la página pueda scrollearse hacia
+          // abajo y se vea todo el contenido.
+          justifyContent: "safe center",
           touchAction: "pan-y",
-          // Evita que el scroll del popup propague al body al llegar al borde.
-          overscrollBehavior: "contain",
         }}
       >
-        <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">
+        <Flex direction="column" align="center" gap={{ base: 5, md: 8 }} maxW="680px" w="100%" flexShrink={0}>
           <Box
             key={`img-${index}`}
             w={{ base: "100%", sm: "85%", md: "75%" }}
@@ -403,7 +426,11 @@ export function ComicViewer({
             pt={{ base: 5, md: 7 }}
             pb={{ base: 8, md: 9 }}
             animation={`${fadeIn} 0.55s ease 0.08s both`}
-            boxShadow={`0 0 18px ${themeColor}22, 0 0 40px ${themeColor}14, inset 0 0 20px rgba(0,0,0,0.35)`}
+            boxShadow={
+              isDisciplinaMode && disciplinaBgColor
+                ? `0 0 22px ${disciplinaBgColor}88, 0 0 50px ${disciplinaBgColor}55, 0 0 18px ${themeColor}44, 0 0 40px ${themeColor}22, inset 0 0 20px rgba(0,0,0,0.35)`
+                : `0 0 18px ${themeColor}22, 0 0 40px ${themeColor}14, inset 0 0 20px rgba(0,0,0,0.35)`
+            }
           >
             <Box
               position="absolute"
@@ -417,19 +444,28 @@ export function ComicViewer({
             >
               <Box
                 as="img"
-                src="/img/astrologia/space.jpg"
+                src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.jpg"}
                 alt=""
                 loading="eager"
                 position="absolute"
                 inset="0"
                 w="100%"
                 h="100%"
-                style={{ objectFit: "cover", objectPosition: "center", opacity: 0.75 }}
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  opacity: isDisciplinaMode ? 1 : 0.75,
+                  filter: isDisciplinaMode ? "blur(3px) saturate(1.1)" : undefined,
+                }}
               />
-              <Box position="absolute" inset="0" bg="rgba(8,13,30,0.55)" />
+              <Box
+                position="absolute"
+                inset="0"
+                bg={isDisciplinaMode && disciplinaBgColor ? `${disciplinaBgColor}55` : "rgba(8,13,30,0.55)"}
+              />
             </Box>
 
-            <Stars />
+            {!isDisciplinaMode && <Stars />}
 
             <Box
               position="absolute"

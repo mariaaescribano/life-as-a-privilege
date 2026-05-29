@@ -416,11 +416,6 @@ export default function Opiniones() {
         <OpinionesList opiniones={opiniones} loading={loading} listReveal={listReveal} />
       </Flex>
 
-      {/* ── SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 14, md: 18 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.18)" />
-      </Flex>
-
       {/* ── TÍTULO DEJAR OPINIÓN ── */}
       <Flex
         ref={dejarTitleReveal.ref}
@@ -428,7 +423,7 @@ export default function Opiniones() {
         align="center"
         textAlign="center"
         px={{ base: 5, md: 10 }}
-        pt={{ base: 14, md: 18 }}
+        pt={{ base: 24, md: 32 }}
         gap={{ base: 3, md: 4 }}
       >
         <Text

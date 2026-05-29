@@ -119,7 +119,7 @@ interface ComicUniversoModalProps {
 
 export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
+    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
@@ -128,7 +128,6 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        overflow="hidden"
         minH="100vh"
       >
         {/* key={isOpen}: al reabrir el modal, ComicViewer se remonta y

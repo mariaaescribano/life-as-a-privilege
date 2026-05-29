@@ -19,9 +19,6 @@ USAR OBJ+ID : userId
 
 
 
-
-
-
 CONECTANDO CON SUPABASE
 
 postgresql://postgres:[YOUR-PASSWORD]@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres

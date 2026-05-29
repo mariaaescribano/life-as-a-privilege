@@ -273,7 +273,7 @@ export default function NuevosCursosPage() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Material introductorio y complementario para cada disciplina
+          Material introductorio y complementario de cada disciplina
         </Text>
       </Flex>
 

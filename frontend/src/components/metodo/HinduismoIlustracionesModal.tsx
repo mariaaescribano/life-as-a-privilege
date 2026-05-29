@@ -76,7 +76,7 @@ export function HinduismoIlustracionesModal({
   const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered>
+    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
       <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
       <ModalContent
         bg="transparent"
@@ -85,7 +85,6 @@ export function HinduismoIlustracionesModal({
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        overflow={capitulo ? "hidden" : undefined}
         minH="100vh"
         position="relative"
       >
@@ -283,6 +282,8 @@ export function HinduismoIlustracionesModal({
             key={capitulo}
             vinetas={vinetas}
             themeColor={ayurvedaTxt}
+            disciplinaBgImage="/img/fondos/hinduismo.png"
+            disciplinaBgColor={ayurvedaBg}
             onClose={onClose}
             onBack={volverAlSelector}
             onComplete={() => {

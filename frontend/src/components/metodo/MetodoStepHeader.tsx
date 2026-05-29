@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { astrologiaNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
@@ -120,6 +120,33 @@ export function MetodoStepHeader({
   // bgColor suele venir con alpha pegado (#RRGGBBaa). Para el textShadow
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
+
+  // Auto-shrink del título: si ocupa más de una línea, reducimos un escalón
+  // de tamaño para que vuelva a entrar en una sola (o al menos quepa mejor).
+  //
+  // IMPORTANTE: medimos solo en el wrapper (cuyo ancho NO depende de
+  // titleWraps) y nunca volvemos atrás. Si midiéramos sobre el propio Text
+  // con ResizeObserver, el cambio de fontSize provocado por setTitleWraps
+  // dispararía el observer otra vez → al haberse encogido el texto ya no
+  // partiría → titleWraps volvería a false → font grande → re-wraps → loop
+  // infinito (el bug que petaba los tests de TCM).
+  const titleWrapperRef = useRef<HTMLDivElement>(null);
+  const [titleWraps, setTitleWraps] = useState(false);
+  useLayoutEffect(() => {
+    setTitleWraps(false); // empezamos midiendo con el tamaño grande
+    const wrapper = titleWrapperRef.current;
+    if (!wrapper) return;
+    // Tras pintar con el font grande, medimos. Usamos rAF para que el browser
+    // haya aplicado el layout con titleWraps=false antes de leer scrollHeight.
+    const id = requestAnimationFrame(() => {
+      const el = titleWrapperRef.current?.querySelector("p, .chakra-text") as HTMLElement | null;
+      if (!el) return;
+      const lineHeightPx = parseFloat(getComputedStyle(el).lineHeight || "0");
+      const wraps = lineHeightPx > 0 && el.scrollHeight > lineHeightPx * 1.4;
+      if (wraps) setTitleWraps(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [title]);
   return (
     <Box
       position="relative"
@@ -145,7 +172,7 @@ export function MetodoStepHeader({
             borderRadius="full"
             bg={useDiscBg ? "transparent" : bgColor}
             border={`5px solid ${color}`}
-            boxShadow={`0 0 14px rgba(255,255,255,0.5), 0 0 32px rgba(255,255,255,0.25), 0 0 22px ${color}77, 0 0 55px ${color}28`}
+            boxShadow={`0 0 14px ${bgHex}cc, 0 0 32px ${bgHex}88, 0 0 22px ${color}77, 0 0 55px ${color}28`}
             w={{ base: "60px", md: "72px" }}
             h={{ base: "60px", md: "72px" }}
             display="flex"
@@ -161,20 +188,23 @@ export function MetodoStepHeader({
               {icon}
             </Box>
           </Box>
-          <Text
-            color={color}
-            fontSize={{ base: "3xl", md: "6xl" }}
-            fontWeight="700"
-            letterSpacing="0.05em"
-            lineHeight="1.15"
-            style={{
-              textShadow: useDiscBg
-                ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
-                : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
-            }}
-          >
-            {title}
-          </Text>
+          <Box ref={titleWrapperRef}>
+            <Text
+              color={color}
+              fontSize={titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "6xl" }}
+              fontWeight="700"
+              letterSpacing="0.05em"
+              lineHeight="1.15"
+              textAlign="center"
+              style={{
+                textShadow: useDiscBg
+                  ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
+                  : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
+              }}
+            >
+              {title}
+            </Text>
+          </Box>
         </Flex>
 
         {/* Raya separadora */}

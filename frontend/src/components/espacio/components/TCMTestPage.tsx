@@ -157,14 +157,14 @@ const SeccionCard = ({
       position="relative"
       overflow="hidden"
       w="100%"
-      maxW="820px"
+      maxW="850px"
       boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
       border={`1px solid ${complete ? `${accent}55` : `${accent}1a`}`}
       borderRadius="2xl"
       mb={4}
       transition="border-color 0.3s, box-shadow 0.3s"
     >
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
       <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
       <Flex align="center" gap={3} mb={2}>
         {!monoColor && (
@@ -389,7 +389,7 @@ export default function TCMTestPage({
           pb={{ base: 14, md: 20 }}
         >
           <MetodoStepHeader
-            icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
+            icon={pageIcon ?? <TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={pageTitle}
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -404,14 +404,14 @@ export default function TCMTestPage({
             position="relative"
             overflow="hidden"
             w="100%"
-            maxW="820px"
+            maxW="850px"
             boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
             border="1px solid rgba(218,113,113,0.22)"
             borderRadius="2xl"
             mb={4}
             mt="20px"
           >
-            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
               <Text
                 color={tcmTxt}
@@ -479,7 +479,7 @@ export default function TCMTestPage({
           ))}
 
           {/* ── BOTÓN VER RESULTADOS ── */}
-          <Box w="100%" maxW="820px" textAlign="center" mt={6}>
+          <Box w="100%" maxW="850px" textAlign="center" mt={6}>
             {!allAnswered && (
               <Text
                 color="rgba(255,255,255,0.35)"
@@ -518,7 +518,7 @@ export default function TCMTestPage({
 
           {/* ── RESULTADOS ── */}
           {showResults && (
-            <Box ref={resultsRef} boxShadow={GLOW} w="100%" maxW="820px" mt={12}>
+            <Box ref={resultsRef} boxShadow={GLOW} w="100%" maxW="850px" mt={12}>
 
               {/* Puntuaciones */}
               <Box
@@ -529,7 +529,7 @@ export default function TCMTestPage({
                 mb={5}
                 boxShadow={GLOW}
               >
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text
                   color={tcmTxt}
@@ -623,7 +623,7 @@ export default function TCMTestPage({
                 borderRadius="2xl"
                 boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
               >
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text
                   color={tcmTxt}
@@ -783,7 +783,7 @@ export default function TCMTestPage({
                 const elTheme = getTheme(resultadoNombre);
 
                 return (
-                  <Box w="100%" maxW="820px" mt={8}>
+                  <Box w="100%" maxW="850px" mt={8}>
                     <Text
                       color={tcmTxt}
                       fontSize={{ base: "2xl", md: "3xl" }}
@@ -809,7 +809,7 @@ export default function TCMTestPage({
                             borderRadius="2xl"
                             boxShadow={GLOW}
                           >
-                            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+                            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
                             <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
                             <Flex align="center" gap={2.5} mb={4}>
                               <Box

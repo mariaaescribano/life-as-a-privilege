@@ -28,7 +28,7 @@ export const recorridoContenido: Record<
   // 1. ASTROLOGÍA
   // ───────────────────────────────────────────────────────────
   astrologia: {
-    desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarlo.",
+    desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     modalDesc:
       "Tu carta natal no predice tu futuro: describe cómo estás configurado. Qué partes tuyas tienen más peso, qué tensiones internas arrastras, qué te cuesta y qué te sale solo. Es el primer paso de «El Recorrido» porque sin saber de dónde partes, cualquier trabajo posterior va a ciegas.",
     contenido: [
@@ -47,7 +47,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Sesiones de lectura conjunta",
         items: [
-          "5 sesiones para entender tu carta juntos. No para que te la explique yo, para que puedas leerla sola y poner palabras a lo que antes no las tenía.",
+          "5 sesiones para entender tu carta juntos. No para que te la explique yo, para que puedas leerla solo y poner palabras a lo que antes no las tenía.",
         ],
         aviso: "Se cobra aparte",
       },
@@ -77,7 +77,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Psicoterapia Breve",
         items: [
-          "16 a 20 sesiones aprox. No es una sesión al mes para desahogarte: es desarrollo intenso y focalizado.",
+          "16 a 20 sesiones aproximádamente. No es una sesión al mes para desahogarte: es desarrollo intenso y focalizado.",
         ],
         aviso: "Se cobra aparte",
       },

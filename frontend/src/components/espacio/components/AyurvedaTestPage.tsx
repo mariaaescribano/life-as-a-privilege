@@ -125,41 +125,43 @@ export default function AyurvedaTestPage({
 
             {/* Resultado principal */}
             <Box
+              position="relative"
+              overflow="hidden"
               w="100%" maxW="850px"
-              bg={ayurvedaBg}
               border={`2px solid ${cfg.color}55`}
               borderRadius="2xl"
-              px={{ base: 5, md: 8 }}
-              py={{ base: 6, md: 8 }}
               boxShadow={GLOW}
               textAlign="center"
             >
-              <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
-                Tu Dosha principal es
-              </Text>
-              <Flex align="center" justify="center" gap={3} mb={5}>
-                <Box>{DOSHA_CONFIG[guestResult.dosha].icon && React.cloneElement(DOSHA_CONFIG[guestResult.dosha].icon as React.ReactElement<any>, { size: "38px" })}</Box>
-                <Text color={cfg.color} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em" fontStyle="italic">
-                  {cfg.label}
+              <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
+              <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
+                <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
+                  Tu Dosha principal es
                 </Text>
-              </Flex>
+                <Flex align="center" justify="center" gap={3} mb={5}>
+                  <Box>{DOSHA_CONFIG[guestResult.dosha].icon && React.cloneElement(DOSHA_CONFIG[guestResult.dosha].icon as React.ReactElement<any>, { size: "38px" })}</Box>
+                  <Text color={cfg.color} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em" fontStyle="italic">
+                    {cfg.label}
+                  </Text>
+                </Flex>
 
-              {/* Barras de puntuación */}
-              {DOSHAS.map((d) => {
-                const pct = Math.round((guestResult.scores[d] / total) * 100);
-                const dc = DOSHA_CONFIG[d];
-                return (
-                  <Box key={d} mb={3} textAlign="left">
-                    <Flex justify="space-between" mb={1}>
-                      <Text color={dc.color} fontWeight="600" fontSize="md">{dc.label}</Text>
-                      <Text color={dc.color} fontWeight="600" fontSize="md">{guestResult.scores[d]} / {total}</Text>
-                    </Flex>
-                    <Box bg={`${dc.color}22`} borderRadius="full" h="8px" overflow="hidden">
-                      <Box bg={dc.color} h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.6s ease" />
+                {/* Barras de puntuación */}
+                {DOSHAS.map((d) => {
+                  const pct = Math.round((guestResult.scores[d] / total) * 100);
+                  const dc = DOSHA_CONFIG[d];
+                  return (
+                    <Box key={d} mb={3} textAlign="left">
+                      <Flex justify="space-between" mb={1}>
+                        <Text color={dc.color} fontWeight="600" fontSize="md">{dc.label}</Text>
+                        <Text color={dc.color} fontWeight="600" fontSize="md">{guestResult.scores[d]} / {total}</Text>
+                      </Flex>
+                      <Box bg={`${dc.color}22`} borderRadius="full" h="8px" overflow="hidden">
+                        <Box bg={dc.color} h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.6s ease" />
+                      </Box>
                     </Box>
-                  </Box>
-                );
-              })}
+                  );
+                })}
+              </Box>
             </Box>
 
             {/* Botones */}
@@ -174,6 +176,8 @@ export default function AyurvedaTestPage({
                   }));
                   generateAyurvedaPdf(respuestas, guestResult.dosha, guestResult.scores);
                 }}
+                position="relative"
+                overflow="hidden"
                 px={{ base: 8, md: 12 }}
                 py={{ base: 3, md: 4 }}
                 borderRadius="full"
@@ -181,7 +185,7 @@ export default function AyurvedaTestPage({
                 fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="700"
                 letterSpacing="0.08em"
-                bg={ayurvedaBg}
+                bg="transparent"
                 color={ayurvedaTxt}
                 border={`1.5px solid ${ayurvedaTxt}60`}
                 cursor="pointer"
@@ -189,7 +193,8 @@ export default function AyurvedaTestPage({
                 boxShadow={GLOW}
                 _hover={{ opacity: 0.88, transform: "translateY(-2px)", borderColor: ayurvedaTxt }}
               >
-                Descargar PDF
+                <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="full" overlay={`${ayurvedaBg}22`} />
+                <Box as="span" position="relative" zIndex={1}>Descargar PDF</Box>
               </Box>
               <Box
                 as="button"
@@ -225,46 +230,50 @@ export default function AyurvedaTestPage({
               return (
                 <Box w="100%" maxW="850px" mt={4}>
                   <Box
-                    bg={ayurvedaBg}
+                    position="relative"
+                    overflow="hidden"
                     border={`1px solid ${ayurvedaTxt}35`}
                     borderRadius="2xl"
-                    px={{ base: 5, md: 8 }}
-                    py={{ base: 5, md: 6 }}
                     mb={4}
                     boxShadow={GLOW}
                   >
-                    <Text
-                      color={ayurvedaTxt}
-                      fontSize={{ base: "2xl", md: "3xl" }}
-                      fontWeight="700"
-                      letterSpacing="0.08em"
-                      textAlign="center"
-                      fontFamily="'EB Garamond', serif"
-                    >
-                      Tus consejos personalizados
-                    </Text>
+                    <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
+                    <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
+                      <Text
+                        color={ayurvedaTxt}
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        fontWeight="700"
+                        letterSpacing="0.08em"
+                        textAlign="center"
+                        fontFamily="'EB Garamond', serif"
+                      >
+                        Tus consejos personalizados
+                      </Text>
+                    </Box>
                   </Box>
 
                   {/* Descripción */}
                   <Box
-                    bg={ayurvedaBg}
+                    position="relative"
+                    overflow="hidden"
                     border={`1px solid ${ayurvedaTxt}22`}
                     borderRadius="2xl"
-                    px={{ base: 5, md: 7 }}
-                    py={{ base: 5, md: 6 }}
                     mb={4}
                     boxShadow={GLOW}
                   >
-                    <Text
-                      color={`${ayurvedaTxt}cc`}
-                      fontSize={{ base: "md", md: "lg" }}
-                      fontFamily="'EB Garamond', serif"
-                      lineHeight="1.8"
-                      fontStyle="italic"
-                      textAlign="center"
-                    >
-                      {recs.descripcion}
-                    </Text>
+                    <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
+                    <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+                      <Text
+                        color={`${ayurvedaTxt}cc`}
+                        fontSize={{ base: "md", md: "lg" }}
+                        fontFamily="'EB Garamond', serif"
+                        lineHeight="1.8"
+                        fontStyle="italic"
+                        textAlign="center"
+                      >
+                        {recs.descripcion}
+                      </Text>
+                    </Box>
                   </Box>
 
                   <Flex direction="column" gap={4}>
@@ -274,38 +283,40 @@ export default function AyurvedaTestPage({
                       return (
                         <Box
                           key={key}
-                          bg={ayurvedaBg}
+                          position="relative"
+                          overflow="hidden"
                           border={`1px solid ${ayurvedaTxt}22`}
                           borderRadius="2xl"
-                          px={{ base: 5, md: 7 }}
-                          py={{ base: 5, md: 6 }}
                           boxShadow={GLOW}
                         >
-                          <Text
-                            color={ayurvedaTxt}
-                            fontSize={{ base: "xl", md: "2xl" }}
-                            fontWeight="700"
-                            fontFamily="'EB Garamond', serif"
-                            letterSpacing="0.06em"
-                            mb={4}
-                          >
-                            {label}
-                          </Text>
-                          <Flex direction="column" gap={2}>
-                            {items.map((item, j) => (
-                              <Flex key={j} align="flex-start" gap={2.5}>
-                                <Text color={`${ayurvedaTxt}66`} fontSize="md" mt="2px" flexShrink={0}>·</Text>
-                                <Text
-                                  color={`${ayurvedaTxt}cc`}
-                                  fontSize={{ base: "md", md: "lg" }}
-                                  fontFamily="'EB Garamond', serif"
-                                  lineHeight="1.7"
-                                >
-                                  {item}
-                                </Text>
-                              </Flex>
-                            ))}
-                          </Flex>
+                          <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
+                          <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+                            <Text
+                              color={ayurvedaTxt}
+                              fontSize={{ base: "xl", md: "2xl" }}
+                              fontWeight="700"
+                              fontFamily="'EB Garamond', serif"
+                              letterSpacing="0.06em"
+                              mb={4}
+                            >
+                              {label}
+                            </Text>
+                            <Flex direction="column" gap={2}>
+                              {items.map((item, j) => (
+                                <Flex key={j} align="flex-start" gap={2.5}>
+                                  <Text color={`${ayurvedaTxt}66`} fontSize="md" mt="2px" flexShrink={0}>·</Text>
+                                  <Text
+                                    color={`${ayurvedaTxt}cc`}
+                                    fontSize={{ base: "md", md: "lg" }}
+                                    fontFamily="'EB Garamond', serif"
+                                    lineHeight="1.7"
+                                  >
+                                    {item}
+                                  </Text>
+                                </Flex>
+                              ))}
+                            </Flex>
+                          </Box>
                         </Box>
                       );
                     })}
@@ -315,6 +326,8 @@ export default function AyurvedaTestPage({
                   <Flex justify="center" mt={6}>
                     <Box
                       as="button"
+                      position="relative"
+                      overflow="hidden"
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
@@ -328,16 +341,19 @@ export default function AyurvedaTestPage({
                       fontWeight="700"
                       letterSpacing="0.08em"
                       border={`2px solid ${ayurvedaTxt}`}
-                      bg={ayurvedaBg}
+                      bg="transparent"
                       color={ayurvedaTxt}
                       cursor="pointer"
                       transition="all 0.22s"
                       boxShadow={GLOW}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
-                      </svg>
-                      Descargar consejos
+                      <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="full" overlay={`${ayurvedaBg}22`} />
+                      <Box as="span" position="relative" zIndex={1} display="flex" alignItems="center" gap={2}>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
+                          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                        </svg>
+                        Descargar consejos
+                      </Box>
                     </Box>
                   </Flex>
                 </Box>
@@ -385,7 +401,7 @@ export default function AyurvedaTestPage({
             borderRadius="2xl"
             boxShadow={GLOW}
           >
-            <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}55`} blur />
+            <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={3}>
                 Descubre tu Dosha
@@ -408,7 +424,7 @@ export default function AyurvedaTestPage({
               boxShadow={GLOW}
               transition="border-color 0.3s"
             >
-              <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}55`} blur />
+              <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
                 <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7" mb={4}>
                   {qi + 1}. {p.pregunta}
@@ -466,6 +482,8 @@ export default function AyurvedaTestPage({
             <Box
               as="button"
               onClick={handleSave}
+              position="relative"
+              overflow="hidden"
               px={{ base: 10, md: 14 }}
               py={{ base: 4, md: 5 }}
               borderRadius="full"
@@ -475,14 +493,15 @@ export default function AyurvedaTestPage({
               letterSpacing="0.1em"
               fontStyle="italic"
               border={`2px solid ${allAnswered ? ayurvedaTxt : `${ayurvedaTxt}33`}`}
-              bg={allAnswered ? ayurvedaBg : "rgba(255,255,255,0.05)"}
+              bg={allAnswered ? "transparent" : "rgba(255,255,255,0.05)"}
               color={allAnswered ? ayurvedaTxt : `${ayurvedaTxt}44`}
               cursor={allAnswered ? "pointer" : "not-allowed"}
               transition="all 0.28s"
               boxShadow={allAnswered ? GLOW : "none"}
               _hover={{}}
             >
-              <Flex as="span" align="center" justify="center" gap={3}>
+              {allAnswered && <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="full" overlay={`${ayurvedaBg}22`} />}
+              <Flex as="span" align="center" justify="center" gap={3} position="relative" zIndex={1}>
                 <AyurvedaIcon size={{ base: "22px", md: "26px" }} />
                 {saving ? "Guardando..." : "Descubrir mi Dosha →"}
               </Flex>
