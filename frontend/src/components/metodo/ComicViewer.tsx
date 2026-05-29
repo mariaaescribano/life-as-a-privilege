@@ -347,7 +347,8 @@ export function ComicViewer({
       {/* Contenedor del contenido: SIN altura fija ni scroll interno. El
           scroll lo gestiona el contenedor exterior del Modal (Chakra con
           scrollBehavior="outside") usando la scrollbar real del navegador.
-          El py mantiene siempre mt/mb visibles, también al hacer scroll. */}
+          pt/pb generosos para que SIEMPRE haya un mt/mb visible por arriba
+          y por abajo, también justo al abrir el popup. */}
       <ModalBody
         ref={contentRef}
         position="relative"
@@ -355,16 +356,14 @@ export function ComicViewer({
         display="flex"
         flexDirection="column"
         alignItems="center"
+        justifyContent="flex-start"
         minH="100vh"
         px={{ base: 4, md: 24 }}
-        py={{ base: 20, md: 24 }}
+        pt={{ base: 28, md: 32 }}
+        pb={{ base: 24, md: 28 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{
-          // "safe center": centra cuando el contenido cabe en 100vh; si
-          // rebasa, alinea al top para que la página pueda scrollearse hacia
-          // abajo y se vea todo el contenido.
-          justifyContent: "safe center",
           touchAction: "pan-y",
         }}
       >

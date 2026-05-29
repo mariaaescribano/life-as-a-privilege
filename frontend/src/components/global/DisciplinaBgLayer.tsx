@@ -35,39 +35,46 @@ const ImageBgLayer = ({
   overlay?: string;
   /** Blur extra para los popups, donde el texto es grande y necesita destacar. */
   strongBlur?: boolean;
-}) => (
-  <Box
-    position="absolute"
-    inset="0"
-    pointerEvents="none"
-    overflow="hidden"
-    borderRadius={borderRadius}
-    zIndex={0}
-  >
+}) => {
+  // El filtro blur() de CSS desvanece hacia transparente en los bordes (el
+  // kernel del blur muestrea píxeles fuera del bounds del <img>, que valen
+  // transparente). En boxes pequeños/redondos eso deja un halo transparente
+  // visible. La solución: agrandar la imagen por un offset FIJO en píxeles
+  // (no porcentaje) ≥ el radio del blur, así el desvanecido cae siempre
+  // fuera del área visible y el overflow:hidden del padre lo recorta.
+  const blurPx = strongBlur ? 8 : 3;
+  const bleed = blurPx * 3; // margen generoso para que no se vea el halo
+  return (
     <Box
-      as="img"
-      src={src}
-      alt=""
-      loading="eager"
       position="absolute"
       inset="0"
-      w="100%"
-      h="100%"
-      style={{
-        objectFit: "cover",
-        objectPosition: "center",
-        // Blur suave para que la foto no compita con el texto. El scale es
-        // justo el necesario para que el desenfoque no deje bordes
-        // transparentes — nunca un zoom agresivo que coma composición.
-        filter: strongBlur ? "blur(8px)" : "blur(3px)",
-        transform: strongBlur ? "scale(1.05)" : "scale(1.03)",
-      }}
-    />
-    {overlay && (
-      <Box position="absolute" inset="0" style={{ background: overlay }} />
-    )}
-  </Box>
-);
+      pointerEvents="none"
+      overflow="hidden"
+      borderRadius={borderRadius}
+      zIndex={0}
+    >
+      <Box
+        as="img"
+        src={src}
+        alt=""
+        loading="eager"
+        position="absolute"
+        top={`-${bleed}px`}
+        left={`-${bleed}px`}
+        w={`calc(100% + ${bleed * 2}px)`}
+        h={`calc(100% + ${bleed * 2}px)`}
+        style={{
+          objectFit: "cover",
+          objectPosition: "center",
+          filter: `blur(${blurPx}px)`,
+        }}
+      />
+      {overlay && (
+        <Box position="absolute" inset="0" style={{ background: overlay }} />
+      )}
+    </Box>
+  );
+};
 
 /** ¿Esta disciplina tiene un fondo propio (estrellado o imagen)? */
 export const hasDisciplinaBg = (nom: string): boolean =>

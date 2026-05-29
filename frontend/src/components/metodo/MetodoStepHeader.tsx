@@ -39,7 +39,7 @@ const StepBtn = ({ label, color, bgColor, onClick, disabled, icon, disabledToolt
       as="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      px={{ base: 2.5, sm: 4, md: 7 }}
+      px={{ base: 2, sm: 4, md: 7 }}
       py={{ base: 1.5, md: 2.5 }}
       borderRadius="full"
       bg="rgba(255,255,255,0.04)"
@@ -50,15 +50,36 @@ const StepBtn = ({ label, color, bgColor, onClick, disabled, icon, disabledToolt
       letterSpacing={{ base: "0.02em", md: "0.05em" }}
       fontStyle="italic"
       cursor={disabled ? "not-allowed" : "pointer"}
-      transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease"
+      // transition mucho más rápida (80ms) para que el feedback visual sea
+      // casi instantáneo al pulsar. background/border/box-shadow son las
+      // propiedades que pintan el "pressed".
+      transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
       boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}33`}
       textShadow={disabled ? "none" : `0 1px 2px ${bgHex}cc, 0 0 8px ${bgHex}99, 0 0 14px ${bgHex}55`}
+      // touch-action: manipulation elimina el delay de 300ms del navegador
+      // móvil (que estaba esperando un posible double-tap zoom). user-select
+      // none + WebkitTapHighlightColor transparente quitan el rectángulo gris
+      // de highlight de iOS/Android que da sensación de "delay".
+      sx={{
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
+        userSelect: "none",
+      }}
       _hover={disabled ? undefined : {
         bg: "rgba(255,255,255,0.12)",
         borderColor: `${color}cc`,
         boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}33, 0 0 30px ${color}44`,
       }}
+      // _active: feedback inmediato al pulsar (móvil y desktop).
+      _active={disabled ? undefined : {
+        bg: "rgba(255,255,255,0.18)",
+        borderColor: color,
+        transform: "scale(0.96)",
+        boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 0 42px ${color}66`,
+      }}
       whiteSpace="nowrap"
+      overflow="hidden"
+      textOverflow="ellipsis"
       display="inline-flex"
       alignItems="center"
       gap={{ base: 1, md: 2 }}
@@ -121,29 +142,24 @@ export function MetodoStepHeader({
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
 
-  // Auto-shrink del título: si ocupa más de una línea, reducimos un escalón
-  // de tamaño para que vuelva a entrar en una sola (o al menos quepa mejor).
-  //
-  // IMPORTANTE: medimos solo en el wrapper (cuyo ancho NO depende de
-  // titleWraps) y nunca volvemos atrás. Si midiéramos sobre el propio Text
-  // con ResizeObserver, el cambio de fontSize provocado por setTitleWraps
-  // dispararía el observer otra vez → al haberse encogido el texto ya no
-  // partiría → titleWraps volvería a false → font grande → re-wraps → loop
-  // infinito (el bug que petaba los tests de TCM).
+  // Auto-shrink del título: el título va SIEMPRE en una sola línea
+  // (whiteSpace:nowrap). Si su ancho natural supera el ancho del wrapper,
+  // bajamos un escalón de fontSize para que quepa entero sin truncar.
+  // Solo cambiamos a true (nunca volvemos atrás) para evitar el loop infinito
+  // que hubo cuando medíamos sobre el propio <Text> y el observer disparaba
+  // con cada cambio de fontSize.
   const titleWrapperRef = useRef<HTMLDivElement>(null);
   const [titleWraps, setTitleWraps] = useState(false);
   useLayoutEffect(() => {
     setTitleWraps(false); // empezamos midiendo con el tamaño grande
     const wrapper = titleWrapperRef.current;
     if (!wrapper) return;
-    // Tras pintar con el font grande, medimos. Usamos rAF para que el browser
-    // haya aplicado el layout con titleWraps=false antes de leer scrollHeight.
     const id = requestAnimationFrame(() => {
       const el = titleWrapperRef.current?.querySelector("p, .chakra-text") as HTMLElement | null;
       if (!el) return;
-      const lineHeightPx = parseFloat(getComputedStyle(el).lineHeight || "0");
-      const wraps = lineHeightPx > 0 && el.scrollHeight > lineHeightPx * 1.4;
-      if (wraps) setTitleWraps(true);
+      // overflow horizontal: el texto natural es más ancho que su contenedor.
+      const overflows = el.scrollWidth > el.clientWidth + 1;
+      if (overflows) setTitleWraps(true);
     });
     return () => cancelAnimationFrame(id);
   }, [title]);
@@ -165,7 +181,7 @@ export function MetodoStepHeader({
     >
       {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}
 
-      <Box position="relative" zIndex={1} px={{ base: 8, md: 14 }} py={{ base: 3, md: 4 }}>
+      <Box position="relative" zIndex={1} px={{ base: 4, md: 14 }} py={{ base: 3, md: 4 }}>
         {/* Cabecera: icono + título */}
         <Flex direction="row" align="center" justify="center" gap={5}>
           <Box
@@ -188,7 +204,7 @@ export function MetodoStepHeader({
               {icon}
             </Box>
           </Box>
-          <Box ref={titleWrapperRef}>
+          <Box ref={titleWrapperRef} minW={0} flexShrink={1}>
             <Text
               color={color}
               fontSize={titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "6xl" }}
@@ -196,6 +212,9 @@ export function MetodoStepHeader({
               letterSpacing="0.05em"
               lineHeight="1.15"
               textAlign="center"
+              whiteSpace="nowrap"
+              overflow="hidden"
+              textOverflow="ellipsis"
               style={{
                 textShadow: useDiscBg
                   ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
@@ -218,16 +237,17 @@ export function MetodoStepHeader({
           />
         )}
 
-        {/* Botones contextuales — wrap centrado.
-            En desktop entran los 3 en una fila; en móvil, si no caben, los que
-            sobren bajan a una segunda fila sin recortarse ni descolocarse. */}
+        {/* Botones contextuales — siempre en una sola fila horizontal,
+            tanto en móvil como en desktop. Si no caben, los botones se
+            encogen (gracias al flex:0 1 auto + minW:0 del StepBtn) en lugar
+            de saltar a una segunda fila. */}
         {(prev || next || extra) && (
           <Flex
             justify="center"
             align="center"
             gap={{ base: 2, md: 3 }}
             direction="row"
-            wrap="wrap"
+            wrap="nowrap"
           >
             {prev && <StepBtn {...prev} color={color} bgColor={bgColor} />}
             {extra && <StepBtn {...extra} color={color} bgColor={bgColor} />}
