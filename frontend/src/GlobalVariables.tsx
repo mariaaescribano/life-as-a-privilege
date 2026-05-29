@@ -144,7 +144,7 @@ export const astrologiaDescrip =  "Entiende los arquetipos que actúan en cada �
 export const tcmNom = "Medicina China";
 export const tcmNomLink = "medicinachina";
 export const tcmTxt = "#6b0404";
-export const tcmBg = "#da7171";
+export const tcmBg = "#d8a4a4";
 export function TCMIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (
     <Box
@@ -332,7 +332,7 @@ export function FisicaIcon({ size = { base: "24px", md: "24px" } }: { size?: str
 
 // Cábala
 export const cabalaNom = "Cábala";
-export const cabalaTxt = "#2c1e11";
+export const cabalaTxt = "#301904";
 export const cabalaBg = "#cb8e59";
 export function CabalaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
   return (

@@ -319,7 +319,9 @@ export function ComicViewer({
         }
       />
 
-      {/* Contenido scrollable */}
+      {/* Contenido scrollable — el scroll vertical ocurre DENTRO del popup
+          (h fija a 100vh + overflowY:auto), nunca a nivel de página. El pt
+          mantiene espacio arriba para no chocar con la X. */}
       <ModalBody
         ref={contentRef}
         position="relative"
@@ -328,7 +330,7 @@ export function ComicViewer({
         pt={{ base: 16, md: 20 }}
         pb={{ base: 14, md: 18 }}
         overflowY="auto"
-        minH="100vh"
+        h="100vh"
         display="flex"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
@@ -339,6 +341,8 @@ export function ComicViewer({
           msOverflowStyle: "none",
           "&::-webkit-scrollbar": { display: "none" },
           touchAction: "pan-y",
+          // Evita que el scroll del popup propague al body al llegar al borde.
+          overscrollBehavior: "contain",
         }}
       >
         <Flex direction="column" align="center" justify="center" gap={{ base: 5, md: 8 }} maxW="680px" mx="auto" w="100%">

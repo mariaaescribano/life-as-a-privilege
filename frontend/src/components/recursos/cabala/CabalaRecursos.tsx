@@ -6,7 +6,6 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { CabalaIcon, cabalaBg, cabalaNom, cabalaTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
-import { SaberMasButton } from "../../global/SaberMasButton";
 import { SubscribeBox } from "../../global/SubscribeBox";
 import { modulosCabala } from "../../../hardCoded/aprendizajes/Cabala/ModulosCabala";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
@@ -280,7 +279,6 @@ export default function CabalaRecursos() {
             />
           </Box>
 
-          <SaberMasButton onClick={() => setSaberMasOpen(true)} color={cabalaTxt} bgColor={cabalaBg} />
           <SubscribeBox />
         </Flex>
       </Box>

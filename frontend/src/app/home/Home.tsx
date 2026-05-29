@@ -45,12 +45,7 @@ const disciplines = [
 
 // Disciplinas habilitadas para navegar desde el mandala. Cualquier disciplina
 // no listada aquí queda con candado y no es clickable.
-const ABIERTAS = new Set<string>([
-  astrologiaNom,
-  neuropsicologiaNom,
-  ayurvedaNom,
-  tcmNom,
-]);
+const ABIERTAS = new Set<string>([astrologiaNom]);
 
 const Home = () => {
   const navigate = useNavigate();
@@ -486,7 +481,7 @@ const Home = () => {
                       borderRadius="full"
                       bg="white"
                       border={`2px solid ${badgeColor}`}
-                      boxShadow={`0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3), 0 2px 10px ${badgeColor}88, 0 4px 14px rgba(0,0,0,0.25)`}
+                      boxShadow={`0 2px 6px rgba(0,0,0,0.2)`}
                       display="flex"
                       alignItems="center"
                       justifyContent="center"

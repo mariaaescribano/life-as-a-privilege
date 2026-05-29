@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContactModal } from "../../components/global/ContactModal";
-import { SaberMasButton } from "../../components/global/SaberMasButton";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { DisciplineHeader } from "../../components/global/DisciplineHeader";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
@@ -510,17 +509,8 @@ export default function VideoLessonPage() {
               </Box>
             )}
             
-            {/* ── BOTÓN ¿QUIERES SABER MÁS? ── */}
             {moduloDatos && (
-              <>
-                <SaberMasButton
-                    icon={moduloDatos.icon}
-                    color={moduloDatos.color}
-                    bgColor={moduloDatos.bgColor}
-                    onClick={() => setSaberMasOpen(true)}
-                  />
-                <SubscribeBox />
-              </>
+              <SubscribeBox />
             )}
 
           </Flex>

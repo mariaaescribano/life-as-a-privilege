@@ -58,7 +58,7 @@ export const recorridoContenido: Record<
   // 2. PSICOLOGÍA (neuropsicología)
   // ───────────────────────────────────────────────────────────
   psicologia: {
-    desc: "Tu carta dice cómo estás configurado. Tu historia dice por qué. Aquí los unimos.",
+    desc: "Tu carta dice cómo estás configurado. Tu historia cómo y para qué. Aquí los unimos.",
     modalDesc:
       "La astrología te muestra el cómo. La psicología te muestra dónde y de qué manera. Cruzamos tu carta natal con tu historia personal para entender qué mecanismos desarrollaste para sobrevivir, cuáles te sirvieron en su momento y cuáles hoy te limitan. Lo que ahora te molesta de ti fue antes una forma de protegerte.",
     contenido: [

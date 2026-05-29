@@ -138,7 +138,7 @@ export function MetodoStepHeader({
     >
       {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}
 
-      <Box position="relative" zIndex={1} px={{ base: 8, md: 14 }} py={{ base: 5, md: 7 }}>
+      <Box position="relative" zIndex={1} px={{ base: 8, md: 14 }} py={{ base: 3, md: 4 }}>
         {/* Cabecera: icono + título */}
         <Flex direction="row" align="center" justify="center" gap={5}>
           <Box
@@ -181,7 +181,7 @@ export function MetodoStepHeader({
         {(prev || next || extra) && (
           <Box
             h="1px"
-            my={5}
+            my={3}
             mx="auto"
             w="80%"
             bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}

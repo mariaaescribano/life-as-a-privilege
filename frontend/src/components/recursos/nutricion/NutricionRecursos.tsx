@@ -5,7 +5,6 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
-import { SaberMasButton } from "../../global/SaberMasButton";
 import { SubscribeBox } from "../../global/SubscribeBox";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../../GlobalVariables";
 
@@ -762,7 +761,6 @@ export default function NutricionRecursos() {
             </Collapse>
           </Box>
 
-          <SaberMasButton onClick={() => setSaberMasOpen(true)} color={TXT} bgColor={BG} />
           <SubscribeBox />
         </Flex>
       </Box>

@@ -469,7 +469,7 @@ function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
         px={3}
       >
         <Text
-          color="white"
+          color={astrologiaTxt}
           fontSize={{ base: "lg", md: "xl" }}
           fontWeight="700"
           letterSpacing="0.18em"
@@ -640,7 +640,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               >
                 <Flex direction="column" align="center" gap={2}>
                   <Text
-                    color="white"
+                    color={astrologiaTxt}
                     fontSize={{ base: "2xl", md: "4xl" }}
                     fontWeight="700"
                     letterSpacing="0.2em"

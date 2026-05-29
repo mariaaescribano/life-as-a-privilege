@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { DisciplineHeader } from "../../global/DisciplineHeader";
+import { MetodoStepHeader } from "../../metodo/MetodoStepHeader";
+import { DisciplinaBgLayer } from "../../global/DisciplinaBgLayer";
+import { HinduismoIlustracionesModal } from "../../metodo/HinduismoIlustracionesModal";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import {
@@ -18,6 +20,13 @@ import { generateDoshaConsejosPdf } from "../../../utils/generateDoshaConsejosPd
 
 type Dosha = "vata" | "pitta" | "kapha";
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
+
+// Icono ojo para el botón "Ilustraciones" del header.
+const EyeIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
 
 const DOSHA_CONFIG: Record<Dosha, { label: string; color: string; icon: React.ReactNode }> = {
   vata:  { label: "Vata",  color: vataColor,  icon: <VataIcon  size="22px" color={vataColor}  /> },
@@ -40,6 +49,7 @@ export default function AyurvedaTestPage({
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
   const [saving, setSaving] = useState(false);
   const [guestResult, setGuestResult] = useState<GuestResult | null>(null);
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
   const allAnswered = answers.every((a) => a !== null);
   const answered = answers.filter((a) => a !== null).length;
@@ -102,19 +112,20 @@ export default function AyurvedaTestPage({
             pt={{ base: 10, md: 14 }}
             pb={{ base: 14, md: 20 }}
           >
-            <DisciplineHeader
-              icon={<AyurvedaIcon size={{ base: "35px", md: "45px" }} />}
-              title={ayurvedaNom}
-              subtitle="Test de los Doshas"
-              bgColor={ayurvedaBg}
+            <MetodoStepHeader
+              icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
+              title="Test de los Doshas"
+              bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
-              maxW="820px" mb={{ base: 0, md: 0 }}
-              onIconClick={() => navigate("/aprendizaje/cursosModalidad/ayurveda")}
+              nom={ayurvedaNom}
+              mb={{ base: 0, md: 0 }}
+              prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/ayurveda") }}
+              next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
             />
 
             {/* Resultado principal */}
             <Box
-              w="100%" maxW="820px"
+              w="100%" maxW="850px"
               bg={ayurvedaBg}
               border={`2px solid ${cfg.color}55`}
               borderRadius="2xl"
@@ -212,7 +223,7 @@ export default function AyurvedaTestPage({
                 { key: "evitar" as const, label: "Evitar" },
               ];
               return (
-                <Box w="100%" maxW="820px" mt={4}>
+                <Box w="100%" maxW="850px" mt={4}>
                   <Box
                     bg={ayurvedaBg}
                     border={`1px solid ${ayurvedaTxt}35`}
@@ -334,6 +345,7 @@ export default function AyurvedaTestPage({
             })()}
           </Flex>
         </Box>
+        <HinduismoIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
         <SiteFooter />
       </Box>
     );
@@ -352,92 +364,100 @@ export default function AyurvedaTestPage({
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
         >
-          <DisciplineHeader
-            icon={<AyurvedaIcon size={{ base: "35px", md: "45px" }} />}
-            title={ayurvedaNom}
-            bgColor={ayurvedaBg}
+          <MetodoStepHeader
+            icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
+            title="Test de los Doshas"
+            bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
-            maxW="820px" mb={{ base: 0, md: 0 }}
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/ayurveda")}
+            nom={ayurvedaNom}
+            mb={{ base: 0, md: 0 }}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/ayurveda") }}
+            next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
           />
 
           {/* Instrucciones */}
           <Box
-            w="100%" maxW="820px"
-            bg={ayurvedaBg} mt="20px"
+            position="relative"
+            overflow="hidden"
+            w="100%" maxW="850px"
+            mt="20px"
             border={`1px solid ${ayurvedaTxt}33`}
             borderRadius="2xl"
-            px={{ base: 5, md: 8 }}
-            py={{ base: 5, md: 7 }}
             boxShadow={GLOW}
           >
-            <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={3}>
-              Descubre tu Dosha
-            </Text>
-            <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9">
-              Para cada pregunta, elige la opción que mejor te describa. No hay respuestas correctas ni incorrectas: confía en tu primera impresión.
-            </Text>
+            <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}55`} blur />
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
+              <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={3}>
+                Descubre tu Dosha
+              </Text>
+              <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9">
+                Para cada pregunta, elige la opción que mejor te describa. No hay respuestas correctas ni incorrectas: confía en tu primera impresión.
+              </Text>
+            </Box>
           </Box>
 
           {/* Preguntas */}
           {preguntasAyurveda.map((p, qi) => (
             <Box
               key={qi}
-              w="100%" maxW="820px"
-              bg={ayurvedaBg}
+              position="relative"
+              overflow="hidden"
+              w="100%" maxW="850px"
               border={`1px solid ${answers[qi] ? `${DOSHA_CONFIG[answers[qi]!].color}55` : `${ayurvedaTxt}22`}`}
               borderRadius="2xl"
-              px={{ base: 5, md: 8 }}
-              py={{ base: 5, md: 7 }}
               boxShadow={GLOW}
               transition="border-color 0.3s"
             >
-              <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7" mb={4}>
-                {qi + 1}. {p.pregunta}
-              </Text>
+              <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}55`} blur />
+              <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
+                <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7" mb={4}>
+                  {qi + 1}. {p.pregunta}
+                </Text>
 
-              <Flex direction="column" gap={3}>
-                {DOSHAS.map((dosha) => {
-                  const cfg = DOSHA_CONFIG[dosha];
-                  const selected = answers[qi] === dosha;
-                  return (
-                    <Box
-                      key={dosha}
-                      as="button"
-                      onClick={() => setAnswers((prev) => { const next = [...prev]; next[qi] = dosha; return next; })}
-                      display="flex"
-                      alignItems="center"
-                      gap={3}
-                      px={{ base: 4, md: 5 }}
-                      py={{ base: 3, md: 4 }}
-                      borderRadius="xl"
-                      border={selected ? `2px solid ${cfg.color}` : `1.5px solid ${ayurvedaTxt}22`}
-                      bg={selected ? `${cfg.color}12` : "transparent"}
-                      cursor="pointer"
-                      transition="all 0.18s"
-                      textAlign="left"
-                      boxShadow={selected ? `0 0 12px ${cfg.color}33` : "none"}
-                      _hover={{ bg: `${cfg.color}0d`, borderColor: `${cfg.color}77` }}
-                    >
-                      <Box flexShrink={0}>{cfg.icon}</Box>
-                      <Text
-                        color={selected ? cfg.color : ayurvedaTxt}
-                        fontSize={{ base: "md", md: "lg" }}
-                        fontWeight={selected ? "600" : "400"}
-                        lineHeight="1.6"
-                        transition="color 0.18s"
+                <Flex direction="column" gap={3}>
+                  {DOSHAS.map((dosha) => {
+                    const cfg = DOSHA_CONFIG[dosha];
+                    const selected = answers[qi] === dosha;
+                    return (
+                      <Box
+                        key={dosha}
+                        as="button"
+                        onClick={() => setAnswers((prev) => { const next = [...prev]; next[qi] = dosha; return next; })}
+                        display="flex"
+                        alignItems="center"
+                        gap={3}
+                        px={{ base: 4, md: 5 }}
+                        py={{ base: 3, md: 4 }}
+                        borderRadius="xl"
+                        border={selected ? `2px solid ${cfg.color}` : "1px solid rgba(255,255,255,0.18)"}
+                        bg={selected ? `${cfg.color}33` : "rgba(255,255,255,0.10)"}
+                        cursor="pointer"
+                        transition="all 0.18s"
+                        textAlign="left"
+                        boxShadow={selected ? `0 0 12px ${cfg.color}55` : "none"}
+                        sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+                        _hover={{ bg: selected ? `${cfg.color}44` : "rgba(255,255,255,0.18)", borderColor: `${cfg.color}88` }}
                       >
-                        {p[dosha]}
-                      </Text>
-                    </Box>
-                  );
-                })}
-              </Flex>
+                        <Box flexShrink={0}>{cfg.icon}</Box>
+                        <Text
+                          color={selected ? cfg.color : ayurvedaTxt}
+                          fontSize={{ base: "md", md: "lg" }}
+                          fontWeight={selected ? "600" : "400"}
+                          lineHeight="1.6"
+                          transition="color 0.18s"
+                        >
+                          {p[dosha]}
+                        </Text>
+                      </Box>
+                    );
+                  })}
+                </Flex>
+              </Box>
             </Box>
           ))}
 
           {/* Botón enviar */}
-          <Box w="100%" maxW="820px" textAlign="center" mt={4}>
+          <Box w="100%" maxW="850px" textAlign="center" mt={4}>
             {!allAnswered && (
               <Text color="rgba(255,255,255,0.4)" fontSize="md" letterSpacing="0.06em" fontStyle="italic" mb={4}>
                 Responde todas las preguntas para ver tu dosha ({answered} / {preguntasAyurveda.length})
@@ -471,6 +491,7 @@ export default function AyurvedaTestPage({
         </Flex>
       </Box>
 
+      <HinduismoIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
       <SiteFooter />
     </Box>
   );

@@ -2,12 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { DisciplineHeader } from "../../global/DisciplineHeader";
+import { MetodoStepHeader } from "../../metodo/MetodoStepHeader";
+import { DisciplinaBgLayer } from "../../global/DisciplinaBgLayer";
+import { TCMIlustracionesModal } from "../../metodo/TCMIlustracionesModal";
 import SiteHeader from "../../global/SiteHeader";
-import { API_URL, EspacioPersonalIcon, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
+import { API_URL, EspacioPersonalIcon, tcmBg, tcmNom, TCMIcon, tcmTxt } from "../../../GlobalVariables";
 import { getTheme } from "../data/tcmTheme";
 import { generateTcmPdf, generateTcmConsejosPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
 import type { Recs } from "../../espacio/data/tcmRecommendations";
+
+// Icono ojo para el botón "Ilustraciones" del header.
+const EyeIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -145,17 +154,18 @@ const SeccionCard = ({
 
   return (
     <Box
+      position="relative"
+      overflow="hidden"
       w="100%"
       maxW="820px"
-     boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-      bg={tcmBg}
+      boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
       border={`1px solid ${complete ? `${accent}55` : `${accent}1a`}`}
       borderRadius="2xl"
-      px={{ base: 5, md: 8 }}
-      py={{ base: 6, md: 8 }}
       mb={4}
       transition="border-color 0.3s, box-shadow 0.3s"
     >
+      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+      <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
       <Flex align="center" gap={3} mb={2}>
         {!monoColor && (
           <Box
@@ -240,6 +250,7 @@ const SeccionCard = ({
           <Text color="rgba(255,255,255,0.28)" fontSize="sm">/ {maxScore}</Text>
         </Flex>
       </Flex>
+      </Box>
     </Box>
   );
 };
@@ -279,6 +290,7 @@ export default function TCMTestPage({
     secciones.map((s) => s.preguntas.map(() => null))
   );
   const [showResults, setShowResults] = useState(false);
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -376,74 +388,80 @@ export default function TCMTestPage({
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
         >
-          <DisciplineHeader
-            icon={pageIcon ?? <TCMIcon size={{ base: "36px", md: "52px" }} />}
+          <MetodoStepHeader
+            icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={pageTitle}
-            subtitle="Medicina China"
-            bgColor={tcmBg}
+            bgColor={`${tcmBg}dd`}
             color={tcmTxt}
-            maxW="820px"
+            nom={tcmNom}
+            mb={{ base: 0, md: 0 }}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/medicinachina") }}
+            next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
           />
 
           {/* ── INSTRUCCIONES ── */}
           <Box
+            position="relative"
+            overflow="hidden"
             w="100%"
             maxW="820px"
             boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-            bg={tcmBg}
             border="1px solid rgba(218,113,113,0.22)"
             borderRadius="2xl"
-            px={{ base: 5, md: 8 }}
-            py={{ base: 5, md: 7 }}
             mb={4}
+            mt="20px"
           >
-            <Text
-              color={tcmTxt}
-              fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="700"
-              letterSpacing="0.2em"
-              textTransform="uppercase"
-              mb={4}
-            >
-              {instruccionesTitle}
-            </Text>
-            <Text
-              color={tcmTxt}
-              fontSize={{ base: "lg", md: "xl" }}
-              lineHeight="1.9"
-              mb={5}
-            >
-              {instruccionesText}
-            </Text>
-            <Flex gap={{ base: 4, md: 8 }} flexWrap="wrap">
-              {scaleLabels.map((label, i) => (
-                <Flex key={i} align="center" gap={2}>
-                  <Box
-                    w="42px" h="42px" borderRadius="full"
-                    border="1.5px solid rgba(218,113,113,0.45)"
-                    display="flex" alignItems="center" justifyContent="center"
-                    bg={tcmBg}
-                    flexShrink={0}
-                  >
-                    <Text color={tcmTxt} fontSize="md" fontWeight="700">{i}</Text>
-                  </Box>
-                  <Text color={tcmTxt} fontSize={{ base: "lg", md: "xl" }}>
-                    {label}
-                  </Text>
-                </Flex>
-              ))}
-            </Flex>
-            {instruccionesNota && (
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
               <Text
                 color={tcmTxt}
-                fontSize="sm"
-                fontStyle="italic"
-                mt={5}
-                letterSpacing="0.03em"
+                fontSize={{ base: "lg", md: "xl" }}
+                fontWeight="700"
+                letterSpacing="0.2em"
+                textTransform="uppercase"
+                mb={4}
               >
-                {instruccionesNota}
+                {instruccionesTitle}
               </Text>
-            )}
+              <Text
+                color={tcmTxt}
+                fontSize={{ base: "lg", md: "xl" }}
+                lineHeight="1.9"
+                mb={5}
+              >
+                {instruccionesText}
+              </Text>
+              <Flex gap={{ base: 4, md: 8 }} flexWrap="wrap">
+                {scaleLabels.map((label, i) => (
+                  <Flex key={i} align="center" gap={2}>
+                    <Box
+                      w="42px" h="42px" borderRadius="full"
+                      border="1.5px solid rgba(218,113,113,0.45)"
+                      display="flex" alignItems="center" justifyContent="center"
+                      bg="rgba(255,255,255,0.10)"
+                      flexShrink={0}
+                      sx={{ backdropFilter: "blur(8px)" }}
+                    >
+                      <Text color={tcmTxt} fontSize="md" fontWeight="700">{i}</Text>
+                    </Box>
+                    <Text color={tcmTxt} fontSize={{ base: "lg", md: "xl" }}>
+                      {label}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+              {instruccionesNota && (
+                <Text
+                  color={tcmTxt}
+                  fontSize="sm"
+                  fontStyle="italic"
+                  mt={5}
+                  letterSpacing="0.03em"
+                >
+                  {instruccionesNota}
+                </Text>
+              )}
+            </Box>
           </Box>
 
           {/* ── SECCIONES ── */}
@@ -504,14 +522,15 @@ export default function TCMTestPage({
 
               {/* Puntuaciones */}
               <Box
-                bg={tcmBg}
+                position="relative"
+                overflow="hidden"
                 border="1px solid rgba(218,113,113,0.35)"
                 borderRadius="2xl"
-                px={{ base: 5, md: 8 }}
-                py={{ base: 6, md: 8 }}
                 mb={5}
                 boxShadow={GLOW}
               >
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+                <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text
                   color={tcmTxt}
                   fontSize={{ base: "2xl", md: "3xl" }}
@@ -593,17 +612,19 @@ export default function TCMTestPage({
                     {resultadosNota(totals, maxTotal)}
                   </Box>
                 )}
+                </Box>
               </Box>
 
               {/* Interpretación */}
               {showInterpretacion && <Box
-                bg={tcmBg}
+                position="relative"
+                overflow="hidden"
                 border="1px solid rgba(218,113,113,0.35)"
                 borderRadius="2xl"
-                px={{ base: 5, md: 8 }}
-                py={{ base: 6, md: 8 }}
                 boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
               >
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+                <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text
                   color={tcmTxt}
                   fontSize={{ base: "2xl", md: "3xl" }}
@@ -692,6 +713,7 @@ export default function TCMTestPage({
                     );
                   })}
                 </Flex>
+                </Box>
               </Box>}
             </Box>
           )}
@@ -781,13 +803,14 @@ export default function TCMTestPage({
                         return (
                           <Box
                             key={key}
-                            bg={tcmBg}
+                            position="relative"
+                            overflow="hidden"
                             border={`1px solid ${elTheme.accent}44`}
                             borderRadius="2xl"
-                            px={{ base: 5, md: 7 }}
-                            py={{ base: 5, md: 6 }}
                             boxShadow={GLOW}
                           >
+                            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}77`} blur />
+                            <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
                             <Flex align="center" gap={2.5} mb={4}>
                               <Box
                                 w="32px" h="32px" borderRadius="full"
@@ -826,6 +849,7 @@ export default function TCMTestPage({
                                 </Flex>
                               ))}
                             </Flex>
+                            </Box>
                           </Box>
                         );
                       })}
@@ -933,6 +957,8 @@ export default function TCMTestPage({
               )}
         </Flex>
       </Box>
+
+      <TCMIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <Box
         as="footer"

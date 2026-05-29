@@ -6,7 +6,6 @@ import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
-import { SaberMasButton } from "../../global/SaberMasButton";
 import { SubscribeBox } from "../../global/SubscribeBox";
 import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
@@ -706,7 +705,6 @@ export default function CartaAstralRecursos() {
             </Box>
           </Box>
 
-          <SaberMasButton onClick={() => setSaberMasOpen(true)} color={astrologiaTxt} bgColor={astrologiaBg} />
           <SubscribeBox />
         </Flex>
       </Box>

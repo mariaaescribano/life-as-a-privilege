@@ -1493,9 +1493,6 @@ const TCMPage = () => {
           </Flex>
         </Box>
 
-        {/* ── SABER MÁS ── */}
-        {/* <SaberMasButton onClick={() => setSaberMasOpen(true)} color={tcmTxt} bgColor={tcmBg} /> */}
-
         <Flex justify="center" w="100%" px={{ base: 5, md: 10 }} pb={{ base: 10, md: 14 }}>
           <SubscribeBox />
         </Flex>
