@@ -55,6 +55,7 @@ export function SubscribeBox() {
         w="100%"
         maxW="500px"
         h="1px"
+        mb={{ base: 4, md: 6 }}
         bg="rgba(255,255,255,0.15)"
         opacity={reveal.visible ? 1 : 0}
         transform={reveal.visible ? "scaleX(1)" : "scaleX(0.2)"}

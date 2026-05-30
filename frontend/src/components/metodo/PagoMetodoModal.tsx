@@ -14,14 +14,14 @@ interface PagoMetodoModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPagar: () => void;
-  /* TEST PAGO — START */
-  onPagoTest?: () => void;
+  /* TEST PAGO — START (comentado: reactivar más tarde) */
+  // onPagoTest?: () => void;
   /* TEST PAGO — END */
   loading?: boolean;
   error?: string | null;
 }
 
-export function PagoMetodoModal({ isOpen, onClose, onPagar, onPagoTest, loading, error }: PagoMetodoModalProps) {
+export function PagoMetodoModal({ isOpen, onClose, onPagar, /* TEST PAGO: onPagoTest, */ loading, error }: PagoMetodoModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
       <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
@@ -115,8 +115,8 @@ export function PagoMetodoModal({ isOpen, onClose, onPagar, onPagoTest, loading,
                 Ahora no
               </Box>
 
-              {/* TEST PAGO — START (eliminar antes de producción) */}
-              {onPagoTest && (
+              {/* TEST PAGO — START (comentado: reactivar más tarde) */}
+              {/* {onPagoTest && (
                 <Box
                   as="button"
                   onClick={loading ? undefined : onPagoTest}
@@ -137,7 +137,7 @@ export function PagoMetodoModal({ isOpen, onClose, onPagar, onPagoTest, loading,
                 >
                   Pago test
                 </Box>
-              )}
+              )} */}
               {/* TEST PAGO — END */}
             </Flex>
 

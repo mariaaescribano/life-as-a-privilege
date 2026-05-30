@@ -62,12 +62,12 @@ export class PaymentService {
     return { ok: true as const };
   }
 
-  /* TEST PAGO — START (eliminar antes de producción) */
+  /* TEST PAGO — START (comentado: reactivar más tarde)
   async testMarcarPagado(userId: string) {
     await this.userService.marcarSuscritoMetodo(userId);
     return { ok: true as const };
   }
-  /* TEST PAGO — END */
+  TEST PAGO — END */
 
   async createLibroCheckout(libroId: string) {
     const libro = findLibroPago(libroId);

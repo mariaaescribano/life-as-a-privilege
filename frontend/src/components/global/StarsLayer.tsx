@@ -16,6 +16,11 @@ export const StarsLayer = ({
     overflow="hidden"
     borderRadius={borderRadius}
     zIndex={0}
+    // En iOS/Safari, `overflow:hidden + border-radius` no recorta los hijos
+    // absolutos → la foto se vería como cuadrado sobre el círculo. Forzar capa
+    // de composición propia + redondear cada hijo arregla el recorte.
+    transform="translateZ(0)"
+    sx={{ isolation: "isolate" }}
     style={{
       background:
         "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
@@ -30,6 +35,7 @@ export const StarsLayer = ({
       inset="0"
       w="100%"
       h="100%"
+      borderRadius={borderRadius}
       style={{
         objectFit: "cover",
         objectPosition: "center",
@@ -39,6 +45,6 @@ export const StarsLayer = ({
         ...(blur ? { filter: "blur(8px)", transform: "scale(1.12)" } : {}),
       }}
     />
-    <Box position="absolute" inset="0" style={{ background: overlay }} />
+    <Box position="absolute" inset="0" borderRadius={borderRadius} style={{ background: overlay }} />
   </Box>
 );

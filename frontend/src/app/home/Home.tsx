@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
-import { AvisoInicialModal } from "../../components/metodo/AvisoInicialModal";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
@@ -54,7 +53,6 @@ const Home = () => {
   const [img, setImg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState<string>("");
-  const [avisoOpen, setAvisoOpen] = useState(false);
   const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
@@ -63,22 +61,7 @@ const Home = () => {
   const [comicOpen, setComicOpen] = useState(false);
 
   const continuarAstrologia = async () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
-    try {
-      const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.data?.aviso_visto) {
-        navigate("/metodo/astrologia");
-      } else {
-        setAvisoOpen(true);
-      }
-    } catch {
-      // Si la BD falla, mostramos el aviso (camino seguro)
-      setAvisoOpen(true);
-    }
+    navigate("/metodo/astrologia");
   };
 
   const irAstrologia = async () => {
@@ -88,7 +71,22 @@ const Home = () => {
       navigate("/welcome");
       return;
     }
-    if (!metodoSuscrito) {
+    // El box de pago SOLO debe salir si el usuario NO ha pagado. Si aún no
+    // sabemos su estado (carga inicial todavía en curso → metodoSuscrito null),
+    // lo consultamos antes de decidir, para no mostrar el pago a quien ya pagó.
+    let suscrito = metodoSuscrito;
+    if (suscrito === null) {
+      try {
+        const me = await axios.get(`${API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        suscrito = !!me.data?.metodo_suscrito;
+        setMetodoSuscrito(suscrito);
+      } catch {
+        suscrito = false;
+      }
+    }
+    if (!suscrito) {
       setPagoOpen(true);
       return;
     }
@@ -132,50 +130,32 @@ const Home = () => {
     }
   };
 
-  /* TEST PAGO — START (eliminar antes de producción) */
-  const pagarMetodoTest = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      navigate("/welcome");
-      return;
-    }
-    setPagoLoading(true);
-    setPagoError(null);
-    try {
-      await axios.post(
-        `${API_URL}/payment/metodo/test`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setMetodoSuscrito(true);
-      setPagoOpen(false);
-      setPagoExitoOpen(true);
-    } catch (err: any) {
-      console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
-      setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
-    } finally {
-      setPagoLoading(false);
-    }
-  };
+  /* TEST PAGO — START (comentado: reactivar más tarde) */
+  // const pagarMetodoTest = async () => {
+  //   const token = sessionStorage.getItem("token");
+  //   if (!token) {
+  //     navigate("/welcome");
+  //     return;
+  //   }
+  //   setPagoLoading(true);
+  //   setPagoError(null);
+  //   try {
+  //     await axios.post(
+  //       `${API_URL}/payment/metodo/test`,
+  //       {},
+  //       { headers: { Authorization: `Bearer ${token}` } },
+  //     );
+  //     setMetodoSuscrito(true);
+  //     setPagoOpen(false);
+  //     setPagoExitoOpen(true);
+  //   } catch (err: any) {
+  //     console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
+  //     setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
+  //   } finally {
+  //     setPagoLoading(false);
+  //   }
+  // };
   /* TEST PAGO — END */
-
-  const confirmarAviso = async () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-    setAvisoOpen(false);
-    if (userId && token) {
-      try {
-        await axios.patch(
-          `${API_URL}/metodo-astrologia/${userId}`,
-          { aviso_visto: true },
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-      } catch {
-        // Silencioso: el flag se persistirá la próxima vez si BD vuelve
-      }
-    }
-    navigate("/metodo/astrologia");
-  };
 
   const radius        = useBreakpointValue({ base: 125, sm: 155, md: 220, lg: 280, xl: 320 });
   const containerSize = useBreakpointValue({ base: "320px", sm: "400px", md: "560px", lg: "700px", xl: "800px" });
@@ -602,14 +582,13 @@ const Home = () => {
 
       <SiteFooter />
 
-      <AvisoInicialModal isOpen={avisoOpen} onConfirm={confirmarAviso} />
       <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => setPagoExitoOpen(false)} />
       <PagoMetodoModal
         isOpen={pagoOpen}
         onClose={() => { setPagoOpen(false); setPagoError(null); }}
         onPagar={pagarMetodo}
-        /* TEST PAGO — START */
-        onPagoTest={pagarMetodoTest}
+        /* TEST PAGO — START (comentado: reactivar más tarde) */
+        /* onPagoTest={pagarMetodoTest} */
         /* TEST PAGO — END */
         loading={pagoLoading}
         error={pagoError}

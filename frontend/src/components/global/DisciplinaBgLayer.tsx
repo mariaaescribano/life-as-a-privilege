@@ -63,13 +63,18 @@ const ImageBgLayer = ({
    *  por si el navegador no soporta backdrop-filter). */
   fallbackBg?: string;
 }) => {
-  // Truco: usamos `backdrop-filter: blur()` en una capa hermana SOBRE la
-  // imagen, en lugar de `filter: blur()` directo en el <img>. La diferencia
-  // es clave: `filter: blur()` muestrea píxeles fuera del bounds del <img>
-  // (los cuenta como transparentes) → bordes que se desvanecen a transparente.
-  // `backdrop-filter` opera sobre lo que ya está pintado DETRÁS dentro del
-  // contenedor → no hay "fuera de la imagen", no hay bordes transparentes,
-  // la foto rellena todo el box hasta las esquinas redondeadas.
+  // Enfoque para que NUNCA haya huecos ni aros, independiente del tamaño:
+  //  1) Color sólido de la disciplina (fallbackBg) como último respaldo.
+  //  2) La MISMA imagen como fondo CSS NÍTIDO en el contenedor (background).
+  //     Un `background-image` NO sufre el desvanecido a transparente que sí
+  //     tiene `filter: blur()` en los bordes, así que cubre el box completo.
+  //  3) Encima, la imagen con `filter: blur()` para el efecto difuminado.
+  //     Donde el blur se desvanece en el borde, en vez de asomar el color
+  //     claro de respaldo, asoma la imagen nítida del paso 2 → mismo dibujo,
+  //     sin aro perceptible, a cualquier tamaño de círculo.
+  //  (Antes escalábamos la imagen blureada para empujar el desvanecido fuera
+  //   del recorte, pero el margen era relativo al tamaño y en los círculos
+  //   pequeños del mandala dejaba un aro claro.)
   const blurPx = strongBlur ? 8 : 3;
   return (
     <Box
@@ -79,10 +84,21 @@ const ImageBgLayer = ({
       overflow="hidden"
       borderRadius={borderRadius}
       zIndex={0}
-      bg={fallbackBg}
+      bgColor={fallbackBg}
+      bgImage={`url('${src}')`}
+      bgSize="cover"
+      bgPosition="center"
+      bgRepeat="no-repeat"
+      // En iOS/Safari, `overflow:hidden + border-radius` NO recorta hijos
+      // absolutos: la foto se ve como un cuadrado por encima del círculo.
+      // Forzar una capa de composición propia (translateZ/isolate) hace que
+      // el navegador respete el recorte.
+      transform="translateZ(0)"
+      sx={{ isolation: "isolate" }}
     >
-      {/* Imagen NÍTIDA que cubre todo el box. Sin filter para que no se
-          desvanezcan los bordes. */}
+      {/* Imagen difuminada encima del fondo nítido. Redondeamos también la
+          propia imagen además del contenedor: así el recorte circular funciona
+          aunque el navegador falle al recortar el hijo contra el padre. */}
       <Box
         as="img"
         src={src}
@@ -92,24 +108,21 @@ const ImageBgLayer = ({
         inset="0"
         w="100%"
         h="100%"
+        borderRadius={borderRadius}
         style={{
           objectFit: "cover",
           objectPosition: "center",
-        }}
-      />
-      {/* Capa transparente que difumina lo que tiene detrás (la imagen
-          nítida) → la imagen aparece blureada sin generar bordes
-          transparentes. */}
-      <Box
-        position="absolute"
-        inset="0"
-        sx={{
-          backdropFilter: `blur(${blurPx}px)`,
-          WebkitBackdropFilter: `blur(${blurPx}px)`,
+          filter: `blur(${blurPx}px)`,
+          transform: "scale(1.08)",
         }}
       />
       {overlay && (
-        <Box position="absolute" inset="0" style={{ background: overlay }} />
+        <Box
+          position="absolute"
+          inset="0"
+          borderRadius={borderRadius}
+          style={{ background: overlay }}
+        />
       )}
     </Box>
   );
