@@ -2,12 +2,19 @@ import React from "react";
 import { Box } from "@chakra-ui/react";
 import {
   astrologiaNom,
+  ayurvedaBg,
   ayurvedaNom,
+  cabalaBg,
   cabalaNom,
+  culturaBg,
   culturaNom,
+  fisiologiaBg,
   fisiologiaNom,
+  neuropsicologiaBg,
   neuropsicologiaNom,
+  nutricionBg,
   nutricionNom,
+  tcmBg,
   tcmNom,
 } from "../../GlobalVariables";
 import { StarsLayer } from "./StarsLayer";
@@ -24,26 +31,46 @@ const DISCIPLINA_BG_IMG: Record<string, string> = {
   [culturaNom]: "/img/fondos/cultura.png",
 };
 
+// Color sólido de respaldo por disciplina. Se pinta DEBAJO de la imagen
+// para rellenar cualquier hueco transparente (causado por el blur que
+// desvanece los bordes hacia transparente, y por el bug de compositing del
+// navegador cuando un hijo con `filter:` está dentro de un padre con
+// `overflow:hidden + border-radius`).
+const DISCIPLINA_FALLBACK_BG: Record<string, string> = {
+  [tcmNom]: tcmBg,
+  [ayurvedaNom]: ayurvedaBg,
+  [neuropsicologiaNom]: neuropsicologiaBg,
+  [fisiologiaNom]: fisiologiaBg,
+  [nutricionNom]: nutricionBg,
+  [cabalaNom]: cabalaBg,
+  [culturaNom]: culturaBg,
+};
+
 const ImageBgLayer = ({
   src,
   borderRadius = "2xl",
   overlay,
   strongBlur = false,
+  fallbackBg,
 }: {
   src: string;
   borderRadius?: any;
   overlay?: string;
   /** Blur extra para los popups, donde el texto es grande y necesita destacar. */
   strongBlur?: boolean;
+  /** Color sólido detrás de la imagen como respaldo (poco probable que se
+   *  vea ahora que el blur se aplica vía backdrop-filter, pero es un seguro
+   *  por si el navegador no soporta backdrop-filter). */
+  fallbackBg?: string;
 }) => {
-  // El filtro blur() de CSS desvanece hacia transparente en los bordes (el
-  // kernel del blur muestrea píxeles fuera del bounds del <img>, que valen
-  // transparente). En boxes pequeños/redondos eso deja un halo transparente
-  // visible. La solución: agrandar la imagen por un offset FIJO en píxeles
-  // (no porcentaje) ≥ el radio del blur, así el desvanecido cae siempre
-  // fuera del área visible y el overflow:hidden del padre lo recorta.
+  // Truco: usamos `backdrop-filter: blur()` en una capa hermana SOBRE la
+  // imagen, en lugar de `filter: blur()` directo en el <img>. La diferencia
+  // es clave: `filter: blur()` muestrea píxeles fuera del bounds del <img>
+  // (los cuenta como transparentes) → bordes que se desvanecen a transparente.
+  // `backdrop-filter` opera sobre lo que ya está pintado DETRÁS dentro del
+  // contenedor → no hay "fuera de la imagen", no hay bordes transparentes,
+  // la foto rellena todo el box hasta las esquinas redondeadas.
   const blurPx = strongBlur ? 8 : 3;
-  const bleed = blurPx * 3; // margen generoso para que no se vea el halo
   return (
     <Box
       position="absolute"
@@ -52,21 +79,33 @@ const ImageBgLayer = ({
       overflow="hidden"
       borderRadius={borderRadius}
       zIndex={0}
+      bg={fallbackBg}
     >
+      {/* Imagen NÍTIDA que cubre todo el box. Sin filter para que no se
+          desvanezcan los bordes. */}
       <Box
         as="img"
         src={src}
         alt=""
         loading="eager"
         position="absolute"
-        top={`-${bleed}px`}
-        left={`-${bleed}px`}
-        w={`calc(100% + ${bleed * 2}px)`}
-        h={`calc(100% + ${bleed * 2}px)`}
+        inset="0"
+        w="100%"
+        h="100%"
         style={{
           objectFit: "cover",
           objectPosition: "center",
-          filter: `blur(${blurPx}px)`,
+        }}
+      />
+      {/* Capa transparente que difumina lo que tiene detrás (la imagen
+          nítida) → la imagen aparece blureada sin generar bordes
+          transparentes. */}
+      <Box
+        position="absolute"
+        inset="0"
+        sx={{
+          backdropFilter: `blur(${blurPx}px)`,
+          WebkitBackdropFilter: `blur(${blurPx}px)`,
         }}
       />
       {overlay && (
@@ -106,5 +145,13 @@ export const DisciplinaBgLayer = ({
   }
   const src = imageSrc ?? DISCIPLINA_BG_IMG[nom];
   if (!src) return null;
-  return <ImageBgLayer src={src} borderRadius={borderRadius} overlay={overlay} strongBlur={blur} />;
+  return (
+    <ImageBgLayer
+      src={src}
+      borderRadius={borderRadius}
+      overlay={overlay}
+      strongBlur={blur}
+      fallbackBg={DISCIPLINA_FALLBACK_BG[nom]}
+    />
+  );
 };
