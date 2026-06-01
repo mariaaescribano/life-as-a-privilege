@@ -696,13 +696,13 @@ export default function CursosModalidad() {
             zIndex={2}
             w="100%"
             px={{ base: 5, md: 10 }}
-            pt={{ base: 16, md: 14 }}
+            pt={{ base: 20, md: 24 }}
             pb={{ base: 10, md: 14 }}
             display="flex"
             flexDirection="column"
             alignItems="center"
-            justifyContent={{ base: "flex-start", md: "center" }}
-            minH={{ base: "auto", md: "100vh" }}
+            justifyContent="flex-start"
+            minH="100vh"
             overflowY="auto"
             overflowX="hidden"
           >

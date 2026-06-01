@@ -75,7 +75,7 @@ const ImageBgLayer = ({
   //  (Antes escalábamos la imagen blureada para empujar el desvanecido fuera
   //   del recorte, pero el margen era relativo al tamaño y en los círculos
   //   pequeños del mandala dejaba un aro claro.)
-  const blurPx = strongBlur ? 8 : 3;
+  const blurPx = strongBlur ? 8 : 0;
   return (
     <Box
       position="absolute"

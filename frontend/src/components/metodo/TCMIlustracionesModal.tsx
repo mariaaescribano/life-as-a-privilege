@@ -22,42 +22,84 @@ import type { Vineta } from "./ComicViewer";
 const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/5tcm.png",
-    paragraphs: [],
-  },
-  {
-    src: "/viñetas/tcm/elementos/fuegotcm.png",
-    paragraphs: [],
-  },
-  {
-    src: "/viñetas/tcm/elementos/madera.png",
-    paragraphs: [],
+    paragraphs: [
+      "Los Cinco Elementos son las cinco fuerzas sobre las que se construye la naturaleza y, por extensión, el ser humano.",
+      "Nuestros órganos, emociones y procesos vitales siguen los movimientos de estos cinco elementos.",
+    ],
   },
   {
     src: "/viñetas/tcm/elementos/tierratcm.png",
-    paragraphs: [],
-  },
-  {
-    src: "/viñetas/tcm/elementos/aguatcm.png",
-    paragraphs: [],
+    paragraphs: [
+      "La tierra es el suelo sobre el que todo se construye. Representa nuestra capacidad para nutrirnos y transformarnos, tanto a nivel físico como emocional.",
+      "Cuando la tierra está fuerte, somos capaces de aprovechar aquello que recibimos de la vida y convertirlo en raíces, aprendizaje y nutrición.",
+    ],
   },
   {
     src: "/viñetas/tcm/elementos/metaltcm.png",
-    paragraphs: [],
+    paragraphs: [
+      "Del proceso de transformación de la tierra surge el metal. Representa la claridad, el orden y la capacidad de distinguir cuál dolor es nuestro y cuál no.",
+      "Nos ayuda a aceptar quiénes somos y a soltar aquello que ya ha cumplido su función para dejar espacio a lo nuevo.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/elementos/aguatcm.png",
+    paragraphs: [
+      "Cuando aprendemos a soltar, aparece el agua. Es la profundidad, la introspección y la conexión con nuestros recursos internos.",
+      "Nos invita a mirar hacia dentro, encontrar paz y desarrollar la confianza necesaria para fluir con los cambios de la vida.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/elementos/madera.png",
+    paragraphs: [
+      "Cuando estos elementos están en orden, surge la madera, que representa el crecimiento, la expansión y la capacidad de avanzar. Es la fuerza que transforma nuestro potencial en acción.",
+      "Cuando está equilibrada nos ayuda a construir, crear y desarrollar aquello que hemos sembrado. Cuando se bloquea, pueden aparecer la frustración, la rigidez o el enfado.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/elementos/fuegotcm.png",
+    paragraphs: [
+      "El fuego es la expresión de la vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
+      "Nos aporta entusiasmo, inspiración y el impulso necesario para compartir aquello que hemos creado.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/elementos/tcmpersona.png",
+    paragraphs: [
+      "Según la Medicina Tradicional China, la salud surge cuando estos cinco movimientos se encuentran en equilibrio, permitiendo que la energía fluya de forma armoniosa a través de nuestro cuerpo, nuestras emociones y nuestra forma de vivir.",
+    ],
   },
 ];
 
 const VINETAS_YIN_YANG: Vineta[] = [
   {
     src: "/viñetas/tcm/yinyang/yinyang.png",
-    paragraphs: [],
+    paragraphs: [
+      "El universo, todo y todos, existe gracias a dos fuerzas complementarias.",
+      "La luz y la oscuridad. El dar y el recibir.",
+      "La Medicina Tradicional China las llama Yin y Yang.",
+    ],
   },
   {
     src: "/viñetas/tcm/yinyang/yin.png",
-    paragraphs: [],
+    paragraphs: [
+      "El Yin es la energía de la calma, la noche, la nutrición y la recepción.",
+      "Es la capacidad de convertir la materia y la energía en parte de nosotros.",
+      "En nuestro cuerpo, las mitocondrias son un buen ejemplo. Reciben para poder transformar.",
+    ],
   },
   {
     src: "/viñetas/tcm/yinyang/yang.png",
-    paragraphs: [],
+    paragraphs: [
+      "Ahí aparece el Yang. Transforma esa materia en energía.",
+      "El Yang es la actividad, la luz, el movimiento y la acción. Es la fuerza que convierte el potencial en realidad.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/yinyang/yinyang.png",
+    paragraphs: [
+      "Por eso no existe Yin sin Yang. Ni Yang sin Yin.",
+      "Ambas son complementarias. Ambas son uno.",
+    ],
   },
 ];
 

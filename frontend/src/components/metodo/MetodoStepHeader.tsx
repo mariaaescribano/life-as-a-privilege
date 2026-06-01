@@ -30,10 +30,7 @@ interface MetodoStepHeaderProps {
   extra?: StepButton;  // botón opcional adicional (ej: "Cómic")
 }
 
-const StepBtn = ({ label, color, bgColor, onClick, disabled, icon, disabledTooltip }: StepButton & { color: string; bgColor: string }) => {
-  // bgColor puede venir con alpha pegado (#RRGGBBaa). Para la sombra del texto
-  // queremos solo #RRGGBB y aplicar nuestra propia alpha discreta.
-  const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip }: StepButton & { color: string; bgColor: string }) => {
   const btn = (
     <Box
       as="button"
@@ -55,7 +52,7 @@ const StepBtn = ({ label, color, bgColor, onClick, disabled, icon, disabledToolt
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
       boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}33`}
-      textShadow={disabled ? "none" : `0 1px 2px ${bgHex}cc, 0 0 8px ${bgHex}99, 0 0 14px ${bgHex}55`}
+      textShadow={disabled ? "none" : "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)"}
       // touch-action: manipulation elimina el delay de 300ms del navegador
       // móvil (que estaba esperando un posible double-tap zoom). user-select
       // none + WebkitTapHighlightColor transparente quitan el rectángulo gris

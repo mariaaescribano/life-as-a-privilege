@@ -6,7 +6,6 @@ import {
   Image,
   ModalBody,
   Text,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { astrologiaTxt } from "../../GlobalVariables";
@@ -24,14 +23,6 @@ const twinkle = keyframes`
   0%, 100% { opacity: 0.35; }
   50%      { opacity: 1; }
 `;
-
-const blink = keyframes`
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
-`;
-
-const TYPE_SPEED_MS = 24;
-const PARAGRAPH_PAUSE_MS = 420;
 
 export interface Vineta {
   src: string;
@@ -159,37 +150,9 @@ export function ComicViewer({
     }
   };
 
-  // Typewriter — móvil muestra texto completo de golpe.
-  const isMobile = useBreakpointValue({ base: true, md: false });
-  const totalChars = current.paragraphs.reduce((acc, p) => acc + p.length, 0);
-  const [typed, setTyped] = useState(0);
-  const [lastIndex, setLastIndex] = useState(index);
+  // Todo el texto de la viñeta como un único bloque, sin saltos de línea.
+  const fullText = current.paragraphs.join(" ");
 
-  if (lastIndex !== index) {
-    setLastIndex(index);
-    setTyped(isMobile ? totalChars : 0);
-  }
-
-  useEffect(() => {
-    if (isMobile) {
-      if (typed < totalChars) setTyped(totalChars);
-      return;
-    }
-    if (typed >= totalChars) return;
-    let acc = 0;
-    let atBoundary = false;
-    for (let i = 0; i < current.paragraphs.length - 1; i++) {
-      acc += current.paragraphs[i].length;
-      if (typed === acc) { atBoundary = true; break; }
-    }
-    const delay = atBoundary ? PARAGRAPH_PAUSE_MS : TYPE_SPEED_MS;
-    const t = setTimeout(() => setTyped((n) => n + 1), delay);
-    return () => clearTimeout(t);
-  }, [typed, totalChars, current, isMobile]);
-
-  const skipTyping = () => setTyped(totalChars);
-
-  const glowText = `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${themeColor}55`;
   const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
   return (
@@ -350,203 +313,220 @@ export function ComicViewer({
           pt/pb generosos para que SIEMPRE haya un mt/mb visible por arriba
           y por abajo, también justo al abrir el popup. */}
       <ModalBody
-        ref={contentRef}
         position="relative"
         zIndex={2}
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="flex-start"
+        justifyContent="center"
         minH="100vh"
         px={{ base: 4, md: 24 }}
-        pt={{ base: 28, md: 32 }}
-        pb={{ base: 24, md: 28 }}
+        py={{ base: 12, md: 14 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{
           touchAction: "pan-y",
         }}
       >
-        <Flex direction="column" align="center" gap={{ base: 5, md: 8 }} maxW="680px" w="100%" flexShrink={0}>
+        {/* Caja única: contiene foto + texto sobre el fondo de la disciplina.
+            El scroll vertical ocurre DENTRO de la caja (el área de contenido),
+            no a nivel de página. */}
+        <Box
+          key={`box-${index}`}
+          w="100%"
+          maxW={{ base: "360px", md: "900px" }}
+          h={{ base: "auto", md: "500px" }}
+          maxH={{ base: "calc(100dvh - 96px)" }}
+          display="flex"
+          flexDirection="column"
+          position="relative"
+          borderRadius="xl"
+          overflow="hidden"
+          border={`1px solid ${themeColor}44`}
+          animation={`${fadeIn} 0.55s ease both`}
+          boxShadow={
+            isDisciplinaMode && disciplinaBgColor
+              ? `0 0 22px ${disciplinaBgColor}88, 0 0 50px ${disciplinaBgColor}55, 0 0 18px ${themeColor}44, 0 0 40px ${themeColor}22, inset 0 0 20px rgba(0,0,0,0.35)`
+              : `0 0 18px ${themeColor}22, 0 0 40px ${themeColor}14, inset 0 0 20px rgba(0,0,0,0.35)`
+          }
+        >
+          {/* Fondo de la caja (foto de disciplina blureada + overlay) */}
           <Box
-            key={`img-${index}`}
-            w={{ base: "100%", sm: "85%", md: "75%" }}
-            maxW={{ base: "100%", md: "560px" }}
-            aspectRatio={1}
-            animation={`${fadeIn} 0.5s ease both`}
-            position="relative"
-            sx={{
-              filter: `
-                drop-shadow(0 0 30px rgba(255,255,255,0.35))
-                drop-shadow(0 0 60px rgba(180,210,255,0.28))
-                drop-shadow(0 0 110px ${themeColor}55)
-              `,
+            position="absolute"
+            inset="0"
+            pointerEvents="none"
+            zIndex={0}
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
             }}
           >
-            {!imgFailed[index] ? (
-              <Image
-                src={encodeURI(current.src)}
-                alt={`Viñeta ${index + 1}`}
-                w="100%"
-                h="100%"
-                objectFit="contain"
-                onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
-              />
-            ) : (
-              <Flex
-                w="100%"
-                h="100%"
-                align="center"
-                justify="center"
-                direction="column"
-                gap={2}
-                px={4}
-                textAlign="center"
-                bg="rgba(8,13,30,0.55)"
-                border={`1px dashed ${themeColor}44`}
-                borderRadius="2xl"
-              >
-                <Text fontSize="4xl">✨</Text>
-                <Text color={`${themeColor}cc`} fontSize="sm" fontStyle="italic">
-                  Viñeta {index + 1} próximamente
-                </Text>
-              </Flex>
-            )}
-          </Box>
-
-          <Box
-            key={`txt-${index}`}
-            w="100%"
-            position="relative"
-            borderRadius="xl"
-            overflow="hidden"
-            border={`1px solid ${themeColor}44`}
-            px={{ base: 5, md: 8 }}
-            pt={{ base: 5, md: 7 }}
-            pb={{ base: 8, md: 9 }}
-            animation={`${fadeIn} 0.55s ease 0.08s both`}
-            boxShadow={
-              isDisciplinaMode && disciplinaBgColor
-                ? `0 0 22px ${disciplinaBgColor}88, 0 0 50px ${disciplinaBgColor}55, 0 0 18px ${themeColor}44, 0 0 40px ${themeColor}22, inset 0 0 20px rgba(0,0,0,0.35)`
-                : `0 0 18px ${themeColor}22, 0 0 40px ${themeColor}14, inset 0 0 20px rgba(0,0,0,0.35)`
-            }
-          >
+            <Box
+              as="img"
+              src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.jpg"}
+              alt=""
+              loading="eager"
+              position="absolute"
+              inset="0"
+              w="100%"
+              h="100%"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+                opacity: isDisciplinaMode ? 1 : 0.75,
+                filter: isDisciplinaMode ? "saturate(1.05)" : undefined,
+              }}
+            />
             <Box
               position="absolute"
               inset="0"
-              pointerEvents="none"
-              zIndex={0}
-              style={{
-                background:
-                  "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
+              bg={isDisciplinaMode && disciplinaBgColor ? `${disciplinaBgColor}55` : "rgba(8,13,30,0.55)"}
+            />
+          </Box>
+
+          {!isDisciplinaMode && <Stars />}
+
+          {/* Línea de luz superior */}
+          <Box
+            position="absolute"
+            top="-1px"
+            left="15%"
+            right="15%"
+            h="1px"
+            bgGradient={`linear(to-r, transparent, ${themeColor}aa, transparent)`}
+            zIndex={3}
+          />
+
+          {/* Área de contenido scrollable: foto + texto.
+              Escritorio: foto a la izquierda, texto a la derecha (fila).
+              Móvil: foto arriba, texto abajo (columna) con una rayita corta
+              y elegante entre medias. */}
+          <Flex
+            ref={contentRef}
+            direction={{ base: "column", md: "row" }}
+            align="center"
+            justify="center"
+            gap={{ base: 5, md: 10 }}
+            position="relative"
+            zIndex={2}
+            flex="1"
+            minH={0}
+            overflowY="auto"
+            overflowX="hidden"
+            px={{ base: 5, md: 10 }}
+            py={{ base: 9, md: 10 }}
+            sx={{
+              "&::-webkit-scrollbar": { width: "6px" },
+              "&::-webkit-scrollbar-thumb": {
+                background: `${themeColor}55`,
+                borderRadius: "3px",
+              },
+            }}
+          >
+            <Box
+              w={{ base: "90%", md: "380px" }}
+              maxW={{ base: "300px", md: "380px" }}
+              aspectRatio={1}
+              flexShrink={0}
+              position="relative"
+              sx={{
+                filter: `
+                  drop-shadow(0 0 24px rgba(255,255,255,0.3))
+                  drop-shadow(0 0 50px rgba(180,210,255,0.24))
+                  drop-shadow(0 0 90px ${themeColor}55)
+                `,
               }}
             >
-              <Box
-                as="img"
-                src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.jpg"}
-                alt=""
-                loading="eager"
-                position="absolute"
-                inset="0"
-                w="100%"
-                h="100%"
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                  opacity: isDisciplinaMode ? 1 : 0.75,
-                  filter: isDisciplinaMode ? "blur(3px) saturate(1.1)" : undefined,
-                }}
-              />
-              <Box
-                position="absolute"
-                inset="0"
-                bg={isDisciplinaMode && disciplinaBgColor ? `${disciplinaBgColor}55` : "rgba(8,13,30,0.55)"}
-              />
+              {!imgFailed[index] ? (
+                <Image
+                  src={encodeURI(current.src)}
+                  alt={`Viñeta ${index + 1}`}
+                  w="100%"
+                  h="100%"
+                  objectFit="contain"
+                  borderRadius="lg"
+                  onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
+                />
+              ) : (
+                <Flex
+                  w="100%"
+                  h="100%"
+                  align="center"
+                  justify="center"
+                  direction="column"
+                  gap={2}
+                  px={4}
+                  textAlign="center"
+                  bg="rgba(8,13,30,0.55)"
+                  border={`1px dashed ${themeColor}44`}
+                  borderRadius="2xl"
+                >
+                  <Text fontSize="4xl">✨</Text>
+                  <Text color={`${themeColor}cc`} fontSize="sm" fontStyle="italic">
+                    Viñeta {index + 1} próximamente
+                  </Text>
+                </Flex>
+              )}
             </Box>
 
-            {!isDisciplinaMode && <Stars />}
-
+            {/* Separador elegante: rayita horizontal y corta en móvil,
+                vertical entre foto y texto en escritorio. */}
             <Box
-              position="absolute"
-              top="-1px"
-              left="15%"
-              right="15%"
-              h="1px"
-              bgGradient={`linear(to-r, transparent, ${themeColor}aa, transparent)`}
-              zIndex={2}
+              flexShrink={0}
+              alignSelf="center"
+              w={{ base: "52px", md: "1px" }}
+              h={{ base: "1px", md: "150px" }}
+              borderRadius="full"
+              bgGradient={{
+                base: `linear(to-r, transparent, ${themeColor}aa, transparent)`,
+                md: `linear(to-b, transparent, ${themeColor}aa, transparent)`,
+              }}
             />
 
-            <Flex
-              direction="column"
-              gap={4}
-              position="relative"
-              zIndex={2}
-              onClick={skipTyping}
-              cursor={typed < totalChars ? "pointer" : "default"}
-            >
-              {current.paragraphs.map((p, i) => {
-                let consumed = 0;
-                for (let j = 0; j < i; j++) consumed += current.paragraphs[j].length;
-                const remaining = Math.max(0, typed - consumed);
-                if (remaining === 0) return null;
-                const shown = p.slice(0, remaining);
-                const isCurrent = remaining < p.length;
-                return (
-                  <Text
-                    key={i}
-                    color={i === 0 ? themeColor : `${themeColor}dd`}
-                    fontSize={{ base: "md", md: "lg" }}
-                    lineHeight="1.85"
-                    letterSpacing="0.02em"
-                    textAlign="center"
-                    fontWeight={i === 0 ? "600" : "400"}
-                    fontStyle={i === 0 ? "italic" : "normal"}
-                    style={{ textShadow: i === 0 ? glowText : glowTextSoft }}
-                  >
-                    {shown}
-                    {isCurrent && (
-                      <Box
-                        as="span"
-                        display="inline-block"
-                        ml="3px"
-                        w="2px"
-                        h="1em"
-                        verticalAlign="text-bottom"
-                        bg={themeColor}
-                        animation={`${blink} 0.9s steps(1) infinite`}
-                        sx={{ boxShadow: `0 0 8px ${themeColor}` }}
-                      />
-                    )}
-                  </Text>
-                );
-              })}
-            </Flex>
+            <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
+              <Text
+                color={themeColor}
+                fontSize={{ base: "lg", md: "xl" }}
+                lineHeight="1.9"
+                letterSpacing="0.02em"
+                textAlign={{ base: "center", md: "left" }}
+                fontWeight="400"
+                style={{
+                  textShadow:
+                    "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)",
+                }}
+              >
+                {fullText}
+              </Text>
+            </Box>
+          </Flex>
 
-            <Box
-              position="absolute"
-              bottom="-1px"
-              left="15%"
-              right="15%"
-              h="1px"
-              bgGradient={`linear(to-r, transparent, ${themeColor}aa, transparent)`}
-              zIndex={2}
-            />
+          {/* Línea de luz inferior */}
+          <Box
+            position="absolute"
+            bottom="-1px"
+            left="15%"
+            right="15%"
+            h="1px"
+            bgGradient={`linear(to-r, transparent, ${themeColor}aa, transparent)`}
+            zIndex={3}
+          />
 
-            <Text
-              position="absolute"
-              bottom={{ base: 2, md: 3 }}
-              right={{ base: 3, md: 4 }}
-              color={`${themeColor}99`}
-              fontSize={{ base: "xs", md: "sm" }}
-              fontStyle="italic"
-              letterSpacing="0.18em"
-              style={{ textShadow: glowTextSoft }}
-              zIndex={2}
-            >
-              {index + 1} / {total}
-            </Text>
-          </Box>
-        </Flex>
+          {/* Contador de página */}
+          <Text
+            position="absolute"
+            bottom={{ base: 2, md: 3 }}
+            right={{ base: 3, md: 4 }}
+            color={`${themeColor}99`}
+            fontSize={{ base: "xs", md: "sm" }}
+            fontStyle="italic"
+            letterSpacing="0.18em"
+            style={{ textShadow: glowTextSoft }}
+            zIndex={3}
+          >
+            {index + 1} / {total}
+          </Text>
+        </Box>
       </ModalBody>
     </>
   );

@@ -1019,7 +1019,7 @@ export default function ElMetodo() {
                       <Text
                         key={j}
                         color={selectedCard.txt}
-                        opacity={0.88}
+                        opacity={1}
                         fontSize={{ base: "md", md: "lg" }}
                         lineHeight={{ base: "1.6", md: "1.7" }}
                         letterSpacing="0.01em"
@@ -1046,7 +1046,7 @@ export default function ElMetodo() {
                         w={{ base: "12px", md: "14px" }}
                         h={{ base: "12px", md: "14px" }}
                         fill={selectedCard.txt}
-                        opacity={0.85}
+                        opacity={0.95}
                         flexShrink={0}
                       >
                         <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/>
@@ -1056,7 +1056,7 @@ export default function ElMetodo() {
                         fontSize={{ base: "xs", md: "sm" }}
                         letterSpacing="0.06em"
                         fontStyle="italic"
-                        opacity={0.85}
+                        opacity={0.95}
                         lineHeight="1.3"
                         textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
                       >

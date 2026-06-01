@@ -21,20 +21,76 @@ import type { Vineta } from "./ComicViewer";
 
 const VINETAS_ELEMENTOS: Vineta[] = [
   {
-    src: "",
+    src: "/viñetas/hinduismo/elementos/elementosayurveda.png",
     paragraphs: [
-      "Próximamente.",
-      "Aquí irán las viñetas de Los Elementos.",
+      "Según la Ayurveda, todo lo que existe en el universo está formado por cinco elementos.",
+      "Y nosotros no somos la excepción.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/elementos/eter.png",
+    paragraphs: [
+      "El Éter es el espacio.",
+      "Es aquello que permite que todo lo demás exista y se exprese.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/elementos/aire.png",
+    paragraphs: [
+      "El Aire es el movimiento.",
+      "La respiración, los pensamientos y el cambio constante de la vida.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/elementos/fuego.png",
+    paragraphs: [
+      "El Fuego es la transformación.",
+      "Convierte la materia en energía, las experiencias en aprendizaje y las ideas en acción.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/elementos/agua.png",
+    paragraphs: [
+      "El Agua es la unión.",
+      "La nutrición, la sensibilidad y la capacidad de adaptarnos sin perder nuestra esencia.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/elementos/tierra.png",
+    paragraphs: [
+      "La Tierra es la estabilidad.",
+      "Nos aporta estructura, fuerza y la capacidad de construir algo duradero.",
     ],
   },
 ];
 
 const VINETAS_DOSHAS: Vineta[] = [
   {
-    src: "",
+    src: "/viñetas/hinduismo/doshas/doshasportada.png",
     paragraphs: [
-      "Próximamente.",
-      "Aquí irán las viñetas de Los Doshas.",
+      "Según la Ayurveda, los cinco elementos se mezclan para formar los tres doshas.",
+      "En cada persona, un dosha predomina sobre los otros. Lo que influencia la constitución, la mentalidad y la salud.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/doshas/vatta.png",
+    paragraphs: [
+      "Vata está formado por Aire y Éter.",
+      "Es la energía del movimiento, la creatividad y el cambio.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/doshas/pitta.png",
+    paragraphs: [
+      "Pitta está formado por Fuego y Agua.",
+      "Es la energía de la transformación, la intensidad y la acción.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/doshas/kapha.png",
+    paragraphs: [
+      "Kapha está formado por Agua y Tierra.",
+      "Es la energía de la estabilidad, la nutrición y la constancia.",
     ],
   },
 ];
@@ -46,9 +102,9 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
   los_doshas: VINETAS_DOSHAS,
 };
 
-const SELECTOR_OPTIONS: { key: Capitulo; title: string }[] = [
-  { key: "los_elementos", title: "Los Elementos" },
-  { key: "los_doshas",    title: "Los Doshas"    },
+const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
+  { key: "los_elementos", title: "Los Elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.png" },
+  { key: "los_doshas",    title: "Los Doshas",    cover: "/viñetas/hinduismo/doshas/doshasportada.png"        },
 ];
 
 interface HinduismoIlustracionesModalProps {
@@ -210,8 +266,6 @@ export function HinduismoIlustracionesModal({
                     w="100%"
                     minW={{ base: "auto", sm: "280px", md: "300px" }}
                     maxW={{ base: "300px", md: "360px" }}
-                    py={{ base: 10, md: 14 }}
-                    px={5}
                     borderRadius="2xl"
                     overflow="hidden"
                     border={`1px solid ${ayurvedaTxt}55`}
@@ -231,7 +285,35 @@ export function HinduismoIlustracionesModal({
                       _active: { transform: "translateY(-1px)" },
                     }}
                   >
-                    <Flex direction="column" align="center" gap={2}>
+                    {opt.cover && (
+                      <Box
+                        position="relative"
+                        w="100%"
+                        aspectRatio={1}
+                        overflow="hidden"
+                        borderBottom={`1px solid ${ayurvedaTxt}44`}
+                        bg="rgba(0,0,0,0.25)"
+                      >
+                        <Box
+                          as="img"
+                          src={encodeURI(opt.cover)}
+                          alt={opt.title}
+                          loading="eager"
+                          position="absolute"
+                          inset="0"
+                          w="100%"
+                          h="100%"
+                          style={{ objectFit: "cover", objectPosition: opt.coverPosition ?? "center" }}
+                        />
+                      </Box>
+                    )}
+                    <Flex
+                      direction="column"
+                      align="center"
+                      gap={1}
+                      py={opt.cover ? { base: 4, md: 5 } : { base: 10, md: 14 }}
+                      px={3}
+                    >
                       <Text
                         color={ayurvedaTxt}
                         fontSize={{ base: "xl", md: "2xl" }}
