@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
-import { astrologiaNom } from "../../GlobalVariables";
+import { astrologiaNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 
 interface StepButton {
@@ -28,9 +28,12 @@ interface MetodoStepHeaderProps {
   prev?: StepButton;
   next?: StepButton;
   extra?: StepButton;  // botón opcional adicional (ej: "Cómic")
+  /** Título más pequeño (p.ej. en los tests, cuyos nombres son largos y deben
+   *  caber en el header). */
+  compact?: boolean;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip }: StepButton & { color: string; bgColor: string }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
   const btn = (
     <Box
       as="button"
@@ -39,7 +42,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip }: Ste
       px={{ base: 2, sm: 4, md: 7 }}
       py={{ base: 1.5, md: 2.5 }}
       borderRadius="full"
-      bg="rgba(255,255,255,0.04)"
+      bg={whiteBg ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)"}
       border={`1px solid ${disabled ? color + "22" : `${color}66`}`}
       color={disabled ? `${color}44` : color}
       fontFamily="'EB Garamond', serif"
@@ -52,7 +55,9 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip }: Ste
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
       boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}33`}
-      textShadow={disabled ? "none" : "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)"}
+      // En el header de TCM (whiteBg) el texto lleva una sombra granate oscura
+      // para contrastar con el fondo de la disciplina.
+      textShadow={whiteBg && !disabled ? "0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85), 0 0 5px rgba(58,10,10,0.8)" : undefined}
       // touch-action: manipulation elimina el delay de 300ms del navegador
       // móvil (que estaba esperando un posible double-tap zoom). user-select
       // none + WebkitTapHighlightColor transparente quitan el rectángulo gris
@@ -130,11 +135,15 @@ export function MetodoStepHeader({
   prev,
   next,
   extra,
+  compact = false,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
   const headerNom = nom ?? (space ? astrologiaNom : undefined);
   const useDiscBg = !!headerNom && hasDisciplinaBg(headerNom);
+  // En el header de Medicina China los botones llevan un fondo blanco mínimo
+  // (casi transparente) para que el texto se lea sobre su fondo.
+  const btnWhiteBg = headerNom === tcmNom;
   // bgColor suele venir con alpha pegado (#RRGGBBaa). Para el textShadow
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
@@ -204,7 +213,11 @@ export function MetodoStepHeader({
           <Box ref={titleWrapperRef} minW={0} flexShrink={1}>
             <Text
               color={color}
-              fontSize={titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "6xl" }}
+              fontSize={
+                compact
+                  ? (titleWraps ? { base: "md", md: "2xl" } : { base: "xl", md: "3xl" })
+                  : (titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "6xl" })
+              }
               fontWeight="700"
               letterSpacing="0.05em"
               lineHeight="1.15"
@@ -246,9 +259,9 @@ export function MetodoStepHeader({
             direction="row"
             wrap="nowrap"
           >
-            {prev && <StepBtn {...prev} color={color} bgColor={bgColor} />}
-            {extra && <StepBtn {...extra} color={color} bgColor={bgColor} />}
-            {next && <StepBtn {...next} color={color} bgColor={bgColor} />}
+            {prev && <StepBtn {...prev} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {extra && <StepBtn {...extra} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {next && <StepBtn {...next} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
           </Flex>
         )}
       </Box>

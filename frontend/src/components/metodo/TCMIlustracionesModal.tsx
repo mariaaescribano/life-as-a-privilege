@@ -174,7 +174,6 @@ export function TCMIlustracionesModal({
             style={{
               objectFit: "cover",
               objectPosition: "center",
-              filter: "blur(8px)",
             }}
           />
           <Box position="absolute" inset="0" bg={`${tcmBg}55`} />

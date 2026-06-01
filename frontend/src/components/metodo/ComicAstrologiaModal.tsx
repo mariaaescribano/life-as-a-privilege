@@ -688,6 +688,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
           <ComicViewer
             key={seccion}
             vinetas={VINETAS_BY_SECCION[seccion]}
+            textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
             onClose={onClose}
             onComplete={handleComplete}
             onBack={volverAlSelector}

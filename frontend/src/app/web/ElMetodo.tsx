@@ -87,6 +87,48 @@ const modalidades: ModalidadData[] = [
   },
 ];
 
+// ── Sombras de texto del recorrido ──
+// La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
+// Algunas concretas piden una sombra oscura para que el texto contraste mejor.
+const SHADOW_BLACK = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
+const SHADOW_GRANATE = "0 1px 4px rgba(56,8,8,0.95), 0 2px 12px rgba(56,8,8,0.82), 0 0 5px rgba(56,8,8,0.78), 0 0 18px rgba(255,255,255,0.22)";
+
+const naturalBoxShadow = (bg: string) =>
+  `0 1px 3px ${bg}f5, 0 0 6px ${bg}cc, 0 2px 14px ${bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`;
+
+const esOscuraNegra = (name: string) =>
+  name === fisiologiaNom || name === cabalaNom || name === culturaNom;
+
+// Sombra para los textos DENTRO de las cajas (ítems y aviso).
+const boxTextShadow = (card: ModalidadData) => {
+  if (card.name === tcmNom) return SHADOW_GRANATE;
+  if (esOscuraNegra(card.name)) return SHADOW_BLACK;
+  return naturalBoxShadow(card.bg);
+};
+
+// Igual, pero para el título de cada sección (en el original, las disciplinas
+// sin fondo propio no llevaban sombra).
+const boxTitleShadow = (card: ModalidadData) => {
+  if (card.name === tcmNom) return SHADOW_GRANATE;
+  if (esOscuraNegra(card.name)) return SHADOW_BLACK;
+  return hasDisciplinaBg(card.name) ? naturalBoxShadow(card.bg) : undefined;
+};
+
+// Cabecera del modal: nombre de la disciplina y frase introductoria. Solo
+// Cábala y Cultura llevan sombra oscura aquí.
+const headerNameShadow = (card: ModalidadData) =>
+  card.name === tcmNom
+    ? SHADOW_GRANATE
+    : esOscuraNegra(card.name)
+    ? SHADOW_BLACK
+    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 16px rgba(255,255,255,0.55), 0 0 36px rgba(255,255,255,0.3)`;
+
+const headerDescShadow = (card: ModalidadData) =>
+  card.name === tcmNom
+    ? SHADOW_GRANATE
+    : esOscuraNegra(card.name)
+    ? SHADOW_BLACK
+    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 12px rgba(255,255,255,0.5), 0 0 26px rgba(255,255,255,0.25)`;
 
 const useReveal = (threshold = 0.12) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -935,7 +977,7 @@ export default function ElMetodo() {
                 letterSpacing="0.05em"
                 textAlign="center"
                 lineHeight="1.1"
-                textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 8px ${selectedCard.bg}cc, 0 2px 16px ${selectedCard.bg}88, 0 0 16px rgba(255,255,255,0.55), 0 0 36px rgba(255,255,255,0.3)`}
+                textShadow={headerNameShadow(selectedCard)}
                 filter={hasDisciplinaBg(selectedCard.name) ? undefined : `drop-shadow(0 2px 14px ${selectedCard.txt}55)`}
               >
                 {selectedCard.name}
@@ -957,7 +999,7 @@ export default function ElMetodo() {
                 letterSpacing="0.02em"
                 opacity={0.95}
                 maxW="640px"
-                textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 8px ${selectedCard.bg}cc, 0 2px 16px ${selectedCard.bg}88, 0 0 12px rgba(255,255,255,0.5), 0 0 26px rgba(255,255,255,0.25)`}
+                textShadow={headerDescShadow(selectedCard)}
               >
                 {selectedCard.desc}
               </Text>
@@ -973,7 +1015,7 @@ export default function ElMetodo() {
                 letterSpacing="0.32em"
                 textTransform="uppercase"
                 fontWeight="600"
-                textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
+                textShadow={naturalBoxShadow(selectedCard.bg)}
               >
                 Qué incluye
               </Text>
@@ -1006,9 +1048,7 @@ export default function ElMetodo() {
                     letterSpacing="0.04em"
                     lineHeight="1.25"
                     textAlign="center"
-                    textShadow={hasDisciplinaBg(selectedCard.name)
-                      ? `0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`
-                      : undefined}
+                    textShadow={boxTitleShadow(selectedCard)}
                   >
                     {seccion.titulo}
                   </Text>
@@ -1024,7 +1064,7 @@ export default function ElMetodo() {
                         lineHeight={{ base: "1.6", md: "1.7" }}
                         letterSpacing="0.01em"
                         textAlign="center"
-                        textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
+                        textShadow={boxTextShadow(selectedCard)}
                       >
                         {item}
                       </Text>
@@ -1058,7 +1098,7 @@ export default function ElMetodo() {
                         fontStyle="italic"
                         opacity={0.95}
                         lineHeight="1.3"
-                        textShadow={`0 1px 3px ${selectedCard.bg}f5, 0 0 6px ${selectedCard.bg}cc, 0 2px 14px ${selectedCard.bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`}
+                        textShadow={boxTextShadow(selectedCard)}
                       >
                         {seccion.aviso}
                       </Text>

@@ -677,7 +677,7 @@ export default function CursosModalidad() {
               bottom="-14px"
               w="calc(100% + 28px)"
               h="calc(100% + 28px)"
-              style={{ objectFit: "cover", objectPosition: "center", filter: "blur(8px)" }}
+              style={{ objectFit: "cover", objectPosition: "center" }}
             />
             <Box position="absolute" inset="0" bg={`${tcmBg}55`} />
           </Box>

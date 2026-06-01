@@ -170,7 +170,6 @@ export function HinduismoIlustracionesModal({
             style={{
               objectFit: "cover",
               objectPosition: "center",
-              filter: "blur(8px)",
             }}
           />
           <Box position="absolute" inset="0" bg={`${ayurvedaBg}55`} />
@@ -366,6 +365,7 @@ export function HinduismoIlustracionesModal({
             themeColor={ayurvedaTxt}
             disciplinaBgImage="/img/fondos/hinduismo.png"
             disciplinaBgColor={ayurvedaBg}
+            textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
             onClose={onClose}
             onBack={volverAlSelector}
             onComplete={() => {

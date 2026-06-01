@@ -78,7 +78,14 @@ interface ComicViewerProps {
   disciplinaBgImage?: string;
   /** Color hex del bg de la disciplina. Se usa para el glow del box de texto. */
   disciplinaBgColor?: string;
+  /** Sombra del texto de las viñetas. Por defecto una sombra oscura (la usa
+   *  TCM). Cada cómic puede pasar la suya (p.ej. Hinduismo/Astrología usan una
+   *  sombra del color de su disciplina en vez de negra). */
+  textShadow?: string;
 }
+
+const DEFAULT_TEXT_SHADOW =
+  "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
 
 export function ComicViewer({
   vinetas,
@@ -88,6 +95,7 @@ export function ComicViewer({
   themeColor = astrologiaTxt,
   disciplinaBgImage,
   disciplinaBgColor,
+  textShadow = DEFAULT_TEXT_SHADOW,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   const [index, setIndex] = useState(0);
@@ -169,6 +177,7 @@ export function ComicViewer({
         pointerEvents="none"
         zIndex={0}
         overflow="hidden"
+        bg={isDisciplinaMode ? disciplinaBgColor : undefined}
       >
         <Box
           as="img"
@@ -486,15 +495,12 @@ export function ComicViewer({
             <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
               <Text
                 color={themeColor}
-                fontSize={{ base: "lg", md: "xl" }}
+                fontSize={{ base: "xl", md: "2xl" }}
                 lineHeight="1.9"
                 letterSpacing="0.02em"
                 textAlign={{ base: "center", md: "left" }}
                 fontWeight="400"
-                style={{
-                  textShadow:
-                    "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)",
-                }}
+                style={{ textShadow }}
               >
                 {fullText}
               </Text>

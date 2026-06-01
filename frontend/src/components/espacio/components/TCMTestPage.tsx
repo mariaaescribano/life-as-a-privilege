@@ -29,6 +29,7 @@ export interface TCMSeccion {
 }
 
  const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
+const TXT_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
 
 export interface TCMInterpretacion {
   nombre: string;
@@ -127,134 +128,6 @@ const ScaleBtn = ({
   </Flex>
 );
 
-const SeccionCard = ({
-  el,
-  respuestas,
-  scaleValues,
-  scaleLabels,
-  scaleMobileHint,
-  onAnswer,
-  monoColor = false,
-}: {
-  el: TCMSeccion;
-  respuestas: (number | null)[];
-  scaleValues: number[];
-  scaleLabels: string[];
-  scaleMobileHint: string;
-  onAnswer: (qi: number, val: number) => void;
-  monoColor?: boolean;
-}) => {
-  const maxPerQ = Math.max(...scaleValues);
-  const maxScore = el.preguntas.length * maxPerQ;
-  const total = respuestas.reduce((s: number, a) => s + (a ?? 0), 0);
-  const answered = respuestas.filter((a) => a !== null).length;
-  const complete = answered === el.preguntas.length;
-  const elTheme = getTheme(el.nombre);
-  const accent = monoColor ? tcmTxt : elTheme.accent;
-
-  return (
-    <Box
-      position="relative"
-      overflow="hidden"
-      w="100%"
-      maxW="850px"
-      boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-      border={`1px solid ${complete ? `${accent}55` : `${accent}1a`}`}
-      borderRadius="2xl"
-      mb={4}
-      transition="border-color 0.3s, box-shadow 0.3s"
-    >
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
-      <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
-      <Flex align="center" gap={3} mb={2}>
-        {!monoColor && (
-          <Box
-            w="36px"
-            h="36px"
-            borderRadius="full"
-            bg={elTheme.accent}
-            border={`1.5px solid ${elTheme.accent}88`}
-            boxShadow={`0 0 14px ${elTheme.accent}66, 0 0 4px ${elTheme.accent}44`}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            color={elTheme.bg}
-            flexShrink={0}
-          >
-            {elTheme.icon}
-          </Box>
-        )}
-        <Text
-          color={tcmTxt}
-          fontSize={{ base: "2xl", md: "3xl" }}
-          fontWeight="600"
-          letterSpacing="0.1em"
-          textShadow={`0 0 18px ${tcmTxt}33`}
-        >
-          {el.nombre}
-        </Text>
-      </Flex>
-
-      <Divider color={accent} />
-
-      <Flex direction="column" gap={7}>
-        {el.preguntas.map((pregunta, qi) => (
-          <Box key={qi}>
-            <Text
-              color="rgba(255,255,255,0.82)"
-              fontSize={{ base: "xl", md: "2xl" }}
-              letterSpacing="0.02em"
-              lineHeight="1.75"
-              mb={3}
-            >
-              {qi + 1}. {pregunta}
-            </Text>
-            <Flex gap={{ base: 3, md: 5 }} align="flex-start" flexWrap="wrap">
-              {scaleValues.map((v) => (
-                <ScaleBtn
-                  key={v}
-                  val={v}
-                  selected={respuestas[qi] === v}
-                  scaleLabels={scaleLabels}
-                  onClick={() => onAnswer(qi, v)}
-                  accent={accent}
-                />
-              ))}
-              <Box display={{ base: "flex", md: "none" }} alignItems="center" pl={1} pt={3}>
-                <Text color="rgba(255,255,255,0.25)" fontSize="15px" letterSpacing="0.04em" fontStyle="italic">
-                  {scaleMobileHint}
-                </Text>
-              </Box>
-            </Flex>
-          </Box>
-        ))}
-      </Flex>
-
-      <Divider color={accent} />
-
-      <Flex align="center" justify="space-between">
-        <Text color={`${accent}85`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
-          Suma {el.nombre}
-        </Text>
-        <Flex align="center" gap={2}>
-          <Text
-            color={complete ? accent : "rgba(255,255,255,0.22)"}
-            fontSize={{ base: "2xl", md: "3xl" }}
-            fontWeight="700"
-            letterSpacing="0.04em"
-            transition="color 0.3s"
-            textShadow={complete ? `0 0 12px ${accent}66` : "none"}
-          >
-            {total}
-          </Text>
-          <Text color="rgba(255,255,255,0.28)" fontSize="sm">/ {maxScore}</Text>
-        </Flex>
-      </Flex>
-      </Box>
-    </Box>
-  );
-};
-
 /* ══════════════════════════════════════════════
    PÁGINA
 ══════════════════════════════════════════════ */
@@ -285,6 +158,9 @@ export default function TCMTestPage({
   const [searchParams] = useSearchParams();
   const isGuest = searchParams.get("guest") === "true";
   const maxPerQ = Math.max(...scaleValues);
+  // Con 3 o menos etiquetas de escala caben las 3 en una sola línea; con más
+  // (tests de 4 niveles) dejamos que hagan wrap para no desbordar.
+  const oneLineScale = scaleLabels.length <= 3;
 
   const [answers, setAnswers] = useState<(number | null)[][]>(
     secciones.map((s) => s.preguntas.map(() => null))
@@ -395,6 +271,7 @@ export default function TCMTestPage({
             color={tcmTxt}
             nom={tcmNom}
             mb={{ base: 0, md: 0 }}
+            compact
             prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/medicinachina") }}
             next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
           />
@@ -411,7 +288,7 @@ export default function TCMTestPage({
             mb={4}
             mt="20px"
           >
-            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} blur imageSrc="/img/fondos/tcm-vertical.png" />
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} imageSrc="/img/fondos/tcm-vertical.png" />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
               <Text
                 color={tcmTxt}
@@ -420,6 +297,7 @@ export default function TCMTestPage({
                 letterSpacing="0.2em"
                 textTransform="uppercase"
                 mb={4}
+                textShadow={TXT_SHADOW}
               >
                 {instruccionesTitle}
               </Text>
@@ -428,23 +306,29 @@ export default function TCMTestPage({
                 fontSize={{ base: "lg", md: "xl" }}
                 lineHeight="1.9"
                 mb={5}
+                textShadow={TXT_SHADOW}
               >
                 {instruccionesText}
               </Text>
-              <Flex gap={{ base: 4, md: 8 }} flexWrap="wrap">
+              <Flex
+                gap={oneLineScale ? { base: 3, md: 5 } : { base: 4, md: 8 }}
+                flexWrap={oneLineScale ? "nowrap" : "wrap"}
+                justify="flex-start"
+              >
                 {scaleLabels.map((label, i) => (
-                  <Flex key={i} align="center" gap={2}>
+                  <Flex key={i} align="center" gap={{ base: 1.5, md: 2 }} flexShrink={oneLineScale ? 1 : 0} minW={0}>
                     <Box
-                      w="42px" h="42px" borderRadius="full"
+                      w={{ base: oneLineScale ? "30px" : "42px", md: "42px" }}
+                      h={{ base: oneLineScale ? "30px" : "42px", md: "42px" }}
+                      borderRadius="full"
                       border="1.5px solid rgba(218,113,113,0.45)"
                       display="flex" alignItems="center" justifyContent="center"
                       bg="rgba(255,255,255,0.10)"
                       flexShrink={0}
-                      sx={{ backdropFilter: "blur(8px)" }}
                     >
-                      <Text color={tcmTxt} fontSize="md" fontWeight="700">{i}</Text>
+                      <Text color={tcmTxt} fontSize={{ base: oneLineScale ? "sm" : "md", md: "md" }} fontWeight="700" textShadow={TXT_SHADOW}>{i}</Text>
                     </Box>
-                    <Text color={tcmTxt} fontSize={{ base: "lg", md: "xl" }}>
+                    <Text color={tcmTxt} fontSize={{ base: oneLineScale ? "sm" : "lg", md: "xl" }} whiteSpace="nowrap" textShadow={TXT_SHADOW}>
                       {label}
                     </Text>
                   </Flex>
@@ -457,6 +341,7 @@ export default function TCMTestPage({
                   fontStyle="italic"
                   mt={5}
                   letterSpacing="0.03em"
+                  textShadow={TXT_SHADOW}
                 >
                   {instruccionesNota}
                 </Text>
@@ -464,19 +349,48 @@ export default function TCMTestPage({
             </Box>
           </Box>
 
-          {/* ── SECCIONES ── */}
-          {secciones.map((sec, si) => (
-            <SeccionCard
-              key={si}
-              el={sec}
-              respuestas={answers[si]}
-              scaleValues={scaleValues}
-              scaleLabels={scaleLabels}
-              scaleMobileHint={scaleMobileHint}
-              onAnswer={(qi, val) => handleAnswer(si, qi, val)}
-              monoColor={monoColor}
-            />
-          ))}
+          {/* ── PREGUNTAS ──
+              Lista limpia y seguida, SIN agrupar en cajas ni mostrar el nombre
+              del patrón ni la suma en vivo (eso sesga las respuestas). El
+              cálculo por patrón se sigue haciendo por detrás con answers[si][qi]
+              y solo se revela en los resultados. */}
+          <Box w="100%" maxW="850px" mt="20px">
+            {secciones
+              .flatMap((sec, si) =>
+                sec.preguntas.map((pregunta, qi) => ({ si, qi, pregunta }))
+              )
+              .map(({ si, qi, pregunta }, idx) => (
+                <Box key={`${si}-${qi}`}>
+                  {idx > 0 && <Divider color={tcmTxt} />}
+                  <Text
+                    color="rgba(255,255,255,0.92)"
+                    fontSize={{ base: "xl", md: "2xl" }}
+                    letterSpacing="0.02em"
+                    lineHeight="1.75"
+                    mb={3}
+                  >
+                    {idx + 1}. {pregunta}
+                  </Text>
+                  <Flex gap={{ base: 3, md: 5 }} align="flex-start" flexWrap="wrap">
+                    {scaleValues.map((v) => (
+                      <ScaleBtn
+                        key={v}
+                        val={v}
+                        selected={answers[si][qi] === v}
+                        scaleLabels={scaleLabels}
+                        onClick={() => handleAnswer(si, qi, v)}
+                        accent={tcmTxt}
+                      />
+                    ))}
+                    <Box display={{ base: "flex", md: "none" }} alignItems="center" pl={1} pt={3}>
+                      <Text color="rgba(255,255,255,0.25)" fontSize="15px" letterSpacing="0.04em" fontStyle="italic">
+                        {scaleMobileHint}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Box>
+              ))}
+          </Box>
 
           {/* ── BOTÓN VER RESULTADOS ── */}
           <Box w="100%" maxW="850px" textAlign="center" mt={6}>
@@ -495,6 +409,8 @@ export default function TCMTestPage({
             <Box
               as="button"
               onClick={allAnswered ? handleShowResults : undefined}
+              position="relative"
+              overflow="hidden"
               px={{ base: 10, md: 14 }}
               py={{ base: 4, md: 5 }}
               borderRadius="full"
@@ -510,9 +426,15 @@ export default function TCMTestPage({
               transition="all 0.28s"
               boxShadow={allAnswered ? GLOW : "none"}
               transform={allAnswered ? "scale(1)" : "scale(0.97)"}
+              textShadow={allAnswered ? TXT_SHADOW : undefined}
               _hover={{}}
             >
-              Ver mis resultados
+              {allAnswered && (
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}77`} imageSrc="/img/fondos/tcm-vertical.png" />
+              )}
+              <Box as="span" position="relative" zIndex={1}>
+                Ver mis resultados
+              </Box>
             </Box>
           </Box>
 
@@ -892,35 +814,6 @@ export default function TCMTestPage({
                   </Box>
                 );
               })()}
-
-              {/* ── VOLVER (guest) ── */}
-              {isGuest && (
-                <Flex justify="center" mt={8}>
-                  <Box
-                    as="button"
-                    onClick={() => navigate("/aprendizaje/cursosModalidad/medicinachina")}
-                    display="flex"
-                    alignItems="center"
-                    gap={3}
-                    px={8}
-                    py={3}
-                    borderRadius="full"
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "lg", md: "xl" }}
-                    fontWeight="600"
-                    letterSpacing="0.08em"
-                    border={`1.5px solid ${tcmTxt}`}
-                    bg={tcmBg}
-                    color={tcmTxt}
-                    cursor="pointer"
-                    transition="all 0.22s"
-                    boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                    _hover={{ bg: `${tcmBg}dd` }}
-                  >
-                    ← Volver a Medicina China
-                  </Box>
-                </Flex>
-              )}
 
               {/* ── VOLVER A MI ESPACIO ── */}
               {backToSpaceLink && !isGuest && (

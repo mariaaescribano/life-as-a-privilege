@@ -259,7 +259,7 @@ export default function NuevosCursosPage() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Todos los cursos
+          Todos los vídeos
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
