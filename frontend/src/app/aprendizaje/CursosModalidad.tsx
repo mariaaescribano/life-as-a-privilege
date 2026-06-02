@@ -11,6 +11,7 @@ import { HinduismoIlustracionesModal } from "../../components/metodo/HinduismoIl
 import { TCMIlustracionesModal } from "../../components/metodo/TCMIlustracionesModal";
 import { ContactModal } from "../../components/global/ContactModal";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
+import { DisciplinaReels } from "../../components/global/DisciplinaReels";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
@@ -490,20 +491,14 @@ export default function CursosModalidad() {
                 </Box>
               ))}
             </SimpleGrid>
-          ) : (
-            <Text
-              color="white"
-              fontSize={{ base: "lg", md: "xl" }}
-              fontStyle="italic"
-              textAlign="center"
-              opacity={0.85}
-              mt={{ base: 4, md: 6 }}
-              mb={{ base: 6, md: 8 }}
-              style={{ textShadow: "0 0 14px rgba(255,255,255,0.35)" }}
-            >
-              Próximamente, cursos disponibles.
-            </Text>
-          )}
+          ) : null}
+
+          {/* ── REELS DE LA DISCIPLINA ── */}
+          <DisciplinaReels
+            moduloId={moduloId}
+            nom={modalidad.nom}
+            color={modalidad.color}
+          />
 
           <SubscribeBox />
         </Flex>

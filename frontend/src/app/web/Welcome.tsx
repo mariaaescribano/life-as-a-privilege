@@ -202,7 +202,7 @@ const Welcome = () => {
           transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
-          El Recorrido que buscabas para entenderte: tus patrones, tu historia y tus células.
+          El recorrido de 8 disciplinas para comprender tus patrones, tu historia y tus células.
         </Text>
       </Flex>
 

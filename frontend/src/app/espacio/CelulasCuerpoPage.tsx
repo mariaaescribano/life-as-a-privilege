@@ -43,12 +43,12 @@ function CelulaCard({ celula, onClick }: { celula: Celula; onClick: () => void }
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
 
       <Flex direction="column" position="relative" zIndex={1} p={{ base: 4, md: 5 }} gap={3} h="100%">
-        {/* Foto de la célula */}
+        {/* Foto de la célula — cuadrada 1:1 (como es la foto real) */}
         <Box
           borderRadius="lg"
           overflow="hidden"
           w="100%"
-          aspectRatio={4 / 3}
+          aspectRatio={1}
           bg={`${TXT}14`}
           boxShadow="0 4px 16px rgba(0,0,0,0.28)"
           flexShrink={0}

@@ -220,11 +220,16 @@ export function MetodoStepHeader({
               }
               fontWeight="700"
               letterSpacing="0.05em"
-              lineHeight="1.15"
+              lineHeight="1.3"
               textAlign="center"
               whiteSpace="nowrap"
               overflow="hidden"
               textOverflow="ellipsis"
+              // El rabito de la "g" (descendente) baja por debajo de la línea
+              // base; con overflow:hidden se recortaría. Este padding inferior
+              // entra dentro de la zona visible y deja espacio para que se vea
+              // entero (Fisiología, Astrología…).
+              pb="0.18em"
               style={{
                 textShadow: useDiscBg
                   ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
