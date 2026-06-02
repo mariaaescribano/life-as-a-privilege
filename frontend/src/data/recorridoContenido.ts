@@ -75,7 +75,7 @@ export const recorridoContenido: Record<
         ],
       },
       {
-        titulo: "Psicoterapia Breve",
+        titulo: "Acompañamiento inspirado en la Psicoterapia Breve",
         items: [
           "16 a 20 sesiones aproximádamente. No es una sesión al mes para desahogarte: es desarrollo intenso y focalizado.",
         ],

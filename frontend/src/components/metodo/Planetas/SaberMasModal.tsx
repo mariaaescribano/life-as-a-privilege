@@ -57,8 +57,8 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
     <Text
       key={pi}
       color={`${color}ee`}
-      fontSize={{ base: "sm", md: "md" }}
-      lineHeight="1.55"
+      fontSize={{ base: "md", md: "lg" }}
+      lineHeight="1.7"
       whiteSpace="pre-wrap"
       textAlign="center"
       mt={pi === 0 ? 0 : { base: 2.5, md: 3 }}

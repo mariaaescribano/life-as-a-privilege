@@ -108,6 +108,29 @@ const disciplines: Discipline[] = [
   },
 ];
 
+// ── Sombras de texto de los popups (mismo criterio que El Recorrido) ──
+// La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
+// TCM lleva sombra granate; Cábala, Fisiología y Cultura sombra negra.
+const SHADOW_BLACK = "0 0 3px rgba(0,0,0,1), 0 1px 5px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
+const SHADOW_GRANATE = "0 0 3px rgba(40,2,2,1), 0 1px 5px rgba(40,2,2,0.98), 0 2px 14px rgba(40,2,2,0.9), 0 0 24px rgba(40,2,2,0.78), 0 0 18px rgba(255,255,255,0.22)";
+
+const esOscuraNegra = (name: string) =>
+  name === fisiologiaNom || name === cabalaNom || name === culturaNom;
+
+const nameShadow = (d: Discipline) =>
+  d.name === tcmNom
+    ? SHADOW_GRANATE
+    : esOscuraNegra(d.name)
+    ? SHADOW_BLACK
+    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 16px ${d.bg}88, 0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.3)`;
+
+const descShadow = (d: Discipline) =>
+  d.name === tcmNom
+    ? SHADOW_GRANATE
+    : esOscuraNegra(d.name)
+    ? SHADOW_BLACK
+    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 14px ${d.bg}88, 0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)`;
+
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -594,7 +617,6 @@ const Welcome = () => {
           alignItems="center"
           justifyContent="center"
           bg="rgba(0,0,0,0.65)"
-          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
           onClick={() => setShowEspacioModal(false)}
           px={{ base: 5, md: 10 }}
         >
@@ -698,7 +720,6 @@ const Welcome = () => {
           alignItems="center"
           justifyContent="center"
           bg="rgba(0,0,0,0.6)"
-          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
           onClick={() => setSelected(null)}
           px={{ base: 5, md: 10 }}
         >
@@ -706,7 +727,6 @@ const Welcome = () => {
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
             bg={hasDisciplinaBg(selected.name) ? "transparent" : selected.bg + "e8"}
             border={`1.5px solid ${selected.txt}55`}
-            sx={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
             borderRadius="2xl"
             boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selected.txt}22`}
             maxW="560px"
@@ -715,7 +735,7 @@ const Welcome = () => {
             position="relative"
             overflow="hidden"
           >
-            {hasDisciplinaBg(selected.name) && <DisciplinaBgLayer nom={selected.name} borderRadius="2xl" blur />}
+            {hasDisciplinaBg(selected.name) && <DisciplinaBgLayer nom={selected.name} borderRadius="2xl" />}
             {/* X */}
             <Box
               position="absolute"
@@ -790,7 +810,7 @@ const Welcome = () => {
                 fontWeight="700"
                 letterSpacing="0.04em"
                 textAlign="center"
-                textShadow={`0 1px 3px ${selected.bg}f5, 0 0 8px ${selected.bg}cc, 0 2px 16px ${selected.bg}88, 0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.3)`}
+                textShadow={nameShadow(selected)}
               >
                 {selected.name}
               </Text>
@@ -805,7 +825,7 @@ const Welcome = () => {
                 lineHeight="1.9"
                 letterSpacing="0.02em"
                 opacity={0.82}
-                textShadow={`0 1px 3px ${selected.bg}f5, 0 0 8px ${selected.bg}cc, 0 2px 14px ${selected.bg}88, 0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)`}
+                textShadow={descShadow(selected)}
               >
                 {selected.desc}
               </Text>

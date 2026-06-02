@@ -349,7 +349,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Ocho disciplinas, un orden. De la autocompasión a la ciencia.
+          Ocho disciplinas. Un orden. Un propósito. De la autocompasión a la ciencia.
         </Text>
       </Flex>
 
