@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -53,6 +53,11 @@ export default function AyurvedaTestPage({
 
   const allAnswered = answers.every((a) => a !== null);
   const answered = answers.filter((a) => a !== null).length;
+
+  // Al mostrar el resultado, sube la ventana arriba para ver el primer texto.
+  useEffect(() => {
+    if (guestResult) window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [guestResult]);
 
   const handleSave = async () => {
     if (!allAnswered || saving) return;

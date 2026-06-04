@@ -5,6 +5,7 @@ import SiteFooter from "../../components/global/Footer";
 import { useNavigate } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
+import { TodosLosReels } from "../../components/global/DisciplinaReels";
 import {
   neuropsicologiaNom,
   astrologiaNom,
@@ -285,6 +286,9 @@ export default function NuevosCursosPage() {
         pb={{ base: 24, md: 32 }}
       >
         <Box ref={cardsReveal.ref} w="100%" maxW="1280px">
+          {/* ── REELS (vídeos verticales de todas las disciplinas) ── */}
+          <TodosLosReels />
+
           <SimpleGrid
             columns={{ base: 1, md: 2, xl: 3 }}
             spacing={{ base: 5, md: 5 }}

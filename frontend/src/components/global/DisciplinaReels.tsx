@@ -1,7 +1,50 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "./DisciplinaBgLayer";
-import { getReelsDisciplina, type ReelVideo } from "../../hardCoded/reels";
+import { getReelsDisciplina, reelsPorDisciplina, type ReelVideo } from "../../hardCoded/reels";
+import {
+  fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon,
+  neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon,
+  astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon,
+  tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon,
+  nutricionNom, nutricionNomLink, nutricionBg, nutricionTxt, NutricionIcon,
+  ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon,
+  cabalaNom, cabalaBg, cabalaTxt, CabalaIcon,
+  culturaNom, culturaNomLink, culturaBg, culturaTxt, CulturaIcon,
+  fitoterapiaNom, fitoterapiaBg, fitoterapiaTxt, FitoterapiaIcon,
+} from "../../GlobalVariables";
+
+/* ─── Metadatos por disciplina (color, fondo e icono) para los reels ─── */
+type DiscMeta = { nom: string; bgColor: string; color: string; icon: React.ReactNode };
+const ICONO = { base: "22px", md: "24px" };
+const DISCIPLINA_META: Record<string, DiscMeta> = {
+  [fisiologiaNom]:      { nom: fisiologiaNom,      bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={ICONO} /> },
+  [neuropsicologiaNom]: { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={ICONO} /> },
+  [astrologiaNom]:      { nom: astrologiaNom,      bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={ICONO} /> },
+  [tcmNomLink]:         { nom: tcmNom,             bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={ICONO} /> },
+  [nutricionNomLink]:   { nom: nutricionNom,       bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={ICONO} /> },
+  [ayurvedaNomLink]:    { nom: ayurvedaNom,        bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={ICONO} /> },
+  [cabalaNom]:          { nom: cabalaNom,          bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={ICONO} /> },
+  [culturaNom]:         { nom: culturaNom,         bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={ICONO} /> },
+  [culturaNomLink]:     { nom: culturaNom,         bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={ICONO} /> },
+  [fitoterapiaNom]:     { nom: fitoterapiaNom,     bgColor: fitoterapiaBg,     color: fitoterapiaTxt,     icon: <FitoterapiaIcon size={ICONO} color={fitoterapiaTxt} /> },
+};
+
+/** Todos los reels de todas las disciplinas, con sus metadatos (color/icono/fondo). */
+export function getAllReelsConDisciplina(): { reel: ReelVideo; meta: DiscMeta }[] {
+  const seen = new Set<string>();
+  const out: { reel: ReelVideo; meta: DiscMeta }[] = [];
+  for (const key of Object.keys(reelsPorDisciplina)) {
+    const meta = DISCIPLINA_META[key];
+    if (!meta) continue;
+    for (const reel of reelsPorDisciplina[key]) {
+      if (seen.has(reel.id)) continue; // evita duplicados (p.ej. alias de Cultura)
+      seen.add(reel.id);
+      out.push({ reel, meta });
+    }
+  }
+  return out;
+}
 
 /* ════════════════════════════════════════════════════════════════
    DISCIPLINA REELS
@@ -78,11 +121,14 @@ function ReelCard({
   reel,
   nom,
   color,
+  icon,
   onOpen,
 }: {
   reel: ReelVideo;
   nom: string;
   color: string;
+  /** Icono de la disciplina, a la izquierda del título (página "Todos los vídeos"). */
+  icon?: React.ReactNode;
   onOpen: () => void;
 }) {
   return (
@@ -124,20 +170,52 @@ function ReelCard({
           <ReelPortada reel={reel} color={color} />
         </Box>
 
-        {/* Título — altura fija de 2 líneas para que todas las tarjetas midan igual */}
-        <Text
-          color={color}
-          fontWeight="700"
-          fontSize={{ base: "sm", md: "md" }}
-          textAlign="center"
-          lineHeight="1.3"
-          letterSpacing="0.02em"
-          noOfLines={2}
-          minH="2.6em"
-          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.45)" }}
-        >
-          {reel.titulo}
-        </Text>
+        {/* Título — altura fija de 2 líneas para que todas las tarjetas midan igual.
+            Con icono: icono de la disciplina a la izquierda del título. */}
+        {icon ? (
+          <Flex align="center" gap={2.5} minH="2.6em">
+            <Flex
+              flexShrink={0}
+              w={{ base: "34px", md: "40px" }}
+              h={{ base: "34px", md: "40px" }}
+              borderRadius="full"
+              align="center"
+              justify="center"
+              bg={`${color}1c`}
+              border={`1.5px solid ${color}88`}
+              boxShadow={`0 0 10px ${color}44`}
+            >
+              {icon}
+            </Flex>
+            <Text
+              color={color}
+              fontWeight="700"
+              fontSize={{ base: "sm", md: "md" }}
+              lineHeight="1.25"
+              letterSpacing="0.02em"
+              noOfLines={2}
+              flex={1}
+              minW={0}
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.45)" }}
+            >
+              {reel.titulo}
+            </Text>
+          </Flex>
+        ) : (
+          <Text
+            color={color}
+            fontWeight="700"
+            fontSize={{ base: "sm", md: "md" }}
+            textAlign="center"
+            lineHeight="1.3"
+            letterSpacing="0.02em"
+            noOfLines={2}
+            minH="2.6em"
+            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.45)" }}
+          >
+            {reel.titulo}
+          </Text>
+        )}
 
         {/* Ver vídeo → */}
         <Flex
@@ -343,6 +421,39 @@ export function DisciplinaReels({
 
       {openReel && (
         <ReelModal reel={openReel} color={color} onClose={() => setOpenReel(null)} />
+      )}
+    </Box>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TODOS LOS REELS — para /aprendizaje/nuevosCursos
+   Cada box mantiene el color de su disciplina y muestra su icono a la
+   izquierda del título.
+═══════════════════════════════════════════════════════════════════ */
+export function TodosLosReels() {
+  const items = getAllReelsConDisciplina();
+  const [open, setOpen] = useState<{ reel: ReelVideo; color: string } | null>(null);
+
+  if (items.length === 0) return null;
+
+  return (
+    <Box w="100%" fontFamily="'EB Garamond', serif">
+      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
+        {items.map(({ reel, meta }) => (
+          <ReelCard
+            key={reel.id}
+            reel={reel}
+            nom={meta.nom}
+            color={meta.color}
+            icon={meta.icon}
+            onOpen={() => setOpen({ reel, color: meta.color })}
+          />
+        ))}
+      </SimpleGrid>
+
+      {open && (
+        <ReelModal reel={open.reel} color={open.color} onClose={() => setOpen(null)} />
       )}
     </Box>
   );

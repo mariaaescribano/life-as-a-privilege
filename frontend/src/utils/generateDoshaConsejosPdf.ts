@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
 import type { DoshaRecs } from "../hardCoded/espacio/DoshaConsejos";
 
 const HEADER_COLOR: [number, number, number] = [0, 128, 128];
@@ -30,6 +31,7 @@ function splitLines(doc: jsPDF, text: string, maxWidth: number): string[] {
 
 export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  registerEbGaramond(doc);
   const pageH = doc.internal.pageSize.getHeight();
   const doshaColor = DOSHA_COLORS[dosha] ?? TEXT_COLOR;
   const doshaLabel = dosha.charAt(0).toUpperCase() + dosha.slice(1);
@@ -41,7 +43,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   };
 
   const drawPageNum = (p: number) => {
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(8);
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
@@ -50,11 +52,11 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   const drawHeader = () => {
     doc.setFillColor(...HEADER_COLOR);
     doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(10);
     doc.setTextColor(255, 255, 255);
     doc.text("Life as a Privilege  \u00b7  Ayurveda", MARGIN, 10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(236, 213, 237);
     doc.text(sanitize("Consejos personalizados"), MARGIN, 17);
@@ -78,7 +80,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   y = 30;
 
   /* Title */
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(18);
   doc.setTextColor(...TEXT_COLOR);
   doc.text(sanitize("Tus consejos personalizados"), MARGIN, y);
@@ -89,11 +91,11 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   doc.setDrawColor(...doshaColor);
   doc.setLineWidth(0.5);
   doc.roundedRect(MARGIN, y - 4, CONTENT_W, 12, 2, 2, "S");
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
   doc.text("Tu Dosha:", MARGIN + 4, y + 3);
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(13);
   doc.setTextColor(...doshaColor);
   doc.text(doshaLabel, MARGIN + 26, y + 3);
@@ -106,7 +108,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   doc.setDrawColor(...doshaColor);
   doc.setLineWidth(0.4);
   doc.roundedRect(MARGIN, y - 2, CONTENT_W, descH, 3, 3, "S");
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9.5);
   doc.setTextColor(...TEXT_COLOR);
   y += 5;
@@ -129,7 +131,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
     if (!items || !Array.isArray(items) || items.length === 0) continue;
 
     ensureSpace(12);
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(13);
     doc.setTextColor(...SECTION_COLOR);
     doc.text(sanitize(cat.label), MARGIN, y);
@@ -142,7 +144,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
     for (const item of items) {
       const lines = splitLines(doc, item, CONTENT_W - 8);
       ensureSpace(lines.length * 5 + 4);
-      doc.setFont("helvetica", "normal");
+      doc.setFont(GARAMOND, "normal");
       doc.setFontSize(9.5);
       doc.setTextColor(...TEXT_COLOR);
 

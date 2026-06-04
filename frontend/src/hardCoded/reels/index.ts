@@ -1,4 +1,9 @@
-import { fisiologiaNom } from "../../GlobalVariables";
+import {
+  fisiologiaNom,
+  ayurvedaNomLink,
+  astrologiaNom,
+  neuropsicologiaNom,
+} from "../../GlobalVariables";
 
 /* ─────────────────────────────────────────────────────────────
    REELS POR DISCIPLINA
@@ -36,6 +41,30 @@ export const reelsPorDisciplina: Record<string, ReelVideo[]> = {
       titulo: "Correr = Antidepresivos",
       portada: "/miniaturas/fisio/portadacorrer.png",
       embedUrl: "https://www.youtube.com/embed/_cW744qC1UY",
+    },
+  ],
+  [ayurvedaNomLink]: [
+    {
+      id: "ayur-introduccion",
+      titulo: "Ayurveda introducción",
+      portada: "/miniaturas/hinduismo/ayurveda.png",
+      embedUrl: "https://www.youtube.com/embed/iVLveGXr1Pw",
+    },
+  ],
+  [astrologiaNom]: [
+    {
+      id: "astro-heridas",
+      titulo: "Tus heridas",
+      portada: "/miniaturas/astro/heridas.png",
+      embedUrl: "https://www.youtube.com/embed/3nyN4gX4q04",
+    },
+  ],
+  [neuropsicologiaNom]: [
+    {
+      id: "psico-procrastinar",
+      titulo: "Deja de procrastinar",
+      portada: "/miniaturas/psicologia/procrastinar.png",
+      embedUrl: "https://www.youtube.com/embed/8_KZn3ca8io",
     },
   ],
 };

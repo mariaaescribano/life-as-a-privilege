@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
 
 /* ══════════════════════════════════════════════
    TYPES
@@ -101,6 +102,7 @@ export function generateTcmPdf(
   if (!testInfo) return;
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  registerEbGaramond(doc);
   const pageH = doc.internal.pageSize.getHeight();
   let page = 1;
 
@@ -112,7 +114,7 @@ export function generateTcmPdf(
 
   /* ── draw page number ── */
   const drawPageNum = (p: number) => {
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(8);
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
@@ -122,11 +124,11 @@ export function generateTcmPdf(
   const drawHeader = () => {
     doc.setFillColor(...HEADER_COLOR);
     doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(10);
     doc.setTextColor(255, 255, 255);
     doc.text("Life as a Privilege  ·  TCM", MARGIN, 10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(220, 240, 240);
     doc.text(sanitize(testInfo.title), MARGIN, 17);
@@ -151,7 +153,7 @@ export function generateTcmPdf(
   y = 30;
 
   /* ── test title ── */
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(16);
   doc.setTextColor(...TEXT_COLOR);
   const titleLines = splitLines(doc, testInfo.title, CONTENT_W);
@@ -170,11 +172,11 @@ export function generateTcmPdf(
     doc.setDrawColor(...HEADER_COLOR);
     doc.setLineWidth(0.4);
     doc.roundedRect(MARGIN, y - 4, CONTENT_W, 11, 2, 2, "S");
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(...MUTED_COLOR);
     doc.text("Resultado predominante:", MARGIN + 3, y + 2);
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(11);
     doc.setTextColor(...CHOSEN_COLOR);
     doc.text(sanitize(resultado), MARGIN + 52, y + 2);
@@ -192,13 +194,13 @@ export function generateTcmPdf(
     doc.setLineWidth(0.5);
     doc.roundedRect(MARGIN, y - 2, CONTENT_W, boxH, 3, 3, "S");
     // title
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(11);
     doc.setTextColor(...CHOSEN_COLOR);
     doc.text(sanitize("Tu consejo personalizado"), MARGIN + 6, y + 6);
     y += 14;
     // body
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(10);
     doc.setTextColor(...TEXT_COLOR);
     consejoLines.forEach((line) => {
@@ -229,7 +231,7 @@ export function generateTcmPdf(
   for (const sec of sections) {
     /* ── section header ── */
     ensureSpace(10);
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(12);
     doc.setTextColor(...SECTION_COLOR);
     const secLines = splitLines(doc, sec.nombre, CONTENT_W);
@@ -253,7 +255,7 @@ export function generateTcmPdf(
 
     for (const item of sorted) {
       /* question text */
-      doc.setFont("helvetica", "bold");
+      doc.setFont(GARAMOND, "bold");
       doc.setFontSize(9);
       doc.setTextColor(...TEXT_COLOR);
       const qText = `${item.pregunta_idx + 1}. ${item.pregunta}`;
@@ -288,7 +290,7 @@ export function generateTcmPdf(
         }
 
         // Draw label
-        doc.setFont("helvetica", chosen ? "bold" : "normal");
+        doc.setFont(GARAMOND, chosen ? "bold" : "normal");
         doc.setFontSize(9);
         doc.setTextColor(chosen ? CHOSEN_COLOR[0] : MUTED_COLOR[0], chosen ? CHOSEN_COLOR[1] : MUTED_COLOR[1], chosen ? CHOSEN_COLOR[2] : MUTED_COLOR[2]);
 
@@ -324,6 +326,7 @@ export function generateTcmConsejosPdf(
   if (!testInfo) return;
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  registerEbGaramond(doc);
   const pageH = doc.internal.pageSize.getHeight();
   let page = 1;
 
@@ -333,7 +336,7 @@ export function generateTcmConsejosPdf(
   };
 
   const drawPageNum = (p: number) => {
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(8);
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
@@ -342,11 +345,11 @@ export function generateTcmConsejosPdf(
   const drawHeader = () => {
     doc.setFillColor(...HEADER_COLOR);
     doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(10);
     doc.setTextColor(255, 255, 255);
     doc.text("Life as a Privilege  ·  TCM", MARGIN, 10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(220, 240, 240);
     doc.text(sanitize("Consejos personalizados"), MARGIN, 17);
@@ -370,7 +373,7 @@ export function generateTcmConsejosPdf(
   y = 30;
 
   /* ── title ── */
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(16);
   doc.setTextColor(...TEXT_COLOR);
   const titleLines = splitLines(doc, "Tus consejos personalizados", CONTENT_W);
@@ -385,11 +388,11 @@ export function generateTcmConsejosPdf(
   doc.setDrawColor(...HEADER_COLOR);
   doc.setLineWidth(0.4);
   doc.roundedRect(MARGIN, y - 4, CONTENT_W, 11, 2, 2, "S");
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
   doc.text("Resultado predominante:", MARGIN + 3, y + 2);
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(11);
   doc.setTextColor(...CHOSEN_COLOR);
   doc.text(sanitize(resultado), MARGIN + 52, y + 2);
@@ -403,7 +406,7 @@ export function generateTcmConsejosPdf(
     doc.setDrawColor(...HEADER_COLOR);
     doc.setLineWidth(0.4);
     doc.roundedRect(MARGIN, y - 2, CONTENT_W, boxH, 3, 3, "S");
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9.5);
     doc.setTextColor(...TEXT_COLOR);
     y += 6;
@@ -428,7 +431,7 @@ export function generateTcmConsejosPdf(
 
     /* section title */
     ensureSpace(12);
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(13);
     doc.setTextColor(...SECTION_COLOR);
     doc.text(sanitize(cat.label), MARGIN, y);
@@ -442,7 +445,7 @@ export function generateTcmConsejosPdf(
     for (const item of items) {
       const lines = splitLines(doc, item, CONTENT_W - 8);
       ensureSpace(lines.length * 5 + 4);
-      doc.setFont("helvetica", "normal");
+      doc.setFont(GARAMOND, "normal");
       doc.setFontSize(9.5);
       doc.setTextColor(...TEXT_COLOR);
 

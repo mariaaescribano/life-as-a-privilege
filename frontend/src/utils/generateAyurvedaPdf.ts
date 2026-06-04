@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
 
 /* ──────────────────────────────────────────────
    TYPES
@@ -86,6 +87,7 @@ export async function generateAyurvedaPdf(
   }
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  registerEbGaramond(doc);
   const pageH = doc.internal.pageSize.getHeight();
   let page = 1;
 
@@ -95,7 +97,7 @@ export async function generateAyurvedaPdf(
   };
 
   const drawPageNum = (p: number) => {
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(8);
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
@@ -104,11 +106,11 @@ export async function generateAyurvedaPdf(
   const drawHeader = () => {
     doc.setFillColor(...HEADER_BG);
     doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(10);
     doc.setTextColor(255, 255, 255);
     doc.text("Life as a Privilege  \u00b7  Ayurveda", MARGIN, 10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(236, 213, 237);
     doc.text("Descubre tu Dosha", MARGIN, 17);
@@ -132,7 +134,7 @@ export async function generateAyurvedaPdf(
   y = 30;
 
   /* Title */
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(16);
   doc.setTextColor(...TEXT_COLOR);
   doc.text("Descubre tu Dosha", MARGIN, y);
@@ -144,13 +146,13 @@ export async function generateAyurvedaPdf(
   doc.setLineWidth(0.5);
   doc.roundedRect(MARGIN, y - 4, CONTENT_W, 14, 2, 2, "S");
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
   doc.text("Dosha predominante:", MARGIN + 3, y + 3);
 
   const resColor = DOSHA_COLOR[resultado.toLowerCase()] ?? TEXT_COLOR;
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(13);
   doc.setTextColor(...resColor);
   doc.text(resultado.charAt(0).toUpperCase() + resultado.slice(1), MARGIN + 48, y + 3);
@@ -170,11 +172,11 @@ export async function generateAyurvedaPdf(
     if (doshaIcons[dosha]) {
       doc.addImage(doshaIcons[dosha], "PNG", MARGIN, y - ICON_MM + 0.5, ICON_MM, ICON_MM);
     }
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(9);
     doc.setTextColor(...color);
     doc.text(`${label}`, MARGIN + ICON_MM + 1.5, y);
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${count}`, PAGE_W - MARGIN, y, { align: "right" });
 
@@ -212,7 +214,7 @@ export async function generateAyurvedaPdf(
     const blockH = qLines.length * 5 + OPTIONS_ORDER.length * 5.5 + 5;
     ensureSpace(blockH);
 
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(9);
     doc.setTextColor(...TEXT_COLOR);
     qLines.forEach((line) => {
@@ -238,7 +240,7 @@ export async function generateAyurvedaPdf(
         doc.circle(circleX, cy, circleR, "S");
       }
 
-      doc.setFont("helvetica", chosen ? "bold" : "normal");
+      doc.setFont(GARAMOND, chosen ? "bold" : "normal");
       doc.setFontSize(9);
       const tc = chosen ? color : MUTED_COLOR;
       doc.setTextColor(...tc);

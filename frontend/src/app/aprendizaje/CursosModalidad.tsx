@@ -15,7 +15,7 @@ import { DisciplinaReels } from "../../components/global/DisciplinaReels";
 import { useNavigate, useParams } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
-import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon } from "../../GlobalVariables";
+import { nutricionNomLink, NutricionIcon, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -33,6 +33,7 @@ const FALLBACK_MODALIDADES: Record<string, Omit<ModalidadInfo, "cursos">> = {
   [ayurvedaNomLink]: { nom: ayurvedaNom,   bgColor: ayurvedaBg,   color: ayurvedaTxt,   icon: <AyurvedaIcon size={{ base: "40px", md: "56px" }} /> },
   [tcmNomLink]:      { nom: tcmNom,        bgColor: tcmBg,        color: tcmTxt,        icon: <TCMIcon size={{ base: "40px", md: "56px" }} /> },
   [fisiologiaNom]:   { nom: fisiologiaNom, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size={{ base: "40px", md: "56px" }} /> },
+  [neuropsicologiaNom]: { nom: neuropsicologiaNom, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} /> },
 };
 
 // Iconos pequeños (16-18px) para los botones dentro del header de la disciplina.

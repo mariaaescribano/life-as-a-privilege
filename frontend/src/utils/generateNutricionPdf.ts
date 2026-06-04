@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
 
 interface NutricionResult {
   tdee: number;
@@ -30,6 +31,7 @@ function sanitize(text: string): string {
 
 export function generateNutricionPdf(result: NutricionResult, input: NutricionInput): void {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  registerEbGaramond(doc);
   const pageH = doc.internal.pageSize.getHeight();
 
   // Background
@@ -39,11 +41,11 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
   // Header bar
   doc.setFillColor(...HEADER_COLOR);
   doc.rect(0, 0, PAGE_W, 22, "F");
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(10);
   doc.setTextColor(255, 255, 255);
   doc.text("Life as a Privilege  ·  Nutrición", MARGIN, 10);
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(220, 240, 240);
   doc.text(sanitize("Tus necesidades nutricionales"), MARGIN, 17);
@@ -51,14 +53,14 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
   let y = 34;
 
   // Title
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(18);
   doc.setTextColor(...TEXT_COLOR);
   doc.text(sanitize("Tus necesidades nutricionales"), MARGIN, y);
   y += 10;
 
   // Date
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
   doc.text(new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" }), MARGIN, y);
@@ -69,12 +71,12 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
   doc.setLineWidth(0.4);
   doc.roundedRect(MARGIN, y - 3, CONTENT_W, 32, 3, 3, "S");
 
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(10);
   doc.setTextColor(...ACCENT);
   doc.text("Datos personales", MARGIN + 5, y + 4);
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9.5);
   doc.setTextColor(...TEXT_COLOR);
   const col1 = MARGIN + 5;
@@ -94,17 +96,17 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
   doc.setLineWidth(0.5);
   doc.roundedRect(MARGIN, y - 3, CONTENT_W, 28, 3, 3, "S");
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
   doc.text(sanitize("CALORÍAS DIARIAS ESTIMADAS"), PAGE_W / 2, y + 4, { align: "center" });
 
-  doc.setFont("helvetica", "bold");
+  doc.setFont(GARAMOND, "bold");
   doc.setFontSize(28);
   doc.setTextColor(...ACCENT);
   doc.text(`${result.tdee.toLocaleString()}`, PAGE_W / 2, y + 17, { align: "center" });
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(11);
   doc.setTextColor(...MUTED_COLOR);
   doc.text("kcal / día", PAGE_W / 2, y + 23, { align: "center" });
@@ -122,22 +124,22 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
     doc.setLineWidth(0.3);
     doc.roundedRect(MARGIN, y - 3, CONTENT_W, 18, 3, 3, "S");
 
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(12);
     doc.setTextColor(...TEXT_COLOR);
     doc.text(sanitize(macro.label), MARGIN + 5, y + 5);
 
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(10);
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${macro.pct}%`, MARGIN + 5, y + 12);
 
-    doc.setFont("helvetica", "bold");
+    doc.setFont(GARAMOND, "bold");
     doc.setFontSize(14);
     doc.setTextColor(...ACCENT);
     doc.text(`${macro.g} g`, PAGE_W - MARGIN - 5, y + 5, { align: "right" });
 
-    doc.setFont("helvetica", "normal");
+    doc.setFont(GARAMOND, "normal");
     doc.setFontSize(10);
     doc.setTextColor(...MUTED_COLOR);
     doc.text(`${macro.kcal} kcal`, PAGE_W - MARGIN - 5, y + 12, { align: "right" });
@@ -147,7 +149,7 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
 
   // Disclaimer
   y += 4;
-  doc.setFont("helvetica", "italic");
+  doc.setFont(GARAMOND, "italic");
   doc.setFontSize(8);
   doc.setTextColor(...MUTED_COLOR);
   const disclaimer = doc.splitTextToSize(
@@ -160,7 +162,7 @@ export function generateNutricionPdf(result: NutricionResult, input: NutricionIn
   });
 
   // Page number
-  doc.setFont("helvetica", "normal");
+  doc.setFont(GARAMOND, "normal");
   doc.setFontSize(8);
   doc.setTextColor(...MUTED_COLOR);
   doc.text("1", PAGE_W / 2, pageH - 6, { align: "center" });
