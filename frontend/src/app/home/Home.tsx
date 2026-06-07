@@ -130,32 +130,31 @@ const Home = () => {
     }
   };
 
-  /* TEST PAGO — START (comentado: reactivar más tarde) */
-  // const pagarMetodoTest = async () => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //     navigate("/welcome");
-  //     return;
-  //   }
-  //   setPagoLoading(true);
-  //   setPagoError(null);
-  //   try {
-  //     await axios.post(
-  //       `${API_URL}/payment/metodo/test`,
-  //       {},
-  //       { headers: { Authorization: `Bearer ${token}` } },
-  //     );
-  //     setMetodoSuscrito(true);
-  //     setPagoOpen(false);
-  //     setPagoExitoOpen(true);
-  //   } catch (err: any) {
-  //     console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
-  //     setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
-  //   } finally {
-  //     setPagoLoading(false);
-  //   }
-  // };
-  /* TEST PAGO — END */
+  /* TEST PAGO — marca suscrito sin pasar por Stripe (para pruebas) */
+  const pagarMetodoTest = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      navigate("/welcome");
+      return;
+    }
+    setPagoLoading(true);
+    setPagoError(null);
+    try {
+      await axios.post(
+        `${API_URL}/payment/metodo/test`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setMetodoSuscrito(true);
+      setPagoOpen(false);
+      setPagoExitoOpen(true);
+    } catch (err: any) {
+      console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
+      setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
+    } finally {
+      setPagoLoading(false);
+    }
+  };
 
   const radius        = useBreakpointValue({ base: 125, sm: 155, md: 220, lg: 280, xl: 320 });
   const containerSize = useBreakpointValue({ base: "320px", sm: "400px", md: "560px", lg: "700px", xl: "800px" });
@@ -587,9 +586,7 @@ const Home = () => {
         isOpen={pagoOpen}
         onClose={() => { setPagoOpen(false); setPagoError(null); }}
         onPagar={pagarMetodo}
-        /* TEST PAGO — START (comentado: reactivar más tarde) */
-        /* onPagoTest={pagarMetodoTest} */
-        /* TEST PAGO — END */
+        onPagoTest={pagarMetodoTest}
         loading={pagoLoading}
         error={pagoError}
       />

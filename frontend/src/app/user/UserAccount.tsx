@@ -48,6 +48,7 @@ export default function UserAccount() {
   const [email, setEmail] = useState("");
   const [contra, setContra] = useState("");
 
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -68,6 +69,7 @@ export default function UserAccount() {
       .then(u => {
         setName(u.name ?? "");
         setEmail(u.email ?? "");
+        setIsAdmin(!!u.is_admin);
         initialRef.current = { name: u.name ?? "", email: u.email ?? "" };
       })
       .catch(() => setError("Error al cargar los datos"))
@@ -376,6 +378,25 @@ export default function UserAccount() {
 
           {/* Acciones secundarias */}
           <Flex direction="column" align="center" gap={3} pt={6}>
+            {isAdmin && (
+              <Text
+                as="button"
+                onClick={() => navigate("/admin")}
+                color={turquesa}
+                fontSize="sm"
+                fontWeight="600"
+                letterSpacing="0.1em"
+                textTransform="uppercase"
+                bg="transparent"
+                cursor="pointer"
+                mb={2}
+                style={{ textShadow: `0 0 10px ${turquesa}88, 0 0 22px ${turquesa}44` }}
+                _hover={{ color: "white", textShadow: `0 0 14px ${turquesa}, 0 0 28px ${turquesa}88` }}
+                transition="all 0.22s ease"
+              >
+                Panel de administración
+              </Text>
+            )}
             <Text
               as="button"
               onClick={handleLogout}

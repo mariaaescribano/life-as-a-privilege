@@ -2,6 +2,8 @@ import { Controller, Get, Post, Patch, Body, Param, Delete, UseGuards, Req } fro
 import { UserService } from './user.service';
 import type { CreateUser, LoginUser, UpdateUser } from "../dtos/user.types";
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { AdminGuard } from '../auth/admin.guard';
+import { isAdminEmail } from '../auth/admin.util';
 
 // #region user
 @Controller('user')
@@ -21,7 +23,16 @@ export class UserController {
   @Get("me")
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: any) {
-    return await this.usersService.getUserById(req.user.userId);
+    const user = await this.usersService.getUserById(req.user.userId);
+    // is_admin se deriva del email contra ADMIN_EMAILS (no es columna de BD).
+    return { ...user, is_admin: isAdminEmail(req.user?.email) };
+  }
+
+  // Usuarios del recorrido para el panel admin (antes de :id para no colisionar)
+  @Get("admin/recorrido")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async getRecorrido() {
+    return await this.usersService.getRecorridoUsers();
   }
 
   @Get(":id")

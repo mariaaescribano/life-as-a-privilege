@@ -62,12 +62,11 @@ export class PaymentService {
     return { ok: true as const };
   }
 
-  /* TEST PAGO — START (comentado: reactivar más tarde)
+  /* TEST PAGO — marca suscrito sin pasar por Stripe (para pruebas) */
   async testMarcarPagado(userId: string) {
     await this.userService.marcarSuscritoMetodo(userId);
     return { ok: true as const };
   }
-  TEST PAGO — END */
 
   async createLibroCheckout(libroId: string) {
     const libro = findLibroPago(libroId);

@@ -100,7 +100,7 @@ export default function MetodoPsicologia() {
           color={neuropsicologiaTxt}
           nom={neuropsicologiaNom}
           mb={0}
-          prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/planetas") }}
+          prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/aspectos") }}
           next={{
             label: todoCompletado ? "Continuar a Hinduismo →" : "Completa primero tu cronología",
             onClick: () => navigate("/metodo/hinduismo"),

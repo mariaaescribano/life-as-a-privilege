@@ -135,8 +135,8 @@ export default function MetodoAstrologiaCartaAstral() {
   }
 
   const headerNext = {
-    label: "Psicología →",
-    onClick: () => navigate("/metodo/psicologia"),
+    label: "Mi carta (PDF) →",
+    onClick: () => navigate("/metodo/astrologia/lectura"),
     disabled: !todoCompletado,
     disabledTooltip: "Lee todos los planetas antes de continuar",
   };
@@ -166,7 +166,7 @@ export default function MetodoAstrologiaCartaAstral() {
             color={astrologiaTxt}
             space
             mb={0}
-            prev={{ label: "← Mi carta", onClick: () => navigate("/metodo/astrologia") }}
+            prev={{ label: "← Sol, Luna y Asc.", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={headerNext}
           />

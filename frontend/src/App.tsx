@@ -31,6 +31,14 @@ import MetodoAstrologia from "./app/metodo/MetodoAstrologia";
 import MetodoAstrologiaCartaAstral from "./app/metodo/MetodoAstrologiaCartaAstral";
 import MetodoAstrologiaPlanetas from "./app/metodo/MetodoAstrologiaPlanetas";
 import MetodoAstrologiaProfundizar from "./app/metodo/MetodoAstrologiaProfundizar";
+import MetodoAstrologiaSolAscLuna from "./app/metodo/MetodoAstrologiaSolAscLuna";
+import MetodoAstrologiaLectura from "./app/metodo/MetodoAstrologiaLectura";
+import MetodoAstrologiaCasas from "./app/metodo/MetodoAstrologiaCasas";
+import MetodoAstrologiaAspectos from "./app/metodo/MetodoAstrologiaAspectos";
+import AdminHome from "./app/admin/AdminHome";
+import AdminUsuarios from "./app/admin/AdminUsuarios";
+import AdminAstrologiaEditor from "./app/admin/AdminAstrologiaEditor";
+import AdminEditorPlaceholder from "./app/admin/AdminEditorPlaceholder";
 import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
 import MetodoPsicologiaEtapa from "./app/metodo/MetodoPsicologiaEtapa";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
@@ -85,9 +93,17 @@ export default function App()
       <Route path="/materiales" element={<MaterialesGratuitos />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/solascendenteluna" element={<PrivateRoute><MetodoAstrologiaSolAscLuna /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/lectura" element={<PrivateRoute><MetodoAstrologiaLectura /></PrivateRoute>} />
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
+      <Route path="/admin" element={<PrivateRoute><AdminHome /></PrivateRoute>} />
+      <Route path="/admin/astrologia/:userId" element={<PrivateRoute><AdminAstrologiaEditor /></PrivateRoute>} />
+      <Route path="/admin/:disciplina/:userId" element={<PrivateRoute><AdminEditorPlaceholder /></PrivateRoute>} />
+      <Route path="/admin/:disciplina" element={<PrivateRoute><AdminUsuarios /></PrivateRoute>} />
       <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:etapaKey" element={<PrivateRoute><MetodoPsicologiaEtapa /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />

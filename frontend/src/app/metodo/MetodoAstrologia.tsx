@@ -67,18 +67,6 @@ interface Estado {
   link_carta?: string | null;
 }
 
-// Convierte un link de "compartir" de Google Drive a URL de descarga directa.
-// Si ya es una URL de descarga o no es de Drive, la devuelve tal cual.
-function toDriveDownload(url: string): string {
-  if (!url) return url;
-  // 1) https://drive.google.com/file/d/{ID}/view?...
-  const m1 = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (m1) return `https://drive.google.com/uc?export=download&id=${m1[1]}`;
-  // 2) https://drive.google.com/open?id={ID}
-  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (m2 && /drive\.google\.com/.test(url)) return `https://drive.google.com/uc?export=download&id=${m2[1]}`;
-  return url;
-}
 
 export default function MetodoAstrologia() {
   const navigate = useNavigate();
@@ -97,6 +85,10 @@ export default function MetodoAstrologia() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comicAstroOpen, setComicAstroOpen] = useState(false);
+
+  // Popup de confirmación de datos antes de enviar la solicitud
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [popupError, setPopupError] = useState<string | null>(null);
 
   const MESES = [
     { num: "01", nombre: "Enero" },
@@ -134,35 +126,39 @@ export default function MetodoAstrologia() {
     })();
   }, []);
 
-  const enviarSolicitud = async () => {
+  // Valida los campos y devuelve la fecha YYYY-MM-DD, o null si hay error (lo deja en `error`).
+  const validarFecha = (): string | null => {
     setError(null);
     if (!dia || !mes || !anio || !hora || !pais.trim() || !lugar.trim() || !region.trim()) {
       setError("Rellena todos los campos para continuar.");
-      return;
+      return null;
     }
     const diaN = parseInt(dia, 10);
     const mesN = parseInt(mes, 10);
     const anioN = parseInt(anio, 10);
-    if (!Number.isFinite(diaN) || diaN < 1 || diaN > 31) {
-      setError("Día inválido (1-31).");
-      return;
-    }
-    if (!Number.isFinite(mesN) || mesN < 1 || mesN > 12) {
-      setError("Mes inválido.");
-      return;
-    }
-    if (!Number.isFinite(anioN) || anioN < 1900 || anioN > 2100) {
-      setError("Año inválido (1900-2100).");
-      return;
-    }
-    // Construye fecha YYYY-MM-DD explícitamente: no hay forma de que el back la malinterprete.
-    const fecha = `${anioN.toString().padStart(4, "0")}-${mesN.toString().padStart(2, "0")}-${diaN.toString().padStart(2, "0")}`;
+    if (!Number.isFinite(diaN) || diaN < 1 || diaN > 31) { setError("Día inválido (1-31)."); return null; }
+    if (!Number.isFinite(mesN) || mesN < 1 || mesN > 12) { setError("Mes inválido."); return null; }
+    if (!Number.isFinite(anioN) || anioN < 1900 || anioN > 2100) { setError("Año inválido (1900-2100)."); return null; }
+    return `${anioN.toString().padStart(4, "0")}-${mesN.toString().padStart(2, "0")}-${diaN.toString().padStart(2, "0")}`;
+  };
 
+  // Abre el popup de confirmación (no envía todavía).
+  const abrirConfirmacion = () => {
+    if (!validarFecha()) return;
+    setPopupError(null);
+    setConfirmOpen(true);
+  };
+
+  // Confirma: envía la solicitud y, si va bien, pasa el popup al texto explicativo.
+  const confirmarEnvio = async () => {
+    const fecha = validarFecha();
+    if (!fecha) { setConfirmOpen(false); return; }
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
 
     setEnviando(true);
+    setPopupError(null);
     try {
       await axios.post(
         `${API_URL}/metodo-astrologia/solicitud/${userId}`,
@@ -180,15 +176,22 @@ export default function MetodoAstrologia() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEstado(r.data ?? null);
+      setConfirmOpen(false); // cierra el popup; la página pasa a "esperando lectura"
     } catch (err: any) {
       const status = err?.response?.status;
       const msg = err?.response?.data?.message || err?.message || "Error desconocido";
       console.error("[solicitud] error:", status, msg, err?.response?.data);
-      setError(`No se pudo enviar (${status || "?"}): ${msg}`);
+      setPopupError(`No se pudo enviar (${status || "?"}): ${msg}`);
     } finally {
       setEnviando(false);
     }
   };
+
+  // Resumen legible de los datos, para el popup de confirmación.
+  const fechaLegible = dia && mes && anio
+    ? `${parseInt(dia, 10)} de ${MESES.find((m) => m.num === mes.padStart(2, "0"))?.nombre.toLowerCase() ?? mes} de ${anio}`
+    : "";
+  const lugarLegible = [lugar.trim(), region.trim(), pais.trim()].filter(Boolean).join(", ");
 
   if (loading) {
     return (
@@ -210,10 +213,10 @@ export default function MetodoAstrologia() {
     icon: <EyeIcon />,
   };
   const headerNext = yaConPdf
-    ? { label: "Mi carta 3D →", onClick: () => navigate("/metodo/astrologia/cartaAstral") }
+    ? { label: "Sol, Luna y Ascendente →", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }
     : yaSolicitado
     ? { label: "Esperando lectura…", onClick: () => {}, disabled: true }
-    : { label: "Leer carta →", onClick: () => { void enviarSolicitud(); }, disabled: !camposCompletos || enviando };
+    : { label: "Leer carta →", onClick: abrirConfirmacion, disabled: !camposCompletos };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -248,43 +251,36 @@ export default function MetodoAstrologia() {
 
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
 
-              {/* ── ESTADO C — PDF disponible ── */}
+              {/* ── ESTADO C — María ya leyó la carta: empieza el recorrido ── */}
               {yaConPdf && (
                 <Flex direction="column" align="center" gap={6}>
                   <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                         style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${astrologiaTxt}55` }}>
-                    Tu carta astral está lista
+                    Tu lectura está lista
                   </Text>
                   <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px"
                         style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                    Descárgala, léela con calma y, cuando estés listo, continúa.
+                    María ya ha leído tu carta. Empieza conociendo tu Sol, tu Luna y tu Ascendente, y ve avanzando con calma.
                   </Text>
                   <Box
-                    as="a"
-                    href={toDriveDownload(estado!.link_carta!)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    px={{ base: 5, md: 10 }}
+                    as="button"
+                    onClick={() => navigate("/metodo/astrologia/solascendenteluna")}
+                    px={{ base: 7, md: 10 }}
                     py={3}
                     borderRadius="full"
                     bg={astrologiaTxt}
                     color={astrologiaBg}
                     fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "sm", md: "xl" }}
+                    fontSize={{ base: "md", md: "xl" }}
                     fontWeight="700"
                     letterSpacing={{ base: "0.04em", md: "0.08em" }}
                     whiteSpace="nowrap"
                     boxShadow={`0 0 10px rgba(255,255,255,0.28), 0 0 26px rgba(255,255,255,0.14), 0 0 18px ${astrologiaTxt}88, 0 0 42px ${astrologiaTxt}44`}
                     cursor="pointer"
-                    // Texto centrado tipográficamente en el botón.
-                    display="inline-flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="center"
-                    lineHeight="1"
-                    mx="auto"
+                    transition="all 0.2s"
+                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${astrologiaTxt}88, 0 0 58px ${astrologiaTxt}44` }}
                   >
-                    Descargar mi carta (PDF)
+                    Comenzar mi recorrido →
                   </Box>
                 </Flex>
               )}
@@ -452,30 +448,30 @@ export default function MetodoAstrologia() {
                   <Flex justify="flex-end" mt={4}>
                     <Box
                       as="button"
-                      onClick={() => { if (!enviando) void enviarSolicitud(); }}
-                      disabled={!camposCompletos || enviando}
+                      onClick={() => { if (camposCompletos) abrirConfirmacion(); }}
+                      disabled={!camposCompletos}
                       px={{ base: 7, md: 9 }}
                       py={{ base: 3, md: 3.5 }}
                       borderRadius="full"
-                      bg={camposCompletos && !enviando ? astrologiaTxt : `${astrologiaTxt}33`}
-                      color={camposCompletos && !enviando ? "#0a0a1a" : `${astrologiaTxt}aa`}
+                      bg={camposCompletos ? astrologiaTxt : `${astrologiaTxt}33`}
+                      color={camposCompletos ? "#0a0a1a" : `${astrologiaTxt}aa`}
                       border={`1px solid ${astrologiaTxt}88`}
                       fontFamily="'EB Garamond', serif"
                       fontSize={{ base: "md", md: "lg" }}
                       fontWeight="700"
                       letterSpacing="0.08em"
-                      cursor={camposCompletos && !enviando ? "pointer" : "not-allowed"}
-                      opacity={camposCompletos && !enviando ? 1 : 0.6}
-                      boxShadow={camposCompletos && !enviando
+                      cursor={camposCompletos ? "pointer" : "not-allowed"}
+                      opacity={camposCompletos ? 1 : 0.6}
+                      boxShadow={camposCompletos
                         ? `0 0 18px ${astrologiaTxt}66, 0 0 38px ${astrologiaTxt}33`
                         : "none"}
                       transition="all 0.22s"
-                      _hover={camposCompletos && !enviando ? {
+                      _hover={camposCompletos ? {
                         transform: "translateY(-2px)",
                         boxShadow: `0 0 28px ${astrologiaTxt}88, 0 0 58px ${astrologiaTxt}44`,
                       } : {}}
                     >
-                      {enviando ? "Enviando…" : "Recibir mi lectura"}
+                      Recibir mi lectura
                     </Box>
                   </Flex>
                 </Flex>
@@ -490,6 +486,72 @@ export default function MetodoAstrologia() {
         isOpen={comicAstroOpen}
         onClose={() => setComicAstroOpen(false)}
       />
+
+      {/* ── POPUP: confirmar datos antes de enviar ── */}
+      {confirmOpen && (
+        <Box
+          position="fixed" inset={0} zIndex={500}
+          display="flex" alignItems="center" justifyContent="center"
+          px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
+          bg="rgba(0,0,0,0.72)"
+          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+          onClick={() => { if (!enviando) setConfirmOpen(false); }}
+        >
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            position="relative" w="100%" maxW="480px"
+            maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }}
+            borderRadius="2xl" overflow="hidden"
+            border={`1px solid ${astrologiaTxt}66`}
+            boxShadow={`0 0 32px ${astrologiaTxt}55, 0 0 80px ${astrologiaTxt}28, 0 12px 60px rgba(0,0,0,0.6)`}
+            display="flex" flexDirection="column"
+          >
+            <SpaceBg overlay="rgba(8,13,30,0.78)" />
+
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
+              <Flex direction="column" align="center" gap={5}>
+                <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
+                      letterSpacing="0.03em" style={{ textShadow: `0 0 14px ${astrologiaTxt}66` }}>
+                  ¿Seguro que estos son tus datos?
+                </Text>
+
+                <Flex direction="column" align="center" gap={2} w="100%"
+                      bg="rgba(8,13,30,0.5)" borderRadius="xl" border={`1px solid ${astrologiaTxt}33`} px={5} py={5}>
+                  <Text color={astrologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" textAlign="center">
+                    {fechaLegible}{hora ? ` · ${hora}` : ""}
+                  </Text>
+                  <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center">
+                    {lugarLegible}
+                  </Text>
+                </Flex>
+
+                {popupError && (
+                  <Text color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic">{popupError}</Text>
+                )}
+
+                <Flex gap={3} mt={1} w="100%" justify="center" wrap="wrap">
+                  <Box as="button" onClick={() => { if (!enviando) setConfirmOpen(false); }}
+                       px={6} py={2.5} borderRadius="full" bg="transparent" color={`${astrologiaTxt}cc`}
+                       border={`1px solid ${astrologiaTxt}55`} fontFamily="'EB Garamond', serif" fontWeight="600"
+                       cursor={enviando ? "not-allowed" : "pointer"} opacity={enviando ? 0.5 : 1}
+                       _hover={enviando ? {} : { borderColor: astrologiaTxt, color: astrologiaTxt }}>
+                    Volver a revisar
+                  </Box>
+                  <Box as="button" onClick={() => { if (!enviando) void confirmarEnvio(); }}
+                       px={7} py={2.5} borderRadius="full" bg={astrologiaTxt} color="#0a0a1a"
+                       border={`1px solid ${astrologiaTxt}88`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                       letterSpacing="0.06em" cursor={enviando ? "wait" : "pointer"} opacity={enviando ? 0.7 : 1}
+                       boxShadow={`0 0 18px ${astrologiaTxt}66`}
+                       _hover={enviando ? {} : { boxShadow: `0 0 28px ${astrologiaTxt}88`, transform: "translateY(-1px)" }}
+                       transition="all 0.2s">
+                    {enviando ? "Enviando…" : "Sí, confirmar"}
+                  </Box>
+                </Flex>
+              </Flex>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       <SiteFooter />
     </Box>

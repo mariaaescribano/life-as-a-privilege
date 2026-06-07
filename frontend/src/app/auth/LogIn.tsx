@@ -52,6 +52,8 @@ export default function LogIn() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
+  // Destino tras login: si la cuenta es admin, va al panel.
+  const destinoRef = useRef<string>(next);
 
   const [name, setname] = useState<string>("");
   const [contra, setcontra] = useState<string>("");
@@ -99,6 +101,14 @@ export default function LogIn() {
             : "/img/icono/noImg.png"
         );
 
+        // Si la cuenta es admin, redirige al panel en vez de a /home.
+        try {
+          const me = await axios.get(`${API_URL}/user/me`, {
+            headers: { Authorization: `Bearer ${response.data?.token}` },
+          });
+          if (me.data?.is_admin && next === "/home") destinoRef.current = "/admin";
+        } catch { /* si falla, destino normal */ }
+
         setmessage({
           soy: 1,
           title: "Bienvenido",
@@ -127,7 +137,7 @@ export default function LogIn() {
 
   useEffect(() => {
     if (message?.soy === 1) {
-      const timer = setTimeout(() => navigate(next, { replace: true }), 3000);
+      const timer = setTimeout(() => navigate(destinoRef.current, { replace: true }), 3000);
       return () => clearTimeout(timer);
     }
   }, [message]);

@@ -112,6 +112,24 @@ export class UserService {
     return data;
   }
 
+  // --------- Usuarios que se han unido al recorrido (para el panel admin) ---------
+  async getRecorridoUsers() {
+    const client = this.databaseService.getClient();
+    // Intento con filtro por metodo_suscrito; si la columna no existe, devolvemos todos.
+    const full = await client
+      .from('user')
+      .select('id, name, email, img, metodo_suscrito')
+      .eq('metodo_suscrito', true)
+      .order('name', { ascending: true });
+    if (!full.error) return full.data ?? [];
+
+    const { data } = await client
+      .from('user')
+      .select('id, name, email, img')
+      .order('name', { ascending: true });
+    return data ?? [];
+  }
+
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
     const full = await this.databaseService.getClient()

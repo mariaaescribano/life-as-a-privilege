@@ -31,6 +31,14 @@ export interface SolicitudCarta {
   region: string;
 }
 
+// Textos escritos a mano por la administradora.
+// casas_texto: { "1": "texto casa 1", ..., "12": "texto casa 12" }
+// aspectos_texto: { "sol-luna-trigono": "texto...", ... }  (clave = `${a}-${b}-${tipo}`)
+export interface TextosCarta {
+  casas_texto?: Record<string, string>;
+  aspectos_texto?: Record<string, string>;
+}
+
 @Injectable()
 export class MetodoAstrologiaService {
   constructor(
@@ -53,6 +61,71 @@ export class MetodoAstrologiaService {
       return null;
     }
     return data ?? null;
+  }
+
+  // ── ADMIN: lista de usuarios que han enviado solicitud de carta ──
+  // Devuelve nombre/email + estado de la lectura (PDF y si ya hay textos escritos).
+  async listarSolicitudes() {
+    const { data: rows, error } = await this.databaseService.getClient()
+      .from('metodo_astrologia')
+      .select('user_id, solicitud_enviada_at, link_carta, casas_texto, aspectos_texto')
+      .not('solicitud_enviada_at', 'is', null)
+      .order('solicitud_enviada_at', { ascending: false });
+
+    if (error) {
+      console.warn('[metodoAstrologia.listarSolicitudes] error:', error.message);
+      return [];
+    }
+    const lista = rows ?? [];
+    if (lista.length === 0) return [];
+
+    // Adjunta nombre/email de cada usuario.
+    const ids = lista.map((r) => r.user_id);
+    const { data: users } = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email')
+      .in('id', ids);
+    const byId = new Map((users ?? []).map((u: any) => [u.id, u]));
+
+    return lista.map((r) => {
+      const casas = (r.casas_texto ?? {}) as Record<string, string>;
+      const aspectos = (r.aspectos_texto ?? {}) as Record<string, string>;
+      const u = byId.get(r.user_id);
+      return {
+        user_id: r.user_id,
+        name: u?.name ?? '—',
+        email: u?.email ?? '—',
+        solicitud_enviada_at: r.solicitud_enviada_at,
+        tiene_pdf: !!r.link_carta,
+        casas_escritas: Object.values(casas).filter((t) => (t ?? '').trim()).length,
+        aspectos_escritos: Object.values(aspectos).filter((t) => (t ?? '').trim()).length,
+      };
+    });
+  }
+
+  // ── ADMIN: guarda los textos de casas/aspectos (merge sobre lo existente) ──
+  async guardarTextos(userId: string, textos: TextosCarta): Promise<{ success: boolean }> {
+    const row = await this.getMetodoAstrologia(userId);
+    if (!row) throw new NotFoundException('El usuario no tiene solicitud de carta');
+
+    const update: Record<string, any> = { updated_at: new Date().toISOString() };
+    if (textos.casas_texto) {
+      update.casas_texto = { ...(row.casas_texto ?? {}), ...textos.casas_texto };
+    }
+    if (textos.aspectos_texto) {
+      update.aspectos_texto = { ...(row.aspectos_texto ?? {}), ...textos.aspectos_texto };
+    }
+
+    const { error } = await this.databaseService.getClient()
+      .from('metodo_astrologia')
+      .update(update)
+      .eq('user_id', userId);
+
+    if (error) {
+      console.warn('[metodoAstrologia.guardarTextos] error:', error.message);
+      return { success: false };
+    }
+    return { success: true };
   }
 
   // ── GET solo del JSON de la carta natal calculada ──

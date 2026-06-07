@@ -1,12 +1,28 @@
 import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { MetodoAstrologiaService } from './metodoAstrologia.service';
-import type { SolicitudCarta } from './metodoAstrologia.service';
+import type { SolicitudCarta, TextosCarta } from './metodoAstrologia.service';
 import type { CuerpoKey } from './cartaNatal.types';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('metodo-astrologia')
 export class MetodoAstrologiaController {
   constructor(private readonly service: MetodoAstrologiaService) {}
+
+  // ── ADMIN: lista de usuarios que han solicitado carta (para el panel) ──
+  // (debe ir antes de :userId para no colisionar con esa ruta)
+  @Get('admin/usuarios')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async listarSolicitudes() {
+    return await this.service.listarSolicitudes();
+  }
+
+  // ── ADMIN: guardar los textos de casas/aspectos escritos a mano ──
+  @Patch('admin/:userId/textos')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async guardarTextos(@Param('userId') userId: string, @Body() body: TextosCarta) {
+    return await this.service.guardarTextos(userId, body);
+  }
 
   // JSON de la carta natal calculada para el componente 3D (debe ir antes de :userId)
   @Get('carta-natal/:userId')
