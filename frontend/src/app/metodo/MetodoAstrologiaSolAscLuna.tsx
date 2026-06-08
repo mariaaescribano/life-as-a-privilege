@@ -49,10 +49,11 @@ export default function MetodoAstrologiaSolAscLuna() {
 
     (async () => {
       try {
-        const rowRes = await axios.get<{ link_carta?: string | null; data?: Data } | null>(
+        const rowRes = await axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null; data?: Data } | null>(
           `${API_URL}/metodo-astrologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } },
         );
-        if (!rowRes.data?.link_carta) { navigate("/metodo/astrologia"); return; }
+        // Accesible en cuanto hay solicitud (la carta ya está calculada); no requiere el PDF.
+        if (!rowRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia"); return; }
         let d: Data = rowRes.data?.data ?? {};
 
         // Fallback: si falta signo/casa de algún cuerpo del trío, lo derivamos de la carta.
@@ -128,7 +129,7 @@ export default function MetodoAstrologiaSolAscLuna() {
   const valorAbierto = abierto ? data[abierto] ?? {} : {};
 
   const headerNext = {
-    label: todosLeidos ? "Mi carta completa →" : "Lee los tres para continuar",
+    label: todosLeidos ? "Arquetipos →" : "Lee los tres para continuar",
     onClick: () => navigate("/metodo/astrologia/cartaAstral"),
     disabled: !todosLeidos,
     disabledTooltip: "Lee tu Sol, tu Luna y tu Ascendente antes de seguir",
@@ -139,15 +140,16 @@ export default function MetodoAstrologiaSolAscLuna() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="900px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Astrología · Sol, Luna y Ascendente"
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Sol, Luna y Ascendente"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 2, total: 5 }}
             mb={0}
-            prev={{ label: "← Mis datos", onClick: () => navigate("/metodo/astrologia") }}
+            prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={headerNext}
           />
@@ -158,13 +160,13 @@ export default function MetodoAstrologiaSolAscLuna() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 30px ${astrologiaTxt}33`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.62)" />
 
             <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 9, md: 12 }}>
               <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={{ base: 8, md: 10 }} maxW="560px" mx="auto">
-                Tu Luna (mundo interior), tu Sol (tu esencia) y tu Ascendente (cómo percibes al mundo). Léelos los tres.
+                Tu Luna (el hogar al que llegaste y tus sentimientos), tu Sol (tu esencia) y tu Ascendente (cómo percibes al mundo). Léelos los tres.
               </Text>
 
               <Flex
@@ -244,7 +246,7 @@ function TrioCard({
       boxShadow={destacado ? `0 0 26px ${c}44, 0 0 60px ${c}22` : `0 0 16px ${c}22`}
     >
       {/* icono */}
-      <Box style={{ filter: `drop-shadow(0 0 14px ${c}aa)` }}>
+      <Box style={{ filter: `drop-shadow(0 0 6px ${c}55)` }}>
         <Glifo symbol={cuerpo.symbol} color={c} size={destacado ? 64 : 52} />
       </Box>
       <Text color={c} fontSize={{ base: "lg", md: destacado ? "2xl" : "xl" }} fontWeight="700" letterSpacing="0.04em"

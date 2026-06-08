@@ -31,6 +31,8 @@ interface MetodoStepHeaderProps {
   /** Título más pequeño (p.ej. en los tests, cuyos nombres son largos y deben
    *  caber en el header). */
   compact?: boolean;
+  /** Indicador de progreso: paso actual / total. Pinta una fila de puntos. */
+  step?: { current: number; total: number };
 }
 
 const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
@@ -54,7 +56,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       // casi instantáneo al pulsar. background/border/box-shadow son las
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
-      boxShadow={disabled ? "none" : `0 0 8px rgba(255,255,255,0.14), 0 0 18px ${color}33`}
+      boxShadow={disabled ? "none" : `0 0 6px rgba(255,255,255,0.1), 0 0 13px ${color}24`}
       // En el header de TCM (whiteBg) el texto lleva una sombra granate oscura
       // para contrastar con el fondo de la disciplina.
       textShadow={whiteBg && !disabled ? "0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85), 0 0 5px rgba(58,10,10,0.8)" : undefined}
@@ -136,6 +138,7 @@ export function MetodoStepHeader({
   next,
   extra,
   compact = false,
+  step,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
@@ -181,8 +184,8 @@ export function MetodoStepHeader({
       border={`1px solid ${color}33`}
       boxShadow={
         useDiscBg
-          ? `0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(255,255,255,0.16), 0 0 90px rgba(180,255,245,0.18), 0 0 28px ${color}33, 0 0 72px ${color}1f`
-          : `0 4px 20px rgba(0,0,0,0.22), 0 0 18px rgba(255,255,255,0.28), 0 0 40px rgba(255,255,255,0.14), 0 0 22px ${color}55`
+          ? `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`
+          : `0 4px 20px rgba(0,0,0,0.22), 0 0 12px rgba(255,255,255,0.14), 0 0 26px rgba(255,255,255,0.07), 0 0 16px ${color}2b`
       }
     >
       {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}
@@ -190,55 +193,46 @@ export function MetodoStepHeader({
       <Box position="relative" zIndex={1} px={{ base: 4, md: 14 }} py={{ base: 3, md: 4 }}>
         {/* Cabecera: icono + título */}
         <Flex direction="row" align="center" justify="center" gap={5}>
-          <Box
-            borderRadius="full"
-            bg={useDiscBg ? "transparent" : bgColor}
-            border={`5px solid ${color}`}
-            boxShadow={`0 0 14px ${bgHex}cc, 0 0 32px ${bgHex}88, 0 0 22px ${color}77, 0 0 55px ${color}28`}
-            w={{ base: "60px", md: "72px" }}
-            h={{ base: "60px", md: "72px" }}
-            display="flex"
-            p="5px"
-            alignItems="center"
-            justifyContent="center"
-            flexShrink={0}
-            position="relative"
-            overflow={useDiscBg ? "hidden" : undefined}
-          >
-            {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="full" />}
-            <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-              {icon}
+          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center">
+            {icon}
+          </Box>
+          <Flex align="baseline" gap={{ base: 1.5, md: 2.5 }} minW={0} flexShrink={1}>
+            <Box ref={titleWrapperRef} minW={0} flexShrink={1}>
+              <Text
+                color={color}
+                fontSize={
+                  compact
+                    ? (titleWraps ? { base: "md", md: "2xl" } : { base: "xl", md: "3xl" })
+                    : (titleWraps ? { base: "lg", md: "4xl" } : { base: "2xl", md: "5xl" })
+                }
+                fontWeight="700"
+                letterSpacing="0.05em"
+                lineHeight="1.3"
+                textAlign="center"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                // El rabito de la "g" (descendente) baja por debajo de la línea
+                // base; con overflow:hidden se recortaría. Este padding inferior
+                // entra dentro de la zona visible y deja espacio para que se vea
+                // entero (Fisiología, Astrología…).
+                pb="0.18em"
+                style={{
+                  textShadow: useDiscBg
+                    ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
+                    : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
+                }}
+              >
+                {title}
+              </Text>
             </Box>
-          </Box>
-          <Box ref={titleWrapperRef} minW={0} flexShrink={1}>
-            <Text
-              color={color}
-              fontSize={
-                compact
-                  ? (titleWraps ? { base: "md", md: "2xl" } : { base: "xl", md: "3xl" })
-                  : (titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "6xl" })
-              }
-              fontWeight="700"
-              letterSpacing="0.05em"
-              lineHeight="1.3"
-              textAlign="center"
-              whiteSpace="nowrap"
-              overflow="hidden"
-              textOverflow="ellipsis"
-              // El rabito de la "g" (descendente) baja por debajo de la línea
-              // base; con overflow:hidden se recortaría. Este padding inferior
-              // entra dentro de la zona visible y deja espacio para que se vea
-              // entero (Fisiología, Astrología…).
-              pb="0.18em"
-              style={{
-                textShadow: useDiscBg
-                  ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
-                  : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
-              }}
-            >
-              {title}
-            </Text>
-          </Box>
+            {step && step.total > 1 && (
+              <Text flexShrink={0} color={`${color}aa`} fontSize={{ base: "xs", md: "lg" }} fontWeight="600"
+                    letterSpacing="0.06em" whiteSpace="nowrap">
+                {step.current}/{step.total}
+              </Text>
+            )}
+          </Flex>
         </Flex>
 
         {/* Raya separadora */}

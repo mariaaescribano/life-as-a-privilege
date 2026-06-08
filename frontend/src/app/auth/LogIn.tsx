@@ -106,7 +106,10 @@ export default function LogIn() {
           const me = await axios.get(`${API_URL}/user/me`, {
             headers: { Authorization: `Bearer ${response.data?.token}` },
           });
-          if (me.data?.is_admin && next === "/home") destinoRef.current = "/admin";
+          if (me.data?.is_admin) {
+            sessionStorage.setItem("isAdmin", "1");
+            if (next === "/home") destinoRef.current = "/admin";
+          }
         } catch { /* si falla, destino normal */ }
 
         setmessage({

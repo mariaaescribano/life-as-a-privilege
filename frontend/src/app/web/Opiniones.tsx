@@ -58,7 +58,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
           textAlign="center"
           fontStyle="italic"
           fontSize={{ base: "md", md: "lg" }}
-          textShadow="0 0 8px rgba(255,255,255,0.25)"
+          textShadow="0 0 8px rgba(255,255,255,0.19)"
         >
           Cargando…
         </Text>
@@ -68,7 +68,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
           textAlign="center"
           fontStyle="italic"
           fontSize={{ base: "md", md: "lg" }}
-          textShadow="0 0 8px rgba(255,255,255,0.25)"
+          textShadow="0 0 8px rgba(255,255,255,0.19)"
         >
           Todavía no hay opiniones publicadas. ¡Sé la primera persona en compartir la tuya!
         </Text>
@@ -94,7 +94,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
                 fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.75"
                 fontFamily="'EB Garamond', serif"
-                textShadow="0 0 8px rgba(255,255,255,0.25)"
+                textShadow="0 0 8px rgba(255,255,255,0.19)"
                 flex="1"
               >
                 {op.texto}
@@ -105,7 +105,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
                 fontWeight="700"
                 letterSpacing="0.06em"
                 fontFamily="'EB Garamond', serif"
-                textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+                textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
                 mt="auto"
               >
                 — {op.nombre}
@@ -180,14 +180,14 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="700"
             letterSpacing="0.05em"
-            textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3)"
+            textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
           >
             ¡Gracias por compartirla!
           </Text>
           <Text
             color="rgba(255,255,255,0.85)"
             fontSize={{ base: "md", md: "lg" }}
-            textShadow="0 0 10px rgba(255,255,255,0.35)"
+            textShadow="0 0 10px rgba(255,255,255,0.26)"
           >
             Aparecerá publicada en breve.
           </Text>
@@ -210,7 +210,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
             letterSpacing="0.16em"
             textTransform="uppercase"
             boxShadow="0 0 14px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.15)"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
             _hover={{
               bg: "rgba(255,255,255,0.18)",
               borderColor: "rgba(255,255,255,0.9)",
@@ -225,7 +225,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
       ) : (
         <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5}>
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
               NOMBRE
             </Text>
             <Input
@@ -239,7 +239,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
           </Box>
 
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
               EMAIL (OPCIONAL)
             </Text>
             <Input
@@ -253,7 +253,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
           </Box>
 
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
               TU OPINIÓN
             </Text>
             <Textarea
@@ -304,7 +304,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"
                 flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
+                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
               />
               <Text
                 color="white"
@@ -313,7 +313,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
                 fontSize={{ base: "md", md: "xl" }}
                 letterSpacing="0.2em"
                 textTransform="uppercase"
-                textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
+                textShadow="0 0 12px rgba(255,255,255,0.49), 0 0 26px rgba(255,255,255,0.3)"
               >
                 {status === "sending" ? "Enviando…" : "Enviar opinión"}
               </Text>
@@ -361,7 +361,7 @@ export default function Opiniones() {
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -384,7 +384,7 @@ export default function Opiniones() {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(255,255,255,0.55), 0 0 56px rgba(180,255,245,0.45)"
+          textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -397,7 +397,7 @@ export default function Opiniones() {
           fontStyle="italic"
           letterSpacing="0.05em"
           lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.28)"
+          textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.21)"
           maxW={{ base: "100%", md: "512px" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
@@ -433,7 +433,7 @@ export default function Opiniones() {
           letterSpacing="0.08em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4), 0 0 54px rgba(180,255,245,0.35)"
+          textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 54px rgba(180,255,245,0.26)"
           opacity={dejarTitleReveal.visible ? 1 : 0}
           transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
@@ -446,7 +446,7 @@ export default function Opiniones() {
           fontStyle="italic"
           letterSpacing="0.04em"
           lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.4)"
+          textShadow="0 0 8px rgba(255,255,255,0.3)"
           maxW={{ base: "100%", md: "480px" }}
           opacity={dejarTitleReveal.visible ? 1 : 0}
           transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(13px)"}

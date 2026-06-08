@@ -34,7 +34,7 @@ export class UserService {
   async createUser(data: CreateUser) {
     try {
       const { nameExists, emailExists } = await this.getNomEmailExist(data.name, data.email);
-      if (nameExists) throw new ConflictException('Nombre ya existe. Elige otro');
+      if (nameExists) throw new ConflictException('El nombre ya existe. Elige otro');
       if (emailExists) throw new ConflictException('El email ya está registrado');
 
       let inserted = false;
@@ -53,7 +53,7 @@ export class UserService {
           if (rows && rows.length === 1) {
             inserted = true;
             const newUserId = rows[0].id;
-            const token = this.authService.generateToken(newUserId);
+            const token = this.authService.generateToken(newUserId, data.email);
 
             const { data: users } = await this.databaseService.getClient()
               .from('user')
@@ -90,7 +90,7 @@ export class UserService {
         const user = rows[0];
         const coinciden = await comparePassword(body.password, user.password);
         if (coinciden) {
-          const token = this.authService.generateToken(user.id);
+          const token = this.authService.generateToken(user.id, user.email);
           return { token, user };
         } else {
           throw new ConflictException('La contraseña es errónea');
@@ -177,7 +177,7 @@ export class UserService {
 
     if (existing && existing.length > 0) {
       const user = existing[0];
-      const token = this.authService.generateToken(user.id);
+      const token = this.authService.generateToken(user.id, user.email);
       return { token, user };
     }
 
@@ -208,7 +208,7 @@ export class UserService {
 
         if (rows && rows.length === 1) {
           inserted = true;
-          const token = this.authService.generateToken(rows[0].id);
+          const token = this.authService.generateToken(rows[0].id, rows[0].email);
           return { token, user: rows[0] };
         }
       } catch (error: any) {

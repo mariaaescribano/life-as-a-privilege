@@ -52,6 +52,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
+  const destinoRef = useRef<string>(next);
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -81,6 +82,17 @@ export default function SignIn() {
         sessionStorage.setItem("name", response.data.user.name);
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("img", "/img/icono/noImg.png");
+
+        // Si la cuenta es admin, al continuar va al panel.
+        try {
+          const me = await axios.get(`${API_URL}/user/me`, {
+            headers: { Authorization: `Bearer ${response.data.token}` },
+          });
+          if (me.data?.is_admin) {
+            sessionStorage.setItem("isAdmin", "1");
+            if (next === "/home") destinoRef.current = "/admin";
+          }
+        } catch { /* destino normal */ }
 
         setMessage({
           soy: 1,
@@ -125,7 +137,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (message?.soy === 1) {
-      const timer = setTimeout(() => navigate(next, { replace: true }), 1800);
+      const timer = setTimeout(() => navigate(destinoRef.current, { replace: true }), 1800);
       return () => clearTimeout(timer);
     }
   }, [message]);

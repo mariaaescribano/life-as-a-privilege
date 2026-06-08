@@ -90,11 +90,11 @@ const modalidades: ModalidadData[] = [
 // ── Sombras de texto del recorrido ──
 // La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
 // Algunas concretas piden una sombra oscura para que el texto contraste mejor.
-const SHADOW_BLACK = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
-const SHADOW_GRANATE = "0 1px 4px rgba(56,8,8,0.95), 0 2px 12px rgba(56,8,8,0.82), 0 0 5px rgba(56,8,8,0.78), 0 0 18px rgba(255,255,255,0.22)";
+const SHADOW_BLACK = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.19)";
+const SHADOW_GRANATE = "0 1px 4px rgba(56,8,8,0.95), 0 2px 12px rgba(56,8,8,0.82), 0 0 5px rgba(56,8,8,0.78), 0 0 18px rgba(255,255,255,0.17)";
 
 const naturalBoxShadow = (bg: string) =>
-  `0 1px 3px ${bg}f5, 0 0 6px ${bg}cc, 0 2px 14px ${bg}88, 0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)`;
+  `0 1px 3px ${bg}f5, 0 0 6px ${bg}cc, 0 2px 14px ${bg}88, 0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)`;
 
 const esOscuraNegra = (name: string) =>
   name === fisiologiaNom || name === cabalaNom || name === culturaNom;
@@ -121,14 +121,14 @@ const headerNameShadow = (card: ModalidadData) =>
     ? SHADOW_GRANATE
     : esOscuraNegra(card.name)
     ? SHADOW_BLACK
-    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 16px rgba(255,255,255,0.55), 0 0 36px rgba(255,255,255,0.3)`;
+    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 16px rgba(255,255,255,0.41), 0 0 36px rgba(255,255,255,0.22)`;
 
 const headerDescShadow = (card: ModalidadData) =>
   card.name === tcmNom
     ? SHADOW_GRANATE
     : esOscuraNegra(card.name)
     ? SHADOW_BLACK
-    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 12px rgba(255,255,255,0.5), 0 0 26px rgba(255,255,255,0.25)`;
+    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 12px rgba(255,255,255,0.38), 0 0 26px rgba(255,255,255,0.19)`;
 
 const useReveal = (threshold = 0.12) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -293,7 +293,7 @@ export default function ElMetodo() {
           alt=""
           h={{ base: "63px", md: "86px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.78)) drop-shadow(0 0 23px rgba(255,255,255,0.42)) drop-shadow(0 0 47px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 23px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -317,7 +317,7 @@ export default function ElMetodo() {
           fontWeight="700"
           letterSpacing="0.08em"
           lineHeight="1.1"
-          textShadow="0 0 16px rgba(255,255,255,0.85), 0 0 34px rgba(255,255,255,0.55), 0 0 63px rgba(180,255,245,0.45)"
+          textShadow="0 0 16px rgba(255,255,255,0.64), 0 0 34px rgba(255,255,255,0.41), 0 0 63px rgba(180,255,245,0.34)"
           opacity={headerReveal.visible ? 1 : 0}
           transform={headerReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.85s ease, transform 0.85s ease"
@@ -330,7 +330,7 @@ export default function ElMetodo() {
           fontStyle="italic"
           fontWeight="400"
           letterSpacing="0.05em"
-          textShadow="0 0 9px rgba(255,255,255,0.55), 0 0 20px rgba(255,255,255,0.3)"
+          textShadow="0 0 9px rgba(255,255,255,0.41), 0 0 20px rgba(255,255,255,0.22)"
           opacity={headerReveal.visible ? 1 : 0}
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s"
@@ -342,7 +342,7 @@ export default function ElMetodo() {
           fontSize={{ base: "sm", md: "lg" }}
           lineHeight="1.95"
           letterSpacing="0.015em"
-          textShadow="0 0 11px rgba(255,255,255,0.5), 0 0 25px rgba(255,255,255,0.25)"
+          textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
           maxW={{ base: "100%", md: "70%" }}
           mt={{ base: 2, md: 3 }}
           opacity={headerReveal.visible ? 1 : 0}
@@ -351,6 +351,22 @@ export default function ElMetodo() {
         >
           Ocho disciplinas. Un orden. Un propósito.
         </Text>
+
+        <Text
+          color="white"
+          fontSize={{ base: "sm", md: "lg" }}
+          lineHeight="1.95"
+          letterSpacing="0.015em"
+          textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
+          maxW={{ base: "100%", md: "70%" }}
+          mt={{ base: 2, md: 3 }}
+          opacity={headerReveal.visible ? 1 : 0}
+          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
+        >
+          Un recorrido guiado por ocho disciplinas que observan al ser humano desde perspectivas diferentes. Cada paso suma estructura y coherencia que el anterior no podía.
+        </Text>
+      
       </Flex>
 
       {/* ── SEPARADOR + TÍTULO DISCIPLINAS ── */}
@@ -377,7 +393,7 @@ export default function ElMetodo() {
           fontWeight="400"
           fontSize={{ base: "lg", md: "2xl" }}
           letterSpacing="0.12em"
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
           textAlign="center"
           px={{ base: 5, md: 10 }}
           opacity={disciplinasTitleReveal.visible ? 1 : 0}
@@ -432,7 +448,7 @@ export default function ElMetodo() {
           fontSize={{ base: "2xl", md: "4xl" }}
           fontWeight="700"
           letterSpacing="0.06em"
-          textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4), 0 0 54px rgba(180,255,245,0.35)"
+          textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 54px rgba(180,255,245,0.26)"
           opacity={pricingReveal.visible ? 1 : 0}
           transform={pricingReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
@@ -459,7 +475,7 @@ export default function ElMetodo() {
               letterSpacing="0.18em"
               textTransform="uppercase"
               mb={2}
-              textShadow="0 0 8px rgba(255,255,255,0.4)"
+              textShadow="0 0 8px rgba(255,255,255,0.3)"
             >
               Por disciplina
             </Text>
@@ -467,11 +483,11 @@ export default function ElMetodo() {
               color="white"
               fontSize={{ base: "4xl", md: "5xl" }}
               fontWeight="700"
-              textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4)"
+              textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3)"
             >
               20 €
             </Text>
-            <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.3)">
+            <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.22)">
               Acceso a los cursos y materiales de la disciplina concreta
             </Text>
             {/* <Text color="rgba(255,255,255,0.6)" fontSize="sm" mt={2} fontStyle="italic" lineHeight="1.55" maxW="320px" mx="auto">
@@ -494,7 +510,7 @@ export default function ElMetodo() {
               letterSpacing="0.18em"
               textTransform="uppercase"
               mb={2}
-              textShadow="0 0 8px rgba(255,255,255,0.4)"
+              textShadow="0 0 8px rgba(255,255,255,0.3)"
             >
               Consultas individuales
             </Text>
@@ -502,11 +518,11 @@ export default function ElMetodo() {
               color="white"
               fontSize={{ base: "4xl", md: "5xl" }}
               fontWeight="700"
-              textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4)"
+              textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3)"
             >
               15 € <Box as="span" fontSize={{ base: "xl", md: "2xl" }} fontWeight="500" opacity={0.85}>/ sesión</Box>
             </Text>
-            <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.3)">
+            <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.22)">
               1 hora de duración, se pagan aparte
             </Text>
           </Box>
@@ -532,7 +548,7 @@ export default function ElMetodo() {
           alt=""
           h={{ base: "50px", md: "64px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 22px rgba(255,255,255,0.35))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 22px rgba(255,255,255,0.26))" }}
           opacity={comunidadReveal.visible ? 1 : 0}
           transform={comunidadReveal.visible ? "scale(1)" : "scale(0.8)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
@@ -608,7 +624,7 @@ export default function ElMetodo() {
                   strokeWidth="1.8"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}
+                  style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
                 >
                   {c.icon}
                 </Box>
@@ -622,7 +638,7 @@ export default function ElMetodo() {
                 fontSize={{ base: "sm", md: "md" }}
                 letterSpacing="0.14em"
                 textTransform="uppercase"
-                textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.25)"
+                textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.19)"
               >
                 {c.titulo}
               </Text>
@@ -675,7 +691,7 @@ export default function ElMetodo() {
           bg="rgba(255,255,255,0.06)"
           cursor="pointer"
           boxShadow="0 0 12px rgba(255,255,255,0.28), 0 0 26px rgba(255,255,255,0.14), 0 2px 10px rgba(0,0,0,0.15)"
-          textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.28)"
+          textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.21)"
           _hover={{
             bg: "rgba(255,255,255,0.16)",
             borderColor: "rgba(255,255,255,0.85)",
@@ -685,7 +701,7 @@ export default function ElMetodo() {
           transition="all 0.25s ease"
         >
           Conocer a la creadora
-          <Box as="span" fontSize={{ base: "sm", md: "md" }} style={{ textShadow: "0 0 8px rgba(255,255,255,0.6), 0 0 18px rgba(255,255,255,0.3)" }}>
+          <Box as="span" fontSize={{ base: "sm", md: "md" }} style={{ textShadow: "0 0 8px rgba(255,255,255,0.45), 0 0 18px rgba(255,255,255,0.22)" }}>
             →
           </Box>
         </Flex>
@@ -743,7 +759,7 @@ export default function ElMetodo() {
             h={{ base: "34px", md: "44px" }}
             objectFit="contain"
             flexShrink={0}
-            style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.75)) drop-shadow(0 0 24px rgba(255,255,255,0.4))" }}
+            style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.56)) drop-shadow(0 0 24px rgba(255,255,255,0.3))" }}
           />
           <Text
             color="white"
@@ -752,7 +768,7 @@ export default function ElMetodo() {
             fontSize={{ base: "lg", md: "3xl" }}
             letterSpacing={{ base: "0.14em", md: "0.22em" }}
             textTransform="uppercase"
-            textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4), 0 0 60px rgba(180,255,245,0.3)"
+            textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
             whiteSpace="nowrap"
           >
             Empezar
@@ -798,7 +814,7 @@ export default function ElMetodo() {
               strokeLinecap="round"
               strokeLinejoin="round"
               flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}
+              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
             >
               <rect x="3" y="4" width="18" height="18" rx="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
@@ -812,7 +828,7 @@ export default function ElMetodo() {
               fontSize={{ base: "sm", md: "md" }}
               letterSpacing="0.04em"
               fontStyle="italic"
-              textShadow="0 0 8px rgba(255,255,255,0.45), 0 0 18px rgba(255,255,255,0.22)"
+              textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
             >
               Agendar llamada gratuita (20 min)
             </Text>
@@ -850,7 +866,7 @@ export default function ElMetodo() {
               strokeLinecap="round"
               strokeLinejoin="round"
               flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.5))" }}
+              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
             >
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </Box>
@@ -861,7 +877,7 @@ export default function ElMetodo() {
               fontSize={{ base: "sm", md: "md" }}
               letterSpacing="0.04em"
               fontStyle="italic"
-              textShadow="0 0 8px rgba(255,255,255,0.45), 0 0 18px rgba(255,255,255,0.22)"
+              textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
             >
               Tengo dudas
             </Text>

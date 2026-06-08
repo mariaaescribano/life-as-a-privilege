@@ -130,7 +130,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                       fontSize={{ base: "2xl", md: "3xl" }}
                       fontWeight="700"
                       letterSpacing="0.08em"
-                      textShadow="0 0 20px rgba(254,255,228,0.4)"
+                      textShadow="0 0 20px rgba(254,255,228,0.3)"
                     >
                       ✦ Servicios Astrológicos ✦
                     </Text>
@@ -243,7 +243,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                     letterSpacing="0.18em"
                     cursor={(!email.trim() || !selected) ? "not-allowed" : "pointer"}
                     transition="all 0.22s"
-                    textShadow={(!email.trim() || !selected) ? "none" : "0 0 16px rgba(254,255,228,0.4)"}
+                    textShadow={(!email.trim() || !selected) ? "none" : "0 0 16px rgba(254,255,228,0.3)"}
                     boxShadow={(!email.trim() || !selected) ? "none" : "0 0 20px rgba(254,255,228,0.1)"}
                     _hover={(!email.trim() || !selected) ? {} : {
                       bg: "rgba(254,255,228,0.22)",

@@ -14,7 +14,7 @@ export const Glifo = ({
     viewBox="0 0 36 36"
     width={size}
     height={size}
-    style={{ flexShrink: 0, filter: `drop-shadow(0 0 8px ${color}99)` }}
+    style={{ flexShrink: 0, filter: `drop-shadow(0 0 5px ${color}40)` }}
   >
     <text
       x="18"

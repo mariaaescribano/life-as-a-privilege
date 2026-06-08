@@ -27,24 +27,6 @@ function toDriveDownload(url: string): string {
   return url;
 }
 
-const ParrafoTxt = ({ children }: { children: React.ReactNode }) => (
-  <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
-        style={{ textShadow: `0 0 8px ${astrologiaTxt}33` }}>
-    {children}
-  </Text>
-);
-
-const ItemAstro = ({ articulo, titulo, children }: { articulo: string; titulo: string; children: React.ReactNode }) => (
-  <Flex gap={2.5} align="flex-start">
-    <Box mt="10px" w="6px" h="6px" borderRadius="full" bg={astrologiaTxt} flexShrink={0}
-         style={{ boxShadow: `0 0 6px ${astrologiaTxt}` }} />
-    <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75"
-          style={{ textShadow: `0 0 8px ${astrologiaTxt}33` }}>
-      {articulo} <Box as="span" fontWeight="700" color={astrologiaTxt} style={{ textShadow: `0 0 8px ${astrologiaTxt}77` }}>{titulo}</Box> {children}
-    </Text>
-  </Flex>
-);
-
 export default function MetodoAstrologiaLectura() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -83,13 +65,13 @@ export default function MetodoAstrologiaLectura() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Astrología · Tu carta"
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Tu carta"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
             mb={0}
-            prev={{ label: "← Carta 3D", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
+            prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={{ label: "Mis casas →", onClick: () => navigate("/metodo/astrologia/casas") }}
           />
@@ -100,12 +82,12 @@ export default function MetodoAstrologiaLectura() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 30px ${astrologiaTxt}33`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.66)" />
 
-            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 11 }}>
-              <Flex direction="column" align="center" gap={5}>
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
+              <Flex direction="column" align="center" gap={7}>
                 <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                       style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${astrologiaTxt}55` }}>
                   Tu carta astral está lista
@@ -143,37 +125,6 @@ export default function MetodoAstrologiaLectura() {
                     Descargar mi carta (PDF)
                   </Box>
                 )}
-              </Flex>
-
-              <Box h="1px" my={{ base: 7, md: 9 }} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
-
-              {/* ── Texto explicativo de la carta ── */}
-              <Flex direction="column" gap={4}>
-                <ParrafoTxt>
-                  Tu carta astral te muestra dónde se encuentran tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu experiencia en esta vida. También revela tus heridas más profundas y dónde fueron creadas.
-                </ParrafoTxt>
-                <ParrafoTxt>
-                  Es importante recordar que nada de lo que aparece en tu carta es bueno o malo, ni hay nada que juzgar en ti o en ninguna otra persona.
-                </ParrafoTxt>
-                <ParrafoTxt>
-                  Todo fue elegido por tu alma antes de nacer. Por extensión, también fueron elegidas las experiencias, las heridas y las personas que te lo harían.
-                </ParrafoTxt>
-
-                <Text color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" mt={1}
-                      style={{ textShadow: `0 0 10px ${astrologiaTxt}55` }}>
-                  En astrología:
-                </Text>
-
-                <Flex direction="column" gap={2.5}>
-                  <ItemAstro articulo="Las" titulo="casas">muestran dónde ocurre, ocurrió o puede ocurrir una experiencia.</ItemAstro>
-                  <ItemAstro articulo="Los" titulo="planetas">indican qué energía, función o aprendizaje está implicado.</ItemAstro>
-                  <ItemAstro articulo="Los" titulo="signos">revelan cómo se expresa esa energía y cuál es su cualidad.</ItemAstro>
-                  <ItemAstro articulo="Los" titulo="aspectos">muestran las relaciones entre las distintas energías de la carta: los impulsos, los bloqueos, los patrones repetitivos y los puntos donde conviene poner atención para desarrollar tu potencial y no perder de vista tus dones.</ItemAstro>
-                </Flex>
-
-                <ParrafoTxt>
-                  La carta astral es tu mapa para comprenderte mejor, reconocer tus talentos, sanar tus heridas y recorrer tu camino con mayor consciencia.
-                </ParrafoTxt>
               </Flex>
             </Box>
           </Box>

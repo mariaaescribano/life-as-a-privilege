@@ -6,6 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
+import { AdminDisciplinaHeader } from "./AdminDisciplinaHeader";
 import { API_URL } from "../../GlobalVariables";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
@@ -59,20 +60,12 @@ export default function AdminUsuarios() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="720px">
-          {/* cabecera disciplina */}
-          <Flex align="center" gap={3} mb={2}>
-            <Text as="button" onClick={() => navigate("/admin")} color="rgba(255,255,255,0.7)" fontSize="sm"
+          <Flex align="center" gap={3} mb={3}>
+            <Text as="button" onClick={() => navigate("/admin")} color="rgba(255,255,255,0.75)" fontSize="sm"
                   _hover={{ color: "white" }}>← Disciplinas</Text>
           </Flex>
-          <Flex align="center" gap={3} mb={6}>
-            <Box style={{ filter: `drop-shadow(0 0 8px ${disc.txt}66)` }}>
-              <disc.Icon size={{ base: "34px", md: "42px" }} />
-            </Box>
-            <Text color={disc.txt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textTransform="capitalize"
-                  style={{ textShadow: `0 0 14px ${disc.txt}55` }}>
-              {disc.nombre}
-            </Text>
-          </Flex>
+
+          <AdminDisciplinaHeader disc={disc} subtitle="Usuarios del recorrido" />
 
           {!disc.editable && (
             <Text color="rgba(255,220,180,0.85)" fontSize="sm" fontStyle="italic" mb={4}>

@@ -29,6 +29,7 @@ type Discipline = {
   desc: string;
   link: string;
   available:boolean;
+  tagline?: string;
 };
 
 // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
@@ -42,6 +43,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.astrologia.desc,
     link: "/aprendizaje/cursosModalidad/" + astrologiaNom,
     available: true,
+    tagline: "Los arquetipos que te forman.",
   },
   {
     name: neuropsicologiaNom,
@@ -51,6 +53,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.psicologia.desc,
     link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom,
     available: true,
+    tagline: "El porqué de quién eres.",
   },
   {
     name: ayurvedaNom,
@@ -60,6 +63,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.ayurveda.desc,
     link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
     available: true,
+    tagline: "El ser humano como parte de la naturaleza.",
   },
   {
     name: tcmNom,
@@ -69,6 +73,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.tcm.desc,
     link: "/aprendizaje/cursosModalidad/" + tcmNomLink,
     available: true,
+    tagline: "Cinco elementos. Una naturaleza. Un ser humano.",
   },
   {
     name: fisiologiaNom,
@@ -78,6 +83,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.fisiologia.desc,
     link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
     available: true,
+    tagline: "No tenemos un cuerpo. Somos un cuerpo.",
   },
   {
     name: nutricionNom,
@@ -87,6 +93,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.nutricion.desc,
     link: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
     available: true,
+    tagline: "Cómo te reconstruyes con tu alimentación.",
   },
   {
     name: cabalaNom,
@@ -96,6 +103,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.cabala.desc,
     link: "/aprendizaje/cursosModalidad/" + cabalaNom,
     available: true,
+    tagline: "El mapa del alma humana.",
   },
   {
     name: culturaNom,
@@ -105,14 +113,15 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.cultura.desc,
     link: "/aprendizaje/cursosModalidad/" + culturaNom,
     available: true,
+    tagline: "Las grandes filosofías.",
   },
 ];
 
 // ── Sombras de texto de los popups (mismo criterio que El Recorrido) ──
 // La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
 // TCM lleva sombra granate; Cábala, Fisiología y Cultura sombra negra.
-const SHADOW_BLACK = "0 0 3px rgba(0,0,0,1), 0 1px 5px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
-const SHADOW_GRANATE = "0 0 3px rgba(40,2,2,1), 0 1px 5px rgba(40,2,2,0.98), 0 2px 14px rgba(40,2,2,0.9), 0 0 24px rgba(40,2,2,0.78), 0 0 18px rgba(255,255,255,0.22)";
+const SHADOW_BLACK = "0 0 3px rgba(0,0,0,1), 0 1px 5px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.19)";
+const SHADOW_GRANATE = "0 0 3px rgba(40,2,2,1), 0 1px 5px rgba(40,2,2,0.98), 0 2px 14px rgba(40,2,2,0.9), 0 0 24px rgba(40,2,2,0.78), 0 0 18px rgba(255,255,255,0.17)";
 
 const esOscuraNegra = (name: string) =>
   name === fisiologiaNom || name === cabalaNom || name === culturaNom;
@@ -122,14 +131,14 @@ const nameShadow = (d: Discipline) =>
     ? SHADOW_GRANATE
     : esOscuraNegra(d.name)
     ? SHADOW_BLACK
-    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 16px ${d.bg}88, 0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.3)`;
+    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 16px ${d.bg}88, 0 0 14px rgba(255,255,255,0.41), 0 0 30px rgba(255,255,255,0.22)`;
 
 const descShadow = (d: Discipline) =>
   d.name === tcmNom
     ? SHADOW_GRANATE
     : esOscuraNegra(d.name)
     ? SHADOW_BLACK
-    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 14px ${d.bg}88, 0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)`;
+    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 14px ${d.bg}88, 0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)`;
 
 
 const useReveal = (threshold = 0.15) => {
@@ -195,7 +204,7 @@ const Welcome = () => {
           fontWeight="400"
           letterSpacing="0.06em"
           lineHeight="1.4"
-          textShadow="0 0 13px rgba(255,255,255,0.7), 0 0 27px rgba(255,255,255,0.4), 0 0 54px rgba(180,255,245,0.35)"
+          textShadow="0 0 13px rgba(255,255,255,0.52), 0 0 27px rgba(255,255,255,0.3), 0 0 54px rgba(180,255,245,0.26)"
           fontFamily="'EB Garamond', serif"
           maxW={{ base: "100%", md: "78%" }}
           opacity={mounted ? 1 : 0}
@@ -213,7 +222,7 @@ const Welcome = () => {
           alt=""
           h={{ base: "54px", md: "72px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.78)) drop-shadow(0 0 24px rgba(255,255,255,0.42)) drop-shadow(0 0 47px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.45s, transform 1s ease 0.45s"
@@ -239,7 +248,7 @@ const Welcome = () => {
             fontWeight="700"
             letterSpacing="0.06em"
             lineHeight="1.2"
-            textShadow="0 0 16px rgba(255,255,255,0.85), 0 0 34px rgba(255,255,255,0.55), 0 0 63px rgba(180,255,245,0.45)"
+            textShadow="0 0 16px rgba(255,255,255,0.64), 0 0 34px rgba(255,255,255,0.41), 0 0 63px rgba(180,255,245,0.34)"
             mb={1}
           >
             LIFE AS A PRIVILEGE
@@ -251,7 +260,7 @@ const Welcome = () => {
             fontWeight="400"
             letterSpacing="0.05em"
             fontFamily="'EB Garamond', serif"
-            textShadow="0 0 9px rgba(255,255,255,0.7), 0 0 20px rgba(255,255,255,0.4)"
+            textShadow="0 0 9px rgba(255,255,255,0.52), 0 0 20px rgba(255,255,255,0.3)"
             mb={5}
           >
             La Vida como Privilegio
@@ -261,7 +270,7 @@ const Welcome = () => {
             fontSize={{ base: "sm", md: "xl" }}
             lineHeight="1.9"
             letterSpacing="0.02em"
-            textShadow="0 0 11px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)"
+            textShadow="0 0 11px rgba(255,255,255,0.45), 0 0 25px rgba(255,255,255,0.22)"
             maxW={{ base: "100%", md: "88%" }}
           >
             Ciencia y conocimiento tradicional en un recorrido con inicio y cierre.
@@ -315,7 +324,7 @@ const Welcome = () => {
             h={{ base: "30px", md: "38px" }}
             objectFit="contain"
             flexShrink={0}
-            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
+            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
           />
           <Text
             color="white"
@@ -324,7 +333,7 @@ const Welcome = () => {
             fontSize={{ base: "sm", md: "2xl" }}
             letterSpacing={{ base: "0.14em", md: "0.18em" }}
             textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
+            textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.26)"
             whiteSpace="nowrap"
           >
             El Recorrido
@@ -335,7 +344,7 @@ const Welcome = () => {
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
             fontSize={{ base: "sm", md: "2xl" }}
-            style={{ textShadow: "0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)" }}
+            style={{ textShadow: "0 0 10px rgba(255,255,255,0.52), 0 0 22px rgba(255,255,255,0.3)" }}
           >
             →
           </Box>
@@ -385,7 +394,7 @@ const Welcome = () => {
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.04em"
           lineHeight="1.2"
-          textShadow="0 0 13px rgba(255,255,255,0.65), 0 0 27px rgba(255,255,255,0.35), 0 0 54px rgba(180,255,245,0.3)"
+          textShadow="0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)"
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
@@ -400,7 +409,7 @@ const Welcome = () => {
           fontFamily="'EB Garamond', serif"
           lineHeight="1.9"
           letterSpacing="0.02em"
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
           maxW={{ base: "100%", md: "70%" }}
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
@@ -444,7 +453,7 @@ const Welcome = () => {
             bg="rgba(255,255,255,0.08)"
             cursor="pointer"
             boxShadow="0 0 16px rgba(255,255,255,0.35), 0 0 36px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-            textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35)"
+            textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.26)"
             _hover={{
               bg: "rgba(255,255,255,0.18)",
               borderColor: "rgba(255,255,255,0.9)",
@@ -454,7 +463,7 @@ const Welcome = () => {
             transition="all 0.25s ease"
           >
             Conocer a la creadora
-            <Box as="span" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: "0 0 10px rgba(255,255,255,0.7), 0 0 22px rgba(255,255,255,0.4)" }}>
+            <Box as="span" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: "0 0 10px rgba(255,255,255,0.52), 0 0 22px rgba(255,255,255,0.3)" }}>
               →
             </Box>
           </Flex>
@@ -497,7 +506,7 @@ const Welcome = () => {
           fontWeight="400"
           fontSize={{ base: "md", md: "xl" }}
           letterSpacing="0.12em"
-          textShadow="0 0 9px rgba(255,255,255,0.45), 0 0 20px rgba(255,255,255,0.22)"
+          textShadow="0 0 9px rgba(255,255,255,0.34), 0 0 20px rgba(255,255,255,0.17)"
           textAlign="center"
           px={{ base: 5, md: 10 }}
           opacity={disciplinasTitleReveal.visible ? 1 : 0}
@@ -517,7 +526,7 @@ const Welcome = () => {
       >
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 4, md: 18 }}
+          gap={{ base: 4, md: 10 }}
         >
           {disciplines.map((d, i) => {
             const hasBg = hasDisciplinaBg(d.name);
@@ -584,6 +593,28 @@ const Welcome = () => {
                 >
                   {displayName}
                 </Text>
+
+                {/* Frase elegante (cursiva) — da a entender que no son meras
+                    clasificaciones, sino una mirada sobre tu vida. */}
+                {d.tagline && (
+                  <Text
+                    position="relative"
+                    zIndex={1}
+                    mt={2}
+                    color={d.txt}
+                    fontStyle="italic"
+                    fontWeight="400"
+                    fontSize={{ base: "sm", md: "lg" }}
+                    lineHeight="1.45"
+                    letterSpacing="0.01em"
+                    opacity={0.9}
+                    textShadow={hasBg
+                      ? `0 1px 3px ${d.bg}f5, 0 0 6px ${d.bg}cc`
+                      : "1px 1px 2px rgba(0,0,0,0.35)"}
+                  >
+                    {d.tagline}
+                  </Text>
+                )}
               </Box>
             );
           })}
@@ -668,7 +699,7 @@ const Welcome = () => {
               alt="Life as a Privilege"
               w="110px"
               objectFit="contain"
-              filter="drop-shadow(0 4px 12px rgba(255, 255, 255, 0.35))"
+              filter="drop-shadow(0 4px 12px rgba(255, 255, 255, 0.26))"
             />
 
             {/* Mensaje */}
@@ -678,7 +709,7 @@ const Welcome = () => {
               fontFamily="'EB Garamond', serif"
               lineHeight="1.75"
               letterSpacing="0.02em"
-              textShadow="0 1px 6px rgba(255, 255, 255, 0.3)"
+              textShadow="0 1px 6px rgba(255, 255, 255, 0.22)"
             >
               Crea una cuenta o inicia sesión
               {/* <Box as="span" fontWeight="700">Espacio Personal de crecimiento</Box> */}

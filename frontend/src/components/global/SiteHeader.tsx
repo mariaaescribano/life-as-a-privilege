@@ -24,7 +24,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
 
   const hasSession = !!sessionStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
-  const logoTarget = isPrivate ? "/home" : "/";
+  const isAdmin    = sessionStorage.getItem("isAdmin") === "1";
+  // Para admins el "home" es el panel de administración.
+  const homeTarget = isPrivate ? (isAdmin ? "/admin" : "/home") : "/";
+  const logoTarget = homeTarget;
   const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.png";
 
   const path = location.pathname.toLowerCase();
@@ -81,27 +84,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         </Text>
       </Flex>
 
-      {/* Enlace derecha — HOME + avatar si está logueado, El recorrido si público */}
+      {/* Enlace derecha — avatar si está logueado (el logo ya lleva a home), El recorrido si público */}
       {isPrivate ? (
         <Flex align="center" gap={{ base: 4, md: 6 }}>
-          <Text
-            as="button"
-            onClick={() => navigate("/home")}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "md", md: "xl" }}
-            letterSpacing="0.16em"
-            textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-            cursor="pointer"
-            bg="transparent"
-            border="none"
-            _hover={{ color: "white", textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
-            transition="text-shadow 0.25s ease"
-          >
-            Home
-          </Text>
           <Box
             as="button"
             onClick={() => navigate("/user/account")}

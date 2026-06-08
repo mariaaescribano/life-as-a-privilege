@@ -88,7 +88,7 @@ const QuienSoy = () => {
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -134,7 +134,7 @@ const QuienSoy = () => {
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.04em"
           lineHeight="1.2"
-          textShadow="0 0 14px rgba(255,255,255,0.65), 0 0 30px rgba(255,255,255,0.35), 0 0 60px rgba(180,255,245,0.3)"
+          textShadow="0 0 14px rgba(255,255,255,0.49), 0 0 30px rgba(255,255,255,0.26), 0 0 60px rgba(180,255,245,0.22)"
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
@@ -149,7 +149,22 @@ const QuienSoy = () => {
           fontFamily="'EB Garamond', serif"
           lineHeight="1.95"
           letterSpacing="0.015em"
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
+          maxW={{ base: "100%", md: "70%" }}
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.75s ease 0.5s, transform 0.75s ease 0.5s"
+        >
+          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
+        </Text>
+        
+        <Text
+          color="rgba(255,255,255,0.92)"
+          fontSize={{ base: "md", md: "xl" }}
+          fontFamily="'EB Garamond', serif"
+          lineHeight="1.95"
+          letterSpacing="0.015em"
+          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
           maxW={{ base: "100%", md: "70%" }}
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
@@ -158,6 +173,7 @@ const QuienSoy = () => {
           Mi propósito es profundizar en la naturaleza humana, usando psicología, filosofía, ciencias biológicas y conocimientos tradicionales para ello.
         </Text>
 
+     
         {/* Botón Contactar */}
         <Flex
           align="center"
@@ -191,7 +207,7 @@ const QuienSoy = () => {
             bg="rgba(255,255,255,0.08)"
             cursor="pointer"
             boxShadow="0 0 14px rgba(255,255,255,0.3), 0 0 32px rgba(255,255,255,0.15), 0 4px 12px rgba(0,0,0,0.15)"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
             _hover={{
               bg: "rgba(255,255,255,0.18)",
               borderColor: "rgba(255,255,255,0.9)",
@@ -243,7 +259,7 @@ const QuienSoy = () => {
           transform={donacionReveal.visible ? "scale(1)" : "scale(0.8)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={{ base: "30px", md: "36px" }} w={{ base: "30px", md: "36px" }} viewBox="0 -960 960 960" fill="rgba(255,255,255,0.95)" style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.65))" }}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" h={{ base: "30px", md: "36px" }} w={{ base: "30px", md: "36px" }} viewBox="0 -960 960 960" fill="rgba(255,255,255,0.95)" style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.49))" }}>
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
           </Box>
         </Box>
@@ -253,7 +269,7 @@ const QuienSoy = () => {
           fontSize={{ base: "2xl", md: "4xl" }}
           fontWeight="700"
           letterSpacing="0.05em"
-          textShadow="0 0 14px rgba(255,255,255,0.65), 0 0 30px rgba(255,255,255,0.35)"
+          textShadow="0 0 14px rgba(255,255,255,0.49), 0 0 30px rgba(255,255,255,0.26)"
           opacity={donacionReveal.visible ? 1 : 0}
           transform={donacionReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.75s ease 0.25s, transform 0.75s ease 0.25s"
@@ -283,7 +299,7 @@ const QuienSoy = () => {
           cursor="pointer"
           textDecoration="none"
           boxShadow="0 0 16px rgba(255,255,255,0.34), 0 0 36px rgba(255,255,255,0.16), 0 4px 14px rgba(0,0,0,0.18)"
-          textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.3)"
+          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
           _hover={{
             bg: "rgba(255,255,255,0.2)",
             borderColor: "white",
@@ -305,7 +321,7 @@ const QuienSoy = () => {
           fontSize="xs"
           letterSpacing="0.06em"
           fontStyle="italic"
-          textShadow="0 0 6px rgba(255,255,255,0.25)"
+          textShadow="0 0 6px rgba(255,255,255,0.19)"
           opacity={donacionReveal.visible ? 1 : 0}
           transform={donacionReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.75s ease 0.7s, transform 0.75s ease 0.7s"
@@ -340,7 +356,7 @@ const QuienSoy = () => {
           w={{ base: "32px", md: "40px" }}
           h={{ base: "32px", md: "40px" }}
           fill="rgba(255,255,255,0.85)"
-          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55)) drop-shadow(0 0 18px rgba(180,255,245,0.3))" }}
+          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.41)) drop-shadow(0 0 18px rgba(180,255,245,0.22))" }}
           opacity={testimonioReveal.visible ? 1 : 0}
           transform={testimonioReveal.visible ? "translateY(0)" : "translateY(10px)"}
           transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
@@ -357,7 +373,7 @@ const QuienSoy = () => {
           letterSpacing="0.02em"
           textAlign="center"
           maxW="700px"
-          textShadow="0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px rgba(180,255,245,0.35)"
+          textShadow="0 0 14px rgba(255,255,255,0.41), 0 0 30px rgba(255,255,255,0.21), 0 0 60px rgba(180,255,245,0.26)"
           opacity={testimonioReveal.visible ? 1 : 0}
           transform={testimonioReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -381,7 +397,7 @@ const QuienSoy = () => {
             fontSize={{ base: "md", md: "lg" }}
             letterSpacing="0.1em"
             textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.25)"
+            textShadow="0 0 10px rgba(255,255,255,0.38), 0 0 22px rgba(255,255,255,0.19)"
           >
             Drea Burbank
           </Text>
@@ -391,7 +407,7 @@ const QuienSoy = () => {
             fontStyle="italic"
             fontSize={{ base: "xs", md: "sm" }}
             letterSpacing="0.04em"
-            textShadow="0 0 6px rgba(255,255,255,0.25)"
+            textShadow="0 0 6px rgba(255,255,255,0.19)"
           >
             CEO de Savimbo
           </Text>
@@ -419,7 +435,7 @@ const QuienSoy = () => {
           opacity={testimonioReveal.visible ? 1 : 0}
           transform={testimonioReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease"
-          textShadow="0 0 6px rgba(255,255,255,0.25)"
+          textShadow="0 0 6px rgba(255,255,255,0.19)"
           _hover={{
             bg: "rgba(255,255,255,0.12)",
             borderColor: "rgba(255,255,255,0.7)",
@@ -465,7 +481,7 @@ const QuienSoy = () => {
             w={{ base: "30px", md: "36px" }}
             h={{ base: "30px", md: "36px" }}
             fill="rgba(255,255,255,0.9)"
-            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55)) drop-shadow(0 0 18px rgba(255,255,255,0.3))" }}
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.41)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
           >
             <path d="M395-475q-35-35-35-85t35-85q35-35 85-35t85 35q35 35 35 85t-35 85q-35 35-85 35t-85-35ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm410-350q70-70 70-170t-70-170q-70-70-170-70t-170 70q-70 70-70 170t70 170q70 70 170 70t170-70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
           </Box>
@@ -474,7 +490,7 @@ const QuienSoy = () => {
             fontSize={{ base: "2xl", md: "4xl" }}
             fontWeight="700"
             letterSpacing="0.06em"
-            textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3)"
+            textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
           >
             Mis Certificados
           </Text>
@@ -534,7 +550,7 @@ const QuienSoy = () => {
           letterSpacing="0.08em"
           fontStyle="italic"
           textAlign="center"
-          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.25)"
+          textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22), 0 0 60px rgba(180,255,245,0.19)"
           opacity={cierreReveal.visible ? 1 : 0}
           transform={cierreReveal.visible ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)"}
           transition="opacity 0.9s ease, transform 0.9s ease"

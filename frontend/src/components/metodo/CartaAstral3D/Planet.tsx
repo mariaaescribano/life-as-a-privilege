@@ -30,8 +30,8 @@ function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
   const cy = size / 2 + 6;
 
   ctx.shadowColor = color;
-  ctx.shadowBlur = 16;
-  ctx.fillStyle = "rgba(255,255,255,0.92)";
+  ctx.shadowBlur = 7;
+  ctx.fillStyle = "rgba(255,255,255,0.6)";
   ctx.fillText(text, cx, cy);
 
   ctx.shadowBlur = 0;

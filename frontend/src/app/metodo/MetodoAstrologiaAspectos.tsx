@@ -103,11 +103,12 @@ export default function MetodoAstrologiaAspectos() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Astrología · Tus Aspectos"
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Tus aspectos"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 5, total: 5 }}
             mb={0}
             prev={{ label: "← Mis casas", onClick: () => navigate("/metodo/astrologia/casas") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -120,7 +121,7 @@ export default function MetodoAstrologiaAspectos() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 30px ${astrologiaTxt}33`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.66)" />
 

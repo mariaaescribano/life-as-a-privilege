@@ -38,6 +38,7 @@ export default function MetodoAstrologiaCartaAstral() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
+  const [hayPdf, setHayPdf] = useState(false); // María ya leyó la carta (subió el PDF)
   const [editOpen, setEditOpen] = useState(false);
   const [comicOpen, setComicOpen] = useState(false);
 
@@ -68,13 +69,15 @@ export default function MetodoAstrologiaCartaAstral() {
 
     (async () => {
       try {
-        const estadoRes = await axios.get<{ link_carta?: string | null } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
+        const estadoRes = await axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!estadoRes.data?.link_carta) {
+        // Accesible en cuanto hay solicitud; el PDF solo desbloquea el "siguiente".
+        if (!estadoRes.data?.solicitud_enviada_at) {
           navigate("/metodo/astrologia");
           return;
         }
+        setHayPdf(!!estadoRes.data?.link_carta);
 
         const res = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -135,10 +138,12 @@ export default function MetodoAstrologiaCartaAstral() {
   }
 
   const headerNext = {
-    label: "Mi carta (PDF) →",
+    label: hayPdf ? "Mi carta (PDF) →" : "María está leyendo tu carta…",
     onClick: () => navigate("/metodo/astrologia/lectura"),
-    disabled: !todoCompletado,
-    disabledTooltip: "Lee todos los planetas antes de continuar",
+    disabled: !todoCompletado || !hayPdf,
+    disabledTooltip: !hayPdf
+      ? "María aún está leyendo tu carta. Podrás continuar cuando esté lista."
+      : "Lee todos los planetas antes de continuar",
   };
 
   return (
@@ -160,11 +165,12 @@ export default function MetodoAstrologiaCartaAstral() {
       >
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={{ base: 6, md: 8 }}>
           <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Astrología"
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Arquetipos"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 3, total: 5 }}
             mb={0}
             prev={{ label: "← Sol, Luna y Asc.", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -178,7 +184,7 @@ export default function MetodoAstrologiaCartaAstral() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 90px rgba(180,255,245,0.16), 0 0 30px ${astrologiaTxt}33, 0 0 80px ${astrologiaTxt}1f`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 90px rgba(180,255,245,0.08), 0 0 30px ${astrologiaTxt}1a, 0 0 80px ${astrologiaTxt}10`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.65)" />
 

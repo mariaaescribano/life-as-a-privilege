@@ -38,7 +38,7 @@ const FALLBACK_MODALIDADES: Record<string, Omit<ModalidadInfo, "cursos">> = {
 
 // Iconos pequeños (16-18px) para los botones dentro del header de la disciplina.
 const EyeIcon = () => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.38))" }}>
     <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
   </Box>
 );
@@ -101,7 +101,7 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
           fontWeight="700"
           letterSpacing="0.04em"
           lineHeight="1.25"
-          style={{ textShadow: `0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.28), 0 0 50px ${color}55` }}
+          style={{ textShadow: `0 0 12px rgba(255,255,255,0.41), 0 0 26px rgba(255,255,255,0.21), 0 0 50px ${color}55` }}
         >
           {curso.titulo}
         </Text>
@@ -112,7 +112,7 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
           letterSpacing="0.14em"
           textTransform="uppercase"
           mt={2}
-          style={{ textShadow: `0 0 8px rgba(255,255,255,0.35), 0 0 18px ${color}44` }}
+          style={{ textShadow: `0 0 8px rgba(255,255,255,0.26), 0 0 18px ${color}44` }}
         >
           {disciplina}
         </Text>
@@ -148,7 +148,7 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
           fontSize={{ base: "2xl", md: "2xl" }}
           fontWeight="700"
           lineHeight="1"
-          style={{ textShadow: `0 0 10px rgba(255,255,255,0.5), 0 0 22px ${color}66` }}
+          style={{ textShadow: `0 0 10px rgba(255,255,255,0.38), 0 0 22px ${color}66` }}
         >
           {label}
         </Text>

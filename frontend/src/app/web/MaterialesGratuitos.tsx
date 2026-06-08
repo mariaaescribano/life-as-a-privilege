@@ -56,7 +56,7 @@ export default function MaterialesGratuitos() {
           alt=""
           h="54px"
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.7)) drop-shadow(0 0 18px rgba(255,255,255,0.35))" }}
+          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.52)) drop-shadow(0 0 18px rgba(255,255,255,0.26))" }}
         />
       ),
     },
@@ -79,7 +79,7 @@ export default function MaterialesGratuitos() {
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -102,7 +102,7 @@ export default function MaterialesGratuitos() {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(255,255,255,0.55), 0 0 56px rgba(180,255,245,0.45)"
+          textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -116,7 +116,7 @@ export default function MaterialesGratuitos() {
           fontWeight="400"
           letterSpacing="0.05em"
           lineHeight="1.5"
-          textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 21px rgba(255,255,255,0.3)"
+          textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 21px rgba(255,255,255,0.22)"
           maxW={{ base: "100%", md: "580px" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
@@ -201,7 +201,7 @@ export default function MaterialesGratuitos() {
                 textTransform="uppercase"
                 textAlign="center"
                 lineHeight="1.2"
-                textShadow="0 0 10px rgba(255,255,255,0.6), 0 0 22px rgba(255,255,255,0.35), 0 0 40px rgba(180,255,245,0.3)"
+                textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.26), 0 0 40px rgba(180,255,245,0.22)"
               >
                 {c.titulo}
               </Text>

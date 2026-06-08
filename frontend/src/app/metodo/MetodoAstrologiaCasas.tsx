@@ -150,10 +150,10 @@ export default function MetodoAstrologiaCasas() {
     );
 
   const headerNext = {
-    label: todasEscritas ? "Aspectos →" : "Lectura de casas en proceso…",
+    label: todasEscritas ? "Aspectos →" : "…",
     onClick: () => navigate("/metodo/astrologia/aspectos"),
     disabled: !todasEscritas,
-    disabledTooltip: "María está escribiendo la lectura de tus casas",
+    disabledTooltip: "María está escribiendo la lectura de tus aspectos",
   };
 
   return (
@@ -161,15 +161,16 @@ export default function MetodoAstrologiaCasas() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Astrología · Tus Casas"
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Tus casas"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 4, total: 5 }}
             mb={0}
-            prev={{ label: "← Mi carta (PDF)", onClick: () => navigate("/metodo/astrologia/lectura") }}
+            prev={{ label: "← Carta", onClick: () => navigate("/metodo/astrologia/lectura") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={headerNext}
           />
@@ -180,7 +181,7 @@ export default function MetodoAstrologiaCasas() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 30px ${astrologiaTxt}33`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.6)" />
 
@@ -270,10 +271,10 @@ export default function MetodoAstrologiaCasas() {
                              fill={astrologiaTxt} style={{ filter: `drop-shadow(0 0 5px ${astrologiaTxt})` }} />
                     {/* glifo central del signo de la casa activa */}
                     {info && (
-                      <text x={CX} y={CY + 11} textAnchor="middle" fontSize={30} fill={info.regente?.color ?? astrologiaTxt}
-                            fontFamily="'Times New Roman', serif"
+                      <text x={CX} y={CY + 12} textAnchor="middle" fontSize={34} fill={info.regente?.color ?? astrologiaTxt}
+                            fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
                             style={{ filter: `drop-shadow(0 0 8px ${(info.regente?.color ?? astrologiaTxt)}aa)` }}>
-                        {info.signo.symbol}
+                        {info.signo.symbol}{"︎"}
                       </text>
                     )}
                   </Box>
@@ -303,64 +304,128 @@ function CasaBox({
   textoSel: string;
   sel: number;
 }) {
-  return (
-    <Box
-      w="100%"
-      borderRadius="xl"
-      border={`1px solid ${astrologiaTxt}33`}
-      bg="rgba(8,13,30,0.45)"
-      px={{ base: 5, md: 7 }}
-      py={{ base: 6, md: 7 }}
-      boxShadow={`0 0 18px ${astrologiaTxt}22`}
-    >
-      {/* cabecera horizontal: Casa N · signo · REGENTE [glifo grande iluminado] */}
-      <Flex align="center" gap={3} mb={4} wrap="wrap">
+  const [open, setOpen] = useState(false);
+
+  const Cabecera = (
+    <Flex align="center" gap={3} mb={4} wrap="nowrap">
+      {/* Izquierda: Casa N · signo (se encoge/truncar si hace falta) */}
+      <Flex align="center" gap={3} flex="1" minW={0}>
         <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
-              style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
+              whiteSpace="nowrap" flexShrink={0} style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
           Casa {NUMEROS_ROMANOS[sel - 1]}
         </Text>
         {info && (
           <>
-            <Box w="1px" h="22px" bg={`${astrologiaTxt}33`} />
-            <Flex align="center" gap={1.5}>
-              <Glifo symbol={info.signo.symbol} color={astrologiaTxt} size={22} />
-              <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }}>{info.signo.name}</Text>
+            <Box w="1px" h="22px" bg={`${astrologiaTxt}33`} flexShrink={0} />
+            <Flex align="center" gap={1.5} minW={0}>
+              <Box flexShrink={0}><Glifo symbol={info.signo.symbol} color={astrologiaTxt} size={22} /></Box>
+              <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} noOfLines={1}>{info.signo.name}</Text>
             </Flex>
-            {info.regente && (
-              <Flex align="center" gap={2} ml={1}>
-                <Text color={`${info.regente.color}cc`} fontSize="2xs" letterSpacing="0.18em" fontWeight="700" textTransform="uppercase"
-                      style={{ textShadow: `0 0 8px ${info.regente.color}66` }}>
-                  Regente
-                </Text>
-                <Flex align="center" justify="center" w="44px" h="44px" borderRadius="full"
-                      bg={`${info.regente.color}1f`} border={`1px solid ${info.regente.color}44`}
-                      style={{ boxShadow: `0 0 16px ${info.regente.color}55, inset 0 0 12px ${info.regente.color}2a` }}>
-                  <Glifo symbol={info.regente.symbol} color={info.regente.color} size={32} />
-                </Flex>
-              </Flex>
-            )}
           </>
         )}
       </Flex>
 
-      <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
-
-      {/* texto escrito a mano */}
-      {textoSel ? (
-        <Text
-          color={`${astrologiaTxt}e6`}
-          fontSize={{ base: "md", md: "lg" }}
-          lineHeight="1.85"
-          letterSpacing="0.015em"
-          style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}
-        >
-          {renderConNegritas(textoSel, astrologiaTxt)}
-        </Text>
-      ) : (
-        <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" fontStyle="italic">
-          María aún no ha escrito la lectura de esta casa. Estará disponible pronto.
-        </Text>
+      {/* Derecha: REGENTE siempre a la derecha y en una línea */}
+      {info?.regente && (
+        <Flex align="center" gap={2} flexShrink={0}>
+          <Text color={`${info.regente.color}cc`} fontSize="2xs" letterSpacing="0.18em" fontWeight="700" textTransform="uppercase"
+                whiteSpace="nowrap" style={{ textShadow: `0 0 8px ${info.regente.color}66` }}>
+            <Box as="span" display={{ base: "inline", lg: "none" }}>Regente</Box>
+            <Box as="span" display={{ base: "none", lg: "inline" }}>Reg.</Box>
+          </Text>
+          <Flex align="center" justify="center" w="44px" h="44px" borderRadius="full" flexShrink={0}
+                bg={`${info.regente.color}1f`} border={`1px solid ${info.regente.color}44`}
+                style={{ boxShadow: `0 0 16px ${info.regente.color}55, inset 0 0 12px ${info.regente.color}2a` }}>
+            <Glifo symbol={info.regente.symbol} color={info.regente.color} size={32} />
+          </Flex>
+        </Flex>
       )}
-    </Box>
+    </Flex>
+  );
+
+  return (
+    <>
+      <Box
+        w="100%"
+        h={{ lg: "380px" }}
+        display="flex"
+        flexDirection="column"
+        borderRadius="xl"
+        border={`1px solid ${astrologiaTxt}33`}
+        bg="rgba(8,13,30,0.45)"
+        px={{ base: 5, md: 7 }}
+        py={{ base: 6, md: 7 }}
+        boxShadow={`0 0 18px ${astrologiaTxt}22`}
+      >
+        {Cabecera}
+        <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
+
+        {/* texto (recortado con … en escritorio; completo en móvil) */}
+        <Box flex="1" minH={0} overflow="hidden">
+          {textoSel ? (
+            <Text
+              color={`${astrologiaTxt}e6`}
+              fontSize={{ base: "md", md: "lg" }}
+              lineHeight="1.85"
+              letterSpacing="0.015em"
+              noOfLines={{ lg: 7 }}
+              style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}
+            >
+              {renderConNegritas(textoSel, astrologiaTxt)}
+            </Text>
+          ) : (
+            <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" fontStyle="italic">
+              María aún no ha escrito la lectura de esta casa. Estará disponible pronto.
+            </Text>
+          )}
+        </Box>
+
+        {/* botón Leer — abajo a la derecha, abre el texto completo */}
+        {textoSel && (
+          <Flex justify="flex-end" mt={3}>
+            <Box as="button" onClick={() => setOpen(true)}
+                 px={6} py={2} borderRadius="full" bg={astrologiaTxt} color="#0a0a1a"
+                 border={`1px solid ${astrologiaTxt}88`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                 fontSize="sm" letterSpacing="0.06em" cursor="pointer" boxShadow={`0 0 14px ${astrologiaTxt}66`}
+                 _hover={{ boxShadow: `0 0 22px ${astrologiaTxt}99`, transform: "translateY(-1px)" }} transition="all 0.18s">
+              Leer
+            </Box>
+          </Flex>
+        )}
+      </Box>
+
+      {/* modal con el texto completo */}
+      {open && (
+        <Box position="fixed" inset={0} zIndex={500} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.72)"
+             sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+             onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="620px"
+               maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }} borderRadius="2xl" overflow="hidden"
+               border={`1px solid ${astrologiaTxt}66`}
+               boxShadow={`0 0 32px ${astrologiaTxt}55, 0 0 80px ${astrologiaTxt}28, 0 12px 60px rgba(0,0,0,0.6)`}
+               display="flex" flexDirection="column">
+            <SpaceBg overlay="rgba(8,13,30,0.78)" />
+            <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={3}
+                 w="36px" h="36px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
+                 bg="rgba(0,0,0,0.6)" border={`1px solid ${astrologiaTxt}66`} color={astrologiaTxt} cursor="pointer"
+                 _hover={{ bg: "rgba(0,0,0,0.85)", borderColor: astrologiaTxt }}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 -960 960 960" width="14" fill="currentColor">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+              </svg>
+            </Box>
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }} overflowY="auto"
+                 sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}55`, borderRadius: "8px" } }}>
+              {Cabecera}
+              <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
+              <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.015em"
+                    style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}>
+                {renderConNegritas(textoSel, astrologiaTxt)}
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </>
   );
 }

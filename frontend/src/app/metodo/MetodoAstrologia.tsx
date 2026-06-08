@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { TextoCartaExplicativo } from "../../components/metodo/TextoCartaExplicativo";
 import {
   API_URL,
   astrologiaBg,
@@ -89,6 +90,8 @@ export default function MetodoAstrologia() {
   // Popup de confirmación de datos antes de enviar la solicitud
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [popupError, setPopupError] = useState<string | null>(null);
+  // Popup "tu carta está en proceso" que sale tras enviar
+  const [procesoOpen, setProcesoOpen] = useState(false);
 
   const MESES = [
     { num: "01", nombre: "Enero" },
@@ -176,7 +179,8 @@ export default function MetodoAstrologia() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEstado(r.data ?? null);
-      setConfirmOpen(false); // cierra el popup; la página pasa a "esperando lectura"
+      setConfirmOpen(false);   // cierra el de confirmación
+      setProcesoOpen(true);    // abre el de "tu carta está en proceso"
     } catch (err: any) {
       const status = err?.response?.status;
       const msg = err?.response?.data?.message || err?.message || "Error desconocido";
@@ -212,10 +216,8 @@ export default function MetodoAstrologia() {
     onClick: () => setComicAstroOpen(true),
     icon: <EyeIcon />,
   };
-  const headerNext = yaConPdf
+  const headerNext = (yaConPdf || yaSolicitado)
     ? { label: "Sol, Luna y Ascendente →", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }
-    : yaSolicitado
-    ? { label: "Esperando lectura…", onClick: () => {}, disabled: true }
     : { label: "Leer carta →", onClick: abrirConfirmacion, disabled: !camposCompletos };
 
   return (
@@ -227,11 +229,12 @@ export default function MetodoAstrologia() {
 
           {/* ── Header de disciplina ── */}
           <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
             title="Astrología"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 1, total: 5 }}
             mb={0}
             prev={headerPrev}
             extra={headerExtra}
@@ -245,72 +248,26 @@ export default function MetodoAstrologia() {
             borderRadius="2xl"
             overflow="hidden"
             border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 90px rgba(180,255,245,0.16), 0 0 30px ${astrologiaTxt}33, 0 0 80px ${astrologiaTxt}1f`}
+            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 90px rgba(180,255,245,0.08), 0 0 30px ${astrologiaTxt}1a, 0 0 80px ${astrologiaTxt}10`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.65)" />
 
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
 
-              {/* ── ESTADO C — María ya leyó la carta: empieza el recorrido ── */}
-              {yaConPdf && (
-                <Flex direction="column" align="center" gap={6}>
+              {/* ── Tras enviar la solicitud: box informativo "¿Qué es una carta astral?" ── */}
+              {yaSolicitado && (
+                <Flex direction="column" gap={5}>
                   <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${astrologiaTxt}55` }}>
-                    Tu lectura está lista
+                        style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
+                    ¿Qué es una carta astral?
                   </Text>
-                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px"
-                        style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                    María ya ha leído tu carta. Empieza conociendo tu Sol, tu Luna y tu Ascendente, y ve avanzando con calma.
-                  </Text>
-                  <Box
-                    as="button"
-                    onClick={() => navigate("/metodo/astrologia/solascendenteluna")}
-                    px={{ base: 7, md: 10 }}
-                    py={3}
-                    borderRadius="full"
-                    bg={astrologiaTxt}
-                    color={astrologiaBg}
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "md", md: "xl" }}
-                    fontWeight="700"
-                    letterSpacing={{ base: "0.04em", md: "0.08em" }}
-                    whiteSpace="nowrap"
-                    boxShadow={`0 0 10px rgba(255,255,255,0.28), 0 0 26px rgba(255,255,255,0.14), 0 0 18px ${astrologiaTxt}88, 0 0 42px ${astrologiaTxt}44`}
-                    cursor="pointer"
-                    transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${astrologiaTxt}88, 0 0 58px ${astrologiaTxt}44` }}
-                  >
-                    Comenzar mi recorrido →
-                  </Box>
-                </Flex>
-              )}
-
-              {/* ── ESTADO B — solicitud enviada, esperando lectura ── */}
-              {!yaConPdf && yaSolicitado && (
-                <Flex direction="column" align="center" gap={5} py={4}>
-                
-                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 -960 960 960" width="26" fill={astrologiaTxt}
-                         style={{ filter: `drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 0 14px ${astrologiaTxt}88)` }}>
-                      <path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Z"/>
-                    </Box>
-               
-                  <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.28), 0 0 50px ${astrologiaTxt}55` }}>
-                    Tu carta está en proceso
-                  </Text>
-                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center" maxW="600px"
-                        style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                    María personalmente leerá tu carta y te dirá los arquetipos para que puedas continuar. Hasta entonces tienes que esperar, lo sentimos.
-                  </Text>
-                  <Text color={`${astrologiaTxt}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" textAlign="center" fontStyle="italic" maxW="540px"
-                        style={{ textShadow: `0 0 8px rgba(255,255,255,0.3)` }}>
-                    Mientras tanto, recuerda que tienes los cursos y libros gratuitos.
-                  </Text>
+                  <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
+                  <TextoCartaExplicativo color={astrologiaTxt} />
                 </Flex>
               )}
 
               {/* ── ESTADO A — formulario ── */}
-              {!yaConPdf && !yaSolicitado && (
+              {!yaSolicitado && (
                 <Flex direction="column" gap={5}>
                   <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                         style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
@@ -547,6 +504,43 @@ export default function MetodoAstrologia() {
                     {enviando ? "Enviando…" : "Sí, confirmar"}
                   </Box>
                 </Flex>
+              </Flex>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* ── POPUP: tu carta está en proceso (tras enviar) ── */}
+      {procesoOpen && (
+        <Box
+          position="fixed" inset={0} zIndex={500}
+          display="flex" alignItems="center" justifyContent="center"
+          px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
+          bg="rgba(0,0,0,0.72)"
+          sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+          onClick={() => setProcesoOpen(false)}
+        >
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            position="relative" w="100%" maxW="480px"
+            borderRadius="2xl" overflow="hidden"
+            border={`1px solid ${astrologiaTxt}66`}
+            boxShadow={`0 0 32px ${astrologiaTxt}55, 0 0 80px ${astrologiaTxt}28, 0 12px 60px rgba(0,0,0,0.6)`}
+          >
+            <SpaceBg overlay="rgba(8,13,30,0.8)" />
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
+              <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center"
+                    style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}>
+                Tu carta está en proceso. María personalmente leerá tu carta. Mientras tanto, puedes continuar para ver tus arquetipos.
+              </Text>
+              <Flex justify="flex-end" mt={6}>
+                <Box as="button" onClick={() => setProcesoOpen(false)}
+                     px={8} py={2.5} borderRadius="full" bg={astrologiaTxt} color="#0a0a1a"
+                     border={`1px solid ${astrologiaTxt}88`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                     letterSpacing="0.06em" cursor="pointer" boxShadow={`0 0 18px ${astrologiaTxt}66`}
+                     _hover={{ boxShadow: `0 0 28px ${astrologiaTxt}88`, transform: "translateY(-1px)" }} transition="all 0.2s">
+                  Aceptar
+                </Box>
               </Flex>
             </Box>
           </Box>

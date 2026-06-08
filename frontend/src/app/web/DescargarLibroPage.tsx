@@ -86,7 +86,7 @@ export default function DescargarLibroPage() {
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
         />
       </Flex>
 
@@ -99,7 +99,7 @@ export default function DescargarLibroPage() {
               fontWeight="700"
               letterSpacing="0.1em"
               textTransform="uppercase"
-              textShadow="0 0 14px rgba(255,255,255,0.7), 0 0 30px rgba(180,255,245,0.4)"
+              textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(180,255,245,0.3)"
             >
               Verificando tu compra…
             </Text>
@@ -117,7 +117,7 @@ export default function DescargarLibroPage() {
               fontWeight="700"
               letterSpacing="0.08em"
               lineHeight="1.2"
-              textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(180,255,245,0.45)"
+              textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(180,255,245,0.34)"
             >
               ¡Gracias por tu compra!
             </Text>
@@ -173,7 +173,7 @@ export default function DescargarLibroPage() {
               fontSize={{ base: "2xl", md: "4xl" }}
               fontWeight="700"
               letterSpacing="0.08em"
-              textShadow="0 0 14px rgba(255,255,255,0.6)"
+              textShadow="0 0 14px rgba(255,255,255,0.45)"
             >
               No hemos podido completar la descarga
             </Text>

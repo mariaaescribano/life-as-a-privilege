@@ -53,7 +53,9 @@ export function useCartaPlanetas() {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.data?.link_carta) {
+        // Accesible en cuanto hay solicitud enviada (la carta ya está calculada);
+        // el PDF (link_carta) solo desbloquea el "siguiente", no el acceso.
+        if (!res.data?.solicitud_enviada_at) {
           navigate("/metodo/astrologia", { replace: true });
           return;
         }

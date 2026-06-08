@@ -89,9 +89,9 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
     ctx.translate(x, y);
     // Orientar el glifo tangente al anillo (igual que antes: que "mire" hacia fuera).
     ctx.rotate(-(angle) + Math.PI / 2);
-    ctx.shadowColor = "rgba(255,255,255,0.45)";
-    ctx.shadowBlur = 6;
-    ctx.fillStyle = "rgba(255,255,255,0.88)";
+    ctx.shadowColor = "rgba(255,255,255,0.14)";
+    ctx.shadowBlur = 1.5;
+    ctx.fillStyle = "rgba(255,255,255,0.4)";
     // +y en el frame rotado = hacia el centro del anillo. El offset compensa
     // que el glifo es alto y, con textBaseline="middle", queda visualmente
     // más alto de lo que correspondería al centro del rectángulo.

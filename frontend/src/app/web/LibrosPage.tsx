@@ -55,7 +55,7 @@ function DescargarBtn({
     textTransform: "uppercase" as const,
     textDecoration: "none",
     boxShadow: "0 0 12px rgba(255,255,255,0.25), 0 0 28px rgba(255,255,255,0.12)",
-    textShadow: "0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)",
+    textShadow: "0 0 10px rgba(255,255,255,0.38), 0 0 22px rgba(255,255,255,0.21)",
     _hover: disabled ? {} : {
       bg: "rgba(255,255,255,0.16)",
       borderColor: "rgba(255,255,255,0.85)",
@@ -70,7 +70,7 @@ function DescargarBtn({
     return (
       <Flex as="a" href={href} target="_blank" rel="noopener noreferrer" {...commonProps}>
         {label}
-        <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+        <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.45)" }}>
           {icon}
         </Box>
       </Flex>
@@ -80,7 +80,7 @@ function DescargarBtn({
   return (
     <Flex as="button" onClick={disabled ? undefined : onClick} disabled={disabled} {...commonProps}>
       {label}
-      <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+      <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.45)" }}>
         {icon}
       </Box>
     </Flex>
@@ -174,7 +174,7 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
           fontWeight="700"
           letterSpacing="0.04em"
           lineHeight="1.25"
-          textShadow="0 0 12px rgba(255,255,255,0.45), 0 0 26px rgba(255,255,255,0.22)"
+          textShadow="0 0 12px rgba(255,255,255,0.34), 0 0 26px rgba(255,255,255,0.17)"
         >
           {item.titulo}
         </Text>
@@ -184,7 +184,7 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
           fontSize={{ base: "sm", md: "md" }}
           fontStyle="italic"
           lineHeight="1.5"
-          textShadow="0 0 6px rgba(255,255,255,0.18)"
+          textShadow="0 0 6px rgba(255,255,255,0.14)"
         >
           {item.descripcion}
         </Text>
@@ -195,7 +195,7 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
             fontSize={{ base: "md", md: "lg" }}
             fontWeight="700"
             letterSpacing="0.08em"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.28)"
+            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.21)"
           >
             {PRECIO_LIBRO_PAGO}
           </Text>
@@ -276,7 +276,7 @@ function BookCell({ item, i, total, visible }: { item: Item; i: number; total: n
           fontWeight="700"
           letterSpacing="0.04em"
           lineHeight="1.3"
-          textShadow="0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)"
+          textShadow="0 0 10px rgba(255,255,255,0.3), 0 0 22px rgba(255,255,255,0.15)"
         >
           {item.titulo}
         </Text>
@@ -336,7 +336,7 @@ export default function LibrosPage() {
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 21px rgba(255,255,255,0.42)) drop-shadow(0 0 42px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -359,7 +359,7 @@ export default function LibrosPage() {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.85), 0 0 30px rgba(255,255,255,0.55), 0 0 56px rgba(180,255,245,0.45)"
+          textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -372,7 +372,7 @@ export default function LibrosPage() {
           fontStyle="italic"
           letterSpacing="0.05em"
           lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.5), 0 0 18px rgba(255,255,255,0.28)"
+          textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.21)"
           maxW={{ base: "100%", md: "512px" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(13px)"}

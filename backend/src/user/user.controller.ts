@@ -24,8 +24,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: any) {
     const user = await this.usersService.getUserById(req.user.userId);
-    // is_admin se deriva del email contra ADMIN_EMAILS (no es columna de BD).
-    return { ...user, is_admin: isAdminEmail(req.user?.email) };
+    // is_admin se deriva del email real del usuario contra ADMIN_EMAILS (no es columna de BD).
+    return { ...user, is_admin: isAdminEmail((user as any)?.email ?? req.user?.email) };
   }
 
   // Usuarios del recorrido para el panel admin (antes de :id para no colisionar)

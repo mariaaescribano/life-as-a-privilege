@@ -37,6 +37,7 @@ export interface SolicitudCarta {
 export interface TextosCarta {
   casas_texto?: Record<string, string>;
   aspectos_texto?: Record<string, string>;
+  link_carta?: string | null; // link del PDF (Google Drive)
 }
 
 @Injectable()
@@ -114,6 +115,9 @@ export class MetodoAstrologiaService {
     }
     if (textos.aspectos_texto) {
       update.aspectos_texto = { ...(row.aspectos_texto ?? {}), ...textos.aspectos_texto };
+    }
+    if (textos.link_carta !== undefined) {
+      update.link_carta = textos.link_carta?.trim() || null;
     }
 
     const { error } = await this.databaseService.getClient()

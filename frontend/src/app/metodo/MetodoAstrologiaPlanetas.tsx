@@ -58,13 +58,13 @@ export default function MetodoAstrologiaPlanetas() {
       {/* ── CABECERA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }}>
         <MetodoStepHeader
-          icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
+          icon={<AstrologiaIcon size={{ base: "28px", md: "38px" }} />}
           title="Astrología"
           bgColor={`${astrologiaBg}dd`}
           color={astrologiaTxt}
           space
           mb={0}
-          prev={{ label: "← Mi carta 3D", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
+          prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
           extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
           next={{
             label: todoCompletado ? "Continuar a Psicología →" : "Completa primero la carta",

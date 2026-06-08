@@ -113,7 +113,7 @@ const Contacto = () => {
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -136,7 +136,7 @@ const Contacto = () => {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+          textShadow="0 0 18px rgba(255,255,255,0.64), 0 0 38px rgba(255,255,255,0.41), 0 0 70px rgba(180,255,245,0.34)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -149,7 +149,7 @@ const Contacto = () => {
           lineHeight="1.7"
           letterSpacing="0.03em"
           maxW={{ base: "100%", md: "560px" }}
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
+          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
@@ -192,14 +192,14 @@ const Contacto = () => {
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 letterSpacing="0.05em"
-                textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3)"
+                textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
               >
                 ¡Mensaje enviado!
               </Text>
               <Text
                 color="rgba(255,255,255,0.85)"
                 fontSize={{ base: "md", md: "lg" }}
-                textShadow="0 0 10px rgba(255,255,255,0.35)"
+                textShadow="0 0 10px rgba(255,255,255,0.26)"
               >
                 Te responderé lo antes posible.
               </Text>
@@ -222,7 +222,7 @@ const Contacto = () => {
                 letterSpacing="0.16em"
                 textTransform="uppercase"
                 boxShadow="0 0 14px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.15)"
-                textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+                textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.22)"
                 _hover={{
                   bg: "rgba(255,255,255,0.18)",
                   borderColor: "rgba(255,255,255,0.9)",
@@ -239,7 +239,7 @@ const Contacto = () => {
             <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5} w="80%" mx="auto">
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   NOMBRE
                 </Text>
                 <Input
@@ -253,7 +253,7 @@ const Contacto = () => {
               </Box>
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   EMAIL
                 </Text>
                 <Input
@@ -268,7 +268,7 @@ const Contacto = () => {
               </Box>
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   TÍTULO
                 </Text>
                 <Input
@@ -282,7 +282,7 @@ const Contacto = () => {
               </Box>
 
               <Box>
-                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
                   MENSAJE
                 </Text>
                 <Textarea
@@ -341,7 +341,7 @@ const Contacto = () => {
                     h={{ base: "20px", md: "32px" }}
                     objectFit="contain"
                     flexShrink={0}
-                    style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
+                    style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
                   />
                   <Text
                     color="white"
@@ -350,7 +350,7 @@ const Contacto = () => {
                     fontSize={{ base: "sm", md: "xl" }}
                     letterSpacing={{ base: "0.12em", md: "0.2em" }}
                     textTransform="uppercase"
-                    textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
+                    textShadow="0 0 12px rgba(255,255,255,0.49), 0 0 26px rgba(255,255,255,0.3)"
                     whiteSpace="nowrap"
                   >
                     {status === "sending" ? "Enviando…" : "Enviar mensaje"}

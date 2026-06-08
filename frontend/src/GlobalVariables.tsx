@@ -3,7 +3,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-export const API_URL = "https://life-as-a-privilege.onrender.com"; // 'http://localhost:3000';
+export const API_URL = "http://localhost:3000"; // "https://life-as-a-privilege.onrender.com";
 
 // COLORES
 export const turquesa = "#48C0B5";
