@@ -70,6 +70,7 @@ export default function MetodoAstrologiaLectura() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 4, total: 6 }}
             mb={0}
             prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -94,7 +95,7 @@ export default function MetodoAstrologiaLectura() {
                 </Text>
                 <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px"
                       style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
-                  Descárgala, léela con calma y, cuando estés listo, continúa.
+                  Ahora que conoces tus arquetipos, accede a tu carta completa. Descárgala, léela con calma y, cuando estés listo, continúa.
                 </Text>
 
                 {linkCarta && (

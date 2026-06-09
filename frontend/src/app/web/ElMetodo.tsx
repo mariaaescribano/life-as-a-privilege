@@ -1,12 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
+import { WaitlistModal } from "../../components/global/WaitlistModal";
 import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import {
+  GraduationCap,
+  BookOpen,
+  Users,
+  PlayCircle,
+  MessageCircle,
+  Network,
+} from "lucide-react";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -84,6 +92,46 @@ const modalidades: ModalidadData[] = [
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
     ...recorridoContenido.cultura,
+  },
+];
+
+// ── "Qué recibirás" — valor del recorrido ──
+type Beneficio = {
+  icon: React.ComponentType<{ size?: number | string; strokeWidth?: number }>;
+  title: string;
+  text: string;
+};
+
+const beneficios: Beneficio[] = [
+  {
+    icon: GraduationCap,
+    title: "Una disciplina completa",
+    text: "Accede a los cursos, vídeos y materiales de las disciplinas.",
+  },
+  {
+    icon: BookOpen,
+    title: "Material complementario",
+    text: "Libros, PDFs, investigaciones y recursos para profundizar más allá de las clases.",
+  },
+  {
+    icon: Users,
+    title: "Comunidad",
+    text: "Comparte dudas, descubrimientos y experiencias con otras personas del recorrido.",
+  },
+  {
+    icon: PlayCircle,
+    title: "Acompañamiento",
+    text: "Vídeos y contenidos periódicos para ayudarte a integrar lo aprendido.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Sesiones individuales",
+    text: "Posibilidad de reservar consultas privadas para profundizar en tu caso concreto.",
+  },
+  {
+    icon: Network,
+    title: "Un sistema coherente",
+    text: "Las disciplinas no están aisladas. Cada una aporta una perspectiva distinta sobre la misma persona.",
   },
 ];
 
@@ -238,28 +286,34 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
 }
 
 export default function ElMetodo() {
-  const navigate = useNavigate();
   const headerReveal = useReveal(0.05);
   const disciplinasTitleReveal = useReveal(0.15);
   const cardsReveal = useReveal(0.04);
-  const pricingReveal = useReveal(0.1);
-  const comunidadReveal = useReveal(0.15);
+  const recibirasTitleReveal = useReveal(0.2);
+  const recibirasGridReveal = useReveal(0.05);
   const botonesReveal = useReveal(0.1);
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  // El recorrido aún no está acabado: en vez de mandar al registro/flujo
+  // incompleto, abrimos el modal de "lista de espera" y guardamos el email.
   const handleApuntarme = () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-
-    if (!userId || !token) {
-      navigate("/signIn?next=/home");
-      return;
-    }
-    navigate("/home");
+    setWaitlistOpen(true);
   };
+
+  // Flujo original (cuando el recorrido esté disponible):
+  // const handleApuntarme = () => {
+  //   const userId = sessionStorage.getItem("userId");
+  //   const token = sessionStorage.getItem("token");
+  //   if (!userId || !token) {
+  //     navigate("/signIn?next=/home");
+  //     return;
+  //   }
+  //   navigate("/home");
+  // };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -340,6 +394,8 @@ export default function ElMetodo() {
         <Text
           color="white"
           fontSize={{ base: "sm", md: "lg" }}
+          fontWeight="700"
+          fontStyle="italic"
           lineHeight="1.95"
           letterSpacing="0.015em"
           textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
@@ -386,22 +442,6 @@ export default function ElMetodo() {
           transform={disciplinasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         />
-        <Text
-          color="rgba(255,255,255,0.85)"
-          fontFamily="'EB Garamond', serif"
-          fontStyle="italic"
-          fontWeight="400"
-          fontSize={{ base: "lg", md: "2xl" }}
-          letterSpacing="0.12em"
-          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
-          textAlign="center"
-          px={{ base: 5, md: 10 }}
-          opacity={disciplinasTitleReveal.visible ? 1 : 0}
-          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
-          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
-        >
-          Las 8 disciplinas en orden…
-        </Text>
       </Flex>
 
       {/* ── CARDS DE MODALIDADES ── */}
@@ -428,235 +468,261 @@ export default function ElMetodo() {
         </Grid>
       </Box>
 
-      {/* ── SEPARADOR ANTES DE INFORMACIÓN ── */}
-      <Flex mb="10px" justify="center" pt={{ base: 14, md: 21 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
-      </Flex>
-
-      {/* ── INFORMACIÓN Y PRECIO (sin caja) ── */}
-      <Flex
-        ref={pricingReveal.ref}
-        direction="column"
-        align="center"
-        textAlign="center"
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 14, md: 21 }}
-        gap={{ base: 8, md: 10 }}
-      >
-        <Text
-          color="white"
-          fontSize={{ base: "2xl", md: "4xl" }}
-          fontWeight="700"
-          letterSpacing="0.06em"
-          textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 54px rgba(180,255,245,0.26)"
-          opacity={pricingReveal.visible ? 1 : 0}
-          transform={pricingReveal.visible ? "translateY(0)" : "translateY(22px)"}
-          transition="opacity 0.8s ease, transform 0.8s ease"
-        >
-          ¿Cómo funciona?
-        </Text>
-
-        {/* Info sesiones */}
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          gap={{ base: 10, md: 16 }}
-          justify="center"
-          align={{ base: "center", md: "flex-start" }}
-          w="100%" mb={{ base: "5px", md: "10px" }}
-          maxW="900px"
-          opacity={pricingReveal.visible ? 1 : 0}
-          transform={pricingReveal.visible ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
-        >
-          <Box textAlign="center" flex="1">
-            <Text
-              color="rgba(255,255,255,0.75)"
-              fontSize="sm"
-              letterSpacing="0.18em"
-              textTransform="uppercase"
-              mb={2}
-              textShadow="0 0 8px rgba(255,255,255,0.3)"
-            >
-              Por disciplina
-            </Text>
-            <Text
-              color="white"
-              fontSize={{ base: "4xl", md: "5xl" }}
-              fontWeight="700"
-              textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3)"
-            >
-              20 €
-            </Text>
-            <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.22)">
-              Acceso a los cursos y materiales de la disciplina concreta
-            </Text>
-            {/* <Text color="rgba(255,255,255,0.6)" fontSize="sm" mt={2} fontStyle="italic" lineHeight="1.55" maxW="320px" mx="auto">
-              cada pago se realiza por separado: al terminar una disciplina, abonas la siguiente
-            </Text> */}
-          </Box>
-
-          <Box
-            display={{ base: "none", md: "block" }}
-            w="1px"
-            bg="rgba(255,255,255,0.25)"
-            alignSelf="stretch"
-            boxShadow="0 0 8px rgba(255,255,255,0.4)"
-          />
-
-          <Box textAlign="center" flex="1">
-            <Text
-              color="rgba(255,255,255,0.75)"
-              fontSize="sm"
-              letterSpacing="0.18em"
-              textTransform="uppercase"
-              mb={2}
-              textShadow="0 0 8px rgba(255,255,255,0.3)"
-            >
-              Consultas individuales
-            </Text>
-            <Text
-              color="white"
-              fontSize={{ base: "4xl", md: "5xl" }}
-              fontWeight="700"
-              textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3)"
-            >
-              15 € <Box as="span" fontSize={{ base: "xl", md: "2xl" }} fontWeight="500" opacity={0.85}>/ sesión</Box>
-            </Text>
-            <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "md", md: "lg" }} mt={2} lineHeight="1.6" textShadow="0 0 8px rgba(255,255,255,0.22)">
-              1 hora de duración, se pagan aparte
-            </Text>
-          </Box>
-        </Flex>
-      </Flex>
-
-      {/* ── SEPARADOR ── */}
-      <Flex mb={{ base: "0px", md: "10px" }} justify="center" pt={{ base: 14, md: 21 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
-      </Flex>
-
-      {/* ── 3 CAJITAS (Comunidad / Acompañamiento / Precio) ── */}
-      <Flex
-        ref={comunidadReveal.ref}
-        direction="column"
-        align="center"
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 14, md: 21 }}
-        gap={{ base: 8, md: 10 }}
-      >
-        {/* <Image
-          src="/img/icono/life.png"
-          alt=""
-          h={{ base: "50px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 22px rgba(255,255,255,0.26))" }}
-          opacity={comunidadReveal.visible ? 1 : 0}
-          transform={comunidadReveal.visible ? "scale(1)" : "scale(0.8)"}
-          transition="opacity 0.8s ease, transform 0.8s ease"
-        /> */}
-
-        <Grid
-          w={{ base: "100%", md: "90%" }}
-          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-          gap={{ base: 6, md: 8 }}
-        >
-          {[
-            {
-              titulo: "Comunidad",
-              valor: "Acceso a grupo de WhatsApp",
-              delay: 0.2,
-              icon: (
-                <>
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                </>
-              ),
-            },
-            {
-              titulo: "Acompañamiento",
-              valor: "Vídeo diario de la creadora",
-              delay: 0.4,
-              icon: (
-                <>
-                  <polygon points="6 4 20 12 6 20 6 4" />
-                </>
-              ),
-            },
-            {
-              titulo: "Precio económico",
-              valor: "El conocimiento es un derecho",
-              delay: 0.6,
-              icon: (
-                <>
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                </>
-              ),
-            },
-          ].map((c) => (
+      {/* ── QUÉ RECIBIRÁS ── */}
+      <Box w="100%" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }}>
+        <Box maxW="1200px" mx="auto">
+          {/* Separador con mandala en medio y líneas degradadas a los lados */}
+          <Flex
+            ref={recibirasTitleReveal.ref}
+            align="center"
+            justify="center"
+            gap={{ base: 4, md: 6 }}
+            mb={{ base: 10, md: 14 }}
+            opacity={recibirasTitleReveal.visible ? 1 : 0}
+            transform={recibirasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
+            transition="opacity 0.8s ease, transform 0.8s ease"
+          >
             <Box
-              key={c.titulo}
-              bg="transparent"
-              borderRadius="xl"
-              px={{ base: 4, md: 4 }}
-              py={{ base: 5, md: 6 }}
-              textAlign="center"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              gap={{ base: 2.5, md: 3 }}
-              opacity={comunidadReveal.visible ? 1 : 0}
-              transform={comunidadReveal.visible ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)"}
-              transition={`opacity 0.7s ease ${c.delay}s, transform 0.7s ease ${c.delay}s`}
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+            />
+            <Image
+              src="/img/icono/life.png"
+              alt=""
+              h={{ base: "26px", md: "34px" }}
+              objectFit="contain"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+            />
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+            />
+          </Flex>
+
+          {/* Título + subtítulo */}
+          <Flex
+            direction="column"
+            align="center"
+            textAlign="center"
+            gap={{ base: 4, md: 5 }}
+          >
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "3xl", md: "5xl" }}
+              letterSpacing="0.04em"
+              lineHeight="1.2"
+              textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
+              opacity={recibirasTitleReveal.visible ? 1 : 0}
+              transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
+              transition="opacity 0.8s ease, transform 0.8s ease"
             >
-              {/* Icono */}
-              <Box
-                w={{ base: "38px", md: "42px" }}
-                h={{ base: "38px", md: "42px" }}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Box
-                  as="svg"
-                  viewBox="0 0 24 24"
-                  w={{ base: "18px", md: "20px" }}
-                  h={{ base: "18px", md: "20px" }}
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
+              Qué recibirás
+            </Text>
+            <Text
+              color="rgba(255,255,255,0.88)"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="400"
+              fontSize={{ base: "md", md: "xl" }}
+              lineHeight="1.7"
+              letterSpacing="0.02em"
+              maxW={{ base: "100%", md: "640px" }}
+              textShadow="0 0 8px rgba(255,255,255,0.22)"
+              opacity={recibirasTitleReveal.visible ? 1 : 0}
+              transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
+              transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
+            >
+              Todo lo necesario para comprender cada disciplina y aplicarla a tu vida.
+            </Text>
+          </Flex>
+
+          {/* Cuadrícula de tarjetas */}
+          <Grid
+            ref={recibirasGridReveal.ref}
+            templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+            gap={{ base: 5, md: 7 }}
+            mt={{ base: 10, md: 14 }}
+          >
+            {beneficios.map((b, i) => {
+              const Icon = b.icon;
+              return (
+                <Flex
+                  key={i}
+                  direction="column"
+                  align="flex-start"
+                  gap={4}
+                  p={{ base: 7, md: 9 }}
+                  borderRadius="2xl"
+                  bg="rgba(255,255,255,0.05)"
+                  border="1px solid rgba(255,255,255,0.14)"
+                  sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
+                  boxShadow="0 4px 18px rgba(0,0,0,0.12)"
+                  opacity={recibirasGridReveal.visible ? 1 : 0}
+                  transform={recibirasGridReveal.visible ? "translateY(0)" : "translateY(28px)"}
+                  transition={`opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`}
                 >
-                  {c.icon}
-                </Box>
-              </Box>
+                  {/* Icono (izquierda) + título (derecha) */}
+                  <Flex align="center" gap={4} w="100%">
+                    <Flex
+                      align="center"
+                      justify="center"
+                      w="56px"
+                      h="56px"
+                      borderRadius="full"
+                      bg="rgba(255,255,255,0.08)"
+                      border="1px solid rgba(255,255,255,0.22)"
+                      color="white"
+                      flexShrink={0}
+                      sx={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.25))" }}
+                    >
+                      <Icon size={28} strokeWidth={1.6} />
+                    </Flex>
 
-              {/* Título */}
-              <Text
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.14em"
-                textTransform="uppercase"
-                textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.19)"
-              >
-                {c.titulo}
-              </Text>
+                    <Text
+                      color="white"
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="700"
+                      fontSize={{ base: "xl", md: "2xl" }}
+                      letterSpacing="0.02em"
+                      lineHeight="1.3"
+                      textShadow="0 0 8px rgba(255,255,255,0.22)"
+                    >
+                      {b.title}
+                    </Text>
+                  </Flex>
 
-              {/* Valor */}
-              <Text
-                color="rgba(255,255,255,0.85)"
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "xs", md: "sm" }}
-                lineHeight="1.55"
-                letterSpacing="0.01em"
-              >
-                {c.valor}
-              </Text>
-            </Box>
-          ))}
-        </Grid>
-      </Flex>
+                  <Text
+                    color="rgba(255,255,255,0.82)"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="400"
+                    fontSize={{ base: "sm", md: "md" }}
+                    lineHeight="1.75"
+                    letterSpacing="0.01em"
+                  >
+                    {b.text}
+                  </Text>
+                </Flex>
+              );
+            })}
+          </Grid>
+
+          {/* Separador (mismo estilo que el de las disciplinas) */}
+          {/* <Flex justify="center" mt={{ base: 16, md: 20 }}>
+            <Box
+              w="100%"
+              maxW="500px"
+              h="1px"
+              bg="rgba(255,255,255,0.15)"
+              opacity={recibirasAccesoReveal.visible ? 1 : 0}
+              transform={recibirasAccesoReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
+              transition="opacity 0.8s ease, transform 0.8s ease"
+            />
+          </Flex>
+
+          {/* Bloque horizontal de acceso 
+          <Flex
+            ref={recibirasAccesoReveal.ref}
+            direction="column"
+            align="center"
+            gap={{ base: 8, md: 10 }}
+            mt={{ base: 16, md: 24 }}
+            opacity={recibirasAccesoReveal.visible ? 1 : 0}
+            transform={recibirasAccesoReveal.visible ? "translateY(0)" : "translateY(28px)"}
+            transition="opacity 0.8s ease, transform 0.8s ease"
+          >
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "2xl", md: "4xl" }}
+              letterSpacing="0.03em"
+              lineHeight="1.2"
+              textAlign="center"
+              textShadow="0 0 12px rgba(255,255,255,0.38), 0 0 26px rgba(180,255,245,0.16)"
+            >
+              Empieza cuando quieras
+            </Text>
+
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              gap={{ base: 5, md: 7 }}
+              w="100%"
+              maxW="820px"
+              align="stretch"
+            >
+              {[
+                {
+                  nombre: "Disciplina individual",
+                  precio: "20 €",
+                  desc: "Acceso completo a una disciplina.",
+                },
+                {
+                  nombre: "Sesión individual",
+                  precio: "15 € / hora",
+                  desc: "Acompañamiento opcional.",
+                },
+              ].map((col, i) => (
+                <Flex
+                  key={i}
+                  flex={1}
+                  direction="column"
+                  align="center"
+                  textAlign="center"
+                  gap={3}
+                  p={{ base: 8, md: 10 }}
+                  borderRadius="2xl"
+                  bg="rgba(255,255,255,0.05)"
+                  border="1px solid rgba(255,255,255,0.14)"
+                  sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
+                  boxShadow="0 4px 18px rgba(0,0,0,0.12)"
+                  transition="box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, transform 0.3s ease"
+                  _hover={{
+                    bg: "rgba(255,255,255,0.08)",
+                    borderColor: "rgba(255,255,255,0.3)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.2), 0 0 22px rgba(180,255,245,0.16)",
+                    transform: "translateY(-6px)",
+                  }}
+                >
+                  <Text
+                    color="rgba(255,255,255,0.9)"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="600"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    letterSpacing="0.04em"
+                    textShadow="0 0 8px rgba(255,255,255,0.2)"
+                  >
+                    {col.nombre}
+                  </Text>
+                  <Text
+                    color="white"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="700"
+                    fontSize={{ base: "3xl", md: "4xl" }}
+                    letterSpacing="0.02em"
+                    lineHeight="1.1"
+                    textShadow="0 0 14px rgba(255,255,255,0.4), 0 0 28px rgba(180,255,245,0.18)"
+                  >
+                    {col.precio}
+                  </Text>
+                  <Text
+                    color="rgba(255,255,255,0.8)"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="400"
+                    fontSize={{ base: "sm", md: "md" }}
+                    lineHeight="1.7"
+                  >
+                    {col.desc}
+                  </Text>
+                </Flex>
+              ))}
+            </Flex>
+          </Flex> */}
+        </Box>
+      </Box>
 
       {/* ── Conocer a la creadora ── */}
       {/* <Flex
@@ -713,17 +779,12 @@ export default function ElMetodo() {
         />
       </Flex> */}
 
-      {/* ── SEPARADOR ── */}
-      <Flex justify="center" mb={{ base: "25px", md: "35px" }} pt={{ base: 14, md: 21 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
-      </Flex>
-
       {/* ── BOTÓN EMPEZAR + TENGO DUDAS ── */}
       <Flex
         ref={botonesReveal.ref}
         direction="column"
         align="center"
-        pt={{ base: 14, md: 21 }}
+        pt={{ base: 24, md: 36 }}
         pb={{ base: 24, md: 32 }}
         gap={{ base: 12, md: 16 }}
         opacity={botonesReveal.visible ? 1 : 0}
@@ -765,13 +826,13 @@ export default function ElMetodo() {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "lg", md: "3xl" }}
-            letterSpacing={{ base: "0.14em", md: "0.22em" }}
+            fontSize={{ base: "md", md: "2xl" }}
+            letterSpacing={{ base: "0.08em", md: "0.18em" }}
             textTransform="uppercase"
+            textAlign="center"
             textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
-            whiteSpace="nowrap"
           >
-            Empezar
+            Apúntate a la lista de espera
           </Text>
         </Flex>
 
@@ -988,7 +1049,7 @@ export default function ElMetodo() {
 
               <Text
                 color={selectedCard.txt}
-                fontSize={{ base: "4xl", md: "6xl" }}
+                fontSize={{ base: "3xl", md: "5xl" }}
                 fontWeight="700"
                 letterSpacing="0.05em"
                 textAlign="center"
@@ -1008,7 +1069,7 @@ export default function ElMetodo() {
 
               <Text
                 color={selectedCard.txt}
-                fontSize={{ base: "xl", md: "3xl" }}
+                fontSize={{ base: "lg", md: "2xl" }}
                 fontStyle="italic"
                 textAlign="center"
                 lineHeight="1.7"
@@ -1059,7 +1120,7 @@ export default function ElMetodo() {
                   {/* Título de sección */}
                   <Text
                     color={selectedCard.txt}
-                    fontSize={{ base: "lg", md: "2xl" }}
+                    fontSize={{ base: "16px", md: "20px" }}
                     fontWeight="700"
                     letterSpacing="0.04em"
                     lineHeight="1.25"
@@ -1076,7 +1137,7 @@ export default function ElMetodo() {
                         key={j}
                         color={selectedCard.txt}
                         opacity={1}
-                        fontSize={{ base: "md", md: "lg" }}
+                        fontSize={{ base: "14px", md: "16px" }}
                         lineHeight={{ base: "1.6", md: "1.7" }}
                         letterSpacing="0.01em"
                         textAlign="center"
@@ -1143,6 +1204,11 @@ export default function ElMetodo() {
       <BookCallModal
         isOpen={bookCallOpen}
         onClose={() => setBookCallOpen(false)}
+      />
+
+      <WaitlistModal
+        isOpen={waitlistOpen}
+        onClose={() => setWaitlistOpen(false)}
       />
 
       <SiteFooter />

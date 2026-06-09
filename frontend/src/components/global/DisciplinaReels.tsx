@@ -404,20 +404,36 @@ export function DisciplinaReels({
 
   if (reels.length === 0) return null;
 
+  const shown = reels.slice(0, 4);
+
   return (
     <Box w="100%" maxW="1280px" mb={{ base: 8, md: 10 }} fontFamily="'EB Garamond', serif">
-      {/* Tarjetas individuales — todas del mismo tamaño. 4 por fila (ordenador), 2 (móvil) */}
-      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
-        {reels.slice(0, 4).map((reel) => (
-          <ReelCard
-            key={reel.id}
-            reel={reel}
-            nom={nom}
-            color={color}
-            onOpen={() => setOpenReel(reel)}
-          />
-        ))}
-      </SimpleGrid>
+      {/* Tarjetas individuales — todas del mismo tamaño. 4 por fila (ordenador), 2 (móvil).
+          Si solo hay un vídeo, lo centramos en vez de dejarlo pegado a la izquierda. */}
+      {shown.length === 1 ? (
+        <Flex justify="center">
+          <Box w="100%" maxW="280px">
+            <ReelCard
+              reel={shown[0]}
+              nom={nom}
+              color={color}
+              onOpen={() => setOpenReel(shown[0])}
+            />
+          </Box>
+        </Flex>
+      ) : (
+        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
+          {shown.map((reel) => (
+            <ReelCard
+              key={reel.id}
+              reel={reel}
+              nom={nom}
+              color={color}
+              onOpen={() => setOpenReel(reel)}
+            />
+          ))}
+        </SimpleGrid>
+      )}
 
       {openReel && (
         <ReelModal reel={openReel} color={color} onClose={() => setOpenReel(null)} />

@@ -5,29 +5,30 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
    Viñetas del cómic "¿Qué es una carta astral?".
    Cambia `img` por las fotos que quieras y edita los textos.
    ────────────────────────────────────────────────────────────── */
-const MAPA = "/viñetas/astrologia/astro/mapa.png";
-const ASPECTOS = "/viñetas/astrologia/astro/aspectos.png";
-const FINAL = "/viñetas/astrologia/astro/viñeta13.png";
+const MAPA1 = "/viñetas/astrologia/astro/mapa1.png";
+const MAPA2 = "/viñetas/astrologia/astro/mapa2.png";
+const MAPA3 = "/viñetas/astrologia/astro/mapa3.png";
+const MAPA4 = "/viñetas/astrologia/astro/mapa4.png";
 
 const VINETAS: { img: string; texto: string }[] = [
   {
-    img: MAPA,
+    img: MAPA1,
     texto: "Tu carta astral te muestra dónde se encuentran tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu experiencia en esta vida. También revela tus heridas más profundas y dónde fueron creadas.",
   },
   {
-    img: MAPA,
+    img: MAPA1,
     texto: "Es importante recordar que nada de lo que aparece en tu carta es bueno o malo, ni hay nada que juzgar en ti o en ninguna otra persona. Todo fue elegido por tu alma antes de nacer. Por extensión, también fueron elegidas las experiencias, las heridas y las personas que te lo harían.",
   },
   {
-    img: ASPECTOS,
+    img: MAPA2,
     texto: "En astrología, las **casas** muestran dónde ocurre, ocurrió o puede ocurrir una experiencia, y los **planetas** indican qué energía, función o aprendizaje está implicado.",
   },
   {
-    img: ASPECTOS,
+    img: MAPA3,
     texto: "Los **signos** revelan cómo se expresa esa energía y cuál es su cualidad. Los **aspectos** muestran las relaciones entre las distintas energías de la carta: los impulsos, los bloqueos, los patrones repetitivos y los puntos donde conviene poner atención para desarrollar tu potencial y no perder de vista tus dones.",
   },
   {
-    img: FINAL,
+    img: MAPA4,
     texto: "La carta astral es tu mapa para comprenderte mejor, reconocer tus talentos, sanar tus heridas y recorrer tu camino con mayor consciencia.",
   },
 ];

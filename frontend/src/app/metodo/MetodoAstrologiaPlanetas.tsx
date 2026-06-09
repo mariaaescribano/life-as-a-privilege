@@ -67,9 +67,10 @@ export default function MetodoAstrologiaPlanetas() {
           prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
           extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
           next={{
-            label: todoCompletado ? "Continuar a Psicología →" : "Completa primero la carta",
+            label: todoCompletado ? "Psicología →" : "Completa primero la carta",
             onClick: () => navigate("/metodo/psicologia"),
-            disabled: !todoCompletado,
+            disabled: true, // Psicología bloqueada por ahora
+            disabledTooltip: "Psicología estará disponible próximamente",
           }}
         />
       </Flex>

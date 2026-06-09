@@ -461,37 +461,70 @@ export default function CursosModalidad() {
           )}
 
           {modalidad.cursos.length > 0 ? (
-            <SimpleGrid
-              w="100%"
-              maxW="1280px"
-              columns={{ base: 1, md: 2, xl: 3 }}
-              spacing={{ base: 5, md: 5 }}
-              sx={{
-                "@keyframes cursoCardIn": {
-                  from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
-                  to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
-                },
-              }}
-            >
-              {modalidad.cursos.map((curso, i) => (
+            modalidad.cursos.length === 1 ? (
+              // Un solo curso: lo centramos en vez de dejarlo pegado a la izquierda.
+              <Flex
+                w="100%"
+                maxW="1280px"
+                justify="center"
+                sx={{
+                  "@keyframes cursoCardIn": {
+                    from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                    to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+                  },
+                }}
+              >
                 <Box
-                  key={curso.id}
+                  w="100%"
+                  maxW="380px"
                   h="100%"
                   style={{
                     opacity: 0,
-                    animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
+                    animation: "cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) 0s forwards",
                   }}
                 >
                   <CursoCard
-                    curso={curso}
+                    curso={modalidad.cursos[0]}
                     bgColor={modalidad.bgColor}
                     color={modalidad.color}
                     disciplina={modalidad.nom}
-                    onVerDetalle={() => setDetailCurso(curso)}
+                    onVerDetalle={() => setDetailCurso(modalidad.cursos[0])}
                   />
                 </Box>
-              ))}
-            </SimpleGrid>
+              </Flex>
+            ) : (
+              <SimpleGrid
+                w="100%"
+                maxW="1280px"
+                columns={{ base: 1, md: 2, lg: 3, xl: 4 }}
+                spacing={{ base: 5, md: 5 }}
+                sx={{
+                  "@keyframes cursoCardIn": {
+                    from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                    to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+                  },
+                }}
+              >
+                {modalidad.cursos.map((curso, i) => (
+                  <Box
+                    key={curso.id}
+                    h="100%"
+                    style={{
+                      opacity: 0,
+                      animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
+                    }}
+                  >
+                    <CursoCard
+                      curso={curso}
+                      bgColor={modalidad.bgColor}
+                      color={modalidad.color}
+                      disciplina={modalidad.nom}
+                      onVerDetalle={() => setDetailCurso(curso)}
+                    />
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )
           ) : null}
 
           {/* ── REELS DE LA DISCIPLINA ── */}
@@ -501,7 +534,7 @@ export default function CursosModalidad() {
             color={modalidad.color}
           />
 
-          <SubscribeBox />
+          <SubscribeBox hideSeparator />
         </Flex>
       </Box>
 

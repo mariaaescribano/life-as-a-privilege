@@ -374,7 +374,7 @@ export default function AyurvedaTestPage({
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
-      <SiteHeader variant={isGuest ? "auto" : "private"} />
+      <SiteHeader variant="auto" />
 
       <Box flex="1">
         <Flex

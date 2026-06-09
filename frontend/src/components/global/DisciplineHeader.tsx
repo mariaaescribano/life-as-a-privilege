@@ -22,7 +22,7 @@ export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW =
       borderRadius="2xl"
       boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.15), 0 0 90px rgba(180,255,245,0.16), 0 0 40px ${color}55, 0 4px 22px rgba(0,0,0,0.22)`}
       px={compact ? { base: 6, md: 10 } : { base: 8, md: 14 }}
-      py={compact ? { base: 5, md: 7 } : { base: 8, md: 12 }}
+      py={compact ? { base: 2.5, md: 3 } : { base: 3.5, md: 4 }}
       w="100%"
       maxW={maxW}
       mb={mb}
@@ -31,10 +31,10 @@ export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW =
         <Box
           borderRadius="full"
           bg={bgColor}
-          border={`${compact ? 4 : 5}px solid ${color}`}
+          border={`${compact ? 3 : 4}px solid ${color}`}
           boxShadow={`0 0 14px rgba(255,255,255,0.5), 0 0 32px rgba(255,255,255,0.25), 0 0 22px ${color}99, 0 0 55px ${color}44`}
-          w={compact ? { base: "44px", md: "54px" } : { base: "60px", md: "72px" }}
-          h={compact ? { base: "44px", md: "54px" } : { base: "60px", md: "72px" }}
+          w={compact ? { base: "34px", md: "40px" } : { base: "44px", md: "52px" }}
+          h={compact ? { base: "34px", md: "40px" } : { base: "44px", md: "52px" }}
           display="flex"
           p={compact ? "4px" : "5px"}
           alignItems="center"
@@ -50,7 +50,7 @@ export function DisciplineHeader({ icon, title, subtitle, bgColor, color, maxW =
         <Box>
           <Text
             color={color}
-            fontSize={compact ? { base: "xl", md: "3xl" } : { base: "2xl", md: "5xl" }}
+            fontSize={compact ? { base: "lg", md: "2xl" } : { base: "xl", md: "4xl" }}
             fontWeight="700"
             letterSpacing="0.06em"
             lineHeight="1.15"

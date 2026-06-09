@@ -403,7 +403,7 @@ export default function Opiniones() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Experiencias de quienes ya están en «El Recorrido»
+          Experiencias de quienes ya han participado en «El Recorrido»
         </Text>
       </Flex>
 
@@ -416,6 +416,13 @@ export default function Opiniones() {
         <OpinionesList opiniones={opiniones} loading={loading} listReveal={listReveal} />
       </Flex>
 
+      {/* ── SEPARADOR (entre opiniones y "Deja tu opinión") ──
+            Justo en medio: misma separación arriba y abajo, idéntica en
+            móvil y escritorio (mt = mb = 20 en todos los breakpoints). */}
+      <Flex justify="center" px={{ base: 5, md: 10 }} mt={20} mb={20}>
+        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+      </Flex>
+
       {/* ── TÍTULO DEJAR OPINIÓN ── */}
       <Flex
         ref={dejarTitleReveal.ref}
@@ -423,7 +430,6 @@ export default function Opiniones() {
         align="center"
         textAlign="center"
         px={{ base: 5, md: 10 }}
-        pt={{ base: 24, md: 32 }}
         gap={{ base: 3, md: 4 }}
       >
         <Text

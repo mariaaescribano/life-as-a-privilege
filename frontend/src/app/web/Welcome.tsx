@@ -43,7 +43,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.astrologia.desc,
     link: "/aprendizaje/cursosModalidad/" + astrologiaNom,
     available: true,
-    tagline: "Los arquetipos que te forman.",
+    tagline: "Los patrones que te forman.",
   },
   {
     name: neuropsicologiaNom,
@@ -53,7 +53,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.psicologia.desc,
     link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom,
     available: true,
-    tagline: "El porqué de quién eres.",
+    tagline: "Cómo se construyó tu mente.",
   },
   {
     name: ayurvedaNom,
@@ -63,7 +63,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.ayurveda.desc,
     link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,
     available: true,
-    tagline: "El ser humano como parte de la naturaleza.",
+    tagline: "Tu lugar dentro del orden natural.",
   },
   {
     name: tcmNom,
@@ -73,7 +73,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.tcm.desc,
     link: "/aprendizaje/cursosModalidad/" + tcmNomLink,
     available: true,
-    tagline: "Cinco elementos. Una naturaleza. Un ser humano.",
+    tagline: "El origen de tus desequilibrios.",
   },
   {
     name: fisiologiaNom,
@@ -83,7 +83,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.fisiologia.desc,
     link: "/aprendizaje/cursosModalidad/" + fisiologiaNom,
     available: true,
-    tagline: "No tenemos un cuerpo. Somos un cuerpo.",
+    tagline: "Eres un cuerpo.",
   },
   {
     name: nutricionNom,
@@ -93,7 +93,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.nutricion.desc,
     link: "/aprendizaje/cursosModalidad/" + nutricionNomLink,
     available: true,
-    tagline: "Cómo te reconstruyes con tu alimentación.",
+    tagline: "Cómo te reconstruyes.",
   },
   {
     name: cabalaNom,
@@ -103,7 +103,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.cabala.desc,
     link: "/aprendizaje/cursosModalidad/" + cabalaNom,
     available: true,
-    tagline: "El mapa del alma humana.",
+    tagline: "La arquitectura del alma.",
   },
   {
     name: culturaNom,
@@ -211,23 +211,10 @@ const Welcome = () => {
           transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
-          El recorrido de 8 disciplinas para comprender tus patrones, tu historia y tus células.
+          Comprende quién eres a través de un recorrido de 8 disciplinas.
         </Text>
       </Flex>
 
-      {/* ── LOGO SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 7, md: 9 }}>
-        <Image
-          src="/img/icono/life.png"
-          alt=""
-          h={{ base: "54px", md: "72px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.45s, transform 1s ease 0.45s"
-        />
-      </Flex>
 
       {/* ── BIENVENIDA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 5, md: 7 }}>
@@ -534,87 +521,150 @@ const Welcome = () => {
             return (
               <Box
                 key={i}
-                position="relative"
+                role="group"
                 mt="42px"
-                pt="46px"
-                pb={{ base: 5, md: 7 }}
-                px={{ base: 3, md: 5 }}
-                bg={hasBg ? "transparent" : d.bg}
-                borderRadius="2xl"
                 cursor="pointer"
                 onClick={() => setSelected(d)}
                 opacity={disciplinasReveal.visible ? 1 : 0}
                 transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
                 transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`}
-                textAlign="center"
-                overflow={hasBg ? "visible" : undefined}
               >
-                {/* Fondo propio de la disciplina (estrellas o imagen) — en su
-                    propia capa con overflow:hidden, para que el icono que
-                    sobresale por arriba (top:-36px) no quede recortado. */}
-                {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
-
-                {/* Icono que sobresale por arriba */}
+                {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
+                    del reveal de entrada para que no se pisen los transforms. */}
                 <Box
-                  position="absolute"
-                  top="-36px"
-                  left="50%"
-                  transform="translateX(-50%)"
-                  bg={hasBg ? "transparent" : d.bg}
-                  borderRadius="full"
-                  p="8px"
-                  border={"4px solid "+ d.txt}
-                  boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-                  w="72px"
-                  h="72px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  zIndex={2}
-                  overflow={hasBg ? "hidden" : undefined}
-                >
-                  {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
-                  <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-                    {d.renderIcon("42px")}
-                  </Box>
-                </Box>
-
-                <Text
                   position="relative"
-                  zIndex={1}
-                  color={d.txt}
-                  fontWeight="700"
-                  fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
-                  letterSpacing="0.03em"
-                  lineHeight="short"
-                  textShadow={hasBg
-                    ? `0 1px 3px ${d.bg}f5, 0 0 6px ${d.bg}cc, 0 2px 14px ${d.bg}88`
-                    : "2px 2px 2px rgba(0,0,0,0.4)"}
+                  pt="46px"
+                  pb={{ base: 5, md: 7 }}
+                  px={{ base: 3, md: 5 }}
+                  bg={hasBg ? "transparent" : d.bg}
+                  borderRadius="2xl"
+                  textAlign="center"
+                  overflow={hasBg ? "visible" : undefined}
+                  boxShadow="0 4px 20px rgba(0,0,0,0.16)"
+                  transition="transform 0.28s ease, box-shadow 0.28s ease"
+                  _groupHover={{
+                    transform: "translateY(-6px)",
+                    boxShadow: "0 14px 38px rgba(0,0,0,0.26)",
+                  }}
                 >
-                  {displayName}
-                </Text>
+                  {/* Fondo propio de la disciplina (estrellas o imagen) — en su
+                      propia capa con overflow:hidden, para que el icono que
+                      sobresale por arriba (top:-36px) no quede recortado. */}
+                  {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
 
-                {/* Frase elegante (cursiva) — da a entender que no son meras
-                    clasificaciones, sino una mirada sobre tu vida. */}
-                {d.tagline && (
+                  {/* Icono que sobresale por arriba — único elemento con glow
+                      fuerte; en hover crece un 5% y aumenta su brillo. */}
+                  <Box
+                    position="absolute"
+                    top="-36px"
+                    left="50%"
+                    transform="translateX(-50%)"
+                    bg={hasBg ? "transparent" : d.bg}
+                    borderRadius="full"
+                    p="8px"
+                    border={"4px solid "+ d.txt}
+                    boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
+                    w="72px"
+                    h="72px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    zIndex={2}
+                    overflow={hasBg ? "hidden" : undefined}
+                    transition="transform 0.28s ease, box-shadow 0.28s ease"
+                    _groupHover={{
+                      transform: "translateX(-50%) scale(1.05)",
+                      boxShadow: `0 0 30px ${d.txt}dd, 0 2px 20px ${d.txt}aa`,
+                    }}
+                  >
+                    {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
+                    <Box
+                      position="relative"
+                      zIndex={1}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      transition="filter 0.28s ease"
+                      _groupHover={{ filter: "brightness(1.12)" }}
+                    >
+                      {d.renderIcon("42px")}
+                    </Box>
+                  </Box>
+
+                  {/* Nombre — protagonista tras el icono. Sombra reforzada en
+                      el color de la disciplina para despegarlo del fondo. */}
                   <Text
                     position="relative"
                     zIndex={1}
-                    mt={2}
                     color={d.txt}
-                    fontStyle="italic"
-                    fontWeight="400"
-                    fontSize={{ base: "sm", md: "lg" }}
-                    lineHeight="1.45"
-                    letterSpacing="0.01em"
-                    opacity={0.9}
+                    fontWeight="700"
+                    fontSize={{ base: "18px", md: "27px", lg: "33px" }}
+                    letterSpacing="0.04em"
+                    lineHeight="short"
                     textShadow={hasBg
-                      ? `0 1px 3px ${d.bg}f5, 0 0 6px ${d.bg}cc`
-                      : "1px 1px 2px rgba(0,0,0,0.35)"}
+                      ? `0 1px 3px ${d.bg}, 0 2px 8px ${d.bg}, 0 0 16px ${d.bg}dd, 0 2px 14px ${d.bg}aa`
+                      : "2px 2px 4px rgba(0,0,0,0.55)"}
                   >
-                    {d.tagline}
+                    {displayName}
                   </Text>
-                )}
+
+                  {/* Subtítulo — el verdadero protagonista: responde
+                      "¿qué voy a descubrir aquí?". minH fija para que la fila
+                      "Explorar disciplina" quede alineada en todas las tarjetas. */}
+                  {d.tagline && (
+                    <Text
+                      position="relative"
+                      zIndex={1}
+                      mt={{ base: 2, md: 3 }}
+                      minH="2em"
+                      color={d.txt}
+                      fontWeight="500"
+                      fontSize={{ base: "sm", md: "lg" }}
+                      lineHeight="1.45"
+                      letterSpacing="0.01em"
+                      opacity={0.96}
+                      textShadow={hasBg
+                        ? `0 1px 3px ${d.bg}, 0 1px 6px ${d.bg}, 0 0 12px ${d.bg}dd`
+                        : "1px 1px 3px rgba(0,0,0,0.5)"}
+                    >
+                      {d.tagline}
+                    </Text>
+                  )}
+
+                  {/* Indicador de interacción — invita a explorar; tenue en
+                      reposo, se enciende y la flecha avanza en hover. Enlaza
+                      directamente con la página de la disciplina (sin abrir el
+                      popup, de ahí el stopPropagation). */}
+                  <Flex
+                    position="relative"
+                    zIndex={1}
+                    align="center"
+                    justify="center"
+                    gap={1.5}
+                    mt={{ base: 3, md: 3 }}
+                    color={d.txt}
+                    fontSize={{ base: "10px", md: "xs" }}
+                    fontWeight="600"
+                    letterSpacing={{ base: "0.08em", md: "0.14em" }}
+                    textTransform="uppercase"
+                    whiteSpace="nowrap"
+                    cursor="pointer"
+                    opacity={0.75}
+                    transition="opacity 0.28s ease"
+                    _groupHover={{ opacity: 1 }}
+                    _hover={{ opacity: 1 }}
+                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); navigate(d.link); }}
+                  >
+                    <Box as="span">Explorar</Box>
+                    <Box
+                      as="span"
+                      transition="transform 0.28s ease"
+                      _groupHover={{ transform: "translateX(4px)" }}
+                    >
+                      →
+                    </Box>
+                  </Flex>
+                </Box>
               </Box>
             );
           })}
@@ -791,11 +841,41 @@ const Welcome = () => {
               ✕
             </Box>
 
+            {/* Flecha abajo a la derecha — eco del indicador "Explorar
+                disciplina →" de la tarjeta; fija sobre el modal y enlaza con
+                la página de la disciplina. */}
+            <Flex
+              as="button"
+              onClick={() => navigate(selected.link)}
+              position="absolute"
+              bottom={4}
+              right={5}
+              align="center"
+              gap={1.5}
+              color={selected.txt}
+              fontSize={{ base: "10px", md: "xs" }}
+              fontWeight="600"
+              letterSpacing="0.14em"
+              textTransform="uppercase"
+              opacity={0.75}
+              zIndex={2}
+              whiteSpace="nowrap"
+              cursor="pointer"
+              textShadow={descShadow(selected)}
+              transition="opacity 0.2s ease"
+              _hover={{ opacity: 1 }}
+              sx={{ "&:hover span": { transform: "translateX(4px)" } }}
+            >
+              Explorar disciplina
+              <Box as="span" transition="transform 0.2s ease">→</Box>
+            </Flex>
+
             {/* Contenido scrollable interno — el modal exterior se queda fijo
                 (con el bg y la X), y aquí dentro se hace scroll si el contenido
                 desborda. Así nunca se corta contra el viewport. */}
             <Box
               p={{ base: 8, md: 12 }}
+              pb={{ base: 16, md: 20 }}
               display="flex"
               flexDirection="column"
               alignItems="center"

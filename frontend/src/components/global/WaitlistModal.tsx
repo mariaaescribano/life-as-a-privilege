@@ -44,14 +44,8 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
     setSubmitting(true);
     try {
-      await axios.post(`${API_URL}/contact`, {
-        nombre: cleanEmail,
-        email: cleanEmail,
-        titulo: "Nuevo cliente",
-        mensaje:
-          `Una persona quiere ser de las primeras en participar en el pack del Método cuando esté disponible.\n\n` +
-          `Email: ${cleanEmail}`,
-      });
+      // Guarda el email en backend/data/subscribers.txt (+ notificación).
+      await axios.post(`${API_URL}/subscribe`, { email: cleanEmail });
       setSubmitted(true);
     } catch {
       setError("No se pudo enviar. Inténtalo de nuevo en un momento.");
@@ -171,7 +165,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   textAlign="center"
                   lineHeight="1.7"
                 >
-                  Te avisaré en cuanto el pack esté disponible.
+                  Te avisaré en cuando El Recorrido esté disponible.
                 </Text>
                 <Box
                   as="button"

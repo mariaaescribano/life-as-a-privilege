@@ -88,10 +88,10 @@ export default function MetodoAstrologiaAspectos() {
     aspectos.length > 0 && aspectos.every((a) => (textos[aspectoKey(a)] ?? "").trim().length > 0);
 
   const headerNext = {
-    label: todosEscritos ? "Continuar a Psicología →" : "Lectura de aspectos en proceso…",
+    label: todosEscritos ? "Psicología →" : "Lectura de aspectos en proceso…",
     onClick: () => navigate("/metodo/psicologia"),
-    disabled: !todosEscritos,
-    disabledTooltip: "María está escribiendo la lectura de tus aspectos",
+    disabled: true, // Psicología bloqueada por ahora
+    disabledTooltip: "Psicología estará disponible próximamente",
   };
 
   const textoAbierto = abierto ? (textos[aspectoKey(abierto)] ?? "").trim() : "";
@@ -108,7 +108,7 @@ export default function MetodoAstrologiaAspectos() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 5, total: 5 }}
+            step={{ current: 6, total: 6 }}
             mb={0}
             prev={{ label: "← Mis casas", onClick: () => navigate("/metodo/astrologia/casas") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -123,7 +123,28 @@ export default function MetodoAstrologiaAspectos() {
             border={`1px solid ${astrologiaTxt}44`}
             boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
           >
-            <SpaceBg overlay="rgba(8,13,30,0.66)" />
+            {/* Fondo espacial NÍTIDO (sin la veladura que difuminaba la imagen) */}
+            <Box
+              position="absolute"
+              inset="0"
+              pointerEvents="none"
+              overflow="hidden"
+              borderRadius="inherit"
+              style={{ background: "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)" }}
+            >
+              <Box
+                as="img"
+                src="/img/astrologia/space.jpg"
+                alt=""
+                loading="eager"
+                position="absolute"
+                inset="0"
+                w="100%"
+                h="100%"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
+              <Box position="absolute" inset="0" style={{ background: "rgba(8,13,30,0.45)" }} />
+            </Box>
 
             <Box position="relative" zIndex={1} px={{ base: 4, md: 8 }} py={{ base: 7, md: 9 }}>
               <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={2}
@@ -131,7 +152,7 @@ export default function MetodoAstrologiaAspectos() {
                 Los diálogos de tu carta
               </Text>
               <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={6} maxW="560px" mx="auto">
-                Cada aspecto es una conversación entre dos planetas. Pulsa “Leer” para ver lo que dicen en tu carta.
+                Cada aspecto es una conversación entre dos planetas. Pulsa para leer.
               </Text>
 
               {aspectos.length === 0 ? (
@@ -148,58 +169,79 @@ export default function MetodoAstrologiaAspectos() {
                     return (
                       <Flex
                         key={`${aspectoKey(a)}-${idx}`}
+                        as="button"
+                        onClick={() => setAbierto(a)}
+                        w="100%"
+                        textAlign="left"
                         align="center"
                         gap={{ base: 2, md: 4 }}
-                        px={{ base: 3, md: 5 }}
-                        py={{ base: 3, md: 3.5 }}
+                        px={{ base: 4, md: 7 }}
+                        py={{ base: 3.5, md: 4 }}
                         borderRadius="xl"
-                        bg="rgba(8,13,30,0.45)"
+                        bg="rgba(8,13,30,0.35)"
                         border={`1px solid ${colorAsp}44`}
                         boxShadow={`0 0 12px ${colorAsp}1f`}
+                        cursor="pointer"
+                        opacity={escrito ? 1 : 0.6}
+                        transition="all 0.18s"
+                        _hover={{
+                          bg: "rgba(8,13,30,0.5)",
+                          borderColor: `${colorAsp}88`,
+                          boxShadow: `0 0 20px ${colorAsp}44`,
+                          transform: "translateY(-1px)",
+                        }}
                       >
-                        {/* glifo A */}
-                        <Flex align="center" justify="center" minW={{ base: "34px", md: "40px" }}>
-                          {cuerpoA && <Glifo symbol={cuerpoA.symbol} color={cuerpoA.color} size={28} />}
+                        {/* Planeta A: glifo + nombre a la derecha */}
+                        <Flex align="center" gap={{ base: 2, md: 3 }} flexShrink={0}>
+                          {cuerpoA && <Glifo symbol={cuerpoA.symbol} color={cuerpoA.color} size={34} />}
+                          {cuerpoA && (
+                            <Text
+                              display={{ base: "none", md: "block" }}
+                              w={{ md: "120px" }}
+                              flexShrink={0}
+                              color={`${cuerpoA.color}ee`}
+                              fontSize="lg"
+                              fontWeight="600"
+                              letterSpacing="0.02em"
+                              noOfLines={1}
+                              style={{ textShadow: `0 0 8px ${cuerpoA.color}55` }}
+                            >
+                              {cuerpoA.label}
+                            </Text>
+                          )}
                         </Flex>
 
-                        {/* símbolo del aspecto + nombre */}
-                        <Flex flex="1" align="center" justify="center" direction="column" gap={0} minW={0}>
-                          <Text fontSize={{ base: "lg", md: "xl" }} color={colorAsp} fontFamily="'Times New Roman', serif"
+                        {/* Aspecto: símbolo + nombre en una sola línea */}
+                        <Flex align="center" gap={{ base: 1.5, md: 2.5 }} justify="center" flex="1" minW={0}>
+                          <Text fontSize={{ base: "xl", md: "2xl" }} color={colorAsp} fontFamily="'Times New Roman', serif"
                                 style={{ filter: `drop-shadow(0 0 6px ${colorAsp}aa)`, lineHeight: 1 }}>
                             {ASPECTO_SYMBOL[a.tipo]}
                           </Text>
-                          <Text fontSize={{ base: "2xs", md: "sm" }} color={`${colorAsp}dd`} letterSpacing="0.06em"
-                                textTransform="uppercase" mt={1} noOfLines={1}>
+                          <Text fontSize={{ base: "2xs", md: "sm" }} color={`${colorAsp}dd`} letterSpacing="0.08em"
+                                textTransform="uppercase" whiteSpace="nowrap">
                             {ASPECTO_LABEL[a.tipo]}
                           </Text>
                         </Flex>
 
-                        {/* glifo B */}
-                        <Flex align="center" justify="center" minW={{ base: "34px", md: "40px" }}>
-                          {cuerpoB && <Glifo symbol={cuerpoB.symbol} color={cuerpoB.color} size={28} />}
+                        {/* Planeta B: glifo + nombre a la derecha */}
+                        <Flex align="center" gap={{ base: 2, md: 3 }} flexShrink={0}>
+                          {cuerpoB && <Glifo symbol={cuerpoB.symbol} color={cuerpoB.color} size={34} />}
+                          {cuerpoB && (
+                            <Text
+                              display={{ base: "none", md: "block" }}
+                              w={{ md: "120px" }}
+                              flexShrink={0}
+                              color={`${cuerpoB.color}ee`}
+                              fontSize="lg"
+                              fontWeight="600"
+                              letterSpacing="0.02em"
+                              noOfLines={1}
+                              style={{ textShadow: `0 0 8px ${cuerpoB.color}55` }}
+                            >
+                              {cuerpoB.label}
+                            </Text>
+                          )}
                         </Flex>
-
-                        {/* botón Leer */}
-                        <Box
-                          as="button"
-                          onClick={() => setAbierto(a)}
-                          px={{ base: 3, md: 5 }}
-                          py={1.5}
-                          borderRadius="full"
-                          bg={escrito ? astrologiaTxt : `${astrologiaTxt}22`}
-                          color={escrito ? "#0a0a1a" : `${astrologiaTxt}aa`}
-                          border={`1px solid ${astrologiaTxt}66`}
-                          fontFamily="'EB Garamond', serif"
-                          fontSize={{ base: "sm", md: "md" }}
-                          fontWeight="700"
-                          letterSpacing="0.06em"
-                          whiteSpace="nowrap"
-                          cursor="pointer"
-                          transition="all 0.18s"
-                          _hover={{ boxShadow: `0 0 16px ${astrologiaTxt}66`, transform: "translateY(-1px)" }}
-                        >
-                          Leer
-                        </Box>
                       </Flex>
                     );
                   })}

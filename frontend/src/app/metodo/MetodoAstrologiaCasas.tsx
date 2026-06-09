@@ -168,7 +168,7 @@ export default function MetodoAstrologiaCasas() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 4, total: 5 }}
+            step={{ current: 5, total: 6 }}
             mb={0}
             prev={{ label: "← Carta", onClick: () => navigate("/metodo/astrologia/lectura") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -201,7 +201,7 @@ export default function MetodoAstrologiaCasas() {
                 w="100%"
                 direction="column"
                 justify="center"
-                minH={{ lg: "320px" }}
+                minH={{ lg: "253px" }}
               >
                 <CasaBox info={info} textoSel={textoSel} sel={sel} />
               </Flex>
@@ -347,7 +347,7 @@ function CasaBox({
     <>
       <Box
         w="100%"
-        h={{ lg: "380px" }}
+        h={{ lg: "253px" }}
         display="flex"
         flexDirection="column"
         borderRadius="xl"
@@ -368,7 +368,7 @@ function CasaBox({
               fontSize={{ base: "md", md: "lg" }}
               lineHeight="1.85"
               letterSpacing="0.015em"
-              noOfLines={{ lg: 7 }}
+              noOfLines={{ lg: 4 }}
               style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}
             >
               {renderConNegritas(textoSel, astrologiaTxt)}

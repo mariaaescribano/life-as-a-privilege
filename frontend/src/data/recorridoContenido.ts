@@ -35,19 +35,19 @@ export const recorridoContenido: Record<
       {
         titulo: "Lectura de tu carta natal",
         items: [
-          "PDF completo con la lectura de tu carta. Es un mapa de cómo estás configurado, qué áreas de tu vida tienen más peso y qué tensiones internas arrastras.",
+          "Comprenderás qué partes de ti tienen más peso, qué tensiones internas arrastras y por qué ciertos patrones aparecen una y otra vez en tu vida.",
         ],
       },
       {
         titulo: "Los doce arquetipos",
         items: [
-          "Material para entender tus arquetipos uno por uno. No para memorizarlos, para reconocerlos en ti. Cuando sabes qué arquetipo está actuando, dejas de pelearte contigo.",
+          "Aprenderás a reconocer las distintas energías que actúan dentro de ti en cada área de tu Vida. Cuando identificas el arquetipo que está tomando el control, dejas de confundirte con él.",
         ],
       },
       {
         titulo: "Sesiones de lectura conjunta",
         items: [
-          "5 sesiones para entender tu carta juntos. No para que te la explique yo, para que puedas leerla solo y poner palabras a lo que antes no las tenía.",
+          "El objetivo no es depender de un intérprete. Es que puedas comprender tu carta, leerla por ti mismo y utilizarla como herramienta durante toda tu Vida.",
         ],
         aviso: "Se cobra aparte",
       },
@@ -65,19 +65,19 @@ export const recorridoContenido: Record<
       {
         titulo: "Mapa de Vida",
         items: [
-          "Material guiado para poner tu vida en orden: lo que recuerdas, lo que te contaron, lo que se repite. No es un ejercicio de memoria, es ver tu historia desde fuera por primera vez.",
+          "Verás tu historia desde una perspectiva nueva. Lo que parecía una colección de acontecimientos aislados empieza a mostrar estructura y sentido.",
         ],
       },
       {
         titulo: "Cronología junto a tu carta",
         items: [
-          "Cruzamos tu cronología con tu carta natal. Lo que se repite no es azar. Tiene origen, y se puede dejar de repetir.",
+          "Descubrirás cómo determinados acontecimientos activaron patrones que ya estaban presentes en tu configuración inicial.",
         ],
       },
       {
         titulo: "Acompañamiento inspirado en la Psicoterapia Breve",
         items: [
-          "16 a 20 sesiones aproximádamente. No es una sesión al mes para desahogarte: es desarrollo intenso y focalizado.",
+          "No trabajamos síntomas aislados. Trabajamos las estructuras que los generan para que los cambios sean profundos y duraderos.",
         ],
         aviso: "Se cobra aparte",
       },
@@ -88,26 +88,26 @@ export const recorridoContenido: Record<
   // 3. HINDUISMO (ayurveda)
   // ───────────────────────────────────────────────────────────
   ayurveda: {
-    desc: "Cinco mil años leyendo al ser humano. Lo que el hinduismo descubrió sobre tu cuerpo, tu mente y tu lugar en la naturaleza.",
+    desc: "No todos enfermamos igual porque no todos estamos construidos igual. Comprende tu naturaleza antes de intentar corregirla.",
     modalDesc:
       "El ayurveda es la medicina tradicional india. No mira síntomas aislados: lee a la persona entera. Tu constitución (dosha) determina cómo piensas, cómo enfermas y qué te sienta bien comer. Entender tu dosha es entender por qué dos personas con la misma vida tienen problemas distintos.",
     contenido: [
       {
         titulo: "Cursos para entender el sistema",
         items: [
-          "Más de cinco cursos grabados sobre la base del ayurveda: qué son los doshas, cómo se manifiestan. Acceso ilimitado.",
+          "Comprenderás cómo el ayurveda observa al ser humano y por qué dos personas expuestas a la misma situación desarrollan desequilibrios diferentes.",
         ],
       },
       {
         titulo: "Tu dosha",
         items: [
-          "Identificarás tu constitución dominante, qué desequilibrios desarrollas y a qué estás predispuesto por naturaleza.",
+          "Descubrirás tu constitución dominante, tus fortalezas naturales y los desequilibrios hacia los que tiendes cuando pierdes el equilibrio.",
         ],
       },
       {
         titulo: "Material para el día a día",
         items: [
-          "Fichas y guías para que el ayurveda no se quede en teoría. Material práctico y funcional para respetar tu naturaleza.",
+          "Aprenderás a tomar decisiones cotidianas que respeten tu naturaleza en lugar de luchar constantemente contra ella.",
         ],
       },
     ],
@@ -117,26 +117,26 @@ export const recorridoContenido: Record<
   // 4. MEDICINA CHINA (tcm)
   // ───────────────────────────────────────────────────────────
   tcm: {
-    desc: "Una naturaleza. Un ser humano. Cinco elementos. Descubre su relación.",
+    desc: "Los órganos están interconectados. Todo desequilibrio deja huellas. Tu cuerpo habla antes de enfermar. Aprende su lenguaje.",
     modalDesc:
       "La medicina tradicional china lee el cuerpo a través de cinco elementos (madera, fuego, tierra, metal, agua) y los órganos que los gobiernan. No es metáfora poética: es un sistema de diagnóstico con miles de años de pruebas. Aquí identificamos qué elemento tienes en exceso o defecto y cómo se traduce eso en lo que te pasa.",
     contenido: [
       {
         titulo: "Los cinco elementos",
         items: [
-          "Cómo la medicina china lee el cuerpo a partir de cinco elementos y los cinco órganos que los gobiernan. Un sistema de diagnóstico con miles de años de pruebas.",
+          "Aprenderás a leer el cuerpo como un sistema donde todo está conectado. Ningún síntoma aparece aislado.",
         ],
       },
       {
         titulo: "Taoísmo aplicado",
         items: [
-          "La sabiduría del taoísmo es ancestral. Entiéndelo, vívelo, y deja de funcionar en piloto automático.",
+          "Descubrirás cómo recuperar equilibrio sin vivir reaccionando constantemente a lo que ocurre fuera de ti.",
         ],
       },
       {
         titulo: "Tu desequilibrio hoy",
         items: [
-          "Identificamos qué elemento tienes en exceso o en defecto ahora mismo, y trabajamos con herramientas concretas: alimentación, plantas, hábitos, ejercicio.",
+          "Identificaremos qué sistema necesita más atención ahora mismo y qué acciones concretas pueden ayudarte a recuperar estabilidad.",
         ],
       },
     ],
@@ -146,26 +146,26 @@ export const recorridoContenido: Record<
   // 5. FISIOLOGÍA
   // ───────────────────────────────────────────────────────────
   fisiologia: {
-    desc: "No tenemos un cuerpo. Somos un cuerpo.",
+    desc: "No tenemos un cuerpo. Somos un cuerpo. Entiéndete.",
     modalDesc:
       "Hasta ahora hemos trabajado con conocimiento tradicional. Aquí cambia el registro: ciencia, evidencia, mecanismos celulares. No para anular lo anterior, para sostenerlo. Cuando entiendes qué hace tu hígado, por qué se inflama tu intestino o cómo se regula tu glucosa, las decisiones que tomas sobre tu cuerpo dejan de ser intuición.",
     contenido: [
       {
         titulo: "Curso sobre el cuerpo humano",
         items: [
-          "Curso grabado de fisiología real: cómo funcionan los órganos, los sistemas, las hormonas. Ni simplificado al nivel de revista, ni complicado al nivel de facultad.",
+          "Entenderás qué ocurre realmente en ti cuando tienes energía, inflamación, fatiga o enfermedad. Eres tu cuerpo, deja de ser un misterio.",
         ],
       },
       {
         titulo: "Desequilibrios frecuentes",
         items: [
-          "Estudio detallado de los más comunes: hígado graso, resistencia a la insulina, síndrome premenstrual, hipotiroidismo subclínico, fatiga adrenal. Qué son, por qué aparecen, qué los reactiva.",
+          "Aprenderás a reconocer los mecanismos detrás de muchos de los problemas que afectan a millones de personas hoy.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "1 o 2 sesiones para resolver dudas concretas sobre tu caso. Si te han dado un diagnóstico y no te han explicado nada, aquí lo desmontamos.",
+          "Un espacio para traducir la teoría a tu situación concreta y comprender mejor lo que ocurre en tu propio organismo.",
         ],
         aviso: "Se cobra aparte",
       },
@@ -176,26 +176,26 @@ export const recorridoContenido: Record<
   // 6. NUTRICIÓN
   // ───────────────────────────────────────────────────────────
   nutricion: {
-    desc: "Conoce más para temer menos y elegir mejor.",
+    desc: "Entiende cómo los alimentos que eliges cada día te construyen.",
     modalDesc:
       "La nutrición es el primer hábito que se ajusta cuando ya entiendes tu cuerpo. No es una dieta, no es una lista de prohibiciones: es saber qué pasa en tu organismo con cada alimento y decidir desde ahí.",
     contenido: [
       {
         titulo: "Microbiota",
         items: [
-          "Profundiza en la microbiota intestinal: qué la compone, qué la destruye, qué la repara. Por qué dos personas con la misma dieta tienen energía radicalmente distinta.",
+          "Comprenderás por qué tu intestino influye en mucho más que la digestión: energía, estado de ánimo, claridad mental y salud.",
         ],
       },
       {
         titulo: "Macro y micro nutrientes",
         items: [
-          "Carbohidratos, proteínas, grasas, vitaminas y minerales. Qué hace cada uno, cuándo los necesitas, qué pasa cuando faltan o sobran.",
+          "Aprenderás qué necesita realmente tu cuerpo y cómo identificar carencias o excesos antes de que generen problemas.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "1 o 2 sesiones para ajustarlo a tu caso: tu dosha, tus desequilibrios, tus horarios, tu presupuesto.",
+          "Adaptaremos el conocimiento a tu realidad: tu constitución, tus horarios, tus necesidades y tu estilo de vida.",
         ],
         aviso: "Se cobra aparte",
       },
@@ -206,26 +206,26 @@ export const recorridoContenido: Record<
   // 7. CÁBALA
   // ───────────────────────────────────────────────────────────
   cabala: {
-    desc: "El mapa del alma, sus equilibrios y sus desequilibrios.",
+    desc: "Descubre las dimensiones que viven en ti solo por tener un alma. Entiende tus equilibrios y desequilibrios.",
     modalDesc:
       "Llegamos aquí después de un largo trabajo: ya conoces tu carta, tu historia, tu constitución, tu cuerpo, lo que comes. Ya estás preparado para descubrir el alma humana según El Árbol de la Vida y sus diez Sefirot.",
     contenido: [
       {
         titulo: "Filosofía de la cábala",
         items: [
-          "Curso grabado sobre la base de la cábala. Qué es, de dónde viene y por qué no es lo que se ha vendido en los últimos años.",
+          "Descubrirás una forma distinta de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
         ],
       },
       {
         titulo: "Las Sefirot como herramientas",
         items: [
-          "Las diez Sefirot del Árbol de la Vida. Cada una representa una cualidad concreta (juicio, misericordia, fundamento, victoria) que puedes trabajar en ti. No símbolos para contemplar, cualidades para desarrollar.",
+          "Aprenderás a trabajar cualidades concretas que transforman la manera en que te relacionas contigo mismo y con los demás.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "1 o 2 sesiones para dudas sobre tu recorrido por el árbol, o sobre cómo aplicar Sefirot concretas a momentos de tu vida.",
+          "Un espacio para aterrizar estos principios en situaciones reales de tu vida y convertirlos en algo práctico.",
         ],
          aviso: "Se cobra aparte",
       },
@@ -243,19 +243,19 @@ export const recorridoContenido: Record<
       {
         titulo: "Filosofía de Life as a Privilege",
         items: [
-          "Curso sobre la filosofía que da vida a este proyecto. No para que la copies, sino para inspirarte a que construyas la tuya.",
+          "Después de recorrer siete disciplinas distintas, llega el momento de integrarlas en una visión propia del mundo y de ti mismo.",
         ],
       },
       {
         titulo: "Autores importantes",
         items: [
-          "Curso grabado de explicaciones de autores y obras concretas recomendadas.",
+          "Conocerás ideas y autores que han dedicado su vida a responder las mismas preguntas que el ser humano lleva siglos haciéndose.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "1 o 2 sesiones para hablar en profundidad de ti, tu camino y tu filosofía. Qué has aprendido, cómo has cambiado. Lo que has desarrollado es importante y aquí puedes compartirlo.",
+          "Reflexionaremos sobre quién eras al empezar este recorrido, qué has comprendido y quién te estás convirtiendo después de atravesarlo.",
         ],
         aviso: "Se cobra aparte",
       },

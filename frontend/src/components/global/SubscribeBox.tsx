@@ -19,7 +19,7 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
-export function SubscribeBox() {
+export function SubscribeBox({ hideSeparator = false }: { hideSeparator?: boolean } = {}) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "invalid" | "error">("idle");
   const reveal = useReveal(0.15);
@@ -51,16 +51,37 @@ export function SubscribeBox() {
 
   return (
     <Flex ref={reveal.ref} direction="column" align="center" w="100%" maxW="900px" mt={10} gap={{ base: 8, md: 10 }}>
-      <Box
-        w="100%"
-        maxW="500px"
-        h="1px"
-        mb={{ base: 4, md: 6 }}
-        bg="rgba(255,255,255,0.15)"
-        opacity={reveal.visible ? 1 : 0}
-        transform={reveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
-        transition="opacity 0.8s ease, transform 0.8s ease"
-      />
+      {/* Separador con mandala en medio y líneas degradadas a los lados */}
+      {/* {!hideSeparator && (
+        <Flex
+          align="center"
+          justify="center"
+          gap={{ base: 4, md: 6 }}
+          mb={{ base: 4, md: 6 }}
+          opacity={reveal.visible ? 1 : 0}
+          transform={reveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
+          transition="opacity 0.8s ease, transform 0.8s ease"
+        >
+          <Box
+            h="1px"
+            w={{ base: "60px", md: "150px" }}
+            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+          />
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h={{ base: "26px", md: "34px" }}
+            objectFit="contain"
+            flexShrink={0}
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+          />
+          <Box
+            h="1px"
+            w={{ base: "60px", md: "150px" }}
+            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+          />
+        </Flex>
+      )} */}
 
       <Box
         w="100%"
@@ -95,7 +116,7 @@ export function SubscribeBox() {
           mb={2}
           textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.22)"
         >
-          ¡No te pierdas nada!
+          Recibe nuevos materiales.
         </Text>
         <Text
           color="rgba(255,255,255,0.65)"
@@ -104,7 +125,7 @@ export function SubscribeBox() {
           mb={6}
           lineHeight="1.6"
         >
-          Suscríbete y recibe un email cuando haya contenido nuevo
+          Cuando publique nuevos contenidos serás el primero en saberlo.
         </Text>
 
         {status === "ok" ? (

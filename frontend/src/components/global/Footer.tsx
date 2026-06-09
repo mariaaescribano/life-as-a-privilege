@@ -48,6 +48,22 @@ const SiteFooter = () => {
           <Text fontSize="15px" lineHeight="1" color="white">♊︎</Text>
           Quién soy
         </Flex>
+        <Flex
+          align="center"
+          gap="6px"
+          color="rgba(255,255,255,0.65)"
+          fontSize="sm"
+          letterSpacing="0.05em"
+          cursor="pointer"
+          _hover={{ color: "white" }}
+          transition="color 0.2s"
+          onClick={() => navigate("/opiniones")}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="currentColor">
+            <path d="M240-400h122l200-200q9-9 13.5-20.5T580-643q0-11-5-21.5T562-684l-36-38q-9-9-20-13.5t-23-4.5q-11 0-22.5 4.5T440-722L240-522v122ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Z"/>
+          </svg>
+          Opiniones
+        </Flex>
         <Box
           as="a"
           href="https://www.tiktok.com/@lifeasaprivilege"

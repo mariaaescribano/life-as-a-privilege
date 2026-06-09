@@ -235,16 +235,8 @@ export function MetodoStepHeader({
           </Flex>
         </Flex>
 
-        {/* Raya separadora */}
-        {(prev || next || extra) && (
-          <Box
-            h="1px"
-            my={3}
-            mx="auto"
-            w="80%"
-            bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}
-          />
-        )}
+        {/* Espacio entre título y botones (antes había una raya separadora) */}
+        {(prev || next || extra) && <Box h={{ base: 2.5, md: 3 }} />}
 
         {/* Botones contextuales — siempre en una sola fila horizontal,
             tanto en móvil como en desktop. Si no caben, los botones se

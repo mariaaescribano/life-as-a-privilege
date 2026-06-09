@@ -234,7 +234,7 @@ export default function MetodoAstrologia() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 1, total: 5 }}
+            step={{ current: 1, total: 6 }}
             mb={0}
             prev={headerPrev}
             extra={headerExtra}
@@ -256,12 +256,11 @@ export default function MetodoAstrologia() {
 
               {/* ── Tras enviar la solicitud: box informativo "¿Qué es una carta astral?" ── */}
               {yaSolicitado && (
-                <Flex direction="column" gap={5}>
-                  <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
+                <Flex direction="column" gap={5} mt="5px">
+                  {/* <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                         style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
                     ¿Qué es una carta astral?
-                  </Text>
-                  <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
+                  </Text> */}
                   <TextoCartaExplicativo color={astrologiaTxt} />
                 </Flex>
               )}

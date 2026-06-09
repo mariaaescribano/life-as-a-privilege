@@ -24,6 +24,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
 
   const hasSession = !!sessionStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
+  // En el área privada (logueado: /home, /metodo, …) el header es ~10% más compacto.
+  const compact = isPrivate;
   const isAdmin    = sessionStorage.getItem("isAdmin") === "1";
   // Para admins el "home" es el panel de administración.
   const homeTarget = isPrivate ? (isAdmin ? "/admin" : "/home") : "/";
@@ -47,8 +49,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       align="center"
       justify="space-between"
       px={{ base: 5, md: 12 }}
-      pt={{ base: 2, md: 4 }}
-      pb={{ base: "13px", md: 4 }}
+      pt={{ base: 2, md: compact ? 3 : 4 }}
+      pb={{ base: compact ? "10px" : "13px", md: compact ? 3 : 4 }}
       bg="#008080"
       position="sticky"
       top="0"
@@ -67,7 +69,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       >
         <Image
           src="/img/icono/life.png"
-          h={{ base: "40px", md: "70px" }}
+          h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }}
           objectFit="contain"
           style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 20px rgba(255,255,255,0.38)) drop-shadow(0 0 42px rgba(180,255,245,0.28))" }}
         />
@@ -90,8 +92,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           <Box
             as="button"
             onClick={() => navigate("/user/account")}
-            w={{ base: "48px", md: "56px" }}
-            h={{ base: "48px", md: "56px" }}
+            w={{ base: "44px", md: "50px" }}
+            h={{ base: "44px", md: "50px" }}
             borderRadius="full"
             overflow="hidden"
             border="2px solid rgba(255,255,255,0.7)"

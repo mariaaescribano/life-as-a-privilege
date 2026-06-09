@@ -147,7 +147,7 @@ export default function MetodoAstrologiaSolAscLuna() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 2, total: 5 }}
+            step={{ current: 2, total: 6 }}
             mb={0}
             prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -165,13 +165,14 @@ export default function MetodoAstrologiaSolAscLuna() {
             <SpaceBg overlay="rgba(8,13,30,0.62)" />
 
             <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 9, md: 12 }}>
-              <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={{ base: 8, md: 10 }} maxW="560px" mx="auto">
+              {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={{ base: 8, md: 10 }} maxW="560px" mx="auto">
                 Tu Luna (el hogar al que llegaste y tus sentimientos), tu Sol (tu esencia) y tu Ascendente (cómo percibes al mundo). Léelos los tres.
-              </Text>
+              </Text> */}
 
               <Flex
                 direction={{ base: "column", md: "row" }}
                 align="center"
+                mt="5px"
                 justify="center"
                 gap={{ base: 7, md: 6 }}
               >
