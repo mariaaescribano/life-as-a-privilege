@@ -5,7 +5,8 @@ export type CuerpoKey =
   | 'quiron' | 'nodoNorte' | 'nodoSur';
 
 export type TipoAspecto =
-  | 'conjuncion' | 'oposicion' | 'trigono' | 'cuadratura' | 'sextil';
+  | 'conjuncion' | 'oposicion' | 'trigono' | 'cuadratura' | 'sextil'
+  | 'semisextil' | 'quincuncio';
 
 export interface PosicionPlaneta {
   planeta: CuerpoKey;

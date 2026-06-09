@@ -5,7 +5,9 @@ export type TipoAspecto =
   | "oposicion"
   | "trigono"
   | "cuadratura"
-  | "sextil";
+  | "sextil"
+  | "semisextil"
+  | "quincuncio";
 
 export interface PosicionPlaneta {
   planeta: CuerpoKey;
@@ -33,15 +35,13 @@ export const COLOR_ASPECTO: Record<TipoAspecto, string> = {
   cuadratura: "#ff8a4c",
   trigono: "#6ec1ff",
   sextil: "#80efd8",
+  semisextil: "#a8d8a0",
+  quincuncio: "#d0a0c8",
 };
 
-export const ORBE_GRADOS: Record<TipoAspecto, number> = {
-  conjuncion: 8,
-  oposicion: 8,
-  trigono: 7,
-  cuadratura: 7,
-  sextil: 5,
-};
+// NOTA: los orbes NO se calculan en el frontend. La carta (incluidos los
+// aspectos) la calcula el backend en cartaNatal.service.ts (ASPECTOS_DEF),
+// que es la única fuente de verdad. Aquí solo se pintan los aspectos recibidos.
 
 /**
  * Mapea un grado eclíptico a un ángulo de la carta (math angle en 3D), usando un

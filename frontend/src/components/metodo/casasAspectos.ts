@@ -55,6 +55,8 @@ export const ASPECTO_LABEL: Record<TipoAspecto, string> = {
   trigono: "Trígono",
   cuadratura: "Cuadratura",
   sextil: "Sextil",
+  semisextil: "Semisextil",
+  quincuncio: "Quincuncio",
 };
 
 export const ASPECTO_SYMBOL: Record<TipoAspecto, string> = {
@@ -63,6 +65,8 @@ export const ASPECTO_SYMBOL: Record<TipoAspecto, string> = {
   trigono: "△",
   cuadratura: "□",
   sextil: "⚹",
+  semisextil: "⚺",
+  quincuncio: "⚻",
 };
 
 /** Clave estable de un aspecto para indexar el texto escrito a mano. */

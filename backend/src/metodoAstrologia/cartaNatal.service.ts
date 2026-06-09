@@ -50,15 +50,58 @@ const BODIES: BodyDef[] = [
   { key: 'pluton',   body: Astronomy.Body.Pluto   },
 ];
 
-interface AspectoDef { tipo: TipoAspecto; angulo: number; orbe: number; }
+/* Tabla de orbes (Astrodienst). Cada aspecto tiene un orbe distinto según la
+ * CATEGORÍA del cuerpo. Cuando dos cuerpos de categorías distintas forman un
+ * aspecto, se usa el MENOR de los dos orbes (ver `orbeEntre`). Editar estos
+ * valores cambia qué aspectos "salen" en la carta. */
+type CategoriaCuerpo =
+  | 'planetas' | 'lilith' | 'nodos' | 'quiron'
+  | 'asteroides' | 'partes' | 'acmc' | 'cuspides';
+
+interface AspectoDef {
+  tipo: TipoAspecto;
+  angulo: number;
+  orbes: Record<CategoriaCuerpo, number>;
+}
 
 const ASPECTOS_DEF: AspectoDef[] = [
-  { tipo: 'conjuncion', angulo: 0,   orbe: 8 },
-  { tipo: 'oposicion',  angulo: 180, orbe: 8 },
-  { tipo: 'trigono',    angulo: 120, orbe: 7 },
-  { tipo: 'cuadratura', angulo: 90,  orbe: 7 },
-  { tipo: 'sextil',     angulo: 60,  orbe: 5 },
+  { tipo: 'conjuncion', angulo: 0,   orbes: { planetas: 10, lilith: 3, nodos: 5, quiron: 5, asteroides: 2, partes: 2, acmc: 2, cuspides: 1 } },
+  { tipo: 'semisextil', angulo: 30,  orbes: { planetas: 2,  lilith: 1, nodos: 1, quiron: 1, asteroides: 1, partes: 1, acmc: 1, cuspides: 1 } },
+  { tipo: 'sextil',     angulo: 60,  orbes: { planetas: 3,  lilith: 2, nodos: 3, quiron: 4, asteroides: 1, partes: 1, acmc: 1, cuspides: 1 } },
+  { tipo: 'cuadratura', angulo: 90,  orbes: { planetas: 8,  lilith: 2, nodos: 5, quiron: 5, asteroides: 1, partes: 1, acmc: 1, cuspides: 1 } },
+  { tipo: 'trigono',    angulo: 120, orbes: { planetas: 8,  lilith: 2, nodos: 5, quiron: 5, asteroides: 1, partes: 1, acmc: 1, cuspides: 1 } },
+  { tipo: 'quincuncio', angulo: 150, orbes: { planetas: 3,  lilith: 2, nodos: 3, quiron: 2, asteroides: 1, partes: 1, acmc: 1, cuspides: 1 } },
+  { tipo: 'oposicion',  angulo: 180, orbes: { planetas: 10, lilith: 3, nodos: 5, quiron: 5, asteroides: 2, partes: 2, acmc: 2, cuspides: 1 } },
 ];
+
+/* Bonus de orbe cuando el Sol o la Luna participan en el aspecto
+ * (campo "Sol/Luna: +" de Astrodienst). Actualmente 0 = sin bonus. */
+const SOL_LUNA_BONUS = 0;
+
+/* Categoría de cada cuerpo. Hoy el sistema solo tiene planetas, Quirón y nodos;
+ * el resto de categorías quedan en la tabla preparadas para cuando existan. */
+const CATEGORIA_CUERPO: Partial<Record<CuerpoKey, CategoriaCuerpo>> = {
+  sol: 'planetas', luna: 'planetas', mercurio: 'planetas', venus: 'planetas', marte: 'planetas',
+  jupiter: 'planetas', saturno: 'planetas', urano: 'planetas', neptuno: 'planetas', pluton: 'planetas',
+  quiron: 'quiron',
+  nodoNorte: 'nodos', nodoSur: 'nodos',
+};
+
+function categoriaDe(k: CuerpoKey): CategoriaCuerpo {
+  return CATEGORIA_CUERPO[k] ?? 'planetas';
+}
+
+function esLuminaria(k: CuerpoKey): boolean {
+  return k === 'sol' || k === 'luna';
+}
+
+/** Orbe efectivo de un aspecto entre dos cuerpos: el MENOR de los orbes de cada
+ *  categoría, más el bonus Sol/Luna si alguno es luminaria. */
+function orbeEntre(def: AspectoDef, a: CuerpoKey, b: CuerpoKey): number {
+  const base = Math.min(def.orbes[categoriaDe(a)], def.orbes[categoriaDe(b)]);
+  const bonus = esLuminaria(a) || esLuminaria(b) ? SOL_LUNA_BONUS : 0;
+  return base + bonus;
+}
 
 /* ─────────────────────── Service ─────────────────────── */
 
@@ -200,7 +243,8 @@ export class CartaNatalService {
       for (let j = i + 1; j < cuerpos.length; j++) {
         const diff = angularDiff(cuerpos[i].grado, cuerpos[j].grado);
         for (const def of ASPECTOS_DEF) {
-          if (Math.abs(diff - def.angulo) <= def.orbe) {
+          const orbe = orbeEntre(def, cuerpos[i].planeta, cuerpos[j].planeta);
+          if (Math.abs(diff - def.angulo) <= orbe) {
             aspectos.push({ a: cuerpos[i].planeta, b: cuerpos[j].planeta, tipo: def.tipo });
             break;
           }
