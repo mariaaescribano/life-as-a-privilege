@@ -534,7 +534,7 @@ export default function CursosModalidad() {
             color={modalidad.color}
           />
 
-          <SubscribeBox hideSeparator />
+          <SubscribeBox />
         </Flex>
       </Box>
 

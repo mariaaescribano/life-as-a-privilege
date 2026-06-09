@@ -19,7 +19,7 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
-export function SubscribeBox({ hideSeparator = false }: { hideSeparator?: boolean } = {}) {
+export function SubscribeBox() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "invalid" | "error">("idle");
   const reveal = useReveal(0.15);
