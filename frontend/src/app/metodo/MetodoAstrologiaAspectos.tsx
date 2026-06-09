@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,11 +9,12 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
-import { cuerpoByKey } from "../../components/metodo/astrologiaData";
+import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import { COLOR_ASPECTO } from "../../components/metodo/CartaAstral3D/types";
 import { ASPECTO_LABEL, ASPECTO_SYMBOL, aspectoKey } from "../../components/metodo/casasAspectos";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
@@ -96,6 +97,16 @@ export default function MetodoAstrologiaAspectos() {
 
   const textoAbierto = abierto ? (textos[aspectoKey(abierto)] ?? "").trim() : "";
 
+  // Agrupamos los aspectos por planeta. Cada aspecto une dos planetas, así que
+  // aparece en los dos boxes (el del planeta A y el del B). Mantenemos el orden
+  // canónico de CUERPOS y descartamos los planetas sin aspectos.
+  const gruposPorPlaneta = CUERPOS.map((c) => ({
+    cuerpo: c,
+    items: aspectos
+      .filter((a) => a.a === c.key || a.b === c.key)
+      .map((a) => ({ aspecto: a, otro: a.a === c.key ? a.b : a.a })),
+  })).filter((g) => g.items.length > 0);
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -115,140 +126,123 @@ export default function MetodoAstrologiaAspectos() {
             next={headerNext}
           />
 
-          <Box
-            position="relative"
-            w="100%"
-            borderRadius="2xl"
-            overflow="hidden"
-            border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
-          >
-            {/* Fondo espacial NÍTIDO (sin la veladura que difuminaba la imagen) */}
-            <Box
-              position="absolute"
-              inset="0"
-              pointerEvents="none"
-              overflow="hidden"
-              borderRadius="inherit"
-              style={{ background: "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)" }}
-            >
-              <Box
-                as="img"
-                src="/img/astrologia/space.jpg"
-                alt=""
-                loading="eager"
-                position="absolute"
-                inset="0"
-                w="100%"
-                h="100%"
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-              <Box position="absolute" inset="0" style={{ background: "rgba(8,13,30,0.45)" }} />
-            </Box>
+          {/* Título + subtítulo centrados */}
+          <Flex direction="column" align="center" textAlign="center" mb={{ base: 2, md: 4 }}>
+            <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2}
+                  letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
+              Los diálogos de tu carta
+            </Text>
+            <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">
+              Cada aspecto es una conversación entre dos planetas. Pulsa para leer.
+            </Text>
+          </Flex>
 
-            <Box position="relative" zIndex={1} px={{ base: 4, md: 8 }} py={{ base: 7, md: 9 }}>
-              <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={2}
-                    letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
-                Los diálogos de tu carta
-              </Text>
-              <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={6} maxW="560px" mx="auto">
-                Cada aspecto es una conversación entre dos planetas. Pulsa para leer.
-              </Text>
+          {aspectos.length === 0 ? (
+            <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" py={6}>
+              No hay aspectos calculados todavía.
+            </Text>
+          ) : (
+            <SimpleGrid w="100%" columns={1} spacing={{ base: 5, md: 6 }}>
+              {gruposPorPlaneta.map(({ cuerpo, items }) => (
+                <Box
+                  key={cuerpo.key}
+                  position="relative"
+                  borderRadius="2xl"
+                  overflow="hidden"
+                  border={`1px solid ${astrologiaTxt}44`}
+                  boxShadow={`0 0 18px rgba(255,255,255,0.12), 0 0 40px rgba(255,255,255,0.06), 0 0 24px ${astrologiaTxt}1a`}
+                >
+                  {/* Fondo de astrología (estrellado) sin blur, recortado sin deformar */}
+                  <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" overlay="rgba(8,13,30,0.58)" />
 
-              {aspectos.length === 0 ? (
-                <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" py={6}>
-                  No hay aspectos calculados todavía.
-                </Text>
-              ) : (
-                <Flex direction="column" gap={3}>
-                  {aspectos.map((a, idx) => {
-                    const cuerpoA = cuerpoByKey(a.a);
-                    const cuerpoB = cuerpoByKey(a.b);
-                    const colorAsp = COLOR_ASPECTO[a.tipo];
-                    const escrito = (textos[aspectoKey(a)] ?? "").trim().length > 0;
-                    return (
-                      <Flex
-                        key={`${aspectoKey(a)}-${idx}`}
-                        as="button"
-                        onClick={() => setAbierto(a)}
-                        w="100%"
-                        textAlign="left"
-                        align="center"
-                        gap={{ base: 2, md: 4 }}
-                        px={{ base: 4, md: 7 }}
-                        py={{ base: 3.5, md: 4 }}
-                        borderRadius="xl"
-                        bg="rgba(8,13,30,0.35)"
-                        border={`1px solid ${colorAsp}44`}
-                        boxShadow={`0 0 12px ${colorAsp}1f`}
-                        cursor="pointer"
-                        opacity={escrito ? 1 : 0.6}
-                        transition="all 0.18s"
-                        _hover={{
-                          bg: "rgba(8,13,30,0.5)",
-                          borderColor: `${colorAsp}88`,
-                          boxShadow: `0 0 20px ${colorAsp}44`,
-                          transform: "translateY(-1px)",
-                        }}
-                      >
-                        {/* Planeta A: glifo + nombre a la derecha */}
-                        <Flex align="center" gap={{ base: 2, md: 3 }} flexShrink={0}>
-                          {cuerpoA && <Glifo symbol={cuerpoA.symbol} color={cuerpoA.color} size={34} />}
-                          {cuerpoA && (
-                            <Text
-                              display={{ base: "none", md: "block" }}
-                              w={{ md: "120px" }}
+                  <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} py={{ base: 5, md: 6 }}>
+                    {/* Cabecera del planeta */}
+                    <Flex align="center" justify="center" gap={3} mb={4}>
+                      <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={36} />
+                      <Text color={cuerpo.color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                            letterSpacing="0.03em" style={{ textShadow: `0 0 12px ${cuerpo.color}66` }}>
+                        {cuerpo.label}
+                      </Text>
+                    </Flex>
+                    <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${cuerpo.color}55, transparent)`} />
+
+                    {/* Aspectos de este planeta — el box se adapta a su contenido */}
+                    <Flex direction="column" gap={2.5}>
+                        {items.map(({ aspecto, otro }, idx) => {
+                          const co = cuerpoByKey(otro);
+                          const colorAsp = COLOR_ASPECTO[aspecto.tipo];
+                          const escrito = (textos[aspectoKey(aspecto)] ?? "").trim().length > 0;
+                          return (
+                            <Flex
+                              key={`${aspectoKey(aspecto)}-${idx}`}
+                              as="button"
+                              onClick={() => setAbierto(aspecto)}
+                              w="100%"
+                              align="center"
+                              gap={{ base: 2, md: 3 }}
+                              px={{ base: 3, md: 4 }}
+                              py={{ base: 2.5, md: 3 }}
+                              borderRadius="lg"
+                              bg="rgba(8,13,30,0.4)"
+                              border={`1px solid ${colorAsp}44`}
+                              boxShadow={`0 0 10px ${colorAsp}1a`}
+                              cursor="pointer"
                               flexShrink={0}
-                              color={`${cuerpoA.color}ee`}
-                              fontSize="lg"
-                              fontWeight="600"
-                              letterSpacing="0.02em"
-                              noOfLines={1}
-                              style={{ textShadow: `0 0 8px ${cuerpoA.color}55` }}
+                              opacity={escrito ? 1 : 0.6}
+                              transition="all 0.18s"
+                              _hover={{
+                                bg: "rgba(8,13,30,0.55)",
+                                borderColor: `${colorAsp}88`,
+                                boxShadow: `0 0 18px ${colorAsp}44`,
+                                transform: "translateY(-1px)",
+                              }}
                             >
-                              {cuerpoA.label}
-                            </Text>
-                          )}
-                        </Flex>
+                              {/* Planeta del box (este) — ancho fijo para que todos
+                                  empiecen en el mismo sitio */}
+                              <Flex align="center" gap={2.5} flexShrink={0}>
+                                <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={30} />
+                                <Text display={{ base: "none", md: "block" }} w={{ md: "120px" }} flexShrink={0}
+                                      color={`${cuerpo.color}ee`} fontSize="md" fontWeight="600" noOfLines={1}
+                                      style={{ textShadow: `0 0 8px ${cuerpo.color}55` }}>
+                                  {cuerpo.label}
+                                </Text>
+                              </Flex>
 
-                        {/* Aspecto: símbolo + nombre en una sola línea */}
-                        <Flex align="center" gap={{ base: 1.5, md: 2.5 }} justify="center" flex="1" minW={0}>
-                          <Text fontSize={{ base: "xl", md: "2xl" }} color={colorAsp} fontFamily="'Times New Roman', serif"
-                                style={{ filter: `drop-shadow(0 0 6px ${colorAsp}aa)`, lineHeight: 1 }}>
-                            {ASPECTO_SYMBOL[a.tipo]}
-                          </Text>
-                          <Text fontSize={{ base: "2xs", md: "sm" }} color={`${colorAsp}dd`} letterSpacing="0.08em"
-                                textTransform="uppercase" whiteSpace="nowrap">
-                            {ASPECTO_LABEL[a.tipo]}
-                          </Text>
-                        </Flex>
+                              {/* Aspecto: símbolo + nombre con ancho fijo, para que
+                                  queden siempre en la misma posición */}
+                              <Flex align="center" gap={2} justify="center" flex="1" minW={0}>
+                                <Text w="28px" textAlign="center" flexShrink={0} fontSize={{ base: "xl", md: "2xl" }}
+                                      color={colorAsp} fontFamily="'Times New Roman', serif"
+                                      style={{ filter: `drop-shadow(0 0 6px ${colorAsp}aa)`, lineHeight: 1 }}>
+                                  {ASPECTO_SYMBOL[aspecto.tipo]}
+                                </Text>
+                                <Text w={{ md: "110px" }} flexShrink={0} fontSize={{ base: "2xs", md: "sm" }}
+                                      color={`${colorAsp}dd`} letterSpacing="0.08em"
+                                      textTransform="uppercase" whiteSpace="nowrap">
+                                  {ASPECTO_LABEL[aspecto.tipo]}
+                                </Text>
+                              </Flex>
 
-                        {/* Planeta B: glifo + nombre a la derecha */}
-                        <Flex align="center" gap={{ base: 2, md: 3 }} flexShrink={0}>
-                          {cuerpoB && <Glifo symbol={cuerpoB.symbol} color={cuerpoB.color} size={34} />}
-                          {cuerpoB && (
-                            <Text
-                              display={{ base: "none", md: "block" }}
-                              w={{ md: "120px" }}
-                              flexShrink={0}
-                              color={`${cuerpoB.color}ee`}
-                              fontSize="lg"
-                              fontWeight="600"
-                              letterSpacing="0.02em"
-                              noOfLines={1}
-                              style={{ textShadow: `0 0 8px ${cuerpoB.color}55` }}
-                            >
-                              {cuerpoB.label}
-                            </Text>
-                          )}
-                        </Flex>
-                      </Flex>
-                    );
-                  })}
-                </Flex>
-              )}
-            </Box>
-          </Box>
+                              {/* Otro planeta — ancho fijo, alineado */}
+                              <Flex align="center" gap={2.5} flexShrink={0}>
+                                {co && <Glifo symbol={co.symbol} color={co.color} size={30} />}
+                                {co && (
+                                  <Text display={{ base: "none", md: "block" }} w={{ md: "120px" }} flexShrink={0}
+                                        color={`${co.color}ee`} fontSize="md" fontWeight="600" noOfLines={1}
+                                        style={{ textShadow: `0 0 8px ${co.color}55` }}>
+                                    {co.label}
+                                  </Text>
+                                )}
+                              </Flex>
+                            </Flex>
+                          );
+                        })}
+                    </Flex>
+                  </Box>
+                </Box>
+              ))}
+            </SimpleGrid>
+          )}
         </Flex>
       </Flex>
 

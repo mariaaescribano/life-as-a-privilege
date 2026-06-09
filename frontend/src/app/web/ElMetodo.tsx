@@ -405,7 +405,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Ocho disciplinas. Un orden. Un propósito.
+          Ocho disciplinas. Un orden. Un propósito: entenderte.
         </Text>
 
         <Text
@@ -420,7 +420,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Un recorrido guiado por ocho disciplinas que observan al ser humano desde perspectivas diferentes. Cada paso suma estructura y coherencia que el anterior no podía.
+          Un recorrido guiado por ocho disciplinas que observan al ser humano desde perspectivas diferentes. No es acumular ideas sueltas. Cada paso añade coherencia.
         </Text>
       
       </Flex>

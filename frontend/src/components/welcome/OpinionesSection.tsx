@@ -204,7 +204,7 @@ const OpinionesSection: React.FC = () => {
           transform={reveal.visible ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
         >
-          Si ellos pudieron comprenderse mejor, tú también puedes.
+          Si ellos encontraron respuestas aquí, tú también puedes.
         </Text>
 
         {/* ── CTA principal → El Recorrido (botón con mandala + flecha + líneas,

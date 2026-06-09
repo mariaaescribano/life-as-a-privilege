@@ -211,10 +211,23 @@ const Welcome = () => {
           transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
         >
-          Comprende quién eres a través de un recorrido de 8 disciplinas.
+            Un recorrido de 8 disciplinas para comprender quién eres, integrando ciencia y tradición.
         </Text>
       </Flex>
 
+      {/* ── LOGO SEPARADOR ── */}
+      <Flex justify="center" pt={{ base: 7, md: 9 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "54px", md: "72px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          transition="opacity 1s ease 0.45s, transform 1s ease 0.45s"
+        />
+      </Flex>
 
       {/* ── BIENVENIDA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 5, md: 7 }}>
@@ -251,16 +264,6 @@ const Welcome = () => {
             mb={5}
           >
             La Vida como Privilegio
-          </Text>
-          <Text
-            color="white"
-            fontSize={{ base: "sm", md: "xl" }}
-            lineHeight="1.9"
-            letterSpacing="0.02em"
-            textShadow="0 0 11px rgba(255,255,255,0.45), 0 0 25px rgba(255,255,255,0.22)"
-            maxW={{ base: "100%", md: "88%" }}
-          >
-            Ciencia y conocimiento tradicional en un recorrido con inicio y cierre.
           </Text>
         </Box>
       </Flex>
