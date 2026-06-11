@@ -66,7 +66,7 @@ export default function MetodoAstrologiaLectura() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Tu carta"
+            title="Carta"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
@@ -74,7 +74,7 @@ export default function MetodoAstrologiaLectura() {
             mb={0}
             prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={{ label: "Mis casas →", onClick: () => navigate("/metodo/astrologia/casas") }}
+            next={{ label: "Casas →", onClick: () => navigate("/metodo/astrologia/casas") }}
           />
 
           <Box

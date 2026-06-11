@@ -599,7 +599,7 @@ export default function FitoterapiaEspacio() {
               </Text>
               <Box
                 as="button"
-                onClick={() => navigate(`/aprendizaje/cursosModalidad/${fitoterapiaNom}`)}
+                onClick={() => navigate(`/aprendizaje/cursos/${fitoterapiaNom}`)}
                 display="flex"
                 flexDirection="row"
                 alignItems="center"

@@ -408,7 +408,7 @@ export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly
             title={favoritesOnly ? "Mis alimentos favoritos" : "Alimentos"}
             bgColor={nutricionBg}
             color={nutricionTxt}
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
+            onIconClick={() => navigate("/aprendizaje/cursos/nutricion")}
           />
 
           {favoritesOnly && alimentosMostrados.length === 0 && (

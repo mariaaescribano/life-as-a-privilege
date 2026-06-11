@@ -43,15 +43,17 @@ export const AprendizajeHome = () => {
 
   // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
   // Fisiología → Nutrición → Cábala → Cultura
+  // Cada disciplina expone dos destinos: sus vídeos y sus cursos. El `slug`
+  // (nombre canónico o *NomLink) es el mismo para ambas rutas.
   const items = [
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     link: "/aprendizaje/cursosModalidad/" + astrologiaNom,    cursor: "pointer" },
-    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "48px" }} />, link: "/aprendizaje/cursosModalidad/" + neuropsicologiaNom, cursor: "pointer"},
-    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      link: "/aprendizaje/cursosModalidad/" + ayurvedaNomLink,  cursor: "pointer" },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            link: "/aprendizaje/cursosModalidad/" + tcmNomLink, cursor: "pointer" },
-    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "40px", md: "48px" }}/>,     link:  "/aprendizaje/cursosModalidad/" + fisiologiaNom,  cursor: "pointer" },
-    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "40px", md: "48px" }}  />,   link: "/aprendizaje/cursosModalidad/" + nutricionNomLink, cursor: "pointer" },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         link: "/aprendizaje/cursosModalidad/" + cabalaNom,      cursor: "pointer"  },
-    { title: culturaNom,           bgColor: culturaBg,         color: culturaTxt,      icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,       link: "/aprendizaje/cursosModalidad/" + culturaNom,      cursor: "pointer" },
+    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     slug: astrologiaNom },
+    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "48px" }} />, slug: neuropsicologiaNom },
+    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      slug: ayurvedaNomLink },
+    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            slug: tcmNomLink },
+    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "40px", md: "48px" }}/>,     slug: fisiologiaNom },
+    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "40px", md: "48px" }}  />,   slug: nutricionNomLink },
+    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         slug: cabalaNom },
+    { title: culturaNom,          bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,        slug: culturaNom },
   ];
 
   return (
@@ -94,7 +96,7 @@ export const AprendizajeHome = () => {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Disciplinas
+          CURSOS Y DISCIPLINAS
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -108,7 +110,7 @@ export const AprendizajeHome = () => {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Ocho puntos de vista. Un ser humano.
+          Ocho perspectivas. Un ser humano. Para los que quieren profundizar, qué hay detrás de El Recorrido.
         </Text>
       </Flex>
 
@@ -137,8 +139,8 @@ export const AprendizajeHome = () => {
                   bgColor={item.bgColor}
                   color={item.color}
                   icon={item.icon}
-                  link={item.link}
-                  cursor={item.cursor}
+                  link={"/aprendizaje/cursos/" + item.slug}
+                  cursor="pointer"
                 />
               </Box>
             ))}

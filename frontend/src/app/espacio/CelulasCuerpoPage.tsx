@@ -369,7 +369,7 @@ export default function CelulasCuerpoPage() {
             color={TXT}
             nom={fisiologiaNom}
             mb={{ base: 2, md: 4 }}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/" + fisiologiaNom) }}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/" + fisiologiaNom) }}
           />
 
           {/* Rejilla plana: 4 en ordenador, 1 en móvil */}

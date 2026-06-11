@@ -124,7 +124,7 @@ export default function AyurvedaTestPage({
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={{ base: 0, md: 0 }}
-              prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/ayurveda") }}
+              prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/ayurveda") }}
               next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
             />
 
@@ -392,7 +392,7 @@ export default function AyurvedaTestPage({
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={{ base: 0, md: 0 }}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/ayurveda") }}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/ayurveda") }}
             next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
           />
 

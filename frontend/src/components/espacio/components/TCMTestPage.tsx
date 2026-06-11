@@ -272,7 +272,7 @@ export default function TCMTestPage({
             nom={tcmNom}
             mb={{ base: 0, md: 0 }}
             compact
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursosModalidad/medicinachina") }}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/medicinachina") }}
             next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
           />
 

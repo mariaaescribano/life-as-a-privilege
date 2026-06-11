@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Portal, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -11,6 +11,7 @@ import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
@@ -150,7 +151,7 @@ export default function MetodoAstrologiaCasas() {
     );
 
   const headerNext = {
-    label: todasEscritas ? "Aspectos →" : "…",
+    label:"Aspectos →",
     onClick: () => navigate("/metodo/astrologia/aspectos"),
     disabled: !todasEscritas,
     disabledTooltip: "María está escribiendo la lectura de tus aspectos",
@@ -164,7 +165,7 @@ export default function MetodoAstrologiaCasas() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Tus casas"
+            title="Casas"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
@@ -306,6 +307,9 @@ function CasaBox({
 }) {
   const [open, setOpen] = useState(false);
 
+  // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
+  useLockBodyScroll(open);
+
   const Cabecera = (
     <Flex align="center" gap={3} mb={4} wrap="nowrap">
       {/* Izquierda: Casa N · signo (se encoge/truncar si hace falta) */}
@@ -347,7 +351,7 @@ function CasaBox({
     <>
       <Box
         w="100%"
-        h={{ lg: "253px" }}
+        minH={{ lg: "253px" }}
         display="flex"
         flexDirection="column"
         borderRadius="xl"
@@ -360,21 +364,25 @@ function CasaBox({
         {Cabecera}
         <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
 
-        {/* texto (recortado con … en escritorio; completo en móvil) */}
-        <Box flex="1" minH={0} overflow="hidden">
+        {/* texto recortado con … — máximo 2 líneas en cualquier tamaño.
+            El line-clamp (noOfLines) controla la altura y dibuja la elipsis; no
+            usamos overflow:hidden con altura fija porque recortaría la línea de
+            los puntos antes de que el clamp los pinte. */}
+        <Box flex={{ lg: "1" }} minH={{ base: "calc(1em * 1.85 * 2)", lg: 0 }}>
           {textoSel ? (
             <Text
               color={`${astrologiaTxt}e6`}
               fontSize={{ base: "md", md: "lg" }}
               lineHeight="1.85"
               letterSpacing="0.015em"
-              noOfLines={{ lg: 4 }}
-              style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}
+              noOfLines={2}
+              style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}
             >
               {renderConNegritas(textoSel, astrologiaTxt)}
             </Text>
           ) : (
-            <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" fontStyle="italic">
+            <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic"
+                  noOfLines={2}>
               María aún no ha escrito la lectura de esta casa. Estará disponible pronto.
             </Text>
           )}
@@ -394,9 +402,11 @@ function CasaBox({
         )}
       </Box>
 
-      {/* modal con el texto completo */}
+      {/* modal con el texto completo — en Portal para escapar del stacking
+          context (zIndex 1) del contenedor y quedar por encima del header */}
       {open && (
-        <Box position="fixed" inset={0} zIndex={500} display="flex" alignItems="center" justifyContent="center"
+        <Portal>
+        <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
              px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.72)"
              sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
              onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
@@ -415,6 +425,7 @@ function CasaBox({
               </svg>
             </Box>
             <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }} overflowY="auto"
+                 overscrollBehavior="contain"
                  sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}55`, borderRadius: "8px" } }}>
               {Cabecera}
               <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
@@ -425,6 +436,7 @@ function CasaBox({
             </Box>
           </Box>
         </Box>
+        </Portal>
       )}
     </>
   );

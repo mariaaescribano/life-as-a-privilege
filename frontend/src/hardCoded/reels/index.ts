@@ -9,7 +9,7 @@ import {
    REELS POR DISCIPLINA
    ---------------------------------------------------------------
    Cada disciplina puede mostrar 3/4 reels (vídeos verticales de
-   YouTube) en su página /aprendizaje/cursosModalidad/:moduloId.
+   YouTube) en su página /aprendizaje/cursos/:moduloId.
 
    Para añadir un vídeo a una disciplina, mete un objeto en su lista:
      • titulo   → el título que aparece debajo de la portada.

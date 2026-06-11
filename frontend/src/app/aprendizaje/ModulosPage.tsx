@@ -116,7 +116,7 @@ export default function ModulesPage() {
               subtitle={moduloDatos.disciplina !== moduloDatos.nom ? moduloDatos.disciplina : undefined}
               bgColor={moduloDatos.bgColor}
               color={moduloDatos.color}
-              onIconClick={() => navigate(`/aprendizaje/cursosModalidad/${moduloDatos.nomModalidad}`)}
+              onIconClick={() => navigate(`/aprendizaje/cursos/${moduloDatos.nomModalidad}`)}
             />
 
             {/* Módulos directos — sin card contenedor */}

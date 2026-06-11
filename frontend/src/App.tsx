@@ -122,7 +122,7 @@ export default function App()
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
       <Route path="/aprendizaje/nuevosCursos" element={<NuevosCursosPage />} />
-      <Route path="/aprendizaje/cursosModalidad/:moduloId" element={<CursosModalidad />} />
+      <Route path="/aprendizaje/cursos/:moduloId" element={<CursosModalidad />} />
       <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
       <Route path="/aprendizaje/herbario/favoritos" element={<PrivateRoute><HerbarioPage favoritesOnly /></PrivateRoute>} />
       <Route path="/aprendizaje/alimentos" element={<AlimentosPage />} />

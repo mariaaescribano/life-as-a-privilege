@@ -543,7 +543,7 @@ export default function ElMetodo() {
           {/* Cuadrícula de tarjetas */}
           <Grid
             ref={recibirasGridReveal.ref}
-            templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+            templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
             gap={{ base: 5, md: 7 }}
             mt={{ base: 10, md: 14 }}
           >
@@ -797,10 +797,11 @@ export default function ElMetodo() {
           onClick={handleApuntarme}
           align="center"
           justify="center"
-          gap={{ base: 3, md: 6 }}
-          px={{ base: 8, md: 24 }}
-          py={{ base: "18px", md: "22px" }}
-          minW={{ base: "240px", md: "520px" }}
+          gap={{ base: 2, md: 6 }}
+          px={{ base: 5, md: 24 }}
+          py={{ base: "12px", md: "22px" }}
+          minW={{ base: "auto", md: "520px" }}
+          maxW={{ base: "92vw", md: "none" }}
           flexShrink={0}
           borderRadius="full"
           border="1.5px solid rgba(255,255,255,0.65)"
@@ -817,7 +818,7 @@ export default function ElMetodo() {
           <Image
             src="/img/icono/life.png"
             alt=""
-            h={{ base: "34px", md: "44px" }}
+            h={{ base: "24px", md: "44px" }}
             objectFit="contain"
             flexShrink={0}
             style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.56)) drop-shadow(0 0 24px rgba(255,255,255,0.3))" }}
@@ -826,10 +827,11 @@ export default function ElMetodo() {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "md", md: "2xl" }}
-            letterSpacing={{ base: "0.08em", md: "0.18em" }}
+            fontSize={{ base: "14px", md: "2xl" }}
+            letterSpacing={{ base: "0.04em", md: "0.18em" }}
             textTransform="uppercase"
             textAlign="center"
+            whiteSpace="nowrap"
             textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
           >
             Apúntate a la lista de espera

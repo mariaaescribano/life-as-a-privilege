@@ -417,7 +417,7 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
             title={favoritesOnly ? "Mis plantas favoritas" : "Herbario"}
             bgColor={nutricionBg}
             color={nutricionTxt}
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
+            onIconClick={() => navigate("/aprendizaje/cursos/nutricion")}
           />
 
           {favoritesOnly && plantasMostradas.length === 0 && (

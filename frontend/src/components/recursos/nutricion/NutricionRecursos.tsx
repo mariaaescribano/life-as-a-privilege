@@ -687,7 +687,7 @@ export default function NutricionRecursos() {
             subtitle={nutricionNom}
             bgColor={BG}
             color={TXT} mb={{ base: 0, md: 0 }}
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/nutricion")}
+            onIconClick={() => navigate("/aprendizaje/cursos/nutricion")}
           />
 
           <CarbohidratosCard onSelect={setSelected} />

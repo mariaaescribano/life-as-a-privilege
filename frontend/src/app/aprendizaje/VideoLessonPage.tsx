@@ -79,7 +79,7 @@ export default function VideoLessonPage() {
   const getModulosPageLink = (): string => {
     if (!moduloId || !datos?.cursoId) return "";
     if (moduloId.startsWith(neuropsicologiaNom)) {
-      return `/aprendizaje/cursosModalidad/${neuropsicologiaNom}`;
+      return `/aprendizaje/cursos/${neuropsicologiaNom}`;
     }
     return `/aprendizaje/modulosPage/${moduloId}/${datos.cursoId}`;
   };

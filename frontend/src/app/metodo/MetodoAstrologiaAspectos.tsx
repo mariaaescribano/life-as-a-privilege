@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Portal, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -13,9 +13,10 @@ import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import { COLOR_ASPECTO } from "../../components/metodo/CartaAstral3D/types";
 import { ASPECTO_LABEL, ASPECTO_SYMBOL, aspectoKey } from "../../components/metodo/casasAspectos";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
-
+ 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
        style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
@@ -55,6 +56,9 @@ export default function MetodoAstrologiaAspectos() {
   const [comicOpen, setComicOpen] = useState(false);
   const [abierto, setAbierto] = useState<Aspecto | null>(null);
 
+  // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
+  useLockBodyScroll(!!abierto);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -91,7 +95,7 @@ export default function MetodoAstrologiaAspectos() {
   const headerNext = {
     label: todosEscritos ? "Psicología →" : "Lectura de aspectos en proceso…",
     onClick: () => navigate("/metodo/psicologia"),
-    disabled: true, // Psicología bloqueada por ahora
+    disabled: true, // Psicología bloqueada hasta nueva orden
     disabledTooltip: "Psicología estará disponible próximamente",
   };
 
@@ -115,26 +119,26 @@ export default function MetodoAstrologiaAspectos() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Tus aspectos"
+            title="Aspectos"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
             step={{ current: 6, total: 6 }}
             mb={0}
-            prev={{ label: "← Mis casas", onClick: () => navigate("/metodo/astrologia/casas") }}
+            prev={{ label: "← Casas", onClick: () => navigate("/metodo/astrologia/casas") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={headerNext}
           />
 
           {/* Título + subtítulo centrados */}
           <Flex direction="column" align="center" textAlign="center" mb={{ base: 2, md: 4 }}>
-            <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2}
+            <Text color={astrologiaTxt} fontSize={{ base: "l", md: "xl" }} fontWeight="700" mb={2} fontStyle="italic"
                   letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
-              Los diálogos de tu carta
+              Cada aspecto es una relación entre dos planetas. Pulsa para leer.
             </Text>
-            <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">
+            {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">
               Cada aspecto es una conversación entre dos planetas. Pulsa para leer.
-            </Text>
+            </Text> */}
           </Flex>
 
           {aspectos.length === 0 ? (
@@ -252,8 +256,9 @@ export default function MetodoAstrologiaAspectos() {
         const cuerpoB = cuerpoByKey(abierto.b);
         const colorAsp = COLOR_ASPECTO[abierto.tipo];
         return (
+          <Portal>
           <Box
-            position="fixed" inset={0} zIndex={500}
+            position="fixed" inset={0} zIndex={2000}
             display="flex" alignItems="center" justifyContent="center"
             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
             bg="rgba(0,0,0,0.72)"
@@ -282,7 +287,7 @@ export default function MetodoAstrologiaAspectos() {
               </Box>
 
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}
-                   overflowY="auto"
+                   overflowY="auto" overscrollBehavior="contain"
                    sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${colorAsp}55`, borderRadius: "8px" } }}>
                 <Flex align="center" justify="center" gap={3} mb={5} flexWrap="wrap">
                   {cuerpoA && <Glifo symbol={cuerpoA.symbol} color={cuerpoA.color} size={34} />}
@@ -292,10 +297,13 @@ export default function MetodoAstrologiaAspectos() {
                   </Text>
                   {cuerpoB && <Glifo symbol={cuerpoB.symbol} color={cuerpoB.color} size={34} />}
                 </Flex>
-                <Text color={colorAsp} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" mb={5}
+                <Text color={colorAsp} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" mb={4}
                       letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${colorAsp}66` }}>
                   {cuerpoA?.label} {ASPECTO_LABEL[abierto.tipo].toLowerCase()} {cuerpoB?.label}
                 </Text>
+
+                {/* línea separadora con el color del aspecto */}
+                <Box h="1px" mb={5} bgGradient={`linear(to-r, transparent, ${colorAsp}66, transparent)`} />
 
                 {textoAbierto ? (
                   renderParrafos(textoAbierto, astrologiaTxt)
@@ -307,6 +315,7 @@ export default function MetodoAstrologiaAspectos() {
               </Box>
             </Box>
           </Box>
+          </Portal>
         );
       })()}
 

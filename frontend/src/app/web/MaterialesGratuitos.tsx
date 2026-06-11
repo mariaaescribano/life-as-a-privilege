@@ -3,7 +3,7 @@ import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { AprendizajeIcon, LibrosIcon } from "../../GlobalVariables";
+import { LibrosIcon } from "../../GlobalVariables";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -42,13 +42,24 @@ export default function MaterialesGratuitos() {
   const cajitas: Cajita[] = [
     {
       titulo: "Vídeos",
-      delay: 0.3,
+      delay: 0.15,
       link: "/aprendizaje/nuevosCursos",
-      renderIcon: () => <AprendizajeIcon color="white" size="52px" shadow={false} />,
+      renderIcon: () => (
+        <Box
+          as="svg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 -960 960 960"
+          width="52px"
+          height="52px"
+          fill="white"
+        >
+          <path d="M320-200v-560l440 280-440 280Z" />
+        </Box>
+      ),
     },
     {
-      titulo: "Disciplinas",
-      delay: 0.15,
+      titulo: "Cursos",
+      delay: 0.3,
       link: "/aprendizaje/aprendizajeHome",
       renderIcon: () => (
         <Image
@@ -107,7 +118,7 @@ export default function MaterialesGratuitos() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Materiales gratuitos
+          Materiales
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"

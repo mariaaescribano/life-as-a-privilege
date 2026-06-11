@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { TextoCartaExplicativo } from "../../components/metodo/TextoCartaExplicativo";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   API_URL,
   astrologiaBg,
@@ -92,6 +93,9 @@ export default function MetodoAstrologia() {
   const [popupError, setPopupError] = useState<string | null>(null);
   // Popup "tu carta está en proceso" que sale tras enviar
   const [procesoOpen, setProcesoOpen] = useState(false);
+
+  // Bloquea el scroll del fondo mientras cualquier popup está abierto.
+  useLockBodyScroll(confirmOpen || procesoOpen);
 
   const MESES = [
     { num: "01", nombre: "Enero" },

@@ -252,7 +252,7 @@ export default function CabalaRecursos2() {
             subtitle={cabalaNom}
             bgColor={cabalaBg}
             color={cabalaTxt}
-            onIconClick={() => navigate("/aprendizaje/cursosModalidad/Cábala")}
+            onIconClick={() => navigate("/aprendizaje/cursos/Cábala")}
           />
 
           {/* ── Árbol de la Vida ── */}

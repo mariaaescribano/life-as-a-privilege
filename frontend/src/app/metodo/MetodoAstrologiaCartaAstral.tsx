@@ -138,7 +138,7 @@ export default function MetodoAstrologiaCartaAstral() {
   }
 
   const headerNext = {
-    label: hayPdf ? "Mi carta (PDF) →" : "María está leyendo tu carta…",
+    label: hayPdf ? "Carta (PDF) →" : "María está leyendo tu carta…",
     onClick: () => navigate("/metodo/astrologia/lectura"),
     disabled: !todoCompletado || !hayPdf,
     disabledTooltip: !hayPdf

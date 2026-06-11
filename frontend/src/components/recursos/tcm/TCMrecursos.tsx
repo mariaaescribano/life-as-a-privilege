@@ -1290,7 +1290,7 @@ const TCMPage = () => {
           subtitle={tcmNom}
           bgColor={tcmBg}
           color={tcmTxt}
-          onIconClick={() => navigate("/aprendizaje/cursosModalidad/medicinachina")}
+          onIconClick={() => navigate("/aprendizaje/cursos/medicinachina")}
         />
 
        
