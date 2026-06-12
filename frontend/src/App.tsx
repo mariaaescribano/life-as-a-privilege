@@ -9,6 +9,7 @@ import { AprendizajeHome } from "./app/aprendizaje/AprendizajeHome";
 import ModulosPage from "./app/aprendizaje/ModulosPage";
 import VideoLessonPage from "./app/aprendizaje/VideoLessonPage";
 import CursosModalidad from "./app/aprendizaje/CursosModalidad";
+import TextLessonPage from "./app/aprendizaje/TextLessonPage";
 import HerbarioPage from "./app/aprendizaje/HerbarioPage";
 import AlimentosPage from "./app/aprendizaje/AlimentosPage";
 import CalcularNecesidadesPage from "./app/aprendizaje/CalcularNecesidadesPage";
@@ -131,6 +132,7 @@ export default function App()
       <Route path="/aprendizaje/test-doshas" element={<TestDoshasPage />} />
       <Route path="/aprendizaje/modulosPage/:modalidadId/:cursoId" element={<ModulosPage />} />
       <Route path="/aprendizaje/videoLessonPage/:moduloId/:submoduloId" element={<VideoLessonPage />} />
+      <Route path="/aprendizaje/leccion/:modalidadId/:cursoId/:submoduloId" element={<TextLessonPage />} />
 
       <Route path="/recursos/:moduloId" element={<RecursosPage />} />
 

@@ -1,11 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { DisciplineHeader } from "../../components/global/DisciplineHeader";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { Modulo } from "../../dtos/aprendizaje.type";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -24,7 +24,6 @@ import type { ModuloContenido } from "../../dtos/aprendizaje.type";
 export default function ModulesPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
   const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -110,13 +109,12 @@ export default function ModulesPage() {
             pt={{ base: 10, md: 14 }}
             pb={{ base: 14, md: 20 }}
           >
-            <DisciplineHeader
+            <MetodoStepHeader
               icon={moduloDatos.icon}
               title={moduloDatos.nom}
-              subtitle={moduloDatos.disciplina !== moduloDatos.nom ? moduloDatos.disciplina : undefined}
               bgColor={moduloDatos.bgColor}
               color={moduloDatos.color}
-              onIconClick={() => navigate(`/aprendizaje/cursos/${moduloDatos.nomModalidad}`)}
+              nom={moduloDatos.disciplina}
             />
 
             {/* Módulos directos — sin card contenedor */}
@@ -144,6 +142,7 @@ export default function ModulesPage() {
                     color={moduloDatos.color}
                     submodules={mod.submodules}
                     icon={mod.icon}
+                    disciplina={moduloDatos.disciplina}
                   />
                 </Box>
               ))}

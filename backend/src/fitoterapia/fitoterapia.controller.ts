@@ -1,7 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { FitoterapiaService } from './fitoterapia.service';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { OwnerGuard } from '../auth/owner.guard';
 
 @Controller('fitoterapia')
+@UseGuards(JwtAuthGuard, OwnerGuard)
 export class FitoterapiaController {
   constructor(private readonly fitoterapiaService: FitoterapiaService) {}
 

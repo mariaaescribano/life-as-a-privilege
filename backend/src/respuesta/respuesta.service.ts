@@ -10,17 +10,24 @@ export class RespuestaService {
     try {
       const db = this.databaseService.getClient();
 
-      // 1️⃣ Borrar si ya existe
-      await db
+      // UPDATE si ya existe la respuesta (userid+pregid), INSERT si no. Evita la
+      // ventana de pérdida del patrón anterior (borrar y luego insertar).
+      const { data: existing } = await db
         .from('neuroPsicologia')
-        .delete()
+        .select('pregid')
         .eq('userid', body.userId)
-        .eq('pregid', body.idPregunta);
+        .eq('pregid', body.idPregunta)
+        .limit(1);
 
-      // 2️⃣ Insertar nueva respuesta
-      const { error } = await db
-        .from('neuroPsicologia')
-        .insert({ userid: body.userId, pregid: body.idPregunta, respuesta: body.respuesta });
+      const { error } = (existing?.length ?? 0) > 0
+        ? await db
+            .from('neuroPsicologia')
+            .update({ respuesta: body.respuesta })
+            .eq('userid', body.userId)
+            .eq('pregid', body.idPregunta)
+        : await db
+            .from('neuroPsicologia')
+            .insert({ userid: body.userId, pregid: body.idPregunta, respuesta: body.respuesta });
 
       if (error) throw error;
 
@@ -31,7 +38,7 @@ export class RespuestaService {
     }
   }
 
-  async getRespuestaDePregunta(pregId: string, userId: string): Promise<Respuesta> {
+  async getRespuestaDePregunta(pregId: string, userId: string): Promise<Respuesta | null> {
     try {
       const { data, error } = await this.databaseService.getClient()
         .from('neuroPsicologia')
@@ -41,10 +48,10 @@ export class RespuestaService {
 
       if (error) throw error;
 
-      return data?.[0];
+      return data?.[0] ?? null;
     } catch (error) {
-      console.log("Error en getRespuestaDePregunta:", error);
-      throw new Error(error);
+      console.error("Error en getRespuestaDePregunta:", error);
+      throw error instanceof Error ? error : new Error(JSON.stringify(error));
     }
   }
 }

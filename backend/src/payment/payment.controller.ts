@@ -18,13 +18,6 @@ export class PaymentController {
     return await this.paymentService.verifyMetodoCheckout(sessionId, req.user.userId);
   }
 
-  /* TEST PAGO — marca suscrito sin pasar por Stripe (para pruebas) */
-  @Post('metodo/test')
-  @UseGuards(JwtAuthGuard)
-  async testPagoMetodo(@Req() req: any) {
-    return await this.paymentService.testMarcarPagado(req.user.userId);
-  }
-
   @Post('libros/checkout')
   async createLibroCheckout(@Body() body: { libroId?: string }) {
     if (!body?.libroId) throw new BadRequestException('libroId requerido');

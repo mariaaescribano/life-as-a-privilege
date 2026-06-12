@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AstrologiaService } from './astrologia.service';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { OwnerGuard } from '../auth/owner.guard';
 
 @Controller('astrologia')
+@UseGuards(JwtAuthGuard, OwnerGuard)
 export class AstrologiaController {
   constructor(private readonly astrologiaService: AstrologiaService) {}
 

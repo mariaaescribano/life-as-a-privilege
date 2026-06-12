@@ -21,13 +21,17 @@ export class UserService {
 
   // --------- Verifica si el nombre o email existen ---------
   async getNomEmailExist(nom: string, email: string): Promise<{ nameExists: boolean; emailExists: boolean }> {
-    const { data } = await this.databaseService.getClient()
-      .from('user')
-      .select('name, email')
-      .or(`name.eq.${nom},email.eq.${email}`);
-    const nameExists = (data ?? []).some((u: any) => u.name === nom);
-    const emailExists = (data ?? []).some((u: any) => u.email === email);
-    return { nameExists, emailExists };
+    const db = this.databaseService.getClient();
+    // Dos consultas con .eq() parametrizado (el cliente las escapa) en lugar de
+    // interpolar la entrada del usuario en un filtro .or() de PostgREST.
+    const [byName, byEmail] = await Promise.all([
+      db.from('user').select('name').eq('name', nom).limit(1),
+      db.from('user').select('email').eq('email', email).limit(1),
+    ]);
+    return {
+      nameExists: (byName.data ?? []).length > 0,
+      emailExists: (byEmail.data ?? []).length > 0,
+    };
   }
 
   // --------- Crear usuario ---------
@@ -37,41 +41,37 @@ export class UserService {
       if (nameExists) throw new ConflictException('El nombre ya existe. Elige otro');
       if (emailExists) throw new ConflictException('El email ya está registrado');
 
-      let inserted = false;
       let id = randomString();
       const pass = await hashPassword(data.password);
 
-      do {
+      // Reintentamos solo ante colisión de id (23505), con un tope para no
+      // entrar en bucle infinito si el insert nunca devuelve la fila esperada.
+      for (let intento = 0; intento < 5; intento++) {
         try {
           const { data: rows, error } = await this.databaseService.getClient()
             .from('user')
             .insert({ id, name: data.name, email: data.email, password: pass })
-            .select('id');
+            .select('id, name, email, img');
 
           if (error) throw error;
 
           if (rows && rows.length === 1) {
-            inserted = true;
-            const newUserId = rows[0].id;
-            const token = this.authService.generateToken(newUserId, data.email);
-
-            const { data: users } = await this.databaseService.getClient()
-              .from('user')
-              .select('*')
-              .eq('id', newUserId);
-
-            return { token, user: users?.[0] };
+            const newUser = rows[0];
+            const token = this.authService.generateToken(newUser.id, data.email);
+            return { token, user: newUser };
           }
-
+          // Insert sin error pero sin fila: no reintentamos a ciegas.
+          throw new Error('El insert de usuario no devolvió la fila esperada');
         } catch (error: any) {
           if (error.code === '23505') {
             id = randomString();
-          } else {
-            throw error;
+            continue;
           }
+          throw error;
         }
-      } while (!inserted);
+      }
 
+      throw new ConflictException('No se pudo generar un id de usuario único');
     } catch (error) {
       console.log(error);
       throw error;
@@ -81,17 +81,22 @@ export class UserService {
   // --------- Login ---------
   async logIn(body: LoginUser) {
     try {
-      const { data: rows } = await this.databaseService.getClient()
-        .from('user')
-        .select('*')
-        .or(`name.eq.${body.name},email.eq.${body.name}`);
+      const db = this.databaseService.getClient();
+      // Buscar por nombre y, si no hay, por email (con .eq() parametrizado en
+      // lugar de interpolar la entrada en un filtro .or()).
+      let { data: rows } = await db.from('user').select('*').eq('name', body.name).limit(1);
+      if (!rows || rows.length === 0) {
+        ({ data: rows } = await db.from('user').select('*').eq('email', body.name).limit(1));
+      }
 
       if (rows && rows.length > 0) {
         const user = rows[0];
         const coinciden = await comparePassword(body.password, user.password);
         if (coinciden) {
           const token = this.authService.generateToken(user.id, user.email);
-          return { token, user };
+          // No devolver nunca el hash de la contraseña al cliente.
+          const { password, ...safeUser } = user;
+          return { token, user: safeUser };
         } else {
           throw new ConflictException('La contraseña es errónea');
         }
@@ -169,10 +174,10 @@ export class UserService {
 
   // --------- Login con Google (encontrar o crear) ---------
   async findOrCreateGoogleUser({ email, name, img }: { email: string; name: string; img: string | null }) {
-    // Buscar usuario existente por email
+    // Buscar usuario existente por email (sin traer el hash de contraseña)
     const { data: existing } = await this.databaseService.getClient()
       .from('user')
-      .select('*')
+      .select('id, name, email, img')
       .eq('email', email);
 
     if (existing && existing.length > 0) {
@@ -194,31 +199,33 @@ export class UserService {
     // Contraseña aleatoria (el usuario de Google nunca la usará)
     const dummyPass = await hashPassword(randomString());
 
-    let inserted = false;
     let id = randomString();
 
-    do {
+    // Reintento acotado solo ante colisión de id (23505).
+    for (let intento = 0; intento < 5; intento++) {
       try {
         const { data: rows, error } = await this.databaseService.getClient()
           .from('user')
           .insert({ id, name: finalName, email, password: dummyPass, img: img ?? null })
-          .select('*');
+          .select('id, name, email, img');
 
         if (error) throw error;
 
         if (rows && rows.length === 1) {
-          inserted = true;
           const token = this.authService.generateToken(rows[0].id, rows[0].email);
           return { token, user: rows[0] };
         }
+        throw new Error('El insert de usuario (Google) no devolvió la fila esperada');
       } catch (error: any) {
         if (error.code === '23505') {
           id = randomString();
-        } else {
-          throw error;
+          continue;
         }
+        throw error;
       }
-    } while (!inserted);
+    }
+
+    throw new ConflictException('No se pudo generar un id de usuario único');
   }
 
   // --------- Marcar usuario como suscrito al Método ---------

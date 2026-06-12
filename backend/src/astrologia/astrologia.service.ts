@@ -15,19 +15,19 @@ export class AstrologiaService {
 
       const { data: existing } = await db
         .from('astrologia')
-        .select('*')
+        .select('userId')
         .eq('userId', userId)
+        .limit(1)
         .maybeSingle();
 
       if (existing) {
-        await db.from('astrologia').delete().eq('userId', userId);
-        const { error } = await db.from('astrologia').insert({
-          userId,
-          sol:        existing.sol        ?? null,
-          luna:       existing.luna       ?? null,
-          ascendente: existing.ascendente ?? null,
-          [field]: value,
-        });
+        // UPDATE solo del campo afectado: atómico y sin ventana de pérdida de
+        // datos (antes se borraba la fila entera y se reinsertaba), y dos
+        // guardados concurrentes (p. ej. sol y luna) ya no se pisan.
+        const { error } = await db
+          .from('astrologia')
+          .update({ [field]: value })
+          .eq('userId', userId);
         if (error) throw error;
       } else {
         const { error } = await db

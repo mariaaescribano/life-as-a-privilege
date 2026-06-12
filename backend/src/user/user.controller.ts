@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import type { CreateUser, LoginUser, UpdateUser } from "../dtos/user.types";
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { AdminGuard } from '../auth/admin.guard';
+import { OwnerGuard } from '../auth/owner.guard';
 import { isAdminEmail } from '../auth/admin.util';
 
 // #region user
@@ -36,19 +37,19 @@ export class UserController {
   }
 
   @Get(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnerGuard)
   async getById(@Param("id") id: string) {
     return await this.usersService.getUserById(id);
   }
 
   @Patch(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnerGuard)
   async update(@Param("id") id: string, @Body() body: UpdateUser) {
     return await this.usersService.updateUser(id, body);
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnerGuard)
   async remove(@Param("id") id: string) {
     return await this.usersService.deleteUser(id);
   }

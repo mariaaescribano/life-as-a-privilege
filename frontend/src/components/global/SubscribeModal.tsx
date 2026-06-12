@@ -23,16 +23,12 @@ interface SubscribeModalProps {
 
 export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleClose = () => {
     setEmail("");
-    setPassword("");
-    setPassword2("");
     setSubmitting(false);
     setSubmitted(false);
     setError(null);
@@ -47,14 +43,6 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
       setError("Introduce un email válido.");
       return;
     }
-    if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
-    if (password !== password2) {
-      setError("Las contraseñas no coinciden.");
-      return;
-    }
 
     setSubmitting(true);
     try {
@@ -64,9 +52,8 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
         titulo: "Quiero apuntarme — Pre-pago pack",
         mensaje:
           `El usuario ha iniciado el flujo de compra del pack y va a proceder al pago.\n\n` +
-          `Email: ${cleanEmail}\n` +
-          `Contraseña elegida: ${password}\n\n` +
-          `Cuando recibas la confirmación de pago de Stripe, crea su cuenta con estos datos y envíale el código de acceso.`,
+          `Email: ${cleanEmail}\n\n` +
+          `Cuando recibas la confirmación de pago de Stripe, crea su cuenta con este email y envíale su código de acceso por correo.`,
       });
       setSubmitted(true);
     } catch {
@@ -121,8 +108,9 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
             {!submitted ? (
               <Flex direction="column" gap={4}>
                 <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
-                  Introduce el email y la contraseña que usarás para acceder a
-                  los cursos. Después te llevaremos al pago seguro.
+                  Introduce el email con el que quieres acceder a los cursos.
+                  Después te llevaremos al pago seguro y, una vez confirmado,
+                  recibirás tu código de acceso por correo.
                 </Text>
 
                 <Input
@@ -130,20 +118,6 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  {...inputStyle}
-                />
-                <Input
-                  placeholder="Contraseña (mín. 6 caracteres)"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  {...inputStyle}
-                />
-                <Input
-                  placeholder="Repite la contraseña"
-                  type="password"
-                  value={password2}
-                  onChange={(e) => setPassword2(e.target.value)}
                   {...inputStyle}
                 />
 

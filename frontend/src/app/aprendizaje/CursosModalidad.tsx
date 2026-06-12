@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Flex, Text, Image, SimpleGrid,
+  Box, Flex, Text, Image, SimpleGrid, Collapse,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -83,99 +84,86 @@ interface CursoCardProps {
 
 function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCardProps) {
   const label = curso.precio === null ? "Gratis" : `${curso.precio.toFixed(2).replace(".", ",")} €`;
+  const esPago = curso.precio !== null;
 
   return (
     <Flex
-      bg={bgColor}
-      gap={4}
-      borderRadius="2xl"
-      border={`1px solid ${color}55`}
-      boxShadow={`0 0 22px rgba(255,255,255,0.3), 0 0 50px rgba(255,255,255,0.14), 0 0 90px rgba(180,255,245,0.16), 0 0 36px ${color}55, 0 4px 22px rgba(0,0,0,0.22)`}
       direction="column"
-      p={{ base: 7, md: 8 }}
+      position="relative"
+      w="100%"
       h="100%"
+      borderRadius="2xl"
+      overflow="hidden"
+      cursor="pointer"
+      onClick={onVerDetalle}
+      bg={bgColor}
+      border={`1px solid ${color}66`}
+      boxShadow={`0 0 18px rgba(255,255,255,0.15), 0 0 42px rgba(180,255,245,0.1), 0 0 24px ${color}40, 0 0 60px ${color}22`}
+      transition="transform 0.25s ease, box-shadow 0.25s ease"
+      _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 28px rgba(255,255,255,0.22), 0 0 65px rgba(180,255,245,0.16), 0 0 38px ${color}66, 0 0 90px ${color}33` }}
     >
-      {/* Título */}
-      <Box mt="3px" mb={"10px"}>
+      {/* Fondo propio de la disciplina */}
+      {hasDisciplinaBg(disciplina) && (
+        <DisciplinaBgLayer
+          nom={disciplina}
+          borderRadius="2xl"
+          overlay="linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.28) 45%, rgba(0,0,0,0.6) 100%)"
+        />
+      )}
+
+      {/* Contenido */}
+      <Flex direction="column" position="relative" zIndex={1} h="100%" p={{ base: 4, md: 5 }} gap={{ base: 3, md: 3 }}>
+        {/* Título */}
         <Text
           color={color}
-          fontSize={{ base: "2xl", md: "3xl" }}
+          fontSize={{ base: "lg", md: "xl" }}
           fontWeight="700"
-          letterSpacing="0.04em"
-          lineHeight="1.25"
-          style={{ textShadow: `0 0 12px rgba(255,255,255,0.41), 0 0 26px rgba(255,255,255,0.21), 0 0 50px ${color}55` }}
+          letterSpacing="0.03em"
+          lineHeight="1.2"
+          noOfLines={1}
+          style={{ textShadow: `0 1px 6px rgba(0,0,0,0.85), 0 0 18px ${color}55` }}
         >
           {curso.titulo}
         </Text>
-        <Text
-          color={`${color}bb`}
-          fontSize={{ base: "xs", md: "sm" }}
-          fontWeight="500"
-          letterSpacing="0.14em"
-          textTransform="uppercase"
-          mt={2}
-          style={{ textShadow: `0 0 8px rgba(255,255,255,0.26), 0 0 18px ${color}44` }}
-        >
-          {disciplina}
-        </Text>
-      </Box>
 
-      {/* Foto — ratio 16:9 (YouTube thumbnail) */}
-      <Box
-        borderRadius="xl"
-        overflow="hidden"
-        mb={"6px"}
-        position="relative"
-        paddingBottom="56.25%"
-        boxShadow={`0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 6px 28px ${color}66`}
-        border={`1px solid ${color}55`}
-      >
-        <Image
-          src={curso.foto}
-          alt={curso.titulo}
-          position="absolute"
-          top="0"
-          left="0"
-          w="100%"
-          h="100%"
-          objectFit="cover"
-          display="block"
-        />
-      </Box>
-
-      {/* Precio + Botón */}
-      <Flex align="center" justify="space-between" gap={3} mt="auto">
-        <Text
-          color={color}
-          fontSize={{ base: "2xl", md: "2xl" }}
-          fontWeight="700"
-          lineHeight="1"
-          style={{ textShadow: `0 0 10px rgba(255,255,255,0.38), 0 0 22px ${color}66` }}
-        >
-          {label}
-        </Text>
-
+        {/* Foto del curso (16:9, con margen) */}
         <Box
-          as="button"
-          onClick={onVerDetalle}
-          color={bgColor}
-          bg={color}
-          fontFamily="'EB Garamond', serif"
-          fontWeight="700"
-          fontSize="md"
-          letterSpacing="0.14em"
-          textTransform="uppercase"
-          px={6}
-          py="11px"
-          borderRadius="full"
-          cursor="pointer"
-          flexShrink={0}
-          boxShadow={`0 0 14px rgba(255,255,255,0.3), 0 4px 18px ${color}66`}
-          _hover={{ boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 6px 24px ${color}88` }}
-          transition="box-shadow 0.25s ease"
+          borderRadius="lg"
+          overflow="hidden"
+          w="100%"
+          sx={{ aspectRatio: "16 / 9" }}
+          border={`1px solid ${color}44`}
         >
-          Acceder →
+          <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block" />
         </Box>
+
+        {/* Precio (izquierda) + botón (derecha) */}
+        <Flex align="center" justify="space-between" gap={3} mt="auto">
+          <Text
+            color={color}
+            fontSize={{ base: "lg", md: "xl" }}
+            fontWeight="700"
+            lineHeight="1"
+            style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}
+          >
+            {label}
+          </Text>
+          <Box
+            as="span"
+            color={bgColor}
+            bg={color}
+            fontWeight="700"
+            fontSize={{ base: "sm", md: "md" }}
+            letterSpacing="0.06em"
+            px={{ base: 4, md: 5 }}
+            py="8px"
+            borderRadius="full"
+            flexShrink={0}
+            boxShadow={`0 3px 14px ${color}66`}
+          >
+            {esPago ? "Saber más →" : "Acceder →"}
+          </Box>
+        </Flex>
       </Flex>
     </Flex>
   );
@@ -198,6 +186,9 @@ export default function CursosModalidad() {
     fromData ?? (fallback ? { ...fallback, cursos: [] } : null);
 
   const [detailCurso, setDetailCurso] = useState<Curso | null>(null);
+  const [leccionesOpen, setLeccionesOpen] = useState(false);
+  // Al abrir/cambiar de curso, el desplegable de lecciones empieza cerrado.
+  useEffect(() => { setLeccionesOpen(false); }, [detailCurso]);
   const [saberMasOpen, setSaberMasOpen] = useState(false);
   const [ilustracionesHinduismoOpen, setIlustracionesHinduismoOpen] = useState(false);
   const [ilustracionesAstroOpen, setIlustracionesAstroOpen] = useState(false);
@@ -498,7 +489,7 @@ export default function CursosModalidad() {
               <SimpleGrid
                 w="100%"
                 maxW="1280px"
-                columns={{ base: 1, md: 2, lg: 3, xl: 4 }}
+                columns={{ base: 1, md: 3 }}
                 spacing={{ base: 5, md: 5 }}
                 sx={{
                   "@keyframes cursoCardIn": {
@@ -557,74 +548,151 @@ export default function CursosModalidad() {
         isCentered
         scrollBehavior="inside"
       >
-        <ModalOverlay bg="rgba(0,60,60,0.65)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.86)" sx={{ backdropFilter: "blur(8px)" }} />
         <ModalContent
           bg={modalidad.bgColor}
-          border={`1px solid ${modalidad.color}55`}
+          border={`1px solid ${modalidad.color}77`}
           borderRadius="2xl"
-          boxShadow="0 16px 60px rgba(0,0,0,0.5)"
+          overflow="hidden"
+          position="relative"
+          boxShadow={`0 0 50px ${modalidad.color}66, 0 0 120px rgba(255,255,255,0.16), 0 22px 70px rgba(0,0,0,0.7)`}
           mx={{ base: 4, md: 0 }}
           fontFamily="'EB Garamond', serif"
         >
-          <ModalCloseButton color={modalidad.color} top={4} right={4} />
-          <ModalBody px={{ base: 6, md: 10 }} py={{ base: 8, md: 11 }}>
-            {detailCurso && (
+          {/* Fondo de la disciplina (estrellas en Astrología, imagen en el resto) */}
+          {hasDisciplinaBg(modalidad.nom) && (
+            <DisciplinaBgLayer
+              nom={modalidad.nom}
+              borderRadius="2xl"
+              blur
+              overlay="radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,0.16) 0%, rgba(0,0,0,0.32) 55%, rgba(0,0,0,0.62) 100%)"
+            />
+          )}
+
+          <ModalCloseButton color="white" top={4} right={4} zIndex={2} />
+          <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 11 }}>
+            {detailCurso && (() => {
+              const nLecciones =
+                detailCurso.modulos?.reduce((a, m) => a + m.submodules.length, 0) ??
+                detailCurso.numLecciones ?? 0;
+              return (
               <Box>
                 {/* Título */}
                 <Text
-                  color={modalidad.color}
-                  fontSize={{ base: "3xl", md: "4xl" }}
+                  color="white"
+                  fontSize={{ base: "xl", md: "3xl" }}
                   fontWeight="700"
-                  letterSpacing="0.05em"
-                  lineHeight="1.2"
-                  mt={{ base: "10px", md: "25px" }} mb={7}
-                  style={{ textShadow: `1px 2px 10px ${modalidad.color}77` }}
+                  letterSpacing="0.04em"
+                  lineHeight="1.25"
+                  textAlign="left"
+                  mt={{ base: "22px", md: "34px" }}
+                  mb={6}
+                  style={{ textShadow: `0 2px 14px rgba(0,0,0,0.7), 0 0 28px ${modalidad.color}66` }}
                 >
                   {detailCurso.titulo}
                 </Text>
 
-                {/* Foto grande */}
+                {/* Foto del curso (16:9, como un vídeo de YouTube) */}
                 <Box
                   borderRadius="xl"
                   overflow="hidden"
-                  mb={10}
-                  boxShadow={`0 8px 32px ${modalidad.color}55`}
+                  mb={6}
+                  w="100%"
+                  sx={{ aspectRatio: "16 / 9" }}
+                  border={`1px solid ${modalidad.color}44`}
+                  boxShadow="0 8px 30px rgba(0,0,0,0.5)"
                 >
-                  <Image
-                    src={detailCurso.foto}
-                    alt={detailCurso.titulo}
-                    w="100%"
-                    h="auto"
-                    display="block"
-                  />
+                  <Image src={detailCurso.foto} alt={detailCurso.titulo} w="100%" h="100%" objectFit="cover" display="block" />
                 </Box>
 
                 {/* Descripción */}
                 <Text
-                  color={`${modalidad.color}cc`}
+                  color="rgba(255,255,255,0.92)"
                   fontSize={{ base: "md", md: "lg" }}
                   lineHeight="1.85"
                   letterSpacing="0.02em"
+                  textAlign="center"
                   mb={6}
+                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
                 >
                   {detailCurso.descripcion}
                 </Text>
 
+                {/* N lecciones — desplegable con módulos y submódulos */}
+                <Box mb={6}>
+                  <Flex
+                    as="button"
+                    w="100%"
+                    align="center"
+                    justify="space-between"
+                    px={{ base: 5, md: 6 }}
+                    py={4}
+                    borderTopRadius="xl"
+                    borderBottomRadius={leccionesOpen ? "0" : "xl"}
+                    bg="rgba(255,255,255,0.1)"
+                    border={`1px solid ${modalidad.color}44`}
+                    sx={{ backdropFilter: "blur(8px)" }}
+                    cursor="pointer"
+                    onClick={() => setLeccionesOpen((o) => !o)}
+                    transition="border-radius 0.2s, background 0.2s"
+                    _hover={{ bg: "rgba(255,255,255,0.16)" }}
+                  >
+                    <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.7)" }}>
+                      {nLecciones} {nLecciones === 1 ? "lección" : "lecciones"}
+                    </Text>
+                    <Text color="white" fontSize="lg" transform={leccionesOpen ? "rotate(180deg)" : "rotate(0deg)"} transition="transform 0.25s">
+                      ▾
+                    </Text>
+                  </Flex>
+
+                  <Collapse in={leccionesOpen} animateOpacity>
+                    <Box
+                      px={{ base: 5, md: 6 }}
+                      py={4}
+                      bg="rgba(255,255,255,0.06)"
+                      border={`1px solid ${modalidad.color}44`}
+                      borderTop="none"
+                      borderBottomRadius="xl"
+                      sx={{ backdropFilter: "blur(8px)" }}
+                    >
+                      {(detailCurso.modulos ?? []).map((mod, mi) => (
+                        <Box key={mi} mb={mi < (detailCurso.modulos!.length - 1) ? 4 : 0}>
+                          <Text color={modalidad.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em" textTransform="uppercase" mb={2} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
+                            {mod.title}
+                          </Text>
+                          <Flex direction="column" gap={1.5} pl={3}>
+                            {mod.submodules.map((sub, si) => (
+                              <Flex key={si} align="center" gap={2}>
+                                <Box w="5px" h="5px" borderRadius="full" bg={modalidad.color} flexShrink={0} />
+                                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.5">{sub.nom}</Text>
+                              </Flex>
+                            ))}
+                          </Flex>
+                        </Box>
+                      ))}
+                      {(!detailCurso.modulos || detailCurso.modulos.length === 0) && (
+                        <Text color="rgba(255,255,255,0.7)" fontStyle="italic" fontSize="sm">Próximamente.</Text>
+                      )}
+                    </Box>
+                  </Collapse>
+                </Box>
 
                 {/* Precio + Botón */}
                 <Flex
                   align="center"
                   justify="space-between"
-                  borderTop={`1px solid ${modalidad.color}33`}
+                  borderTop="1px solid rgba(255,255,255,0.25)"
                   pt={5}
+                  mb={{ base: 4, md: 7 }}
                   gap={4}
-                  flexWrap="wrap" mb="10px"
+                  flexWrap="wrap"
                 >
                   <Text
-                    color={modalidad.color}
+                    color="white"
                     fontSize={{ base: "2xl", md: "3xl" }}
                     fontWeight="700"
                     lineHeight="1"
+                    style={{ textShadow: "0 1px 8px rgba(0,0,0,0.7)" }}
                   >
                     {formatPrecio(detailCurso.precio)}
                   </Text>
@@ -642,15 +710,16 @@ export default function CursosModalidad() {
                     py="13px"
                     borderRadius="full"
                     cursor="pointer"
-                    _hover={{ opacity: 0.88, transform: "translateY(-1px)" }}
+                    _hover={{ opacity: 0.9, transform: "translateY(-1px)" }}
                     transition="all 0.2s"
-                    boxShadow={`0 4px 16px ${modalidad.color}44`}
+                    boxShadow={`0 4px 18px rgba(0,0,0,0.4), 0 0 22px ${modalidad.color}66`}
                   >
-                    {detailCurso.precio === null ? "Acceder →" : "Comprar →"}
+                    {detailCurso.precio === null ? "Acceder →" : "Pagar →"}
                   </Box>
                 </Flex>
               </Box>
-            )}
+              );
+            })()}
           </ModalBody>
         </ModalContent>
       </Modal>

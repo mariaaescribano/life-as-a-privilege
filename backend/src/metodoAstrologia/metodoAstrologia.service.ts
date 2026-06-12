@@ -148,9 +148,19 @@ export class MetodoAstrologiaService {
     return null;
   }
 
-  // ── PATCH parcial (aviso_visto, data, link_carta…) ──
+  // Campos que el cliente puede modificar vía PATCH. Columnas sensibles como
+  // link_carta, carta_natal_json, solicitud_enviada_at, latitud/longitud, etc.
+  // las gestiona el backend/administración y NO deben escribirse desde el front.
+  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data', 'aviso_visto']);
+
+  // ── PATCH parcial (solo campos permitidos) ──
   async actualizar(userId: string, patch: Record<string, any>): Promise<{ success: boolean }> {
-    const update = { ...patch, updated_at: new Date().toISOString() };
+    const filtered = Object.fromEntries(
+      Object.entries(patch ?? {}).filter(([k]) =>
+        MetodoAstrologiaService.CAMPOS_PATCH_PERMITIDOS.has(k),
+      ),
+    );
+    const update = { ...filtered, updated_at: new Date().toISOString() };
     const { error } = await this.databaseService.getClient()
       .from('metodo_astrologia')
       .upsert({ user_id: userId, ...update }, { onConflict: 'user_id' });

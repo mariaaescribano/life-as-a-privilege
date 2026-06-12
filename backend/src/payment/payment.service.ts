@@ -46,7 +46,12 @@ export class PaymentService {
   async verifyMetodoCheckout(sessionId: string, userId: string) {
     if (!sessionId) throw new BadRequestException('session_id requerido');
 
-    const session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
 
     if (session.payment_status !== 'paid') {
       return { ok: false as const, reason: 'unpaid' };
@@ -58,12 +63,6 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoMetodo(userId);
-    return { ok: true as const };
-  }
-
-  /* TEST PAGO — marca suscrito sin pasar por Stripe (para pruebas) */
-  async testMarcarPagado(userId: string) {
     await this.userService.marcarSuscritoMetodo(userId);
     return { ok: true as const };
   }
@@ -102,7 +101,12 @@ export class PaymentService {
   async verifyLibroCheckout(sessionId: string) {
     if (!sessionId) throw new BadRequestException('session_id requerido');
 
-    const session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
 
     if (session.payment_status !== 'paid') {
       return { ok: false as const, reason: 'unpaid' };

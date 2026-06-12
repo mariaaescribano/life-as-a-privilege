@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { TcmService } from './tcm.service';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { OwnerGuard } from '../auth/owner.guard';
 
 @Controller('tcm')
+@UseGuards(JwtAuthGuard, OwnerGuard)
 export class TcmController {
   constructor(private readonly tcmService: TcmService) {}
 

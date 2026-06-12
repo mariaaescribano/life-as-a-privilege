@@ -130,33 +130,7 @@ const Home = () => {
     }
   };
 
-  /* TEST PAGO — marca suscrito sin pasar por Stripe (para pruebas) */
-  const pagarMetodoTest = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      navigate("/welcome");
-      return;
-    }
-    setPagoLoading(true);
-    setPagoError(null);
-    try {
-      await axios.post(
-        `${API_URL}/payment/metodo/test`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setMetodoSuscrito(true);
-      setPagoOpen(false);
-      setPagoExitoOpen(true);
-    } catch (err: any) {
-      console.error("[pagarMetodoTest] error:", err?.response?.status, err?.response?.data || err?.message);
-      setPagoError("No se pudo simular el pago. ¿Reiniciaste el backend?");
-    } finally {
-      setPagoLoading(false);
-    }
-  };
-
-  const radius        = useBreakpointValue({ base: 125, sm: 155, md: 220, lg: 280, xl: 320 });
+  const radius       = useBreakpointValue({ base: 125, sm: 155, md: 220, lg: 280, xl: 320 });
   const containerSize = useBreakpointValue({ base: "320px", sm: "400px", md: "560px", lg: "700px", xl: "800px" });
   const centerSize    = useBreakpointValue({ base: "115px", sm: "140px", md: "180px", lg: "220px", xl: "260px" });
   const circleSize    = useBreakpointValue({ base: "75px", sm: "89px", md: "108px", lg: "130px" });
@@ -235,7 +209,11 @@ const Home = () => {
       const formData = new FormData();
       formData.append("file", e.target.files[0]);
       formData.append("userId", userId);
-      const res  = await fetch(`${API_URL}/upload/profile-pic`, { method: "POST", body: formData });
+      const res  = await fetch(`${API_URL}/upload/profile-pic`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (!data.url) throw new Error("Sin URL devuelta");
@@ -586,7 +564,6 @@ const Home = () => {
         isOpen={pagoOpen}
         onClose={() => { setPagoOpen(false); setPagoError(null); }}
         onPagar={pagarMetodo}
-        onPagoTest={pagarMetodoTest}
         loading={pagoLoading}
         error={pagoError}
       />

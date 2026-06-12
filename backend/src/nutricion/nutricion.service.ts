@@ -21,19 +21,30 @@ export class NutricionService {
   async save(data: NutricionData): Promise<boolean> {
     try {
       const db = this.databaseService.getClient();
-      await db.from('nutricion').delete().eq('userId', data.userId);
-      const { error } = await db.from('nutricion').insert({
-        userId:       data.userId,
-        peso:         data.peso,
-        altura:       data.altura,
-        edad:         data.edad,
-        genero:       data.genero,
+      const fields = {
+        peso:          data.peso,
+        altura:        data.altura,
+        edad:          data.edad,
+        genero:        data.genero,
         actividad_idx: data.actividadIdx,
-        tdee:         data.tdee,
-        prot_g:       data.protG,
-        carb_g:       data.carbG,
-        fat_g:        data.fatG,
-      });
+        tdee:          data.tdee,
+        prot_g:        data.protG,
+        carb_g:        data.carbG,
+        fat_g:         data.fatG,
+      };
+
+      // UPDATE si ya existe, INSERT si no: evita la ventana de pérdida de datos
+      // del patrón anterior (borrar y luego insertar en dos pasos).
+      const { data: existing } = await db
+        .from('nutricion')
+        .select('userId')
+        .eq('userId', data.userId)
+        .limit(1);
+
+      const { error } = (existing?.length ?? 0) > 0
+        ? await db.from('nutricion').update(fields).eq('userId', data.userId)
+        : await db.from('nutricion').insert({ userId: data.userId, ...fields });
+
       if (error) throw error;
       return true;
     } catch (err) {

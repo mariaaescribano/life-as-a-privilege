@@ -27,6 +27,10 @@ export type Submodulo = {
   linkNext:string;
   icon:any | null;
   floatingButton?: FloatingButtonConfig;
+  /** Tipo de lección. Por defecto 'video' (compatibilidad con los cursos existentes). */
+  tipo?: "video" | "texto";
+  /** Contenido en Markdown — solo para lecciones de tipo 'texto'. */
+  contenido?: string;
 };
 
 export type ModuloContenido = {

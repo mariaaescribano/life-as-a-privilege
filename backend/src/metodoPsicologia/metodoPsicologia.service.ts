@@ -19,8 +19,16 @@ export class MetodoPsicologiaService {
     return data ?? null;
   }
 
+  // Solo el campo `data` (progreso de etapas) es editable desde el cliente.
+  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data']);
+
   async actualizar(userId: string, patch: Record<string, any>): Promise<{ success: boolean }> {
-    const update = { ...patch, updated_at: new Date().toISOString() };
+    const filtered = Object.fromEntries(
+      Object.entries(patch ?? {}).filter(([k]) =>
+        MetodoPsicologiaService.CAMPOS_PATCH_PERMITIDOS.has(k),
+      ),
+    );
+    const update = { ...filtered, updated_at: new Date().toISOString() };
     const { error } = await this.databaseService.getClient()
       .from('metodo_psicologia')
       .upsert({ user_id: userId, ...update }, { onConflict: 'user_id' });
