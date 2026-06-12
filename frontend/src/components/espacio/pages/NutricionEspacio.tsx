@@ -4,15 +4,23 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
-import { DisciplineHeader } from "../../global/DisciplineHeader";
+import { MetodoStepHeader } from "../../metodo/MetodoStepHeader";
 import { NutricionIcon, CalculadoraIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../../GlobalVariables";
-import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 import { generateNutricionPdf } from "../../../utils/generateNutricionPdf";
 
 const BG   = nutricionBg;
 const TXT  = nutricionTxt;
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 const BASE = "/img/nutri/curso1";
+
+// Fondo de la disciplina Nutrición para los boxes (mismo que el header).
+const nutriBoxBg = {
+  bgColor: nutricionBg,
+  bgImage: "url('/img/fondos/nutri.png')",
+  bgSize: "cover",
+  bgPosition: "center",
+  bgRepeat: "no-repeat",
+};
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type Genero = "mujer" | "hombre";
@@ -172,7 +180,7 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
   alimentos: Alimento[]; onSelect: (d: ModalData) => void;
 }) {
   return (
-    <Box bg={BG} borderRadius="2xl" border={`1px solid ${TXT}22`} boxShadow={GLOW}
+    <Box {...nutriBoxBg} borderRadius="2xl" border={`1px solid ${TXT}22`} boxShadow={GLOW}
       px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }} w="100%" maxW="780px"
     >
       {/* Header */}
@@ -287,14 +295,15 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
         <Flex direction="column" alignItems="center" gap={{ base: 6, md: 8 }}
           px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }} pb={{ base: 14, md: 20 }}
         >
-          <DisciplineHeader
+          <MetodoStepHeader
             icon={isGuest
               ? <CalculadoraIcon />
               : <NutricionIcon size={{ base: "35px", md: "45px" }} />
             }
             title={isGuest ? "Calcular necesidades" : nutricionNom}
             bgColor={BG} color={TXT} mb={{ base: 0, md: 0 }}
-            onIconClick={() => navigate("/aprendizaje/cursos/nutricion")}
+            nom={nutricionNom}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
           />
 
           {/* ── Accesos rápidos favoritos ── */}
@@ -303,7 +312,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               <Box
                 as="button"
                 flex="1"
-                bg={BG}
+                {...nutriBoxBg}
                 border={`1px solid ${TXT}33`}
                 borderRadius="2xl"
                 boxShadow={GLOW}
@@ -323,7 +332,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               <Box
                 as="button"
                 flex="1"
-                bg={BG}
+                {...nutriBoxBg}
                 border={`1px solid ${TXT}33`}
                 borderRadius="2xl"
                 boxShadow={GLOW}
@@ -345,7 +354,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
 
           {/* ── Form ── */}
           {showForm && (
-            <Box bg={BG} mt="10px" borderRadius="2xl" boxShadow={GLOW} border={`1px solid ${TXT}22`}
+            <Box {...nutriBoxBg} mt="10px" borderRadius="2xl" boxShadow={GLOW} border={`1px solid ${TXT}22`}
               px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} w="100%" maxW="780px"
             >
               <Text color={TXT} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" mb={1}>
@@ -418,7 +427,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               display="flex" flexDirection="column" alignItems="center" gap={{ base: 5, md: 6 }}
             >
               {/* TDEE */}
-              <Box bg={BG} borderRadius="2xl" boxShadow={GLOW} border={`1px solid ${TXT}22`}
+              <Box {...nutriBoxBg} borderRadius="2xl" boxShadow={GLOW} border={`1px solid ${TXT}22`}
                 px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }} w="100%" textAlign="center"
               >
                 <Text color={TXT + "77"} fontSize="sm" fontFamily="'EB Garamond', serif" fontWeight="600" letterSpacing="0.08em" textTransform="uppercase" mb={1}>
@@ -478,7 +487,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               gap={3}
               px={{ base: 5, md: 6 }}
               py={{ base: 4, md: 5 }}
-              bg={BG}
+              {...nutriBoxBg}
               border={`1px solid ${TXT}33`}
               borderRadius={infoOpen ? "2xl 2xl 0 0" : "2xl"}
               boxShadow={GLOW}
@@ -505,7 +514,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
             <Collapse in={infoOpen} animateOpacity>
               <Box
                 px={{ base: 6, md: 10 }} py={{ base: 5, md: 7 }}
-                bg={BG} border={`1px solid ${TXT}33`} borderTop="none"
+                {...nutriBoxBg} border={`1px solid ${TXT}33`} borderTop="none"
                 borderRadius="0 0 2xl 2xl" boxShadow={GLOW}
               >
                 <Text color={TXT + "cc"} fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif"
@@ -522,13 +531,6 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
 
         </Flex>
       </Box>
-
-      <SolicitarAutoevaluacionButton
-        bgColor={nutricionBg}
-        color={nutricionTxt}
-        icon={<NutricionIcon size={{base:"30px", md: "50px"}}  />}
-        disciplineName="Nutrición"
-      />
 
       <SiteFooter />
       {selected && <AlimentoModal data={selected} onClose={() => setSelected(null)} />}

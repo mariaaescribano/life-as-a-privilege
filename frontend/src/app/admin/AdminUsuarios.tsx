@@ -60,11 +60,6 @@ export default function AdminUsuarios() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="720px">
-          <Flex align="center" gap={3} mb={3}>
-            <Text as="button" onClick={() => navigate("/admin")} color="rgba(255,255,255,0.75)" fontSize="sm"
-                  _hover={{ color: "white" }}>← Disciplinas</Text>
-          </Flex>
-
           <AdminDisciplinaHeader disc={disc} subtitle="Usuarios del recorrido" />
 
           {!disc.editable && (

@@ -196,7 +196,6 @@ function ReelCard({
               noOfLines={2}
               flex={1}
               minW={0}
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.45)" }}
             >
               {reel.titulo}
             </Text>

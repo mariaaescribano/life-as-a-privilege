@@ -7,7 +7,6 @@ import SiteHeader from "../../global/SiteHeader";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { API_URL, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
-import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 import {
   RECS_CONSTITUCIONES,
   RECS_ELEMENTOS,
@@ -815,13 +814,6 @@ export default function TCMespacio() {
           )}
         </Flex>
       </Box>
-
-      <SolicitarAutoevaluacionButton
-        bgColor={tcmBg}
-        color={tcmTxt}
-        icon={<TCMIcon size={{base:"30px", md: "50px"}}  />}
-        disciplineName="Medicina China"
-      />
 
       {/* ── FOOTER ── */}
       <SiteFooter />

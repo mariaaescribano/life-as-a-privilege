@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Markdown } from "../../components/global/Markdown";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
-import { cursosData } from "../../hardCoded/cursos";
+import { useCursosData } from "../../data/cursosApi";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
 
 function safeDecode(s: string): string {
@@ -19,18 +20,21 @@ export default function TextLessonPage() {
   }>();
   const modalidadId = rawMod ? safeDecode(rawMod) : "";
   const navigate = useNavigate();
+  const { cursosData, loading } = useCursosData();
 
-  useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [submoduloId]);
+  React.useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [submoduloId]);
 
   const modalidad = modalidadId ? cursosData[modalidadId] : undefined;
   const curso = modalidad?.cursos.find((c) => c.id === cursoId);
-
-  // Todas las lecciones del curso en orden (para anterior/siguiente).
   const lecciones: Submodulo[] = (curso?.modulos ?? []).flatMap((m) => m.submodules);
   const idx = lecciones.findIndex((s) => s.id === submoduloId);
   const leccion = idx >= 0 ? lecciones[idx] : null;
   const anterior = idx > 0 ? lecciones[idx - 1] : null;
   const siguiente = idx >= 0 && idx < lecciones.length - 1 ? lecciones[idx + 1] : null;
+
+  if (loading) {
+    return <Box minH="100vh" bg="#008080"><SiteHeader variant="auto" /><SpinnerTurquesa /></Box>;
+  }
 
   if (!modalidad || !curso || !leccion) {
     return (
@@ -46,9 +50,8 @@ export default function TextLessonPage() {
 
   const { bgColor, color, icon, nom: disciplinaNom } = modalidad;
   const hasBg = hasDisciplinaBg(disciplinaNom);
+  const esVideo = leccion.tipo === "video" && !!leccion.video;
 
-  // Brillo/sombra del texto: oscuro para legibilidad + halo de color de la
-  // disciplina para que la lectura tenga un aire "mágico" (estilo Astrología).
   const TEXT_GLOW = `0 1px 4px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.7), 0 0 22px ${color}66, 0 0 44px ${color}33`;
   const BOX_OVERLAY = "linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.48) 100%)";
 
@@ -80,56 +83,51 @@ export default function TextLessonPage() {
   );
 
   return (
-    <Box
-      minH="100vh"
-      display="flex"
-      flexDirection="column"
-      bg="#008080"
-      position="relative"
-      fontFamily="'EB Garamond', serif"
-    >
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" position="relative" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
       <Box flex="1" position="relative" zIndex={1}>
-        <Flex
-          direction="column"
-          alignItems="center"
-          px={{ base: 5, md: 10, lg: 16 }}
-          pt={{ base: 10, md: 14 }}
-          pb={{ base: 14, md: 20 }}
-        >
-          {/* Cabecera: header de disciplina con el título del submódulo */}
-          <MetodoStepHeader
-            icon={icon}
-            title={leccion.nom}
-            bgColor={bgColor}
-            color={color}
-            nom={disciplinaNom}
-          />
+        <Flex direction="column" alignItems="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }} pb={{ base: 14, md: 20 }}>
+          {/* Header de disciplina con el título del submódulo */}
+          <MetodoStepHeader icon={icon} title={leccion.nom} bgColor={bgColor} color={color} nom={disciplinaNom} />
 
-          {/* Artículo: fondo de disciplina + texto con brillo */}
-          <Box
-            maxW="760px"
-            w="100%"
-            position="relative"
-            overflow="hidden"
-            borderRadius="2xl"
-            bg={bgColor}
-            border={`1px solid ${color}55`}
-            boxShadow={`0 0 32px ${color}44, 0 0 80px rgba(255,255,255,0.08), 0 16px 50px rgba(0,0,0,0.5)`}
-            mt={{ base: 2, md: 4 }}
-          >
-            {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" overlay={BOX_OVERLAY} />}
+          {/* Vídeo (16:9) o artículo de texto */}
+          {esVideo ? (
             <Box
-              position="relative"
-              zIndex={1}
-              px={{ base: 6, md: 12 }}
-              py={{ base: 8, md: 12 }}
-              sx={{ textShadow: TEXT_GLOW }}
+              maxW="900px"
+              w="100%"
+              sx={{ aspectRatio: "16 / 9" }}
+              borderRadius="2xl"
+              overflow="hidden"
+              border={`1px solid ${color}55`}
+              boxShadow={`0 0 32px ${color}44, 0 16px 50px rgba(0,0,0,0.5)`}
+              mt={{ base: 2, md: 4 }}
             >
-              <Markdown text={leccion.contenido ?? leccion.letra ?? ""} color={color} />
+              <iframe
+                style={{ width: "100%", height: "100%" }}
+                src={`https://www.youtube.com/embed/${leccion.video}`}
+                title={leccion.nom}
+                allowFullScreen
+              />
             </Box>
-          </Box>
+          ) : (
+            <Box
+              maxW="760px"
+              w="100%"
+              position="relative"
+              overflow="hidden"
+              borderRadius="2xl"
+              bg={bgColor}
+              border={`1px solid ${color}66`}
+              boxShadow={`0 0 26px ${color}88, 0 0 60px ${color}4d, 0 0 110px rgba(180,255,245,0.16), 0 16px 50px rgba(0,0,0,0.45)`}
+              mt={{ base: 2, md: 4 }}
+            >
+              {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" overlay={BOX_OVERLAY} />}
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 12 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
+                <Markdown text={leccion.contenido ?? leccion.letra ?? ""} color={color} />
+              </Box>
+            </Box>
+          )}
 
           {/* Navegación anterior / siguiente */}
           <Flex gap={5} justify="center" mt={{ base: 8, md: 10 }}>

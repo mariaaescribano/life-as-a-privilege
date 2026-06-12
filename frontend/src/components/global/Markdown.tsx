@@ -15,21 +15,21 @@ type MarkdownProps = {
   color?: string;
 };
 
-// ── Inline: **negrita**, *cursiva*, `código`, [texto](url) ──
+// ── Inline: **negrita** o __negrita__, *cursiva* o _cursiva_, `código`, [texto](url) ──
 function parseInline(str: string, color: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
-  // Orden importa: el patrón de negrita (**) antes que el de cursiva (*).
-  const regex = /(\*\*([^*]+)\*\*)|(\*([^*]+)\*)|(`([^`]+)`)|(\[([^\]]+)\]\(([^)]+)\))/g;
+  // Orden importa: los dobles (** / __) antes que los simples (* / _).
+  const regex = /(\*\*([^*]+)\*\*)|(__([^_]+)__)|(\*([^*]+)\*)|(_([^_]+)_)|(`([^`]+)`)|(\[([^\]]+)\]\(([^)]+)\))/g;
   let last = 0;
   let m: RegExpExecArray | null;
   let key = 0;
   while ((m = regex.exec(str)) !== null) {
     if (m.index > last) nodes.push(str.slice(last, m.index));
-    if (m[2] !== undefined) {
-      nodes.push(<Box as="strong" key={key++} fontWeight="700">{m[2]}</Box>);
-    } else if (m[4] !== undefined) {
-      nodes.push(<Box as="em" key={key++} fontStyle="italic">{m[4]}</Box>);
-    } else if (m[6] !== undefined) {
+    if (m[2] !== undefined || m[4] !== undefined) {
+      nodes.push(<Box as="strong" key={key++} fontWeight="700">{m[2] ?? m[4]}</Box>);
+    } else if (m[6] !== undefined || m[8] !== undefined) {
+      nodes.push(<Box as="em" key={key++} fontStyle="italic">{m[6] ?? m[8]}</Box>);
+    } else if (m[10] !== undefined) {
       nodes.push(
         <Box
           as="code"
@@ -41,13 +41,13 @@ function parseInline(str: string, color: string): React.ReactNode[] {
           py="1px"
           borderRadius="4px"
         >
-          {m[6]}
+          {m[10]}
         </Box>,
       );
-    } else if (m[8] !== undefined) {
+    } else if (m[12] !== undefined) {
       nodes.push(
-        <Link key={key++} href={m[9]} isExternal textDecoration="underline" color={color} _hover={{ opacity: 0.8 }}>
-          {m[8]}
+        <Link key={key++} href={m[13]} isExternal textDecoration="underline" color={color} _hover={{ opacity: 0.8 }}>
+          {m[12]}
         </Link>,
       );
     }

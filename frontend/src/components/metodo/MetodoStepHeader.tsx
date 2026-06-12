@@ -181,7 +181,7 @@ export function MetodoStepHeader({
       borderRadius="2xl"
       overflow="hidden"
       bg={useDiscBg ? "transparent" : bgColor}
-      border={`1px solid ${color}33`}
+      border={useDiscBg ? "none" : `1px solid ${color}33`}
       boxShadow={
         useDiscBg
           ? `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`

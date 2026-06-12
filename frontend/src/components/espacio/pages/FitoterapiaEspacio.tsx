@@ -13,7 +13,6 @@ import {
 import { plantas, type Planta } from "../../recursos/fitoterapia/PlantasData";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteFooter from "../../global/Footer";
-import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 
 const CARD_COLOR  = fitoterapiaTxt;
 const MODAL_COLOR = fitoterapiaBg;
@@ -659,13 +658,6 @@ export default function FitoterapiaEspacio() {
 
         </Box>
       </Flex>
-
-      <SolicitarAutoevaluacionButton
-        bgColor={fitoterapiaBg}
-        color={fitoterapiaTxt}
-        icon={<FitoterapiaIcon size={{base:"30px", md: "50px"}}  />}
-        disciplineName="Fitoterapia"
-      />
 
       {/* FOOTER */}
       <SiteFooter />

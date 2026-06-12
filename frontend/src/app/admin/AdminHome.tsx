@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -20,16 +20,31 @@ export default function AdminHome() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 10, md: 14 }}>
-        <Box w="100%" maxW="920px">
-          <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" letterSpacing="0.06em"
-                textAlign="center" mb={2} textShadow="0 0 18px rgba(255,255,255,0.55)">
-            Panel de administración
-          </Text>
-          <Text color="rgba(255,255,255,0.7)" fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={{ base: 8, md: 12 }} fontStyle="italic">
-            Elige una disciplina para escribir el contenido de tus usuarios.
-          </Text>
+      {/* ── MANDALA ── */}
+      <Flex justify="center" pt={{ base: 8, md: 12 }}>
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "48px", md: "64px" }}
+          objectFit="contain"
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
+        />
+      </Flex>
 
+      {/* ── TÍTULO ── */}
+      <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 5, md: 7 }} gap={{ base: 2, md: 3 }}>
+        <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
+              textTransform="uppercase" lineHeight="1.15"
+              textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)">
+          Administración de El Recorrido
+        </Text>
+        <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+          Elige una disciplina para escribir el contenido de tus usuarios.
+        </Text>
+      </Flex>
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 10, md: 14 }}>
+        <Box w="100%" maxW="920px">
           <Grid templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }} gap={{ base: 4, md: 6 }}>
             {ADMIN_DISCIPLINAS.map((d) => {
               const Icon = d.Icon;
@@ -46,14 +61,12 @@ export default function AdminHome() {
                   borderRadius="2xl"
                   bg={d.bg}
                   border={`1px solid ${d.txt}55`}
-                  boxShadow={`0 0 18px ${d.txt}22, 0 6px 20px rgba(0,0,0,0.3)`}
                   cursor="pointer"
                   transition="all 0.22s ease"
                   position="relative"
                   overflow="hidden"
                   _hover={{
                     transform: "translateY(-3px)",
-                    boxShadow: `0 0 30px ${d.txt}55, 0 10px 28px rgba(0,0,0,0.35)`,
                     borderColor: `${d.txt}aa`,
                   }}
                 >

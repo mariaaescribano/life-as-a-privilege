@@ -14,7 +14,6 @@ import {
   neuropsicologiaTxt,
 } from "../../../GlobalVariables";
 import SiteFooter from "../../global/Footer";
-import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 
 const ThemePreguntas = () => {
   const { themeId } = useParams<{ themeId: string }>();
@@ -84,13 +83,6 @@ const ThemePreguntas = () => {
                 />
               ))}
             </VStack>
-
-            <SolicitarAutoevaluacionButton
-              bgColor={neuropsicologiaBg}
-              color={neuropsicologiaTxt}
-              icon={<NeuropsicologiaIcon size={{base:"30px", md: "50px"}}  />}
-              disciplineName="Neuropsicología"
-            />
           </Flex>
         )}
       </Box>

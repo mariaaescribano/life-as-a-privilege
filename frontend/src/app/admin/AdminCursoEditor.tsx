@@ -1,0 +1,283 @@
+import React, { useEffect, useState } from "react";
+import {
+  Box, Flex, Text, Input, Textarea, Select, Checkbox, useToast,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { useAdminGuard, adminHeaders } from "./useAdminGuard";
+import { API_URL } from "../../GlobalVariables";
+import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { Markdown } from "../../components/global/Markdown";
+
+interface Leccion { id: string; nom: string; tipo: "texto" | "video"; contenido?: string; video?: string; }
+interface Modulo { title: string; submodules: Leccion[]; }
+interface Curso {
+  id: string; modalidad: string; titulo: string; foto: string; descripcion: string;
+  de_pago: boolean; publicado: boolean; completado: boolean; orden: number; contenido: Modulo[];
+}
+
+const genId = () => "l-" + Math.random().toString(36).slice(2, 9);
+
+const fieldStyle = {
+  bg: "rgba(255,255,255,0.12)",
+  border: "1px solid rgba(255,255,255,0.25)",
+  _placeholder: { color: "rgba(255,255,255,0.45)" },
+} as const;
+
+const btn = {
+  fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.05em",
+  borderRadius: "full", cursor: "pointer", transition: "all 0.2s",
+} as const;
+
+export default function AdminCursoEditor() {
+  const { id } = useParams<{ id: string }>();
+  const { verificando } = useAdminGuard();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const [curso, setCurso] = useState<Curso | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [guardando, setGuardando] = useState(false);
+  const [previews, setPreviews] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (verificando || !id) return;
+    (async () => {
+      try {
+        const r = await axios.get(`${API_URL}/cursos/${id}`, { headers: adminHeaders() });
+        const c = r.data;
+        setCurso({ ...c, contenido: Array.isArray(c.contenido) ? c.contenido : [] });
+      } catch {
+        toast({ title: "No se pudo cargar el curso", status: "error", duration: 3000 });
+      } finally {
+        setLoading(false);
+      }
+    })();
+    // eslint-disable-next-line
+  }, [verificando, id]);
+
+  const set = (patch: Partial<Curso>) => setCurso((c) => (c ? { ...c, ...patch } : c));
+
+  // ── Módulos ──
+  const setModulos = (modulos: Modulo[]) => set({ contenido: modulos });
+  const addModulo = () => curso && setModulos([...curso.contenido, { title: "Nuevo módulo", submodules: [] }]);
+  const updModulo = (mi: number, patch: Partial<Modulo>) =>
+    curso && setModulos(curso.contenido.map((m, i) => (i === mi ? { ...m, ...patch } : m)));
+  const delModulo = (mi: number) => curso && setModulos(curso.contenido.filter((_, i) => i !== mi));
+
+  // ── Lecciones ──
+  const addLeccion = (mi: number) =>
+    curso && updModulo(mi, {
+      submodules: [...curso.contenido[mi].submodules, { id: genId(), nom: "Nueva lección", tipo: "texto", contenido: "" }],
+    });
+  const updLeccion = (mi: number, li: number, patch: Partial<Leccion>) =>
+    curso && updModulo(mi, {
+      submodules: curso.contenido[mi].submodules.map((s, i) => (i === li ? { ...s, ...patch } : s)),
+    });
+  const delLeccion = (mi: number, li: number) =>
+    curso && updModulo(mi, { submodules: curso.contenido[mi].submodules.filter((_, i) => i !== li) });
+
+  const guardar = async () => {
+    if (!curso) return;
+    setGuardando(true);
+    try {
+      await axios.patch(`${API_URL}/cursos/${curso.id}`, {
+        modalidad: curso.modalidad, titulo: curso.titulo, foto: curso.foto, descripcion: curso.descripcion,
+        de_pago: curso.de_pago, publicado: curso.publicado, completado: curso.completado, orden: curso.orden, contenido: curso.contenido,
+      }, { headers: adminHeaders() });
+      toast({ title: "Guardado", status: "success", duration: 2000 });
+    } catch {
+      toast({ title: "No se pudo guardar", status: "error", duration: 3000 });
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  if (verificando || loading) return <Box minH="100vh" bg="#008080"><SiteHeader variant="private" /><SpinnerTurquesa /></Box>;
+  if (!curso) {
+    return (
+      <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="private" />
+        <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+          <Text color="white" fontStyle="italic">Curso no encontrado.</Text>
+        </Box>
+      </Box>
+    );
+  }
+
+  // Fondo de la disciplina del curso (para los boxes del editor).
+  const disc = disciplinaCursoBySlug(curso.modalidad);
+  const discNom = disc?.nom ?? "";
+  const color = disc?.color ?? "#ffffff";
+  const bg = disc?.bg ?? "#003535";
+  const hasBg = hasDisciplinaBg(discNom);
+  // Glow brillante (blanco/aguamarina + color), como el resto de la app — sin negro.
+  const GLOW = `0 0 18px rgba(255,255,255,0.22), 0 0 45px rgba(255,255,255,0.1), 0 0 78px rgba(180,255,245,0.14), 0 0 28px ${color}40`;
+  // Sombra/brillo del texto con el color de fondo de la disciplina.
+  const TEXT_SHADOW = `0 1px 4px ${bg}, 0 0 10px ${bg}, 0 0 22px ${bg}`;
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" color="white">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} sx={{ zoom: 1.15 }}>
+        <Box w="100%" maxW="820px">
+          {/* Barra superior */}
+          <Flex justify="space-between" align="center" mb={6} gap={3} flexWrap="wrap">
+            <Box as="button" onClick={() => navigate("/admin/cursos")} {...btn} px={4} py="7px"
+                 border="1px solid rgba(255,255,255,0.35)" fontSize="sm">← Cursos</Box>
+            <Flex gap={3} align="center">
+              <Box as="button" onClick={() => window.open(`/aprendizaje/modulosPage/${curso.modalidad}/${curso.id}`, "_blank")}
+                   {...btn} px={4} py="7px" border="1px solid rgba(255,255,255,0.35)" fontSize="sm">Ver curso ↗</Box>
+              <Box as="button" onClick={guardar} {...btn} px={6} py="9px" bg="white" color="#008080"
+                   boxShadow="0 0 16px rgba(255,255,255,0.4)" opacity={guardando ? 0.6 : 1} pointerEvents={guardando ? "none" : "auto"}>
+                {guardando ? "Guardando…" : "Guardar"}
+              </Box>
+            </Flex>
+          </Flex>
+
+          {/* ── Datos del curso ── */}
+          <Box position="relative" overflow="hidden" bg="#05403f" borderRadius="xl" p={{ base: 5, md: 6 }} mb={6} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
+            {hasBg && <DisciplinaBgLayer nom={discNom} borderRadius="xl" />}
+            <Box position="relative" zIndex={1}>
+            <Text fontSize="lg" fontWeight="700" mb={4} letterSpacing="0.04em">Datos del curso</Text>
+            <Flex direction="column" gap={4}>
+              <Flex gap={4} direction={{ base: "column", md: "row" }}>
+                <Box flex="1">
+                  <Text fontSize="sm" mb={1} opacity={0.8}>Disciplina</Text>
+                  <Select value={curso.modalidad} onChange={(e) => set({ modalidad: e.target.value })} {...fieldStyle} sx={{ option: { color: "black" } }}>
+                    {DISCIPLINAS_CURSO.map((d) => <option key={d.slug} value={d.slug}>{d.nom}</option>)}
+                  </Select>
+                </Box>
+                <Box flex="1">
+                  <Text fontSize="sm" mb={1} opacity={0.8}>Título</Text>
+                  <Input value={curso.titulo} onChange={(e) => set({ titulo: e.target.value })} {...fieldStyle} />
+                </Box>
+              </Flex>
+              <Box>
+                <Text fontSize="sm" mb={1} opacity={0.8}>Foto (ruta o URL)</Text>
+                <Input value={curso.foto} onChange={(e) => set({ foto: e.target.value })} placeholder="/img/astrologia/space.jpg" {...fieldStyle} />
+              </Box>
+              <Box>
+                <Text fontSize="sm" mb={1} opacity={0.8}>Descripción</Text>
+                <Textarea value={curso.descripcion} onChange={(e) => set({ descripcion: e.target.value })} rows={2} {...fieldStyle} />
+              </Box>
+              <Flex gap={6} align="center" flexWrap="wrap">
+                <Checkbox isChecked={curso.de_pago} onChange={(e) => set({ de_pago: e.target.checked })}>De pago (5 €)</Checkbox>
+                <Checkbox isChecked={curso.publicado} onChange={(e) => set({ publicado: e.target.checked })}>Publicado</Checkbox>
+                <Checkbox isChecked={curso.completado} onChange={(e) => set({ completado: e.target.checked })}>Completado</Checkbox>
+                <Flex align="center" gap={2}>
+                  <Text fontSize="sm" opacity={0.8}>Orden</Text>
+                  <Input type="number" value={curso.orden} onChange={(e) => set({ orden: Number(e.target.value) })} w="80px" {...fieldStyle} />
+                </Flex>
+              </Flex>
+            </Flex>
+            </Box>
+          </Box>
+
+          {/* ── Módulos y lecciones ── */}
+          <Flex justify="space-between" align="center" mb={3}>
+            <Text fontSize="lg" fontWeight="700" letterSpacing="0.04em">Contenido</Text>
+            <Box as="button" onClick={addModulo} {...btn} px={5} py="8px" bg="rgba(255,255,255,0.92)" color="#008080" fontSize="sm">+ Módulo</Box>
+          </Flex>
+
+          {curso.contenido.length === 0 && (
+            <Text opacity={0.7} fontStyle="italic" mb={4}>Sin módulos todavía. Añade el primero.</Text>
+          )}
+
+          <Flex direction="column" gap={5}>
+            {curso.contenido.map((mod, mi) => (
+              <Box key={mi} position="relative" overflow="hidden" bg="#05403f" borderRadius="xl" p={{ base: 4, md: 5 }} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
+                {hasBg && <DisciplinaBgLayer nom={discNom} borderRadius="xl" />}
+                <Box position="relative" zIndex={1}>
+                <Flex gap={3} align="center" mb={4}>
+                  <Input value={mod.title} onChange={(e) => updModulo(mi, { title: e.target.value })}
+                         fontWeight="700" fontSize={{ base: "md", md: "lg" }} {...fieldStyle} />
+                  <Box as="button" onClick={() => delModulo(mi)} {...btn} px={3} py="6px" fontSize="xs"
+                       border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }} flexShrink={0}>
+                    Borrar módulo
+                  </Box>
+                </Flex>
+
+                <Flex direction="column" gap={4} pl={{ base: 0, md: 3 }}>
+                  {mod.submodules.map((lec, li) => {
+                    const key = `${mi}-${li}`;
+                    const previewOn = previews[key];
+                    return (
+                      <Box key={li} bg="rgba(0,0,0,0.2)" border="1px solid rgba(255,255,255,0.12)" borderRadius="lg" p={4}>
+                        <Flex gap={3} align="center" mb={3} flexWrap="wrap">
+                          <Input value={lec.nom} onChange={(e) => updLeccion(mi, li, { nom: e.target.value })}
+                                 placeholder="Nombre de la lección" flex="1" minW="160px" {...fieldStyle} />
+                          <Select value={lec.tipo} onChange={(e) => updLeccion(mi, li, { tipo: e.target.value as "texto" | "video" })}
+                                  w="130px" {...fieldStyle} sx={{ option: { color: "black" } }}>
+                            <option value="texto">Texto</option>
+                            <option value="video">Vídeo</option>
+                          </Select>
+                          <Box as="button" onClick={() => delLeccion(mi, li)} {...btn} px={3} py="6px" fontSize="xs"
+                               border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }}>
+                            ✕
+                          </Box>
+                        </Flex>
+
+                        {lec.tipo === "video" ? (
+                          <Box>
+                            <Text fontSize="xs" mb={1} opacity={0.7}>ID de YouTube (lo que va después de v=)</Text>
+                            <Input value={lec.video ?? ""} onChange={(e) => updLeccion(mi, li, { video: e.target.value })}
+                                   placeholder="dQw4w9WgXcQ" {...fieldStyle} />
+                          </Box>
+                        ) : (
+                          <Box>
+                            <Flex justify="space-between" align="center" mb={1}>
+                              <Text fontSize="xs" opacity={0.7}>Contenido (Markdown)</Text>
+                              <Box as="button" onClick={() => setPreviews((p) => ({ ...p, [key]: !p[key] }))}
+                                   fontSize="xs" textDecoration="underline" cursor="pointer" opacity={0.85}>
+                                {previewOn ? "Editar" : "Vista previa"}
+                              </Box>
+                            </Flex>
+                            <Text color={color} fontSize="xs" mb={2} opacity={0.9} style={{ textShadow: TEXT_SHADOW }}>
+                              Negrita: <Box as="span" fontWeight="700">**texto**</Box> · Cursiva: <Box as="span" fontStyle="italic">*texto*</Box> o <Box as="span" fontStyle="italic">_texto_</Box>
+                            </Text>
+                            {previewOn ? (
+                              <Box bg="rgba(0,0,0,0.25)" borderRadius="md" p={4} minH="120px">
+                                <Markdown text={lec.contenido ?? ""} color="white" />
+                              </Box>
+                            ) : (
+                              <Textarea value={lec.contenido ?? ""} onChange={(e) => updLeccion(mi, li, { contenido: e.target.value })}
+                                        rows={8} fontFamily="monospace" fontSize="sm"
+                                        placeholder={"# Título\n\nTexto en **Markdown**…"} {...fieldStyle} />
+                            )}
+                          </Box>
+                        )}
+                      </Box>
+                    );
+                  })}
+
+                  <Box as="button" onClick={() => addLeccion(mi)} {...btn} alignSelf="flex-start" px={4} py="7px" fontSize="sm"
+                       border="1px dashed rgba(255,255,255,0.4)" _hover={{ bg: "rgba(255,255,255,0.08)" }}>
+                    + Lección
+                  </Box>
+                </Flex>
+                </Box>
+              </Box>
+            ))}
+          </Flex>
+
+          {/* Guardar abajo también */}
+          <Flex justify="flex-end" mt={8}>
+            <Box as="button" onClick={guardar} {...btn} px={8} py="11px" bg="white" color="#008080"
+                 boxShadow="0 0 16px rgba(255,255,255,0.4)" fontSize="lg"
+                 opacity={guardando ? 0.6 : 1} pointerEvents={guardando ? "none" : "auto"}>
+              {guardando ? "Guardando…" : "Guardar"}
+            </Box>
+          </Flex>
+        </Box>
+      </Flex>
+
+      <SiteFooter />
+    </Box>
+  );
+}

@@ -18,9 +18,15 @@ export const ThemeCard = (props:{
       cursor="pointer"
       minH={{ base: "176px", md: "208px" }}
       onClick={() => {window.scrollTo({ top: 0, behavior: "auto" }); navigate(props.link);}}
-      border={`1px solid ${props.color}55`}
       position="relative"
       overflow={hasBg ? "hidden" : undefined}
+      boxShadow={`0 0 14px ${props.color}33, 0 0 32px ${props.color}1f`}
+      transition="transform 0.25s ease, box-shadow 0.25s ease"
+      _hover={{
+        transform: "translateY(-4px)",
+        boxShadow: `0 0 24px ${props.color}99, 0 0 55px ${props.color}55, 0 0 90px ${props.color}33`,
+      }}
+      _active={{ transform: "translateY(-1px)" }}
     >
       {hasBg && <DisciplinaBgLayer nom={props.title} borderRadius="2xl" />}
       <Flex

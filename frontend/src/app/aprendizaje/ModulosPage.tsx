@@ -1,107 +1,32 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
-import { FloatingActionButton } from "../../components/aprendizaje/FloatingActionButton";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import type { Modulo } from "../../dtos/aprendizaje.type";
-import {
-  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
-  FitoterapiaIcon,
-  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
-  culturaBg, CulturaIcon, culturaNom, culturaNomLink, culturaTxt,
-  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
-  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
-} from "../../GlobalVariables";
-import { cursosData } from "../../hardCoded/cursos";
-import type { ModuloContenido } from "../../dtos/aprendizaje.type";
+import { useCursosData } from "../../data/cursosApi";
 
-export default function ModulesPage() {
+export default function ModulosPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
-  const [moduloDatos, setmoduloDatos] = useState<Modulo | null>(null);
+  const { cursosData, loading } = useCursosData();
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
-  const getCursoTitulo = (): string => {
-    if (!modalidadId || !cursoId) return "";
-    const normalizedId = modalidadId.startsWith(neuropsicologiaNom) ? neuropsicologiaNom : modalidadId;
-    const modalidad = cursosData[normalizedId];
-    if (!modalidad) return "";
-    return modalidad.cursos.find((c) => c.id === cursoId)?.titulo ?? "";
-  };
+  const modalidad = modalidadId ? cursosData[modalidadId] : undefined;
+  const curso = modalidad?.cursos.find((c) => c.id === cursoId);
 
-  const getModulosParaCurso = (): ModuloContenido[] => {
-    if (modalidadId && cursoId) {
-      const normalizedId = modalidadId.startsWith(neuropsicologiaNom) ? neuropsicologiaNom : modalidadId;
-      const curso = cursosData[normalizedId]?.cursos.find(c => c.id === cursoId);
-      if (curso?.modulos) return curso.modulos;
-    }
-    return [];
-  };
-
-  const getModuloDatos = (): Modulo => {
-    const titulo = getCursoTitulo();
-    const modulos = getModulosParaCurso();
-    const nomMod = modalidadId ?? "";
-    switch (modalidadId) {
-      case fisiologiaNom:
-        return { nom: titulo || fisiologiaNom, disciplina: fisiologiaNom, nomModalidad: nomMod, bgColor: fisiologiaBg, color: fisiologiaTxt, icon: <FisiologiaIcon size={{ base: "40px", md: "50px" }} />, modulos};
-      case neuropsicologiaNom:
-        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case neuropsicologiaNom + "cursoEsq":
-        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case neuropsicologiaNom + "cursoAnx":
-        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case neuropsicologiaNom + "cursoDep":
-        return { nom: titulo || neuropsicologiaNom, disciplina: neuropsicologiaNom, nomModalidad: nomMod, bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case astrologiaNom:
-        return { nom: titulo || astrologiaNom, disciplina: astrologiaNom, nomModalidad: nomMod, bgColor: astrologiaBg, color: astrologiaTxt, icon: <AstrologiaIcon size={{ base: "40px", md: "50px" }}/>, modulos };
-      case tcmNomLink:
-        return { nom: titulo || tcmNom, disciplina: tcmNom, nomModalidad: nomMod, bgColor: tcmBg, color: tcmTxt, icon: <TCMIcon  size={{ base: "40px", md: "50px" }} />, modulos };
-      case nutricionNomLink:
-        return {
-          nom: titulo || nutricionNom, disciplina: nutricionNom, nomModalidad: nomMod, bgColor: nutricionBg, color: nutricionTxt, modulos,
-          icon: cursoId === "fito-curso-1"
-            ? <FitoterapiaIcon size={{ base: "40px", md: "50px" }} color={nutricionTxt} />
-            : <NutricionIcon size={{ base: "40px", md: "50px" }} />,
-        };
-      case ayurvedaNomLink:
-        return { nom: titulo || ayurvedaNom, disciplina: ayurvedaNom, nomModalidad: nomMod, bgColor: ayurvedaBg, color: ayurvedaTxt, icon: <AyurvedaIcon size={{ base: "40px", md: "50px" }} />, modulos};
-      case cabalaNom:
-        return { nom: titulo || cabalaNom, disciplina: cabalaNom, nomModalidad: nomMod, bgColor: cabalaBg, color: cabalaTxt, icon: <CabalaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      case culturaNomLink:
-        return { nom: titulo || culturaNom, disciplina: culturaNom, nomModalidad: nomMod, bgColor: culturaBg, color: culturaTxt, icon: <CulturaIcon size={{ base: "40px", md: "50px" }} />, modulos };
-      default:
-        return { nom: "", nomModalidad: "", bgColor: "", color: "", icon: null };
-    }
-  };
-
-  useEffect(() => {
-    if (modalidadId) {
-      setmoduloDatos(getModuloDatos());
-    }
-  }, [modalidadId, cursoId]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
+  if (loading) {
+    return <Box minH="100vh" bg="#008080"><SiteHeader variant="auto" /><SpinnerTurquesa /></Box>;
+  }
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
-
-      {/* ── HEADER ── */}
       <SiteHeader variant="auto" />
 
-      {/* ── MAIN ── */}
       <Box flex="1">
-        {moduloDatos != null && moduloDatos.modulos && (
+        {modalidad && curso ? (
           <Flex
             direction="column"
             alignItems="center"
@@ -110,14 +35,13 @@ export default function ModulesPage() {
             pb={{ base: 14, md: 20 }}
           >
             <MetodoStepHeader
-              icon={moduloDatos.icon}
-              title={moduloDatos.nom}
-              bgColor={moduloDatos.bgColor}
-              color={moduloDatos.color}
-              nom={moduloDatos.disciplina}
+              icon={modalidad.icon}
+              title={curso.titulo}
+              bgColor={modalidad.bgColor}
+              color={modalidad.color}
+              nom={modalidad.nom}
             />
 
-            {/* Módulos directos — sin card contenedor */}
             <Box
               w="100%"
               maxW="850px"
@@ -128,7 +52,7 @@ export default function ModulesPage() {
                 },
               }}
             >
-              {moduloDatos.modulos.map((mod, i) => (
+              {(curso.modulos ?? []).map((mod, i) => (
                 <Box
                   key={i}
                   style={{
@@ -138,35 +62,30 @@ export default function ModulesPage() {
                 >
                   <ModuloAcordeon
                     title={mod.title}
-                    bgColor={moduloDatos.bgColor}
-                    color={moduloDatos.color}
+                    bgColor={modalidad.bgColor}
+                    color={modalidad.color}
                     submodules={mod.submodules}
                     icon={mod.icon}
-                    disciplina={moduloDatos.disciplina}
+                    disciplina={modalidad.nom}
                   />
                 </Box>
               ))}
+
+              {(!curso.modulos || curso.modulos.length === 0) && (
+                <Text color="rgba(255,255,255,0.75)" fontStyle="italic" textAlign="center" mt={6}>
+                  Este curso aún no tiene contenido.
+                </Text>
+              )}
             </Box>
           </Flex>
+        ) : (
+          <Box flex="1" display="flex" alignItems="center" justifyContent="center" py={20}>
+            <Text color="white" fontSize="xl" fontStyle="italic">Curso no encontrado.</Text>
+          </Box>
         )}
       </Box>
 
-      {/* ── FOOTER ── */}
       <SiteFooter />
-
-      {/* ── BOTÓN FLOTANTE ── */}
-      {moduloDatos && (() => {
-        const fb = moduloDatos.modulos?.find(m => m.floatingButton)?.floatingButton;
-        return fb ? (
-          <FloatingActionButton
-            config={{ ...fb, action: fb.action === "astrologia-services" ? "astrologia-services" : "modal" }}
-            color={moduloDatos.color}
-            bgColor={moduloDatos.bgColor}
-            icon={moduloDatos.icon}
-            modalityName={moduloDatos.nom}
-          />
-        ) : null;
-      })()}
     </Box>
   );
 }

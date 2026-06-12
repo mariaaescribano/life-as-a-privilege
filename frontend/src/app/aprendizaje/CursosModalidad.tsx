@@ -13,7 +13,7 @@ import { TCMIlustracionesModal } from "../../components/metodo/TCMIlustracionesM
 import { ContactModal } from "../../components/global/ContactModal";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
-import { cursosData } from "../../hardCoded/cursos";
+import { useCursosData } from "../../data/cursosApi";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
 import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
 
@@ -70,6 +70,11 @@ const CartasIcon = () => (
     <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm457-560 21-89-71-59 94-8 36-84 36 84 94 8-71 59 21 89-80-47-80 47ZM480-481Z"/>
   </Box>
 );
+const CalcularIcon = ({ size = "16px" }: { size?: string } = {}) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" w={size} h={size} viewBox="0 -960 960 960" fill="currentColor">
+    <path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-56 56-56-42-42-56 56-56-56-42 42 56 56-56 56 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+  </Box>
+);
 
 // ────────────────────────────────
 // CURSO CARD
@@ -85,6 +90,7 @@ interface CursoCardProps {
 function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCardProps) {
   const label = curso.precio === null ? "Gratis" : `${curso.precio.toFixed(2).replace(".", ",")} €`;
   const esPago = curso.precio !== null;
+  const tShadow = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 20px ${bgColor}`;
 
   return (
     <Flex
@@ -102,13 +108,9 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
       transition="transform 0.25s ease, box-shadow 0.25s ease"
       _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 28px rgba(255,255,255,0.22), 0 0 65px rgba(180,255,245,0.16), 0 0 38px ${color}66, 0 0 90px ${color}33` }}
     >
-      {/* Fondo propio de la disciplina */}
+      {/* Fondo propio de la disciplina (con su color real, sin velo) */}
       {hasDisciplinaBg(disciplina) && (
-        <DisciplinaBgLayer
-          nom={disciplina}
-          borderRadius="2xl"
-          overlay="linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.28) 45%, rgba(0,0,0,0.6) 100%)"
-        />
+        <DisciplinaBgLayer nom={disciplina} borderRadius="2xl" />
       )}
 
       {/* Contenido */}
@@ -121,7 +123,7 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
           letterSpacing="0.03em"
           lineHeight="1.2"
           noOfLines={1}
-          style={{ textShadow: `0 1px 6px rgba(0,0,0,0.85), 0 0 18px ${color}55` }}
+          style={{ textShadow: tShadow }}
         >
           {curso.titulo}
         </Text>
@@ -144,7 +146,7 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
             fontSize={{ base: "lg", md: "xl" }}
             fontWeight="700"
             lineHeight="1"
-            style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}
+            style={{ textShadow: tShadow }}
           >
             {label}
           </Text>
@@ -179,6 +181,7 @@ export default function CursosModalidad() {
   // nombres canónicos (`astrologiaNom = "Astrología"`).
   const moduloId = rawModuloId ? safeDecode(rawModuloId) : rawModuloId;
   const navigate = useNavigate();
+  const { cursosData } = useCursosData();
 
   const fromData = moduloId ? cursosData[moduloId] : null;
   const fallback = moduloId ? FALLBACK_MODALIDADES[moduloId] : null;
@@ -219,6 +222,13 @@ export default function CursosModalidad() {
           icon: <CartasIcon />,
         },
         next: { label: "Ilustraciones", onClick: () => setIlustracionesAstroOpen(true), icon: <EyeIcon /> },
+      };
+    }
+    if (moduloId === nutricionNomLink) {
+      return {
+        prev:  { label: "Herbario",             onClick: () => navigate("/aprendizaje/herbario"),             icon: <FitoterapiaIcon size="16px" color={nutricionTxt} /> },
+        extra: { label: "Alimentos",            onClick: () => navigate("/aprendizaje/alimentos"),            icon: <NutricionIcon size={{ base: "16px", md: "16px" }} /> },
+        next:  { label: "Calcular necesidades", onClick: () => navigate("/aprendizaje/calcular-necesidades"), icon: <CalcularIcon /> },
       };
     }
     if (moduloId === fisiologiaNom) {
@@ -330,129 +340,6 @@ export default function CursosModalidad() {
             </Flex>
           )} */}
 
-          {/* ── HERBARIO + ALIMENTOS + CALCULAR (solo Nutrición) ── */}
-          {moduloId === nutricionNomLink && (
-            <Flex justify="center" gap={{ base: 2, md: 3 }} mb={{ base: 6, md: 7 }} w="100%" maxW="900px" flexWrap={{ base: "wrap", md: "nowrap" }}>
-              {/* Herbario */}
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                flex="1"
-                px={{ base: 4, md: 8 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={modalidad.bgColor}
-                border={`1.5px solid ${modalidad.color}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/aprendizaje/herbario")}
-                _hover={{
-                  boxShadow: `0 0 20px ${modalidad.color}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${modalidad.color}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <Box flexShrink={0} display="flex" alignItems="center">
-                  <FitoterapiaIcon size="22px" color={nutricionTxt} />
-                </Box>
-                <Text
-                  color={modalidad.color}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "lg", md: "xl" }}
-                  letterSpacing="0.08em"
-                  lineHeight="1"
-                >
-                  Herbario
-                </Text>
-              </Flex>
-
-              {/* Alimentos */}
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                flex="1"
-                px={{ base: 4, md: 6 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={modalidad.bgColor}
-                border={`1.5px solid ${modalidad.color}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/aprendizaje/alimentos")}
-                _hover={{
-                  boxShadow: `0 0 20px ${modalidad.color}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${modalidad.color}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <NutricionIcon size={{ base: "22px", md: "22px" }} />
-                <Text
-                  color={modalidad.color}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "lg", md: "xl" }}
-                  letterSpacing="0.08em"
-                  lineHeight="1"
-                >
-                  Alimentos
-                </Text>
-              </Flex>
-
-              {/* Calcular necesidades */}
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                gap={2}
-                flex="1"
-                px={{ base: 4, md: 6 }}
-                py={{ base: 3, md: 4 }}
-                borderRadius="full"
-                bg={modalidad.bgColor}
-                border={`1.5px solid ${modalidad.color}88`}
-                boxShadow="0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"
-                cursor="pointer"
-                transition="all 0.22s ease"
-                onClick={() => navigate("/aprendizaje/calcular-necesidades")}
-                _hover={{
-                  boxShadow: `0 0 20px ${modalidad.color}44`,
-                  transform: "translateY(-2px)",
-                  border: `1.5px solid ${modalidad.color}aa`,
-                  opacity: 0.88,
-                }}
-                _active={{ transform: "translateY(0px)" }}
-              >
-                <Box flexShrink={0} display="flex" alignItems="center">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill={modalidad.color}>
-                    <path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-56 56-56-42-42-56 56-56-56-42 42 56 56-56 56 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
-                  </svg>
-                </Box>
-                <Text
-                  color={modalidad.color}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "md", md: "lg" }}
-                  letterSpacing="0.06em"
-                  lineHeight="1.1"
-                  textAlign="center"
-                >
-                  Calcular necesidades
-                </Text>
-              </Flex>
-            </Flex>
-          )}
-
           {modalidad.cursos.length > 0 ? (
             modalidad.cursos.length === 1 ? (
               // Un solo curso: lo centramos en vez de dejarlo pegado a la izquierda.
@@ -559,27 +446,23 @@ export default function CursosModalidad() {
           mx={{ base: 4, md: 0 }}
           fontFamily="'EB Garamond', serif"
         >
-          {/* Fondo de la disciplina (estrellas en Astrología, imagen en el resto) */}
+          {/* Fondo de la disciplina con su imagen real (sin velo ni desenfoque) */}
           {hasDisciplinaBg(modalidad.nom) && (
-            <DisciplinaBgLayer
-              nom={modalidad.nom}
-              borderRadius="2xl"
-              blur
-              overlay="radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,0.16) 0%, rgba(0,0,0,0.32) 55%, rgba(0,0,0,0.62) 100%)"
-            />
+            <DisciplinaBgLayer nom={modalidad.nom} borderRadius="2xl" />
           )}
 
-          <ModalCloseButton color="white" top={4} right={4} zIndex={2} />
+          <ModalCloseButton color={modalidad.color} top={4} right={4} zIndex={2} />
           <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 11 }}>
             {detailCurso && (() => {
               const nLecciones =
                 detailCurso.modulos?.reduce((a, m) => a + m.submodules.length, 0) ??
                 detailCurso.numLecciones ?? 0;
+              const tShadow = `0 1px 4px ${modalidad.bgColor}, 0 0 10px ${modalidad.bgColor}, 0 0 22px ${modalidad.bgColor}`;
               return (
               <Box>
                 {/* Título */}
                 <Text
-                  color="white"
+                  color={modalidad.color}
                   fontSize={{ base: "xl", md: "3xl" }}
                   fontWeight="700"
                   letterSpacing="0.04em"
@@ -587,7 +470,7 @@ export default function CursosModalidad() {
                   textAlign="left"
                   mt={{ base: "22px", md: "34px" }}
                   mb={6}
-                  style={{ textShadow: `0 2px 14px rgba(0,0,0,0.7), 0 0 28px ${modalidad.color}66` }}
+                  style={{ textShadow: tShadow }}
                 >
                   {detailCurso.titulo}
                 </Text>
@@ -607,13 +490,14 @@ export default function CursosModalidad() {
 
                 {/* Descripción */}
                 <Text
-                  color="rgba(255,255,255,0.92)"
+                  color={modalidad.color}
                   fontSize={{ base: "md", md: "lg" }}
                   lineHeight="1.85"
                   letterSpacing="0.02em"
                   textAlign="center"
                   mb={6}
-                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
+                  opacity={0.95}
+                  style={{ textShadow: tShadow }}
                 >
                   {detailCurso.descripcion}
                 </Text>
@@ -637,10 +521,10 @@ export default function CursosModalidad() {
                     transition="border-radius 0.2s, background 0.2s"
                     _hover={{ bg: "rgba(255,255,255,0.16)" }}
                   >
-                    <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.7)" }}>
+                    <Text color={modalidad.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: tShadow }}>
                       {nLecciones} {nLecciones === 1 ? "lección" : "lecciones"}
                     </Text>
-                    <Text color="white" fontSize="lg" transform={leccionesOpen ? "rotate(180deg)" : "rotate(0deg)"} transition="transform 0.25s">
+                    <Text color={modalidad.color} fontSize="lg" transform={leccionesOpen ? "rotate(180deg)" : "rotate(0deg)"} transition="transform 0.25s">
                       ▾
                     </Text>
                   </Flex>
@@ -657,21 +541,21 @@ export default function CursosModalidad() {
                     >
                       {(detailCurso.modulos ?? []).map((mod, mi) => (
                         <Box key={mi} mb={mi < (detailCurso.modulos!.length - 1) ? 4 : 0}>
-                          <Text color={modalidad.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em" textTransform="uppercase" mb={2} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
+                          <Text color={modalidad.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em" textTransform="uppercase" mb={2} style={{ textShadow: tShadow }}>
                             {mod.title}
                           </Text>
                           <Flex direction="column" gap={1.5} pl={3}>
                             {mod.submodules.map((sub, si) => (
                               <Flex key={si} align="center" gap={2}>
                                 <Box w="5px" h="5px" borderRadius="full" bg={modalidad.color} flexShrink={0} />
-                                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.5">{sub.nom}</Text>
+                                <Text color={modalidad.color} opacity={0.92} fontSize={{ base: "sm", md: "md" }} lineHeight="1.5" style={{ textShadow: tShadow }}>{sub.nom}</Text>
                               </Flex>
                             ))}
                           </Flex>
                         </Box>
                       ))}
                       {(!detailCurso.modulos || detailCurso.modulos.length === 0) && (
-                        <Text color="rgba(255,255,255,0.7)" fontStyle="italic" fontSize="sm">Próximamente.</Text>
+                        <Text color={modalidad.color} opacity={0.8} fontStyle="italic" fontSize="sm" style={{ textShadow: tShadow }}>Próximamente.</Text>
                       )}
                     </Box>
                   </Collapse>
@@ -688,11 +572,11 @@ export default function CursosModalidad() {
                   flexWrap="wrap"
                 >
                   <Text
-                    color="white"
+                    color={modalidad.color}
                     fontSize={{ base: "2xl", md: "3xl" }}
                     fontWeight="700"
                     lineHeight="1"
-                    style={{ textShadow: "0 1px 8px rgba(0,0,0,0.7)" }}
+                    style={{ textShadow: tShadow }}
                   >
                     {formatPrecio(detailCurso.precio)}
                   </Text>

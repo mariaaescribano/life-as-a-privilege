@@ -19,7 +19,6 @@ import {
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import SiteFooter from "../../global/Footer";
-import { SolicitarAutoevaluacionButton } from "../../global/SolicitarAutoevaluacionButton";
 import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 
 /* ══════════════════════════════════════════════
@@ -952,13 +951,6 @@ export default function AstrologiaEspacio() {
           )}
         </Flex>
       </Box>
-
-      <SolicitarAutoevaluacionButton
-        bgColor={astrologiaBg}
-        color={astrologiaTxt}
-        icon={<AstrologiaIcon size={{base:"30px", md: "50px"}} />}
-        disciplineName="Astrología"
-      />
 
      <SiteFooter />
 

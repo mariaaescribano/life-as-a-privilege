@@ -4,12 +4,21 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { DisciplineHeader } from "../../components/global/DisciplineHeader";
-import { NutricionIcon, nutricionBg, nutricionTxt, API_URL } from "../../GlobalVariables";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../GlobalVariables";
 import { alimentos, type Alimento } from "../../components/recursos/nutricion/AlimentosData";
 
 const CARD_COLOR  = nutricionTxt;
 const MODAL_COLOR = nutricionBg;
+
+// Fondo de la disciplina Nutrición para los boxes/cards (mismo que el header).
+const nutriBoxBg = {
+  bgColor: nutricionBg,
+  bgImage: "url('/img/fondos/nutri.png')",
+  bgSize: "cover",
+  bgPosition: "center",
+  bgRepeat: "no-repeat",
+};
 
 /* ══════════════════════════════════════════════
    SVG — ESQUINA BOTÁNICA
@@ -105,7 +114,7 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
   }, [onClose]);
 
   const textDark = nutricionTxt;
-  const textMid  = "#2b5e25";
+  const textMid  = nutricionTxt;
   const accentBg     = MODAL_COLOR + "12";
   const accentBorder = MODAL_COLOR + "40";
 
@@ -124,7 +133,10 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
         maxH={{ base: "88vh", md: "88vh" }}
         overflowY="auto"
         borderRadius="24px"
-        bg="#fdf7ee"
+        bgImage={`linear-gradient(rgba(253,247,238,0.74), rgba(253,247,238,0.82)), url('/img/fondos/nutri.png')`}
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
         boxShadow="0 32px 80px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.15)"
         sx={{
           "&::-webkit-scrollbar": { width: "5px" },
@@ -279,9 +291,8 @@ function AlimentoCard({ alimento, onOpen, isFavorite, onToggleFavorite, showFavo
     <Flex
       align="center"
       gap={{ base: 3, md: 4 }}
-      bg={nutricionBg}
+      {...nutriBoxBg}
       border={`1px solid ${nutricionTxt}22`}
-      sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
       borderRadius="2xl"
       px={{ base: 4, md: 5 }}
       py={{ base: 4, md: 4 }}
@@ -403,12 +414,13 @@ export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly
           pb={{ base: 14, md: 20 }}
           gap={{ base: 4, md: 5 }}
         >
-          <DisciplineHeader
+          <MetodoStepHeader
             icon={<NutricionIcon size={{ base: "35px", md: "45px" }} />}
             title={favoritesOnly ? "Mis alimentos favoritos" : "Alimentos"}
             bgColor={nutricionBg}
             color={nutricionTxt}
-            onIconClick={() => navigate("/aprendizaje/cursos/nutricion")}
+            nom={nutricionNom}
+            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
           />
 
           {favoritesOnly && alimentosMostrados.length === 0 && (

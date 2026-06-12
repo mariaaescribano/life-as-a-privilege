@@ -35,6 +35,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const path = location.pathname.toLowerCase();
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
+  // Navegación de administración (pestañas en el header).
+  const isAdminPage = path.startsWith("/admin");
+  const adminCursosActive = path.startsWith("/admin/cursos");
 
   const underlineStyles = {
     textDecoration: "underline",
@@ -89,6 +92,49 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       {/* Enlace derecha — avatar si está logueado (el logo ya lleva a home), El recorrido si público */}
       {isPrivate ? (
         <Flex align="center" gap={{ base: 4, md: 6 }}>
+          {/* Pestañas de administración — a la izquierda del avatar */}
+          {isAdminPage && (
+            <>
+              <Text
+                as="button"
+                onClick={() => navigate("/admin")}
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="600"
+                fontSize={{ base: "2xs", md: "lg" }}
+                letterSpacing={{ base: "0.08em", md: "0.14em" }}
+                textTransform="uppercase"
+                textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+                cursor="pointer"
+                bg="transparent"
+                border="none"
+                {...(isAdminPage && !adminCursosActive ? underlineStyles : {})}
+                _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
+                transition="text-shadow 0.25s ease"
+              >
+                El Recorrido
+              </Text>
+              <Text
+                as="button"
+                onClick={() => navigate("/admin/cursos")}
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="600"
+                fontSize={{ base: "2xs", md: "lg" }}
+                letterSpacing={{ base: "0.08em", md: "0.14em" }}
+                textTransform="uppercase"
+                textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+                cursor="pointer"
+                bg="transparent"
+                border="none"
+                {...(adminCursosActive ? underlineStyles : {})}
+                _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
+                transition="text-shadow 0.25s ease"
+              >
+                Cursos
+              </Text>
+            </>
+          )}
           <Box
             as="button"
             onClick={() => navigate("/user/account")}
