@@ -27,35 +27,6 @@ const nutriBoxBg = {
 ══════════════════════════════════════════════ */
 const DECO_COLOR = nutricionTxt;
 
-const BotanicalCorner = ({ flip = false }: { flip?: boolean }) => (
-  <Box
-    position="absolute"
-    top={flip ? "auto" : 0} bottom={flip ? 0 : "auto"}
-    left={flip ? "auto" : 0} right={flip ? 0 : "auto"}
-    transform={flip ? "rotate(180deg)" : "none"}
-    opacity={0.18} pointerEvents="none" zIndex={0}
-  >
-    <svg width="170" height="170" viewBox="0 0 170 170" fill="none">
-      <path d="M 10 160 C 22 124 55 88 90 58 C 118 34 142 18 162 8" stroke={DECO_COLOR} strokeWidth="2.2" strokeLinecap="round"/>
-      <path d="M 30 136 C 10 122 8 102 22 92 C 40 104 44 124 30 136 Z" fill={DECO_COLOR}/>
-      <path d="M 30 136 C 24 116 18 98 22 92" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <path d="M 58 108 C 72 92 74 72 60 62 C 44 72 42 92 58 108 Z" fill={DECO_COLOR}/>
-      <path d="M 58 108 C 56 90 54 74 60 62" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <path d="M 88 78 C 72 64 70 46 84 38 C 102 48 104 66 88 78 Z" fill={DECO_COLOR}/>
-      <path d="M 88 78 C 82 62 80 48 84 38" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <path d="M 118 50 C 130 36 134 18 120 10 C 104 18 100 36 118 50 Z" fill={DECO_COLOR}/>
-      <path d="M 118 50 C 116 34 114 20 120 10" stroke={DECO_COLOR} strokeWidth="0.9" fill="none"/>
-      <circle cx="10" cy="158" r="5.5" fill={DECO_COLOR}/>
-      <circle cx="5"  cy="148" r="4"   fill={DECO_COLOR}/>
-      <circle cx="18" cy="149" r="4"   fill={DECO_COLOR}/>
-      <circle cx="6"  cy="138" r="2.5" fill={DECO_COLOR} opacity="0.7"/>
-      <circle cx="162" cy="9"  r="4"   fill={DECO_COLOR}/>
-      <circle cx="158" cy="4"  r="2.8" fill={DECO_COLOR} opacity="0.8"/>
-      <circle cx="167" cy="5"  r="2.5" fill={DECO_COLOR} opacity="0.7"/>
-    </svg>
-  </Box>
-);
-
 /* ══════════════════════════════════════════════
    SVG — ABEJITA
 ══════════════════════════════════════════════ */
@@ -146,7 +117,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
         maxH={{ base: "88vh", md: "88vh" }}
         overflowY="auto"
         borderRadius="24px"
-        bgImage={`linear-gradient(rgba(253,247,238,0.74), rgba(253,247,238,0.82)), url('/img/fondos/nutri.png')`}
+        bgImage={`linear-gradient(rgba(253,247,238,0.42), rgba(253,247,238,0.54)), url('/img/fondos/nutri.png')`}
         bgSize="cover"
         bgPosition="center"
         bgRepeat="no-repeat"
@@ -157,8 +128,6 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
           "&::-webkit-scrollbar-thumb": { bg: MODAL_COLOR + "55", borderRadius: "full" },
         }}
       >
-        <BotanicalCorner />
-        <BotanicalCorner flip />
         <BeeDecoration size={62} opacity={0.11} style={{ top: "22%", right: "12px" }} />
         <BeeDecoration size={40} opacity={0.08} style={{ top: "55%", left: "18px", transform: "rotate(-15deg) scaleX(-1)" }} />
         <BeeDecoration size={30} opacity={0.07} style={{ bottom: "18%", right: "60px", transform: "rotate(10deg)" }} />

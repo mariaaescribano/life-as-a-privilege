@@ -6,10 +6,6 @@ import type { Submodulo } from "../../dtos/aprendizaje.type";
 import { useNavigate } from "react-router-dom";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 
-// Velo oscuro sobre el fondo de la disciplina para que el texto (en color de la
-// disciplina) se lea bien dentro de los boxes de módulo / submódulo.
-const BOX_OVERLAY = "linear-gradient(180deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.52) 100%)";
-
 export function ModuloAcordeon(props:{
   title:string, bgColor:string, color:string,
   submodules: Submodulo[], icon:any,
@@ -22,6 +18,7 @@ export function ModuloAcordeon(props:{
   const navigate = useNavigate();
   const disc = props.disciplina;
   const hasBg = !!disc && hasDisciplinaBg(disc);
+  const tShadow = `0 1px 4px ${props.bgColor}, 0 0 10px ${props.bgColor}, 0 0 20px ${props.bgColor}`;
 
   const handleToggle = () => {
     const next = !open;
@@ -29,8 +26,8 @@ export function ModuloAcordeon(props:{
     props.onToggle?.(next);
   };
 
-  const glow = `0 4px 20px rgba(0,0,0,0.3), 0 0 18px ${props.color}55`;
-  const glowHover = `0 6px 26px rgba(0,0,0,0.4), 0 0 28px ${props.color}88`;
+  const glow = `0 0 16px rgba(255,255,255,0.16), 0 0 40px rgba(180,255,245,0.12), 0 0 22px ${props.color}55`;
+  const glowHover = `0 0 24px rgba(255,255,255,0.24), 0 0 58px rgba(180,255,245,0.18), 0 0 34px ${props.color}88`;
 
   return (
     <Box w="100%" maxW="800px" mx="auto" mb={5}>
@@ -46,11 +43,11 @@ export function ModuloAcordeon(props:{
         transition="all 0.25s"
         _hover={{ transform: "translateY(-3px)", boxShadow: glowHover }}
       >
-        {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" overlay={BOX_OVERLAY} />}
+        {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" />}
         <Flex position="relative" zIndex={1} align="center" justify="space-between" p={5} color={props.color}>
           <HStack>
             {< props.icon color={props.color} />}
-            <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+            <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" style={{ textShadow: tShadow }}>
               {props.title}
             </Text>
           </HStack>
@@ -77,13 +74,13 @@ export function ModuloAcordeon(props:{
               bg={props.bgColor ?? "white"}
               cursor="pointer"
               onClick={() => navigate(sub.link)}
-              boxShadow={`0 3px 14px rgba(0,0,0,0.25), 0 0 12px ${props.color}44`}
+              boxShadow={`0 0 14px rgba(255,255,255,0.12), 0 0 18px ${props.color}44`}
               transition="all 0.25s"
-              _hover={{ transform: "translateY(-2px)", boxShadow: `0 5px 20px rgba(0,0,0,0.35), 0 0 20px ${props.color}66` }}
+              _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 22px rgba(255,255,255,0.18), 0 0 26px ${props.color}66` }}
             >
-              {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" overlay={BOX_OVERLAY} />}
+              {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" />}
               <Flex position="relative" zIndex={1} align="center" justify="space-between" color={props.color} p={4}>
-                <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+                <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: tShadow }}>
                   {sub.nom}
                 </Text>
               </Flex>

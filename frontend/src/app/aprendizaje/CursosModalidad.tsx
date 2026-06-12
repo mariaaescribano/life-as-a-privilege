@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Box, Flex, Text, Image, SimpleGrid, Collapse,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
@@ -168,6 +168,37 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
         </Flex>
       </Flex>
     </Flex>
+  );
+}
+
+// Título del popup: centrado si cabe en una línea; alineado a la izquierda si
+// es largo y se parte en varias líneas.
+function PopupTitle({ text, color, tShadow }: { text: string; color: string; tShadow: string }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [wraps, setWraps] = useState(false);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const cs = getComputedStyle(el);
+    let lh = parseFloat(cs.lineHeight);
+    if (isNaN(lh) || lh < 5) lh = parseFloat(cs.fontSize) * 1.25;
+    setWraps(el.scrollHeight > lh * 1.6);
+  }, [text]);
+  return (
+    <Text
+      ref={ref}
+      color={color}
+      fontSize={{ base: "xl", md: "3xl" }}
+      fontWeight="700"
+      letterSpacing="0.04em"
+      lineHeight="1.25"
+      textAlign={wraps ? "left" : "center"}
+      mt={{ base: "22px", md: "34px" }}
+      mb={4}
+      style={{ textShadow: tShadow }}
+    >
+      {text}
+    </Text>
   );
 }
 
@@ -345,7 +376,7 @@ export default function CursosModalidad() {
               // Un solo curso: lo centramos en vez de dejarlo pegado a la izquierda.
               <Flex
                 w="100%"
-                maxW="1280px"
+                maxW="850px"
                 justify="center"
                 sx={{
                   "@keyframes cursoCardIn": {
@@ -356,7 +387,7 @@ export default function CursosModalidad() {
               >
                 <Box
                   w="100%"
-                  maxW="380px"
+                  maxW="413px"
                   h="100%"
                   style={{
                     opacity: 0,
@@ -375,9 +406,9 @@ export default function CursosModalidad() {
             ) : (
               <SimpleGrid
                 w="100%"
-                maxW="1280px"
-                columns={{ base: 1, md: 3 }}
-                spacing={{ base: 5, md: 5 }}
+                maxW="850px"
+                columns={{ base: 1, md: 2 }}
+                spacing={{ base: 5, md: 6 }}
                 sx={{
                   "@keyframes cursoCardIn": {
                     from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
@@ -461,19 +492,11 @@ export default function CursosModalidad() {
               return (
               <Box>
                 {/* Título */}
-                <Text
-                  color={modalidad.color}
-                  fontSize={{ base: "xl", md: "3xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.04em"
-                  lineHeight="1.25"
-                  textAlign="left"
-                  mt={{ base: "22px", md: "34px" }}
-                  mb={6}
-                  style={{ textShadow: tShadow }}
-                >
-                  {detailCurso.titulo}
-                </Text>
+                <PopupTitle text={detailCurso.titulo} color={modalidad.color} tShadow={tShadow} />
+
+                {/* Raya horizontal de separación */}
+                <Box h="2px" mb={6} borderRadius="full" opacity={0.75}
+                     bgGradient={`linear(to-r, transparent, ${modalidad.color}, transparent)`} />
 
                 {/* Foto del curso (16:9, como un vídeo de YouTube) */}
                 <Box
@@ -483,7 +506,6 @@ export default function CursosModalidad() {
                   w="100%"
                   sx={{ aspectRatio: "16 / 9" }}
                   border={`1px solid ${modalidad.color}44`}
-                  boxShadow="0 8px 30px rgba(0,0,0,0.5)"
                 >
                   <Image src={detailCurso.foto} alt={detailCurso.titulo} w="100%" h="100%" objectFit="cover" display="block" />
                 </Box>
@@ -565,8 +587,7 @@ export default function CursosModalidad() {
                 <Flex
                   align="center"
                   justify="space-between"
-                  borderTop="1px solid rgba(255,255,255,0.25)"
-                  pt={5}
+                  pt={2}
                   mb={{ base: 4, md: 7 }}
                   gap={4}
                   flexWrap="wrap"

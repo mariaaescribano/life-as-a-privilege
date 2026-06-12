@@ -61,6 +61,12 @@ export const reelsPorDisciplina: Record<string, ReelVideo[]> = {
   ],
   [neuropsicologiaNom]: [
     {
+      id: "psico-inconsciente",
+      titulo: "Tu Inconsciente",
+      portada: "/miniaturas/psicologia/inconsciente.png",
+      embedUrl: "https://www.youtube.com/embed/1LY9J84VZxo",
+    },
+    {
       id: "psico-procrastinar",
       titulo: "Deja de procrastinar",
       portada: "/miniaturas/psicologia/procrastinar.png",

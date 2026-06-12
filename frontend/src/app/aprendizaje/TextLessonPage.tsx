@@ -52,8 +52,9 @@ export default function TextLessonPage() {
   const hasBg = hasDisciplinaBg(disciplinaNom);
   const esVideo = leccion.tipo === "video" && !!leccion.video;
 
-  const TEXT_GLOW = `0 1px 4px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.7), 0 0 22px ${color}66, 0 0 44px ${color}33`;
-  const BOX_OVERLAY = "linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.48) 100%)";
+  const TEXT_GLOW = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 22px ${bgColor}, 0 0 40px ${color}33`;
+  // Mismo glow que el header (MetodoStepHeader) para que haya coherencia.
+  const HEADER_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`;
 
   const Arrow = ({ dir, target }: { dir: "prev" | "next"; target: Submodulo | null }) => (
     <Box
@@ -69,7 +70,6 @@ export default function TextLessonPage() {
       fontSize={{ base: "xl", md: "2xl" }}
       fontWeight="700"
       bg="rgba(255,255,255,0.08)"
-      boxShadow={`0 4px 16px rgba(0,0,0,0.35), 0 0 18px ${color}55`}
       cursor={target ? "pointer" : "not-allowed"}
       opacity={target ? 1 : 0.25}
       transition="all 0.2s"
@@ -89,7 +89,15 @@ export default function TextLessonPage() {
       <Box flex="1" position="relative" zIndex={1}>
         <Flex direction="column" alignItems="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }} pb={{ base: 14, md: 20 }}>
           {/* Header de disciplina con el título del submódulo */}
-          <MetodoStepHeader icon={icon} title={leccion.nom} bgColor={bgColor} color={color} nom={disciplinaNom} />
+          <MetodoStepHeader
+            icon={icon}
+            title={leccion.nom}
+            bgColor={bgColor}
+            color={color}
+            nom={disciplinaNom}
+            compact
+            prev={{ label: "← Volver al curso", onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`) }}
+          />
 
           {/* Vídeo (16:9) o artículo de texto */}
           {esVideo ? (
@@ -99,8 +107,7 @@ export default function TextLessonPage() {
               sx={{ aspectRatio: "16 / 9" }}
               borderRadius="2xl"
               overflow="hidden"
-              border={`1px solid ${color}55`}
-              boxShadow={`0 0 32px ${color}44, 0 16px 50px rgba(0,0,0,0.5)`}
+              boxShadow={HEADER_GLOW}
               mt={{ base: 2, md: 4 }}
             >
               <iframe
@@ -118,11 +125,10 @@ export default function TextLessonPage() {
               overflow="hidden"
               borderRadius="2xl"
               bg={bgColor}
-              border={`1px solid ${color}66`}
-              boxShadow={`0 0 26px ${color}88, 0 0 60px ${color}4d, 0 0 110px rgba(180,255,245,0.16), 0 16px 50px rgba(0,0,0,0.45)`}
+              boxShadow={HEADER_GLOW}
               mt={{ base: 2, md: 4 }}
             >
-              {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" overlay={BOX_OVERLAY} />}
+              {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" />}
               <Box position="relative" zIndex={1} px={{ base: 6, md: 12 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
                 <Markdown text={leccion.contenido ?? leccion.letra ?? ""} color={color} />
               </Box>
