@@ -49,7 +49,7 @@ export const recorridoContenido: Record<
         items: [
           "El objetivo no es depender de un intérprete. Es que puedas comprender tu carta, leerla por ti mismo y utilizarla como herramienta durante toda tu Vida.",
         ],
-        aviso: "Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -79,7 +79,7 @@ export const recorridoContenido: Record<
         items: [
           "No trabajamos síntomas aislados. Trabajamos las estructuras que los generan para que los cambios sean profundos y duraderos.",
         ],
-        aviso: "Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -167,7 +167,7 @@ export const recorridoContenido: Record<
         items: [
           "Un espacio para traducir la teoría a tu situación concreta y comprender mejor lo que ocurre en tu propio organismo.",
         ],
-        aviso: "Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -197,7 +197,7 @@ export const recorridoContenido: Record<
         items: [
           "Adaptaremos el conocimiento a tu realidad: tu constitución, tus horarios, tus necesidades y tu estilo de vida.",
         ],
-        aviso: "Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -227,7 +227,7 @@ export const recorridoContenido: Record<
         items: [
           "Un espacio para aterrizar estos principios en situaciones reales de tu vida y convertirlos en algo práctico.",
         ],
-         aviso: "Se cobra aparte",
+         aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -257,7 +257,7 @@ export const recorridoContenido: Record<
         items: [
           "Reflexionaremos sobre quién eras al empezar este recorrido, qué has comprendido y quién te estás convirtiendo después de atravesarlo.",
         ],
-        aviso: "Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },

@@ -75,7 +75,7 @@ const useReveal = (threshold = 0.05) => {
 // ────────────────────────────────
 // COURSE CARD
 // ────────────────────────────────
-export function CourseCard({ entry, discBg = false }: { entry: CourseEntry; discBg?: boolean }) {
+export function CourseCard({ entry, discBg = false, onOpen }: { entry: CourseEntry; discBg?: boolean; onOpen?: () => void }) {
   const { curso, modalidad } = entry;
   const showDiscBg = discBg && hasDisciplinaBg(modalidad.nom);
   const navigate = useNavigate();
@@ -103,6 +103,8 @@ export function CourseCard({ entry, discBg = false }: { entry: CourseEntry; disc
       direction="column"
       p={{ base: 7, md: 8 }}
       h="100%"
+      cursor={onOpen ? "pointer" : undefined}
+      onClick={onOpen}
     >
       {showDiscBg && <DisciplinaBgLayer nom={modalidad.nom} borderRadius="2xl" />}
       <Flex position="relative" zIndex={1} direction="column" gap={5} h="100%" flex="1">
@@ -155,7 +157,7 @@ export function CourseCard({ entry, discBg = false }: { entry: CourseEntry; disc
         w="100%"
         aspectRatio={16 / 9}
         boxShadow={discBg ? "none" : `0 8px 26px ${modalidad.color}55, 0 0 18px rgba(255,255,255,0.25)`}
-        border={`1px solid ${modalidad.color}55`}
+        border={modalidad.nom === astrologiaNom ? `2px solid ${modalidad.color}` : "none"}
       >
         <Image
           src={curso.foto}
@@ -181,7 +183,7 @@ export function CourseCard({ entry, discBg = false }: { entry: CourseEntry; disc
 
         <Box
           as="button"
-          onClick={handleAcceder}
+          onClick={(e: React.MouseEvent) => { if (onOpen) { e.stopPropagation(); onOpen(); } else { handleAcceder(); } }}
           color={modalidad.bgColor}
           bg={modalidad.color}
           fontFamily="'EB Garamond', serif"

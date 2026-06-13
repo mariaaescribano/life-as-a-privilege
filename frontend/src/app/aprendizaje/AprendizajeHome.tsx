@@ -4,6 +4,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { CourseCard, type CourseEntry } from "./NuevosCursosPage";
+import { CursoDetalleModal } from "../../components/aprendizaje/CursoDetalleModal";
 import { useCursosData } from "../../data/cursosApi";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import {
@@ -38,6 +39,7 @@ export const AprendizajeHome = () => {
   const [mounted, setMounted] = useState(false);
   const cardsReveal = useReveal(0.04);
   const { cursosData, loading } = useCursosData();
+  const [detail, setDetail] = useState<CourseEntry | null>(null);
 
   // Todos los cursos de todas las disciplinas, en una sola lista mezclada.
   const allCourses: CourseEntry[] = Object.values(cursosData).flatMap((modalidad) =>
@@ -184,7 +186,7 @@ export const AprendizajeHome = () => {
                       transform={cardsReveal.visible ? "translateY(0)" : "translateY(24px)"}
                       transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
                     >
-                      <CourseCard entry={entry} discBg />
+                      <CourseCard entry={entry} discBg onOpen={() => setDetail(entry)} />
                     </Box>
                   ))}
                 </SimpleGrid>
@@ -193,6 +195,15 @@ export const AprendizajeHome = () => {
           )}
         </Box>
       </Flex>
+
+      {/* Popup de detalle del curso */}
+      <CursoDetalleModal
+        curso={detail?.curso ?? null}
+        color={detail?.modalidad.color ?? "#ffffff"}
+        bgColor={detail?.modalidad.bgColor ?? "#003535"}
+        nom={detail?.modalidad.nom ?? ""}
+        onClose={() => setDetail(null)}
+      />
 
       <SiteFooter />
     </Box>
