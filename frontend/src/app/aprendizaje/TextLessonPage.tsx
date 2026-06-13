@@ -130,10 +130,7 @@ export default function TextLessonPage() {
               boxShadow={HEADER_GLOW}
               mt={{ base: 2, md: 4 }}
             >
-              {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" />}
-              <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 10 }}>
-                <CursoTest ejercicios={leccion.ejercicios ?? []} color={color} />
-              </Box>
+              <CursoTest ejercicios={leccion.ejercicios ?? []} color={color} disciplinaNom={disciplinaNom} bgColor={bgColor} />
             </Box>
           ) : (
             <Box

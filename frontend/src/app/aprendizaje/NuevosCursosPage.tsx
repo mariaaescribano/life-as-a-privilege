@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Image, SimpleGrid } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { useNavigate } from "react-router-dom";
 import { cursosData } from "../../hardCoded/cursos";
 import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
@@ -74,8 +75,9 @@ const useReveal = (threshold = 0.05) => {
 // ────────────────────────────────
 // COURSE CARD
 // ────────────────────────────────
-export function CourseCard({ entry }: { entry: CourseEntry }) {
+export function CourseCard({ entry, discBg = false }: { entry: CourseEntry; discBg?: boolean }) {
   const { curso, modalidad } = entry;
+  const showDiscBg = discBg && hasDisciplinaBg(modalidad.nom);
   const navigate = useNavigate();
   const label =
     curso.precio === null
@@ -92,15 +94,18 @@ export function CourseCard({ entry }: { entry: CourseEntry }) {
 
   return (
     <Flex
+      position="relative"
+      overflow="hidden"
       bg={modalidad.bgColor}
       borderRadius="2xl"
-      border={`1px solid ${modalidad.color}55`}
-      boxShadow={`0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(255,255,255,0.16), 0 0 90px rgba(180,255,245,0.18), 0 0 36px ${modalidad.color}66, 0 4px 22px rgba(0,0,0,0.22)`}
+      border={discBg ? "none" : `1px solid ${modalidad.color}55`}
+      boxShadow={discBg ? "none" : `0 0 22px rgba(255,255,255,0.32), 0 0 50px rgba(255,255,255,0.16), 0 0 90px rgba(180,255,245,0.18), 0 0 36px ${modalidad.color}66, 0 4px 22px rgba(0,0,0,0.22)`}
       direction="column"
       p={{ base: 7, md: 8 }}
-      gap={5}
       h="100%"
     >
+      {showDiscBg && <DisciplinaBgLayer nom={modalidad.nom} borderRadius="2xl" />}
+      <Flex position="relative" zIndex={1} direction="column" gap={5} h="100%" flex="1">
       {/* Top: icon + título + modalidad */}
       <Flex align="center" gap={4}>
         <Box
@@ -113,7 +118,7 @@ export function CourseCard({ entry }: { entry: CourseEntry }) {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          boxShadow={`0 0 12px rgba(255,255,255,0.35), 0 0 26px ${modalidad.color}55`}
+          boxShadow={discBg ? "none" : `0 0 12px rgba(255,255,255,0.35), 0 0 26px ${modalidad.color}55`}
         >
           {modalidad.icon}
         </Box>
@@ -149,7 +154,7 @@ export function CourseCard({ entry }: { entry: CourseEntry }) {
         overflow="hidden"
         w="100%"
         aspectRatio={16 / 9}
-        boxShadow={`0 8px 26px ${modalidad.color}55, 0 0 18px rgba(255,255,255,0.25)`}
+        boxShadow={discBg ? "none" : `0 8px 26px ${modalidad.color}55, 0 0 18px rgba(255,255,255,0.25)`}
         border={`1px solid ${modalidad.color}55`}
       >
         <Image
@@ -195,6 +200,7 @@ export function CourseCard({ entry }: { entry: CourseEntry }) {
         >
           Acceder →
         </Box>
+      </Flex>
       </Flex>
     </Flex>
   );

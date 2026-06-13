@@ -184,7 +184,7 @@ export const AprendizajeHome = () => {
                       transform={cardsReveal.visible ? "translateY(0)" : "translateY(24px)"}
                       transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
                     >
-                      <CourseCard entry={entry} />
+                      <CourseCard entry={entry} discBg />
                     </Box>
                   ))}
                 </SimpleGrid>
