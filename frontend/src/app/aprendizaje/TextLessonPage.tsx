@@ -6,6 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Markdown } from "../../components/global/Markdown";
+import { CursoTest } from "../../components/aprendizaje/CursoTest";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { useCursosData } from "../../data/cursosApi";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
@@ -51,6 +52,7 @@ export default function TextLessonPage() {
   const { bgColor, color, icon, nom: disciplinaNom } = modalidad;
   const hasBg = hasDisciplinaBg(disciplinaNom);
   const esVideo = leccion.tipo === "video" && !!leccion.video;
+  const esTest = leccion.tipo === "test";
 
   const TEXT_GLOW = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 22px ${bgColor}, 0 0 40px ${color}33`;
   // Mismo glow que el header (MetodoStepHeader) para que haya coherencia.
@@ -116,6 +118,22 @@ export default function TextLessonPage() {
                 title={leccion.nom}
                 allowFullScreen
               />
+            </Box>
+          ) : esTest ? (
+            <Box
+              maxW="760px"
+              w="100%"
+              position="relative"
+              overflow="hidden"
+              borderRadius="2xl"
+              bg={bgColor}
+              boxShadow={HEADER_GLOW}
+              mt={{ base: 2, md: 4 }}
+            >
+              {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" />}
+              <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 10 }}>
+                <CursoTest ejercicios={leccion.ejercicios ?? []} color={color} />
+              </Box>
             </Box>
           ) : (
             <Box

@@ -62,7 +62,7 @@ export function ModuloAcordeon(props:{
         </Flex>
       </Box>
 
-      {/* Submódulos — glow individual, no se fusionan */}
+      {/* Submódulos */}
       <Collapse in={open} animateOpacity>
         <Box mt={4} pl={2} pb={1} display="flex" flexDirection="column" gap={4}>
           {props.submodules.map((sub, i) => (
@@ -74,9 +74,8 @@ export function ModuloAcordeon(props:{
               bg={props.bgColor ?? "white"}
               cursor="pointer"
               onClick={() => navigate(sub.link)}
-              boxShadow={`0 0 14px rgba(255,255,255,0.12), 0 0 18px ${props.color}44`}
               transition="all 0.25s"
-              _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 22px rgba(255,255,255,0.18), 0 0 26px ${props.color}66` }}
+              _hover={{ transform: "translateY(-2px)" }}
             >
               {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" />}
               <Flex position="relative" zIndex={1} align="center" justify="space-between" color={props.color} p={4}>

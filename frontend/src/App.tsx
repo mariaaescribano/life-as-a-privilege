@@ -126,7 +126,7 @@ export default function App()
       <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
-      <Route path="/aprendizaje/nuevosCursos" element={<NuevosCursosPage />} />
+      <Route path="/aprendizaje/todosVideos" element={<NuevosCursosPage />} />
       <Route path="/aprendizaje/cursos/:moduloId" element={<CursosModalidad />} />
       <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
       <Route path="/aprendizaje/herbario/favoritos" element={<PrivateRoute><HerbarioPage favoritesOnly /></PrivateRoute>} />

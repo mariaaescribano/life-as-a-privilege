@@ -7,7 +7,12 @@
 --       "title": "Introducción",
 --       "submodules": [
 --         { "id": "leccion-1", "nom": "Orígenes", "tipo": "texto", "contenido": "# ...markdown..." },
---         { "id": "leccion-2", "nom": "Vídeo intro", "tipo": "video", "video": "<youtubeId>" }
+--         { "id": "leccion-2", "nom": "Vídeo intro", "tipo": "video", "video": "<youtubeId>" },
+--         { "id": "leccion-3", "nom": "Test final", "tipo": "test", "ejercicios": [
+--             { "tipo": "opcion", "enunciado": "¿...?", "opciones": ["A","B"], "correcta": 0 },
+--             { "tipo": "verdadero", "enunciado": "...", "correcta": true },
+--             { "tipo": "relacionar", "enunciado": "Une cada pareja", "pares": [{ "izquierda": "X", "derecha": "Y" }] }
+--         ] }
 --       ]
 --     }
 --   ]

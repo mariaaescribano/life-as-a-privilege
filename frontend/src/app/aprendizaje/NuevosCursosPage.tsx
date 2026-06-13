@@ -40,7 +40,7 @@ const COURSE_ORDER: { modalidadKey: string; cursoId: string }[] = [
   { modalidadKey: fisiologiaNom,         cursoId: "fisio-curso-1"   },
 ];
 
-interface CourseEntry {
+export interface CourseEntry {
   curso: Curso;
   modalidad: ModalidadInfo;
 }
@@ -74,7 +74,7 @@ const useReveal = (threshold = 0.05) => {
 // ────────────────────────────────
 // COURSE CARD
 // ────────────────────────────────
-function CourseCard({ entry }: { entry: CourseEntry }) {
+export function CourseCard({ entry }: { entry: CourseEntry }) {
   const { curso, modalidad } = entry;
   const navigate = useNavigate();
   const label =

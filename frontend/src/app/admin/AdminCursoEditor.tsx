@@ -12,8 +12,10 @@ import { API_URL } from "../../GlobalVariables";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { Markdown } from "../../components/global/Markdown";
+import { CursoTestEditor } from "../../components/aprendizaje/CursoTestEditor";
+import type { Ejercicio } from "../../dtos/aprendizaje.type";
 
-interface Leccion { id: string; nom: string; tipo: "texto" | "video"; contenido?: string; video?: string; }
+interface Leccion { id: string; nom: string; tipo: "texto" | "video" | "test"; contenido?: string; video?: string; ejercicios?: Ejercicio[]; }
 interface Modulo { title: string; submodules: Leccion[]; }
 interface Curso {
   id: string; modalidad: string; titulo: string; foto: string; descripcion: string;
@@ -212,10 +214,11 @@ export default function AdminCursoEditor() {
                         <Flex gap={3} align="center" mb={3} flexWrap="wrap">
                           <Input value={lec.nom} onChange={(e) => updLeccion(mi, li, { nom: e.target.value })}
                                  placeholder="Nombre de la lección" flex="1" minW="160px" {...fieldStyle} />
-                          <Select value={lec.tipo} onChange={(e) => updLeccion(mi, li, { tipo: e.target.value as "texto" | "video" })}
+                          <Select value={lec.tipo} onChange={(e) => updLeccion(mi, li, { tipo: e.target.value as "texto" | "video" | "test" })}
                                   w="130px" {...fieldStyle} sx={{ option: { color: "black" } }}>
                             <option value="texto">Texto</option>
                             <option value="video">Vídeo</option>
+                            <option value="test">Test</option>
                           </Select>
                           <Box as="button" onClick={() => delLeccion(mi, li)} {...btn} px={3} py="6px" fontSize="xs"
                                border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }}>
@@ -229,6 +232,11 @@ export default function AdminCursoEditor() {
                             <Input value={lec.video ?? ""} onChange={(e) => updLeccion(mi, li, { video: e.target.value })}
                                    placeholder="dQw4w9WgXcQ" {...fieldStyle} />
                           </Box>
+                        ) : lec.tipo === "test" ? (
+                          <CursoTestEditor
+                            ejercicios={lec.ejercicios ?? []}
+                            onChange={(ej) => updLeccion(mi, li, { ejercicios: ej })}
+                          />
                         ) : (
                           <Box>
                             <Flex justify="space-between" align="center" mb={1}>

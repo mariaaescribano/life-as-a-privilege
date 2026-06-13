@@ -6,6 +6,7 @@ import {
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { HinduismoIlustracionesModal } from "../../components/metodo/HinduismoIlustracionesModal";
@@ -103,7 +104,6 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
       cursor="pointer"
       onClick={onVerDetalle}
       bg={bgColor}
-      border={`1px solid ${color}66`}
       boxShadow={`0 0 18px rgba(255,255,255,0.15), 0 0 42px rgba(180,255,245,0.1), 0 0 24px ${color}40, 0 0 60px ${color}22`}
       transition="transform 0.25s ease, box-shadow 0.25s ease"
       _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 28px rgba(255,255,255,0.22), 0 0 65px rgba(180,255,245,0.16), 0 0 38px ${color}66, 0 0 90px ${color}33` }}
@@ -175,24 +175,38 @@ function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCar
 // es largo y se parte en varias líneas.
 function PopupTitle({ text, color, tShadow }: { text: string; color: string; tShadow: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
-  const [wraps, setWraps] = useState(false);
+  // Tamaño de fuente base por viewport (md → 3xl ≈ 30px, base → xl ≈ 22px).
+  // El título va SIEMPRE en una sola línea (whiteSpace:nowrap); si no cabe,
+  // reducimos la fuente hasta que entre en el ancho disponible.
+  const [fontPx, setFontPx] = useState<number | null>(null);
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const cs = getComputedStyle(el);
-    let lh = parseFloat(cs.lineHeight);
-    if (isNaN(lh) || lh < 5) lh = parseFloat(cs.fontSize) * 1.25;
-    setWraps(el.scrollHeight > lh * 1.6);
+    const measure = () => {
+      const base = window.innerWidth >= 768 ? 30 : 22;
+      el.style.fontSize = `${base}px`;
+      const available = el.clientWidth;       // ancho del contenedor (bloque)
+      const needed = el.scrollWidth;          // ancho real del texto sin cortar
+      if (needed > available && available > 0) {
+        setFontPx(Math.max(13, Math.floor(base * (available / needed))));
+      } else {
+        setFontPx(base);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, [text]);
   return (
     <Text
       ref={ref}
       color={color}
-      fontSize={{ base: "xl", md: "3xl" }}
+      fontSize={fontPx ? `${fontPx}px` : { base: "xl", md: "3xl" }}
       fontWeight="700"
       letterSpacing="0.04em"
       lineHeight="1.25"
-      textAlign={wraps ? "left" : "center"}
+      textAlign="center"
+      whiteSpace="nowrap"
       mt={{ base: "22px", md: "34px" }}
       mb={4}
       style={{ textShadow: tShadow }}
@@ -212,7 +226,7 @@ export default function CursosModalidad() {
   // nombres canónicos (`astrologiaNom = "Astrología"`).
   const moduloId = rawModuloId ? safeDecode(rawModuloId) : rawModuloId;
   const navigate = useNavigate();
-  const { cursosData } = useCursosData();
+  const { cursosData, loading } = useCursosData();
 
   const fromData = moduloId ? cursosData[moduloId] : null;
   const fallback = moduloId ? FALLBACK_MODALIDADES[moduloId] : null;
@@ -273,6 +287,12 @@ export default function CursosModalidad() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
+
+  // Mientras se cargan los cursos desde la API, mostramos el spinner en vez de
+  // pintar la cabecera con los cursos vacíos y que aparezcan luego de golpe.
+  if (loading) {
+    return <Box minH="100vh" bg="#008080"><SiteHeader variant="auto" /><SpinnerTurquesa /></Box>;
+  }
 
   if (!modalidad) {
     return (
@@ -488,6 +508,11 @@ export default function CursosModalidad() {
               const nLecciones =
                 detailCurso.modulos?.reduce((a, m) => a + m.submodules.length, 0) ??
                 detailCurso.numLecciones ?? 0;
+              // Total de ejercicios sumando los de todas las lecciones de tipo 'test'.
+              const nEjercicios = (detailCurso.modulos ?? []).reduce(
+                (a, m) => a + m.submodules.reduce((b, s) => b + (s.tipo === "test" ? (s.ejercicios?.length ?? 0) : 0), 0),
+                0,
+              );
               const tShadow = `0 1px 4px ${modalidad.bgColor}, 0 0 10px ${modalidad.bgColor}, 0 0 22px ${modalidad.bgColor}`;
               return (
               <Box>
@@ -545,6 +570,7 @@ export default function CursosModalidad() {
                   >
                     <Text color={modalidad.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: tShadow }}>
                       {nLecciones} {nLecciones === 1 ? "lección" : "lecciones"}
+                      {nEjercicios > 0 && ` · ${nEjercicios} ${nEjercicios === 1 ? "ejercicio" : "ejercicios"}`}
                     </Text>
                     <Text color={modalidad.color} fontSize="lg" transform={leccionesOpen ? "rotate(180deg)" : "rotate(0deg)"} transition="transform 0.25s">
                       ▾

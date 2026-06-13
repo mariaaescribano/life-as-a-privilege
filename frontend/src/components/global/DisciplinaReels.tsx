@@ -442,7 +442,7 @@ export function DisciplinaReels({
 }
 
 /* ════════════════════════════════════════════════════════════════
-   TODOS LOS REELS — para /aprendizaje/nuevosCursos
+   TODOS LOS REELS — para /aprendizaje/todosVideos
    Cada box mantiene el color de su disciplina y muestra su icono a la
    izquierda del título.
 ═══════════════════════════════════════════════════════════════════ */

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
 import type { Curso, ModalidadInfo } from "../hardCoded/cursos";
-import type { ModuloContenido, Submodulo } from "../dtos/aprendizaje.type";
+import type { Ejercicio, ModuloContenido, Submodulo } from "../dtos/aprendizaje.type";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug, type DisciplinaCurso } from "./disciplinasCurso";
 
 // Todos los cursos de pago valen lo mismo (de_pago = checkbox en el admin).
 export const PRECIO_CURSO = 5;
 
 // ── Formas que llegan del API (tabla `curso`) ──
-export interface LeccionApi { id: string; nom: string; tipo: "texto" | "video"; contenido?: string; video?: string; }
+export interface LeccionApi { id: string; nom: string; tipo: "texto" | "video" | "test"; contenido?: string; video?: string; ejercicios?: Ejercicio[]; }
 export interface ModuloApi { title: string; submodules: LeccionApi[]; }
 export interface CursoApi {
   id: string;
@@ -38,6 +38,7 @@ function buildSubmodulo(modalidad: string, cursoId: string, det: Submodulo["deta
     icon: null,
     tipo: l.tipo,
     contenido: l.contenido,
+    ejercicios: l.ejercicios,
   };
 }
 

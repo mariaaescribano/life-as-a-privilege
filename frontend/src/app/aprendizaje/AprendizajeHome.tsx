@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
+import { CourseCard, type CourseEntry } from "./NuevosCursosPage";
+import { useCursosData } from "../../data/cursosApi";
+import SpinnerTurquesa from "../../components/global/Spinner";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -34,6 +37,12 @@ const useReveal = (threshold = 0.05) => {
 export const AprendizajeHome = () => {
   const [mounted, setMounted] = useState(false);
   const cardsReveal = useReveal(0.04);
+  const { cursosData, loading } = useCursosData();
+
+  // Todos los cursos de todas las disciplinas, en una sola lista mezclada.
+  const allCourses: CourseEntry[] = Object.values(cursosData).flatMap((modalidad) =>
+    modalidad.cursos.map((curso) => ({ curso, modalidad })),
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -145,6 +154,43 @@ export const AprendizajeHome = () => {
               </Box>
             ))}
           </SimpleGrid>
+
+          {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS ── */}
+          {(loading || allCourses.length > 0) && (
+            <>
+              <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
+                <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
+                <Image
+                  src="/img/icono/life.png"
+                  alt=""
+                  h={{ base: "40px", md: "52px" }}
+                  objectFit="contain"
+                  style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 21px rgba(180,255,245,0.3))" }}
+                />
+                <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
+              </Flex>
+
+              {loading ? (
+                <Box py={{ base: 8, md: 10 }}>
+                  <SpinnerTurquesa fullScreen={false} />
+                </Box>
+              ) : (
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 6 }}>
+                  {allCourses.map((entry, i) => (
+                    <Box
+                      key={`${entry.modalidad.nom}-${entry.curso.id}`}
+                      h="100%"
+                      opacity={cardsReveal.visible ? 1 : 0}
+                      transform={cardsReveal.visible ? "translateY(0)" : "translateY(24px)"}
+                      transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
+                    >
+                      <CourseCard entry={entry} />
+                    </Box>
+                  ))}
+                </SimpleGrid>
+              )}
+            </>
+          )}
         </Box>
       </Flex>
 

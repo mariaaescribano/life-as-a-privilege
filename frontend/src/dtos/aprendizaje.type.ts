@@ -14,6 +14,12 @@ export type Detalles = {
   bgColor:string;
 };
 
+/** Un ejercicio dentro de una lección de tipo 'test'. */
+export type Ejercicio =
+  | { tipo: "opcion"; enunciado: string; opciones: string[]; correcta: number }
+  | { tipo: "verdadero"; enunciado: string; correcta: boolean }
+  | { tipo: "relacionar"; enunciado: string; pares: { izquierda: string; derecha: string }[] };
+
 export type Submodulo = {
   id:string;
   cursoId: string;
@@ -28,9 +34,11 @@ export type Submodulo = {
   icon:any | null;
   floatingButton?: FloatingButtonConfig;
   /** Tipo de lección. Por defecto 'video' (compatibilidad con los cursos existentes). */
-  tipo?: "video" | "texto";
+  tipo?: "video" | "texto" | "test";
   /** Contenido en Markdown — solo para lecciones de tipo 'texto'. */
   contenido?: string;
+  /** Ejercicios — solo para lecciones de tipo 'test'. */
+  ejercicios?: Ejercicio[];
 };
 
 export type ModuloContenido = {

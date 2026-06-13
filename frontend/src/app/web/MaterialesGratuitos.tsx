@@ -43,7 +43,7 @@ export default function MaterialesGratuitos() {
     {
       titulo: "Vídeos",
       delay: 0.15,
-      link: "/aprendizaje/nuevosCursos",
+      link: "/aprendizaje/todosVideos",
       renderIcon: () => (
         <Box
           as="svg"
@@ -133,7 +133,7 @@ export default function MaterialesGratuitos() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Información introductoria y complementaria
+          Contenido creado y seleccionado por María
         </Text>
       </Flex>
 
