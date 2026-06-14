@@ -36,6 +36,7 @@ import MetodoAstrologiaSolAscLuna from "./app/metodo/MetodoAstrologiaSolAscLuna"
 import MetodoAstrologiaLectura from "./app/metodo/MetodoAstrologiaLectura";
 import MetodoAstrologiaCasas from "./app/metodo/MetodoAstrologiaCasas";
 import MetodoAstrologiaAspectos from "./app/metodo/MetodoAstrologiaAspectos";
+import MetodoAstrologiaLlamada from "./app/metodo/MetodoAstrologiaLlamada";
 import AdminHome from "./app/admin/AdminHome";
 import AdminUsuarios from "./app/admin/AdminUsuarios";
 import AdminAstrologiaEditor from "./app/admin/AdminAstrologiaEditor";
@@ -102,6 +103,7 @@ export default function App()
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
       <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} />
       <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/llamada" element={<PrivateRoute><MetodoAstrologiaLlamada /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
       <Route path="/admin" element={<PrivateRoute><AdminHome /></PrivateRoute>} />
       <Route path="/admin/cursos" element={<PrivateRoute><AdminCursos /></PrivateRoute>} />

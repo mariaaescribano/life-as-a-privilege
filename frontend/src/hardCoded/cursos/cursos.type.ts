@@ -11,6 +11,8 @@ export interface Curso {
   icon: ReactNode;
   cursoLink : string;
   modulos?: ModuloContenido[];
+  /** Fecha de creación (ISO). Se usa para ordenar los cursos más nuevos primero. */
+  createdAt?: string;
 }
 
 export interface ModalidadInfo {

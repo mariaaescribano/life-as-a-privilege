@@ -41,10 +41,11 @@ export const AprendizajeHome = () => {
   const { cursosData, loading } = useCursosData();
   const [detail, setDetail] = useState<CourseEntry | null>(null);
 
-  // Todos los cursos de todas las disciplinas, en una sola lista mezclada.
-  const allCourses: CourseEntry[] = Object.values(cursosData).flatMap((modalidad) =>
-    modalidad.cursos.map((curso) => ({ curso, modalidad })),
-  );
+  // Todos los cursos de todas las disciplinas, en una sola lista mezclada,
+  // ordenada por fecha de creación descendente (los más nuevos, primero).
+  const allCourses: CourseEntry[] = Object.values(cursosData)
+    .flatMap((modalidad) => modalidad.cursos.map((curso) => ({ curso, modalidad })))
+    .sort((a, b) => (b.curso.createdAt ?? "").localeCompare(a.curso.createdAt ?? ""));
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });

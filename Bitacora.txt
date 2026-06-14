@@ -3,12 +3,8 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-xxx cómo funciona --> qué obtendrás
-xxx cartas de el recorrido
-Meter bloques oscuros entre secciones. como se te ocurre q podemos hacer esto? crees q es buena idea?
-
-
-
+Poner fotos de cómo es cada disciplina + hacer mas peques los boxes de elr ecorrido popup
+Agendar llamada calendario al final de astro del recorrido
 
 
 

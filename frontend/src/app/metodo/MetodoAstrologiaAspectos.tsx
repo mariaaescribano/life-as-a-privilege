@@ -89,14 +89,9 @@ export default function MetodoAstrologiaAspectos() {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
-  const todosEscritos =
-    aspectos.length > 0 && aspectos.every((a) => (textos[aspectoKey(a)] ?? "").trim().length > 0);
-
   const headerNext = {
-    label: todosEscritos ? "Psicología →" : "Lectura de aspectos en proceso…",
-    onClick: () => navigate("/metodo/psicologia"),
-    disabled: true, // Psicología bloqueada hasta nueva orden
-    disabledTooltip: "Psicología estará disponible próximamente",
+    label: "Agendar llamada →",
+    onClick: () => navigate("/metodo/astrologia/llamada"),
   };
 
   const textoAbierto = abierto ? (textos[aspectoKey(abierto)] ?? "").trim() : "";

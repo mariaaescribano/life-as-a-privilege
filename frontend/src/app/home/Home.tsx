@@ -130,12 +130,12 @@ const Home = () => {
     }
   };
 
-  const radius       = useBreakpointValue({ base: 125, sm: 155, md: 220, lg: 280, xl: 320 });
-  const containerSize = useBreakpointValue({ base: "320px", sm: "400px", md: "560px", lg: "700px", xl: "800px" });
-  const centerSize    = useBreakpointValue({ base: "115px", sm: "140px", md: "180px", lg: "220px", xl: "260px" });
-  const circleSize    = useBreakpointValue({ base: "75px", sm: "89px", md: "108px", lg: "130px" });
-  const iconSize      = useBreakpointValue({ base: "38px", sm: "48px", md: "60px", lg: "72px" });
-  const numberSize    = useBreakpointValue({ base: "24px", sm: "28px", md: "32px", lg: "38px" });
+  const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
+  const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
+  const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
+  const circleSize    = useBreakpointValue({ base: "67px", sm: "79px", md: "96px", lg: "116px" });
+  const iconSize      = useBreakpointValue({ base: "34px", sm: "43px", md: "53px", lg: "64px" });
+  const numberSize    = useBreakpointValue({ base: "22px", sm: "25px", md: "29px", lg: "34px" });
   const mandalaScale  = useBreakpointValue({ base: "none", md: "scale(0.7)" });
 
   useEffect(() => {
@@ -266,11 +266,11 @@ const Home = () => {
               textAlign="center"
               lineHeight="1.15"
               textShadow="0 0 18px rgba(255,255,255,0.75), 0 0 38px rgba(255,255,255,0.45), 0 0 70px rgba(180,255,245,0.35)"
-              mb={3}
+              mb={{ base: 10, md: 8 }}
             >
-              Te damos la bienvenida{name ? `, ${name}` : ""}
+              Te damos la bienvenida al Recorrido{name ? `, ${name}` : ""}
             </Text>
-            <Text
+            {/* <Text
               color="rgba(255,255,255,0.92)"
               // En móvil: clamp() escala el tamaño según el ancho del viewport
               // para que la frase entre siempre en una sola línea, sea cual
@@ -285,7 +285,7 @@ const Home = () => {
               px={2}
             >
               Este es «El Recorrido» para empezar el camino de vuelta a ti.
-            </Text>
+            </Text> */}
 
             {/* Mandala */}
             <Box

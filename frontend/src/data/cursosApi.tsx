@@ -21,6 +21,7 @@ export interface CursoApi {
   publicado: boolean;
   orden: number;
   contenido: ModuloApi[];
+  created_at?: string;
 }
 
 function buildSubmodulo(modalidad: string, cursoId: string, det: Submodulo["detalles"], l: LeccionApi): Submodulo {
@@ -60,6 +61,7 @@ function buildCurso(row: CursoApi, disc: DisciplinaCurso): Curso {
     icon: <disc.Icon size={{ base: "40px", md: "48px" }} />,
     cursoLink: `/aprendizaje/modulosPage/${row.modalidad}/${row.id}`,
     modulos,
+    createdAt: row.created_at,
   };
 }
 
