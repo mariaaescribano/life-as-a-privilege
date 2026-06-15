@@ -7,13 +7,11 @@ import { BookCallModal } from "../../components/global/BookCallModal";
 import { WaitlistModal } from "../../components/global/WaitlistModal";
 import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import MandalaRecorrido from "../../components/global/MandalaRecorrido";
 import {
-  GraduationCap,
   BookOpen,
   Users,
-  PlayCircle,
   MessageCircle,
-  Network,
 } from "lucide-react";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -104,9 +102,9 @@ type Beneficio = {
 
 const beneficios: Beneficio[] = [
   {
-    icon: GraduationCap,
-    title: "Una disciplina completa",
-    text: "Accede a los cursos, vídeos y materiales de las disciplinas.",
+    icon: Users,
+    title: "Comunidad",
+    text: "Comparte dudas, descubrimientos y experiencias con otras personas del recorrido.",
   },
   {
     icon: BookOpen,
@@ -114,24 +112,9 @@ const beneficios: Beneficio[] = [
     text: "Libros, PDFs, investigaciones y recursos para profundizar más allá de las clases.",
   },
   {
-    icon: Users,
-    title: "Comunidad",
-    text: "Comparte dudas, descubrimientos y experiencias con otras personas del recorrido.",
-  },
-  {
-    icon: PlayCircle,
-    title: "Acompañamiento",
-    text: "Vídeos y contenidos periódicos para ayudarte a integrar lo aprendido.",
-  },
-  {
     icon: MessageCircle,
     title: "Sesiones individuales",
     text: "Posibilidad de reservar consultas privadas para profundizar en tu caso concreto.",
-  },
-  {
-    icon: Network,
-    title: "Un sistema coherente",
-    text: "Las disciplinas no están aisladas. Cada una aporta una perspectiva distinta sobre la misma persona.",
   },
 ];
 
@@ -208,8 +191,10 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
   const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : data.name;
   return (
     <Box
+      role="group"
       position="relative"
       mt="42px"
+      mb={{ base: 3, md: 5 }}
       pt="46px"
       pb={{ base: 5, md: 7 }}
       px={{ base: 3, md: 5 }}
@@ -217,13 +202,18 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
       borderRadius="2xl"
       opacity={parentVisible ? 1 : 0}
       transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-      transition={`opacity 0.65s ease ${delay}s, transform 0.65s ease ${delay}s`}
+      transition={`opacity 0.65s ease ${delay}s, transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease`}
       cursor="pointer"
       onClick={onClick}
       textAlign="center"
       display="flex"
       flexDirection="column"
       alignItems="center"
+      _hover={{
+        transform: "translateY(-6px)",
+        boxShadow: `0 12px 32px rgba(0,0,0,0.28), 0 0 30px ${data.txt}55`,
+        filter: "brightness(1.06)",
+      }}
     >
       {/* Fondo propio de la disciplina — capa absoluta clipeada al borderRadius
           del card, para no recortar el icono que sobresale arriba (top:-36px). */}
@@ -255,7 +245,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
       </Box>
 
       {/* Número + título */}
-      <Flex align="baseline" justify="center" gap={2} position="relative" zIndex={1}>
+      <Flex mb="10px" align="baseline" justify="center" gap={2} position="relative" zIndex={1}>
         <Text
           color={data.txt}
           fontWeight="700"
@@ -281,6 +271,36 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
           {displayName}
         </Text>
       </Flex>
+
+      {/* Flecha dinámica — invita a abrir la disciplina. Va en posición
+          absoluta dentro del espacio inferior que ya existe, así NO cambia
+          la altura de la tarjeta. Rebota de forma continua (dinámica) y se
+          enciende al pasar el ratón por la tarjeta. */}
+      <Box
+        position="absolute"
+        bottom={{ base: "8px", md: "12px" }}
+        right={{ base: "12px", md: "16px" }}
+        zIndex={1}
+        color={data.txt}
+        fontSize={{ base: "lg", md: "2xl" }}
+        lineHeight="1"
+        opacity={0.55}
+        pointerEvents="none"
+        textShadow={hasBg
+          ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
+          : `0 0 10px ${data.txt}66`}
+        transition="opacity 0.3s ease"
+        _groupHover={{ opacity: 1 }}
+        sx={{
+          "@keyframes metodoArrowBounce": {
+            "0%, 100%": { transform: "translateX(0)" },
+            "50%": { transform: "translateX(5px)" },
+          },
+          animation: "metodoArrowBounce 1.8s ease-in-out infinite",
+        }}
+      >
+        →
+      </Box>
     </Box>
   );
 }
@@ -291,6 +311,7 @@ export default function ElMetodo() {
   const cardsReveal = useReveal(0.04);
   const recibirasTitleReveal = useReveal(0.2);
   const recibirasGridReveal = useReveal(0.05);
+  const creadoraReveal = useReveal(0.12);
   const botonesReveal = useReveal(0.1);
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
@@ -420,7 +441,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          Un recorrido guiado por ocho disciplinas que observan al ser humano desde perspectivas diferentes. No es acumular ideas sueltas. Cada paso añade coherencia.
+          No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes pero complementarias. Cada disciplina aporta una pieza distinta hasta formar una comprensión más profunda y coherente de quién eres.
         </Text>
       
       </Flex>
@@ -442,7 +463,24 @@ export default function ElMetodo() {
           transform={disciplinasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         />
+
+        <Text
+          color="rgba(255,255,255,0.9)"
+          fontSize={{ base: "sm", md: "lg" }}
+          fontStyle="italic"
+          textAlign="center"
+          letterSpacing="0.02em"
+          lineHeight="1.6"
+          maxW={{ base: "100%", md: "640px" }}
+          textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
+          opacity={disciplinasTitleReveal.visible ? 1 : 0}
+          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(10px)"}
+          transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
+        >
+          Cada disciplina observa una parte distinta del ser humano. Haz clic para explorarlas.
+        </Text>
       </Flex>
+      
 
       {/* ── CARDS DE MODALIDADES ── */}
       <Box
@@ -521,7 +559,7 @@ export default function ElMetodo() {
               transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
               transition="opacity 0.8s ease, transform 0.8s ease"
             >
-              Qué recibirás
+              Así es El Recorrido por dentro
             </Text>
             <Text
               color="rgba(255,255,255,0.88)"
@@ -536,16 +574,140 @@ export default function ElMetodo() {
               transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
               transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
             >
-              Todo lo necesario para comprender cada disciplina y aplicarla a tu vida.
+              Todo lo necesario para comprenderte desde cada disciplina. Haz click.
             </Text>
           </Flex>
 
-          {/* Cuadrícula de tarjetas */}
+          {/* Mandala interactivo */}
+          <Box mt={{ base: 2, md: 4 }}>
+            <MandalaRecorrido />
+          </Box>
+
+          {/* ── LA CREADORA ── */}
+          {/* Separador con mandala en medio (mismo estilo y separación que el
+              de "Así es El Recorrido por dentro", para mantener coherencia). */}
+          <Flex
+            align="center"
+            justify="center"
+            gap={{ base: 4, md: 6 }}
+            mt={{ base: 10, md: 14 }}
+            mb={{ base: 10, md: 14 }}
+            opacity={creadoraReveal.visible ? 1 : 0}
+            transform={creadoraReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
+            transition="opacity 0.8s ease, transform 0.8s ease"
+          >
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+            />
+            <Image
+              src="/img/icono/life.png"
+              alt=""
+              h={{ base: "26px", md: "34px" }}
+              objectFit="contain"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+            />
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+            />
+          </Flex>
+
+          <Flex
+            ref={creadoraReveal.ref}
+            direction="column"
+            align="center"
+            textAlign="center"
+            gap={{ base: 5, md: 7 }}
+          >
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "3xl", md: "5xl" }}
+              letterSpacing="0.04em"
+              lineHeight="1.2"
+              textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
+              opacity={creadoraReveal.visible ? 1 : 0}
+              transform={creadoraReveal.visible ? "translateY(0)" : "translateY(20px)"}
+              transition="opacity 0.8s ease, transform 0.8s ease"
+            >
+              La creadora: María Escribano
+            </Text>
+
+            {/* Foto */}
+            <Box
+              maxW={{ base: "234px", md: "306px" }}
+              borderRadius="2xl"
+              overflow="hidden"
+              boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
+              opacity={creadoraReveal.visible ? 1 : 0}
+              transform={creadoraReveal.visible ? "scale(1)" : "scale(0.85)"}
+              transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
+            >
+              <Image
+                src="/img/me/me.png"
+                alt="María Escribano"
+                w="100%"
+                h="auto"
+                display="block"
+              />
+            </Box>
+
+            {/* Bio */}
+            <Text
+              color="rgba(255,255,255,0.92)"
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "sm", md: "lg" }}
+              lineHeight="1.9"
+              letterSpacing="0.02em"
+              textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
+              maxW={{ base: "100%", md: "70%" }}
+              opacity={creadoraReveal.visible ? 1 : 0}
+              transform={creadoraReveal.visible ? "translateY(0)" : "translateY(24px)"}
+              transition="opacity 0.7s ease 0.45s, transform 0.7s ease 0.45s"
+            >
+              Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
+            </Text>
+          </Flex>
+
+          {/* ── Separador con mandala en medio ── */}
+          <Flex
+            align="center"
+            justify="center"
+            gap={{ base: 4, md: 6 }}
+            mt={{ base: 16, md: 24 }}
+            mb={{ base: 10, md: 14 }}
+          >
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+            />
+            <Image
+              src="/img/icono/life.png"
+              alt=""
+              h={{ base: "26px", md: "34px" }}
+              objectFit="contain"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+            />
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+            />
+          </Flex>
+
+          {/* Cuadrícula de cajas */}
           <Grid
             ref={recibirasGridReveal.ref}
             templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
             gap={{ base: 5, md: 7 }}
-            mt={{ base: 10, md: 14 }}
+            mt={{ base: 4, md: 6 }}
           >
             {beneficios.map((b, i) => {
               const Icon = b.icon;
@@ -957,7 +1119,7 @@ export default function ElMetodo() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bg="rgba(0,0,0,0.6)"
+          bg="rgba(0,0,0,0.85)"
           sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
           onClick={() => setSelectedCard(null)}
           px={{ base: 5, md: 10 }}
@@ -968,8 +1130,8 @@ export default function ElMetodo() {
             border={`1.5px solid ${selectedCard.txt}66`}
             sx={{ backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)" }}
             borderRadius="3xl"
-            boxShadow={`0 12px 60px rgba(0,0,0,0.55), 0 0 0 1px ${selectedCard.txt}33, 0 0 80px ${selectedCard.txt}22`}
-            maxW={{ base: "100%", md: "880px" }}
+            boxShadow={`0 0 0 1px ${selectedCard.txt}55, 0 0 45px ${selectedCard.txt}66, 0 0 90px ${selectedCard.txt}33, 0 22px 70px rgba(0,0,0,0.6)`}
+            maxW={{ base: "100%", md: "700px" }}
             w="100%"
             maxH="92vh"
             position="relative"

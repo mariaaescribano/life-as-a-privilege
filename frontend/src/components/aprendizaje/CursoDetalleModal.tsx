@@ -41,8 +41,8 @@ function PopupTitle({ text, color, tShadow }: { text: string; color: string; tSh
       lineHeight="1.25"
       textAlign="center"
       whiteSpace="nowrap"
-      mt={{ base: "22px", md: "34px" }}
-      mb={4}
+      mt={{ base: "22px", md: "14px" }}
+      mb={{ base: 4, md: 3 }}
       style={{ textShadow: tShadow }}
     >
       {text}
@@ -95,7 +95,7 @@ export function CursoDetalleModal({
         {hasDisciplinaBg(nom) && <DisciplinaBgLayer nom={nom} borderRadius="2xl" />}
 
         <ModalCloseButton color={color} top={4} right={4} zIndex={2} />
-        <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 11 }}>
+        <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 7 }}>
           {curso && (() => {
             const nLecciones =
               curso.modulos?.reduce((a, m) => a + m.submodules.length, 0) ??
@@ -111,14 +111,14 @@ export function CursoDetalleModal({
                 <PopupTitle text={curso.titulo} color={color} tShadow={tShadow} />
 
                 {/* Raya horizontal de separación */}
-                <Box h="2px" mb={6} borderRadius="full" opacity={0.75}
+                <Box h="2px" mb={{ base: 6, md: 4 }} borderRadius="full" opacity={0.75}
                      bgGradient={`linear(to-r, transparent, ${color}, transparent)`} />
 
                 {/* Foto del curso (16:9) */}
                 <Box
                   borderRadius="xl"
                   overflow="hidden"
-                  mb={6}
+                  mb={{ base: 6, md: 4 }}
                   w="100%"
                   sx={{ aspectRatio: "16 / 9" }}
                   border={`1px solid ${color}44`}
@@ -129,11 +129,11 @@ export function CursoDetalleModal({
                 {/* Descripción */}
                 <Text
                   color={color}
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight="1.85"
+                  fontSize={{ base: "md", md: "md" }}
+                  lineHeight={{ base: "1.85", md: "1.7" }}
                   letterSpacing="0.02em"
                   textAlign="center"
-                  mb={6}
+                  mb={{ base: 6, md: 4 }}
                   opacity={0.95}
                   style={{ textShadow: tShadow }}
                 >
@@ -141,7 +141,7 @@ export function CursoDetalleModal({
                 </Text>
 
                 {/* N lecciones — desplegable con módulos y submódulos */}
-                <Box mb={6}>
+                <Box mb={{ base: 6, md: 4 }}>
                   <Flex
                     as="button"
                     w="100%"
@@ -205,7 +205,7 @@ export function CursoDetalleModal({
                   align="center"
                   justify="space-between"
                   pt={2}
-                  mb={{ base: 4, md: 7 }}
+                  mb={{ base: 4, md: 1 }}
                   gap={4}
                   flexWrap="wrap"
                 >

@@ -803,7 +803,8 @@ const Welcome = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bg="rgba(0,0,0,0.6)"
+          bg="rgba(0,0,0,0.85)"
+          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
           onClick={() => setSelected(null)}
           px={{ base: 5, md: 10 }}
         >
@@ -812,7 +813,7 @@ const Welcome = () => {
             bg={hasDisciplinaBg(selected.name) ? "transparent" : selected.bg + "e8"}
             border={`1.5px solid ${selected.txt}55`}
             borderRadius="2xl"
-            boxShadow={`0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px ${selected.txt}22`}
+            boxShadow={`0 0 0 1px ${selected.txt}55, 0 0 45px ${selected.txt}66, 0 0 90px ${selected.txt}33, 0 22px 70px rgba(0,0,0,0.6)`}
             maxW="560px"
             w="100%"
             maxH="92vh"

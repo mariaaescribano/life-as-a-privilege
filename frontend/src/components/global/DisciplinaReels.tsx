@@ -216,23 +216,22 @@ function ReelCard({
           </Text>
         )}
 
-        {/* Ver vídeo → */}
-        <Flex
-          align="center"
-          justify="center"
-          gap={1.5}
-          mt="auto"
-          pt={1}
-          color={color}
-          fontSize={{ base: "xs", md: "sm" }}
-          fontStyle="italic"
-          letterSpacing="0.06em"
-          transition="gap 0.22s ease"
-          style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}
-          _groupHover={{ gap: 2.5 }}
-        >
-          <Text as="span">Ver vídeo</Text>
-          <ArrowIcon />
+        {/* Flecha abajo a la derecha */}
+        <Flex mt="auto" pt={1} justify="flex-end">
+          <Flex
+            align="center"
+            justify="center"
+            w={{ base: "26px", md: "30px" }}
+            h={{ base: "26px", md: "30px" }}
+            borderRadius="full"
+            color={color}
+            bg={`${color}1f`}
+            border={`1px solid ${color}55`}
+            transition="all 0.22s ease"
+            _groupHover={{ bg: `${color}33`, transform: "translateX(2px)" }}
+          >
+            <ArrowIcon />
+          </Flex>
         </Flex>
       </Flex>
     </Box>
@@ -454,7 +453,7 @@ export function TodosLosReels() {
 
   return (
     <Box w="100%" fontFamily="'EB Garamond', serif">
-      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
+      <SimpleGrid columns={{ base: 2, md: 5 }} spacing={{ base: 4, md: 5 }}>
         {items.map(({ reel, meta }) => (
           <ReelCard
             key={reel.id}

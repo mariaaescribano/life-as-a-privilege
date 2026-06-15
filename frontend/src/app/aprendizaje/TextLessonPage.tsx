@@ -98,7 +98,22 @@ export default function TextLessonPage() {
             color={color}
             nom={disciplinaNom}
             compact
-            prev={{ label: "← Volver al curso", onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`) }}
+            prev={{
+              label: "←",
+              onClick: () => anterior && navigate(anterior.link),
+              disabled: !anterior,
+              disabledTooltip: "Es la primera lección",
+            }}
+            extra={{
+              label: "Volver al curso",
+              onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`),
+            }}
+            next={{
+              label: "→",
+              onClick: () => siguiente && navigate(siguiente.link),
+              disabled: !siguiente,
+              disabledTooltip: "Es la última lección",
+            }}
           />
 
           {/* Vídeo (16:9) o artículo de texto */}

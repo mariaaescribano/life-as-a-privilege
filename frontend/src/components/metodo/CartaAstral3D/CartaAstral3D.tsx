@@ -263,6 +263,9 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           aspectRatio: "1 / 1",
           borderRadius: "9999px",
           overflow: "hidden",
+          // Interior 15% más oscuro que el fondo (capa negra al 15% sobre el SpaceBg,
+          // visible por la transparencia del Canvas).
+          background: "rgba(0,0,0,0.15)",
           boxShadow: `0 0 40px ${color}33, 0 0 80px ${color}22, inset 0 0 60px rgba(255,255,255,0.05)`,
           border: `1px solid ${color}55`,
         }}

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Flex, Text, Image, SimpleGrid,
+  Box, Flex, Text, SimpleGrid,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
-import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { CursoDetalleModal } from "../../components/aprendizaje/CursoDetalleModal";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { HinduismoIlustracionesModal } from "../../components/metodo/HinduismoIlustracionesModal";
 import { TCMIlustracionesModal } from "../../components/metodo/TCMIlustracionesModal";
@@ -16,7 +15,7 @@ import { ContactModal } from "../../components/global/ContactModal";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCursosData } from "../../data/cursosApi";
-import type { Curso, ModalidadInfo } from "../../hardCoded/cursos";
+import type { ModalidadInfo } from "../../hardCoded/cursos";
 import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
 
 
@@ -78,102 +77,6 @@ const CalcularIcon = ({ size = "16px" }: { size?: string } = {}) => (
 );
 
 // ────────────────────────────────
-// CURSO CARD
-// ────────────────────────────────
-interface CursoCardProps {
-  curso: Curso;
-  bgColor: string;
-  color: string;
-  disciplina: string;
-  onVerDetalle: () => void;
-}
-
-function CursoCard({ curso, bgColor, color, disciplina, onVerDetalle }: CursoCardProps) {
-  const label = curso.precio === null ? "Gratis" : `${curso.precio.toFixed(2).replace(".", ",")} €`;
-  const esPago = curso.precio !== null;
-  const tShadow = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 20px ${bgColor}`;
-
-  return (
-    <Flex
-      direction="column"
-      position="relative"
-      w="100%"
-      h="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      cursor="pointer"
-      onClick={onVerDetalle}
-      bg={bgColor}
-      boxShadow={`0 0 18px rgba(255,255,255,0.15), 0 0 42px rgba(180,255,245,0.1), 0 0 24px ${color}40, 0 0 60px ${color}22`}
-      transition="transform 0.25s ease, box-shadow 0.25s ease"
-      _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 28px rgba(255,255,255,0.22), 0 0 65px rgba(180,255,245,0.16), 0 0 38px ${color}66, 0 0 90px ${color}33` }}
-    >
-      {/* Fondo propio de la disciplina (con su color real, sin velo) */}
-      {hasDisciplinaBg(disciplina) && (
-        <DisciplinaBgLayer nom={disciplina} borderRadius="2xl" />
-      )}
-
-      {/* Contenido */}
-      <Flex direction="column" position="relative" zIndex={1} h="100%" p={{ base: 7, md: 8 }} gap={{ base: 3, md: 3 }}>
-        {/* Título */}
-        <Text
-          color={color}
-          fontSize={{ base: "lg", md: "xl" }}
-          fontWeight="700"
-          letterSpacing="0.03em"
-          lineHeight="1.2"
-          noOfLines={1}
-          style={{ textShadow: tShadow }}
-        >
-          {curso.titulo}
-        </Text>
-
-        {/* Foto del curso (16:9, con margen) */}
-        <Box
-          borderRadius="lg"
-          overflow="hidden"
-          w="100%"
-          sx={{ aspectRatio: "16 / 9" }}
-          border={`1px solid ${color}44`}
-        >
-          <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block" />
-        </Box>
-
-        {/* Precio (izquierda) + botón (derecha) */}
-        <Flex align="center" justify="space-between" gap={3} mt="auto">
-          <Text
-            color={color}
-            fontSize={{ base: "lg", md: "xl" }}
-            fontWeight="700"
-            lineHeight="1"
-            style={{ textShadow: tShadow }}
-          >
-            {label}
-          </Text>
-          <Box
-            as="span"
-            color={bgColor}
-            bg={color}
-            fontWeight="700"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.06em"
-            px={{ base: 4, md: 5 }}
-            py="8px"
-            borderRadius="full"
-            flexShrink={0}
-            boxShadow={`0 3px 14px ${color}66`}
-          >
-            {esPago ? "Saber más →" : "Acceder →"}
-          </Box>
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-}
-
-// Título del popup: centrado si cabe en una línea; alineado a la izquierda si
-// es largo y se parte en varias líneas.
-// ────────────────────────────────
 // PÁGINA PRINCIPAL
 // ────────────────────────────────
 export default function CursosModalidad() {
@@ -190,7 +93,6 @@ export default function CursosModalidad() {
   const modalidad: ModalidadInfo | null =
     fromData ?? (fallback ? { ...fallback, cursos: [] } : null);
 
-  const [detailCurso, setDetailCurso] = useState<Curso | null>(null);
   const [saberMasOpen, setSaberMasOpen] = useState(false);
   const [ilustracionesHinduismoOpen, setIlustracionesHinduismoOpen] = useState(false);
   const [ilustracionesAstroOpen, setIlustracionesAstroOpen] = useState(false);
@@ -261,6 +163,10 @@ export default function CursosModalidad() {
     );
   }
 
+  // Cursos ordenados por fecha de publicación: los más recientes, primero.
+  const cursos = [...modalidad.cursos].sort(
+    (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+  );
 
   return (
     <Box
@@ -335,8 +241,8 @@ export default function CursosModalidad() {
             </Flex>
           )} */}
 
-          {modalidad.cursos.length > 0 ? (
-            modalidad.cursos.length === 1 ? (
+          {cursos.length > 0 ? (
+            cursos.length === 1 ? (
               // Un solo curso: lo centramos en vez de dejarlo pegado a la izquierda.
               <Flex
                 w="100%"
@@ -351,28 +257,28 @@ export default function CursosModalidad() {
               >
                 <Box
                   w="100%"
-                  maxW="413px"
+                  maxW="520px"
                   h="100%"
                   style={{
                     opacity: 0,
                     animation: "cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) 0s forwards",
                   }}
                 >
-                  <CursoCard
-                    curso={modalidad.cursos[0]}
+                  <CursoCardDetalle
+                    curso={cursos[0]}
                     bgColor={modalidad.bgColor}
                     color={modalidad.color}
-                    disciplina={modalidad.nom}
-                    onVerDetalle={() => setDetailCurso(modalidad.cursos[0])}
+                    nom={modalidad.nom}
                   />
                 </Box>
               </Flex>
             ) : (
               <SimpleGrid
                 w="100%"
-                maxW="850px"
+                maxW="980px"
                 columns={{ base: 1, md: 2 }}
                 spacing={{ base: 5, md: 6 }}
+                alignItems="start"
                 sx={{
                   "@keyframes cursoCardIn": {
                     from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
@@ -380,7 +286,7 @@ export default function CursosModalidad() {
                   },
                 }}
               >
-                {modalidad.cursos.map((curso, i) => (
+                {cursos.map((curso, i) => (
                   <Box
                     key={curso.id}
                     h="100%"
@@ -389,12 +295,11 @@ export default function CursosModalidad() {
                       animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
                     }}
                   >
-                    <CursoCard
+                    <CursoCardDetalle
                       curso={curso}
                       bgColor={modalidad.bgColor}
                       color={modalidad.color}
-                      disciplina={modalidad.nom}
-                      onVerDetalle={() => setDetailCurso(curso)}
+                      nom={modalidad.nom}
                     />
                   </Box>
                 ))}
@@ -420,15 +325,6 @@ export default function CursosModalidad() {
         color={modalidad.color}
         emailSubject={`Quiero saber más — ${modalidad.nom}`}
         showDescription
-      />
-
-      {/* ── MODAL DETALLE DEL CURSO ── */}
-      <CursoDetalleModal
-        curso={detailCurso}
-        color={modalidad.color}
-        bgColor={modalidad.bgColor}
-        nom={modalidad.nom}
-        onClose={() => setDetailCurso(null)}
       />
 
       {/* ── MODAL ILUSTRACIONES ASTROLOGÍA ── */}
