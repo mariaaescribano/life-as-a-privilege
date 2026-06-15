@@ -107,6 +107,23 @@ const QuienSoy = () => {
         pt={{ base: 14, md: 18 }}
         gap={{ base: 6, md: 7 }}
       >
+        {/* Nombre — título de la página (estilo coherente con "Materiales") */}
+        <Text
+          color="white"
+          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+          fontWeight="700"
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.1em"
+          lineHeight="1.1"
+          textTransform="uppercase"
+          textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(20px)"}
+          transition="opacity 0.85s ease 0.1s, transform 0.85s ease 0.1s"
+        >
+          María Escribano
+        </Text>
+
         {/* Foto */}
         <Box
           maxW={{ base: "260px", md: "340px" }}
@@ -115,7 +132,7 @@ const QuienSoy = () => {
           boxShadow="0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(255,255,255,0.28), 0 0 60px rgba(180,255,245,0.22)"
           opacity={presentacionReveal.visible ? 1 : 0}
           transform={presentacionReveal.visible ? "scale(1)" : "scale(0.85)"}
-          transition="opacity 0.85s ease, transform 0.85s ease"
+          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
           <Image
             src="/img/me/me.png"
@@ -125,22 +142,6 @@ const QuienSoy = () => {
             display="block"
           />
         </Box>
-
-        {/* Nombre */}
-        <Text
-          color="white"
-          fontSize={{ base: "3xl", md: "5xl" }}
-          fontWeight="700"
-          fontFamily="'EB Garamond', serif"
-          letterSpacing="0.04em"
-          lineHeight="1.2"
-          textShadow="0 0 14px rgba(255,255,255,0.49), 0 0 30px rgba(255,255,255,0.26), 0 0 60px rgba(180,255,245,0.22)"
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
-        >
-          María Escribano
-        </Text>
 
         {/* Bio */}
         <Text
@@ -157,7 +158,7 @@ const QuienSoy = () => {
         >
           Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
         </Text>
-        
+
         <Text
           color="rgba(255,255,255,0.92)"
           fontSize={{ base: "md", md: "xl" }}
@@ -173,7 +174,7 @@ const QuienSoy = () => {
           Mi propósito es profundizar en la naturaleza humana, usando psicología, filosofía, ciencias biológicas y conocimientos tradicionales para ello.
         </Text>
 
-     
+
         {/* Botón Contactar */}
         <Flex
           align="center"
@@ -229,7 +230,7 @@ const QuienSoy = () => {
       </Flex>
 
       {/* ── SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 16, md: 20 }}>
+      <Flex justify="center" pt={{ base: 10, md: 12 }}>
         <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
       </Flex>
 
@@ -240,7 +241,7 @@ const QuienSoy = () => {
         align="center"
         textAlign="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 16, md: 20 }}
+        pt={{ base: 10, md: 12 }}
         gap={{ base: 5, md: 6 }}
       >
         {/* Icono corazón */}
@@ -330,15 +331,8 @@ const QuienSoy = () => {
         </Text>
       </Flex>
 
-      {/* ── TESTIMONIO ── */}
-      <Flex
-        ref={testimonioReveal.ref}
-        direction="column"
-        align="center"
-        pt={{ base: 16, md: 20 }}
-        gap={{ base: 5, md: 6 }}
-        px={{ base: 5, md: 10, lg: 16 }}
-      >
+      {/* ── SEPARADOR (línea centrada en el hueco) ── */}
+      <Flex ref={testimonioReveal.ref} justify="center" py={{ base: 10, md: 12 }}>
         <Box
           w="100%"
           maxW="500px"
@@ -348,8 +342,16 @@ const QuienSoy = () => {
           transform={testimonioReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         />
+      </Flex>
 
-        <Box
+      {/* ── TESTIMONIO ── */}
+      <Flex
+        direction="column"
+        align="center"
+        gap={{ base: 5, md: 6 }}
+        px={{ base: 5, md: 10, lg: 16 }}
+      >
+        {/* <Box
           as="svg"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 -960 960 960"
@@ -362,7 +364,7 @@ const QuienSoy = () => {
           transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
         >
           <path d="M580-360q42 0 71-29t29-71v-200H520v200h80q0 17-11.5 28.5T560-420h-20v60h40Zm-240 0q42 0 71-29t29-71v-200H280v200h80q0 17-11.5 28.5T320-420h-20v60h40ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z" />
-        </Box>
+        </Box> */}
 
         <Text
           color="white"
@@ -378,7 +380,7 @@ const QuienSoy = () => {
           transform={testimonioReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Brillante, colaboradora, productiva y ética. No podría recomendarla lo suficiente.
+          "Brillante, colaboradora, productiva y ética. No podría recomendarla lo suficiente."
         </Text>
 
         <Flex
@@ -450,14 +452,8 @@ const QuienSoy = () => {
         </Flex>
       </Flex>
 
-      {/* ── SEPARADOR + TÍTULO CERTIFICADOS ── */}
-      <Flex
-        ref={certifTitleReveal.ref}
-        direction="column"
-        align="center"
-        pt={{ base: 16, md: 20 }}
-        gap={{ base: 7, md: 10 }}
-      >
+      {/* ── SEPARADOR (línea centrada en el hueco) ── */}
+      <Flex ref={certifTitleReveal.ref} justify="center" py={{ base: 8, md: 10 }}>
         <Box
           w="100%"
           maxW="500px"
@@ -467,6 +463,13 @@ const QuienSoy = () => {
           transform={certifTitleReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         />
+      </Flex>
+
+      {/* ── TÍTULO CERTIFICADOS ── */}
+      <Flex
+        direction="column"
+        align="center"
+      >
         <Flex
           align="center"
           gap={3}
@@ -532,7 +535,8 @@ const QuienSoy = () => {
 
       {/* ── SEPARADOR ── */}
       <Flex justify="center" mb="10px" pt={{ base: 16, md: 20 }}>
-        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+        {/* <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.15)" />
+       */}
       </Flex>
 
       {/* ── CIERRE ── */}

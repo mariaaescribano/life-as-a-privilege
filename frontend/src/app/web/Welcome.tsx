@@ -5,6 +5,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import OpinionesSection from "../../components/welcome/OpinionesSection";
+import CreadoraCard from "../../components/welcome/CreadoraCard";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -162,7 +163,6 @@ const Welcome = () => {
   const [selected, setSelected] = useState<Discipline | null>(null);
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
-  const presentacionReveal = useReveal();
   const disciplinasTitleReveal = useReveal(0.2);
   const disciplinasReveal = useReveal(0.05);
   const [mounted, setMounted] = useState(false);
@@ -487,121 +487,7 @@ const Welcome = () => {
       </Flex>
 
       {/* ── PRESENTACIÓN (creadora) ── */}
-      <Flex
-        ref={presentacionReveal.ref}
-        direction="column"
-        align="center"
-        textAlign="center"
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 10, md: 14 }}
-        gap={{ base: 5, md: 7 }}
-      >
-        {/* Foto */}
-        <Box
-          maxW={{ base: "234px", md: "306px" }}
-          borderRadius="2xl"
-          overflow="hidden"
-          boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "scale(1)" : "scale(0.85)"}
-          transition="opacity 0.8s ease, transform 0.8s ease"
-        >
-          <Image
-            src="/img/me/me.png"
-            alt="María Escribano"
-            w="100%"
-            h="auto"
-            display="block"
-          />
-        </Box>
-
-        {/* Nombre */}
-        <Text
-          color="white"
-          fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
-          fontWeight="700"
-          fontFamily="'EB Garamond', serif"
-          letterSpacing="0.04em"
-          lineHeight="1.2"
-          textShadow="0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)"
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(22px)"}
-          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
-        >
-          María Escribano
-        </Text>
-
-        {/* Descripción */}
-        <Text
-          color="rgba(255,255,255,0.92)"
-          fontSize={{ base: "sm", md: "lg" }}
-          fontFamily="'EB Garamond', serif"
-          lineHeight="1.9"
-          letterSpacing="0.02em"
-          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
-          maxW={{ base: "100%", md: "70%" }}
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
-        >
-          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
-        </Text>
-
-        {/* Botón Conoce más — acción SECUNDARIA: más pequeño, sutil y cercano
-            a María (menos peso visual que el CTA "El Recorrido"). */}
-        <Flex
-          align="center"
-          gap={3}
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.7s ease 0.75s, transform 0.7s ease 0.75s"
-          mt={{ base: -1, md: -2 }}
-        >
-          <Box
-            h="1px"
-            w={{ base: "14px", md: "44px" }}
-            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.45))"
-          />
-          <Flex
-            as="button"
-            onClick={() => navigate("/quienSoy")}
-            align="center"
-            gap={2}
-            color="rgba(255,255,255,0.85)"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="500"
-            fontSize={{ base: "xs", md: "sm" }}
-            letterSpacing={{ base: "0.08em", md: "0.14em" }}
-            textTransform="uppercase"
-            whiteSpace="nowrap"
-            px={{ base: 3, md: 6 }}
-            py={{ base: "7px", md: "9px" }}
-            flexShrink={0}
-            borderRadius="full"
-            border="1px solid rgba(255,255,255,0.35)"
-            bg="rgba(255,255,255,0.05)"
-            cursor="pointer"
-            boxShadow="0 0 12px rgba(255,255,255,0.2), 0 0 24px rgba(180,255,245,0.16), 0 2px 10px rgba(0,0,0,0.16)"
-            _hover={{
-              bg: "rgba(255,255,255,0.12)",
-              borderColor: "rgba(255,255,255,0.6)",
-              color: "white",
-              boxShadow: "0 0 16px rgba(255,255,255,0.3), 0 0 32px rgba(180,255,245,0.26), 0 2px 12px rgba(0,0,0,0.18)",
-            }}
-            transition="all 0.25s ease"
-          >
-            Conocer a la creadora
-            <Box as="span" fontSize={{ base: "sm", md: "md" }}>
-              →
-            </Box>
-          </Flex>
-          <Box
-            h="1px"
-            w={{ base: "14px", md: "44px" }}
-            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.45))"
-          />
-        </Flex>
-      </Flex>
+      <CreadoraCard />
 
       {/* ── SEPARADOR DE ZONAS ── */}
       {/* <Flex justify="center" pt={{ base: 12, md: 16 }}>

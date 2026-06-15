@@ -23,14 +23,14 @@ const VINETAS: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta2.png",
     paragraphs: [
       "Un día, lo infinito quiso saber qué se siente al recibir amor.",
-      "Para poder sentirlo, tuvo que hacerse dos. La Cábala lo llama Tzimtzum: la primera contracción, el momento en que lo ilimitado se puso un límite.",
+      "Para poder sentirlo, tuvo que manifestarse en dos.",
     ],
   },
   {
     src: "/viñetas/comicInicio/viñeta3.png",
     paragraphs: [
       "Así nacieron la vasija que sostiene y la luz que se entrega.",
-      "Yang, Or: el portador y dador de luz. Yin, Kli: la energía que recibe, contiene y transforma para crear.",
+      "Yang, Purusha, Or: el portador y dador de luz. Yin, Prakriti, Kli: la energía que recibe, contiene y transforma para crear.",
     ],
   },
   {

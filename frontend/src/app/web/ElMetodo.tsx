@@ -8,6 +8,8 @@ import { WaitlistModal } from "../../components/global/WaitlistModal";
 import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import MandalaRecorrido from "../../components/global/MandalaRecorrido";
+import ExperienciasReales from "../../components/welcome/ExperienciasReales";
+import CreadoraCard from "../../components/welcome/CreadoraCard";
 import {
   BookOpen,
   Users,
@@ -587,6 +589,7 @@ export default function ElMetodo() {
           {/* Separador con mandala en medio (mismo estilo y separación que el
               de "Así es El Recorrido por dentro", para mantener coherencia). */}
           <Flex
+            ref={creadoraReveal.ref}
             align="center"
             justify="center"
             gap={{ base: 4, md: 6 }}
@@ -616,63 +619,8 @@ export default function ElMetodo() {
             />
           </Flex>
 
-          <Flex
-            ref={creadoraReveal.ref}
-            direction="column"
-            align="center"
-            textAlign="center"
-            gap={{ base: 5, md: 7 }}
-          >
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "3xl", md: "5xl" }}
-              letterSpacing="0.04em"
-              lineHeight="1.2"
-              textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
-              opacity={creadoraReveal.visible ? 1 : 0}
-              transform={creadoraReveal.visible ? "translateY(0)" : "translateY(20px)"}
-              transition="opacity 0.8s ease, transform 0.8s ease"
-            >
-              La creadora: María Escribano
-            </Text>
-
-            {/* Foto */}
-            <Box
-              maxW={{ base: "234px", md: "306px" }}
-              borderRadius="2xl"
-              overflow="hidden"
-              boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
-              opacity={creadoraReveal.visible ? 1 : 0}
-              transform={creadoraReveal.visible ? "scale(1)" : "scale(0.85)"}
-              transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
-            >
-              <Image
-                src="/img/me/me.png"
-                alt="María Escribano"
-                w="100%"
-                h="auto"
-                display="block"
-              />
-            </Box>
-
-            {/* Bio */}
-            <Text
-              color="rgba(255,255,255,0.92)"
-              fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "sm", md: "lg" }}
-              lineHeight="1.9"
-              letterSpacing="0.02em"
-              textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
-              maxW={{ base: "100%", md: "70%" }}
-              opacity={creadoraReveal.visible ? 1 : 0}
-              transform={creadoraReveal.visible ? "translateY(0)" : "translateY(24px)"}
-              transition="opacity 0.7s ease 0.45s, transform 0.7s ease 0.45s"
-            >
-              Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
-            </Text>
-          </Flex>
+          {/* Tarjeta de la creadora (componente compartido con Welcome) */}
+          <CreadoraCard />
 
           {/* ── Separador con mandala en medio ── */}
           <Flex
@@ -771,6 +719,37 @@ export default function ElMetodo() {
               );
             })}
           </Grid>
+
+          {/* ── Separador con mandala (entre los boxes y las experiencias) ── */}
+          <Flex
+            align="center"
+            justify="center"
+            gap={{ base: 4, md: 6 }}
+            mt={{ base: 16, md: 24 }}
+            mb={{ base: 12, md: 16 }}
+          >
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+            />
+            <Image
+              src="/img/icono/life.png"
+              alt=""
+              h={{ base: "26px", md: "34px" }}
+              objectFit="contain"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+            />
+            <Box
+              h="1px"
+              w={{ base: "60px", md: "150px" }}
+              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+            />
+          </Flex>
+
+          {/* ── EXPERIENCIAS REALES (testimonios) ── */}
+          <ExperienciasReales />
 
           {/* Separador (mismo estilo que el de las disciplinas) */}
           {/* <Flex justify="center" mt={{ base: 16, md: 20 }}>
