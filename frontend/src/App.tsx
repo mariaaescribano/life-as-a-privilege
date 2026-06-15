@@ -44,7 +44,10 @@ import AdminEditorPlaceholder from "./app/admin/AdminEditorPlaceholder";
 import AdminCursos from "./app/admin/AdminCursos";
 import AdminCursoEditor from "./app/admin/AdminCursoEditor";
 import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
-import MetodoPsicologiaEtapa from "./app/metodo/MetodoPsicologiaEtapa";
+import MetodoPsicologiaExperiencia from "./app/metodo/MetodoPsicologiaExperiencia";
+import MetodoPsicologiaHuellas from "./app/metodo/MetodoPsicologiaHuellas";
+import MetodoPsicologiaNudos from "./app/metodo/MetodoPsicologiaNudos";
+import MetodoPsicologiaIntegracion from "./app/metodo/MetodoPsicologiaIntegracion";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -112,7 +115,10 @@ export default function App()
       <Route path="/admin/:disciplina/:userId" element={<PrivateRoute><AdminEditorPlaceholder /></PrivateRoute>} />
       <Route path="/admin/:disciplina" element={<PrivateRoute><AdminUsuarios /></PrivateRoute>} />
       <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />
-      <Route path="/metodo/psicologia/:etapaKey" element={<PrivateRoute><MetodoPsicologiaEtapa /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/huellas" element={<PrivateRoute><MetodoPsicologiaHuellas /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/nudos" element={<PrivateRoute><MetodoPsicologiaNudos /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/integracion" element={<PrivateRoute><MetodoPsicologiaIntegracion /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId" element={<PrivateRoute><MetodoPsicologiaExperiencia /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

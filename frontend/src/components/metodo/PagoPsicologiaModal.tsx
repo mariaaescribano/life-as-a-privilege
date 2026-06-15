@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-interface PagoMetodoModalProps {
+interface PagoPsicologiaModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPagar: () => void;
@@ -20,7 +20,8 @@ interface PagoMetodoModalProps {
   onTest?: () => void;
 }
 
-export function PagoMetodoModal({ isOpen, onClose, onPagar, loading, error, onTest }: PagoMetodoModalProps) {
+/** Pago de la 2ª disciplina (Psicología). Mismo lenguaje que PagoMetodoModal. */
+export function PagoPsicologiaModal({ isOpen, onClose, onPagar, loading, error, onTest }: PagoPsicologiaModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
       <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
@@ -44,7 +45,7 @@ export function PagoMetodoModal({ isOpen, onClose, onPagar, loading, error, onTe
                 letterSpacing="0.05em"
                 style={{ textShadow: "1px 2px 12px rgba(255,255,255,0.3)" }}
               >
-                Primera disciplina
+                Segunda disciplina
               </Text>
             </Flex>
 
@@ -57,7 +58,7 @@ export function PagoMetodoModal({ isOpen, onClose, onPagar, loading, error, onTe
               letterSpacing="0.015em"
               textAlign="center"
             >
-              Abona la primera disciplina para acceder a los contenidos.
+              Continúa el Recorrido con Psicología: reconstruye tu historia y comprende cómo se construyó tu mente.
             </Text>
 
             <Text

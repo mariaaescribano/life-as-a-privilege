@@ -13,9 +13,18 @@ import {
 interface PagoExitoModalProps {
   isOpen: boolean;
   onAceptar: () => void;
+  /** Título del modal. Por defecto, el de Astrología (compatibilidad). */
+  titulo?: string;
+  /** Mensaje bajo el título. */
+  mensaje?: string;
 }
 
-export function PagoExitoModal({ isOpen, onAceptar }: PagoExitoModalProps) {
+export function PagoExitoModal({
+  isOpen,
+  onAceptar,
+  titulo = "Pago de Astrología realizado",
+  mensaje = "Ya puedes acceder.",
+}: PagoExitoModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onAceptar} size="lg" isCentered closeOnOverlayClick={false} closeOnEsc={false}>
       <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
@@ -41,7 +50,7 @@ export function PagoExitoModal({ isOpen, onAceptar }: PagoExitoModalProps) {
                 whiteSpace="nowrap"
                 style={{ textShadow: "1px 2px 12px rgba(255,255,255,0.3)" }}
               >
-                Pago de Astrología realizado
+                {titulo}
               </Text>
             </Flex>
 
@@ -55,7 +64,7 @@ export function PagoExitoModal({ isOpen, onAceptar }: PagoExitoModalProps) {
               textAlign="center"
               fontStyle="italic"
             >
-              Ya puedes acceder.
+              {mensaje}
             </Text>
 
             <Flex justify="center" mt={3}>

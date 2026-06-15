@@ -18,6 +18,30 @@ export class PaymentController {
     return await this.paymentService.verifyMetodoCheckout(sessionId, req.user.userId);
   }
 
+  @Post('psicologia/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createPsicologiaCheckout(@Req() req: any) {
+    return await this.paymentService.createPsicologiaCheckout(req.user.userId);
+  }
+
+  @Get('psicologia/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyPsicologiaCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyPsicologiaCheckout(sessionId, req.user.userId);
+  }
+
+  // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
+  @Get('test/enabled')
+  testEnabled() {
+    return { enabled: PaymentService.testPagosHabilitado() };
+  }
+
+  @Post('test/unlock')
+  @UseGuards(JwtAuthGuard)
+  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'all' }) {
+    return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
+  }
+
   @Post('libros/checkout')
   async createLibroCheckout(@Body() body: { libroId?: string }) {
     if (!body?.libroId) throw new BadRequestException('libroId requerido');

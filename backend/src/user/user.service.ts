@@ -139,7 +139,7 @@ export class UserService {
   async getUserById(id: string) {
     const full = await this.databaseService.getClient()
       .from('user')
-      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra')
       .eq('id', id)
       .single();
     if (full.data) return full.data;
@@ -246,6 +246,35 @@ export class UserService {
     if (tryUpdate.error) {
       console.warn('[user.service] update metodo_* falló (¿columnas no creadas?):', tryUpdate.error.message);
       // Fallback: leer datos básicos del usuario para poder enviar email igualmente.
+      const { data, error } = await this.databaseService.getClient()
+        .from('user')
+        .select('id, name, email')
+        .eq('id', id)
+        .single();
+      if (error || !data) throw new NotFoundException('Usuario no encontrado');
+      return data;
+    }
+
+    if (!tryUpdate.data) throw new NotFoundException('Usuario no encontrado');
+    return tryUpdate.data;
+  }
+
+  // --------- Marcar usuario como suscrito a Psicología (2ª disciplina) ---------
+  async marcarSuscritoPsicologia(id: string) {
+    // Mismo patrón que marcarSuscritoMetodo: si las columnas psicologia_* aún no
+    // existen (ALTER TABLE pendiente), no rompe el flujo.
+    const tryUpdate = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        psicologia_suscrito: true,
+        psicologia_fecha_compra: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select('id, name, email')
+      .single();
+
+    if (tryUpdate.error) {
+      console.warn('[user.service] update psicologia_* falló (¿columnas no creadas?):', tryUpdate.error.message);
       const { data, error } = await this.databaseService.getClient()
         .from('user')
         .select('id, name, email')

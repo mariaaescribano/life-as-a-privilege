@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
-  ETAPAS,
-  type Etapa,
-  type EtapaKey,
-  calcularEdad,
-  etapasParaEdad,
-} from "../../components/metodo/psicologiaData";
+  EXPERIENCIAS,
+  aniosRecorridos,
+  lineaCompleta,
+  type LineaDeVidaData,
+} from "../../components/metodo/psicologiaRecorrido";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -21,32 +22,19 @@ import {
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
 
-/* Datos por etapa guardados en BD */
-interface EtapaEstado {
-  completada?: boolean;
-  notas?: string;
-  fecha?: string; // cuando se marcó completada
-}
-type CronologiaData = Partial<Record<EtapaKey, EtapaEstado>>;
-
-const valorOf = (data: CronologiaData, key: EtapaKey): EtapaEstado => data[key] || {};
-
-function esEtapaCompleta(v: EtapaEstado): boolean {
-  return !!v.completada;
-}
-
-function siguienteEtapaIndex(etapas: Etapa[], data: CronologiaData): number {
-  for (let i = 0; i < etapas.length; i++) {
-    if (!esEtapaCompleta(valorOf(data, etapas[i].key))) return i;
-  }
-  return -1;
-}
+// Tinta cálida: sombras suaves marrones en vez de glows claros (es papel, no cosmos).
+const TINTA = neuropsicologiaTxt;
+const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
 
 export default function MetodoPsicologia() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<CronologiaData>({});
-  const [etapasVisibles, setEtapasVisibles] = useState<Etapa[]>(ETAPAS);
+  const [suscrito, setSuscrito] = useState(false);
+  const [data, setData] = useState<LineaDeVidaData>({});
+  const [pagoOpen, setPagoOpen] = useState(false);
+  const [pagoLoading, setPagoLoading] = useState(false);
+  const [pagoError, setPagoError] = useState<string | null>(null);
+  const [testPagos, setTestPagos] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -54,195 +42,250 @@ export default function MetodoPsicologia() {
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
 
+    axios.get(`${API_URL}/payment/test/enabled`)
+      .then((r) => setTestPagos(!!r.data?.enabled))
+      .catch(() => setTestPagos(false));
+
     (async () => {
       try {
-        // 1) Sacamos la fecha de nacimiento del módulo de astrología para calcular edad
-        const astro = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
+        const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const edad = calcularEdad(astro.data?.fecha_nacimiento);
-        setEtapasVisibles(etapasParaEdad(edad));
+        // Prerrequisito: hay que haber pagado Astrología para llegar aquí.
+        if (!me.data?.metodo_suscrito) { navigate("/home"); return; }
 
-        // 2) Sacamos los datos de psicología
-        const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (psi.data?.data) setData(psi.data.data);
+        const psicoSuscrito = !!me.data?.psicologia_suscrito;
+        setSuscrito(psicoSuscrito);
+        if (!psicoSuscrito) {
+          setPagoOpen(true);
+        } else {
+          // Cargamos el progreso (respuestas guardadas) para mostrar avance.
+          try {
+            const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (psi.data?.data) setData(psi.data.data);
+          } catch { /* silencioso */ }
+        }
       } catch {
-        // Silencioso: si falla la edad, mostramos todas las etapas
+        navigate("/home");
+        return;
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [navigate]);
+
+  const pagarPsicologia = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoLoading(true);
+    setPagoError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/psicologia/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoError(
+        status === 403
+          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoLoading(false);
+    }
+  };
+
+  const testUnlock = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    try {
+      await axios.post(
+        `${API_URL}/payment/test/unlock`,
+        { scope: "psicologia" },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setSuscrito(true);
+      setPagoOpen(false);
+      const userId = sessionStorage.getItem("userId");
+      const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (psi.data?.data) setData(psi.data.data);
+    } catch (err: any) {
+      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
+    }
+  };
 
   if (loading) {
-    return (
-      <Box minH="100vh" bg="#008080">
-        <SpinnerTurquesa />
-      </Box>
-    );
+    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
-
-  const siguienteIdx = siguienteEtapaIndex(etapasVisibles, data);
-  const todoCompletado = siguienteIdx === -1;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      {/* ── CABECERA ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }}>
-        <MetodoStepHeader
-          icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
-          title="Psicología"
-          bgColor={`${neuropsicologiaBg}dd`}
-          color={neuropsicologiaTxt}
-          nom={neuropsicologiaNom}
-          mb={0}
-          prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/aspectos") }}
-          next={{
-            label: todoCompletado ? "Continuar a Hinduismo →" : "Completa primero tu cronología",
-            onClick: () => navigate("/metodo/hinduismo"),
-            disabled: !todoCompletado,
-          }}
-        />
-      </Flex>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
-      {/* Subtítulo / aviso de orden */}
-      <Flex direction="column" align="center" px={{ base: 5, md: 10, lg: 16 }} pt={4} gap={3}>
-        <Text
-          color="rgba(255,255,255,0.92)"
-          fontSize={{ base: "md", md: "lg" }}
-          lineHeight="1.7"
-          fontStyle="italic"
-          letterSpacing="0.015em"
-          textAlign="center"
-          maxW="720px"
-        >
-          Construye tu cronología de vida etapa a etapa. Toma una libreta, responde a las preguntas a mano y, cuando termines cada etapa, márcala como completada para abrir la siguiente.
-        </Text>
-        <Box
-          px={5}
-          py={2.5}
-          borderRadius="full"
-          bg={`${neuropsicologiaBg}24`}
-          border={`1px solid ${neuropsicologiaBg}66`}
-          boxShadow={`0 0 16px ${neuropsicologiaBg}33`}
-        >
-          <Text color={neuropsicologiaBg} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.08em" fontStyle="italic" textAlign="center">
-            ✦ Hay que ir por orden — empieza por la primera etapa.
-          </Text>
-        </Box>
-      </Flex>
+          <MetodoStepHeader
+            icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
+            title="Psicología"
+            bgColor={`${neuropsicologiaBg}dd`}
+            color={neuropsicologiaTxt}
+            nom={neuropsicologiaNom}
+            mb={0}
+            prev={{ label: "← Volver al Recorrido", onClick: () => navigate("/home") }}
+          />
 
-      {/* ── CRONOLOGÍA: lista de etapas ── */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
-        <VStack spacing={5} align="stretch" maxW="850px" mx="auto">
-          {etapasVisibles.map((e, index) => {
-            const v = valorOf(data, e.key);
-            const desbloqueado = index <= siguienteIdx || todoCompletado;
-            const esActual = index === siguienteIdx;
-            const bloqueado = !desbloqueado;
-            const completa = esEtapaCompleta(v);
-
-            const borderColor = bloqueado
-              ? `${neuropsicologiaBg}22`
-              : esActual
-              ? neuropsicologiaBg
-              : `${neuropsicologiaBg}66`;
-            const boxShadow = bloqueado
-              ? "none"
-              : esActual
-              ? `0 0 32px ${neuropsicologiaBg}cc, 0 0 80px ${neuropsicologiaBg}77, 0 0 140px ${neuropsicologiaBg}44`
-              : `0 0 22px ${neuropsicologiaBg}55, 0 0 60px ${neuropsicologiaBg}33`;
-
-            return (
-              <Box
-                key={e.key}
-                position="relative"
-                borderRadius="2xl"
-                overflow="hidden"
-                bg={`${neuropsicologiaBg}eb`}
-                border={`${esActual ? 2 : 1.5}px solid ${borderColor}`}
-                boxShadow={boxShadow}
-                opacity={bloqueado ? 0.4 : 1}
-                filter={bloqueado ? "grayscale(0.45)" : "none"}
-                pointerEvents={bloqueado ? "none" : "auto"}
-                cursor={bloqueado ? "not-allowed" : "pointer"}
-                onClick={bloqueado ? undefined : () => navigate(`/metodo/psicologia/${e.key}`)}
-                transition="all 0.3s ease"
-                _hover={bloqueado ? undefined : {
-                  transform: "translateY(-2px)",
-                  boxShadow: esActual
-                    ? `0 0 40px ${neuropsicologiaBg}, 0 0 100px ${neuropsicologiaBg}88`
-                    : `0 0 30px ${neuropsicologiaBg}88, 0 0 70px ${neuropsicologiaBg}55`,
-                }}
-                px={{ base: 6, md: 8 }}
-                py={{ base: 5, md: 6 }}
+          {/* ── Intro contemplativa ── */}
+          <Box
+            position="relative"
+            w="100%"
+            borderRadius="2xl"
+            overflow="hidden"
+            border={`1px solid ${TINTA}33`}
+            boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
+          >
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.45)" />
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} py={{ base: 9, md: 12 }} textAlign="center">
+              <Text
+                color={TINTA}
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.22em"
+                textTransform="uppercase"
+                fontWeight="600"
+                opacity={0.7}
+                mb={4}
               >
-                <Flex align="center" gap={{ base: 4, md: 6 }}>
-                  {/* Número de etapa */}
-                  <Box
-                    flexShrink={0}
-                    w={{ base: "44px", md: "54px" }}
-                    h={{ base: "44px", md: "54px" }}
-                    borderRadius="full"
-                    bg={neuropsicologiaTxt}
-                    color={neuropsicologiaBg}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="700"
-                    fontSize={{ base: "lg", md: "xl" }}
-                    boxShadow={`0 0 14px ${neuropsicologiaTxt}66`}
-                  >
-                    {index + 1}
-                  </Box>
+                El Recorrido · Psicología
+              </Text>
+              <Text
+                color={TINTA}
+                fontSize={{ base: "2xl", md: "4xl" }}
+                fontWeight="700"
+                letterSpacing="0.02em"
+                lineHeight="1.2"
+                mb={5}
+                style={{ textShadow: INK_SHADOW }}
+              >
+                Vuelve a tu historia
+              </Text>
+              <Text
+                color={TINTA}
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="1.95"
+                opacity={0.9}
+                maxW="640px"
+                mx="auto"
+              >
+                Antes de comprender tu mente, hay que recordar la vida que te formó. Este recorrido es para reconstruirte.
+              </Text>
+            </Box>
+          </Box>
 
-                  {/* Texto */}
-                  <Box flex="1">
-                    <Flex align="center" gap={2}>
-                      <Text
-                        color={neuropsicologiaTxt}
-                        fontSize={{ base: "lg", md: "2xl" }}
+          {/* ── Experiencias ── */}
+          <Flex direction="column" w="100%" gap={5}>
+            {EXPERIENCIAS.map((exp, i) => {
+              const edad = typeof data.edad === "number" ? data.edad : 0;
+              const total = edad > 0 ? edad + 1 : 0;
+              const respondidas = edad > 0 ? aniosRecorridos(data, edad) : 0;
+              const problemaEscrito =
+                typeof data["problema-actual"] === "string" &&
+                (data["problema-actual"] as string).trim().length > 0;
+              const empezada = problemaEscrito || edad > 0;
+              const completada = edad > 0 && lineaCompleta(data, edad);
+              return (
+                <Box
+                  key={exp.id}
+                  position="relative"
+                  borderRadius="2xl"
+                  overflow="hidden"
+                  cursor={suscrito ? "pointer" : "not-allowed"}
+                  onClick={suscrito ? () => navigate(`/metodo/psicologia/${exp.id}`) : () => setPagoOpen(true)}
+                  border={`1.5px solid ${TINTA}44`}
+                  boxShadow={`0 10px 40px rgba(94,45,16,0.2), 0 0 0 1px ${neuropsicologiaBg}55`}
+                  transition="transform 0.28s ease, box-shadow 0.28s ease"
+                  _hover={{
+                    transform: "translateY(-3px)",
+                    boxShadow: `0 16px 52px rgba(94,45,16,0.28), 0 0 0 1px ${TINTA}55`,
+                  }}
+                >
+                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.3)" />
+                  <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
+                    <Flex align="center" gap={{ base: 4, md: 6 }}>
+                      {/* Número de la experiencia */}
+                      <Flex
+                        flexShrink={0}
+                        w={{ base: "52px", md: "64px" }}
+                        h={{ base: "52px", md: "64px" }}
+                        borderRadius="full"
+                        bg={`${TINTA}`}
+                        color={neuropsicologiaBg}
+                        align="center"
+                        justify="center"
                         fontWeight="700"
-                        letterSpacing="0.04em"
+                        fontSize={{ base: "xl", md: "2xl" }}
+                        boxShadow={`0 4px 14px rgba(94,45,16,0.35)`}
                       >
-                        {e.label}
-                      </Text>
-                      {completa && (
-                        <Box as="span" color={neuropsicologiaTxt} fontSize="lg" opacity={0.85} title="Completada">
-                          ✓
-                        </Box>
-                      )}
-                    </Flex>
-                    <Text
-                      color={neuropsicologiaTxt}
-                      fontSize={{ base: "sm", md: "md" }}
-                      opacity={0.75}
-                      letterSpacing="0.04em"
-                      mt={0.5}
-                    >
-                      {e.rango}
-                    </Text>
-                  </Box>
+                        {i + 1}
+                      </Flex>
 
-                  {/* Flecha */}
-                  {!bloqueado && (
-                    <Box color={neuropsicologiaTxt} fontSize="2xl" opacity={0.7} flexShrink={0}>
-                      →
-                    </Box>
-                  )}
-                </Flex>
-              </Box>
-            );
-          })}
-        </VStack>
-      </Box>
+                      <Box flex="1" minW={0}>
+                        <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.16em" textTransform="uppercase" opacity={0.65} fontWeight="600">
+                          Experiencia {i + 1}
+                        </Text>
+                        <Text color={TINTA} fontSize={{ base: "xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.15" style={{ textShadow: INK_SHADOW }}>
+                          {exp.titulo}
+                        </Text>
+                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.85} mt={0.5} fontStyle="italic">
+                          {exp.subtitulo}
+                        </Text>
+
+                        {/* Progreso de la línea de vida (años recorridos) */}
+                        {suscrito && total > 0 && (
+                          <Flex align="center" gap={3} mt={3}>
+                            <Box flex="1" maxW="220px" h="6px" borderRadius="full" bg={`${TINTA}26`} overflow="hidden">
+                              <Box h="100%" w={`${(respondidas / total) * 100}%`} bg={TINTA} borderRadius="full" transition="width 0.4s ease" />
+                            </Box>
+                            <Text color={TINTA} fontSize="sm" opacity={0.8} whiteSpace="nowrap">
+                              {respondidas}/{total} años
+                            </Text>
+                          </Flex>
+                        )}
+                      </Box>
+
+                      {/* CTA */}
+                      <Flex flexShrink={0} align="center" gap={2} color={TINTA} fontWeight="600" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em">
+                        <Box as="span" display={{ base: "none", sm: "block" }}>
+                          {!suscrito ? "Desbloquear" : completada ? "Repasar" : empezada ? "Continuar" : "Comenzar"}
+                        </Box>
+                        <Box as="span" fontSize="xl">→</Box>
+                      </Flex>
+                    </Flex>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Flex>
+        </Flex>
+      </Flex>
 
       <SiteFooter />
+
+      <PagoPsicologiaModal
+        isOpen={pagoOpen && !suscrito}
+        onClose={() => setPagoOpen(false)}
+        onPagar={pagarPsicologia}
+        loading={pagoLoading}
+        error={pagoError}
+        onTest={testPagos ? testUnlock : undefined}
+      />
     </Box>
   );
 }

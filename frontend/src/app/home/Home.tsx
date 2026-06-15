@@ -6,6 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
+import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
@@ -42,9 +43,9 @@ const disciplines = [
   { name: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon,         link: `/aprendizaje/cursos/${culturaNom}` },
 ];
 
-// Disciplinas habilitadas para navegar desde el mandala. Cualquier disciplina
-// no listada aquí queda con candado y no es clickable.
-const ABIERTAS = new Set<string>([astrologiaNom]);
+// Astrología siempre está abierta. Psicología se abre una vez pagada la primera
+// disciplina (metodo_suscrito) — entonces su círculo es clickable: navega si ya
+// está pagada, o abre el pago si todavía no. El resto queda con candado.
 
 const Home = () => {
   const navigate = useNavigate();
@@ -54,10 +55,17 @@ const Home = () => {
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState<string>("");
   const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(null);
+  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
   const [pagoExitoOpen, setPagoExitoOpen] = useState(false);
+  // Pago de Psicología (2ª disciplina)
+  const [pagoPsicoOpen, setPagoPsicoOpen] = useState(false);
+  const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
+  const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
+  const [pagoPsicoExitoOpen, setPagoPsicoExitoOpen] = useState(false);
+  const [testPagos, setTestPagos] = useState(false);
   const [comicOpen, setComicOpen] = useState(false);
 
   const continuarAstrologia = async () => {
@@ -130,6 +138,67 @@ const Home = () => {
     }
   };
 
+  // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
+  const testUnlock = async (scope: "metodo" | "psicologia") => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    try {
+      await axios.post(
+        `${API_URL}/payment/test/unlock`,
+        { scope },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (scope === "metodo") {
+        setMetodoSuscrito(true);
+        setPagoOpen(false);
+        setPagoExitoOpen(true);
+      } else {
+        setMetodoSuscrito(true);
+        setPsicologiaSuscrito(true);
+        setPagoPsicoOpen(false);
+        setPagoPsicoExitoOpen(true);
+      }
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
+      if (scope === "metodo") setPagoError(msg); else setPagoPsicoError(msg);
+    }
+  };
+
+  // Psicología (2ª disciplina): clic en su círculo del mandala.
+  const irPsicologia = () => {
+    if (psicologiaSuscrito) {
+      navigate("/metodo/psicologia");
+    } else {
+      setPagoPsicoError(null);
+      setPagoPsicoOpen(true);
+    }
+  };
+
+  const pagarPsicologia = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoPsicoLoading(true);
+    setPagoPsicoError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/psicologia/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoPsicoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoPsicoLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoPsicoError(
+        status === 403
+          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoPsicoLoading(false);
+    }
+  };
+
   const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
   const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
   const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
@@ -152,8 +221,14 @@ const Home = () => {
     }
     setName(sessionStorage.getItem("name") || "");
 
+    // ¿Modo test de pagos habilitado en el backend? (público)
+    axios.get(`${API_URL}/payment/test/enabled`)
+      .then((r) => setTestPagos(!!r.data?.enabled))
+      .catch(() => setTestPagos(false));
+
     const url = new URL(window.location.href);
     const metodoPagado = url.searchParams.get("metodo_pagado");
+    const psicologiaPagado = url.searchParams.get("psicologia_pagado");
 
     const cargarSuscripcion = async () => {
       try {
@@ -162,9 +237,11 @@ const Home = () => {
         });
         const suscrito = !!me.data?.metodo_suscrito;
         setMetodoSuscrito(suscrito);
+        setPsicologiaSuscrito(!!me.data?.psicologia_suscrito);
         return suscrito;
       } catch {
         setMetodoSuscrito(false);
+        setPsicologiaSuscrito(false);
         return false;
       }
     };
@@ -183,8 +260,30 @@ const Home = () => {
           if (res.data?.ok) {
             setMetodoSuscrito(true);
             setPagoExitoOpen(true);
+            await cargarSuscripcion();
           } else {
             await cargarSuscripcion();
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else if (psicologiaPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("psicologia_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/psicologia/verify`, {
+          params: { session_id: psicologiaPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            setPsicologiaSuscrito(true);
+            setPagoPsicoExitoOpen(true);
           }
         })
         .catch(async () => {
@@ -357,18 +456,36 @@ const Home = () => {
                 const Icon = d.Icon;
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
                 const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
-                const abierta = ABIERTAS.has(d.name);
+                // `abierta` = estado visual desbloqueado (iluminado, sin candado).
+                //   · Astrología: siempre (gestiona su propio pago al entrar).
+                //   · Psicología: solo cuando está PAGADA (psicologia_suscrito).
+                // Psicología sigue con candado hasta que se pague / se pruebe el pago.
+                const abierta =
+                  d.name === astrologiaNom ||
+                  (d.name === neuropsicologiaNom && psicologiaSuscrito === true);
+                // `clickable` = se puede pulsar. Psicología es pulsable —aunque siga
+                //   con candado— si ya se pagó Astrología, para poder abrir su pago.
+                const clickable =
+                  d.name === astrologiaNom ||
+                  (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true));
                 const hasBg = hasDisciplinaBg(d.name);
-                // Astrología tiene flujo propio (chequea aviso_visto antes de navegar).
-                // Las demás abiertas saltan directamente a su página.
+                // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
+                // Las demás abiertas saltarían directamente a su página.
                 const handleClick = d.name === astrologiaNom
                   ? irAstrologia
+                  : d.name === neuropsicologiaNom
+                  ? irPsicologia
                   : () => navigate(d.link);
+                // Tooltip al pasar el ratón sobre un círculo bloqueado.
+                const tooltipLabel =
+                  d.name === neuropsicologiaNom && clickable
+                    ? "Desbloquea Psicología para empezar la 2ª disciplina."
+                    : "«El Recorrido» se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
                   <Box
-                    onClick={abierta ? handleClick : undefined}
-                    cursor={abierta ? "pointer" : "not-allowed"}
+                    onClick={clickable ? handleClick : undefined}
+                    cursor={clickable ? "pointer" : "not-allowed"}
                     w="100%"
                     h="100%"
                     borderRadius="full"
@@ -469,7 +586,7 @@ const Home = () => {
                       disciplinaCircle
                     ) : (
                       <Tooltip
-                        label="«El Recorrido» se hace en orden — por favor, completa la disciplina anterior."
+                        label={tooltipLabel}
                         placement="top"
                         hasArrow
                         bg="rgba(0,40,40,0.95)"
@@ -560,12 +677,27 @@ const Home = () => {
       <SiteFooter />
 
       <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => setPagoExitoOpen(false)} />
+      <PagoExitoModal
+        isOpen={pagoPsicoExitoOpen}
+        onAceptar={() => setPagoPsicoExitoOpen(false)}
+        titulo="Pago de Psicología realizado"
+        mensaje="Ya puedes empezar tu Línea de Vida."
+      />
       <PagoMetodoModal
         isOpen={pagoOpen}
         onClose={() => { setPagoOpen(false); setPagoError(null); }}
         onPagar={pagarMetodo}
         loading={pagoLoading}
         error={pagoError}
+        onTest={testPagos ? () => testUnlock("metodo") : undefined}
+      />
+      <PagoPsicologiaModal
+        isOpen={pagoPsicoOpen}
+        onClose={() => { setPagoPsicoOpen(false); setPagoPsicoError(null); }}
+        onPagar={pagarPsicologia}
+        loading={pagoPsicoLoading}
+        error={pagoPsicoError}
+        onTest={testPagos ? () => testUnlock("psicologia") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
 
