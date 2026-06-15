@@ -574,7 +574,7 @@ export default function ElMetodo() {
               transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
               transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
             >
-              Todo lo necesario para comprenderte desde cada disciplina. Haz click.
+              Explora cada disciplina y descubre ejemplos reales del contenido.
             </Text>
           </Flex>
 

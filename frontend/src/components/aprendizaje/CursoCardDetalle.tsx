@@ -100,7 +100,7 @@ export function CursoCardDetalle({
             as="button"
             w="100%"
             align="center"
-            justify="space-between"
+            justify="center"
             px={{ base: 4, md: 4 }}
             py={{ base: 2, md: 2.5 }}
             borderRadius="lg"
@@ -115,15 +115,8 @@ export function CursoCardDetalle({
             <Text color={color} fontSize={{ base: "xs", md: "sm" }} fontWeight="600" letterSpacing="0.03em" opacity={0.9} style={{ textShadow: tShadow }}>
               {nLecciones} {nLecciones === 1 ? "lección" : "lecciones"}
               {nEjercicios > 0 && ` · ${nEjercicios} ${nEjercicios === 1 ? "ejercicio" : "ejercicios"}`}
+              {" · Explorar"}
             </Text>
-            <Box as="svg" w="16px" h="16px" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" opacity={0.85} flexShrink={0}>
-              <line x1="8" y1="7" x2="20" y2="7" />
-              <line x1="8" y1="12" x2="20" y2="12" />
-              <line x1="8" y1="17" x2="20" y2="17" />
-              <circle cx="4" cy="7" r="0.6" fill={color} stroke="none" />
-              <circle cx="4" cy="12" r="0.6" fill={color} stroke="none" />
-              <circle cx="4" cy="17" r="0.6" fill={color} stroke="none" />
-            </Box>
           </Flex>
         </Box>
 
@@ -143,10 +136,13 @@ export function CursoCardDetalle({
             {hasDisciplinaBg(nom) && <DisciplinaBgLayer nom={nom} borderRadius="2xl" />}
             <ModalCloseButton color={color} zIndex={2} />
 
-            {/* Cabecera fija con separación horizontal */}
+            {/* Cabecera fija: título + minidescripción (1 frase) y separación horizontal */}
             <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} pt={{ base: 5, md: 6 }} pb={3}>
               <Text color={color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.12em" textTransform="uppercase" pr={6} style={{ textShadow: tShadow }}>
                 Contenido del curso
+              </Text>
+              <Text color={color} opacity={0.8} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.5" mt={2} pr={6} style={{ textShadow: tShadow }}>
+                {curso.descripcion}
               </Text>
             </Box>
             <Divider position="relative" zIndex={1} borderColor={`${color}33`} opacity={1} />

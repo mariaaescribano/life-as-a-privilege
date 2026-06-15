@@ -61,9 +61,10 @@ const PlayIcon = ({ size = "26px", color = "white" }: { size?: string; color?: s
   </Box>
 );
 
+// Flecha diagonal hacia abajo-derecha (south-east), discreta.
 const ArrowIcon = ({ color = "currentColor" }: { color?: string }) => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill={color}>
-    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill={color}>
+    <path d="M280-280v-80h264L200-704l56-56 344 344v-264h80v400H280Z" />
   </Box>
 );
 
@@ -156,12 +157,13 @@ function ReelCard({
       {/* Fondo: foto de la disciplina */}
       <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
 
-      <Flex direction="column" position="relative" zIndex={1} p={{ base: 3, md: 4 }} gap={3} h="100%">
-        {/* Portada vertical 3:4 (encaja la imagen de portada sin recortarla) */}
+      <Flex direction="column" position="relative" zIndex={1} p={{ base: 3, md: 4 }} gap={icon ? 2 : 3} h="100%">
+        {/* Portada: en "Todos los vídeos" (icon) más baja (4:5) para que los boxes
+            no sean tan altos; en el resto se mantiene vertical 3:4. */}
         <Box
           position="relative"
           w="100%"
-          sx={{ aspectRatio: "3 / 4" }}
+          sx={{ aspectRatio: icon ? "4 / 5" : "3 / 4" }}
           borderRadius="lg"
           overflow="hidden"
           boxShadow="0 6px 20px rgba(0,0,0,0.35)"
@@ -173,11 +175,11 @@ function ReelCard({
         {/* Título — altura fija de 2 líneas para que todas las tarjetas midan igual.
             Con icono: icono de la disciplina a la izquierda del título. */}
         {icon ? (
-          <Flex align="center" gap={2.5} minH="2.6em">
+          <Flex align="center" gap={2.5}>
             <Flex
               flexShrink={0}
-              w={{ base: "34px", md: "40px" }}
-              h={{ base: "34px", md: "40px" }}
+              w={{ base: "30px", md: "34px" }}
+              h={{ base: "30px", md: "34px" }}
               borderRadius="full"
               align="center"
               justify="center"
@@ -216,22 +218,16 @@ function ReelCard({
           </Text>
         )}
 
-        {/* Flecha abajo a la derecha */}
+        {/* Flecha abajo-derecha — discreta, sin fondo. Se realza levemente al hover. */}
         <Flex mt="auto" pt={1} justify="flex-end">
-          <Flex
-            align="center"
-            justify="center"
-            w={{ base: "26px", md: "30px" }}
-            h={{ base: "26px", md: "30px" }}
-            borderRadius="full"
+          <Box
             color={color}
-            bg={`${color}1f`}
-            border={`1px solid ${color}55`}
+            opacity={0.4}
             transition="all 0.22s ease"
-            _groupHover={{ bg: `${color}33`, transform: "translateX(2px)" }}
+            _groupHover={{ opacity: 0.85, transform: "translate(1px, 1px)" }}
           >
             <ArrowIcon />
-          </Flex>
+          </Box>
         </Flex>
       </Flex>
     </Box>

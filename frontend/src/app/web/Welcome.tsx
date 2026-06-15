@@ -162,7 +162,6 @@ const Welcome = () => {
   const [selected, setSelected] = useState<Discipline | null>(null);
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
-  const videoReveal = useReveal();
   const presentacionReveal = useReveal();
   const disciplinasTitleReveal = useReveal(0.2);
   const disciplinasReveal = useReveal(0.05);
@@ -195,28 +194,8 @@ const Welcome = () => {
       {/* ── HEADER ── */}
       <SiteHeader variant="public" />
 
-      {/* ── FRASE ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
-        <Text
-          color="white"
-          textAlign="center"
-          fontSize={{ base: "md", md: "xl", lg: "2xl" }}
-          fontWeight="400"
-          letterSpacing="0.06em"
-          lineHeight="1.4"
-          textShadow="0 0 13px rgba(255,255,255,0.52), 0 0 27px rgba(255,255,255,0.3), 0 0 54px rgba(180,255,245,0.26)"
-          fontFamily="'EB Garamond', serif"
-          maxW={{ base: "100%", md: "78%" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(18px)"}
-          transition="opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s"
-        >
-            Un recorrido de 8 disciplinas para comprender quién eres, integrando ciencia y tradición.
-        </Text>
-      </Flex>
-
-      {/* ── LOGO SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 7, md: 9 }}>
+      {/* ── MANDALA (elemento central, encima del título) ── */}
+      <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
           src="/img/icono/life.png"
           alt=""
@@ -225,12 +204,12 @@ const Welcome = () => {
           style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.45s, transform 1s ease 0.45s"
+          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
         />
       </Flex>
 
-      {/* ── BIENVENIDA ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 5, md: 7 }}>
+      {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 6, md: 8 }}>
         <Box
           ref={bienvenidaReveal.ref}
           w={{ base: "100%", md: "78%" }}
@@ -238,232 +217,37 @@ const Welcome = () => {
           flexDirection="column"
           alignItems="center"
           textAlign="center"
+          gap={{ base: 3, md: 4 }}
           opacity={bienvenidaReveal.visible ? 1 : 0}
-          transform={bienvenidaReveal.visible ? "none" : "translateX(-50px)"}
+          transform={bienvenidaReveal.visible ? "none" : "translateY(18px)"}
           transition="opacity 0.7s ease, transform 0.7s ease"
         >
           <Text
             color="white"
-            fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
+            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
             fontWeight="700"
-            letterSpacing="0.06em"
-            lineHeight="1.2"
-            textShadow="0 0 16px rgba(255,255,255,0.64), 0 0 34px rgba(255,255,255,0.41), 0 0 63px rgba(180,255,245,0.34)"
-            mb={1}
+            letterSpacing="0.1em"
+            lineHeight="1.1"
+            textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
           >
             LIFE AS A PRIVILEGE
           </Text>
+
+          {/* Subtítulo (estructura de Materiales) */}
           <Text
-            color="rgba(255,255,255,0.85)"
-            fontSize={{ base: "xs", md: "sm" }}
+            color="rgba(255,255,255,0.88)"
+            fontSize={{ base: "md", md: "xl" }}
             fontStyle="italic"
             fontWeight="400"
             letterSpacing="0.05em"
+            lineHeight="1.5"
+            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 21px rgba(255,255,255,0.22)"
             fontFamily="'EB Garamond', serif"
-            textShadow="0 0 9px rgba(255,255,255,0.52), 0 0 20px rgba(255,255,255,0.3)"
-            mb={5}
+            maxW={{ base: "100%", md: "640px" }}
           >
-            La Vida como Privilegio
+            Un recorrido de 8 disciplinas para comprender quién eres, integrando ciencia y tradición.
           </Text>
         </Box>
-      </Flex>
-
-      {/* ── BOTÓN EL RECORRIDO ── */}
-      <Flex
-        ref={videoReveal.ref}
-        justify="center"
-        align="center"
-        gap={{ base: 3, md: 4 }}
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 10, md: 12 }}
-        opacity={videoReveal.visible ? 1 : 0}
-        transform={videoReveal.visible ? "none" : "translateY(40px)"}
-        transition="opacity 0.7s ease, transform 0.7s ease"
-      >
-        <Box
-          h="1px"
-          w={{ base: "18px", md: "70px" }}
-          bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
-          boxShadow="0 0 8px rgba(255,255,255,0.5)"
-        />
-        <Flex
-          as="button"
-          onClick={() => navigate("/elMetodo")}
-          align="center"
-          justify="center"
-          gap={{ base: 2, md: 4 }}
-          px={{ base: 5, md: 12 }}
-          py={{ base: "14px", md: "18px" }}
-          flexShrink={0}
-          borderRadius="full"
-          border="1px solid rgba(255,255,255,0.55)"
-          bg="rgba(255,255,255,0.08)"
-          cursor="pointer"
-          boxShadow="0 0 16px rgba(255,255,255,0.35), 0 0 36px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-          _hover={{
-            bg: "rgba(255,255,255,0.18)",
-            borderColor: "rgba(255,255,255,0.9)",
-            boxShadow: "0 0 26px rgba(255,255,255,0.55), 0 0 54px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
-            transform: "translateY(-1px)",
-          }}
-          transition="all 0.25s ease"
-        >
-          <Image
-            src="/img/icono/life.png"
-            alt=""
-            h={{ base: "30px", md: "38px" }}
-            objectFit="contain"
-            flexShrink={0}
-            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
-          />
-          <Text
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "sm", md: "2xl" }}
-            letterSpacing={{ base: "0.14em", md: "0.18em" }}
-            textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.26)"
-            whiteSpace="nowrap"
-          >
-            El Recorrido
-          </Text>
-          <Box
-            as="span"
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "sm", md: "2xl" }}
-            style={{ textShadow: "0 0 10px rgba(255,255,255,0.52), 0 0 22px rgba(255,255,255,0.3)" }}
-          >
-            →
-          </Box>
-        </Flex>
-        <Box
-          h="1px"
-          w={{ base: "18px", md: "70px" }}
-          bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
-          boxShadow="0 0 8px rgba(255,255,255,0.5)"
-        />
-      </Flex>
-
-      {/* ── PRESENTACIÓN ── */}
-      <Flex
-        ref={presentacionReveal.ref}
-        direction="column"
-        align="center"
-        textAlign="center"
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 16, md: 20 }}
-        gap={{ base: 5, md: 7 }}
-      >
-        {/* Foto */}
-        <Box
-          maxW={{ base: "234px", md: "306px" }}
-          borderRadius="2xl"
-          overflow="hidden"
-          boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "scale(1)" : "scale(0.85)"}
-          transition="opacity 0.8s ease, transform 0.8s ease"
-        >
-          <Image
-            src="/img/me/me.png"
-            alt="María Escribano"
-            w="100%"
-            h="auto"
-            display="block"
-          />
-        </Box>
-
-        {/* Nombre */}
-        <Text
-          color="white"
-          fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
-          fontWeight="700"
-          fontFamily="'EB Garamond', serif"
-          letterSpacing="0.04em"
-          lineHeight="1.2"
-          textShadow="0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)"
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(22px)"}
-          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
-        >
-          María Escribano
-        </Text>
-
-        {/* Descripción */}
-        <Text
-          color="rgba(255,255,255,0.92)"
-          fontSize={{ base: "sm", md: "lg" }}
-          fontFamily="'EB Garamond', serif"
-          lineHeight="1.9"
-          letterSpacing="0.02em"
-          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
-          maxW={{ base: "100%", md: "70%" }}
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
-        >
-          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
-        </Text>
-
-        {/* Botón Conoce más */}
-        <Flex
-          align="center"
-          gap={3}
-          opacity={presentacionReveal.visible ? 1 : 0}
-          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.7s ease 0.75s, transform 0.7s ease 0.75s"
-          mt={2}
-        >
-          <Box
-            h="1px"
-            w={{ base: "16px", md: "56px" }}
-            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.5)"
-          />
-          <Flex
-            as="button"
-            onClick={() => navigate("/quienSoy")}
-            align="center"
-            gap={2}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "xs", md: "md" }}
-            letterSpacing={{ base: "0.08em", md: "0.18em" }}
-            textTransform="uppercase"
-            whiteSpace="nowrap"
-            px={{ base: 4, md: 9 }}
-            py={{ base: "10px", md: "12px" }}
-            flexShrink={0}
-            borderRadius="full"
-            border="1px solid rgba(255,255,255,0.55)"
-            bg="rgba(255,255,255,0.08)"
-            cursor="pointer"
-            boxShadow="0 0 16px rgba(255,255,255,0.35), 0 0 36px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-            textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.26)"
-            _hover={{
-              bg: "rgba(255,255,255,0.18)",
-              borderColor: "rgba(255,255,255,0.9)",
-              boxShadow: "0 0 26px rgba(255,255,255,0.55), 0 0 54px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
-              transform: "translateY(-1px)",
-            }}
-            transition="all 0.25s ease"
-          >
-            Conocer a la creadora
-            <Box as="span" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: "0 0 10px rgba(255,255,255,0.52), 0 0 22px rgba(255,255,255,0.3)" }}>
-              →
-            </Box>
-          </Flex>
-          <Box
-            h="1px"
-            w={{ base: "16px", md: "56px" }}
-            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.5)"
-          />
-        </Flex>
       </Flex>
 
       {/* ── BANNERS PRODUCTOS & REELS ── */}
@@ -487,9 +271,9 @@ const Welcome = () => {
         ref={disciplinasTitleReveal.ref}
         direction="column"
         align="center"
-        pt={{ base: 16, md: 20 }}
+        pt={{ base: 8, md: 10 }}
       >
-        <Text
+        {/* <Text
           color="rgba(255,255,255,0.85)"
           fontFamily="'EB Garamond', serif"
           fontStyle="italic"
@@ -504,7 +288,7 @@ const Welcome = () => {
           transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
         >
           Las 8 disciplinas…
-        </Text>
+        </Text> */}
       </Flex>
 
       {/* ── CARDS DE DISCIPLINAS ── */}
@@ -674,17 +458,169 @@ const Welcome = () => {
         </Grid>
       </Box>
 
+      {/* ── SEPARADOR CON MANDALA (entre disciplinas y la creadora) ── */}
+      <Flex
+        align="center"
+        justify="center"
+        gap={{ base: 4, md: 6 }}
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 12, md: 16 }}
+      >
+        <Box
+          h="1px"
+          w={{ base: "60px", md: "150px" }}
+          bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+        />
+        <Image
+          src="/img/icono/life.png"
+          alt=""
+          h={{ base: "26px", md: "34px" }}
+          objectFit="contain"
+          flexShrink={0}
+          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+        />
+        <Box
+          h="1px"
+          w={{ base: "60px", md: "150px" }}
+          bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+        />
+      </Flex>
+
+      {/* ── PRESENTACIÓN (creadora) ── */}
+      <Flex
+        ref={presentacionReveal.ref}
+        direction="column"
+        align="center"
+        textAlign="center"
+        px={{ base: 5, md: 10, lg: 16 }}
+        pt={{ base: 10, md: 14 }}
+        gap={{ base: 5, md: 7 }}
+      >
+        {/* Foto */}
+        <Box
+          maxW={{ base: "234px", md: "306px" }}
+          borderRadius="2xl"
+          overflow="hidden"
+          boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "scale(1)" : "scale(0.85)"}
+          transition="opacity 0.8s ease, transform 0.8s ease"
+        >
+          <Image
+            src="/img/me/me.png"
+            alt="María Escribano"
+            w="100%"
+            h="auto"
+            display="block"
+          />
+        </Box>
+
+        {/* Nombre */}
+        <Text
+          color="white"
+          fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+          fontWeight="700"
+          fontFamily="'EB Garamond', serif"
+          letterSpacing="0.04em"
+          lineHeight="1.2"
+          textShadow="0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)"
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(22px)"}
+          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
+        >
+          María Escribano
+        </Text>
+
+        {/* Descripción */}
+        <Text
+          color="rgba(255,255,255,0.92)"
+          fontSize={{ base: "sm", md: "lg" }}
+          fontFamily="'EB Garamond', serif"
+          lineHeight="1.9"
+          letterSpacing="0.02em"
+          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
+          maxW={{ base: "100%", md: "70%" }}
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s"
+        >
+          Ingeniera informática, 22 años. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados.
+        </Text>
+
+        {/* Botón Conoce más — acción SECUNDARIA: más pequeño, sutil y cercano
+            a María (menos peso visual que el CTA "El Recorrido"). */}
+        <Flex
+          align="center"
+          gap={3}
+          opacity={presentacionReveal.visible ? 1 : 0}
+          transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
+          transition="opacity 0.7s ease 0.75s, transform 0.7s ease 0.75s"
+          mt={{ base: -1, md: -2 }}
+        >
+          <Box
+            h="1px"
+            w={{ base: "14px", md: "44px" }}
+            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.45))"
+          />
+          <Flex
+            as="button"
+            onClick={() => navigate("/quienSoy")}
+            align="center"
+            gap={2}
+            color="rgba(255,255,255,0.85)"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="500"
+            fontSize={{ base: "xs", md: "sm" }}
+            letterSpacing={{ base: "0.08em", md: "0.14em" }}
+            textTransform="uppercase"
+            whiteSpace="nowrap"
+            px={{ base: 3, md: 6 }}
+            py={{ base: "7px", md: "9px" }}
+            flexShrink={0}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.35)"
+            bg="rgba(255,255,255,0.05)"
+            cursor="pointer"
+            boxShadow="0 0 12px rgba(255,255,255,0.2), 0 0 24px rgba(180,255,245,0.16), 0 2px 10px rgba(0,0,0,0.16)"
+            _hover={{
+              bg: "rgba(255,255,255,0.12)",
+              borderColor: "rgba(255,255,255,0.6)",
+              color: "white",
+              boxShadow: "0 0 16px rgba(255,255,255,0.3), 0 0 32px rgba(180,255,245,0.26), 0 2px 12px rgba(0,0,0,0.18)",
+            }}
+            transition="all 0.25s ease"
+          >
+            Conocer a la creadora
+            <Box as="span" fontSize={{ base: "sm", md: "md" }}>
+              →
+            </Box>
+          </Flex>
+          <Box
+            h="1px"
+            w={{ base: "14px", md: "44px" }}
+            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.45))"
+          />
+        </Flex>
+      </Flex>
 
       {/* ── SEPARADOR DE ZONAS ── */}
-      <Flex justify="center" pt={{ base: 12, md: 16 }}>
+      {/* <Flex justify="center" pt={{ base: 12, md: 16 }}>
         <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.18)" />
-      </Flex>
+      </Flex> */}
 
       {/* ── OPINIONES ── */}
       <OpinionesSection />
 
-      {/* ── SUSCRIPCIÓN ── */}
-      <Flex justify="center" px={{ base: 5, md: 10 }} pb={{ base: 24, md: 32 }}>
+      {/* ── SUSCRIPCIÓN (newsletter) — acción opcional y final: peso visual
+            reducido para que no compita con el CTA "El Recorrido". ── */}
+      <Flex
+        justify="center"
+        px={{ base: 5, md: 10 }}
+        pb={{ base: 24, md: 32 }}
+        opacity={0.82}
+        transform={{ base: "none", md: "scale(0.94)" }}
+        sx={{ transformOrigin: "top center" }}
+      >
         <SubscribeBox />
       </Flex>
 

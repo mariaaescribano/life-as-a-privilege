@@ -389,7 +389,7 @@ export default function Opiniones() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Opiniones
+          Experiencias reales
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"

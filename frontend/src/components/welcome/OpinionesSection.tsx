@@ -104,7 +104,7 @@ const OpinionesSection: React.FC = () => {
             textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 28px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.25)"
             fontFamily="'EB Garamond', serif"
           >
-            Opiniones
+            Experiencias reales
           </Text>
         </Flex>
 
@@ -207,87 +207,11 @@ const OpinionesSection: React.FC = () => {
           Si ellos encontraron respuestas aquí, tú también puedes.
         </Text>
 
-        {/* ── CTA principal → El Recorrido (botón con mandala + flecha + líneas,
-              versión reducida del de la home) ── */}
-        <Flex
-          justify="center"
-          align="center"
-          gap={{ base: 3, md: 4 }}
-          mt={{ base: 3, md: 4 }}
-        >
-          <Box
-            h="1px"
-            w={{ base: "18px", md: "70px" }}
-            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.5)"
-          />
-          <Flex
-            as="button"
-            onClick={() => navigate("/elMetodo")}
-            align="center"
-            justify="center"
-            gap={{ base: 2, md: 4 }}
-            px={{ base: 5, md: 12 }}
-            py={{ base: "14px", md: "18px" }}
-            flexShrink={0}
-            borderRadius="full"
-            border="1px solid rgba(255,255,255,0.55)"
-            bg="rgba(255,255,255,0.08)"
-            cursor="pointer"
-            boxShadow="0 0 16px rgba(255,255,255,0.35), 0 0 36px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-            _hover={{
-              bg: "rgba(255,255,255,0.18)",
-              borderColor: "rgba(255,255,255,0.9)",
-              boxShadow: "0 0 26px rgba(255,255,255,0.55), 0 0 54px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
-              transform: "translateY(-1px)",
-            }}
-            transition="all 0.25s ease"
-          >
-            <Image
-              src="/img/icono/life.png"
-              alt=""
-              h={{ base: "30px", md: "38px" }}
-              objectFit="contain"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.52)) drop-shadow(0 0 20px rgba(255,255,255,0.26))" }}
-            />
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "sm", md: "2xl" }}
-              letterSpacing={{ base: "0.14em", md: "0.18em" }}
-              textTransform="uppercase"
-              textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.26)"
-              whiteSpace="nowrap"
-            >
-              El Recorrido
-            </Text>
-            <Box
-              as="span"
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "sm", md: "2xl" }}
-              style={{ textShadow: "0 0 10px rgba(255,255,255,0.52), 0 0 22px rgba(255,255,255,0.3)" }}
-            >
-              →
-            </Box>
-          </Flex>
-          <Box
-            h="1px"
-            w={{ base: "18px", md: "70px" }}
-            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.5)"
-          />
-        </Flex>
-
         {/* ── Enlace secundario → página completa de Opiniones ── */}
         <Box
           as="button"
           onClick={() => navigate("/opiniones")}
-          mt={{ base: 4, md: 5 }}
-          color="rgba(255,255,255,0.6)"
+          color="rgba(255,255,255,0.7)"
           fontFamily="'EB Garamond', serif"
           fontSize={{ base: "sm", md: "md" }}
           letterSpacing="0.04em"
@@ -301,6 +225,81 @@ const OpinionesSection: React.FC = () => {
         >
           Ver más experiencias →
         </Box>
+
+        {/* ── CTA principal → El Recorrido (botón grande con mandala + flecha
+              + líneas, versión destacada). ── */}
+        <Flex
+          justify="center"
+          align="center"
+          gap={{ base: 4, md: 7 }}
+          mt={{ base: 12, md: 16 }}
+        >
+          <Box
+            h="1px"
+            w={{ base: "24px", md: "110px" }}
+            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
+            boxShadow="0 0 8px rgba(255,255,255,0.5)"
+          />
+          <Flex
+            as="button"
+            onClick={() => navigate("/elMetodo")}
+            align="center"
+            justify="center"
+            gap={{ base: 3, md: 5 }}
+            px={{ base: 9, md: 24 }}
+            py={{ base: "18px", md: "28px" }}
+            flexShrink={0}
+            borderRadius="full"
+            border="1.5px solid rgba(255,255,255,0.65)"
+            bg="rgba(255,255,255,0.11)"
+            cursor="pointer"
+            boxShadow="0 0 28px rgba(255,255,255,0.48), 0 0 62px rgba(255,255,255,0.26), 0 0 112px rgba(180,255,245,0.28), 0 6px 22px rgba(0,0,0,0.22)"
+            _hover={{
+              bg: "rgba(255,255,255,0.22)",
+              borderColor: "white",
+              boxShadow: "0 0 40px rgba(255,255,255,0.66), 0 0 84px rgba(180,255,245,0.5), 0 8px 26px rgba(0,0,0,0.26)",
+              transform: "translateY(-2px)",
+            }}
+            transition="all 0.25s ease"
+          >
+            <Image
+              src="/img/icono/life.png"
+              alt=""
+              h={{ base: "42px", md: "60px" }}
+              objectFit="contain"
+              flexShrink={0}
+              style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.6)) drop-shadow(0 0 26px rgba(255,255,255,0.32))" }}
+            />
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "xl", md: "4xl" }}
+              letterSpacing={{ base: "0.14em", md: "0.2em" }}
+              textTransform="uppercase"
+              textShadow="0 0 16px rgba(255,255,255,0.56), 0 0 34px rgba(255,255,255,0.32), 0 0 66px rgba(180,255,245,0.24)"
+              whiteSpace="nowrap"
+            >
+              El Recorrido
+            </Text>
+            <Box
+              as="span"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "xl", md: "4xl" }}
+              style={{ textShadow: "0 0 16px rgba(255,255,255,0.56), 0 0 34px rgba(255,255,255,0.32)" }}
+            >
+              →
+            </Box>
+          </Flex>
+          <Box
+            h="1px"
+            w={{ base: "24px", md: "110px" }}
+            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
+            boxShadow="0 0 8px rgba(255,255,255,0.5)"
+          />
+        </Flex>
       </Flex>
     </Box>
   );
