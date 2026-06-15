@@ -8,12 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import {
-  EXPERIENCIAS,
-  aniosRecorridos,
-  lineaCompleta,
-  type LineaDeVidaData,
-} from "../../components/metodo/psicologiaRecorrido";
+import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -28,9 +23,9 @@ const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
 
 export default function MetodoPsicologia() {
   const navigate = useNavigate();
+  const experiencia = EXPERIENCIAS[0];
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
-  const [data, setData] = useState<LineaDeVidaData>({});
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
@@ -56,17 +51,7 @@ export default function MetodoPsicologia() {
 
         const psicoSuscrito = !!me.data?.psicologia_suscrito;
         setSuscrito(psicoSuscrito);
-        if (!psicoSuscrito) {
-          setPagoOpen(true);
-        } else {
-          // Cargamos el progreso (respuestas guardadas) para mostrar avance.
-          try {
-            const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            if (psi.data?.data) setData(psi.data.data);
-          } catch { /* silencioso */ }
-        }
+        if (!psicoSuscrito) setPagoOpen(true);
       } catch {
         navigate("/home");
         return;
@@ -112,14 +97,15 @@ export default function MetodoPsicologia() {
       );
       setSuscrito(true);
       setPagoOpen(false);
-      const userId = sessionStorage.getItem("userId");
-      const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (psi.data?.data) setData(psi.data.data);
     } catch (err: any) {
       setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
+  };
+
+  // Empezar la experiencia (o abrir el pago si aún no está desbloqueada).
+  const empezar = () => {
+    if (suscrito) navigate(`/metodo/psicologia/${experiencia.id}`);
+    else setPagoOpen(true);
   };
 
   if (loading) {
@@ -135,15 +121,17 @@ export default function MetodoPsicologia() {
 
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Psicología"
+            title="Vuelve"
+            pageLabel="1/9"
             bgColor={`${neuropsicologiaBg}dd`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
-            prev={{ label: "← Volver al Recorrido", onClick: () => navigate("/home") }}
+            prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/llamada") }}
+            next={{ label: "Problema →", onClick: empezar }}
           />
 
-          {/* ── Intro contemplativa ── */}
+          {/* ── Intro contemplativa (misma fuerza que el header: sin velo) ── */}
           <Box
             position="relative"
             w="100%"
@@ -152,22 +140,11 @@ export default function MetodoPsicologia() {
             border={`1px solid ${TINTA}33`}
             boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
           >
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.45)" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} py={{ base: 9, md: 12 }} textAlign="center">
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.22em"
-                textTransform="uppercase"
-                fontWeight="600"
-                opacity={0.7}
-                mb={4}
-              >
-                El Recorrido · Psicología
-              </Text>
-              <Text
-                color={TINTA}
-                fontSize={{ base: "2xl", md: "4xl" }}
+                fontSize={{ base: "3xl", md: "5xl" }}
                 fontWeight="700"
                 letterSpacing="0.02em"
                 lineHeight="1.2"
@@ -178,101 +155,37 @@ export default function MetodoPsicologia() {
               </Text>
               <Text
                 color={TINTA}
-                fontSize={{ base: "md", md: "lg" }}
+                fontSize={{ base: "md", md: "xl" }}
                 lineHeight="1.95"
-                opacity={0.9}
-                maxW="640px"
+                maxW="620px"
                 mx="auto"
               >
-                Antes de comprender tu mente, hay que recordar la vida que te formó. Este recorrido es para reconstruirte.
+                Antes de comprender tu mente, hay que recordar la vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
               </Text>
+
+              {/* Botón Empezar */}
+              <Box
+                as="button"
+                onClick={empezar}
+                mt={{ base: 8, md: 10 }}
+                px={{ base: 10, md: 14 }}
+                py={4}
+                borderRadius="full"
+                bg={TINTA}
+                color="#fbf4e8"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "lg", md: "xl" }}
+                letterSpacing="0.08em"
+                cursor="pointer"
+                boxShadow={`0 8px 26px rgba(94,45,16,0.4)`}
+                transition="all 0.22s"
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 12px 34px rgba(94,45,16,0.5)` }}
+              >
+                Empezar
+              </Box>
             </Box>
           </Box>
-
-          {/* ── Experiencias ── */}
-          <Flex direction="column" w="100%" gap={5}>
-            {EXPERIENCIAS.map((exp, i) => {
-              const edad = typeof data.edad === "number" ? data.edad : 0;
-              const total = edad > 0 ? edad + 1 : 0;
-              const respondidas = edad > 0 ? aniosRecorridos(data, edad) : 0;
-              const problemaEscrito =
-                typeof data["problema-actual"] === "string" &&
-                (data["problema-actual"] as string).trim().length > 0;
-              const empezada = problemaEscrito || edad > 0;
-              const completada = edad > 0 && lineaCompleta(data, edad);
-              return (
-                <Box
-                  key={exp.id}
-                  position="relative"
-                  borderRadius="2xl"
-                  overflow="hidden"
-                  cursor={suscrito ? "pointer" : "not-allowed"}
-                  onClick={suscrito ? () => navigate(`/metodo/psicologia/${exp.id}`) : () => setPagoOpen(true)}
-                  border={`1.5px solid ${TINTA}44`}
-                  boxShadow={`0 10px 40px rgba(94,45,16,0.2), 0 0 0 1px ${neuropsicologiaBg}55`}
-                  transition="transform 0.28s ease, box-shadow 0.28s ease"
-                  _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: `0 16px 52px rgba(94,45,16,0.28), 0 0 0 1px ${TINTA}55`,
-                  }}
-                >
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.3)" />
-                  <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-                    <Flex align="center" gap={{ base: 4, md: 6 }}>
-                      {/* Número de la experiencia */}
-                      <Flex
-                        flexShrink={0}
-                        w={{ base: "52px", md: "64px" }}
-                        h={{ base: "52px", md: "64px" }}
-                        borderRadius="full"
-                        bg={`${TINTA}`}
-                        color={neuropsicologiaBg}
-                        align="center"
-                        justify="center"
-                        fontWeight="700"
-                        fontSize={{ base: "xl", md: "2xl" }}
-                        boxShadow={`0 4px 14px rgba(94,45,16,0.35)`}
-                      >
-                        {i + 1}
-                      </Flex>
-
-                      <Box flex="1" minW={0}>
-                        <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.16em" textTransform="uppercase" opacity={0.65} fontWeight="600">
-                          Experiencia {i + 1}
-                        </Text>
-                        <Text color={TINTA} fontSize={{ base: "xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.15" style={{ textShadow: INK_SHADOW }}>
-                          {exp.titulo}
-                        </Text>
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.85} mt={0.5} fontStyle="italic">
-                          {exp.subtitulo}
-                        </Text>
-
-                        {/* Progreso de la línea de vida (años recorridos) */}
-                        {suscrito && total > 0 && (
-                          <Flex align="center" gap={3} mt={3}>
-                            <Box flex="1" maxW="220px" h="6px" borderRadius="full" bg={`${TINTA}26`} overflow="hidden">
-                              <Box h="100%" w={`${(respondidas / total) * 100}%`} bg={TINTA} borderRadius="full" transition="width 0.4s ease" />
-                            </Box>
-                            <Text color={TINTA} fontSize="sm" opacity={0.8} whiteSpace="nowrap">
-                              {respondidas}/{total} años
-                            </Text>
-                          </Flex>
-                        )}
-                      </Box>
-
-                      {/* CTA */}
-                      <Flex flexShrink={0} align="center" gap={2} color={TINTA} fontWeight="600" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em">
-                        <Box as="span" display={{ base: "none", sm: "block" }}>
-                          {!suscrito ? "Desbloquear" : completada ? "Repasar" : empezada ? "Continuar" : "Comenzar"}
-                        </Box>
-                        <Box as="span" fontSize="xl">→</Box>
-                      </Flex>
-                    </Flex>
-                  </Box>
-                </Box>
-              );
-            })}
-          </Flex>
         </Flex>
       </Flex>
 

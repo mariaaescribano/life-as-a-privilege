@@ -94,7 +94,7 @@ export default function MetodoPsicologiaIntegracion() {
               border={`1px solid ${TINTA}33`}
               boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
             >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.55)" />
+              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 11 }} py={{ base: 8, md: 10 }}>
                 <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.18em" textTransform="uppercase" fontWeight="600" opacity={0.7} textAlign="center" mb={6}>
                   Lo que exploraremos

@@ -52,8 +52,8 @@ const lineaDeVida: ExperienciaPsicologia = {
 
   problemaInicial: {
     key: "problema-actual",
-    pregunta: "¿Qué problema estás viviendo actualmente?",
-    apoyo: "Describe aquello que hoy quieres cambiar de tu vida.",
+    pregunta: "¿Qué problemas hay en tu Vida actualmente?",
+    apoyo: "",
     placeholder: "Empieza por aquí…",
   },
 

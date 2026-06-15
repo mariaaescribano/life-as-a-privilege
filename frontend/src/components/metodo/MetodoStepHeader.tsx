@@ -33,6 +33,8 @@ interface MetodoStepHeaderProps {
   compact?: boolean;
   /** Indicador de progreso: paso actual / total. Pinta una fila de puntos. */
   step?: { current: number; total: number };
+  /** Etiqueta libre de número de página junto al título (p.ej. "2/"). */
+  pageLabel?: string;
 }
 
 const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
@@ -139,6 +141,7 @@ export function MetodoStepHeader({
   extra,
   compact = false,
   step,
+  pageLabel,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
@@ -230,6 +233,12 @@ export function MetodoStepHeader({
               <Text flexShrink={0} color={`${color}aa`} fontSize={{ base: "xs", md: "lg" }} fontWeight="600"
                     letterSpacing="0.06em" whiteSpace="nowrap">
                 {step.current}/{step.total}
+              </Text>
+            )}
+            {pageLabel && (
+              <Text flexShrink={0} color={`${color}aa`} fontSize={{ base: "xs", md: "lg" }} fontWeight="600"
+                    letterSpacing="0.06em" whiteSpace="nowrap">
+                {pageLabel}
               </Text>
             )}
           </Flex>

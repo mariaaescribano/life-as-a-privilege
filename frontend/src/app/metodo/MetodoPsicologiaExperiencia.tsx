@@ -6,7 +6,6 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { PsicologiaBg } from "../../components/metodo/PsicologiaBg";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
@@ -29,11 +28,12 @@ import {
 
 const TINTA = neuropsicologiaTxt;          // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";                    // crema claro para el texto sobre tinta
+const CREMA = "rgba(255,255,255,0.92)";    // texto sobre el fondo teal de la página
 const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
 
-// Fases de la experiencia «Línea de Vida».
-const FASE = { PROBLEMA: 0, EDAD: 1, LINEA: 2 } as const;
-const TOTAL_FASES = 3;
+// Fases de la experiencia «Línea de Vida». La edad ya no es una fase: se pide
+// en un popup bloqueante al entrar en la línea de vida.
+const FASE = { PROBLEMA: 0, LINEA: 1 } as const;
 
 export default function MetodoPsicologiaExperiencia() {
   const navigate = useNavigate();
@@ -54,7 +54,10 @@ export default function MetodoPsicologiaExperiencia() {
 
   const anioActual = new Date().getFullYear();
 
-  useLockBodyScroll(anoAbierto !== null || transicionOpen);
+  // La edad se pide en un popup bloqueante al entrar en la línea de vida.
+  const necesitaEdad = fase === FASE.LINEA && typeof data.edad !== "number";
+
+  useLockBodyScroll(anoAbierto !== null || transicionOpen || necesitaEdad);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -78,12 +81,11 @@ export default function MetodoPsicologiaExperiencia() {
         guardadoRef.current = JSON.parse(JSON.stringify(d));
         if (typeof d.edad === "number") setEdadInput(String(d.edad));
 
-        // Arranca donde lo dejó.
+        // Arranca donde lo dejó. Si ya escribió el problema, va a la línea de
+        // vida (el popup de edad aparece allí si todavía no la ha indicado).
         const problemaEscrito =
           typeof d["problema-actual"] === "string" && (d["problema-actual"] as string).trim().length > 0;
-        if (!problemaEscrito) setFase(FASE.PROBLEMA);
-        else if (typeof d.edad !== "number") setFase(FASE.EDAD);
-        else setFase(FASE.LINEA);
+        setFase(problemaEscrito ? FASE.LINEA : FASE.PROBLEMA);
       } catch {
         // silencioso
       } finally {
@@ -135,25 +137,23 @@ export default function MetodoPsicologiaExperiencia() {
 
   const avanzarDesdeProblema = async () => {
     await guardarSiCambio();
-    setFase(FASE.EDAD);
+    setFase(FASE.LINEA); // si no hay edad, el popup bloqueante aparecerá aquí
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ── Fase 1 · edad ──
+  // ── Edad (popup bloqueante) ──
   const edadValida = (() => {
     const n = parseInt(edadInput, 10);
     return Number.isFinite(n) && n >= 1 && n <= 120;
   })();
 
-  const avanzarDesdeEdad = async () => {
+  const confirmarEdad = async () => {
     const n = parseInt(edadInput, 10);
     if (!Number.isFinite(n) || n < 1 || n > 120) return;
     const next = { ...data, edad: n };
-    setData(next);
+    setData(next);          // necesitaEdad pasa a false → el popup se cierra
     await persistir(next);
     setTramoIdx(0);
-    setFase(FASE.LINEA);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // ── Página de un año (popup tipo libro) ──
@@ -188,110 +188,73 @@ export default function MetodoPsicologiaExperiencia() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Box position="relative" flex="1" overflow="hidden">
-        <PsicologiaBg overlay="rgba(247,236,220,0.26)" />
-
-        <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
-          <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+        <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Psicología"
+              title={fase === FASE.PROBLEMA ? "Problemas" : "Línea de Vida"}
+              pageLabel={fase === FASE.PROBLEMA ? "2/9" : "3/9"}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: fase + 1, total: TOTAL_FASES }}
               mb={0}
               prev={
                 fase === FASE.PROBLEMA
-                  ? { label: "← Recorrido", onClick: terminar }
-                  : { label: "← Anterior", onClick: () => { void guardarSiCambio(); setFase(fase - 1); window.scrollTo({ top: 0, behavior: "smooth" }); } }
+                  ? { label: "← Vuelve", onClick: terminar }
+                  : { label: "← Problema", onClick: () => { void guardarSiCambio(); setFase(FASE.PROBLEMA); window.scrollTo({ top: 0, behavior: "smooth" }); } }
               }
               next={
                 fase === FASE.PROBLEMA
-                  ? { label: "Siguiente →", onClick: avanzarDesdeProblema }
-                  : fase === FASE.EDAD
-                  ? { label: "Dibujar mi línea →", onClick: avanzarDesdeEdad, disabled: !edadValida, disabledTooltip: "Escribe tu edad para continuar" }
+                  ? { label: "Línea de Vida →", onClick: avanzarDesdeProblema }
                   : { label: completa ? "Continuar →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }
               }
             />
 
-            <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.22em" textTransform="uppercase" opacity={0.6} fontWeight="600" mt={-2}>
-              {exp.titulo}
-            </Text>
-
-            {/* ───────────────── FASE 0 · PROBLEMA ───────────────── */}
+            {/* ── PROBLEMA · box con fondo de psicología sobre la página teal ── */}
             {fase === FASE.PROBLEMA && (
-              <Flex direction="column" align="center" textAlign="center" w="100%" gap={{ base: 6, md: 8 }}>
-                <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" lineHeight="1.3" maxW="620px" style={{ textShadow: INK_SHADOW }}>
-                  {exp.problemaInicial.pregunta}
-                </Text>
-                {exp.problemaInicial.apoyo && (
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.82} maxW="520px">
-                    {exp.problemaInicial.apoyo}
-                  </Text>
-                )}
-                <Textarea
-                  value={problema}
-                  onChange={(e) => setProblema(e.target.value)}
-                  onBlur={guardarSiCambio}
-                  placeholder={exp.problemaInicial.placeholder || "Escribe aquí…"}
-                  {...textareaSx}
-                />
-                <GuardadoHint guardando={guardando} />
-              </Flex>
-            )}
-
-            {/* ───────────────── FASE 1 · EDAD ───────────────── */}
-            {fase === FASE.EDAD && (
-              <Flex direction="column" align="center" textAlign="center" w="100%" gap={{ base: 6, md: 8 }}>
-                <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" lineHeight="1.3" maxW="620px" style={{ textShadow: INK_SHADOW }}>
-                  {exp.preguntaEdad.pregunta}
-                </Text>
-                {exp.preguntaEdad.apoyo && (
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.82} maxW="520px">
-                    {exp.preguntaEdad.apoyo}
-                  </Text>
-                )}
-                <Input
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  max={120}
-                  value={edadInput}
-                  onChange={(e) => setEdadInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && edadValida) void avanzarDesdeEdad(); }}
-                  placeholder={exp.preguntaEdad.placeholder || "Tu edad"}
-                  w="160px"
+              <Box
+                position="relative"
+                w="100%"
+                borderRadius="2xl"
+                overflow="hidden"
+                border={`1px solid ${TINTA}33`}
+                boxShadow={`0 12px 44px rgba(94,45,16,0.22), 0 0 0 1px ${neuropsicologiaBg}55`}
+              >
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                <Flex
+                  position="relative"
+                  zIndex={1}
+                  direction="column"
+                  align="center"
                   textAlign="center"
-                  bg="rgba(255,251,243,0.72)"
-                  border={`1px solid ${TINTA}33`}
-                  color={TINTA}
-                  borderRadius="xl"
-                  size="lg"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize="3xl"
-                  fontWeight="700"
-                  sx={{ caretColor: TINTA }}
-                  _placeholder={{ color: `${TINTA}55`, fontStyle: "italic", fontSize: "lg", fontWeight: 400 }}
-                  _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33, 0 8px 26px rgba(94,45,16,0.16)`, bg: "rgba(255,251,243,0.85)" }}
-                />
-              </Flex>
+                  px={{ base: 7, md: 12 }}
+                  py={{ base: 9, md: 12 }}
+                  gap={{ base: 6, md: 7 }}
+                >
+                  <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" lineHeight="1.3" maxW="620px" style={{ textShadow: INK_SHADOW }}>
+                    {exp.problemaInicial.pregunta}
+                  </Text>
+                  {exp.problemaInicial.apoyo && (
+                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} maxW="520px">
+                      {exp.problemaInicial.apoyo}
+                    </Text>
+                  )}
+                  <Textarea
+                    value={problema}
+                    onChange={(e) => setProblema(e.target.value)}
+                    onBlur={guardarSiCambio}
+                    placeholder={exp.problemaInicial.placeholder || "Escribe aquí…"}
+                    {...textareaSx}
+                  />
+                  <GuardadoHint guardando={guardando} />
+                </Flex>
+              </Box>
             )}
 
-            {/* ───────────────── FASE 2 · LÍNEA DE VIDA ───────────────── */}
+            {/* ───────────────── LÍNEA DE VIDA ───────────────── */}
             {fase === FASE.LINEA && (
               <Flex direction="column" align="center" w="100%" gap={6}>
-                <Flex direction="column" align="center" textAlign="center" gap={2}>
-                  <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
-                    Tu Línea de Vida
-                  </Text>
-                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.82} maxW="560px">
-                    Recorre cada año. No hace falta escribir mucho: basta con visitar tu historia con conciencia. Cuando no haya recuerdos, márcalo y sigue.
-                  </Text>
-                </Flex>
-
                 {/* Contenedor editorial de la timeline */}
                 <Box
                   position="relative"
@@ -301,7 +264,7 @@ export default function MetodoPsicologiaExperiencia() {
                   border={`1px solid ${TINTA}33`}
                   boxShadow={`0 12px 44px rgba(94,45,16,0.2), 0 0 0 1px ${neuropsicologiaBg}55`}
                 >
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.5)" />
+                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 8, md: 11 }}>
 
                     {/* Etiqueta del tramo */}
@@ -377,25 +340,101 @@ export default function MetodoPsicologiaExperiencia() {
 
                 {/* Progreso global de la vida recorrida */}
                 <Flex align="center" gap={3} w="100%" maxW="420px">
-                  <Box flex="1" h="8px" borderRadius="full" bg={`${TINTA}26`} overflow="hidden">
-                    <Box h="100%" w={`${(recorridos / (edad + 1)) * 100}%`} bg={TINTA} borderRadius="full" boxShadow={`0 0 12px ${TINTA}77`} transition="width 0.5s ease" />
+                  <Box flex="1" h="8px" borderRadius="full" bg="rgba(255,255,255,0.22)" overflow="hidden">
+                    <Box h="100%" w={`${(recorridos / (edad + 1)) * 100}%`} bg={PAPEL} borderRadius="full" boxShadow="0 0 12px rgba(255,255,255,0.5)" transition="width 0.5s ease" />
                   </Box>
-                  <Text color={TINTA} fontSize="sm" opacity={0.8} whiteSpace="nowrap">{recorridos}/{edad + 1} años</Text>
+                  <Text color={CREMA} fontSize="sm" opacity={0.9} whiteSpace="nowrap">{recorridos}/{edad + 1} años</Text>
                 </Flex>
 
                 {completa && (
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" maxW="560px" style={{ textShadow: INK_SHADOW }}>
+                  <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" maxW="560px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.3)" }}>
                     Has reconstruido tu vida entera. Tómate un momento para mirarla completa antes de continuar.
                   </Text>
                 )}
 
-                <GuardadoHint guardando={guardando} />
+                <GuardadoHint guardando={guardando} color={CREMA} />
               </Flex>
             )}
 
-          </Flex>
         </Flex>
-      </Box>
+      </Flex>
+
+      {/* ───────────────── EDAD · popup bloqueante ───────────────── */}
+      {necesitaEdad && (
+        <Box
+          position="fixed" inset={0} zIndex={2100}
+          display="flex" alignItems="center" justifyContent="center"
+          px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
+          bg="rgba(0,0,0,0.82)"
+          sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
+          fontFamily="'EB Garamond', serif"
+        >
+          <Box
+            position="relative" w="100%" maxW="440px"
+            borderRadius="2xl" overflow="hidden"
+            boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 90px rgba(0,0,0,0.7)`}
+          >
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 8, md: 10 }} py={{ base: 10, md: 12 }} textAlign="center">
+              <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" mb={3} style={{ textShadow: INK_SHADOW }}>
+                {exp.preguntaEdad.pregunta}
+              </Text>
+              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.82} mb={8} maxW="360px" mx="auto" lineHeight="1.7">
+                {exp.preguntaEdad.apoyo}
+              </Text>
+              <Input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={120}
+                autoFocus
+                value={edadInput}
+                onChange={(e) => setEdadInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && edadValida) void confirmarEdad(); }}
+                placeholder={exp.preguntaEdad.placeholder || "Tu edad"}
+                w="150px"
+                textAlign="center"
+                bg="rgba(255,251,243,0.45)"
+                border={`1px solid ${TINTA}44`}
+                color={TINTA}
+                borderRadius="xl"
+                size="lg"
+                fontFamily="'EB Garamond', serif"
+                fontSize="3xl"
+                fontWeight="700"
+                sx={{ caretColor: TINTA }}
+                _placeholder={{ color: `${TINTA}55`, fontStyle: "italic", fontSize: "lg", fontWeight: 400 }}
+                _hover={{ borderColor: `${TINTA}66` }}
+                _focus={{ borderColor: `${TINTA}99`, boxShadow: `0 0 0 1px ${TINTA}44`, bg: "rgba(255,251,243,0.6)" }}
+              />
+              <Box
+                as="button"
+                onClick={() => { if (edadValida) void confirmarEdad(); }}
+                disabled={!edadValida}
+                display="block"
+                mx="auto"
+                mt={8}
+                px={10}
+                py={3}
+                borderRadius="full"
+                bg={edadValida ? TINTA : `${TINTA}55`}
+                color={PAPEL}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "md", md: "lg" }}
+                letterSpacing="0.06em"
+                cursor={edadValida ? "pointer" : "not-allowed"}
+                opacity={edadValida ? 1 : 0.7}
+                boxShadow={edadValida ? `0 6px 20px rgba(94,45,16,0.35)` : "none"}
+                transition="all 0.2s"
+                _hover={edadValida ? { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.45)` } : {}}
+              >
+                Mi línea de tiempo
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       {/* ───────────────── TRANSICIÓN · «Las Huellas» ───────────────── */}
       {transicionOpen && (
@@ -417,7 +456,7 @@ export default function MetodoPsicologiaExperiencia() {
             boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 80px rgba(40,18,4,0.6)`}
             display="flex" flexDirection="column"
           >
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(248,238,222,0.55)" />
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 8, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center"
                  overflowY="auto" overscrollBehavior="contain">
               <Text color={TINTA} fontSize="2xl" mb={4} style={{ filter: `drop-shadow(0 0 6px ${TINTA}55)` }}>✦</Text>
@@ -476,8 +515,8 @@ const textareaSx = {
   w: "100%",
   maxW: "640px",
   minH: { base: "200px", md: "260px" },
-  bg: "rgba(255,251,243,0.72)",
-  border: `1px solid ${TINTA}33`,
+  bg: "rgba(255,251,243,0.38)",
+  border: `1px solid ${TINTA}3a`,
   color: TINTA,
   borderRadius: "xl",
   px: { base: 5, md: 7 },
@@ -492,12 +531,12 @@ const textareaSx = {
   _focus: {
     borderColor: `${TINTA}88`,
     boxShadow: `inset 0 1px 4px rgba(94,45,16,0.1), 0 0 0 1px ${TINTA}33, 0 8px 30px rgba(94,45,16,0.16)`,
-    bg: "rgba(255,251,243,0.85)",
+    bg: "rgba(255,251,243,0.52)",
   },
 } as const;
 
-const GuardadoHint = ({ guardando }: { guardando: boolean }) => (
-  <Text color={TINTA} fontSize="xs" opacity={0.6} fontStyle="italic" minH="1.2em">
+const GuardadoHint = ({ guardando, color = TINTA }: { guardando: boolean; color?: string }) => (
+  <Text color={color} fontSize="xs" opacity={0.65} fontStyle="italic" minH="1.2em">
     {guardando ? "Guardando…" : "Se guarda solo. Tómate el tiempo que necesites."}
   </Text>
 );
@@ -581,7 +620,7 @@ function PaginaDeAno({
         display="flex"
         flexDirection="column"
       >
-        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(248,238,222,0.55)" />
+        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
         {/* Cerrar */}
         <Box

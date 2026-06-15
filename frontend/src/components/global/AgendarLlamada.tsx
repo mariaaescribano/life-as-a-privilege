@@ -97,7 +97,8 @@ export function AgendarLlamada({
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [nombre, setNombre] = useState("");
+  // Prerrellenamos el nombre con el de la sesión para no pedirlo de nuevo.
+  const [nombre, setNombre] = useState(() => sessionStorage.getItem("name") || "");
   const [email, setEmail] = useState("");
   const [tema, setTema] = useState("");
   const [pagando, setPagando] = useState(false);
@@ -119,6 +120,20 @@ export function AgendarLlamada({
         setTaken(s);
       })
       .catch(() => {});
+
+    // Prerrellena nombre/email con los datos del usuario (si ha iniciado sesión),
+    // para que no tenga que volver a escribirlos.
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      axios
+        .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => {
+          if (cancelled) return;
+          if (res.data?.name) setNombre((prev) => prev || res.data.name);
+          if (res.data?.email) setEmail((prev) => prev || res.data.email);
+        })
+        .catch(() => {});
+    }
     return () => { cancelled = true; };
   }, []);
 

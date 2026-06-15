@@ -140,7 +140,7 @@ export default function MetodoPsicologiaNudos() {
               border={`1px solid ${TINTA}33`}
               boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
             >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" overlay="rgba(247,236,220,0.5)" />
+              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 11 }} py={{ base: 8, md: 11 }} textAlign="center">
                 <Text color={TINTA} fontSize="xl" mb={4} opacity={0.8} style={{ filter: `drop-shadow(0 0 6px ${TINTA}44)` }}>✦</Text>
                 <Flex direction="column" gap={3} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" opacity={0.92} maxW="560px" mx="auto">
@@ -249,7 +249,7 @@ export default function MetodoPsicologiaNudos() {
                     border={`1px solid ${TINTA}33`}
                     boxShadow={`0 6px 22px rgba(94,45,16,0.14)`}
                   >
-                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" overlay="rgba(248,238,222,0.62)" />
+                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
                     <Box position="relative" zIndex={1} as="span" color={TINTA} fontSize="lg" opacity={0.7}>✦</Box>
                     <Text position="relative" zIndex={1} flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
                       {n}
