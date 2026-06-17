@@ -29,7 +29,7 @@ const VINETAS: { img: string; texto: string }[] = [
   },
   {
     img: MAPA4,
-    texto: "La carta astral es tu mapa para comprenderte mejor, reconocer tus talentos, sanar tus heridas y recorrer tu camino con mayor consciencia.",
+    texto: "La carta astral es tu mapa para comprenderte mejor, reconocer tus dones, sanar tus heridas y recorrer tu camino con mayor consciencia.",
   },
 ];
 

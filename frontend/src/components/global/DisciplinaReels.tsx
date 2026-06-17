@@ -61,13 +61,6 @@ const PlayIcon = ({ size = "26px", color = "white" }: { size?: string; color?: s
   </Box>
 );
 
-// Flecha diagonal hacia abajo-derecha (south-east), discreta.
-const ArrowIcon = ({ color = "currentColor" }: { color?: string }) => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill={color}>
-    <path d="M280-280v-80h264L200-704l56-56 344 344v-264h80v400H280Z" />
-  </Box>
-);
-
 /** Extrae el ID de YouTube de una URL embed (…/embed/VIDEO_ID). */
 function youtubeId(embedUrl: string): string | null {
   return embedUrl.match(/\/embed\/([^?&/]+)/)?.[1] ?? null;
@@ -122,16 +115,22 @@ function ReelCard({
   reel,
   nom,
   color,
+  bgColor,
   icon,
   onOpen,
 }: {
   reel: ReelVideo;
   nom: string;
   color: string;
+  /** Color de fondo de la disciplina, para la sombra del título (coherencia con el resto del programa). */
+  bgColor: string;
   /** Icono de la disciplina, a la izquierda del título (página "Todos los vídeos"). */
   icon?: React.ReactNode;
   onOpen: () => void;
 }) {
+  // Misma sombra de texto que el resto del programa (tarjetas/lecciones de curso):
+  // basada en el color de fondo de la disciplina.
+  const tituloShadow = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 22px ${bgColor}`;
   return (
     <Box
       as="button"
@@ -146,7 +145,6 @@ function ReelCard({
       fontFamily="'EB Garamond', serif"
       boxShadow={`0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${color}26`}
       transition="all 0.22s ease"
-      h="100%"
       _hover={{
         transform: "translateY(-4px)",
         borderColor: `${color}88`,
@@ -157,7 +155,15 @@ function ReelCard({
       {/* Fondo: foto de la disciplina */}
       <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
 
-      <Flex direction="column" position="relative" zIndex={1} p={{ base: 3, md: 4 }} gap={icon ? 2 : 3} h="100%">
+      <Flex
+        direction="column"
+        position="relative"
+        zIndex={1}
+        px={icon ? { base: 2.5, md: 3 } : { base: 3, md: 4 }}
+        pt={icon ? { base: 2.5, md: 3 } : { base: 3, md: 4 }}
+        pb={icon ? { base: 1, md: 1.5 } : { base: 3, md: 4 }}
+        gap={icon ? 1.5 : 3}
+      >
         {/* Portada: en "Todos los vídeos" (icon) más baja (4:5) para que los boxes
             no sean tan altos; en el resto se mantiene vertical 3:4. */}
         <Box
@@ -175,7 +181,7 @@ function ReelCard({
         {/* Título — altura fija de 2 líneas para que todas las tarjetas midan igual.
             Con icono: icono de la disciplina a la izquierda del título. */}
         {icon ? (
-          <Flex align="center" gap={2.5}>
+          <Flex align="center" gap={2.5} my={{ base: 1.5, md: 2.5 }}>
             <Flex
               flexShrink={0}
               w={{ base: "30px", md: "34px" }}
@@ -198,6 +204,7 @@ function ReelCard({
               noOfLines={2}
               flex={1}
               minW={0}
+              style={{ textShadow: tituloShadow }}
             >
               {reel.titulo}
             </Text>
@@ -212,21 +219,33 @@ function ReelCard({
             letterSpacing="0.02em"
             noOfLines={2}
             minH="2.6em"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.45)" }}
+            style={{ textShadow: tituloShadow }}
           >
             {reel.titulo}
           </Text>
         )}
 
-        {/* Flecha abajo-derecha — discreta, sin fondo. Se realza levemente al hover. */}
-        <Flex mt="auto" pt={1} justify="flex-end">
+        {/* Flecha → (igual que los discipline boxes de Welcome): avanza un poco
+            en bucle para llamar la atención y se realza al hover. */}
+        <Flex pt={1} justify="flex-end">
           <Box
+            as="span"
             color={color}
-            opacity={0.4}
-            transition="all 0.22s ease"
-            _groupHover={{ opacity: 0.85, transform: "translate(1px, 1px)" }}
+            fontSize={{ base: "lg", md: "xl" }}
+            fontWeight="700"
+            lineHeight="1"
+            opacity={0.85}
+            transition="opacity 0.22s ease"
+            sx={{
+              "@keyframes reelArrowNudge": {
+                "0%, 100%": { transform: "translateX(0)" },
+                "50%": { transform: "translateX(5px)" },
+              },
+              animation: "reelArrowNudge 1.3s ease-in-out infinite",
+            }}
+            _groupHover={{ opacity: 1 }}
           >
-            <ArrowIcon />
+            →
           </Box>
         </Flex>
       </Flex>
@@ -387,11 +406,14 @@ export function DisciplinaReels({
   moduloId,
   nom,
   color,
+  bgColor,
 }: {
   moduloId?: string | null;
   /** Nombre canónico de la disciplina (para la foto de fondo). */
   nom: string;
   color: string;
+  /** Color de fondo de la disciplina (para la sombra del título). */
+  bgColor: string;
 }) {
   const reels = getReelsDisciplina(moduloId);
   const [openReel, setOpenReel] = useState<ReelVideo | null>(null);
@@ -411,18 +433,20 @@ export function DisciplinaReels({
               reel={shown[0]}
               nom={nom}
               color={color}
+              bgColor={bgColor}
               onOpen={() => setOpenReel(shown[0])}
             />
           </Box>
         </Flex>
       ) : (
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }}>
+        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }} alignItems="start">
           {shown.map((reel) => (
             <ReelCard
               key={reel.id}
               reel={reel}
               nom={nom}
               color={color}
+              bgColor={bgColor}
               onOpen={() => setOpenReel(reel)}
             />
           ))}
@@ -449,13 +473,14 @@ export function TodosLosReels() {
 
   return (
     <Box w="100%" fontFamily="'EB Garamond', serif">
-      <SimpleGrid columns={{ base: 2, md: 5 }} spacing={{ base: 4, md: 5 }}>
+      <SimpleGrid columns={{ base: 2, md: 5 }} spacing={{ base: 4, md: 5 }} alignItems="start">
         {items.map(({ reel, meta }) => (
           <ReelCard
             key={reel.id}
             reel={reel}
             nom={meta.nom}
             color={meta.color}
+            bgColor={meta.bgColor}
             icon={meta.icon}
             onOpen={() => setOpen({ reel, color: meta.color })}
           />

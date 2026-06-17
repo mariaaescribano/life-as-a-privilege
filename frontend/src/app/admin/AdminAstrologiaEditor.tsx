@@ -23,6 +23,10 @@ import { disciplinaByKey } from "../../data/adminDisciplinas";
 import { AdminDisciplinaHeader } from "./AdminDisciplinaHeader";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
+// Un reto = punto importante que el usuario verá como una estrella en su cielo.
+interface Reto { id: string; titulo: string; texto: string; }
+const genRetoId = () => "r-" + Math.random().toString(36).slice(2, 9);
+
 const Chevron = ({ open, color }: { open: boolean; color: string }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill={color}
        style={{ transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}>
@@ -60,9 +64,10 @@ export default function AdminAstrologiaEditor() {
   const [carta, setCarta] = useState<CartaNatal | null>(null);
   const [casas, setCasas] = useState<Record<string, string>>({});
   const [aspectos, setAspectos] = useState<Record<string, string>>({});
-  const [linkCarta, setLinkCarta] = useState("");
+  const [retos, setRetos] = useState<Reto[]>([]);
   const [guardando, setGuardando] = useState(false);
   const [guardado, setGuardado] = useState(false);
+  const [errorRetos, setErrorRetos] = useState<string | null>(null);
   const [casasOpen, setCasasOpen] = useState(true);
   const [aspectosOpen, setAspectosOpen] = useState(false);
 
@@ -75,7 +80,7 @@ export default function AdminAstrologiaEditor() {
         const [userRes, cartaRes, rowRes] = await Promise.all([
           axios.get(`${API_URL}/user/${userId}`, { headers: adminHeaders() }),
           axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, { headers: adminHeaders() }),
-          axios.get<{ casas_texto?: Record<string, string>; aspectos_texto?: Record<string, string>; link_carta?: string | null } | null>(
+          axios.get<{ casas_texto?: Record<string, string>; aspectos_texto?: Record<string, string>; retos?: Reto[] } | null>(
             `${API_URL}/metodo-astrologia/${userId}`, { headers: adminHeaders() },
           ),
         ]);
@@ -84,7 +89,7 @@ export default function AdminAstrologiaEditor() {
         setCarta(cartaRes.data ?? null);
         setCasas((rowRes.data?.casas_texto ?? {}) as Record<string, string>);
         setAspectos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
-        setLinkCarta(rowRes.data?.link_carta ?? "");
+        setRetos(Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : []);
       } catch {
         // silencioso
       } finally {
@@ -95,12 +100,31 @@ export default function AdminAstrologiaEditor() {
 
   const guardar = async () => {
     if (!userId) return;
+
+    // ── Validación de puntos clave ──
+    // Regla: mínimo 1 punto, y cada uno debe tener título Y descripción.
+    const conContenido = retos.filter((r) => r.titulo.trim() || r.texto.trim());
+    const incompletos = conContenido.filter((r) => !r.titulo.trim() || !r.texto.trim());
+    if (incompletos.length > 0) {
+      setErrorRetos("Cada punto clave necesita título y descripción (o bórralo).");
+      return;
+    }
+    if (conContenido.length === 0) {
+      setErrorRetos("Añade al menos un punto clave (con título y descripción).");
+      return;
+    }
+    setErrorRetos(null);
+
     setGuardando(true);
     setGuardado(false);
     try {
       await axios.patch(
         `${API_URL}/metodo-astrologia/admin/${userId}/textos`,
-        { casas_texto: casas, aspectos_texto: aspectos, link_carta: linkCarta },
+        {
+          casas_texto: casas,
+          aspectos_texto: aspectos,
+          retos: conContenido.map((r) => ({ ...r, titulo: r.titulo.trim(), texto: r.texto.trim() })),
+        },
         { headers: adminHeaders() },
       );
       setGuardado(true);
@@ -136,7 +160,12 @@ export default function AdminAstrologiaEditor() {
             <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
             {/* barra de guardar */}
-            <Flex justify="flex-end" align="center" gap={3} mb={5}>
+            <Flex justify="flex-end" align="center" gap={3} mb={5} wrap="wrap">
+              {errorRetos && (
+                <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>
+                  {errorRetos}
+                </Text>
+              )}
               {guardado && (
                 <Flex align="center" gap={1.5} color="#ffffff" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>
                   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="#ffffff">
@@ -157,27 +186,66 @@ export default function AdminAstrologiaEditor() {
               </Box>
             </Flex>
 
-            {/* Link del PDF de la carta (Google Drive) */}
+            {/* ── Retos (estrellas del cielo del usuario) ── */}
             <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
                  boxShadow={`0 0 16px ${turquesa}1f`}>
               <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" overlay="rgba(8,13,30,0.82)" />
               <Box position="relative" zIndex={1} p={{ base: 4, md: 5 }}>
-                <Flex align="center" gap={2} mb={2} wrap="wrap">
-                  <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>Link de la carta (PDF)</Text>
-                  {linkCarta?.trim() ? (
-                    <Text fontSize="xs" color="#7ee0c0">· subido</Text>
-                  ) : (
-                    <Text fontSize="xs" color="rgba(255,180,180,0.85)">· sin subir (el usuario no puede pasar de los arquetipos)</Text>
-                  )}
+                <Flex align="center" justify="space-between" gap={2} mb={3} wrap="wrap">
+                  <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>
+                    Puntos clave <Box as="span" color="rgba(255,255,255,0.75)" fontSize="sm">({retos.length})</Box>
+                  </Text>
+                  <Box as="button"
+                       onClick={() => setRetos((p) => [...p, { id: genRetoId(), titulo: "", texto: "" }])}
+                       px={4} py={1.5} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
+                       color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.04em"
+                       cursor="pointer" _hover={{ boxShadow: `0 0 16px ${astrologiaTxt}66` }} transition="all 0.2s"
+                       style={{ textShadow: GLOW }}>
+                    + Añadir punto clave
+                  </Box>
                 </Flex>
-                <Input
-                  value={linkCarta}
-                  onChange={(e) => setLinkCarta(e.target.value)}
-                  placeholder="Pega aquí el enlace de Google Drive del PDF…"
-                  bg="rgba(0,0,0,0.35)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                  fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                  _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
-                />
+
+                <Text color="rgba(255,255,255,0.6)" fontSize="xs" mb={4} fontStyle="italic">
+                  Cada punto clave aparece como una estrella en el cielo del usuario; al pulsarla lee su texto. Mínimo 1, y cada uno con título y descripción.
+                </Text>
+
+                {retos.length === 0 ? (
+                  <Text color="rgba(255,255,255,0.55)" fontStyle="italic" fontSize="sm">Sin puntos clave todavía. Añade el primero.</Text>
+                ) : (
+                  <Flex direction="column" gap={5}>
+                    {retos.map((r, i) => (
+                      <Box key={r.id}>
+                        <Flex align="center" gap={2} mb={1.5} wrap="wrap">
+                          <Text color="#ffffff" fontWeight="700" fontSize="sm" style={{ textShadow: GLOW }}>Estrella {i + 1}</Text>
+                          <Box as="button" ml="auto"
+                               onClick={() => setRetos((p) => p.filter((x) => x.id !== r.id))}
+                               color="rgba(255,180,180,0.9)" fontSize="xs" cursor="pointer"
+                               _hover={{ color: "#ff8a8a" }}>
+                            ✕ Borrar
+                          </Box>
+                        </Flex>
+                        <Input
+                          value={r.titulo}
+                          onChange={(e) => setRetos((p) => p.map((x) => x.id === r.id ? { ...x, titulo: e.target.value } : x))}
+                          placeholder="Título del reto…"
+                          mb={2}
+                          bg="rgba(0,0,0,0.35)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
+                          fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                          _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                        />
+                        <Textarea
+                          value={r.texto}
+                          onChange={(e) => setRetos((p) => p.map((x) => x.id === r.id ? { ...x, texto: e.target.value } : x))}
+                          placeholder="Texto del reto…"
+                          rows={4}
+                          bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
+                          fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                          _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                        />
+                      </Box>
+                    ))}
+                  </Flex>
+                )}
               </Box>
             </Box>
 

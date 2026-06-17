@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import {
+  Box, Flex, Text,
+  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
+} from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -10,6 +13,8 @@ import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
+interface Reto { id: string; titulo: string; texto: string; }
+
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
        style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
@@ -17,20 +22,73 @@ const EyeIcon = () => (
   </Box>
 );
 
-// Convierte un link de "compartir" de Google Drive a URL de descarga directa.
-function toDriveDownload(url: string): string {
-  if (!url) return url;
-  const m1 = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (m1) return `https://drive.google.com/uc?export=download&id=${m1[1]}`;
-  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (m2 && /drive\.google\.com/.test(url)) return `https://drive.google.com/uc?export=download&id=${m2[1]}`;
-  return url;
+// Posición (en %) de cada estrella: rejilla con "temblor" determinista por índice,
+// para que se repartan por el cielo y no salten al re-renderizar.
+function starPos(i: number, total: number): { top: string; left: string } {
+  const cols = Math.min(Math.max(Math.ceil(Math.sqrt(total)), 1), 4);
+  const rows = Math.max(Math.ceil(total / cols), 1);
+  const col = i % cols;
+  const row = Math.floor(i / cols);
+  const cellW = 100 / cols;
+  const cellH = 100 / rows;
+  const seeded = (n: number) => {
+    const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+    return x - Math.floor(x);
+  };
+  const jitterX = (seeded(i * 2 + 1) - 0.5) * cellW * 0.5;
+  const jitterY = (seeded(i * 2 + 2) - 0.5) * cellH * 0.5;
+  return {
+    left: `${cellW * (col + 0.5) + jitterX}%`,
+    top: `${cellH * (row + 0.5) + jitterY}%`,
+  };
+}
+
+// Estrella grande con glow que titila; al pulsarla se abre el reto.
+function EstrellaReto({ index, total, onOpen }: { index: number; total: number; onOpen: () => void }) {
+  const { top, left } = starPos(index, total);
+  const glow = `drop-shadow(0 0 6px ${astrologiaTxt}) drop-shadow(0 0 16px ${astrologiaTxt}cc)`;
+  const glowFuerte = `drop-shadow(0 0 12px ${astrologiaTxt}) drop-shadow(0 0 30px ${astrologiaTxt})`;
+  return (
+    <Box
+      as="button"
+      onClick={onOpen}
+      aria-label="Abrir punto clave"
+      position="absolute"
+      top={top}
+      left={left}
+      transform="translate(-50%, -50%)"
+      transition="transform 0.25s ease"
+      cursor="pointer"
+      zIndex={2}
+      _hover={{ transform: "translate(-50%, -50%) scale(1.18)" }}
+      sx={{
+        "@keyframes retoTwinkle": {
+          "0%, 100%": { filter: glow, opacity: 0.9 },
+          "50%": { filter: glowFuerte, opacity: 1 },
+        },
+      }}
+    >
+      <Box
+        as="svg"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        w={{ base: "42px", md: "56px" }}
+        h={{ base: "42px", md: "56px" }}
+        fill={astrologiaTxt}
+        style={{ animation: "retoTwinkle 3s ease-in-out infinite", animationDelay: `${(index % 5) * 0.45}s` }}
+      >
+        {/* Estrella de 8 puntas (octograma) con rayos finos y elegantes. */}
+        <path d="M12 1 L13.53 8.30 L19.78 4.22 L15.70 10.47 L23 12 L15.70 13.53 L19.78 19.78 L13.53 15.70 L12 23 L10.47 15.70 L4.22 19.78 L8.30 13.53 L1 12 L8.30 10.47 L4.22 4.22 L10.47 8.30 Z" />
+      </Box>
+    </Box>
+  );
 }
 
 export default function MetodoAstrologiaLectura() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [linkCarta, setLinkCarta] = useState<string | null>(null);
+  const [retos, setRetos] = useState<Reto[]>([]);
+  const [retoAbierto, setRetoAbierto] = useState<Reto | null>(null);
   const [comicOpen, setComicOpen] = useState(false);
 
   useEffect(() => {
@@ -40,11 +98,13 @@ export default function MetodoAstrologiaLectura() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const res = await axios.get<{ link_carta?: string | null } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
+        const res = await axios.get<{ link_carta?: string | null; retos?: Reto[] } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.data?.link_carta) { navigate("/metodo/astrologia"); return; }
-        setLinkCarta(res.data.link_carta);
+        const lista = Array.isArray(res.data?.retos) ? res.data!.retos! : [];
+        // Si no hay ni PDF ni puntos clave, la carta aún no está lista.
+        if (!res.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        setRetos(lista);
       } catch {
         navigate("/metodo/astrologia");
         return;
@@ -66,7 +126,7 @@ export default function MetodoAstrologiaLectura() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
           <MetodoStepHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Carta"
+            title="Puntos clave"
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
@@ -87,50 +147,73 @@ export default function MetodoAstrologiaLectura() {
           >
             <SpaceBg overlay="rgba(8,13,30,0.66)" />
 
-            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 12 }}>
-              <Flex direction="column" align="center" gap={7}>
-                <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                      style={{ textShadow: `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${astrologiaTxt}55` }}>
-                  Tu carta astral está lista
-                </Text>
-                <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="560px"
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 5, md: 7 }}>
+              <Flex direction="column" align="center" gap={3}>
+                <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px"
                       style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
-                  Ahora que conoces tus arquetipos, accede a tu carta completa. Descárgala, léela con calma y, cuando estés listo, continúa.
+                  Pulsa sobre cada estrella para descubrir tus puntos clave.
                 </Text>
-
-                {linkCarta && (
-                  <Box
-                    as="a"
-                    href={toDriveDownload(linkCarta)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    px={{ base: 6, md: 10 }}
-                    py={3}
-                    borderRadius="full"
-                    bg={astrologiaTxt}
-                    color={astrologiaBg}
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "md", md: "xl" }}
-                    fontWeight="700"
-                    letterSpacing={{ base: "0.04em", md: "0.08em" }}
-                    whiteSpace="nowrap"
-                    boxShadow={`0 0 18px ${astrologiaTxt}88, 0 0 42px ${astrologiaTxt}44`}
-                    cursor="pointer"
-                    display="inline-flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    lineHeight="1"
-                    transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${astrologiaTxt}aa, 0 0 58px ${astrologiaTxt}55` }}
-                  >
-                    Descargar mi carta (PDF)
-                  </Box>
-                )}
               </Flex>
+
+              {/* Cielo con las estrellas-reto */}
+              {retos.length > 0 ? (
+                <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} mt={{ base: 4, md: 5 }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
+                  {retos.map((r, i) => (
+                    <EstrellaReto key={r.id} index={i} total={retos.length} onOpen={() => setRetoAbierto(r)} />
+                  ))}
+                </Box>
+              ) : (
+                <Text color={`${astrologiaTxt}aa`} fontSize="md" fontStyle="italic" textAlign="center" mt={8}>
+                  Tus puntos clave aparecerán aquí muy pronto.
+                </Text>
+              )}
             </Box>
           </Box>
         </Flex>
       </Flex>
+
+      {/* Modal de un reto */}
+      <Modal isOpen={!!retoAbierto} onClose={() => setRetoAbierto(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
+        <ModalOverlay bg="rgba(5,8,22,0.7)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalContent
+          bg={astrologiaBg}
+          borderRadius="2xl"
+          border={`1px solid ${astrologiaTxt}55`}
+          boxShadow={`0 20px 60px rgba(0,0,0,0.6), 0 0 30px ${astrologiaTxt}44`}
+          overflow="hidden"
+          mx={4}
+        >
+          <SpaceBg overlay="rgba(8,13,30,0.8)" />
+          <ModalCloseButton color={astrologiaTxt} zIndex={2} />
+          <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
+            {retoAbierto && (
+              <Flex direction="column" gap={4}>
+                {retoAbierto.titulo.trim() && (
+                  <>
+                    <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em" textAlign="center"
+                          style={{ textShadow: `0 0 14px rgba(255,255,255,0.5), 0 0 30px ${astrologiaTxt}55` }}>
+                      {retoAbierto.titulo}
+                    </Text>
+                    {/* Separador horizontal elegante: línea con degradado que se desvanece en los bordes */}
+                    <Box
+                      h="1px"
+                      w="55%"
+                      maxW="220px"
+                      mx="auto"
+                      bgGradient={`linear(to-r, transparent, ${astrologiaTxt}aa, transparent)`}
+                      boxShadow={`0 0 8px ${astrologiaTxt}55`}
+                    />
+                  </>
+                )}
+                <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" whiteSpace="pre-line"
+                      style={{ textShadow: `0 0 10px rgba(255,255,255,0.35)` }}>
+                  {retoAbierto.texto}
+                </Text>
+              </Flex>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
       <SiteFooter />

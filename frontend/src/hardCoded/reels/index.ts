@@ -1,8 +1,8 @@
 import {
   fisiologiaNom,
-  ayurvedaNomLink,
-  astrologiaNom,
   neuropsicologiaNom,
+  nutricionNomLink,
+  culturaNom,
 } from "../../GlobalVariables";
 
 /* ─────────────────────────────────────────────────────────────
@@ -43,34 +43,52 @@ export const reelsPorDisciplina: Record<string, ReelVideo[]> = {
       embedUrl: "https://www.youtube.com/embed/_cW744qC1UY",
     },
   ],
-  [ayurvedaNomLink]: [
-    {
-      id: "ayur-introduccion",
-      titulo: "Ayurveda introducción",
-      portada: "/miniaturas/hinduismo/ayurveda.png",
-      embedUrl: "https://www.youtube.com/embed/iVLveGXr1Pw",
-    },
-  ],
-  [astrologiaNom]: [
-    {
-      id: "astro-heridas",
-      titulo: "Tus heridas",
-      portada: "/miniaturas/astro/heridas.png",
-      embedUrl: "https://www.youtube.com/embed/3nyN4gX4q04",
-    },
-  ],
   [neuropsicologiaNom]: [
     {
+      id: "psico-darmas",
+      titulo: "Personas que te importan no te valoran",
+      portada: "/miniaturas/psicologia/darmas.png",
+      embedUrl: "https://www.youtube.com/embed/1OfA8r-Jd3s",
+    },
+    {
+      id: "psico-cuidarte",
+      titulo: "Puedes empezar a cuidarte",
+      portada: "/miniaturas/psicologia/cuidarte.png",
+      embedUrl: "https://www.youtube.com/embed/tNezw66zv-4",
+    },
+    {
+      id: "psico-trastorno",
+      titulo: "¿Qué es un trastorno mental?",
+      portada: "/miniaturas/psicologia/trastorno.png",
+      embedUrl: "https://www.youtube.com/embed/tf_6H4fM6-w",
+    },
+    {
+      id: "psico-estudiar",
+      titulo: "¿Estudiar ya no sirve?",
+      portada: "/miniaturas/psicologia/estudiar.png",
+      embedUrl: "https://www.youtube.com/embed/RTEBJbN-yn4",
+    },
+    {
       id: "psico-inconsciente",
-      titulo: "Tu Inconsciente",
+      titulo: "Tu inconsciente",
       portada: "/miniaturas/psicologia/inconsciente.png",
       embedUrl: "https://www.youtube.com/embed/1LY9J84VZxo",
     },
+  ],
+  [nutricionNomLink]: [
     {
-      id: "psico-procrastinar",
-      titulo: "Deja de procrastinar",
-      portada: "/miniaturas/psicologia/procrastinar.png",
-      embedUrl: "https://www.youtube.com/embed/8_KZn3ca8io",
+      id: "nutri-keto",
+      titulo: "Dieta keto",
+      portada: "/miniaturas/nutri/keto.png",
+      embedUrl: "https://www.youtube.com/embed/olD-2hiG8SQ",
+    },
+  ],
+  [culturaNom]: [
+    {
+      id: "cultura-nube",
+      titulo: "La nube",
+      portada: "/miniaturas/cultura/nube.jpeg",
+      embedUrl: "https://www.youtube.com/embed/deSo8HdR4Ms",
     },
   ],
 };

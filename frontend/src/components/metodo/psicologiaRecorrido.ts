@@ -69,8 +69,7 @@ const lineaDeVida: ExperienciaPsicologia = {
   // recoger y luego marcar como huella. No cambies las `key` tras publicar.
   preguntasPorAno: [
     { key: "recuerdas", pregunta: "¿Qué recuerdas de este año?" },
-    { key: "importante", pregunta: "¿Quién o qué fue importante para ti?" },
-    { key: "paso-importante", pregunta: "¿Pasó algo importante? (enfermedad, muerte, amistad…)" },
+    { key: "importante", pregunta: "¿Quién o qué fue importante para ti? ¿Pasó algo importante? (enfermedad, muerte, amistad…)" },
     { key: "gustaba", pregunta: "¿Qué te gustaba? ¿Cómo disfrutabas?" },
     { key: "experiencias", pregunta: "¿Recuerdas alguna experiencia?" },
     { key: "sentias", pregunta: "¿Cómo te sentías?" },
@@ -91,9 +90,38 @@ export const experienciaById = (id: string): ExperienciaPsicologia | undefined =
 
 export interface AnoEstado {
   sinRecuerdos?: boolean;
-  respuestas?: Record<string, string>;
-  /** El usuario marcó este recuerdo como significativo ("dejó huella"). */
+  /** Respuestas por pregunta. Cada pregunta guarda una LISTA de ítems
+   *  (recuerdos cortos). Se admite `string` heredado (datos antiguos). */
+  respuestas?: Record<string, string[] | string>;
+  /** Marca de huella POR AÑO (heredado). El nuevo modelo marca por ítem. */
   huella?: boolean;
+  /** Ítems (textos) que el usuario marcó como «dejó huella» en Las Huellas. */
+  huellas?: string[];
+}
+
+/** Todos los ítems escritos de un año, en orden de pregunta (lista plana). */
+export function itemsDelAno(
+  data: LineaDeVidaData,
+  edadAno: number,
+  preguntas: { key: string }[],
+): string[] {
+  const ano = data?.anos?.[String(edadAno)];
+  if (!ano?.respuestas) return [];
+  return preguntas
+    .flatMap((p) => itemsDeRespuesta(ano.respuestas?.[p.key]))
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+/** ¿El usuario marcó este ítem (por texto) como que dejó huella? */
+export const itemMarcado = (data: LineaDeVidaData, edadAno: number, texto: string): boolean =>
+  (data?.anos?.[String(edadAno)]?.huellas || []).includes(texto);
+
+/** Normaliza el valor de una respuesta a lista de ítems (acepta string heredado). */
+export function itemsDeRespuesta(valor: unknown): string[] {
+  if (Array.isArray(valor)) return valor.filter((x): x is string => typeof x === "string");
+  if (typeof valor === "string" && valor.trim().length > 0) return [valor];
+  return [];
 }
 export interface LineaDeVidaData {
   [key: string]: unknown;
@@ -108,9 +136,7 @@ export interface LineaDeVidaData {
 export const NUDOS = {
   titulo: "Los Nudos",
   intro: [
-    "Has recorrido tu historia.",
-    "Has vuelto a visitar recuerdos, personas y momentos que ayudaron a moldear quién eres hoy.",
-    "Algunas experiencias quedaron atrás. Otras continúan influyendo en tu forma de pensar, sentir y relacionarte.",
+    "Has recorrido tu historia. Has vuelto a visitar recuerdos, personas y momentos que ayudaron a moldear quién eres hoy. Algunas experiencias quedaron atrás. Otras continúan influyendo en tu forma de pensar, sentir y relacionarte.",
     "A esos puntos de tensión los llamaremos nudos.",
   ],
   apoyo:
@@ -170,7 +196,7 @@ export function estadoDelAno(data: LineaDeVidaData, edadAno: number): EstadoAno 
   const ano = data?.anos?.[String(edadAno)];
   if (!ano) return "vacio";
   const escrito = Object.values(ano.respuestas || {}).some(
-    (v) => typeof v === "string" && v.trim().length > 0,
+    (v) => itemsDeRespuesta(v).some((x) => x.trim().length > 0),
   );
   if (escrito) return "completado";
   if (ano.sinRecuerdos) return "sin-recuerdos";
@@ -235,7 +261,8 @@ export function recuerdoDeAno(
   const ano = data?.anos?.[String(edadAno)];
   if (!ano?.respuestas) return "";
   return preguntas
-    .map((p) => (ano.respuestas?.[p.key] || "").trim())
+    .flatMap((p) => itemsDeRespuesta(ano.respuestas?.[p.key]))
+    .map((x) => x.trim())
     .filter(Boolean)
     .join("\n");
 }

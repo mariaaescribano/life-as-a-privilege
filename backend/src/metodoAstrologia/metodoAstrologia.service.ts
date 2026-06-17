@@ -34,10 +34,19 @@ export interface SolicitudCarta {
 // Textos escritos a mano por la administradora.
 // casas_texto: { "1": "texto casa 1", ..., "12": "texto casa 12" }
 // aspectos_texto: { "sol-luna-trigono": "texto...", ... }  (clave = `${a}-${b}-${tipo}`)
+// Un "reto" de la carta: punto importante que el usuario lee como una estrella
+// en su cielo. Lo escribe la administradora.
+export interface Reto {
+  id: string;
+  titulo: string;
+  texto: string;
+}
+
 export interface TextosCarta {
   casas_texto?: Record<string, string>;
   aspectos_texto?: Record<string, string>;
   link_carta?: string | null; // link del PDF (Google Drive)
+  retos?: Reto[];             // lista de retos (estrellas del cielo)
 }
 
 @Injectable()
@@ -118,6 +127,10 @@ export class MetodoAstrologiaService {
     }
     if (textos.link_carta !== undefined) {
       update.link_carta = textos.link_carta?.trim() || null;
+    }
+    if (textos.retos !== undefined) {
+      // El array de retos se reemplaza por completo (no se hace merge como las casas).
+      update.retos = Array.isArray(textos.retos) ? textos.retos : [];
     }
 
     const { error } = await this.databaseService.getClient()

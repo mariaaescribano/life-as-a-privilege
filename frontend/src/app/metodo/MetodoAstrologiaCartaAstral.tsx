@@ -69,15 +69,16 @@ export default function MetodoAstrologiaCartaAstral() {
 
     (async () => {
       try {
-        const estadoRes = await axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
+        const estadoRes = await axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null; retos?: { id: string }[] } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Accesible en cuanto hay solicitud; el PDF solo desbloquea el "siguiente".
+        // Accesible en cuanto hay solicitud; los retos (o el PDF) desbloquean el "siguiente".
         if (!estadoRes.data?.solicitud_enviada_at) {
           navigate("/metodo/astrologia");
           return;
         }
-        setHayPdf(!!estadoRes.data?.link_carta);
+        const tieneRetos = Array.isArray(estadoRes.data?.retos) && estadoRes.data!.retos!.length > 0;
+        setHayPdf(!!estadoRes.data?.link_carta || tieneRetos);
 
         const res = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -138,7 +139,7 @@ export default function MetodoAstrologiaCartaAstral() {
   }
 
   const headerNext = {
-    label: hayPdf ? "Carta (PDF) →" : "María está leyendo tu carta…",
+    label: hayPdf ? "Puntos clave →" : "María está leyendo tu carta…",
     onClick: () => navigate("/metodo/astrologia/lectura"),
     disabled: !todoCompletado || !hayPdf,
     disabledTooltip: !hayPdf

@@ -171,7 +171,7 @@ export default function MetodoAstrologiaCasas() {
             space
             step={{ current: 5, total: 6 }}
             mb={0}
-            prev={{ label: "← Carta", onClick: () => navigate("/metodo/astrologia/lectura") }}
+            prev={{ label: "← Puntos clave", onClick: () => navigate("/metodo/astrologia/lectura") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
             next={headerNext}
           />

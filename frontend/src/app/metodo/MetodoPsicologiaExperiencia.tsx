@@ -16,6 +16,7 @@ import {
   aniosRecorridos,
   anoNatural,
   tramosDeAnios,
+  itemsDeRespuesta,
   type LineaDeVidaData,
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
@@ -47,7 +48,7 @@ export default function MetodoPsicologiaExperiencia() {
   const [data, setData] = useState<LineaDeVidaData>({});
   const [fase, setFase] = useState<number>(FASE.PROBLEMA);
   const [edadInput, setEdadInput] = useState("");
-  const [guardando, setGuardando] = useState(false);
+  const [, setGuardando] = useState(false);
   const guardadoRef = useRef<LineaDeVidaData>({});
 
   // Tramo visible de la timeline + año abierto (página de libro).
@@ -163,9 +164,11 @@ export default function MetodoPsicologiaExperiencia() {
   };
 
   // ── Página de un año (popup tipo libro) ──
-  const guardarAno = async (edadAno: number, estado: { respuestas: Record<string, string>; sinRecuerdos: boolean }) => {
+  const guardarAno = async (edadAno: number, estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => {
     const anos = { ...(data.anos || {}) };
-    anos[String(edadAno)] = { respuestas: estado.respuestas, sinRecuerdos: estado.sinRecuerdos };
+    const prev = anos[String(edadAno)] || {};
+    // Conservamos `huella` (marca de Las Huellas) al guardar el año.
+    anos[String(edadAno)] = { ...prev, respuestas: estado.respuestas, sinRecuerdos: estado.sinRecuerdos };
     const next = { ...data, anos };
     setData(next);
     await persistir(next);
@@ -253,7 +256,7 @@ export default function MetodoPsicologiaExperiencia() {
                     placeholder={exp.problemaInicial.placeholder || "Escribe aquí…"}
                     {...textareaSx}
                   />
-                  <GuardadoHint guardando={guardando} />
+                  {/* <GuardadoHint guardando={guardando} /> */}
                 </Flex>
               </Box>
             )}
@@ -271,7 +274,7 @@ export default function MetodoPsicologiaExperiencia() {
                   boxShadow={`0 12px 44px rgba(94,45,16,0.2), 0 0 0 1px ${neuropsicologiaBg}55`}
                 >
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} pt={{ base: 8, md: 16 }} pb={{ base: 8, md: 11 }}>
+                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} pt={{ base: 4, md: 6 }} pb={{ base: 8, md: 11 }}>
 
                     {/* Etiqueta del tramo */}
                     <Text textAlign="center" color={TINTA} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.18em" textTransform="uppercase" opacity={0.7} fontWeight="600" mb={{ base: 7, md: 9 }}>
@@ -358,11 +361,11 @@ export default function MetodoPsicologiaExperiencia() {
                   </Text>
                 )}
 
-                <GuardadoHint guardando={guardando} color={CREMA} />
+                {/* <GuardadoHint guardando={guardando} color={CREMA} /> */}
 
                 {/* Recomendación discreta */}
                 <Text color={CREMA} fontSize={{ base: "xs", md: "sm" }} opacity={0.78} fontStyle="italic" textAlign="center" maxW="520px" mt={2}>
-                  Se recomienda buscar fotos de todas las edades de tu vida.
+                  Se recomienda buscar fotos de todas las edades de tu Vida.
                 </Text>
               </Flex>
             )}
@@ -528,13 +531,14 @@ export default function MetodoPsicologiaExperiencia() {
           px={{ base: 4, md: 5 }}
           py={{ base: 2.5, md: 3 }}
           borderRadius="full"
+          overflow="hidden"
           bg={`${neuropsicologiaBg}f2`}
           color={TINTA}
           border={`1px solid ${TINTA}66`}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "sm", md: "md" }}
-          letterSpacing="0.14em"
+          letterSpacing="0.04em"
           cursor="pointer"
           boxShadow={`0 6px 22px rgba(94,45,16,0.35), 0 0 0 1px ${neuropsicologiaBg}66`}
           transition="all 0.22s"
@@ -543,8 +547,11 @@ export default function MetodoPsicologiaExperiencia() {
           alignItems="center"
           gap={2}
         >
-          <Box as="span" opacity={0.85}>✦</Box>
-          LEER
+          {/* Fondo: acuarela de psicología, para que entre en el mismo vibe */}
+          <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+          <Box as="span" position="relative" zIndex={1} style={{ textShadow: INK_SHADOW }}>
+            ¿Necesitas ayuda?
+          </Box>
         </Box>
       )}
 
@@ -566,7 +573,7 @@ export default function MetodoPsicologiaExperiencia() {
             boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 80px rgba(40,18,4,0.55)`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 9 }} py={{ base: 9, md: 11 }} textAlign="center">
+            <Box position="relative" zIndex={1} px={{ base: 9, md: 14 }} py={{ base: 12, md: 16 }} textAlign="center">
               <Box as="button" onClick={() => setLeerOpen(false)} position="absolute" top={3} right={3}
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
@@ -612,9 +619,6 @@ export default function MetodoPsicologiaExperiencia() {
             position="relative" w="100%" maxW="640px" my="auto"
           >
             <Flex align="center" justify="space-between" mb={3} px={1}>
-              <Text color={PAPEL} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.4)" }}>
-                Compañía para tu línea de tiempo
-              </Text>
               <Box as="button" onClick={() => setCompaniaOpen(false)}
                    w="36px" h="36px" borderRadius="full" flexShrink={0}
                    bg="rgba(255,251,243,0.85)" border={`1px solid ${TINTA}44`} color={TINTA}
@@ -663,11 +667,11 @@ const textareaSx = {
   },
 } as const;
 
-const GuardadoHint = ({ guardando, color = TINTA }: { guardando: boolean; color?: string }) => (
-  <Text color={color} fontSize="xs" opacity={0.65} fontStyle="italic" minH="1.2em">
-    {guardando ? "Guardando…" : "Se guarda solo. Tómate el tiempo que necesites."}
-  </Text>
-);
+// const GuardadoHint = ({ guardando, color = TINTA }: { guardando: boolean; color?: string }) => (
+//   // <Text color={color} fontSize="xs" opacity={0.65} fontStyle="italic" minH="1.2em">
+//   //   {guardando ? "Guardando…" : "Se guarda solo. Tómate el tiempo que necesites."}
+//   // </Text>
+// );
 
 const FlechaTramo = ({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
   <Box
@@ -705,34 +709,67 @@ function PaginaDeAno({
   edadAno: number;
   anioNatural: number;
   preguntas: { key: string; pregunta: string; apoyo?: string }[];
-  inicial?: { sinRecuerdos?: boolean; respuestas?: Record<string, string> };
+  inicial?: { sinRecuerdos?: boolean; respuestas?: Record<string, string[] | string> };
   onCerrar: () => void;
-  onGuardar: (estado: { respuestas: Record<string, string>; sinRecuerdos: boolean }) => Promise<void> | void;
-  onGuardarSinCerrar: (estado: { respuestas: Record<string, string>; sinRecuerdos: boolean }) => Promise<void> | void;
+  onGuardar: (estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => Promise<void> | void;
+  onGuardarSinCerrar: (estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => Promise<void> | void;
 }) {
-  const [respuestas, setRespuestas] = useState<Record<string, string>>(inicial?.respuestas || {});
+  // Cada pregunta guarda una LISTA de ítems (coerciona datos antiguos en string).
+  const [respuestas, setRespuestas] = useState<Record<string, string[]>>(() => {
+    const out: Record<string, string[]> = {};
+    for (const p of preguntas) out[p.key] = itemsDeRespuesta(inicial?.respuestas?.[p.key]);
+    return out;
+  });
+  // Texto en curso por pregunta (aún no añadido como ítem).
+  const [draft, setDraft] = useState<Record<string, string>>({});
   const [sinRecuerdos, setSinRecuerdos] = useState<boolean>(!!inicial?.sinRecuerdos);
   const [guardando, setGuardando] = useState(false);
   const [guardadoOk, setGuardadoOk] = useState(false);
 
-  const algoEscrito = Object.values(respuestas).some((v) => v && v.trim().length > 0);
-  const estadoActual = () => ({ respuestas, sinRecuerdos: sinRecuerdos && !algoEscrito ? true : sinRecuerdos });
-
-  const cambiar = (key: string, valor: string) => {
-    setRespuestas((prev) => ({ ...prev, [key]: valor }));
+  const añadirItem = (key: string) => {
+    const v = (draft[key] || "").trim();
+    if (!v) return;
+    setRespuestas((prev) => ({ ...prev, [key]: [...(prev[key] || []), v] }));
+    setDraft((prev) => ({ ...prev, [key]: "" }));
+    setGuardadoOk(false);
+  };
+  const quitarItem = (key: string, i: number) => {
+    setRespuestas((prev) => ({ ...prev, [key]: (prev[key] || []).filter((_, idx) => idx !== i) }));
+    setGuardadoOk(false);
+  };
+  const cambiarDraft = (key: string, v: string) => {
+    setDraft((prev) => ({ ...prev, [key]: v }));
     setGuardadoOk(false);
   };
 
+  // Vuelca lo que haya escrito sin pulsar Enter como un ítem más (no se pierde).
+  const flushDrafts = (): Record<string, string[]> => {
+    const next: Record<string, string[]> = { ...respuestas };
+    let changed = false;
+    for (const p of preguntas) {
+      const d = (draft[p.key] || "").trim();
+      if (d) { next[p.key] = [...(next[p.key] || []), d]; changed = true; }
+    }
+    if (changed) { setRespuestas(next); setDraft({}); }
+    return next;
+  };
+  const estadoDe = (r: Record<string, string[]>) => {
+    const algo = preguntas.some((p) => (r[p.key] || []).some((x) => x.trim().length > 0));
+    return { respuestas: r, sinRecuerdos: sinRecuerdos && !algo ? true : sinRecuerdos };
+  };
+
   const guardar = async () => {
+    const r = flushDrafts();
     setGuardando(true);
-    await onGuardar(estadoActual());
+    await onGuardar(estadoDe(r));
     setGuardando(false);
   };
 
   // Guarda sin cerrar el año, con feedback breve.
   const guardarSinCerrar = async () => {
+    const r = flushDrafts();
     setGuardando(true);
-    await onGuardarSinCerrar(estadoActual());
+    await onGuardarSinCerrar(estadoDe(r));
     setGuardando(false);
     setGuardadoOk(true);
   };
@@ -816,43 +853,84 @@ function PaginaDeAno({
             <Box mt={3} h="1px" w="120px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
           </Flex>
 
-          {/* Preguntas evocadoras */}
-          <Flex direction="column" gap={{ base: 7, md: 8 }}>
-            {preguntas.map((p) => (
-              <Box key={p.key}>
-                <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
-                  {p.pregunta}
-                </Text>
-                <Textarea
-                  value={respuestas[p.key] || ""}
-                  onChange={(e) => cambiar(p.key, e.target.value)}
-                  placeholder="Escribe lo que recuerdes…"
-                  minH={{ base: "84px", md: "92px" }}
-                  bg="rgba(255,251,243,0.6)"
-                  border={`1px solid ${TINTA}2e`}
-                  color={TINTA}
-                  borderRadius="lg"
-                  px={4}
-                  py={3}
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight="1.8"
-                  sx={{ caretColor: TINTA }}
-                  _placeholder={{ color: `${TINTA}55`, fontStyle: "italic" }}
-                  _hover={{ borderColor: `${TINTA}4d` }}
-                  _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.8)" }}
-                />
-              </Box>
-            ))}
+          {/* Preguntas — cada una en su box; las respuestas son una lista de
+              ítems: escribe y pulsa Enter para añadir cada recuerdo. */}
+          <Flex direction="column" gap={{ base: 5, md: 6 }}>
+            {preguntas.map((p) => {
+              const items = respuestas[p.key] || [];
+              return (
+                <Box
+                  key={p.key}
+                  borderRadius="xl"
+                  px={{ base: 5, md: 6 }}
+                  py={{ base: 4, md: 5 }}
+                  bg="rgba(255,251,243,0.42)"
+                  border={`1px solid ${TINTA}26`}
+                >
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.5" mb={items.length ? 3 : 2} style={{ textShadow: INK_SHADOW }}>
+                    {p.pregunta}
+                  </Text>
+
+                  {/* Lista de ítems añadidos */}
+                  {items.length > 0 && (
+                    <Flex direction="column" gap={1.5} mb={3}>
+                      {items.map((it, i) => (
+                        <Flex key={i} align="flex-start" gap={2.5} role="group">
+                          <Box as="span" color={TINTA} opacity={0.55} mt="7px" flexShrink={0} fontSize="2xs">✦</Box>
+                          <Text flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
+                            {it}
+                          </Text>
+                          <Box
+                            as="button"
+                            onClick={() => quitarItem(p.key, i)}
+                            flexShrink={0}
+                            mt="2px"
+                            w="22px" h="22px"
+                            borderRadius="full"
+                            color={`${TINTA}88`}
+                            fontSize="sm"
+                            display="flex" alignItems="center" justifyContent="center"
+                            opacity={0}
+                            transition="opacity 0.15s, background 0.15s, color 0.15s"
+                            _groupHover={{ opacity: 1 }}
+                            _hover={{ bg: `${TINTA}14`, color: TINTA }}
+                            aria-label="Quitar"
+                          >
+                            ✕
+                          </Box>
+                        </Flex>
+                      ))}
+                    </Flex>
+                  )}
+
+                  {/* Campo discreto: escribir + Enter añade un ítem */}
+                  <Input
+                    value={draft[p.key] || ""}
+                    onChange={(e) => cambiarDraft(p.key, e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); añadirItem(p.key); } }}
+                    placeholder={items.length ? "Añade otro…" : "Escribe y pulsa Enter…"}
+                    variant="unstyled"
+                    color={TINTA}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "md", md: "lg" }}
+                    sx={{ caretColor: TINTA }}
+                    _placeholder={{ color: `${TINTA}55`, fontStyle: "italic" }}
+                  />
+                  <Box h="1px" mt={2} bg={`${TINTA}22`} />
+                </Box>
+              );
+            })}
           </Flex>
 
-          {/* Acciones — con bastante aire respecto al último box de escritura */}
-          <Flex direction="column" align="center" gap={3} mt={{ base: 14, md: 20 }}>
-            <Flex direction={{ base: "column", sm: "row" }} align="center" justify="center" gap={3} w="100%">
+          {/* Acciones — fila horizontal estable: anchos fijos para que no se
+              reordenen ni cambien de tamaño al guardar. */}
+          <Flex direction="row" wrap="nowrap" align="center" justify="center" gap={{ base: 2, md: 3 }} mt={{ base: 12, md: 20 }} w="100%">
               <Box
                 as="button"
                 onClick={() => { setSinRecuerdos((v) => !v); setGuardadoOk(false); }}
-                px={6}
+                flexShrink={0}
+                minW={{ base: "120px", md: "168px" }}
+                px={{ base: 3, md: 5 }}
                 py={3}
                 borderRadius="full"
                 bg={sinRecuerdos ? `${TINTA}` : "transparent"}
@@ -860,18 +938,22 @@ function PaginaDeAno({
                 border={`1px solid ${TINTA}66`}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="600"
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.04em"
+                fontSize={{ base: "xs", md: "md" }}
+                letterSpacing="0.03em"
+                whiteSpace="nowrap"
+                textAlign="center"
                 cursor="pointer"
-                transition="all 0.2s"
+                transition="background 0.2s, border-color 0.2s, transform 0.2s"
                 _hover={{ bg: sinRecuerdos ? `${TINTA}` : `${TINTA}14`, borderColor: TINTA }}
               >
-                {sinRecuerdos ? "✓ Sin recuerdos de este año" : "No tengo recuerdos de este año"}
+                {sinRecuerdos ? "✓ Sin recuerdos" : "Sin recuerdos"}
               </Box>
               <Box
                 as="button"
                 onClick={guardando ? undefined : guardarSinCerrar}
-                px={7}
+                flexShrink={0}
+                minW={{ base: "104px", md: "134px" }}
+                px={{ base: 3, md: 5 }}
                 py={3}
                 borderRadius="full"
                 bg="transparent"
@@ -879,10 +961,12 @@ function PaginaDeAno({
                 border={`1.5px solid ${TINTA}`}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.04em"
+                fontSize={{ base: "xs", md: "md" }}
+                letterSpacing="0.03em"
+                whiteSpace="nowrap"
+                textAlign="center"
                 cursor={guardando ? "wait" : "pointer"}
-                transition="all 0.2s"
+                transition="background 0.2s, transform 0.2s"
                 _hover={guardando ? {} : { bg: `${TINTA}14`, transform: "translateY(-1px)" }}
               >
                 {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
@@ -890,7 +974,8 @@ function PaginaDeAno({
               <Box
                 as="button"
                 onClick={guardando ? undefined : guardar}
-                px={9}
+                flexShrink={0}
+                px={{ base: 4, md: 8 }}
                 py={3}
                 borderRadius="full"
                 bg={TINTA}
@@ -898,17 +983,18 @@ function PaginaDeAno({
                 border={`1px solid ${TINTA}`}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
-                letterSpacing="0.06em"
+                fontSize={{ base: "xs", md: "lg" }}
+                letterSpacing="0.04em"
+                whiteSpace="nowrap"
+                textAlign="center"
                 cursor={guardando ? "wait" : "pointer"}
                 opacity={guardando ? 0.7 : 1}
                 boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
-                transition="all 0.2s"
+                transition="transform 0.2s, box-shadow 0.2s, opacity 0.2s"
                 _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
               >
                 Guardar y cerrar
               </Box>
-            </Flex>
           </Flex>
         </Box>
       </Box>

@@ -6,7 +6,6 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { PsicologiaBg } from "../../components/metodo/PsicologiaBg";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
   experienciaById,
@@ -115,9 +114,7 @@ export default function MetodoPsicologiaNudos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Box position="relative" flex="1" overflow="hidden">
-        <PsicologiaBg overlay="rgba(247,236,220,0.26)" />
-
+      <Box position="relative" flex="1">
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 7, md: 9 }}>
 
@@ -127,6 +124,7 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
+              step={{ current: 5, total: 9 }}
               mb={0}
               prev={{ label: "← Las Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
               next={{ label: "La Integración →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
@@ -142,9 +140,8 @@ export default function MetodoPsicologiaNudos() {
               boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 7, md: 11 }} py={{ base: 8, md: 11 }} textAlign="center">
-                <Text color={TINTA} fontSize="xl" mb={4} opacity={0.8} style={{ filter: `drop-shadow(0 0 6px ${TINTA}44)` }}>✦</Text>
-                <Flex direction="column" gap={3} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" opacity={0.92} maxW="560px" mx="auto">
+              <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }} textAlign="center">
+                <Flex direction="column" gap={2.5} color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.92} maxW="560px" mx="auto">
                   {NUDOS.intro.map((p, i) => (
                     <Text key={i} fontStyle={i === NUDOS.intro.length - 1 ? "italic" : "normal"} style={{ textShadow: INK_SHADOW }}>{p}</Text>
                   ))}
@@ -152,139 +149,173 @@ export default function MetodoPsicologiaNudos() {
               </Box>
             </Box>
 
-            {/* Pregunta principal + apoyo */}
-            <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
-              <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                {NUDOS.pregunta}
-              </Text>
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
-                {NUDOS.apoyo}
-              </Text>
-            </Flex>
+            {/* Box principal: pregunta + entrada + ejemplos + nudos seleccionados */}
+            <Box
+              position="relative"
+              w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              border={`1px solid ${TINTA}33`}
+              boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
+            >
+              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 6, md: 7 }} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
 
-            {/* Entrada para añadir nudos */}
-            <Flex w="100%" maxW="560px" gap={3} direction={{ base: "column", sm: "row" }}>
-              <Input
-                value={entrada}
-                onChange={(e) => setEntrada(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") añadirNudo(entrada); }}
-                placeholder="Escribe un nudo y pulsa Añadir…"
-                flex="1"
-                bg="rgba(255,251,243,0.72)"
-                border={`1px solid ${TINTA}33`}
-                color={TINTA}
-                borderRadius="xl"
-                size="lg"
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }}
-                sx={{ caretColor: TINTA }}
-                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                _hover={{ borderColor: `${TINTA}55` }}
-                _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.85)" }}
-              />
-              <Box
-                as="button"
-                onClick={() => añadirNudo(entrada)}
-                px={8}
-                borderRadius="xl"
-                bg={TINTA}
-                color={PAPEL}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
-                letterSpacing="0.04em"
-                cursor="pointer"
-                py={{ base: 3, sm: 0 }}
-                boxShadow={`0 4px 16px rgba(94,45,16,0.28)`}
-                transition="all 0.2s"
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 22px rgba(94,45,16,0.38)` }}
-              >
-                Añadir
-              </Box>
-            </Flex>
-
-            {/* Ejemplos sugeridos (opcionales) */}
-            {ejemplosDisponibles.length > 0 && (
-              <Flex direction="column" align="center" gap={3} w="100%" maxW="620px">
-                <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
-                  Si te sirven de inspiración
-                </Text>
-                <Flex wrap="wrap" justify="center" gap={2}>
-                  {ejemplosDisponibles.map((e) => (
-                    <Box
-                      key={e}
-                      as="button"
-                      onClick={() => añadirNudo(e)}
-                      px={4}
-                      py={2}
-                      borderRadius="full"
-                      bg="rgba(255,251,243,0.4)"
-                      color={TINTA}
-                      border={`1px dashed ${TINTA}55`}
-                      fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "sm", md: "md" }}
-                      cursor="pointer"
-                      transition="all 0.18s"
-                      _hover={{ bg: "rgba(255,251,243,0.7)", borderColor: TINTA }}
-                    >
-                      + {e}
-                    </Box>
-                  ))}
+                {/* Pregunta principal + apoyo */}
+                <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
+                  <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                    {NUDOS.pregunta}
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
+                    {NUDOS.apoyo}
+                  </Text>
                 </Flex>
-              </Flex>
-            )}
 
-            {/* Nudos añadidos */}
-            {nudos.length > 0 && (
-              <Flex direction="column" w="100%" maxW="620px" gap={3}>
-                {nudos.map((n, i) => (
-                  <Flex
-                    key={`${n}-${i}`}
-                    align="center"
-                    gap={4}
-                    px={{ base: 5, md: 6 }}
-                    py={{ base: 4, md: 4 }}
-                    borderRadius="xl"
-                    position="relative"
-                    overflow="hidden"
+                {/* Entrada para añadir nudos */}
+                <Flex w="100%" maxW="560px" gap={3} direction={{ base: "column", sm: "row" }}>
+                  <Input
+                    value={entrada}
+                    onChange={(e) => setEntrada(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") añadirNudo(entrada); }}
+                    placeholder="Escribe un nudo y pulsa Añadir…"
+                    flex="1"
+                    bg="rgba(255,251,243,0.72)"
                     border={`1px solid ${TINTA}33`}
-                    boxShadow={`0 6px 22px rgba(94,45,16,0.14)`}
+                    color={TINTA}
+                    borderRadius="xl"
+                    size="lg"
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "md", md: "lg" }}
+                    sx={{ caretColor: TINTA }}
+                    _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                    _hover={{ borderColor: `${TINTA}55` }}
+                    _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.85)" }}
+                  />
+                  <Box
+                    as="button"
+                    onClick={() => añadirNudo(entrada)}
+                    px={8}
+                    borderRadius="xl"
+                    bg={TINTA}
+                    color={PAPEL}
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="700"
+                    fontSize={{ base: "md", md: "lg" }}
+                    letterSpacing="0.04em"
+                    cursor="pointer"
+                    py={{ base: 3, sm: 0 }}
+                    boxShadow={`0 4px 16px rgba(94,45,16,0.28)`}
+                    transition="all 0.2s"
+                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 22px rgba(94,45,16,0.38)` }}
                   >
-                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
-                    <Box position="relative" zIndex={1} as="span" color={TINTA} fontSize="lg" opacity={0.7}>✦</Box>
-                    <Text position="relative" zIndex={1} flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                      {n}
-                    </Text>
-                    <Box
-                      as="button"
-                      position="relative"
-                      zIndex={1}
-                      onClick={() => quitarNudo(i)}
-                      w="30px"
-                      h="30px"
-                      borderRadius="full"
-                      bg="rgba(94,45,16,0.08)"
-                      color={TINTA}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      fontSize="md"
-                      cursor="pointer"
-                      flexShrink={0}
-                      transition="all 0.18s"
-                      _hover={{ bg: "rgba(94,45,16,0.18)" }}
-                      title="Quitar"
-                    >
-                      ✕
-                    </Box>
-                  </Flex>
-                ))}
-              </Flex>
-            )}
+                    Añadir
+                  </Box>
+                </Flex>
 
-            <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
-              {guardando ? "Guardando…" : nudos.length > 0 ? "Cada nudo se guarda por separado." : ""}
-            </Text>
+                {/* Ejemplos sugeridos (opcionales) — punteados */}
+                {ejemplosDisponibles.length > 0 && (
+                  <Flex direction="column" align="center" gap={3} w="100%" maxW="620px">
+                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
+                      Si te sirven de inspiración
+                    </Text>
+                    <Flex wrap="wrap" justify="center" gap={2}>
+                      {ejemplosDisponibles.map((e) => (
+                        <Box
+                          key={e}
+                          as="button"
+                          onClick={() => añadirNudo(e)}
+                          px={4}
+                          py={2}
+                          borderRadius="full"
+                          bg="rgba(255,251,243,0.35)"
+                          color={TINTA}
+                          border={`1px dashed ${TINTA}55`}
+                          fontFamily="'EB Garamond', serif"
+                          fontSize={{ base: "sm", md: "md" }}
+                          cursor="pointer"
+                          transition="all 0.18s"
+                          _hover={{ bg: "rgba(255,251,243,0.6)", borderColor: TINTA }}
+                        >
+                          + {e}
+                        </Box>
+                      ))}
+                    </Flex>
+                  </Flex>
+                )}
+
+              </Flex>
+            </Box>
+
+            {/* Box «Mis Nudos»: la selección final del usuario */}
+            <Box
+              position="relative"
+              w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              border={`1px solid ${TINTA}33`}
+              boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
+            >
+              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
+                <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
+                  Mis Nudos
+                  {nudos.length > 0 && (
+                    <Box as="span" ml={2} fontSize={{ base: "sm", md: "md" }} fontWeight="600" opacity={0.7}>({nudos.length})</Box>
+                  )}
+                </Text>
+
+                {nudos.length > 0 ? (
+                  <Flex wrap="wrap" justify="center" gap={2.5} w="100%" maxW="620px">
+                    {nudos.map((n, i) => (
+                      <Flex
+                        key={`${n}-${i}`}
+                        align="center"
+                        gap={2}
+                        pl={4}
+                        pr={2}
+                        py={2}
+                        borderRadius="full"
+                        bg="rgba(255,251,243,0.6)"
+                        border={`1px solid ${TINTA}66`}
+                        boxShadow={`0 3px 12px rgba(94,45,16,0.14)`}
+                      >
+                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                          {n}
+                        </Text>
+                        <Box
+                          as="button"
+                          onClick={() => quitarNudo(i)}
+                          w="22px"
+                          h="22px"
+                          borderRadius="full"
+                          bg="rgba(94,45,16,0.1)"
+                          color={TINTA}
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          fontSize="xs"
+                          cursor="pointer"
+                          flexShrink={0}
+                          transition="all 0.18s"
+                          _hover={{ bg: "rgba(94,45,16,0.22)" }}
+                          title="Quitar"
+                        >
+                          ✕
+                        </Box>
+                      </Flex>
+                    ))}
+                  </Flex>
+                ) : (
+                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                    Aquí aparecerán los nudos que vayas seleccionando.
+                  </Text>
+                )}
+
+                <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
+                  {guardando ? "Guardando…" : nudos.length > 0 ? "Cada nudo se guarda según lo seleccionas." : ""}
+                </Text>
+              </Flex>
+            </Box>
           </Flex>
         </Flex>
       </Box>
