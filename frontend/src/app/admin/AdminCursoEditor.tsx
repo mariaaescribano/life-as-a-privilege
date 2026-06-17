@@ -19,6 +19,7 @@ interface Leccion { id: string; nom: string; tipo: "texto" | "video" | "test"; c
 interface Modulo { title: string; submodules: Leccion[]; }
 interface Curso {
   id: string; modalidad: string; titulo: string; foto: string; descripcion: string;
+  descripcion_contenido?: string;
   de_pago: boolean; publicado: boolean; completado: boolean; orden: number; contenido: Modulo[];
 }
 
@@ -89,6 +90,7 @@ export default function AdminCursoEditor() {
     try {
       await axios.patch(`${API_URL}/cursos/${curso.id}`, {
         modalidad: curso.modalidad, titulo: curso.titulo, foto: curso.foto, descripcion: curso.descripcion,
+        descripcion_contenido: curso.descripcion_contenido,
         de_pago: curso.de_pago, publicado: curso.publicado, completado: curso.completado, orden: curso.orden, contenido: curso.contenido,
       }, { headers: adminHeaders() });
       toast({ title: "Guardado", status: "success", duration: 2000 });
@@ -167,6 +169,11 @@ export default function AdminCursoEditor() {
               <Box>
                 <Text fontSize="sm" mb={1} opacity={0.8}>Descripción</Text>
                 <Textarea value={curso.descripcion} onChange={(e) => set({ descripcion: e.target.value })} rows={2} {...fieldStyle} />
+              </Box>
+              <Box>
+                <Text fontSize="sm" mb={1} opacity={0.8}>Frase bajo «Contenido del curso»</Text>
+                <Textarea value={curso.descripcion_contenido ?? ""} onChange={(e) => set({ descripcion_contenido: e.target.value })} rows={2}
+                          placeholder="Si lo dejas vacío, se usa la descripción de arriba." {...fieldStyle} />
               </Box>
               <Flex gap={6} align="center" flexWrap="wrap">
                 <Checkbox isChecked={curso.de_pago} onChange={(e) => set({ de_pago: e.target.checked })}>De pago (5 €)</Checkbox>

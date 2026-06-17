@@ -3,13 +3,27 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-Poner fotos de cómo es cada disciplina + hacer mas peques los boxes de elr ecorrido popup
-Agendar llamada calendario al final de astro del recorrido
+
+- poner cursos al final de astrología y de psicología
+
+PSICOLOGIA RECORRIDO
+- Quién o qué / que se pueda guardar sin cerrar
+- dejar mas espacio entre botones y ultimo box de escritura
+- añadir boxes: "Pasó algo importante? (enfermedad, muerte, amistad...), "Qué te gustaba/cómo disfrutabas?", "Recuerdas alguna experiencia?", añadir "Algo más que quieres añadir..."
+- añadir "Se recomienda buscar fotos de todas las edades de tu vida" 
+-añadir "Prefieres hacerlo acompañado? Agenda tu llamada"
 
 
 
+- añadir una frase debajo de CONTENIDO
 
+Por ejemplo en Pareja:
 
+Un recorrido por el amor, el conflicto, el compromiso y el cambio dentro de las relaciones.
+
+Y en Autoestima:
+
+Comprende cómo se construye el valor personal y qué necesitamos para desarrollarlo.
 
 
 

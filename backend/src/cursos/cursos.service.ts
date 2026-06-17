@@ -5,7 +5,7 @@ import type { CursoDB, CursoInput } from './cursos.types';
 const TABLE = 'curso';
 
 // Solo estos campos se pueden escribir desde el API (evita inyectar columnas raras).
-const CAMPOS = ['modalidad', 'titulo', 'foto', 'descripcion', 'de_pago', 'publicado', 'completado', 'orden', 'contenido'] as const;
+const CAMPOS = ['modalidad', 'titulo', 'foto', 'descripcion', 'descripcion_contenido', 'de_pago', 'publicado', 'completado', 'orden', 'contenido'] as const;
 
 function pick(input: CursoInput): Record<string, any> {
   const out: Record<string, any> = {};

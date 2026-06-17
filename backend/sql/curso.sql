@@ -23,6 +23,7 @@ create table if not exists public.curso (
   titulo       text not null default '',
   foto         text not null default '',      -- ruta/URL de la imagen (la subes tú a /img)
   descripcion  text not null default '',
+  descripcion_contenido text not null default '', -- frase bajo "Contenido del curso" (si vacía, se usa descripcion)
   de_pago      boolean not null default false,-- true = precio fijo + link Stripe; false = gratis
   publicado    boolean not null default true,
   completado   boolean not null default false,-- true = terminado por la admin (organización interna)
@@ -35,7 +36,8 @@ create table if not exists public.curso (
 create index if not exists curso_modalidad_idx on public.curso (modalidad);
 create index if not exists curso_publicado_idx on public.curso (publicado);
 
--- Si la tabla ya existía, añade la columna nueva:
+-- Si la tabla ya existía, añade las columnas nuevas:
 alter table public.curso add column if not exists completado boolean not null default false;
+alter table public.curso add column if not exists descripcion_contenido text not null default '';
 
 -- El backend accede con SERVICE_ROLE_KEY (salta RLS), igual que el resto de tablas.

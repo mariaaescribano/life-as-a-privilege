@@ -15,6 +15,28 @@ function safeDecode(s: string): string {
   try { return decodeURIComponent(s); } catch { return s; }
 }
 
+// Divide el contenido de la lección en secciones por las líneas separadoras
+// (--- o ***), igual que las detecta el Markdown. Cada sección se pinta como
+// su propio "rectángulo" con la imagen de la disciplina ajustada (cover), así
+// el autor controla con --- dónde empieza cada imagen y nunca queda estirada.
+function splitSecciones(text: string): string[] {
+  const lines = text.replace(/\r\n/g, "\n").split("\n");
+  const secciones: string[] = [];
+  let cur: string[] = [];
+  for (const line of lines) {
+    if (/^(-{3,}|\*{3,})$/.test(line.trim())) {
+      secciones.push(cur.join("\n"));
+      cur = [];
+    } else {
+      cur.push(line);
+    }
+  }
+  secciones.push(cur.join("\n"));
+  const limpias = secciones.map((s) => s.trim()).filter((s) => s.length > 0);
+  // Si no hay separadores (o queda vacío), tratamos todo como una sola sección.
+  return limpias.length > 0 ? limpias : [text];
+}
+
 export default function TextLessonPage() {
   const { modalidadId: rawMod, cursoId, submoduloId } = useParams<{
     modalidadId: string; cursoId: string; submoduloId: string;
@@ -54,7 +76,8 @@ export default function TextLessonPage() {
   const esVideo = leccion.tipo === "video" && !!leccion.video;
   const esTest = leccion.tipo === "test";
 
-  const TEXT_GLOW = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 22px ${bgColor}, 0 0 40px ${color}33`;
+  // Misma sombra que la tarjeta de curso y el editor admin (coherencia del módulo de cursos).
+  const TEXT_GLOW = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 22px ${bgColor}`;
   // Mismo glow que el header (MetodoStepHeader) para que haya coherencia.
   const HEADER_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`;
 
@@ -158,10 +181,19 @@ export default function TextLessonPage() {
               boxShadow={HEADER_GLOW}
               mt={{ base: 2, md: 4 }}
             >
-              {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" />}
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 12 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
-                <Markdown text={leccion.contenido ?? leccion.letra ?? ""} color={color} />
-              </Box>
+              {/* Cada sección separada por `---` es su propio rectángulo, con
+                  una imagen de la disciplina ajustada a su tamaño. Las
+                  secciones van pegadas y se separan con una línea fina (el
+                  antiguo `---`). */}
+              {splitSecciones(leccion.contenido ?? leccion.letra ?? "").map((sec, si) => (
+                <Box key={si} position="relative">
+                  {si > 0 && <Box position="relative" zIndex={1} h="1px" bg={`${color}44`} />}
+                  {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="0" />}
+                  <Box position="relative" zIndex={1} px={{ base: 6, md: 12 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
+                    <Markdown text={sec} color={color} />
+                  </Box>
+                </Box>
+              ))}
             </Box>
           )}
 

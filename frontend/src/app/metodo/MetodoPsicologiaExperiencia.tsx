@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { AgendarLlamada } from "../../components/global/AgendarLlamada";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
@@ -29,7 +30,9 @@ import {
 const TINTA = neuropsicologiaTxt;          // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";                    // crema claro para el texto sobre tinta
 const CREMA = "rgba(255,255,255,0.92)";    // texto sobre el fondo teal de la página
-const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
+// Halo claro (crema + color de la disciplina) para despegar la tinta oscura del
+// fondo de acuarela y que se lea bien.
+const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // Fases de la experiencia «Línea de Vida». La edad ya no es una fase: se pide
 // en un popup bloqueante al entrar en la línea de vida.
@@ -51,13 +54,16 @@ export default function MetodoPsicologiaExperiencia() {
   const [tramoIdx, setTramoIdx] = useState(0);
   const [anoAbierto, setAnoAbierto] = useState<number | null>(null);
   const [transicionOpen, setTransicionOpen] = useState(false);
+  // Aviso flotante "LEER" + modal de reserva de acompañamiento.
+  const [leerOpen, setLeerOpen] = useState(false);
+  const [companiaOpen, setCompaniaOpen] = useState(false);
 
   const anioActual = new Date().getFullYear();
 
   // La edad se pide en un popup bloqueante al entrar en la línea de vida.
   const necesitaEdad = fase === FASE.LINEA && typeof data.edad !== "number";
 
-  useLockBodyScroll(anoAbierto !== null || transicionOpen || necesitaEdad);
+  useLockBodyScroll(anoAbierto !== null || transicionOpen || necesitaEdad || leerOpen || companiaOpen);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -236,7 +242,7 @@ export default function MetodoPsicologiaExperiencia() {
                     {exp.problemaInicial.pregunta}
                   </Text>
                   {exp.problemaInicial.apoyo && (
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} maxW="520px">
+                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} maxW="520px" style={{ textShadow: INK_SHADOW }}>
                       {exp.problemaInicial.apoyo}
                     </Text>
                   )}
@@ -265,7 +271,7 @@ export default function MetodoPsicologiaExperiencia() {
                   boxShadow={`0 12px 44px rgba(94,45,16,0.2), 0 0 0 1px ${neuropsicologiaBg}55`}
                 >
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 8, md: 11 }}>
+                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} pt={{ base: 8, md: 16 }} pb={{ base: 8, md: 11 }}>
 
                     {/* Etiqueta del tramo */}
                     <Text textAlign="center" color={TINTA} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.18em" textTransform="uppercase" opacity={0.7} fontWeight="600" mb={{ base: 7, md: 9 }}>
@@ -348,11 +354,16 @@ export default function MetodoPsicologiaExperiencia() {
 
                 {completa && (
                   <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" maxW="560px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.3)" }}>
-                    Has reconstruido tu vida entera. Tómate un momento para mirarla completa antes de continuar.
+                    Has reconstruido tu vida entera. Enhorabuena por no abandonarte.
                   </Text>
                 )}
 
                 <GuardadoHint guardando={guardando} color={CREMA} />
+
+                {/* Recomendación discreta */}
+                <Text color={CREMA} fontSize={{ base: "xs", md: "sm" }} opacity={0.78} fontStyle="italic" textAlign="center" maxW="520px" mt={2}>
+                  Se recomienda buscar fotos de todas las edades de tu vida.
+                </Text>
               </Flex>
             )}
 
@@ -379,7 +390,7 @@ export default function MetodoPsicologiaExperiencia() {
               <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" mb={3} style={{ textShadow: INK_SHADOW }}>
                 {exp.preguntaEdad.pregunta}
               </Text>
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.82} mb={8} maxW="360px" mx="auto" lineHeight="1.7">
+              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.82} mb={8} maxW="360px" mx="auto" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
                 {exp.preguntaEdad.apoyo}
               </Text>
               <Input
@@ -459,12 +470,11 @@ export default function MetodoPsicologiaExperiencia() {
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 8, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center"
                  overflowY="auto" overscrollBehavior="contain">
-              <Text color={TINTA} fontSize="2xl" mb={4} style={{ filter: `drop-shadow(0 0 6px ${TINTA}55)` }}>✦</Text>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" letterSpacing="0.04em" mb={6} style={{ textShadow: INK_SHADOW }}>
                 Las Huellas
               </Text>
               <Box mx="auto" mb={7} h="1px" w="120px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-              <Flex direction="column" gap={4} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.95" opacity={0.92} maxW="460px" mx="auto">
+              <Flex direction="column" gap={4} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.95" opacity={0.92} maxW="460px" mx="auto" style={{ textShadow: INK_SHADOW }}>
                 <Text>No todos los recuerdos permanecen con nosotros.</Text>
                 <Text>Algunos se desvanecen con el tiempo. Otros continúan acompañándonos muchos años después.</Text>
                 <Text>Las siguientes páginas contienen fragmentos de tu historia. Recórrelas una vez más.</Text>
@@ -502,7 +512,125 @@ export default function MetodoPsicologiaExperiencia() {
           inicial={data.anos?.[String(anoAbierto)]}
           onCerrar={() => setAnoAbierto(null)}
           onGuardar={async (estado) => { await guardarAno(anoAbierto, estado); setAnoAbierto(null); }}
+          onGuardarSinCerrar={async (estado) => { await guardarAno(anoAbierto, estado); }}
         />
+      )}
+
+      {/* ───────────────── AVISO FLOTANTE «LEER» ───────────────── */}
+      {fase === FASE.LINEA && !necesitaEdad && (
+        <Box
+          as="button"
+          onClick={() => setLeerOpen(true)}
+          position="fixed"
+          bottom={{ base: 4, md: 6 }}
+          right={{ base: 4, md: 6 }}
+          zIndex={1500}
+          px={{ base: 4, md: 5 }}
+          py={{ base: 2.5, md: 3 }}
+          borderRadius="full"
+          bg={`${neuropsicologiaBg}f2`}
+          color={TINTA}
+          border={`1px solid ${TINTA}66`}
+          fontFamily="'EB Garamond', serif"
+          fontWeight="700"
+          fontSize={{ base: "sm", md: "md" }}
+          letterSpacing="0.14em"
+          cursor="pointer"
+          boxShadow={`0 6px 22px rgba(94,45,16,0.35), 0 0 0 1px ${neuropsicologiaBg}66`}
+          transition="all 0.22s"
+          _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.45)` }}
+          display="inline-flex"
+          alignItems="center"
+          gap={2}
+        >
+          <Box as="span" opacity={0.85}>✦</Box>
+          LEER
+        </Box>
+      )}
+
+      {/* Panel del aviso */}
+      {leerOpen && (
+        <Box
+          position="fixed" inset={0} zIndex={2200}
+          display="flex" alignItems="center" justifyContent="center"
+          px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
+          bg="rgba(60,34,12,0.6)"
+          sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          onClick={() => setLeerOpen(false)}
+          fontFamily="'EB Garamond', serif"
+        >
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            position="relative" w="100%" maxW="460px"
+            borderRadius="2xl" overflow="hidden"
+            boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 80px rgba(40,18,4,0.55)`}
+          >
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 9 }} py={{ base: 9, md: 11 }} textAlign="center">
+              <Box as="button" onClick={() => setLeerOpen(false)} position="absolute" top={3} right={3}
+                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4" mb={5} style={{ textShadow: INK_SHADOW }}>
+                ¿Prefieres hacerlo acompañado?
+              </Text>
+              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
+                Puedes recorrer tu línea de vida junto a María. Agenda una llamada y hazlo acompañado.
+              </Text>
+              <Box
+                as="button"
+                onClick={() => { setLeerOpen(false); setCompaniaOpen(true); }}
+                px={9} py={3} borderRadius="full"
+                bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}
+                fontFamily="'EB Garamond', serif" fontWeight="700"
+                fontSize={{ base: "md", md: "lg" }} letterSpacing="0.06em"
+                cursor="pointer" boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
+                transition="all 0.2s"
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
+              >
+                Agenda tu llamada →
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* Modal «Compañía para línea de tiempo» (reserva con María) */}
+      {companiaOpen && (
+        <Box
+          position="fixed" inset={0} zIndex={2300}
+          display="flex" alignItems="flex-start" justifyContent="center"
+          px={{ base: 3, md: 10 }} py={{ base: 5, md: 10 }}
+          bg="rgba(60,34,12,0.62)"
+          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+          onClick={() => setCompaniaOpen(false)}
+          fontFamily="'EB Garamond', serif"
+          overflowY="auto"
+        >
+          <Box
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            position="relative" w="100%" maxW="640px" my="auto"
+          >
+            <Flex align="center" justify="space-between" mb={3} px={1}>
+              <Text color={PAPEL} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.4)" }}>
+                Compañía para tu línea de tiempo
+              </Text>
+              <Box as="button" onClick={() => setCompaniaOpen(false)}
+                   w="36px" h="36px" borderRadius="full" flexShrink={0}
+                   bg="rgba(255,251,243,0.85)" border={`1px solid ${TINTA}44`} color={TINTA}
+                   display="flex" alignItems="center" justifyContent="center" fontSize="lg" cursor="pointer"
+                   _hover={{ bg: "#fff" }}>✕</Box>
+            </Flex>
+            <AgendarLlamada
+              color={neuropsicologiaTxt}
+              bgColor={neuropsicologiaBg}
+              disciplinaNom={neuropsicologiaNom}
+              precio={60}
+              titulo="Compañía para tu línea de tiempo"
+              subtitulo="Sesión con María · indica tu motivo de consulta · horario peninsular España"
+            />
+          </Box>
+        </Box>
       )}
 
       <SiteFooter />
@@ -572,6 +700,7 @@ function PaginaDeAno({
   inicial,
   onCerrar,
   onGuardar,
+  onGuardarSinCerrar,
 }: {
   edadAno: number;
   anioNatural: number;
@@ -579,17 +708,33 @@ function PaginaDeAno({
   inicial?: { sinRecuerdos?: boolean; respuestas?: Record<string, string> };
   onCerrar: () => void;
   onGuardar: (estado: { respuestas: Record<string, string>; sinRecuerdos: boolean }) => Promise<void> | void;
+  onGuardarSinCerrar: (estado: { respuestas: Record<string, string>; sinRecuerdos: boolean }) => Promise<void> | void;
 }) {
   const [respuestas, setRespuestas] = useState<Record<string, string>>(inicial?.respuestas || {});
   const [sinRecuerdos, setSinRecuerdos] = useState<boolean>(!!inicial?.sinRecuerdos);
   const [guardando, setGuardando] = useState(false);
+  const [guardadoOk, setGuardadoOk] = useState(false);
 
   const algoEscrito = Object.values(respuestas).some((v) => v && v.trim().length > 0);
+  const estadoActual = () => ({ respuestas, sinRecuerdos: sinRecuerdos && !algoEscrito ? true : sinRecuerdos });
+
+  const cambiar = (key: string, valor: string) => {
+    setRespuestas((prev) => ({ ...prev, [key]: valor }));
+    setGuardadoOk(false);
+  };
 
   const guardar = async () => {
     setGuardando(true);
-    await onGuardar({ respuestas, sinRecuerdos: sinRecuerdos && !algoEscrito ? true : sinRecuerdos });
+    await onGuardar(estadoActual());
     setGuardando(false);
+  };
+
+  // Guarda sin cerrar el año, con feedback breve.
+  const guardarSinCerrar = async () => {
+    setGuardando(true);
+    await onGuardarSinCerrar(estadoActual());
+    setGuardando(false);
+    setGuardadoOk(true);
   };
 
   return (
@@ -665,7 +810,7 @@ function PaginaDeAno({
             <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
               Año {edadAno}
             </Text>
-            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7}>
+            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
               {anioNatural}
             </Text>
             <Box mt={3} h="1px" w="120px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
@@ -680,7 +825,7 @@ function PaginaDeAno({
                 </Text>
                 <Textarea
                   value={respuestas[p.key] || ""}
-                  onChange={(e) => setRespuestas((prev) => ({ ...prev, [p.key]: e.target.value }))}
+                  onChange={(e) => cambiar(p.key, e.target.value)}
                   placeholder="Escribe lo que recuerdes…"
                   minH={{ base: "84px", md: "92px" }}
                   bg="rgba(255,251,243,0.6)"
@@ -701,48 +846,69 @@ function PaginaDeAno({
             ))}
           </Flex>
 
-          {/* Acciones */}
-          <Flex direction={{ base: "column", sm: "row" }} align="center" justify="center" gap={3} mt={{ base: 9, md: 11 }}>
-            <Box
-              as="button"
-              onClick={() => setSinRecuerdos((v) => !v)}
-              px={6}
-              py={3}
-              borderRadius="full"
-              bg={sinRecuerdos ? `${TINTA}` : "transparent"}
-              color={sinRecuerdos ? PAPEL : TINTA}
-              border={`1px solid ${TINTA}66`}
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.04em"
-              cursor="pointer"
-              transition="all 0.2s"
-              _hover={{ bg: sinRecuerdos ? `${TINTA}` : `${TINTA}14`, borderColor: TINTA }}
-            >
-              {sinRecuerdos ? "✓ Sin recuerdos de este año" : "No tengo recuerdos de este año"}
-            </Box>
-            <Box
-              as="button"
-              onClick={guardando ? undefined : guardar}
-              px={9}
-              py={3}
-              borderRadius="full"
-              bg={TINTA}
-              color={PAPEL}
-              border={`1px solid ${TINTA}`}
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "md", md: "lg" }}
-              letterSpacing="0.06em"
-              cursor={guardando ? "wait" : "pointer"}
-              opacity={guardando ? 0.7 : 1}
-              boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
-              transition="all 0.2s"
-              _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
-            >
-              {guardando ? "Guardando…" : "Guardar y cerrar"}
-            </Box>
+          {/* Acciones — con bastante aire respecto al último box de escritura */}
+          <Flex direction="column" align="center" gap={3} mt={{ base: 14, md: 20 }}>
+            <Flex direction={{ base: "column", sm: "row" }} align="center" justify="center" gap={3} w="100%">
+              <Box
+                as="button"
+                onClick={() => { setSinRecuerdos((v) => !v); setGuardadoOk(false); }}
+                px={6}
+                py={3}
+                borderRadius="full"
+                bg={sinRecuerdos ? `${TINTA}` : "transparent"}
+                color={sinRecuerdos ? PAPEL : TINTA}
+                border={`1px solid ${TINTA}66`}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="600"
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.04em"
+                cursor="pointer"
+                transition="all 0.2s"
+                _hover={{ bg: sinRecuerdos ? `${TINTA}` : `${TINTA}14`, borderColor: TINTA }}
+              >
+                {sinRecuerdos ? "✓ Sin recuerdos de este año" : "No tengo recuerdos de este año"}
+              </Box>
+              <Box
+                as="button"
+                onClick={guardando ? undefined : guardarSinCerrar}
+                px={7}
+                py={3}
+                borderRadius="full"
+                bg="transparent"
+                color={TINTA}
+                border={`1.5px solid ${TINTA}`}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.04em"
+                cursor={guardando ? "wait" : "pointer"}
+                transition="all 0.2s"
+                _hover={guardando ? {} : { bg: `${TINTA}14`, transform: "translateY(-1px)" }}
+              >
+                {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
+              </Box>
+              <Box
+                as="button"
+                onClick={guardando ? undefined : guardar}
+                px={9}
+                py={3}
+                borderRadius="full"
+                bg={TINTA}
+                color={PAPEL}
+                border={`1px solid ${TINTA}`}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "md", md: "lg" }}
+                letterSpacing="0.06em"
+                cursor={guardando ? "wait" : "pointer"}
+                opacity={guardando ? 0.7 : 1}
+                boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
+                transition="all 0.2s"
+                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
+              >
+                Guardar y cerrar
+              </Box>
+            </Flex>
           </Flex>
         </Box>
       </Box>

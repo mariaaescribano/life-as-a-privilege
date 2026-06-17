@@ -65,12 +65,18 @@ const lineaDeVida: ExperienciaPsicologia = {
   },
 
   // Preguntas de la página de cada año. Breves y evocadoras, nunca clínicas.
+  // Se muestran como una lista de cajas; cuantas más, más recuerdos podrá
+  // recoger y luego marcar como huella. No cambies las `key` tras publicar.
   preguntasPorAno: [
     { key: "recuerdas", pregunta: "¿Qué recuerdas de este año?" },
-    { key: "importante", pregunta: "¿Quién era importante para ti?" },
+    { key: "importante", pregunta: "¿Quién o qué fue importante para ti?" },
+    { key: "paso-importante", pregunta: "¿Pasó algo importante? (enfermedad, muerte, amistad…)" },
+    { key: "gustaba", pregunta: "¿Qué te gustaba? ¿Cómo disfrutabas?" },
+    { key: "experiencias", pregunta: "¿Recuerdas alguna experiencia?" },
     { key: "sentias", pregunta: "¿Cómo te sentías?" },
     { key: "cambio", pregunta: "¿Qué cambió?" },
     { key: "dejo", pregunta: "¿Qué dejó este año en ti?" },
+    { key: "algo-mas", pregunta: "Algo más que quieras añadir…" },
   ],
 };
 

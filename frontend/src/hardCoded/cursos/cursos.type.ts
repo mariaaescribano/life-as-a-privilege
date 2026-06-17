@@ -6,6 +6,8 @@ export interface Curso {
   titulo: string;
   foto: string;
   descripcion: string;
+  /** Frase que aparece bajo "Contenido del curso" (si está vacía, se usa `descripcion`). */
+  descripcionContenido?: string;
   precio: number | null; // null = gratis
   numLecciones: number;
   icon: ReactNode;

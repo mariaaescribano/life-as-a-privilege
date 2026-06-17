@@ -20,7 +20,8 @@ import {
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
-const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
+// Halo claro (crema + color de la disciplina) para despegar la tinta del fondo.
+const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaIntegracion() {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function MetodoPsicologiaIntegracion() {
               <Text color={TINTA} fontSize="2xl" opacity={0.8} style={{ filter: `drop-shadow(0 0 6px ${TINTA}44)` }}>✦</Text>
               <Flex direction="column" gap={2.5}>
                 {INTEGRACION.principal.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight={i === INTEGRACION.principal.length - 1 ? "700" : "500"} lineHeight="1.5" style={i === INTEGRACION.principal.length - 1 ? { textShadow: INK_SHADOW } : undefined}>
+                  <Text key={i} color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight={i === INTEGRACION.principal.length - 1 ? "700" : "500"} lineHeight="1.5" style={{ textShadow: INK_SHADOW }}>
                     {p}
                   </Text>
                 ))}
@@ -78,7 +79,7 @@ export default function MetodoPsicologiaIntegracion() {
             {/* Texto secundario */}
             <Flex direction="column" gap={4} maxW="600px" textAlign="center">
               {INTEGRACION.secundario.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" opacity={0.9}>
+                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" opacity={0.9} style={{ textShadow: INK_SHADOW }}>
                   {p}
                 </Text>
               ))}
@@ -103,7 +104,7 @@ export default function MetodoPsicologiaIntegracion() {
                   {INTEGRACION.exploraremos.map((item, i) => (
                     <Flex key={i} align="flex-start" gap={3}>
                       <Box as="span" color={TINTA} fontSize="md" opacity={0.7} mt="2px" flexShrink={0}>✦</Box>
-                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{item}</Text>
+                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{item}</Text>
                     </Flex>
                   ))}
                 </Flex>
@@ -113,7 +114,7 @@ export default function MetodoPsicologiaIntegracion() {
             {/* Cierre */}
             <Flex direction="column" gap={3} maxW="600px" textAlign="center">
               {INTEGRACION.cierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic" opacity={i === INTEGRACION.cierre.length - 1 ? 1 : 0.9} fontWeight={i === INTEGRACION.cierre.length - 1 ? "600" : "400"} style={i === INTEGRACION.cierre.length - 1 ? { textShadow: INK_SHADOW } : undefined}>
+                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic" opacity={i === INTEGRACION.cierre.length - 1 ? 1 : 0.9} fontWeight={i === INTEGRACION.cierre.length - 1 ? "600" : "400"} style={{ textShadow: INK_SHADOW }}>
                   {p}
                 </Text>
               ))}

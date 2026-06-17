@@ -18,6 +18,7 @@ export interface CursoDB {
   titulo: string;
   foto: string;
   descripcion: string;
+  descripcion_contenido?: string; // frase que aparece bajo "Contenido del curso"
   de_pago: boolean;
   publicado: boolean;
   completado: boolean;
@@ -33,6 +34,7 @@ export interface CursoInput {
   titulo?: string;
   foto?: string;
   descripcion?: string;
+  descripcion_contenido?: string;
   de_pago?: boolean;
   publicado?: boolean;
   completado?: boolean;

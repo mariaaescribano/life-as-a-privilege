@@ -17,9 +17,10 @@ import {
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
 
-// Tinta cálida: sombras suaves marrones en vez de glows claros (es papel, no cosmos).
+// Tinta cálida con halo claro (crema + color de la disciplina) para que se lea
+// bien sobre el fondo de acuarela.
 const TINTA = neuropsicologiaTxt;
-const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
+const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologia() {
   const navigate = useNavigate();
@@ -159,6 +160,7 @@ export default function MetodoPsicologia() {
                 lineHeight="1.95"
                 maxW="620px"
                 mx="auto"
+                style={{ textShadow: INK_SHADOW }}
               >
                 Antes de comprender tu mente, hay que recordar la vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
               </Text>

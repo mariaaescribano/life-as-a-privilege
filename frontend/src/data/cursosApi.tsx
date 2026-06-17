@@ -17,6 +17,7 @@ export interface CursoApi {
   titulo: string;
   foto: string;
   descripcion: string;
+  descripcion_contenido?: string;
   de_pago: boolean;
   publicado: boolean;
   orden: number;
@@ -56,6 +57,7 @@ function buildCurso(row: CursoApi, disc: DisciplinaCurso): Curso {
     titulo: row.titulo,
     foto: row.foto,
     descripcion: row.descripcion,
+    descripcionContenido: row.descripcion_contenido ?? "",
     precio: row.de_pago ? PRECIO_CURSO : null,
     numLecciones,
     icon: <disc.Icon size={{ base: "40px", md: "48px" }} />,

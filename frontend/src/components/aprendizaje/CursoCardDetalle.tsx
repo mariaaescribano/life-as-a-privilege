@@ -115,7 +115,6 @@ export function CursoCardDetalle({
             <Text color={color} fontSize={{ base: "xs", md: "sm" }} fontWeight="600" letterSpacing="0.03em" opacity={0.9} style={{ textShadow: tShadow }}>
               {nLecciones} {nLecciones === 1 ? "lección" : "lecciones"}
               {nEjercicios > 0 && ` · ${nEjercicios} ${nEjercicios === 1 ? "ejercicio" : "ejercicios"}`}
-              {" · Explorar"}
             </Text>
           </Flex>
         </Box>
@@ -142,7 +141,7 @@ export function CursoCardDetalle({
                 Contenido del curso
               </Text>
               <Text color={color} opacity={0.8} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.5" mt={2} pr={6} style={{ textShadow: tShadow }}>
-                {curso.descripcion}
+                {curso.descripcionContenido || curso.descripcion}
               </Text>
             </Box>
             <Divider position="relative" zIndex={1} borderColor={`${color}33`} opacity={1} />

@@ -23,7 +23,8 @@ import {
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
-const INK_SHADOW = `0 1px 2px rgba(94,45,16,0.18)`;
+// Halo claro (crema + color de la disciplina) para despegar la tinta del fondo.
+const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaNudos() {
   const navigate = useNavigate();
@@ -145,7 +146,7 @@ export default function MetodoPsicologiaNudos() {
                 <Text color={TINTA} fontSize="xl" mb={4} opacity={0.8} style={{ filter: `drop-shadow(0 0 6px ${TINTA}44)` }}>✦</Text>
                 <Flex direction="column" gap={3} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" opacity={0.92} maxW="560px" mx="auto">
                   {NUDOS.intro.map((p, i) => (
-                    <Text key={i} fontStyle={i === NUDOS.intro.length - 1 ? "italic" : "normal"}>{p}</Text>
+                    <Text key={i} fontStyle={i === NUDOS.intro.length - 1 ? "italic" : "normal"} style={{ textShadow: INK_SHADOW }}>{p}</Text>
                   ))}
                 </Flex>
               </Box>
@@ -156,7 +157,7 @@ export default function MetodoPsicologiaNudos() {
               <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
                 {NUDOS.pregunta}
               </Text>
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} lineHeight="1.8">
+              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
                 {NUDOS.apoyo}
               </Text>
             </Flex>
@@ -251,7 +252,7 @@ export default function MetodoPsicologiaNudos() {
                   >
                     <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
                     <Box position="relative" zIndex={1} as="span" color={TINTA} fontSize="lg" opacity={0.7}>✦</Box>
-                    <Text position="relative" zIndex={1} flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
+                    <Text position="relative" zIndex={1} flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                       {n}
                     </Text>
                     <Box
