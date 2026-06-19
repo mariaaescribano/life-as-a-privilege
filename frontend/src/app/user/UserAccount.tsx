@@ -142,9 +142,8 @@ export default function UserAccount() {
     setUploading(true);
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("userId", userId);
     try {
-      const res = await fetch(`${API_URL}/upload/profile-pic`, {
+      const res = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

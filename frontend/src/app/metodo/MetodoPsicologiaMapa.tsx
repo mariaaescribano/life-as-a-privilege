@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { experienciaById } from "../../components/metodo/psicologiaRecorrido";
@@ -69,6 +70,8 @@ export default function MetodoPsicologiaMapa() {
           </Flex>
         </Flex>
       </Box>
+
+      <AyudaRecorrido pagina="mapa" />
 
       <SiteFooter />
     </Box>

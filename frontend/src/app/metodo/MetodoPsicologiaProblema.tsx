@@ -4,6 +4,7 @@ import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -128,8 +129,7 @@ export default function MetodoPsicologiaProblema() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={`1px solid ${TINTA}33`}
-            boxShadow={`0 12px 44px rgba(94,45,16,0.22), 0 0 0 1px ${neuropsicologiaBg}55`}
+            boxShadow={`0 12px 44px rgba(94,45,16,0.22)`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Flex
@@ -199,6 +199,8 @@ export default function MetodoPsicologiaProblema() {
           </Box>
         </Flex>
       </Flex>
+
+      <AyudaRecorrido pagina="problema" />
 
       <SiteFooter />
     </Box>

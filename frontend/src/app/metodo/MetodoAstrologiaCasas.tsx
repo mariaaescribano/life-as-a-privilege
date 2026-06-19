@@ -63,6 +63,7 @@ const rotParaCasa = (casaNum: number) => norm360(-((casaNum - 1) * 30 + 15));
 interface Row {
   link_carta?: string | null;
   casas_texto?: Record<string, string> | null;
+  retos?: { id: string }[];
 }
 
 export default function MetodoAstrologiaCasas() {
@@ -88,8 +89,12 @@ export default function MetodoAstrologiaCasas() {
         const rowRes = await axios.get<Row | null>(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!rowRes.data?.link_carta) { navigate("/metodo/astrologia"); return; }
-        setCasasTexto((rowRes.data.casas_texto ?? {}) as Record<string, string>);
+        // Acceso consistente con "Puntos clave": basta con que la carta esté
+        // procesada (hay PDF O hay retos). Antes exigía SOLO el PDF, así que un
+        // usuario con retos pero sin PDF subido rebotaba al inicio al entrar.
+        const lista = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
+        if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        setCasasTexto((rowRes.data?.casas_texto ?? {}) as Record<string, string>);
 
         const cartaRes = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -144,17 +149,9 @@ export default function MetodoAstrologiaCasas() {
   const info = cusps.length ? infoCasa(cusps, sel) : null;
   const textoSel = (casasTexto[String(sel)] ?? "").trim();
 
-  const todasEscritas =
-    NUMEROS_ROMANOS.length > 0 &&
-    Array.from({ length: 12 }, (_, i) => i + 1).every(
-      (n) => (casasTexto[String(n)] ?? "").trim().length > 0,
-    );
-
   const headerNext = {
     label:"Aspectos →",
     onClick: () => navigate("/metodo/astrologia/aspectos"),
-    disabled: !todasEscritas,
-    disabledTooltip: "María está escribiendo la lectura de tus aspectos",
   };
 
   return (

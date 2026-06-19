@@ -46,6 +46,7 @@ function renderParrafos(texto: string, color: string): React.ReactNode {
 interface Row {
   link_carta?: string | null;
   aspectos_texto?: Record<string, string> | null;
+  retos?: { id: string }[];
 }
 
 export default function MetodoAstrologiaAspectos() {
@@ -70,8 +71,11 @@ export default function MetodoAstrologiaAspectos() {
         const rowRes = await axios.get<Row | null>(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!rowRes.data?.link_carta) { navigate("/metodo/astrologia"); return; }
-        setTextos((rowRes.data.aspectos_texto ?? {}) as Record<string, string>);
+        // Abierta si la carta está procesada (hay PDF O retos), igual que el
+        // resto del recorrido. Es el GET quien decide: si hay info, se entra.
+        const lista = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
+        if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        setTextos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
 
         const cartaRes = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },

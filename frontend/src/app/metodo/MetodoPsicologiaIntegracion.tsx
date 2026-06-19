@@ -4,6 +4,7 @@ import { Box, Flex, Text, Textarea, Input } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -433,6 +434,8 @@ export default function MetodoPsicologiaIntegracion() {
 
       <SaberMasModal isOpen={!!saberMas} onClose={() => setSaberMas(null)}
                      cuerpo={saberMas?.cuerpo || null} signo={saberMas?.signo} casa={saberMas?.casa} facet={saberMas?.facet} />
+
+      <AyudaRecorrido pagina="integracion" />
 
       <SiteFooter />
     </Box>

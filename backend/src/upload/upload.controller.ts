@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors, Body, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, Get, Param, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
@@ -9,13 +9,16 @@ import * as multer from 'multer';
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
-  // Subir/sobrescribir la foto requiere ser el dueño (o admin). El body lleva userId.
-  @Post('profile-pic')
+  // Subir/sobrescribir la foto requiere ser el dueño (o admin). El userId va en
+  // la URL (param), NO en el body: los guards se ejecutan ANTES que el
+  // FileInterceptor (multer), así que el body multipart aún no está parseado
+  // cuando OwnerGuard necesita leer el userId. Desde la URL sí está disponible.
+  @Post('profile-pic/:userId')
   @UseGuards(JwtAuthGuard, OwnerGuard)
   @UseInterceptors(FileInterceptor('file', { storage: multer.memoryStorage() }))
   async uploadProfilePic(
     @UploadedFile() file: Express.Multer.File,
-    @Body('userId') userId: string
+    @Param('userId') userId: string
   ) {
     return this.uploadService.uploadProfilePic(userId, file);
   }

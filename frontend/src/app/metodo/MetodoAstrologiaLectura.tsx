@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box, Flex, Text,
@@ -22,33 +22,52 @@ const EyeIcon = () => (
   </Box>
 );
 
-// Posición (en %) de cada estrella: rejilla con "temblor" determinista por índice,
-// para que se repartan por el cielo y no salten al re-renderizar.
-function starPos(i: number, total: number): { top: string; left: string } {
-  const cols = Math.min(Math.max(Math.ceil(Math.sqrt(total)), 1), 4);
-  const rows = Math.max(Math.ceil(total / cols), 1);
-  const col = i % cols;
-  const row = Math.floor(i / cols);
-  const cellW = 100 / cols;
-  const cellH = 100 / rows;
-  const seeded = (n: number) => {
-    const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
-    return x - Math.floor(x);
-  };
-  // Jitter amplio (0.9 de la celda) → reparto más caótico, tipo constelación real.
-  const jitterX = (seeded(i * 2 + 1) - 0.5) * cellW * 0.9;
-  const jitterY = (seeded(i * 2 + 2) - 0.5) * cellH * 0.9;
-  // Clamp para que ninguna estrella se pegue al borde del box.
-  const clamp = (v: number) => Math.max(8, Math.min(92, v));
-  return {
-    left: `${clamp(cellW * (col + 0.5) + jitterX)}%`,
-    top: `${clamp(cellH * (row + 0.5) + jitterY)}%`,
+// PRNG determinista (mulberry32): mismo reparto en cada render, no "salta".
+function mulberry32(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
 
+// Reparte `total` estrellas por el cielo de forma ALEATORIA pero SIN solaparse:
+// muestreo por rechazo con distancia mínima (estilo Poisson-disk). Como el
+// recuadro es más ancho que alto, ponderamos la distancia horizontal por el
+// aspecto para que el hueco se vea parejo en ambas direcciones. Si en algún
+// caso cuesta colocar una estrella, relajamos la distancia para no bloquear.
+function layoutStars(total: number): { top: string; left: string }[] {
+  const rand = mulberry32(total * 9973 + 7);
+  const ax = 7, ay = 10;                  // márgenes (%) mínimos: que llenen el box
+  const xMin = ax, xMax = 100 - ax;
+  const yMin = ay, yMax = 100 - ay;
+  const aspect = 2.2;                     // ancho/alto aproximado del recuadro
+  let minDist = 22;                       // hueco mínimo entre centros (ponderado)
+  const pts: { x: number; y: number }[] = [];
+
+  for (let i = 0; i < total; i++) {
+    let placed = false;
+    for (let attempt = 0; attempt < 60; attempt++) {
+      const x = xMin + rand() * (xMax - xMin);
+      const y = yMin + rand() * (yMax - yMin);
+      const lejos = pts.every((p) => Math.hypot((x - p.x) * aspect, y - p.y) >= minDist);
+      if (lejos) { pts.push({ x, y }); placed = true; break; }
+    }
+    if (!placed) {
+      // No se encontró hueco: si aún hay margen, relajamos y reintentamos.
+      if (minDist > 7) { minDist *= 0.85; i--; continue; }
+      pts.push({ x: xMin + rand() * (xMax - xMin), y: yMin + rand() * (yMax - yMin) });
+    }
+  }
+
+  return pts.map((p) => ({ left: `${p.x.toFixed(2)}%`, top: `${p.y.toFixed(2)}%` }));
+}
+
 // Estrella grande con glow que titila; al pulsarla se abre el reto.
-function EstrellaReto({ index, total, onOpen }: { index: number; total: number; onOpen: () => void }) {
-  const { top, left } = starPos(index, total);
+function EstrellaReto({ index, pos, onOpen }: { index: number; pos: { top: string; left: string }; onOpen: () => void }) {
+  const { top, left } = pos;
   const glow = `drop-shadow(0 0 6px ${astrologiaTxt}) drop-shadow(0 0 16px ${astrologiaTxt}cc)`;
   const glowFuerte = `drop-shadow(0 0 12px ${astrologiaTxt}) drop-shadow(0 0 30px ${astrologiaTxt})`;
   return (
@@ -75,8 +94,8 @@ function EstrellaReto({ index, total, onOpen }: { index: number; total: number; 
         as="svg"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        w={{ base: "42px", md: "56px" }}
-        h={{ base: "42px", md: "56px" }}
+        w={{ base: "38px", md: "50px" }}
+        h={{ base: "38px", md: "50px" }}
         fill={astrologiaTxt}
         style={{ animation: "retoTwinkle 3s ease-in-out infinite", animationDelay: `${(index % 5) * 0.45}s` }}
       >
@@ -93,6 +112,9 @@ export default function MetodoAstrologiaLectura() {
   const [retos, setRetos] = useState<Reto[]>([]);
   const [retoAbierto, setRetoAbierto] = useState<Reto | null>(null);
   const [comicOpen, setComicOpen] = useState(false);
+
+  // Posiciones (aleatorias pero separadas) calculadas una vez por nº de retos.
+  const starPositions = useMemo(() => layoutStars(retos.length), [retos.length]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -162,7 +184,7 @@ export default function MetodoAstrologiaLectura() {
               {retos.length > 0 ? (
                 <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} mt={{ base: 4, md: 5 }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
                   {retos.map((r, i) => (
-                    <EstrellaReto key={r.id} index={i} total={retos.length} onOpen={() => setRetoAbierto(r)} />
+                    <EstrellaReto key={r.id} index={i} pos={starPositions[i]} onOpen={() => setRetoAbierto(r)} />
                   ))}
                 </Box>
               ) : (

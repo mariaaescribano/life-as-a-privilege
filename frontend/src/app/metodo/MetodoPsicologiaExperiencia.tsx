@@ -4,6 +4,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -194,8 +195,7 @@ export default function MetodoPsicologiaExperiencia() {
                   w="100%"
                   borderRadius="2xl"
                   overflow="hidden"
-                  border={`1px solid ${TINTA}33`}
-                  boxShadow={`0 12px 44px rgba(94,45,16,0.2), 0 0 0 1px ${neuropsicologiaBg}55`}
+                  boxShadow={`0 12px 44px rgba(94,45,16,0.2)`}
                 >
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} pt={{ base: 4, md: 6 }} pb={{ base: 8, md: 11 }}>
@@ -309,7 +309,7 @@ export default function MetodoPsicologiaExperiencia() {
           <Box
             position="relative" w="100%" maxW="440px"
             borderRadius="2xl" overflow="hidden"
-            boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 90px rgba(0,0,0,0.7)`}
+            boxShadow={`0 30px 90px rgba(0,0,0,0.7)`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 8, md: 10 }} py={{ base: 10, md: 12 }} textAlign="center">
@@ -438,7 +438,7 @@ export default function MetodoPsicologiaExperiencia() {
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
             position="relative" w="100%" maxW="460px"
             borderRadius="2xl" overflow="hidden"
-            boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 80px rgba(40,18,4,0.55)`}
+            boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 9, md: 14 }} py={{ base: 12, md: 16 }} textAlign="center">
@@ -504,6 +504,8 @@ export default function MetodoPsicologiaExperiencia() {
           </Box>
         </Box>
       )}
+
+      <AyudaRecorrido pagina="linea-de-vida" />
 
       <SiteFooter />
     </Box>
@@ -634,8 +636,7 @@ function PaginaDeAno({
         maxH={{ base: "calc(100vh - 32px)", md: "calc(100vh - 80px)" }}
         borderRadius="2xl"
         overflow="hidden"
-        border={`1px solid ${TINTA}55`}
-        boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 80px rgba(40,18,4,0.6), 0 0 50px rgba(94,45,16,0.3)`}
+        boxShadow={`0 30px 80px rgba(40,18,4,0.6), 0 0 50px rgba(94,45,16,0.3)`}
         display="flex"
         flexDirection="column"
       >

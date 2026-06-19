@@ -4,6 +4,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -305,6 +306,8 @@ export default function MetodoPsicologiaNudos() {
           </Flex>
         </Flex>
       </Box>
+
+      <AyudaRecorrido pagina="nudos" />
 
       <SiteFooter />
     </Box>

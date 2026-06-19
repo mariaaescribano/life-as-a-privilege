@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import {
   experienciaById,
   type LineaDeVidaData,
@@ -382,10 +383,13 @@ export default function MetodoPsicologiaHuellasNudos() {
         </Flex>
       </Box>
 
+      <AyudaRecorrido pagina="heridas" />
+
       <SiteFooter />
     </Box>
   );
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────
 // Subcomponentes

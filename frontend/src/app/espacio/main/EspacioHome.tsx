@@ -82,8 +82,7 @@ const EspacioHome = () => {
       try {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
-        formData.append("userId", userId);
-        const res  = await fetch(`${API_URL}/upload/profile-pic`, {
+        const res  = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
           body: formData,

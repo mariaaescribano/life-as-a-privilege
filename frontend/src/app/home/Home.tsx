@@ -43,9 +43,11 @@ const disciplines = [
   { name: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon,         link: `/aprendizaje/cursos/${culturaNom}` },
 ];
 
-// Astrología siempre está abierta. Psicología se abre una vez pagada la primera
-// disciplina (metodo_suscrito) — entonces su círculo es clickable: navega si ya
-// está pagada, o abre el pago si todavía no. El resto queda con candado.
+// Astrología lleva candado hasta pagarse (metodo_suscrito), pero su círculo es
+// clickable: al pulsarlo abre el pago si aún no está pagada, o entra al recorrido
+// si ya lo está. Psicología se abre una vez pagada la primera disciplina
+// (metodo_suscrito) — clickable igual: navega si ya está pagada, o abre el pago
+// si todavía no. El resto queda con candado.
 
 const Home = () => {
   const navigate = useNavigate();
@@ -307,8 +309,7 @@ const Home = () => {
     try {
       const formData = new FormData();
       formData.append("file", e.target.files[0]);
-      formData.append("userId", userId);
-      const res  = await fetch(`${API_URL}/upload/profile-pic`, {
+      const res  = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -369,6 +370,7 @@ const Home = () => {
             >
               Te damos la bienvenida al Recorrido{name ? `, ${name}` : ""}
             </Text>
+
             {/* <Text
               color="rgba(255,255,255,0.92)"
               // En móvil: clamp() escala el tamaño según el ancho del viewport
@@ -457,11 +459,14 @@ const Home = () => {
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
                 const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
                 // `abierta` = estado visual desbloqueado (iluminado, sin candado).
-                //   · Astrología: siempre (gestiona su propio pago al entrar).
+                //   · Astrología: cuando está PAGADA (metodo_suscrito). Mientras
+                //     se carga el estado (null) la mostramos abierta para no
+                //     parpadear el candado a quien ya pagó.
                 //   · Psicología: solo cuando está PAGADA (psicologia_suscrito).
-                // Psicología sigue con candado hasta que se pague / se pruebe el pago.
+                // Ambas siguen con candado hasta que se pague / se pruebe el pago,
+                // pero siguen siendo clicables para poder abrir su pago.
                 const abierta =
-                  d.name === astrologiaNom ||
+                  (d.name === astrologiaNom && metodoSuscrito !== false) ||
                   (d.name === neuropsicologiaNom && psicologiaSuscrito === true);
                 // `clickable` = se puede pulsar. Psicología es pulsable —aunque siga
                 //   con candado— si ya se pagó Astrología, para poder abrir su pago.
@@ -478,7 +483,9 @@ const Home = () => {
                   : () => navigate(d.link);
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
-                  d.name === neuropsicologiaNom && clickable
+                  d.name === astrologiaNom
+                    ? "Haz clic en Astrología para empezar tu recorrido."
+                    : d.name === neuropsicologiaNom && clickable
                     ? "Desbloquea Psicología para empezar la 2ª disciplina."
                     : "«El Recorrido» se hace en orden — por favor, completa la disciplina anterior.";
 

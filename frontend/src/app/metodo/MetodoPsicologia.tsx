@@ -5,6 +5,7 @@ import { keyframes } from "@emotion/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
@@ -241,6 +242,8 @@ export default function MetodoPsicologia() {
           </Box>
         </Flex>
       </Flex>
+
+      <AyudaRecorrido pagina="inicio" />
 
       <SiteFooter />
 

@@ -139,11 +139,11 @@ export default function MetodoAstrologiaCartaAstral() {
   }
 
   const headerNext = {
-    label: hayPdf ? "Puntos clave →" : "María está leyendo tu carta…",
+    label: "Puntos clave →",
     onClick: () => navigate("/metodo/astrologia/lectura"),
     disabled: !todoCompletado || !hayPdf,
     disabledTooltip: !hayPdf
-      ? "María aún está leyendo tu carta. Podrás continuar cuando esté lista."
+      ? "María está leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada."
       : "Lee todos los planetas antes de continuar",
   };
 
