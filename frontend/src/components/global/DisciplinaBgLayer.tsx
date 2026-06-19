@@ -46,6 +46,15 @@ const DISCIPLINA_FALLBACK_BG: Record<string, string> = {
   [culturaNom]: culturaBg,
 };
 
+// Velo oscuro por defecto para disciplinas cuya imagen tiene zonas muy
+// brillantes que compiten con el texto. Cábala (nebulosa con destellos
+// dorados) lleva texto dorado, así que sin oscurecer el contraste cae en los
+// puntos claros. Este velo plano sube el contraste de forma uniforme. Solo
+// se usa cuando el llamante NO pasa su propio `overlay`.
+const DISCIPLINA_OVERLAY: Record<string, string> = {
+  [cabalaNom]: "rgba(0,0,0,0.4)",
+};
+
 const ImageBgLayer = ({
   src,
   borderRadius = "2xl",
@@ -162,7 +171,7 @@ export const DisciplinaBgLayer = ({
     <ImageBgLayer
       src={src}
       borderRadius={borderRadius}
-      overlay={overlay}
+      overlay={overlay ?? DISCIPLINA_OVERLAY[nom]}
       strongBlur={blur}
       fallbackBg={DISCIPLINA_FALLBACK_BG[nom]}
     />

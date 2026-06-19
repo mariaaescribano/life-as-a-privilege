@@ -147,7 +147,7 @@ export default function MetodoAstrologiaSolAscLuna() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 2, total: 6 }}
+            step={{ current: 2, total: 8 }}
             mb={0}
             prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}

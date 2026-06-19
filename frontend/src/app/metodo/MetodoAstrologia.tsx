@@ -238,7 +238,7 @@ export default function MetodoAstrologia() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 1, total: 6 }}
+            step={{ current: 1, total: 8 }}
             mb={0}
             prev={headerPrev}
             extra={headerExtra}

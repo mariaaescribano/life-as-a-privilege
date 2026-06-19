@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -8,7 +9,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
+import { EXPERIENCIAS, type LineaDeVidaData } from "../../components/metodo/psicologiaRecorrido";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -22,6 +23,13 @@ import {
 const TINTA = neuropsicologiaTxt;
 const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
+// Latido al pulsar «Voy a ser valiente»: la pieza late y emite un anillo.
+const latido = keyframes`
+  0%   { transform: scale(1);    box-shadow: 0 8px 26px rgba(94,45,16,0.4), 0 0 0 0 rgba(94,45,16,0.35); }
+  45%  { transform: scale(1.07); box-shadow: 0 12px 34px rgba(94,45,16,0.5), 0 0 0 16px rgba(94,45,16,0); }
+  100% { transform: scale(1);    box-shadow: 0 8px 26px rgba(94,45,16,0.4), 0 0 0 0 rgba(94,45,16,0); }
+`;
+
 export default function MetodoPsicologia() {
   const navigate = useNavigate();
   const experiencia = EXPERIENCIAS[0];
@@ -31,6 +39,10 @@ export default function MetodoPsicologia() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  // «Voy a ser valiente»: desbloquea la página de Problema (persistido en BD).
+  const [valiente, setValiente] = useState(false);
+  const [animando, setAnimando] = useState(false);
+  const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -52,7 +64,17 @@ export default function MetodoPsicologia() {
 
         const psicoSuscrito = !!me.data?.psicologia_suscrito;
         setSuscrito(psicoSuscrito);
-        if (!psicoSuscrito) setPagoOpen(true);
+        if (!psicoSuscrito) { setPagoOpen(true); return; }
+
+        // Cargamos el progreso para saber si ya pulsó «Voy a ser valiente».
+        try {
+          const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const d: LineaDeVidaData = psi.data?.data || {};
+          dataRef.current = d;
+          setValiente(!!d.valiente);
+        } catch { /* silencioso */ }
       } catch {
         navigate("/home");
         return;
@@ -103,10 +125,30 @@ export default function MetodoPsicologia() {
     }
   };
 
-  // Empezar la experiencia (o abrir el pago si aún no está desbloqueada).
-  const empezar = () => {
-    if (suscrito) navigate(`/metodo/psicologia/${experiencia.id}`);
-    else setPagoOpen(true);
+  // «Voy a ser valiente»: anima, persiste el flag y desbloquea Problema.
+  const serValiente = () => {
+    if (valiente || animando) return;
+    if (!suscrito) { setPagoOpen(true); return; }
+    setAnimando(true);
+    const token = sessionStorage.getItem("token");
+    const userId = sessionStorage.getItem("userId");
+    const next = { ...dataRef.current, valiente: true };
+    dataRef.current = next;
+    if (token && userId) {
+      axios.patch(
+        `${API_URL}/metodo-psicologia/${userId}`,
+        { data: next },
+        { headers: { Authorization: `Bearer ${token}` } },
+      ).catch(() => { /* silencioso */ });
+    }
+    // Tras el latido, fija el estado «valiente» (desbloquea Problema).
+    window.setTimeout(() => { setValiente(true); setAnimando(false); }, 850);
+  };
+
+  // Continuar a la página de Problema (solo cuando ya ha sido valiente).
+  const irAProblema = () => {
+    if (!suscrito) { setPagoOpen(true); return; }
+    if (valiente) navigate(`/metodo/psicologia/${experiencia.id}/problema`);
   };
 
   if (loading) {
@@ -129,7 +171,12 @@ export default function MetodoPsicologia() {
             nom={neuropsicologiaNom}
             mb={0}
             prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/llamada") }}
-            next={{ label: "Problema →", onClick: empezar }}
+            next={{
+              label: "Problema →",
+              onClick: irAProblema,
+              disabled: !valiente,
+              disabledTooltip: "Pulsa «Voy a ser valiente» para empezar",
+            }}
           />
 
           {/* ── Intro contemplativa (misma fuerza que el header: sin velo) ── */}
@@ -138,11 +185,10 @@ export default function MetodoPsicologia() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={`1px solid ${TINTA}33`}
-            boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
+            boxShadow={`0 10px 40px rgba(94,45,16,0.18)`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center">
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
                 fontSize={{ base: "3xl", md: "5xl" }}
@@ -156,19 +202,21 @@ export default function MetodoPsicologia() {
               </Text>
               <Text
                 color={TINTA}
-                fontSize={{ base: "md", md: "xl" }}
-                lineHeight="1.95"
-                maxW="620px"
+                fontSize={{ base: "sm", md: "md" }}
+                lineHeight="1.8"
+                opacity={0.72}
+                maxW="560px"
                 mx="auto"
-                style={{ textShadow: INK_SHADOW }}
               >
-                Antes de comprender tu mente, hay que recordar la vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
+                Antes de comprender tu mente, hay que recordar la Vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
               </Text>
 
-              {/* Botón Empezar */}
+              {/* Botón: «Voy a ser valiente» → (con latido) pasa a «Ir a mi
+                  problema →», que ya navega a la página de Problema. */}
               <Box
                 as="button"
-                onClick={empezar}
+                onClick={() => { if (animando) return; if (valiente) irAProblema(); else serValiente(); }}
+                disabled={animando}
                 mt={{ base: 8, md: 10 }}
                 px={{ base: 10, md: 14 }}
                 py={4}
@@ -179,12 +227,15 @@ export default function MetodoPsicologia() {
                 fontWeight="700"
                 fontSize={{ base: "lg", md: "xl" }}
                 letterSpacing="0.08em"
-                cursor="pointer"
-                boxShadow={`0 8px 26px rgba(94,45,16,0.4)`}
+                cursor={animando ? "wait" : "pointer"}
+                boxShadow={valiente
+                  ? `0 8px 26px rgba(94,45,16,0.4), 0 0 22px ${neuropsicologiaBg}`
+                  : `0 8px 26px rgba(94,45,16,0.4)`}
+                animation={animando ? `${latido} 0.85s ease` : undefined}
                 transition="all 0.22s"
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 12px 34px rgba(94,45,16,0.5)` }}
+                _hover={animando ? {} : { transform: "translateY(-2px)", boxShadow: `0 12px 34px rgba(94,45,16,0.5)` }}
               >
-                Empezar
+                {valiente ? "Ir a mi problema →" : "Voy a ser valiente"}
               </Box>
             </Box>
           </Box>

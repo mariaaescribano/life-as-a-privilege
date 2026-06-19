@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Input, Text, Textarea } from "@chakra-ui/react";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -35,10 +35,6 @@ const CREMA = "rgba(255,255,255,0.92)";    // texto sobre el fondo teal de la p�
 // fondo de acuarela y que se lea bien.
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
-// Fases de la experiencia «Línea de Vida». La edad ya no es una fase: se pide
-// en un popup bloqueante al entrar en la línea de vida.
-const FASE = { PROBLEMA: 0, LINEA: 1 } as const;
-
 export default function MetodoPsicologiaExperiencia() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
@@ -46,7 +42,6 @@ export default function MetodoPsicologiaExperiencia() {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<LineaDeVidaData>({});
-  const [fase, setFase] = useState<number>(FASE.PROBLEMA);
   const [edadInput, setEdadInput] = useState("");
   const [, setGuardando] = useState(false);
   const guardadoRef = useRef<LineaDeVidaData>({});
@@ -54,7 +49,6 @@ export default function MetodoPsicologiaExperiencia() {
   // Tramo visible de la timeline + año abierto (página de libro).
   const [tramoIdx, setTramoIdx] = useState(0);
   const [anoAbierto, setAnoAbierto] = useState<number | null>(null);
-  const [transicionOpen, setTransicionOpen] = useState(false);
   // Aviso flotante "LEER" + modal de reserva de acompañamiento.
   const [leerOpen, setLeerOpen] = useState(false);
   const [companiaOpen, setCompaniaOpen] = useState(false);
@@ -62,9 +56,9 @@ export default function MetodoPsicologiaExperiencia() {
   const anioActual = new Date().getFullYear();
 
   // La edad se pide en un popup bloqueante al entrar en la línea de vida.
-  const necesitaEdad = fase === FASE.LINEA && typeof data.edad !== "number";
+  const necesitaEdad = typeof data.edad !== "number";
 
-  useLockBodyScroll(anoAbierto !== null || transicionOpen || necesitaEdad || leerOpen || companiaOpen);
+  useLockBodyScroll(anoAbierto !== null || necesitaEdad || leerOpen || companiaOpen);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -87,12 +81,6 @@ export default function MetodoPsicologiaExperiencia() {
         setData(d);
         guardadoRef.current = JSON.parse(JSON.stringify(d));
         if (typeof d.edad === "number") setEdadInput(String(d.edad));
-
-        // Arranca donde lo dejó. Si ya escribió el problema, va a la línea de
-        // vida (el popup de edad aparece allí si todavía no la ha indicado).
-        const problemaEscrito =
-          typeof d["problema-actual"] === "string" && (d["problema-actual"] as string).trim().length > 0;
-        setFase(problemaEscrito ? FASE.LINEA : FASE.PROBLEMA);
       } catch {
         // silencioso
       } finally {
@@ -132,20 +120,10 @@ export default function MetodoPsicologiaExperiencia() {
   }
   if (!exp) return null;
 
-  // ── Fase 0 · problema ──
-  const problema = (data["problema-actual"] as string) || "";
-  const setProblema = (t: string) => setData((p) => ({ ...p, "problema-actual": t }));
-
   const guardarSiCambio = async () => {
     if (JSON.stringify(data) !== JSON.stringify(guardadoRef.current)) {
       await persistir(data);
     }
-  };
-
-  const avanzarDesdeProblema = async () => {
-    await guardarSiCambio();
-    setFase(FASE.LINEA); // si no hay edad, el popup bloqueante aparecerá aquí
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // ── Edad (popup bloqueante) ──
@@ -174,15 +152,11 @@ export default function MetodoPsicologiaExperiencia() {
     await persistir(next);
   };
 
-  const terminar = async () => {
-    await guardarSiCambio();
-    navigate("/metodo/psicologia");
-  };
-
-  // Al completar la línea de vida: guardar y abrir la transición a «Las Huellas».
+  // Al completar la línea de vida: guardar y pasar directo a «Las Huellas»
+  // (sin popup: ya se entiende con la frase de esa página).
   const irAHuellas = async () => {
     await guardarSiCambio();
-    setTransicionOpen(true);
+    navigate(`/metodo/psicologia/${exp.id}/huellas`);
   };
 
   // Estilos de nodo por estado.
@@ -202,68 +176,18 @@ export default function MetodoPsicologiaExperiencia() {
 
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title={fase === FASE.PROBLEMA ? "Problemas" : "Línea de Vida"}
-              pageLabel={fase === FASE.PROBLEMA ? "2/9" : "3/9"}
+              title="Línea de Vida"
+              pageLabel="3/9"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               mb={0}
-              prev={
-                fase === FASE.PROBLEMA
-                  ? { label: "← Vuelve", onClick: terminar }
-                  : { label: "← Problema", onClick: () => { void guardarSiCambio(); setFase(FASE.PROBLEMA); window.scrollTo({ top: 0, behavior: "smooth" }); } }
-              }
-              next={
-                fase === FASE.PROBLEMA
-                  ? { label: "Línea de Vida →", onClick: avanzarDesdeProblema }
-                  : { label: completa ? "Continuar →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }
-              }
+              prev={{ label: "← Problemas", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/problema`); } }}
+              next={{ label: completa ? "Huellas →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }}
             />
 
-            {/* ── PROBLEMA · box con fondo de psicología sobre la página teal ── */}
-            {fase === FASE.PROBLEMA && (
-              <Box
-                position="relative"
-                w="100%"
-                borderRadius="2xl"
-                overflow="hidden"
-                border={`1px solid ${TINTA}33`}
-                boxShadow={`0 12px 44px rgba(94,45,16,0.22), 0 0 0 1px ${neuropsicologiaBg}55`}
-              >
-                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                <Flex
-                  position="relative"
-                  zIndex={1}
-                  direction="column"
-                  align="center"
-                  textAlign="center"
-                  px={{ base: 7, md: 12 }}
-                  py={{ base: 9, md: 12 }}
-                  gap={{ base: 6, md: 7 }}
-                >
-                  <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" lineHeight="1.3" maxW="620px" style={{ textShadow: INK_SHADOW }}>
-                    {exp.problemaInicial.pregunta}
-                  </Text>
-                  {exp.problemaInicial.apoyo && (
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} maxW="520px" style={{ textShadow: INK_SHADOW }}>
-                      {exp.problemaInicial.apoyo}
-                    </Text>
-                  )}
-                  <Textarea
-                    value={problema}
-                    onChange={(e) => setProblema(e.target.value)}
-                    onBlur={guardarSiCambio}
-                    placeholder={exp.problemaInicial.placeholder || "Escribe aquí…"}
-                    {...textareaSx}
-                  />
-                  {/* <GuardadoHint guardando={guardando} /> */}
-                </Flex>
-              </Box>
-            )}
-
             {/* ───────────────── LÍNEA DE VIDA ───────────────── */}
-            {fase === FASE.LINEA && (
-              <Flex direction="column" align="center" w="100%" gap={6}>
+            <Flex direction="column" align="center" w="100%" gap={6}>
                 {/* Contenedor editorial de la timeline */}
                 <Box
                   position="relative"
@@ -368,7 +292,6 @@ export default function MetodoPsicologiaExperiencia() {
                   Se recomienda buscar fotos de todas las edades de tu Vida.
                 </Text>
               </Flex>
-            )}
 
         </Flex>
       </Flex>
@@ -450,61 +373,6 @@ export default function MetodoPsicologiaExperiencia() {
         </Box>
       )}
 
-      {/* ───────────────── TRANSICIÓN · «Las Huellas» ───────────────── */}
-      {transicionOpen && (
-        <Box
-          position="fixed" inset={0} zIndex={2000}
-          display="flex" alignItems="center" justifyContent="center"
-          px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
-          bg="rgba(60,34,12,0.62)"
-          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          onClick={() => setTransicionOpen(false)}
-          fontFamily="'EB Garamond', serif"
-        >
-          <Box
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            position="relative" w="100%" maxW="600px"
-            maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }}
-            borderRadius="2xl" overflow="hidden"
-            border={`1px solid ${TINTA}55`}
-            boxShadow={`0 0 0 1px ${neuropsicologiaBg}66, 0 30px 80px rgba(40,18,4,0.6)`}
-            display="flex" flexDirection="column"
-          >
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 8, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center"
-                 overflowY="auto" overscrollBehavior="contain">
-              <Text color={TINTA} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" letterSpacing="0.04em" mb={6} style={{ textShadow: INK_SHADOW }}>
-                Las Huellas
-              </Text>
-              <Box mx="auto" mb={7} h="1px" w="120px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-              <Flex direction="column" gap={4} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.95" opacity={0.92} maxW="460px" mx="auto" style={{ textShadow: INK_SHADOW }}>
-                <Text>No todos los recuerdos permanecen con nosotros.</Text>
-                <Text>Algunos se desvanecen con el tiempo. Otros continúan acompañándonos muchos años después.</Text>
-                <Text>Las siguientes páginas contienen fragmentos de tu historia. Recórrelas una vez más.</Text>
-                <Text fontStyle="italic">No busques los acontecimientos más importantes. Busca aquellos que dejaron una huella.</Text>
-              </Flex>
-              <Box
-                as="button"
-                mt={9}
-                onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas`)}
-                px={10} py={3}
-                borderRadius="full"
-                bg={TINTA} color={PAPEL}
-                border={`1px solid ${TINTA}`}
-                fontFamily="'EB Garamond', serif" fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }} letterSpacing="0.06em"
-                cursor="pointer"
-                boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
-                transition="all 0.2s"
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
-              >
-                Recorrer mis huellas →
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      )}
-
       {/* ───────────────── PÁGINA DE UN AÑO (popup tipo libro) ───────────────── */}
       {anoAbierto !== null && (
         <PaginaDeAno
@@ -520,7 +388,7 @@ export default function MetodoPsicologiaExperiencia() {
       )}
 
       {/* ───────────────── AVISO FLOTANTE «LEER» ───────────────── */}
-      {fase === FASE.LINEA && !necesitaEdad && (
+      {!necesitaEdad && (
         <Box
           as="button"
           onClick={() => setLeerOpen(true)}
@@ -642,38 +510,7 @@ export default function MetodoPsicologiaExperiencia() {
   );
 }
 
-// ── Estilos compartidos del textarea de las fases ──
-const textareaSx = {
-  w: "100%",
-  maxW: "640px",
-  minH: { base: "200px", md: "260px" },
-  bg: "rgba(255,251,243,0.38)",
-  border: `1px solid ${TINTA}3a`,
-  color: TINTA,
-  borderRadius: "xl",
-  px: { base: 5, md: 7 },
-  py: { base: 4, md: 5 },
-  fontFamily: "'EB Garamond', serif",
-  fontSize: { base: "lg", md: "xl" },
-  lineHeight: "1.9",
-  boxShadow: `inset 0 1px 4px rgba(94,45,16,0.08), 0 6px 24px rgba(94,45,16,0.1)`,
-  sx: { caretColor: TINTA },
-  _placeholder: { color: `${TINTA}66`, fontStyle: "italic" },
-  _hover: { borderColor: `${TINTA}55` },
-  _focus: {
-    borderColor: `${TINTA}88`,
-    boxShadow: `inset 0 1px 4px rgba(94,45,16,0.1), 0 0 0 1px ${TINTA}33, 0 8px 30px rgba(94,45,16,0.16)`,
-    bg: "rgba(255,251,243,0.52)",
-  },
-} as const;
-
-// const GuardadoHint = ({ guardando, color = TINTA }: { guardando: boolean; color?: string }) => (
-//   // <Text color={color} fontSize="xs" opacity={0.65} fontStyle="italic" minH="1.2em">
-//   //   {guardando ? "Guardando…" : "Se guarda solo. Tómate el tiempo que necesites."}
-//   // </Text>
-// );
-
-const FlechaTramo = ({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
+const FlechaTramo =({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
   <Box
     as="button"
     onClick={disabled ? undefined : onClick}

@@ -52,7 +52,7 @@ const lineaDeVida: ExperienciaPsicologia = {
 
   problemaInicial: {
     key: "problema-actual",
-    pregunta: "¿Qué problemas hay en tu Vida actualmente?",
+    pregunta: "¿Qué problemas te acompañan?",
     apoyo: "",
     placeholder: "Empieza por aquí…",
   },
@@ -130,18 +130,79 @@ export interface LineaDeVidaData {
   /** «Los Nudos»: conflictos/patrones que el usuario reconoce hoy. Cada uno
    *  es un elemento independiente (se usará en la sesión de integración). */
   nudos?: string[];
+  /** «La Integración»: constelaciones que el propio usuario compone, agrupando
+   *  nudos y arquetipos de su carta astral. La frase la escribe siempre la
+   *  persona. La plataforma NUNCA interpreta: sólo guarda lo que ella une. */
+  constelaciones?: Constelacion[];
+  /** «Heridas»: el usuario une huellas (recuerdos marcados) con nudos para
+   *  reconocer de dónde nace cada nudo. La frase la escribe siempre la persona. */
+  heridas?: RelacionHuellaNudo[];
+  /** El usuario pulsó «Voy a ser valiente» (desbloquea la página de Problema). */
+  valiente?: boolean;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// «La Integración» — el usuario compone CONSTELACIONES: agrupa uno o varios
+// nudos con uno o varios arquetipos de su carta y escribe, con sus propias
+// palabras, la relación que encuentra. Esto alimenta el Mapa de consciencia
+// (un nudo en el centro, símbolos alrededor).
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Referencia a UNA faceta de un arquetipo de la carta astral:
+ *  o bien «cuerpo en signo» (faceta "signo"), o bien «cuerpo en casa»
+ *  (faceta "casa"). Cada faceta es una pieza independiente que el usuario
+ *  puede arrastrar y relacionar por separado. */
+export interface ArquetipoRef {
+  /** Clave del cuerpo astral (sol, luna, saturno, ascendente…). */
+  cuerpoKey: string;
+  /** Qué faceta del cuerpo representa esta pieza. */
+  faceta: "signo" | "casa";
+  /** Signo zodiacal (presente cuando faceta = "signo"). */
+  signo: string | null;
+  /** Casa astrológica 1–12 (presente cuando faceta = "casa"). */
+  casa: number | null;
+}
+
+export interface Constelacion {
+  /** Identificador estable de la constelación. */
+  id: string;
+  /** Título que pone el usuario a esta relación. */
+  titulo: string;
+  /** Nudos agrupados (texto, tal cual los escribió en Los Nudos). */
+  nudos: string[];
+  /** Arquetipos agrupados. */
+  arquetipos: ArquetipoRef[];
+  /** La frase que escribe el usuario: su propia comprensión de la relación. */
+  texto: string;
+}
+
+/** Clave estable de una faceta de arquetipo (para comparar y deduplicar). */
+export const arquetipoKey = (a: { cuerpoKey: string; faceta: string }): string =>
+  `${a.cuerpoKey}-${a.faceta}`;
+
+/** «Heridas»: el usuario agrupa huellas (experiencias) con nudos (creencias que
+ *  dejaron) para reconocer de dónde nace cada herida. Cada herida es un box con
+ *  su título, descripción y las piezas seleccionadas. */
+export interface RelacionHuellaNudo {
+  /** Identificador estable. */
+  id: string;
+  /** Título que pone el usuario a esta herida. */
+  titulo: string;
+  /** Huellas (recuerdos marcados) agrupadas. */
+  huellas: string[];
+  /** Nudos agrupados. */
+  nudos: string[];
+  /** Descripción libre: lo que la persona reconoce. */
+  texto: string;
 }
 
 // ── «Los Nudos» — textos editables ──
 export const NUDOS = {
-  titulo: "Los Nudos",
-  intro: [
-    "Has recorrido tu historia. Has vuelto a visitar recuerdos, personas y momentos que ayudaron a moldear quién eres hoy. Algunas experiencias quedaron atrás. Otras continúan influyendo en tu forma de pensar, sentir y relacionarte.",
-    "A esos puntos de tensión los llamaremos nudos.",
-  ],
+  titulo: "Nudos",
+  intro: [] as string[],
   apoyo:
     "Un nudo puede ser un miedo, una herida, una creencia, un conflicto repetido o una dificultad que parece acompañarte desde hace años. No busques explicaciones perfectas. Simplemente observa aquello que sientes presente en tu vida hoy.",
-  pregunta: "¿Qué conflictos o nudos reconoces actualmente en tu vida?",
+  pregunta: "¿Qué conflictos o nudos hay en tu Vida?",
   ejemplos: [
     "Miedo al abandono",
     "Necesidad de aprobación",
@@ -158,7 +219,7 @@ export const NUDOS = {
 
 // ── «La Integración» — textos editables ──
 export const INTEGRACION = {
-  titulo: "La Integración",
+  titulo: "Integración",
   principal: [
     "Has recorrido tu historia.",
     "Has identificado las experiencias que dejaron huella.",

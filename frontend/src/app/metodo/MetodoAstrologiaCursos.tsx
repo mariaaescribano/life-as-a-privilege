@@ -1,0 +1,238 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import axios from "axios";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
+import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { useCursosData } from "../../data/cursosApi";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+
+const EyeIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
+       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
+
+/**
+ * Última pantalla del Recorrido de Astrología: los cursos de Astrología, para
+ * que el usuario los tenga a mano y pueda profundizar. Va después de la pantalla
+ * de la Llamada. Desde aquí se desbloquea/avanza a Psicología (misma lógica de
+ * pago que antes estaba en la Llamada, que ahora es el paso previo).
+ */
+export default function MetodoAstrologiaCursos() {
+  const navigate = useNavigate();
+  const { cursosData, loading } = useCursosData();
+  const [comicOpen, setComicOpen] = useState(false);
+  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState(false);
+  const [pagoPsicoOpen, setPagoPsicoOpen] = useState(false);
+  const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
+  const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
+  const [testPagos, setTestPagos] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const token = sessionStorage.getItem("token");
+    if (!token) return;
+    axios
+      .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setPsicologiaSuscrito(!!res.data?.psicologia_suscrito))
+      .catch(() => {});
+    axios
+      .get(`${API_URL}/payment/test/enabled`)
+      .then((res) => setTestPagos(!!res.data?.enabled))
+      .catch(() => {});
+  }, []);
+
+  const testUnlockPsico = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    try {
+      await axios.post(
+        `${API_URL}/payment/test/unlock`,
+        { scope: "psicologia" },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      navigate("/metodo/psicologia");
+    } catch (err: any) {
+      setPagoPsicoError(err?.response?.data?.message || "No se pudo activar el modo test.");
+    }
+  };
+
+  const pagarPsicologia = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoPsicoLoading(true);
+    setPagoPsicoError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/psicologia/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoPsicoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoPsicoLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoPsicoError(
+        status === 403
+          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoPsicoLoading(false);
+    }
+  };
+
+  // El botón "Psicología →" del header se desbloquea al pagar Psicología.
+  // Mientras no esté pagada, el clic abre el pago (en vez de quedar inerte).
+  const onPsicologia = () => {
+    if (psicologiaSuscrito) navigate("/metodo/psicologia");
+    else { setPagoPsicoError(null); setPagoPsicoOpen(true); }
+  };
+
+  // Cursos de Astrología ordenados por fecha de publicación (recientes primero),
+  // igual que en la página de Cursos de la disciplina.
+  const cursos = [...(cursosData[astrologiaNom]?.cursos ?? [])].sort(
+    (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+  );
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="980px" gap={6}>
+          <MetodoStepHeader
+            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Cursos de Astrología"
+            bgColor={`${astrologiaBg}dd`}
+            color={astrologiaTxt}
+            space
+            step={{ current: 8, total: 8 }}
+            mb={0}
+            prev={{ label: "← Llamada", onClick: () => navigate("/metodo/astrologia/llamada") }}
+            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+            next={{
+              label: psicologiaSuscrito ? "Psicología →" : "Desbloquear Psicología 🔒",
+              onClick: onPsicologia,
+            }}
+          />
+
+          {/* Texto introductorio debajo del header */}
+          <Text
+            color={`${astrologiaTxt}ee`}
+            fontSize={{ base: "md", md: "lg" }}
+            fontStyle="italic"
+            textAlign="center"
+            lineHeight="1.8"
+            style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
+          >
+            Si quieres profundizar, no te olvides de los cursos.
+          </Text>
+
+          {/* Grid de cursos de Astrología */}
+          {loading ? (
+            <SpinnerTurquesa />
+          ) : cursos.length > 0 ? (
+            cursos.length === 1 ? (
+              <Flex
+                w="100%"
+                justify="center"
+                sx={{
+                  "@keyframes cursoCardIn": {
+                    from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                    to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+                  },
+                }}
+              >
+                <Box
+                  w="100%"
+                  maxW="520px"
+                  style={{ opacity: 0, animation: "cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) 0s forwards" }}
+                >
+                  <CursoCardDetalle
+                    curso={cursos[0]}
+                    bgColor={astrologiaBg}
+                    color={astrologiaTxt}
+                    nom={astrologiaNom}
+                  />
+                </Box>
+              </Flex>
+            ) : (
+              <SimpleGrid
+                w="100%"
+                columns={{ base: 1, md: 2 }}
+                spacing={{ base: 5, md: 6 }}
+                alignItems="start"
+                sx={{
+                  "@keyframes cursoCardIn": {
+                    from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                    to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+                  },
+                }}
+              >
+                {cursos.map((curso, i) => (
+                  <Box
+                    key={curso.id}
+                    h="100%"
+                    style={{ opacity: 0, animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards` }}
+                  >
+                    <CursoCardDetalle
+                      curso={curso}
+                      bgColor={astrologiaBg}
+                      color={astrologiaTxt}
+                      nom={astrologiaNom}
+                    />
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )
+          ) : (
+            // Aún no hay cursos publicados: mensaje suave con el fondo de astrología.
+            <Box
+              position="relative"
+              w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              border={`1px solid ${astrologiaTxt}44`}
+              boxShadow={`0 0 18px rgba(255,255,255,0.1), 0 0 30px ${astrologiaTxt}1a`}
+            >
+              <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
+                <Text
+                  color={`${astrologiaTxt}cc`}
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontStyle="italic"
+                  lineHeight="1.8"
+                  style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
+                >
+                  Pronto encontrarás aquí los cursos de Astrología.
+                </Text>
+              </Box>
+            </Box>
+          )}
+        </Flex>
+      </Flex>
+
+      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+
+      <PagoPsicologiaModal
+        isOpen={pagoPsicoOpen}
+        onClose={() => { setPagoPsicoOpen(false); setPagoPsicoError(null); }}
+        onPagar={pagarPsicologia}
+        loading={pagoPsicoLoading}
+        error={pagoPsicoError}
+        onTest={testPagos ? testUnlockPsico : undefined}
+      />
+
+      <SiteFooter />
+    </Box>
+  );
+}

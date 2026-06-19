@@ -169,7 +169,7 @@ export default function MetodoAstrologiaCasas() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 5, total: 6 }}
+            step={{ current: 5, total: 8 }}
             mb={0}
             prev={{ label: "← Puntos clave", onClick: () => navigate("/metodo/astrologia/lectura") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}

@@ -12,6 +12,9 @@ interface SaberMasModalProps {
   cuerpo: Cuerpo | null;
   signo?: string;
   casa?: number;
+  /** Si se indica, el popup muestra SOLO esa faceta (signo o casa). Sin él,
+   *  muestra ambas (comportamiento por defecto en Astrología). */
+  facet?: "signo" | "casa";
 }
 
 const ZodiacGlyph = ({ symbol, size = 28, color }: { symbol: string; size?: number; color: string }) => (
@@ -69,7 +72,7 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
   ));
 }
 
-export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMasModalProps) {
+export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: SaberMasModalProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Al abrir / cambiar de cuerpo, vuelve al inicio del contenido.
@@ -101,6 +104,9 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
   const signoData = signo ? ZODIAC_SIGNS.find((s) => s.name === signo) : null;
   const textoSigno = signo ? getTextoSigno(cuerpo.key, signo) : null;
   const textoCasa = casa != null ? getTextoCasa(cuerpo.key, casa) : null;
+  // Qué bloques mostrar (si llega `facet`, sólo uno).
+  const verSigno = facet !== "casa";
+  const verCasa = cuerpo.conCasa && facet !== "signo";
 
   return (
     <Box
@@ -181,7 +187,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
         >
 
           {/* ── Bloque SIGNO ── */}
-          {signoData ? (
+          {verSigno && (signoData ? (
             <Flex direction="column" gap={4}>
               <Flex align="center" justify="center" gap={3} flexWrap="wrap">
                 <Glifo symbol={cuerpo.symbol} color={color} size={36} />
@@ -225,10 +231,10 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
                 {cuerpo.label} — signo aún no elegido
               </Text>
             </Flex>
-          )}
+          ))}
 
           {/* ── Separador ── */}
-          {cuerpo.conCasa && (
+          {verSigno && verCasa && (
             <Box
               my={{ base: 6, md: 8 }}
               h="1px"
@@ -240,7 +246,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa }: SaberMas
           )}
 
           {/* ── Bloque CASA ── */}
-          {cuerpo.conCasa && (
+          {verCasa && (
             casa != null ? (
               <Flex direction="column" gap={4}>
                 <Flex align="center" justify="center" gap={3} flexWrap="wrap">

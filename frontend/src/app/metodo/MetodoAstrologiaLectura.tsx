@@ -35,11 +35,14 @@ function starPos(i: number, total: number): { top: string; left: string } {
     const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
     return x - Math.floor(x);
   };
-  const jitterX = (seeded(i * 2 + 1) - 0.5) * cellW * 0.5;
-  const jitterY = (seeded(i * 2 + 2) - 0.5) * cellH * 0.5;
+  // Jitter amplio (0.9 de la celda) → reparto más caótico, tipo constelación real.
+  const jitterX = (seeded(i * 2 + 1) - 0.5) * cellW * 0.9;
+  const jitterY = (seeded(i * 2 + 2) - 0.5) * cellH * 0.9;
+  // Clamp para que ninguna estrella se pegue al borde del box.
+  const clamp = (v: number) => Math.max(8, Math.min(92, v));
   return {
-    left: `${cellW * (col + 0.5) + jitterX}%`,
-    top: `${cellH * (row + 0.5) + jitterY}%`,
+    left: `${clamp(cellW * (col + 0.5) + jitterX)}%`,
+    top: `${clamp(cellH * (row + 0.5) + jitterY)}%`,
   };
 }
 
@@ -130,7 +133,7 @@ export default function MetodoAstrologiaLectura() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
-            step={{ current: 4, total: 6 }}
+            step={{ current: 4, total: 8 }}
             mb={0}
             prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}

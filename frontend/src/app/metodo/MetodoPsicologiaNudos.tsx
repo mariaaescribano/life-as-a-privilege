@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import {
   experienciaById,
   NUDOS,
@@ -120,34 +121,16 @@ export default function MetodoPsicologiaNudos() {
 
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Los Nudos"
+              title="Nudos"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 5, total: 9 }}
               mb={0}
-              prev={{ label: "← Las Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
-              next={{ label: "La Integración →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
+              prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
+              next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
             />
 
-            {/* Intro contemplativa */}
-            <Box
-              position="relative"
-              w="100%"
-              borderRadius="2xl"
-              overflow="hidden"
-              border={`1px solid ${TINTA}33`}
-              boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
-            >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }} textAlign="center">
-                <Flex direction="column" gap={2.5} color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" opacity={0.92} maxW="560px" mx="auto">
-                  {NUDOS.intro.map((p, i) => (
-                    <Text key={i} fontStyle={i === NUDOS.intro.length - 1 ? "italic" : "normal"} style={{ textShadow: INK_SHADOW }}>{p}</Text>
-                  ))}
-                </Flex>
-              </Box>
-            </Box>
 
             {/* Box principal: pregunta + entrada + ejemplos + nudos seleccionados */}
             <Box
@@ -155,20 +138,19 @@ export default function MetodoPsicologiaNudos() {
               w="100%"
               borderRadius="2xl"
               overflow="hidden"
-              border={`1px solid ${TINTA}33`}
-              boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
+              boxShadow={`0 10px 40px rgba(94,45,16,0.18)`}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 6, md: 7 }} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
 
-                {/* Pregunta principal + apoyo */}
+                {/* Pregunta principal */}
                 <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
-                  <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    {NUDOS.pregunta}
-                  </Text>
-                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
-                    {NUDOS.apoyo}
-                  </Text>
+                  <Flex align="center" justify="center" gap={3}>
+                    <NudoEspiralIcon size={34} color={TINTA} strokeWidth={1.7} />
+                    <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                      {NUDOS.pregunta}
+                    </Text>
+                  </Flex>
                 </Flex>
 
                 {/* Entrada para añadir nudos */}
@@ -252,17 +234,20 @@ export default function MetodoPsicologiaNudos() {
               w="100%"
               borderRadius="2xl"
               overflow="hidden"
-              border={`1px solid ${TINTA}33`}
-              boxShadow={`0 10px 40px rgba(94,45,16,0.18), 0 0 0 1px ${neuropsicologiaBg}55`}
+              boxShadow={`0 10px 40px rgba(94,45,16,0.18)`}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-                <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
-                  Mis Nudos
-                  {nudos.length > 0 && (
-                    <Box as="span" ml={2} fontSize={{ base: "sm", md: "md" }} fontWeight="600" opacity={0.7}>({nudos.length})</Box>
-                  )}
-                </Text>
+                <Flex align="center" justify="center" gap={2.5}>
+                  <NudoEspiralIcon size={28} color={TINTA} strokeWidth={1.8} />
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
+                    Mis Nudos
+                    {nudos.length > 0 && (
+                      <Box as="span" ml={2} fontSize={{ base: "sm", md: "md" }} fontWeight="600" opacity={0.7}>({nudos.length})</Box>
+                    )}
+                  </Text>
+                </Flex>
+                <Box h="1px" w="70%" maxW="340px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
                 {nudos.length > 0 ? (
                   <Flex wrap="wrap" justify="center" gap={2.5} w="100%" maxW="620px">
@@ -279,6 +264,7 @@ export default function MetodoPsicologiaNudos() {
                         border={`1px solid ${TINTA}66`}
                         boxShadow={`0 3px 12px rgba(94,45,16,0.14)`}
                       >
+                        <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.9} />
                         <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
                           {n}
                         </Text>

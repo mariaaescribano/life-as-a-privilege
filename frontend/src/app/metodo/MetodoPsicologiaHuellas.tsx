@@ -115,7 +115,9 @@ export default function MetodoPsicologiaHuellas() {
   if (!exp) return null;
 
   // ── Render de una página (un año) del cuaderno ──
-  const Pagina = ({ edadAno }: { edadAno: number | undefined }) => {
+  // `scrollIzquierda`: pone la barra de scroll en el borde IZQUIERDO (página
+  // izquierda del cuaderno), como en un libro abierto.
+  const Pagina = ({ edadAno, scrollIzquierda }: { edadAno: number | undefined; scrollIzquierda?: boolean }) => {
     if (edadAno === undefined) {
       // Página en blanco (cuando el nº de años es impar).
       return <Box flex="1" display={{ base: "none", md: "block" }} />;
@@ -126,94 +128,102 @@ export default function MetodoPsicologiaHuellas() {
         flex="1"
         minW={0}
         position="relative"
-        borderRadius="xl"
         overflow="hidden"
-        border={`1px solid ${TINTA}3a`}
-        boxShadow={`0 10px 34px rgba(94,45,16,0.16), inset 0 0 0 1px ${neuropsicologiaBg}55`}
-        h={{ base: "auto", md: "440px" }}
+        h={{ base: "60vh", md: "440px" }}
+        bgColor={neuropsicologiaBg}
+        bgImage="url('/img/fondos/psciologia.png')"
+        bgSize="cover"
+        bgPosition="center"
       >
-        {/* Fondo de psicología EN MOSAICO: se repite en vertical (no se estira),
-            así el contenido largo mantiene la textura de acuarela como libreta. */}
-        <Box
-          position="absolute"
-          inset="0"
-          pointerEvents="none"
-          borderRadius="inherit"
-          bgColor={neuropsicologiaBg}
-          bgImage="url('/img/fondos/psciologia.png')"
-          bgSize="100% auto"
-          bgRepeat="repeat-y"
-          bgPosition="top center"
-        />
-        {/* Contenido: en ordenador altura fija con scroll interno propio. */}
+        {/* Contenido con scroll interno SIEMPRE visible (móvil y ordenador),
+            barra gruesa para que quede clarísimo que se puede desplazar. */}
         <Box
           position="relative"
           zIndex={1}
-          px={{ base: 6, md: 8 }}
-          py={{ base: 7, md: 9 }}
-          h={{ base: "auto", md: "100%" }}
-          overflowY={{ base: "visible", md: "auto" }}
+          h="100%"
+          overflowY="scroll"
           overscrollBehavior="contain"
           sx={{
-            scrollbarWidth: "thin",
-            scrollbarColor: `${TINTA}66 transparent`,
-            "&::-webkit-scrollbar": { width: "9px" },
-            "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "9px", border: "2px solid transparent", backgroundClip: "content-box" },
-            "&::-webkit-scrollbar-thumb:hover": { background: `${TINTA}88`, backgroundClip: "content-box" },
+            direction: scrollIzquierda ? "rtl" : "ltr",
+            scrollbarWidth: "auto",
+            scrollbarColor: `${TINTA} ${neuropsicologiaBg}`,
+            "&::-webkit-scrollbar": { width: "14px" },
+            "&::-webkit-scrollbar-track": { background: `${TINTA}1f` },
+            "&::-webkit-scrollbar-thumb": { background: TINTA, borderRadius: "10px", border: `3px solid ${neuropsicologiaBg}`, backgroundClip: "content-box" },
           }}
         >
-          {/* Cabecera del año */}
-          <Flex direction="column" align="center" textAlign="center" gap={3} mb={2}>
-            <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
-              Año {edadAno}{"  "}
-              <Box as="span" fontWeight="500" opacity={0.6}>{anoNatural(edad, edadAno, anioActual)}</Box>
-            </Text>
-            <Box h="1px" w="70%" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-          </Flex>
+         <Box sx={{ direction: "ltr" }}>
+          {/* Cabecera del año — con su propia "foto" de psicología */}
+          <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
+            <FotoFranja posicion="center top" />
+            <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center" gap={3}>
+              <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
+                Año {edadAno}{"  "}
+                <Box as="span" fontWeight="500" opacity={0.6}>{anoNatural(edad, edadAno, anioActual)}</Box>
+              </Text>
+            </Flex>
+          </Box>
 
-          {/* Ítems del año, separados por una línea fina; cada uno con su punto */}
+          {/* Cada ítem es su propia franja con una "foto" nueva; entre franjas,
+              una raya de separación bien visible. */}
           {items.length === 0 ? (
-            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" py={6} style={{ textShadow: INK_SHADOW }}>
-              Sin recuerdos escritos este año.
-            </Text>
+            <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}55`}>
+              <FotoFranja posicion="center 40%" />
+              <Text position="relative" zIndex={1} color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                Sin recuerdos escritos este año.
+              </Text>
+            </Box>
           ) : (
-            <Flex direction="column">
-              {items.map((it, i) => {
-                const marcado = itemMarcado(data, edadAno, it);
-                return (
-                  <Flex
-                    key={`${i}-${it}`}
-                    align="flex-start"
-                    gap={3}
-                    py={3}
-                    borderTop={i === 0 ? "none" : `1px solid ${TINTA}1f`}
-                  >
-                    {/* Punto neutro para marcar que dejó huella */}
+            items.map((it, i) => {
+              const marcado = itemMarcado(data, edadAno, it);
+              return (
+                <Box
+                  key={`${i}-${it}`}
+                  position="relative"
+                  px={{ base: 6, md: 8 }}
+                  py={{ base: 4, md: 5 }}
+                  borderTop={`2px solid ${TINTA}55`}
+                >
+                  {/* "Foto" de esta franja (posición distinta por ítem) */}
+                  <FotoFranja posicion={`center ${(i * 29) % 100}%`} />
+                  <Flex position="relative" zIndex={1} align="flex-start" gap={3}>
+                    {/* ◈ para marcar que dejó huella (color psicología) */}
                     <Box
                       as="button"
                       onClick={() => toggleItem(edadAno, it)}
                       flexShrink={0}
-                      mt="6px"
-                      w="18px"
-                      h="18px"
-                      borderRadius="full"
-                      border={`1.5px solid ${marcado ? TINTA : `${TINTA}66`}`}
-                      bg={marcado ? TINTA : "transparent"}
-                      boxShadow={marcado ? `0 0 10px ${TINTA}88` : "none"}
+                      mt="2px"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      lineHeight="1"
+                      fontSize={{ base: "20px", md: "22px" }}
+                      color={TINTA}
+                      opacity={marcado ? 1 : 0.4}
                       cursor="pointer"
                       transition="all 0.2s ease"
-                      _hover={{ borderColor: TINTA, transform: "scale(1.12)" }}
+                      style={{ textShadow: marcado ? `0 1px 2px #fbf4e8, 0 0 9px ${TINTA}99` : `0 1px 2px #fbf4e8` }}
+                      _hover={{ opacity: 1, transform: "scale(1.18)" }}
                       title={marcado ? "Dejó huella (pulsa para quitar)" : "Marcar que dejó huella"}
                       aria-label="Marcar que dejó huella"
-                    />
+                    >
+                      ◈
+                    </Box>
                     <Text flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontWeight={marcado ? "600" : "400"} style={{ textShadow: INK_SHADOW }}>
                       {it}
                     </Text>
                   </Flex>
-                );
-              })}
-            </Flex>
+                </Box>
+              );
+            })
           )}
+          {/* Franja final vacía: respiración elegante, como un ítem más */}
+          {items.length > 0 && (
+            <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 7, md: 9 }} borderTop={`2px solid ${TINTA}55`}>
+              <FotoFranja posicion="center 85%" />
+            </Box>
+          )}
+         </Box>
         </Box>
       </Box>
     );
@@ -228,19 +238,19 @@ export default function MetodoPsicologiaHuellas() {
 
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title="Las Huellas"
+            title="Huellas"
             pageLabel="4/9"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
             prev={{ label: "← Línea de Vida", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
-            next={{ label: "Los Nudos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
+            next={{ label: "Nudos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
           />
 
           <Flex direction="column" align="center" textAlign="center" gap={2} maxW="620px">
             <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.9} lineHeight="1.8">
-              Relee tu historia. Marca con un punto los recuerdos que dejaron huella en ti.
+              Recorre tu historia. Marca con ◈ los recuerdos que dejaron huella en ti.
             </Text>
           </Flex>
 
@@ -262,8 +272,11 @@ export default function MetodoPsicologiaHuellas() {
                 justify="center"
                 direction={{ base: "column", md: "row" }}
                 gap={0}
+                borderRadius="2xl"
+                overflow="hidden"
+                boxShadow="0 14px 44px rgba(40,18,4,0.28)"
               >
-                <Pagina edadAno={izquierda} />
+                <Pagina edadAno={izquierda} scrollIzquierda />
 
                 {/* Lomo del cuaderno con anillas: opaco (cubre del todo la unión,
                     no asoma el fondo), monta sobre ambas páginas. Vertical en
@@ -274,15 +287,16 @@ export default function MetodoPsicologiaHuellas() {
                   justify={{ base: "center", md: "space-evenly" }}
                   align="center"
                   flexShrink={0}
-                  w={{ base: "100%", md: "40px" }}
-                  h={{ base: "32px", md: "auto" }}
-                  bg={neuropsicologiaBg}
-                  boxShadow={`inset 0 0 16px rgba(94,45,16,0.22), 0 0 0 1px ${TINTA}33`}
+                  alignSelf="stretch"
+                  w={{ base: "100%", md: "42px" }}
+                  h={{ base: "34px", md: "440px" }}
+                  bg={TINTA}
+                  boxShadow={`inset 0 0 18px rgba(0,0,0,0.4)`}
                   my={{ base: "-14px", md: 0 }}
                   mx={{ base: 0, md: "-12px" }}
                   gap={{ base: 4, md: 0 }}
                   py={{ base: 0, md: 4 }}
-                  zIndex={2}
+                  zIndex={3}
                   aria-hidden
                 >
                   {Array.from({ length: 7 }).map((_, i) => (
@@ -291,9 +305,9 @@ export default function MetodoPsicologiaHuellas() {
                       w="14px"
                       h="14px"
                       borderRadius="full"
-                      border={`2px solid ${TINTA}aa`}
-                      bg="rgba(255,251,243,0.85)"
-                      boxShadow={`inset 0 1px 3px rgba(94,45,16,0.35)`}
+                      border={`2px solid rgba(255,251,243,0.55)`}
+                      bg="rgba(255,251,243,0.9)"
+                      boxShadow={`inset 0 1px 3px rgba(94,45,16,0.5)`}
                     />
                   ))}
                 </Flex>
@@ -322,6 +336,20 @@ export default function MetodoPsicologiaHuellas() {
     </Box>
   );
 }
+
+// "Foto" de acuarela para una franja (cabecera o ítem). Cada franja muestra
+// una zona distinta de la imagen → sensación de una foto nueva entre rayas.
+const FotoFranja = ({ posicion }: { posicion: string }) => (
+  <Box
+    position="absolute"
+    inset="0"
+    pointerEvents="none"
+    bgColor={neuropsicologiaBg}
+    bgImage="url('/img/fondos/psciologia.png')"
+    bgSize="cover"
+    style={{ backgroundPosition: posicion }}
+  />
+);
 
 const FlechaPagina = ({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
   <Box

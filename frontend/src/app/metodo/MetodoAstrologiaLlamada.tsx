@@ -1,88 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { AgendarLlamada } from "../../components/global/AgendarLlamada";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+
+const EyeIcon = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
+       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
 
 /**
- * Última pantalla del Recorrido de Astrología: reservar una llamada (de pago,
+ * Penúltima pantalla del Recorrido de Astrología: reservar una llamada (de pago,
  * pago simulado por ahora) con María. Estilo astrología (fondo estrellado +
- * texto con brillo). Usa el componente reutilizable AgendarLlamada.
+ * texto con brillo). Usa el componente reutilizable AgendarLlamada. El paso
+ * siguiente son los Cursos de Astrología (MetodoAstrologiaCursos).
  */
 export default function MetodoAstrologiaLlamada() {
   const navigate = useNavigate();
-  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState(false);
-  const [pagoPsicoOpen, setPagoPsicoOpen] = useState(false);
-  const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
-  const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
+  const [comicOpen, setComicOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-    axios
-      .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => setPsicologiaSuscrito(!!res.data?.psicologia_suscrito))
-      .catch(() => {});
-    axios
-      .get(`${API_URL}/payment/test/enabled`)
-      .then((res) => setTestPagos(!!res.data?.enabled))
-      .catch(() => {});
   }, []);
-
-  const testUnlockPsico = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "psicologia" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      navigate("/metodo/psicologia");
-    } catch (err: any) {
-      setPagoPsicoError(err?.response?.data?.message || "No se pudo activar el modo test.");
-    }
-  };
-
-  const pagarPsicologia = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    setPagoPsicoLoading(true);
-    setPagoPsicoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/psicologia/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoPsicoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoPsicoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoPsicoError(
-        status === 403
-          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoPsicoLoading(false);
-    }
-  };
-
-  // El botón "Psicología →" del header se desbloquea al pagar Psicología.
-  // Mientras no esté pagada, el clic abre el pago (en vez de quedar inerte).
-  const onPsicologia = () => {
-    if (psicologiaSuscrito) navigate("/metodo/psicologia");
-    else { setPagoPsicoError(null); setPagoPsicoOpen(true); }
-  };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -96,12 +42,11 @@ export default function MetodoAstrologiaLlamada() {
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             space
+            step={{ current: 7, total: 8 }}
             mb={0}
             prev={{ label: "← Aspectos", onClick: () => navigate("/metodo/astrologia/aspectos") }}
-            next={{
-              label: psicologiaSuscrito ? "Psicología →" : "Desbloquear Psicología 🔒",
-              onClick: onPsicologia,
-            }}
+            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+            next={{ label: "Cursos →", onClick: () => navigate("/metodo/astrologia/cursos") }}
           />
 
           <AgendarLlamada
@@ -139,21 +84,14 @@ export default function MetodoAstrologiaLlamada() {
                 lineHeight="1.6"
                 style={{ textShadow: `0 0 8px ${astrologiaTxt}33` }}
               >
-                La llamada es opcional pero recomendada. Puedes avanzar a Psicología.
+                La llamada es opcional pero recomendada. Puedes avanzar a los cursos.
               </Text>
             </Box>
           </Box>
         </Flex>
       </Flex>
 
-      <PagoPsicologiaModal
-        isOpen={pagoPsicoOpen}
-        onClose={() => { setPagoPsicoOpen(false); setPagoPsicoError(null); }}
-        onPagar={pagarPsicologia}
-        loading={pagoPsicoLoading}
-        error={pagoPsicoError}
-        onTest={testPagos ? testUnlockPsico : undefined}
-      />
+      <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
 
       <SiteFooter />
     </Box>
