@@ -201,7 +201,7 @@ export default function LogIn() {
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Entra a tus materiales y cursos grabados de «El Recorrido»
+          Entra a tus materiales y cursos grabados de El Recorrido
         </Text>
       </Flex>
 

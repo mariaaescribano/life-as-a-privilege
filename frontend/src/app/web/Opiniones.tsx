@@ -403,7 +403,7 @@ export default function Opiniones() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Experiencias de quienes ya han participado en «El Recorrido»
+          Experiencias de quienes ya han participado en El Recorrido
         </Text>
       </Flex>
 
@@ -458,7 +458,7 @@ export default function Opiniones() {
           transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
         >
-          Comparte tu experiencia con «El Recorrido»
+          Comparte tu experiencia con El Recorrido
         </Text>
       </Flex>
 

@@ -30,7 +30,7 @@ export const recorridoContenido: Record<
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     modalDesc:
-      "Tu carta natal no predice tu futuro: describe cómo estás configurado. Qué partes tuyas tienen más peso, qué tensiones internas arrastras, qué te cuesta y qué te sale solo. Es el primer paso de «El Recorrido» porque sin saber de dónde partes, cualquier trabajo posterior va a ciegas.",
+      "Tu carta natal no predice tu futuro: describe cómo estás configurado. Qué partes tuyas tienen más peso, qué tensiones internas arrastras, qué te cuesta y qué te sale solo. Es el primer paso de El Recorrido porque sin saber de dónde partes, cualquier trabajo posterior va a ciegas.",
     contenido: [
       {
         titulo: "Lectura de tu carta natal",

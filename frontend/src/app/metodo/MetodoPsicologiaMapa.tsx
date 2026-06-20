@@ -47,7 +47,7 @@ export default function MetodoPsicologiaMapa() {
               nom={neuropsicologiaNom}
               step={{ current: 8, total: 9 }}
               mb={0}
-              prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
+              prev={{ label: "← Relación", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
             />
 
             {/* Placeholder — pendiente de definir el contenido del mapa */}

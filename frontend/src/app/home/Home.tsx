@@ -487,7 +487,7 @@ const Home = () => {
                     ? "Haz clic en Astrología para empezar tu recorrido."
                     : d.name === neuropsicologiaNom && clickable
                     ? "Desbloquea Psicología para empezar la 2ª disciplina."
-                    : "«El Recorrido» se hace en orden — por favor, completa la disciplina anterior.";
+                    : "El Recorrido se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
                   <Box

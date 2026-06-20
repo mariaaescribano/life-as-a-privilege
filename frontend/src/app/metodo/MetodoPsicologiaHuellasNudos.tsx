@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
+import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import {
   experienciaById,
@@ -75,14 +76,14 @@ const HuellaIcon = ({ size = 16, color = TINTA, opacity = 1 }: { size?: number; 
 );
 
 // Cabecera DENTRO del box, separada del contenido por una raya horizontal.
-function ColumnaHeaderBox({ n, titulo, apoyo }: { n: number; titulo: string; apoyo?: string }) {
+// Cada columna se identifica por su ICONO (más estructural que un número).
+function ColumnaHeaderBox({ icono, titulo, apoyo }: { icono: React.ReactNode; titulo: string; apoyo?: string }) {
   return (
     <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
       <Flex direction="column" align="center" gap={1} textAlign="center">
         <Flex align="center" gap={2.5}>
-          <Flex w="28px" h="28px" align="center" justify="center" borderRadius="full"
-                bg={TINTA} color={PAPEL} fontWeight="800" fontSize="sm" flexShrink={0}
-                boxShadow={`0 2px 8px rgba(94,45,16,0.35)`}>{n}</Flex>
+          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
+               style={{ filter: `drop-shadow(0 1px 2px ${PAPEL})` }}>{icono}</Box>
           <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
                 style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{titulo}</Text>
         </Flex>
@@ -251,15 +252,14 @@ export default function MetodoPsicologiaHuellasNudos() {
               step={{ current: 6, total: 9 }}
               mb={0}
               prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
-              next={{ label: "Integración →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
+              next={{ label: "Relación →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
             />
 
             {/* Intro: texto sobre el fondo turquesa */}
             <Flex direction="column" align="center" textAlign="center" gap={2} maxW="720px" mx="auto">
               <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.92} lineHeight="1.7"
                     style={{ textShadow: `0 1px 8px rgba(0,0,0,0.35)` }}>
-                Reúne una experiencia (huella) con la creencia que dejó en ti (nudo).
-                Cada herida nace de lo que viviste con lo que aprendiste a creer.
+                Una herida surge cuando una experiencia importante (huella) se une a la creencia que nació de ella (nudo). No es solo lo que viviste, sino lo que aprendiste a creer sobre ti, los demás o el mundo.
               </Text>
             </Flex>
 
@@ -272,7 +272,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                      border={`1px solid ${PAPEL}33`} boxShadow={`0 10px 36px rgba(94,45,16,0.22)`}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox n={1} titulo="Tus huellas" apoyo="Tócalas o arrástralas para clasificarlas." />
+                    <ColumnaHeaderBox icono={<HuellaIcon size={22} color={TINTA} />} titulo="Tus huellas" apoyo="Tócalas o arrástralas para clasificarlas." />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {huellas.length === 0 ? (
                         <EstadoVacio texto="Aún no has marcado huellas en tu línea de vida." accion="Ir a Huellas →"
@@ -299,7 +299,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                      border={`1px solid ${PAPEL}33`} boxShadow={`0 10px 36px rgba(94,45,16,0.22)`}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox n={2} titulo="Tus nudos" apoyo="La creencia o conflicto que dejó esa experiencia." />
+                    <ColumnaHeaderBox icono={<NudoEspiralIcon size={22} color={TINTA} strokeWidth={1.7} opacity={0.9} />} titulo="Tus nudos" apoyo="La creencia o conflicto que dejó esa experiencia." />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {nudos.length === 0 ? (
                         <EstadoVacio texto="Aún no has nombrado tus nudos." accion="Ir a Nudos →"
@@ -332,11 +332,11 @@ export default function MetodoPsicologiaHuellasNudos() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox n={3} titulo="Tus heridas" apoyo="Cada herida une una experiencia con lo que dejó en ti." />
+                    <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo="Tus heridas" apoyo="Cada herida une una experiencia con lo que dejó en ti." />
                     <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
                       {heridas.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
-                          <HuellaIcon size={26} color={TINTA} opacity={0.45} />
+                          <HeridaIcon size={28} color={TINTA} opacity={0.45} />
                           <Text color={TINTA} opacity={0.7} fontStyle="italic" fontSize="sm">
                             Pulsa «Añadir herida» y reúne una huella con su nudo.
                           </Text>
@@ -442,9 +442,9 @@ function HeridaBox({ h, activa, sobreMesa, onActivar, onTitulo, onTexto, onQuita
          opacity={activa ? 1 : 0.85} transition="all 0.16s" cursor="pointer">
       <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
 
-        {/* Título (con el color de la herida) */}
+        {/* Título (con el icono de herida en el color de esta herida) */}
         <Flex align="center" gap={2} mb={3}>
-          <Box w="14px" h="14px" borderRadius="full" bg={color} border={`1.5px solid ${TINTA}55`} flexShrink={0} />
+          <HeridaIcon size={18} color={color} />
           <Input value={h.titulo} onChange={(e) => onTitulo(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
                  placeholder="Título de la herida…" variant="unstyled" flex="1"
                  color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"

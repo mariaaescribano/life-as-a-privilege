@@ -106,7 +106,7 @@ const VINETAS: Vineta[] = [
   {
     src: "/viñetas/comicInicio/viñeta14.png",
     paragraphs: [
-      "«El Recorrido» te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y dar sentido a tu dolor.",
+      "El Recorrido te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y dar sentido a tu dolor.",
       "Obtendrás herramientas que te ayudarán en tu camino, el cual tienes que caminar con tu valentía y fortaleza. Nadie hará por ti lo que tú puedes hacer por ti.",
     ],
   },

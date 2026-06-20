@@ -10,7 +10,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
-import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
+import { RelacionIcon } from "../../components/metodo/RelacionIcon";
+import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
 import { CUERPOS, cuerpoByKey, type Cuerpo } from "../../components/metodo/astrologiaData";
 import { type CartaData } from "../../components/metodo/Planetas/useCartaPlanetas";
@@ -20,10 +21,12 @@ import {
   type LineaDeVidaData,
   type Constelacion,
   type ArquetipoRef,
+  type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
   API_URL,
+  AstrologiaIcon,
   neuropsicologiaBg,
   neuropsicologiaNom,
   neuropsicologiaTxt,
@@ -62,6 +65,27 @@ const nuevoId = (): string =>
 
 const relVacia = (): Constelacion => ({ id: nuevoId(), titulo: "", nudos: [], arquetipos: [], texto: "" });
 
+// Etiqueta visible de una herida (reutilizamos el campo `nudos` de la
+// constelación para guardar estas etiquetas, que es lo que el usuario relaciona).
+const heridaLabel = (h: RelacionHuellaNudo): string => (h.titulo || "").trim() || "Herida sin título";
+
+// Cada box de relación toma un color distinto (misma paleta que las heridas).
+const PALETA_RELACION = [
+  "#e7c4ad", // melocotón
+  "#cfe0d2", // menta suave
+  "#d9cde8", // lavanda
+  "#e8dcb0", // mantequilla
+  "#bfd6e6", // cielo
+  "#ecc7cf", // rosa palo
+  "#cdd9b8", // pistacho
+  "#e3cdbf", // arena rosada
+];
+function colorRelacion(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return PALETA_RELACION[h % PALETA_RELACION.length];
+}
+
 function facetasDe(p: ArqPlaneta): ArqItem[] {
   const out: ArqItem[] = [];
   if (p.signo) out.push({ cuerpoKey: p.cuerpoKey, faceta: "signo", signo: p.signo, casa: null, symbol: p.symbol });
@@ -77,18 +101,15 @@ const EyeIcon = ({ color }: { color: string }) => (
 
 // Cabecera DENTRO del box, separada del contenido por una raya horizontal.
 // `dark` para la columna con fondo de estrellas (texto claro).
-function ColumnaHeaderBox({ n, titulo, apoyo, dark }: { n: number; titulo: string; apoyo?: string; dark?: boolean }) {
+function ColumnaHeaderBox({ icono, titulo, apoyo, dark }: { icono: React.ReactNode; titulo: string; apoyo?: string; dark?: boolean }) {
   const tinta = dark ? PAPEL : TINTA;
-  const badgeBg = dark ? PAPEL : TINTA;
-  const badgeFg = dark ? TINTA : PAPEL;
   const shadow = dark ? `0 1px 6px rgba(0,0,0,0.5)` : `0 1px 2px ${PAPEL}`;
   return (
     <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
       <Flex direction="column" align="center" gap={1} textAlign="center">
         <Flex align="center" gap={2.5}>
-          <Flex w="28px" h="28px" align="center" justify="center" borderRadius="full"
-                bg={badgeBg} color={badgeFg} fontWeight="800" fontSize="sm" flexShrink={0}
-                boxShadow={`0 2px 8px rgba(0,0,0,0.3)`}>{n}</Flex>
+          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
+               style={{ filter: `drop-shadow(${shadow})` }}>{icono}</Box>
           <Text color={tinta} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
                 style={{ textShadow: shadow }}>{titulo}</Text>
         </Flex>
@@ -109,8 +130,8 @@ export default function MetodoPsicologiaIntegracion() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [guardando, setGuardando] = useState(false);
-  const [nudos, setNudos] = useState<string[]>([]);
+  const [, setGuardando] = useState(false);
+  const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
   const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [activaId, setActivaId] = useState<string | null>(null);
@@ -142,7 +163,7 @@ export default function MetodoPsicologiaIntegracion() {
         if (psiRes.status === "fulfilled") {
           const d: LineaDeVidaData = psiRes.value.data?.data || {};
           dataRef.current = d;
-          setNudos(Array.isArray(d.nudos) ? d.nudos : []);
+          setHeridas(Array.isArray(d.heridas) ? d.heridas : []);
           const rels = Array.isArray(d.constelaciones)
             ? d.constelaciones.map((c) => ({ ...c, titulo: c.titulo ?? "" }))
             : [];
@@ -288,7 +309,7 @@ export default function MetodoPsicologiaIntegracion() {
 
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Integración"
+              title="Relación"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
@@ -301,25 +322,28 @@ export default function MetodoPsicologiaIntegracion() {
             {/* ════════ TRES COLUMNAS ════════ */}
             <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} align="stretch">
 
-              {/* ── COLUMNA 1 · NUDOS ── */}
+              {/* ── COLUMNA 1 · HERIDAS ── */}
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={`1px solid ${PAPEL}33`} boxShadow={`0 10px 36px rgba(94,45,16,0.22)`}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox n={1} titulo="Tus nudos" apoyo="Tócalos o arrástralos para relacionarlos." />
+                    <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo="Tus heridas" apoyo="Tócalas o arrástralas para relacionarlas." />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
-                      {nudos.length === 0 ? (
-                        <EstadoVacio texto="Aún no has nombrado tus nudos." accion="Ir a Nudos →"
-                                     onClick={() => navigate(`/metodo/psicologia/${exp.id}/nudos`)} />
+                      {heridas.length === 0 ? (
+                        <EstadoVacio texto="Aún no has creado tus heridas." accion="Ir a Heridas →"
+                                     onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)} />
                       ) : (
                         <Flex direction="column" gap={2.5}>
-                          {nudos.map((n, i) => (
-                            <NudoRect key={`${n}-${i}`} nudo={n} activo={nudoEnActiva(n)}
-                                      onTap={() => toggleNudo(n)}
-                                      onDragStart={() => { arrastreRef.current = { tipo: "nudo", nudo: n }; }}
-                                      onDragEnd={() => { arrastreRef.current = null; }} />
-                          ))}
+                          {heridas.map((h) => {
+                            const label = heridaLabel(h);
+                            return (
+                              <HeridaRect key={h.id} texto={label} activo={nudoEnActiva(label)}
+                                          onTap={() => toggleNudo(label)}
+                                          onDragStart={() => { arrastreRef.current = { tipo: "nudo", nudo: label }; }}
+                                          onDragEnd={() => { arrastreRef.current = null; }} />
+                            );
+                          })}
                         </Flex>
                       )}
                     </Box>
@@ -331,11 +355,11 @@ export default function MetodoPsicologiaIntegracion() {
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={`1px solid ${PAPEL}26`} boxShadow={`0 10px 36px rgba(0,0,0,0.34)`}>
-                  {/* Fondo: imagen de astrología al ~50% (deja ver el turquesa) */}
+                  {/* Fondo: imagen de astrología a opacidad completa */}
                   <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
-                       bgSize="cover" bgPosition="center" opacity={0.5} />
+                       bgSize="cover" bgPosition="center" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox dark n={2} titulo="Tus arquetipos" apoyo="Toca una carta para relacionarla; el ojo abre su lectura." />
+                    <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo="Tus arquetipos" apoyo="Toca una carta para relacionarla; el ojo abre su lectura." />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
                          sx={{ ...SCROLL_SX, scrollbarColor: `${PAPEL}55 transparent`,
                                "&::-webkit-scrollbar": { width: "7px" },
@@ -376,13 +400,13 @@ export default function MetodoPsicologiaIntegracion() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox n={3} titulo="Tus relaciones" apoyo="Cada relación es un box. Ponle título y escribe lo que tú ves." />
+                    <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo="Tus relaciones" apoyo="Cada relación es un box. Ponle título y escribe lo que tú ves." />
                     <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
                       {relaciones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
-                          <NudoEspiralIcon size={26} color={TINTA} opacity={0.45} />
+                          <RelacionIcon size={26} color={TINTA} opacity={0.45} />
                           <Text color={TINTA} opacity={0.7} fontStyle="italic" fontSize="sm">
-                            Pulsa «Añadir relación» y empieza a reunir nudos y arquetipos.
+                            Pulsa «Añadir relación» y empieza a reunir heridas y arquetipos.
                           </Text>
                         </Flex>
                       ) : (
@@ -400,12 +424,7 @@ export default function MetodoPsicologiaIntegracion() {
 
                     {/* Barra inferior: botón Añadir relación (marrón) sobre la imagen */}
                     <Flex flexShrink={0} align="center" justify="center" gap={3}
-                          px={{ base: 3.5, md: 4 }} pt={6} pb={{ base: 3, md: 4 }}
-                          bgGradient={`linear(to-t, ${neuropsicologiaBg}, ${neuropsicologiaBg}cc 55%, transparent)`}>
-                      {guardando && (
-                        <Text color={PAPEL} fontSize="xs" fontStyle="italic"
-                              style={{ textShadow: `0 1px 6px rgba(0,0,0,0.5)` }}>Guardando…</Text>
-                      )}
+                          px={{ base: 3.5, md: 4 }} pt={6} pb={{ base: 3, md: 4 }}>
                       <Box as="button" onClick={añadirRelacion}
                            px={{ base: 5, md: 6 }} py={2.5} borderRadius="full" bg={`${PAPEL}d9`} color={TINTA}
                            border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
@@ -456,21 +475,22 @@ function EstadoVacio({ texto, accion, onClick }: { texto: string; accion: string
   );
 }
 
-// Nudo: rectángulo sobrio, espiral a la izquierda. Tocar = seleccionar (se ilumina). Arrastrable.
-function NudoRect({ nudo, activo, onTap, onDragStart, onDragEnd }: {
-  nudo: string; activo: boolean; onTap: () => void; onDragStart: () => void; onDragEnd: () => void;
+// Herida: rectángulo sobrio, icono de herida a la izquierda. Tocar = seleccionar
+// (se ilumina). Arrastrable.
+function HeridaRect({ texto, activo, onTap, onDragStart, onDragEnd }: {
+  texto: string; activo: boolean; onTap: () => void; onDragStart: () => void; onDragEnd: () => void;
 }) {
   return (
     <Flex as="button" draggable onDragStart={onDragStart} onDragEnd={onDragEnd} onClick={onTap}
           align="center" gap={3} px={4} py={3} borderRadius="lg" textAlign="left" w="100%"
-          bg={activo ? TINTA : `${PAPEL}d9`} color={activo ? PAPEL : TINTA}
-          border={`1.5px solid ${activo ? PAPEL : `${TINTA}33`}`}
-          boxShadow={activo ? `0 0 0 3px ${PAPEL}66, 0 8px 22px rgba(94,45,16,0.4)` : `0 2px 8px rgba(94,45,16,0.12)`}
+          bg={TINTA} color={PAPEL}
+          border={`1.5px solid ${activo ? PAPEL : `${PAPEL}33`}`}
+          boxShadow={activo ? `0 0 0 3px ${PAPEL}66, 0 8px 22px rgba(94,45,16,0.4)` : `0 2px 8px rgba(94,45,16,0.2)`}
           cursor="grab" transition="all 0.16s"
-          _hover={{ boxShadow: activo ? `0 0 0 3px ${PAPEL}66, 0 8px 22px rgba(94,45,16,0.45)` : `0 4px 14px rgba(94,45,16,0.22)` }}
+          _hover={{ boxShadow: activo ? `0 0 0 3px ${PAPEL}66, 0 8px 22px rgba(94,45,16,0.45)` : `0 4px 14px rgba(94,45,16,0.3)` }}
           _active={{ cursor: "grabbing" }}>
-      <NudoEspiralIcon size={22} color={activo ? PAPEL : TINTA} strokeWidth={1.7} opacity={0.9} />
-      <Text fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.3">{nudo}</Text>
+      <HeridaIcon size={20} color={PAPEL} />
+      <Text fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.3">{texto}</Text>
     </Flex>
   );
 }
@@ -522,16 +542,17 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
   onQuitarNudo: (n: string) => void; onQuitarArq: (a: ArquetipoRef) => void; onBorrar: () => void;
 }) {
   const vacio = c.nudos.length === 0 && c.arquetipos.length === 0;
+  const color = colorRelacion(c.id);
   return (
     <Box onClick={onActivar} position="relative" mb={4} borderRadius="xl" overflow="hidden"
-         bgGradient={`linear(135deg, ${PAPEL}f7, #f3e7cfee)`}
-         boxShadow={activa ? `0 10px 28px rgba(94,45,16,0.32)` : `0 4px 14px rgba(94,45,16,0.14)`}
+         bgGradient={`linear(135deg, ${PAPEL}f2, ${color}66)`}
+         boxShadow={activa ? `0 0 0 2px ${color}, 0 10px 28px rgba(94,45,16,0.3)` : `0 4px 14px rgba(94,45,16,0.14)`}
          opacity={activa ? 1 : 0.85} transition="all 0.16s" cursor="pointer">
       <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
 
-        {/* Box del título */}
+        {/* Box del título (icono en el color de esta relación) */}
         <Flex align="center" gap={2} mb={3}>
-          <NudoEspiralIcon size={16} color={TINTA} strokeWidth={1.9} opacity={0.8} />
+          <RelacionIcon size={18} color={color} />
           <Input value={c.titulo} onChange={(e) => onTitulo(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
                  placeholder="Título de la relación…" variant="unstyled" flex="1"
                  color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
@@ -549,14 +570,14 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
           {vacio ? (
             <Flex align="center" justify="center" h="100%" minH="38px" textAlign="center">
               <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">
-                {activa ? "Toca o arrastra aquí nudos y arquetipos." : "Pulsa este box para activarlo."}
+                {activa ? "Toca o arrastra aquí heridas y arquetipos." : "Pulsa este box para activarlo."}
               </Text>
             </Flex>
           ) : (
             <Flex wrap="wrap" gap={2}>
               {c.nudos.map((n) => (
                 <Chip key={`n-${n}`} fuerte onRemove={() => onQuitarNudo(n)}
-                      icon={<NudoEspiralIcon size={13} color={PAPEL} strokeWidth={2} />} label={n} />
+                      icon={<HeridaIcon size={13} color={PAPEL} />} label={n} />
               ))}
               {c.arquetipos.map((a) => (
                 <Chip key={`a-${arquetipoKey(a)}`} onRemove={() => onQuitarArq(a)}

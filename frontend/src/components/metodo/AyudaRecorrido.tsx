@@ -9,6 +9,7 @@ import { AgendarLlamada } from "../global/AgendarLlamada";
 import { CursoCardDetalle } from "../aprendizaje/CursoCardDetalle";
 import { useCursosData } from "../../data/cursosApi";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { NUDOS } from "./psicologiaRecorrido";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -24,12 +25,24 @@ const ORIENTACION_CURSO: Partial<Record<string, string>> = {
   inicio: "cd03ced9-f239-4236-93d4-31eb2e995ef6",          // Psicología · «La Autoestima»
   problema: "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",        // Psicología · «El Trauma»
   "linea-de-vida": "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4", // Psicología · «El Trauma»
+  huellas: "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",         // Psicología · «El Trauma»
+  nudos: "cd03ced9-f239-4236-93d4-31eb2e995ef6",           // Psicología · «La Autoestima»
 };
 
 // Box de «Ejemplo» con fondo de psicología y una lista de ejemplos, por página.
 // Las páginas con entrada aquí abren este box elegante en vez del popup de texto
 // de siempre. Edita/añade ejemplos libremente.
-const EJEMPLOS_BOX: Partial<Record<string, { titulo: string; ejemplos: string[] }>> = {
+// `variante`: "frases" → tarjetas de cita (frases largas); "chips" → etiquetas
+// (ítems cortos, p. ej. los nudos); "herida" → ejemplo estructurado
+// (Huella → Nudo → Herida). Por defecto "frases".
+const EJEMPLOS_BOX: Partial<Record<string, {
+  titulo: string;
+  subtitulo?: string;
+  variante?: "frases" | "chips" | "herida" | "relacion";
+  ejemplos?: string[];
+  triadas?: { huella: string; nudo: string; herida: string }[];
+  relaciones?: { herida: string; arquetipo: string; relacionTitulo: string; comprension: string }[];
+}>> = {
   problema: {
     titulo: "Ejemplos de problemas",
     ejemplos: [
@@ -40,6 +53,60 @@ const EJEMPLOS_BOX: Partial<Record<string, { titulo: string; ejemplos: string[] 
       "Evito los conflictos y me callo lo que de verdad siento.",
       "Me cuesta estar sola y busco constantemente aprobación.",
       "Aplazo lo importante y luego me castigo por no avanzar.",
+    ],
+  },
+  huellas: {
+    titulo: "Ejemplos de huellas",
+    variante: "chips",
+    ejemplos: [
+      "La muerte de mi abuela",
+      "El día que aprobé el examen",
+      "La mudanza a otra ciudad",
+      "Mi primer desamor",
+      "Cuando nació mi hermana",
+      "El divorcio de mis padres",
+      "Un verano en casa de mis abuelos",
+      "El día que me sentí libre",
+    ],
+  },
+  nudos: {
+    titulo: "Ejemplos de nudos",
+    ejemplos: NUDOS.ejemplos,
+    variante: "chips",
+  },
+  integracion: {
+    titulo: "Ejemplos de relaciones",
+    subtitulo: "(ejemplo sencillo orientativo)",
+    variante: "relacion",
+    relaciones: [
+      {
+        herida: "Aprendí que expresar lo que siento genera conflicto.",
+        arquetipo: "Marte en Cáncer (evita la confrontación directa).",
+        relacionTitulo: "Represión de mi poder",
+        comprension: "Prefiero callar mis necesidades antes que arriesgarme a discutir o incomodar a otros.",
+      },
+      {
+        herida: "Aprendí que equivocarme hacía que valiera menos.",
+        arquetipo: "Ascendente en Virgo.",
+        relacionTitulo: "Perfeccionismo exagerado",
+        comprension: "Me exijo demasiado y me cuesta disfrutar las cosas si no salen exactamente como esperaba.",
+      },
+    ],
+  },
+  heridas: {
+    titulo: "Ejemplos de heridas",
+    variante: "herida",
+    triadas: [
+      {
+        huella: "Mis padres discutían mucho cuando era pequeño.",
+        nudo: "Miedo al conflicto.",
+        herida: "Aprendí que cuando alguien levanta la voz algo malo va a pasar; por eso evito discutir, aunque me calle lo que siento.",
+      },
+      {
+        huella: "Mis padres criticaban mucho mis errores.",
+        nudo: "Perfeccionismo.",
+        herida: "Aprendí que equivocarme hacía que valiera menos.",
+      },
     ],
   },
 };
@@ -362,7 +429,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                 ¿Prefieres hacerlo acompañado?
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
-                Puedes recorrer este camino junto a María. Agenda una llamada y hazlo acompañado.
+                Puedes recorrer este tramo junto a María. Agenda una llamada y hazlo acompañado.
               </Text>
               <Box as="button" onClick={() => { setAcompPreguntaOpen(false); setCompaniaOpen(true); }}
                    px={9} py={3} borderRadius="full" bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}
@@ -420,18 +487,99 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                     pr={6} style={{ textShadow: INK_SHADOW }}>
                 {ejemplosBox.titulo}
               </Text>
+              {ejemplosBox.subtitulo && (
+                <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" textAlign="center"
+                      opacity={0.7} mt={1.5}>
+                  {ejemplosBox.subtitulo}
+                </Text>
+              )}
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-              <Flex direction="column" gap={3}>
-                {ejemplosBox.ejemplos.map((ej, i) => (
-                  <Box key={i} px={{ base: 4, md: 5 }} py={3} borderRadius="xl"
-                       bg="rgba(255,251,243,0.14)" border={`1px solid ${TINTA}33`}
-                       sx={{ backdropFilter: "blur(4px)" }}>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
-                      «{ej}»
-                    </Text>
-                  </Box>
-                ))}
-              </Flex>
+              {ejemplosBox.variante === "herida" ? (
+                <Flex direction="column" gap={4}>
+                  {(ejemplosBox.triadas ?? []).map((t, i) => (
+                    <Box key={i} px={{ base: 4, md: 5 }} py={{ base: 4, md: 4 }} borderRadius="xl"
+                         bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
+                         sx={{ backdropFilter: "blur(4px)" }}>
+                      <Flex direction="column" gap={2.5}>
+                        {([["Huella", t.huella], ["Nudo", t.nudo], ["Herida", t.herida]] as const).map(([label, texto]) => (
+                          <Box key={label}>
+                            <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                                  opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>
+                              {label}
+                            </Text>
+                            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
+                              «{texto}»
+                            </Text>
+                          </Box>
+                        ))}
+                      </Flex>
+                    </Box>
+                  ))}
+                </Flex>
+              ) : ejemplosBox.variante === "relacion" ? (
+                <Flex direction="column" gap={4}>
+                  {(ejemplosBox.relaciones ?? []).map((r, i) => (
+                    <Box key={i} px={{ base: 4, md: 5 }} py={{ base: 4, md: 4 }} borderRadius="xl"
+                         bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
+                         sx={{ backdropFilter: "blur(4px)" }}>
+                      <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.2em" textTransform="uppercase"
+                            opacity={0.55} mb={2.5}>
+                        Ejemplo {i + 1}
+                      </Text>
+                      <Flex direction="column" gap={2.5}>
+                        <Box>
+                          <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                                opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Herida</Text>
+                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
+                            «{r.herida}»
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                                opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Arquetipo</Text>
+                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
+                            {r.arquetipo}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                                opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Relación</Text>
+                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.4">
+                            {r.relacionTitulo}
+                          </Text>
+                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={0.5} opacity={0.92}>
+                            {r.comprension}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Box>
+                  ))}
+                </Flex>
+              ) : ejemplosBox.variante === "chips" ? (
+                <Flex wrap="wrap" gap={2.5} justify="center">
+                  {(ejemplosBox.ejemplos ?? []).map((ej, i) => (
+                    <Box key={i} px={{ base: 3.5, md: 4 }} py={2} borderRadius="full"
+                         bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
+                         sx={{ backdropFilter: "blur(4px)" }}>
+                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" whiteSpace="nowrap">
+                        {ej}
+                      </Text>
+                    </Box>
+                  ))}
+                </Flex>
+              ) : (
+                <Flex direction="column" gap={3}>
+                  {(ejemplosBox.ejemplos ?? []).map((ej, i) => (
+                    <Box key={i} px={{ base: 4, md: 5 }} py={3} borderRadius="xl"
+                         bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
+                         sx={{ backdropFilter: "blur(4px)" }}>
+                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
+                        «{ej}»
+                      </Text>
+                    </Box>
+                  ))}
+                </Flex>
+              )}
             </Box>
           </Box>
         </Box>
@@ -456,7 +604,12 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                    _hover={{ bg: "#fff" }}>✕</Box>
             </Flex>
             {curso ? (
-              <CursoCardDetalle curso={curso} color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} nom={neuropsicologiaNom} />
+              // Envoltura con overflow:hidden → recorta los brillos blancos/turquesa
+              // propios de la tarjeta (pensados para la página teal) que sobre el
+              // fondo oscuro del popup dejaban marcas raras. Sombra limpia propia.
+              <Box borderRadius="2xl" overflow="hidden" boxShadow="0 24px 60px rgba(0,0,0,0.5)">
+                <CursoCardDetalle curso={curso} color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} nom={neuropsicologiaNom} />
+              </Box>
             ) : (
               <Text color={PAPEL} fontStyle="italic" opacity={0.85}>
                 El curso estará disponible pronto.
