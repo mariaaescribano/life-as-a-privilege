@@ -8,7 +8,6 @@ import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { AgendarLlamada } from "../../components/global/AgendarLlamada";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
@@ -50,16 +49,13 @@ export default function MetodoPsicologiaExperiencia() {
   // Tramo visible de la timeline + año abierto (página de libro).
   const [tramoIdx, setTramoIdx] = useState(0);
   const [anoAbierto, setAnoAbierto] = useState<number | null>(null);
-  // Aviso flotante "LEER" + modal de reserva de acompañamiento.
-  const [leerOpen, setLeerOpen] = useState(false);
-  const [companiaOpen, setCompaniaOpen] = useState(false);
 
   const anioActual = new Date().getFullYear();
 
   // La edad se pide en un popup bloqueante al entrar en la línea de vida.
   const necesitaEdad = typeof data.edad !== "number";
 
-  useLockBodyScroll(anoAbierto !== null || necesitaEdad || leerOpen || companiaOpen);
+  useLockBodyScroll(anoAbierto !== null || necesitaEdad);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -387,124 +383,8 @@ export default function MetodoPsicologiaExperiencia() {
         />
       )}
 
-      {/* ───────────────── AVISO FLOTANTE «LEER» ───────────────── */}
-      {!necesitaEdad && (
-        <Box
-          as="button"
-          onClick={() => setLeerOpen(true)}
-          position="fixed"
-          bottom={{ base: 4, md: 6 }}
-          right={{ base: 4, md: 6 }}
-          zIndex={1500}
-          px={{ base: 4, md: 5 }}
-          py={{ base: 2.5, md: 3 }}
-          borderRadius="full"
-          overflow="hidden"
-          bg={`${neuropsicologiaBg}f2`}
-          color={TINTA}
-          border={`1px solid ${TINTA}66`}
-          fontFamily="'EB Garamond', serif"
-          fontWeight="700"
-          fontSize={{ base: "sm", md: "md" }}
-          letterSpacing="0.04em"
-          cursor="pointer"
-          boxShadow={`0 6px 22px rgba(94,45,16,0.35), 0 0 0 1px ${neuropsicologiaBg}66`}
-          transition="all 0.22s"
-          _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.45)` }}
-          display="inline-flex"
-          alignItems="center"
-          gap={2}
-        >
-          {/* Fondo: acuarela de psicología, para que entre en el mismo vibe */}
-          <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-          <Box as="span" position="relative" zIndex={1} style={{ textShadow: INK_SHADOW }}>
-            ¿Necesitas ayuda?
-          </Box>
-        </Box>
-      )}
-
-      {/* Panel del aviso */}
-      {leerOpen && (
-        <Box
-          position="fixed" inset={0} zIndex={2200}
-          display="flex" alignItems="center" justifyContent="center"
-          px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
-          bg="rgba(60,34,12,0.6)"
-          sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-          onClick={() => setLeerOpen(false)}
-          fontFamily="'EB Garamond', serif"
-        >
-          <Box
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            position="relative" w="100%" maxW="460px"
-            borderRadius="2xl" overflow="hidden"
-            boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}
-          >
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 9, md: 14 }} py={{ base: 12, md: 16 }} textAlign="center">
-              <Box as="button" onClick={() => setLeerOpen(false)} position="absolute" top={3} right={3}
-                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
-                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
-                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4" mb={5} style={{ textShadow: INK_SHADOW }}>
-                ¿Prefieres hacerlo acompañado?
-              </Text>
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
-                Puedes recorrer tu línea de vida junto a María. Agenda una llamada y hazlo acompañado.
-              </Text>
-              <Box
-                as="button"
-                onClick={() => { setLeerOpen(false); setCompaniaOpen(true); }}
-                px={9} py={3} borderRadius="full"
-                bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}
-                fontFamily="'EB Garamond', serif" fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }} letterSpacing="0.06em"
-                cursor="pointer" boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
-                transition="all 0.2s"
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
-              >
-                Agenda tu llamada →
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      )}
-
-      {/* Modal «Compañía para línea de tiempo» (reserva con María) */}
-      {companiaOpen && (
-        <Box
-          position="fixed" inset={0} zIndex={2300}
-          display="flex" alignItems="flex-start" justifyContent="center"
-          px={{ base: 3, md: 10 }} py={{ base: 5, md: 10 }}
-          bg="rgba(60,34,12,0.62)"
-          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          onClick={() => setCompaniaOpen(false)}
-          fontFamily="'EB Garamond', serif"
-          overflowY="auto"
-        >
-          <Box
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            position="relative" w="100%" maxW="640px" my="auto"
-          >
-            <Flex align="center" justify="space-between" mb={3} px={1}>
-              <Box as="button" onClick={() => setCompaniaOpen(false)}
-                   w="36px" h="36px" borderRadius="full" flexShrink={0}
-                   bg="rgba(255,251,243,0.85)" border={`1px solid ${TINTA}44`} color={TINTA}
-                   display="flex" alignItems="center" justifyContent="center" fontSize="lg" cursor="pointer"
-                   _hover={{ bg: "#fff" }}>✕</Box>
-            </Flex>
-            <AgendarLlamada
-              color={neuropsicologiaTxt}
-              bgColor={neuropsicologiaBg}
-              disciplinaNom={neuropsicologiaNom}
-              precio={60}
-              titulo="Compañía para tu línea de tiempo"
-              subtitulo="Sesión con María · indica tu motivo de consulta · horario peninsular España"
-            />
-          </Box>
-        </Box>
-      )}
-
+      {/* El botón flotante de ayuda y la reserva acompañada los aporta ahora
+          AyudaRecorrido (común a todo el recorrido). */}
       <AyudaRecorrido pagina="linea-de-vida" />
 
       <SiteFooter />

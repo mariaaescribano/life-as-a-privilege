@@ -307,7 +307,10 @@ function CasaBox({
   // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
   useLockBodyScroll(open);
 
-  const Cabecera = (
+  // `reserveClose`: en el modal hay una X arriba a la derecha; reservamos un
+  // margen para que el regente no quede pegado a ella. En el box lateral (sin X)
+  // no hace falta.
+  const cabecera = (reserveClose = false) => (
     <Flex align="center" gap={3} mb={4} wrap="nowrap">
       {/* Izquierda: Casa N · signo (se encoge/truncar si hace falta) */}
       <Flex align="center" gap={3} flex="1" minW={0}>
@@ -328,7 +331,7 @@ function CasaBox({
 
       {/* Derecha: REGENTE siempre a la derecha y en una línea */}
       {info?.regente && (
-        <Flex align="center" gap={2} flexShrink={0}>
+        <Flex align="center" gap={2} flexShrink={0} mr={reserveClose ? { base: "40px", md: "48px" } : undefined}>
           <Text color={`${info.regente.color}cc`} fontSize="2xs" letterSpacing="0.18em" fontWeight="700" textTransform="uppercase"
                 whiteSpace="nowrap" style={{ textShadow: `0 0 8px ${info.regente.color}66` }}>
             <Box as="span" display={{ base: "inline", lg: "none" }}>Regente</Box>
@@ -358,7 +361,7 @@ function CasaBox({
         py={{ base: 6, md: 7 }}
         boxShadow={`0 0 18px ${astrologiaTxt}22`}
       >
-        {Cabecera}
+        {cabecera()}
         <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
 
         {/* texto recortado con … — máximo 2 líneas en cualquier tamaño.
@@ -424,7 +427,7 @@ function CasaBox({
             <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }} overflowY="auto"
                  overscrollBehavior="contain"
                  sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}55`, borderRadius: "8px" } }}>
-              {Cabecera}
+              {cabecera(true)}
               <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
               <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.015em"
                     style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}>
