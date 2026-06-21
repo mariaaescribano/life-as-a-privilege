@@ -121,7 +121,7 @@ export const AprendizajeHome = () => {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Ocho perspectivas. Un ser humano. Para los que quieren profundizar, qué hay detrás de El Recorrido.
+          Ocho perspectivas. Un ser humano.
         </Text>
       </Flex>
 

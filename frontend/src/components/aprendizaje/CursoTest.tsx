@@ -59,6 +59,9 @@ export function CursoTest({
   const hasBg = hasDisciplinaBg(disciplinaNom);
   // Sombra del texto con el color de fondo, para que se lea sobre la foto.
   const tsh = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 20px ${bgColor}`;
+  // Fondo por defecto de cada opción: tinte del color de la disciplina (en vez
+  // de blanco) para que el box destaque más sobre la foto de fondo.
+  const OPT_BG = `${color}2b`;
 
   return (
     <Flex direction="column">
@@ -85,7 +88,7 @@ export function CursoTest({
                     {ej.opciones.map((op, oi) => {
                       const selected = answers[i] === oi;
                       const isCorrect = oi === ej.correcta;
-                      let bd = `${color}66`, bgc = "rgba(255,255,255,0.12)";
+                      let bd = `${color}66`, bgc = OPT_BG;
                       if (answered && isCorrect) { bd = VERDE; bgc = "rgba(63,191,111,0.28)"; }
                       else if (answered && selected) { bd = ROJO; bgc = "rgba(224,106,106,0.28)"; }
                       return (
@@ -109,7 +112,7 @@ export function CursoTest({
                     {[{ v: true, label: "Verdadero" }, { v: false, label: "Falso" }].map(({ v, label }) => {
                       const selected = answers[i] === v;
                       const isCorrect = ej.correcta === v;
-                      let bd = `${color}66`, bgc = "rgba(255,255,255,0.12)";
+                      let bd = `${color}66`, bgc = OPT_BG;
                       if (answered && isCorrect) { bd = VERDE; bgc = "rgba(63,191,111,0.28)"; }
                       else if (answered && selected) { bd = ROJO; bgc = "rgba(224,106,106,0.28)"; }
                       return (
@@ -140,7 +143,7 @@ export function CursoTest({
                           <Text flex="1" minW={0} color={color} fontSize={{ base: "sm", md: "md" }} style={{ textShadow: tsh }}>{p.izquierda}</Text>
                           <Box color={color} opacity={0.6}>→</Box>
                           <Select flex="1" value={sel} size="sm" borderRadius="lg"
-                            bg="rgba(255,255,255,0.18)" color={color}
+                            bg={OPT_BG} color={color}
                             borderColor={ok ? VERDE : bad ? ROJO : `${color}66`}
                             onChange={(e) => setAnswers((a) => ({ ...a, [i]: { ...(a[i] ?? {}), [li]: e.target.value } }))}
                             sx={{ option: { color: "black" } }}>
