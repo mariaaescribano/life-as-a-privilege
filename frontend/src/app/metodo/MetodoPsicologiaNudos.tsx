@@ -14,6 +14,7 @@ import {
   NUDOS,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -128,6 +129,7 @@ export default function MetodoPsicologiaNudos() {
               nom={neuropsicologiaNom}
               step={{ current: 5, total: 9 }}
               mb={0}
+              boxShadow={glowHeader}
               prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
               next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
             />
@@ -139,7 +141,8 @@ export default function MetodoPsicologiaNudos() {
               w="100%"
               borderRadius="2xl"
               overflow="hidden"
-              boxShadow={`0 10px 40px rgba(94,45,16,0.18)`}
+              border={azulBorde}
+              boxShadow={glowPanel}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 6, md: 7 }} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
@@ -177,21 +180,26 @@ export default function MetodoPsicologiaNudos() {
                   <Box
                     as="button"
                     onClick={() => añadirNudo(entrada)}
+                    position="relative"
+                    overflow="hidden"
                     px={8}
                     borderRadius="xl"
-                    bg={TINTA}
-                    color={PAPEL}
+                    border={`1.5px solid ${AZUL}`}
                     fontFamily="'EB Garamond', serif"
                     fontWeight="700"
                     fontSize={{ base: "md", md: "lg" }}
                     letterSpacing="0.04em"
                     cursor="pointer"
                     py={{ base: 3, sm: 0 }}
-                    boxShadow={`0 4px 16px rgba(94,45,16,0.28)`}
+                    boxShadow={glowBtn}
                     transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 22px rgba(94,45,16,0.38)` }}
+                    _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}
                   >
-                    Añadir
+                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
+                    <Box as="span" position="relative" zIndex={1} color={TINTA}
+                         style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>
+                      Añadir
+                    </Box>
                   </Box>
                 </Flex>
 
@@ -235,7 +243,8 @@ export default function MetodoPsicologiaNudos() {
               w="100%"
               borderRadius="2xl"
               overflow="hidden"
-              boxShadow={`0 10px 40px rgba(94,45,16,0.18)`}
+              border={azulBorde}
+              boxShadow={glowPanel}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
@@ -263,7 +272,7 @@ export default function MetodoPsicologiaNudos() {
                         borderRadius="full"
                         bg="rgba(255,251,243,0.6)"
                         border={`1px solid ${TINTA}66`}
-                        boxShadow={`0 3px 12px rgba(94,45,16,0.14)`}
+                        boxShadow={`0 0 10px ${AZUL}26`}
                       >
                         <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.9} />
                         <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>

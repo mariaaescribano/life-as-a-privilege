@@ -15,6 +15,7 @@ import {
   type LineaDeVidaData,
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
+import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -251,6 +252,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               nom={neuropsicologiaNom}
               step={{ current: 6, total: 9 }}
               mb={0}
+              boxShadow={glowHeader}
               prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
               next={{ label: "Relación →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
             />
@@ -269,7 +271,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               {/* ── COLUMNA 1 · HUELLAS ── */}
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
-                     border={`1px solid ${PAPEL}33`} boxShadow={`0 10px 36px rgba(94,45,16,0.22)`}>
+                     border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<HuellaIcon size={22} color={TINTA} />} titulo="Tus huellas" apoyo="Tócalas o arrástralas para clasificarlas." />
@@ -296,7 +298,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               {/* ── COLUMNA 2 · NUDOS (icono a la derecha) ── */}
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
-                     border={`1px solid ${PAPEL}33`} boxShadow={`0 10px 36px rgba(94,45,16,0.22)`}>
+                     border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<NudoEspiralIcon size={22} color={TINTA} strokeWidth={1.7} opacity={0.9} />} titulo="Tus nudos" apoyo="La creencia o conflicto que dejó esa experiencia." />
@@ -323,8 +325,8 @@ export default function MetodoPsicologiaHuellasNudos() {
               {/* ── COLUMNA 3 · HERIDAS ── */}
               <Flex direction="column" flex="1.05" minW={0}>
                 <Box position="relative" borderRadius="2xl" overflow="hidden" h={COL_H}
-                     border={`1px solid ${sobreMesa ? PAPEL : `${TINTA}33`}`}
-                     boxShadow={sobreMesa ? `0 0 0 3px ${PAPEL}66, 0 14px 44px rgba(94,45,16,0.3)` : `0 14px 44px rgba(94,45,16,0.28)`}
+                     border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
+                     boxShadow={sobreMesa ? `0 0 0 3px ${AZUL}, 0 0 34px ${AZUL}88, 0 0 70px ${AZUL}44` : glowPanel}
                      transition="box-shadow 0.18s, border-color 0.18s"
                      onDragOver={(e: React.DragEvent) => { e.preventDefault(); if (!sobreMesa) setSobreMesa(true); }}
                      onDragLeave={() => setSobreMesa(false)}
@@ -357,21 +359,25 @@ export default function MetodoPsicologiaHuellasNudos() {
                     {/* Barra inferior: Añadir herida (sin tapar la imagen) */}
                     <Flex flexShrink={0} align="center" justify="center" gap={3}
                           px={{ base: 3.5, md: 4 }} pt={4} pb={{ base: 3, md: 4 }}>
-                      <Box as="button" onClick={añadirHerida}
-                           px={{ base: 5, md: 6 }} py={2.5} borderRadius="full" bg={`${PAPEL}d9`} color={TINTA}
-                           border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                      <Box as="button" onClick={añadirHerida} position="relative" overflow="hidden"
+                           px={{ base: 5, md: 6 }} py={2.5} borderRadius="full"
+                           border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 5px 16px rgba(94,45,16,0.28)`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 9px 24px rgba(94,45,16,0.4)` }}>
-                        + Añadir herida
+                           boxShadow={glowBtn} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}>
+                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+                        <Box as="span" position="relative" zIndex={1} color={TINTA}
+                             style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>+ Añadir herida</Box>
                       </Box>
-                      <Box as="button" onClick={guardarAhora}
-                           px={{ base: 6, md: 7 }} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
-                           border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                      <Box as="button" onClick={guardarAhora} position="relative" overflow="hidden"
+                           px={{ base: 6, md: 7 }} py={2.5} borderRadius="full"
+                           border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 5px 16px rgba(94,45,16,0.34)`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 9px 24px rgba(94,45,16,0.46)` }}>
-                        Guardar
+                           boxShadow={glowBtn} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}>
+                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+                        <Box as="span" position="relative" zIndex={1} color={TINTA}
+                             style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>Guardar</Box>
                       </Box>
                     </Flex>
                   </Flex>
@@ -416,9 +422,9 @@ function PiezaRect({ texto, activo, colorSel, icono, iconoDerecha, onTap, onDrag
           align="center" gap={3} px={4} py={3} borderRadius="lg" textAlign="left" w="100%"
           bg={activo ? colorSel : `${PAPEL}d9`} color={TINTA}
           border={`1.5px solid ${activo ? `${TINTA}55` : `${TINTA}33`}`}
-          boxShadow={activo ? `0 4px 16px rgba(94,45,16,0.28)` : `0 2px 8px rgba(94,45,16,0.12)`}
+          boxShadow={activo ? `0 0 14px ${AZUL}55` : "none"}
           cursor="grab" transition="all 0.16s"
-          _hover={{ transform: "translateY(-1px)", boxShadow: activo ? `0 6px 18px rgba(94,45,16,0.34)` : `0 4px 14px rgba(94,45,16,0.22)` }}
+          _hover={{ transform: "translateY(-1px)", boxShadow: activo ? `0 0 18px ${AZUL}77` : `0 0 10px ${AZUL}33` }}
           _active={{ cursor: "grabbing" }}>
       {!iconoDerecha && icono}
       <Text flex="1" fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.3">{texto}</Text>
@@ -438,7 +444,7 @@ function HeridaBox({ h, activa, sobreMesa, onActivar, onTitulo, onTexto, onQuita
   return (
     <Box onClick={onActivar} position="relative" mb={4} borderRadius="xl" overflow="hidden"
          bgGradient={`linear(135deg, ${PAPEL}f2, ${color}66)`}
-         boxShadow={activa ? `0 0 0 2px ${color}, 0 10px 28px rgba(94,45,16,0.3)` : `0 4px 14px rgba(94,45,16,0.14)`}
+         boxShadow={activa ? `0 0 0 2px ${color}, 0 0 24px ${AZUL}55` : `0 0 12px ${AZUL}26`}
          opacity={activa ? 1 : 0.85} transition="all 0.16s" cursor="pointer">
       <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
 
@@ -499,7 +505,7 @@ function Chip({ icon, label, onRemove, tint }: {
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
           bg={tint || `${TINTA}12`} color={TINTA}
-          border={`1px solid ${TINTA}40`} boxShadow={`0 1px 6px rgba(94,45,16,0.14)`}>
+          border={`1px solid ${TINTA}40`} boxShadow="none">
       {icon}
       <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"

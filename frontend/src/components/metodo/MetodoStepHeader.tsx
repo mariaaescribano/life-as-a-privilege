@@ -35,6 +35,9 @@ interface MetodoStepHeaderProps {
   step?: { current: number; total: number };
   /** Etiqueta libre de número de página junto al título (p.ej. "2/"). */
   pageLabel?: string;
+  /** Sombra/glow del box completo. Si se pasa, sustituye al glow por defecto
+   *  (útil para darle un brillo propio a una página, p.ej. dorado). */
+  boxShadow?: string;
 }
 
 const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
@@ -142,6 +145,7 @@ export function MetodoStepHeader({
   compact = false,
   step,
   pageLabel,
+  boxShadow,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
@@ -186,9 +190,10 @@ export function MetodoStepHeader({
       bg={useDiscBg ? "transparent" : bgColor}
       border={useDiscBg ? "none" : `1px solid ${color}33`}
       boxShadow={
-        useDiscBg
+        boxShadow ??
+        (useDiscBg
           ? `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`
-          : `0 4px 20px rgba(0,0,0,0.22), 0 0 12px rgba(255,255,255,0.14), 0 0 26px rgba(255,255,255,0.07), 0 0 16px ${color}2b`
+          : `0 4px 20px rgba(0,0,0,0.22), 0 0 12px rgba(255,255,255,0.14), 0 0 26px rgba(255,255,255,0.07), 0 0 16px ${color}2b`)
       }
     >
       {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}

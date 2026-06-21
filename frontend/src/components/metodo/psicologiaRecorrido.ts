@@ -139,13 +139,17 @@ export interface LineaDeVidaData {
   heridas?: RelacionHuellaNudo[];
   /** El usuario pulsó «Voy a ser valiente» (desbloquea la página de Problema). */
   valiente?: boolean;
+  /** «Síntesis del Camino» (cierre): el capítulo que el usuario quiere empezar
+   *  a escribir ahora. Mirada hacia adelante, no análisis del pasado. */
+  proximoCapitulo?: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// «La Integración» — el usuario compone CONSTELACIONES: agrupa uno o varios
-// nudos con uno o varios arquetipos de su carta y escribe, con sus propias
-// palabras, la relación que encuentra. Esto alimenta el Mapa de consciencia
-// (un nudo en el centro, símbolos alrededor).
+// «Relación» — el usuario compone CONSTELACIONES: agrupa uno o varios
+// nudos (heridas) con uno o varios arquetipos de su carta y escribe, con sus
+// propias palabras, la relación que encuentra. Estas relaciones son la materia
+// prima de la página «Integración», donde transforma cada patrón en una nueva
+// narrativa más sana.
 // ─────────────────────────────────────────────────────────────────────────
 
 /** Referencia a UNA faceta de un arquetipo de la carta astral:
@@ -174,11 +178,49 @@ export interface Constelacion {
   arquetipos: ArquetipoRef[];
   /** La frase que escribe el usuario: su propia comprensión de la relación. */
   texto: string;
+
+  // ── «Integración» (página posterior) — el usuario transforma cada relación
+  //    en una nueva narrativa. Cuatro bloques de texto libre por relación. ──
+  /** ¿Qué intentaba proteger este patrón? (intención positiva). */
+  proteger?: string;
+  /** ¿Qué coste tiene mantener este patrón? (consecuencias actuales). */
+  coste?: string;
+  /** ¿Qué verdad más sana quieres practicar? — el núcleo: la Integración. */
+  verdadSana?: string;
+  /** Frase breve de apoyo para cuando vuelva a caer en el patrón. */
+  recordatorio?: string;
+  /** «Síntesis del Camino»: la esencia que el usuario decide llevarse de esta
+   *  relación (p. ej. «Autoaceptación», «Confianza»). */
+  aprendizaje?: string;
 }
 
 /** Clave estable de una faceta de arquetipo (para comparar y deduplicar). */
 export const arquetipoKey = (a: { cuerpoKey: string; faceta: string }): string =>
   `${a.cuerpoKey}-${a.faceta}`;
+
+/** Etiqueta visible de una herida (la misma con la que se guarda en las
+ *  relaciones: el campo `nudos` de la constelación reutiliza estas etiquetas). */
+export const heridaLabel = (h: { titulo?: string }): string =>
+  (h.titulo || "").trim() || "Herida sin título";
+
+/** Busca la herida (RelacionHuellaNudo) cuyo título coincide con una etiqueta
+ *  guardada en una relación. Sirve para reconstruir la cadena completa en la
+ *  Síntesis del Camino (etiqueta → nudos y huellas que la formaron). */
+export const heridaByLabel = (data: LineaDeVidaData, label: string): RelacionHuellaNudo | undefined =>
+  (data?.heridas || []).find((h) => heridaLabel(h) === label);
+
+/** «Síntesis del Camino» — esencias sugeridas para la columna Aprendizaje.
+ *  No son objetivos: es lo que la persona decide llevarse. */
+export const APRENDIZAJES_SUGERIDOS = [
+  "Autoaceptación",
+  "Confianza",
+  "Autenticidad",
+  "Valentía",
+  "Amor propio",
+  "Libertad",
+  "Presencia",
+  "Paciencia",
+];
 
 /** «Heridas»: el usuario agrupa huellas (experiencias) con nudos (creencias que
  *  dejaron) para reconocer de dónde nace cada herida. Cada herida es un box con

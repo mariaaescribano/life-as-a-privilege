@@ -16,6 +16,7 @@ import {
   anoNatural,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -245,6 +246,7 @@ export default function MetodoPsicologiaHuellas() {
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
+            boxShadow={glowHeader}
             prev={{ label: "← Línea de Vida", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
             next={{ label: "Nudos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
           />
@@ -256,7 +258,7 @@ export default function MetodoPsicologiaHuellas() {
           </Flex>
 
           {anios.length === 0 ? (
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" border={`1px solid ${TINTA}33`} boxShadow={`0 12px 44px rgba(94,45,16,0.2)`}>
+            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={8} py={12}>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
@@ -275,7 +277,8 @@ export default function MetodoPsicologiaHuellas() {
                 gap={0}
                 borderRadius="2xl"
                 overflow="hidden"
-                boxShadow="0 14px 44px rgba(40,18,4,0.28)"
+                border={azulBorde}
+                boxShadow={glowPanel}
               >
                 <Pagina edadAno={izquierda} scrollIzquierda />
 
@@ -371,7 +374,7 @@ const FlechaPagina = ({ dir, disabled, onClick }: { dir: "prev" | "next"; disabl
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.5 : 1}
     transition="all 0.2s ease"
-    _hover={disabled ? {} : { transform: "translateY(-2px)", boxShadow: `0 6px 16px rgba(94,45,16,0.3)` }}
+    _hover={disabled ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 14px ${AZUL}66, 0 0 30px ${AZUL}33` }}
   >
     {dir === "prev" ? "←" : "→"}
   </Box>

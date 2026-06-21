@@ -24,6 +24,7 @@ import {
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
+import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   AstrologiaIcon,
@@ -294,7 +295,8 @@ export default function MetodoPsicologiaIntegracion() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
-  const irAlMapa = () => navigate(`/metodo/psicologia/${exp.id}/mapa`);
+  // /mapa es la ruta interna de la página «Integración» (el ejercicio posterior).
+  const irAIntegracion = () => navigate(`/metodo/psicologia/${exp.id}/mapa`);
   const activa = relaciones.find((c) => c.id === activaId) || null;
   const nudoEnActiva = (n: string) => !!activa?.nudos.includes(n);
   const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
@@ -315,8 +317,9 @@ export default function MetodoPsicologiaIntegracion() {
               nom={neuropsicologiaNom}
               step={{ current: 7, total: 9 }}
               mb={0}
+              boxShadow={glowHeader}
               prev={{ label: "← Heridas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
-              next={{ label: "Mapa →", onClick: irAlMapa }}
+              next={{ label: "Integración →", onClick: irAIntegracion }}
             />
 
             {/* ════════ TRES COLUMNAS ════════ */}
@@ -325,7 +328,7 @@ export default function MetodoPsicologiaIntegracion() {
               {/* ── COLUMNA 1 · HERIDAS ── */}
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
-                     border={`1px solid ${PAPEL}33`} boxShadow={`0 10px 36px rgba(94,45,16,0.22)`}>
+                     border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo="Tus heridas" apoyo="Tócalas o arrástralas para relacionarlas." />
@@ -354,7 +357,7 @@ export default function MetodoPsicologiaIntegracion() {
               {/* ── COLUMNA 2 · ARQUETIPOS ── */}
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
-                     border={`1px solid ${PAPEL}26`} boxShadow={`0 10px 36px rgba(0,0,0,0.34)`}>
+                     border={azulBorde} boxShadow={glowPanel}>
                   {/* Fondo: imagen de astrología a opacidad completa */}
                   <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
                        bgSize="cover" bgPosition="center" />
@@ -391,8 +394,8 @@ export default function MetodoPsicologiaIntegracion() {
               {/* ── COLUMNA 3 · RELACIONES ── */}
               <Flex direction="column" flex="1.05" minW={0}>
                 <Box position="relative" borderRadius="2xl" overflow="hidden" h={COL_H}
-                     border={`1px solid ${sobreMesa ? PAPEL : `${TINTA}33`}`}
-                     boxShadow={sobreMesa ? `0 0 0 3px ${PAPEL}66, 0 14px 44px rgba(94,45,16,0.3)` : `0 14px 44px rgba(94,45,16,0.28)`}
+                     border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
+                     boxShadow={sobreMesa ? `0 0 0 3px ${AZUL}, 0 0 34px ${AZUL}88, 0 0 70px ${AZUL}44` : glowPanel}
                      transition="box-shadow 0.18s, border-color 0.18s"
                      onDragOver={(e: React.DragEvent) => { e.preventDefault(); if (!sobreMesa) setSobreMesa(true); }}
                      onDragLeave={() => setSobreMesa(false)}
@@ -425,21 +428,25 @@ export default function MetodoPsicologiaIntegracion() {
                     {/* Barra inferior: botón Añadir relación (marrón) sobre la imagen */}
                     <Flex flexShrink={0} align="center" justify="center" gap={3}
                           px={{ base: 3.5, md: 4 }} pt={6} pb={{ base: 3, md: 4 }}>
-                      <Box as="button" onClick={añadirRelacion}
-                           px={{ base: 5, md: 6 }} py={2.5} borderRadius="full" bg={`${PAPEL}d9`} color={TINTA}
-                           border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                      <Box as="button" onClick={añadirRelacion} position="relative" overflow="hidden"
+                           px={{ base: 5, md: 6 }} py={2.5} borderRadius="full"
+                           border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 5px 16px rgba(94,45,16,0.28)`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 9px 24px rgba(94,45,16,0.4)` }}>
-                        + Añadir relación
+                           boxShadow={glowBtn} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}>
+                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+                        <Box as="span" position="relative" zIndex={1} color={TINTA}
+                             style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>+ Añadir relación</Box>
                       </Box>
-                      <Box as="button" onClick={guardarAhora}
-                           px={{ base: 6, md: 7 }} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
-                           border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                      <Box as="button" onClick={guardarAhora} position="relative" overflow="hidden"
+                           px={{ base: 6, md: 7 }} py={2.5} borderRadius="full"
+                           border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 5px 16px rgba(94,45,16,0.34)`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 9px 24px rgba(94,45,16,0.46)` }}>
-                        Guardar
+                           boxShadow={glowBtn} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}>
+                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+                        <Box as="span" position="relative" zIndex={1} color={TINTA}
+                             style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>Guardar</Box>
                       </Box>
                     </Flex>
                   </Flex>
@@ -485,9 +492,9 @@ function HeridaRect({ texto, activo, onTap, onDragStart, onDragEnd }: {
           align="center" gap={3} px={4} py={3} borderRadius="lg" textAlign="left" w="100%"
           bg={TINTA} color={PAPEL}
           border={`1.5px solid ${activo ? PAPEL : `${PAPEL}33`}`}
-          boxShadow={activo ? `0 0 0 3px ${PAPEL}66, 0 8px 22px rgba(94,45,16,0.4)` : `0 2px 8px rgba(94,45,16,0.2)`}
+          boxShadow={activo ? `0 0 0 3px ${AZUL}, 0 0 20px ${AZUL}77` : "none"}
           cursor="grab" transition="all 0.16s"
-          _hover={{ boxShadow: activo ? `0 0 0 3px ${PAPEL}66, 0 8px 22px rgba(94,45,16,0.45)` : `0 4px 14px rgba(94,45,16,0.3)` }}
+          _hover={{ boxShadow: activo ? `0 0 0 3px ${AZUL}, 0 0 24px ${AZUL}88` : `0 0 12px ${AZUL}33` }}
           _active={{ cursor: "grabbing" }}>
       <HeridaIcon size={20} color={PAPEL} />
       <Text fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.3">{texto}</Text>
@@ -546,7 +553,7 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
   return (
     <Box onClick={onActivar} position="relative" mb={4} borderRadius="xl" overflow="hidden"
          bgGradient={`linear(135deg, ${PAPEL}f2, ${color}66)`}
-         boxShadow={activa ? `0 0 0 2px ${color}, 0 10px 28px rgba(94,45,16,0.3)` : `0 4px 14px rgba(94,45,16,0.14)`}
+         boxShadow={activa ? `0 0 0 2px ${color}, 0 0 24px ${AZUL}55` : `0 0 12px ${AZUL}26`}
          opacity={activa ? 1 : 0.85} transition="all 0.16s" cursor="pointer">
       <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
 
@@ -607,7 +614,7 @@ function Chip({ icon, label, onRemove, fuerte }: {
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
           bg={fuerte ? TINTA : `${TINTA}12`} color={fuerte ? PAPEL : TINTA}
-          border={`1px solid ${fuerte ? TINTA : `${TINTA}44`}`} boxShadow={`0 1px 6px rgba(94,45,16,0.14)`}>
+          border={`1px solid ${fuerte ? TINTA : `${TINTA}44`}`} boxShadow="none">
       {icon}
       <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"

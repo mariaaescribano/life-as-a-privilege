@@ -11,6 +11,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { EXPERIENCIAS, type LineaDeVidaData } from "../../components/metodo/psicologiaRecorrido";
+import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -26,9 +27,9 @@ const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicolog
 
 // Latido al pulsar «Voy a ser valiente»: la pieza late y emite un anillo.
 const latido = keyframes`
-  0%   { transform: scale(1);    box-shadow: 0 8px 26px rgba(94,45,16,0.4), 0 0 0 0 rgba(94,45,16,0.35); }
-  45%  { transform: scale(1.07); box-shadow: 0 12px 34px rgba(94,45,16,0.5), 0 0 0 16px rgba(94,45,16,0); }
-  100% { transform: scale(1);    box-shadow: 0 8px 26px rgba(94,45,16,0.4), 0 0 0 0 rgba(94,45,16,0); }
+  0%   { transform: scale(1);    box-shadow: 0 0 16px ${AZUL}66, 0 0 0 0 ${AZUL}55; }
+  45%  { transform: scale(1.07); box-shadow: 0 0 28px ${AZUL}99, 0 0 0 16px ${AZUL}00; }
+  100% { transform: scale(1);    box-shadow: 0 0 16px ${AZUL}66, 0 0 0 0 ${AZUL}00; }
 `;
 
 export default function MetodoPsicologia() {
@@ -171,6 +172,7 @@ export default function MetodoPsicologia() {
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
+            boxShadow={glowHeader}
             prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/llamada") }}
             next={{
               label: "Problema →",
@@ -186,7 +188,8 @@ export default function MetodoPsicologia() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            boxShadow={`0 10px 40px rgba(94,45,16,0.18)`}
+            border={azulBorde}
+            boxShadow={glowPanel}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
@@ -218,25 +221,28 @@ export default function MetodoPsicologia() {
                 as="button"
                 onClick={() => { if (animando) return; if (valiente) irAProblema(); else serValiente(); }}
                 disabled={animando}
+                position="relative"
+                overflow="hidden"
                 mt={{ base: 8, md: 10 }}
                 px={{ base: 10, md: 14 }}
                 py={4}
                 borderRadius="full"
-                bg={TINTA}
-                color="#fbf4e8"
+                border={`1.5px solid ${AZUL}`}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "lg", md: "xl" }}
                 letterSpacing="0.08em"
                 cursor={animando ? "wait" : "pointer"}
-                boxShadow={valiente
-                  ? `0 8px 26px rgba(94,45,16,0.4), 0 0 22px ${neuropsicologiaBg}`
-                  : `0 8px 26px rgba(94,45,16,0.4)`}
+                boxShadow={glowBtn}
                 animation={animando ? `${latido} 0.85s ease` : undefined}
                 transition="all 0.22s"
-                _hover={animando ? {} : { transform: "translateY(-2px)", boxShadow: `0 12px 34px rgba(94,45,16,0.5)` }}
+                _hover={animando ? {} : { transform: "translateY(-2px)", boxShadow: glowBtnHover }}
               >
-                {valiente ? "Ir a mi problema →" : "Voy a ser valiente"}
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+                <Box as="span" position="relative" zIndex={1} color={TINTA}
+                     style={{ textShadow: `0 1px 2px #fbf4e8, 0 0 8px #fbf4e8` }}>
+                  {valiente ? "Ir a mi problema →" : "Voy a ser valiente"}
+                </Box>
               </Box>
             </Box>
           </Box>

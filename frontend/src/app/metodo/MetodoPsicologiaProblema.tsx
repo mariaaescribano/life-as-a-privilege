@@ -12,6 +12,7 @@ import {
   experienciaById,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -119,6 +120,7 @@ export default function MetodoPsicologiaProblema() {
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
+            boxShadow={glowHeader}
             prev={{ label: "← Vuelve", onClick: () => { void guardarSiCambio(); navigate("/metodo/psicologia"); } }}
             next={{ label: "Línea de Vida →", onClick: irALineaDeVida }}
           />
@@ -129,7 +131,8 @@ export default function MetodoPsicologiaProblema() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            boxShadow={`0 12px 44px rgba(94,45,16,0.22)`}
+            border={azulBorde}
+            boxShadow={glowPanel}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Flex
@@ -176,12 +179,13 @@ export default function MetodoPsicologiaProblema() {
               <Box
                 as="button"
                 onClick={guardando ? undefined : guardar}
+                position="relative"
+                overflow="hidden"
                 minW="160px"
                 px={9}
                 py={3}
                 borderRadius="full"
-                bg={TINTA}
-                color="#fbf4e8"
+                border={`1.5px solid ${AZUL}`}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "lg" }}
@@ -189,11 +193,15 @@ export default function MetodoPsicologiaProblema() {
                 whiteSpace="nowrap"
                 textAlign="center"
                 cursor={guardando ? "wait" : "pointer"}
-                boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
+                boxShadow={glowBtn}
                 transition="transform 0.2s, box-shadow 0.2s"
-                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
+                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: glowBtnHover }}
               >
-                {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
+                <Box as="span" position="relative" zIndex={1} color={TINTA}
+                     style={{ textShadow: `0 1px 2px #fbf4e8, 0 0 8px #fbf4e8` }}>
+                  {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
+                </Box>
               </Box>
             </Flex>
           </Box>

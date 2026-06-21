@@ -288,26 +288,53 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  // `mapa` es la clave interna de la página «Integración» (el ejercicio posterior
+  // a Relación, donde transformas cada patrón en una narrativa más sana).
   mapa: {
     ejemplo: {
       titulo: "Un ejemplo",
       cuerpo: [
-        "El mapa reúne tus heridas y relaciones en una sola imagen.",
-        "Verás cómo se conectan las piezas de tu historia.",
+        "Toma una de tus relaciones y transfórmala en una verdad más sana.",
+        "Por ejemplo, de «Mi valor depende de hacerlo perfecto» a «Mi valor no depende de hacerlo perfecto».",
       ],
     },
     ayuda: {
-      titulo: "¿Cómo se lee?",
+      titulo: "¿Cómo se hace?",
       cuerpo: [
-        "Observa el mapa con calma.",
-        "Cada conexión nace de lo que tú has unido en las etapas anteriores.",
+        "Para cada relación responde las cuatro preguntas con calma.",
+        "Reconoce qué protegía el patrón, qué te cuesta, qué quieres creer ahora y qué recordar.",
+        "Todo se guarda solo; pulsa Guardar cuando quieras.",
       ],
     },
     orientacion: {
       titulo: "Orientación",
       cuerpo: [
-        "No estás viendo una explicación, sino cómo se relacionan las piezas de tu historia.",
-        "Vuelve cuando quieras: tu mapa irá cambiando contigo.",
+        "No se trata de seguir analizando el pasado, sino de empezar a escribir una historia nueva.",
+        "Sé amable contigo: el patrón un día te protegió. Hoy puedes elegir otra verdad.",
+      ],
+    },
+  },
+  sintesis: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Cada fila reúne una cadena completa de tu historia.",
+        "Por ejemplo: «No soy suficiente» → «Equivocarme me hacía valer menos» → «Ascendente Virgo» → «Perfeccionismo» → «Mi valor no depende de hacerlo perfecto» → Aprendizaje: «Autoaceptación».",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se lee?",
+      cuerpo: [
+        "Observa tu camino completo, sin prisa.",
+        "Elige para cada relación el aprendizaje que quieres llevarte.",
+        "Despídete escribiendo el capítulo que quieres empezar a vivir.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No hay más análisis ni más heridas: solo comprensión, integración y dirección.",
+        "Esta página es para contemplar lo que ya eres capaz de ver.",
       ],
     },
   },
@@ -320,8 +347,8 @@ function BotonAyuda({ children, onClick }: { children: React.ReactNode; onClick:
          px={{ base: 4, md: 5 }} py={2} borderRadius="full"
          border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
          fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.03em" cursor="pointer" whiteSpace="nowrap"
-         boxShadow={`0 6px 18px rgba(94,45,16,0.4)`} transition="all 0.18s"
-         _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 26px rgba(94,45,16,0.5)` }}>
+         transition="all 0.18s"
+         _hover={{ transform: "translateY(-2px)" }}>
       {/* Fondo: imagen de la disciplina (psicología) recortada al pill */}
       <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
       <Box as="span" position="relative" zIndex={1} color={TINTA}

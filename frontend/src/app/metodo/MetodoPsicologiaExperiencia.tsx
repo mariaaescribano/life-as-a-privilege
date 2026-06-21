@@ -20,6 +20,7 @@ import {
   type LineaDeVidaData,
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
+import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -179,6 +180,7 @@ export default function MetodoPsicologiaExperiencia() {
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               mb={0}
+              boxShadow={glowHeader}
               prev={{ label: "← Problemas", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/problema`); } }}
               next={{ label: completa ? "Huellas →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }}
             />
@@ -191,7 +193,8 @@ export default function MetodoPsicologiaExperiencia() {
                   w="100%"
                   borderRadius="2xl"
                   overflow="hidden"
-                  boxShadow={`0 12px 44px rgba(94,45,16,0.2)`}
+                  border={azulBorde}
+                  boxShadow={glowPanel}
                 >
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} pt={{ base: 4, md: 6 }} pb={{ base: 8, md: 11 }}>
@@ -305,7 +308,8 @@ export default function MetodoPsicologiaExperiencia() {
           <Box
             position="relative" w="100%" maxW="440px"
             borderRadius="2xl" overflow="hidden"
-            boxShadow={`0 30px 90px rgba(0,0,0,0.7)`}
+            border={azulBorde}
+            boxShadow={`0 0 44px ${AZUL}77, 0 0 100px ${AZUL}33`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 8, md: 10 }} py={{ base: 10, md: 12 }} textAlign="center">
@@ -358,9 +362,9 @@ export default function MetodoPsicologiaExperiencia() {
                 letterSpacing="0.06em"
                 cursor={edadValida ? "pointer" : "not-allowed"}
                 opacity={edadValida ? 1 : 0.7}
-                boxShadow={edadValida ? `0 6px 20px rgba(94,45,16,0.35)` : "none"}
+                boxShadow={edadValida ? `0 0 18px ${AZUL}66, 0 0 44px ${AZUL}33` : "none"}
                 transition="all 0.2s"
-                _hover={edadValida ? { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.45)` } : {}}
+                _hover={edadValida ? { transform: "translateY(-2px)", boxShadow: `0 0 26px ${AZUL}88, 0 0 60px ${AZUL}44` } : {}}
               >
                 Mi línea de tiempo
               </Box>
@@ -409,7 +413,7 @@ const FlechaTramo =({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.5 : 1}
     transition="all 0.2s ease"
-    _hover={disabled ? {} : { bg: "rgba(255,251,243,0.85)", borderColor: TINTA, transform: "translateY(-2px)", boxShadow: `0 6px 16px rgba(94,45,16,0.22)` }}
+    _hover={disabled ? {} : { bg: "rgba(255,251,243,0.85)", borderColor: TINTA, transform: "translateY(-2px)", boxShadow: `0 0 14px ${AZUL}66, 0 0 30px ${AZUL}33` }}
   >
     {dir === "prev" ? "←" : "→"}
   </Box>
@@ -516,7 +520,7 @@ function PaginaDeAno({
         maxH={{ base: "calc(100vh - 32px)", md: "calc(100vh - 80px)" }}
         borderRadius="2xl"
         overflow="hidden"
-        boxShadow={`0 30px 80px rgba(40,18,4,0.6), 0 0 50px rgba(94,45,16,0.3)`}
+        boxShadow={`0 0 44px ${AZUL}77, 0 0 100px ${AZUL}33`}
         display="flex"
         flexDirection="column"
       >
@@ -707,9 +711,9 @@ function PaginaDeAno({
                 textAlign="center"
                 cursor={guardando ? "wait" : "pointer"}
                 opacity={guardando ? 0.7 : 1}
-                boxShadow={`0 6px 20px rgba(94,45,16,0.32)`}
+                boxShadow={`0 0 18px ${AZUL}66, 0 0 44px ${AZUL}33`}
                 transition="transform 0.2s, box-shadow 0.2s, opacity 0.2s"
-                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}
+                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${AZUL}88, 0 0 60px ${AZUL}44` }}
               >
                 Guardar y cerrar
               </Box>

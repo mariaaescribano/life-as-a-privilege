@@ -52,6 +52,7 @@ import MetodoPsicologiaNudos from "./app/metodo/MetodoPsicologiaNudos";
 import MetodoPsicologiaHuellasNudos from "./app/metodo/MetodoPsicologiaHuellasNudos";
 import MetodoPsicologiaIntegracion from "./app/metodo/MetodoPsicologiaIntegracion";
 import MetodoPsicologiaMapa from "./app/metodo/MetodoPsicologiaMapa";
+import MetodoPsicologiaSintesis from "./app/metodo/MetodoPsicologiaSintesis";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -126,6 +127,7 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/huellas-nudos" element={<PrivateRoute><MetodoPsicologiaHuellasNudos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/integracion" element={<PrivateRoute><MetodoPsicologiaIntegracion /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/mapa" element={<PrivateRoute><MetodoPsicologiaMapa /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/sintesis" element={<PrivateRoute><MetodoPsicologiaSintesis /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId" element={<PrivateRoute><MetodoPsicologiaExperiencia /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
