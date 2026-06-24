@@ -49,6 +49,7 @@ const disciplinas: Disciplina[] = [
       { src: "/capturasRecorrido/astro/4.png", titulo: "4. Lectura de tu carta astral" },
       { src: "/capturasRecorrido/astro/5.png", titulo: "5. Tus casas y su significado" },
       { src: "/capturasRecorrido/astro/6.png", titulo: "6. Las relaciones entre tus arquetipos" },
+      { src: "/capturasRecorrido/astro/7.png", titulo: "Cursos orientativos de Astrología" },
       { src: "/capturasRecorrido/astro/biblio1.png", titulo: "Biblioteca de ilustraciones" },
       { src: "/capturasRecorrido/astro/biblio2.png", titulo: "Ejemplo" },
     ],
@@ -65,7 +66,7 @@ const disciplinas: Disciplina[] = [
       { src: "/capturasRecorrido/psico/1.png",  titulo: "1. Tu punto de partida" },
       { src: "/capturasRecorrido/psico/2.png",  titulo: "2. Tus problemas actuales" },
       { src: "/capturasRecorrido/psico/3.png",  titulo: "3. Tu Línea de Vida" },
-      { src: "/capturasRecorrido/psico/4.png",  titulo: "4. Huellas: quién te marcó" },
+      { src: "/capturasRecorrido/psico/4.png",  titulo: "4. Huellas: qué te marcó" },
       { src: "/capturasRecorrido/psico/5.png",  titulo: "5. Nudos: patrones que se repiten" },
       { src: "/capturasRecorrido/psico/6.png",  titulo: "6. Tus necesidades" },
       { src: "/capturasRecorrido/psico/7.png",  titulo: "7. Tus heridas" },
@@ -215,7 +216,43 @@ const MandalaCircle = ({
   );
 };
 
-// ── Modal de capturas ────────────────────────────────────────────────────────
+// ── Flecha (encima de la foto, en la barra superior del popup) ───────────────
+const PanelArrow = ({
+  side, color, onClick,
+}: {
+  side: "left" | "right";
+  color: string;
+  onClick: () => void;
+}) => (
+  <Box
+    as="button"
+    onClick={onClick}
+    flexShrink={0}
+    w={{ base: "38px", md: "44px" }}
+    h={{ base: "38px", md: "44px" }}
+    borderRadius="full"
+    bg={`${color}1f`}
+    border={`1px solid ${color}66`}
+    color={color}
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    fontSize={{ base: "xl", md: "2xl" }}
+    lineHeight="1"
+    cursor="pointer"
+    boxShadow={`0 0 12px ${color}33`}
+    sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none" }}
+    _hover={{ bg: `${color}33`, borderColor: color, boxShadow: `0 0 18px ${color}66` }}
+    _active={{ transform: "scale(0.94)" }}
+    transition="all 0.18s ease"
+  >
+    {side === "left" ? "‹" : "›"}
+  </Box>
+);
+
+// ── Popup de capturas ─────────────────────────────────────────────────────────
+// Diseño: barra superior con las flechas y el título de la captura, foto grande
+// debajo y puntos indicadores. Se cierra con la X o pulsando fuera.
 const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) => {
   const [idx, setIdx] = useState(0);
   const total = disc.capturas.length;
@@ -226,7 +263,7 @@ const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => voi
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") setIdx((p) => (p + 1 + total) % total);
+      if (e.key === "ArrowRight") setIdx((p) => (p + 1) % total);
       if (e.key === "ArrowLeft") setIdx((p) => (p - 1 + total) % total);
     };
     window.addEventListener("keydown", onKey);
@@ -258,6 +295,8 @@ const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => voi
         maxH="94vh"
         position="relative"
         overflow="hidden"
+        display="flex"
+        flexDirection="column"
       >
         {hasBg && <DisciplinaBgLayer nom={disc.nom} borderRadius="3xl" blur />}
 
@@ -285,135 +324,83 @@ const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => voi
           ✕
         </Box>
 
-        <Box
-          p={{ base: 5, md: 8 }}
-          display="flex"
-          flexDirection="column"
-          gap={{ base: 4, md: 5 }}
+        {/* Barra superior FIJA: flechas + título (siempre visible, nunca la
+            tapa la foto). El pt deja hueco para la X de arriba a la derecha. */}
+        <Flex
+          flexShrink={0}
+          align="center"
+          gap={{ base: 3, md: 4 }}
+          px={{ base: 5, md: 8 }}
+          pt={{ base: "62px", md: "66px" }}
+          pb={{ base: 3, md: 4 }}
           position="relative"
           zIndex={1}
-          maxH="92vh"
-          overflowY="auto"
-          sx={{
-            scrollbarWidth: "thin",
-            "&::-webkit-scrollbar": { width: "6px" },
-            "&::-webkit-scrollbar-thumb": { background: `${disc.txt}55`, borderRadius: "3px" },
-          }}
         >
-          {/* Mini texto de la captura actual + separador elegante */}
-          <Flex direction="column" align="center" gap={{ base: 2, md: 3 }}>
+          {total > 1 && <PanelArrow side="left" color={disc.txt} onClick={() => go(-1)} />}
+          <Flex direction="column" align="center" flex="1" minW={0}>
             <Text
               color={disc.txt}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "sm", md: "md" }}
               fontStyle="italic"
-              letterSpacing="0.06em"
+              letterSpacing="0.05em"
               textAlign="center"
-              opacity={0.95}
+              lineHeight="1.3"
               textShadow={`0 1px 3px ${disc.bg}f5, 0 0 10px ${disc.bg}aa`}
             >
               {disc.capturas[idx].titulo}
             </Text>
-            <Box
-              w={{ base: "56px", md: "72px" }}
-              h="2px"
-              borderRadius="full"
-              bgGradient={`linear(to-r, transparent, ${disc.txt}, transparent)`}
-              opacity={0.7}
-            />
           </Flex>
+          {total > 1 && <PanelArrow side="right" color={disc.txt} onClick={() => go(1)} />}
+        </Flex>
 
-          {/* Carrusel de capturas — minimalista: la imagen va sola, sin marco
-              ni fondo. Sin recortar (contain), centrada y con alto adaptado al
-              viewport para que se lea bien sea cual sea su proporción. */}
-          <Box position="relative" w="100%">
-            <Flex
-              justify="center"
-              align="center"
-              minH={{ base: "180px", md: "240px" }}
-              px={{ base: 4, md: 6 }}
-            >
-              <Image
-                src={disc.capturas[idx].src}
-                alt={`${disc.nom} — ${disc.capturas[idx].titulo}`}
-                maxW="100%"
-                maxH={{ base: "70vh", md: "82vh" }}
-                objectFit="contain"
-                display="block"
-                borderRadius="lg"
-                sx={{ filter: "drop-shadow(0 14px 36px rgba(0,0,0,0.5))" }}
+        {/* Foto — ocupa el espacio central que queda; se ajusta (contain) para
+            no desbordar nunca sobre la barra de flechas ni los puntos. */}
+        <Flex
+          flex="1"
+          minH={0}
+          justify="center"
+          align="center"
+          px={{ base: 5, md: 8 }}
+          position="relative"
+          zIndex={1}
+        >
+          <Image
+            key={disc.capturas[idx].src}
+            src={disc.capturas[idx].src}
+            alt={`${disc.nom} — ${disc.capturas[idx].titulo}`}
+            maxW="100%"
+            maxH={{ base: "calc(90vh - 190px)", md: "calc(94vh - 210px)" }}
+            objectFit="contain"
+            display="block"
+            borderRadius="lg"
+            sx={{ filter: "drop-shadow(0 14px 36px rgba(0,0,0,0.5))" }}
+          />
+        </Flex>
+
+        {/* Puntos indicadores */}
+        {total > 1 && (
+          <Flex flexShrink={0} justify="center" gap={2} wrap="wrap" px={{ base: 5, md: 8 }} py={{ base: 4, md: 5 }} position="relative" zIndex={1}>
+            {disc.capturas.map((_, i) => (
+              <Box
+                key={i}
+                as="button"
+                onClick={() => setIdx(i)}
+                w={i === idx ? "22px" : "8px"}
+                h="8px"
+                borderRadius="full"
+                bg={i === idx ? disc.txt : `${disc.txt}55`}
+                cursor="pointer"
+                transition="all 0.3s ease"
+                boxShadow={i === idx ? `0 0 8px ${disc.txt}aa` : undefined}
               />
-            </Flex>
-
-            {/* Flechas laterales */}
-            {total > 1 && (
-              <>
-                <ArrowButton side="left" onClick={() => go(-1)} />
-                <ArrowButton side="right" onClick={() => go(1)} />
-              </>
-            )}
-          </Box>
-
-          {/* Indicadores (dots) */}
-          {total > 1 && (
-            <Flex justify="center" gap={2}>
-              {disc.capturas.map((_, i) => (
-                <Box
-                  key={i}
-                  as="button"
-                  onClick={() => setIdx(i)}
-                  w={i === idx ? "22px" : "8px"}
-                  h="8px"
-                  borderRadius="full"
-                  bg={i === idx ? disc.txt : `${disc.txt}55`}
-                  cursor="pointer"
-                  transition="all 0.3s ease"
-                  boxShadow={i === idx ? `0 0 8px ${disc.txt}aa` : undefined}
-                />
-              ))}
-            </Flex>
-          )}
-        </Box>
+            ))}
+          </Flex>
+        )}
       </Box>
     </Box>
   );
 };
-
-// Flechas neutras (blanco translúcido) — visibles pero sin competir con la
-// captura, que es lo importante.
-const ArrowButton = ({
-  side, onClick,
-}: {
-  side: "left" | "right";
-  onClick: () => void;
-}) => (
-  <Box
-    as="button"
-    onClick={onClick}
-    position="absolute"
-    top="50%"
-    transform="translateY(-50%)"
-    {...(side === "left" ? { left: { base: 0, md: 1 } } : { right: { base: 0, md: 1 } })}
-    w={{ base: "32px", md: "36px" }}
-    h={{ base: "32px", md: "36px" }}
-    borderRadius="full"
-    bg="rgba(0,0,0,0.4)"
-    border="1px solid rgba(255,255,255,0.35)"
-    color="white"
-    display="flex"
-    alignItems="center"
-    justifyContent="center"
-    cursor="pointer"
-    fontSize={{ base: "md", md: "lg" }}
-    sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
-    boxShadow="0 2px 10px rgba(0,0,0,0.35)"
-    _hover={{ bg: "rgba(0,0,0,0.62)", borderColor: "rgba(255,255,255,0.7)" }}
-    transition="all 0.2s ease"
-    zIndex={2}
-  >
-    {side === "left" ? "‹" : "›"}
-  </Box>
-);
 
 // ── Mandala interactivo ──────────────────────────────────────────────────────
 const MandalaRecorrido = () => {
