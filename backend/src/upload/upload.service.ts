@@ -7,7 +7,9 @@ export class UploadService {
 
   async uploadProfilePic(userId: string, file: Express.Multer.File) {
     const extension = file.originalname.split('.').pop();
-    const fileName = `${userId}.${extension}`;
+    // Nombre único en cada subida: así la URL pública SIEMPRE cambia y ninguna
+    // caché (navegador o CDN de Supabase) puede seguir sirviendo la foto vieja.
+    const fileName = `${userId}-${Date.now()}.${extension}`;
     const bucket = this.databaseService.getClient().storage.from('img');
 
     const { data: userData } = await this.databaseService.getClient()
@@ -18,10 +20,12 @@ export class UploadService {
     const oldUrl = userData?.[0]?.img;
 
     if (oldUrl) {
-      const oldPath = oldUrl.split('/img/')[1];
+      // Ruta DENTRO del bucket 'img' = todo lo que viene tras '/public/img/'.
+      // (La URL pública es .../public/img/img/<archivo>, con la carpeta 'img'.)
+      const oldPath = oldUrl.split('?')[0].split('/public/img/')[1];
       if (oldPath) {
         console.log("Borrando foto anterior del bucket...");
-        const { data, error } = await bucket.remove([`img/${oldPath}`]);
+        const { data, error } = await bucket.remove([oldPath]);
         if (error) console.log("Error al borrar foto antigua:", error);
         else console.log("Foto antigua borrada correctamente:", data);
       }

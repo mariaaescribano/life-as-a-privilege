@@ -104,6 +104,7 @@ export default function MetodoPsicologiaCompromiso() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
+              next={{ label: "Ayurveda →", onClick: () => {}, disabled: true, disabledTooltip: "Disponible próximamente" }}
             />
 
             {/* Intro */}

@@ -490,9 +490,9 @@ function HeridaRect({ texto, activo, onTap, onDragStart, onDragEnd }: {
           align="center" gap={3} px={4} py={3} borderRadius="lg" textAlign="left" w="100%"
           bg={TINTA} color={PAPEL}
           border={`1.5px solid ${activo ? PAPEL : `${PAPEL}33`}`}
-          boxShadow={activo ? `0 0 0 3px ${AZUL}, 0 0 20px ${AZUL}77` : "none"}
+          boxShadow={activo ? "0 8px 22px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4)" : "none"}
           cursor="grab" transition="all 0.16s"
-          _hover={{ boxShadow: activo ? `0 0 0 3px ${AZUL}, 0 0 24px ${AZUL}88` : `0 0 12px ${AZUL}33` }}
+          _hover={{ boxShadow: activo ? "0 10px 26px rgba(0,0,0,0.55), 0 3px 10px rgba(0,0,0,0.45)" : "0 4px 14px rgba(0,0,0,0.3)" }}
           _active={{ cursor: "grabbing" }}>
       <HeridaIcon size={20} color={PAPEL} />
       <Text fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.3">{texto}</Text>

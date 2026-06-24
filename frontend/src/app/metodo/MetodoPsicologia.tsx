@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import {
+  Box, Flex, Text,
+  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
+} from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -33,6 +36,7 @@ export default function MetodoPsicologia() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  const [avisoOpen, setAvisoOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -172,6 +176,30 @@ export default function MetodoPsicologia() {
               </Text>
             </Box>
           </Box>
+
+          {/* ── Disparador del aviso: abre el popup en mitad de la página ── */}
+          <Box
+            as="button"
+            onClick={() => setAvisoOpen(true)}
+            display="inline-flex"
+            alignItems="center"
+            gap={2}
+            px={6}
+            py={2.5}
+            borderRadius="full"
+            bg="rgba(255,255,255,0.08)"
+            border="1px solid rgba(255,255,255,0.4)"
+            color="rgba(255,255,255,0.92)"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "sm", md: "md" }}
+            letterSpacing="0.04em"
+            cursor="pointer"
+            transition="all 0.2s"
+            _hover={{ bg: "rgba(255,255,255,0.16)", transform: "translateY(-1px)" }}
+          >
+            <Box as="span" fontSize="md">⚠</Box> Aviso importante
+          </Box>
         </Flex>
       </Flex>
 
@@ -187,6 +215,41 @@ export default function MetodoPsicologia() {
         error={pagoError}
         onTest={testPagos ? testUnlock : undefined}
       />
+
+      {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}
+      <Modal isOpen={avisoOpen} onClose={() => setAvisoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
+        <ModalOverlay bg="rgba(40,20,8,0.62)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
+          <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <ModalCloseButton color={TINTA} zIndex={3} />
+            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
+              <Flex direction="column" gap={4}>
+                <Flex align="center" justify="center" gap={2.5}>
+                  <Box as="span" fontSize="2xl" lineHeight="1">⚠</Box>
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
+                        style={{ textShadow: INK_SHADOW }}>
+                    Importante
+                  </Text>
+                </Flex>
+                <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
+                      style={{ textShadow: INK_SHADOW }}>
+                  Este recorrido no sustituye una terapia psicológica ni una evaluación profesional.
+                </Text>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
+                      style={{ textShadow: INK_SHADOW }}>
+                  Su propósito es ayudarte a ordenar tu historia, comprender mejor tus patrones y construir una narrativa más consciente sobre tu vida.
+                </Text>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
+                      style={{ textShadow: INK_SHADOW }}>
+                  Si estás atravesando un momento de sufrimiento importante o necesitas apoyo especializado, te recomendamos buscar ayuda profesional.
+                </Text>
+              </Flex>
+            </ModalBody>
+          </Box>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

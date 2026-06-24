@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -128,6 +128,7 @@ interface CursosPsicologiaModalProps {
  */
 export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModalProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { cursosData, loading } = useCursosData();
 
   const cursos = [...(cursosData[neuropsicologiaNom]?.cursos ?? [])].sort(
@@ -135,8 +136,13 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
   );
 
   const acceder = (curso: Curso) => {
-    if (curso.precio === null) navigate(curso.cursoLink);
-    else window.open(STRIPE_PAYMENT_LINK, "_blank");
+    if (curso.precio === null) {
+      // Pasamos la ruta de origen para que el curso muestre un botón
+      // "Volver a El Recorrido" SOLO cuando se accede desde aquí.
+      navigate(`${curso.cursoLink}?volver=${encodeURIComponent(location.pathname)}`);
+    } else {
+      window.open(STRIPE_PAYMENT_LINK, "_blank");
+    }
   };
 
   return (
@@ -203,7 +209,7 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
                 textTransform="uppercase"
                 textAlign="center"
                 lineHeight="1.15"
-                style={{ textShadow: `0 0 14px ${C}cc, 0 0 32px ${C}77, 0 0 70px ${C}44` }}
+                style={{ textShadow: `0 0 14px ${neuropsicologiaBg}cc, 0 0 32px ${neuropsicologiaBg}77, 0 0 70px ${neuropsicologiaBg}44` }}
               >
                 Cursos orientativos de Psicología
               </Text>

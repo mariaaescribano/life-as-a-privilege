@@ -1112,7 +1112,7 @@ export default function ElMetodo() {
             boxShadow={`0 0 0 1px ${selectedCard.txt}55, 0 0 45px ${selectedCard.txt}66, 0 0 90px ${selectedCard.txt}33, 0 22px 70px rgba(0,0,0,0.6)`}
             maxW={{ base: "100%", md: "700px" }}
             w="100%"
-            maxH="92vh"
+            h={{ base: "85dvh", md: "82vh" }}
             position="relative"
             overflow="hidden"
           >
@@ -1151,7 +1151,7 @@ export default function ElMetodo() {
               gap={{ base: 6, md: 8 }}
               position="relative"
               zIndex={1}
-              maxH="92vh"
+              h="100%"
               overflowY="auto"
               sx={{
                 scrollbarWidth: "thin",

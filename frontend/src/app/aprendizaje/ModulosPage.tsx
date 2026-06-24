@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -11,6 +11,10 @@ import { useCursosData } from "../../data/cursosApi";
 export default function ModulosPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
   const { cursosData, loading } = useCursosData();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Ruta de origen: solo presente si se llegó desde el recorrido (modal Cursos).
+  const volver = searchParams.get("volver");
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
@@ -40,6 +44,7 @@ export default function ModulosPage() {
               bgColor={modalidad.bgColor}
               color={modalidad.color}
               nom={modalidad.nom}
+              prev={volver ? { label: "← Volver a El Recorrido", onClick: () => navigate(volver) } : undefined}
             />
 
             <Box
