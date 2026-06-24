@@ -298,7 +298,7 @@ export default function NuevosCursosPage() {
           <TodosLosReels />
 
           <SimpleGrid
-            columns={{ base: 1, md: 2, xl: 3 }}
+            columns={{ base: 1, sm: 2, lg: 3 }}
             spacing={{ base: 5, md: 5 }}
           >
             {courses.map((entry, i) => (

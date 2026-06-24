@@ -14,7 +14,7 @@ import {
   NUDOS,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
-import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -127,11 +127,11 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 5, total: 9 }}
+              step={{ current: 5, total: 10 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
-              next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
+              next={{ label: "Necesidades →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
             />
 
 
@@ -184,20 +184,20 @@ export default function MetodoPsicologiaNudos() {
                     overflow="hidden"
                     px={8}
                     borderRadius="xl"
-                    border={`1.5px solid ${AZUL}`}
+                    bg={TINTA}
+                    border={`1.5px solid ${TINTA}`}
                     fontFamily="'EB Garamond', serif"
                     fontWeight="700"
                     fontSize={{ base: "md", md: "lg" }}
                     letterSpacing="0.04em"
                     cursor="pointer"
                     py={{ base: 3, sm: 0 }}
-                    boxShadow={glowBtn}
+                    boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`}
                     transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}
+                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
                   >
-                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
-                    <Box as="span" position="relative" zIndex={1} color={TINTA}
-                         style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>
+                    <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
                       Añadir
                     </Box>
                   </Box>

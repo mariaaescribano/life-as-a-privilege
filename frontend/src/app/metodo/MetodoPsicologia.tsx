@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -10,8 +9,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { EXPERIENCIAS, type LineaDeVidaData } from "../../components/metodo/psicologiaRecorrido";
-import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
+import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -25,13 +24,6 @@ import {
 const TINTA = neuropsicologiaTxt;
 const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
-// Latido al pulsar «Voy a ser valiente»: la pieza late y emite un anillo.
-const latido = keyframes`
-  0%   { transform: scale(1);    box-shadow: 0 0 16px ${AZUL}66, 0 0 0 0 ${AZUL}55; }
-  45%  { transform: scale(1.07); box-shadow: 0 0 28px ${AZUL}99, 0 0 0 16px ${AZUL}00; }
-  100% { transform: scale(1);    box-shadow: 0 0 16px ${AZUL}66, 0 0 0 0 ${AZUL}00; }
-`;
-
 export default function MetodoPsicologia() {
   const navigate = useNavigate();
   const experiencia = EXPERIENCIAS[0];
@@ -41,10 +33,6 @@ export default function MetodoPsicologia() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
-  // «Voy a ser valiente»: desbloquea la página de Problema (persistido en BD).
-  const [valiente, setValiente] = useState(false);
-  const [animando, setAnimando] = useState(false);
-  const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -67,16 +55,6 @@ export default function MetodoPsicologia() {
         const psicoSuscrito = !!me.data?.psicologia_suscrito;
         setSuscrito(psicoSuscrito);
         if (!psicoSuscrito) { setPagoOpen(true); return; }
-
-        // Cargamos el progreso para saber si ya pulsó «Voy a ser valiente».
-        try {
-          const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const d: LineaDeVidaData = psi.data?.data || {};
-          dataRef.current = d;
-          setValiente(!!d.valiente);
-        } catch { /* silencioso */ }
       } catch {
         navigate("/home");
         return;
@@ -127,30 +105,10 @@ export default function MetodoPsicologia() {
     }
   };
 
-  // «Voy a ser valiente»: anima, persiste el flag y desbloquea Problema.
-  const serValiente = () => {
-    if (valiente || animando) return;
-    if (!suscrito) { setPagoOpen(true); return; }
-    setAnimando(true);
-    const token = sessionStorage.getItem("token");
-    const userId = sessionStorage.getItem("userId");
-    const next = { ...dataRef.current, valiente: true };
-    dataRef.current = next;
-    if (token && userId) {
-      axios.patch(
-        `${API_URL}/metodo-psicologia/${userId}`,
-        { data: next },
-        { headers: { Authorization: `Bearer ${token}` } },
-      ).catch(() => { /* silencioso */ });
-    }
-    // Tras el latido, fija el estado «valiente» (desbloquea Problema).
-    window.setTimeout(() => { setValiente(true); setAnimando(false); }, 850);
-  };
-
-  // Continuar a la página de Problema (solo cuando ya ha sido valiente).
+  // Continuar a la página de Problema.
   const irAProblema = () => {
     if (!suscrito) { setPagoOpen(true); return; }
-    if (valiente) navigate(`/metodo/psicologia/${experiencia.id}/problema`);
+    navigate(`/metodo/psicologia/${experiencia.id}/problema`);
   };
 
   if (loading) {
@@ -167,18 +125,16 @@ export default function MetodoPsicologia() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Vuelve"
-            pageLabel="1/9"
+            pageLabel="1/10"
             bgColor={`${neuropsicologiaBg}dd`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/llamada") }}
+            prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/cursos") }}
             next={{
               label: "Problema →",
               onClick: irAProblema,
-              disabled: !valiente,
-              disabledTooltip: "Pulsa «Voy a ser valiente» para empezar",
             }}
           />
 
@@ -214,36 +170,6 @@ export default function MetodoPsicologia() {
               >
                 Antes de comprender tu mente, hay que recordar la Vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
               </Text>
-
-              {/* Botón: «Voy a ser valiente» → (con latido) pasa a «Ir a mi
-                  problema →», que ya navega a la página de Problema. */}
-              <Box
-                as="button"
-                onClick={() => { if (animando) return; if (valiente) irAProblema(); else serValiente(); }}
-                disabled={animando}
-                position="relative"
-                overflow="hidden"
-                mt={{ base: 8, md: 10 }}
-                px={{ base: 10, md: 14 }}
-                py={4}
-                borderRadius="full"
-                border={`1.5px solid ${AZUL}`}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "lg", md: "xl" }}
-                letterSpacing="0.08em"
-                cursor={animando ? "wait" : "pointer"}
-                boxShadow={glowBtn}
-                animation={animando ? `${latido} 0.85s ease` : undefined}
-                transition="all 0.22s"
-                _hover={animando ? {} : { transform: "translateY(-2px)", boxShadow: glowBtnHover }}
-              >
-                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-                <Box as="span" position="relative" zIndex={1} color={TINTA}
-                     style={{ textShadow: `0 1px 2px #fbf4e8, 0 0 8px #fbf4e8` }}>
-                  {valiente ? "Ir a mi problema →" : "Voy a ser valiente"}
-                </Box>
-              </Box>
             </Box>
           </Box>
         </Flex>

@@ -142,6 +142,10 @@ export interface LineaDeVidaData {
   /** «Síntesis del Camino» (cierre): el capítulo que el usuario quiere empezar
    *  a escribir ahora. Mirada hacia adelante, no análisis del pasado. */
   proximoCapitulo?: string;
+  /** «Las Necesidades del Niño»: para cada necesidad (por `key`), cómo siente el
+   *  usuario que la vivió en su infancia. Material reflexivo previo a la línea
+   *  de vida. */
+  necesidades?: Record<string, EstadoNecesidad>;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -192,6 +196,9 @@ export interface Constelacion {
   /** «Síntesis del Camino»: la esencia que el usuario decide llevarse de esta
    *  relación (p. ej. «Autoaceptación», «Confianza»). */
   aprendizaje?: string;
+  /** «Síntesis del Camino»: el nuevo patrón que el usuario quiere vivir a partir
+   *  de ahora en esta relación. */
+  nuevoPatron?: string;
 }
 
 /** Clave estable de una faceta de arquetipo (para comparar y deduplicar). */
@@ -291,6 +298,81 @@ export const INTEGRACION = {
   precio: 60,
   duracionMin: 60,
 };
+
+// ─────────────────────────────────────────────────────────────────────────
+// «Las Necesidades del Niño» — material reflexivo previo a la Línea de Vida.
+//
+// Un grid de celdas: cada necesidad de la infancia junto a la respuesta sana
+// que un cuidador ofrece. El usuario abre cada celda y marca cómo lo vivió.
+// Lo marcado se guarda en `data.necesidades[key]` y reestiliza la celda.
+//
+// ✍️  No cambies las `key` tras publicar (se perderían las respuestas).
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Cómo siente el usuario que vivió una necesidad en su infancia. */
+export type EstadoNecesidad = "recibida" | "a-veces" | "falto";
+
+export interface Necesidad {
+  /** Clave estable (no cambiar tras publicar). */
+  key: string;
+  /** Necesidad del niño (título corto de la celda). */
+  necesidad: string;
+  /** Respuesta adecuada de los progenitores (se revela en el popup). */
+  respuesta: string;
+}
+
+export const NECESIDADES_INTRO = {
+  titulo: "Las necesidades de la infancia",
+  subtitulo: "Lo que todo niño necesita — y la respuesta que un cuidador sano ofrece.",
+  texto:
+    "Ya has recordado tu historia y nombrado tus nudos. Detente ahora en lo que un niño necesita para crecer sano: abre cada necesidad y, sin juzgar a nadie, marca cómo lo viviste tú. No hay respuestas correctas: solo tu verdad.",
+};
+
+export const NECESIDADES: Necesidad[] = [
+  { key: "seguridad-fisica",            necesidad: "Seguridad física",                 respuesta: "Protegen al niño de peligros, supervisan, cubren alimentación, higiene, descanso y salud." },
+  { key: "seguridad-emocional",         necesidad: "Seguridad emocional",              respuesta: "Consuelan cuando tiene miedo, tristeza o frustración. Le hacen sentir que no está solo." },
+  { key: "apego-vinculo",               necesidad: "Apego y vínculo afectivo",         respuesta: "Muestran cariño físico y verbal, disponibilidad emocional y cercanía." },
+  { key: "amado-valorado",              necesidad: "Sentirse amado y valorado",        respuesta: "Expresan afecto incondicional, reconocen su importancia como persona." },
+  { key: "atencion-presencia",          necesidad: "Atención y presencia",             respuesta: "Escuchan activamente, dedican tiempo exclusivo y muestran interés genuino." },
+  { key: "comprension-emocional",       necesidad: "Comprensión emocional",            respuesta: "Ayudan a identificar y nombrar emociones sin ridiculizarlas." },
+  { key: "validacion-emocional",        necesidad: "Validación emocional",             respuesta: "Aceptan sus emociones aunque corrijan conductas inapropiadas." },
+  { key: "estructura-limites",          necesidad: "Estructura y límites",             respuesta: "Establecen normas claras, coherentes y predecibles." },
+  { key: "orientacion-ensenanza",       necesidad: "Orientación y enseñanza",          respuesta: "Explican consecuencias, enseñan habilidades y sirven de modelo." },
+  { key: "autonomia",                   necesidad: "Autonomía",                        respuesta: "Permiten tomar decisiones acordes a la edad y fomentan la iniciativa." },
+  { key: "competencia-autoestima",      necesidad: "Competencia y autoestima",         respuesta: "Reconocen esfuerzos, favorecen experiencias de éxito y aprendizaje." },
+  { key: "juego-exploracion",           necesidad: "Juego y exploración",              respuesta: "Facilitan oportunidades para jugar, descubrir y experimentar." },
+  { key: "participacion",               necesidad: "Participación",                    respuesta: "Escuchan su opinión y la consideran en decisiones apropiadas para su edad." },
+  { key: "proteccion-violencia",        necesidad: "Protección frente a la violencia", respuesta: "Evitan humillaciones, amenazas, agresiones físicas o psicológicas." },
+  { key: "estabilidad-predictibilidad", necesidad: "Estabilidad y predictibilidad",    respuesta: "Mantienen rutinas y respuestas relativamente consistentes." },
+  { key: "apoyo-dificultades",          necesidad: "Apoyo en dificultades",            respuesta: "Ayudan cuando fracasa, se equivoca o atraviesa problemas." },
+  { key: "pertenencia-familiar",        necesidad: "Pertenencia familiar",             respuesta: "Favorecen que se sienta miembro importante de la familia." },
+  { key: "desarrollo-social",           necesidad: "Desarrollo social",                respuesta: "Enseñan empatía, cooperación y habilidades para relacionarse." },
+];
+
+export const necesidadByKey = (key: string): Necesidad | undefined =>
+  NECESIDADES.find((n) => n.key === key);
+
+/** Las tres respuestas posibles, con su etiqueta y color (sobre acuarela). */
+export interface OpcionNecesidad {
+  value: EstadoNecesidad;
+  label: string;
+  /** Color de borde/glow con el que se reestiliza la celda al elegirla. */
+  color: string;
+  descripcion: string;
+}
+
+export const ESTADOS_NECESIDAD: OpcionNecesidad[] = [
+  { value: "recibida", label: "La recibí", color: "#3f9d6b", descripcion: "Sentí cubierta esta necesidad." },
+  { value: "a-veces",  label: "A veces",   color: "#caa23c", descripcion: "A veces sí, a veces no." },
+  { value: "falto",    label: "Me faltó",  color: "#c5613e", descripcion: "Sentí que me faltó." },
+];
+
+export const opcionNecesidad = (value?: EstadoNecesidad): OpcionNecesidad | undefined =>
+  ESTADOS_NECESIDAD.find((o) => o.value === value);
+
+/** Cuántas necesidades ha marcado ya el usuario (para la barra de progreso). */
+export const necesidadesRespondidas = (data: LineaDeVidaData): number =>
+  NECESIDADES.filter((n) => !!data?.necesidades?.[n.key]).length;
 
 export type EstadoAno = "vacio" | "completado" | "sin-recuerdos";
 

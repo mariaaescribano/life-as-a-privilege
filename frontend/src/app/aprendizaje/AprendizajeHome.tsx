@@ -128,7 +128,8 @@ export const AprendizajeHome = () => {
       {/* ── GRID DE DISCIPLINAS ── */}
       <Flex
         flex={1}
-        justify="center"
+        direction="column"
+        align="center"
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 20, md: 24 }}
         pb={{ base: 24, md: 32 }}
@@ -156,49 +157,49 @@ export const AprendizajeHome = () => {
               </Box>
             ))}
           </SimpleGrid>
-
-          {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS ── */}
-          {(loading || allCourses.length > 0) && (
-            <>
-              <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
-                <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
-                <Image
-                  src="/img/icono/life.png"
-                  alt=""
-                  h={{ base: "40px", md: "52px" }}
-                  objectFit="contain"
-                  style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 21px rgba(180,255,245,0.3))" }}
-                />
-                <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
-              </Flex>
-
-              {loading ? (
-                <Box py={{ base: 8, md: 10 }}>
-                  <SpinnerTurquesa fullScreen={false} />
-                </Box>
-              ) : (
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 6 }}>
-                  {allCourses.map((entry, i) => (
-                    <Box
-                      key={`${entry.modalidad.nom}-${entry.curso.id}`}
-                      h="100%"
-                      opacity={cardsReveal.visible ? 1 : 0}
-                      transform={cardsReveal.visible ? "translateY(0)" : "translateY(24px)"}
-                      transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
-                    >
-                      <CursoCardDetalle
-                        curso={entry.curso}
-                        color={entry.modalidad.color}
-                        bgColor={entry.modalidad.bgColor}
-                        nom={entry.modalidad.nom}
-                      />
-                    </Box>
-                  ))}
-                </SimpleGrid>
-              )}
-            </>
-          )}
         </Box>
+
+        {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS (ancho completo) ── */}
+        {(loading || allCourses.length > 0) && (
+          <Box w="100%">
+            <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
+              <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
+              <Image
+                src="/img/icono/life.png"
+                alt=""
+                h={{ base: "40px", md: "52px" }}
+                objectFit="contain"
+                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 21px rgba(180,255,245,0.3))" }}
+              />
+              <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
+            </Flex>
+
+            {loading ? (
+              <Box py={{ base: 8, md: 10 }}>
+                <SpinnerTurquesa fullScreen={false} />
+              </Box>
+            ) : (
+              <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={{ base: 6, md: 8 }}>
+                {allCourses.map((entry, i) => (
+                  <Box
+                    key={`${entry.modalidad.nom}-${entry.curso.id}`}
+                    h="100%"
+                    opacity={cardsReveal.visible ? 1 : 0}
+                    transform={cardsReveal.visible ? "translateY(0)" : "translateY(24px)"}
+                    transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
+                  >
+                    <CursoCardDetalle
+                      curso={entry.curso}
+                      color={entry.modalidad.color}
+                      bgColor={entry.modalidad.bgColor}
+                      nom={entry.modalidad.nom}
+                    />
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )}
+          </Box>
+        )}
       </Flex>
 
       <SiteFooter />

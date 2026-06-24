@@ -63,7 +63,6 @@ export default function MetodoAstrologiaLlamada() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={`1px solid ${astrologiaTxt}44`}
             boxShadow={`0 0 18px rgba(255,255,255,0.1), 0 0 30px ${astrologiaTxt}1a`}
           >
             <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
@@ -74,7 +73,7 @@ export default function MetodoAstrologiaLlamada() {
                 lineHeight="1.9"
                 style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
               >
-                Da el paso de integrar tus arquetipos: agenda una llamada y no te quedes con dudas.
+                Da el paso para integrar tus arquetipos: agenda una llamada y no te quedes con dudas.
               </Text>
               <Text
                 color={`${astrologiaTxt}bb`}

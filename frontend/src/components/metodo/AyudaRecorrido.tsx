@@ -22,7 +22,7 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicol
 // curso. Las páginas sin entrada no muestran curso (cae al texto de siempre).
 // Los ids salen de la tabla `curso` (GET /cursos).
 const ORIENTACION_CURSO: Partial<Record<string, string>> = {
-  inicio: "cd03ced9-f239-4236-93d4-31eb2e995ef6",          // Psicología · «La Autoestima»
+  inicio: "cf53523f-9a27-4866-95e3-71e08cef4886",          // Psicología · «Los primeros vínculos»
   problema: "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",        // Psicología · «El Trauma»
   "linea-de-vida": "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4", // Psicología · «El Trauma»
   huellas: "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",         // Psicología · «El Trauma»
@@ -162,6 +162,30 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       cuerpo: [
         "Nombrar el problema ya es empezar a mirarlo.",
         "No busques la palabra perfecta; busca la honesta.",
+      ],
+    },
+  },
+  necesidades: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Cada celda es una necesidad de la infancia. Ábrela para ver la respuesta sana de un cuidador.",
+        "Por ejemplo, en «Seguridad emocional» marcarías «Me faltó» si de niño te sentías solo ante el miedo o la tristeza.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Pulsa el botón del centro de cada celda para abrirla.",
+        "Lee la respuesta sana y marca cómo lo viviste tú: la recibí, a veces o me faltó.",
+        "La celda cambia de color según lo que marques. Puedes cambiar tu respuesta cuando quieras.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No se trata de juzgar a nadie, sino de reconocer tu experiencia.",
+        "Lo que marques aquí te ayudará a mirar tu historia con más claridad en los siguientes pasos.",
       ],
     },
   },
@@ -411,30 +435,34 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
         )}
       </Flex>
 
-      {/* Popup informativo (páginas no-inicio) */}
+      {/* Popup informativo (páginas no-inicio) — estilo acuarela de psicología */}
       <Modal isOpen={!!sec} onClose={() => setAbierto(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "md" }}>
         <ModalOverlay bg="rgba(40,20,8,0.6)" sx={{ backdropFilter: "blur(5px)" }} />
-        <ModalContent bg={PAPEL} borderRadius="2xl" boxShadow={`0 24px 60px rgba(40,20,8,0.5)`} overflow="hidden" mx={4}
-                      fontFamily="'EB Garamond', serif">
-          <ModalCloseButton color={TINTA} zIndex={2} />
-          <ModalBody px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
-            {sec && (
-              <Flex direction="column" gap={4}>
-                <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center">
-                  {sec.titulo}
-                </Text>
-                <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                <Flex direction="column" gap={3}>
-                  {sec.cuerpo.map((p, i) => (
-                    <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                          fontStyle={abierto === "ejemplo" && i >= 1 ? "italic" : "normal"}>
-                      {p}
-                    </Text>
-                  ))}
+        <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
+          <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <ModalCloseButton color={TINTA} zIndex={3} />
+            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
+              {sec && (
+                <Flex direction="column" gap={4}>
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
+                        style={{ textShadow: INK_SHADOW }}>
+                    {sec.titulo}
+                  </Text>
+                  <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+                  <Flex direction="column" gap={3}>
+                    {sec.cuerpo.map((p, i) => (
+                      <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                            fontStyle={abierto === "ejemplo" && i >= 1 ? "italic" : "normal"}
+                            style={{ textShadow: INK_SHADOW }}>
+                        {p}
+                      </Text>
+                    ))}
+                  </Flex>
                 </Flex>
-              </Flex>
-            )}
-          </ModalBody>
+              )}
+            </ModalBody>
+          </Box>
         </ModalContent>
       </Modal>
 

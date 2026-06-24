@@ -175,7 +175,7 @@ export default function MetodoPsicologiaExperiencia() {
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Línea de Vida"
-              pageLabel="3/9"
+              pageLabel="3/10"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
@@ -308,8 +308,8 @@ export default function MetodoPsicologiaExperiencia() {
           <Box
             position="relative" w="100%" maxW="440px"
             borderRadius="2xl" overflow="hidden"
-            border={azulBorde}
-            boxShadow={`0 0 44px ${AZUL}77, 0 0 100px ${AZUL}33`}
+            border={`1px solid ${TINTA}44`}
+            boxShadow={`0 0 44px ${TINTA}77, 0 0 100px ${TINTA}33`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 8, md: 10 }} py={{ base: 10, md: 12 }} textAlign="center">
@@ -362,9 +362,9 @@ export default function MetodoPsicologiaExperiencia() {
                 letterSpacing="0.06em"
                 cursor={edadValida ? "pointer" : "not-allowed"}
                 opacity={edadValida ? 1 : 0.7}
-                boxShadow={edadValida ? `0 0 18px ${AZUL}66, 0 0 44px ${AZUL}33` : "none"}
+                boxShadow={edadValida ? `0 0 18px ${TINTA}66, 0 0 44px ${TINTA}33` : "none"}
                 transition="all 0.2s"
-                _hover={edadValida ? { transform: "translateY(-2px)", boxShadow: `0 0 26px ${AZUL}88, 0 0 60px ${AZUL}44` } : {}}
+                _hover={edadValida ? { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` } : {}}
               >
                 Mi línea de tiempo
               </Box>
@@ -520,7 +520,7 @@ function PaginaDeAno({
         maxH={{ base: "calc(100vh - 32px)", md: "calc(100vh - 80px)" }}
         borderRadius="2xl"
         overflow="hidden"
-        boxShadow={`0 0 44px ${AZUL}77, 0 0 100px ${AZUL}33`}
+        boxShadow={`0 0 44px ${TINTA}77, 0 0 100px ${TINTA}33`}
         display="flex"
         flexDirection="column"
       >
@@ -711,9 +711,9 @@ function PaginaDeAno({
                 textAlign="center"
                 cursor={guardando ? "wait" : "pointer"}
                 opacity={guardando ? 0.7 : 1}
-                boxShadow={`0 0 18px ${AZUL}66, 0 0 44px ${AZUL}33`}
+                boxShadow={`0 0 18px ${TINTA}66, 0 0 44px ${TINTA}33`}
                 transition="transform 0.2s, box-shadow 0.2s, opacity 0.2s"
-                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${AZUL}88, 0 0 60px ${AZUL}44` }}
+                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` }}
               >
                 Guardar y cerrar
               </Box>

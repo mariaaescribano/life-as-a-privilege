@@ -1,22 +1,23 @@
 // ─────────────────────────────────────────────────────────────────────────
-// Glow azul clásico común al recorrido de psicología.
+// Glow ligero común al recorrido de psicología.
 //
-// En todo el recorrido los boxes llevan un GLOW azul (no una sombra oscura).
-// Importa estos presets y úsalos en `boxShadow`. Mantén la coherencia: paneles
-// grandes → glowPanel; cabeceras → glowHeader; botones → glowBtn / glowBtnHover.
+// Glow suave (sobre todo blanco) con un punto de azul como tinte, igual que en
+// el resto del programa. Importa estos presets y úsalos en `boxShadow`. Mantén
+// la coherencia: paneles grandes → glowPanel; cabeceras → glowHeader; botones →
+// glowBtn / glowBtnHover.
 // ─────────────────────────────────────────────────────────────────────────
 
 export const AZUL = "#2f6fe0";
 
 /** Panel/box de contenido. */
-export const glowPanel = `0 0 24px ${AZUL}55, 0 0 60px ${AZUL}2a`;
+export const glowPanel = `0 0 18px rgba(255,255,255,0.1), 0 0 34px ${AZUL}1a`;
 /** Panel más sutil (estados vacíos, secundarios). */
-export const glowPanelSoft = `0 0 22px ${AZUL}3a, 0 0 55px ${AZUL}1f`;
+export const glowPanelSoft = `0 0 16px rgba(255,255,255,0.08), 0 0 28px ${AZUL}14`;
 /** Cabecera (MetodoStepHeader → prop boxShadow). */
-export const glowHeader = `0 0 22px ${AZUL}77, 0 0 55px ${AZUL}44, 0 0 90px ${AZUL}26, 0 0 18px rgba(255,255,255,0.22)`;
+export const glowHeader = `0 0 18px rgba(255,255,255,0.18), 0 0 34px ${AZUL}22`;
 /** Botón principal. */
-export const glowBtn = `0 0 16px ${AZUL}66, 0 0 40px ${AZUL}33`;
+export const glowBtn = `0 0 14px rgba(255,255,255,0.12), 0 0 24px ${AZUL}1a`;
 /** Botón principal en hover. */
-export const glowBtnHover = `0 0 24px ${AZUL}88, 0 0 56px ${AZUL}44`;
+export const glowBtnHover = `0 0 20px rgba(255,255,255,0.18), 0 0 32px ${AZUL}26`;
 /** Borde fino azul para enmarcar el glow de un panel. */
-export const azulBorde = `1px solid ${AZUL}44`;
+export const azulBorde = `1px solid ${AZUL}33`;

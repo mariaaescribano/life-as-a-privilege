@@ -209,7 +209,6 @@ export function AgendarLlamada({
       w="100%"
       borderRadius="2xl"
       overflow="hidden"
-      border={`1px solid ${color}44`}
       boxShadow={`0 0 22px rgba(255,255,255,0.12), 0 0 50px rgba(255,255,255,0.06), 0 0 30px ${color}1a`}
       fontFamily="'EB Garamond', serif"
     >

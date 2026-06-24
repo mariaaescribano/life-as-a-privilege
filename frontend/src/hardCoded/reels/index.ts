@@ -35,14 +35,6 @@ export interface ReelVideo {
 }
 
 export const reelsPorDisciplina: Record<string, ReelVideo[]> = {
-  [fisiologiaNom]: [
-    {
-      id: "fisio-correr",
-      titulo: "Correr = Antidepresivos",
-      portada: "/miniaturas/fisio/portadacorrer.png",
-      embedUrl: "https://www.youtube.com/embed/_cW744qC1UY",
-    },
-  ],
   [neuropsicologiaNom]: [
     {
       id: "psico-darmas",
@@ -73,6 +65,38 @@ export const reelsPorDisciplina: Record<string, ReelVideo[]> = {
       titulo: "Tu inconsciente",
       portada: "/miniaturas/psicologia/inconsciente.png",
       embedUrl: "https://www.youtube.com/embed/1LY9J84VZxo",
+    },
+    {
+      id: "psico-baja-autoestima",
+      titulo: "Baja autoestima",
+      portada: "/miniaturas/psicologia/bajaautoestima.png",
+      embedUrl: "https://www.youtube.com/embed/yz5VJMy7xdY",
+    },
+    {
+      id: "psico-soledad",
+      titulo: "Soledad",
+      portada: "/miniaturas/psicologia/soledad.png",
+      embedUrl: "https://www.youtube.com/embed/3Uz5JL3hiHU",
+    },
+    {
+      id: "psico-hablas-bien",
+      titulo: "¿Te hablas bien?",
+      portada: "/miniaturas/psicologia/hablasbien.png",
+      embedUrl: "https://www.youtube.com/embed/4SccjlJHlkA",
+    },
+    {
+      id: "psico-relacion-sana",
+      titulo: "Relación sana",
+      portada: "/miniaturas/psicologia/relacionsana.png",
+      embedUrl: "https://www.youtube.com/embed/RoqsUeIldlk",
+    },
+  ],
+  [fisiologiaNom]: [
+    {
+      id: "fisio-correr",
+      titulo: "Correr = Antidepresivos",
+      portada: "/miniaturas/fisio/portadacorrer.png",
+      embedUrl: "https://www.youtube.com/embed/_cW744qC1UY",
     },
   ],
   [nutricionNomLink]: [

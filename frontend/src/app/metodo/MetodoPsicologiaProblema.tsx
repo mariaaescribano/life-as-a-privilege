@@ -12,7 +12,7 @@ import {
   experienciaById,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
-import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -115,7 +115,7 @@ export default function MetodoPsicologiaProblema() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Problemas"
-            pageLabel="2/9"
+            pageLabel="2/10"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
@@ -185,7 +185,8 @@ export default function MetodoPsicologiaProblema() {
                 px={9}
                 py={3}
                 borderRadius="full"
-                border={`1.5px solid ${AZUL}`}
+                bg={TINTA}
+                border={`1.5px solid ${TINTA}`}
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
                 fontSize={{ base: "md", md: "lg" }}
@@ -193,13 +194,12 @@ export default function MetodoPsicologiaProblema() {
                 whiteSpace="nowrap"
                 textAlign="center"
                 cursor={guardando ? "wait" : "pointer"}
-                boxShadow={glowBtn}
+                boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`}
                 transition="transform 0.2s, box-shadow 0.2s"
-                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: glowBtnHover }}
+                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
               >
-                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-                <Box as="span" position="relative" zIndex={1} color={TINTA}
-                     style={{ textShadow: `0 1px 2px #fbf4e8, 0 0 8px #fbf4e8` }}>
+                <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                     style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
                   {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
                 </Box>
               </Box>

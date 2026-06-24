@@ -24,7 +24,7 @@ import {
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
-import { AZUL, glowPanel, glowHeader, glowBtn, glowBtnHover, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   AstrologiaIcon,
@@ -315,7 +315,7 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 7, total: 9 }}
+              step={{ current: 8, total: 10 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Heridas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
@@ -430,23 +430,21 @@ export default function MetodoPsicologiaIntegracion() {
                           px={{ base: 3.5, md: 4 }} pt={6} pb={{ base: 3, md: 4 }}>
                       <Box as="button" onClick={añadirRelacion} position="relative" overflow="hidden"
                            px={{ base: 5, md: 6 }} py={2.5} borderRadius="full"
-                           border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                           bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={glowBtn} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}>
-                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-                        <Box as="span" position="relative" zIndex={1} color={TINTA}
-                             style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>+ Añadir relación</Box>
+                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                        <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>+ Añadir relación</Box>
                       </Box>
                       <Box as="button" onClick={guardarAhora} position="relative" overflow="hidden"
                            px={{ base: 6, md: 7 }} py={2.5} borderRadius="full"
-                           border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                           bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={glowBtn} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: glowBtnHover }}>
-                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-                        <Box as="span" position="relative" zIndex={1} color={TINTA}
-                             style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>Guardar</Box>
+                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                        <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>Guardar</Box>
                       </Box>
                     </Flex>
                   </Flex>

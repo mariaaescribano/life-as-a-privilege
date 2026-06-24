@@ -42,7 +42,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const CREMA = "rgba(255,255,255,0.92)";
 // Acento luminoso/dorado: esta página marca el inicio de la transformación y
 // debe sentirse más esperanzadora que las anteriores.
 const ORO = "#caa24a";
@@ -187,7 +186,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
   if (!exp) return null;
 
   const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
-  const irASintesis = () => navigate(`/metodo/psicologia/${exp.id}/sintesis`);
+  const irACompromiso = () => navigate(`/metodo/psicologia/${exp.id}/compromiso`);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -203,22 +202,19 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 8, total: 9 }}
+              step={{ current: 9, total: 10 }}
               mb={0}
-              boxShadow={`0 0 22px ${AZUL}77, 0 0 55px ${AZUL}44, 0 0 90px ${AZUL}26, 0 0 18px rgba(255,255,255,0.22)`}
+              boxShadow={`0 0 16px ${AZUL}3a, 0 0 40px ${AZUL}1f, 0 0 14px rgba(255,255,255,0.16)`}
               prev={{ label: "← Relación", onClick: irARelacion }}
-              next={{ label: "Síntesis →", onClick: irASintesis }}
+              next={{ label: "Compromiso →", onClick: irACompromiso }}
             />
 
             {/* Intro luminosa */}
-            <Flex direction="column" align="center" gap={3} textAlign="center" maxW="640px">
+            {/* <Flex direction="column" align="center" gap={3} textAlign="center" maxW="640px">
               <Text color={CREMA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" style={{ textShadow: "0 1px 12px rgba(0,0,0,0.35)" }}>
-                Ya entiendes tu historia. Ahora puedes empezar a escribir una nueva.
+                Ya entiendes tu historia. Ahora puedes empezar a integrar en ti 
               </Text>
-              <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.92} lineHeight="1.7">
-                «Ahora que entiendo por qué actúo así, ¿qué quiero empezar a creer y vivir?»
-              </Text>
-            </Flex>
+            </Flex> */}
 
             {relaciones.length === 0 ? (
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
@@ -231,13 +227,12 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
                     Aún no has creado tus relaciones. Vuelve a la página anterior para reunir tus heridas y arquetipos.
                   </Text>
                   <Box as="button" onClick={irARelacion} position="relative" overflow="hidden"
-                       px={6} py={2.5} borderRadius="full" border={`1.5px solid ${AZUL}`}
+                       px={6} py={2.5} borderRadius="full" bg={TINTA} border={`1.5px solid ${TINTA}`}
                        fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                       boxShadow={`0 0 16px ${AZUL}66, 0 0 40px ${AZUL}33`} transition="all 0.18s"
-                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 24px ${AZUL}88, 0 0 56px ${AZUL}44` }}>
-                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-                    <Box as="span" position="relative" zIndex={1} color={TINTA}
-                         style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>
+                       boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                    <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
                       Ir a Relación →
                     </Box>
                   </Box>
@@ -247,24 +242,9 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
               <Flex direction="column" w="100%" gap={{ base: 8, md: 10 }}>
                 {relaciones.map((c) => (
                   <TarjetaIntegracion key={c.id} c={c}
-                                      onCampo={(campo, v) => updateCampo(c.id, campo, v)} />
+                                      onCampo={(campo, v) => updateCampo(c.id, campo, v)}
+                                      onGuardar={guardarAhora} guardadoOk={guardadoOk} />
                 ))}
-
-                {/* Guardar — fondo con la imagen de psicología + glow azul */}
-                <Flex justify="center" pt={1}>
-                  <Box as="button" onClick={guardarAhora} position="relative" overflow="hidden"
-                       px={{ base: 9, md: 11 }} py={3} borderRadius="full"
-                       border={`1.5px solid ${AZUL}`} fontFamily="'EB Garamond', serif" fontWeight="700"
-                       fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" cursor="pointer"
-                       boxShadow={`0 0 18px ${AZUL}66, 0 0 44px ${AZUL}33`} transition="all 0.18s"
-                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 26px ${AZUL}88, 0 0 60px ${AZUL}44` }}>
-                    <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
-                    <Box as="span" position="relative" zIndex={1} color={TINTA}
-                         style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>
-                      {guardadoOk ? "Guardado ✓" : "Guardar"}
-                    </Box>
-                  </Box>
-                </Flex>
               </Flex>
             )}
 
@@ -282,38 +262,61 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 // ─────────────────────────────────────────────────────────────────────────
 // Una tarjeta de integración por relación.
 // ─────────────────────────────────────────────────────────────────────────
-function TarjetaIntegracion({ c, onCampo }: {
+function TarjetaIntegracion({ c, onCampo, onGuardar, guardadoOk }: {
   c: Constelacion;
   onCampo: (campo: keyof Constelacion, valor: string) => void;
+  onGuardar: () => void;
+  guardadoOk: boolean;
 }) {
   const verdad = (c.verdadSana || "").trim();
   const recordatorio = (c.recordatorio || "").trim();
   const hayResultado = verdad.length > 0 || recordatorio.length > 0;
+  // Cada box llega CERRADO: el usuario va abriendo las relaciones poco a poco.
+  const [abierto, setAbierto] = useState(false);
 
   return (
     <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-         border={`1px solid ${AZUL}66`}
-         boxShadow={`0 0 24px ${AZUL}66, 0 0 60px ${AZUL}33`}>
-      <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-      <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
+         bgColor={neuropsicologiaBg}
+         border={`1px solid ${AZUL}44`}
+         boxShadow={`0 0 22px ${AZUL}3a, 0 0 55px ${AZUL}1f`}>
 
-        {/* Cabecera: título de la relación */}
-        <Flex align="center" gap={2.5}>
-          <RelacionIcon size={20} color={TINTA} />
-          <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+      {/* Cabecera plegable — fondo de psicología (acuarela), título grande y
+          centrado en color tinta, con una flecha a la derecha que cambia según
+          el box esté abierto o cerrado. */}
+      <Box as="button" type="button" onClick={() => setAbierto((o) => !o)}
+           position="relative" overflow="hidden" w="100%" display="block" cursor="pointer"
+           transition="filter 0.15s ease" _hover={{ filter: "brightness(1.04)" }}>
+        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
+        <Flex position="relative" zIndex={1} align="center" px={{ base: 4, md: 6 }} py={{ base: 4, md: 5 }}>
+          <Box flexShrink={0} w={{ base: "28px", md: "34px" }} display="flex" alignItems="center">
+            <RelacionIcon size={22} color={TINTA} />
+          </Box>
+          <Text flex="1" px={2} textAlign="center" color={TINTA}
+                fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
                 style={{ textShadow: INK_SHADOW }}>
             {relTitulo(c)}
           </Text>
+          <Box flexShrink={0} w={{ base: "28px", md: "34px" }} display="flex" justifyContent="flex-end"
+               color={TINTA} transform={abierto ? "rotate(180deg)" : "rotate(0deg)"}
+               transition="transform 0.25s ease">
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px" fill="currentColor">
+              <path d="M480-360 280-560h400L480-360Z" />
+            </Box>
+          </Box>
         </Flex>
+      </Box>
 
-        {/* Raya bajo el título */}
-        <Box h="1px" w="100%" my={{ base: 4, md: 5 }} bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
+      {abierto && (
+        <>
+      <Linea />
 
-        {/* Piezas (heridas + arquetipos) SIEMPRE en una línea, con scroll horizontal. */}
-        <Flex gap={2} overflowX="auto" pb={2}
-              sx={{ scrollbarWidth: "thin",
+      {/* Piezas (heridas + arquetipos) SIEMPRE en una línea, con scroll horizontal. */}
+      <Banda py={{ base: 4, md: 5 }}>
+        <Flex gap={2} overflowX="auto" pb={1}
+              sx={{ scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
                     "&::-webkit-scrollbar": { height: "6px" },
-                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}40`, borderRadius: "8px" } }}>
+                    "&::-webkit-scrollbar-track": { background: "transparent" },
+                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}>
           {c.nudos.map((n) => (
             <Pieza key={`n-${n}`} icon={<HeridaIcon size={13} color={TINTA} />} label={n} />
           ))}
@@ -323,69 +326,113 @@ function TarjetaIntegracion({ c, onCampo }: {
                    label={arquetipoLabel(a)} />
           ))}
         </Flex>
+      </Banda>
 
-        {/* Raya bajo las piezas */}
-        <Box h="1px" w="100%" mt={2} mb={{ base: 6, md: 7 }} bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
-
-        {/* Los cuatro bloques */}
-        <Flex direction="column" gap={{ base: 5, md: 6 }}>
-          {BLOQUES.map((b) => (
-            <Box key={b.key}>
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" lineHeight="1.3" mb={2}
-                    style={{ textShadow: INK_SHADOW }}>{b.pregunta}</Text>
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.95} mb={2.5}
-                    lineHeight="1.55" style={{ textShadow: INK_SHADOW }}>
-                {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
-              </Text>
-              <Textarea value={(c[b.key] as string) || ""} onChange={(e) => onCampo(b.key, e.target.value)}
-                        placeholder={b.placeholder}
-                        minH={b.key === "recordatorio" ? "56px" : "78px"}
-                        bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                        borderRadius="lg" px={3.5} py={2.5} fontFamily="'EB Garamond', serif"
-                        fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" sx={{ caretColor: TINTA }}
-                        _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                        _hover={{ borderColor: `${TINTA}55` }}
-                        _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.88)" }} />
-            </Box>
-          ))}
-        </Flex>
-
-        {/* Resultado: la nueva narrativa, luminosa */}
-        {hayResultado && (
-          <Box mt={{ base: 7, md: 8 }} borderRadius="xl" overflow="hidden"
-               bgGradient={`linear(135deg, ${PAPEL}, ${ORO}3a)`}
-               border={`1px solid ${ORO}88`} boxShadow={`0 0 24px ${ORO}44, 0 0 50px ${ORO}22`}
-               px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
-            <Text color={ORO} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
-                  mb={3} style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-              ✦ Tu integración
+      {/* Una banda por pregunta — cada una repinta la imagen y va separada por
+          una raya horizontal entera (de borde a borde). */}
+      {BLOQUES.map((b) => (
+        <Box key={b.key}>
+          <Linea />
+          <Banda>
+            <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" lineHeight="1.3" mb={2}
+                  style={{ textShadow: INK_SHADOW }}>{b.pregunta}</Text>
+            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.95} mb={2.5}
+                  lineHeight="1.55" style={{ textShadow: INK_SHADOW }}>
+              {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
             </Text>
-            {verdad && (
-              <Box mb={recordatorio ? 4 : 0}>
-                <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.6} mb={0.5}>
-                  Integración
-                </Text>
-                <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" fontWeight="600" lineHeight="1.5">
-                  «{verdad}»
-                </Text>
-              </Box>
-            )}
-            {recordatorio && (
-              <Box>
-                <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.6} mb={0.5}>
-                  Recordatorio
-                </Text>
-                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
-                  {recordatorio}
-                </Text>
-              </Box>
-            )}
-          </Box>
-        )}
+            <Textarea value={(c[b.key] as string) || ""} onChange={(e) => onCampo(b.key, e.target.value)}
+                      placeholder={b.placeholder}
+                      minH={b.key === "recordatorio" ? "56px" : "78px"}
+                      bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" px={3.5} py={2.5} fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                      sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                            "&::-webkit-scrollbar": { width: "8px" },
+                            "&::-webkit-scrollbar-track": { background: "transparent" },
+                            "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.88)" }} />
+          </Banda>
+        </Box>
+      ))}
 
+      {/* Resultado: la nueva narrativa, luminosa (banda dorada a todo el ancho) */}
+      {hayResultado && (
+        <>
+          <Linea />
+          <Box position="relative" overflow="hidden" bgGradient={`linear(135deg, ${PAPEL}, ${ORO}3a)`}>
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 6, md: 7 }}>
+              <Text color={ORO} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
+                    mb={3} style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+                ✦ Tu integración
+              </Text>
+              {verdad && (
+                <Box mb={recordatorio ? 4 : 0}>
+                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.6} mb={0.5}>
+                    Integración
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" fontWeight="600" lineHeight="1.5">
+                    «{verdad}»
+                  </Text>
+                </Box>
+              )}
+              {recordatorio && (
+                <Box>
+                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.6} mb={0.5}>
+                    Recordatorio
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
+                    {recordatorio}
+                  </Text>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </>
+      )}
+
+      {/* Guardar — dentro del box, abajo a la derecha */}
+      <Linea />
+      <Banda py={{ base: 4, md: 5 }}>
+        <Flex justify="flex-end">
+          <Box as="button" onClick={onGuardar} position="relative" overflow="hidden"
+               px={{ base: 8, md: 10 }} py={2.5} borderRadius="full"
+               bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+               fontSize={{ base: "sm", md: "md" }} letterSpacing="0.05em" cursor="pointer"
+               boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+               _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+            <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                 style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
+              {guardadoOk ? "Guardado ✓" : "Guardar"}
+            </Box>
+          </Box>
+        </Flex>
+      </Banda>
+        </>
+      )}
+    </Box>
+  );
+}
+
+// Banda a todo el ancho que REPINTA la imagen de la disciplina (como los boxes
+// de los tests). Al ser cada banda baja, la acuarela se pinta a escala natural y
+// no se deforma como cuando una sola imagen cubría toda la tarjeta.
+function Banda({ children, py }: { children: React.ReactNode; py?: any }) {
+  return (
+    <Box position="relative" overflow="hidden">
+      <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
+      <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={py ?? { base: 5, md: 6 }}>
+        {children}
       </Box>
     </Box>
   );
+}
+
+// Separación entre bandas: una fina franja del marrón de psicología (de borde a
+// borde), a media intensidad para que se lea como marrón y no como una raya dura.
+function Linea() {
+  return <Box position="relative" zIndex={1} h="2px" w="100%" bg={`${TINTA}55`} />;
 }
 
 // Chip sobrio para mostrar herida / arquetipo (no editable aquí).

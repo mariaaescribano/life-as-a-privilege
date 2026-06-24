@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
-import { astrologiaNom, tcmNom } from "../../GlobalVariables";
+import { astrologiaNom, neuropsicologiaNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
+import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 
 interface StepButton {
   label: string;
@@ -154,6 +155,10 @@ export function MetodoStepHeader({
   // En el header de Medicina China los botones llevan un fondo blanco mínimo
   // (casi transparente) para que el texto se lea sobre su fondo.
   const btnWhiteBg = headerNom === tcmNom;
+  // En todo el recorrido de Psicología, el header lleva un botón "Cursos" que
+  // abre la pantalla completa con los cursos orientativos de la disciplina.
+  const isPsico = headerNom === neuropsicologiaNom;
+  const [cursosOpen, setCursosOpen] = useState(false);
   // bgColor suele venir con alpha pegado (#RRGGBBaa). Para el textShadow
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
@@ -180,6 +185,7 @@ export function MetodoStepHeader({
     return () => cancelAnimationFrame(id);
   }, [title]);
   return (
+    <>
     <Box
       position="relative"
       w="100%"
@@ -250,13 +256,13 @@ export function MetodoStepHeader({
         </Flex>
 
         {/* Espacio entre título y botones (antes había una raya separadora) */}
-        {(prev || next || extra) && <Box h={{ base: 2.5, md: 3 }} />}
+        {(prev || next || extra || isPsico) && <Box h={{ base: 2.5, md: 3 }} />}
 
         {/* Botones contextuales — siempre en una sola fila horizontal,
             tanto en móvil como en desktop. Si no caben, los botones se
             encogen (gracias al flex:0 1 auto + minW:0 del StepBtn) en lugar
             de saltar a una segunda fila. */}
-        {(prev || next || extra) && (
+        {(prev || next || extra || isPsico) && (
           <Flex
             justify="center"
             align="center"
@@ -266,10 +272,13 @@ export function MetodoStepHeader({
           >
             {prev && <StepBtn {...prev} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra && <StepBtn {...extra} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {isPsico && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {next && <StepBtn {...next} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
           </Flex>
         )}
       </Box>
     </Box>
+    {isPsico && <CursosPsicologiaModal isOpen={cursosOpen} onClose={() => setCursosOpen(false)} />}
+    </>
   );
 }

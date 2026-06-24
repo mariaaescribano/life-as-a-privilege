@@ -108,7 +108,7 @@ export default function MetodoAstrologiaCursos() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="980px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={6}>
           <MetodoStepHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
             title="Cursos de Astrología"
@@ -168,7 +168,7 @@ export default function MetodoAstrologiaCursos() {
             ) : (
               <SimpleGrid
                 w="100%"
-                columns={{ base: 1, md: 2 }}
+                columns={{ base: 1, sm: 2, lg: 3 }}
                 spacing={{ base: 5, md: 6 }}
                 alignItems="start"
                 sx={{
