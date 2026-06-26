@@ -22,6 +22,68 @@ interface CursoRow {
 
 const nLecciones = (c: CursoRow) => (c.contenido ?? []).reduce((a, m) => a + (m.submodules?.length ?? 0), 0);
 
+// Convierte los ejercicios de una lección 'test' en texto legible.
+function testATexto(ejs: any[]): string {
+  return (ejs ?? []).map((e, i) => {
+    const cab = `${i + 1}. ${e.enunciado ?? ""}`.trim();
+    if (e.tipo === "opcion") {
+      const ops = (e.opciones ?? []).map((o: string, k: number) =>
+        `   ${String.fromCharCode(97 + k)}) ${o}${k === e.correcta ? "  ✓" : ""}`).join("\n");
+      return `${cab}\n${ops}`;
+    }
+    if (e.tipo === "verdadero") return `${cab}\n   (Respuesta: ${e.correcta ? "Verdadero" : "Falso"})`;
+    if (e.tipo === "relacionar") {
+      const pares = (e.pares ?? []).map((p: any) => `   ${p.izquierda} ↔ ${p.derecha}`).join("\n");
+      return `${cab}\n${pares}`;
+    }
+    return cab;
+  }).join("\n\n");
+}
+
+// Vuelca TODO el texto del curso (título, módulos y todas las lecciones) a un string.
+function cursoATexto(c: CursoRow): string {
+  const p: string[] = [];
+  p.push((c.titulo || "(sin título)").toUpperCase());
+  if (c.descripcion?.trim()) p.push(c.descripcion.trim());
+  (c.contenido ?? []).forEach((mod, mi) => {
+    p.push("\n" + "═".repeat(44));
+    p.push(`MÓDULO ${mi + 1}: ${mod.title ?? ""}`.trim());
+    p.push("═".repeat(44));
+    (mod.submodules ?? []).forEach((lec: any, li: number) => {
+      p.push(`\n— ${mi + 1}.${li + 1}  ${lec.nom ?? ""} —`.trim());
+      if (lec.tipo === "video") {
+        p.push(lec.video ? `[Vídeo de YouTube: ${lec.video}]` : "[Vídeo]");
+      } else if (lec.tipo === "test") {
+        p.push(testATexto(lec.ejercicios ?? []));
+      } else {
+        p.push((lec.contenido ?? "").trim());
+      }
+    });
+  });
+  return p.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+}
+
+async function copiarAlPortapapeles(texto: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(texto);
+    return true;
+  } catch {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = texto;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch {
+      return false;
+    }
+  }
+}
+
 const btnStyle = {
   fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.06em",
   borderRadius: "full", cursor: "pointer", transition: "all 0.2s",
@@ -85,6 +147,17 @@ export default function AdminCursos() {
     }
   };
 
+  const copiarCurso = async (c: CursoRow) => {
+    const texto = cursoATexto(c);
+    const ok = await copiarAlPortapapeles(texto);
+    toast({
+      title: ok ? "Texto copiado al portapapeles" : "No se pudo copiar",
+      description: ok ? `${nLecciones(c)} lecciones · ${texto.length} caracteres` : undefined,
+      status: ok ? "success" : "error",
+      duration: 2500,
+    });
+  };
+
   const toggleCompletado = async (c: CursoRow) => {
     try {
       await axios.patch(`${API_URL}/cursos/${c.id}`, { completado: !c.completado }, { headers: adminHeaders() });
@@ -106,7 +179,7 @@ export default function AdminCursos() {
       <Box key={c.id} position="relative" overflow="hidden" borderRadius="xl" bg="#05403f"
            boxShadow={`0 0 18px rgba(255,255,255,0.22), 0 0 45px rgba(255,255,255,0.1), 0 0 78px rgba(180,255,245,0.14), 0 0 28px ${color}40`}>
         {hasBg && disc && <DisciplinaBgLayer nom={disc.nom} borderRadius="xl" />}
-        <Flex position="relative" zIndex={1} align="center" gap={4} p={{ base: 4, md: 5 }}>
+        <Flex position="relative" zIndex={1} align="center" gap={3} p={{ base: 4, md: 5 }} flexWrap="wrap">
           {Icon && (
             <Flex flexShrink={0} w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }} borderRadius="full"
                   align="center" justify="center" bg={`${color}1c`} border={`2px solid ${color}`} boxShadow={`0 0 12px ${color}88`}>
@@ -123,6 +196,11 @@ export default function AdminCursos() {
               <Badge colorScheme={c.publicado ? "teal" : "gray"}>{c.publicado ? "Publicado" : "Oculto"}</Badge>
               <Text color={color} fontSize="sm" opacity={0.85} style={{ textShadow: tShadow }}>{nLecciones(c)} lecciones</Text>
             </Flex>
+          </Box>
+          <Box as="button" onClick={() => copiarCurso(c)} {...btnStyle}
+               color="white" bg="rgba(0,0,0,0.28)" border="1px solid rgba(255,255,255,0.4)" px={4} py="7px" fontSize="sm"
+               _hover={{ borderColor: "white" }} title="Copiar todo el texto del curso al portapapeles">
+            ⧉ Copiar texto
           </Box>
           <Box as="button" onClick={() => toggleCompletado(c)} {...btnStyle}
                color="white" bg="rgba(0,0,0,0.28)" border="1px solid rgba(255,255,255,0.4)" px={4} py="7px" fontSize="sm"
