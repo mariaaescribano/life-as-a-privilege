@@ -36,6 +36,27 @@ const btn = {
   borderRadius: "full", cursor: "pointer", transition: "all 0.2s",
 } as const;
 
+// Botones de subir/bajar para reordenar módulos o lecciones.
+function MoveBtns({ onUp, onDown, canUp, canDown }: {
+  onUp: () => void; onDown: () => void; canUp: boolean; canDown: boolean;
+}) {
+  const base = {
+    ...btn,
+    w: "30px", h: "30px", display: "flex", alignItems: "center", justifyContent: "center",
+    fontSize: "md", border: "1px solid rgba(255,255,255,0.3)", flexShrink: 0,
+  } as const;
+  return (
+    <Flex gap={1.5} flexShrink={0}>
+      <Box as="button" {...base} onClick={onUp} aria-label="Subir"
+           opacity={canUp ? 1 : 0.3} pointerEvents={canUp ? "auto" : "none"}
+           _hover={canUp ? { bg: "rgba(255,255,255,0.12)" } : {}}>↑</Box>
+      <Box as="button" {...base} onClick={onDown} aria-label="Bajar"
+           opacity={canDown ? 1 : 0.3} pointerEvents={canDown ? "auto" : "none"}
+           _hover={canDown ? { bg: "rgba(255,255,255,0.12)" } : {}}>↓</Box>
+    </Flex>
+  );
+}
+
 export default function AdminCursoEditor() {
   const { id } = useParams<{ id: string }>();
   const { verificando } = useAdminGuard();
@@ -71,6 +92,21 @@ export default function AdminCursoEditor() {
   const updModulo = (mi: number, patch: Partial<Modulo>) =>
     curso && setModulos(curso.contenido.map((m, i) => (i === mi ? { ...m, ...patch } : m)));
   const delModulo = (mi: number) => curso && setModulos(curso.contenido.filter((_, i) => i !== mi));
+  const moveModulo = (mi: number, dir: -1 | 1) => {
+    if (!curso) return;
+    const j = mi + dir;
+    if (j < 0 || j >= curso.contenido.length) return;
+    const arr = [...curso.contenido];
+    [arr[mi], arr[j]] = [arr[j], arr[mi]];
+    setModulos(arr);
+  };
+  // Inserta un módulo nuevo justo después del índice indicado.
+  const insertModulo = (mi: number) => {
+    if (!curso) return;
+    const arr = [...curso.contenido];
+    arr.splice(mi + 1, 0, { title: "Nuevo módulo", submodules: [] });
+    setModulos(arr);
+  };
 
   // ── Lecciones ──
   const addLeccion = (mi: number) =>
@@ -83,6 +119,22 @@ export default function AdminCursoEditor() {
     });
   const delLeccion = (mi: number, li: number) =>
     curso && updModulo(mi, { submodules: curso.contenido[mi].submodules.filter((_, i) => i !== li) });
+  const moveLeccion = (mi: number, li: number, dir: -1 | 1) => {
+    if (!curso) return;
+    const subs = curso.contenido[mi].submodules;
+    const j = li + dir;
+    if (j < 0 || j >= subs.length) return;
+    const arr = [...subs];
+    [arr[li], arr[j]] = [arr[j], arr[li]];
+    updModulo(mi, { submodules: arr });
+  };
+  // Inserta una lección nueva justo después del índice indicado.
+  const insertLeccion = (mi: number, li: number) => {
+    if (!curso) return;
+    const arr = [...curso.contenido[mi].submodules];
+    arr.splice(li + 1, 0, { id: genId(), nom: "Nueva lección", tipo: "texto", contenido: "" });
+    updModulo(mi, { submodules: arr });
+  };
 
   const guardar = async () => {
     if (!curso) return;
@@ -203,9 +255,18 @@ export default function AdminCursoEditor() {
               <Box key={mi} position="relative" overflow="hidden" bg="#05403f" borderRadius="xl" p={{ base: 4, md: 5 }} boxShadow={GLOW} color={color} sx={{ textShadow: TEXT_SHADOW }}>
                 {hasBg && <DisciplinaBgLayer nom={discNom} borderRadius="xl" />}
                 <Box position="relative" zIndex={1}>
-                <Flex gap={3} align="center" mb={4}>
+                <Flex gap={3} align="center" mb={4} flexWrap="wrap">
+                  <Box fontWeight="700" fontSize="sm" opacity={0.7} flexShrink={0}>Módulo {mi + 1}</Box>
                   <Input value={mod.title} onChange={(e) => updModulo(mi, { title: e.target.value })}
-                         fontWeight="700" fontSize={{ base: "md", md: "lg" }} {...fieldStyle} />
+                         fontWeight="700" fontSize={{ base: "md", md: "lg" }} flex="1" minW="160px" {...fieldStyle} />
+                  <MoveBtns
+                    onUp={() => moveModulo(mi, -1)} onDown={() => moveModulo(mi, 1)}
+                    canUp={mi > 0} canDown={mi < curso.contenido.length - 1}
+                  />
+                  <Box as="button" onClick={() => insertModulo(mi)} {...btn} px={3} py="6px" fontSize="xs"
+                       border="1px solid rgba(255,255,255,0.3)" _hover={{ bg: "rgba(255,255,255,0.12)" }} flexShrink={0} title="Insertar módulo debajo">
+                    + aquí
+                  </Box>
                   <Box as="button" onClick={() => delModulo(mi)} {...btn} px={3} py="6px" fontSize="xs"
                        border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }} flexShrink={0}>
                     Borrar módulo
@@ -214,11 +275,12 @@ export default function AdminCursoEditor() {
 
                 <Flex direction="column" gap={4} pl={{ base: 0, md: 3 }}>
                   {mod.submodules.map((lec, li) => {
-                    const key = `${mi}-${li}`;
+                    const key = lec.id;
                     const previewOn = previews[key];
                     return (
-                      <Box key={li} bg="rgba(0,0,0,0.2)" border="1px solid rgba(255,255,255,0.12)" borderRadius="lg" p={4}>
+                      <Box key={lec.id} bg="rgba(0,0,0,0.2)" border="1px solid rgba(255,255,255,0.12)" borderRadius="lg" p={4}>
                         <Flex gap={3} align="center" mb={3} flexWrap="wrap">
+                          <Box fontSize="xs" opacity={0.6} flexShrink={0}>{mi + 1}.{li + 1}</Box>
                           <Input value={lec.nom} onChange={(e) => updLeccion(mi, li, { nom: e.target.value })}
                                  placeholder="Nombre de la lección" flex="1" minW="160px" {...fieldStyle} />
                           <Select value={lec.tipo} onChange={(e) => updLeccion(mi, li, { tipo: e.target.value as "texto" | "video" | "test" })}
@@ -227,6 +289,14 @@ export default function AdminCursoEditor() {
                             <option value="video">Vídeo</option>
                             <option value="test">Test</option>
                           </Select>
+                          <MoveBtns
+                            onUp={() => moveLeccion(mi, li, -1)} onDown={() => moveLeccion(mi, li, 1)}
+                            canUp={li > 0} canDown={li < mod.submodules.length - 1}
+                          />
+                          <Box as="button" onClick={() => insertLeccion(mi, li)} {...btn} px={3} py="6px" fontSize="xs"
+                               border="1px solid rgba(255,255,255,0.3)" _hover={{ bg: "rgba(255,255,255,0.12)" }} title="Insertar lección debajo">
+                            + aquí
+                          </Box>
                           <Box as="button" onClick={() => delLeccion(mi, li)} {...btn} px={3} py="6px" fontSize="xs"
                                border="1px solid rgba(255,255,255,0.3)" _hover={{ borderColor: "#ff8a8a", color: "#ff8a8a" }}>
                             ✕

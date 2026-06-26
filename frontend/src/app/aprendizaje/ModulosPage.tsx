@@ -6,6 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
+import { CursoBuscador } from "../../components/aprendizaje/CursoBuscador";
 import { useCursosData } from "../../data/cursosApi";
 
 export default function ModulosPage() {
@@ -57,6 +58,14 @@ export default function ModulosPage() {
                 },
               }}
             >
+              {(curso.modulos?.length ?? 0) > 0 && (
+                <CursoBuscador
+                  modulos={curso.modulos ?? []}
+                  color={modalidad.color}
+                  bgColor={modalidad.bgColor}
+                />
+              )}
+
               {(curso.modulos ?? []).map((mod, i) => (
                 <Box
                   key={i}
