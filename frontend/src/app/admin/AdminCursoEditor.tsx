@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box, Flex, Text, Input, Textarea, Select, Checkbox, useToast,
 } from "@chakra-ui/react";
@@ -57,6 +57,27 @@ function MoveBtns({ onUp, onDown, canUp, canDown }: {
   );
 }
 
+// Pliega el texto (sin acentos, en minúsculas) conservando un mapa de índices
+// al string original, para localizar y seleccionar la frase exacta.
+const COMBINING = new RegExp("[\\u0300-\\u036f]", "g");
+function fold(s: string): { folded: string; map: number[] } {
+  let folded = "";
+  const map: number[] = [];
+  for (let i = 0; i < s.length; i++) {
+    const dec = s[i].normalize("NFD").replace(COMBINING, "").toLowerCase();
+    for (let k = 0; k < dec.length; k++) { folded += dec[k]; map.push(i); }
+  }
+  return { folded, map };
+}
+function limpiarMd(s: string): string {
+  return s.replace(/^#{1,6}\s+/gm, "").replace(/[*_`>]/g, "").replace(/\s+/g, " ").trim();
+}
+
+interface ResultadoBusqueda {
+  mi: number; li: number; lecId: string; moduloTitle: string; leccionNom: string;
+  antes: string; match: string; despues: string;
+}
+
 export default function AdminCursoEditor() {
   const { id } = useParams<{ id: string }>();
   const { verificando } = useAdminGuard();
@@ -67,6 +88,9 @@ export default function AdminCursoEditor() {
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [previews, setPreviews] = useState<Record<string, boolean>>({});
+  const [busqueda, setBusqueda] = useState("");
+  const [mostrarRes, setMostrarRes] = useState(false);
+  const buscadorRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (verificando || !id) return;
@@ -134,6 +158,73 @@ export default function AdminCursoEditor() {
     const arr = [...curso.contenido[mi].submodules];
     arr.splice(li + 1, 0, { id: genId(), nom: "Nueva lección", tipo: "texto", contenido: "" });
     updModulo(mi, { submodules: arr });
+  };
+
+  // ── Buscador interno del editor ──
+  const resultados: ResultadoBusqueda[] = useMemo(() => {
+    const query = busqueda.trim();
+    if (!curso || query.length < 2) return [];
+    const foldedQ = fold(query).folded;
+    const out: ResultadoBusqueda[] = [];
+    curso.contenido.forEach((mod, mi) => {
+      mod.submodules.forEach((lec, li) => {
+        const texto = lec.contenido ?? "";
+        const objetivo = texto || lec.nom;
+        const { folded, map } = fold(objetivo);
+        const idx = folded.indexOf(foldedQ);
+        if (idx === -1) {
+          if (fold(lec.nom).folded.includes(foldedQ) && texto) {
+            out.push({ mi, li, lecId: lec.id, moduloTitle: mod.title, leccionNom: lec.nom, antes: "", match: lec.nom, despues: "" });
+          }
+          return;
+        }
+        const start = map[idx];
+        const end = map[idx + foldedQ.length - 1] + 1;
+        out.push({
+          mi, li, lecId: lec.id, moduloTitle: mod.title, leccionNom: lec.nom,
+          antes: limpiarMd(objetivo.slice(Math.max(0, start - 50), start)),
+          match: objetivo.slice(start, end),
+          despues: limpiarMd(objetivo.slice(end, end + 80)),
+        });
+      });
+    });
+    return out.slice(0, 40);
+  }, [busqueda, curso]);
+
+  // Salta a la lección: la desplaza al centro, la resalta y selecciona la frase.
+  const saltarA = (r: ResultadoBusqueda) => {
+    if (!curso) return;
+    const lec = curso.contenido[r.mi]?.submodules[r.li];
+    if (!lec) return;
+    setPreviews((p) => ({ ...p, [lec.id]: false })); // asegura que se ve el textarea
+    setMostrarRes(false);
+    const query = busqueda.trim();
+    window.setTimeout(() => {
+      const el = document.getElementById(`lec-${lec.id}`);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.animate(
+        [
+          { boxShadow: "0 0 0 0 rgba(255,245,150,0)" },
+          { boxShadow: "0 0 0 3px rgba(255,245,150,0.95)", offset: 0.2 },
+          { boxShadow: "0 0 0 3px rgba(255,245,150,0.95)", offset: 0.75 },
+          { boxShadow: "0 0 0 0 rgba(255,245,150,0)" },
+        ],
+        { duration: 2600, easing: "ease-in-out" },
+      );
+      const ta = el.querySelector("textarea") as HTMLTextAreaElement | null;
+      const texto = lec.contenido ?? "";
+      if (ta && texto && query) {
+        const { folded, map } = fold(texto);
+        const idx = folded.indexOf(fold(query).folded);
+        if (idx >= 0) {
+          const start = map[idx];
+          const end = map[idx + fold(query).folded.length - 1] + 1;
+          ta.focus();
+          ta.setSelectionRange(start, end);
+        }
+      }
+    }, 130);
   };
 
   const guardar = async () => {
@@ -246,6 +337,42 @@ export default function AdminCursoEditor() {
             <Box as="button" onClick={addModulo} {...btn} px={5} py="8px" bg="rgba(255,255,255,0.92)" color="#008080" fontSize="sm">+ Módulo</Box>
           </Flex>
 
+          {/* Buscador interno: encuentra una frase en cualquier lección y salta a ella */}
+          <Box ref={buscadorRef} position="relative" mb={5} zIndex={5}
+               onBlur={(e) => { if (!buscadorRef.current?.contains(e.relatedTarget as Node)) setMostrarRes(false); }}>
+            <Input
+              value={busqueda}
+              onChange={(e) => { setBusqueda(e.target.value); setMostrarRes(true); }}
+              onFocus={() => setMostrarRes(true)}
+              placeholder="🔍 Buscar una frase en el curso y saltar a ella…"
+              {...fieldStyle}
+            />
+            {mostrarRes && busqueda.trim().length >= 2 && (
+              <Box position="absolute" top="calc(100% + 6px)" left={0} right={0} bg="#05403f"
+                   borderRadius="lg" border="1px solid rgba(255,255,255,0.25)"
+                   boxShadow="0 12px 40px rgba(0,0,0,0.45)" maxH="360px" overflowY="auto" zIndex={20}>
+                {resultados.length === 0 ? (
+                  <Text opacity={0.7} fontStyle="italic" px={4} py={3}>Sin resultados para «{busqueda.trim()}».</Text>
+                ) : (
+                  resultados.map((r, i) => (
+                    <Box key={r.lecId + "-" + i} as="button" onClick={() => saltarA(r)} display="block" textAlign="left" w="100%"
+                         px={4} py={3} borderTop={i === 0 ? undefined : "1px solid rgba(255,255,255,0.1)"}
+                         transition="background 0.15s" _hover={{ bg: "rgba(255,255,255,0.1)" }}>
+                      <Text fontSize="xs" opacity={0.65} mb={0.5}>
+                        Módulo {r.mi + 1} · {r.moduloTitle} → <Box as="span" fontWeight="700">{r.leccionNom}</Box>
+                      </Text>
+                      <Text fontSize="sm" lineHeight="1.5" noOfLines={2}>
+                        {r.antes && <Box as="span" opacity={0.7}>…{r.antes} </Box>}
+                        <Box as="span" fontWeight="700" bg="rgba(255,245,150,0.35)" px="2px" borderRadius="2px">{r.match}</Box>
+                        {r.despues && <Box as="span" opacity={0.7}> {r.despues}…</Box>}
+                      </Text>
+                    </Box>
+                  ))
+                )}
+              </Box>
+            )}
+          </Box>
+
           {curso.contenido.length === 0 && (
             <Text opacity={0.7} fontStyle="italic" mb={4}>Sin módulos todavía. Añade el primero.</Text>
           )}
@@ -278,7 +405,7 @@ export default function AdminCursoEditor() {
                     const key = lec.id;
                     const previewOn = previews[key];
                     return (
-                      <Box key={lec.id} bg="rgba(0,0,0,0.2)" border="1px solid rgba(255,255,255,0.12)" borderRadius="lg" p={4}>
+                      <Box key={lec.id} id={`lec-${lec.id}`} bg="rgba(0,0,0,0.2)" border="1px solid rgba(255,255,255,0.12)" borderRadius="lg" p={4}>
                         <Flex gap={3} align="center" mb={3} flexWrap="wrap">
                           <Box fontSize="xs" opacity={0.6} flexShrink={0}>{mi + 1}.{li + 1}</Box>
                           <Input value={lec.nom} onChange={(e) => updLeccion(mi, li, { nom: e.target.value })}

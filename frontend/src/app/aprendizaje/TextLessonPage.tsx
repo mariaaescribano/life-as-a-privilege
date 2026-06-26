@@ -1,12 +1,11 @@
 import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Markdown } from "../../components/global/Markdown";
-import { CursoBuscador } from "../../components/aprendizaje/CursoBuscador";
 import { CursoTest } from "../../components/aprendizaje/CursoTest";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { useCursosData } from "../../data/cursosApi";
@@ -45,45 +44,8 @@ export default function TextLessonPage() {
   const modalidadId = rawMod ? safeDecode(rawMod) : "";
   const navigate = useNavigate();
   const { cursosData, loading } = useCursosData();
-  const [searchParams] = useSearchParams();
-  const buscar = searchParams.get("buscar") ?? "";
-  const contenidoRef = React.useRef<HTMLDivElement>(null);
 
-  // Si NO venimos de una búsqueda, subimos arriba al cambiar de lección.
-  React.useEffect(() => {
-    if (!buscar) window.scrollTo({ top: 0, behavior: "auto" });
-  }, [submoduloId, buscar]);
-
-  // Si venimos de una búsqueda (?buscar=…), bajamos al párrafo que la contiene
-  // y lo resaltamos un instante. Esperamos un poco a que el contenido pinte.
-  React.useEffect(() => {
-    if (!buscar) return;
-    const norm = (s: string) =>
-      s.normalize("NFD").replace(new RegExp("[\\u0300-\\u036f]", "g"), "").toLowerCase().replace(/\s+/g, " ").trim();
-    const target = norm(buscar);
-    if (!target) return;
-    const id = window.setTimeout(() => {
-      const root = contenidoRef.current;
-      if (!root) return;
-      const bloques = root.querySelectorAll<HTMLElement>("h1,h2,h3,h4,h5,h6,p,li,blockquote");
-      let encontrado: HTMLElement | null = null;
-      for (const el of Array.from(bloques)) {
-        if (norm(el.textContent ?? "").includes(target)) { encontrado = el; break; }
-      }
-      if (!encontrado) return;
-      encontrado.scrollIntoView({ behavior: "smooth", block: "center" });
-      encontrado.animate(
-        [
-          { backgroundColor: "rgba(255,245,150,0)" },
-          { backgroundColor: "rgba(255,245,150,0.45)", offset: 0.2 },
-          { backgroundColor: "rgba(255,245,150,0.45)", offset: 0.75 },
-          { backgroundColor: "rgba(255,245,150,0)" },
-        ],
-        { duration: 2600, easing: "ease-in-out" },
-      );
-    }, 180);
-    return () => window.clearTimeout(id);
-  }, [buscar, submoduloId, loading]);
+  React.useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [submoduloId]);
 
   const modalidad = modalidadId ? cursosData[modalidadId] : undefined;
   const curso = modalidad?.cursos.find((c) => c.id === cursoId);
@@ -177,11 +139,6 @@ export default function TextLessonPage() {
             }}
           />
 
-          {/* Buscador del curso (busca en todas las lecciones) */}
-          <Box w="100%" maxW="760px" mt={{ base: 4, md: 6 }}>
-            <CursoBuscador modulos={curso.modulos ?? []} color={color} bgColor={bgColor} />
-          </Box>
-
           {/* Vídeo (16:9) o artículo de texto */}
           {esVideo ? (
             <Box
@@ -215,7 +172,6 @@ export default function TextLessonPage() {
             </Box>
           ) : (
             <Box
-              ref={contenidoRef}
               maxW="760px"
               w="100%"
               position="relative"
