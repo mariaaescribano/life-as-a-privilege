@@ -45,6 +45,7 @@ export default function MetodoPsicologiaCompromiso() {
   const [loading, setLoading] = useState(true);
   const [problema, setProblema] = useState("");
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
+  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function MetodoPsicologiaCompromiso() {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
+        setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
 
         const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -104,7 +106,9 @@ export default function MetodoPsicologiaCompromiso() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
-              next={{ label: "Ayurveda →", onClick: () => {}, disabled: true, disabledTooltip: "Disponible próximamente" }}
+              next={ayurvedaSuscrito
+                ? { label: "Ayurveda →", onClick: () => navigate("/metodo/ayurveda") }
+                : { label: "Ayurveda →", onClick: () => {}, disabled: true, disabledTooltip: "Desbloquea Ayurveda para empezar la 3ª disciplina." }}
             />
 
             {/* Intro */}

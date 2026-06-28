@@ -1,0 +1,46 @@
+import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '../database.service';
+
+// Progreso acumulado del recorrido de Ayurveda (3ª disciplina). Mismo patrón
+// que metodo_psicologia: una fila por usuario con un único campo `data` (JSONB)
+// donde cada página del recorrido guarda y lee su estado. El resultado del test
+// de doshas vive aparte, en la tabla `ayurveda` (módulo AyurvedaModule).
+@Injectable()
+export class MetodoAyurvedaService {
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async get(userId: string) {
+    const { data, error } = await this.databaseService.getClient()
+      .from('metodo_ayurveda')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('[metodoAyurveda.get] error:', error.message);
+      return null;
+    }
+    return data ?? null;
+  }
+
+  // Solo el campo `data` (progreso de etapas) es editable desde el cliente.
+  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data']);
+
+  async actualizar(userId: string, patch: Record<string, any>): Promise<{ success: boolean }> {
+    const filtered = Object.fromEntries(
+      Object.entries(patch ?? {}).filter(([k]) =>
+        MetodoAyurvedaService.CAMPOS_PATCH_PERMITIDOS.has(k),
+      ),
+    );
+    const update = { ...filtered, updated_at: new Date().toISOString() };
+    const { error } = await this.databaseService.getClient()
+      .from('metodo_ayurveda')
+      .upsert({ user_id: userId, ...update }, { onConflict: 'user_id' });
+
+    if (error) {
+      console.warn('[metodoAyurveda.actualizar] error:', error.message);
+      return { success: false };
+    }
+    return { success: true };
+  }
+}

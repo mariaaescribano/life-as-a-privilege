@@ -41,9 +41,17 @@ type GuestResult = { dosha: Dosha; scores: Record<Dosha, number> };
 export default function AyurvedaTestPage({
   onComplete,
   isGuest = false,
+  prevTo = "/aprendizaje/cursos/ayurveda",
+  pageLabel,
 }: {
   onComplete?: () => Promise<void>;
   isGuest?: boolean;
+  /** Destino del botón "← Volver". Por defecto, la página del curso de Ayurveda.
+   *  En el recorrido del Método se pasa "/metodo/ayurveda" para no salir del flujo. */
+  prevTo?: string;
+  /** Número de paso dentro de El Recorrido (p.ej. "2/—"). Solo se muestra en el
+   *  flujo del recorrido; en uso suelto (curso/espacio) se deja sin número. */
+  pageLabel?: string;
 }) {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
@@ -120,11 +128,12 @@ export default function AyurvedaTestPage({
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
               title="Test de los Doshas"
+              pageLabel={pageLabel}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={{ base: 0, md: 0 }}
-              prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/ayurveda") }}
+              prev={{ label: "← Volver", onClick: () => navigate(prevTo) }}
               next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
             />
 
@@ -392,7 +401,7 @@ export default function AyurvedaTestPage({
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={{ base: 0, md: 0 }}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/ayurveda") }}
+            prev={{ label: "← Volver", onClick: () => navigate(prevTo) }}
             next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
           />
 

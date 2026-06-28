@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
+import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
@@ -58,6 +59,7 @@ const Home = () => {
   const [name, setName] = useState<string>("");
   const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(null);
   const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
+  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
@@ -67,6 +69,11 @@ const Home = () => {
   const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
   const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
   const [pagoPsicoExitoOpen, setPagoPsicoExitoOpen] = useState(false);
+  // Pago de Ayurveda (3ª disciplina)
+  const [pagoAyurOpen, setPagoAyurOpen] = useState(false);
+  const [pagoAyurLoading, setPagoAyurLoading] = useState(false);
+  const [pagoAyurError, setPagoAyurError] = useState<string | null>(null);
+  const [pagoAyurExitoOpen, setPagoAyurExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
   const [comicOpen, setComicOpen] = useState(false);
 
@@ -141,7 +148,7 @@ const Home = () => {
   };
 
   // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
-  const testUnlock = async (scope: "metodo" | "psicologia") => {
+  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda") => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     try {
@@ -154,15 +161,24 @@ const Home = () => {
         setMetodoSuscrito(true);
         setPagoOpen(false);
         setPagoExitoOpen(true);
-      } else {
+      } else if (scope === "psicologia") {
         setMetodoSuscrito(true);
         setPsicologiaSuscrito(true);
         setPagoPsicoOpen(false);
         setPagoPsicoExitoOpen(true);
+      } else {
+        // Ayurveda desbloquea también las disciplinas anteriores (cadena de prereq).
+        setMetodoSuscrito(true);
+        setPsicologiaSuscrito(true);
+        setAyurvedaSuscrito(true);
+        setPagoAyurOpen(false);
+        setPagoAyurExitoOpen(true);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
-      if (scope === "metodo") setPagoError(msg); else setPagoPsicoError(msg);
+      if (scope === "metodo") setPagoError(msg);
+      else if (scope === "psicologia") setPagoPsicoError(msg);
+      else setPagoAyurError(msg);
     }
   };
 
@@ -201,6 +217,41 @@ const Home = () => {
     }
   };
 
+  // Ayurveda (3ª disciplina): clic en su círculo del mandala.
+  const irAyurveda = () => {
+    if (ayurvedaSuscrito) {
+      navigate("/metodo/ayurveda");
+    } else {
+      setPagoAyurError(null);
+      setPagoAyurOpen(true);
+    }
+  };
+
+  const pagarAyurveda = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoAyurLoading(true);
+    setPagoAyurError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/ayurveda/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoAyurError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoAyurLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoAyurError(
+        status === 403
+          ? "Necesitas completar el pago de Psicología antes de adquirir Ayurveda."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoAyurLoading(false);
+    }
+  };
+
   const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
   const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
   const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
@@ -231,6 +282,7 @@ const Home = () => {
     const url = new URL(window.location.href);
     const metodoPagado = url.searchParams.get("metodo_pagado");
     const psicologiaPagado = url.searchParams.get("psicologia_pagado");
+    const ayurvedaPagado = url.searchParams.get("ayurveda_pagado");
 
     const cargarSuscripcion = async () => {
       try {
@@ -240,10 +292,12 @@ const Home = () => {
         const suscrito = !!me.data?.metodo_suscrito;
         setMetodoSuscrito(suscrito);
         setPsicologiaSuscrito(!!me.data?.psicologia_suscrito);
+        setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
         return suscrito;
       } catch {
         setMetodoSuscrito(false);
         setPsicologiaSuscrito(false);
+        setAyurvedaSuscrito(false);
         return false;
       }
     };
@@ -286,6 +340,27 @@ const Home = () => {
           if (res.data?.ok) {
             setPsicologiaSuscrito(true);
             setPagoPsicoExitoOpen(true);
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else if (ayurvedaPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("ayurveda_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/ayurveda/verify`, {
+          params: { session_id: ayurvedaPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            setAyurvedaSuscrito(true);
+            setPagoAyurExitoOpen(true);
           }
         })
         .catch(async () => {
@@ -467,12 +542,15 @@ const Home = () => {
                 // pero siguen siendo clicables para poder abrir su pago.
                 const abierta =
                   (d.name === astrologiaNom && metodoSuscrito !== false) ||
-                  (d.name === neuropsicologiaNom && psicologiaSuscrito === true);
+                  (d.name === neuropsicologiaNom && psicologiaSuscrito === true) ||
+                  (d.name === ayurvedaNom && ayurvedaSuscrito === true);
                 // `clickable` = se puede pulsar. Psicología es pulsable —aunque siga
                 //   con candado— si ya se pagó Astrología, para poder abrir su pago.
+                //   Ayurveda igual: pulsable si ya se pagó Psicología (su prereq).
                 const clickable =
                   d.name === astrologiaNom ||
-                  (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true));
+                  (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true)) ||
+                  (d.name === ayurvedaNom && (ayurvedaSuscrito === true || psicologiaSuscrito === true));
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
@@ -480,6 +558,8 @@ const Home = () => {
                   ? irAstrologia
                   : d.name === neuropsicologiaNom
                   ? irPsicologia
+                  : d.name === ayurvedaNom
+                  ? irAyurveda
                   : () => navigate(d.link);
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
@@ -487,6 +567,8 @@ const Home = () => {
                     ? "Haz clic en Astrología para empezar tu recorrido."
                     : d.name === neuropsicologiaNom && clickable
                     ? "Desbloquea Psicología para empezar la 2ª disciplina."
+                    : d.name === ayurvedaNom && clickable
+                    ? "Desbloquea Ayurveda para empezar la 3ª disciplina."
                     : "El Recorrido se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
@@ -705,6 +787,20 @@ const Home = () => {
         loading={pagoPsicoLoading}
         error={pagoPsicoError}
         onTest={testPagos ? () => testUnlock("psicologia") : undefined}
+      />
+      <PagoExitoModal
+        isOpen={pagoAyurExitoOpen}
+        onAceptar={() => setPagoAyurExitoOpen(false)}
+        titulo="Pago de Ayurveda realizado"
+        mensaje="Ya puedes empezar la 3ª disciplina del Recorrido."
+      />
+      <PagoAyurvedaModal
+        isOpen={pagoAyurOpen}
+        onClose={() => { setPagoAyurOpen(false); setPagoAyurError(null); }}
+        onPagar={pagarAyurveda}
+        loading={pagoAyurLoading}
+        error={pagoAyurError}
+        onTest={testPagos ? () => testUnlock("ayurveda") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
 

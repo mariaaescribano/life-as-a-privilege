@@ -137,14 +137,25 @@ export class UserService {
 
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
+    // Intento 1: con las columnas de las 3 disciplinas (ayurveda_* puede no existir
+    // todavía si está pendiente el ALTER TABLE → caemos al intento 2).
     const full = await this.databaseService.getClient()
       .from('user')
-      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra')
       .eq('id', id)
       .single();
     if (full.data) return full.data;
 
-    // Fallback si las columnas metodo_* aún no existen (ALTER TABLE pendiente).
+    // Intento 2: sin ayurveda_* (por si aún no se ha migrado esa columna) para no
+    // perder los flags de metodo/psicologia que sí existen.
+    const conPsico = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra')
+      .eq('id', id)
+      .single();
+    if (conPsico.data) return conPsico.data;
+
+    // Fallback final si las columnas de suscripción aún no existen.
     const { data, error } = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, img')
@@ -275,6 +286,35 @@ export class UserService {
 
     if (tryUpdate.error) {
       console.warn('[user.service] update psicologia_* falló (¿columnas no creadas?):', tryUpdate.error.message);
+      const { data, error } = await this.databaseService.getClient()
+        .from('user')
+        .select('id, name, email')
+        .eq('id', id)
+        .single();
+      if (error || !data) throw new NotFoundException('Usuario no encontrado');
+      return data;
+    }
+
+    if (!tryUpdate.data) throw new NotFoundException('Usuario no encontrado');
+    return tryUpdate.data;
+  }
+
+  // --------- Marcar usuario como suscrito a Ayurveda (3ª disciplina) ---------
+  async marcarSuscritoAyurveda(id: string) {
+    // Mismo patrón que marcarSuscritoPsicologia: si las columnas ayurveda_* aún
+    // no existen (ALTER TABLE pendiente), no rompe el flujo.
+    const tryUpdate = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        ayurveda_suscrito: true,
+        ayurveda_fecha_compra: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select('id, name, email')
+      .single();
+
+    if (tryUpdate.error) {
+      console.warn('[user.service] update ayurveda_* falló (¿columnas no creadas?):', tryUpdate.error.message);
       const { data, error } = await this.databaseService.getClient()
         .from('user')
         .select('id, name, email')

@@ -7,29 +7,29 @@ import {
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
+import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
+import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
-import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
-  neuropsicologiaBg,
-  neuropsicologiaNom,
-  neuropsicologiaTxt,
-  NeuropsicologiaIcon,
+  ayurvedaBg,
+  ayurvedaNom,
+  ayurvedaTxt,
+  AyurvedaIcon,
 } from "../../GlobalVariables";
 
-// Tinta cálida con halo claro (crema + color de la disciplina) para que se lea
-// bien sobre el fondo de acuarela.
-const TINTA = neuropsicologiaTxt;
-const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
+// Tinta cálida con halo crema para que se lea sobre el fondo de acuarela de
+// Hinduismo (mismo lenguaje visual que el recorrido de Psicología).
+const TINTA = ayurvedaTxt;
+const PAPEL = "#fbf4e8";
+const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${ayurvedaTxt}`;
+const ayurvedaBorde = `1px solid ${ayurvedaTxt}55`;
+const glowPanel = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`;
 
-export default function MetodoPsicologia() {
+export default function MetodoAyurveda() {
   const navigate = useNavigate();
-  const experiencia = EXPERIENCIAS[0];
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
   const [pagoOpen, setPagoOpen] = useState(false);
@@ -37,6 +37,7 @@ export default function MetodoPsicologia() {
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
+  const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -53,12 +54,12 @@ export default function MetodoPsicologia() {
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Prerrequisito: hay que haber pagado Astrología para llegar aquí.
-        if (!me.data?.metodo_suscrito) { navigate("/home"); return; }
+        // Prerrequisito: hay que haber pagado Psicología para llegar aquí.
+        if (!me.data?.psicologia_suscrito) { navigate("/home"); return; }
 
-        const psicoSuscrito = !!me.data?.psicologia_suscrito;
-        setSuscrito(psicoSuscrito);
-        if (!psicoSuscrito) { setPagoOpen(true); return; }
+        const ayurSuscrito = !!me.data?.ayurveda_suscrito;
+        setSuscrito(ayurSuscrito);
+        if (!ayurSuscrito) { setPagoOpen(true); return; }
       } catch {
         navigate("/home");
         return;
@@ -68,14 +69,14 @@ export default function MetodoPsicologia() {
     })();
   }, [navigate]);
 
-  const pagarPsicologia = async () => {
+  const pagarAyurveda = async () => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
     try {
       const res = await axios.post(
-        `${API_URL}/payment/psicologia/checkout`,
+        `${API_URL}/payment/ayurveda/checkout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -86,7 +87,7 @@ export default function MetodoPsicologia() {
       const status = err?.response?.status;
       setPagoError(
         status === 403
-          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
+          ? "Necesitas completar el pago de Psicología antes de adquirir Ayurveda."
           : err?.response?.data?.message || err?.message || "Error desconocido",
       );
       setPagoLoading(false);
@@ -99,7 +100,7 @@ export default function MetodoPsicologia() {
     try {
       await axios.post(
         `${API_URL}/payment/test/unlock`,
-        { scope: "psicologia" },
+        { scope: "ayurveda" },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       setSuscrito(true);
@@ -107,12 +108,6 @@ export default function MetodoPsicologia() {
     } catch (err: any) {
       setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
-  };
-
-  // Continuar a la página de Problema.
-  const irAProblema = () => {
-    if (!suscrito) { setPagoOpen(true); return; }
-    navigate(`/metodo/psicologia/${experiencia.id}/problema`);
   };
 
   if (loading) {
@@ -127,31 +122,31 @@ export default function MetodoPsicologia() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
           <MetodoStepHeader
-            icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Vuelve"
-            pageLabel="1/10"
-            bgColor={`${neuropsicologiaBg}dd`}
-            color={neuropsicologiaTxt}
-            nom={neuropsicologiaNom}
+            icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
+            title="Equilibra"
+            pageLabel="1/—"
+            bgColor={`${ayurvedaBg}dd`}
+            color={ayurvedaTxt}
+            nom={ayurvedaNom}
             mb={0}
-            boxShadow={glowHeader}
-            prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/cursos") }}
+            prev={{ label: "← Compromiso", onClick: () => navigate("/metodo/psicologia/linea-de-vida/compromiso") }}
+            extra={ilustracionesBtn}
             next={{
-              label: "Problema →",
-              onClick: irAProblema,
+              label: "Comenzar →",
+              onClick: () => navigate("/metodo/ayurveda/test"),
             }}
           />
 
-          {/* ── Intro contemplativa (misma fuerza que el header: sin velo) ── */}
+          {/* ── Intro contemplativa ── */}
           <Box
             position="relative"
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={azulBorde}
+            border={ayurvedaBorde}
             boxShadow={glowPanel}
           >
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
@@ -162,22 +157,22 @@ export default function MetodoPsicologia() {
                 mb={5}
                 style={{ textShadow: INK_SHADOW }}
               >
-                Vuelve a tu historia
+                Vuelve a tu naturaleza
               </Text>
               <Text
                 color={TINTA}
                 fontSize={{ base: "sm", md: "md" }}
                 lineHeight="1.8"
-                opacity={0.72}
+                opacity={0.78}
                 maxW="560px"
                 mx="auto"
               >
-                Antes de comprender tu mente, hay que recordar la Vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
+                El Ayurveda enseña que cada persona nace con una constitución única —su dosha— y que la salud es el equilibrio de esa naturaleza. Esta tercera etapa de El Recorrido es para reconocer tu constitución, entender tus desequilibrios y aprender a vivir en armonía contigo mismo.
               </Text>
             </Box>
           </Box>
 
-          {/* ── Disparador del aviso: abre el popup en mitad de la página ── */}
+          {/* ── Disparador del aviso ── */}
           <Box
             as="button"
             onClick={() => setAvisoOpen(true)}
@@ -203,31 +198,31 @@ export default function MetodoPsicologia() {
         </Flex>
       </Flex>
 
-      <AyudaRecorrido pagina="inicio" />
-
       <SiteFooter />
 
-      <PagoPsicologiaModal
+      <PagoAyurvedaModal
         isOpen={pagoOpen && !suscrito}
-        onClose={() => setPagoOpen(false)}
-        onPagar={pagarPsicologia}
+        onClose={() => { setPagoOpen(false); navigate("/home"); }}
+        onPagar={pagarAyurveda}
         loading={pagoLoading}
         error={pagoError}
         onTest={testPagos ? testUnlock : undefined}
       />
+
+      {ilustracionesModal}
 
       {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}
       <Modal isOpen={avisoOpen} onClose={() => setAvisoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
         <ModalOverlay bg="rgba(40,20,8,0.62)" sx={{ backdropFilter: "blur(6px)" }} />
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" />
             <ModalCloseButton color={TINTA} zIndex={3} />
             <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
               <Flex direction="column" gap={4}>
                 <Flex align="center" justify="center" gap={2.5}>
                   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="28px" h="28px" fill={TINTA} flexShrink={0}
-                       style={{ filter: "drop-shadow(0 1px 2px #fbf4e8) drop-shadow(0 0 6px #fbf4e8)" }}>
+                       style={{ filter: `drop-shadow(0 1px 2px ${PAPEL}) drop-shadow(0 0 6px ${PAPEL})` }}>
                     <path d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm302-40q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm-40-120h80v-200h-80v200Zm40-100Z" />
                   </Box>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
@@ -238,15 +233,15 @@ export default function MetodoPsicologia() {
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
                       style={{ textShadow: INK_SHADOW }}>
-                  Este recorrido no sustituye una terapia psicológica ni una evaluación profesional.
+                  El Ayurveda es un saber milenario de autoconocimiento, no un sustituto de la medicina.
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Su propósito es ayudarte a ordenar tu historia, comprender mejor tus patrones y construir una narrativa más consciente sobre tu vida.
+                  Su propósito en El Recorrido es ayudarte a observar tu constitución y tus hábitos, y a cuidarte con más conciencia día a día.
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Si estás atravesando un momento de sufrimiento importante o necesitas apoyo especializado, te recomendamos buscar ayuda profesional.
+                  Ante cualquier síntoma o problema de salud, consulta siempre con un profesional sanitario.
                 </Text>
               </Flex>
             </ModalBody>

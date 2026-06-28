@@ -30,6 +30,18 @@ export class PaymentController {
     return await this.paymentService.verifyPsicologiaCheckout(sessionId, req.user.userId);
   }
 
+  @Post('ayurveda/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createAyurvedaCheckout(@Req() req: any) {
+    return await this.paymentService.createAyurvedaCheckout(req.user.userId);
+  }
+
+  @Get('ayurveda/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyAyurvedaCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyAyurvedaCheckout(sessionId, req.user.userId);
+  }
+
   // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
   @Get('test/enabled')
   testEnabled() {
@@ -38,7 +50,7 @@ export class PaymentController {
 
   @Post('test/unlock')
   @UseGuards(JwtAuthGuard)
-  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'all' }) {
+  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'all' }) {
     return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
   }
 
