@@ -131,8 +131,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
       nota: "Guardaremos esta respuesta. Cuando termines el recorrido volveremos a ella.",
     },
     cierre: [
-      "*No necesitas apagar tu fuego.*",
-      "*Solo necesitas aprender a dirigirlo.*",
+      "*No necesitas apagar tu fuego, necesitas aprender a dirigirlo.*",
       "Comencemos.",
     ],
   },
@@ -188,8 +187,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
       nota: "Guardaremos esta respuesta. Cuando termines el recorrido volveremos a ella.",
     },
     cierre: [
-      "*No necesitas perder tu calma.*",
-      "*Solo necesitas recordar que la vida también crece cuando cambia.*",
+      "*No necesitas perder tu calma, necesitas recordar que la vida también crece cuando cambia.*",
       "Comencemos.",
     ],
   },

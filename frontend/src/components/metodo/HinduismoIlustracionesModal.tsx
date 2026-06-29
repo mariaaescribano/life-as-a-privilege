@@ -35,7 +35,7 @@ const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen3.png",
     paragraphs: [
-      "Cuando Puruṣa se encuentra con Prakṛti, comienza la manifestación del universo. La primera manifestación es Mahat o Buddhi, la inteligencia cósmica. Mahat representa el orden y el principio organizador del universo. De Mahat surge Ahaṃkāra, el principio de individualización o ego. Gracias a él aparece la noción de «yo», permitiendo que la unidad se experimente y manifieste como múltiples seres y objetos.",
+      "Cuando Puruṣa se encuentra con Prakṛti, comienza la manifestación del universo. La primera manifestación es Mahat o Buddhi, la inteligencia cósmica. De Mahat surge Ahaṃkāra, el ego. Gracias a él aparece la noción de «yo», permitiendo que la unidad se experimente y manifieste como múltiples seres y objetos.",
     ],
   },
   {

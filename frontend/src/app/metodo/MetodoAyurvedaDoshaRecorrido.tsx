@@ -13,6 +13,7 @@ import {
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
+  tcmNomLink,
 } from "../../GlobalVariables";
 import { DOSHA_INTRO, type DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 import { DOSHA_DESCUBRE } from "../../hardCoded/metodo/doshaDescubre";
@@ -107,6 +108,14 @@ export default function MetodoAyurvedaDoshaRecorrido() {
 
   const compromiso: string = d?.doshaCuidarte?.[doshaKey]?.compromiso || "";
 
+  // Día ideal que el usuario construyó en «Crea tu día».
+  const diaBloquesRaw: any[] = Array.isArray(d?.doshaDia?.[doshaKey]?.bloques) ? d.doshaDia[doshaKey].bloques : [];
+  const diaBloques = [...diaBloquesRaw]
+    .filter((b) => (b?.actividad && b.actividad.trim()) || (Array.isArray(b?.alimentos) && b.alimentos.length > 0) || b?.hora)
+    .sort((a, b) => (a.hora || "99").localeCompare(b.hora || "99"));
+
+  const irMedChina = () => navigate(`/aprendizaje/cursos/${tcmNomLink}`);
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -123,7 +132,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             mb={0}
             prev={{ label: "← Cursos", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cursos`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Inicio →", onClick: () => navigate("/home") }}
+            next={{ label: "Med. China →", onClick: irMedChina }}
           />
 
           {/* ── HERO ── */}
@@ -178,40 +187,64 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             </Panel>
           )}
 
-          {/* ── Mensaje de cierre ── */}
+          {/* ── Tu día ideal ── */}
           <Panel color={meta.color}>
-            <Flex direction="column" gap={4}>
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" lineHeight="1.4" style={{ textShadow: INK_SHADOW }}>
-                Esto es lo que te has propuesto.
+            <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" lineHeight="1.3" mb={2} style={{ textShadow: INK_SHADOW }}>
+              Este es el día ideal que te has propuesto
+            </Text>
+            <Box h="1px" w="60%" mx="auto" mb={6} bgGradient={`linear(to-r, transparent, ${ayurvedaTxt}66, transparent)`} />
+            {diaBloques.length > 0 ? (
+              <Flex direction="column" gap={4}>
+                {diaBloques.map((b, i) => (
+                  <Flex key={i} align="flex-start" gap={4}>
+                    <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} minW={{ base: "48px", md: "58px" }} flexShrink={0} mt="2px">
+                      {b.hora || "—"}
+                    </Text>
+                    <Box>
+                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
+                        {b.actividad || (b.comida ? "Comida" : "Momento")}
+                      </Text>
+                      {b.comida && Array.isArray(b.alimentos) && b.alimentos.length > 0 && (
+                        <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
+                          {b.alimentos.join(" · ")}
+                        </Text>
+                      )}
+                    </Box>
+                  </Flex>
+                ))}
+              </Flex>
+            ) : (
+              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" lineHeight="1.8">
+                Aún no has creado tu día ideal. Vuelve a «Crea tu día» para diseñarlo.
               </Text>
-              <Separador />
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9">
-                Gracias a la <Box as="span" fontWeight="700">Astrología</Box> ya sabes tus nudos y tus dones.
-              </Text>
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9">
-                Gracias a la <Box as="span" fontWeight="700">Psicología</Box> sabes cómo enfrentarte a ellos.
-              </Text>
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9">
-                Gracias a la <Box as="span" fontWeight="700">Ayurveda</Box> puedes empezar a encarnar tu verdad, dejar de hacerte daño y ser tu mejor versión.
-              </Text>
-            </Flex>
+            )}
           </Panel>
 
-          {/* ── Volver al inicio ── */}
-          <Box
-            as="button"
-            onClick={() => navigate("/home")}
-            mt={1}
-            px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
-            bg={meta.color} color="#fff"
-            fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
-            cursor="pointer"
-            boxShadow={`0 0 26px ${meta.color}88`} transition="all 0.2s"
-            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
-            _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
-          >
-            Volver al inicio
-          </Box>
+          {/* ── Cierre · A por todas ── */}
+          {/* <Panel color={meta.color}>
+            <Flex direction="column" align="center" textAlign="center" gap={4}>
+              <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" maxW="560px">
+                Enhorabuena por llegar hasta aquí. 
+              </Text>
+              <Text color={meta.color} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
+                ¡A por todas!
+              </Text>
+              <Box
+                as="button"
+                onClick={irMedChina}
+                mt={2}
+                px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
+                bg={meta.color} color="#fff"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                cursor="pointer"
+                boxShadow={`0 0 26px ${meta.color}88`} transition="all 0.2s"
+                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
+              >
+                Med. China →
+              </Box>
+            </Flex>
+          </Panel> */}
         </Flex>
       </Flex>
 

@@ -26,7 +26,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
     intro: [
       "Ahora ya conoces mejor tu naturaleza.",
       "La siguiente pregunta es sencilla.",
-      "**¿Qué hace que pierdas tu equilibrio?**",
+      "**¿Qué hábitos o costumbres te desequilibran?**",
       "En Ayurveda no enfermamos de un día para otro.",
       "Primero aparecen pequeños cambios que, si se mantienen en el tiempo, terminan afectando al cuerpo y a la mente.",
       "En una persona Vata, estos suelen ser los desencadenantes más frecuentes.",
@@ -95,8 +95,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
       nota: "Lo recuperaremos al final del recorrido.",
     },
     cierre: [
-      "*El equilibrio no aparece de golpe.*",
-      "*Se construye con pequeñas decisiones repetidas cada día.*",
+      "*El equilibrio no aparece sin más, se construye con pequeñas decisiones repetidas cada día.*",
     ],
   },
   pitta: {
@@ -174,8 +173,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
       nota: "Lo recuperaremos al final del recorrido.",
     },
     cierre: [
-      "*El fuego ilumina cuando está equilibrado.*",
-      "*Cuando nunca descansa, termina consumiéndose a sí mismo.*",
+      "*El fuego ilumina cuando está equilibrado, pero cuando nunca descansa, termina consumiéndose a sí mismo.*",
     ],
   },
   kapha: {
@@ -253,8 +251,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
       nota: "Lo recuperaremos al final del recorrido.",
     },
     cierre: [
-      "*La naturaleza nunca permanece completamente quieta.*",
-      "*Cuando tú también vuelves a moverte, recuperas tu equilibrio.*",
+      "*La naturaleza nunca permanece completamente quieta, cuando tú también vuelves a moverte, recuperas tu equilibrio.*",
     ],
   },
 };

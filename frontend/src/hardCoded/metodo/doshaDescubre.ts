@@ -39,8 +39,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     mente: {
       titulo: "Tu mente",
       parrafos: [
-        "Tu mente es rápida.",
-        "Muy rápida.",
+        "Tu mente es muy rápida.",
         "Las ideas aparecen con facilidad y suelen conectar unas con otras de forma casi automática. Tienes facilidad para aprender, imaginar, crear y encontrar soluciones originales.",
         "Tu creatividad es uno de tus mayores dones.",
         "Pero esa misma rapidez también puede hacer que te resulte difícil desconectar, mantener el foco durante mucho tiempo o terminar todo lo que empiezas.",
@@ -81,9 +80,9 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
         "Quieren dejar de pensar tanto.",
         "Quieren ser más organizadas.",
         "Pero el objetivo nunca ha sido ese.",
-        "**No necesitas dejar de ser creativo.**",
-        "**Necesitas aprender a sostener esa creatividad.**",
-        "Porque cuando Vata encuentra estabilidad, su imaginación se convierte en inspiración, su sensibilidad en intuición y su capacidad de adaptación en una de las mayores fortalezas que una persona puede desarrollar.",
+        "**No necesitas dejar de pensar.**",
+        "**Necesitas aprender a no vivir en tu mente.**",
+        "Cuando Vata encuentra estabilidad, su imaginación se convierte en inspiración, su sensibilidad en intuición y su capacidad de adaptación en una de las mayores fortalezas que una persona puede desarrollar.",
       ],
     },
     reflexion: {
@@ -92,8 +91,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
       nota: "Guardaremos esta respuesta para recuperarla al final del recorrido.",
     },
     cierre: [
-      "*No necesitas perder tu creatividad.*",
-      "*Necesitas darle raíces.*",
+      "*No necesitas perder tu creatividad, necesitas darle raíces.*",
     ],
   },
   pitta: {
@@ -163,8 +161,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
       nota: "Guardaremos esta respuesta para recuperarla al final del recorrido.",
     },
     cierre: [
-      "*No necesitas apagar tu fuego.*",
-      "*Solo necesitas aprender a dirigirlo.*",
+      "*No necesitas apagar tu fuego, necesitas aprender a dirigirlo.*",
     ],
   },
   kapha: {
@@ -233,8 +230,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
       nota: "Guardaremos esta respuesta para recuperarla al final del recorrido.",
     },
     cierre: [
-      "*No necesitas perder tu calma.*",
-      "*Solo necesitas recordar que la vida también crece cuando cambia.*",
+      "*No necesitas perder tu calma, necesitas recordar que la vida también crece cuando cambia.*",
     ],
   },
 };

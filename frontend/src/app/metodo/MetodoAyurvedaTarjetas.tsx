@@ -130,7 +130,7 @@ export default function MetodoAyurvedaTarjetas() {
             maxW="680px"
             lineHeight="1.8"
           >
-            Las tres dosha viven en ti. Estas son las que <Box as="span" fontWeight="700" color="white">predominan</Box> según tu test —brillan con más fuerza—, pero todas forman parte de tu naturaleza.
+            Las tres dosha viven en ti, pero unos predominan más que otros. Descúbrelos primero.
           </Text>
 
           {/* 3 tarjetas */}

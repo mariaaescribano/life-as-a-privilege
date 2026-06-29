@@ -11,7 +11,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { useCursosData } from "../../data/cursosApi";
 import {
-  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaTxt, AyurvedaIcon,
+  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
 } from "../../GlobalVariables";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
@@ -37,7 +37,7 @@ export default function MetodoAyurvedaDoshaCursos() {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
-  const cursos = [...(cursosData[ayurvedaNom]?.cursos ?? [])].sort(
+  const cursos = [...(cursosData[ayurvedaNomLink]?.cursos ?? [])].sort(
     (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
   );
 
@@ -54,7 +54,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Cuidarte", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cuidarte`) }}
+            prev={{ label: "← Tu día", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
             extra={ilustracionesBtn}
             next={{ label: "Tu Recorrido →", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
           />

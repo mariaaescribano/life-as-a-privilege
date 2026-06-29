@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { Check, AlertTriangle } from "lucide-react";
+import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
+import { Lock } from "lucide-react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -87,67 +87,50 @@ function ListItem({ texto, color }: { texto: string; color: string }) {
   );
 }
 
-function SaborRow({ texto, tipo, color }: { texto: string; tipo: "favorable" | "moderar"; color: string }) {
-  const tono = tipo === "favorable" ? color : "#b9770e";
-  return (
-    <Flex align="center" gap={3}>
-      <Flex align="center" justify="center" flexShrink={0} w="26px" h="26px" borderRadius="full"
-            bg={`${tono}1f`} border={`1px solid ${tono}66`}>
-        {tipo === "favorable" ? <Check size={15} color={tono} strokeWidth={2.6} /> : <AlertTriangle size={14} color={tono} strokeWidth={2.2} />}
-      </Flex>
-      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">{texto}</Text>
-    </Flex>
-  );
-}
-
-// Casilla interactiva (local). `tono` controla el color del marcado.
-function CheckRow({ label, checked, onToggle, tono }: { label: string; checked: boolean; onToggle: () => void; tono: string }) {
+function RadioRow({ label, checked, onSelect, color }: { label: string; checked: boolean; onSelect: () => void; color: string }) {
   return (
     <Flex
       as="button"
-      onClick={onToggle}
+      onClick={onSelect}
       align="center"
       gap={3}
       w="100%"
       textAlign="left"
       px={{ base: 4, md: 5 }}
-      py={{ base: 2.5, md: 3 }}
+      py={{ base: 3, md: 3.5 }}
       borderRadius="xl"
-      bg={checked ? `${tono}24` : "rgba(255,251,243,0.4)"}
-      border={`1.5px solid ${checked ? tono : `${TINTA}2a`}`}
+      bg={checked ? `${color}24` : "rgba(255,251,243,0.4)"}
+      border={`1.5px solid ${checked ? color : `${TINTA}2a`}`}
       cursor="pointer"
       transition="all 0.16s"
       sx={{ backdropFilter: "blur(4px)" }}
-      _hover={{ bg: checked ? `${tono}30` : "rgba(255,251,243,0.6)", borderColor: `${tono}99` }}
+      _hover={{ bg: checked ? `${color}30` : "rgba(255,251,243,0.6)", borderColor: `${color}99` }}
     >
       <Box
-        w="22px" h="22px" flexShrink={0} borderRadius="6px"
-        border={`2px solid ${checked ? tono : `${TINTA}66`}`}
-        bg={checked ? tono : "transparent"}
+        w="22px" h="22px" flexShrink={0} borderRadius="full"
+        border={`2px solid ${checked ? color : `${TINTA}66`}`}
+        bg="transparent"
         display="flex" alignItems="center" justifyContent="center" transition="all 0.16s"
       >
-        {checked && (
-          <Box as="svg" viewBox="0 0 24 24" w="14px" h="14px" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </Box>
-        )}
+        {checked && <Box w="11px" h="11px" borderRadius="full" bg={color} />}
       </Box>
       <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.5">{label}</Text>
     </Flex>
   );
 }
 
-export default function MetodoAyurvedaDoshaCuidarte() {
+export default function MetodoAyurvedaDoshaEstilo() {
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
 
   const [loading, setLoading] = useState(true);
-  // Cajas interactivas: se guardan en BD (autoguardado al marcar).
-  const [desequilibranSel, setDesequilibranSel] = useState<string[]>([]);
-  const [equilibranSel, setEquilibranSel] = useState<string[]>([]);
+  const [reflexion, setReflexion] = useState("");
+  const [compromiso, setCompromiso] = useState("");
+  const [guardado, setGuardado] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<Record<string, any>>({});
+  const reflexionRef = useRef<HTMLDivElement>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
 
   useEffect(() => {
@@ -161,23 +144,26 @@ export default function MetodoAyurvedaDoshaCuidarte() {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
+
         const r = await axios.get(`${API_URL}/metodo-ayurveda/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: Record<string, any> = r.data?.data || {};
         dataRef.current = d;
         const slice = d?.doshaCuidarte?.[doshaKey] || {};
-        if (Array.isArray(slice.desequilibranSel)) setDesequilibranSel(slice.desequilibranSel);
-        if (Array.isArray(slice.equilibranSel)) setEquilibranSel(slice.equilibranSel);
+        const prevRef = typeof slice.reflexion === "string" ? slice.reflexion : "";
+        const prevCom = typeof slice.compromiso === "string" ? slice.compromiso : "";
+        setReflexion(prevRef);
+        setCompromiso(prevCom);
+        setGuardado(prevRef.trim().length > 0 || prevCom.length > 0);
       } catch {
         // silencioso
       } finally {
         setLoading(false);
       }
     })();
-  }, [navigate, doshaKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doshaKey]);
 
-  // Autoguardado: persiste ambas listas dentro de doshaCuidarte[dosha], sin pisar
-  // la reflexión/compromiso que guarda la página de Estilo de vida.
-  const persist = async (deseq: string[], equil: string[]) => {
+  const persist = async (refl: string, comp: string) => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token || !doshaKey) return;
@@ -187,7 +173,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
         ...dataRef.current,
         doshaCuidarte: {
           ...(dataRef.current.doshaCuidarte || {}),
-          [doshaKey]: { ...(dataRef.current.doshaCuidarte?.[doshaKey] || {}), desequilibranSel: deseq, equilibranSel: equil },
+          [doshaKey]: { ...(dataRef.current.doshaCuidarte?.[doshaKey] || {}), reflexion: refl, compromiso: comp },
         },
       };
       await axios.patch(`${API_URL}/metodo-ayurveda/${userId}`, { data: next }, { headers: { Authorization: `Bearer ${token}` } });
@@ -199,15 +185,17 @@ export default function MetodoAyurvedaDoshaCuidarte() {
     }
   };
 
-  const toggleDeseq = (op: string) => {
-    const next = desequilibranSel.includes(op) ? desequilibranSel.filter((x) => x !== op) : [...desequilibranSel, op];
-    setDesequilibranSel(next);
-    void persist(next, equilibranSel);
+  const guardarReflexion = async () => {
+    await persist(reflexion, compromiso);
+    setGuardado(true);
   };
-  const toggleEquil = (op: string) => {
-    const next = equilibranSel.includes(op) ? equilibranSel.filter((x) => x !== op) : [...equilibranSel, op];
-    setEquilibranSel(next);
-    void persist(desequilibranSel, next);
+
+  const irSiguiente = () => {
+    if (!guardado) {
+      reflexionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`);
   };
 
   if (loading || !doshaKey) {
@@ -217,8 +205,6 @@ export default function MetodoAyurvedaDoshaCuidarte() {
   const meta = DOSHA_META[doshaKey];
   const Icon = meta.Icon;
   const c = DOSHA_CUIDARTE[doshaKey];
-
-  const irEstilo = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`);
 
   if (!c) {
     return (
@@ -233,7 +219,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={0}
-              prev={{ label: "← Equilibrio", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/desequilibrio`) }}
+              prev={{ label: "← Alimentación", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cuidarte`) }}
               extra={ilustracionesBtn}
             />
             <Panel color={meta.color}>
@@ -241,7 +227,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
                 Estamos preparando esta sección
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
-                Tu alimentación ideal para {meta.label} estará disponible muy pronto.
+                Tu estilo de vida ideal para {meta.label} estará disponible muy pronto.
               </Text>
             </Panel>
           </Flex>
@@ -266,151 +252,162 @@ export default function MetodoAyurvedaDoshaCuidarte() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Equilibrio", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/desequilibrio`) }}
+            prev={{ label: "← Alimentación", onClick: () => { void persist(reflexion, compromiso); navigate(`/metodo/ayurveda/dosha/${doshaKey}/cuidarte`); } }}
             extra={ilustracionesBtn}
-            next={{ label: "Estilo de vida →", onClick: irEstilo }}
+            next={{ label: "Tu día →", onClick: irSiguiente, icon: guardado ? undefined : <Lock size={14} /> }}
           />
 
-          {/* HERO · Alimentación */}
+          {/* HERO · Estilo de vida */}
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
-                {c.alimTitulo}
+                {c.estiloTitulo}
               </Text>
               <Separador />
               <Flex direction="column" gap={3.5} maxW="640px">
-                {c.alimIntro.map((p, i) => (
+                {c.estiloIntro.map((p, i) => (
                   <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{parseRich(p)}</Text>
                 ))}
               </Flex>
             </Flex>
           </Panel>
 
-          {/* Sabores */}
-          <Panel color={meta.color}>
-            <SeccionTitulo color={meta.color}>{c.sabores.titulo}</SeccionTitulo>
-            <Flex direction="column" gap={2} mb={5}>
-              {c.sabores.intro.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
-              ))}
-            </Flex>
-            <Flex direction="column" gap={2.5} mb={5}>
-              {c.sabores.favorables.map((s, i) => (<SaborRow key={i} texto={s} tipo="favorable" color={meta.color} />))}
-            </Flex>
-            <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={3}>{c.sabores.moderarIntro}</Text>
-            <Flex direction="column" gap={2.5}>
-              {c.sabores.moderar.map((s, i) => (<SaborRow key={i} texto={s} tipo="moderar" color={meta.color} />))}
-            </Flex>
-          </Panel>
-
-          {/* Caja interactiva · comidas de hoy que te desequilibran */}
-          {c.desequilibran && (
-            <Panel color={meta.color}>
-              <SeccionTitulo color={meta.color}>{c.desequilibran.titulo}</SeccionTitulo>
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}>
-                {c.desequilibran.intro}
-              </Text>
-              <Flex direction="column" gap={2.5}>
-                {c.desequilibran.opciones.map((op) => (
-                  <CheckRow key={op} label={op} tono="#b9770e" checked={desequilibranSel.includes(op)} onToggle={() => toggleDeseq(op)} />
+          {c.secciones.map((sec, si) => (
+            <Panel key={si} color={meta.color}>
+              <SeccionTitulo color={meta.color}>{sec.titulo}</SeccionTitulo>
+              <Flex direction="column" gap={2.5} mb={sec.items ? 4 : 0}>
+                {sec.parrafos.map((p, i) => (
+                  <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
                 ))}
               </Flex>
-              <Text color={`${TINTA}99`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" mt={4}>
-                {guardando ? "Guardando…" : "Tus selecciones se guardan automáticamente."}
-              </Text>
+              {sec.items && (
+                <Flex direction="column" gap={2.5}>
+                  {sec.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
+                </Flex>
+              )}
+              {sec.cierre && (
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mt={4}>{parseRich(sec.cierre)}</Text>
+              )}
             </Panel>
-          )}
+          ))}
 
-          {/* Lo que aumenta */}
+          {/* Abhyanga */}
           <Panel color={meta.color}>
-            <SeccionTitulo color={meta.color}>{c.alimentosAumentan.titulo}</SeccionTitulo>
-            <Flex direction="column" gap={2.5}>
-              {c.alimentosAumentan.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
-            </Flex>
-          </Panel>
-
-          {/* Cómo comes */}
-          <Panel color={meta.color}>
-            <SeccionTitulo color={meta.color}>{c.comoComes.titulo}</SeccionTitulo>
-            <Flex direction="column" gap={2} mb={4}>
-              {c.comoComes.intro.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
+            <SeccionTitulo color={meta.color}>{c.abhyanga.titulo}</SeccionTitulo>
+            <Flex direction="column" gap={3}>
+              {c.abhyanga.parrafos.map((p, i) => (
+                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{parseRich(p)}</Text>
               ))}
             </Flex>
-            <Flex direction="column" gap={2.5} mb={4}>
-              {c.comoComes.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
-            </Flex>
-            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(c.comoComes.cierre)}</Text>
           </Panel>
 
-          {/* Alimentos que sientan mejor */}
+          {/* Lo que el Ayurveda quiere que recuerdes */}
           <Panel color={meta.color}>
-            <SeccionTitulo color={meta.color}>{c.alimentosBuenos.titulo}</SeccionTitulo>
-            <Flex direction="column" gap={2.5}>
-              {c.alimentosBuenos.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
+            <SeccionTitulo color={meta.color}>{c.recuerda.titulo}</SeccionTitulo>
+            <Flex direction="column" gap={3}>
+              {c.recuerda.parrafos.map((p, i) => (
+                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{parseRich(p)}</Text>
+              ))}
             </Flex>
           </Panel>
 
-          {/* Día de ejemplo */}
-          <Panel color={meta.color}>
-            <SeccionTitulo color={meta.color}>{c.diaEjemplo.titulo}</SeccionTitulo>
-            <Flex direction="column" gap={4}>
-              {c.diaEjemplo.comidas.map((m, i) => (
-                <Box key={i} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }} borderRadius="xl"
-                     bg="rgba(255,251,243,0.4)" border={`1px solid ${meta.color}2a`} sx={{ backdropFilter: "blur(4px)" }}>
-                  <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.1em" textTransform="uppercase" mb={1.5}>
-                    {m.momento}
+          {/* Reflexión + compromiso (SE GUARDAN) */}
+          <Box ref={reflexionRef} w="100%">
+            <Panel color={meta.color}>
+              <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
+              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={4}>{c.reflexion.pregunta}</Text>
+              <Textarea
+                value={reflexion}
+                onChange={(e) => { setReflexion(e.target.value); setGuardado(false); }}
+                placeholder="Escríbela aquí…"
+                w="100%"
+                minH={{ base: "110px", md: "140px" }}
+                bg="rgba(255,251,243,0.45)"
+                border={`1px solid ${meta.color}55`}
+                color={TINTA}
+                borderRadius="xl"
+                px={{ base: 5, md: 6 }}
+                py={{ base: 4, md: 5 }}
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "lg", md: "xl" }}
+                lineHeight="1.8"
+                sx={{ caretColor: TINTA }}
+                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                _hover={{ borderColor: `${meta.color}88` }}
+                _focus={{ borderColor: meta.color, boxShadow: `0 0 0 1px ${meta.color}44`, bg: "rgba(255,251,243,0.6)" }}
+              />
+
+              {c.reflexion.compromisos && c.reflexion.compromisos.length > 0 && (
+                <Box mt={7}>
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={1.5} style={{ textShadow: INK_SHADOW }}>
+                    {c.reflexion.compromisoTitulo}
                   </Text>
-                  {m.texto.map((t, j) => (
-                    <Text key={j} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{t}</Text>
-                  ))}
+                  <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}>
+                    {c.reflexion.compromisoIntro}
+                  </Text>
+                  <Flex direction="column" gap={3}>
+                    {c.reflexion.compromisos.map((op) => (
+                      <RadioRow
+                        key={op}
+                        label={op}
+                        color={meta.color}
+                        checked={compromiso === op}
+                        onSelect={() => { setCompromiso((prev) => (prev === op ? "" : op)); setGuardado(false); }}
+                      />
+                    ))}
+                  </Flex>
                 </Box>
-              ))}
-            </Flex>
-          </Panel>
+              )}
 
-          {/* Caja interactiva · alimentos que te equilibran y puedes tomar hoy */}
-          {c.equilibran && (
-            <Panel color={meta.color}>
-              <SeccionTitulo color={meta.color}>{c.equilibran.titulo}</SeccionTitulo>
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}>
-                {c.equilibran.intro}
-              </Text>
-              <Flex direction="column" gap={2.5}>
-                {c.equilibran.opciones.map((op) => (
-                  <CheckRow key={op} label={op} tono={meta.color} checked={equilibranSel.includes(op)} onToggle={() => toggleEquil(op)} />
-                ))}
+              <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={4}>{c.reflexion.nota}</Text>
+
+              <Flex justify="flex-end" mt={6}>
+                <Box
+                  as="button"
+                  onClick={guardando ? undefined : guardarReflexion}
+                  minW="180px" px={9} py={3} borderRadius="full"
+                  bg={meta.color} color="#fff"
+                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+                  cursor={guardando ? "wait" : "pointer"}
+                  boxShadow={`0 0 18px ${meta.color}55`} transition="all 0.2s"
+                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                  _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 28px ${meta.color}88` }}
+                >
+                  {guardando ? "Guardando…" : guardado ? "Guardado ✓" : "Guardar"}
+                </Box>
               </Flex>
-              <Text color={`${TINTA}99`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" mt={4}>
-                {guardando ? "Guardando…" : "Tus selecciones se guardan automáticamente."}
-              </Text>
             </Panel>
-          )}
+          </Box>
 
-          {/* Cierre alimentación */}
+          {/* Cierre + Continuar */}
           <Panel color={meta.color}>
-            <Flex direction="column" align="center" textAlign="center" gap={2}>
-              {c.alimCierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6">{parseRich(p)}</Text>
+            <Flex direction="column" align="center" textAlign="center" gap={5}>
+              {c.cierre.map((p, i) => (
+                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{parseRich(p)}</Text>
               ))}
+              <Box
+                as="button"
+                onClick={irSiguiente}
+                mt={1}
+                px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
+                bg={guardado ? meta.color : `${meta.color}55`} color="#fff"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                cursor="pointer" opacity={guardado ? 1 : 0.9}
+                boxShadow={guardado ? `0 0 26px ${meta.color}88` : "none"} transition="all 0.2s"
+                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                display="inline-flex" alignItems="center" gap={2.5}
+                _hover={{ transform: "translateY(-2px)", boxShadow: guardado ? `0 0 34px ${meta.color}aa` : `0 0 18px ${meta.color}55` }}
+              >
+                {!guardado && <Lock size={17} />}
+                Tu día →
+              </Box>
+              {!guardado && (
+                <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                  Guarda tu reflexión de arriba para continuar.
+                </Text>
+              )}
             </Flex>
           </Panel>
-
-          {/* Continuar → Estilo de vida */}
-          <Box
-            as="button"
-            onClick={irEstilo}
-            mt={1}
-            px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
-            bg={meta.color} color="#fff"
-            fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
-            cursor="pointer"
-            boxShadow={`0 0 26px ${meta.color}88`} transition="all 0.2s"
-            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
-            _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
-          >
-            Estilo de vida →
-          </Box>
         </Flex>
       </Flex>
 

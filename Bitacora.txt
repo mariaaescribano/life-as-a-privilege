@@ -4,28 +4,9 @@ USAR OBJ+ID : userId
 ---------------------------------------------
 
 
-- poner cursos al final de astrología y de psicología
 
-PSICOLOGIA RECORRIDO
-- Quién o qué / que se pueda guardar sin cerrar
-- dejar mas espacio entre botones y ultimo box de escritura
-- añadir boxes: "Pasó algo importante? (enfermedad, muerte, amistad...), "Qué te gustaba/cómo disfrutabas?", "Recuerdas alguna experiencia?", añadir "Algo más que quieres añadir..."
-- añadir "Se recomienda buscar fotos de todas las edades de tu vida" 
--añadir "Prefieres hacerlo acompañado? Agenda tu llamada"
-
-
-
-- añadir una frase debajo de CONTENIDO
-
-Por ejemplo en Pareja:
-
-Un recorrido por el amor, el conflicto, el compromiso y el cambio dentro de las relaciones.
-
-Y en Autoestima:
-
-Comprende cómo se construye el valor personal y qué necesitamos para desarrollarlo.
-
-
+IDEA Ayurveda: poner pagina para crear tu menu ideal y horario ideal, q el usuario pueda editarlo y descargarlo en pdf" 
+Cada dosha tiene su spropias reomendaciones
 
 
 

@@ -63,6 +63,8 @@ import MetodoAyurvedaDoshaDescubre from "./app/metodo/MetodoAyurvedaDoshaDescubr
 import MetodoAyurvedaDoshaCuerpo from "./app/metodo/MetodoAyurvedaDoshaCuerpo";
 import MetodoAyurvedaDoshaDesequilibrio from "./app/metodo/MetodoAyurvedaDoshaDesequilibrio";
 import MetodoAyurvedaDoshaCuidarte from "./app/metodo/MetodoAyurvedaDoshaCuidarte";
+import MetodoAyurvedaDoshaEstilo from "./app/metodo/MetodoAyurvedaDoshaEstilo";
+import MetodoAyurvedaDoshaDia from "./app/metodo/MetodoAyurvedaDoshaDia";
 import MetodoAyurvedaDoshaCursos from "./app/metodo/MetodoAyurvedaDoshaCursos";
 import MetodoAyurvedaDoshaRecorrido from "./app/metodo/MetodoAyurvedaDoshaRecorrido";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
@@ -151,6 +153,8 @@ export default function App()
       <Route path="/metodo/ayurveda/dosha/:dosha/cuerpo" element={<PrivateRoute><MetodoAyurvedaDoshaCuerpo /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/desequilibrio" element={<PrivateRoute><MetodoAyurvedaDoshaDesequilibrio /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/cuidarte" element={<PrivateRoute><MetodoAyurvedaDoshaCuidarte /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/estilo" element={<PrivateRoute><MetodoAyurvedaDoshaEstilo /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/dia" element={<PrivateRoute><MetodoAyurvedaDoshaDia /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/cursos" element={<PrivateRoute><MetodoAyurvedaDoshaCursos /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/recorrido" element={<PrivateRoute><MetodoAyurvedaDoshaRecorrido /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />

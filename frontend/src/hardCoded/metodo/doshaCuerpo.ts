@@ -26,7 +26,7 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
     intro: [
       "Ahora que comprendes un poco mejor tu forma de ser, es el momento de entender tu cuerpo.",
       "En Ayurveda, el cuerpo y la mente no funcionan por separado.",
-      "Tu constitución también influye en cómo digieres, cómo duermes, cómo respondes al estrés o incluso en la energía que tienes a lo largo del día.",
+      "Tu constitución también influye en cómo digieres, cómo duermes, cómo respondes al estrés y en la energía que tienes a lo largo del día.",
       "Si Vata predomina en ti, es probable que muchas de las siguientes características te resulten familiares.",
     ],
     secciones: [
@@ -35,11 +35,11 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
         parrafos: [
           "Tu energía no suele ser constante.",
           "Hay días en los que sientes que podrías hacerlo todo.",
-          "Y otros en los que necesitas parar sin saber muy bien por qué.",
+          "Y otros en los que necesitas ir más despacio, sin saber muy bien por qué.",
           "No significa que tengas menos energía que otras personas.",
           "Simplemente, **tu energía funciona por impulsos**.",
           "Cuando algo te ilusiona puedes sentirte incansable, pero si no respetas tus límites es fácil que termines agotando tus reservas.",
-          "*Tu cuerpo necesita alternar movimiento y descanso.*",
+          "*Tu cuerpo necesita alternar movimiento rápido y lento.*",
         ],
       },
       {
@@ -47,8 +47,8 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
         parrafos: [
           "La digestión de Vata suele ser variable.",
           "Un día puedes tener mucha hambre y al siguiente casi ninguna.",
-          "También es frecuente que el estrés, las prisas o los cambios de rutina afecten rápidamente a tu sistema digestivo.",
-          "Cuando Vata aumenta pueden aparecer gases, hinchazón, digestiones irregulares o estreñimiento.",
+          "También es frecuente que el estrés, las prisas o los cambios de rutina afecten rápidamente a tu sistema digestivo, aumentando Vata.",
+          "Cuando esto ocurre, pueden aparecer gases, hinchazón, digestiones irregulares o estreñimiento.",
           "Por eso, para una persona Vata, **cómo come suele ser casi tan importante como qué come.**",
         ],
       },
@@ -151,6 +151,7 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
       items: [
         "Sueles tener las manos y los pies calientes.",
         "Toleras peor el calor que el frío.",
+        "Tu cuerpo suele tener una alta temperatura sin necesidad de mucha ropa.",
         "Tu piel puede ser sensible o enrojecerse con facilidad.",
         "Tiendes a tener una musculatura definida.",
         "El hambre aparece con bastante regularidad.",
