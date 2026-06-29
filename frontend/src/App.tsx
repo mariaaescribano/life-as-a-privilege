@@ -59,6 +59,12 @@ import MetodoAyurvedaTest from "./app/metodo/MetodoAyurvedaTest";
 import MetodoAyurvedaResultado from "./app/metodo/MetodoAyurvedaResultado";
 import MetodoAyurvedaTarjetas from "./app/metodo/MetodoAyurvedaTarjetas";
 import MetodoAyurvedaDoshaIntro from "./app/metodo/MetodoAyurvedaDoshaIntro";
+import MetodoAyurvedaDoshaDescubre from "./app/metodo/MetodoAyurvedaDoshaDescubre";
+import MetodoAyurvedaDoshaCuerpo from "./app/metodo/MetodoAyurvedaDoshaCuerpo";
+import MetodoAyurvedaDoshaDesequilibrio from "./app/metodo/MetodoAyurvedaDoshaDesequilibrio";
+import MetodoAyurvedaDoshaCuidarte from "./app/metodo/MetodoAyurvedaDoshaCuidarte";
+import MetodoAyurvedaDoshaCursos from "./app/metodo/MetodoAyurvedaDoshaCursos";
+import MetodoAyurvedaDoshaRecorrido from "./app/metodo/MetodoAyurvedaDoshaRecorrido";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -141,6 +147,12 @@ export default function App()
       <Route path="/metodo/ayurveda/resultado" element={<PrivateRoute><MetodoAyurvedaResultado /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/tarjetas" element={<PrivateRoute><MetodoAyurvedaTarjetas /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha" element={<PrivateRoute><MetodoAyurvedaDoshaIntro /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/comenzar" element={<PrivateRoute><MetodoAyurvedaDoshaDescubre /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/cuerpo" element={<PrivateRoute><MetodoAyurvedaDoshaCuerpo /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/desequilibrio" element={<PrivateRoute><MetodoAyurvedaDoshaDesequilibrio /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/cuidarte" element={<PrivateRoute><MetodoAyurvedaDoshaCuidarte /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/cursos" element={<PrivateRoute><MetodoAyurvedaDoshaCursos /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/recorrido" element={<PrivateRoute><MetodoAyurvedaDoshaRecorrido /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

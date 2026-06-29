@@ -17,7 +17,7 @@ import {
 import { preguntasAyurveda } from "../../hardCoded/espacio/PreguntasAyurveda";
 
 type Dosha = "vata" | "pitta" | "kapha";
-const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
+const GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`;
 
 const DOSHA_CONFIG: Record<Dosha, { label: string; color: string; Icon: any }> = {
   vata:  { label: "Vata",  color: vataColor,  Icon: VataIcon },
@@ -96,15 +96,15 @@ export default function MetodoAyurvedaResultado() {
         >
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Tu resultado"
+            title="Resultado"
             pageLabel="3/—"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Repetir test", onClick: () => navigate("/metodo/ayurveda/test") }}
+            prev={{ label: "← Test", onClick: () => navigate("/metodo/ayurveda/test") }}
             extra={ilustracionesBtn}
-            next={{ label: "Continuar →", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
+            next={{ label: "Tarjetas →", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
           />
 
           {/* Resultado principal — solo el resultado, sin consejos */}
@@ -112,7 +112,6 @@ export default function MetodoAyurvedaResultado() {
             position="relative"
             overflow="hidden"
             w="100%" maxW="850px"
-            border={`2px solid ${cfg.color}55`}
             borderRadius="2xl"
             boxShadow={GLOW}
             textAlign="center"

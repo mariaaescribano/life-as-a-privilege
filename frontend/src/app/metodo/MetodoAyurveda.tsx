@@ -24,8 +24,7 @@ import {
 // Hinduismo (mismo lenguaje visual que el recorrido de Psicología).
 const TINTA = ayurvedaTxt;
 const PAPEL = "#fbf4e8";
-const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${ayurvedaTxt}`;
-const ayurvedaBorde = `1px solid ${ayurvedaTxt}55`;
+const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${ayurvedaBg}`;
 const glowPanel = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`;
 
 export default function MetodoAyurveda() {
@@ -132,7 +131,7 @@ export default function MetodoAyurveda() {
             prev={{ label: "← Compromiso", onClick: () => navigate("/metodo/psicologia/linea-de-vida/compromiso") }}
             extra={ilustracionesBtn}
             next={{
-              label: "Comenzar →",
+              label: "Test →",
               onClick: () => navigate("/metodo/ayurveda/test"),
             }}
           />
@@ -143,7 +142,6 @@ export default function MetodoAyurveda() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={ayurvedaBorde}
             boxShadow={glowPanel}
           >
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" />

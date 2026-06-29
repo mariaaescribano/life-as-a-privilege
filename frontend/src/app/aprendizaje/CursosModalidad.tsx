@@ -275,9 +275,8 @@ export default function CursosModalidad() {
             ) : (
               <SimpleGrid
                 w="100%"
-                maxW="1280px"
                 columns={{ base: 1, sm: 2, lg: 3 }}
-                spacing={{ base: 5, md: 6 }}
+                spacing={{ base: 6, md: 8 }}
                 alignItems="start"
                 sx={{
                   "@keyframes cursoCardIn": {

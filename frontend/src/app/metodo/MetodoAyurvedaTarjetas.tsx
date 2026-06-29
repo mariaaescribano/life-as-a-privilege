@@ -29,21 +29,21 @@ const DOSHA_CARD: Record<Dosha, {
     color: vataColor,
     Icon: VataIcon,
     elemento: "Aire y Éter",
-    esencia: "El movimiento. Rige todo lo que fluye en ti: el aliento, los impulsos, la creatividad y el pensamiento.",
+    esencia: "El movimiento.",
   },
   pitta: {
     label: "Pitta",
     color: pittaColor,
     Icon: PittaIcon,
     elemento: "Fuego y Agua",
-    esencia: "La transformación. Rige el fuego que digiere, decide y convierte una cosa en otra.",
+    esencia: "La transformación.",
   },
   kapha: {
     label: "Kapha",
     color: kaphaColor,
     Icon: KaphaIcon,
     elemento: "Tierra y Agua",
-    esencia: "La estructura. Rige lo que sostiene, nutre y da estabilidad, calma y resistencia.",
+    esencia: "La estructura.",
   },
 };
 const DOSHAS: Dosha[] = ["vata", "pitta", "kapha"];
@@ -112,13 +112,13 @@ export default function MetodoAyurvedaTarjetas() {
         >
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Tus tres energías"
+            title="Las tres energías"
             pageLabel="4/—"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Volver al resultado", onClick: () => navigate("/metodo/ayurveda/resultado") }}
+            prev={{ label: "← Resultado", onClick: () => navigate("/metodo/ayurveda/resultado") }}
             extra={ilustracionesBtn}
           />
 

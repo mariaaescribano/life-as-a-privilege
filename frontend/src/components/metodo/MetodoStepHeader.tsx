@@ -15,7 +15,7 @@ interface StepButton {
 
 interface MetodoStepHeaderProps {
   icon: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
   bgColor: string;     // color sólido del círculo del icono (y fondo si no hay disciplinaBg)
   color: string;       // color del título, botones, borde, glow
   maxW?: string;

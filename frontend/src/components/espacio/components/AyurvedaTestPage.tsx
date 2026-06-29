@@ -42,16 +42,23 @@ export default function AyurvedaTestPage({
   onComplete,
   isGuest = false,
   prevTo = "/aprendizaje/cursos/ayurveda",
+  prevLabel = "← Volver",
   pageLabel,
+  headerNext,
 }: {
   onComplete?: () => Promise<void>;
   isGuest?: boolean;
   /** Destino del botón "← Volver". Por defecto, la página del curso de Ayurveda.
    *  En el recorrido del Método se pasa "/metodo/ayurveda" para no salir del flujo. */
   prevTo?: string;
+  /** Etiqueta del botón "atrás" (en el recorrido se usa la palabra clave de la página). */
+  prevLabel?: string;
   /** Número de paso dentro de El Recorrido (p.ej. "2/—"). Solo se muestra en el
    *  flujo del recorrido; en uso suelto (curso/espacio) se deja sin número. */
   pageLabel?: string;
+  /** Botón "siguiente" del header (recorrido). Si se pasa, "Ilustraciones" se
+   *  mueve al centro (extra) y este botón ocupa la derecha. */
+  headerNext?: { label: string; onClick: () => void; disabled?: boolean; disabledTooltip?: string; icon?: React.ReactNode };
 }) {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
@@ -133,8 +140,9 @@ export default function AyurvedaTestPage({
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={{ base: 0, md: 0 }}
-              prev={{ label: "← Volver", onClick: () => navigate(prevTo) }}
-              next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
+              prev={{ label: prevLabel, onClick: () => navigate(prevTo) }}
+              extra={headerNext ? { label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> } : undefined}
+              next={headerNext ?? { label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
             />
 
             {/* Resultado principal */}
@@ -142,7 +150,6 @@ export default function AyurvedaTestPage({
               position="relative"
               overflow="hidden"
               w="100%" maxW="850px"
-              border={`2px solid ${cfg.color}55`}
               borderRadius="2xl"
               boxShadow={GLOW}
               textAlign="center"
@@ -246,7 +253,6 @@ export default function AyurvedaTestPage({
                   <Box
                     position="relative"
                     overflow="hidden"
-                    border={`1px solid ${ayurvedaTxt}35`}
                     borderRadius="2xl"
                     mb={4}
                     boxShadow={GLOW}
@@ -270,7 +276,6 @@ export default function AyurvedaTestPage({
                   <Box
                     position="relative"
                     overflow="hidden"
-                    border={`1px solid ${ayurvedaTxt}22`}
                     borderRadius="2xl"
                     mb={4}
                     boxShadow={GLOW}
@@ -299,7 +304,6 @@ export default function AyurvedaTestPage({
                           key={key}
                           position="relative"
                           overflow="hidden"
-                          border={`1px solid ${ayurvedaTxt}22`}
                           borderRadius="2xl"
                           boxShadow={GLOW}
                         >
@@ -411,7 +415,6 @@ export default function AyurvedaTestPage({
             overflow="hidden"
             w="100%" maxW="850px"
             mt="20px"
-            border={`1px solid ${ayurvedaTxt}33`}
             borderRadius="2xl"
             boxShadow={GLOW}
           >
@@ -433,10 +436,8 @@ export default function AyurvedaTestPage({
               position="relative"
               overflow="hidden"
               w="100%" maxW="850px"
-              border={`1px solid ${answers[qi] ? `${DOSHA_CONFIG[answers[qi]!].color}55` : `${ayurvedaTxt}22`}`}
               borderRadius="2xl"
               boxShadow={GLOW}
-              transition="border-color 0.3s"
             >
               <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>

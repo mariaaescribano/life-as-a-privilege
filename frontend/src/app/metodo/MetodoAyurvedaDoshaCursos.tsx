@@ -1,0 +1,124 @@
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import axios from "axios";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
+import { useCursosData } from "../../data/cursosApi";
+import {
+  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaTxt, AyurvedaIcon,
+} from "../../GlobalVariables";
+import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
+
+export default function MetodoAyurvedaDoshaCursos() {
+  const navigate = useNavigate();
+  const { dosha } = useParams<{ dosha: string }>();
+  const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
+  const { cursosData, loading } = useCursosData();
+  const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) { navigate("/welcome"); return; }
+    if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
+    axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => { if (!res.data?.ayurveda_suscrito) navigate("/metodo/ayurveda"); })
+      .catch(() => {});
+  }, [navigate, doshaKey]);
+
+  if (!doshaKey) {
+    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  }
+
+  const cursos = [...(cursosData[ayurvedaNom]?.cursos ?? [])].sort(
+    (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+  );
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={6}>
+          <MetodoStepHeader
+            icon={<AyurvedaIcon size={{ base: "40px", md: "52px" }} />}
+            title="Cursos para profundizar"
+            bgColor={`${ayurvedaBg}dd`}
+            color={ayurvedaTxt}
+            nom={ayurvedaNom}
+            mb={0}
+            prev={{ label: "← Cuidarte", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cuidarte`) }}
+            extra={ilustracionesBtn}
+            next={{ label: "Tu Recorrido →", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
+          />
+
+          <Text
+            color="rgba(255,255,255,0.88)"
+            fontSize={{ base: "md", md: "lg" }}
+            fontStyle="italic"
+            textAlign="center"
+            lineHeight="1.8"
+            maxW="680px"
+          >
+            Si quieres profundizar en el Ayurveda, estos cursos te acompañan paso a paso.
+          </Text>
+
+          {loading ? (
+            <SpinnerTurquesa />
+          ) : cursos.length > 0 ? (
+            cursos.length === 1 ? (
+              <Flex
+                w="100%"
+                justify="center"
+                sx={{ "@keyframes cursoCardIn": { from: { opacity: 0, transform: "translateY(40px) scale(0.95)" }, to: { opacity: 1, transform: "translateY(0) scale(1)" } } }}
+              >
+                <Box w="100%" maxW="520px" style={{ opacity: 0, animation: "cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) 0s forwards" }}>
+                  <CursoCardDetalle curso={cursos[0]} bgColor={ayurvedaBg} color={ayurvedaTxt} nom={ayurvedaNom} />
+                </Box>
+              </Flex>
+            ) : (
+              <SimpleGrid
+                w="100%"
+                columns={{ base: 1, sm: 2, lg: 3 }}
+                spacing={{ base: 5, md: 6 }}
+                alignItems="start"
+                sx={{ "@keyframes cursoCardIn": { from: { opacity: 0, transform: "translateY(40px) scale(0.95)" }, to: { opacity: 1, transform: "translateY(0) scale(1)" } } }}
+              >
+                {cursos.map((curso, i) => (
+                  <Box key={curso.id} h="100%" style={{ opacity: 0, animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards` }}>
+                    <CursoCardDetalle curso={curso} bgColor={ayurvedaBg} color={ayurvedaTxt} nom={ayurvedaNom} />
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )
+          ) : (
+            <Box
+              position="relative"
+              w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`}
+            >
+              <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
+                <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8">
+                  Pronto encontrarás aquí los cursos de Ayurveda.
+                </Text>
+              </Box>
+            </Box>
+          )}
+        </Flex>
+      </Flex>
+
+      {ilustracionesModal}
+      <SiteFooter />
+    </Box>
+  );
+}

@@ -19,6 +19,63 @@ import type { Vineta } from "./ComicViewer";
 //  una viñeta placeholder para que el ComicViewer no rompa.)
 // ────────────────────────────────────────────────────────────────────────────
 
+const VINETAS_ORIGEN: Vineta[] = [
+  {
+    src: "/viñetas/hinduismo/origen/origen1.png",
+    paragraphs: [
+      "El Uno se manifiesta en dos principios fundamentales: Puruṣa, la energía masculina y la consciencia pura, y Prakṛti, la energía femenina, la naturaleza primordial o energía creadora.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen2.png",
+    paragraphs: [
+      "Prakṛti está formada por tres cualidades o energías llamadas guṇas: Sattva (armonía y claridad), Rajas (acción y movimiento) y Tamas (estabilidad e inercia).",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen3.png",
+    paragraphs: [
+      "Cuando Puruṣa se encuentra con Prakṛti, comienza la manifestación del universo. La primera manifestación es Mahat o Buddhi, la inteligencia cósmica. Mahat representa el orden y el principio organizador del universo. De Mahat surge Ahaṃkāra, el principio de individualización o ego. Gracias a él aparece la noción de «yo», permitiendo que la unidad se experimente y manifieste como múltiples seres y objetos.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen4.png",
+    paragraphs: [
+      "Desde Ahaṃkāra, cuando predomina Sattva, nacen Manas (la mente), los cinco sentidos de conocimiento y los cinco órganos de acción.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen5.png",
+    paragraphs: [
+      "Desde Ahaṃkāra, cuando predomina Tamas, surgen los cinco Tanmātras o cualidades sutiles: sonido, tacto, forma, sabor y olor. De ellos emergerán posteriormente los cinco grandes elementos.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen6.png",
+    paragraphs: [
+      "Los cinco grandes elementos son: Éter, Aire, Fuego, Agua y Tierra. Constituyen toda la materia del universo.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen7.png",
+    paragraphs: [
+      "Los cinco elementos se combinan para formar los tres doṣhas: Vāta, Pitta y Kapha.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen8.png",
+    paragraphs: [
+      "La interacción de los elementos y los doṣhas da lugar a la naturaleza y al ser humano, que refleja en sí mismo las mismas leyes que gobiernan el universo.",
+    ],
+  },
+  {
+    src: "/viñetas/hinduismo/origen/origen9.png",
+    paragraphs: [
+      "Por ello, el ser humano es considerado un microcosmos: un universo en miniatura que contiene los mismos principios presentes en el macrocosmos. Entendernos es entender el universo y entender el universo es entendernos a nosotros.",
+    ],
+  },
+];
+
 const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/hinduismo/elementos/elementosayurveda.png",
@@ -95,14 +152,16 @@ const VINETAS_DOSHAS: Vineta[] = [
   },
 ];
 
-type Capitulo = "los_elementos" | "los_doshas";
+type Capitulo = "el_origen" | "los_elementos" | "los_doshas";
 
 const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
+  el_origen: VINETAS_ORIGEN,
   los_elementos: VINETAS_ELEMENTOS,
   los_doshas: VINETAS_DOSHAS,
 };
 
 const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
+  { key: "el_origen",     title: "El Origen",     cover: "/viñetas/hinduismo/origen/portada.png"              },
   { key: "los_elementos", title: "Los Elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.png" },
   { key: "los_doshas",    title: "Los Doshas",    cover: "/viñetas/hinduismo/doshas/doshasportada.png"        },
 ];
