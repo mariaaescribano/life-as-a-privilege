@@ -443,7 +443,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes pero complementarias. Cada disciplina aporta una pieza distinta hasta formar una comprensión más profunda y coherente de quién eres.
+          No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes pero complementarias. Cada disciplina aporta una pieza distinta hasta formar una comprensión profunda y coherente de quién eres.
         </Text>
       
       </Flex>
