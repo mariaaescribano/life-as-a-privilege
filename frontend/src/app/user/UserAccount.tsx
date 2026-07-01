@@ -24,6 +24,8 @@ const inputStyles = {
   color: "white",
   borderRadius: "full",
   size: "lg" as const,
+  h: "62px",
+  fontSize: "xl",
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
@@ -218,7 +220,7 @@ export default function UserAccount() {
       {/* ── CONTENIDO ── */}
       <Flex flex={1} justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }}>
         <VStack
-          w={{ base: "100%", sm: "440px" }}
+          w={{ base: "100%", sm: "520px" }}
           spacing={8}
           align="stretch"
           opacity={mounted ? 1 : 0}
@@ -281,7 +283,7 @@ export default function UserAccount() {
           {/* ── Campos ── */}
           <VStack spacing={5} align="stretch">
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 NOMBRE
               </Text>
               <Input
@@ -292,7 +294,7 @@ export default function UserAccount() {
             </Box>
 
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 EMAIL
               </Text>
               <Input
@@ -304,7 +306,7 @@ export default function UserAccount() {
             </Box>
 
             <Box>
-              <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 CONTRASEÑA
               </Text>
               <Input
@@ -400,7 +402,8 @@ export default function UserAccount() {
               as="button"
               onClick={handleLogout}
               color="rgba(255,255,255,0.78)"
-              fontSize="sm"
+              fontSize="lg"
+              fontWeight="600"
               letterSpacing="0.06em"
               bg="transparent"
               cursor="pointer"
@@ -411,76 +414,145 @@ export default function UserAccount() {
               Cerrar sesión
             </Text>
 
-            {!confirmDelete ? (
-              <Text
-                as="button"
-                onClick={() => setConfirmDelete(true)}
-                color="rgba(255,160,160,0.7)"
-                fontSize="xs"
-                letterSpacing="0.06em"
-                fontStyle="italic"
-                bg="transparent"
-                cursor="pointer"
-                textShadow="0 0 6px rgba(255,140,140,0.3)"
-                _hover={{ color: "rgba(255,200,200,1)", textShadow: "0 0 12px rgba(255,140,140,0.55)" }}
-                transition="all 0.22s ease"
-              >
-                Eliminar cuenta
-              </Text>
-            ) : (
-              <Flex direction="column" align="center" gap={3} pt={2}>
-                <Text
-                  color="rgba(255,200,200,0.95)"
-                  fontSize="sm"
-                  textAlign="center"
-                  fontStyle="italic"
-                  textShadow="0 0 8px rgba(255,150,150,0.35)"
-                  maxW="320px"
-                  lineHeight="1.6"
-                >
-                  ¿Estás segura? Esta acción no se puede deshacer.
-                </Text>
-                <Flex gap={3}>
-                  <Text
-                    as="button"
-                    onClick={handleDelete}
-                    color="rgba(255,170,170,0.95)"
-                    fontSize="sm"
-                    fontWeight="600"
-                    letterSpacing="0.08em"
-                    textTransform="uppercase"
-                    bg="transparent"
-                    cursor="pointer"
-                    textShadow="0 0 10px rgba(255,140,140,0.5)"
-                    _hover={{ color: "rgba(255,200,200,1)", textShadow: "0 0 14px rgba(255,140,140,0.7)" }}
-                    transition="all 0.22s ease"
-                  >
-                    Sí, eliminar
-                  </Text>
-                  <Text
-                    as="button"
-                    onClick={() => setConfirmDelete(false)}
-                    color="rgba(255,255,255,0.7)"
-                    fontSize="sm"
-                    fontWeight="600"
-                    letterSpacing="0.08em"
-                    textTransform="uppercase"
-                    bg="transparent"
-                    cursor="pointer"
-                    textShadow="0 0 8px rgba(255,255,255,0.35)"
-                    _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6)" }}
-                    transition="all 0.22s ease"
-                  >
-                    Cancelar
-                  </Text>
-                </Flex>
-              </Flex>
-            )}
+            <Text
+              as="button"
+              onClick={() => setConfirmDelete(true)}
+              color="rgba(255,160,160,0.75)"
+              fontSize="md"
+              letterSpacing="0.06em"
+              fontStyle="italic"
+              bg="transparent"
+              cursor="pointer"
+              textShadow="0 0 6px rgba(255,140,140,0.3)"
+              _hover={{ color: "rgba(255,200,200,1)", textShadow: "0 0 12px rgba(255,140,140,0.55)" }}
+              transition="all 0.22s ease"
+            >
+              Eliminar cuenta
+            </Text>
           </Flex>
         </VStack>
       </Flex>
 
       </Box>
+
+      {/* ── POP-UP ELIMINAR CUENTA ── */}
+      {confirmDelete && (
+        <Flex
+          position="fixed"
+          top={0}
+          left={0}
+          w="100vw"
+          h="100vh"
+          align="center"
+          justify="center"
+          zIndex={1000}
+          bg="rgba(0,0,0,0.55)"
+          backdropFilter="blur(6px)"
+          px={5}
+          onClick={() => setConfirmDelete(false)}
+        >
+          <Flex
+            direction="column"
+            align="center"
+            textAlign="center"
+            onClick={(e) => e.stopPropagation()}
+            w={{ base: "100%", sm: "480px" }}
+            bgGradient="linear(to-b, #5a1522, #3d0d17)"
+            borderRadius="30px"
+            border="1.5px solid rgba(226,140,140,0.5)"
+            boxShadow="0 0 34px rgba(200,70,70,0.4), 0 0 80px rgba(150,40,40,0.28), 0 24px 70px rgba(0,0,0,0.55), inset 0 0 34px rgba(255,180,180,0.06)"
+            px={{ base: 9, md: 14 }}
+            py={{ base: 12, md: 16 }}
+            gap={6}
+          >
+            <Text
+              color="rgba(255,235,235,0.98)"
+              fontSize={{ base: "2xl", md: "3xl" }}
+              fontWeight="700"
+              letterSpacing="0.04em"
+              lineHeight="1.25"
+              textShadow="0 0 18px rgba(255,120,120,0.5), 0 0 40px rgba(255,90,90,0.3)"
+            >
+              ¿Seguro que quieres eliminar tu cuenta?
+            </Text>
+
+            {/* Línea horizontal separadora bajo el título */}
+            <Box
+              w={{ base: "70%", md: "60%" }}
+              h="1px"
+              bgGradient="linear(to-r, transparent, rgba(255,180,180,0.65), transparent)"
+              boxShadow="0 0 10px rgba(255,150,150,0.5)"
+            />
+
+            <Text
+              color="rgba(255,225,225,0.85)"
+              fontSize={{ base: "md", md: "lg" }}
+              lineHeight="1.75"
+              fontStyle="italic"
+              textShadow="0 0 8px rgba(255,150,150,0.2)"
+            >
+              Todos tus datos se borrarán y no podrás recuperarlos. No se devolverá lo abonado. No se guardará tu información personalizada.
+            </Text>
+
+            <Flex gap={4} pt={4} w="100%" justify="center" wrap="wrap">
+              {/* Aceptar (discreto: acción destructiva) */}
+              <Text
+                as="button"
+                onClick={handleDelete}
+                color="rgba(255,225,225,0.82)"
+                fontSize="md"
+                fontWeight="600"
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+                bg="rgba(0,0,0,0.2)"
+                cursor="pointer"
+                px={7}
+                py={3}
+                borderRadius="full"
+                border="1px solid rgba(255,200,200,0.32)"
+                textShadow="0 0 8px rgba(0,0,0,0.4)"
+                _hover={{ color: "white", bg: "rgba(0,0,0,0.32)", borderColor: "rgba(255,210,210,0.6)" }}
+                transition="all 0.22s ease"
+              >
+                Aceptar
+              </Text>
+
+              {/* Cancelar (destacado) */}
+              <Flex
+                as="button"
+                onClick={() => setConfirmDelete(false)}
+                align="center"
+                justify="center"
+                px={10}
+                py={3}
+                borderRadius="full"
+                border="1.5px solid rgba(255,255,255,0.75)"
+                bg="rgba(255,255,255,0.18)"
+                cursor="pointer"
+                boxShadow="0 0 22px rgba(255,255,255,0.45), 0 0 50px rgba(255,210,210,0.32)"
+                _hover={{
+                  bg: "rgba(255,255,255,0.3)",
+                  borderColor: "white",
+                  boxShadow: "0 0 32px rgba(255,255,255,0.65), 0 0 64px rgba(255,200,200,0.45)",
+                  transform: "translateY(-1px)",
+                }}
+                transition="all 0.22s ease"
+              >
+                <Text
+                  color="white"
+                  fontSize="lg"
+                  fontWeight="700"
+                  letterSpacing="0.1em"
+                  textTransform="uppercase"
+                  textShadow="0 0 12px rgba(255,255,255,0.7), 0 0 26px rgba(255,255,255,0.4)"
+                >
+                  Cancelar
+                </Text>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
+      )}
     </Box>
   );
 }

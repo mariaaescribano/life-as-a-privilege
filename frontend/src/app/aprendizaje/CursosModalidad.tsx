@@ -184,7 +184,7 @@ export default function CursosModalidad() {
         <Flex
           direction="column"
           alignItems="center"
-          px={{ base: 5, md: 10, lg: 16 }}
+          px={{ base: 5, md: 8, lg: 10 }}
           pt={{ base: 10, md: 14 }}
           pb={{ base: 14, md: 20 }}
         >
@@ -194,10 +194,11 @@ export default function CursosModalidad() {
             bgColor={`${modalidad.bgColor}dd`}
             color={modalidad.color}
             nom={modalidad.nom}
+            hideCursos
             prev={headerButtons.prev}
             extra={headerButtons.extra}
             next={headerButtons.next}
-            mb={(moduloId === nutricionNomLink || moduloId === tcmNomLink || moduloId === ayurvedaNomLink || moduloId === astrologiaNom || moduloId === culturaNom || moduloId === culturaNomLink /*|| moduloId === fisiologiaNom*/) ? { base: 6, md: 7 } : { base: 10, md: 12 }}
+            mb={{ base: 12, md: 16 }}
           />
 
           {/* ── CÉLULAS DEL CUERPO (solo Fisiología) ── */}
@@ -276,7 +277,7 @@ export default function CursosModalidad() {
               <SimpleGrid
                 w="100%"
                 columns={{ base: 1, sm: 2, lg: 3 }}
-                spacing={{ base: 6, md: 8 }}
+                spacing={{ base: 4, md: 4 }}
                 alignItems="start"
                 sx={{
                   "@keyframes cursoCardIn": {

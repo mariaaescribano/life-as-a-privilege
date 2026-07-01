@@ -135,9 +135,6 @@ export default function TCMTestPage({
   pageBg = "#008080",
   pageTitle,
   pageIcon,
-  instruccionesTitle,
-  instruccionesText,
-  instruccionesNota,
   scaleValues,
   scaleLabels,
   scaleMobileHint,
@@ -160,7 +157,6 @@ export default function TCMTestPage({
   const maxPerQ = Math.max(...scaleValues);
   // Con 3 o menos etiquetas de escala caben las 3 en una sola línea; con más
   // (tests de 4 niveles) dejamos que hagan wrap para no desbordar.
-  const oneLineScale = scaleLabels.length <= 3;
 
   const [answers, setAnswers] = useState<(number | null)[][]>(
     secciones.map((s) => s.preguntas.map(() => null))
@@ -277,78 +273,6 @@ export default function TCMTestPage({
           />
 
           {/* ── INSTRUCCIONES ── */}
-          <Box
-            position="relative"
-            overflow="hidden"
-            w="100%"
-            maxW="850px"
-            boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
-            border="1px solid rgba(218,113,113,0.22)"
-            borderRadius="2xl"
-            mb={4}
-            mt="20px"
-          >
-            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} imageSrc="/img/fondos/tcm-vertical.png" />
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
-              <Text
-                color={tcmTxt}
-                fontSize={{ base: "lg", md: "xl" }}
-                fontWeight="700"
-                letterSpacing="0.2em"
-                textTransform="uppercase"
-                mb={4}
-                textShadow={TXT_SHADOW}
-              >
-                {instruccionesTitle}
-              </Text>
-              <Text
-                color={tcmTxt}
-                fontSize={{ base: "lg", md: "xl" }}
-                lineHeight="1.9"
-                mb={5}
-                textShadow={TXT_SHADOW}
-              >
-                {instruccionesText}
-              </Text>
-              <Flex
-                gap={oneLineScale ? { base: 3, md: 5 } : { base: 4, md: 8 }}
-                flexWrap={oneLineScale ? "nowrap" : "wrap"}
-                justify="flex-start"
-              >
-                {scaleLabels.map((label, i) => (
-                  <Flex key={i} align="center" gap={{ base: 1.5, md: 2 }} flexShrink={oneLineScale ? 1 : 0} minW={0}>
-                    <Box
-                      w={{ base: oneLineScale ? "30px" : "42px", md: "42px" }}
-                      h={{ base: oneLineScale ? "30px" : "42px", md: "42px" }}
-                      borderRadius="full"
-                      border="1.5px solid rgba(218,113,113,0.45)"
-                      display="flex" alignItems="center" justifyContent="center"
-                      bg="rgba(255,255,255,0.10)"
-                      flexShrink={0}
-                    >
-                      <Text color={tcmTxt} fontSize={{ base: oneLineScale ? "sm" : "md", md: "md" }} fontWeight="700" textShadow={TXT_SHADOW}>{i}</Text>
-                    </Box>
-                    <Text color={tcmTxt} fontSize={{ base: oneLineScale ? "sm" : "lg", md: "xl" }} whiteSpace="nowrap" textShadow={TXT_SHADOW}>
-                      {label}
-                    </Text>
-                  </Flex>
-                ))}
-              </Flex>
-              {instruccionesNota && (
-                <Text
-                  color={tcmTxt}
-                  fontSize="sm"
-                  fontStyle="italic"
-                  mt={5}
-                  letterSpacing="0.03em"
-                  textShadow={TXT_SHADOW}
-                >
-                  {instruccionesNota}
-                </Text>
-              )}
-            </Box>
-          </Box>
-
           {/* ── PREGUNTAS ──
               Lista limpia y seguida, SIN agrupar en cajas ni mostrar el nombre
               del patrón ni la suma en vivo (eso sesga las respuestas). El

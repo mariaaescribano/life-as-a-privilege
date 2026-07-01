@@ -84,6 +84,7 @@ const CATEGORIA_CUERPO: Partial<Record<CuerpoKey, CategoriaCuerpo>> = {
   sol: 'planetas', luna: 'planetas', mercurio: 'planetas', venus: 'planetas', marte: 'planetas',
   jupiter: 'planetas', saturno: 'planetas', urano: 'planetas', neptuno: 'planetas', pluton: 'planetas',
   quiron: 'quiron',
+  lilith: 'lilith',
   nodoNorte: 'nodos', nodoSur: 'nodos',
 };
 
@@ -228,6 +229,17 @@ export class CartaNatalService {
       casa: casaDe(quironLon, cusps),
     });
 
+    // 6.c) Lilith (Luna Negra media) = apogeo lunar medio. Es el homólogo del
+    //      Nodo Lunar Medio: se obtiene por fórmula de elementos medios (Meeus),
+    //      no por efemérides, igual que meanLunarNode.
+    const lilithLon = meanLilith(utc);
+    planetas.push({
+      planeta: 'lilith',
+      grado: lilithLon,
+      signoIdx: Math.floor(lilithLon / 30) % 12,
+      casa: casaDe(lilithLon, cusps),
+    });
+
     // 7) Ascendente como cuerpo (para mostrar en UI si interesa)
     planetas.unshift({
       planeta: 'ascendente',
@@ -280,6 +292,26 @@ function meanLunarNode(date: Date): number {
   const T = (JD - 2451545.0) / 36525;
   const omega = 125.04452 - 1934.136261 * T + 0.0020708 * T * T + (T * T * T) / 450000;
   return norm360(omega);
+}
+
+/** Longitud eclíptica de Lilith (Luna Negra MEDIA), grados.
+ *  Lilith media = apogeo lunar medio = longitud media del perigeo + 180°.
+ *  El perigeo medio es (longitud media de la Luna L' − anomalía media M'),
+ *  ambos con los polinomios de Meeus (cap. 47). Es la definición estándar de
+ *  "Mean Black Moon Lilith" que usan Astrodienst/Swiss Ephemeris. */
+function meanLilith(date: Date): number {
+  const JD = date.getTime() / 86400000 + 2440587.5;
+  const T = (JD - 2451545.0) / 36525;
+
+  // Longitud media de la Luna (Meeus 47.1)
+  const Lp = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T
+    + (T * T * T) / 538841 - (T * T * T * T) / 65194000;
+  // Anomalía media de la Luna (Meeus 47.4)
+  const Mp = 134.9633964 + 477198.8675055 * T + 0.0087414 * T * T
+    + (T * T * T) / 69699 - (T * T * T * T) / 14712000;
+
+  // Perigeo medio = Lp − Mp; apogeo (Lilith) = perigeo + 180°
+  return norm360(Lp - Mp + 180);
 }
 
 /** Longitud eclíptica geocéntrica de Quirón (2060 Chiron), grados.

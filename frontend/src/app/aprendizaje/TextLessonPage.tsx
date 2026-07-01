@@ -121,6 +121,9 @@ export default function TextLessonPage() {
             color={color}
             nom={disciplinaNom}
             compact
+            tallTitle
+            hideCursos
+            mb={{ base: 6, md: 7 }}
             prev={{
               label: "←",
               onClick: () => anterior && navigate(anterior.link),
@@ -130,6 +133,7 @@ export default function TextLessonPage() {
             extra={{
               label: "Volver al curso",
               onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`),
+              small: true,
             }}
             next={{
               label: "→",
@@ -159,7 +163,7 @@ export default function TextLessonPage() {
             </Box>
           ) : esTest ? (
             <Box
-              maxW="760px"
+              maxW="850px"
               w="100%"
               position="relative"
               overflow="hidden"
@@ -172,7 +176,7 @@ export default function TextLessonPage() {
             </Box>
           ) : (
             <Box
-              maxW="760px"
+              maxW="850px"
               w="100%"
               position="relative"
               overflow="hidden"
@@ -189,8 +193,12 @@ export default function TextLessonPage() {
                 <Box key={si} position="relative">
                   {si > 0 && <Box position="relative" zIndex={1} h="1px" bg={`${color}44`} />}
                   {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="0" />}
-                  <Box position="relative" zIndex={1} px={{ base: 6, md: 12 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
-                    <Markdown text={sec} color={color} />
+                  <Box position="relative" zIndex={1} px={{ base: 6, md: 0 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
+                    {/* Las líneas de texto ocupan ~82% del ancho de la tarjeta
+                        (centradas) en escritorio; en móvil van a ancho completo. */}
+                    <Box w="100%" maxW={{ base: "100%", md: "82%" }} mx="auto">
+                      <Markdown text={sec} color={color} bigger />
+                    </Box>
                   </Box>
                 </Box>
               ))}

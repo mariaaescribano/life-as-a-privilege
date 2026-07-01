@@ -5,10 +5,11 @@ import { API_URL } from "../../../GlobalVariables";
 import { ZODIAC_SIGNS } from "../astrologiaData";
 import type { CartaNatal } from "./types";
 
-type CuerpoManual = "quiron" | "nodoNorte" | "nodoSur";
+type CuerpoManual = "quiron" | "lilith" | "nodoNorte" | "nodoSur";
 
 const CUERPO_LABEL: Record<CuerpoManual, string> = {
   quiron: "Quirón",
+  lilith: "Lilith",
   nodoNorte: "Nodo Norte",
   nodoSur: "Nodo Sur",
 };
@@ -126,6 +127,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
             sx={{ option: { background: "#0c1230", color } }}
           >
             <option value="quiron">{CUERPO_LABEL.quiron}</option>
+            <option value="lilith">{CUERPO_LABEL.lilith}</option>
             <option value="nodoNorte">{CUERPO_LABEL.nodoNorte}</option>
             <option value="nodoSur">{CUERPO_LABEL.nodoSur}</option>
           </Select>

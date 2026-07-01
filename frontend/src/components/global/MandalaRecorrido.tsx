@@ -1,6 +1,6 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { recorridoContenido } from "../../data/recorridoContenido";
 import {
@@ -216,7 +216,9 @@ const MandalaCircle = ({
   );
 };
 
-// ── Flecha (encima de la foto, en la barra superior del popup) ───────────────
+// ── Flecha de navegación flotante — bien visible sobre cualquier foto ────────
+// Círculo oscuro semitransparente + chevron en el color de la disciplina, con
+// glow suave, para que destaque tanto sobre fotos claras como oscuras.
 const PanelArrow = ({
   side, color, onClick,
 }: {
@@ -226,49 +228,86 @@ const PanelArrow = ({
 }) => (
   <Box
     as="button"
-    onClick={onClick}
-    flexShrink={0}
-    w={{ base: "38px", md: "44px" }}
-    h={{ base: "38px", md: "44px" }}
+    aria-label={side === "left" ? "Anterior" : "Siguiente"}
+    onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClick(); }}
+    position="absolute"
+    top="50%"
+    left={side === "left" ? { base: "8px", md: "20px" } : "auto"}
+    right={side === "right" ? { base: "8px", md: "20px" } : "auto"}
+    transform="translateY(-50%)"
+    zIndex={5}
+    w={{ base: "46px", md: "58px" }}
+    h={{ base: "46px", md: "58px" }}
     borderRadius="full"
-    bg={`${color}1f`}
-    border={`1px solid ${color}66`}
+    bg="rgba(0,0,0,0.5)"
+    border={`1.5px solid ${color}aa`}
     color={color}
     display="flex"
     alignItems="center"
     justifyContent="center"
-    fontSize={{ base: "xl", md: "2xl" }}
-    lineHeight="1"
     cursor="pointer"
-    boxShadow={`0 0 12px ${color}33`}
-    sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none" }}
-    _hover={{ bg: `${color}33`, borderColor: color, boxShadow: `0 0 18px ${color}66` }}
-    _active={{ transform: "scale(0.94)" }}
-    transition="all 0.18s ease"
+    boxShadow={`0 4px 18px rgba(0,0,0,0.5), 0 0 16px ${color}44`}
+    sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
+    _hover={{ bg: "rgba(0,0,0,0.68)", borderColor: color, boxShadow: `0 6px 22px rgba(0,0,0,0.6), 0 0 26px ${color}88` }}
+    _active={{ transform: "translateY(-50%) scale(0.93)" }}
+    transition="background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease"
   >
-    {side === "left" ? "‹" : "›"}
+    <Box
+      as="svg"
+      viewBox="0 0 24 24"
+      w={{ base: "24px", md: "28px" }}
+      h={{ base: "24px", md: "28px" }}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {side === "left" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
+    </Box>
   </Box>
 );
 
-// ── Popup de capturas ─────────────────────────────────────────────────────────
-// Diseño: barra superior con las flechas y el título de la captura, foto grande
-// debajo y puntos indicadores. Se cierra con la X o pulsando fuera.
+// ── Lightbox de capturas ──────────────────────────────────────────────────────
+// Solo la FOTO, sin caja que la sostenga, para que el usuario se fije en ella.
+// Sobre el fondo oscuro flotan: la X de cerrar, las flechas (bien visibles) y
+// un pie discreto con el título de la captura + progreso. La imagen mantiene
+// siempre `contain` (nunca se deforma) y cambia con una transición suave.
 const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) => {
-  const [idx, setIdx] = useState(0);
+  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
   const total = disc.capturas.length;
-  const hasBg = hasDisciplinaBg(disc.nom);
+  const accent = disc.txt;
+  const base = disc.bg;
+  // Color de la luz de la foto: normalmente el fondo de la disciplina, pero en
+  // las de fondo oscuro (Astrología, Medicina China, Fisiología, Cábala y
+  // Cultura) usamos su color de texto para que la luz se note.
+  const glowDisciplinasOscuras = [astrologiaNom, tcmNom, fisiologiaNom, cabalaNom, culturaNom];
+  const glowColor = glowDisciplinasOscuras.includes(disc.nom) ? accent : base;
 
-  const go = (dir: number) => setIdx((p) => (p + dir + total) % total);
+  // `page` puede crecer/decrecer sin límite (para saber la dirección); el índice
+  // real se obtiene con módulo, de modo que la navegación es circular.
+  const idx = ((page % total) + total) % total;
+  const captura = disc.capturas[idx];
+
+  const paginate = (dir: number) => setPage(([p]) => [p + dir, dir]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") setIdx((p) => (p + 1) % total);
-      if (e.key === "ArrowLeft") setIdx((p) => (p - 1 + total) % total);
+      if (e.key === "ArrowRight") setPage(([p]) => [p + 1, 1]);
+      if (e.key === "ArrowLeft") setPage(([p]) => [p - 1, -1]);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [total, onClose]);
+  }, [onClose]);
+
+  const darkShadow = "0 1px 3px rgba(0,0,0,0.9), 0 0 14px rgba(0,0,0,0.7)";
+
+  const slideVariants = {
+    enter: (dir: number) => ({ opacity: 0, x: dir >= 0 ? 50 : -50 }),
+    center: { opacity: 1, x: 0 },
+    exit: (dir: number) => ({ opacity: 0, x: dir >= 0 ? -50 : 50 }),
+  };
 
   return (
     <Box
@@ -278,126 +317,124 @@ const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => voi
       display="flex"
       alignItems="center"
       justifyContent="center"
-      bg="rgba(0,0,0,0.85)"
+      bg="rgba(0,0,0,0.9)"
       sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
       onClick={onClose}
-      px={{ base: 4, md: 10 }}
     >
+      {/* X cerrar */}
       <Box
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        bg={hasBg ? "transparent" : disc.bg + "f0"}
-        border={`1.5px solid ${disc.txt}66`}
-        sx={{ backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)" }}
-        borderRadius="3xl"
-        boxShadow={`0 0 0 1px ${disc.txt}55, 0 0 45px ${disc.txt}66, 0 0 90px ${disc.txt}33, 0 22px 70px rgba(0,0,0,0.6)`}
-        maxW={{ base: "100%", md: "880px" }}
-        w="100%"
-        maxH="94vh"
-        position="relative"
-        overflow="hidden"
+        position="absolute"
+        top={{ base: 4, md: 6 }}
+        right={{ base: 4, md: 6 }}
+        as="button"
+        onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClose(); }}
+        color={accent}
+        fontSize="md"
+        cursor="pointer"
+        bg="rgba(0,0,0,0.5)"
+        border={`1px solid ${accent}66`}
+        borderRadius="full"
+        w="40px"
+        h="40px"
         display="flex"
-        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        boxShadow={`0 2px 12px rgba(0,0,0,0.5)`}
+        _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: accent }}
+        transition="all 0.2s"
+        zIndex={6}
       >
-        {hasBg && <DisciplinaBgLayer nom={disc.nom} borderRadius="3xl" blur />}
-
-        {/* X */}
-        <Box
-          position="absolute"
-          top={5}
-          right={5}
-          as="button"
-          onClick={onClose}
-          color={disc.txt}
-          fontSize="lg"
-          cursor="pointer"
-          bg={disc.txt + "22"}
-          borderRadius="full"
-          w="40px"
-          h="40px"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          _hover={{ bg: disc.txt + "44" }}
-          transition="background 0.2s"
-          zIndex={3}
-        >
-          ✕
-        </Box>
-
-        {/* Barra superior FIJA: flechas + título (siempre visible, nunca la
-            tapa la foto). El pt deja hueco para la X de arriba a la derecha. */}
-        <Flex
-          flexShrink={0}
-          align="center"
-          gap={{ base: 3, md: 4 }}
-          px={{ base: 5, md: 8 }}
-          pt={{ base: "62px", md: "66px" }}
-          pb={{ base: 3, md: 4 }}
-          position="relative"
-          zIndex={1}
-        >
-          {total > 1 && <PanelArrow side="left" color={disc.txt} onClick={() => go(-1)} />}
-          <Flex direction="column" align="center" flex="1" minW={0}>
-            <Text
-              color={disc.txt}
-              fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "sm", md: "md" }}
-              fontStyle="italic"
-              letterSpacing="0.05em"
-              textAlign="center"
-              lineHeight="1.3"
-              textShadow={`0 1px 3px ${disc.bg}f5, 0 0 10px ${disc.bg}aa`}
-            >
-              {disc.capturas[idx].titulo}
-            </Text>
-          </Flex>
-          {total > 1 && <PanelArrow side="right" color={disc.txt} onClick={() => go(1)} />}
-        </Flex>
-
-        {/* Foto — ocupa el espacio central que queda; se ajusta (contain) para
-            no desbordar nunca sobre la barra de flechas ni los puntos. */}
-        <Flex
-          flex="1"
-          minH={0}
-          justify="center"
-          align="center"
-          px={{ base: 5, md: 8 }}
-          position="relative"
-          zIndex={1}
-        >
-          <Image
-            key={disc.capturas[idx].src}
-            src={disc.capturas[idx].src}
-            alt={`${disc.nom} — ${disc.capturas[idx].titulo}`}
-            maxW="100%"
-            maxH={{ base: "calc(90vh - 190px)", md: "calc(94vh - 210px)" }}
-            objectFit="contain"
-            display="block"
-            borderRadius="lg"
-            sx={{ filter: "drop-shadow(0 14px 36px rgba(0,0,0,0.5))" }}
-          />
-        </Flex>
-
-        {/* Puntos indicadores */}
-        {total > 1 && (
-          <Flex flexShrink={0} justify="center" gap={2} wrap="wrap" px={{ base: 5, md: 8 }} py={{ base: 4, md: 5 }} position="relative" zIndex={1}>
-            {disc.capturas.map((_, i) => (
-              <Box
-                key={i}
-                as="button"
-                onClick={() => setIdx(i)}
-                w={i === idx ? "22px" : "8px"}
-                h="8px"
-                borderRadius="full"
-                bg={i === idx ? disc.txt : `${disc.txt}55`}
-                cursor="pointer"
-                transition="all 0.3s ease"
-                boxShadow={i === idx ? `0 0 8px ${disc.txt}aa` : undefined}
-              />
-            ))}
-          </Flex>
-        )}
+        ✕
       </Box>
+
+      {/* Flechas flotantes */}
+      {total > 1 && <PanelArrow side="left" color={accent} onClick={() => paginate(-1)} />}
+      {total > 1 && <PanelArrow side="right" color={accent} onClick={() => paginate(1)} />}
+
+      {/* LA FOTO — protagonista absoluta, sin caja. contain para no deformar. */}
+      <Box
+        position="absolute"
+        inset={0}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        px={{ base: "64px", md: "110px" }}
+        py={{ base: "72px", md: "88px" }}
+        overflow="hidden"
+        onClick={onClose}
+      >
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <MotionBox
+            key={idx}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.28, ease: "easeInOut" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          >
+            <Image
+              src={captura.src}
+              alt={`${disc.nom} — ${captura.titulo}`}
+              maxW={{ base: "100%", md: "620px" }}
+              maxH={{ base: "100%", md: "68vh" }}
+              w="auto"
+              h="auto"
+              objectFit="contain"
+              display="block"
+              borderRadius="lg"
+              sx={{
+                filter: `drop-shadow(0 0 10px ${glowColor}) drop-shadow(0 14px 40px rgba(0,0,0,0.55))`,
+              }}
+            />
+          </MotionBox>
+        </AnimatePresence>
+      </Box>
+
+      {/* PIE discreto — título de la captura + progreso, flotando sobre el fondo */}
+      <Flex
+        position="absolute"
+        bottom={{ base: 4, md: 6 }}
+        left={0}
+        right={0}
+        direction="column"
+        align="center"
+        gap={1}
+        px={{ base: "72px", md: "120px" }}
+        pointerEvents="none"
+        zIndex={4}
+      >
+        <Text
+          color="rgba(255,255,255,0.9)"
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "xs", md: "sm" }}
+          fontStyle="italic"
+          letterSpacing="0.04em"
+          textAlign="center"
+          lineHeight="1.4"
+          noOfLines={2}
+          style={{ textShadow: darkShadow }}
+        >
+          {captura.titulo}
+        </Text>
+        {total > 1 && (
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "2xs", md: "xs" }}
+            fontWeight="600"
+            letterSpacing="0.2em"
+            opacity={0.7}
+            style={{ textShadow: darkShadow }}
+          >
+            {idx + 1} / {total}
+          </Text>
+        )}
+      </Flex>
     </Box>
   );
 };

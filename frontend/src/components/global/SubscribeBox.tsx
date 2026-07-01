@@ -116,7 +116,7 @@ export function SubscribeBox() {
           mb={2}
           textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.22)"
         >
-          Recibe nuevos materiales.
+          No te pierdas nada.
         </Text>
         <Text
           color="rgba(255,255,255,0.65)"

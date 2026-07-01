@@ -5,7 +5,7 @@ import { UserService } from '../user/user.service';
 import { CartaNatalService } from './cartaNatal.service';
 import type { CartaNatal, CuerpoKey, PosicionPlaneta } from './cartaNatal.types';
 
-const CUERPOS_MANUALES: CuerpoKey[] = ['quiron', 'nodoNorte', 'nodoSur'];
+const CUERPOS_MANUALES: CuerpoKey[] = ['quiron', 'lilith', 'nodoNorte', 'nodoSur'];
 
 function norm360Local(deg: number): number {
   return ((deg % 360) + 360) % 360;
@@ -267,7 +267,7 @@ export class MetodoAstrologiaService {
   // ── Ajuste manual de Quirón / nodos en el JSON cacheado ──
   async setCuerpoManual(userId: string, planeta: CuerpoKey, grado: number): Promise<{ success: boolean; message?: string; carta?: CartaNatal }> {
     if (!CUERPOS_MANUALES.includes(planeta)) {
-      return { success: false, message: 'Solo se pueden ajustar manualmente: quiron, nodoNorte, nodoSur' };
+      return { success: false, message: 'Solo se pueden ajustar manualmente: quiron, lilith, nodoNorte, nodoSur' };
     }
     if (!Number.isFinite(grado) || grado < 0 || grado >= 360) {
       return { success: false, message: 'El grado debe ser un número entre 0 y 360' };

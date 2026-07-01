@@ -44,7 +44,15 @@ export default function ModulosPage() {
               bgColor={modalidad.bgColor}
               color={modalidad.color}
               nom={modalidad.nom}
-              prev={volver ? { label: "← Volver a El Recorrido", onClick: () => navigate(volver) } : undefined}
+              hideCursos
+              // Botón de vuelta, discreto (small). Si se llegó desde El Recorrido
+              // se respeta ese destino; en cualquier otro caso vuelve a los cursos
+              // de la propia disciplina (misma clave que la ruta /cursos/:slug).
+              prev={
+                volver
+                  ? { label: "← Volver a El Recorrido", onClick: () => navigate(volver), small: true }
+                  : { label: `← Cursos de ${modalidad.nom}`, onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`), small: true }
+              }
             />
 
             <Box

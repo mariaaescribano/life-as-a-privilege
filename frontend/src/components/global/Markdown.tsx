@@ -1,11 +1,11 @@
 import React from "react";
-import { Box, Heading, Text, Link, List, ListItem } from "@chakra-ui/react";
+import { Box, Heading, Text, Link, List, ListItem, Image } from "@chakra-ui/react";
 
 /* ─────────────────────────────────────────────────────────────────────────
  *  Renderizador de Markdown ligero y sin dependencias.
  *  Soporta:  # ## ###  títulos · **negrita** · *cursiva* · `código`
- *            [texto](url) · listas (- / *) · listas numeradas (1.)
- *            > citas · ---  separador · párrafos.
+ *            [texto](url) · ![alt](ruta) imágenes · listas (- / *)
+ *            listas numeradas (1.) · > citas · ---  separador · párrafos.
  *  Pensado para las lecciones de texto de los cursos (estilo serif / teal).
  * ───────────────────────────────────────────────────────────────────────── */
 
@@ -13,6 +13,8 @@ type MarkdownProps = {
   text: string;
   /** Color principal del texto (suele ser el color de la disciplina). */
   color?: string;
+  /** Sube el cuerpo del texto un escalón (~2px más). Usado en las lecciones. */
+  bigger?: boolean;
 };
 
 // ── Inline: **negrita** o __negrita__, *cursiva* o _cursiva_, `código`, [texto](url) ──
@@ -57,11 +59,13 @@ function parseInline(str: string, color: string): React.ReactNode[] {
   return nodes;
 }
 
-export function Markdown({ text, color = "white" }: MarkdownProps) {
+export function Markdown({ text, color = "white", bigger = false }: MarkdownProps) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
   const blocks: React.ReactNode[] = [];
   let i = 0;
   let key = 0;
+  // Tamaño del cuerpo de texto (párrafos, listas, citas). `bigger` sube un escalón.
+  const bodySize = bigger ? { base: "lg", md: "xl" } : { base: "md", md: "lg" };
 
   const headingProps = {
     color,
@@ -81,6 +85,26 @@ export function Markdown({ text, color = "white" }: MarkdownProps) {
     // Separador horizontal
     if (/^(-{3,}|\*{3,})$/.test(trimmed)) {
       blocks.push(<Box key={key++} h="1px" my={{ base: 6, md: 8 }} bg={`${color}44`} />);
+      i++;
+      continue;
+    }
+
+    // Imagen en su propia línea: ![alt](/ruta-en-public.jpg)
+    // El archivo vive en el proyecto (frontend/public/…); aquí solo va la ruta.
+    const img = /^!\[([^\]]*)\]\(([^)]+)\)$/.exec(trimmed);
+    if (img) {
+      blocks.push(
+        <Box key={key++} my={{ base: 5, md: 7 }} display="flex" justifyContent="center">
+          <Image
+            src={img[2]}
+            alt={img[1]}
+            maxW="100%"
+            borderRadius="lg"
+            display="block"
+            sx={{ filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.4))" }}
+          />
+        </Box>,
+      );
       i++;
       continue;
     }
@@ -108,7 +132,7 @@ export function Markdown({ text, color = "white" }: MarkdownProps) {
       }
       blocks.push(
         <Box key={key++} borderLeft={`3px solid ${color}88`} pl={{ base: 4, md: 5 }} py={1} my={{ base: 4, md: 5 }}>
-          <Text color={color} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.9" opacity={0.9}>
+          <Text color={color} fontSize={bodySize} fontStyle="italic" lineHeight="1.9" opacity={0.9}>
             {parseInline(quote.join(" "), color)}
           </Text>
         </Box>,
@@ -126,7 +150,7 @@ export function Markdown({ text, color = "white" }: MarkdownProps) {
       blocks.push(
         <List key={key++} as="ol" styleType="decimal" pl={{ base: 6, md: 7 }} my={{ base: 3, md: 4 }} spacing={2}>
           {items.map((it, j) => (
-            <ListItem key={j} color={color} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
+            <ListItem key={j} color={color} fontSize={bodySize} lineHeight="1.8">
               {parseInline(it, color)}
             </ListItem>
           ))}
@@ -145,7 +169,7 @@ export function Markdown({ text, color = "white" }: MarkdownProps) {
       blocks.push(
         <List key={key++} styleType="disc" pl={{ base: 6, md: 7 }} my={{ base: 3, md: 4 }} spacing={2}>
           {items.map((it, j) => (
-            <ListItem key={j} color={color} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
+            <ListItem key={j} color={color} fontSize={bodySize} lineHeight="1.8">
               {parseInline(it, color)}
             </ListItem>
           ))}
@@ -169,7 +193,7 @@ export function Markdown({ text, color = "white" }: MarkdownProps) {
       i++;
     }
     blocks.push(
-      <Text key={key++} color={color} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" letterSpacing="0.01em" mb={{ base: 4, md: 5 }}>
+      <Text key={key++} color={color} fontSize={bodySize} lineHeight="1.9" letterSpacing="0.01em" mb={{ base: 4, md: 5 }}>
         {parseInline(para.join(" "), color)}
       </Text>,
     );

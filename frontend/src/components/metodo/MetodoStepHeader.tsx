@@ -11,6 +11,8 @@ interface StepButton {
   icon?: React.ReactNode;
   /** Texto que aparece al pasar el ratón cuando está deshabilitado. */
   disabledTooltip?: string;
+  /** Botón más compacto (menos padding y letra), p.ej. «Volver al curso». */
+  small?: boolean;
 }
 
 interface MetodoStepHeaderProps {
@@ -36,25 +38,31 @@ interface MetodoStepHeaderProps {
   step?: { current: number; total: number };
   /** Etiqueta libre de número de página junto al título (p.ej. "2/"). */
   pageLabel?: string;
+  /** Título un poco más grande y con más alto de línea (~15-20px extra),
+   *  p.ej. en la página de lección. No afecta a las páginas que no lo pasen. */
+  tallTitle?: boolean;
+  /** Oculta el botón "Cursos" que Psicología añade por defecto. Útil en páginas
+   *  donde ya se está dentro de un curso (lección, módulos). */
+  hideCursos?: boolean;
   /** Sombra/glow del box completo. Si se pasa, sustituye al glow por defecto
    *  (útil para darle un brillo propio a una página, p.ej. dorado). */
   boxShadow?: string;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
   const btn = (
     <Box
       as="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      px={{ base: 2, sm: 4, md: 7 }}
-      py={{ base: 1.5, md: 2.5 }}
+      px={small ? { base: 2, md: 3.5 } : { base: 3, sm: 5, md: 8 }}
+      py={small ? { base: 1, md: 1.5 } : { base: 2, md: 3 }}
       borderRadius="full"
-      bg={whiteBg ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)"}
-      border={`1px solid ${disabled ? color + "22" : `${color}66`}`}
+      bg={whiteBg ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.1)"}
+      border={`1.5px solid ${disabled ? color + "22" : `${color}aa`}`}
       color={disabled ? `${color}44` : color}
       fontFamily="'EB Garamond', serif"
-      fontSize={{ base: "xs", sm: "sm", md: "md" }}
+      fontSize={small ? { base: "2xs", md: "xs" } : { base: "sm", sm: "md", md: "md" }}
       letterSpacing={{ base: "0.02em", md: "0.05em" }}
       fontStyle="italic"
       cursor={disabled ? "not-allowed" : "pointer"}
@@ -62,7 +70,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       // casi instantáneo al pulsar. background/border/box-shadow son las
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
-      boxShadow={disabled ? "none" : `0 0 6px rgba(255,255,255,0.1), 0 0 13px ${color}24`}
+      boxShadow={disabled ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px rgba(255,255,255,0.05)`}
       // En el header de TCM (whiteBg) el texto lleva una sombra granate oscura
       // para contrastar con el fondo de la disciplina.
       textShadow={whiteBg && !disabled ? "0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85), 0 0 5px rgba(58,10,10,0.8)" : undefined}
@@ -147,6 +155,8 @@ export function MetodoStepHeader({
   step,
   pageLabel,
   boxShadow,
+  tallTitle = false,
+  hideCursos = false,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
@@ -158,6 +168,8 @@ export function MetodoStepHeader({
   // En todo el recorrido de Psicología, el header lleva un botón "Cursos" que
   // abre la pantalla completa con los cursos orientativos de la disciplina.
   const isPsico = headerNom === neuropsicologiaNom;
+  // El botón "Cursos" de Psicología puede ocultarse en páginas concretas.
+  const showPsicoCursos = isPsico && !hideCursos;
   const [cursosOpen, setCursosOpen] = useState(false);
   // bgColor suele venir con alpha pegado (#RRGGBBaa). Para el textShadow
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
@@ -215,13 +227,17 @@ export function MetodoStepHeader({
               <Text
                 color={color}
                 fontSize={
-                  compact
-                    ? (titleWraps ? { base: "md", md: "2xl" } : { base: "xl", md: "3xl" })
-                    : (titleWraps ? { base: "lg", md: "4xl" } : { base: "2xl", md: "5xl" })
+                  tallTitle
+                    ? (compact
+                        ? (titleWraps ? { base: "lg", md: "3xl" } : { base: "2xl", md: "4xl" })
+                        : (titleWraps ? { base: "xl", md: "5xl" } : { base: "3xl", md: "6xl" }))
+                    : (compact
+                        ? (titleWraps ? { base: "md", md: "2xl" } : { base: "xl", md: "3xl" })
+                        : (titleWraps ? { base: "lg", md: "4xl" } : { base: "2xl", md: "5xl" }))
                 }
                 fontWeight="700"
                 letterSpacing="0.05em"
-                lineHeight="1.3"
+                lineHeight={tallTitle ? "1.75" : "1.3"}
                 textAlign="center"
                 whiteSpace="nowrap"
                 overflow="hidden"
@@ -256,29 +272,29 @@ export function MetodoStepHeader({
         </Flex>
 
         {/* Espacio entre título y botones (antes había una raya separadora) */}
-        {(prev || next || extra || isPsico) && <Box h={{ base: 2.5, md: 3 }} />}
+        {(prev || next || extra || showPsicoCursos) && <Box h={{ base: 5, md: 7 }} />}
 
         {/* Botones contextuales — siempre en una sola fila horizontal,
             tanto en móvil como en desktop. Si no caben, los botones se
             encogen (gracias al flex:0 1 auto + minW:0 del StepBtn) en lugar
             de saltar a una segunda fila. */}
-        {(prev || next || extra || isPsico) && (
+        {(prev || next || extra || showPsicoCursos) && (
           <Flex
             justify="center"
             align="center"
-            gap={{ base: 2, md: 3 }}
+            gap={{ base: 3, md: 6 }}
             direction="row"
             wrap="nowrap"
           >
             {prev && <StepBtn {...prev} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra && <StepBtn {...extra} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {isPsico && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {showPsicoCursos && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {next && <StepBtn {...next} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
           </Flex>
         )}
       </Box>
     </Box>
-    {isPsico && <CursosPsicologiaModal isOpen={cursosOpen} onClose={() => setCursosOpen(false)} />}
+    {showPsicoCursos && <CursosPsicologiaModal isOpen={cursosOpen} onClose={() => setCursosOpen(false)} />}
     </>
   );
 }

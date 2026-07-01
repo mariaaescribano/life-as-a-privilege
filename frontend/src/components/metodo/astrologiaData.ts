@@ -19,7 +19,7 @@ export type CuerpoKey =
   | "ascendente"
   | "sol"        | "luna"      | "mercurio"  | "venus"   | "marte"
   | "jupiter"    | "saturno"   | "urano"     | "neptuno" | "pluton"
-  | "quiron"     | "nodoNorte" | "nodoSur";
+  | "quiron"     | "lilith"    | "nodoNorte" | "nodoSur";
 
 export interface Cuerpo {
   key: CuerpoKey;
@@ -42,6 +42,7 @@ export const CUERPOS: Cuerpo[] = [
   { key: "neptuno",    label: "Neptuno",    symbol: "♆", color: "#6090FF", conCasa: true  },
   { key: "pluton",     label: "Plutón",     symbol: "♇", color: "#B080E0", conCasa: true  },
   { key: "quiron",     label: "Quirón",     symbol: "⚷", color: "#A8324A", conCasa: true  },
+  { key: "lilith",     label: "Lilith",     symbol: "⚸", color: "#8A5FA8", conCasa: true  },
   { key: "nodoNorte",  label: "Nodo Norte", symbol: "☊", color: "#7BB8E0", conCasa: true  },
   { key: "nodoSur",    label: "Nodo Sur",   symbol: "☋", color: "#C8806A", conCasa: true  },
 ];

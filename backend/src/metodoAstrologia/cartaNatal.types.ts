@@ -2,7 +2,7 @@ export type CuerpoKey =
   | 'ascendente'
   | 'sol' | 'luna' | 'mercurio' | 'venus' | 'marte'
   | 'jupiter' | 'saturno' | 'urano' | 'neptuno' | 'pluton'
-  | 'quiron' | 'nodoNorte' | 'nodoSur';
+  | 'quiron' | 'lilith' | 'nodoNorte' | 'nodoSur';
 
 export type TipoAspecto =
   | 'conjuncion' | 'oposicion' | 'trigono' | 'cuadratura' | 'sextil'

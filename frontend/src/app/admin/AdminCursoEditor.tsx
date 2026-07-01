@@ -451,7 +451,7 @@ export default function AdminCursoEditor() {
                               </Box>
                             </Flex>
                             <Text color={color} fontSize="xs" mb={2} opacity={0.9} style={{ textShadow: TEXT_SHADOW }}>
-                              Negrita: <Box as="span" fontWeight="700">**texto**</Box> · Cursiva: <Box as="span" fontStyle="italic">*texto*</Box> o <Box as="span" fontStyle="italic">_texto_</Box> · Raya de separación: <Box as="span" fontFamily="monospace">---</Box> (en una línea aparte)
+                              Negrita: <Box as="span" fontWeight="700">**texto**</Box> · Cursiva: <Box as="span" fontStyle="italic">*texto*</Box> o <Box as="span" fontStyle="italic">_texto_</Box> · Raya de separación: <Box as="span" fontFamily="monospace">---</Box> (en una línea aparte) · Imagen: <Box as="span" fontFamily="monospace">![](/img/cursos/mi-foto.jpg)</Box> (el archivo va en <Box as="span" fontFamily="monospace">frontend/public/</Box>)
                             </Text>
                             {previewOn ? (
                               <Box bg="rgba(0,0,0,0.25)" borderRadius="md" p={4} minH="120px">

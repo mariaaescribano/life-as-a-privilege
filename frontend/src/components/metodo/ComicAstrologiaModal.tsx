@@ -35,7 +35,7 @@ const VINETAS_PLANETAS: Vineta[] = [
     src: "/viñetas/astrologia/planetas/luna.png",
     paragraphs: [
       "La Luna fue lo que nos cobijó los primeros años de Vida.",
-      "Nuestro más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y donde descansamos.",
+      "Nuestra más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y donde descansamos.",
     ],
   },
   {
