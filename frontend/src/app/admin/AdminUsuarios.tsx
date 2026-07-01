@@ -62,9 +62,9 @@ export default function AdminUsuarios() {
         <Box w="100%" maxW="720px">
           <AdminDisciplinaHeader disc={disc} subtitle="Usuarios del recorrido" />
 
-          {!disc.editable && (
+          {!disc.disponible && (
             <Text color="rgba(255,220,180,0.85)" fontSize="sm" fontStyle="italic" mb={4}>
-              Esta disciplina aún no tiene editor de contenido. Puedes ver la lista, pero la edición llegará pronto.
+              Esta disciplina aún no tiene panel de administración. Puedes ver la lista, pero la lectura llegará pronto.
             </Text>
           )}
 

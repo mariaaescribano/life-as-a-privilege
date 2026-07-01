@@ -106,7 +106,7 @@ export default function AdminHome() {
                           style={{ textShadow: `0 1px 6px ${d.bg}, 0 2px 14px ${d.bg}, 0 0 18px ${d.txt}66` }}>
                       {d.nombre}
                     </Text>
-                    {!d.editable && (
+                    {!d.disponible && (
                       <Text color={`${d.txt}cc`} fontSize="xs" fontStyle="italic" mt={0.5}
                             style={{ textShadow: `0 1px 6px ${d.bg}` }}>
                         próximamente

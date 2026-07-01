@@ -41,6 +41,8 @@ import MetodoAstrologiaCursos from "./app/metodo/MetodoAstrologiaCursos";
 import AdminHome from "./app/admin/AdminHome";
 import AdminUsuarios from "./app/admin/AdminUsuarios";
 import AdminAstrologiaEditor from "./app/admin/AdminAstrologiaEditor";
+import AdminPsicologiaLectura from "./app/admin/AdminPsicologiaLectura";
+import AdminAyurvedaLectura from "./app/admin/AdminAyurvedaLectura";
 import AdminEditorPlaceholder from "./app/admin/AdminEditorPlaceholder";
 import AdminCursos from "./app/admin/AdminCursos";
 import AdminCursoEditor from "./app/admin/AdminCursoEditor";
@@ -132,6 +134,8 @@ export default function App()
       <Route path="/admin/cursos" element={<PrivateRoute><AdminCursos /></PrivateRoute>} />
       <Route path="/admin/cursos/:id" element={<PrivateRoute><AdminCursoEditor /></PrivateRoute>} />
       <Route path="/admin/astrologia/:userId" element={<PrivateRoute><AdminAstrologiaEditor /></PrivateRoute>} />
+      <Route path="/admin/psicologia/:userId" element={<PrivateRoute><AdminPsicologiaLectura /></PrivateRoute>} />
+      <Route path="/admin/ayurveda/:userId" element={<PrivateRoute><AdminAyurvedaLectura /></PrivateRoute>} />
       <Route path="/admin/:disciplina/:userId" element={<PrivateRoute><AdminEditorPlaceholder /></PrivateRoute>} />
       <Route path="/admin/:disciplina" element={<PrivateRoute><AdminUsuarios /></PrivateRoute>} />
       <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -106,6 +106,11 @@ export default function MetodoPsicologiaHuellas() {
 
   const edad = typeof data.edad === "number" ? data.edad : 0;
   const anios = useMemo(() => aniosConRecuerdo(data, edad), [data, edad]);
+  // ¿Ha marcado al menos una huella? Hasta entonces no se desbloquea «Nudos».
+  const algunaHuella = useMemo(
+    () => Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0),
+    [data],
+  );
   const totalSpreads = Math.max(1, Math.ceil(anios.length / 2));
   const spreadActual = Math.min(spread, totalSpreads - 1);
   const izquierda = anios[spreadActual * 2];
@@ -115,121 +120,6 @@ export default function MetodoPsicologiaHuellas() {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
   if (!exp) return null;
-
-  // ── Render de una página (un año) del cuaderno ──
-  // `scrollIzquierda`: pone la barra de scroll en el borde IZQUIERDO (página
-  // izquierda del cuaderno), como en un libro abierto.
-  const Pagina = ({ edadAno, scrollIzquierda }: { edadAno: number | undefined; scrollIzquierda?: boolean }) => {
-    if (edadAno === undefined) {
-      // Página en blanco (cuando el nº de años es impar).
-      return <Box flex="1" display={{ base: "none", md: "block" }} />;
-    }
-    const items = itemsDelAno(data, edadAno, exp.preguntasPorAno);
-    return (
-      <Box
-        flex="1"
-        minW={0}
-        position="relative"
-        overflow="hidden"
-        h={{ base: "60vh", md: "440px" }}
-        bgColor={neuropsicologiaBg}
-        bgImage="url('/img/fondos/psciologia.png')"
-        bgSize="cover"
-        bgPosition="center"
-      >
-        {/* Contenido con scroll interno SIEMPRE visible (móvil y ordenador),
-            barra gruesa para que quede clarísimo que se puede desplazar. */}
-        <Box
-          position="relative"
-          zIndex={1}
-          h="100%"
-          overflowY="scroll"
-          overscrollBehavior="contain"
-          sx={{
-            direction: scrollIzquierda ? "rtl" : "ltr",
-            scrollbarWidth: "auto",
-            scrollbarColor: `${TINTA} ${neuropsicologiaBg}`,
-            "&::-webkit-scrollbar": { width: "14px" },
-            "&::-webkit-scrollbar-track": { background: `${TINTA}1f` },
-            "&::-webkit-scrollbar-thumb": { background: TINTA, borderRadius: "10px", border: `3px solid ${neuropsicologiaBg}`, backgroundClip: "content-box" },
-          }}
-        >
-         <Box sx={{ direction: "ltr" }}>
-          {/* Cabecera del año — con su propia "foto" de psicología */}
-          <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
-            <FotoFranja posicion="center top" />
-            <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center" gap={3}>
-              <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
-                Año {edadAno}{"  "}
-                <Box as="span" fontWeight="500" opacity={0.6}>{anoNatural(edad, edadAno, anioActual)}</Box>
-              </Text>
-            </Flex>
-          </Box>
-
-          {/* Cada ítem es su propia franja con una "foto" nueva; entre franjas,
-              una raya de separación bien visible. */}
-          {items.length === 0 ? (
-            <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}55`}>
-              <FotoFranja posicion="center 40%" />
-              <Text position="relative" zIndex={1} color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                Sin recuerdos escritos este año.
-              </Text>
-            </Box>
-          ) : (
-            items.map((it, i) => {
-              const marcado = itemMarcado(data, edadAno, it);
-              return (
-                <Box
-                  key={`${i}-${it}`}
-                  position="relative"
-                  px={{ base: 6, md: 8 }}
-                  py={{ base: 4, md: 5 }}
-                  borderTop={`2px solid ${TINTA}55`}
-                >
-                  {/* "Foto" de esta franja (posición distinta por ítem) */}
-                  <FotoFranja posicion={`center ${(i * 29) % 100}%`} />
-                  <Flex position="relative" zIndex={1} align="flex-start" gap={3}>
-                    {/* ◈ para marcar que dejó huella (color psicología) */}
-                    <Box
-                      as="button"
-                      onClick={() => toggleItem(edadAno, it)}
-                      flexShrink={0}
-                      mt="2px"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      lineHeight="1"
-                      fontSize={{ base: "20px", md: "22px" }}
-                      color={TINTA}
-                      opacity={marcado ? 1 : 0.4}
-                      cursor="pointer"
-                      transition="all 0.2s ease"
-                      style={{ textShadow: marcado ? `0 1px 2px #fbf4e8, 0 0 9px ${TINTA}99` : `0 1px 2px #fbf4e8` }}
-                      _hover={{ opacity: 1, transform: "scale(1.18)" }}
-                      title={marcado ? "Dejó huella (pulsa para quitar)" : "Marcar que dejó huella"}
-                      aria-label="Marcar que dejó huella"
-                    >
-                      ◈
-                    </Box>
-                    <Text flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontWeight={marcado ? "600" : "400"} style={{ textShadow: INK_SHADOW }}>
-                      {it}
-                    </Text>
-                  </Flex>
-                </Box>
-              );
-            })
-          )}
-          {/* Franja final vacía: respiración elegante, como un ítem más */}
-          {items.length > 0 && (
-            <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 7, md: 9 }} borderTop={`2px solid ${TINTA}55`}>
-              <FotoFranja posicion="center 85%" />
-            </Box>
-          )}
-         </Box>
-        </Box>
-      </Box>
-    );
-  };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -248,7 +138,12 @@ export default function MetodoPsicologiaHuellas() {
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Línea de Vida", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
-            next={{ label: "Nudos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
+            next={{
+              label: "Nudos →",
+              onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`),
+              disabled: !algunaHuella,
+              disabledTooltip: "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
+            }}
           />
 
           <Flex direction="column" align="center" textAlign="center" gap={2} maxW="620px">
@@ -280,7 +175,15 @@ export default function MetodoPsicologiaHuellas() {
                 border={azulBorde}
                 boxShadow={glowPanel}
               >
-                <Pagina edadAno={izquierda} scrollIzquierda />
+                <Pagina
+                  edadAno={izquierda}
+                  scrollIzquierda
+                  data={data}
+                  edad={edad}
+                  anioActual={anioActual}
+                  preguntasPorAno={exp.preguntasPorAno}
+                  onToggle={toggleItem}
+                />
 
                 {/* Lomo del cuaderno con anillas: opaco (cubre del todo la unión,
                     no asoma el fondo), monta sobre ambas páginas. Vertical en
@@ -316,7 +219,14 @@ export default function MetodoPsicologiaHuellas() {
                   ))}
                 </Flex>
 
-                <Pagina edadAno={derecha} />
+                <Pagina
+                  edadAno={derecha}
+                  data={data}
+                  edad={edad}
+                  anioActual={anioActual}
+                  preguntasPorAno={exp.preguntasPorAno}
+                  onToggle={toggleItem}
+                />
               </Flex>
 
               {/* Botones para pasar de página */}
@@ -342,6 +252,167 @@ export default function MetodoPsicologiaHuellas() {
     </Box>
   );
 }
+
+// ── Página (un año) del cuaderno ──
+// Se define A NIVEL DE MÓDULO (no dentro del componente padre) para que su
+// identidad sea estable: al marcar una huella el padre re-renderiza, pero React
+// reutiliza esta instancia en vez de remontarla, así el scroll interno NO salta
+// arriba de golpe.
+// `scrollIzquierda`: pone la barra de scroll en el borde IZQUIERDO (página
+// izquierda del cuaderno), como en un libro abierto.
+const Pagina = ({
+  edadAno,
+  scrollIzquierda,
+  data,
+  edad,
+  anioActual,
+  preguntasPorAno,
+  onToggle,
+}: {
+  edadAno: number | undefined;
+  scrollIzquierda?: boolean;
+  data: LineaDeVidaData;
+  edad: number;
+  anioActual: number;
+  preguntasPorAno: { key: string }[];
+  onToggle: (edadAno: number, texto: string) => void;
+}) => {
+  if (edadAno === undefined) {
+    // Página en blanco (cuando el nº de años es impar).
+    return <Box flex="1" display={{ base: "none", md: "block" }} />;
+  }
+  const items = itemsDelAno(data, edadAno, preguntasPorAno);
+
+  // La franja final vacía solo debe aparecer cuando el contenido desborda la
+  // página (es decir, cuando SÍ hay scroll). Con listas cortas que caben sin
+  // desplazamiento, ese renglón vacío colgaría feo, así que lo ocultamos.
+  // Medimos el contenido (sin la franja) contra la altura visible del scroll.
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [hayScroll, setHayScroll] = useState(false);
+  useLayoutEffect(() => {
+    const medir = () => {
+      const cont = contentRef.current;
+      const scroll = scrollRef.current;
+      if (!cont || !scroll) return;
+      setHayScroll(cont.offsetHeight > scroll.clientHeight);
+    };
+    medir();
+    window.addEventListener("resize", medir);
+    return () => window.removeEventListener("resize", medir);
+  }, [items.length]);
+
+  return (
+    <Box
+      flex="1"
+      minW={0}
+      position="relative"
+      overflow="hidden"
+      h={{ base: "60vh", md: "440px" }}
+      bgColor={neuropsicologiaBg}
+      bgImage="url('/img/fondos/psciologia.png')"
+      bgSize="cover"
+      bgPosition="center"
+    >
+      {/* Contenido con scroll interno SIEMPRE visible (móvil y ordenador),
+          barra gruesa para que quede clarísimo que se puede desplazar. */}
+      <Box
+        ref={scrollRef}
+        position="relative"
+        zIndex={1}
+        h="100%"
+        overflowY="scroll"
+        overscrollBehavior="contain"
+        sx={{
+          direction: scrollIzquierda ? "rtl" : "ltr",
+          scrollbarWidth: "auto",
+          scrollbarColor: `${TINTA} ${neuropsicologiaBg}`,
+          "&::-webkit-scrollbar": { width: "14px" },
+          "&::-webkit-scrollbar-track": { background: `${TINTA}1f` },
+          "&::-webkit-scrollbar-thumb": { background: TINTA, borderRadius: "10px", border: `3px solid ${neuropsicologiaBg}`, backgroundClip: "content-box" },
+        }}
+      >
+       <Box sx={{ direction: "ltr" }}>
+        {/* Contenido medible (cabecera + ítems), SIN la franja final: así la
+            medida de scroll no se pisa a sí misma. */}
+        <Box ref={contentRef}>
+        {/* Cabecera del año — con su propia "foto" de psicología */}
+        <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
+          <FotoFranja posicion="center top" />
+          <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center" gap={3}>
+            <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
+              Año {edadAno}{"  "}
+              <Box as="span" fontWeight="500" opacity={0.6}>{anoNatural(edad, edadAno, anioActual)}</Box>
+            </Text>
+          </Flex>
+        </Box>
+
+        {/* Cada ítem es su propia franja con una "foto" nueva; entre franjas,
+            una raya de separación bien visible. */}
+        {items.length === 0 ? (
+          <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}55`}>
+            <FotoFranja posicion="center 40%" />
+            <Text position="relative" zIndex={1} color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
+              Sin recuerdos escritos este año.
+            </Text>
+          </Box>
+        ) : (
+          items.map((it, i) => {
+            const marcado = itemMarcado(data, edadAno, it);
+            return (
+              <Box
+                key={`${i}-${it}`}
+                position="relative"
+                px={{ base: 6, md: 8 }}
+                py={{ base: 4, md: 5 }}
+                borderTop={`2px solid ${TINTA}55`}
+              >
+                {/* "Foto" de esta franja (posición distinta por ítem) */}
+                <FotoFranja posicion={`center ${(i * 29) % 100}%`} />
+                <Flex position="relative" zIndex={1} align="flex-start" gap={3}>
+                  {/* ◈ para marcar que dejó huella (color psicología) */}
+                  <Box
+                    as="button"
+                    onClick={() => onToggle(edadAno, it)}
+                    flexShrink={0}
+                    mt="2px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    lineHeight="1"
+                    fontSize={{ base: "20px", md: "22px" }}
+                    color={TINTA}
+                    opacity={marcado ? 1 : 0.4}
+                    cursor="pointer"
+                    transition="all 0.2s ease"
+                    style={{ textShadow: marcado ? `0 1px 2px #fbf4e8, 0 0 9px ${TINTA}99` : `0 1px 2px #fbf4e8` }}
+                    _hover={{ opacity: 1, transform: "scale(1.18)" }}
+                    title={marcado ? "Dejó huella (pulsa para quitar)" : "Marcar que dejó huella"}
+                    aria-label="Marcar que dejó huella"
+                  >
+                    ◈
+                  </Box>
+                  <Text flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontWeight={marcado ? "600" : "400"} style={{ textShadow: INK_SHADOW }}>
+                    {it}
+                  </Text>
+                </Flex>
+              </Box>
+            );
+          })
+        )}
+        </Box>
+        {/* Franja final vacía: respiración elegante, como un ítem más. Solo
+            cuando hay scroll; con listas cortas quedaría un renglón colgando. */}
+        {items.length > 0 && hayScroll && (
+          <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 7, md: 9 }} borderTop={`2px solid ${TINTA}55`}>
+            <FotoFranja posicion="center 85%" />
+          </Box>
+        )}
+       </Box>
+      </Box>
+    </Box>
+  );
+};
 
 // "Foto" de acuarela para una franja (cabecera o ítem). Cada franja muestra
 // una zona distinta de la imagen → sensación de una foto nueva entre rayas.
