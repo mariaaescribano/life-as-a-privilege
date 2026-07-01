@@ -133,21 +133,22 @@ export function PagoMetodoModal({ isOpen, onClose, onPagar, loading, error, onTe
                 as="button"
                 onClick={loading ? undefined : onTest}
                 alignSelf="center"
-                mt={1}
-                px={5}
-                py={2}
+                mt={2}
+                px={8}
+                py={2.5}
                 borderRadius="full"
-                bg="rgba(255,255,255,0.08)"
-                color="rgba(255,255,255,0.8)"
-                border="1px dashed rgba(255,255,255,0.4)"
+                bg="rgba(255,255,255,0.16)"
+                color="white"
+                border="1.5px dashed rgba(255,255,255,0.75)"
                 fontFamily="'EB Garamond', serif"
-                fontSize="sm"
-                letterSpacing="0.04em"
+                fontSize={{ base: "md", md: "lg" }}
+                fontWeight="600"
+                letterSpacing="0.05em"
                 cursor={loading ? "not-allowed" : "pointer"}
                 transition="all 0.2s"
-                _hover={loading ? {} : { bg: "rgba(255,255,255,0.16)", color: "white" }}
+                _hover={loading ? {} : { bg: "rgba(255,255,255,0.28)", transform: "translateY(-1px)" }}
               >
-                Probar sin pagar · modo test
+                💳 Pago de prueba (sin cobro real)
               </Box>
             )}
 

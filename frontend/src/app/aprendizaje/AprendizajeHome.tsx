@@ -4,7 +4,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { type CourseEntry } from "./NuevosCursosPage";
-import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import {
@@ -130,7 +130,7 @@ export const AprendizajeHome = () => {
         flex={1}
         direction="column"
         align="center"
-        px={{ base: 5, md: 10, lg: 16 }}
+        px={{ base: 5, md: 8, lg: 10 }}
         pt={{ base: 20, md: 24 }}
         pb={{ base: 24, md: 32 }}
       >
@@ -179,24 +179,14 @@ export const AprendizajeHome = () => {
                 <SpinnerTurquesa fullScreen={false} />
               </Box>
             ) : (
-              <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={{ base: 6, md: 8 }}>
-                {allCourses.map((entry, i) => (
-                  <Box
-                    key={`${entry.modalidad.nom}-${entry.curso.id}`}
-                    h="100%"
-                    opacity={cardsReveal.visible ? 1 : 0}
-                    transform={cardsReveal.visible ? "translateY(0)" : "translateY(24px)"}
-                    transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
-                  >
-                    <CursoCardDetalle
-                      curso={entry.curso}
-                      color={entry.modalidad.color}
-                      bgColor={entry.modalidad.bgColor}
-                      nom={entry.modalidad.nom}
-                    />
-                  </Box>
-                ))}
-              </SimpleGrid>
+              <CursosGrid
+                items={allCourses.map((entry) => ({
+                  curso: entry.curso,
+                  color: entry.modalidad.color,
+                  bgColor: entry.modalidad.bgColor,
+                  nom: entry.modalidad.nom,
+                }))}
+              />
             )}
           </Box>
         )}

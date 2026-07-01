@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../GlobalVariables";
-import { CUERPOS, type Cuerpo, type CuerpoKey } from "../astrologiaData";
+import { CUERPOS, soloClavesPlaneta, type Cuerpo, type CuerpoKey } from "../astrologiaData";
 
 export interface Valor {
   signo?: string;
@@ -59,7 +59,10 @@ export function useCartaPlanetas() {
           navigate("/metodo/astrologia", { replace: true });
           return;
         }
-        if (res.data?.data) setCarta(res.data.data);
+        // Cargamos SOLO las claves de planeta. El JSONB `data` también guarda
+        // otras cosas (aspectos/casas leídos para el progreso); si las
+        // arrastráramos, al reguardar podríamos pisar un valor más reciente.
+        if (res.data?.data) setCarta(soloClavesPlaneta<Valor>(res.data.data));
       } catch {
         navigate("/metodo/astrologia", { replace: true });
         return;

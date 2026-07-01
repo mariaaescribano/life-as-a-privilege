@@ -3,12 +3,7 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-
-
-IDEA Ayurveda: poner pagina para crear tu menu ideal y horario ideal, q el usuario pueda editarlo y descargarlo en pdf" 
-Cada dosha tiene su spropias reomendaciones
-
-
+en /admin/disciplina es muy importante q los headers se mantengan del color, sin poner opacidad. Además, esto t ellevará mucho rato, pero de cada usuario, necesito poder ver TODO lo que hana escrito. En Astrologia esto ya está, pero en psicologia y ayurveda no. Como son respuestas que rellena el propio usuario, yo solo tengo q leerlas, nada más. Haz que cada pagina para leer sea elegante, tenga coherencia y los img de cada disciplina
 
 
 CONECTANDO CON SUPABASE

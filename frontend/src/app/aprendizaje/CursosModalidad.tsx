@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Flex, Text, SimpleGrid,
+  Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -8,6 +8,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { HinduismoIlustracionesModal } from "../../components/metodo/HinduismoIlustracionesModal";
 import { TCMIlustracionesModal } from "../../components/metodo/TCMIlustracionesModal";
@@ -274,36 +275,14 @@ export default function CursosModalidad() {
                 </Box>
               </Flex>
             ) : (
-              <SimpleGrid
-                w="100%"
-                columns={{ base: 1, sm: 2, lg: 3 }}
-                spacing={{ base: 4, md: 4 }}
-                alignItems="start"
-                sx={{
-                  "@keyframes cursoCardIn": {
-                    from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
-                    to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
-                  },
-                }}
-              >
-                {cursos.map((curso, i) => (
-                  <Box
-                    key={curso.id}
-                    h="100%"
-                    style={{
-                      opacity: 0,
-                      animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards`,
-                    }}
-                  >
-                    <CursoCardDetalle
-                      curso={curso}
-                      bgColor={modalidad.bgColor}
-                      color={modalidad.color}
-                      nom={modalidad.nom}
-                    />
-                  </Box>
-                ))}
-              </SimpleGrid>
+              <CursosGrid
+                items={cursos.map((curso) => ({
+                  curso,
+                  color: modalidad.color,
+                  bgColor: modalidad.bgColor,
+                  nom: modalidad.nom,
+                }))}
+              />
             )
           ) : null}
 

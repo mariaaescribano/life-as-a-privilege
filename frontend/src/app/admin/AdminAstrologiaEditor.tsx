@@ -5,7 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { Glifo } from "../../components/metodo/Glifo";
-import { cuerpoByKey } from "../../components/metodo/astrologiaData";
+import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import {
   infoCasa,
@@ -146,6 +146,16 @@ export default function AdminAstrologiaEditor() {
 
   const cusps = carta?.cusps ?? [];
   const listaAspectos: Aspecto[] = carta?.aspectos ?? [];
+
+  // Mismo agrupado que /metodo/astrologia/aspectos: recorremos el orden canónico
+  // de CUERPOS y, por cada planeta, sus aspectos (cada aspecto aparece bajo sus
+  // dos planetas). Descartamos los planetas sin aspectos.
+  const gruposAspectosPorPlaneta = CUERPOS.map((c) => ({
+    cuerpo: c,
+    items: listaAspectos
+      .filter((a) => a.a === c.key || a.b === c.key)
+      .map((a) => ({ aspecto: a, otro: a.a === c.key ? a.b : a.a })),
+  })).filter((g) => g.items.length > 0);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -296,34 +306,48 @@ export default function AdminAstrologiaEditor() {
                 </Desplegable>
 
                 {/* ── ASPECTOS (desplegable) ── */}
+                {/* Agrupados por planeta EXACTAMENTE igual que la página del usuario
+                    (/metodo/astrologia/aspectos): cada aspecto une dos planetas, así
+                    que aparece en los dos boxes (el del planeta A y el del B). La
+                    lectura se comparte por `aspectoKey`, de modo que editarla en un
+                    sitio la actualiza en el otro. Así el admin muestra los MISMOS
+                    aspectos que ve el usuario, sin que falte ninguno. */}
                 <Desplegable titulo="Los aspectos" count={listaAspectos.length} open={aspectosOpen} onToggle={() => setAspectosOpen((o) => !o)}>
-                  <Flex direction="column" gap={4}>
-                    {listaAspectos.map((a, idx) => {
-                      const ca = cuerpoByKey(a.a);
-                      const cb = cuerpoByKey(a.b);
-                      const key = aspectoKey(a);
-                      return (
-                        <Box key={`${key}-${idx}`}>
-                          <Flex align="center" gap={2} mb={1.5} wrap="wrap">
-                            {ca && <Glifo symbol={ca.symbol} color={ca.color} size={18} />}
-                            <Text color="#ffffff" fontSize="md" style={{ textShadow: GLOW }}>{ASPECTO_SYMBOL[a.tipo]}{"︎"}</Text>
-                            {cb && <Glifo symbol={cb.symbol} color={cb.color} size={18} />}
-                            <Text color="#ffffff" fontSize="sm" ml={1} style={{ textShadow: GLOW }}>
-                              {ca?.label} {ASPECTO_LABEL[a.tipo].toLowerCase()} {cb?.label}
-                            </Text>
-                          </Flex>
-                          <Textarea
-                            value={aspectos[key] ?? ""}
-                            onChange={(e) => setAspectos((p) => ({ ...p, [key]: e.target.value }))}
-                            placeholder={`Lectura del aspecto ${ca?.label} ${ASPECTO_LABEL[a.tipo].toLowerCase()} ${cb?.label}…`}
-                            rows={3}
-                            bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
-                            fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
-                            _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
-                          />
-                        </Box>
-                      );
-                    })}
+                  <Flex direction="column" gap={6}>
+                    {gruposAspectosPorPlaneta.map(({ cuerpo, items }) => (
+                      <Box key={cuerpo.key}>
+                        <Flex align="center" gap={2} mb={2}>
+                          <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={22} />
+                          <Text color="#ffffff" fontSize="lg" fontWeight="700" style={{ textShadow: GLOW }}>{cuerpo.label}</Text>
+                        </Flex>
+                        <Flex direction="column" gap={4} pl={{ base: 2, md: 4 }}>
+                          {items.map(({ aspecto: a, otro }, idx) => {
+                            const co = cuerpoByKey(otro);
+                            const key = aspectoKey(a);
+                            return (
+                              <Box key={`${cuerpo.key}-${key}-${idx}`}>
+                                <Flex align="center" gap={2} mb={1.5} wrap="wrap">
+                                  <Text color="#ffffff" fontSize="md" style={{ textShadow: GLOW }}>{ASPECTO_SYMBOL[a.tipo]}{"︎"}</Text>
+                                  {co && <Glifo symbol={co.symbol} color={co.color} size={18} />}
+                                  <Text color="#ffffff" fontSize="sm" ml={1} style={{ textShadow: GLOW }}>
+                                    {ASPECTO_LABEL[a.tipo]} {co?.label}
+                                  </Text>
+                                </Flex>
+                                <Textarea
+                                  value={aspectos[key] ?? ""}
+                                  onChange={(e) => setAspectos((p) => ({ ...p, [key]: e.target.value }))}
+                                  placeholder={`Lectura del aspecto ${cuerpo.label} ${ASPECTO_LABEL[a.tipo].toLowerCase()} ${co?.label}…`}
+                                  rows={3}
+                                  bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
+                                  fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+                                  _focus={{ borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` }}
+                                />
+                              </Box>
+                            );
+                          })}
+                        </Flex>
+                      </Box>
+                    ))}
                     {listaAspectos.length === 0 && (
                       <Text color="rgba(255,255,255,0.6)" fontStyle="italic" fontSize="sm">Esta carta no tiene aspectos calculados.</Text>
                     )}

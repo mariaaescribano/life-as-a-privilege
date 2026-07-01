@@ -173,6 +173,17 @@ export class MetodoAstrologiaService {
         MetodoAstrologiaService.CAMPOS_PATCH_PERMITIDOS.has(k),
       ),
     );
+
+    // `data` es un JSONB que acumula cosas distintas (planetas elegidos por el
+    // usuario, aspectos/casas leídos para el progreso, etc.). Un upsert lo
+    // reemplazaría entero, así que lo FUSIONAMOS a nivel de primer nivel con lo
+    // que ya hay guardado para no pisar otras claves.
+    if (filtered.data && typeof filtered.data === 'object') {
+      const row = await this.getMetodoAstrologia(userId);
+      const prev = (row?.data ?? {}) as Record<string, any>;
+      filtered.data = { ...prev, ...(filtered.data as Record<string, any>) };
+    }
+
     const update = { ...filtered, updated_at: new Date().toISOString() };
     const { error } = await this.databaseService.getClient()
       .from('metodo_astrologia')

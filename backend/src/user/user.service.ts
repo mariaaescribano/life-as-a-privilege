@@ -329,12 +329,66 @@ export class UserService {
   }
 
   // --------- Eliminar usuario ---------
+  // Borra la cuenta y TODOS los datos relacionados con ese usuario:
+  // sus filas en cada tabla de disciplina/recorrido, sus reservas de llamada
+  // y su foto de perfil en el bucket de storage. La fila de `user` se borra al
+  // final. Cada borrado es best-effort: si una tabla falla, se registra el
+  // error pero se continúa con las demás para no dejar datos huérfanos.
   async deleteUser(id: string) {
-    const { error } = await this.databaseService.getClient()
+    const db = this.databaseService.getClient();
+
+    // Recuperamos email y foto ANTES de borrar la fila de usuario, porque
+    // algunas tablas (bookings) se relacionan por email y la foto vive en storage.
+    const { data: userRows } = await db
       .from('user')
-      .delete()
+      .select('email, img')
       .eq('id', id);
+    const user = userRows?.[0] as { email?: string; img?: string } | undefined;
+
+    // Tablas con datos del usuario, cada una con su columna identificadora.
+    // (Los nombres de columna difieren entre tablas: user_id, userId, userid, idUser…)
+    const relatedTables: { table: string; column: string }[] = [
+      { table: 'metodo_psicologia', column: 'user_id' },
+      { table: 'metodo_astrologia', column: 'user_id' },
+      { table: 'metodo_ayurveda', column: 'user_id' },
+      { table: 'astrologia', column: 'userId' },
+      { table: 'ayurveda', column: 'userId' },
+      { table: 'ayurveda_respuestas', column: 'user_id' },
+      { table: 'nutricion', column: 'userId' },
+      { table: 'tcm', column: 'userId' },
+      { table: 'tcm_respuestas', column: 'user_id' },
+      { table: 'cabala', column: 'idUser' },
+      { table: 'fitoterapia', column: 'idUser' },
+      { table: 'neuroPsicologia', column: 'userid' },
+    ];
+
+    for (const { table, column } of relatedTables) {
+      const { error } = await db.from(table).delete().eq(column, id);
+      if (error) {
+        console.error(`[deleteUser] Error borrando de "${table}" (${column}=${id}):`, error.message);
+      }
+    }
+
+    // Reservas de llamada: se relacionan por email, no por id de usuario.
+    if (user?.email) {
+      const { error } = await db.from('bookings').delete().eq('email', user.email);
+      if (error) console.error('[deleteUser] Error borrando bookings:', error.message);
+    }
+
+    // Foto de perfil en el bucket 'img' (si tiene una subida).
+    if (user?.img) {
+      // La ruta dentro del bucket es lo que va tras '/public/img/'.
+      const path = user.img.split('?')[0].split('/public/img/')[1];
+      if (path) {
+        const { error } = await db.storage.from('img').remove([path]);
+        if (error) console.error('[deleteUser] Error borrando foto de perfil:', error.message);
+      }
+    }
+
+    // Por último, la propia cuenta.
+    const { error } = await db.from('user').delete().eq('id', id);
     if (error) throw error;
-    return { message: 'Cuenta eliminada' };
+
+    return { message: 'Cuenta y datos relacionados eliminados' };
   }
 }

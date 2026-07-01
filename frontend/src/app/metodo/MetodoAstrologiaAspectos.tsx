@@ -14,9 +14,26 @@ import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/
 import { COLOR_ASPECTO } from "../../components/metodo/CartaAstral3D/types";
 import { ASPECTO_LABEL, ASPECTO_SYMBOL, aspectoKey } from "../../components/metodo/casasAspectos";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
- 
+
+// Check pequeño para marcar un elemento ya leído.
+const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
+       style={{ filter: `drop-shadow(0 0 4px ${color}aa)` }}>
+    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+  </Box>
+);
+
+// Candado para los planetas aún bloqueados (desbloqueo secuencial).
+const LockIcon = ({ color, size = 18 }: { color: string; size?: number }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
+       style={{ filter: `drop-shadow(0 0 4px ${color}77)` }}>
+    <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
+  </Box>
+);
+
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
        style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
@@ -46,6 +63,7 @@ function renderParrafos(texto: string, color: string): React.ReactNode {
 interface Row {
   link_carta?: string | null;
   aspectos_texto?: Record<string, string> | null;
+  casas_texto?: Record<string, string> | null;
   retos?: { id: string }[];
 }
 
@@ -56,6 +74,16 @@ export default function MetodoAstrologiaAspectos() {
   const [textos, setTextos] = useState<Record<string, string>>({});
   const [comicOpen, setComicOpen] = useState(false);
   const [abierto, setAbierto] = useState<Aspecto | null>(null);
+  const [casasTexto, setCasasTexto] = useState<Record<string, string>>({});
+  const { leidos, marcarLeido, cargado } = useAstroLeidos("aspectos");
+  // Para bloquear la ENTRADA a Aspectos: hay que haber leído todas las casas.
+  const { leidos: casasLeidos, cargado: cargadoCasas } = useAstroLeidos("casas");
+
+  // Abre el aspecto (si su planeta está desbloqueado) y lo marca como leído.
+  const abrirAspecto = (a: Aspecto) => {
+    setAbierto(a);
+    marcarLeido(aspectoKey(a));
+  };
 
   // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
   useLockBodyScroll(!!abierto);
@@ -76,6 +104,7 @@ export default function MetodoAstrologiaAspectos() {
         const lista = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
         if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
         setTextos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
+        setCasasTexto((rowRes.data?.casas_texto ?? {}) as Record<string, string>);
 
         const cartaRes = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -89,7 +118,24 @@ export default function MetodoAstrologiaAspectos() {
     })();
   }, [navigate]);
 
-  if (loading) {
+  // Bloqueo de ENTRADA: si no ha leído todas sus casas (con lectura escrita),
+  // no puede estar en Aspectos (vale también para acceso directo por URL). Se le
+  // devuelve a Casas. Esperamos a tener cargados los datos y los leídos.
+  useEffect(() => {
+    if (loading || !cargadoCasas) return;
+    const casasEscritas = Array.from({ length: 12 }, (_, i) => String(i + 1))
+      .filter((n) => (casasTexto[n] ?? "").trim().length > 0);
+    if (casasEscritas.length > 0 && !casasEscritas.every((n) => casasLeidos.has(n))) {
+      navigate("/metodo/astrologia/casas", { replace: true });
+    }
+  }, [loading, cargadoCasas, casasTexto, casasLeidos, navigate]);
+
+  // Esperamos a que carguen los "leídos" de la BD (aspectos y casas) y, si aún
+  // no ha leído todas sus casas, mostramos spinner mientras el efecto redirige.
+  const casasEscritasGate = Array.from({ length: 12 }, (_, i) => String(i + 1))
+    .filter((n) => (casasTexto[n] ?? "").trim().length > 0);
+  const casasCompletas = casasEscritasGate.length === 0 || casasEscritasGate.every((n) => casasLeidos.has(n));
+  if (loading || !cargado || !cargadoCasas || !casasCompletas) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -103,12 +149,25 @@ export default function MetodoAstrologiaAspectos() {
   // Agrupamos los aspectos por planeta. Cada aspecto une dos planetas, así que
   // aparece en los dos boxes (el del planeta A y el del B). Mantenemos el orden
   // canónico de CUERPOS y descartamos los planetas sin aspectos.
-  const gruposPorPlaneta = CUERPOS.map((c) => ({
+  const gruposBase = CUERPOS.map((c) => ({
     cuerpo: c,
     items: aspectos
       .filter((a) => a.a === c.key || a.b === c.key)
       .map((a) => ({ aspecto: a, otro: a.a === c.key ? a.b : a.a })),
   })).filter((g) => g.items.length > 0);
+
+  // Desbloqueo secuencial POR PLANETA (box): el primero está abierto; cada
+  // planeta se desbloquea cuando TODOS los aspectos del anterior están leídos.
+  // Solo cuentan los aspectos con lectura escrita (los vacíos no bloquean, no
+  // hay nada que leer). Al completar un planeta, se marca visualmente.
+  let anterioresCompletas = true;
+  const gruposPorPlaneta = gruposBase.map((g) => {
+    const leibles = g.items.filter(({ aspecto }) => (textos[aspectoKey(aspecto)] ?? "").trim().length > 0);
+    const completa = leibles.every(({ aspecto }) => leidos.has(aspectoKey(aspecto)));
+    const desbloqueada = anterioresCompletas;
+    anterioresCompletas = anterioresCompletas && completa;
+    return { ...g, completa, desbloqueada, totalLeibles: leibles.length };
+  });
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -146,27 +205,51 @@ export default function MetodoAstrologiaAspectos() {
             </Text>
           ) : (
             <SimpleGrid w="100%" columns={1} spacing={{ base: 5, md: 6 }}>
-              {gruposPorPlaneta.map(({ cuerpo, items }) => (
+              {gruposPorPlaneta.map(({ cuerpo, items, desbloqueada, completa }, gi) => {
+                const anterior = gi > 0 ? gruposPorPlaneta[gi - 1].cuerpo.label : null;
+                return (
                 <Box
                   key={cuerpo.key}
                   position="relative"
                   borderRadius="2xl"
                   overflow="hidden"
-                  border={`1px solid ${astrologiaTxt}44`}
-                  boxShadow={`0 0 18px rgba(255,255,255,0.12), 0 0 40px rgba(255,255,255,0.06), 0 0 24px ${astrologiaTxt}1a`}
+                  border={completa ? `1px solid ${cuerpo.color}88` : `1px solid ${astrologiaTxt}44`}
+                  boxShadow={
+                    completa
+                      ? `0 0 18px ${cuerpo.color}44, 0 0 40px rgba(255,255,255,0.06)`
+                      : `0 0 18px rgba(255,255,255,0.12), 0 0 40px rgba(255,255,255,0.06), 0 0 24px ${astrologiaTxt}1a`
+                  }
+                  opacity={desbloqueada ? 1 : 0.55}
+                  transition="opacity 0.25s, box-shadow 0.25s, border-color 0.25s"
                 >
                   {/* Fondo de astrología (estrellado) sin blur, recortado sin deformar */}
                   <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" overlay="rgba(8,13,30,0.58)" />
 
                   <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} py={{ base: 5, md: 6 }}>
                     {/* Cabecera del planeta */}
-                    <Flex align="center" justify="center" gap={3} mb={4}>
+                    <Flex align="center" justify="center" gap={3} mb={2}>
                       <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={36} />
                       <Text color={cuerpo.color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                             letterSpacing="0.03em" style={{ textShadow: `0 0 12px ${cuerpo.color}66` }}>
                         {cuerpo.label}
                       </Text>
+                      {completa && (
+                        <Flex align="center" gap={1} px={2.5} py={1} borderRadius="full"
+                              bg={`${cuerpo.color}22`} border={`1px solid ${cuerpo.color}66`} ml={1}>
+                          <CheckIcon color={cuerpo.color} size={12} />
+                          <Text color={cuerpo.color} fontSize="2xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase">
+                            Completado
+                          </Text>
+                        </Flex>
+                      )}
+                      {!desbloqueada && <LockIcon color={`${astrologiaTxt}bb`} size={20} />}
                     </Flex>
+                    {!desbloqueada && anterior && (
+                      <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "2xs", md: "xs" }} textAlign="center" mb={2}
+                            fontStyle="italic" letterSpacing="0.04em">
+                        Termina de leer los aspectos de <b>{anterior}</b> para desbloquear este planeta.
+                      </Text>
+                    )}
                     <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${cuerpo.color}55, transparent)`} />
 
                     {/* Aspectos de este planeta — el box se adapta a su contenido */}
@@ -175,31 +258,45 @@ export default function MetodoAstrologiaAspectos() {
                           const co = cuerpoByKey(otro);
                           const colorAsp = COLOR_ASPECTO[aspecto.tipo];
                           const escrito = (textos[aspectoKey(aspecto)] ?? "").trim().length > 0;
+                          // Leído = el usuario ya abrió su lectura. Cambiamos
+                          // ligeramente el diseño (acento a la izquierda + check)
+                          // para que vea de un vistazo lo que ya ha leído.
+                          const leido = escrito && leidos.has(aspectoKey(aspecto));
                           return (
                             <Flex
                               key={`${aspectoKey(aspecto)}-${idx}`}
                               as="button"
-                              onClick={() => setAbierto(aspecto)}
+                              onClick={desbloqueada ? () => abrirAspecto(aspecto) : undefined}
+                              disabled={!desbloqueada}
+                              position="relative"
                               w="100%"
                               align="center"
                               gap={{ base: 2, md: 3 }}
                               px={{ base: 3, md: 4 }}
                               py={{ base: 2.5, md: 3 }}
                               borderRadius="lg"
-                              bg="rgba(8,13,30,0.4)"
+                              bg={leido ? "rgba(8,13,30,0.28)" : "rgba(8,13,30,0.4)"}
                               border={`1px solid ${colorAsp}44`}
+                              borderLeft={leido ? `3px solid ${colorAsp}` : `1px solid ${colorAsp}44`}
                               boxShadow={`0 0 10px ${colorAsp}1a`}
-                              cursor="pointer"
+                              cursor={desbloqueada ? "pointer" : "not-allowed"}
                               flexShrink={0}
-                              opacity={escrito ? 1 : 0.6}
+                              opacity={!escrito ? 0.6 : leido ? 0.82 : 1}
                               transition="all 0.18s"
-                              _hover={{
+                              _hover={desbloqueada ? {
                                 bg: "rgba(8,13,30,0.55)",
                                 borderColor: `${colorAsp}88`,
                                 boxShadow: `0 0 18px ${colorAsp}44`,
                                 transform: "translateY(-1px)",
-                              }}
+                                opacity: 1,
+                              } : {}}
                             >
+                              {leido && (
+                                <Box position="absolute" top={{ base: 1, md: 1.5 }} right={{ base: 1.5, md: 2 }}
+                                     title="Ya leído" pointerEvents="none">
+                                  <CheckIcon color={colorAsp} size={13} />
+                                </Box>
+                              )}
                               {/* Planeta del box (este) — ancho fijo para que todos
                                   empiecen en el mismo sitio */}
                               <Flex align="center" gap={2.5} flexShrink={0}>
@@ -243,7 +340,8 @@ export default function MetodoAstrologiaAspectos() {
                     </Flex>
                   </Box>
                 </Box>
-              ))}
+                );
+              })}
             </SimpleGrid>
           )}
         </Flex>

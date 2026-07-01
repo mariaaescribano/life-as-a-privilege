@@ -10,7 +10,7 @@ import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { SaberMasModal } from "../../components/metodo/Planetas";
-import { ZODIAC_SIGNS, cuerpoByKey, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { ZODIAC_SIGNS, cuerpoByKey, soloClavesPlaneta, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
@@ -54,7 +54,8 @@ export default function MetodoAstrologiaSolAscLuna() {
         );
         // Accesible en cuanto hay solicitud (la carta ya está calculada); no requiere el PDF.
         if (!rowRes.data?.solicitud_enviada_at) { navigate("/metodo/astrologia"); return; }
-        let d: Data = rowRes.data?.data ?? {};
+        // Solo claves de planeta (no arrastrar el progreso de lectura del JSONB).
+        let d: Data = soloClavesPlaneta<Valor>(rowRes.data?.data);
 
         // Fallback: si falta signo/casa de algún cuerpo del trío, lo derivamos de la carta.
         const faltan = TRIO.some((k) => !d[k]?.signo);

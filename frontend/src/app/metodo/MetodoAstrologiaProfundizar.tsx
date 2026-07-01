@@ -7,7 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Glifo } from "../../components/metodo/Glifo";
-import { cuerpoByKey, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { cuerpoByKey, soloClavesPlaneta, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { getTextoSigno, getTextoCasa } from "../../components/metodo/astrologiaTextos";
 import { API_URL } from "../../GlobalVariables";
 
@@ -86,7 +86,8 @@ export default function MetodoAstrologiaProfundizar() {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const data = res.data?.data || {};
+        // Solo claves de planeta (no arrastrar el progreso de lectura del JSONB).
+        const data = soloClavesPlaneta(res.data?.data) as Record<string, any>;
         const existente = data[cuerpo.key] || {};
         setValor({ signo: existente.signo, casa: existente.casa });
 

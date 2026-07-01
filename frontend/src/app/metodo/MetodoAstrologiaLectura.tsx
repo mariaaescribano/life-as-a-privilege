@@ -11,6 +11,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 interface Reto { id: string; titulo: string; texto: string; }
@@ -66,7 +67,9 @@ function layoutStars(total: number): { top: string; left: string }[] {
 }
 
 // Estrella grande con glow que titila; al pulsarla se abre el reto.
-function EstrellaReto({ index, pos, onOpen }: { index: number; pos: { top: string; left: string }; onOpen: () => void }) {
+// Cuando ya se ha leído, la estrella queda más tenue y sin titileo (más un
+// pequeño ✓) para que el usuario vea de un vistazo cuáles le faltan.
+function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top: string; left: string }; leido: boolean; onOpen: () => void }) {
   const { top, left } = pos;
   const glow = `drop-shadow(0 0 6px ${astrologiaTxt}) drop-shadow(0 0 16px ${astrologiaTxt}cc)`;
   const glowFuerte = `drop-shadow(0 0 12px ${astrologiaTxt}) drop-shadow(0 0 30px ${astrologiaTxt})`;
@@ -74,7 +77,7 @@ function EstrellaReto({ index, pos, onOpen }: { index: number; pos: { top: strin
     <Box
       as="button"
       onClick={onOpen}
-      aria-label="Abrir punto clave"
+      aria-label={leido ? "Punto clave leído (abrir de nuevo)" : "Abrir punto clave"}
       position="absolute"
       top={top}
       left={left}
@@ -90,17 +93,29 @@ function EstrellaReto({ index, pos, onOpen }: { index: number; pos: { top: strin
         },
       }}
     >
-      <Box
-        as="svg"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        w={{ base: "38px", md: "50px" }}
-        h={{ base: "38px", md: "50px" }}
-        fill={astrologiaTxt}
-        style={{ animation: "retoTwinkle 3s ease-in-out infinite", animationDelay: `${(index % 5) * 0.45}s` }}
-      >
-        {/* Estrella de 8 puntas (octograma) con rayos finos y elegantes. */}
-        <path d="M12 1 L13.53 8.30 L19.78 4.22 L15.70 10.47 L23 12 L15.70 13.53 L19.78 19.78 L13.53 15.70 L12 23 L10.47 15.70 L4.22 19.78 L8.30 13.53 L1 12 L8.30 10.47 L4.22 4.22 L10.47 8.30 Z" />
+      <Box position="relative" display="inline-flex">
+        <Box
+          as="svg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          w={{ base: "38px", md: "50px" }}
+          h={{ base: "38px", md: "50px" }}
+          fill={astrologiaTxt}
+          opacity={leido ? 0.4 : 1}
+          style={leido
+            ? { filter: `drop-shadow(0 0 4px ${astrologiaTxt}77)` }
+            : { animation: "retoTwinkle 3s ease-in-out infinite", animationDelay: `${(index % 5) * 0.45}s` }}
+        >
+          {/* Estrella de 8 puntas (octograma) con rayos finos y elegantes. */}
+          <path d="M12 1 L13.53 8.30 L19.78 4.22 L15.70 10.47 L23 12 L15.70 13.53 L19.78 19.78 L13.53 15.70 L12 23 L10.47 15.70 L4.22 19.78 L8.30 13.53 L1 12 L8.30 10.47 L4.22 4.22 L10.47 8.30 Z" />
+        </Box>
+        {leido && (
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+               position="absolute" bottom="-2px" right="-2px" w="16px" h="16px" fill={astrologiaTxt}
+               style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }}>
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -112,6 +127,13 @@ export default function MetodoAstrologiaLectura() {
   const [retos, setRetos] = useState<Reto[]>([]);
   const [retoAbierto, setRetoAbierto] = useState<Reto | null>(null);
   const [comicOpen, setComicOpen] = useState(false);
+  const { leidos: retosLeidos, marcarLeido: marcarReto, cargado } = useAstroLeidos("retos");
+
+  // Abre un punto clave y lo marca como leído (persistente en BD).
+  const abrirReto = (r: Reto) => { setRetoAbierto(r); marcarReto(r.id); };
+
+  // Para pasar a Casas hay que haber leído TODOS los puntos clave.
+  const todosRetosLeidos = retos.length === 0 || retos.every((r) => retosLeidos.has(r.id));
 
   // Posiciones (aleatorias pero separadas) calculadas una vez por nº de retos.
   const starPositions = useMemo(() => layoutStars(retos.length), [retos.length]);
@@ -139,7 +161,7 @@ export default function MetodoAstrologiaLectura() {
     })();
   }, [navigate]);
 
-  if (loading) {
+  if (loading || !cargado) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -159,7 +181,12 @@ export default function MetodoAstrologiaLectura() {
             mb={0}
             prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
             extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={{ label: "Casas →", onClick: () => navigate("/metodo/astrologia/casas") }}
+            next={{
+              label: "Casas →",
+              onClick: () => navigate("/metodo/astrologia/casas"),
+              disabled: !todosRetosLeidos,
+              disabledTooltip: "Lee todos tus puntos clave para continuar.",
+            }}
           />
 
           <Box
@@ -178,13 +205,22 @@ export default function MetodoAstrologiaLectura() {
                       style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
                   Pulsa sobre cada estrella para descubrir tus puntos clave.
                 </Text>
+                {retos.length > 0 && (
+                  <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}aa`} fontSize={{ base: "sm", md: "md" }}
+                        fontWeight="600" letterSpacing="0.04em" textAlign="center"
+                        style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
+                    {todosRetosLeidos
+                      ? "Has leído todos tus puntos clave. Ya puedes continuar a Casas."
+                      : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
+                  </Text>
+                )}
               </Flex>
 
               {/* Cielo con las estrellas-reto */}
               {retos.length > 0 ? (
                 <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} mt={{ base: 4, md: 5 }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
                   {retos.map((r, i) => (
-                    <EstrellaReto key={r.id} index={i} pos={starPositions[i]} onOpen={() => setRetoAbierto(r)} />
+                    <EstrellaReto key={r.id} index={i} pos={starPositions[i]} leido={retosLeidos.has(r.id)} onOpen={() => abrirReto(r)} />
                   ))}
                 </Box>
               ) : (

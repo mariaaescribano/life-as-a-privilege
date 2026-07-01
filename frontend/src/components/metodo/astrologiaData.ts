@@ -49,3 +49,19 @@ export const CUERPOS: Cuerpo[] = [
 
 export const cuerpoByKey = (key: string): Cuerpo | undefined =>
   CUERPOS.find((c) => c.key === key);
+
+/* El JSONB `metodo_astrologia.data` mezcla varias cosas: los planetas elegidos
+ * por el usuario (una entrada por CuerpoKey) y el progreso de lectura
+ * (aspectosLeidos / casasLeidos). Las páginas del selector de planetas cargan
+ * ese `data` y lo reguardan con spread; para que NO arrastren ni pisen las
+ * claves de progreso, filtramos a solo las claves de planeta al cargar. */
+export function soloClavesPlaneta<V = unknown>(
+  data: Record<string, unknown> | null | undefined,
+): Partial<Record<CuerpoKey, V>> {
+  const out: Partial<Record<CuerpoKey, V>> = {};
+  if (!data) return out;
+  for (const c of CUERPOS) {
+    if (data[c.key]) out[c.key] = data[c.key] as V;
+  }
+  return out;
+}

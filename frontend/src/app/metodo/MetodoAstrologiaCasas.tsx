@@ -12,7 +12,16 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+
+// Check pequeño para marcar una casa ya leída.
+const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
+       style={{ filter: `drop-shadow(0 0 4px ${color}aa)` }}>
+    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+  </Box>
+);
 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
@@ -73,6 +82,11 @@ export default function MetodoAstrologiaCasas() {
   const [casasTexto, setCasasTexto] = useState<Record<string, string>>({});
   const [comicOpen, setComicOpen] = useState(false);
 
+  const { leidos, marcarLeido, cargado } = useAstroLeidos("casas");
+  // Para bloquear la ENTRADA a Casas: hay que haber leído todos los puntos clave.
+  const { leidos: retosLeidos, cargado: cargadoRetos } = useAstroLeidos("retos");
+  const [retos, setRetos] = useState<{ id: string }[]>([]);
+
   const [rot, setRot] = useState(rotParaCasa(1));
   const [sel, setSel] = useState<number>(1); // casa seleccionada 1..12
   const dragRef = useRef<{ startAng: number; startRot: number; moved: boolean } | null>(null);
@@ -94,6 +108,7 @@ export default function MetodoAstrologiaCasas() {
         // usuario con retos pero sin PDF subido rebotaba al inicio al entrar.
         const lista = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
         if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        setRetos(lista);
         setCasasTexto((rowRes.data?.casas_texto ?? {}) as Record<string, string>);
 
         const cartaRes = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
@@ -107,6 +122,16 @@ export default function MetodoAstrologiaCasas() {
       }
     })();
   }, [navigate]);
+
+  // Bloqueo de ENTRADA: si el usuario no ha leído todos sus puntos clave, no
+  // puede estar en Casas (vale también para acceso directo por URL). Se le
+  // devuelve a "Puntos clave". Esperamos a tener cargados los datos y los leídos.
+  useEffect(() => {
+    if (loading || !cargadoRetos) return;
+    if (retos.length > 0 && !retos.every((r) => retosLeidos.has(r.id))) {
+      navigate("/metodo/astrologia/lectura", { replace: true });
+    }
+  }, [loading, cargadoRetos, retos, retosLeidos, navigate]);
 
   const seleccionarCasa = (casaNum: number) => {
     setSel(casaNum);
@@ -141,7 +166,10 @@ export default function MetodoAstrologiaCasas() {
     dragRef.current = null;
   };
 
-  if (loading) {
+  // Mientras no esté permitida la entrada (faltan puntos clave por leer),
+  // mostramos el spinner: el efecto de arriba redirige a "Puntos clave".
+  const retosCompletos = retos.length === 0 || retos.every((r) => retosLeidos.has(r.id));
+  if (loading || !cargado || !cargadoRetos || !retosCompletos) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -149,9 +177,16 @@ export default function MetodoAstrologiaCasas() {
   const info = cusps.length ? infoCasa(cusps, sel) : null;
   const textoSel = (casasTexto[String(sel)] ?? "").trim();
 
+  // Para pasar a Aspectos hay que haber leído TODAS las casas con lectura escrita.
+  const casasEscritas = Array.from({ length: 12 }, (_, i) => String(i + 1))
+    .filter((n) => (casasTexto[n] ?? "").trim().length > 0);
+  const todasCasasLeidas = casasEscritas.length === 0 || casasEscritas.every((n) => leidos.has(n));
+
   const headerNext = {
-    label:"Aspectos →",
+    label: "Aspectos →",
     onClick: () => navigate("/metodo/astrologia/aspectos"),
+    disabled: !todasCasasLeidas,
+    disabledTooltip: "Lee todas tus casas para continuar.",
   };
 
   return (
@@ -201,7 +236,8 @@ export default function MetodoAstrologiaCasas() {
                 justify="center"
                 minH={{ lg: "253px" }}
               >
-                <CasaBox info={info} textoSel={textoSel} sel={sel} />
+                <CasaBox info={info} textoSel={textoSel} sel={sel}
+                         leida={leidos.has(String(sel))} onLeer={() => marcarLeido(String(sel))} />
               </Flex>
 
               {/* ── RUEDA giratoria ── */}
@@ -228,6 +264,7 @@ export default function MetodoAstrologiaCasas() {
                         const casaNum = i + 1;
                         const activa = casaNum === sel;
                         const escrita = (casasTexto[String(casaNum)] ?? "").trim().length > 0;
+                        const leida = escrita && leidos.has(String(casaNum));
                         const lp = pt(i * 30 + 15, R_LABEL);
                         return (
                           <g key={i}>
@@ -254,10 +291,17 @@ export default function MetodoAstrologiaCasas() {
                               >
                                 {NUMEROS_ROMANOS[i]}
                               </text>
-                              {escrita && (
+                              {/* leída → ✓ ; escrita sin leer → punto */}
+                              {leida ? (
+                                <text x={lp.x} y={lp.y - 11} textAnchor="middle" fontSize={12} fontWeight={700}
+                                      fill={astrologiaTxt} fontFamily="'EB Garamond', serif"
+                                      style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }}>
+                                  ✓
+                                </text>
+                              ) : escrita ? (
                                 <circle cx={lp.x} cy={lp.y - 16} r={1.8} fill={astrologiaTxt}
                                         style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }} />
-                              )}
+                              ) : null}
                             </g>
                           </g>
                         );
@@ -279,6 +323,14 @@ export default function MetodoAstrologiaCasas() {
                   <Text color={`${astrologiaTxt}99`} fontSize="xs" textAlign="center" mt={2} fontStyle="italic" letterSpacing="0.04em">
                     Gira la rueda o toca una casa
                   </Text>
+                  {casasEscritas.length > 0 && (
+                    <Text color={todasCasasLeidas ? astrologiaTxt : `${astrologiaTxt}aa`} fontSize="sm" fontWeight="600"
+                          textAlign="center" mt={1} letterSpacing="0.04em" style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
+                      {todasCasasLeidas
+                        ? "Has leído todas tus casas. Ya puedes continuar a Aspectos."
+                        : `Has leído ${casasEscritas.filter((n) => leidos.has(n)).length} de ${casasEscritas.length} casas.`}
+                    </Text>
+                  )}
                 </Box>
               </Flex>
             </Flex>
@@ -297,12 +349,19 @@ function CasaBox({
   info,
   textoSel,
   sel,
+  leida,
+  onLeer,
 }: {
   info: ReturnType<typeof infoCasa>;
   textoSel: string;
   sel: number;
+  leida: boolean;
+  onLeer: () => void;
 }) {
   const [open, setOpen] = useState(false);
+
+  // Abre el texto completo y marca la casa como leída.
+  const abrir = () => { setOpen(true); onLeer(); };
 
   // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
   useLockBodyScroll(open);
@@ -388,15 +447,30 @@ function CasaBox({
           )}
         </Box>
 
-        {/* botón Leer — abajo a la derecha, abre el texto completo */}
+        {/* botón Leer/Releer — abajo a la derecha, abre el texto completo.
+            Cuando ya se ha leído, el botón cambia (contorno + ✓ "Releer") para
+            que el usuario vea de un vistazo qué casas ya ha leído. */}
         {textoSel && (
-          <Flex justify="flex-end" mt={3}>
-            <Box as="button" onClick={() => setOpen(true)}
-                 px={6} py={2} borderRadius="full" bg={astrologiaTxt} color="#0a0a1a"
-                 border={`1px solid ${astrologiaTxt}88`} fontFamily="'EB Garamond', serif" fontWeight="700"
-                 fontSize="sm" letterSpacing="0.06em" cursor="pointer" boxShadow={`0 0 14px ${astrologiaTxt}66`}
-                 _hover={{ boxShadow: `0 0 22px ${astrologiaTxt}99`, transform: "translateY(-1px)" }} transition="all 0.18s">
-              Leer
+          <Flex justify="flex-end" align="center" gap={3} mt={3}>
+            {leida && (
+              <Flex align="center" gap={1} title="Ya leída">
+                <CheckIcon color={astrologiaTxt} size={14} />
+                <Text color={`${astrologiaTxt}cc`} fontSize="xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase">
+                  Leída
+                </Text>
+              </Flex>
+            )}
+            <Box as="button" onClick={abrir}
+                 px={6} py={2} borderRadius="full"
+                 bg={leida ? "transparent" : astrologiaTxt}
+                 color={leida ? astrologiaTxt : "#0a0a1a"}
+                 border={`1px solid ${astrologiaTxt}${leida ? "88" : "88"}`}
+                 fontFamily="'EB Garamond', serif" fontWeight="700"
+                 fontSize="sm" letterSpacing="0.06em" cursor="pointer"
+                 boxShadow={leida ? "none" : `0 0 14px ${astrologiaTxt}66`}
+                 _hover={{ boxShadow: `0 0 22px ${astrologiaTxt}99`, transform: "translateY(-1px)",
+                           bg: leida ? `${astrologiaTxt}1a` : astrologiaTxt }} transition="all 0.18s">
+              {leida ? "Releer" : "Leer"}
             </Box>
           </Flex>
         )}
