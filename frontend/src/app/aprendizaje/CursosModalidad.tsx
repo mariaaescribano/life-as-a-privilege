@@ -16,7 +16,7 @@ import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCursosData } from "../../data/cursosApi";
 import type { ModalidadInfo } from "../../hardCoded/cursos";
-import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaNomLink, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
+import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
 
 
 // Decodifica un slug de URL (p.ej. "Astrolog%C3%ADa" → "Astrología"). Si ya
