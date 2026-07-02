@@ -55,7 +55,9 @@ export class MetodoNotasService {
 
     if (error) {
       console.warn('[metodoNotas.crear] error:', error.message);
-      return { success: false, error: 'No se pudo guardar la nota' };
+      // Devolvemos el motivo real (p. ej. «relation "public.notas" does not
+      // exist») para poder diagnosticar; si es null, mensaje genérico.
+      return { success: false, error: error.message || 'No se pudo guardar la nota' };
     }
     return { success: true, nota: data };
   }

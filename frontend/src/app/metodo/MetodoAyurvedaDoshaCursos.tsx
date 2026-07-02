@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -10,6 +10,7 @@ import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle"
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { useCursosData } from "../../data/cursosApi";
 import {
@@ -24,6 +25,16 @@ export default function MetodoAyurvedaDoshaCursos() {
   const { cursosData, loading } = useCursosData();
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
 
+  // Desbloqueo de la 4ª disciplina (Medicina China), mismo diseño que
+  // Astrología→Psicología: botón con candado que abre el pago. El backend de
+  // pago de TCM (endpoint /payment/tcm, columna tcm_suscrito, scope 'tcm') aún
+  // no existe; el flujo queda cableado para cuando se añada.
+  const [tcmSuscrito, setTcmSuscrito] = useState(false);
+  const [pagoTcmOpen, setPagoTcmOpen] = useState(false);
+  const [pagoTcmLoading, setPagoTcmLoading] = useState(false);
+  const [pagoTcmError, setPagoTcmError] = useState<string | null>(null);
+  const [testPagos, setTestPagos] = useState(false);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -31,9 +42,62 @@ export default function MetodoAyurvedaDoshaCursos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
     axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => { if (!res.data?.ayurveda_suscrito) navigate("/metodo/ayurveda"); })
+      .then((res) => {
+        if (!res.data?.ayurveda_suscrito) navigate("/metodo/ayurveda");
+        setTcmSuscrito(!!res.data?.tcm_suscrito);
+      })
+      .catch(() => {});
+    axios.get(`${API_URL}/payment/test/enabled`)
+      .then((res) => setTestPagos(!!res.data?.enabled))
       .catch(() => {});
   }, [navigate, doshaKey]);
+
+  // El botón "Med. China" se desbloquea al pagar la 4ª disciplina. Mientras no
+  // esté pagada, el clic abre el pago (en vez de navegar directamente).
+  const onMedChina = () => {
+    if (tcmSuscrito) navigate(`/aprendizaje/cursos/${tcmNomLink}`);
+    else { setPagoTcmError(null); setPagoTcmOpen(true); }
+  };
+
+  const pagarTcm = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoTcmLoading(true);
+    setPagoTcmError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/tcm/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoTcmError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoTcmLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoTcmError(
+        status === 403
+          ? "Necesitas completar el pago de Ayurveda antes de adquirir la Medicina China."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoTcmLoading(false);
+    }
+  };
+
+  const testUnlockTcm = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    try {
+      await axios.post(
+        `${API_URL}/payment/test/unlock`,
+        { scope: "tcm" },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      navigate(`/aprendizaje/cursos/${tcmNomLink}`);
+    } catch (err: any) {
+      setPagoTcmError(err?.response?.data?.message || "No se pudo activar el modo test.");
+    }
+  };
 
   if (!doshaKey) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -58,7 +122,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             mb={0}
             prev={{ label: "← Tu Recorrido", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Med. China →", onClick: () => navigate(`/aprendizaje/cursos/${tcmNomLink}`) }}
+            next={{ label: tcmSuscrito ? "Med. China →" : "Med. China 🔒", onClick: onMedChina }}
           />
 
           <Text
@@ -115,6 +179,16 @@ export default function MetodoAyurvedaDoshaCursos() {
       </Flex>
 
       {ilustracionesModal}
+
+      <PagoTcmModal
+        isOpen={pagoTcmOpen}
+        onClose={() => { setPagoTcmOpen(false); setPagoTcmError(null); }}
+        onPagar={pagarTcm}
+        loading={pagoTcmLoading}
+        error={pagoTcmError}
+        onTest={testPagos ? testUnlockTcm : undefined}
+      />
+
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>

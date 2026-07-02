@@ -17,6 +17,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import {
   experienciaById,
@@ -279,6 +280,8 @@ export default function MetodoPsicologiaCompromiso() {
         error={pagoError}
         onTest={testPagos ? testUnlockAyurveda : undefined}
       />
+
+      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 
       <SiteFooter />
     </Box>

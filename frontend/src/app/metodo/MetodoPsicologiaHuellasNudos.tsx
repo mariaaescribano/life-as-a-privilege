@@ -11,7 +11,7 @@ import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { BotonGuardar } from "../../components/global/BotonGuardar";
+import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import {
   experienciaById,
   type LineaDeVidaData,
@@ -108,7 +108,7 @@ export default function MetodoPsicologiaHuellasNudos() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [, setGuardando] = useState(false);
+  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const [nudos, setNudos] = useState<string[]>([]);
   const [huellas, setHuellas] = useState<string[]>([]);
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
@@ -121,6 +121,12 @@ export default function MetodoPsicologiaHuellasNudos() {
   const [sobreMesa, setSobreMesa] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<RelacionHuellaNudo[] | null>(null);
+  const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const montado = useRef(true);
+  useEffect(() => () => {
+    montado.current = false;
+    if (okTimer.current) clearTimeout(okTimer.current);
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -155,22 +161,27 @@ export default function MetodoPsicologiaHuellasNudos() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
-    setGuardando(true);
+    if (montado.current) setEstadoGuardado("guardando");
     try {
       const data = { ...dataRef.current, heridas: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
+      if (montado.current) {
+        setEstadoGuardado("ok");
+        if (okTimer.current) clearTimeout(okTimer.current);
+        okTimer.current = setTimeout(() => { if (montado.current) setEstadoGuardado("idle"); }, 2200);
+      }
       return true;
     } catch {
+      if (montado.current) setEstadoGuardado("idle");
       return false;
-    } finally {
-      setGuardando(false);
     }
   };
 
   const commit = (next: RelacionHuellaNudo[]) => {
     setHeridas(next);
+    setEstadoGuardado("guardando"); // hay un cambio pendiente de guardar
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
@@ -218,12 +229,6 @@ export default function MetodoPsicologiaHuellasNudos() {
     setActivaId(nueva.id);
   };
 
-  // Guardado inmediato (botón Guardar): cancela el debounce y persiste ya.
-  const guardarAhora = (): Promise<boolean> => {
-    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
-    pendiente.current = null;
-    return persistir(heridas);
-  };
 
   const soltarEnMesa = () => {
     const a = arrastreRef.current;
@@ -409,15 +414,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                         <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
                              style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>+ Añadir herida</Box>
                       </Box>
-                      <BotonGuardar
-                        onSave={guardarAhora}
-                        bg={TINTA}
-                        fg={neuropsicologiaBg}
-                        minW={{ base: "130px", md: "150px" }}
-                        px={{ base: 6, md: 7 }}
-                        py={2.5}
-                        fontSize={{ base: "sm", md: "md" }}
-                      />
+                      <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
                     </Flex>
                   </Flex>
                 </Box>

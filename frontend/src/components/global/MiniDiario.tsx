@@ -154,6 +154,9 @@ export function MiniDiario() {
 
   // No mostramos el diario sin sesión (las notas son por usuario).
   if (!userId) return null;
+  // Tampoco en el panel admin: "Mis notas" es solo para el usuario que hace su
+  // recorrido, no para quien edita contenido desde /admin.
+  if (/^\/admin(\/|$)/i.test(pathname)) return null;
 
   return (
     <>
@@ -489,7 +492,7 @@ function VistaNotas({
 }) {
   return (
     <Flex direction="column" gap={4}>
-      <Flex align="center" justify="space-between" gap={3}>
+      <Flex align="center" gap={3}>
         <Box
           as="button"
           onClick={onVolver}
@@ -502,9 +505,6 @@ function VistaNotas({
         >
           ← Volver a escribir
         </Box>
-        <Text color="rgba(255,255,255,0.6)" fontSize="sm">
-          {notas.length} {notas.length === 1 ? "nota" : "notas"}
-        </Text>
       </Flex>
 
       {cargando ? (
@@ -559,19 +559,27 @@ function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string) => vo
           <Box
             as="button"
             onClick={() => onBorrar(nota.id)}
+            flexShrink={0}
+            w="26px"
+            h="26px"
+            borderRadius="full"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
             color={`${txtColor}aa`}
             fontSize="sm"
+            lineHeight="1"
             transition="all 0.18s"
-            _hover={{ color: "#ffb4b4" }}
+            _hover={{ color: "#ffb4b4", bg: `${txtColor}1a` }}
             aria-label="Borrar nota"
           >
-            🗑
+            ✕
           </Box>
         </Flex>
         <Text
           color={txtColor}
-          fontSize={{ base: "md", md: "md" }}
-          lineHeight="1.6"
+          fontSize={{ base: "lg", md: "xl" }}
+          lineHeight="1.65"
           whiteSpace="pre-wrap"
           sx={{ textShadow: conFondo ? "0 1px 8px rgba(0,0,0,0.35)" : "none" }}
         >

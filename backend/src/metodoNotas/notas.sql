@@ -3,11 +3,15 @@
 
 create table if not exists public.notas (
   id         uuid primary key default gen_random_uuid(),
-  user_id    uuid not null,   -- id del usuario dueño de la nota
+  user_id    text not null,   -- id del usuario dueño de la nota (mismo tipo que public."user".id: text/nanoid, NO uuid)
   contenido  text not null,
   categoria  text,            -- key de la disciplina (astrologia, psicologia, ...) o null
   created_at timestamptz not null default now()
 );
+
+-- Si ya creaste la tabla con user_id uuid (fallará con «invalid input syntax
+-- for type uuid: ...»), corrige el tipo con:
+--   alter table public.notas alter column user_id type text using user_id::text;
 
 -- Búsqueda rápida de "las notas de un usuario, más recientes primero"
 create index if not exists notas_user_created_idx

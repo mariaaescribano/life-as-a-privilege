@@ -220,6 +220,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.16em" textTransform="uppercase">
                   Tu compromiso de esta semana
                 </Text>
+                <Separador />
                 <Text color={meta.color} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
                   {compromiso}
                 </Text>
@@ -235,9 +236,14 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             <Box h="1px" w="60%" mx="auto" mb={6} bgGradient={`linear(to-r, transparent, ${ayurvedaTxt}66, transparent)`} />
             {diaBloques.length > 0 ? (
               <>
-                <Flex direction="column" gap={4}>
+                <Flex direction="column" gap={3.5}>
                   {diaBloques.map((b, i) => (
-                    <Flex key={i} align="flex-start" gap={4}>
+                    <Flex key={i} align="flex-start" gap={4}
+                          borderRadius="xl"
+                          bg="rgba(255,251,243,0.42)"
+                          border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}
+                          sx={{ backdropFilter: "blur(4px)" }}
+                          px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
                       <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} minW={{ base: "48px", md: "58px" }} flexShrink={0} mt="2px">
                         {b.hora || "—"}
                       </Text>

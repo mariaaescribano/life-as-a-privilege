@@ -14,7 +14,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { RecordatorioCompromiso } from "../../components/metodo/RecordatorioCompromiso";
+import { CompromisosBox } from "../../components/metodo/CompromisosBox";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -223,6 +223,7 @@ export default function MetodoAyurvedaDoshaDia() {
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
+            step={{ current: 7, total: 7 }}
             mb={0}
             prev={{ label: "← Estilo de vida", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`) }}
             extra={ilustracionesBtn}
@@ -241,6 +242,9 @@ export default function MetodoAyurvedaDoshaDia() {
               </Text>
             </Flex>
           </Panel>
+
+          {/* Recordatorio de los compromisos escritos en Psicología */}
+          <CompromisosBox />
 
           {/* TU DÍA (lista editable) */}
           <Panel color={meta.color} tile>
@@ -549,7 +553,6 @@ export default function MetodoAyurvedaDoshaDia() {
       </Modal>
 
       {ilustracionesModal}
-      <RecordatorioCompromiso />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>

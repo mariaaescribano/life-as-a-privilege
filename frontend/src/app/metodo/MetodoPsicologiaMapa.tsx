@@ -18,7 +18,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import { BotonGuardar } from "../../components/global/BotonGuardar";
+import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -33,6 +33,7 @@ import {
   type Constelacion,
 } from "../../components/metodo/psicologiaRecorrido";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
+import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -46,8 +47,6 @@ const PAPEL = "#fbf4e8";          // crema claro
 // Acento luminoso/dorado: esta página marca el inicio de la transformación y
 // debe sentirse más esperanzadora que las anteriores.
 const ORO = "#caa24a";
-// Glow azul clásico para el header y los boxes (en vez del tono cálido).
-const AZUL = "#2f6fe0";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // Los cuatro bloques del ejercicio. La `key` es el campo de la constelación.
@@ -105,10 +104,25 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 
   const [loading, setLoading] = useState(true);
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
+  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<Constelacion[] | null>(null);
+  const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const montado = useRef(true);
+  useEffect(() => {
+    // Reactivamos la bandera en CADA montaje: bajo React.StrictMode (dev) el
+    // componente se monta, se desmonta y se vuelve a montar; si solo confiáramos
+    // en el valor inicial del useRef, el primer cleanup dejaría `montado` en
+    // false para siempre y el estado "ok"/"idle" (protegidos por montado) nunca
+    // se aplicarían → el indicador se quedaría en "Guardando…" eternamente.
+    montado.current = true;
+    return () => {
+      montado.current = false;
+      if (okTimer.current) clearTimeout(okTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -144,13 +158,20 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
+    if (montado.current) setEstadoGuardado("guardando");
     try {
       const data = { ...dataRef.current, constelaciones: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
+      if (montado.current) {
+        setEstadoGuardado("ok");
+        if (okTimer.current) clearTimeout(okTimer.current);
+        okTimer.current = setTimeout(() => { if (montado.current) setEstadoGuardado("idle"); }, 2200);
+      }
       return true;
     } catch {
+      if (montado.current) setEstadoGuardado("idle");
       return false;
     }
   };
@@ -158,6 +179,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
   // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
   const commit = (next: Constelacion[]) => {
     setRelaciones(next);
+    setEstadoGuardado("guardando"); // hay un cambio pendiente de guardar
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
@@ -175,11 +197,6 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
   const updateCampo = (id: string, campo: keyof Constelacion, valor: string) =>
     commit(relaciones.map((c) => (c.id === id ? { ...c, [campo]: valor } : c)));
 
-  const guardarAhora = async (): Promise<boolean> => {
-    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
-    pendiente.current = null;
-    return persistir(relaciones);
-  };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
@@ -203,7 +220,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
               nom={neuropsicologiaNom}
               step={{ current: 9, total: 10 }}
               mb={0}
-              boxShadow={`0 0 16px ${AZUL}3a, 0 0 40px ${AZUL}1f, 0 0 14px rgba(255,255,255,0.16)`}
+              boxShadow={glowHeader}
               prev={{ label: "← Relación", onClick: irARelacion }}
               next={{ label: "Compromiso →", onClick: irACompromiso }}
             />
@@ -217,7 +234,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 
             {relaciones.length === 0 ? (
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                   border={`1px solid ${AZUL}55`} boxShadow={`0 0 22px ${AZUL}3a, 0 0 55px ${AZUL}1f`}>
+                   border={azulBorde} boxShadow={glowPanel}>
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                 <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
                       px={{ base: 7, md: 11 }} py={{ base: 12, md: 16 }} textAlign="center">
@@ -242,7 +259,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
                 {relaciones.map((c) => (
                   <TarjetaIntegracion key={c.id} c={c}
                                       onCampo={(campo, v) => updateCampo(c.id, campo, v)}
-                                      onGuardar={guardarAhora} />
+                                      estadoGuardado={estadoGuardado} />
                 ))}
               </Flex>
             )}
@@ -261,10 +278,10 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 // ─────────────────────────────────────────────────────────────────────────
 // Una tarjeta de integración por relación.
 // ─────────────────────────────────────────────────────────────────────────
-function TarjetaIntegracion({ c, onCampo, onGuardar }: {
+function TarjetaIntegracion({ c, onCampo, estadoGuardado }: {
   c: Constelacion;
   onCampo: (campo: keyof Constelacion, valor: string) => void;
-  onGuardar: () => Promise<boolean>;
+  estadoGuardado: EstadoGuardado;
 }) {
   const verdad = (c.verdadSana || "").trim();
   const recordatorio = (c.recordatorio || "").trim();
@@ -275,8 +292,8 @@ function TarjetaIntegracion({ c, onCampo, onGuardar }: {
   return (
     <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
          bgColor={neuropsicologiaBg}
-         border={`1px solid ${AZUL}44`}
-         boxShadow={`0 0 22px ${AZUL}3a, 0 0 55px ${AZUL}1f`}>
+         border={azulBorde}
+         boxShadow={glowPanel}>
 
       {/* Cabecera plegable — fondo de psicología (acuarela), título grande y
           centrado en color tinta, con una flecha a la derecha que cambia según
@@ -390,19 +407,11 @@ function TarjetaIntegracion({ c, onCampo, onGuardar }: {
         </>
       )}
 
-      {/* Guardar — dentro del box, abajo a la derecha */}
+      {/* Autoguardado — indicador dentro del box, abajo a la derecha */}
       <Linea />
       <Banda py={{ base: 4, md: 5 }}>
         <Flex justify="flex-end">
-          <BotonGuardar
-            onSave={onGuardar}
-            bg={TINTA}
-            fg={neuropsicologiaBg}
-            minW={{ base: "150px", md: "170px" }}
-            px={{ base: 8, md: 10 }}
-            py={2.5}
-            fontSize={{ base: "sm", md: "md" }}
-          />
+          <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
         </Flex>
       </Banda>
         </>

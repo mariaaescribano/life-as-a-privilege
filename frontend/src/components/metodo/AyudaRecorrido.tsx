@@ -484,7 +484,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                 ¿Prefieres hacerlo acompañado?
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
-                Puedes recorrer este tramo junto a María. Agenda una llamada y hazlo acompañado.
+                Puedes recorrer este tramo junto a María. Agenda una llamada, no hace falta hacerlo todo de forma individual.
               </Text>
               <Box as="button" onClick={() => { setAcompPreguntaOpen(false); setCompaniaOpen(true); }}
                    px={9} py={3} borderRadius="full" bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}

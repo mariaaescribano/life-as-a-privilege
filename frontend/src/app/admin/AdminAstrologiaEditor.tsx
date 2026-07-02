@@ -167,7 +167,7 @@ export default function AdminAstrologiaEditor() {
                   _hover={{ color: "white" }}>← Usuarios de astrología</Text>
 
             {/* header de disciplina con su imagen */}
-            <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
+            <AdminDisciplinaHeader disc={disc} imagen subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
             {/* barra de guardar */}
             <Flex justify="flex-end" align="center" gap={3} mb={5} wrap="wrap">

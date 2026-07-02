@@ -350,7 +350,7 @@ const Pagina = ({
         {/* Cada ítem es su propia franja con una "foto" nueva; entre franjas,
             una raya de separación bien visible. */}
         {items.length === 0 ? (
-          <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}55`}>
+          <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}55`} borderBottom={`2px solid ${TINTA}55`}>
             <FotoFranja posicion="center 40%" />
             <Text position="relative" zIndex={1} color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
               Sin recuerdos escritos este año.
@@ -366,6 +366,10 @@ const Pagina = ({
                 px={{ base: 6, md: 8 }}
                 py={{ base: 4, md: 5 }}
                 borderTop={`2px solid ${TINTA}55`}
+                // Línea de cierre del último ítem. Cuando hay scroll, ya la
+                // dibuja la "franja final vacía" de abajo, así que solo la
+                // añadimos aquí cuando esa franja no se renderiza (listas cortas).
+                borderBottom={i === items.length - 1 && !hayScroll ? `2px solid ${TINTA}55` : undefined}
               >
                 {/* "Foto" de esta franja (posición distinta por ítem) */}
                 <FotoFranja posicion={`center ${(i * 29) % 100}%`} />

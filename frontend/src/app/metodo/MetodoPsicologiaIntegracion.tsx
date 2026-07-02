@@ -5,7 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import { BotonGuardar } from "../../components/global/BotonGuardar";
+import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -132,7 +132,7 @@ export default function MetodoPsicologiaIntegracion() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [, setGuardando] = useState(false);
+  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
   const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
@@ -144,6 +144,12 @@ export default function MetodoPsicologiaIntegracion() {
   const [sobreMesa, setSobreMesa] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<Constelacion[] | null>(null);
+  const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const montado = useRef(true);
+  useEffect(() => () => {
+    montado.current = false;
+    if (okTimer.current) clearTimeout(okTimer.current);
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -198,23 +204,28 @@ export default function MetodoPsicologiaIntegracion() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
-    setGuardando(true);
+    if (montado.current) setEstadoGuardado("guardando");
     try {
       const data = { ...dataRef.current, constelaciones: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
+      if (montado.current) {
+        setEstadoGuardado("ok");
+        if (okTimer.current) clearTimeout(okTimer.current);
+        okTimer.current = setTimeout(() => { if (montado.current) setEstadoGuardado("idle"); }, 2200);
+      }
       return true;
     } catch {
+      if (montado.current) setEstadoGuardado("idle");
       return false;
-    } finally {
-      setGuardando(false);
     }
   };
 
   // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
   const commit = (next: Constelacion[]) => {
     setRelaciones(next);
+    setEstadoGuardado("guardando"); // hay un cambio pendiente de guardar
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
@@ -272,12 +283,6 @@ export default function MetodoPsicologiaIntegracion() {
     setActivaId(nueva.id);
   };
 
-  // Guardado inmediato (botón Guardar): cancela el debounce y persiste ya.
-  const guardarAhora = (): Promise<boolean> => {
-    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
-    pendiente.current = null;
-    return persistir(relaciones);
-  };
 
   const abrirSaberMas = (a: ArqItem) => {
     const c = cuerpoByKey(a.cuerpoKey);
@@ -439,15 +444,7 @@ export default function MetodoPsicologiaIntegracion() {
                         <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
                              style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>+ Añadir relación</Box>
                       </Box>
-                      <BotonGuardar
-                        onSave={guardarAhora}
-                        bg={TINTA}
-                        fg={neuropsicologiaBg}
-                        minW={{ base: "130px", md: "150px" }}
-                        px={{ base: 6, md: 7 }}
-                        py={2.5}
-                        fontSize={{ base: "sm", md: "md" }}
-                      />
+                      <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
                     </Flex>
                   </Flex>
                 </Box>

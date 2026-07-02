@@ -68,6 +68,14 @@ interface Row {
   retos?: { id: string }[];
 }
 
+// Clave de "leído" ESPECÍFICA DEL BOX (planeta del box + aspecto). Cada aspecto
+// une dos planetas y aparece en los dos boxes; con `aspectoKey` a secas, leerlo
+// en el box del planeta A lo marcaba también como leído en el box del planeta B
+// (que aún no se ha abierto), haciendo que el siguiente box apareciera con su
+// primer aspecto ya leído. Prefijando la clave con el planeta del box, el
+// usuario debe leer el aspecto en CADA box por separado.
+const boxAspectoKey = (cuerpoKey: string, a: Aspecto): string => `${cuerpoKey}|${aspectoKey(a)}`;
+
 export default function MetodoAstrologiaAspectos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -80,10 +88,11 @@ export default function MetodoAstrologiaAspectos() {
   // Para bloquear la ENTRADA a Aspectos: hay que haber leído todas las casas.
   const { leidos: casasLeidos, cargado: cargadoCasas } = useAstroLeidos("casas");
 
-  // Abre el aspecto (si su planeta está desbloqueado) y lo marca como leído.
-  const abrirAspecto = (a: Aspecto) => {
+  // Abre el aspecto (si su planeta está desbloqueado) y lo marca como leído
+  // EN ESTE BOX (la clave lleva el planeta del box como prefijo).
+  const abrirAspecto = (a: Aspecto, cuerpoKey: string) => {
     setAbierto(a);
-    marcarLeido(aspectoKey(a));
+    marcarLeido(boxAspectoKey(cuerpoKey, a));
   };
 
   // Bloquea el scroll del fondo mientras el popup está abierto (solo scrollea la tarjeta).
@@ -163,11 +172,16 @@ export default function MetodoAstrologiaAspectos() {
   // hay nada que leer). Al completar un planeta, se marca visualmente.
   let anterioresCompletas = true;
   const gruposPorPlaneta = gruposBase.map((g) => {
-    const leibles = g.items.filter(({ aspecto }) => (textos[aspectoKey(aspecto)] ?? "").trim().length > 0);
-    const completa = leibles.every(({ aspecto }) => leidos.has(aspectoKey(aspecto)));
+    // El box se completa cuando el usuario ha ABIERTO todos sus aspectos, uno a
+    // uno (al abrir cualquiera —tenga o no lectura escrita— se marca leído). Se
+    // cuentan TODOS los aspectos del box, no solo los que ya tienen texto: así
+    // no sale "Completado" al llegar y el desbloqueo del siguiente planeta es
+    // secuencial de verdad. `gruposBase` garantiza items.length > 0, de modo que
+    // `every` nunca opera sobre un array vacío (evita el falso "completado").
+    const completa = g.items.every(({ aspecto }) => leidos.has(boxAspectoKey(g.cuerpo.key, aspecto)));
     const desbloqueada = anterioresCompletas;
     anterioresCompletas = anterioresCompletas && completa;
-    return { ...g, completa, desbloqueada, totalLeibles: leibles.length };
+    return { ...g, completa, desbloqueada, totalLeibles: g.items.length };
   });
 
   return (
@@ -259,15 +273,16 @@ export default function MetodoAstrologiaAspectos() {
                           const co = cuerpoByKey(otro);
                           const colorAsp = COLOR_ASPECTO[aspecto.tipo];
                           const escrito = (textos[aspectoKey(aspecto)] ?? "").trim().length > 0;
-                          // Leído = el usuario ya abrió su lectura. Cambiamos
-                          // ligeramente el diseño (acento a la izquierda + check)
-                          // para que vea de un vistazo lo que ya ha leído.
-                          const leido = escrito && leidos.has(aspectoKey(aspecto));
+                          // Leído = el usuario ya lo abrió (persiste en la BD vía
+                          // marcarLeido). En cuanto lo lee mostramos el acento de
+                          // color a la izquierda + el check, tenga o no lectura
+                          // escrita, para que vea de un vistazo lo que ya ha leído.
+                          const leido = leidos.has(boxAspectoKey(cuerpo.key, aspecto));
                           return (
                             <Flex
                               key={`${aspectoKey(aspecto)}-${idx}`}
                               as="button"
-                              onClick={desbloqueada ? () => abrirAspecto(aspecto) : undefined}
+                              onClick={desbloqueada ? () => abrirAspecto(aspecto, cuerpo.key) : undefined}
                               disabled={!desbloqueada}
                               position="relative"
                               w="100%"
@@ -282,7 +297,7 @@ export default function MetodoAstrologiaAspectos() {
                               boxShadow={`0 0 10px ${colorAsp}1a`}
                               cursor={desbloqueada ? "pointer" : "not-allowed"}
                               flexShrink={0}
-                              opacity={!escrito ? 0.6 : leido ? 0.82 : 1}
+                              opacity={leido ? 0.82 : !escrito ? 0.6 : 1}
                               transition="all 0.18s"
                               _hover={desbloqueada ? {
                                 bg: "rgba(8,13,30,0.55)",
