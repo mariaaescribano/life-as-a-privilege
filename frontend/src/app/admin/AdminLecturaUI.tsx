@@ -5,12 +5,21 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/Disc
 // ─────────────────────────────────────────────────────────────────────────
 // UI de SOLO LECTURA para el panel admin: el administrador solo lee lo que el
 // propio usuario ha escrito en su recorrido (psicología, ayurveda…). Nada es
-// editable. Cada tarjeta lleva de fondo la imagen de la disciplina (velo claro
-// para legibilidad) y el texto en el color propio de la disciplina, para dar
-// coherencia y elegancia a todas las páginas de lectura.
+// editable.
+//
+// Estética (a petición): la FOTO de la disciplina se ve bien en el fondo de
+// TODAS las tarjetas. Para que el texto sea legible sobre la acuarela, cada
+// respuesta se apoya en un pequeño panel de "papel" translúcido y los títulos
+// llevan un halo claro (glow). Los separadores repiten la foto en una franja
+// horizontal, sin deformarla.
 // ─────────────────────────────────────────────────────────────────────────
 
-/** Tarjeta de sección con la imagen de la disciplina de fondo (atenuada). */
+// Halo claro para que la tinta (texto oscuro) resalte sobre la foto.
+const GLOW = "0 1px 2px #fbf4e8, 0 0 7px #fbf4e8, 0 0 12px #fbf4e8";
+// Panel de papel translúcido donde se asienta el texto largo.
+const PAPEL = "rgba(255,251,243,0.74)";
+
+/** Tarjeta de sección con la FOTO de la disciplina de fondo (bien visible). */
 export function LecturaCard({
   nom,
   txt,
@@ -22,7 +31,7 @@ export function LecturaCard({
 }: {
   nom: string;
   txt: string;
-  /** Velo claro sobre la imagen para que el texto oscuro sea legible. */
+  /** Velo TENUE sobre la foto (solo para unificar; la foto debe verse). */
   overlay: string;
   titulo?: string;
   meta?: string;
@@ -35,20 +44,21 @@ export function LecturaCard({
     <Box
       position="relative"
       borderRadius="xl"
-      border={`1px solid ${ac}44`}
+      border={`1px solid ${ac}55`}
       mb={5}
       overflow="hidden"
-      boxShadow="0 4px 18px rgba(0,0,0,0.10)"
+      boxShadow="0 4px 18px rgba(0,0,0,0.14)"
     >
       {hasDisciplinaBg(nom) && <DisciplinaBgLayer nom={nom} borderRadius="xl" overlay={overlay} />}
       <Box position="relative" zIndex={1} p={{ base: 5, md: 6 }}>
         {titulo && (
-          <Flex align="baseline" gap={2.5} mb={4} wrap="wrap" borderBottom={`1px solid ${ac}33`} pb={2.5}>
-            <Text color={ac} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.02em">
+          <Flex align="baseline" gap={2.5} mb={4} wrap="wrap" borderBottom={`1px solid ${ac}55`} pb={2.5}>
+            <Text color={ac} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.02em"
+                  style={{ textShadow: GLOW }}>
               {titulo}
             </Text>
             {meta && (
-              <Text color={txt} fontSize="sm" fontStyle="italic" opacity={0.65}>
+              <Text color={txt} fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>
                 {meta}
               </Text>
             )}
@@ -60,7 +70,7 @@ export function LecturaCard({
   );
 }
 
-/** Pregunta (opcional) + respuesta de texto libre del usuario. */
+/** Pregunta (opcional) + respuesta de texto libre del usuario, sobre papel. */
 export function QA({
   txt,
   pregunta,
@@ -76,16 +86,18 @@ export function QA({
   return (
     <Box mb={4} _last={{ mb: 0 }}>
       {pregunta && (
-        <Text color={txt} fontWeight="600" fontSize={{ base: "sm", md: "md" }} mb={1.5} opacity={0.85}>
+        <Text color={txt} fontWeight="600" fontSize={{ base: "sm", md: "md" }} mb={1.5} style={{ textShadow: GLOW }}>
           {pregunta}
         </Text>
       )}
       {val ? (
-        <Text color={txt} fontSize={{ base: "md", md: "lg" }} whiteSpace="pre-wrap" lineHeight="1.7">
-          {val}
-        </Text>
+        <Box bg={PAPEL} borderRadius="lg" px={{ base: 3.5, md: 4 }} py={{ base: 2.5, md: 3 }}>
+          <Text color={txt} fontSize={{ base: "md", md: "lg" }} whiteSpace="pre-wrap" lineHeight="1.7">
+            {val}
+          </Text>
+        </Box>
       ) : (
-        <Text color={txt} opacity={0.4} fontStyle="italic" fontSize="sm">
+        <Text color={txt} opacity={0.55} fontStyle="italic" fontSize="sm" style={{ textShadow: GLOW }}>
           {vacio}
         </Text>
       )}
@@ -93,7 +105,7 @@ export function QA({
   );
 }
 
-/** Lista de ítems seleccionados por el usuario, como chips. */
+/** Lista de ítems seleccionados por el usuario, como chips de papel. */
 export function Chips({ txt, items, accent }: { txt: string; items: string[]; accent?: string }) {
   const ac = accent ?? txt;
   if (!items?.length) return null;
@@ -107,8 +119,8 @@ export function Chips({ txt, items, accent }: { txt: string; items: string[]; ac
           px={3}
           py={1}
           borderRadius="full"
-          border={`1px solid ${ac}55`}
-          bg={`${ac}12`}
+          border={`1px solid ${ac}66`}
+          bg={PAPEL}
         >
           {it}
         </Text>
@@ -120,9 +132,32 @@ export function Chips({ txt, items, accent }: { txt: string; items: string[]; ac
 /** Subtítulo pequeño dentro de una tarjeta (etiqueta de un bloque). */
 export function SubTitulo({ txt, children }: { txt: string; children: React.ReactNode }) {
   return (
-    <Text color={txt} fontWeight="700" fontSize="sm" letterSpacing="0.04em" textTransform="uppercase" mb={2} opacity={0.7}>
+    <Text color={txt} fontWeight="700" fontSize="sm" letterSpacing="0.04em" textTransform="uppercase" mb={2}
+          style={{ textShadow: GLOW }}>
       {children}
     </Text>
+  );
+}
+
+/** Separador horizontal que REPITE la foto de la disciplina sin deformarla
+ *  (la escala a la altura de la franja y la repite en horizontal). */
+export function LineaImagen({ img, txt }: { img?: string; txt: string }) {
+  if (!img) {
+    return <Box h="2px" my={5} bg={`${txt}55`} borderRadius="full" />;
+  }
+  return (
+    <Box
+      my={5}
+      h={{ base: "30px", md: "38px" }}
+      borderRadius="full"
+      overflow="hidden"
+      border={`1px solid ${txt}44`}
+      boxShadow="0 2px 8px rgba(0,0,0,0.12)"
+      bgImage={`url('${img}')`}
+      bgRepeat="repeat-x"
+      bgSize="auto 100%"
+      bgPosition="left center"
+    />
   );
 }
 

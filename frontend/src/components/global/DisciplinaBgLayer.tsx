@@ -141,6 +141,10 @@ const ImageBgLayer = ({
 export const hasDisciplinaBg = (nom: string): boolean =>
   nom === astrologiaNom || nom in DISCIPLINA_BG_IMG;
 
+/** Ruta de la imagen de fondo de la disciplina (undefined si usa estrellado o
+ *  no tiene). Útil para reutilizar la foto en franjas/separadores. */
+export const disciplinaBgImg = (nom: string): string | undefined => DISCIPLINA_BG_IMG[nom];
+
 /** Capa de fondo específica de la disciplina. Devuelve null si no tiene una.
  *  Úsala como hijo absoluto dentro de un contenedor con overflow:hidden y
  *  position:relative. Eleva los demás hijos con position:relative + zIndex≥1.

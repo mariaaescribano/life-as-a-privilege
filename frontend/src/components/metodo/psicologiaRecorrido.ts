@@ -323,7 +323,7 @@ export interface Necesidad {
 
 export const NECESIDADES_INTRO = {
   titulo: "Las necesidades de la infancia",
-  subtitulo: "Lo que todo niño necesita — y la respuesta que un cuidador sano ofrece.",
+  subtitulo: "",
   texto:
     "Ya has recordado tu historia y nombrado tus nudos. Detente ahora en lo que un niño necesita para crecer sano: abre cada necesidad y, sin juzgar a nadie, marca cómo lo viviste tú. No hay respuestas correctas: solo tu verdad.",
 };

@@ -3,6 +3,45 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
+xxx hacer mini diario de notas --> abajo a la izquierda, poder escribir lo que sea cuando se quiera, permitir que tenga varios tipos de clasificaciones
+xxx final de cada recorrido hacer una especie de pdf con toda la información??
+xxx boton abajo a la derecha siempre para permitir que pueda agendar una llamada conmigo
+xxx en heridas poner pequeña explicación, que salga algo cuando se le da al boton guardar
+xxx tambien q salga algo para guardar en tus relaciones
+
+xxx en compromiso poner las respuestas de ¿Qué coste tiene mantener este patrón?
+
+xxx q desde Compromiso se pueda abonar ayurveda y empezar 
+
+xxx poner boton de pago de prueba a ayurveda
+
+AYURVEDA 
+xx Equilibra 1/— --> poner numero total de cuantos pasos hay
+xxx cambiar Tarjetas por Energías
+xxx poner en cada dosha el numero de paginas q hay Dosha: Vata
+
+xxx ponerse de acuerdo con el header y los botones, si un boton esta desactivado, se desactiva, no se pone un candado
+xxx poner día de ejemplo en creando día de ayurveda
+xxx traer el compromiso q te has hecho en psicología, q sea un popup que el usuario vea, q no se le olvide lo q se acaba de comprometer
+
+
+
+xxx /metodo/ayurveda/dosha/kapha/cursos es igual de estetica q los de astrología??
+xxx poner Tu recorrido antes q cursos
+xxx poder descaragrase día ideal en Tu recorrido 
+xxx poder descargarse todo el trabajo + consejos de que equilibra y desequilibra a su dosha (pequeño recordatorio de take away)
+
+
+
+xxxhacer todo otra vez pero falso, para sacar fotos y subirlas
+
+
+
+
+
+
+
+
 CONECTANDO CON SUPABASE
 
 postgresql://postgres:[YOUR-PASSWORD]@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres

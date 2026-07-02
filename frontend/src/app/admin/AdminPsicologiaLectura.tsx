@@ -8,7 +8,8 @@ import { API_URL, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVar
 import { disciplinaByKey } from "../../data/adminDisciplinas";
 import { AdminDisciplinaHeader } from "./AdminDisciplinaHeader";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
-import { LecturaCard, QA, Chips, SubTitulo, LecturaVacio } from "./AdminLecturaUI";
+import { LecturaCard, QA, Chips, SubTitulo, LecturaVacio, LineaImagen } from "./AdminLecturaUI";
+import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import {
   experienciaById,
   NECESIDADES,
@@ -25,7 +26,8 @@ import { cuerpoByKey } from "../../components/metodo/astrologiaData";
 import { NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
 
 const TXT = neuropsicologiaTxt;
-const OVERLAY = "rgba(244,230,214,0.87)"; // velo cálido para que el texto oscuro sea legible
+const OVERLAY = "rgba(247,236,220,0.28)"; // velo TENUE: la foto de psicología debe verse bien
+const IMG = disciplinaBgImg(neuropsicologiaNom); // foto para las franjas separadoras
 
 /** Etiqueta legible de un arquetipo de la carta (cuerpo en signo / en casa). */
 function arquetipoLabel(a: ArquetipoRef): string {
@@ -113,7 +115,7 @@ export default function AdminPsicologiaLectura() {
           <Text as="button" onClick={() => navigate("/admin/psicologia")} color="rgba(255,255,255,0.85)" fontSize="sm" mb={3}
                 _hover={{ color: "white" }}>← Usuarios de psicología</Text>
 
-          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
+          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} imagen />
 
           {!haleAlgo ? (
             <LecturaVacio txt="rgba(255,255,255,0.92)">
@@ -155,47 +157,41 @@ export default function AdminPsicologiaLectura() {
               {(aniosCompletados.length > 0 || aniosSinRecuerdos.length > 0) && (
                 <LecturaCard nom={neuropsicologiaNom} txt={TXT} overlay={OVERLAY}
                              titulo="Línea de vida" meta={edad ? `${edad} años · ${aniosCompletados.length} con recuerdos` : undefined}>
-                  <Flex direction="column" gap={5}>
-                    {aniosCompletados.map((a) => {
-                      const ano = data.anos?.[String(a)];
-                      const huellas = Array.isArray(ano?.huellas) ? ano!.huellas! : [];
-                      return (
-                        <Box key={a} borderLeft={`2px solid ${TXT}44`} pl={4}>
-                          <Text color={TXT} fontWeight="700" fontSize={{ base: "md", md: "lg" }} mb={2}>
+                  {aniosCompletados.map((a, idx) => {
+                    const ano = data.anos?.[String(a)];
+                    const huellas = Array.isArray(ano?.huellas) ? ano!.huellas! : [];
+                    return (
+                      <React.Fragment key={a}>
+                        {/* Separación entre años: franja horizontal con la foto repetida. */}
+                        {idx > 0 && <LineaImagen img={IMG} txt={TXT} />}
+                        <Box>
+                          <Text color={TXT} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={2.5} style={{ textShadow: "0 1px 2px #fbf4e8, 0 0 7px #fbf4e8" }}>
                             {a} {a === 1 ? "año" : "años"}
                           </Text>
-                          <Flex direction="column" gap={2.5}>
+                          <Flex direction="column" gap={3}>
                             {exp.preguntasPorAno.map((p) => {
                               const items = itemsDeRespuesta(ano?.respuestas?.[p.key]).map((x) => x.trim()).filter(Boolean);
                               if (items.length === 0) return null;
                               return (
-                                <Box key={p.key}>
-                                  <Text color={TXT} fontSize="sm" fontWeight="600" opacity={0.8} mb={1}>{p.pregunta}</Text>
-                                  <Flex direction="column" gap={1}>
-                                    {items.map((it, i) => {
-                                      const esHuella = huellas.includes(it);
-                                      return (
-                                        <Text key={i} color={TXT} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
-                                          {esHuella && <Box as="span" color={TXT} fontWeight="700">✦ </Box>}
-                                          {it}
-                                        </Text>
-                                      );
-                                    })}
-                                  </Flex>
-                                </Box>
+                                <QA
+                                  key={p.key}
+                                  txt={TXT}
+                                  pregunta={p.pregunta}
+                                  respuesta={items.map((it) => (huellas.includes(it) ? `✦ ${it}` : it)).join("\n")}
+                                />
                               );
                             })}
                           </Flex>
                         </Box>
-                      );
-                    })}
-                    {aniosSinRecuerdos.length > 0 && (
-                      <Text color={TXT} fontSize="sm" fontStyle="italic" opacity={0.6}>
-                        Años marcados «sin recuerdos»: {aniosSinRecuerdos.join(", ")}.
-                      </Text>
-                    )}
-                  </Flex>
-                  <Text color={TXT} fontSize="xs" fontStyle="italic" opacity={0.55} mt={3}>
+                      </React.Fragment>
+                    );
+                  })}
+                  {aniosSinRecuerdos.length > 0 && (
+                    <Text color={TXT} fontSize="sm" fontStyle="italic" mt={4} style={{ textShadow: "0 1px 2px #fbf4e8, 0 0 7px #fbf4e8" }}>
+                      Años marcados «sin recuerdos»: {aniosSinRecuerdos.join(", ")}.
+                    </Text>
+                  )}
+                  <Text color={TXT} fontSize="xs" fontStyle="italic" mt={3} style={{ textShadow: "0 1px 2px #fbf4e8, 0 0 7px #fbf4e8" }}>
                     ✦ Recuerdos que el usuario marcó como huella.
                   </Text>
                 </LecturaCard>

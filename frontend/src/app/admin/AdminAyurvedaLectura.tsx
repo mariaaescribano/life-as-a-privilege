@@ -21,7 +21,7 @@ import { DOSHA_DESEQUILIBRIO } from "../../hardCoded/metodo/doshaDesequilibrio";
 import { DOSHA_CUIDARTE } from "../../hardCoded/metodo/doshaCuidarte";
 
 const TXT = ayurvedaTxt;
-const OVERLAY = "rgba(255,251,244,0.86)"; // velo papel cálido para legibilidad del texto marrón
+const OVERLAY = "rgba(255,251,244,0.30)"; // velo TENUE: la foto de Hinduismo debe verse bien
 
 const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> = {
   vata: { label: "Vata", color: vataColor, Icon: VataIcon },
@@ -99,7 +99,7 @@ export default function AdminAyurvedaLectura() {
           <Text as="button" onClick={() => navigate("/admin/ayurveda")} color="rgba(255,255,255,0.85)" fontSize="sm" mb={3}
                 _hover={{ color: "white" }}>← Usuarios de {disc.nombre.toLowerCase()}</Text>
 
-          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
+          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} imagen />
 
           {doshasConDatos.length === 0 ? (
             <LecturaVacio txt="rgba(255,255,255,0.92)">
