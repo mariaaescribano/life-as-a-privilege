@@ -8,10 +8,12 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { TextoCartaExplicativo } from "../../components/metodo/TextoCartaExplicativo";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   API_URL,
   astrologiaBg,
+  astrologiaNom,
   astrologiaTxt,
   AstrologiaIcon,
 } from "../../GlobalVariables";
@@ -550,6 +552,7 @@ export default function MetodoAstrologia() {
         </Box>
       )}
 
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

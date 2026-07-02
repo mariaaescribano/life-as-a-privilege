@@ -12,6 +12,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   ayurvedaBg,
@@ -123,7 +124,7 @@ export default function MetodoAyurveda() {
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
             title="Equilibra"
-            pageLabel="1/—"
+            pageLabel="1/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
@@ -195,6 +196,8 @@ export default function MetodoAyurveda() {
           </Box>
         </Flex>
       </Flex>
+
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />
 

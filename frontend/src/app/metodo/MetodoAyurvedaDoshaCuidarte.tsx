@@ -9,6 +9,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -262,6 +263,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            pageLabel="5/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
@@ -415,6 +417,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
       </Flex>
 
       {ilustracionesModal}
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

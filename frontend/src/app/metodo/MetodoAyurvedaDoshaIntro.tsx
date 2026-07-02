@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
-import { Brain, HeartPulse, Repeat, Salad, Scale, Sparkles, Lock } from "lucide-react";
+import { Brain, HeartPulse, Repeat, Salad, Scale, Sparkles } from "lucide-react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,6 +9,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -236,7 +237,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={0}
-              prev={{ label: "← Tarjetas", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
+              prev={{ label: "← Energías", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
               extra={ilustracionesBtn}
             />
             <Panel color={meta.color}>
@@ -265,16 +266,18 @@ export default function MetodoAyurvedaDoshaIntro() {
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            pageLabel="1/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Tarjetas", onClick: () => { void persist(cambio); navigate("/metodo/ayurveda/tarjetas"); } }}
+            prev={{ label: "← Energías", onClick: () => { void persist(cambio); navigate("/metodo/ayurveda/tarjetas"); } }}
             extra={ilustracionesBtn}
             next={{
               label: "Descúbrete →",
               onClick: irSiguiente,
-              icon: guardado ? undefined : <Lock size={14} />,
+              disabled: !guardado,
+              disabledTooltip: "Guarda tu respuesta para continuar.",
             }}
           />
 
@@ -461,8 +464,8 @@ export default function MetodoAyurvedaDoshaIntro() {
                 fontWeight="700"
                 fontSize={{ base: "lg", md: "xl" }}
                 letterSpacing="0.06em"
-                cursor="pointer"
-                opacity={guardado ? 1 : 0.9}
+                cursor={guardado ? "pointer" : "not-allowed"}
+                opacity={guardado ? 1 : 0.55}
                 boxShadow={guardado ? `0 0 26px ${meta.color}88` : "none"}
                 transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
@@ -471,7 +474,6 @@ export default function MetodoAyurvedaDoshaIntro() {
                 gap={2.5}
                 _hover={{ transform: "translateY(-2px)", boxShadow: guardado ? `0 0 34px ${meta.color}aa` : `0 0 18px ${meta.color}55` }}
               >
-                {!guardado && <Lock size={17} />}
                 Descúbrete →
               </Box>
 
@@ -486,6 +488,8 @@ export default function MetodoAyurvedaDoshaIntro() {
       </Flex>
 
       {ilustracionesModal}
+
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />
     </Box>

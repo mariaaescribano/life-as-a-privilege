@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { useCursosData } from "../../data/cursosApi";
 import {
-  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
+  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon, tcmNomLink,
 } from "../../GlobalVariables";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
@@ -54,9 +56,9 @@ export default function MetodoAyurvedaDoshaCursos() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Tu día", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
+            prev={{ label: "← Tu Recorrido", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Tu Recorrido →", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
+            next={{ label: "Med. China →", onClick: () => navigate(`/aprendizaje/cursos/${tcmNomLink}`) }}
           />
 
           <Text
@@ -84,19 +86,14 @@ export default function MetodoAyurvedaDoshaCursos() {
                 </Box>
               </Flex>
             ) : (
-              <SimpleGrid
-                w="100%"
-                columns={{ base: 1, sm: 2, lg: 3 }}
-                spacing={{ base: 5, md: 6 }}
-                alignItems="start"
-                sx={{ "@keyframes cursoCardIn": { from: { opacity: 0, transform: "translateY(40px) scale(0.95)" }, to: { opacity: 1, transform: "translateY(0) scale(1)" } } }}
-              >
-                {cursos.map((curso, i) => (
-                  <Box key={curso.id} h="100%" style={{ opacity: 0, animation: `cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s forwards` }}>
-                    <CursoCardDetalle curso={curso} bgColor={ayurvedaBg} color={ayurvedaTxt} nom={ayurvedaNom} />
-                  </Box>
-                ))}
-              </SimpleGrid>
+              <CursosGrid
+                items={cursos.map((curso) => ({
+                  curso,
+                  color: ayurvedaTxt,
+                  bgColor: ayurvedaBg,
+                  nom: ayurvedaNom,
+                }))}
+              />
             )
           ) : (
             <Box
@@ -118,6 +115,7 @@ export default function MetodoAyurvedaDoshaCursos() {
       </Flex>
 
       {ilustracionesModal}
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

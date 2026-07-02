@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { Download } from "lucide-react";
 import axios from "axios";
+import { generateDiaPdf } from "../../utils/generateDiaPdf";
+import { generateRecorridoPdf } from "../../utils/generateRecorridoPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
-  tcmNomLink,
 } from "../../GlobalVariables";
 import { DOSHA_INTRO, type DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 import { DOSHA_DESCUBRE } from "../../hardCoded/metodo/doshaDescubre";
@@ -114,7 +117,29 @@ export default function MetodoAyurvedaDoshaRecorrido() {
     .filter((b) => (b?.actividad && b.actividad.trim()) || (Array.isArray(b?.alimentos) && b.alimentos.length > 0) || b?.hora)
     .sort((a, b) => (a.hora || "99").localeCompare(b.hora || "99"));
 
-  const irMedChina = () => navigate(`/aprendizaje/cursos/${tcmNomLink}`);
+  // Día ideal normalizado para el PDF (garantiza que `alimentos` es un array).
+  const diaBloquesPdf = diaBloques.map((b) => ({
+    hora: b?.hora || "",
+    actividad: b?.actividad || "",
+    comida: !!b?.comida,
+    alimentos: Array.isArray(b?.alimentos) ? b.alimentos : [],
+  }));
+
+  const descargarDia = () => { void generateDiaPdf(doshaKey, meta.label, diaBloquesPdf); };
+
+  const descargarRecorrido = () => {
+    const des = DOSHA_DESEQUILIBRIO[doshaKey];
+    void generateRecorridoPdf(doshaKey, meta.label, {
+      entradas,
+      compromiso,
+      diaBloques: diaBloquesPdf,
+      desequilibra: { titulo: des?.aumenta.titulo || "", items: des?.aumenta.opciones || [] },
+      senales: { titulo: des?.senales.titulo || "", items: des?.senales.items || [] },
+      equilibra: { titulo: des?.equilibrio.titulo || "", items: des?.equilibrio.items || [] },
+    });
+  };
+
+  const irCursos = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cursos`);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -130,9 +155,9 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Cursos", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cursos`) }}
+            prev={{ label: "← Tu día", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Med. China →", onClick: irMedChina }}
+            next={{ label: "Cursos →", onClick: irCursos }}
           />
 
           {/* ── HERO ── */}
@@ -144,6 +169,21 @@ export default function MetodoAyurvedaDoshaRecorrido() {
               <Separador />
               <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
                 A lo largo del camino te has ido escuchando. Estas son las palabras que te dejaste a ti mismo.
+              </Text>
+              <Flex
+                as="button" onClick={descargarRecorrido} mt={2}
+                align="center" gap={2.5}
+                px={{ base: 8, md: 11 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
+                bg={meta.color} color="#fff"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+                cursor="pointer" boxShadow={`0 0 22px ${meta.color}77`} transition="all 0.2s"
+                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${meta.color}aa` }}
+              >
+                <Download size={18} /> Descargar mi recorrido
+              </Flex>
+              <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">
+                Incluye tus respuestas, tu día ideal y, de regalo, qué equilibra y desequilibra tu {meta.label}.
               </Text>
             </Flex>
           </Panel>
@@ -194,25 +234,36 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             </Text>
             <Box h="1px" w="60%" mx="auto" mb={6} bgGradient={`linear(to-r, transparent, ${ayurvedaTxt}66, transparent)`} />
             {diaBloques.length > 0 ? (
-              <Flex direction="column" gap={4}>
-                {diaBloques.map((b, i) => (
-                  <Flex key={i} align="flex-start" gap={4}>
-                    <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} minW={{ base: "48px", md: "58px" }} flexShrink={0} mt="2px">
-                      {b.hora || "—"}
-                    </Text>
-                    <Box>
-                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
-                        {b.actividad || (b.comida ? "Comida" : "Momento")}
+              <>
+                <Flex direction="column" gap={4}>
+                  {diaBloques.map((b, i) => (
+                    <Flex key={i} align="flex-start" gap={4}>
+                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} minW={{ base: "48px", md: "58px" }} flexShrink={0} mt="2px">
+                        {b.hora || "—"}
                       </Text>
-                      {b.comida && Array.isArray(b.alimentos) && b.alimentos.length > 0 && (
-                        <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
-                          {b.alimentos.join(" · ")}
+                      <Box>
+                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
+                          {b.actividad || (b.comida ? "Comida" : "Momento")}
                         </Text>
-                      )}
-                    </Box>
+                        {b.comida && Array.isArray(b.alimentos) && b.alimentos.length > 0 && (
+                          <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
+                            {b.alimentos.join(" · ")}
+                          </Text>
+                        )}
+                      </Box>
+                    </Flex>
+                  ))}
+                </Flex>
+                <Flex justify="center" mt={7}>
+                  <Flex as="button" onClick={descargarDia} align="center" gap={2} px={5} py={2.5} borderRadius="full"
+                        bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
+                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                        cursor="pointer" transition="all 0.15s"
+                        _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
+                    <Download size={16} /> Descargar este día
                   </Flex>
-                ))}
-              </Flex>
+                </Flex>
+              </>
             ) : (
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" lineHeight="1.8">
                 Aún no has creado tu día ideal. Vuelve a «Crea tu día» para diseñarlo.
@@ -231,7 +282,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
               </Text>
               <Box
                 as="button"
-                onClick={irMedChina}
+                onClick={irCursos}
                 mt={2}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={meta.color} color="#fff"
@@ -241,7 +292,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
               >
-                Med. China →
+                Cursos →
               </Box>
             </Flex>
           </Panel> */}
@@ -249,6 +300,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
       </Flex>
 
       {ilustracionesModal}
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

@@ -4,7 +4,7 @@ import {
   Box, Flex, Text, Input, Wrap, WrapItem,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
-import { Lock, Check, Plus, X, Pencil, Clock, Download } from "lucide-react";
+import { Check, Plus, X, Pencil, Clock, Download, Eye } from "lucide-react";
 import axios from "axios";
 import { generateDiaPdf } from "../../utils/generateDiaPdf";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -13,6 +13,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { RecordatorioCompromiso } from "../../components/metodo/RecordatorioCompromiso";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -33,6 +35,17 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
 };
 
 const limpia = (s: string) => s.replace(/\.\s*$/, "");
+
+// Día de ejemplo (solo inspiración; el usuario escribe el suyo).
+const DIA_EJEMPLO: { hora: string; actividad: string; comida?: boolean }[] = [
+  { hora: "6:00", actividad: "Lavarse los dientes y meditar" },
+  { hora: "8:00", actividad: "Entreno" },
+  { hora: "9:00", actividad: "Trabajo" },
+  { hora: "13:00", actividad: "Pausa para comer", comida: true },
+  { hora: "18:00", actividad: "Salir del trabajo" },
+  { hora: "21:00", actividad: "Cena ligera", comida: true },
+  { hora: "22:30", actividad: "Desconectar y preparar el descanso" },
+];
 
 interface Bloque { id: number; hora: string; actividad: string; comida: boolean; alimentos: string[] }
 interface Draft { hora: string; actividad: string; comida: boolean; alimentos: string[] }
@@ -109,6 +122,7 @@ export default function MetodoAyurvedaDoshaDia() {
   const [guardando, setGuardando] = useState(false);
   // Popup de añadir/editar momento.
   const [modalOpen, setModalOpen] = useState(false);
+  const [ejemploOpen, setEjemploOpen] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [draft, setDraft] = useState<Draft>({ hora: "", actividad: "", comida: false, alimentos: [] });
   const dataRef = useRef<Record<string, any>>({});
@@ -182,7 +196,7 @@ export default function MetodoAyurvedaDoshaDia() {
     }
   };
 
-  const irCursos = () => { if (guardado) navigate(`/metodo/ayurveda/dosha/${doshaKey}/cursos`); };
+  const irRecorrido = () => { if (guardado) navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`); };
 
   if (loading || !doshaKey) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -212,7 +226,7 @@ export default function MetodoAyurvedaDoshaDia() {
             mb={0}
             prev={{ label: "← Estilo de vida", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: irCursos, icon: guardado ? undefined : <Lock size={14} /> }}
+            next={{ label: "Tu Recorrido →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
           />
 
           {/* HERO */}
@@ -244,6 +258,13 @@ export default function MetodoAyurvedaDoshaDia() {
                     <Download size={16} /> PDF
                   </Flex>
                 )}
+                <Flex as="button" onClick={() => setEjemploOpen(true)} align="center" gap={2} px={4} py={2} borderRadius="full"
+                      bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
+                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                      cursor="pointer" transition="all 0.15s"
+                      _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
+                  <Eye size={16} /> Ver ejemplo
+                </Flex>
                 <Flex as="button" onClick={abrirAnadir} align="center" gap={2} px={4} py={2} borderRadius="full"
                       bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                       cursor="pointer" boxShadow={`0 0 14px ${meta.color}66`} transition="all 0.15s"
@@ -260,6 +281,13 @@ export default function MetodoAyurvedaDoshaDia() {
                 <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" maxW="460px">
                   Tu día está en blanco. Pulsa «Añadir momento» y empieza a construir la rutina que de verdad encaja contigo.
                 </Text>
+                <Flex as="button" onClick={() => setEjemploOpen(true)} align="center" gap={2} px={5} py={2.5} borderRadius="full"
+                      bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
+                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                      cursor="pointer" transition="all 0.15s"
+                      _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
+                  <Eye size={16} /> Ver un día de ejemplo
+                </Flex>
               </Flex>
             ) : (
               <Flex direction="column" gap={3.5}>
@@ -315,25 +343,24 @@ export default function MetodoAyurvedaDoshaDia() {
             </Box>
           </Flex>
 
-          {/* Continuar → Cursos */}
+          {/* Continuar → Tu Recorrido */}
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
                 Tu día no tiene que ser perfecto. Basta con que, poco a poco, se parezca un poco más a lo que tu cuerpo necesita.
               </Text>
               <Box
-                as="button" onClick={irCursos} mt={1}
+                as="button" onClick={irRecorrido} mt={1}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={guardado ? meta.color : `${meta.color}55`} color="#fff"
                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
-                cursor={guardado ? "pointer" : "not-allowed"} opacity={guardado ? 1 : 0.9}
+                cursor={guardado ? "pointer" : "not-allowed"} opacity={guardado ? 1 : 0.55}
                 boxShadow={guardado ? `0 0 26px ${meta.color}88` : "none"} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 display="inline-flex" alignItems="center" gap={2.5}
                 _hover={guardado ? { transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` } : {}}
               >
-                {!guardado && <Lock size={17} />}
-                Cursos →
+                Tu Recorrido →
               </Box>
               {!guardado && (
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
@@ -463,7 +490,67 @@ export default function MetodoAyurvedaDoshaDia() {
         </ModalContent>
       </Modal>
 
+      {/* Popup: día de ejemplo (inspiración) */}
+      <Modal isOpen={ejemploOpen} onClose={() => setEjemploOpen(false)} size="lg" isCentered scrollBehavior="inside">
+        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalContent
+          bg={`${ayurvedaBg}f2`}
+          border={`1px solid ${TINTA}33`}
+          borderRadius="2xl"
+          boxShadow="0 16px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255,255,255,0.12)"
+          mx={{ base: 4, md: 0 }}
+          fontFamily="'EB Garamond', serif"
+          overflow="hidden"
+        >
+          <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" />
+          <ModalCloseButton color={TINTA} zIndex={2} />
+          <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
+            <Flex direction="column" gap={5}>
+              <Flex direction="column" align="center" gap={1.5}>
+                <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                  Un día de ejemplo
+                </Text>
+                <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
+                  Solo para inspirarte. Tu día lo escribes tú, a tu manera.
+                </Text>
+              </Flex>
+
+              <Box h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+              <Flex direction="column" gap={3}>
+                {DIA_EJEMPLO.map((b, i) => (
+                  <Flex key={i} align="center" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}
+                        borderRadius="xl" bg="rgba(255,251,243,0.5)" border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}>
+                    <Flex align="center" gap={1.5} flexShrink={0} minW={{ base: "58px", md: "68px" }}>
+                      <Clock size={14} color={meta.color} />
+                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }}>{b.hora}</Text>
+                    </Flex>
+                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
+                      {b.actividad}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+
+              <Flex justify="center" mt={1}>
+                <Box
+                  as="button" onClick={() => setEjemploOpen(false)}
+                  px={9} py={2.5} borderRadius="full" bg={meta.color} color="#fff"
+                  fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.06em"
+                  cursor="pointer" boxShadow={`0 4px 20px ${meta.color}55`} style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                  transition="all 0.2s" _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 28px ${meta.color}88` }}
+                >
+                  Crear el mío
+                </Box>
+              </Flex>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       {ilustracionesModal}
+      <RecordatorioCompromiso />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

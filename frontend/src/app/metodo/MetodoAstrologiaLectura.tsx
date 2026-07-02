@@ -12,7 +12,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 interface Reto { id: string; titulo: string; texto: string; }
 
@@ -277,6 +278,7 @@ export default function MetodoAstrologiaLectura() {
       </Modal>
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

@@ -80,6 +80,7 @@ import FisiologiaEspacio from "./components/espacio/pages/FisiologiaEspacio";
 import FitoterapiaEspacio from "./components/espacio/pages/FitoterapiaEspacio";
 import CelulasCuerpoPage from "./app/espacio/CelulasCuerpoPage";
 import { ExitIntentSubscribeModal } from "./components/global/ExitIntentSubscribeModal";
+import { MiniDiario } from "./components/global/MiniDiario";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -99,6 +100,7 @@ export default function App()
     <>
     <ScrollToTop />
     <ExitIntentSubscribeModal />
+    <MiniDiario />
     <Routes>
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />

@@ -5,6 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
+import { BotonGuardar } from "../../components/global/BotonGuardar";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -31,8 +32,7 @@ export default function MetodoPsicologiaProblema() {
 
   const [loading, setLoading] = useState(true);
   const [problema, setProblema] = useState("");
-  const [guardando, setGuardando] = useState(false);
-  const [guardadoOk, setGuardadoOk] = useState(false);
+  const [, setGuardando] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
   const guardadoRef = useRef<string>("");
 
@@ -67,11 +67,11 @@ export default function MetodoPsicologiaProblema() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const guardarSiCambio = async () => {
-    if (problema === guardadoRef.current) return;
+  const guardarSiCambio = async (): Promise<boolean> => {
+    if (problema === guardadoRef.current) return true; // nada que guardar → ya está guardado
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
+    if (!userId || !token) return false;
     setGuardando(true);
     try {
       const next = { ...dataRef.current, "problema-actual": problema };
@@ -82,17 +82,12 @@ export default function MetodoPsicologiaProblema() {
       );
       dataRef.current = next;
       guardadoRef.current = problema;
+      return true;
     } catch {
-      // silencioso
+      return false;
     } finally {
       setGuardando(false);
     }
-  };
-
-  // Guardado manual (botón): conserva el problema sin salir de la página.
-  const guardar = async () => {
-    await guardarSiCambio();
-    setGuardadoOk(true);
   };
 
   const irALineaDeVida = async () => {
@@ -155,7 +150,7 @@ export default function MetodoPsicologiaProblema() {
               )}
               <Textarea
                 value={problema}
-                onChange={(e) => { setProblema(e.target.value); setGuardadoOk(false); }}
+                onChange={(e) => setProblema(e.target.value)}
                 placeholder={exp.problemaInicial.placeholder || "Escribe aquí…"}
                 w="100%"
                 maxW="640px"
@@ -176,33 +171,7 @@ export default function MetodoPsicologiaProblema() {
               />
 
               {/* Guardado manual (no se guarda al escribir) */}
-              <Box
-                as="button"
-                onClick={guardando ? undefined : guardar}
-                position="relative"
-                overflow="hidden"
-                minW="160px"
-                px={9}
-                py={3}
-                borderRadius="full"
-                bg={TINTA}
-                border={`1.5px solid ${TINTA}`}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
-                letterSpacing="0.05em"
-                whiteSpace="nowrap"
-                textAlign="center"
-                cursor={guardando ? "wait" : "pointer"}
-                boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`}
-                transition="transform 0.2s, box-shadow 0.2s"
-                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
-              >
-                <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                     style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
-                  {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
-                </Box>
-              </Box>
+              <BotonGuardar onSave={guardarSiCambio} bg={TINTA} fg={neuropsicologiaBg} />
             </Flex>
           </Box>
         </Flex>

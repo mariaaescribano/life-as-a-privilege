@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -97,14 +98,14 @@ export default function MetodoAyurvedaResultado() {
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
             title="Resultado"
-            pageLabel="3/—"
+            pageLabel="3/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
             prev={{ label: "← Test", onClick: () => navigate("/metodo/ayurveda/test") }}
             extra={ilustracionesBtn}
-            next={{ label: "Tarjetas →", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
+            next={{ label: "Energías →", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
           />
 
           {/* Resultado principal — solo el resultado, sin consejos */}
@@ -164,6 +165,8 @@ export default function MetodoAyurvedaResultado() {
       </Box>
 
       {ilustracionesModal}
+
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />
     </Box>

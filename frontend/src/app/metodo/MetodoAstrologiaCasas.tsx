@@ -13,7 +13,8 @@ import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 // Check pequeño para marcar una casa ya leída.
 const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
@@ -339,6 +340,7 @@ export default function MetodoAstrologiaCasas() {
       </Flex>
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

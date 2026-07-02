@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -113,7 +114,7 @@ export default function MetodoAyurvedaTarjetas() {
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
             title="Las tres energías"
-            pageLabel="4/—"
+            pageLabel="4/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
@@ -232,6 +233,8 @@ export default function MetodoAyurvedaTarjetas() {
       </Box>
 
       {ilustracionesModal}
+
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />
     </Box>

@@ -16,6 +16,7 @@ import { ASPECTO_LABEL, ASPECTO_SYMBOL, aspectoKey } from "../../components/meto
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 // Check pequeño para marcar un elemento ya leído.
@@ -417,6 +418,7 @@ export default function MetodoAstrologiaAspectos() {
       })()}
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

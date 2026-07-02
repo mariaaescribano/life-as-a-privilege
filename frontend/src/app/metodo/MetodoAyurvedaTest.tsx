@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import AyurvedaTestPage from "../../components/espacio/components/AyurvedaTestPage";
 import {
   API_URL,
@@ -86,7 +87,7 @@ export default function MetodoAyurvedaTest() {
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
               title="Test de los Doshas"
-              pageLabel="2/—"
+              pageLabel="2/4"
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
@@ -163,20 +164,24 @@ export default function MetodoAyurvedaTest() {
           </Flex>
         </Flex>
         {ilustracionesModal}
+        <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
         <SiteFooter />
       </Box>
     );
   }
 
   return (
-    <AyurvedaTestPage
-      prevTo="/metodo/ayurveda"
-      prevLabel="← Equilibra"
-      pageLabel="2/—"
-      onComplete={async () => { navigate("/metodo/ayurveda/resultado"); }}
-      headerNext={doshaGuardada
-        ? { label: "Resultado →", onClick: () => navigate("/metodo/ayurveda/resultado") }
-        : { label: "Resultado →", onClick: () => {}, disabled: true, disabledTooltip: "Completa el test para ver tu resultado." }}
-    />
+    <>
+      <AyurvedaTestPage
+        prevTo="/metodo/ayurveda"
+        prevLabel="← Equilibra"
+        pageLabel="2/4"
+        onComplete={async () => { navigate("/metodo/ayurveda/resultado"); }}
+        headerNext={doshaGuardada
+          ? { label: "Resultado →", onClick: () => navigate("/metodo/ayurveda/resultado") }
+          : { label: "Resultado →", onClick: () => {}, disabled: true, disabledTooltip: "Completa el test para ver tu resultado." }}
+      />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+    </>
   );
 }

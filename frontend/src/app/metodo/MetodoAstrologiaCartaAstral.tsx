@@ -18,7 +18,8 @@ import {
   esCuerpoCompleto,
 } from "../../components/metodo/Planetas";
 import { cuerpoByKey, CUERPOS, type CuerpoKey } from "../../components/metodo/astrologiaData";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
   <Box
@@ -230,6 +231,7 @@ export default function MetodoAstrologiaCartaAstral() {
         onClose={() => setComicOpen(false)}
       />
 
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

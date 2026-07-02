@@ -10,6 +10,8 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { BotonGuardar } from "../../components/global/BotonGuardar";
 import {
   experienciaById,
   type LineaDeVidaData,
@@ -111,7 +113,9 @@ export default function MetodoPsicologiaHuellasNudos() {
   const [huellas, setHuellas] = useState<string[]>([]);
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
   const [activaId, setActivaId] = useState<string | null>(null);
+  const [pasosOpen, setPasosOpen] = useState(false); // popup «¿Cómo se hace?»
   const dataRef = useRef<LineaDeVidaData>({});
+  useLockBodyScroll(pasosOpen);
 
   const arrastreRef = useRef<Arrastre>(null);
   const [sobreMesa, setSobreMesa] = useState(false);
@@ -147,18 +151,19 @@ export default function MetodoPsicologiaHuellasNudos() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const persistir = async (next: RelacionHuellaNudo[]) => {
+  const persistir = async (next: RelacionHuellaNudo[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
+    if (!userId || !token) return false;
     setGuardando(true);
     try {
       const data = { ...dataRef.current, heridas: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
+      return true;
     } catch {
-      // silencioso
+      return false;
     } finally {
       setGuardando(false);
     }
@@ -214,10 +219,10 @@ export default function MetodoPsicologiaHuellasNudos() {
   };
 
   // Guardado inmediato (botón Guardar): cancela el debounce y persiste ya.
-  const guardarAhora = () => {
+  const guardarAhora = (): Promise<boolean> => {
     if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
     pendiente.current = null;
-    void persistir(heridas);
+    return persistir(heridas);
   };
 
   const soltarEnMesa = () => {
@@ -258,11 +263,47 @@ export default function MetodoPsicologiaHuellasNudos() {
             />
 
             {/* Intro: texto sobre el fondo turquesa */}
-            <Flex direction="column" align="center" textAlign="center" gap={2} maxW="720px" mx="auto">
+            <Flex direction="column" align="center" textAlign="center" gap={3} maxW="720px" mx="auto">
               <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.92} lineHeight="1.7"
                     style={{ textShadow: `0 1px 8px rgba(0,0,0,0.35)` }}>
                 Una herida surge cuando una experiencia importante (huella) se une a la creencia que nació de ella (nudo). No es solo lo que viviste, sino lo que aprendiste a creer sobre ti, los demás o el mundo.
               </Text>
+              {/* Icono «ⓘ» → abre el popup con los pasos de cómo se hace */}
+              <Flex
+                as="button"
+                onClick={() => setPasosOpen(true)}
+                align="center"
+                gap={2}
+                px={3}
+                py={1.5}
+                borderRadius="full"
+                bg="rgba(255,255,255,0.14)"
+                border={`1px solid ${PAPEL}55`}
+                cursor="pointer"
+                transition="all 0.18s"
+                _hover={{ bg: "rgba(255,255,255,0.24)", borderColor: PAPEL, transform: "translateY(-1px)" }}
+              >
+                <Flex
+                  align="center"
+                  justify="center"
+                  w="20px"
+                  h="20px"
+                  borderRadius="full"
+                  border={`1.5px solid ${PAPEL}`}
+                  color={PAPEL}
+                  fontSize="13px"
+                  fontWeight="700"
+                  fontStyle="italic"
+                  lineHeight="1"
+                  flexShrink={0}
+                >
+                  i
+                </Flex>
+                <Text color={PAPEL} fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.02em"
+                      style={{ textShadow: `0 1px 6px rgba(0,0,0,0.35)` }}>
+                  ¿Cómo se hace?
+                </Text>
+              </Flex>
             </Flex>
 
             {/* ════════ TRES COLUMNAS ════════ */}
@@ -368,15 +409,15 @@ export default function MetodoPsicologiaHuellasNudos() {
                         <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
                              style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>+ Añadir herida</Box>
                       </Box>
-                      <Box as="button" onClick={guardarAhora} position="relative" overflow="hidden"
-                           px={{ base: 6, md: 7 }} py={2.5} borderRadius="full"
-                           bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
-                           fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                        <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>Guardar</Box>
-                      </Box>
+                      <BotonGuardar
+                        onSave={guardarAhora}
+                        bg={TINTA}
+                        fg={neuropsicologiaBg}
+                        minW={{ base: "130px", md: "150px" }}
+                        px={{ base: 6, md: 7 }}
+                        py={2.5}
+                        fontSize={{ base: "sm", md: "md" }}
+                      />
                     </Flex>
                   </Flex>
                 </Box>
@@ -386,6 +427,51 @@ export default function MetodoPsicologiaHuellasNudos() {
           </Flex>
         </Flex>
       </Box>
+
+      {/* Popup «¿Cómo se hace?» — pasos para crear una herida */}
+      {pasosOpen && (
+        <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(40,20,8,0.6)"
+             sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+             onClick={() => setPasosOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="500px" my="auto"
+               borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}
+                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto">
+              <Box as="button" onClick={() => setPasosOpen(false)} position="absolute" top={3} right={3} zIndex={2}
+                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}
+                    style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}` }}>
+                ¿Cómo se hace?
+              </Text>
+              <Box h="1px" w="55%" maxW="220px" mx="auto" my={5}
+                   bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+              <Flex direction="column" gap={3.5}>
+                {[
+                  "Crea una nueva herida con «+ Añadir herida».",
+                  "Toca (o arrastra) las huellas y los nudos que sientas relacionados: se añaden a la herida activa y se iluminan con su color.",
+                  "Ponle un título y describe qué dejó en ti esa experiencia.",
+                  "Si creas más heridas, recuerda pulsar la herida antes de añadirle elementos: así sabrás a cuál se están sumando.",
+                ].map((paso, i) => (
+                  <Flex key={i} align="flex-start" gap={3}>
+                    <Flex align="center" justify="center" flexShrink={0} w="26px" h="26px" borderRadius="full"
+                          bg={`${TINTA}`} color={PAPEL} fontSize="sm" fontWeight="700" mt="2px">
+                      {i + 1}
+                    </Flex>
+                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6"
+                          style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}` }}>
+                      {paso}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       <AyudaRecorrido pagina="heridas" />
 

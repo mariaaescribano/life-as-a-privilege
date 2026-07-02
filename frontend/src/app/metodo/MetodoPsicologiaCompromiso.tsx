@@ -6,7 +6,7 @@
 // nuevos patrones que ha decidido vivir a partir de ahora (uno por relación).
 // Es una página de lectura/contemplación: no se edita nada aquí.
 //
-// Datos: lee data["problema-actual"] + data.constelaciones[i].{titulo,nuevoPatron}.
+// Datos: lee data["problema-actual"] + data.constelaciones[i].{titulo,verdadSana,coste}.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,6 +17,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import {
   experienciaById,
   type LineaDeVidaData,
@@ -46,6 +47,10 @@ export default function MetodoPsicologiaCompromiso() {
   const [problema, setProblema] = useState("");
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState(false);
+  const [pagoOpen, setPagoOpen] = useState(false);
+  const [pagoLoading, setPagoLoading] = useState(false);
+  const [pagoError, setPagoError] = useState<string | null>(null);
+  const [testPagos, setTestPagos] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
@@ -54,6 +59,10 @@ export default function MetodoPsicologiaCompromiso() {
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
+
+    axios.get(`${API_URL}/payment/test/enabled`)
+      .then((r) => setTestPagos(!!r.data?.enabled))
+      .catch(() => {});
 
     (async () => {
       try {
@@ -77,14 +86,66 @@ export default function MetodoPsicologiaCompromiso() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
+  // Igual que astrología → psicología: el botón «Ayurveda →» abre el pago si aún
+  // no está desbloqueado, en vez de quedar inerte.
+  const onAyurveda = () => {
+    if (ayurvedaSuscrito) navigate("/metodo/ayurveda");
+    else { setPagoError(null); setPagoOpen(true); }
+  };
+
+  const pagarAyurveda = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoLoading(true);
+    setPagoError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/ayurveda/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoError(
+        status === 403
+          ? "Necesitas completar el pago de Psicología antes de adquirir Ayurveda."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoLoading(false);
+    }
+  };
+
+  const testUnlockAyurveda = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    try {
+      await axios.post(
+        `${API_URL}/payment/test/unlock`,
+        { scope: "ayurveda" },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      navigate("/metodo/ayurveda");
+    } catch (err: any) {
+      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
+    }
+  };
+
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
   // El usuario suele escribir varios problemas en un mismo texto (uno por línea).
   const problemas = problema.split(/\n+/).map((s) => s.trim()).filter(Boolean);
-  // Solo las relaciones con un nuevo patrón escrito.
+  // Solo las relaciones con una verdad más sana escrita (la respuesta a
+  // «¿Qué verdad más sana quieres practicar?» del Mapa).
   const compromisos = relaciones
-    .map((c) => ({ titulo: relTitulo(c), patron: (c.nuevoPatron || "").trim() }))
+    .map((c) => ({
+      titulo: relTitulo(c),
+      patron: (c.verdadSana || "").trim(),
+      coste: (c.coste || "").trim(),
+    }))
     .filter((x) => x.patron.length > 0);
 
   return (
@@ -106,9 +167,7 @@ export default function MetodoPsicologiaCompromiso() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
-              next={ayurvedaSuscrito
-                ? { label: "Ayurveda →", onClick: () => navigate("/metodo/ayurveda") }
-                : { label: "Ayurveda →", onClick: () => {}, disabled: true, disabledTooltip: "Desbloquea Ayurveda para empezar la 3ª disciplina." }}
+              next={{ label: "Ayurveda →", onClick: onAyurveda }}
             />
 
             {/* Intro */}
@@ -134,7 +193,6 @@ export default function MetodoPsicologiaCompromiso() {
                       <Flex key={i} align="flex-start" gap={3} borderRadius="xl"
                             bg="rgba(255,251,243,0.6)" border={`1px solid ${TINTA}26`}
                             px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}>
-                        <Box flexShrink={0} mt="9px" w="7px" h="7px" borderRadius="full" bg={TINTA} />
                         <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65">
                           {p}
                         </Text>
@@ -171,8 +229,26 @@ export default function MetodoPsicologiaCompromiso() {
                            pl={{ base: 5, md: 6 }} pr={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }}>
                         <Box position="absolute" left="0" top="0" bottom="0" w="4px" bg={TINTA} />
                         <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.16em"
-                              textTransform="uppercase" opacity={0.7} mb={1.5}>
+                              textTransform="uppercase" opacity={0.7} mb={x.coste ? 3 : 1.5}>
                           {x.titulo}
+                        </Text>
+
+                        {x.coste && (
+                          <Box mb={4} pb={4} borderBottom={`1px solid ${TINTA}26`}>
+                            <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.12em"
+                                  textTransform="uppercase" opacity={0.55} mb={1}>
+                              El coste de sostenerlo
+                            </Text>
+                            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                                  lineHeight="1.6" opacity={0.78}>
+                              {x.coste}
+                            </Text>
+                          </Box>
+                        )}
+
+                        <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.12em"
+                              textTransform="uppercase" opacity={0.55} mb={1}>
+                          Me comprometo a
                         </Text>
                         <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" fontStyle="italic"
                               lineHeight="1.55">
@@ -184,8 +260,8 @@ export default function MetodoPsicologiaCompromiso() {
                 ) : (
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7}
                         textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                    Aquí aparecerán los nuevos patrones que escribas en la Síntesis, en
-                    «Nuevo patrón a partir de ahora».
+                    Aquí aparecerán las verdades más sanas que escribas en el Mapa, en
+                    «¿Qué verdad más sana quieres practicar?».
                   </Text>
                 )}
               </Box>
@@ -194,6 +270,15 @@ export default function MetodoPsicologiaCompromiso() {
           </Flex>
         </Flex>
       </Box>
+
+      <PagoAyurvedaModal
+        isOpen={pagoOpen}
+        onClose={() => { setPagoOpen(false); setPagoError(null); }}
+        onPagar={pagarAyurveda}
+        loading={pagoLoading}
+        error={pagoError}
+        onTest={testPagos ? testUnlockAyurveda : undefined}
+      />
 
       <SiteFooter />
     </Box>

@@ -9,7 +9,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Glifo } from "../../components/metodo/Glifo";
 import { cuerpoByKey, soloClavesPlaneta, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { getTextoSigno, getTextoCasa } from "../../components/metodo/astrologiaTextos";
-import { API_URL } from "../../GlobalVariables";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 
 /* Fondo espacial reutilizado */
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
@@ -201,6 +202,7 @@ export default function MetodoAstrologiaProfundizar() {
         </Flex>
       </Flex>
 
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

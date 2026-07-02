@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
-import { Lock } from "lucide-react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -248,13 +248,14 @@ export default function MetodoAyurvedaDoshaEstilo() {
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            pageLabel="6/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
             prev={{ label: "← Alimentación", onClick: () => { void persist(reflexion, compromiso); navigate(`/metodo/ayurveda/dosha/${doshaKey}/cuidarte`); } }}
             extra={ilustracionesBtn}
-            next={{ label: "Tu día →", onClick: irSiguiente, icon: guardado ? undefined : <Lock size={14} /> }}
+            next={{ label: "Tu día →", onClick: irSiguiente, disabled: !guardado, disabledTooltip: "Guarda tu reflexión para continuar." }}
           />
 
           {/* HERO · Estilo de vida */}
@@ -392,13 +393,12 @@ export default function MetodoAyurvedaDoshaEstilo() {
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={guardado ? meta.color : `${meta.color}55`} color="#fff"
                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
-                cursor="pointer" opacity={guardado ? 1 : 0.9}
+                cursor={guardado ? "pointer" : "not-allowed"} opacity={guardado ? 1 : 0.55}
                 boxShadow={guardado ? `0 0 26px ${meta.color}88` : "none"} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 display="inline-flex" alignItems="center" gap={2.5}
                 _hover={{ transform: "translateY(-2px)", boxShadow: guardado ? `0 0 34px ${meta.color}aa` : `0 0 18px ${meta.color}55` }}
               >
-                {!guardado && <Lock size={17} />}
                 Tu día →
               </Box>
               {!guardado && (
@@ -412,6 +412,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
       </Flex>
 
       {ilustracionesModal}
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

@@ -5,6 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
+import { BotonGuardar } from "../../components/global/BotonGuardar";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -193,18 +194,19 @@ export default function MetodoPsicologiaIntegracion() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const persistir = async (next: Constelacion[]) => {
+  const persistir = async (next: Constelacion[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
+    if (!userId || !token) return false;
     setGuardando(true);
     try {
       const data = { ...dataRef.current, constelaciones: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
+      return true;
     } catch {
-      // silencioso
+      return false;
     } finally {
       setGuardando(false);
     }
@@ -271,10 +273,10 @@ export default function MetodoPsicologiaIntegracion() {
   };
 
   // Guardado inmediato (botón Guardar): cancela el debounce y persiste ya.
-  const guardarAhora = () => {
+  const guardarAhora = (): Promise<boolean> => {
     if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
     pendiente.current = null;
-    void persistir(relaciones);
+    return persistir(relaciones);
   };
 
   const abrirSaberMas = (a: ArqItem) => {
@@ -437,15 +439,15 @@ export default function MetodoPsicologiaIntegracion() {
                         <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
                              style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>+ Añadir relación</Box>
                       </Box>
-                      <Box as="button" onClick={guardarAhora} position="relative" overflow="hidden"
-                           px={{ base: 6, md: 7 }} py={2.5} borderRadius="full"
-                           bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
-                           fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                        <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>Guardar</Box>
-                      </Box>
+                      <BotonGuardar
+                        onSave={guardarAhora}
+                        bg={TINTA}
+                        fg={neuropsicologiaBg}
+                        minW={{ base: "130px", md: "150px" }}
+                        px={{ base: 6, md: 7 }}
+                        py={2.5}
+                        fontSize={{ base: "sm", md: "md" }}
+                      />
                     </Flex>
                   </Flex>
                 </Box>

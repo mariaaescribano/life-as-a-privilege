@@ -10,9 +10,10 @@ import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { SaberMasModal } from "../../components/metodo/Planetas";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { ZODIAC_SIGNS, cuerpoByKey, soloClavesPlaneta, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
@@ -209,6 +210,7 @@ export default function MetodoAstrologiaSolAscLuna() {
       />
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <SiteFooter />
     </Box>
   );

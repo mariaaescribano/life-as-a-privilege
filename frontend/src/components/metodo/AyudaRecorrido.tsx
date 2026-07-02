@@ -423,13 +423,13 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
             direction="column" align="flex-end" gap={2}>
         {esInicio ? (
           <>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Necesitas ayuda?</BotonAyuda>
+            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
             <BotonAyuda onClick={() => setCursoOpen(true)}>Orientación</BotonAyuda>
           </>
         ) : (
           <>
             <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>Ejemplo</BotonAyuda>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Necesitas ayuda?</BotonAyuda>
+            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
             <BotonAyuda onClick={() => (curso ? setCursoOpen(true) : setAbierto("orientacion"))}>Orientación</BotonAyuda>
           </>
         )}

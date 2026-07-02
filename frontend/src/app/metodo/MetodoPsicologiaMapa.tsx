@@ -18,6 +18,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
+import { BotonGuardar } from "../../components/global/BotonGuardar";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -108,7 +109,6 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<Constelacion[] | null>(null);
-  const [guardadoOk, setGuardadoOk] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -140,24 +140,24 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const persistir = async (next: Constelacion[]) => {
+  const persistir = async (next: Constelacion[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
+    if (!userId || !token) return false;
     try {
       const data = { ...dataRef.current, constelaciones: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
+      return true;
     } catch {
-      // silencioso
+      return false;
     }
   };
 
   // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
   const commit = (next: Constelacion[]) => {
     setRelaciones(next);
-    setGuardadoOk(false);
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
@@ -175,11 +175,10 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
   const updateCampo = (id: string, campo: keyof Constelacion, valor: string) =>
     commit(relaciones.map((c) => (c.id === id ? { ...c, [campo]: valor } : c)));
 
-  const guardarAhora = async () => {
+  const guardarAhora = async (): Promise<boolean> => {
     if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
     pendiente.current = null;
-    await persistir(relaciones);
-    setGuardadoOk(true);
+    return persistir(relaciones);
   };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -243,7 +242,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
                 {relaciones.map((c) => (
                   <TarjetaIntegracion key={c.id} c={c}
                                       onCampo={(campo, v) => updateCampo(c.id, campo, v)}
-                                      onGuardar={guardarAhora} guardadoOk={guardadoOk} />
+                                      onGuardar={guardarAhora} />
                 ))}
               </Flex>
             )}
@@ -262,11 +261,10 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 // ─────────────────────────────────────────────────────────────────────────
 // Una tarjeta de integración por relación.
 // ─────────────────────────────────────────────────────────────────────────
-function TarjetaIntegracion({ c, onCampo, onGuardar, guardadoOk }: {
+function TarjetaIntegracion({ c, onCampo, onGuardar }: {
   c: Constelacion;
   onCampo: (campo: keyof Constelacion, valor: string) => void;
-  onGuardar: () => void;
-  guardadoOk: boolean;
+  onGuardar: () => Promise<boolean>;
 }) {
   const verdad = (c.verdadSana || "").trim();
   const recordatorio = (c.recordatorio || "").trim();
@@ -396,17 +394,15 @@ function TarjetaIntegracion({ c, onCampo, onGuardar, guardadoOk }: {
       <Linea />
       <Banda py={{ base: 4, md: 5 }}>
         <Flex justify="flex-end">
-          <Box as="button" onClick={onGuardar} position="relative" overflow="hidden"
-               px={{ base: 8, md: 10 }} py={2.5} borderRadius="full"
-               bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
-               fontSize={{ base: "sm", md: "md" }} letterSpacing="0.05em" cursor="pointer"
-               boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-               _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-            <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                 style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
-              {guardadoOk ? "Guardado ✓" : "Guardar"}
-            </Box>
-          </Box>
+          <BotonGuardar
+            onSave={onGuardar}
+            bg={TINTA}
+            fg={neuropsicologiaBg}
+            minW={{ base: "150px", md: "170px" }}
+            px={{ base: 8, md: 10 }}
+            py={2.5}
+            fontSize={{ base: "sm", md: "md" }}
+          />
         </Flex>
       </Banda>
         </>
