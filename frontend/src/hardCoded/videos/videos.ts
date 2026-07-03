@@ -7,6 +7,27 @@ export interface Video {
 }
 
 export const videos: Video[] = [
+  {
+    id: "eres-temporal",
+    titulo: "Eres temporal",
+    foto: "/miniaturas/fisio/atomos.png",
+    descripcion: "Una mirada a lo efímero que somos desde los átomos que nos forman.",
+    video: "MIvyslofulM",
+  },
+  {
+    id: "cambiar-de-pareja",
+    titulo: "¿Cambiar de pareja?",
+    foto: "/miniaturas/psicologia/cambiarpareja.png",
+    descripcion: "Reflexiona sobre cuándo el problema es la relación y cuándo eres tú.",
+    video: "tVQxJcSrTZ8",
+  },
+  {
+    id: "adios-ansiedad",
+    titulo: "Adiós ansiedad",
+    foto: "/miniaturas/psicologia/ansiedad.png",
+    descripcion: "Aprende a gestionar la ansiedad y recupera tu calma.",
+    video: "-fDJ0ZhDluM",
+  },
   // {
   //   id: "ritmo-circadiano",
   //   titulo: "El ritmo circadiano a tu servicio",

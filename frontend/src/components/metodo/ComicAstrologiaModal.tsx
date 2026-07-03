@@ -115,6 +115,13 @@ const VINETAS_PLANETAS: Vineta[] = [
       "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir con él, y al hacerlo, nos da nuestro mayor don.",
     ],
   },
+  {
+    src: "/viñetas/astrologia/planetas/lilith.png",
+    paragraphs: [
+      "Lilith es nuestro deseo más profundo, el que juzgamos inconfesable — porque nos enseñaron que no teníamos derecho a él. Tememos que se sepa, no lograrlo, o lograrlo y perderlo.",
+      "Pero hay que aceptar nuestro deseo: cuanto más lo neguemos, más crecerá la frustración; reconocerlo nos acerca a nuestra esencia.",
+    ],
+  },
 ];
 
 const VINETAS_SIGNOS: Vineta[] = [
