@@ -64,7 +64,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.ayurveda.desc,
     link: "/aprendizaje/cursos/" + ayurvedaNomLink,
     available: true,
-    tagline: "Tu lugar dentro del orden natural.",
+    tagline: "Tu constitución única.",
   },
   {
     name: tcmNom,

@@ -5,6 +5,10 @@ import * as nodemailer from 'nodemailer';
 
 const FILE_PATH = join(__dirname, '..', '..', 'data', 'subscribers.txt');
 
+// Destinatario por defecto de las notificaciones de nuevos suscriptores
+// (se usa si NOTIFY_EMAIL no está configurado en el entorno).
+const DEFAULT_NOTIFY_EMAIL = 'darkcake141@gmail.com';
+
 @Injectable()
 export class SubscribeService {
   async addEmail(email: string): Promise<void> {
@@ -26,9 +30,9 @@ export class SubscribeService {
       },
     });
 
-    const notifyEmail = process.env.NOTIFY_EMAIL;
-    if (!notifyEmail) {
-      console.warn('[SubscribeService] NOTIFY_EMAIL no configurado — no se envía notificación');
+    const notifyEmail = process.env.NOTIFY_EMAIL || DEFAULT_NOTIFY_EMAIL;
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.warn('[SubscribeService] EMAIL_USER / EMAIL_PASS no configurados — no se envía notificación');
       return;
     }
 

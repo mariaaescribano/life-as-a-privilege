@@ -31,6 +31,7 @@ type ModalidadData = {
   bg: string;
   txt: string;
   renderIcon: (size: string) => React.ReactNode;
+  tagline: string;
   desc: string;
   modalDesc: string;
   contenido: ContenidoSeccion[];
@@ -42,6 +43,7 @@ const modalidades: ModalidadData[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
+    tagline: "Los patrones que te forman.",
     ...recorridoContenido.astrologia,
   },
   {
@@ -49,6 +51,7 @@ const modalidades: ModalidadData[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
+    tagline: "Cómo se construyó tu mente.",
     ...recorridoContenido.psicologia,
   },
   {
@@ -56,6 +59,7 @@ const modalidades: ModalidadData[] = [
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
+    tagline: "Tu constitución única.",
     ...recorridoContenido.ayurveda,
   },
   {
@@ -63,6 +67,7 @@ const modalidades: ModalidadData[] = [
     bg: tcmBg,
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
+    tagline: "El origen de tus desequilibrios.",
     ...recorridoContenido.tcm,
   },
   {
@@ -70,6 +75,7 @@ const modalidades: ModalidadData[] = [
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
+    tagline: "Eres un cuerpo.",
     ...recorridoContenido.fisiologia,
   },
   {
@@ -77,6 +83,7 @@ const modalidades: ModalidadData[] = [
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
+    tagline: "Cómo te reconstruyes.",
     ...recorridoContenido.nutricion,
   },
   {
@@ -84,6 +91,7 @@ const modalidades: ModalidadData[] = [
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
+    tagline: "La arquitectura del alma.",
     ...recorridoContenido.cabala,
   },
   {
@@ -91,6 +99,7 @@ const modalidades: ModalidadData[] = [
     bg: culturaBg,
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
+    tagline: "Las grandes filosofías.",
     ...recorridoContenido.cultura,
   },
 ];
@@ -273,6 +282,27 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
           {displayName}
         </Text>
       </Flex>
+
+      {/* Frase corta bajo el nombre (misma que las cajas de home) */}
+      {data.tagline && (
+        <Text
+          position="relative"
+          zIndex={1}
+          mb={{ base: 2, md: 3 }}
+          minH="2em"
+          color={data.txt}
+          fontWeight="500"
+          fontSize={{ base: "sm", md: "lg" }}
+          lineHeight="1.45"
+          letterSpacing="0.01em"
+          opacity={0.96}
+          textShadow={hasBg
+            ? `0 1px 3px ${data.bg}f5, 0 1px 6px ${data.bg}cc, 0 0 12px ${data.bg}dd`
+            : undefined}
+        >
+          {data.tagline}
+        </Text>
+      )}
 
       {/* Flecha dinámica — invita a abrir la disciplina. Va en posición
           absoluta dentro del espacio inferior que ya existe, así NO cambia

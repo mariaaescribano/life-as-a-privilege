@@ -33,21 +33,21 @@ export const recorridoContenido: Record<
       "Tu carta natal no predice tu futuro: describe cómo estás configurado. Qué partes tuyas tienen más peso, qué tensiones internas arrastras, qué te cuesta y qué te sale solo. Es el primer paso de El Recorrido porque sin saber de dónde partes, cualquier trabajo posterior va a ciegas.",
     contenido: [
       {
-        titulo: "Lectura de tu carta natal",
+        titulo: "Conócete sin juicios",
         items: [
-          "Comprenderás qué partes de ti tienen más peso, qué tensiones internas arrastras y por qué ciertos patrones aparecen una y otra vez en tu vida.",
+          "Comprende qué fuerzas mueven tu personalidad, qué conflictos internos se repiten y por qué vuelves una y otra vez a los mismos patrones. Todo ello a través de una lectura interpretada por María.",
         ],
       },
       {
-        titulo: "Los doce arquetipos",
+        titulo: "Las partes de ti",
         items: [
-          "Aprenderás a reconocer las distintas energías que actúan dentro de ti en cada área de tu Vida. Cuando identificas el arquetipo que está tomando el control, dejas de confundirte con él.",
+          "Cada área de tu carta representa una parte diferente de ti. Aprenderás a reconocer cuál está tomando el control en cada momento para actuar con más conciencia, en lugar de reaccionar automáticamente.",
         ],
       },
       {
-        titulo: "Sesiones de lectura conjunta",
+        titulo: "Acompañamiento personal: No estás solo",
         items: [
-          "El objetivo no es depender de un intérprete. Es que puedas comprender tu carta, leerla por ti mismo y utilizarla como herramienta durante toda tu Vida.",
+          "Si quieres profundizar, puedes agendar sesiones con María para lo que necesites. Comprenderás mejor tu carta y aprenderás a utilizarla como una herramienta de autoconocimiento para toda tu Vida.",
         ],
         aviso: "Opcional. Se cobra aparte",
       },
@@ -63,23 +63,22 @@ export const recorridoContenido: Record<
       "La astrología te muestra el cómo. La psicología te muestra dónde y de qué manera. Cruzamos tu carta natal con tu historia personal para entender qué mecanismos desarrollaste para sobrevivir, cuáles te sirvieron en su momento y cuáles hoy te limitan. Lo que ahora te molesta de ti fue antes una forma de protegerte.",
     contenido: [
       {
-        titulo: "Mapa de Vida",
+        titulo: "Recuerda tu historia",
         items: [
-          "Verás tu historia desde una perspectiva nueva. Lo que parecía una colección de acontecimientos aislados empieza a mostrar estructura y sentido.",
+          "Verás tu historia desde una perspectiva diferente. Lo que antes parecía una colección de acontecimientos aislados empieza a revelar conexiones y significado.",
         ],
       },
       {
-        titulo: "Cronología junto a tu carta",
+        titulo: "Cómo se formaron los patrones que hoy te acompañan",
         items: [
-          "Descubrirás cómo determinados acontecimientos activaron patrones que ya estaban presentes en tu configuración inicial.",
+          "Descubrirás cómo determinados acontecimientos activaron patrones que ya estaban presentes en ti.",
         ],
       },
       {
-        titulo: "Acompañamiento inspirado en la Psicoterapia Breve",
+        titulo: "El cambio empieza con el compromiso",
         items: [
-          "No trabajamos síntomas aislados. Trabajamos las estructuras que los generan para que los cambios sean profundos y duraderos.",
+          "Comprender tus heridas es solo el primer paso. El verdadero cambio ocurre cuando aceptas el dolor y aprendes a darle un nuevo sentido, día tras día.",
         ],
-        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -88,26 +87,26 @@ export const recorridoContenido: Record<
   // 3. HINDUISMO (ayurveda)
   // ───────────────────────────────────────────────────────────
   ayurveda: {
-    desc: "No todos enfermamos igual porque no todos estamos construidos igual. Comprende tu naturaleza antes de intentar corregirla.",
+    desc: "No todos necesitamos lo mismo. Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
     modalDesc:
       "El ayurveda es la medicina tradicional india. No mira síntomas aislados: lee a la persona entera. Tu constitución (dosha) determina cómo piensas, cómo enfermas y qué te sienta bien comer. Entender tu dosha es entender por qué dos personas con la misma vida tienen problemas distintos.",
     contenido: [
       {
-        titulo: "Cursos para entender el sistema",
+        titulo: "Los doshas",
         items: [
-          "Comprenderás cómo el ayurveda observa al ser humano y por qué dos personas expuestas a la misma situación desarrollan desequilibrios diferentes.",
+          "Vata, Pitta y Kapha son las tres energías que describe el Ayurveda. Todos tenemos las tres, pero en proporciones diferentes. Comprender ese equilibrio es el primer paso para entender tus necesidades.",
         ],
       },
       {
         titulo: "Tu dosha",
         items: [
-          "Descubrirás tu constitución dominante, tus fortalezas naturales y los desequilibrios hacia los que tiendes cuando pierdes el equilibrio.",
+          "Descubre cuál es tu constitución predominante, cuáles son tus fortalezas naturales y qué desequilibrios tienden a aparecer cuando te alejas de tu equilibrio.",
         ],
       },
       {
-        titulo: "Material para el día a día",
+        titulo: "Que no quede en teoría",
         items: [
-          "Aprenderás a tomar decisiones cotidianas que respeten tu naturaleza en lugar de luchar constantemente contra ella.",
+          "El conocimiento solo tiene valor cuando transforma tu día a día. Aprenderás qué alimentos, rutinas y hábitos favorecen tu equilibrio para empezar a cuidarte de una forma que tenga sentido para ti.",
         ],
       },
     ],
