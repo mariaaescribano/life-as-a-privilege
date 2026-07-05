@@ -33,27 +33,45 @@ const useReveal = (threshold = 0.15) => {
 
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
-type Certificado = { img: string };
+type Certificado = { img: string; name: string };
 
-const certificados: Certificado[] = [
-  { img: "/certificados/0.png" },
-  { img: "/certificados/1.png" }, { img: "/certificados/2.png" }, { img: "/certificados/3.png" },
-  { img: "/certificados/4.png" }, { img: "/certificados/5.png" }, { img: "/certificados/6.png" },
-  { img: "/certificados/7.png" }, { img: "/certificados/8.png" }, { img: "/certificados/9.png" },
-  { img: "/certificados/10.png" }, { img: "/certificados/11.png" }, { img: "/certificados/12.png" },
-  { img: "/certificados/13.png" }, { img: "/certificados/14.png" }, { img: "/certificados/15.png" },
-  { img: "/certificados/16.png" },
-  { img: "/certificados/17.png" },
-  { img: "/certificados/18.png" },
-  { img: "/certificados/19.png" },
-  { img: "/certificados/20.png" },
-  { img: "/certificados/21.png" },
-  { img: "/certificados/22.png" },
-  { img: "/certificados/23.png" },
-  { img: "/certificados/24.png" },
-  { img: "/certificados/25.png" },
-  { img: "/certificados/26.png" },
+// Auto-detecta todas las imágenes de src/assets/certificados
+const certImages = import.meta.glob<string>("../../assets/certificados/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+  import: "default",
+});
+
+// Ordena por número dentro del nombre (fp0 < fp1, e0 < e1, 2 < 10, …)
+const byNaturalName = (a: Certificado, b: Certificado) => {
+  const na = parseInt(a.name.replace(/\D/g, ""), 10);
+  const nb = parseInt(b.name.replace(/\D/g, ""), 10);
+  if (!isNaN(na) && !isNaN(nb) && na !== nb) return na - nb;
+  return a.name.localeCompare(b.name);
+};
+
+const allCerts: Certificado[] = Object.entries(certImages).map(([path, img]) => ({
+  img,
+  name: path.split("/").pop()!.replace(/\.\w+$/, ""),
+}));
+
+// Prefijo → sección. fp = Formación Psicoterapia, e = Especializaciones, resto = Cursos.
+const secciones: { titulo: string; items: Certificado[] }[] = [
+  {
+    titulo: "",
+    items: allCerts.filter((c) => /^fp/i.test(c.name)).sort(byNaturalName),
+  },
+  {
+    titulo: "Especializaciones",
+    items: allCerts.filter((c) => /^e/i.test(c.name) && !/^fp/i.test(c.name)).sort(byNaturalName),
+  },
+  {
+    titulo: "Cursos",
+    items: allCerts.filter((c) => !/^fp/i.test(c.name) && !/^e/i.test(c.name)).sort(byNaturalName),
+  },
 ];
+
+// Lista plana para el lightbox (mismo orden que se muestran)
+const certificados: Certificado[] = secciones.flatMap((s) => s.items);
 
 const QuienSoy = () => {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
@@ -500,37 +518,86 @@ const QuienSoy = () => {
         </Flex>
       </Flex>
 
-      {/* ── GRID DE CERTIFICADOS ── */}
+      {/* ── SECCIONES DE CERTIFICADOS ── */}
       <Box
         ref={certifReveal.ref}
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 10, md: 12 }}
         pb={{ base: 4, md: 6 }}
       >
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 6 }} maxW="1100px" mx="auto">
-          {certificados.map((cert, i) => (
-            <Box
-              key={i}
-              borderRadius="xl"
-              overflow="hidden"
-              boxShadow="0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 4px 18px rgba(0,0,0,0.22)"
-              transition={`all 0.25s, opacity 0.5s ease ${(i % 8) * 0.05}s, transform 0.5s ease ${(i % 8) * 0.05}s`}
-              _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(180,255,245,0.25), 0 8px 26px rgba(0,0,0,0.28)" }}
-              cursor="pointer"
-              onClick={() => setLightboxIdx(i)}
-              opacity={certifReveal.visible ? 1 : 0}
-              transform={certifReveal.visible ? "translateY(0)" : "translateY(20px)"}
-            >
-              <Image
-                src={cert.img}
-                alt={`Certificado ${i + 1}`}
-                w="100%"
-                h={{ base: "130px", md: "170px" }}
-                objectFit="cover"
-              />
+        <Flex direction="column" gap={{ base: 12, md: 16 }} maxW="1100px" mx="auto">
+          {secciones.filter((s) => s.items.length > 0).map((seccion) => (
+            <Box key={seccion.titulo || "sin-titulo"}>
+              {/* Subtítulo de la sección */}
+              {seccion.titulo && (
+                <Flex
+                  direction="column"
+                  align="center"
+                  mb={{ base: 6, md: 8 }}
+                  opacity={certifReveal.visible ? 1 : 0}
+                  transform={certifReveal.visible ? "translateY(0)" : "translateY(16px)"}
+                  transition="opacity 0.6s ease, transform 0.6s ease"
+                >
+                  <Text
+                    color="white"
+                    fontSize={{ base: "xl", md: "2xl" }}
+                    fontWeight="600"
+                    letterSpacing="0.08em"
+                    textTransform="uppercase"
+                    textAlign="center"
+                    textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(255,255,255,0.2)"
+                  >
+                    {seccion.titulo}
+                  </Text>
+                  <Box
+                    mt={3}
+                    h="1px"
+                    w={{ base: "90px", md: "120px" }}
+                    bg="linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)"
+                    boxShadow="0 0 6px rgba(255,255,255,0.4)"
+                  />
+                </Flex>
+              )}
+
+              {/* Grid de la sección */}
+              <SimpleGrid
+                columns={{ base: 2, md: 4 }}
+                spacing={{ base: 4, md: 6 }}
+                {...(seccion.items.length === 1 && {
+                  maxW: { base: "50%", md: "25%" },
+                  mx: "auto",
+                  sx: { "& > *": { gridColumn: "1 / -1" } },
+                })}
+              >
+                {seccion.items.map((cert, i) => {
+                  const globalIdx = certificados.indexOf(cert);
+                  return (
+                    <Box
+                      key={cert.name}
+                      borderRadius="xl"
+                      overflow="hidden"
+                      boxShadow="0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 4px 18px rgba(0,0,0,0.22)"
+                      transition={`all 0.25s, opacity 0.5s ease ${(i % 8) * 0.05}s, transform 0.5s ease ${(i % 8) * 0.05}s`}
+                      _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(180,255,245,0.25), 0 8px 26px rgba(0,0,0,0.28)" }}
+                      cursor="pointer"
+                      onClick={() => setLightboxIdx(globalIdx)}
+                      opacity={certifReveal.visible ? 1 : 0}
+                      transform={certifReveal.visible ? "translateY(0)" : "translateY(20px)"}
+                    >
+                      <Image
+                        src={cert.img}
+                        alt={`${seccion.titulo} ${i + 1}`}
+                        w="100%"
+                        h={{ base: "130px", md: "170px" }}
+                        objectFit="cover"
+                      />
+                    </Box>
+                  );
+                })}
+              </SimpleGrid>
             </Box>
           ))}
-        </SimpleGrid>
+        </Flex>
       </Box>
 
       {/* ── SEPARADOR ── */}
