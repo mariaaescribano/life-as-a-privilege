@@ -54,7 +54,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.psicologia.desc,
     link: "/aprendizaje/cursos/" + neuropsicologiaNom,
     available: true,
-    tagline: "Cómo se construyó tu mente.",
+    tagline: "Cómo funciona tu mente.",
   },
   {
     name: ayurvedaNom,

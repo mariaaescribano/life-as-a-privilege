@@ -202,6 +202,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
   if (!exp) return null;
 
   const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
+  const irADones = () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`);
   const irACompromiso = () => navigate(`/metodo/psicologia/${exp.id}/compromiso`);
 
   return (
@@ -218,10 +219,10 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 9, total: 10 }}
+              step={{ current: 12, total: 13 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Relación", onClick: irARelacion }}
+              prev={{ label: "← Dones", onClick: irADones }}
               next={{ label: "Compromiso →", onClick: irACompromiso }}
             />
 

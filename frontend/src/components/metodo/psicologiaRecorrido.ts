@@ -146,6 +146,16 @@ export interface LineaDeVidaData {
    *  usuario que la vivió en su infancia. Material reflexivo previo a la línea
    *  de vida. */
   necesidades?: Record<string, EstadoNecesidad>;
+  /** «Dones»: el reverso luminoso del recorrido. `respuestas` guarda las
+   *  respuestas a las preguntas de la primera página (por `key`); `lista` son
+   *  los dones que la propia persona reconoce en sí misma en la página espejo,
+   *  a la luz de sus respuestas y de los arquetipos de su carta astral. */
+  dones?: DonesData;
+  /** «Regulación» (estimulación bilateral): un espacio de descarga. Guarda lo
+   *  que la persona escribe mientras escucha el audio. NO es EMDR clínico:
+   *  es un ejercicio autoguiado de regulación, con contención (lugar seguro
+   *  antes, botón de parada, y cierre de grounding después). */
+  regulacion?: RegulacionData;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -479,3 +489,122 @@ export function tramosDeAnios(edad: number): number[][] {
   }
   return tramos;
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// «Dones» — el reverso luminoso del recorrido.
+//
+// Dos páginas:
+//   Página 1 (preguntas) · el usuario mira hacia dentro y responde, sin ver
+//     todavía ningún resultado. Sembrar.
+//   Página 2 (espejo)    · le devolvemos sus propias respuestas junto a los
+//     arquetipos de su carta astral, y él reconoce y escribe sus dones. Cosechar.
+//
+// Persistencia: data.dones = { respuestas: { [key]: string }, lista: string[] }.
+//
+// ✍️  No cambies las `key` tras publicar (se perderían las respuestas guardadas).
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface DonesData {
+  /** Respuestas de la primera página, por clave de pregunta. */
+  respuestas?: Record<string, string>;
+  /** Los dones que la persona reconoce en sí misma (los escribe ella). */
+  lista?: string[];
+}
+
+export interface PreguntaDon {
+  /** Clave estable con la que se guarda la respuesta (no cambiar tras publicar). */
+  key: string;
+  pregunta: string;
+}
+
+export const DONES_INTRO = {
+  titulo: "Tus dones",
+  // Página de preguntas: quitar presión. No se pide «enumera tus virtudes»,
+  // se destila el don a través de preguntas que miran de lado.
+  preguntas:
+    "Un don no es lo que aprendiste con esfuerzo: es lo que se te da con naturalidad, eso que los demás valoran en ti aunque tú no le des importancia. No busques la respuesta perfecta. Responde despacio, con sinceridad. Nadie más leerá esto.",
+  // Página espejo: lo que va a ver.
+  espejo:
+    "Estas son tus respuestas, junto a los arquetipos de tu carta astral. Léelas sin prisa. ¿Qué dones ves aparecer en ti? Nómbralos: son tuyos.",
+};
+
+// Las 15 preguntas que destilan el don. Abiertas: el usuario escribe.
+export const DONES_PREGUNTAS: PreguntaDon[] = [
+  { key: "don-actividad-horas",    pregunta: "¿Qué actividad podrías hacer durante horas sin aburrirte?" },
+  { key: "don-problemas-ayuda",    pregunta: "¿Qué tipo de problemas suelen pedirte que ayudes a resolver?" },
+  { key: "don-nino-facil",         pregunta: "¿Qué se te daba bien de niño o adolescente, incluso sin mucho esfuerzo?" },
+  { key: "don-en-tu-elemento",     pregunta: "¿Cuándo sientes que estás «en tu elemento»?" },
+  { key: "don-elogios",            pregunta: "¿Qué elogios recibes con más frecuencia?" },
+  { key: "don-aprendes-rapido",    pregunta: "¿Qué cosas aprendes más rápido que la mayoría de las personas?" },
+  { key: "don-curiosidad",         pregunta: "¿Qué temas te despiertan curiosidad de forma constante?" },
+  { key: "don-sin-dinero",         pregunta: "Si el dinero no fuera un problema, ¿cómo ocuparías tus días?" },
+  { key: "don-energia",            pregunta: "¿Qué situaciones te llenan de energía y cuáles te la quitan?" },
+  { key: "don-proposito",          pregunta: "¿Qué causa o propósito te mueve profundamente?" },
+  { key: "don-habilidades-dificil", pregunta: "¿Qué habilidades has desarrollado gracias a experiencias difíciles?" },
+  { key: "don-compania",           pregunta: "¿Qué tipo de personas disfrutan más de tu compañía y por qué?" },
+  { key: "don-facil-para-ti",      pregunta: "¿Qué haces que parece fácil para ti, pero otros encuentran complicado?" },
+  { key: "don-mas-orgulloso",      pregunta: "¿Cuál ha sido el momento de tu vida en el que te has sentido más orgulloso de ti mismo?" },
+  { key: "don-huella-mundo",       pregunta: "Si pudieras dejar una huella en el mundo, ¿qué te gustaría que la gente recordara de ti?" },
+];
+
+/** Cuántas preguntas de Dones ha respondido ya el usuario (para la barra). */
+export const donesRespondidas = (data: LineaDeVidaData): number =>
+  DONES_PREGUNTAS.filter((p) => ((data?.dones?.respuestas?.[p.key] || "").trim().length > 0)).length;
+
+// ─────────────────────────────────────────────────────────────────────────
+// «Regulación» — estimulación bilateral + escritura de descarga.
+//
+// IMPORTANTE: esto NO es EMDR clínico ni terapia. Es un ejercicio autoguiado
+// de regulación del sistema nervioso, con contención por diseño:
+//   · Preparación (lugar seguro) y una regla clara: trabajar con UNA cosa.
+//   · Un botón de parada siempre visible.
+//   · Un cierre de grounding (respiración + 5-4-3-2-1) para no quedar en carne viva.
+//
+// Ruta del audio: la persona lo escucha con auriculares (paneo L↔R). El archivo
+// vive en /audio/estimulacion-bilateral.mp3 (carpeta public).
+//
+// Persistencia: data.regulacion.texto = string (lo que escribe; autoguardado).
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface RegulacionData {
+  /** Lo que la persona escribe durante la descarga (autoguardado). */
+  texto?: string;
+}
+
+/** Ruta pública del audio de estimulación bilateral (auriculares recomendados). */
+export const REGULACION_AUDIO_SRC = "/audio/estimulacion-bilateral.mp3";
+
+export const REGULACION = {
+  titulo: "Regulación",
+  // Reencuadre honesto: se vende la calma/descarga, no la cura del trauma.
+  intro:
+    "Este no es un ejercicio clínico ni sustituye a una terapia. Es un espacio para descargar y regularte: mientras escuchas el audio de estimulación bilateral, escribe lo que necesites soltar. Ve despacio. Aquí nadie te lee.",
+  // Preparación (lugar seguro) antes de tocar nada.
+  preparacion: {
+    titulo: "Antes de empezar",
+    pasos: [
+      "Busca un sitio tranquilo donde nadie te interrumpa.",
+      "Ponte los auriculares: el sonido irá pasando de un oído al otro.",
+      "Elige UNA sola cosa para trabajar hoy. No hace falta con todo: con una basta.",
+      "Recuerda: puedes parar en cualquier momento. Tú mandas.",
+    ],
+  },
+  // Placeholder del área de escritura.
+  placeholder: "Escribe lo que necesites soltar…",
+  // Botón de parada (siempre visible).
+  botonParar: "Necesito parar",
+  // Cierre de grounding: para volver al cuerpo y al presente antes de salir.
+  cierre: {
+    titulo: "Volvamos al presente",
+    intro: "Antes de irte, tómate un momento para volver a tu cuerpo y al aquí y ahora.",
+    respiracion: "Respira hondo tres veces, despacio. Inhala… sostén… suelta.",
+    grounding: [
+      "5 cosas que puedes ver a tu alrededor",
+      "4 cosas que puedes tocar",
+      "3 sonidos que puedes oír",
+      "2 olores que puedes notar",
+      "1 cosa buena de ti",
+    ],
+    frase: "Ya está. Lo que ha venido, ha venido. Estás a salvo y estás aquí.",
+  },
+};

@@ -260,11 +260,11 @@ export default function MetodoPsicologiaHuellasNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 7, total: 10 }}
+              step={{ current: 7, total: 13 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Necesidades", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
-              next={{ label: "Relación →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/integracion`) }}
+              next={{ label: "Regulación →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
             />
 
             {/* Intro: texto sobre el fondo turquesa */}

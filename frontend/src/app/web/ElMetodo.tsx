@@ -51,7 +51,7 @@ const modalidades: ModalidadData[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    tagline: "Cómo se construyó tu mente.",
+    tagline: "Cómo funciona tu mente.",
     ...recorridoContenido.psicologia,
   },
   {

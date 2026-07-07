@@ -33,6 +33,7 @@ axios.interceptors.response.use(
       const enAuth = AUTH_PATHS.some((p) => path.toLowerCase().startsWith(p.toLowerCase()));
       if (!enAuth) {
         sessionStorage.clear();
+        localStorage.clear();
         window.location.assign("/logIn");
       }
     }

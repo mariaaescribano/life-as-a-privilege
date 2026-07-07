@@ -122,6 +122,7 @@ export default function UserAccount() {
 
   const handleLogout = () => {
     sessionStorage.clear();
+    localStorage.clear();
     navigate("/welcome");
   };
 
@@ -132,6 +133,7 @@ export default function UserAccount() {
         headers: { Authorization: `Bearer ${token}` },
       });
       sessionStorage.clear();
+      localStorage.clear();
       navigate("/welcome");
     } catch {
       setError("Error al eliminar la cuenta");

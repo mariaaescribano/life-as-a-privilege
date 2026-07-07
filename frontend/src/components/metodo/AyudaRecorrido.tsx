@@ -74,6 +74,25 @@ const EJEMPLOS_BOX: Partial<Record<string, {
     ejemplos: NUDOS.ejemplos,
     variante: "chips",
   },
+  dones: {
+    titulo: "Ejemplos de dones",
+    subtitulo: "(no para copiar: solo para que reconozcas los tuyos)",
+    variante: "chips",
+    ejemplos: [
+      "Escuchar de verdad",
+      "Calmar a los demás",
+      "Ver soluciones donde otros ven muros",
+      "Intuición",
+      "Crear con las manos",
+      "Poner orden en el caos",
+      "Hacer reír",
+      "Enseñar con paciencia",
+      "Sostener a otros en lo difícil",
+      "Imaginar y crear",
+      "Liderar sin imponer",
+      "Cuidar los detalles",
+    ],
+  },
   integracion: {
     titulo: "Ejemplos de relaciones",
     subtitulo: "(ejemplo sencillo orientativo)",
@@ -335,6 +354,79 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       cuerpo: [
         "No se trata de seguir analizando el pasado, sino de empezar a escribir una historia nueva.",
         "Sé amable contigo: el patrón un día te protegió. Hoy puedes elegir otra verdad.",
+      ],
+    },
+  },
+  regulacion: {
+    ejemplo: {
+      titulo: "¿Qué es esto?",
+      cuerpo: [
+        "No es EMDR ni una terapia: es un espacio para descargar y calmar tu sistema nervioso.",
+        "Mientras el audio pasa de un oído al otro, escribes lo que necesites soltar, sin ordenarlo.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Ponte los auriculares y elige UNA sola cosa para trabajar hoy, no todo a la vez.",
+        "Dale al play y escribe libremente lo que vaya surgiendo.",
+        "Si en algún momento te supera, pulsa «Necesito parar»: el audio se detiene y te acompañamos a volver al presente.",
+      ],
+    },
+    orientacion: {
+      titulo: "Cuídate aquí",
+      cuerpo: [
+        "Ve despacio y a tu ritmo. Parar también es avanzar.",
+        "Termina siempre con el cierre, para no levantarte en carne viva.",
+        "Si esto remueve mucho, busca apoyo profesional o agenda una llamada de compañía.",
+      ],
+    },
+  },
+  dones: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Un don no es lo que aprendiste con esfuerzo, sino lo que se te da con naturalidad.",
+        "Por ejemplo, a la pregunta «¿Qué te piden que ayudes a resolver?» quizá respondas: «Siempre me buscan para desahogarse; sé escuchar sin juzgar.»",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Responde las preguntas con calma; no hay respuestas correctas.",
+        "Todo se guarda solo. Puedes dejarlo a medias y volver.",
+        "Cuando termines, pasa al espejo: allí verás lo que has escrito y nombrarás tus dones.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No te frenes por pudor: aquí nadie más te lee.",
+        "Si una pregunta te cuesta, piensa en lo que los demás agradecen de ti.",
+      ],
+    },
+  },
+  "dones-espejo": {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Leyendo tus respuestas, quizá reconozcas dones como: «Escucha», «Intuición», «Sostener a otros».",
+        "Junto a ellos, los arquetipos de tu carta pueden confirmar lo que ya ves en ti.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Relee tus respuestas y observa qué se repite.",
+        "Escribe cada don que reconozcas y pulsa Añadir.",
+        "Quita con la ✕ los que no sientas del todo tuyos.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "Reconocer es más fácil que inventar: nombra lo que ya está ahí.",
+        "Un don también puede nacer de una herida. Lo que te rompió también te dio algo.",
       ],
     },
   },

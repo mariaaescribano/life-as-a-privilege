@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · COMPROMISO  (cierre del recorrido · 11/11)
+// PÁGINA · COMPROMISO  (cierre del recorrido · 13/13)
 //
 // El último paso: del entender al comprometerse. Recoge el problema con el que
 // el usuario llegó («Lo que me trajo hasta aquí») y, frente a él, todos los
@@ -164,7 +164,7 @@ export default function MetodoPsicologiaCompromiso() {
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               maxW="100%"
-              step={{ current: 10, total: 10 }}
+              step={{ current: 13, total: 13 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}

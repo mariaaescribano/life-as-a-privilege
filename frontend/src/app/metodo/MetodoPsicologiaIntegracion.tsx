@@ -302,8 +302,9 @@ export default function MetodoPsicologiaIntegracion() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
-  // /mapa es la ruta interna de la página «Integración» (el ejercicio posterior).
-  const irAIntegracion = () => navigate(`/metodo/psicologia/${exp.id}/mapa`);
+  // Tras Relación viene «Recuérdate» (ruta interna /dones). La Integración (/mapa)
+  // llega más adelante, después del bloque de dones.
+  const irARecuerdate = () => navigate(`/metodo/psicologia/${exp.id}/dones`);
   const activa = relaciones.find((c) => c.id === activaId) || null;
   const nudoEnActiva = (n: string) => !!activa?.nudos.includes(n);
   const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
@@ -322,11 +323,11 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 8, total: 10 }}
+              step={{ current: 9, total: 13 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Heridas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
-              next={{ label: "Integración →", onClick: irAIntegracion }}
+              prev={{ label: "← Regulación", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
+              next={{ label: "Recuérdate →", onClick: irARecuerdate }}
             />
 
             {/* ════════ TRES COLUMNAS ════════ */}

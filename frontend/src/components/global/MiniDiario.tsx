@@ -154,9 +154,10 @@ export function MiniDiario() {
 
   // No mostramos el diario sin sesión (las notas son por usuario).
   if (!userId) return null;
-  // Tampoco en el panel admin: "Mis notas" es solo para el usuario que hace su
-  // recorrido, no para quien edita contenido desde /admin.
-  if (/^\/admin(\/|$)/i.test(pathname)) return null;
+  // «Mis notas» solo aparece dentro de El Recorrido (páginas /metodo/...), que
+  // es donde el usuario hace su trabajo personal. Fuera de ahí (home, web y el
+  // panel /admin) el botón flotante no se muestra.
+  if (!/^\/metodo(\/|$)/i.test(pathname)) return null;
 
   return (
     <>

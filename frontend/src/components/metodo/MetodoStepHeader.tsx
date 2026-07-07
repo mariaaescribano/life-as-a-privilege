@@ -217,8 +217,10 @@ export function MetodoStepHeader({
       {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}
 
       <Box position="relative" zIndex={1} px={{ base: 4, md: 14 }} py={{ base: 3, md: 4 }}>
-        {/* Cabecera: icono + título */}
-        <Flex direction="row" align="center" justify="center" gap={5}>
+        {/* Cabecera: icono + título. Un pequeño margen superior baja el título
+            para que quede ópticamente más centrado dentro del box (detalle de
+            calidad; afecta a todos los headers). */}
+        <Flex direction="row" align="center" justify="center" gap={5} mt={{ base: 1.5, md: 2 }}>
           <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center">
             {icon}
           </Box>
