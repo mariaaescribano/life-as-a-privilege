@@ -23,17 +23,12 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { Glifo } from "../../components/metodo/Glifo";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
-import { HeridaIcon } from "../../components/metodo/HeridaIcon";
-import { cuerpoByKey } from "../../components/metodo/astrologiaData";
 import {
   experienciaById,
-  arquetipoKey,
   type LineaDeVidaData,
   type Constelacion,
 } from "../../components/metodo/psicologiaRecorrido";
-import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
@@ -45,9 +40,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-// Acento luminoso/dorado: esta página marca el inicio de la transformación y
-// debe sentirse más esperanzadora que las anteriores.
-const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // Los cuatro bloques del ejercicio. La `key` es el campo de la constelación.
@@ -325,8 +317,8 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// Popup guiado por relación: una pregunta por página, se avanza con flechas
-// (misma estructura que «Enfréntate», para coherencia del programa).
+// Popup guiado por relación: conversación con el guía (misma estructura que
+// «Enfréntate»). Las preguntas ya respondidas quedan arriba como un hilo.
 // ─────────────────────────────────────────────────────────────────────────
 function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   c: Constelacion;
@@ -336,16 +328,23 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
 }) {
   const total = BLOQUES.length;
   const [paso, setPaso] = useState(0);
-  const b = BLOQUES[paso];
   const esPrimero = paso === 0;
   const esUltimo = paso === total - 1;
 
   useLockBodyScroll(true);
 
+  // El hilo crece hacia abajo: al avanzar llevamos la vista y el foco a la
+  // pregunta actual, como en un chat.
+  const cuerpoRef = useRef<HTMLDivElement | null>(null);
+  const actualRef = useRef<HTMLTextAreaElement | null>(null);
+  useEffect(() => {
+    cuerpoRef.current?.scrollTo({ top: cuerpoRef.current.scrollHeight, behavior: "smooth" });
+    const t = setTimeout(() => actualRef.current?.focus(), 220);
+    return () => clearTimeout(t);
+  }, [paso]);
+
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
   const siguiente = () => { if (esUltimo) onClose(); else setPaso((i) => Math.min(total - 1, i + 1)); };
-
-  const tienePiezas = c.nudos.length > 0 || c.arquetipos.length > 0;
 
   return (
     <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
@@ -369,76 +368,88 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
 
         {/* Cabecera: la relación, separada por una raya sólida a lo ancho */}
         <Box position="relative" zIndex={1} flexShrink={0} borderBottom={`1px solid ${TINTA}55`}
-             px={{ base: 6, md: 9 }} pt={{ base: 7, md: 8 }} pb={{ base: 4, md: 5 }}>
-          <Flex direction="column" align="center" textAlign="center" gap={1}>
+             px={{ base: 6, md: 9 }} pt={{ base: 6, md: 7 }} pb={{ base: 3.5, md: 4 }}>
+          <Flex direction="column" align="center" textAlign="center" gap={0.5}>
             <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
                   opacity={0.6} style={{ textShadow: INK_SHADOW }}>
               Tu relación
             </Text>
-            <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.25"
                   style={{ textShadow: INK_SHADOW }}>
               {relTitulo(c)}
             </Text>
           </Flex>
         </Box>
 
-        {/* Cuerpo scrollable */}
-        <Box position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
-             px={{ base: 6, md: 9 }} py={{ base: 5, md: 6 }}
+        {/* Cuerpo scrollable: la conversación con el guía, acumulativa */}
+        <Box ref={cuerpoRef} position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
+             px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
              sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
-
-          {/* Piezas de la relación (heridas + arquetipos), para tener contexto */}
-          {tienePiezas && (
-            <Flex wrap="wrap" gap={2} justify="center" mb={{ base: 5, md: 6 }}>
-              {c.nudos.map((n) => (
-                <Pieza key={`n-${n}`} icon={<HeridaIcon size={13} color={TINTA} />} label={n} />
-              ))}
-              {c.arquetipos.map((a) => (
-                <Pieza key={`a-${arquetipoKey(a)}`}
-                       icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={13} />}
-                       label={arquetipoLabel(a)} />
-              ))}
-            </Flex>
-          )}
-
-          {/* Pregunta actual */}
-          <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="800" lineHeight="1.3"
-                style={{ textShadow: INK_SHADOW }}>
-            {b.pregunta}
-          </Text>
-          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.9} mt={1.5} lineHeight="1.55"
-                style={{ textShadow: INK_SHADOW }}>
-            {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
-          </Text>
-          <Textarea
-            value={(c[b.key] as string) || ""}
-            onChange={(e) => onUpdate(b.key, e.target.value)}
-            placeholder={b.placeholder}
-            autoFocus
-            mt={3.5}
-            minH={{ base: "100px", md: "120px" }}
-            bg="rgba(255,251,243,0.75)" border={`1px solid ${TINTA}3a`} color={TINTA}
-            borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-            sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                  "&::-webkit-scrollbar": { width: "8px" },
-                  "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
-            _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-            _hover={{ borderColor: `${TINTA}55` }}
-            _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.9)" }}
-          />
-
-          {/* Puntos de progreso */}
-          <Flex justify="center" align="center" gap={2} mt={{ base: 6, md: 7 }}>
-            {BLOQUES.map((q, i) => {
-              const respondida = ((c[q.key] as string) || "").trim().length > 0;
-              const activo = i === paso;
+          <Flex direction="column" gap={{ base: 5, md: 6 }}>
+            {BLOQUES.slice(0, paso + 1).map((b, i) => {
+              const esActual = i === paso;
+              const respuesta = (c[b.key] as string) || "";
               return (
-                <Box key={q.key} as="button" onClick={() => setPaso(i)} title={`Pregunta ${i + 1}`}
-                     w={activo ? "24px" : "9px"} h="9px" borderRadius="full"
-                     bg={activo ? TINTA : respondida ? `${TINTA}99` : `${TINTA}33`}
-                     transition="all 0.2s" cursor="pointer" _hover={{ bg: activo ? TINTA : `${TINTA}bb` }} />
+                <Box key={b.key}>
+                  {/* Mensaje del guía: la pregunta */}
+                  <Flex align="flex-start" gap={{ base: 2.5, md: 3 }}>
+                    <Flex flexShrink={0} w={{ base: "30px", md: "34px" }} h={{ base: "30px", md: "34px" }}
+                          borderRadius="full" bg={`${TINTA}`} align="center" justify="center"
+                          boxShadow={`0 2px 10px ${TINTA}44`}>
+                      <NeuropsicologiaIcon size={{ base: "17px", md: "19px" }} />
+                    </Flex>
+                    <Box flex="1" pt={{ base: 0.5, md: 1 }} minW={0}>
+                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.35"
+                            style={{ textShadow: INK_SHADOW }}>
+                        {b.pregunta}
+                      </Text>
+                      {esActual && (
+                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.85} mt={1} lineHeight="1.55"
+                              style={{ textShadow: INK_SHADOW }}>
+                          {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
+                        </Text>
+                      )}
+                    </Box>
+                  </Flex>
+
+                  {/* La respuesta: campo activo si es la pregunta actual; si no,
+                      la cita de lo que la persona ya escribió (clicable para volver). */}
+                  {esActual ? (
+                    <Textarea
+                      ref={actualRef}
+                      value={respuesta}
+                      onChange={(e) => onUpdate(b.key, e.target.value)}
+                      placeholder={b.placeholder}
+                      mt={3}
+                      minH={{ base: "96px", md: "112px" }}
+                      bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                      sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                            "&::-webkit-scrollbar": { width: "8px" },
+                            "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
+                    />
+                  ) : (
+                    <Flex justify="flex-end" mt={2.5} pl={{ base: 6, md: 9 }}>
+                      <Box as="button" onClick={() => setPaso(i)} textAlign="left" maxW="88%"
+                           bg={respuesta.trim() ? `${TINTA}` : "transparent"}
+                           color={respuesta.trim() ? PAPEL : `${TINTA}88`}
+                           border={respuesta.trim() ? "none" : `1px dashed ${TINTA}55`}
+                           borderRadius="xl" borderBottomRightRadius="sm"
+                           px={{ base: 4, md: 4.5 }} py={{ base: 2.5, md: 3 }}
+                           fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" cursor="pointer"
+                           boxShadow={respuesta.trim() ? `0 2px 12px ${TINTA}3a` : "none"}
+                           transition="all 0.16s" _hover={{ transform: "translateY(-1px)", filter: "brightness(1.04)" }}
+                           sx={{ whiteSpace: "pre-wrap" }}>
+                        {respuesta.trim() ? respuesta : "Sin responder — toca para escribir"}
+                      </Box>
+                    </Flex>
+                  )}
+                </Box>
               );
             })}
           </Flex>
@@ -446,7 +457,7 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
 
         {/* Footer: navegación abajo del todo + autoguardado */}
         <Box position="relative" zIndex={1} flexShrink={0} borderTop={`1px solid ${TINTA}44`}
-             px={{ base: 6, md: 9 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }}>
+             px={{ base: 6, md: 9 }} pt={{ base: 3.5, md: 4 }} pb={{ base: 3.5, md: 4 }}>
           <Flex justify="space-between" align="center" gap={3}>
             <Box as="button" onClick={anterior} disabled={esPrimero}
                  px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
@@ -457,7 +468,10 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
                  _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>
               ‹ Anterior
             </Box>
-            <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6} flexShrink={0}>{paso + 1} / {total}</Text>
+            <Flex align="center" gap={2.5} flexShrink={0}>
+              <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>
+              <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+            </Flex>
             <Box as="button" onClick={siguiente}
                  px={{ base: 5, md: 6 }} py={2} borderRadius="full" bg={TINTA} color={PAPEL}
                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
@@ -467,22 +481,8 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
               {esUltimo ? "Hecho ✓" : "Siguiente ›"}
             </Box>
           </Flex>
-          <Flex justify="center" mt={2.5}>
-            <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
-          </Flex>
         </Box>
       </Box>
     </Box>
-  );
-}
-
-// Chip sobrio para mostrar herida / arquetipo (no editable aquí).
-function Pieza({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <Flex flexShrink={0} align="center" gap={1.5} px={2.5} py={1} borderRadius="full"
-          bg={`${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}33`}>
-      {icon}
-      <Text fontSize="xs" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">{label}</Text>
-    </Flex>
   );
 }

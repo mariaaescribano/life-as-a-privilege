@@ -36,9 +36,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const CREMA = "rgba(255,255,255,0.92)";
-// Acento luminoso/dorado: los Dones son la cara luminosa del recorrido.
-const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaDones() {
@@ -207,10 +204,10 @@ export default function MetodoPsicologiaDones() {
             />
 
             {/* ── LA BARAJA: una carta (pregunta) cada vez ── */}
-            <Box position="relative" w={{ base: "100%", md: "88%" }} borderRadius="2xl" overflow="hidden"
+            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} pt={{ base: 4, md: 5 }} pb={{ base: 8, md: 10 }}>
                 {/* La pregunta */}
                 <Flex align="center" justify="center" minH={{ base: "84px", md: "96px" }}>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.35"
@@ -234,7 +231,7 @@ export default function MetodoPsicologiaDones() {
                         "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
                   _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                   _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.9)" }}
+                  _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
                 />
 
                 <Flex justify="space-between" align="center" mt={4} gap={3} wrap="wrap">
@@ -281,13 +278,6 @@ export default function MetodoPsicologiaDones() {
               </Flex>
               <FlechaPagina dir="next" disabled={esUltima} onClick={siguiente} />
             </Flex>
-
-            {/* Progreso global + aviso al completar (el espejo se abre arriba) */}
-            <Text color={CREMA} fontSize="sm" opacity={0.85} textAlign="center" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.28)" }}>
-              {todoResuelto
-                ? "✨ Ya puedes abrir tus dones — pulsa «Dones →» arriba."
-                : `${resueltas} de ${total} completadas`}
-            </Text>
 
           </Flex>
         </Flex>

@@ -267,11 +267,20 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
   const preguntas = MIEDOS_PREGUNTAS;
   const total = preguntas.length;
   const [paso, setPaso] = useState(0);
-  const p = preguntas[paso];
   const esPrimero = paso === 0;
   const esUltimo = paso === total - 1;
 
   useLockBodyScroll(true);
+
+  // El hilo de la conversación crece hacia abajo: al avanzar, llevamos la vista
+  // (y el foco) a la pregunta actual, como en un chat.
+  const cuerpoRef = useRef<HTMLDivElement | null>(null);
+  const actualRef = useRef<HTMLTextAreaElement | null>(null);
+  useEffect(() => {
+    cuerpoRef.current?.scrollTo({ top: cuerpoRef.current.scrollHeight, behavior: "smooth" });
+    const t = setTimeout(() => actualRef.current?.focus(), 220);
+    return () => clearTimeout(t);
+  }, [paso]);
 
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
   const siguiente = () => { if (esUltimo) onClose(); else setPaso((i) => Math.min(total - 1, i + 1)); };
@@ -282,7 +291,7 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
          sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
-           position="relative" w="100%" maxW={{ base: "420px", md: "460px" }}
+           position="relative" w="100%" maxW={{ base: "440px", md: "500px" }}
            maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
            borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
@@ -298,62 +307,88 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
 
         {/* Cabecera: el miedo, separado por una raya sólida a lo ancho */}
         <Box position="relative" zIndex={1} flexShrink={0} borderBottom={`1px solid ${TINTA}55`}
-             px={{ base: 6, md: 9 }} pt={{ base: 7, md: 8 }} pb={{ base: 4, md: 5 }}>
-          <Flex direction="column" align="center" textAlign="center" gap={1}>
+             px={{ base: 6, md: 9 }} pt={{ base: 6, md: 7 }} pb={{ base: 3.5, md: 4 }}>
+          <Flex direction="column" align="center" textAlign="center" gap={0.5}>
             <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
                   opacity={0.6} style={{ textShadow: INK_SHADOW }}>
               Tu miedo
             </Text>
-            <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.25"
                   style={{ textShadow: INK_SHADOW }}>
               {miedo.texto}
             </Text>
           </Flex>
         </Box>
 
-        {/* Cuerpo scrollable: pregunta + respuesta + progreso */}
-        <Box position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
-             px={{ base: 6, md: 9 }} py={{ base: 5, md: 6 }}
+        {/* Cuerpo scrollable: la conversación con el guía, acumulativa */}
+        <Box ref={cuerpoRef} position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
+             px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
              sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
-          <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.35"
-                style={{ textShadow: INK_SHADOW }}>
-            {p.pregunta}
-          </Text>
-          {p.apoyo && (
-            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} mt={1.5}
-                  style={{ textShadow: INK_SHADOW }}>
-              {p.apoyo}
-            </Text>
-          )}
-          <Textarea
-            value={miedo.respuestas?.[p.key] || ""}
-            onChange={(e) => onUpdate(p.key, e.target.value)}
-            placeholder={p.placeholder || "Escribe aquí…"}
-            autoFocus
-            mt={3.5}
-            minH={{ base: "100px", md: "110px" }}
-            bg="rgba(255,251,243,0.75)" border={`1px solid ${TINTA}3a`} color={TINTA}
-            borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-            sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                  "&::-webkit-scrollbar": { width: "8px" },
-                  "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
-            _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-            _hover={{ borderColor: `${TINTA}55` }}
-            _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.9)" }}
-          />
-
-          {/* Puntos de progreso (clicables) */}
-          <Flex justify="center" align="center" gap={2} mt={{ base: 6, md: 7 }}>
-            {preguntas.map((q, i) => {
-              const respondida = ((miedo.respuestas?.[q.key] || "").trim().length > 0);
-              const activo = i === paso;
+          <Flex direction="column" gap={{ base: 5, md: 6 }}>
+            {preguntas.slice(0, paso + 1).map((q, i) => {
+              const esActual = i === paso;
+              const respuesta = miedo.respuestas?.[q.key] || "";
               return (
-                <Box key={q.key} as="button" onClick={() => setPaso(i)} title={`Pregunta ${i + 1}`}
-                     w={activo ? "24px" : "9px"} h="9px" borderRadius="full"
-                     bg={activo ? TINTA : respondida ? `${TINTA}99` : `${TINTA}33`}
-                     transition="all 0.2s" cursor="pointer" _hover={{ bg: activo ? TINTA : `${TINTA}bb` }} />
+                <Box key={q.key}>
+                  {/* Mensaje del guía: la pregunta */}
+                  <Flex align="flex-start" gap={{ base: 2.5, md: 3 }}>
+                    <Flex flexShrink={0} w={{ base: "30px", md: "34px" }} h={{ base: "30px", md: "34px" }}
+                          borderRadius="full" bg={`${TINTA}`} align="center" justify="center"
+                          boxShadow={`0 2px 10px ${TINTA}44`}>
+                      <NeuropsicologiaIcon size={{ base: "17px", md: "19px" }} />
+                    </Flex>
+                    <Box flex="1" pt={{ base: 0.5, md: 1 }} minW={0}>
+                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.35"
+                            style={{ textShadow: INK_SHADOW }}>
+                        {q.pregunta}
+                      </Text>
+                      {q.apoyo && esActual && (
+                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.78} mt={1}
+                              style={{ textShadow: INK_SHADOW }}>
+                          {q.apoyo}
+                        </Text>
+                      )}
+                    </Box>
+                  </Flex>
+
+                  {/* La respuesta: campo activo si es la pregunta actual; si no,
+                      la cita de lo que la persona ya escribió (clicable para volver). */}
+                  {esActual ? (
+                    <Textarea
+                      ref={actualRef}
+                      value={respuesta}
+                      onChange={(e) => onUpdate(q.key, e.target.value)}
+                      placeholder={q.placeholder || "Escribe aquí…"}
+                      mt={3}
+                      minH={{ base: "96px", md: "108px" }}
+                      bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                      sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                            "&::-webkit-scrollbar": { width: "8px" },
+                            "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
+                    />
+                  ) : (
+                    <Flex justify="flex-end" mt={2.5} pl={{ base: 6, md: 9 }}>
+                      <Box as="button" onClick={() => setPaso(i)} textAlign="left" maxW="88%"
+                           bg={respuesta.trim() ? `${TINTA}` : "transparent"}
+                           color={respuesta.trim() ? PAPEL : `${TINTA}88`}
+                           border={respuesta.trim() ? "none" : `1px dashed ${TINTA}55`}
+                           borderRadius="xl" borderBottomRightRadius="sm"
+                           px={{ base: 4, md: 4.5 }} py={{ base: 2.5, md: 3 }}
+                           fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" cursor="pointer"
+                           boxShadow={respuesta.trim() ? `0 2px 12px ${TINTA}3a` : "none"}
+                           transition="all 0.16s" _hover={{ transform: "translateY(-1px)", filter: "brightness(1.04)" }}
+                           sx={{ whiteSpace: "pre-wrap" }}>
+                        {respuesta.trim() ? respuesta : "Sin responder — toca para escribir"}
+                      </Box>
+                    </Flex>
+                  )}
+                </Box>
               );
             })}
           </Flex>
@@ -361,7 +396,7 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
 
         {/* Footer: navegación abajo del todo + autoguardado */}
         <Box position="relative" zIndex={1} flexShrink={0} borderTop={`1px solid ${TINTA}44`}
-             px={{ base: 6, md: 9 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }}>
+             px={{ base: 6, md: 9 }} pt={{ base: 3.5, md: 4 }} pb={{ base: 3.5, md: 4 }}>
           <Flex justify="space-between" align="center" gap={3}>
             <Box as="button" onClick={anterior} disabled={esPrimero}
                  px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
@@ -373,7 +408,10 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
               ‹ Anterior
             </Box>
 
-            <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6} flexShrink={0}>{paso + 1} / {total}</Text>
+            <Flex align="center" gap={2.5} flexShrink={0}>
+              <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>
+              <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+            </Flex>
 
             <Box as="button" onClick={siguiente}
                  px={{ base: 5, md: 6 }} py={2} borderRadius="full" bg={TINTA} color={PAPEL}
@@ -383,9 +421,6 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
               {esUltimo ? "Hecho ✓" : "Siguiente ›"}
             </Box>
-          </Flex>
-          <Flex justify="center" mt={2.5}>
-            <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
           </Flex>
         </Box>
       </Box>

@@ -94,7 +94,7 @@ const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/madera.png",
     paragraphs: [
-      "Cuando estos elementos están en orden, surge la madera, que representa el crecimiento, la expansión y la capacidad de avanzar. Es la fuerza que transforma nuestro potencial en acción.",
+      "La madera representa el crecimiento, la expansión y la capacidad de avanzar. Es la fuerza que transforma nuestro potencial en acción.",
       "Cuando está equilibrada nos ayuda a construir, crear y desarrollar aquello que hemos sembrado. Cuando se bloquea, pueden aparecer la frustración, la rigidez o el enfado.",
     ],
   },
@@ -198,10 +198,12 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
   alma_humana:   VINETAS_ALMA,
 };
 
-const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
+const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string; coverScale?: number }[] = [
   { key: "origen",        title: "El Origen", cover: "/viñetas/tcm/origen/origentcm3.png" },
   { key: "yin_yang",      title: "El Yin Yang", cover: "/viñetas/tcm/yinyang/yinyang.png" },
-  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.png" },
+  // El pergamino de elementos trae un marco crema decorado alrededor; lo
+  // ampliamos un poco para recortarlo y que llene la caja como las demás.
+  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.png", coverScale: 1.12 },
   { key: "alma_humana",   title: "El Alma Humana", cover: "/viñetas/tcm/alma/alma7.png" },
 ];
 
@@ -362,7 +364,7 @@ export function TCMIlustracionesModal({
                     borderRadius="2xl"
                     overflow="hidden"
                     border={`1px solid ${tcmTxt}55`}
-                    bg="rgba(255,255,255,0.08)"
+                    bg="#3a0606"
                     cursor="pointer"
                     fontFamily="'EB Garamond', serif"
                     sx={{
@@ -385,7 +387,7 @@ export function TCMIlustracionesModal({
                         aspectRatio={1}
                         overflow="hidden"
                         borderBottom={`1px solid ${tcmTxt}44`}
-                        bg="rgba(0,0,0,0.25)"
+                        bg="#3a0606"
                       >
                         <Box
                           as="img"
@@ -396,7 +398,11 @@ export function TCMIlustracionesModal({
                           inset="0"
                           w="100%"
                           h="100%"
-                          style={{ objectFit: "cover", objectPosition: opt.coverPosition ?? "center" }}
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: opt.coverPosition ?? "center",
+                            transform: opt.coverScale ? `scale(${opt.coverScale})` : undefined,
+                          }}
                         />
                       </Box>
                     )}

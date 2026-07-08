@@ -310,7 +310,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                       <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
                            bgGradient={`linear(to-r, transparent, ${TINTA}88, transparent)`} />
                     </Box>
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_TINTA}>
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_TINTA}>
                       {respondidas.length > 0 ? (
                         <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
                           {respondidas.map((r, i) => (
@@ -350,7 +350,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
                                       titulo="Tus arquetipos" apoyo="Toca una carta para unirla al don activo; el ojo abre su lectura." />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
                       {arquetipos.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={3} textAlign="center" px={4}>
                           <Text color={PAPEL} fontStyle="italic" opacity={0.92} fontSize="sm">
@@ -385,12 +385,12 @@ export default function MetodoPsicologiaDonesEspejo() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox
-                      icono={<Box as="span" color={ORO} fontSize="xl" lineHeight="1" style={{ textShadow: `0 0 10px ${ORO}88` }}>✦</Box>}
+                      icono={<DonIcon color={TINTA} size={22} />}
                       titulo="Tus dones" apoyo="Nombra tu don y une tus arquetipos." />
-                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX_TINTA}>
+                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX_TINTA}>
                       {dones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2.5} textAlign="center" px={4}>
-                          <Box as="span" color={ORO} fontSize="2xl" style={{ textShadow: `0 0 12px ${ORO}66` }}>✦</Box>
+                          <DonIcon color={ORO} size={30} glow={`${ORO}66`} />
                           <Text color={TINTA} opacity={0.75} fontStyle="italic" fontSize={{ base: "sm", md: "md" }}
                                 style={{ textShadow: INK_SHADOW }}>
                             Pulsa «Añadir don», ponle nombre y toca las cartas de «Tus arquetipos» para unirlas.
@@ -480,6 +480,15 @@ const EyeIcon = ({ color }: { color: string }) => (
   </Box>
 );
 
+// Icono de «don»: manos ofreciendo. Toma el color del txt que se le pase.
+const DonIcon = ({ color, size = 20, glow }: { color: string; size?: number; glow?: string }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={`${size}px`} h={`${size}px`} fill={color} flexShrink={0} display="inline-block"
+       style={glow ? { filter: `drop-shadow(0 0 8px ${glow})` } : undefined}>
+    <path d="M367-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440h14q-11 19-16.5 39.5T472-358q0 30 10.5 59.5T519-243l84 83H160Zm556 0L576-300q-13-13-18.5-28t-5.5-30q0-32 23-57t59-25q28 0 44 13t38 35q20-20 36.5-34t45.5-14q37 0 59.5 25.5T880-357q0 15-6 30t-18 27L716-160Z" />
+  </Box>
+);
+
 // Tarjeta de UNA faceta del arquetipo (signo o casa). Idéntica a la de Relación:
 // fondo de estrellas, ojo (lectura), tocar = unir al don activo (se ilumina).
 function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
@@ -530,7 +539,7 @@ function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onBorrar }: {
       <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
         {/* Nombre del don */}
         <Flex align="center" gap={2.5} mb={3}>
-          <Box as="span" color={ORO} fontSize="lg" flexShrink={0} style={{ textShadow: `0 0 10px ${ORO}66` }}>✦</Box>
+          <DonIcon color={ORO} size={20} glow={`${ORO}66`} />
           <Input value={d.texto} onChange={(e) => onTexto(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
                  placeholder="Nombra tu don…" variant="unstyled" flex="1"
                  color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"

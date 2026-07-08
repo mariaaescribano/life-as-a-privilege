@@ -14,7 +14,7 @@ import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { useCursosData } from "../../data/cursosApi";
 import {
-  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon, tcmNomLink,
+  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
 } from "../../GlobalVariables";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
@@ -55,7 +55,7 @@ export default function MetodoAyurvedaDoshaCursos() {
   // El botón "Med. China" se desbloquea al pagar la 4ª disciplina. Mientras no
   // esté pagada, el clic abre el pago (en vez de navegar directamente).
   const onMedChina = () => {
-    if (tcmSuscrito) navigate(`/aprendizaje/cursos/${tcmNomLink}`);
+    if (tcmSuscrito) navigate("/metodo/tcm");
     else { setPagoTcmError(null); setPagoTcmOpen(true); }
   };
 
@@ -93,7 +93,7 @@ export default function MetodoAyurvedaDoshaCursos() {
         { scope: "tcm" },
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      navigate(`/aprendizaje/cursos/${tcmNomLink}`);
+      navigate("/metodo/tcm");
     } catch (err: any) {
       setPagoTcmError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }

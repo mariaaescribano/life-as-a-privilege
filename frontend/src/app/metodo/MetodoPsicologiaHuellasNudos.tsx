@@ -323,7 +323,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<HuellaIcon size={22} color={TINTA} />} titulo="Tus huellas" apoyo="Tócalas o arrástralas para clasificarlas." />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {huellas.length === 0 ? (
                         <EstadoVacio texto="Aún no has marcado huellas en tu línea de vida." accion="Ir a Huellas →"
                                      onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas`)} />
@@ -350,7 +350,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<NudoEspiralIcon size={22} color={TINTA} strokeWidth={1.7} opacity={0.9} />} titulo="Tus nudos" apoyo="La creencia o conflicto que dejó esa experiencia." />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {nudos.length === 0 ? (
                         <EstadoVacio texto="Aún no has nombrado tus nudos." accion="Ir a Nudos →"
                                      onClick={() => navigate(`/metodo/psicologia/${exp.id}/nudos`)} />
@@ -383,7 +383,7 @@ export default function MetodoPsicologiaHuellasNudos() {
 
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo="Tus heridas" apoyo="Cada herida une una experiencia con lo que dejó en ti." />
-                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
+                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
                       {heridas.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
                           <HeridaIcon size={28} color={TINTA} opacity={0.45} />

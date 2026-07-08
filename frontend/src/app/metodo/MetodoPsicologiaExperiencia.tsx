@@ -17,6 +17,8 @@ import {
   anoNatural,
   tramosDeAnios,
   itemsDeRespuesta,
+  preguntasDeAno,
+  ANO_GESTACION,
   type LineaDeVidaData,
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
@@ -201,7 +203,12 @@ export default function MetodoPsicologiaExperiencia() {
 
                     {/* Etiqueta del tramo */}
                     <Text textAlign="center" color={TINTA} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.18em" textTransform="uppercase" opacity={0.7} fontWeight="600" mb={{ base: 7, md: 9 }}>
-                      {tramos[tramoIdx] ? `Años ${tramos[tramoIdx][0]} – ${tramos[tramoIdx][tramos[tramoIdx].length - 1]}` : ""}
+                      {(() => {
+                        const tr = tramos[tramoIdx];
+                        if (!tr) return "";
+                        const fin = tr[tr.length - 1];
+                        return tr[0] === ANO_GESTACION ? `Antes de nacer – ${fin} años` : `Años ${tr[0]} – ${fin}`;
+                      })()}
                     </Text>
 
                     {/* Nodos del tramo */}
@@ -246,10 +253,10 @@ export default function MetodoPsicologiaExperiencia() {
                                 transition="all 0.22s ease"
                                 _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 20px ${TINTA}99, 0 6px 18px rgba(94,45,16,0.3)` }}
                               >
-                                {edadAno}
+                                {edadAno === ANO_GESTACION ? <GestacionGlyph /> : edadAno}
                               </Box>
-                              <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} opacity={0.65}>
-                                {anoNatural(edad, edadAno, anioActual)}
+                              <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} opacity={0.65} whiteSpace="nowrap">
+                                {edadAno === ANO_GESTACION ? "Antes de nacer" : anoNatural(edad, edadAno, anioActual)}
                               </Text>
                             </Flex>
                           </React.Fragment>
@@ -379,7 +386,7 @@ export default function MetodoPsicologiaExperiencia() {
           key={anoAbierto}
           edadAno={anoAbierto}
           anioNatural={anoNatural(edad, anoAbierto, anioActual)}
-          preguntas={exp.preguntasPorAno}
+          preguntas={preguntasDeAno(exp, anoAbierto)}
           inicial={data.anos?.[String(anoAbierto)]}
           onCerrar={() => setAnoAbierto(null)}
           onGuardar={async (estado) => { await guardarAno(anoAbierto, estado); setAnoAbierto(null); }}
@@ -395,6 +402,15 @@ export default function MetodoPsicologiaExperiencia() {
     </Box>
   );
 }
+
+// Glifo del nodo de gestación: un corazón (la llegada al mundo, el recibimiento).
+// Hereda el color del texto del nodo (`currentColor`).
+const GestacionGlyph = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={{ base: "20px", md: "24px" }} h={{ base: "20px", md: "24px" }} fill="currentColor">
+    <path d="m480-147-44-40q-101-91-167-157T162-608q-25-42-37.5-83T112-777q0-90 62-153t150-63q52 0 99 22t57 34q10-12 57-34t99-22q88 0 150 63t62 153q0 43-12.5 84T798-344q-42 66-107 132T524-187l-44 40Z" />
+  </Box>
+);
 
 const FlechaTramo =({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
   <Box
@@ -564,14 +580,32 @@ function PaginaDeAno({
             "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" },
           }}
         >
-          {/* Encabezado del año */}
+          {/* Encabezado del año (la gestación tiene su propio título) */}
           <Flex direction="column" align="center" textAlign="center" gap={1} mb={{ base: 7, md: 9 }}>
-            <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
-              Año {edadAno}
-            </Text>
-            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
-              {anioNatural}
-            </Text>
+            {edadAno === ANO_GESTACION ? (
+              <>
+                <Box color={TINTA} mb={1} style={{ filter: `drop-shadow(${INK_SHADOW})` }}><GestacionGlyph /></Box>
+                <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.15" style={{ textShadow: INK_SHADOW }}>
+                  Antes de nacer
+                </Text>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
+                  El embarazo de tu madre · {anioNatural}
+                </Text>
+                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.8} maxW="440px" mt={2} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                  Tu historia empieza antes de tu primer recuerdo. Cuenta lo que sepas o
+                  te hayan contado; y lo que no sepas, imagínalo con cariño.
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
+                  Año {edadAno}
+                </Text>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
+                  {anioNatural}
+                </Text>
+              </>
+            )}
             <Box mt={3} h="1px" w="120px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
           </Flex>
 

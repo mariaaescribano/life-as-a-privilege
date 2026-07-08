@@ -1,4 +1,5 @@
 import type { CuerpoKey } from "./astrologiaData";
+import { ARQUETIPOS_OVERRIDES } from "./astrologiaTextos.overrides";
 
 /**
  * Textos de Quirón — el mismo texto aplica tanto al signo como a la casa
@@ -3319,10 +3320,26 @@ Las lecciones clave incluyen:
   },
 };
 
-export function getTextoSigno(planetaKey: string, signo: string): string | null {
+// El texto original hardcodeado (sin overrides). Lo usa el editor de admin para
+// poder mostrar/restaurar el texto de base de cada celda.
+export function getTextoSignoOriginal(planetaKey: string, signo: string): string | null {
   return TEXTOS_SIGNO[planetaKey as CuerpoKey]?.[signo] ?? null;
 }
 
-export function getTextoCasa(planetaKey: string, casa: number): string | null {
+export function getTextoCasaOriginal(planetaKey: string, casa: number): string | null {
   return TEXTOS_CASA[planetaKey as CuerpoKey]?.[casa] ?? null;
+}
+
+// Texto efectivo: primero el override del editor de admin (si existe y no está
+// vacío), si no el original. Todos los consumidores del recorrido pasan por aquí.
+export function getTextoSigno(planetaKey: string, signo: string): string | null {
+  const ov = ARQUETIPOS_OVERRIDES.signo?.[planetaKey]?.[signo];
+  if (typeof ov === "string" && ov.trim() !== "") return ov;
+  return getTextoSignoOriginal(planetaKey, signo);
+}
+
+export function getTextoCasa(planetaKey: string, casa: number): string | null {
+  const ov = ARQUETIPOS_OVERRIDES.casa?.[planetaKey]?.[String(casa)];
+  if (typeof ov === "string" && ov.trim() !== "") return ov;
+  return getTextoCasaOriginal(planetaKey, casa);
 }

@@ -42,6 +42,18 @@ export class PaymentController {
     return await this.paymentService.verifyAyurvedaCheckout(sessionId, req.user.userId);
   }
 
+  @Post('tcm/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createTcmCheckout(@Req() req: any) {
+    return await this.paymentService.createTcmCheckout(req.user.userId);
+  }
+
+  @Get('tcm/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyTcmCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyTcmCheckout(sessionId, req.user.userId);
+  }
+
   // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
   @Get('test/enabled')
   testEnabled() {
@@ -50,7 +62,7 @@ export class PaymentController {
 
   @Post('test/unlock')
   @UseGuards(JwtAuthGuard)
-  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'all' }) {
+  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'all' }) {
     return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
   }
 

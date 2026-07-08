@@ -58,7 +58,7 @@ export function PagoTcmModal({ isOpen, onClose, onPagar, loading, error, onTest 
               letterSpacing="0.015em"
               textAlign="center"
             >
-              Continúa el Recorrido con la Medicina China: descubre cómo la energía fluye por tu cuerpo y aprende a cuidar tu equilibrio desde su sabiduría milenaria.
+              Continúa el Recorrido con la Medicina China: descubre cómo influyen en ti los Cinco Elementos y cómo volver al equilibrio de la salud.
             </Text>
 
             <Text

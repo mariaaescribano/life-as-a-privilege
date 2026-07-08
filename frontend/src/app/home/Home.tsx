@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
+import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
@@ -60,6 +61,7 @@ const Home = () => {
   const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(null);
   const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
   const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(null);
+  const [tcmSuscrito, setTcmSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
@@ -74,6 +76,11 @@ const Home = () => {
   const [pagoAyurLoading, setPagoAyurLoading] = useState(false);
   const [pagoAyurError, setPagoAyurError] = useState<string | null>(null);
   const [pagoAyurExitoOpen, setPagoAyurExitoOpen] = useState(false);
+  // Pago de Medicina China (4ª disciplina)
+  const [pagoTcmOpen, setPagoTcmOpen] = useState(false);
+  const [pagoTcmLoading, setPagoTcmLoading] = useState(false);
+  const [pagoTcmError, setPagoTcmError] = useState<string | null>(null);
+  const [pagoTcmExitoOpen, setPagoTcmExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
   const [comicOpen, setComicOpen] = useState(false);
 
@@ -148,7 +155,7 @@ const Home = () => {
   };
 
   // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
-  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda") => {
+  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm") => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     try {
@@ -166,19 +173,28 @@ const Home = () => {
         setPsicologiaSuscrito(true);
         setPagoPsicoOpen(false);
         setPagoPsicoExitoOpen(true);
-      } else {
+      } else if (scope === "ayurveda") {
         // Ayurveda desbloquea también las disciplinas anteriores (cadena de prereq).
         setMetodoSuscrito(true);
         setPsicologiaSuscrito(true);
         setAyurvedaSuscrito(true);
         setPagoAyurOpen(false);
         setPagoAyurExitoOpen(true);
+      } else {
+        // TCM desbloquea también toda la cadena anterior.
+        setMetodoSuscrito(true);
+        setPsicologiaSuscrito(true);
+        setAyurvedaSuscrito(true);
+        setTcmSuscrito(true);
+        setPagoTcmOpen(false);
+        setPagoTcmExitoOpen(true);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
       if (scope === "metodo") setPagoError(msg);
       else if (scope === "psicologia") setPagoPsicoError(msg);
-      else setPagoAyurError(msg);
+      else if (scope === "ayurveda") setPagoAyurError(msg);
+      else setPagoTcmError(msg);
     }
   };
 
@@ -252,6 +268,41 @@ const Home = () => {
     }
   };
 
+  // Medicina China (4ª disciplina): clic en su círculo del mandala.
+  const irTcm = () => {
+    if (tcmSuscrito) {
+      navigate("/metodo/tcm");
+    } else {
+      setPagoTcmError(null);
+      setPagoTcmOpen(true);
+    }
+  };
+
+  const pagarTcm = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoTcmLoading(true);
+    setPagoTcmError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/tcm/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoTcmError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoTcmLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoTcmError(
+        status === 403
+          ? "Necesitas completar el pago de Ayurveda antes de adquirir Medicina China."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoTcmLoading(false);
+    }
+  };
+
   const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
   const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
   const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
@@ -283,6 +334,7 @@ const Home = () => {
     const metodoPagado = url.searchParams.get("metodo_pagado");
     const psicologiaPagado = url.searchParams.get("psicologia_pagado");
     const ayurvedaPagado = url.searchParams.get("ayurveda_pagado");
+    const tcmPagado = url.searchParams.get("tcm_pagado");
 
     const cargarSuscripcion = async () => {
       try {
@@ -293,11 +345,13 @@ const Home = () => {
         setMetodoSuscrito(suscrito);
         setPsicologiaSuscrito(!!me.data?.psicologia_suscrito);
         setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
+        setTcmSuscrito(!!me.data?.tcm_suscrito);
         return suscrito;
       } catch {
         setMetodoSuscrito(false);
         setPsicologiaSuscrito(false);
         setAyurvedaSuscrito(false);
+        setTcmSuscrito(false);
         return false;
       }
     };
@@ -361,6 +415,27 @@ const Home = () => {
           if (res.data?.ok) {
             setAyurvedaSuscrito(true);
             setPagoAyurExitoOpen(true);
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else if (tcmPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("tcm_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/tcm/verify`, {
+          params: { session_id: tcmPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            setTcmSuscrito(true);
+            setPagoTcmExitoOpen(true);
           }
         })
         .catch(async () => {
@@ -543,14 +618,16 @@ const Home = () => {
                 const abierta =
                   (d.name === astrologiaNom && metodoSuscrito !== false) ||
                   (d.name === neuropsicologiaNom && psicologiaSuscrito === true) ||
-                  (d.name === ayurvedaNom && ayurvedaSuscrito === true);
+                  (d.name === ayurvedaNom && ayurvedaSuscrito === true) ||
+                  (d.name === tcmNom && tcmSuscrito === true);
                 // `clickable` = se puede pulsar. Psicología es pulsable —aunque siga
                 //   con candado— si ya se pagó Astrología, para poder abrir su pago.
                 //   Ayurveda igual: pulsable si ya se pagó Psicología (su prereq).
                 const clickable =
                   d.name === astrologiaNom ||
                   (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true)) ||
-                  (d.name === ayurvedaNom && (ayurvedaSuscrito === true || psicologiaSuscrito === true));
+                  (d.name === ayurvedaNom && (ayurvedaSuscrito === true || psicologiaSuscrito === true)) ||
+                  (d.name === tcmNom && (tcmSuscrito === true || ayurvedaSuscrito === true));
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
@@ -560,6 +637,8 @@ const Home = () => {
                   ? irPsicologia
                   : d.name === ayurvedaNom
                   ? irAyurveda
+                  : d.name === tcmNom
+                  ? irTcm
                   : () => navigate(d.link);
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
@@ -569,6 +648,8 @@ const Home = () => {
                     ? "Desbloquea Psicología para empezar la 2ª disciplina."
                     : d.name === ayurvedaNom && clickable
                     ? "Desbloquea Ayurveda para empezar la 3ª disciplina."
+                    : d.name === tcmNom && clickable
+                    ? "Desbloquea Medicina China para empezar la 4ª disciplina."
                     : "El Recorrido se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
@@ -801,6 +882,20 @@ const Home = () => {
         loading={pagoAyurLoading}
         error={pagoAyurError}
         onTest={testPagos ? () => testUnlock("ayurveda") : undefined}
+      />
+      <PagoExitoModal
+        isOpen={pagoTcmExitoOpen}
+        onAceptar={() => setPagoTcmExitoOpen(false)}
+        titulo="Pago de Medicina China realizado"
+        mensaje="Ya puedes empezar la 4ª disciplina del Recorrido."
+      />
+      <PagoTcmModal
+        isOpen={pagoTcmOpen}
+        onClose={() => { setPagoTcmOpen(false); setPagoTcmError(null); }}
+        onPagar={pagarTcm}
+        loading={pagoTcmLoading}
+        error={pagoTcmError}
+        onTest={testPagos ? () => testUnlock("tcm") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
 

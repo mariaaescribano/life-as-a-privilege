@@ -1,17 +1,10 @@
 export type FacetaAstro = 'signo' | 'casa';
 
-export interface AstroTextoRow {
-  cuerpo: string;
-  faceta: FacetaAstro;
-  valor: string;
-  texto: string;
-  updated_at?: string;
-}
-
-/** Payload para guardar/upsert una interpretación. */
-export interface AstroTextoInput {
-  cuerpo: string;
-  faceta: FacetaAstro;
-  valor: string;
-  texto: string;
+/**
+ * Overrides de las interpretaciones de la carta (arquetipos del recorrido).
+ * Estructura: faceta → cuerpo → valor (signo o número de casa como string) → texto.
+ */
+export interface ArquetiposOverrides {
+  signo: Record<string, Record<string, string>>;
+  casa: Record<string, Record<string, string>>;
 }

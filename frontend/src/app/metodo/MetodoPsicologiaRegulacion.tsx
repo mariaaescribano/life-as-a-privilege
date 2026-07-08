@@ -260,7 +260,7 @@ export default function MetodoPsicologiaRegulacion() {
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 9 }}>
                 <Flex direction="column" align="center" gap={{ base: 5, md: 6 }}>
-                  <SeccionTitulo>Estimulación bilateral · usa auriculares 🎧</SeccionTitulo>
+                  <SeccionTitulo>Estimulación bilateral · usa auriculares </SeccionTitulo>
 
                   {audioError ? (
                     <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.78}

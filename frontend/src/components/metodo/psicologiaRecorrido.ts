@@ -85,6 +85,32 @@ export const experienciaById = (id: string): ExperienciaPsicologia | undefined =
   EXPERIENCIAS.find((e) => e.id === id);
 
 // ─────────────────────────────────────────────────────────────────────────
+// La gestación · un nodo ANTES del año 0.
+//
+// La vida no empieza al nacer: empieza en el deseo (o no) de quien nos esperaba.
+// Añadimos un nodo −1 al principio de la línea para que la persona cuente lo que
+// sabe o le han contado del embarazo de su madre y de su llegada al mundo.
+// Es OPCIONAL: no cuenta para el progreso ni bloquea el avance (por eso
+// `lineaCompleta` y `aniosRecorridos` siguen recorriendo sólo 0..edad).
+// ─────────────────────────────────────────────────────────────────────────
+export const ANO_GESTACION = -1;
+
+// Preguntas propias de la gestación: aquí no se recuerda, se cuenta lo que se
+// sabe o se imagina. No cambies las `key` tras publicar.
+export const PREGUNTAS_GESTACION: Pregunta[] = [
+  { key: "deseado", pregunta: "¿Fuiste un embarazo buscado, deseado, inesperado…? ¿Qué te han contado?" },
+  { key: "madre", pregunta: "¿Cómo vivió tu madre el embarazo? ¿Cómo estaba de ánimo y de salud?" },
+  { key: "entorno", pregunta: "¿Qué pasaba alrededor? (la relación de tus padres, la familia, el momento que vivían…)" },
+  { key: "nacimiento", pregunta: "¿Qué sabes de tu nacimiento? (cómo fue el parto, dónde, quién te esperaba…)" },
+  { key: "recibimiento", pregunta: "¿Cómo te recibieron al llegar al mundo?" },
+  { key: "algo-mas", pregunta: "Algo más que sepas o imagines de ese tiempo…" },
+];
+
+/** Preguntas de la página de un año: la gestación (−1) tiene las suyas. */
+export const preguntasDeAno = (exp: ExperienciaPsicologia, edadAno: number): Pregunta[] =>
+  edadAno === ANO_GESTACION ? PREGUNTAS_GESTACION : exp.preguntasPorAno;
+
+// ─────────────────────────────────────────────────────────────────────────
 // Tipos y helpers de datos / progreso
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -481,12 +507,17 @@ export function aniosConRecuerdo(data: LineaDeVidaData, edad: number): number[] 
 export const huellaMarcada = (data: LineaDeVidaData, edadAno: number): boolean =>
   !!data?.anos?.[String(edadAno)]?.huella;
 
-/** Tramos de la timeline: el primero 0–5 (6 nodos), luego de 5 en 5. */
+/** Tramos de la timeline: el primero es la gestación (−1) + años 0–4 (6 nodos
+ *  como mucho), y a partir de ahí de 5 en 5. */
 export function tramosDeAnios(edad: number): number[][] {
   const tramos: number[][] = [];
-  let inicio = 0;
+  // Primer tramo: la gestación abre la línea, luego los primeros años.
+  const primero: number[] = [ANO_GESTACION];
+  for (let a = 0; a <= Math.min(4, edad); a++) primero.push(a);
+  tramos.push(primero);
+  let inicio = 5;
   while (inicio <= edad) {
-    const fin = inicio === 0 ? 5 : inicio + 4;
+    const fin = inicio + 4;
     const tramo: number[] = [];
     for (let a = inicio; a <= Math.min(fin, edad); a++) tramo.push(a);
     tramos.push(tramo);

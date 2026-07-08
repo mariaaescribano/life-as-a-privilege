@@ -186,18 +186,17 @@ export default function MetodoPsicologiaCompromiso() {
                 <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
                       textTransform="uppercase" textAlign="center" opacity={0.8} mb={{ base: 5, md: 6 }}
                       style={{ textShadow: INK_SHADOW }}>
-                  Lo que me trajo hasta aquí
+                  De dónde vengo
                 </Text>
                 {problemas.length > 0 ? (
-                  <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
+                  <Flex direction="column" gap={{ base: 5, md: 6 }}>
                     {problemas.map((p, i) => (
-                      <Flex key={i} align="flex-start" gap={3} borderRadius="xl"
-                            bg="rgba(255,251,243,0.6)" border={`1px solid ${TINTA}26`}
-                            px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65">
+                      <Box key={i} pl={{ base: 5, md: 6 }} borderLeft={`3px solid ${TINTA}66`}>
+                        <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
+                              lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
                           {p}
                         </Text>
-                      </Flex>
+                      </Box>
                     ))}
                   </Flex>
                 ) : (

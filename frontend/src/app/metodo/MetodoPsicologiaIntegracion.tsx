@@ -347,7 +347,7 @@ export default function MetodoPsicologiaIntegracion() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo="Tus heridas" apoyo="Tócalas o arrástralas para relacionarlas." />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {heridas.length === 0 ? (
                         <EstadoVacio texto="Aún no has creado tus heridas." accion="Ir a Heridas →"
                                      onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)} />
@@ -379,7 +379,7 @@ export default function MetodoPsicologiaIntegracion() {
                   {/* pb permanente: siempre deja un respiro al fondo del scroll. */}
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={{ base: 3, md: 4 }}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo="Tus arquetipos" apoyo="Toca una carta para relacionarla; el ojo abre su lectura." />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
                          sx={{ ...SCROLL_SX, scrollbarColor: `${PAPEL}55 transparent`,
                                "&::-webkit-scrollbar": { width: "7px" },
                                "&::-webkit-scrollbar-thumb": { background: `${PAPEL}55`, borderRadius: "8px" } }}>
@@ -420,7 +420,7 @@ export default function MetodoPsicologiaIntegracion() {
 
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo="Tus relaciones" apoyo="Cada relación es un box. Ponle título y escribe lo que tú ves." />
-                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
+                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
                       {relaciones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
                           <RelacionIcon size={26} color={TINTA} opacity={0.45} />

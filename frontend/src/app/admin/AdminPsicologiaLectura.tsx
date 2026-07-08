@@ -17,6 +17,8 @@ import {
   itemsDeRespuesta,
   estadoDelAno,
   heridaLabel,
+  ANO_GESTACION,
+  PREGUNTAS_GESTACION,
   type LineaDeVidaData,
   type Constelacion,
   type RelacionHuellaNudo,
@@ -82,6 +84,10 @@ export default function AdminPsicologiaLectura() {
 
   const necesidadesMarcadas = NECESIDADES.filter((n) => data.necesidades?.[n.key]);
 
+  // La gestación (nodo −1): lo que la persona sabe del embarazo de su madre.
+  const gestacion = data.anos?.[String(ANO_GESTACION)];
+  const gestacionEscrita = estadoDelAno(data, ANO_GESTACION) === "completado";
+
   // Años con recuerdo escrito (páginas del libro de vida).
   const aniosCompletados: number[] = [];
   const aniosSinRecuerdos: number[] = [];
@@ -99,6 +105,7 @@ export default function AdminPsicologiaLectura() {
   const haleAlgo =
     problema.trim() ||
     necesidadesMarcadas.length ||
+    gestacionEscrita ||
     aniosCompletados.length ||
     aniosSinRecuerdos.length ||
     nudos.length ||
@@ -154,9 +161,26 @@ export default function AdminPsicologiaLectura() {
               )}
 
               {/* ── Línea de vida ── */}
-              {(aniosCompletados.length > 0 || aniosSinRecuerdos.length > 0) && (
+              {(gestacionEscrita || aniosCompletados.length > 0 || aniosSinRecuerdos.length > 0) && (
                 <LecturaCard nom={neuropsicologiaNom} txt={TXT} overlay={OVERLAY}
                              titulo="Línea de vida" meta={edad ? `${edad} años · ${aniosCompletados.length} con recuerdos` : undefined}>
+                  {gestacionEscrita && (
+                    <>
+                      <Box>
+                        <Text color={TXT} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={2.5} style={{ textShadow: "0 1px 2px #fbf4e8, 0 0 7px #fbf4e8" }}>
+                          Antes de nacer · el embarazo de su madre
+                        </Text>
+                        <Flex direction="column" gap={3}>
+                          {PREGUNTAS_GESTACION.map((p) => {
+                            const items = itemsDeRespuesta(gestacion?.respuestas?.[p.key]).map((x) => x.trim()).filter(Boolean);
+                            if (items.length === 0) return null;
+                            return <QA key={p.key} txt={TXT} pregunta={p.pregunta} respuesta={items.join("\n")} />;
+                          })}
+                        </Flex>
+                      </Box>
+                      {aniosCompletados.length > 0 && <LineaImagen img={IMG} txt={TXT} />}
+                    </>
+                  )}
                   {aniosCompletados.map((a, idx) => {
                     const ano = data.anos?.[String(a)];
                     const huellas = Array.isArray(ano?.huellas) ? ano!.huellas! : [];

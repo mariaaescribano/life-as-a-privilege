@@ -75,6 +75,11 @@ import MetodoAyurvedaDoshaEstilo from "./app/metodo/MetodoAyurvedaDoshaEstilo";
 import MetodoAyurvedaDoshaDia from "./app/metodo/MetodoAyurvedaDoshaDia";
 import MetodoAyurvedaDoshaCursos from "./app/metodo/MetodoAyurvedaDoshaCursos";
 import MetodoAyurvedaDoshaRecorrido from "./app/metodo/MetodoAyurvedaDoshaRecorrido";
+import MetodoTcm from "./app/metodo/MetodoTcm";
+import MetodoTcmEquilibrio from "./app/metodo/MetodoTcmEquilibrio";
+import MetodoTcmMapa from "./app/metodo/MetodoTcmMapa";
+import MetodoTcmElementos from "./app/metodo/MetodoTcmElementos";
+import MetodoTcmElemento from "./app/metodo/MetodoTcmElemento";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -176,6 +181,13 @@ export default function App()
       <Route path="/metodo/ayurveda/dosha/:dosha/cursos" element={<PrivateRoute><MetodoAyurvedaDoshaCursos /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/recorrido" element={<PrivateRoute><MetodoAyurvedaDoshaRecorrido /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
+
+      {/* El Recorrido · Medicina China (4ª disciplina) */}
+      <Route path="/metodo/tcm" element={<PrivateRoute><MetodoTcm /></PrivateRoute>} />
+      <Route path="/metodo/tcm/equilibrio" element={<PrivateRoute><MetodoTcmEquilibrio /></PrivateRoute>} />
+      <Route path="/metodo/tcm/mapa" element={<PrivateRoute><MetodoTcmMapa /></PrivateRoute>} />
+      <Route path="/metodo/tcm/elementos" element={<PrivateRoute><MetodoTcmElementos /></PrivateRoute>} />
+      <Route path="/metodo/tcm/elemento/:elemento" element={<PrivateRoute><MetodoTcmElemento /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
