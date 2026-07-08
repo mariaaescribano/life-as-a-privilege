@@ -483,7 +483,7 @@ function CasaBox({
       {open && (
         <Portal>
         <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
-             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.72)"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
              onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="620px"

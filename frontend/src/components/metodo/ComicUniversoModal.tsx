@@ -72,14 +72,14 @@ const VINETAS: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta9.png",
     paragraphs: [
       "Parte de ese polvo se reunió en planetas. Uno quedó a la distancia justa.",
-      "El ayurveda lo había nombrado antes que la geología: cinco elementos —tierra, agua, fuego, aire, éter— combinándose para sostener Vida.",
+      "El ayurveda lo había nombrado antes que la geología: cinco elementos —tierra, agua, fuego, aire, energía— combinándose para sostener Vida.",
     ],
   },
   {
     src: "/viñetas/comicInicio/viñeta10.png",
     paragraphs: [
       "Y la materia, en algún momento, empezó a copiarse, duplicarse y expandirse.",
-      "Eso somos: un préstamo de polvo de estrellas. Una inversión del Universo. Cada célula que permite que te llames «yo» lleva 13.800 millones de años de historia dentro.",
+      "Eso somos: un préstamo de polvo de estrellas. Una inversión del Universo. Las moléculas de cada célula que permiten que te llames «yo» existen desde hace más de 13.800 millones de años.",
     ],
   },
   {

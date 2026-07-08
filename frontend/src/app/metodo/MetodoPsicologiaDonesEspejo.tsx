@@ -1,12 +1,14 @@
 // ─────────────────────────────────────────────────────────────────────────
 // PÁGINA · DONES (el espejo)  ·  11/13
 //
-// El reverso de la página anterior: aquí se COSECHA. Le devolvemos a la persona
-// sus propias respuestas junto a los arquetipos de su carta astral, y ella
-// reconoce y nombra sus dones (los escribe: la plataforma nunca interpreta).
+// El reverso de «Recuérdate»: aquí se COSECHA. Funciona como «Relación»:
+//   · Columna «Lo que escribiste» — solo las respuestas (más impactante).
+//   · Columna «Tus arquetipos» — la carta astral, igual que en Relación.
+//   · «Tus dones» — la persona nombra cada don y le UNE arquetipos de su carta,
+//     quedando juntos en una etiqueta. La plataforma nunca interpreta.
 //
 // Datos: lee data.dones.respuestas + la carta astral (metodo-astrologia).
-//        escribe data.dones.lista = string[]  (los dones reconocidos).
+//        escribe data.dones.lista = DonReconocido[]  (don + arquetipos unidos).
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,8 +21,10 @@ import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/glo
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
-import { CUERPOS, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
+import { CUERPOS, cuerpoByKey, type Cuerpo } from "../../components/metodo/astrologiaData";
 import { type CartaData } from "../../components/metodo/Planetas/useCartaPlanetas";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
@@ -30,6 +34,7 @@ import {
   arquetipoKey,
   type LineaDeVidaData,
   type DonesData,
+  type DonReconocido,
   type ArquetipoRef,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
@@ -47,21 +52,60 @@ const PAPEL = "#fbf4e8";          // crema claro
 const CREMA = "rgba(255,255,255,0.92)";
 const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
+const COL_H = { base: "440px", md: "520px", lg: "600px" } as const;
+const SCROLL_SX_CLARO = {
+  scrollbarWidth: "thin" as const,
+  scrollbarColor: `${PAPEL}55 transparent`,
+  "&::-webkit-scrollbar": { width: "7px" },
+  "&::-webkit-scrollbar-thumb": { background: `${PAPEL}55`, borderRadius: "8px" },
+};
+const SCROLL_SX_TINTA = {
+  scrollbarWidth: "thin" as const,
+  scrollbarColor: `${TINTA}66 transparent`,
+  "&::-webkit-scrollbar": { width: "7px" },
+  "&::-webkit-scrollbar-thumb": { background: `${TINTA}66`, borderRadius: "8px" },
+};
+// Margen inferior permanente dentro de las columnas con scroll: deja siempre
+// un respiro entre el final visible del scroll y el borde del panel (más limpio,
+// aunque no se haya llegado al final del scroll).
+const COL_PB = { base: 3, md: 4 } as const;
 
-// Una faceta de arquetipo con su símbolo/color, lista para pintar como chip.
-interface ArqChip extends ArquetipoRef { symbol: string; color: string }
+// ── Arquetipos de la carta, agrupados por cuerpo (como en Relación) ──
+interface ArqPlaneta { cuerpoKey: string; symbol: string; color: string; signo: string | null; casa: number | null }
+interface ArqItem extends ArquetipoRef { symbol: string }
 
-function arquetiposDeCarta(carta: CartaData): ArqChip[] {
-  const out: ArqChip[] = [];
+function arquetiposDeCarta(carta: CartaData): ArqPlaneta[] {
+  const out: ArqPlaneta[] = [];
   for (const c of CUERPOS) {
-    const v = carta[c.key as CuerpoKey];
+    const v = carta[c.key];
     if (!v) continue;
     const signo = v.signo || null;
     const casa = c.conCasa && v.casa != null ? v.casa : null;
-    if (signo) out.push({ cuerpoKey: c.key, faceta: "signo", signo, casa: null, symbol: c.symbol, color: c.color });
-    if (casa != null) out.push({ cuerpoKey: c.key, faceta: "casa", signo: null, casa, symbol: c.symbol, color: c.color });
+    if (signo || casa != null) out.push({ cuerpoKey: c.key, symbol: c.symbol, color: c.color, signo, casa });
   }
   return out;
+}
+
+function facetasDe(p: ArqPlaneta): ArqItem[] {
+  const out: ArqItem[] = [];
+  if (p.signo) out.push({ cuerpoKey: p.cuerpoKey, faceta: "signo", signo: p.signo, casa: null, symbol: p.symbol });
+  if (p.casa != null) out.push({ cuerpoKey: p.cuerpoKey, faceta: "casa", signo: null, casa: p.casa, symbol: p.symbol });
+  return out;
+}
+
+const nuevoId = (): string =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `d-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+
+// Coerciona la lista guardada (admite el formato antiguo: string[]).
+function coercionarDones(raw: unknown): DonReconocido[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((x: any) =>
+    typeof x === "string"
+      ? { id: nuevoId(), texto: x, arquetipos: [] }
+      : { id: x?.id || nuevoId(), texto: typeof x?.texto === "string" ? x.texto : "", arquetipos: Array.isArray(x?.arquetipos) ? x.arquetipos : [] },
+  );
 }
 
 export default function MetodoPsicologiaDonesEspejo() {
@@ -71,14 +115,15 @@ export default function MetodoPsicologiaDonesEspejo() {
 
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, string>>({});
-  const [arquetipos, setArquetipos] = useState<ArqChip[]>([]);
-  const [dones, setDones] = useState<string[]>([]);
-  const [draft, setDraft] = useState("");
+  const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
+  const [dones, setDones] = useState<DonReconocido[]>([]);
+  const [activaId, setActivaId] = useState<string | null>(null);
+  const [saberMas, setSaberMas] = useState<{ cuerpo: Cuerpo; signo?: string; casa?: number; facet: "signo" | "casa" } | null>(null);
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendiente = useRef<string[] | null>(null);
+  const pendiente = useRef<DonReconocido[] | null>(null);
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
   useEffect(() => {
@@ -110,7 +155,9 @@ export default function MetodoPsicologiaDonesEspejo() {
           const d: LineaDeVidaData = psiRes.value.data?.data || {};
           dataRef.current = d;
           setRespuestas({ ...(d.dones?.respuestas || {}) });
-          setDones(Array.isArray(d.dones?.lista) ? [...(d.dones!.lista as string[])] : []);
+          const lista = coercionarDones(d.dones?.lista);
+          setDones(lista);
+          if (lista.length > 0) setActivaId(lista[lista.length - 1].id);
         }
         if (astroRes.status === "fulfilled") {
           const carta: CartaData = astroRes.value.data?.data || {};
@@ -125,7 +172,7 @@ export default function MetodoPsicologiaDonesEspejo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const persistir = async (next: string[]): Promise<boolean> => {
+  const persistir = async (next: DonReconocido[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
@@ -148,7 +195,7 @@ export default function MetodoPsicologiaDonesEspejo() {
     }
   };
 
-  const commit = (next: string[]) => {
+  const commit = (next: DonReconocido[]) => {
     setDones(next);
     setEstadoGuardado("guardando");
     pendiente.current = next;
@@ -164,32 +211,68 @@ export default function MetodoPsicologiaDonesEspejo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const añadirDon = () => {
-    const v = draft.trim();
-    if (!v || dones.some((d) => d.toLowerCase() === v.toLowerCase())) { setDraft(""); return; }
-    commit([...dones, v]);
-    setDraft("");
+  // Aplica una mutación al don activo (creándolo si no hay ninguno).
+  const conActiva = (mut: (d: DonReconocido) => DonReconocido) => {
+    let id = activaId;
+    let base = dones;
+    if (!id || !base.some((x) => x.id === id)) {
+      const nueva: DonReconocido = { id: nuevoId(), texto: "", arquetipos: [] };
+      base = [...base, nueva]; id = nueva.id; setActivaId(id);
+    }
+    commit(base.map((x) => (x.id === id ? mut(x) : x)));
   };
-  const quitarDon = (i: number) => commit(dones.filter((_, idx) => idx !== i));
+
+  const toggleArq = (a: ArqItem) =>
+    conActiva((d) => ({
+      ...d,
+      arquetipos: d.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a))
+        ? d.arquetipos.filter((x) => arquetipoKey(x) !== arquetipoKey(a))
+        : [...d.arquetipos, { cuerpoKey: a.cuerpoKey, faceta: a.faceta, signo: a.signo, casa: a.casa }],
+    }));
+
+  const updateTexto = (id: string, texto: string) =>
+    commit(dones.map((d) => (d.id === id ? { ...d, texto } : d)));
+  const removeArq = (id: string, a: ArquetipoRef) =>
+    commit(dones.map((d) => (d.id === id ? { ...d, arquetipos: d.arquetipos.filter((x) => arquetipoKey(x) !== arquetipoKey(a)) } : d)));
+  const borrarDon = (id: string) => {
+    const next = dones.filter((d) => d.id !== id);
+    commit(next);
+    if (activaId === id) setActivaId(next.length ? next[next.length - 1].id : null);
+  };
+  const añadirDon = () => {
+    const nueva: DonReconocido = { id: nuevoId(), texto: "", arquetipos: [] };
+    commit([...dones, nueva]);
+    setActivaId(nueva.id);
+  };
+
+  const abrirSaberMas = (a: ArqItem) => {
+    const c = cuerpoByKey(a.cuerpoKey);
+    if (!c) return;
+    if (a.faceta === "signo") setSaberMas({ cuerpo: c, signo: a.signo || undefined, facet: "signo" });
+    else setSaberMas({ cuerpo: c, casa: a.casa ?? undefined, facet: "casa" });
+  };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
   const irARecuerdate = () => navigate(`/metodo/psicologia/${exp.id}/dones`);
-  const irAIntegracion = () => navigate(`/metodo/psicologia/${exp.id}/mapa`);
+  const irAMiedos = () => navigate(`/metodo/psicologia/${exp.id}/miedos`);
 
-  // Solo las preguntas que la persona respondió (el espejo refleja lo escrito).
+  const activa = dones.find((d) => d.id === activaId) || null;
+  const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
+
+  // Solo las RESPUESTAS (sin la pregunta) — más impactante.
   const respondidas = DONES_PREGUNTAS
-    .map((p) => ({ pregunta: p.pregunta, respuesta: (respuestas[p.key] || "").trim() }))
-    .filter((x) => x.respuesta.length > 0);
+    .map((p) => (respuestas[p.key] || "").trim())
+    .filter((x) => x.length > 0);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Box position="relative" flex="1">
-        <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
-          <Flex direction="column" align="center" w="100%" maxW="860px" gap={{ base: 7, md: 9 }}>
+        <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+          <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 7, md: 9 }}>
 
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
@@ -197,167 +280,301 @@ export default function MetodoPsicologiaDonesEspejo() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 11, total: 13 }}
+              step={{ current: 11, total: 15 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Recuérdate", onClick: irARecuerdate }}
-              next={{ label: "Integración →", onClick: irAIntegracion }}
+              next={{ label: "Miedos →", onClick: irAMiedos }}
             />
 
             {/* Intro */}
             <Text color={CREMA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.7" maxW="640px" style={{ textShadow: "0 1px 12px rgba(0,0,0,0.35)" }}>
+                  lineHeight="1.7" maxW="700px" style={{ textShadow: "0 1px 12px rgba(0,0,0,0.35)" }}>
               {DONES_INTRO.espejo}
             </Text>
 
-            {/* ── Sección A · Tus respuestas ── */}
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-                <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
-                      textTransform="uppercase" textAlign="center" opacity={0.8} mb={{ base: 5, md: 6 }}
-                      style={{ textShadow: INK_SHADOW }}>
-                  Lo que escribiste
-                </Text>
-                {respondidas.length > 0 ? (
-                  <Flex direction="column" gap={{ base: 4, md: 5 }}>
-                    {respondidas.map((x, i) => (
-                      <Box key={i} borderRadius="xl" bg="rgba(255,251,243,0.62)" border={`1px solid ${TINTA}26`}
-                           px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="700" lineHeight="1.4" mb={1.5} opacity={0.82}>
-                          {x.pregunta}
-                        </Text>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65">
-                          {x.respuesta}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Flex direction="column" align="center" gap={4} py={2} textAlign="center">
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.75}
-                          style={{ textShadow: INK_SHADOW }}>
-                      Aún no has respondido las preguntas. Vuelve a la página anterior para descubrir tus dones.
-                    </Text>
-                    <Box as="button" onClick={irARecuerdate} px={6} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
-                         fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                         boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                         _hover={{ transform: "translateY(-2px)" }}>
-                      Ir a Recuérdate →
+            {/* ════════ TRES COLUMNAS: lo que escribiste · arquetipos · unir ════════ */}
+            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} align="stretch">
+
+              {/* ── COLUMNA 1 · LO QUE ESCRIBISTE (solo respuestas) ── */}
+              <Flex direction="column" flex="1" minW={0}>
+                <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
+                     border={azulBorde} boxShadow={glowPanel}>
+                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                  <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
+                    <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
+                      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
+                            letterSpacing="0.03em" style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+                        Lo que escribiste
+                      </Text>
+                      <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
+                           bgGradient={`linear(to-r, transparent, ${TINTA}88, transparent)`} />
                     </Box>
-                  </Flex>
-                )}
-              </Box>
-            </Box>
-
-            {/* ── Sección B · Tus arquetipos (carta astral) ── */}
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-                <Flex align="center" justify="center" gap={2.5} mb={{ base: 5, md: 6 }}>
-                  <AstrologiaIcon size={{ base: "20px", md: "22px" }} />
-                  <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
-                        textTransform="uppercase" opacity={0.8} style={{ textShadow: INK_SHADOW }}>
-                    Tus arquetipos
-                  </Text>
-                </Flex>
-                {arquetipos.length > 0 ? (
-                  <Flex wrap="wrap" gap={2.5} justify="center">
-                    {arquetipos.map((a) => (
-                      <Flex key={arquetipoKey(a)} align="center" gap={1.5} px={3} py={1.5} borderRadius="full"
-                            bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}33`}>
-                        <Glifo symbol={a.symbol} color={TINTA} size={14} />
-                        <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
-                          {arquetipoLabel(a)}
-                        </Text>
-                      </Flex>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Flex direction="column" align="center" gap={4} textAlign="center">
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.75}
-                          style={{ textShadow: INK_SHADOW }}>
-                      Tus arquetipos aparecerán cuando completes tu carta astral.
-                    </Text>
-                    <Box as="button" onClick={() => navigate("/metodo/astrologia")} px={6} py={2.5} borderRadius="full"
-                         bg={TINTA} color={PAPEL} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
-                         cursor="pointer" boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                         _hover={{ transform: "translateY(-2px)" }}>
-                      Ir a Astrología →
-                    </Box>
-                  </Flex>
-                )}
-              </Box>
-            </Box>
-
-            {/* ── Sección C · Tus dones (editable, luminosa) ── */}
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 border={`1px solid ${ORO}66`} boxShadow={`0 0 22px ${ORO}33, ${glowPanel}`}>
-              <Box position="relative" overflow="hidden" bgGradient={`linear(135deg, ${PAPEL}, ${ORO}33)`}>
-                <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                  <Flex direction="column" align="center" gap={2} mb={{ base: 6, md: 7 }} textAlign="center">
-                    <Text color={ORO} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.22em"
-                          textTransform="uppercase">✦ Tus dones</Text>
-                    <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25">
-                      Nombra lo que ves en ti
-                    </Text>
-                    <Box h="2px" w="72px" bg={`${ORO}88`} borderRadius="full" mt={1} />
-                  </Flex>
-
-                  {/* Dones reconocidos */}
-                  {dones.length > 0 && (
-                    <Flex wrap="wrap" gap={2.5} justify="center" mb={6}>
-                      {dones.map((d, i) => (
-                        <Flex key={`${d}-${i}`} align="center" gap={2} pl={4} pr={2} py={2} borderRadius="full"
-                              bg={TINTA} color={PAPEL} boxShadow={`0 2px 12px ${TINTA}55`}>
-                          <Text fontSize={{ base: "sm", md: "md" }} fontWeight="700" lineHeight="1.2">{d}</Text>
-                          <Box as="button" onClick={() => quitarDon(i)} w="20px" h="20px" borderRadius="full"
-                               bg={`${PAPEL}33`} display="flex" alignItems="center" justifyContent="center"
-                               fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ bg: `${PAPEL}55` }} title="Quitar">✕</Box>
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_TINTA}>
+                      {respondidas.length > 0 ? (
+                        <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
+                          {respondidas.map((r, i) => (
+                            <Box key={i} borderRadius="xl" bg="rgba(255,251,243,0.66)" border={`1px solid ${TINTA}26`}
+                                 px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}>
+                              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65">
+                                {r}
+                              </Text>
+                            </Box>
+                          ))}
                         </Flex>
-                      ))}
-                    </Flex>
-                  )}
-
-                  {/* Campo para añadir un don */}
-                  <Flex align="center" gap={3} maxW="480px" mx="auto">
-                    <Input
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); añadirDon(); } }}
-                      placeholder={dones.length ? "Añade otro don…" : "Escribe un don y pulsa Enter…"}
-                      bg="rgba(255,255,255,0.75)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                      borderRadius="full" px={5} py={2} fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "md", md: "lg" }} sx={{ caretColor: TINTA }}
-                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                      _hover={{ borderColor: `${TINTA}55` }}
-                      _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,255,255,0.9)" }}
-                    />
-                    <Box as="button" onClick={añadirDon} flexShrink={0} px={6} py={2.5} borderRadius="full"
-                         bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"
-                         fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                         boxShadow={`0 2px 14px rgba(0,0,0,0.22)`} transition="all 0.18s"
-                         _hover={{ transform: "translateY(-2px)" }}>
-                      Añadir
+                      ) : (
+                        <Flex direction="column" align="center" justify="center" h="100%" gap={4} textAlign="center" px={4}>
+                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.75}
+                                style={{ textShadow: INK_SHADOW }}>
+                            Aún no has respondido las preguntas de «Recuérdate».
+                          </Text>
+                          <Box as="button" onClick={irARecuerdate} px={6} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
+                               fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
+                               boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                               _hover={{ transform: "translateY(-2px)" }}>
+                            Ir a Recuérdate →
+                          </Box>
+                        </Flex>
+                      )}
                     </Box>
-                  </Flex>
-
-                  <Flex justify="center" mt={5}>
-                    <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
                   </Flex>
                 </Box>
-              </Box>
-            </Box>
+              </Flex>
+
+              {/* ── COLUMNA 2 · TUS ARQUETIPOS (fondo de estrellas, como en Relación) ── */}
+              <Flex direction="column" flex="1" minW={0}>
+                <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
+                     border={azulBorde} boxShadow={glowPanel}>
+                  <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+                       bgSize="cover" bgPosition="center" />
+                  <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
+                    <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
+                                      titulo="Tus arquetipos" apoyo="Toca una carta para unirla al don activo; el ojo abre su lectura." />
+                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
+                      {arquetipos.length === 0 ? (
+                        <Flex direction="column" align="center" justify="center" h="100%" gap={3} textAlign="center" px={4}>
+                          <Text color={PAPEL} fontStyle="italic" opacity={0.92} fontSize="sm">
+                            Tus arquetipos aparecerán cuando completes tu carta astral.
+                          </Text>
+                          <Box as="button" onClick={() => navigate("/metodo/astrologia")} px={5} py={2} borderRadius="full"
+                               bg={PAPEL} color={TINTA} fontWeight="700" fontSize="sm" cursor="pointer">
+                            Ir a Astrología →
+                          </Box>
+                        </Flex>
+                      ) : (
+                        <Flex direction="column" gap={{ base: 4, md: 5 }}>
+                          {arquetipos.map((p) => (
+                            <Flex key={p.cuerpoKey} gap={{ base: 3, md: 3.5 }}>
+                              {facetasDe(p).map((it) => (
+                                <MiniCard key={arquetipoKey(it)} item={it} color={p.color} symbol={p.symbol}
+                                          activo={arqEnActiva(it)} onTap={() => toggleArq(it)} onLeer={() => abrirSaberMas(it)} />
+                              ))}
+                            </Flex>
+                          ))}
+                        </Flex>
+                      )}
+                    </Box>
+                  </Flex>
+                </Box>
+              </Flex>
+
+              {/* ── COLUMNA 3 · TUS DONES (unir arquetipos → etiqueta) ── */}
+              <Flex direction="column" flex="1.05" minW={0}>
+                <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
+                     border={`1px solid ${ORO}66`} boxShadow={`0 0 22px ${ORO}2e, ${glowPanel}`}>
+                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                  <Flex position="relative" zIndex={1} direction="column" h="100%">
+                    <ColumnaHeaderBox
+                      icono={<Box as="span" color={ORO} fontSize="xl" lineHeight="1" style={{ textShadow: `0 0 10px ${ORO}88` }}>✦</Box>}
+                      titulo="Tus dones" apoyo="Nombra tu don y une tus arquetipos." />
+                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX_TINTA}>
+                      {dones.length === 0 ? (
+                        <Flex direction="column" align="center" justify="center" h="100%" gap={2.5} textAlign="center" px={4}>
+                          <Box as="span" color={ORO} fontSize="2xl" style={{ textShadow: `0 0 12px ${ORO}66` }}>✦</Box>
+                          <Text color={TINTA} opacity={0.75} fontStyle="italic" fontSize={{ base: "sm", md: "md" }}
+                                style={{ textShadow: INK_SHADOW }}>
+                            Pulsa «Añadir don», ponle nombre y toca las cartas de «Tus arquetipos» para unirlas.
+                          </Text>
+                        </Flex>
+                      ) : (
+                        <Flex direction="column" gap={{ base: 4, md: 5 }}>
+                          {dones.map((d) => (
+                            <DonCard key={d.id} d={d} activa={d.id === activaId}
+                                     onActivar={() => setActivaId(d.id)}
+                                     onTexto={(v) => updateTexto(d.id, v)}
+                                     onQuitarArq={(a) => removeArq(d.id, a)}
+                                     onBorrar={() => borrarDon(d.id)} />
+                          ))}
+                        </Flex>
+                      )}
+                    </Box>
+                    {/* Barra inferior: añadir + autoguardado */}
+                    <Flex flexShrink={0} align="center" justify="center" gap={3}
+                          px={{ base: 3.5, md: 4 }} pt={5} pb={{ base: 3, md: 4 }}>
+                      <Box as="button" onClick={añadirDon} px={{ base: 5, md: 6 }} py={2.5} borderRadius="full"
+                           bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"
+                           fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
+                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                        + Añadir don
+                      </Box>
+                      <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                    </Flex>
+                  </Flex>
+                </Box>
+              </Flex>
+            </Flex>
 
           </Flex>
         </Flex>
       </Box>
 
+      <SaberMasModal isOpen={!!saberMas} onClose={() => setSaberMas(null)}
+                     cuerpo={saberMas?.cuerpo || null} signo={saberMas?.signo} casa={saberMas?.casa} facet={saberMas?.facet} />
+
       <AyudaRecorrido pagina="dones-espejo" />
 
       <SiteFooter />
     </Box>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Subcomponentes
+// ─────────────────────────────────────────────────────────────────────────
+
+// Cabecera de columna (variante `dark` para la columna con fondo de estrellas).
+function ColumnaHeaderBox({ icono, titulo, apoyo, dark }: { icono: React.ReactNode; titulo: string; apoyo?: string; dark?: boolean }) {
+  const tinta = dark ? PAPEL : TINTA;
+  const shadow = dark ? `0 1px 6px rgba(0,0,0,0.5)` : `0 1px 2px ${PAPEL}`;
+  return (
+    <Box flexShrink={0} position="relative" overflow="hidden" borderBottom={`1px solid ${tinta}55`}>
+      {/* Imagen propia de la cabecera (independiente del cuerpo → menos distorsión) */}
+      {dark ? (
+        <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+             bgSize="cover" bgPosition="center" />
+      ) : (
+        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
+      )}
+      <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
+        <Flex direction="column" align="center" gap={1} textAlign="center">
+          <Flex align="center" gap={2.5}>
+            <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
+                 style={{ filter: `drop-shadow(${shadow})` }}>{icono}</Box>
+            <Text color={tinta} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
+                  style={{ textShadow: shadow }}>{titulo}</Text>
+          </Flex>
+          {apoyo && (
+            <Text color={tinta} fontSize="xs" fontStyle="italic" opacity={0.85} maxW="300px"
+                  style={{ textShadow: shadow }}>{apoyo}</Text>
+          )}
+        </Flex>
+      </Box>
+    </Box>
+  );
+}
+
+const EyeIcon = ({ color }: { color: string }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill={color}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </Box>
+);
+
+// Tarjeta de UNA faceta del arquetipo (signo o casa). Idéntica a la de Relación:
+// fondo de estrellas, ojo (lectura), tocar = unir al don activo (se ilumina).
+function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
+  item: ArqItem; color: string; symbol: string; activo: boolean; onTap: () => void; onLeer: () => void;
+}) {
+  return (
+    <Box position="relative" flex="1" minW={0} borderRadius="14px" overflow="hidden"
+         border={`1.5px solid ${activo ? color : `${color}77`}`}
+         boxShadow={activo
+           ? `0 0 0 2px ${color}, 0 0 30px ${color}aa, 0 0 60px ${color}55, 0 10px 26px rgba(0,0,0,0.5)`
+           : `0 0 18px ${color}55, 0 8px 22px rgba(0,0,0,0.45)`}
+         transition="box-shadow 0.16s, border-color 0.16s">
+      <SpaceBg overlay="rgba(8,13,30,0.62)" />
+      {/* Ojo: abre la lectura de esta faceta */}
+      <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onLeer(); }}
+           position="absolute" top="6px" right="6px" zIndex={2} w="24px" h="24px" borderRadius="full"
+           bg="rgba(0,0,0,0.5)" border={`1px solid ${color}66`} display="flex" alignItems="center" justifyContent="center"
+           cursor="pointer" title="Leer" _hover={{ bg: "rgba(0,0,0,0.78)", borderColor: color }}>
+        <EyeIcon color={color} />
+      </Box>
+
+      <Flex as="button" onClick={onTap} position="relative" zIndex={1} direction="column" align="center" justify="center" gap={1.5}
+            w="100%" px={2} py={4} minH={{ base: "108px", md: "118px" }}
+            bg={activo ? `${color}26` : "transparent"} cursor="pointer"
+            transition="background 0.16s" _hover={{ bg: activo ? `${color}33` : "rgba(255,255,255,0.06)" }}>
+        <Box sx={{ filter: `drop-shadow(0 0 9px ${color}cc)` }}>
+          <Glifo symbol={symbol} color={color} size={34} />
+        </Box>
+        <Text color="#fff" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} textAlign="center" lineHeight="1.2"
+              style={{ textShadow: `0 0 10px ${color}aa` }}>
+          {arquetipoLabel(item)}
+        </Text>
+      </Flex>
+    </Box>
+  );
+}
+
+// Una etiqueta de don: su nombre + los arquetipos unidos. Editable, elegante.
+function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onBorrar }: {
+  d: DonReconocido; activa: boolean;
+  onActivar: () => void; onTexto: (v: string) => void; onQuitarArq: (a: ArquetipoRef) => void; onBorrar: () => void;
+}) {
+  return (
+    <Box onClick={onActivar} position="relative" borderRadius="xl" overflow="hidden" cursor="pointer"
+         bg="rgba(255,251,243,0.88)" border={`1px solid ${activa ? ORO : `${TINTA}33`}`}
+         boxShadow={activa ? `0 0 0 2px ${ORO}, 0 0 22px ${ORO}55` : `0 2px 12px ${TINTA}1f`}
+         opacity={activa ? 1 : 0.92} transition="all 0.16s">
+      <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
+        {/* Nombre del don */}
+        <Flex align="center" gap={2.5} mb={3}>
+          <Box as="span" color={ORO} fontSize="lg" flexShrink={0} style={{ textShadow: `0 0 10px ${ORO}66` }}>✦</Box>
+          <Input value={d.texto} onChange={(e) => onTexto(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                 placeholder="Nombra tu don…" variant="unstyled" flex="1"
+                 color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
+                 fontSize={{ base: "lg", md: "xl" }} sx={{ caretColor: TINTA }}
+                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 600 }} />
+          <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBorrar(); }}
+               w="24px" h="24px" borderRadius="full" bg={`${TINTA}14`} color={TINTA} flexShrink={0}
+               display="flex" alignItems="center" justifyContent="center" fontSize="11px" cursor="pointer"
+               _hover={{ bg: `${TINTA}26` }} title="Borrar don">✕</Box>
+        </Flex>
+
+        {/* Arquetipos unidos */}
+        <Box borderRadius="lg" border={`1.5px dashed ${activa ? `${ORO}aa` : `${TINTA}33`}`}
+             bg={`${TINTA}06`} px={3} py={2.5} minH="46px">
+          {d.arquetipos.length === 0 ? (
+            <Flex align="center" justify="center" minH="30px" textAlign="center">
+              <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">
+                {activa ? "Toca arriba una carta de «Tus arquetipos» para unirla." : "Pulsa este don para activarlo."}
+              </Text>
+            </Flex>
+          ) : (
+            <Flex wrap="wrap" gap={2}>
+              {d.arquetipos.map((a) => (
+                <Chip key={arquetipoKey(a)} onRemove={() => onQuitarArq(a)}
+                      icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={14} />}
+                      label={arquetipoLabel(a)} />
+              ))}
+            </Flex>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function Chip({ icon, label, onRemove }: { icon: React.ReactNode; label: string; onRemove: () => void }) {
+  return (
+    <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
+          bg={`${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}44`}>
+      {icon}
+      <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
+      <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"
+           bg={`${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
+           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title="Quitar">✕</Box>
+    </Flex>
   );
 }

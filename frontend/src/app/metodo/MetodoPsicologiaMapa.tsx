@@ -22,6 +22,7 @@ import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/glo
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { Glifo } from "../../components/metodo/Glifo";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
@@ -104,6 +105,7 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 
   const [loading, setLoading] = useState(true);
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
+  const [abiertoId, setAbiertoId] = useState<string | null>(null);
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
@@ -202,8 +204,9 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
   if (!exp) return null;
 
   const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
-  const irADones = () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`);
+  const irAMiedosPreguntas = () => navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`);
   const irACompromiso = () => navigate(`/metodo/psicologia/${exp.id}/compromiso`);
+  const abierta = relaciones.find((c) => c.id === abiertoId) || null;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -219,10 +222,10 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 12, total: 13 }}
+              step={{ current: 14, total: 15 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Dones", onClick: irADones }}
+              prev={{ label: "← Miedos", onClick: irAMiedosPreguntas }}
               next={{ label: "Compromiso →", onClick: irACompromiso }}
             />
 
@@ -256,18 +259,63 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
                 </Flex>
               </Box>
             ) : (
-              <Flex direction="column" w="100%" gap={{ base: 8, md: 10 }}>
-                {relaciones.map((c) => (
-                  <TarjetaIntegracion key={c.id} c={c}
-                                      onCampo={(campo, v) => updateCampo(c.id, campo, v)}
-                                      estadoGuardado={estadoGuardado} />
-                ))}
-              </Flex>
+              <>
+                {/* Tarjetas de relación — limpias. Al tocar, se abre el popup guiado. */}
+                <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
+                  {relaciones.map((c) => {
+                    const hechas = BLOQUES.filter((b) => ((c[b.key] as string) || "").trim().length > 0).length;
+                    const completo = hechas >= BLOQUES.length;
+                    return (
+                      <Box key={c.id} as="button" onClick={() => setAbiertoId(c.id)}
+                           position="relative" w="100%" borderRadius="2xl" overflow="hidden" textAlign="left"
+                           bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}
+                           cursor="pointer" transition="transform 0.16s, filter 0.16s"
+                           _hover={{ transform: "translateY(-2px)", filter: "brightness(1.04)" }}>
+                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                        <Flex position="relative" zIndex={1} align="center" gap={3}
+                              px={{ base: 5, md: 7 }} py={{ base: 4, md: 5 }}>
+                          <RelacionIcon size={22} color={TINTA} />
+                          <Text flex="1" minW={0} color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                                lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                            {relTitulo(c)}
+                          </Text>
+                          <Flex align="center" gap={2} flexShrink={0}>
+                            <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
+                                  opacity={completo ? 1 : 0.65} style={{ textShadow: INK_SHADOW }}>
+                              {completo ? "✓" : `${hechas}/${BLOQUES.length}`}
+                            </Text>
+                            <Box color={TINTA} opacity={0.8} transform="translateY(1px)">
+                              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor">
+                                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                              </Box>
+                            </Box>
+                          </Flex>
+                        </Flex>
+                      </Box>
+                    );
+                  })}
+                </Flex>
+
+                <Flex justify="center">
+                  <AutoguardadoIndicador estado={estadoGuardado} color="rgba(255,255,255,0.9)" />
+                </Flex>
+              </>
             )}
 
           </Flex>
         </Flex>
       </Box>
+
+      {/* ── POPUP GUIADO ── */}
+      {abierta && (
+        <PopupIntegracion
+          key={abierta.id}
+          c={abierta}
+          estadoGuardado={estadoGuardado}
+          onUpdate={(campo, v) => updateCampo(abierta.id, campo, v)}
+          onClose={() => setAbiertoId(null)}
+        />
+      )}
 
       <AyudaRecorrido pagina="mapa" />
 
@@ -277,168 +325,155 @@ export default function MetodoPsicologiaIntegracionEjercicio() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// Una tarjeta de integración por relación.
+// Popup guiado por relación: una pregunta por página, se avanza con flechas
+// (misma estructura que «Enfréntate», para coherencia del programa).
 // ─────────────────────────────────────────────────────────────────────────
-function TarjetaIntegracion({ c, onCampo, estadoGuardado }: {
+function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   c: Constelacion;
-  onCampo: (campo: keyof Constelacion, valor: string) => void;
   estadoGuardado: EstadoGuardado;
+  onUpdate: (campo: keyof Constelacion, valor: string) => void;
+  onClose: () => void;
 }) {
-  const verdad = (c.verdadSana || "").trim();
-  const recordatorio = (c.recordatorio || "").trim();
-  const hayResultado = verdad.length > 0 || recordatorio.length > 0;
-  // Cada box llega CERRADO: el usuario va abriendo las relaciones poco a poco.
-  const [abierto, setAbierto] = useState(false);
+  const total = BLOQUES.length;
+  const [paso, setPaso] = useState(0);
+  const b = BLOQUES[paso];
+  const esPrimero = paso === 0;
+  const esUltimo = paso === total - 1;
+
+  useLockBodyScroll(true);
+
+  const anterior = () => setPaso((i) => Math.max(0, i - 1));
+  const siguiente = () => { if (esUltimo) onClose(); else setPaso((i) => Math.min(total - 1, i + 1)); };
+
+  const tienePiezas = c.nudos.length > 0 || c.arquetipos.length > 0;
 
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-         bgColor={neuropsicologiaBg}
-         border={azulBorde}
-         boxShadow={glowPanel}>
+    <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
+         px={{ base: 4, md: 10 }} py={{ base: 5, md: 10 }} bg="rgba(0,0,0,0.72)"
+         sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+         onClick={onClose} fontFamily="'EB Garamond', serif">
+      <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
+           position="relative" w="100%" maxW={{ base: "440px", md: "500px" }}
+           maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
+           borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
+           boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
+        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
-      {/* Cabecera plegable — fondo de psicología (acuarela), título grande y
-          centrado en color tinta, con una flecha a la derecha que cambia según
-          el box esté abierto o cerrado. */}
-      <Box as="button" type="button" onClick={() => setAbierto((o) => !o)}
-           position="relative" overflow="hidden" w="100%" display="block" cursor="pointer"
-           transition="filter 0.15s ease" _hover={{ filter: "brightness(1.04)" }}>
-        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
-        <Flex position="relative" zIndex={1} align="center" px={{ base: 4, md: 6 }} py={{ base: 4, md: 5 }}>
-          <Box flexShrink={0} w={{ base: "28px", md: "34px" }} display="flex" alignItems="center">
-            <RelacionIcon size={22} color={TINTA} />
-          </Box>
-          <Text flex="1" px={2} textAlign="center" color={TINTA}
-                fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
-                style={{ textShadow: INK_SHADOW }}>
-            {relTitulo(c)}
-          </Text>
-          <Box flexShrink={0} w={{ base: "28px", md: "34px" }} display="flex" justifyContent="flex-end"
-               color={TINTA} transform={abierto ? "rotate(180deg)" : "rotate(0deg)"}
-               transition="transform 0.25s ease">
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px" fill="currentColor">
-              <path d="M480-360 280-560h400L480-360Z" />
-            </Box>
-          </Box>
-        </Flex>
-      </Box>
-
-      {abierto && (
-        <>
-      <Linea />
-
-      {/* Piezas (heridas + arquetipos) SIEMPRE en una línea, con scroll horizontal. */}
-      <Banda py={{ base: 4, md: 5 }}>
-        <Flex gap={2} overflowX="auto" pb={1}
-              sx={{ scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                    "&::-webkit-scrollbar": { height: "6px" },
-                    "&::-webkit-scrollbar-track": { background: "transparent" },
-                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}>
-          {c.nudos.map((n) => (
-            <Pieza key={`n-${n}`} icon={<HeridaIcon size={13} color={TINTA} />} label={n} />
-          ))}
-          {c.arquetipos.map((a) => (
-            <Pieza key={`a-${arquetipoKey(a)}`}
-                   icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={13} />}
-                   label={arquetipoLabel(a)} />
-          ))}
-        </Flex>
-      </Banda>
-
-      {/* Una banda por pregunta — cada una repinta la imagen y va separada por
-          una raya horizontal entera (de borde a borde). */}
-      {BLOQUES.map((b) => (
-        <Box key={b.key}>
-          <Linea />
-          <Banda>
-            <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="800" lineHeight="1.3" mb={2}
-                  style={{ textShadow: INK_SHADOW }}>{b.pregunta}</Text>
-            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.95} mb={2.5}
-                  lineHeight="1.55" style={{ textShadow: INK_SHADOW }}>
-              {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
-            </Text>
-            <Textarea value={(c[b.key] as string) || ""} onChange={(e) => onCampo(b.key, e.target.value)}
-                      placeholder={b.placeholder}
-                      minH={b.key === "recordatorio" ? "56px" : "78px"}
-                      bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                      borderRadius="lg" px={3.5} py={2.5} fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                      sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                            "&::-webkit-scrollbar": { width: "8px" },
-                            "&::-webkit-scrollbar-track": { background: "transparent" },
-                            "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
-                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                      _hover={{ borderColor: `${TINTA}55` }}
-                      _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.88)" }} />
-          </Banda>
+        {/* Cerrar */}
+        <Box as="button" onClick={onClose} position="absolute" top={3} right={3} zIndex={3}
+             w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+             color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+             _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>
+          ✕
         </Box>
-      ))}
 
-      {/* Resultado: la nueva narrativa, luminosa (banda dorada a todo el ancho) */}
-      {hayResultado && (
-        <>
-          <Linea />
-          <Box position="relative" overflow="hidden" bgGradient={`linear(135deg, ${PAPEL}, ${ORO}3a)`}>
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 6, md: 7 }}>
-              <Text color={ORO} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
-                    mb={3} style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                ✦ Tu integración
-              </Text>
-              {verdad && (
-                <Box mb={recordatorio ? 4 : 0}>
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.6} mb={0.5}>
-                    Integración
-                  </Text>
-                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" fontWeight="600" lineHeight="1.5">
-                    «{verdad}»
-                  </Text>
-                </Box>
-              )}
-              {recordatorio && (
-                <Box>
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.6} mb={0.5}>
-                    Recordatorio
-                  </Text>
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
-                    {recordatorio}
-                  </Text>
-                </Box>
-              )}
+        {/* Cabecera: la relación, separada por una raya sólida a lo ancho */}
+        <Box position="relative" zIndex={1} flexShrink={0} borderBottom={`1px solid ${TINTA}55`}
+             px={{ base: 6, md: 9 }} pt={{ base: 7, md: 8 }} pb={{ base: 4, md: 5 }}>
+          <Flex direction="column" align="center" textAlign="center" gap={1}>
+            <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
+                  opacity={0.6} style={{ textShadow: INK_SHADOW }}>
+              Tu relación
+            </Text>
+            <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+                  style={{ textShadow: INK_SHADOW }}>
+              {relTitulo(c)}
+            </Text>
+          </Flex>
+        </Box>
+
+        {/* Cuerpo scrollable */}
+        <Box position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
+             px={{ base: 6, md: 9 }} py={{ base: 5, md: 6 }}
+             sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
+                   "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
+
+          {/* Piezas de la relación (heridas + arquetipos), para tener contexto */}
+          {tienePiezas && (
+            <Flex wrap="wrap" gap={2} justify="center" mb={{ base: 5, md: 6 }}>
+              {c.nudos.map((n) => (
+                <Pieza key={`n-${n}`} icon={<HeridaIcon size={13} color={TINTA} />} label={n} />
+              ))}
+              {c.arquetipos.map((a) => (
+                <Pieza key={`a-${arquetipoKey(a)}`}
+                       icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={13} />}
+                       label={arquetipoLabel(a)} />
+              ))}
+            </Flex>
+          )}
+
+          {/* Pregunta actual */}
+          <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="800" lineHeight="1.3"
+                style={{ textShadow: INK_SHADOW }}>
+            {b.pregunta}
+          </Text>
+          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.9} mt={1.5} lineHeight="1.55"
+                style={{ textShadow: INK_SHADOW }}>
+            {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
+          </Text>
+          <Textarea
+            value={(c[b.key] as string) || ""}
+            onChange={(e) => onUpdate(b.key, e.target.value)}
+            placeholder={b.placeholder}
+            autoFocus
+            mt={3.5}
+            minH={{ base: "100px", md: "120px" }}
+            bg="rgba(255,251,243,0.75)" border={`1px solid ${TINTA}3a`} color={TINTA}
+            borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+            sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                  "&::-webkit-scrollbar": { width: "8px" },
+                  "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+            _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+            _hover={{ borderColor: `${TINTA}55` }}
+            _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.9)" }}
+          />
+
+          {/* Puntos de progreso */}
+          <Flex justify="center" align="center" gap={2} mt={{ base: 6, md: 7 }}>
+            {BLOQUES.map((q, i) => {
+              const respondida = ((c[q.key] as string) || "").trim().length > 0;
+              const activo = i === paso;
+              return (
+                <Box key={q.key} as="button" onClick={() => setPaso(i)} title={`Pregunta ${i + 1}`}
+                     w={activo ? "24px" : "9px"} h="9px" borderRadius="full"
+                     bg={activo ? TINTA : respondida ? `${TINTA}99` : `${TINTA}33`}
+                     transition="all 0.2s" cursor="pointer" _hover={{ bg: activo ? TINTA : `${TINTA}bb` }} />
+              );
+            })}
+          </Flex>
+        </Box>
+
+        {/* Footer: navegación abajo del todo + autoguardado */}
+        <Box position="relative" zIndex={1} flexShrink={0} borderTop={`1px solid ${TINTA}44`}
+             px={{ base: 6, md: 9 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }}>
+          <Flex justify="space-between" align="center" gap={3}>
+            <Box as="button" onClick={anterior} disabled={esPrimero}
+                 px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
+                 border={`1.5px solid ${TINTA}${esPrimero ? "22" : "88"}`}
+                 color={esPrimero ? `${TINTA}44` : TINTA}
+                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                 cursor={esPrimero ? "not-allowed" : "pointer"} transition="all 0.18s"
+                 _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>
+              ‹ Anterior
             </Box>
-          </Box>
-        </>
-      )}
-
-      {/* Autoguardado — indicador dentro del box, abajo a la derecha */}
-      <Linea />
-      <Banda py={{ base: 4, md: 5 }}>
-        <Flex justify="flex-end">
-          <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
-        </Flex>
-      </Banda>
-        </>
-      )}
-    </Box>
-  );
-}
-
-// Banda a todo el ancho que REPINTA la imagen de la disciplina (como los boxes
-// de los tests). Al ser cada banda baja, la acuarela se pinta a escala natural y
-// no se deforma como cuando una sola imagen cubría toda la tarjeta.
-function Banda({ children, py }: { children: React.ReactNode; py?: any }) {
-  return (
-    <Box position="relative" overflow="hidden">
-      <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
-      <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={py ?? { base: 5, md: 6 }}>
-        {children}
+            <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6} flexShrink={0}>{paso + 1} / {total}</Text>
+            <Box as="button" onClick={siguiente}
+                 px={{ base: 5, md: 6 }} py={2} borderRadius="full" bg={TINTA} color={PAPEL}
+                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                 letterSpacing="0.04em" cursor="pointer"
+                 boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+              {esUltimo ? "Hecho ✓" : "Siguiente ›"}
+            </Box>
+          </Flex>
+          <Flex justify="center" mt={2.5}>
+            <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+          </Flex>
+        </Box>
       </Box>
     </Box>
   );
-}
-
-// Separación entre bandas: una fina franja del marrón de psicología (de borde a
-// borde), a media intensidad para que se lea como marrón y no como una raya dura.
-function Linea() {
-  return <Box position="relative" zIndex={1} h="2px" w="100%" bg={`${TINTA}55`} />;
 }
 
 // Chip sobrio para mostrar herida / arquetipo (no editable aquí).

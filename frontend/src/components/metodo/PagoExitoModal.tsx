@@ -27,7 +27,7 @@ export function PagoExitoModal({
 }: PagoExitoModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onAceptar} size="lg" isCentered closeOnOverlayClick={false} closeOnEsc={false}>
-      <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
+      <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
       <ModalContent
         bg="#008080"
         border="1px solid rgba(255,255,255,0.32)"

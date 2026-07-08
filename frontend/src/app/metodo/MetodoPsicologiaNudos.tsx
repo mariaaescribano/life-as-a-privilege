@@ -127,7 +127,7 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 5, total: 13 }}
+              step={{ current: 5, total: 15 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
@@ -145,7 +145,7 @@ export default function MetodoPsicologiaNudos() {
               boxShadow={glowPanel}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 6, md: 7 }} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 7, md: 9 }} px={{ base: 6, md: 10 }} py={{ base: 10, md: 14 }}>
 
                 {/* Pregunta principal */}
                 <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
@@ -205,10 +205,13 @@ export default function MetodoPsicologiaNudos() {
 
                 {/* Ejemplos sugeridos (opcionales) — punteados */}
                 {ejemplosDisponibles.length > 0 && (
-                  <Flex direction="column" align="center" gap={3} w="100%" maxW="620px">
-                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
-                      Si te sirven de inspiración
-                    </Text>
+                  <>
+                    {/* Separador horizontal completo (ancho del box) */}
+                    <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
+                    <Flex direction="column" align="center" gap={3} w="100%" maxW="620px" pt={{ base: 1, md: 2 }}>
+                      <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
+                        Si te sirven de inspiración
+                      </Text>
                     <Flex wrap="wrap" justify="center" gap={2}>
                       {ejemplosDisponibles.map((e) => (
                         <Box
@@ -231,7 +234,8 @@ export default function MetodoPsicologiaNudos() {
                         </Box>
                       ))}
                     </Flex>
-                  </Flex>
+                    </Flex>
+                  </>
                 )}
 
               </Flex>

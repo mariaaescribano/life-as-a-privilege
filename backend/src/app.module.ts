@@ -26,6 +26,7 @@ import { MetodoAyurvedaModule } from './metodoAyurveda/metodoAyurveda.module';
 import { MetodoNotasModule } from './metodoNotas/metodoNotas.module';
 import { BookingModule } from './booking/booking.module';
 import { CursosModule } from './cursos/cursos.module';
+import { AstrologiaTextosModule } from './astrologiaTextos/astrologiaTextos.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -60,6 +61,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     MetodoNotasModule,
     BookingModule,
     CursosModule,
+    AstrologiaTextosModule,
   ],
   providers: [DatabaseService, JwtStrategy],
   exports: [DatabaseService],

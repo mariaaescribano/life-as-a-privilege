@@ -218,7 +218,7 @@ export default function MetodoPsicologia() {
 
       {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}
       <Modal isOpen={avisoOpen} onClose={() => setAvisoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(40,20,8,0.62)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />

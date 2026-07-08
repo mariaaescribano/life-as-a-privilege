@@ -22,7 +22,7 @@ import {
   type Necesidad,
   type EstadoNecesidad,
 } from "../../components/metodo/psicologiaRecorrido";
-import { AZUL, glowPanel, glowHeader } from "../../components/metodo/psicologiaGlow";
+import { AZUL, glowHeader } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -115,7 +115,7 @@ export default function MetodoPsicologiaNecesidades() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 6, total: 13 }}
+            step={{ current: 6, total: 15 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
@@ -187,10 +187,8 @@ export default function MetodoPsicologiaNecesidades() {
                   px={{ base: 5, md: 6 }}
                   py={{ base: 5, md: 6 }}
                   gap={3}
-                  border={`1.5px solid ${marcada ? acento : `${AZUL}44`}`}
-                  boxShadow={marcada
-                    ? `0 0 18px ${acento}77, 0 0 44px ${acento}33, inset 0 0 0 9999px ${acento}14`
-                    : glowPanel}
+                  border="none"
+                  boxShadow={marcada ? `inset 0 0 0 9999px ${acento}14` : "none"}
                   transition="box-shadow 0.3s ease, border-color 0.3s ease, transform 0.2s ease"
                 >
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -244,7 +242,7 @@ export default function MetodoPsicologiaNecesidades() {
 
       {/* ── Popup: respuesta sana + marcar cómo lo viví ── */}
       <Modal isOpen={!!abierta} onClose={() => setAbierta(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(40,20,8,0.62)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -316,7 +314,7 @@ export default function MetodoPsicologiaNecesidades() {
 
       {/* ── Popup: explicación de las necesidades de la infancia ── */}
       <Modal isOpen={infoOpen} onClose={() => setInfoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(40,20,8,0.62)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />

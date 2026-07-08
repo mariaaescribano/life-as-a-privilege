@@ -178,12 +178,12 @@ export function MiniDiario() {
         borderRadius="full"
         bg={btnBg}
         border={`1.5px solid ${btnFg}66`}
-        boxShadow="0 4px 20px rgba(0,0,0,0.28), 0 0 20px rgba(72,192,181,0.5)"
+        boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${btnBg}66`}
         cursor="pointer"
         transition="all 0.22s ease"
         _hover={{
           transform: "translateY(-2px)",
-          boxShadow: "0 6px 28px rgba(0,0,0,0.35), 0 0 30px rgba(72,192,181,0.85)",
+          boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 28px ${btnBg}aa`,
         }}
         _active={{ transform: "translateY(0)" }}
         aria-label="Abrir mis notas"
@@ -218,7 +218,7 @@ export function MiniDiario() {
 
       {/* ── Popup ── */}
       <Modal isOpen={isOpen} onClose={cerrar} size="lg" isCentered scrollBehavior="inside">
-        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
         <ModalContent
           bg="#008080"
           border="1px solid rgba(255,255,255,0.32)"

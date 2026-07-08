@@ -316,8 +316,8 @@ const PanelArrow = ({
 // Sobre el fondo oscuro flotan: la X de cerrar, las flechas (bien visibles) y
 // un pie discreto con el título de la captura + progreso. La imagen mantiene
 // siempre `contain` (nunca se deforma) y cambia con una transición suave.
-const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) => {
-  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
+const CapturasModal = ({ disc, startIndex = 0, onClose }: { disc: Disciplina; startIndex?: number; onClose: () => void }) => {
+  const [[page, direction], setPage] = useState<[number, number]>([startIndex, 0]);
   const total = disc.capturas.length;
   const accent = disc.txt;
   const base = disc.bg;
@@ -479,6 +479,358 @@ const CapturasModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => voi
         )}
       </Flex>
     </Box>
+  );
+};
+
+// ── Flecha pequeña para los carruseles en cuadrícula ─────────────────────────
+const CardArrow = ({
+  side, color, onClick,
+}: {
+  side: "left" | "right";
+  color: string;
+  onClick: () => void;
+}) => (
+  <Box
+    as="button"
+    aria-label={side === "left" ? "Anterior" : "Siguiente"}
+    onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClick(); }}
+    position="absolute"
+    top="50%"
+    left={side === "left" ? { base: "8px", md: "10px" } : "auto"}
+    right={side === "right" ? { base: "8px", md: "10px" } : "auto"}
+    transform="translateY(-50%)"
+    zIndex={3}
+    w={{ base: "34px", md: "38px" }}
+    h={{ base: "34px", md: "38px" }}
+    borderRadius="full"
+    bg="rgba(0,0,0,0.42)"
+    border={`1px solid ${color}88`}
+    color={color}
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    cursor="pointer"
+    boxShadow={`0 2px 10px rgba(0,0,0,0.4), 0 0 12px ${color}33`}
+    sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(3px)" }}
+    _hover={{ bg: "rgba(0,0,0,0.62)", borderColor: color, boxShadow: `0 4px 14px rgba(0,0,0,0.5), 0 0 18px ${color}77` }}
+    _active={{ transform: "translateY(-50%) scale(0.92)" }}
+    transition="background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease"
+  >
+    <Box
+      as="svg"
+      viewBox="0 0 24 24"
+      w={{ base: "18px", md: "20px" }}
+      h={{ base: "18px", md: "20px" }}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {side === "left" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
+    </Box>
+  </Box>
+);
+
+// ── Tarjeta-carrusel de una disciplina ───────────────────────────────────────
+// Muestra las capturas reales de la disciplina en un carrusel embebido (sin
+// popup): cabecera con nº + nombre, la captura con flechas, pie de foto y una
+// barra de progreso. Al hacer clic en la foto se abre en grande (lightbox).
+// Las disciplinas sin capturas se muestran como "Próximamente".
+const CarruselCard = ({
+  disc, step, onOpen,
+}: {
+  disc: Disciplina;
+  step: number;
+  onOpen: (startIndex: number) => void;
+}) => {
+  const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
+  const hasBg = hasDisciplinaBg(disc.nom);
+  const total = disc.capturas.length;
+  const disponible = disc.enabled && total > 0;
+  const accent = disc.txt;
+  // Psicología e Hinduismo: las flechas y los números (nº de paso y contador)
+  // usan el COLOR DE FONDO (bg) de la disciplina, no el de texto.
+  const usaBgAcento = disc.nom === neuropsicologiaNom || disc.nom === ayurvedaNom;
+  const acentoNum = usaBgAcento ? disc.bg : accent;
+
+  const idx = total ? ((page % total) + total) % total : 0;
+  const captura = disponible ? disc.capturas[idx] : null;
+  const paginate = (dir: number) => setPage(([p]) => [p + dir, dir]);
+
+  const slideVariants = {
+    enter: (dir: number) => ({ opacity: 0, x: dir >= 0 ? 30 : -30 }),
+    center: { opacity: 1, x: 0 },
+    exit: (dir: number) => ({ opacity: 0, x: dir >= 0 ? -30 : 30 }),
+  };
+
+  // ── Paleta de la disciplina ──
+  // El fondo del box es la imagen propia de la disciplina; el texto va en su
+  // color (txt). Sin bordes ni brillos: plano y limpio. La captura se muestra
+  // encima, centrada, y el box nunca es más alto que la pantalla.
+  const bg = disc.bg;
+  // Halo del color de la disciplina alrededor del texto: solo para que se lea
+  // sobre la imagen de fondo. No es brillo del box.
+  const textGlow = `0 1px 3px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}`;
+
+  return (
+    <Flex
+      direction="column"
+      position="relative"
+      borderRadius="2xl"
+      overflow="hidden"
+      bg={bg}
+    >
+      {/* Fondo del box: la imagen propia de la disciplina (estrellas/acuarela) */}
+      <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
+
+      {/* Cabecera: nº + icono + nombre */}
+      <Flex align="center" gap={3} px={{ base: 4, md: 5 }} py={{ base: 3, md: 4 }} position="relative" zIndex={1}>
+        <Box
+          position="relative"
+          w={{ base: "40px", md: "46px" }}
+          h={{ base: "40px", md: "46px" }}
+          borderRadius="full"
+          overflow="hidden"
+          flexShrink={0}
+          bg={hasBg ? "transparent" : disc.bg}
+          border={`2px solid ${accent}`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          opacity={disponible ? 1 : 0.6}
+          style={{ filter: disponible ? undefined : "grayscale(0.5)" }}
+        >
+          {hasBg && <DisciplinaBgLayer nom={disc.nom} borderRadius="full" />}
+          <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+            {disc.renderIcon("28px")}
+          </Box>
+        </Box>
+        <Flex align="baseline" gap={2} minW={0}>
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "lg", md: "xl" }}
+            lineHeight="1.1"
+            opacity={disponible ? 0.85 : 0.6}
+            textShadow={textGlow}
+          >
+            {step}.
+          </Text>
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "lg", md: "xl" }}
+            lineHeight="1.35"
+            letterSpacing="0.02em"
+            pb="0.12em"
+            whiteSpace="nowrap"
+            opacity={disponible ? 1 : 0.65}
+            textShadow={textGlow}
+          >
+            {disc.nom}
+          </Text>
+        </Flex>
+      </Flex>
+
+      {/* Marco de la captura — la imagen sobre el fondo de la disciplina, sin
+          bordes ni brillo. Altura acotada al viewport para que el box entero
+          quepa siempre en pantalla. */}
+      <Box
+        position="relative"
+        zIndex={1}
+        sx={{ height: "clamp(200px, 44vh, 430px)" }}
+        mx={{ base: 2.5, md: 3 }}
+        mt={{ base: 1, md: 1.5 }}
+        overflow="hidden"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {disponible && captura ? (
+          <>
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <MotionBox
+                key={idx}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                w="100%"
+                h="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  src={captura.src}
+                  alt={`${disc.nom} — ${captura.titulo}`}
+                  w="100%"
+                  h="100%"
+                  objectFit="contain"
+                  cursor="zoom-in"
+                  onClick={() => onOpen(idx)}
+                  sx={{ filter: "drop-shadow(0 4px 14px rgba(0,0,0,0.32))" }}
+                />
+              </MotionBox>
+            </AnimatePresence>
+
+            {total > 1 && <CardArrow side="left" color={acentoNum} onClick={() => paginate(-1)} />}
+            {total > 1 && <CardArrow side="right" color={acentoNum} onClick={() => paginate(1)} />}
+
+            {/* Contador */}
+            {total > 1 && (
+              <Box
+                position="absolute"
+                top="10px"
+                right="10px"
+                px="10px"
+                py="3px"
+                borderRadius="full"
+                bg="rgba(0,0,0,0.5)"
+                zIndex={3}
+                sx={{ backdropFilter: "blur(3px)" }}
+              >
+                <Text color={acentoNum} fontFamily="'EB Garamond', serif" fontWeight="600" fontSize="xs" letterSpacing="0.1em">
+                  {idx + 1} / {total}
+                </Text>
+              </Box>
+            )}
+          </>
+        ) : (
+          // Placeholder "Próximamente"
+          <Flex direction="column" align="center" justify="center" gap={4} px={5} textAlign="center">
+            <Box
+              position="relative"
+              w={{ base: "64px", md: "76px" }}
+              h={{ base: "64px", md: "76px" }}
+              borderRadius="full"
+              overflow="hidden"
+              bg={hasBg ? "transparent" : disc.bg}
+              border={`2px solid ${accent}`}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              opacity={0.5}
+              style={{ filter: "grayscale(0.55)" }}
+            >
+              {hasBg && <DisciplinaBgLayer nom={disc.nom} borderRadius="full" />}
+              <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+                {disc.renderIcon("40px")}
+              </Box>
+            </Box>
+            <Text
+              color={accent}
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.14em"
+              textTransform="uppercase"
+              opacity={0.85}
+              textShadow={textGlow}
+            >
+              Próximamente
+            </Text>
+          </Flex>
+        )}
+      </Box>
+
+      {/* Pie de foto + barra de progreso */}
+      {disponible && captura ? (
+        <Flex direction="column" gap={2.5} px={{ base: 4, md: 5 }} pt={{ base: 3, md: 4 }} pb={{ base: 4, md: 5 }} position="relative" zIndex={1}>
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "sm", md: "md" }}
+            fontStyle="italic"
+            lineHeight="1.4"
+            textAlign="center"
+            minH={{ base: "2.6em", md: "2.8em" }}
+            noOfLines={2}
+            opacity={0.95}
+            textShadow={textGlow}
+          >
+            {captura.titulo || " "}
+          </Text>
+          {total > 1 && (
+            <Box position="relative" h="3px" w="100%" borderRadius="full" bg={`${accent}2b`} overflow="hidden">
+              <Box
+                position="absolute"
+                left={0}
+                top={0}
+                h="100%"
+                borderRadius="full"
+                bg={accent}
+                w={`${((idx + 1) / total) * 100}%`}
+                transition="width 0.28s ease"
+              />
+            </Box>
+          )}
+        </Flex>
+      ) : (
+        <Box pb={{ base: 4, md: 5 }} pt={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} position="relative" zIndex={1}>
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "sm", md: "md" }}
+            fontStyle="italic"
+            textAlign="center"
+            lineHeight="1.4"
+            opacity={0.8}
+            textShadow={textGlow}
+          >
+            {disc.desc}
+          </Text>
+        </Box>
+      )}
+    </Flex>
+  );
+};
+
+// ── Cuadrícula de carruseles (2 columnas → 4 filas × 2) ──────────────────────
+export const RecorridoCarruseles = () => {
+  const [selected, setSelected] = useState<{ disc: Disciplina; start: number } | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = selected ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [selected]);
+
+  return (
+    <>
+      <Box
+        display="grid"
+        gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+        gap={{ base: 5, md: 7 }}
+        w="100%"
+      >
+        {/* Por ahora solo se muestran las disciplinas que ya tienen capturas.
+            Las demás quedan ocultas y aparecerán solas (con su nº de paso
+            correcto) en cuanto se les suban capturas a `disc.capturas`. */}
+        {disciplinas.map((disc, i) =>
+          disc.capturas.length > 0 ? (
+            <CarruselCard
+              key={disc.nom}
+              disc={disc}
+              step={i + 1}
+              onOpen={(start) => setSelected({ disc, start })}
+            />
+          ) : null,
+        )}
+      </Box>
+
+      {selected && (
+        <CapturasModal
+          disc={selected.disc}
+          startIndex={selected.start}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </>
   );
 };
 

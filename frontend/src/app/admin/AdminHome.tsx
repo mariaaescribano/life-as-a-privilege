@@ -117,6 +117,17 @@ export default function AdminHome() {
               );
             })}
           </Grid>
+
+          {/* Acceso a editores globales (no por usuario) */}
+          <Flex justify="center" mt={{ base: 8, md: 10 }}>
+            <Box as="button" onClick={() => navigate("/admin/astrologia-textos")}
+                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
+                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
+                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
+                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
+              ✦ Interpretaciones de la carta (arquetipos)
+            </Box>
+          </Flex>
         </Box>
       </Flex>
 

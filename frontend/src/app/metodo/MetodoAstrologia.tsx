@@ -455,7 +455,7 @@ export default function MetodoAstrologia() {
           position="fixed" inset={0} zIndex={500}
           display="flex" alignItems="center" justifyContent="center"
           px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
-          bg="rgba(0,0,0,0.72)"
+          bg="rgba(0,0,0,0.82)"
           sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
           onClick={() => { if (!enviando) setConfirmOpen(false); }}
         >
@@ -521,7 +521,7 @@ export default function MetodoAstrologia() {
           position="fixed" inset={0} zIndex={500}
           display="flex" alignItems="center" justifyContent="center"
           px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
-          bg="rgba(0,0,0,0.72)"
+          bg="rgba(0,0,0,0.82)"
           sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
           onClick={() => setProcesoOpen(false)}
         >

@@ -78,26 +78,28 @@ const HuellaIcon = ({ size = 16, color = TINTA, opacity = 1 }: { size?: number; 
   <Box as="span" lineHeight="1" flexShrink={0} style={{ fontSize: `${size}px`, color, opacity }}>◈</Box>
 );
 
-// Cabecera DENTRO del box, separada del contenido por una raya horizontal.
-// Cada columna se identifica por su ICONO (más estructural que un número).
+// Cabecera DENTRO del box. Lleva su PROPIA imagen de psicología (independiente
+// de la del cuerpo) y se separa de él con una raya horizontal sólida a lo ancho.
+// Así cada zona tiene su propio recorte de la imagen (menos distorsión).
 function ColumnaHeaderBox({ icono, titulo, apoyo }: { icono: React.ReactNode; titulo: string; apoyo?: string }) {
   return (
-    <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
-      <Flex direction="column" align="center" gap={1} textAlign="center">
-        <Flex align="center" gap={2.5}>
-          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
-               style={{ filter: `drop-shadow(0 1px 2px ${PAPEL})` }}>{icono}</Box>
-          <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
-                style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{titulo}</Text>
+    <Box flexShrink={0} position="relative" overflow="hidden" borderBottom={`1px solid ${TINTA}55`}>
+      {/* Imagen propia de la cabecera */}
+      <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
+      <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 3, md: 3.5 }}>
+        <Flex direction="column" align="center" gap={1} textAlign="center">
+          <Flex align="center" gap={2.5}>
+            <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
+                 style={{ filter: `drop-shadow(0 1px 2px ${PAPEL})` }}>{icono}</Box>
+            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
+                  style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{titulo}</Text>
+          </Flex>
+          {apoyo && (
+            <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.8} maxW="300px"
+                  style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{apoyo}</Text>
+          )}
         </Flex>
-        {apoyo && (
-          <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.8} maxW="300px"
-                style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{apoyo}</Text>
-        )}
-      </Flex>
-      {/* Raya horizontal elegante */}
-      <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
-           bgGradient={`linear(to-r, transparent, ${TINTA}88, transparent)`} />
+      </Box>
     </Box>
   );
 }
@@ -260,7 +262,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 7, total: 13 }}
+              step={{ current: 7, total: 15 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Necesidades", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
@@ -428,7 +430,7 @@ export default function MetodoPsicologiaHuellasNudos() {
       {/* Popup «¿Cómo se hace?» — pasos para crear una herida */}
       {pasosOpen && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
-             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(40,20,8,0.6)"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
              onClick={() => setPasosOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="500px" my="auto"

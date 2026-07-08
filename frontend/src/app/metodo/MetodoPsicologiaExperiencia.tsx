@@ -507,7 +507,7 @@ function PaginaDeAno({
       justifyContent="center"
       px={{ base: 3, md: 10 }}
       py={{ base: 4, md: 10 }}
-      bg="rgba(60,34,12,0.6)"
+      bg="rgba(0,0,0,0.82)"
       sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
       onClick={onCerrar}
       fontFamily="'EB Garamond', serif"

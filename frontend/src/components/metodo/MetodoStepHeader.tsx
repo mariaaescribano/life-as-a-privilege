@@ -224,7 +224,8 @@ export function MetodoStepHeader({
           <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center">
             {icon}
           </Box>
-          <Flex align="baseline" gap={{ base: 1.5, md: 2.5 }} minW={0} flexShrink={1}>
+          <Flex align="baseline" gap={{ base: 1.5, md: 2.5 }} minW={0} flexShrink={1}
+                mt={{ base: "2px", md: "4px" }}>
             <Box ref={titleWrapperRef} minW={0} flexShrink={1}>
               <Text
                 color={color}

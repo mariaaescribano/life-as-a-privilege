@@ -7,14 +7,10 @@ import { BookCallModal } from "../../components/global/BookCallModal";
 import { WaitlistModal } from "../../components/global/WaitlistModal";
 import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
-import MandalaRecorrido from "../../components/global/MandalaRecorrido";
+// Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
+import { RecorridoCarruseles } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
-import {
-  BookOpen,
-  Users,
-  MessageCircle,
-} from "lucide-react";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -101,31 +97,6 @@ const modalidades: ModalidadData[] = [
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
     tagline: "Las grandes filosofías.",
     ...recorridoContenido.cultura,
-  },
-];
-
-// ── "Qué recibirás" — valor del recorrido ──
-type Beneficio = {
-  icon: React.ComponentType<{ size?: number | string; strokeWidth?: number }>;
-  title: string;
-  text: string;
-};
-
-const beneficios: Beneficio[] = [
-  {
-    icon: Users,
-    title: "Comunidad",
-    text: "Comparte dudas, descubrimientos y experiencias con otras personas del recorrido.",
-  },
-  {
-    icon: BookOpen,
-    title: "Material complementario",
-    text: "Libros, PDFs, investigaciones y recursos para profundizar más allá de las clases.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Sesiones individuales",
-    text: "Posibilidad de reservar consultas privadas para profundizar en tu caso concreto.",
   },
 ];
 
@@ -342,7 +313,6 @@ export default function ElMetodo() {
   const disciplinasTitleReveal = useReveal(0.15);
   const cardsReveal = useReveal(0.04);
   const recibirasTitleReveal = useReveal(0.2);
-  const recibirasGridReveal = useReveal(0.05);
   const creadoraReveal = useReveal(0.12);
   const botonesReveal = useReveal(0.1);
   const [dudasOpen, setDudasOpen] = useState(false);
@@ -593,26 +563,21 @@ export default function ElMetodo() {
             >
               Así es El Recorrido por dentro
             </Text>
-            <Text
-              color="rgba(255,255,255,0.88)"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="400"
-              fontSize={{ base: "md", md: "xl" }}
-              lineHeight="1.7"
-              letterSpacing="0.02em"
-              maxW={{ base: "100%", md: "640px" }}
-              textShadow="0 0 8px rgba(255,255,255,0.22)"
-              opacity={recibirasTitleReveal.visible ? 1 : 0}
-              transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
-              transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
-            >
-              Explora cada disciplina y descubre ejemplos reales del contenido.
-            </Text>
           </Flex>
 
-          {/* Mandala interactivo */}
+          {/* Mandala interactivo — resumen visual de la estructura del recorrido.
+              Retirado de momento: los carruseles de abajo ya enseñan las capturas
+              de cada disciplina sin necesidad de abrir el popup. Se deja comentado
+              por si en el futuro se le quiere dar uso (p.ej. como cabecera-resumen).
           <Box mt={{ base: 2, md: 4 }}>
             <MandalaRecorrido />
+          </Box>
+          */}
+
+          {/* Cuadrícula de carruseles — capturas reales de cada disciplina,
+              visibles sin popup. Clic en una foto la abre en grande. */}
+          <Box mt={{ base: 12, md: 20 }}>
+            <RecorridoCarruseles />
           </Box>
 
           {/* ── LA CREADORA ── */}
@@ -623,8 +588,8 @@ export default function ElMetodo() {
             align="center"
             justify="center"
             gap={{ base: 4, md: 6 }}
-            mt={{ base: 10, md: 14 }}
-            mb={{ base: 10, md: 14 }}
+            mt={{ base: 6, md: 9 }}
+            mb={{ base: 5, md: 7 }}
             opacity={creadoraReveal.visible ? 1 : 0}
             transform={creadoraReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
             transition="opacity 0.8s ease, transform 0.8s ease"
@@ -657,106 +622,8 @@ export default function ElMetodo() {
             align="center"
             justify="center"
             gap={{ base: 4, md: 6 }}
-            mt={{ base: 16, md: 24 }}
+            mt={{ base: 5, md: 7 }}
             mb={{ base: 10, md: 14 }}
-          >
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
-            />
-            <Image
-              src="/img/icono/life.png"
-              alt=""
-              h={{ base: "26px", md: "34px" }}
-              objectFit="contain"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-            />
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
-            />
-          </Flex>
-
-          {/* Cuadrícula de cajas */}
-          <Grid
-            ref={recibirasGridReveal.ref}
-            templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
-            gap={{ base: 5, md: 7 }}
-            mt={{ base: 4, md: 6 }}
-          >
-            {beneficios.map((b, i) => {
-              const Icon = b.icon;
-              return (
-                <Flex
-                  key={i}
-                  direction="column"
-                  align="flex-start"
-                  gap={4}
-                  p={{ base: 7, md: 9 }}
-                  borderRadius="2xl"
-                  bg="rgba(255,255,255,0.05)"
-                  border="1px solid rgba(255,255,255,0.14)"
-                  sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
-                  boxShadow="0 4px 18px rgba(0,0,0,0.12)"
-                  opacity={recibirasGridReveal.visible ? 1 : 0}
-                  transform={recibirasGridReveal.visible ? "translateY(0)" : "translateY(28px)"}
-                  transition={`opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`}
-                >
-                  {/* Icono (izquierda) + título (derecha) */}
-                  <Flex align="center" gap={4} w="100%">
-                    <Flex
-                      align="center"
-                      justify="center"
-                      w="56px"
-                      h="56px"
-                      borderRadius="full"
-                      bg="rgba(255,255,255,0.08)"
-                      border="1px solid rgba(255,255,255,0.22)"
-                      color="white"
-                      flexShrink={0}
-                      sx={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.25))" }}
-                    >
-                      <Icon size={28} strokeWidth={1.6} />
-                    </Flex>
-
-                    <Text
-                      color="white"
-                      fontFamily="'EB Garamond', serif"
-                      fontWeight="700"
-                      fontSize={{ base: "xl", md: "2xl" }}
-                      letterSpacing="0.02em"
-                      lineHeight="1.3"
-                      textShadow="0 0 8px rgba(255,255,255,0.22)"
-                    >
-                      {b.title}
-                    </Text>
-                  </Flex>
-
-                  <Text
-                    color="rgba(255,255,255,0.82)"
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="400"
-                    fontSize={{ base: "sm", md: "md" }}
-                    lineHeight="1.75"
-                    letterSpacing="0.01em"
-                  >
-                    {b.text}
-                  </Text>
-                </Flex>
-              );
-            })}
-          </Grid>
-
-          {/* ── Separador con mandala (entre los boxes y las experiencias) ── */}
-          <Flex
-            align="center"
-            justify="center"
-            gap={{ base: 4, md: 6 }}
-            mt={{ base: 16, md: 24 }}
-            mb={{ base: 12, md: 16 }}
           >
             <Box
               h="1px"

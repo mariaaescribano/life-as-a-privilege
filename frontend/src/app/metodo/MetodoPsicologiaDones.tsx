@@ -22,12 +22,10 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
   experienciaById,
   DONES_PREGUNTAS,
-  DONES_INTRO,
-  donesRespondidas,
   type LineaDeVidaData,
   type DonesData,
 } from "../../components/metodo/psicologiaRecorrido";
-import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { AZUL, glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -50,11 +48,13 @@ export default function MetodoPsicologiaDones() {
 
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, string>>({});
+  const [sinIdeas, setSinIdeas] = useState<string[]>([]);
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
+  const [paso, setPaso] = useState(0); // carta actual de la baraja
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendiente = useRef<Record<string, string> | null>(null);
+  const pendiente = useRef<{ resp: Record<string, string>; sin: string[] } | null>(null);
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
   useEffect(() => {
@@ -83,6 +83,7 @@ export default function MetodoPsicologiaDones() {
         const d: LineaDeVidaData = psi.data?.data || {};
         dataRef.current = d;
         setRespuestas({ ...(d.dones?.respuestas || {}) });
+        setSinIdeas(Array.isArray(d.dones?.sinIdeas) ? [...(d.dones!.sinIdeas as string[])] : []);
       } catch {
         // silencioso
       } finally {
@@ -92,13 +93,13 @@ export default function MetodoPsicologiaDones() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const persistir = async (next: Record<string, string>): Promise<boolean> => {
+  const persistir = async (resp: Record<string, string>, sin: string[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
     if (montado.current) setEstadoGuardado("guardando");
     try {
-      const dones: DonesData = { ...(dataRef.current.dones || {}), respuestas: next };
+      const dones: DonesData = { ...(dataRef.current.dones || {}), respuestas: resp, sinIdeas: sin };
       const data = { ...dataRef.current, dones };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
@@ -115,32 +116,66 @@ export default function MetodoPsicologiaDones() {
     }
   };
 
-  // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
-  const commit = (next: Record<string, string>) => {
-    setRespuestas(next);
+  // Guardado: debounce al escribir; inmediato en las acciones (botones).
+  const programarGuardado = (resp: Record<string, string>, sin: string[]) => {
     setEstadoGuardado("guardando");
-    pendiente.current = next;
+    pendiente.current = { resp, sin };
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
-      if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
+      if (pendiente.current) { void persistir(pendiente.current.resp, pendiente.current.sin); pendiente.current = null; }
     }, 900);
+  };
+  const guardarAhora = (resp: Record<string, string>, sin: string[]) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    pendiente.current = null;
+    void persistir(resp, sin);
   };
 
   // Flush al desmontar.
   useEffect(() => () => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
-    if (pendiente.current) void persistir(pendiente.current);
+    if (pendiente.current) void persistir(pendiente.current.resp, pendiente.current.sin);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const updateRespuesta = (key: string, valor: string) =>
-    commit({ ...respuestas, [key]: valor });
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
-  const respondidas = donesRespondidas({ ...dataRef.current, dones: { ...dataRef.current.dones, respuestas } });
   const total = DONES_PREGUNTAS.length;
+  const p = DONES_PREGUNTAS[paso];
+  const esPrimera = paso === 0;
+  const esUltima = paso === total - 1;
+  const anterior = () => setPaso((i) => Math.max(0, i - 1));
+  const siguiente = () => setPaso((i) => Math.min(total - 1, i + 1));
+
+  // Escribir texto quita la marca «sin ideas» de esa pregunta.
+  const updateRespuesta = (key: string, valor: string) => {
+    const resp = { ...respuestas, [key]: valor };
+    const sin = valor.trim() ? sinIdeas.filter((k) => k !== key) : sinIdeas;
+    setRespuestas(resp);
+    if (sin !== sinIdeas) setSinIdeas(sin);
+    programarGuardado(resp, sin);
+  };
+  // «Sin ideas»: marca la pregunta como resuelta (sin texto) y pasa a la siguiente.
+  const marcarSinIdeas = (key: string) => {
+    const resp = { ...respuestas, [key]: "" };
+    const sin = sinIdeas.includes(key) ? sinIdeas : [...sinIdeas, key];
+    setRespuestas(resp);
+    setSinIdeas(sin);
+    guardarAhora(resp, sin);
+    if (!esUltima) siguiente();
+  };
+  // «Guardar»: fuerza el guardado y avanza (mantiene el ritmo del ejercicio).
+  const guardarYSeguir = () => {
+    guardarAhora(respuestas, sinIdeas);
+    if (!esUltima) siguiente();
+  };
+
+  // Una pregunta queda resuelta con texto o marcada «sin ideas». El espejo solo
+  // se abre cuando TODAS están resueltas.
+  const estaResuelta = (key: string) => (respuestas[key] || "").trim().length > 0 || sinIdeas.includes(key);
+  const resueltas = DONES_PREGUNTAS.filter((q) => estaResuelta(q.key)).length;
+  const todoResuelto = resueltas === total;
 
   const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
   const irAEspejo = () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`);
@@ -159,89 +194,100 @@ export default function MetodoPsicologiaDones() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 10, total: 13 }}
+              step={{ current: 10, total: 15 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Relación", onClick: irARelacion }}
-              next={{ label: "Dones →", onClick: irAEspejo }}
+              next={{
+                label: "Dones →",
+                onClick: irAEspejo,
+                disabled: !todoResuelto,
+                disabledTooltip: "Responde o marca «Sin ideas» las 15 preguntas para descubrir tus dones.",
+              }}
             />
 
-            {/* Intro: quita presión, explica qué es un don */}
-            <Flex direction="column" align="center" gap={3} textAlign="center" maxW="640px">
-              <Text color={CREMA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.7"
-                    style={{ textShadow: "0 1px 12px rgba(0,0,0,0.35)" }}>
-                {DONES_INTRO.preguntas}
-              </Text>
-            </Flex>
-
-            {/* Panel con las 15 preguntas, cada una una banda */}
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+            {/* ── LA BARAJA: una carta (pregunta) cada vez ── */}
+            <Box position="relative" w={{ base: "100%", md: "88%" }} borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1}>
-                {DONES_PREGUNTAS.map((p, i) => (
-                  <Box key={p.key}>
-                    {i > 0 && <Box h="2px" w="100%" bg={`${TINTA}44`} />}
-                    <Box position="relative" overflow="hidden">
-                      <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 5, md: 6 }}>
-                        <Flex align="baseline" gap={2.5} mb={2.5}>
-                          <Text color={`${TINTA}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="700"
-                                flexShrink={0} style={{ textShadow: INK_SHADOW }}>
-                            {String(i + 1).padStart(2, "0")}
-                          </Text>
-                          <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.35"
-                                style={{ textShadow: INK_SHADOW }}>
-                            {p.pregunta}
-                          </Text>
-                        </Flex>
-                        <Textarea
-                          value={respuestas[p.key] || ""}
-                          onChange={(e) => updateRespuesta(p.key, e.target.value)}
-                          placeholder="Escribe lo que te venga…"
-                          minH="72px"
-                          bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                          borderRadius="lg" px={3.5} py={2.5} fontFamily="'EB Garamond', serif"
-                          fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                          sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                                "&::-webkit-scrollbar": { width: "8px" },
-                                "&::-webkit-scrollbar-track": { background: "transparent" },
-                                "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
-                          _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                          _hover={{ borderColor: `${TINTA}55` }}
-                          _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.88)" }}
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
-                ))}
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+                {/* La pregunta */}
+                <Flex align="center" justify="center" minH={{ base: "84px", md: "96px" }}>
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.35"
+                        textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                    {p.pregunta}
+                  </Text>
+                </Flex>
 
-                {/* Pie: autoguardado */}
-                <Box h="2px" w="100%" bg={`${TINTA}44`} />
-                <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 4, md: 5 }}>
-                  <Flex justify="flex-end">
-                    <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                <Textarea
+                  value={respuestas[p.key] || ""}
+                  onChange={(e) => updateRespuesta(p.key, e.target.value)}
+                  placeholder="Escribe lo primero que te venga, sin pensarlo mucho…"
+                  mt={4}
+                  minH={{ base: "120px", md: "140px" }}
+                  bg="rgba(255,251,243,0.75)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                  borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                  sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                        "&::-webkit-scrollbar": { width: "8px" },
+                        "&::-webkit-scrollbar-track": { background: "transparent" },
+                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+                  _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                  _hover={{ borderColor: `${TINTA}55` }}
+                  _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.9)" }}
+                />
+
+                <Flex justify="space-between" align="center" mt={4} gap={3} wrap="wrap">
+                  <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                  <Flex align="center" gap={2.5} ml="auto">
+                    <Box as="button" onClick={() => marcarSinIdeas(p.key)}
+                         px={{ base: 4, md: 5 }} py={2} borderRadius="full"
+                         bg="transparent" border={`1.5px solid ${TINTA}66`} color={TINTA}
+                         fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
+                         letterSpacing="0.02em" cursor="pointer" transition="all 0.18s"
+                         _hover={{ bg: `${TINTA}12`, borderColor: TINTA }}>
+                      Sin ideas
+                    </Box>
+                    <Box as="button" onClick={guardarYSeguir}
+                         px={{ base: 5, md: 6 }} py={2} borderRadius="full"
+                         bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"
+                         fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
+                         boxShadow={`0 2px 12px ${TINTA}3a`} transition="all 0.18s"
+                         _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 16px ${TINTA}5a` }}>
+                      Guardar
+                    </Box>
                   </Flex>
-                </Box>
+                </Flex>
               </Box>
             </Box>
 
-            {/* Progreso */}
-            <Flex align="center" gap={3} w="100%" maxW="420px">
-              <Box flex="1" h="8px" borderRadius="full" bg="rgba(255,255,255,0.22)" overflow="hidden">
-                <Box h="100%" w={`${(respondidas / total) * 100}%`} bg={PAPEL} borderRadius="full"
-                     boxShadow="0 0 12px rgba(255,255,255,0.5)" transition="width 0.5s ease" />
-              </Box>
-              <Text color={CREMA} fontSize="sm" opacity={0.9} whiteSpace="nowrap">{respondidas}/{total}</Text>
+            {/* Navegación entre preguntas — mismas flechas que en Huellas, con
+                los puntos de progreso en medio (coherencia del programa). */}
+            <Flex align="center" justify="center" gap={{ base: 3, md: 5 }} w="100%">
+              <FlechaPagina dir="prev" disabled={esPrimera} onClick={anterior} />
+              <Flex justify="center" align="center" wrap="wrap" gap={2} maxW="520px">
+                {DONES_PREGUNTAS.map((q, i) => {
+                  const hecha = estaResuelta(q.key);
+                  const activo = i === paso;
+                  return (
+                    <Box key={q.key} as="button" onClick={() => setPaso(i)} title={`Pregunta ${i + 1}`}
+                         w={activo ? "24px" : "10px"} h="10px" borderRadius="full"
+                         bg={activo ? PAPEL : hecha ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.28)"}
+                         boxShadow={activo ? "0 0 10px rgba(255,255,255,0.6)" : "none"}
+                         transition="all 0.2s" cursor="pointer"
+                         _hover={{ bg: activo ? PAPEL : "rgba(255,255,255,0.85)" }} />
+                  );
+                })}
+              </Flex>
+              <FlechaPagina dir="next" disabled={esUltima} onClick={siguiente} />
             </Flex>
 
-            {/* Invitación a ver el espejo (botón claro) */}
-            <Box as="button" onClick={irAEspejo} px={8} py={3} borderRadius="full"
-                 bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"
-                 fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
-                 boxShadow={`0 0 18px ${TINTA}66, 0 0 44px ${TINTA}33`} transition="all 0.2s"
-                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` }}>
-              Ver mis dones →
-            </Box>
+            {/* Progreso global + aviso al completar (el espejo se abre arriba) */}
+            <Text color={CREMA} fontSize="sm" opacity={0.85} textAlign="center" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.28)" }}>
+              {todoResuelto
+                ? "✨ Ya puedes abrir tus dones — pulsa «Dones →» arriba."
+                : `${resueltas} de ${total} completadas`}
+            </Text>
 
           </Flex>
         </Flex>
@@ -253,3 +299,29 @@ export default function MetodoPsicologiaDones() {
     </Box>
   );
 }
+
+// Flecha circular de navegación (misma que en «Huellas», para coherencia).
+const FlechaPagina = ({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
+  <Box
+    as="button"
+    onClick={disabled ? undefined : onClick}
+    flexShrink={0}
+    w="46px"
+    h="46px"
+    borderRadius="full"
+    bg={`${neuropsicologiaBg}f0`}
+    border={`1px solid ${TINTA}${disabled ? "22" : "66"}`}
+    color={`${TINTA}${disabled ? "55" : "ff"}`}
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    fontSize="xl"
+    cursor={disabled ? "not-allowed" : "pointer"}
+    opacity={disabled ? 0.5 : 1}
+    transition="all 0.2s ease"
+    _hover={disabled ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 14px ${AZUL}66, 0 0 30px ${AZUL}33` }}
+    aria-label={dir === "prev" ? "Anterior" : "Siguiente"}
+  >
+    {dir === "prev" ? "←" : "→"}
+  </Box>
+);

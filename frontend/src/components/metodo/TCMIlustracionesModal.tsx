@@ -19,6 +19,49 @@ import type { Vineta } from "./ComicViewer";
 //  placeholder para que el ComicViewer no rompa.)
 // ────────────────────────────────────────────────────────────────────────────
 
+const VINETAS_ORIGEN: Vineta[] = [
+  {
+    src: "/viñetas/tcm/origen/origentcm1.png",
+    paragraphs: [
+      "Del Dao, el principio originario del universo, surgió el Qi, la energía primordial de la que nace toda existencia.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/origen/origentcm2.png",
+    paragraphs: [
+      "El Qi se diferenció en Yang, energía masculina, Qi del Cielo, y Yin, energía femenina, recibimiento, Qi de la Tierra.",
+      "De su interacción nació el universo.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/origen/origentcm3.png",
+    paragraphs: [
+      "Montañas, ríos, plantas y animales son manifestaciones del Qi en constante transformación.",
+      "«El ser humano nace de la esencia del cielo y recibe su forma de la tierra.» — Guan Zi",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/origen/origentcm4.png",
+    paragraphs: [
+      "La esencia (Jing) es la manifestación individualizada de la energía primordial, del Qi.",
+      "Es la porción de la Esencia infinita que se condensa para dar origen al cuerpo, sostener la vida y expresar la singularidad de cada ser.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/origen/origentcm5.png",
+    paragraphs: [
+      "Del Jing emerge el Shen, el espíritu que anima la conciencia, las emociones y el pensamiento.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/origen/origentcm6.png",
+    paragraphs: [
+      "El taoísmo enseña que el sentido de la vida es recordar que somos una manifestación del Dao.",
+      "Al cultivar el Jing, equilibrar el Qi y aclarar el Shen, dejamos de luchar contra la corriente de la existencia y aprendemos a vivir con naturalidad, armonía y plenitud.",
+    ],
+  },
+];
+
 const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/5tcm.png",
@@ -74,45 +117,92 @@ const VINETAS_YIN_YANG: Vineta[] = [
   {
     src: "/viñetas/tcm/yinyang/yinyang.png",
     paragraphs: [
-      "El universo, todo y todos, existe gracias a dos fuerzas complementarias.",
-      "La luz y la oscuridad. El dar y el recibir.",
-      "La Medicina Tradicional China las llama Yin y Yang.",
+      "Yin y Yang son dos aspectos opuestos y complementarios de una misma realidad.",
+      "Yang representa la actividad, la luz y el movimiento.",
+      "Yin representa el reposo, la oscuridad y la materia.",
     ],
   },
   {
-    src: "/viñetas/tcm/yinyang/yin.png",
+    src: "/viñetas/tcm/yinyang/yinyang2.png",
     paragraphs: [
-      "El Yin es la energía de la calma, la noche, la nutrición y la recepción.",
-      "Es la capacidad de convertir la materia y la energía en parte de nosotros.",
-      "En nuestro cuerpo, las mitocondrias son un buen ejemplo. Reciben para poder transformar.",
-    ],
-  },
-  {
-    src: "/viñetas/tcm/yinyang/yang.png",
-    paragraphs: [
-      "Ahí aparece el Yang. Transforma esa materia en energía.",
-      "El Yang es la actividad, la luz, el movimiento y la acción. Es la fuerza que convierte el potencial en realidad.",
-    ],
-  },
-  {
-    src: "/viñetas/tcm/yinyang/yinyang.png",
-    paragraphs: [
-      "Por eso no existe Yin sin Yang. Ni Yang sin Yin.",
-      "Ambas son complementarias. Ambas son uno.",
+      "Nada es completamente Yin ni completamente Yang. Cada uno contiene la semilla del otro.",
+      "El Yang transforma la materia en energía. El Yin transforma la energía en materia.",
+      "La salud y la Vida dependen del equilibrio dinámico entre Yin y Yang.",
     ],
   },
 ];
 
-type Capitulo = "los_elementos" | "yin_yang";
+const VINETAS_ALMA: Vineta[] = [
+  {
+    src: "/viñetas/tcm/alma/alma1.png",
+    paragraphs: [
+      "Para la Medicina Tradicional China, el ser humano es una unidad. Cuerpo, Qi y espíritu forman un todo inseparable.",
+      "El cuerpo (Xing) es la forma. El Qi es la energía vital. El Shen es el principio que da vida, conciencia y presencia.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/alma/alma2.png",
+    paragraphs: [
+      "Shen (Corazón)",
+      "Es la conciencia, la claridad mental y la capacidad de relacionarnos con el mundo.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/alma/alma3.png",
+    paragraphs: [
+      "Hun (Hígado)",
+      "Es el alma etérea.",
+      "Inspira los sueños, la creatividad, la imaginación y la capacidad de proyectarnos hacia el futuro.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/alma/alma4.png",
+    paragraphs: [
+      "Po (Pulmones)",
+      "Es el alma corpórea.",
+      "Gobierna los instintos, las sensaciones físicas y la respuesta inmediata a la vida.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/alma/alma5.png",
+    paragraphs: [
+      "Yi (Bazo)",
+      "Es la intención.",
+      "Permite pensar, aprender, recordar y concentrarse.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/alma/alma6.png",
+    paragraphs: [
+      "Zhi (Riñones)",
+      "Es la voluntad.",
+      "Da perseverancia, determinación y la fuerza para seguir adelante.",
+    ],
+  },
+  {
+    src: "/viñetas/tcm/alma/alma7.png",
+    paragraphs: [
+      "Cada aspecto del espíritu reside en un órgano.",
+      "Cuando los órganos están en equilibrio, también lo está la mente.",
+      "La salud no es solo la ausencia de enfermedad. Es la armonía entre cuerpo, energía y espíritu.",
+    ],
+  },
+];
+
+type Capitulo = "origen" | "yin_yang" | "los_elementos" | "alma_humana";
 
 const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
-  los_elementos: VINETAS_ELEMENTOS,
+  origen:        VINETAS_ORIGEN,
   yin_yang:      VINETAS_YIN_YANG,
+  los_elementos: VINETAS_ELEMENTOS,
+  alma_humana:   VINETAS_ALMA,
 };
 
 const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
-  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.png" },
+  { key: "origen",        title: "El Origen", cover: "/viñetas/tcm/origen/origentcm3.png" },
   { key: "yin_yang",      title: "El Yin Yang", cover: "/viñetas/tcm/yinyang/yinyang.png" },
+  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.png" },
+  { key: "alma_humana",   title: "El Alma Humana", cover: "/viñetas/tcm/alma/alma7.png" },
 ];
 
 interface TCMIlustracionesModalProps {

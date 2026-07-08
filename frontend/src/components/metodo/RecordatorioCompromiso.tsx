@@ -100,7 +100,7 @@ export function RecordatorioCompromiso() {
 
       {/* Popup */}
       <Modal isOpen={open} onClose={() => setOpen(false)} size="lg" isCentered scrollBehavior="inside">
-        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
         <ModalContent
           bg={neuropsicologiaBg}
           border={`1px solid ${TINTA}44`}

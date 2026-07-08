@@ -24,7 +24,7 @@ interface PagoPsicologiaModalProps {
 export function PagoPsicologiaModal({ isOpen, onClose, onPagar, loading, error, onTest }: PagoPsicologiaModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
-      <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
+      <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
       <ModalContent
         bg="#008080"
         border="1px solid rgba(255,255,255,0.32)"

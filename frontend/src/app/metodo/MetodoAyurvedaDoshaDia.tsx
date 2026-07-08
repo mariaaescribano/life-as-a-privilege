@@ -378,7 +378,7 @@ export default function MetodoAyurvedaDoshaDia() {
 
       {/* ── POPUP · Añadir/editar momento ── */}
       <Modal isOpen={modalOpen} onClose={cerrarModal} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(40,20,8,0.62)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} my={{ base: 8, md: 12 }} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}1f`} />
@@ -496,7 +496,7 @@ export default function MetodoAyurvedaDoshaDia() {
 
       {/* Popup: día de ejemplo (inspiración) */}
       <Modal isOpen={ejemploOpen} onClose={() => setEjemploOpen(false)} size="lg" isCentered scrollBehavior="inside">
-        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
         <ModalContent
           bg={`${ayurvedaBg}f2`}
           border={`1px solid ${TINTA}33`}

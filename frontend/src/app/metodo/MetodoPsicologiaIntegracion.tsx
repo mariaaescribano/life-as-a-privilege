@@ -107,21 +107,28 @@ function ColumnaHeaderBox({ icono, titulo, apoyo, dark }: { icono: React.ReactNo
   const tinta = dark ? PAPEL : TINTA;
   const shadow = dark ? `0 1px 6px rgba(0,0,0,0.5)` : `0 1px 2px ${PAPEL}`;
   return (
-    <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
-      <Flex direction="column" align="center" gap={1} textAlign="center">
-        <Flex align="center" gap={2.5}>
-          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
-               style={{ filter: `drop-shadow(${shadow})` }}>{icono}</Box>
-          <Text color={tinta} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
-                style={{ textShadow: shadow }}>{titulo}</Text>
+    <Box flexShrink={0} position="relative" overflow="hidden" borderBottom={`1px solid ${tinta}55`}>
+      {/* Imagen propia de la cabecera (independiente del cuerpo → menos distorsión) */}
+      {dark ? (
+        <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+             bgSize="cover" bgPosition="center" />
+      ) : (
+        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
+      )}
+      <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
+        <Flex direction="column" align="center" gap={1} textAlign="center">
+          <Flex align="center" gap={2.5}>
+            <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
+                 style={{ filter: `drop-shadow(${shadow})` }}>{icono}</Box>
+            <Text color={tinta} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.03em"
+                  style={{ textShadow: shadow }}>{titulo}</Text>
+          </Flex>
+          {apoyo && (
+            <Text color={tinta} fontSize="xs" fontStyle="italic" opacity={0.85} maxW="300px"
+                  style={{ textShadow: shadow }}>{apoyo}</Text>
+          )}
         </Flex>
-        {apoyo && (
-          <Text color={tinta} fontSize="xs" fontStyle="italic" opacity={0.85} maxW="300px"
-                style={{ textShadow: shadow }}>{apoyo}</Text>
-        )}
-      </Flex>
-      <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
-           bgGradient={`linear(to-r, transparent, ${tinta}88, transparent)`} />
+      </Box>
     </Box>
   );
 }
@@ -323,7 +330,7 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 9, total: 13 }}
+              step={{ current: 9, total: 15 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Regulación", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
@@ -369,7 +376,8 @@ export default function MetodoPsicologiaIntegracion() {
                   {/* Fondo: imagen de astrología a opacidad completa */}
                   <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
                        bgSize="cover" bgPosition="center" />
-                  <Flex position="relative" zIndex={1} direction="column" h="100%">
+                  {/* pb permanente: siempre deja un respiro al fondo del scroll. */}
+                  <Flex position="relative" zIndex={1} direction="column" h="100%" pb={{ base: 3, md: 4 }}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo="Tus arquetipos" apoyo="Toca una carta para relacionarla; el ojo abre su lectura." />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
                          sx={{ ...SCROLL_SX, scrollbarColor: `${PAPEL}55 transparent`,

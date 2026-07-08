@@ -9,7 +9,7 @@ import { AgendarLlamada } from "../global/AgendarLlamada";
 import { CursoCardDetalle } from "../aprendizaje/CursoCardDetalle";
 import { useCursosData } from "../../data/cursosApi";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { NUDOS } from "./psicologiaRecorrido";
+import { NUDOS, MIEDOS } from "./psicologiaRecorrido";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -72,6 +72,11 @@ const EJEMPLOS_BOX: Partial<Record<string, {
   nudos: {
     titulo: "Ejemplos de nudos",
     ejemplos: NUDOS.ejemplos,
+    variante: "chips",
+  },
+  miedos: {
+    titulo: "Ejemplos de miedos",
+    ejemplos: MIEDOS.ejemplos,
     variante: "chips",
   },
   dones: {
@@ -430,6 +435,54 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  miedos: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Un miedo es algo que temes que ocurra y que condiciona cómo vives hoy.",
+        "Por ejemplo: «A quedarme solo», «A no ser suficiente», «A que me abandonen».",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Escribe un miedo y pulsa Añadir.",
+        "Puedes inspirarte en los ejemplos sugeridos.",
+        "Quita con la ✕ los que no sientas tuyos. En la página siguiente los enfrentarás uno a uno.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No los suavices ni los justifiques: escríbelos tal y como aparecen.",
+        "Nombrar un miedo ya le quita parte de su fuerza.",
+      ],
+    },
+  },
+  "miedos-preguntas": {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Toma un miedo y míralo de frente respondiendo a las preguntas.",
+        "Por ejemplo, ante «Al fracaso»: qué es lo peor que pasaría, qué probabilidad real tiene, cómo lo afrontarías y qué le dirías a alguien que quieres.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Cada miedo es un box con varias preguntas. Respóndelas con calma.",
+        "No hay respuestas correctas: solo tu verdad.",
+        "Todo se guarda solo; puedes dejarlo a medias y volver.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No se trata de vencer el miedo de golpe, sino de desarmarlo mirándolo con calma.",
+        "Casi siempre, cuando lo miramos de frente, deja de ser tan grande como parecía.",
+      ],
+    },
+  },
   sintesis: {
     ejemplo: {
       titulo: "Un ejemplo",
@@ -529,7 +582,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
 
       {/* Popup informativo (páginas no-inicio) — estilo acuarela de psicología */}
       <Modal isOpen={!!sec} onClose={() => setAbierto(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "md" }}>
-        <ModalOverlay bg="rgba(40,20,8,0.6)" sx={{ backdropFilter: "blur(5px)" }} />
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(5px)" }} />
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -561,7 +614,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
       {/* Popup previo «¿Necesitas ayuda?» → invita a hacerlo acompañado */}
       {acompPreguntaOpen && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
-             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(60,34,12,0.6)"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
              onClick={() => setAcompPreguntaOpen(false)} fontFamily="'EB Garamond', serif">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="460px"
@@ -593,7 +646,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
       {/* Popup «¿Necesitas ayuda?» → recorrido acompañado (reserva de llamada) */}
       {companiaOpen && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="flex-start" justifyContent="center"
-             px={{ base: 3, md: 10 }} py={{ base: 5, md: 10 }} bg="rgba(60,34,12,0.62)"
+             px={{ base: 3, md: 10 }} py={{ base: 5, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
              onClick={() => setCompaniaOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="640px" my="auto">
@@ -617,7 +670,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
       {/* Popup «Ejemplo» → box elegante con varios ejemplos (págs. con EJEMPLOS_BOX) */}
       {ejemplosOpen && ejemplosBox && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
-             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(60,34,12,0.6)"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
              onClick={() => setEjemplosOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="520px" my="auto"
@@ -735,7 +788,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
       {/* Popup «Orientación» → curso de acceso libre */}
       {cursoOpen && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
-             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(40,20,8,0.7)"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
              onClick={() => setCursoOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="460px" my="auto">

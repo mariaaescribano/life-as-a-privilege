@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { ZODIAC_SIGNS, type Cuerpo } from "../astrologiaData";
 import { Glifo } from "../Glifo";
 import { SpaceBg } from "../SpaceBg";
-import { getTextoSigno, getTextoCasa } from "../astrologiaTextos";
+import { fetchAstroTexto } from "../../../data/astrologiaTextosApi";
 void React;
 
 interface SaberMasModalProps {
@@ -75,6 +75,33 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
 export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: SaberMasModalProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Textos: se piden al back (tabla astrologia_textos), con fallback al archivo
+  // estático mientras la celda no esté sembrada. `cargando` mientras llega.
+  const [textoSigno, setTextoSigno] = useState<string | null>(null);
+  const [textoCasa, setTextoCasa] = useState<string | null>(null);
+  const [cargando, setCargando] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen || !cuerpo) return;
+    const verSignoE = facet !== "casa";
+    const verCasaE = cuerpo.conCasa && facet !== "signo";
+    let cancel = false;
+    setCargando(true);
+    setTextoSigno(null);
+    setTextoCasa(null);
+    (async () => {
+      const [ts, tc] = await Promise.all([
+        verSignoE && signo ? fetchAstroTexto(cuerpo.key, "signo", signo) : Promise.resolve(null),
+        verCasaE && casa != null ? fetchAstroTexto(cuerpo.key, "casa", String(casa)) : Promise.resolve(null),
+      ]);
+      if (cancel) return;
+      setTextoSigno(ts);
+      setTextoCasa(tc);
+      setCargando(false);
+    })();
+    return () => { cancel = true; };
+  }, [isOpen, cuerpo?.key, signo, casa, facet]);
+
   // Al abrir / cambiar de cuerpo, vuelve al inicio del contenido.
   useEffect(() => {
     if (isOpen && scrollRef.current) {
@@ -102,8 +129,6 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
 
   const color = cuerpo.color;
   const signoData = signo ? ZODIAC_SIGNS.find((s) => s.name === signo) : null;
-  const textoSigno = signo ? getTextoSigno(cuerpo.key, signo) : null;
-  const textoCasa = casa != null ? getTextoCasa(cuerpo.key, casa) : null;
   // Qué bloques mostrar (si llega `facet`, sólo uno).
   const verSigno = facet !== "casa";
   const verCasa = cuerpo.conCasa && facet !== "signo";
@@ -118,7 +143,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
       justifyContent="center"
       px={{ base: 4, md: 10 }}
       py={{ base: 6, md: 10 }}
-      bg="rgba(0,0,0,0.72)"
+      bg="rgba(0,0,0,0.82)"
       sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
       onClick={onClose}
     >
@@ -212,7 +237,13 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
                 </Text>
               </Flex>
 
-              {textoSigno ? (
+              {/* Separación horizontal bajo el título */}
+              <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
+                   boxShadow={`0 0 6px ${color}44`} />
+
+              {cargando ? (
+                <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
+              ) : textoSigno ? (
                 <Box>{renderTextoLargo(textoSigno, color)}</Box>
               ) : (
                 <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
@@ -262,7 +293,13 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
                   </Text>
                 </Flex>
 
-                {textoCasa ? (
+                {/* Separación horizontal bajo el título */}
+                <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
+                     boxShadow={`0 0 6px ${color}44`} />
+
+                {cargando ? (
+                  <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
+                ) : textoCasa ? (
                   <Box>{renderTextoLargo(textoCasa, color)}</Box>
                 ) : (
                   <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">

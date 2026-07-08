@@ -106,7 +106,6 @@ export default function CursosModalidad() {
   const headerButtons: { prev?: any; extra?: any; next?: any } = (() => {
     if (moduloId === tcmNomLink) {
       return {
-        prev: { label: "Tests",         onClick: () => setTestsTCMOpen(true),         icon: <TestConstitucionIcon /> },
         next: { label: "Ilustraciones", onClick: () => setIlustracionesTCMOpen(true), icon: <EyeIcon /> },
       };
     }

@@ -46,6 +46,7 @@ import AdminAyurvedaLectura from "./app/admin/AdminAyurvedaLectura";
 import AdminEditorPlaceholder from "./app/admin/AdminEditorPlaceholder";
 import AdminCursos from "./app/admin/AdminCursos";
 import AdminCursoEditor from "./app/admin/AdminCursoEditor";
+import AdminAstrologiaTextos from "./app/admin/AdminAstrologiaTextos";
 import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
 import MetodoPsicologiaProblema from "./app/metodo/MetodoPsicologiaProblema";
 import MetodoPsicologiaNecesidades from "./app/metodo/MetodoPsicologiaNecesidades";
@@ -58,6 +59,8 @@ import MetodoPsicologiaMapa from "./app/metodo/MetodoPsicologiaMapa";
 import MetodoPsicologiaRegulacion from "./app/metodo/MetodoPsicologiaRegulacion";
 import MetodoPsicologiaDones from "./app/metodo/MetodoPsicologiaDones";
 import MetodoPsicologiaDonesEspejo from "./app/metodo/MetodoPsicologiaDonesEspejo";
+import MetodoPsicologiaMiedos from "./app/metodo/MetodoPsicologiaMiedos";
+import MetodoPsicologiaMiedosPreguntas from "./app/metodo/MetodoPsicologiaMiedosPreguntas";
 import MetodoPsicologiaCompromiso from "./app/metodo/MetodoPsicologiaCompromiso";
 import MetodoAyurveda from "./app/metodo/MetodoAyurveda";
 import MetodoAyurvedaTest from "./app/metodo/MetodoAyurvedaTest";
@@ -138,6 +141,7 @@ export default function App()
       <Route path="/admin" element={<PrivateRoute><AdminHome /></PrivateRoute>} />
       <Route path="/admin/cursos" element={<PrivateRoute><AdminCursos /></PrivateRoute>} />
       <Route path="/admin/cursos/:id" element={<PrivateRoute><AdminCursoEditor /></PrivateRoute>} />
+      <Route path="/admin/astrologia-textos" element={<PrivateRoute><AdminAstrologiaTextos /></PrivateRoute>} />
       <Route path="/admin/astrologia/:userId" element={<PrivateRoute><AdminAstrologiaEditor /></PrivateRoute>} />
       <Route path="/admin/psicologia/:userId" element={<PrivateRoute><AdminPsicologiaLectura /></PrivateRoute>} />
       <Route path="/admin/ayurveda/:userId" element={<PrivateRoute><AdminAyurvedaLectura /></PrivateRoute>} />
@@ -154,6 +158,8 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/regulacion" element={<PrivateRoute><MetodoPsicologiaRegulacion /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/dones" element={<PrivateRoute><MetodoPsicologiaDones /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/dones-espejo" element={<PrivateRoute><MetodoPsicologiaDonesEspejo /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/miedos" element={<PrivateRoute><MetodoPsicologiaMiedos /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/miedos-preguntas" element={<PrivateRoute><MetodoPsicologiaMiedosPreguntas /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/compromiso" element={<PrivateRoute><MetodoPsicologiaCompromiso /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId" element={<PrivateRoute><MetodoPsicologiaExperiencia /></PrivateRoute>} />
       <Route path="/metodo/ayurveda" element={<PrivateRoute><MetodoAyurveda /></PrivateRoute>} />

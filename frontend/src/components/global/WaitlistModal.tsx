@@ -104,7 +104,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   lineHeight="1.8"
                 >
                   Actualmente está en proceso de desarrollo. Deja tu email para
-                  ser de los primeros en participar.
+                  ser de los primeros en avisar.
                 </Text>
 
                 <Input

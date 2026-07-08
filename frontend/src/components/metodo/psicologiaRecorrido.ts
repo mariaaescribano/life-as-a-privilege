@@ -156,6 +156,11 @@ export interface LineaDeVidaData {
    *  es un ejercicio autoguiado de regulación, con contención (lugar seguro
    *  antes, botón de parada, y cierre de grounding después). */
   regulacion?: RegulacionData;
+  /** «Miedos»: los miedos más profundos que la persona reconoce hoy. Primero los
+   *  nombra (página Miedos) y luego los enfrenta uno a uno respondiendo a unas
+   *  preguntas (página «Enfrenta tus miedos»). Cada miedo guarda sus respuestas
+   *  por `key` de pregunta. */
+  miedos?: MiedoItem[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -507,8 +512,25 @@ export function tramosDeAnios(edad: number): number[][] {
 export interface DonesData {
   /** Respuestas de la primera página, por clave de pregunta. */
   respuestas?: Record<string, string>;
-  /** Los dones que la persona reconoce en sí misma (los escribe ella). */
-  lista?: string[];
+  /** Preguntas que la persona marcó como «sin ideas» (resueltas sin texto).
+   *  Cuentan como completadas para poder pasar al espejo, pero no aparecen
+   *  como respuesta en él. */
+  sinIdeas?: string[];
+  /** Los dones que la persona reconoce en sí misma. Cada don es un texto que
+   *  ella escribe, al que puede UNIR uno o varios arquetipos de su carta astral
+   *  (igual que en «Relación» se unen heridas y arquetipos). */
+  lista?: DonReconocido[];
+}
+
+/** Un don reconocido: el texto que escribe la persona + los arquetipos de su
+ *  carta que decide unirle. La plataforma no interpreta: solo guarda la unión. */
+export interface DonReconocido {
+  /** Identificador estable. */
+  id: string;
+  /** El don, con las palabras de la persona (p. ej. «Escucha», «Intuición»). */
+  texto: string;
+  /** Arquetipos de la carta astral que la persona une a este don. */
+  arquetipos: ArquetipoRef[];
 }
 
 export interface PreguntaDon {
@@ -571,6 +593,106 @@ export interface RegulacionData {
   texto?: string;
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// «Miedos» — nombrar y enfrentar.
+//
+// Dos páginas (entre «Dones» e «Integración»):
+//   Página 1 (Miedos)               · la persona escribe sus miedos más
+//     profundos, uno a uno (igual que «Nudos»).
+//   Página 2 (Enfrenta tus miedos)  · le devolvemos cada miedo en un box con
+//     unas preguntas para mirarlo de frente y desactivarlo. Escribe sus
+//     respuestas; la plataforma no interpreta.
+//
+// Persistencia: data.miedos = MiedoItem[]  (cada uno con id, texto y respuestas).
+//
+// ✍️  No cambies las `key` de las preguntas tras publicar (se perderían las
+//     respuestas guardadas con esa clave).
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Un miedo reconocido por la persona + sus respuestas al enfrentarlo. */
+export interface MiedoItem {
+  /** Identificador estable. */
+  id: string;
+  /** El miedo, con las palabras de la persona. */
+  texto: string;
+  /** Respuestas a las preguntas de la página «Enfrenta tus miedos», por `key`. */
+  respuestas?: Record<string, string>;
+}
+
+export const MIEDOS = {
+  titulo: "Miedos",
+  pregunta: "¿Cuáles son tus miedos más profundos?",
+  apoyo:
+    "Un miedo no siempre es racional, y no hace falta que lo sea. Escribe lo que de verdad te da miedo, tal y como aparece, sin justificarlo ni suavizarlo. Nadie más lo va a leer.",
+  ejemplos: [
+    "A quedarme solo/a",
+    "A no ser suficiente",
+    "Al fracaso",
+    "A que me abandonen",
+    "A que le pase algo a quien quiero",
+    "Al rechazo",
+    "A perder el control",
+    "A la enfermedad",
+    "A no ser querido/a tal como soy",
+    "A no encontrar mi lugar",
+  ],
+};
+
+export interface PreguntaMiedo {
+  /** Clave estable con la que se guarda la respuesta (no cambiar tras publicar). */
+  key: string;
+  pregunta: string;
+  apoyo?: string;
+  placeholder?: string;
+}
+
+export const MIEDOS_ENFRENTAR_INTRO = {
+  titulo: "Enfrenta tus miedos",
+  intro:
+    "Ahora mira cada miedo de frente, de uno en uno. Una vez que se hace, dejan de ser tan grandes como parecían.",
+};
+
+// Preguntas para enfrentar cada miedo (decatastrofizar + recursos + autocompasión).
+export const MIEDOS_PREGUNTAS: PreguntaMiedo[] = [
+  {
+    key: "concreta",
+    pregunta: "¿Qué es exactamente lo que temes que ocurra?",
+    apoyo: "Ponle nombre concreto, no en abstracto.",
+    placeholder: "Lo que de verdad temo es…",
+  },
+  {
+    key: "peor",
+    pregunta: "Si se hiciera realidad, ¿qué es lo peor que podría pasar?",
+    placeholder: "Lo peor sería…",
+  },
+  {
+    key: "probabilidad",
+    pregunta: "¿Qué probabilidad real crees que tiene de ocurrir?",
+    apoyo: "Del 0 al 100 %. Sé honesto contigo, no con tu miedo.",
+    placeholder: "Creo que…",
+  },
+  {
+    key: "cambio",
+    pregunta: "Si ocurriera, ¿cómo cambiaría de verdad tu vida?",
+    placeholder: "Mi vida cambiaría en que…",
+  },
+  {
+    key: "afrontar",
+    pregunta: "¿Cómo lo afrontarías? ¿Con qué fortalezas, personas o recursos contarías?",
+    placeholder: "Podría apoyarme en…",
+  },
+  {
+    key: "compasion",
+    pregunta: "¿Qué le dirías a alguien que quieres si tuviera este mismo miedo?",
+    apoyo: "Háblate con esa misma amabilidad.",
+    placeholder: "Le diría que…",
+  },
+];
+
+/** Cuántas preguntas ha respondido la persona para un miedo (para el progreso). */
+export const miedoRespondidas = (m: MiedoItem): number =>
+  MIEDOS_PREGUNTAS.filter((p) => ((m.respuestas?.[p.key] || "").trim().length > 0)).length;
+
 /** Ruta pública del audio de estimulación bilateral (auriculares recomendados). */
 export const REGULACION_AUDIO_SRC = "/audio/estimulacion-bilateral.mp3";
 
@@ -578,7 +700,7 @@ export const REGULACION = {
   titulo: "Regulación",
   // Reencuadre honesto: se vende la calma/descarga, no la cura del trauma.
   intro:
-    "Este no es un ejercicio clínico ni sustituye a una terapia. Es un espacio para descargar y regularte: mientras escuchas el audio de estimulación bilateral, escribe lo que necesites soltar. Ve despacio. Aquí nadie te lee.",
+    "Este no es un ejercicio clínico ni sustituye a una terapia. Es un espacio para descargar y regularte: mientras escuchas el audio de estimulación bilateral, escribe lo que necesites. Ve despacio. Aquí nadie te lee.",
   // Preparación (lugar seguro) antes de tocar nada.
   preparacion: {
     titulo: "Antes de empezar",

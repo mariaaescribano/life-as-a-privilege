@@ -34,6 +34,7 @@ const metodoAyurveda_module_1 = require("./metodoAyurveda/metodoAyurveda.module"
 const metodoNotas_module_1 = require("./metodoNotas/metodoNotas.module");
 const booking_module_1 = require("./booking/booking.module");
 const cursos_module_1 = require("./cursos/cursos.module");
+const astrologiaTextos_module_1 = require("./astrologiaTextos/astrologiaTextos.module");
 exports.uploadFolder = (0, path_1.join)(process.cwd(), 'img');
 let AppModule = class AppModule {
 };
@@ -70,6 +71,7 @@ exports.AppModule = AppModule = __decorate([
             metodoNotas_module_1.MetodoNotasModule,
             booking_module_1.BookingModule,
             cursos_module_1.CursosModule,
+            astrologiaTextos_module_1.AstrologiaTextosModule,
         ],
         providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
         exports: [database_service_1.DatabaseService],

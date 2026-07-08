@@ -27,21 +27,25 @@ interface AgendarLlamadaProps {
   subtitulo?: string;
 }
 
-const DAYS_AHEAD = 14;
 const SLOT_START_HOUR = 8;
 const SLOT_END_HOUR = 21; // último slot empieza a las 20:00 (1h → acaba 21:00)
 const MIN_LEAD_HOURS = 2;
 
 type TakenSlot = { fecha: string; slot: string };
 
+// Días disponibles: desde HOY hasta el domingo de LA SEMANA QUE VIENE, y nada
+// más. Semana europea (empieza lunes, termina domingo). Ejemplo: si hoy es
+// martes, se ve el resto de esta semana (mar→dom) + toda la siguiente (lun→dom).
 function buildDays(): Date[] {
   const out: Date[] = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  for (let i = 0; i < DAYS_AHEAD; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    out.push(d);
+  const dow = today.getDay();               // 0=domingo, 1=lunes … 6=sábado
+  const diasHastaDomingo = (7 - dow) % 7;   // días hasta el domingo de ESTA semana
+  const fin = new Date(today);
+  fin.setDate(today.getDate() + diasHastaDomingo + 7); // domingo de la semana que viene
+  for (const d = new Date(today); d.getTime() <= fin.getTime(); d.setDate(d.getDate() + 1)) {
+    out.push(new Date(d));
   }
   return out;
 }

@@ -1150,7 +1150,7 @@ Cuando está bien aspectado, puedes canalizar tu energía innovadora para alcanz
 
 Cuidado con tener obsesión por el cambio o la renovación constante. Dificultad para manejar el apego emocional. Desapego o frialdad en las relaciones íntimas. Conflictos con la autoridad y los entornos estructurados.`,
 
-    Piscis: `Eres un guerrero espiritual e intuitivo, que se mueve a través del sentir y la guía interior más que por la fuerza bruta. Eres muy emocional, empático y compasivo, a veces puedes ser aprovechada por otros debido a tu receptividad. Tu poder asertivo es sutil y mágico, motivas a otros a actuar pero evitas la confrontación directa.
+    Piscis: `Eres un guerrero espiritual e intuitivo, que se mueve a través del sentir y la guía interior más que por la fuerza bruta. Eres muy emocional, empático y compasivo, a veces puedes ser aprovechado por otros debido a tu receptividad. Tu poder asertivo es sutil y mágico, motivas a otros a actuar pero evitas la confrontación directa.
 
 Consideras cuidadosamente las consecuencias de tus actos, buscando que tus deseos impacten positivamente en los demás. Puede costarte reconocer tus propios deseos, por eso cultivar la autoconciencia es esencial.
 
