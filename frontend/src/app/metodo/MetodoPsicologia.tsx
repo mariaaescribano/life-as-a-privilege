@@ -129,7 +129,7 @@ export default function MetodoPsicologia() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Vuelve"
-            pageLabel="1/13"
+            pageLabel="1/16"
             bgColor={`${neuropsicologiaBg}dd`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}

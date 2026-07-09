@@ -177,7 +177,7 @@ export default function MetodoPsicologiaExperiencia() {
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Línea de Vida"
-              pageLabel="3/13"
+              pageLabel="3/16"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
@@ -592,8 +592,7 @@ function PaginaDeAno({
                   El embarazo de tu madre · {anioNatural}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.8} maxW="440px" mt={2} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                  Tu historia empieza antes de tu primer recuerdo. Cuenta lo que sepas o
-                  te hayan contado; y lo que no sepas, imagínalo con cariño.
+                  Tu historia empieza mucho antes de nacer.
                 </Text>
               </>
             ) : (

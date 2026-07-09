@@ -115,11 +115,11 @@ export default function MetodoPsicologiaNecesidades() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 6, total: 15 }}
+            step={{ current: 6, total: 16 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
-            next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
+            next={{ label: "ACE →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
           />
 
           {/* ── Directo sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}

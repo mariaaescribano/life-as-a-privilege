@@ -228,14 +228,9 @@ export default function MetodoAstrologiaAspectos() {
                   position="relative"
                   borderRadius="2xl"
                   overflow="hidden"
-                  border={completa ? `1px solid ${cuerpo.color}88` : `1px solid ${astrologiaTxt}44`}
-                  boxShadow={
-                    completa
-                      ? `0 0 18px ${cuerpo.color}44, 0 0 40px rgba(255,255,255,0.06)`
-                      : `0 0 18px rgba(255,255,255,0.12), 0 0 40px rgba(255,255,255,0.06), 0 0 24px ${astrologiaTxt}1a`
-                  }
+                  boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
                   opacity={desbloqueada ? 1 : 0.55}
-                  transition="opacity 0.25s, box-shadow 0.25s, border-color 0.25s"
+                  transition="opacity 0.25s, box-shadow 0.25s"
                 >
                   {/* Fondo de astrología (estrellado) sin blur, recortado sin deformar */}
                   <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" overlay="rgba(8,13,30,0.58)" />

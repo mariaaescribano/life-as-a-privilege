@@ -76,7 +76,6 @@ export function CursoCardDetalle({
           overflow="hidden"
           w="100%"
           sx={{ aspectRatio: "16 / 9" }}
-          border={`1px solid ${color}44`}
         >
           <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block" />
         </Box>

@@ -190,36 +190,37 @@ export default function MetodoAstrologiaLectura() {
             }}
           />
 
+          {/* Texto sobre el fondo (área azul), debajo del header y encima del
+              box: el box de las estrellas queda solo para las estrellas. */}
+          <Flex direction="column" align="center" gap={3}>
+            <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px"
+                  style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
+              Pulsa sobre cada estrella para descubrir tus puntos clave.
+            </Text>
+            {retos.length > 0 && (
+              <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="600" letterSpacing="0.04em" textAlign="center"
+                    style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
+                {todosRetosLeidos
+                  ? "Has leído todos tus puntos clave. Ya puedes continuar a Casas."
+                  : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
+              </Text>
+            )}
+          </Flex>
+
           <Box
             position="relative"
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
+            boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.66)" />
 
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 5, md: 7 }}>
-              <Flex direction="column" align="center" gap={3}>
-                <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px"
-                      style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
-                  Pulsa sobre cada estrella para descubrir tus puntos clave.
-                </Text>
-                {retos.length > 0 && (
-                  <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}aa`} fontSize={{ base: "sm", md: "md" }}
-                        fontWeight="600" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
-                    {todosRetosLeidos
-                      ? "Has leído todos tus puntos clave. Ya puedes continuar a Casas."
-                      : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
-                  </Text>
-                )}
-              </Flex>
-
               {/* Cielo con las estrellas-reto */}
               {retos.length > 0 ? (
-                <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} mt={{ base: 4, md: 5 }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
+                <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
                   {retos.map((r, i) => (
                     <EstrellaReto key={r.id} index={i} pos={starPositions[i]} leido={retosLeidos.has(r.id)} onOpen={() => abrirReto(r)} />
                   ))}

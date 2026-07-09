@@ -14,12 +14,15 @@ import {
   ELEMENTOS, ORDEN_ELEMENTOS, puntuaciones, elementoPredominante, elementosAApoyar,
   recomendacionesElemento, testInicialCompleto, type DatosTcm,
 } from "../../components/metodo/tcmRecorrido";
+import { FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
+// Mismo glow ligero que el header, para uniformar los boxes.
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
-// Coordenadas de los 5 vértices del pentágono (viewBox 320×320), empezando arriba.
-const CX = 160, CY = 165, R_REF = 120;
+// Coordenadas de los 5 vértices del pentágono, empezando arriba.
+const CX = 160, CY = 172, R_REF = 106, FOTO_R = 24;
 function vertice(i: number, radio: number) {
   const ang = (-90 + i * 72) * (Math.PI / 180);
   return { x: CX + radio * Math.cos(ang), y: CY + radio * Math.sin(ang) };
@@ -93,14 +96,14 @@ export default function MetodoTcmMapa() {
 
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Tu mapa energético"
+            title="Mapa energético"
             pageLabel="3/14"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← El test", onClick: () => navigate("/metodo/tcm/equilibrio") }}
+            prev={{ label: "← Test", onClick: () => navigate("/metodo/tcm/equilibrio") }}
             extra={ilustracionesBtn}
             next={{
               label: "Los 5 elementos →",
@@ -109,7 +112,7 @@ export default function MetodoTcmMapa() {
           />
 
           {/* ── La estrella de los 5 elementos ── */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden">
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 8 }}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={2}
@@ -122,7 +125,18 @@ export default function MetodoTcmMapa() {
               </Text>
 
               <Flex justify="center">
-                <Box as="svg" viewBox="0 0 320 340" w={{ base: "280px", md: "360px" }} h="auto">
+                <Box as="svg" viewBox="0 0 320 372" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
+                  <defs>
+                    {ORDEN_ELEMENTOS.map((el, i) => {
+                      const v = vertice(i, R_REF);
+                      return (
+                        <clipPath id={`tcm-clip-${el}`} key={el}>
+                          <circle cx={v.x} cy={v.y} r={FOTO_R} />
+                        </clipPath>
+                      );
+                    })}
+                  </defs>
+
                   {/* pentágono de referencia */}
                   <polygon
                     points={ORDEN_ELEMENTOS.map((_, i) => { const v = vertice(i, R_REF); return `${v.x},${v.y}`; }).join(" ")}
@@ -133,16 +147,26 @@ export default function MetodoTcmMapa() {
                     const v = vertice(i, R_REF);
                     return <line key={i} x1={CX} y1={CY} x2={v.x} y2={v.y} stroke={`${tcmTxt}22`} strokeWidth={1} />;
                   })}
-                  {/* tu polígono */}
+                  {/* tu polígono (tu equilibrio) */}
                   <polygon points={puntosPoligono} fill={`${tcmTxt}33`} stroke={tcmTxt} strokeWidth={2} />
-                  {/* vértices + etiquetas */}
+                  {/* punto de tu puntuación en cada eje */}
                   {ORDEN_ELEMENTOS.map((el, i) => {
                     const radio = 32 + (puntos[el] / maxPunto) * (R_REF - 32);
                     const v = vertice(i, radio);
-                    const label = vertice(i, R_REF + 22);
+                    return <circle key={el} cx={v.x} cy={v.y} r={4} fill={ELEMENTOS[el].color} stroke="white" strokeWidth={1} />;
+                  })}
+                  {/* foto de cada elemento en su vértice exterior */}
+                  {ORDEN_ELEMENTOS.map((el, i) => {
+                    const v = vertice(i, R_REF);
+                    const label = vertice(i, R_REF + 46);
                     return (
                       <g key={el}>
-                        <circle cx={v.x} cy={v.y} r={6} fill={ELEMENTOS[el].color} stroke="white" strokeWidth={1.5} />
+                        <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
+                        <image href={FOTO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
+                               width={FOTO_R * 2} height={FOTO_R * 2}
+                               clipPath={`url(#tcm-clip-${el})`} preserveAspectRatio="xMidYMid slice" />
+                        <circle cx={v.x} cy={v.y} r={FOTO_R} fill="none" stroke="white" strokeWidth={2}
+                                style={{ filter: `drop-shadow(0 0 5px ${ELEMENTOS[el].color})` }} />
                         <text x={label.x} y={label.y} fill="white" fontSize={13} fontWeight={700}
                               textAnchor="middle" dominantBaseline="middle"
                               style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
@@ -229,7 +253,7 @@ function Panel({ titulo, color, children, full }: {
   titulo: string; color: string; children: React.ReactNode; full?: boolean;
 }) {
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
          gridColumn={full ? { md: "1 / -1" } : undefined}>
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
       <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}>

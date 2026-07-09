@@ -184,8 +184,7 @@ export default function MetodoAstrologiaCursos() {
               w="100%"
               borderRadius="2xl"
               overflow="hidden"
-              border={`1px solid ${astrologiaTxt}44`}
-              boxShadow={`0 0 18px rgba(255,255,255,0.1), 0 0 30px ${astrologiaTxt}1a`}
+              boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
             >
               <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">

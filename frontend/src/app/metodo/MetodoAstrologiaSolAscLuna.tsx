@@ -161,8 +161,7 @@ export default function MetodoAstrologiaSolAscLuna() {
             w="100%"
             borderRadius="2xl"
             overflow="hidden"
-            border={`1px solid ${astrologiaTxt}44`}
-            boxShadow={`0 0 22px rgba(255,255,255,0.15), 0 0 50px rgba(255,255,255,0.08), 0 0 30px ${astrologiaTxt}1a`}
+            boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
           >
             <SpaceBg overlay="rgba(8,13,30,0.62)" />
 

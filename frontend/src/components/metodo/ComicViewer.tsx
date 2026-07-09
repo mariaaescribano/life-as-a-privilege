@@ -82,6 +82,9 @@ interface ComicViewerProps {
    *  TCM). Cada cómic puede pasar la suya (p.ej. Hinduismo/Astrología usan una
    *  sombra del color de su disciplina en vez de negra). */
   textShadow?: string;
+  /** Color del texto de las viñetas. Por defecto = themeColor. Útil cuando el
+   *  acento es un color poco legible sobre la foto (p.ej. verde de Madera). */
+  textColor?: string;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -96,6 +99,7 @@ export function ComicViewer({
   disciplinaBgImage,
   disciplinaBgColor,
   textShadow = DEFAULT_TEXT_SHADOW,
+  textColor,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   const [index, setIndex] = useState(0);
@@ -351,12 +355,11 @@ export function ComicViewer({
           position="relative"
           borderRadius="xl"
           overflow="hidden"
-          border={`1px solid ${themeColor}44`}
           animation={`${fadeIn} 0.55s ease both`}
           boxShadow={
             isDisciplinaMode && disciplinaBgColor
               ? `0 0 22px ${disciplinaBgColor}88, 0 0 50px ${disciplinaBgColor}55, 0 0 18px ${themeColor}44, 0 0 40px ${themeColor}22, inset 0 0 20px rgba(0,0,0,0.35)`
-              : `0 0 18px ${themeColor}22, 0 0 40px ${themeColor}14, inset 0 0 20px rgba(0,0,0,0.35)`
+              : `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${themeColor}1a, 0 0 48px ${themeColor}10, inset 0 0 20px rgba(0,0,0,0.35)`
           }
         >
           {/* Fondo de la caja (foto de disciplina blureada + overlay) */}
@@ -494,7 +497,7 @@ export function ComicViewer({
 
             <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
               <Text
-                color={themeColor}
+                color={textColor ?? themeColor}
                 fontSize={{ base: "xl", md: "2xl" }}
                 lineHeight="1.9"
                 letterSpacing="0.02em"

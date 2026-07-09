@@ -213,6 +213,30 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  ace: {
+    ejemplo: {
+      titulo: "¿Qué es esto?",
+      cuerpo: [
+        "El test ACE mide las experiencias adversas que viviste en tu hogar antes de los 18 años: maltrato, abandono y disfunción familiar.",
+        "Son 10 preguntas de sí o no. Cada «sí» suma un punto (de 0 a 10). No es una nota ni un juicio: solo pone nombre a lo que cargaste.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Lee cada pregunta y responde Sí o No con honestidad. Puedes cambiar tu respuesta cuando quieras.",
+        "Al responder las 10, aparecerá tu puntuación y su interpretación.",
+        "Todo se guarda solo y es solo para ti.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "Una puntuación alta no es una condena: es un factor de riesgo, no un destino.",
+        "Este test no es un diagnóstico. Si algo remueve demasiado, busca apoyo: pedir ayuda también es cuidarse.",
+      ],
+    },
+  },
   "linea-de-vida": {
     ejemplo: {
       titulo: "Un ejemplo",

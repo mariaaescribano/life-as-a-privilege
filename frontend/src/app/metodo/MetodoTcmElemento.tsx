@@ -18,6 +18,8 @@ import { CONTENIDO_ELEMENTOS, IMAGEN_ELEMENTO, tieneContenido } from "../../comp
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const TXT_SHADOW = "0 1px 4px rgba(58,10,10,0.75)";
+// Mismo glow ligero que el header, para uniformar los boxes.
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 const esElemento = (v: string | undefined): v is Elemento =>
   !!v && (ORDEN_ELEMENTOS as string[]).includes(v);
@@ -261,7 +263,7 @@ export default function MetodoTcmElemento() {
           </Flex>
 
           {/* La pantalla del momento actual (con transición al cambiar) */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
                sx={{ "@keyframes momentoIn": { from: { opacity: 0, transform: "translateY(16px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box key={paso} position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}

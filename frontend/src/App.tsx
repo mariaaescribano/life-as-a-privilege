@@ -50,6 +50,7 @@ import AdminAstrologiaTextos from "./app/admin/AdminAstrologiaTextos";
 import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
 import MetodoPsicologiaProblema from "./app/metodo/MetodoPsicologiaProblema";
 import MetodoPsicologiaNecesidades from "./app/metodo/MetodoPsicologiaNecesidades";
+import MetodoPsicologiaAce from "./app/metodo/MetodoPsicologiaAce";
 import MetodoPsicologiaExperiencia from "./app/metodo/MetodoPsicologiaExperiencia";
 import MetodoPsicologiaHuellas from "./app/metodo/MetodoPsicologiaHuellas";
 import MetodoPsicologiaNudos from "./app/metodo/MetodoPsicologiaNudos";
@@ -155,6 +156,7 @@ export default function App()
       <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/problema" element={<PrivateRoute><MetodoPsicologiaProblema /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/necesidades" element={<PrivateRoute><MetodoPsicologiaNecesidades /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/ace" element={<PrivateRoute><MetodoPsicologiaAce /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/huellas" element={<PrivateRoute><MetodoPsicologiaHuellas /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/nudos" element={<PrivateRoute><MetodoPsicologiaNudos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/huellas-nudos" element={<PrivateRoute><MetodoPsicologiaHuellasNudos /></PrivateRoute>} />

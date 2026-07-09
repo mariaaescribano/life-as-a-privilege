@@ -24,6 +24,8 @@ const DOSHA_CARD: Record<Dosha, {
   Icon: any;
   elemento: string;
   esencia: string;
+  /** Fondo propio de la tarjeta (sustituye la imagen de la disciplina). */
+  bgImg?: string;
 }> = {
   vata: {
     label: "Vata",
@@ -31,6 +33,7 @@ const DOSHA_CARD: Record<Dosha, {
     Icon: VataIcon,
     elemento: "Aire y Éter",
     esencia: "El movimiento.",
+    bgImg: "/img/fondos/vata.png",
   },
   pitta: {
     label: "Pitta",
@@ -38,6 +41,7 @@ const DOSHA_CARD: Record<Dosha, {
     Icon: PittaIcon,
     elemento: "Fuego y Agua",
     esencia: "La transformación.",
+    bgImg: "/img/fondos/pitta.png",
   },
   kapha: {
     label: "Kapha",
@@ -167,7 +171,7 @@ export default function MetodoAyurvedaTarjetas() {
                     ? `0 0 0 1px ${cfg.color}66, 0 0 28px ${cfg.color}aa, 0 0 60px ${cfg.color}55, 0 12px 36px rgba(0,0,0,0.34)`
                     : `0 0 18px ${cfg.color}55, 0 8px 26px rgba(0,0,0,0.28)` }}
                 >
-                  <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}${destacada ? "1a" : "33"}`} />
+                  <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" imageSrc={cfg.bgImg} overlay={`${ayurvedaBg}${destacada ? "1a" : "33"}`} />
 
                   {/* Badge de prioridad */}
                   {destacada && (

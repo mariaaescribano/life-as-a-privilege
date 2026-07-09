@@ -517,7 +517,21 @@ function VistaNotas({
           Todavía no has escrito ninguna nota.
         </Text>
       ) : (
-        <Flex direction="column" gap={3} maxH="55vh" overflowY="auto" pr={1}>
+        <Flex
+          direction="column"
+          gap={3}
+          maxH={{ base: "58vh", md: "62vh" }}
+          overflowY="auto"
+          pr={2}
+          sx={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(255,255,255,0.4) transparent",
+            "&::-webkit-scrollbar": { width: "8px" },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "8px" },
+            "&::-webkit-scrollbar-thumb:hover": { background: "rgba(255,255,255,0.55)" },
+          }}
+        >
           {notas.map((n) => (
             <NotaCard key={n.id} nota={n} onBorrar={onBorrar} />
           ))}
@@ -536,6 +550,7 @@ function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string) => vo
   return (
     <Box
       position="relative"
+      flexShrink={0}
       overflow="hidden"
       borderRadius="xl"
       bg={disc ? disc.bg : "rgba(255,255,255,0.06)"}
@@ -582,7 +597,7 @@ function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string) => vo
           fontSize={{ base: "lg", md: "xl" }}
           lineHeight="1.65"
           whiteSpace="pre-wrap"
-          sx={{ textShadow: conFondo ? "0 1px 8px rgba(0,0,0,0.35)" : "none" }}
+          sx={{ textShadow: conFondo ? "0 1px 8px rgba(0,0,0,0.35)" : "none", overflowWrap: "anywhere", wordBreak: "break-word" }}
         >
           {nota.contenido}
         </Text>

@@ -140,7 +140,7 @@ export default function MetodoPsicologiaMiedos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 12, total: 15 }}
+              step={{ current: 13, total: 16 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Dones", onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`) }}

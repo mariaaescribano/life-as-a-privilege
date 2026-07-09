@@ -330,7 +330,7 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 9, total: 15 }}
+              step={{ current: 10, total: 16 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Regulación", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}

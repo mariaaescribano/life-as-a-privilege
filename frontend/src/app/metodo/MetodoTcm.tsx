@@ -18,6 +18,9 @@ import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 // Tinta rojiza clara con halo oscuro (granate) para leer sobre el fondo de TCM.
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc, 0 2px 16px ${tcmBg}88`;
+// Mismo glow ligero que el header (MetodoStepHeader, rama con fondo de disciplina),
+// para que todos los boxes queden uniformes.
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 export default function MetodoTcm() {
   const navigate = useNavigate();
@@ -151,7 +154,7 @@ export default function MetodoTcm() {
           />
 
           {/* ── Bienvenida contemplativa ── */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden">
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text

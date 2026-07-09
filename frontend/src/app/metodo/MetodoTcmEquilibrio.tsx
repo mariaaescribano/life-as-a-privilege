@@ -16,6 +16,8 @@ import {
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
+// Mismo glow ligero que el header, para uniformar los boxes.
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 export default function MetodoTcmEquilibrio() {
   const navigate = useNavigate();
@@ -99,7 +101,7 @@ export default function MetodoTcmEquilibrio() {
 
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="¿Cómo está tu equilibrio hoy?"
+            title="Equilibrio"
             pageLabel="2/14"
             compact
             bgColor={`${tcmBg}dd`}
@@ -109,7 +111,7 @@ export default function MetodoTcmEquilibrio() {
             prev={{ label: "← Bienvenida", onClick: () => { void guardar(); navigate("/metodo/tcm"); } }}
             extra={ilustracionesBtn}
             next={{
-              label: "Tu mapa →",
+              label: "Mapa →",
               onClick: irAlMapa,
               disabled: !completo,
               disabledTooltip: "Responde a todas las preguntas para ver tu mapa energético",
@@ -124,7 +126,7 @@ export default function MetodoTcmEquilibrio() {
 
           {/* ── Preguntas ── */}
           {TEST_INICIAL.map((p, i) => (
-            <Box key={p.key} position="relative" w="100%" borderRadius="2xl" overflow="hidden">
+            <Box key={p.key} position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
                 <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={4}
@@ -190,7 +192,7 @@ export default function MetodoTcmEquilibrio() {
               _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 24px ${tcmTxt}66, 0 6px 22px rgba(0,0,0,0.36)` }}
               _active={{ transform: "scale(0.97)" }}
             >
-              Tu mapa →
+              Mapa →
             </Box>
           )}
         </Flex>

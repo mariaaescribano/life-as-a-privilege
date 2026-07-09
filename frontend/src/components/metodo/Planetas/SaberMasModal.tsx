@@ -80,6 +80,9 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
   const [textoSigno, setTextoSigno] = useState<string | null>(null);
   const [textoCasa, setTextoCasa] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
+  // Índice del carrusel: cuando el popup muestra DOS facetas (signo + casa), no
+  // las apilamos en una lista, sino que se leen de una en una con las flechas.
+  const [slideIdx, setSlideIdx] = useState(0);
 
   useEffect(() => {
     if (!isOpen || !cuerpo) return;
@@ -102,8 +105,9 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
     return () => { cancel = true; };
   }, [isOpen, cuerpo?.key, signo, casa, facet]);
 
-  // Al abrir / cambiar de cuerpo, vuelve al inicio del contenido.
+  // Al abrir / cambiar de cuerpo, vuelve al inicio del contenido y al 1er slide.
   useEffect(() => {
+    if (isOpen) setSlideIdx(0);
     if (isOpen && scrollRef.current) {
       scrollRef.current.scrollTop = 0;
     }
@@ -132,6 +136,104 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
   // Qué bloques mostrar (si llega `facet`, sólo uno).
   const verSigno = facet !== "casa";
   const verCasa = cuerpo.conCasa && facet !== "signo";
+
+  // ── Bloques de contenido (signo / casa) como slides del carrusel ──
+  const bloqueSigno = signoData ? (
+    <Flex direction="column" gap={4}>
+      <Flex align="center" justify="center" gap={3} flexWrap="wrap">
+        <Glifo symbol={cuerpo.symbol} color={color} size={36} />
+        <Text
+          color={color}
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="700"
+          letterSpacing="0.04em"
+          style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
+        >
+          {cuerpo.label} en
+        </Text>
+        <ZodiacGlyph symbol={signoData.symbol} color={color} size={28} />
+        <Text
+          color={color}
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="700"
+          letterSpacing="0.04em"
+          style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
+        >
+          {signoData.name}
+        </Text>
+      </Flex>
+
+      {/* Separación horizontal bajo el título */}
+      <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
+           boxShadow={`0 0 6px ${color}44`} />
+
+      {cargando ? (
+        <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
+      ) : textoSigno ? (
+        <Box>{renderTextoLargo(textoSigno, color)}</Box>
+      ) : (
+        <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
+          Texto de {cuerpo.label} en {signoData.name} aún no disponible.
+        </Text>
+      )}
+    </Flex>
+  ) : (
+    <Flex align="center" justify="center" gap={3}>
+      <Glifo symbol={cuerpo.symbol} color={color} size={36} />
+      <Text color={`${color}aa`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic">
+        {cuerpo.label} — signo aún no elegido
+      </Text>
+    </Flex>
+  );
+
+  const bloqueCasa = casa != null ? (
+    <Flex direction="column" gap={4}>
+      <Flex align="center" justify="center" gap={3} flexWrap="wrap">
+        <Glifo symbol={cuerpo.symbol} color={color} size={36} />
+        <Text
+          color={color}
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="700"
+          letterSpacing="0.04em"
+          style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
+        >
+          {cuerpo.label} en casa {casa}
+        </Text>
+      </Flex>
+
+      {/* Separación horizontal bajo el título */}
+      <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
+           boxShadow={`0 0 6px ${color}44`} />
+
+      {cargando ? (
+        <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
+      ) : textoCasa ? (
+        <Box>{renderTextoLargo(textoCasa, color)}</Box>
+      ) : (
+        <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
+          Texto de {cuerpo.label} en casa {casa} aún no disponible.
+        </Text>
+      )}
+    </Flex>
+  ) : (
+    <Flex align="center" justify="center" gap={3}>
+      <Glifo symbol={cuerpo.symbol} color={color} size={36} />
+      <Text color={`${color}aa`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic">
+        {cuerpo.label} — casa aún no elegida
+      </Text>
+    </Flex>
+  );
+
+  // Slides visibles según lo que toque mostrar. Con dos, se navegan con flechas.
+  const slides: { key: "signo" | "casa"; label: string; node: React.ReactNode }[] = [];
+  if (verSigno) slides.push({ key: "signo", label: "Signo", node: bloqueSigno });
+  if (verCasa) slides.push({ key: "casa", label: "Casa", node: bloqueCasa });
+  const multi = slides.length > 1;
+  const idx = Math.min(slideIdx, slides.length - 1);
+  const irSlide = (n: number) => {
+    setSlideIdx(((n % slides.length) + slides.length) % slides.length);
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  };
 
   return (
     <Box
@@ -211,114 +313,79 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           }}
         >
 
-          {/* ── Bloque SIGNO ── */}
-          {verSigno && (signoData ? (
-            <Flex direction="column" gap={4}>
-              <Flex align="center" justify="center" gap={3} flexWrap="wrap">
-                <Glifo symbol={cuerpo.symbol} color={color} size={36} />
-                <Text
-                  color={color}
-                  fontSize={{ base: "xl", md: "2xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.04em"
-                  style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
-                >
-                  {cuerpo.label} en
-                </Text>
-                <ZodiacGlyph symbol={signoData.symbol} color={color} size={28} />
-                <Text
-                  color={color}
-                  fontSize={{ base: "xl", md: "2xl" }}
-                  fontWeight="700"
-                  letterSpacing="0.04em"
-                  style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
-                >
-                  {signoData.name}
-                </Text>
-              </Flex>
+          {/* Slide actual del carrusel (signo o casa) */}
+          {slides[idx]?.node}
 
-              {/* Separación horizontal bajo el título */}
-              <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
-                   boxShadow={`0 0 6px ${color}44`} />
-
-              {cargando ? (
-                <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
-              ) : textoSigno ? (
-                <Box>{renderTextoLargo(textoSigno, color)}</Box>
-              ) : (
-                <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
-                  Texto de {cuerpo.label} en {signoData.name} aún no disponible.
-                </Text>
-              )}
-            </Flex>
-          ) : (
-            <Flex align="center" justify="center" gap={3}>
-              <Glifo symbol={cuerpo.symbol} color={color} size={36} />
-              <Text
-                color={`${color}aa`}
-                fontSize={{ base: "lg", md: "xl" }}
-                fontStyle="italic"
+          {/* Navegación del carrusel — solo cuando hay dos facetas (signo + casa).
+              Se lee una, y con el botón se pasa a la siguiente (y se puede volver). */}
+          {multi && (
+            <Flex align="center" justify="center" gap={4} mt={{ base: 7, md: 8 }}>
+              <Box
+                as="button"
+                onClick={() => irSlide(idx - 1)}
+                w="42px"
+                h="42px"
+                borderRadius="full"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                bg="rgba(0,0,0,0.35)"
+                border={`1px solid ${color}66`}
+                color={color}
+                cursor="pointer"
+                transition="all 0.18s"
+                boxShadow={`0 0 12px ${color}33`}
+                _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: color, boxShadow: `0 0 20px ${color}66` }}
+                aria-label="Anterior"
               >
-                {cuerpo.label} — signo aún no elegido
-              </Text>
-            </Flex>
-          ))}
+                <Text fontSize="2xl" lineHeight="1">‹</Text>
+              </Box>
 
-          {/* ── Separador ── */}
-          {verSigno && verCasa && (
-            <Box
-              my={{ base: 6, md: 8 }}
-              h="1px"
-              w="80%"
-              mx="auto"
-              bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
-              boxShadow={`0 0 8px ${color}55`}
-            />
-          )}
-
-          {/* ── Bloque CASA ── */}
-          {verCasa && (
-            casa != null ? (
-              <Flex direction="column" gap={4}>
-                <Flex align="center" justify="center" gap={3} flexWrap="wrap">
-                  <Glifo symbol={cuerpo.symbol} color={color} size={36} />
-                  <Text
-                    color={color}
-                    fontSize={{ base: "xl", md: "2xl" }}
-                    fontWeight="700"
-                    letterSpacing="0.04em"
-                    style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
-                  >
-                    {cuerpo.label} en casa {casa}
-                  </Text>
+              {/* Puntos + etiqueta del slide */}
+              <Flex direction="column" align="center" gap={1.5}>
+                <Flex align="center" gap={2}>
+                  {slides.map((s, i) => (
+                    <Box
+                      key={s.key}
+                      as="button"
+                      onClick={() => irSlide(i)}
+                      w={i === idx ? "22px" : "8px"}
+                      h="8px"
+                      borderRadius="full"
+                      bg={i === idx ? color : `${color}44`}
+                      cursor="pointer"
+                      transition="all 0.22s"
+                      boxShadow={i === idx ? `0 0 10px ${color}aa` : "none"}
+                      aria-label={s.label}
+                    />
+                  ))}
                 </Flex>
-
-                {/* Separación horizontal bajo el título */}
-                <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
-                     boxShadow={`0 0 6px ${color}44`} />
-
-                {cargando ? (
-                  <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
-                ) : textoCasa ? (
-                  <Box>{renderTextoLargo(textoCasa, color)}</Box>
-                ) : (
-                  <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
-                    Texto de {cuerpo.label} en casa {casa} aún no disponible.
-                  </Text>
-                )}
-              </Flex>
-            ) : (
-              <Flex align="center" justify="center" gap={3}>
-                <Glifo symbol={cuerpo.symbol} color={color} size={36} />
-                <Text
-                  color={`${color}aa`}
-                  fontSize={{ base: "lg", md: "xl" }}
-                  fontStyle="italic"
-                >
-                  {cuerpo.label} — casa aún no elegida
+                <Text color={`${color}cc`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase" fontWeight="600">
+                  {slides[idx]?.label} · {idx + 1}/{slides.length}
                 </Text>
               </Flex>
-            )
+
+              <Box
+                as="button"
+                onClick={() => irSlide(idx + 1)}
+                w="42px"
+                h="42px"
+                borderRadius="full"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                bg="rgba(0,0,0,0.35)"
+                border={`1px solid ${color}66`}
+                color={color}
+                cursor="pointer"
+                transition="all 0.18s"
+                boxShadow={`0 0 12px ${color}33`}
+                _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: color, boxShadow: `0 0 20px ${color}66` }}
+                aria-label="Siguiente"
+              >
+                <Text fontSize="2xl" lineHeight="1">›</Text>
+              </Box>
+            </Flex>
           )}
 
         </Box>

@@ -187,6 +187,10 @@ export interface LineaDeVidaData {
    *  preguntas (página «Enfrenta tus miedos»). Cada miedo guarda sus respuestas
    *  por `key` de pregunta. */
   miedos?: MiedoItem[];
+  /** «ACE» (Experiencias Adversas en la Infancia): las 10 respuestas del test,
+   *  por `key` de pregunta ("si" | "no"). La puntuación es el número de "si".
+   *  No es un diagnóstico: es material de autoconocimiento (ver `AceData`). */
+  ace?: AceData;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -723,6 +727,200 @@ export const MIEDOS_PREGUNTAS: PreguntaMiedo[] = [
 /** Cuántas preguntas ha respondido la persona para un miedo (para el progreso). */
 export const miedoRespondidas = (m: MiedoItem): number =>
   MIEDOS_PREGUNTAS.filter((p) => ((m.respuestas?.[p.key] || "").trim().length > 0)).length;
+
+// ─────────────────────────────────────────────────────────────────────────
+// «ACE» — Experiencias Adversas en la Infancia (test + resultado).
+//
+// ACE = Adverse Childhood Experiences. Es el cuestionario de 10 preguntas del
+// gran estudio CDC-Kaiser (Felitti & Anda, 1998; +17.000 personas), que mostró
+// una relación de DOSIS-RESPUESTA entre la adversidad vivida antes de los 18
+// años y la salud física/emocional en la vida adulta.
+//
+// Aquí NO es un instrumento clínico ni un diagnóstico: es un espejo de
+// autoconocimiento. Por eso el tono es cálido, honesto y esperanzador — una
+// puntuación alta es un factor de riesgo, jamás un destino, y todo el recorrido
+// es precisamente el trabajo de reparación.
+//
+// Flujo de la página:
+//   1. Intro: qué es el ACE (+ popup «¿Qué es esto?»).
+//   2. Test: 10 preguntas Sí/No (se guarda cada respuesta al instante).
+//   3. Al responder las 10 → se revela el resultado: puntuación + banda
+//      interpretativa + consecuencias (dosis-respuesta) + mensaje de esperanza.
+//
+// Persistencia: data.ace.respuestas = { [key]: "si" | "no" }.
+//
+// ✍️  No cambies las `key` tras publicar (se perderían las respuestas guardadas).
+// ─────────────────────────────────────────────────────────────────────────
+
+export type AceRespuesta = "si" | "no";
+
+export interface AceData {
+  /** Respuesta por clave de pregunta: "si" | "no". Sin responder = ausente. */
+  respuestas?: Record<string, AceRespuesta>;
+}
+
+export interface PreguntaAce {
+  /** Clave estable (no cambiar tras publicar). */
+  key: string;
+  /** Categoría corta (etiqueta de la tarjeta). */
+  categoria: string;
+  /** La pregunta, reformulada con calidez pero sin perder su sentido clínico. */
+  pregunta: string;
+  /** Matiz aclaratorio opcional (aparece más pequeño bajo la pregunta). */
+  apoyo?: string;
+}
+
+export const ACE_INTRO = {
+  titulo: "Experiencias adversas en la infancia",
+  subtitulo: "El test ACE",
+  // Texto del popup «¿Qué es esto?».
+  que: [
+    "«ACE» son las siglas en inglés de Adverse Childhood Experiences: experiencias adversas en la infancia. Nace de uno de los mayores estudios de salud jamás realizados (CDC-Kaiser, más de 17.000 personas), que descubrió algo tan sencillo como revelador: lo que vivimos de niños deja una huella real en la salud y en la vida adulta.",
+    "El test son 10 preguntas de sí o no sobre lo que ocurrió en tu hogar antes de los 18 años: maltrato, abandono y disfunción familiar. Cada «sí» suma un punto, del 0 al 10. No mide quién eres ni cuánto vales: solo pone nombre a lo que cargaste.",
+    "Responde con calma y con honestidad. Nadie más lo verá. Y recuerda algo antes de empezar: una puntuación alta no es una condena — es, precisamente, el punto de partida de este recorrido.",
+  ],
+  // Frase breve sobre el turquesa, encima del test.
+  subtituloTurquesa: "Antes de los 18 años, ¿viviste alguna de estas situaciones en tu hogar?",
+};
+
+// Las 10 preguntas originales del ACE, reformuladas en español con cuidado. El
+// orden y el sentido se mantienen (abuso 1-3, negligencia 4-5, disfunción 6-10).
+export const ACE_PREGUNTAS: PreguntaAce[] = [
+  {
+    key: "ace-1-maltrato-emocional",
+    categoria: "Maltrato emocional",
+    pregunta: "¿Alguno de tus padres u otro adulto de la casa te insultó, humilló o te menospreció a menudo, o te hizo temer que pudieran hacerte daño?",
+  },
+  {
+    key: "ace-2-maltrato-fisico",
+    categoria: "Maltrato físico",
+    pregunta: "¿Alguno de tus padres u otro adulto te empujó, agarró, abofeteó o te golpeó con fuerza, hasta dejarte marcas o hacerte daño?",
+  },
+  {
+    key: "ace-3-abuso-sexual",
+    categoria: "Abuso sexual",
+    pregunta: "¿Algún adulto, o alguien al menos 5 años mayor que tú, te tocó de forma sexual, o intentó o llegó a tener contacto sexual contigo?",
+  },
+  {
+    key: "ace-4-abandono-emocional",
+    categoria: "Abandono emocional",
+    pregunta: "¿Sentiste a menudo que nadie en tu familia te quería, que no eras importante, o que no os apoyabais ni os cuidabais entre vosotros?",
+  },
+  {
+    key: "ace-5-abandono-fisico",
+    categoria: "Abandono físico",
+    pregunta: "¿Sentiste a menudo que no tenías suficiente para comer, que ibas sucio o sin ropa adecuada, o que no había nadie que te protegiera?",
+    apoyo: "También cuenta si tus padres estaban demasiado afectados (por alcohol, drogas o enfermedad) para cuidarte o llevarte al médico.",
+  },
+  {
+    key: "ace-6-separacion",
+    categoria: "Separación o divorcio",
+    pregunta: "¿Tus padres se separaron o divorciaron alguna vez?",
+  },
+  {
+    key: "ace-7-violencia-hogar",
+    categoria: "Violencia en el hogar",
+    pregunta: "¿Viste cómo empujaban, agarraban, abofeteaban o golpeaban a tu madre (o a la mujer que te cuidaba), o cómo la amenazaban?",
+  },
+  {
+    key: "ace-8-adicciones",
+    categoria: "Adicciones en el hogar",
+    pregunta: "¿Viviste con alguien que tuviera problemas con el alcohol o que consumiera drogas?",
+  },
+  {
+    key: "ace-9-enfermedad-mental",
+    categoria: "Salud mental en el hogar",
+    pregunta: "¿Viviste con alguien que sufriera depresión u otra enfermedad mental, o que intentara quitarse la vida?",
+  },
+  {
+    key: "ace-10-carcel",
+    categoria: "Prisión en el hogar",
+    pregunta: "¿Algún miembro de tu hogar estuvo alguna vez en prisión?",
+  },
+];
+
+/** Puntuación ACE: número de respuestas "si" (0–10). */
+export const aceScore = (data: LineaDeVidaData): number =>
+  ACE_PREGUNTAS.filter((p) => data?.ace?.respuestas?.[p.key] === "si").length;
+
+/** Cuántas de las 10 preguntas se han respondido (para la barra de progreso). */
+export const aceRespondidas = (data: LineaDeVidaData): number =>
+  ACE_PREGUNTAS.filter((p) => !!data?.ace?.respuestas?.[p.key]).length;
+
+/** ¿Están las 10 respondidas? (para revelar el resultado). */
+export const aceCompleto = (data: LineaDeVidaData): boolean =>
+  aceRespondidas(data) === ACE_PREGUNTAS.length;
+
+/** Banda interpretativa de la puntuación. Tono honesto pero esperanzador. */
+export interface AceBanda {
+  min: number;
+  max: number;
+  etiqueta: string;
+  titulo: string;
+  /** Color de acento (mismo criterio semafórico que «Necesidades»). */
+  color: string;
+  texto: string;
+}
+
+export const ACE_BANDAS: AceBanda[] = [
+  {
+    min: 0, max: 0,
+    etiqueta: "0",
+    titulo: "Sin experiencias adversas registradas",
+    color: "#3f9d6b",
+    texto:
+      "Según el test, tu infancia estuvo relativamente libre de estas adversidades concretas. Es una base valiosa. Aun así, ninguna vida está libre de heridas: este recorrido sigue siendo para ti, porque el dolor no siempre cabe en diez preguntas.",
+  },
+  {
+    min: 1, max: 3,
+    etiqueta: "1–3",
+    titulo: "Adversidad moderada",
+    color: "#caa23c",
+    texto:
+      "Viviste algunas experiencias adversas. Es lo más frecuente: la mayoría de las personas suma alguna. Con apoyo y trabajo personal —como el que estás haciendo aquí— su efecto puede cuidarse, comprenderse y sanar.",
+  },
+  {
+    min: 4, max: 10,
+    etiqueta: "4+",
+    titulo: "Adversidad elevada",
+    color: "#c5613e",
+    texto:
+      "Cargaste con varias experiencias adversas, seguramente con más peso del que merecías. Los estudios asocian una puntuación de 4 o más con un mayor riesgo para la salud física y emocional. Pero escúchalo bien: es un riesgo, no un destino. Reconocerlo, como estás haciendo ahora, es el primer paso para que deje de gobernarte.",
+  },
+];
+
+export const aceBanda = (score: number): AceBanda =>
+  ACE_BANDAS.find((b) => score >= b.min && score <= b.max) ?? ACE_BANDAS[ACE_BANDAS.length - 1];
+
+// Consecuencias (dosis-respuesta) — se muestran tras completar el test. Redactado
+// con rigor y sin alarmismo: hablamos de probabilidades en grandes grupos, nunca
+// de algo que vaya a ocurrirle a la persona.
+export const ACE_CONSECUENCIAS = {
+  titulo: "¿Qué se sabe de estas experiencias?",
+  intro:
+    "El estudio ACE observó una relación de «dosis-respuesta»: cuantas más experiencias adversas, mayor es el riesgo de dificultades más adelante. Importante: son probabilidades en grandes grupos de personas, no una predicción sobre ti.",
+  puntos: [
+    "A mayor puntuación, mayor riesgo de dificultades emocionales como ansiedad, depresión o baja autoestima.",
+    "Se asocia también con más dificultad para regular las emociones y para sostener relaciones sanas.",
+    "En la salud física, se ha relacionado con un mayor riesgo de enfermedades crónicas a lo largo de la vida.",
+    "Y con una mayor tendencia a buscar alivio en conductas de riesgo (tabaco, alcohol u otras).",
+  ],
+};
+
+// Mensaje de esperanza y resiliencia — el cierre imprescindible para no dejar a
+// la persona en su herida. Basado en la evidencia: la neuroplasticidad y, sobre
+// todo, los vínculos seguros como principal factor protector.
+export const ACE_ESPERANZA = {
+  titulo: "Tu historia no termina en una cifra",
+  texto: [
+    "El cerebro y el cuerpo tienen una capacidad enorme de sanar. Lo que se aprendió en la adversidad también puede reaprenderse en la seguridad.",
+    "El factor que más protege, según la propia ciencia, es sencillo: las relaciones seguras y el sostén emocional. Un solo vínculo de confianza puede cambiarlo todo.",
+    "Este recorrido —recordar, comprender, integrar— es exactamente ese trabajo. No estás mirando tu herida para quedarte en ella, sino para transformarla.",
+  ],
+  // Recordatorio honesto (coherente con el «Aviso importante» del inicio).
+  caveat:
+    "Este test no es un diagnóstico ni sustituye a una valoración profesional. Es solo una brújula para conocerte mejor. Si algo de esto remueve demasiado, busca apoyo: pedir ayuda también es cuidarse.",
+};
 
 /** Ruta pública del audio de estimulación bilateral (auriculares recomendados). */
 export const REGULACION_AUDIO_SRC = "/audio/estimulacion-bilateral.mp3";

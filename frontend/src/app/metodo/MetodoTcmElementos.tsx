@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -8,18 +8,21 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { ComicViewer } from "../../components/metodo/ComicViewer";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido,
   testInicialCompleto, viajeCompleto, type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
-import { tieneContenido, INTRO_CINCO_ELEMENTOS } from "../../components/metodo/tcmElementosContenido";
+import { tieneContenido, INTRO_CINCO_ELEMENTOS, FOTO_ELEMENTO, COMIC_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
+// Mismo glow ligero que el header, para uniformar los boxes.
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
-const CX = 160, CY = 170, R = 120;
+const CX = 160, CY = 170, R = 120, FOTO_R = 24;
 function vertice(i: number, radio: number) {
   const ang = (-90 + i * 72) * (Math.PI / 180);
   return { x: CX + radio * Math.cos(ang), y: CY + radio * Math.sin(ang) };
@@ -29,6 +32,7 @@ export default function MetodoTcmElementos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
+  const [comicEl, setComicEl] = useState<Elemento | null>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -61,9 +65,27 @@ export default function MetodoTcmElementos() {
     disponible: tieneContenido(el),
   })), [data]);
 
+  // Pinchar un elemento abre su cómic (no navega a otra página).
   const abrir = (el: Elemento, desbloqueado: boolean, disponible: boolean) => {
     if (!desbloqueado || !disponible) return;
-    navigate(`/metodo/tcm/elemento/${el}`);
+    setComicEl(el);
+  };
+
+  // Al terminar el cómic, marcamos el elemento como leído (✓ + desbloquea el siguiente).
+  const marcarLeido = async (el: Elemento) => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    const next: DatosTcm = {
+      ...data,
+      elementos: { ...data.elementos, [el]: { ...data.elementos?.[el], leido: true } },
+    };
+    setData(next);
+    if (userId && token) {
+      try {
+        await axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
+          { headers: { Authorization: `Bearer ${token}` } });
+      } catch { /* el estado local ya refleja el ✓ */ }
+    }
   };
 
   if (loading) {
@@ -86,7 +108,7 @@ export default function MetodoTcmElementos() {
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Tu mapa", onClick: () => navigate("/metodo/tcm/mapa") }}
+            prev={{ label: "← Mapa", onClick: () => navigate("/metodo/tcm/mapa") }}
             extra={ilustracionesBtn}
             next={{
               label: "Tu perfil →",
@@ -97,7 +119,7 @@ export default function MetodoTcmElementos() {
           />
 
           {/* Intro (Módulo 1) */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden">
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 6, md: 8 }} textAlign="center">
               <Flex direction="column" gap={3} maxW="640px" mx="auto">
@@ -116,10 +138,20 @@ export default function MetodoTcmElementos() {
           </Box>
 
           {/* La estrella interactiva */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden">
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-            <Flex position="relative" zIndex={1} justify="center" py={{ base: 6, md: 8 }}>
-              <Box as="svg" viewBox="0 0 320 360" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
+            <Flex position="relative" zIndex={1} justify="center" py={{ base: 3, md: 4 }}>
+              <Box as="svg" viewBox="0 0 320 312" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
+                <defs>
+                  {ORDEN_ELEMENTOS.map((el, i) => {
+                    const v = vertice(i, R);
+                    return (
+                      <clipPath id={`hub-clip-${el}`} key={el}>
+                        <circle cx={v.x} cy={v.y} r={FOTO_R} />
+                      </clipPath>
+                    );
+                  })}
+                </defs>
                 {/* pentágono de referencia */}
                 <polygon
                   points={ORDEN_ELEMENTOS.map((_, i) => { const v = vertice(i, R); return `${v.x},${v.y}`; }).join(" ")}
@@ -127,38 +159,43 @@ export default function MetodoTcmElementos() {
                 />
                 {estados.map(({ el, desbloqueado, leido, disponible }, i) => {
                   const v = vertice(i, R);
-                  const label = vertice(i, R + 26);
+                  const label = vertice(i, R + 46);
                   const activo = desbloqueado && disponible;
                   const color = ELEMENTOS[el].color;
                   return (
                     <g key={el} style={{ cursor: activo ? "pointer" : "not-allowed" }}
                        onClick={() => abrir(el, desbloqueado, disponible)}>
-                      <circle
-                        cx={v.x} cy={v.y} r={20}
-                        fill={activo ? color : `${color}33`}
-                        stroke={leido ? "white" : `${tcmTxt}${activo ? "cc" : "44"}`}
-                        strokeWidth={leido ? 3 : 1.5}
-                        opacity={activo ? 1 : 0.5}
-                      />
-                      {leido && (
-                        <text x={v.x} y={v.y} fill="white" fontSize={18} fontWeight={700}
-                              textAnchor="middle" dominantBaseline="central">✓</text>
-                      )}
-                      {!activo && !leido && (
-                        <text x={v.x} y={v.y} fill={`${tcmTxt}aa`} fontSize={15}
+                      {/* base + foto del elemento */}
+                      <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
+                      <image href={FOTO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
+                             width={FOTO_R * 2} height={FOTO_R * 2}
+                             clipPath={`url(#hub-clip-${el})`} preserveAspectRatio="xMidYMid slice"
+                             opacity={activo ? 1 : 0.35} />
+                      {/* velo si está bloqueado */}
+                      {!activo && <circle cx={v.x} cy={v.y} r={FOTO_R} fill={tcmBg} opacity={0.45} />}
+                      {/* aro */}
+                      <circle cx={v.x} cy={v.y} r={FOTO_R} fill="none"
+                              stroke={leido ? "white" : activo ? color : `${tcmTxt}55`}
+                              strokeWidth={leido ? 3 : 2}
+                              style={activo ? { filter: `drop-shadow(0 0 5px ${color})` } : undefined} />
+                      {/* candado si bloqueado */}
+                      {!activo && (
+                        <text x={v.x} y={v.y} fill="white" fontSize={16}
                               textAnchor="middle" dominantBaseline="central">🔒</text>
+                      )}
+                      {/* insignia ✓ si leído */}
+                      {leido && (
+                        <>
+                          <circle cx={v.x + FOTO_R * 0.72} cy={v.y - FOTO_R * 0.72} r={9} fill="white" />
+                          <text x={v.x + FOTO_R * 0.72} y={v.y - FOTO_R * 0.72} fill={color} fontSize={12}
+                                fontWeight={700} textAnchor="middle" dominantBaseline="central">✓</text>
+                        </>
                       )}
                       <text x={label.x} y={label.y} fill="white" fontSize={14} fontWeight={700}
                             textAnchor="middle" dominantBaseline="middle"
                             style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
                         {ELEMENTOS[el].nombre}
                       </text>
-                      {!disponible && (
-                        <text x={label.x} y={label.y + 15} fill={`${tcmTxt}aa`} fontSize={10}
-                              textAnchor="middle" dominantBaseline="middle" fontStyle="italic">
-                          en preparación
-                        </text>
-                      )}
                     </g>
                   );
                 })}
@@ -173,6 +210,25 @@ export default function MetodoTcmElementos() {
       </Flex>
 
       {ilustracionesModal}
+
+      {/* Cómic del elemento: fondo y box con la foto del elemento; cerrable en cualquier momento. */}
+      <Modal isOpen={!!comicEl} onClose={() => setComicEl(null)} size="full" scrollBehavior="outside">
+        <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
+        <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100vh" position="relative">
+          {comicEl && (
+            <ComicViewer
+              key={comicEl}
+              vinetas={COMIC_ELEMENTO[comicEl]}
+              themeColor={ELEMENTOS[comicEl].color}
+              textColor="#ffffff"
+              disciplinaBgImage={FOTO_ELEMENTO[comicEl]}
+              disciplinaBgColor={ELEMENTOS[comicEl].color}
+              onClose={() => setComicEl(null)}
+              onComplete={() => { const el = comicEl; setComicEl(null); if (el) void marcarLeido(el); }}
+            />
+          )}
+        </ModalContent>
+      </Modal>
 
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 

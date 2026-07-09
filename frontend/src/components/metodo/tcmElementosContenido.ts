@@ -8,6 +8,7 @@
 // cada elemento vive en tcmRecorrido.ts (ELEMENTOS[el].miniTest).
 // ─────────────────────────────────────────────────────────────────────────
 import type { Elemento } from "./tcmRecorrido";
+import type { Vineta } from "./ComicViewer";
 
 export interface ParRige { clave: string; valor: string; }
 export interface FuncionElemento { titulo: string; texto: string; }
@@ -506,6 +507,16 @@ export const CONTENIDO_ELEMENTOS: Record<Elemento, ContenidoElementoRico> = {
   madera, fuego, tierra, metal, agua,
 };
 
+// Fotos artísticas de cada elemento (/public/img/tcm). Van dentro de los círculos
+// del radar y de la estrella. Madera = verde.png.
+export const FOTO_ELEMENTO: Record<Elemento, string> = {
+  madera: "/img/tcm/verde.png",
+  fuego: "/img/tcm/fuego.png",
+  tierra: "/img/tcm/tierra.png",
+  metal: "/img/tcm/metal.png",
+  agua: "/img/tcm/agua.png",
+};
+
 // Ilustración de cada elemento (mismas que el modal de Ilustraciones). Se muestra
 // junto al texto en cada momento del recorrido, como ancla visual del elemento.
 export const IMAGEN_ELEMENTO: Record<Elemento, string> = {
@@ -517,3 +528,23 @@ export const IMAGEN_ELEMENTO: Record<Elemento, string> = {
 };
 
 export const tieneContenido = (el: Elemento): boolean => !!CONTENIDO_ELEMENTOS[el];
+
+// ─────────────────────────────────────────────────────────────────────────
+// CÓMIC de cada elemento (se abre al pinchar el elemento en la estrella).
+// Cada viñeta = { src: foto, paragraphs: [texto] }. El fondo y el box del
+// visor usan la foto del elemento (FOTO_ELEMENTO).
+//
+// ✍️  PLACEHOLDER: por ahora usa los párrafos de la intro con la foto del
+//     elemento. Se reemplazará por los textos y viñetas exactos que dé María,
+//     elemento a elemento.
+// ─────────────────────────────────────────────────────────────────────────
+const comicDesde = (el: Elemento, textos: string[]): Vineta[] =>
+  textos.map((t) => ({ src: FOTO_ELEMENTO[el], paragraphs: [t] }));
+
+export const COMIC_ELEMENTO: Record<Elemento, Vineta[]> = {
+  madera: comicDesde("madera", madera.intro),
+  fuego: comicDesde("fuego", fuego.intro),
+  tierra: comicDesde("tierra", tierra.intro),
+  metal: comicDesde("metal", metal.intro),
+  agua: comicDesde("agua", agua.intro),
+};

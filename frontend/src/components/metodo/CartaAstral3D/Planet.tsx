@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Cuerpo } from "../astrologiaData";
@@ -73,8 +73,27 @@ export function Planet({ cuerpo, position, focused, onClick }: PlanetProps) {
     }
   });
 
+  // Al pasar el ratón por encima de un planeta pulsable, el cursor cambia a
+  // "mano" (pointer) para invitar a hacer clic, en vez de quedarse en flecha.
+  const onOver = onClick
+    ? () => { document.body.style.cursor = "pointer"; }
+    : undefined;
+  const onOut = onClick
+    ? () => { document.body.style.cursor = "auto"; }
+    : undefined;
+
+  // Al desmontar (p.ej. al cambiar de planeta enfocado) reseteamos el cursor
+  // por si el planeta se quita mientras el ratón estaba encima.
+  useEffect(() => () => { document.body.style.cursor = "auto"; }, []);
+
   return (
-    <group ref={groupRef} position={position} onClick={onClick}>
+    <group
+      ref={groupRef}
+      position={position}
+      onClick={onClick}
+      onPointerOver={onOver}
+      onPointerOut={onOut}
+    >
       <sprite ref={spriteRef} scale={[0.78, 0.78, 1]}>
         <spriteMaterial
           map={glyphTexture}
