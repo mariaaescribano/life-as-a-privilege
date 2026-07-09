@@ -4,6 +4,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
@@ -144,7 +145,7 @@ export default function MetodoAstrologiaCartaAstral() {
     onClick: () => navigate("/metodo/astrologia/lectura"),
     disabled: !todoCompletado || !hayPdf,
     disabledTooltip: !hayPdf
-      ? "María está leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada."
+      ? "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada."
       : "Lee todos los planetas antes de continuar",
   };
 
@@ -231,6 +232,7 @@ export default function MetodoAstrologiaCartaAstral() {
       />
 
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <IndiceAstrologia />
       <SiteFooter />
     </Box>
   );

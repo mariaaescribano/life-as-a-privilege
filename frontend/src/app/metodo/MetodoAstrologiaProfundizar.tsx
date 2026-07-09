@@ -193,7 +193,7 @@ export default function MetodoAstrologiaProfundizar() {
                   fontStyle="italic"
                   textAlign="center"
                 >
-                  El texto de profundización para esta combinación aún no está disponible. María lo añadirá pronto.
+                  El texto de profundización para esta combinación aún no está disponible. Lo añadiré pronto.
                 </Text>
               )}
             </Box>

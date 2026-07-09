@@ -131,7 +131,7 @@ export default function MetodoPsicologiaHuellas() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Huellas"
-            pageLabel="4/16"
+            pageLabel="6/18"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
@@ -350,7 +350,7 @@ const Pagina = ({
         {/* Cada ítem es su propia franja con una "foto" nueva; entre franjas,
             una raya de separación bien visible. */}
         {items.length === 0 ? (
-          <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}55`} borderBottom={`2px solid ${TINTA}55`}>
+          <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}`} borderBottom={`2px solid ${TINTA}55`}>
             <FotoFranja posicion="center 40%" />
             <Text position="relative" zIndex={1} color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
               Sin recuerdos escritos este año.
@@ -365,7 +365,7 @@ const Pagina = ({
                 position="relative"
                 px={{ base: 6, md: 8 }}
                 py={{ base: 4, md: 5 }}
-                borderTop={`2px solid ${TINTA}55`}
+                borderTop={`2px solid ${i === 0 ? TINTA : `${TINTA}55`}`}
                 // Línea de cierre del último ítem. Cuando hay scroll, ya la
                 // dibuja la "franja final vacía" de abajo, así que solo la
                 // añadimos aquí cuando esa franja no se renderiza (listas cortas).

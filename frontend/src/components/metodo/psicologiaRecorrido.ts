@@ -52,7 +52,7 @@ const lineaDeVida: ExperienciaPsicologia = {
 
   problemaInicial: {
     key: "problema-actual",
-    pregunta: "¿Qué problemas te acompañan?",
+    pregunta: "¿Qué problemas te acompañan hagas lo que hagas? ¿Qué se repite en tu vida?",
     apoyo: "",
     placeholder: "Empieza por aquí…",
   },
@@ -83,6 +83,48 @@ export const EXPERIENCIAS: ExperienciaPsicologia[] = [lineaDeVida];
 
 export const experienciaById = (id: string): ExperienciaPsicologia | undefined =>
   EXPERIENCIAS.find((e) => e.id === id);
+
+// ─────────────────────────────────────────────────────────────────────────
+// ÍNDICE DEL RECORRIDO · el orden canónico de todas las páginas.
+//
+// Fuente única de la verdad para el número de paso (X/total) y para el botón
+// «Índice» (popup con todas las páginas, pulsables). Si reordenas/añades una
+// página, cámbialo AQUÍ (y el número del header de esa página).
+// ─────────────────────────────────────────────────────────────────────────
+export interface PasoRecorrido {
+  /** Número de paso (1-based). */
+  n: number;
+  /** Título visible en el índice. */
+  titulo: string;
+  /** Ruta a la que salta (recibe el id de la experiencia). */
+  ruta: (expId: string) => string;
+}
+
+export const RECORRIDO_INDICE: PasoRecorrido[] = [
+  { n: 1,  titulo: "Vuelve a ti",     ruta: () => "/metodo/psicologia" },
+  { n: 2,  titulo: "Problemas",       ruta: (id) => `/metodo/psicologia/${id}/problema` },
+  { n: 3,  titulo: "ACE",             ruta: (id) => `/metodo/psicologia/${id}/ace` },
+  { n: 4,  titulo: "Resultado ACE",   ruta: (id) => `/metodo/psicologia/${id}/ace-resultado` },
+  { n: 5,  titulo: "Línea de Vida",   ruta: (id) => `/metodo/psicologia/${id}` },
+  { n: 6,  titulo: "Huellas",         ruta: (id) => `/metodo/psicologia/${id}/huellas` },
+  { n: 7,  titulo: "Nudos",           ruta: (id) => `/metodo/psicologia/${id}/nudos` },
+  { n: 8,  titulo: "Necesidades",     ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
+  { n: 9,  titulo: "Heridas",         ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
+  { n: 10, titulo: "Tus heridas",     ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
+  { n: 11, titulo: "Narra",           ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
+  { n: 12, titulo: "Relación",        ruta: (id) => `/metodo/psicologia/${id}/integracion` },
+  { n: 13, titulo: "Recuérdate",      ruta: (id) => `/metodo/psicologia/${id}/dones` },
+  { n: 14, titulo: "Dones",           ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
+  { n: 15, titulo: "Miedos",          ruta: (id) => `/metodo/psicologia/${id}/miedos` },
+  { n: 16, titulo: "Atrévete",        ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
+  { n: 17, titulo: "Integración",     ruta: (id) => `/metodo/psicologia/${id}/mapa` },
+  { n: 18, titulo: "Compromiso",      ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
+  { n: 19, titulo: "Brújula",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
+  { n: 20, titulo: "Síntesis",     ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
+];
+
+/** Total de pasos del recorrido (para las etiquetas X/total). */
+export const RECORRIDO_TOTAL = RECORRIDO_INDICE.length;
 
 // ─────────────────────────────────────────────────────────────────────────
 // La gestación · un nodo ANTES del año 0.
@@ -191,6 +233,38 @@ export interface LineaDeVidaData {
    *  por `key` de pregunta ("si" | "no"). La puntuación es el número de "si".
    *  No es un diagnóstico: es material de autoconocimiento (ver `AceData`). */
   ace?: AceData;
+  /** «Compromiso» (cierre del recorrido): el compromiso concreto que la persona
+   *  define consigo misma para empezar a vivir desde la integración y no desde
+   *  la herida. Dos preguntas de texto libre (ver `CompromisoData`). */
+  compromiso?: CompromisoData;
+  /** «Tu brújula»: mensaje de la persona a su yo del futuro para los momentos de
+   *  bloqueo. Cuatro preguntas guía (ver `BrujulaData`). */
+  brujula?: BrujulaData;
+}
+
+/** «Compromiso»: lo que la persona escribe en el cierre del recorrido. */
+export interface CompromisoData {
+  /** ¿Qué necesitaste que nadie pudo darte? */
+  necesitaste?: string;
+  /** ¿Cómo puedes empezar a dártelo hoy? */
+  dartelo?: string;
+}
+
+/** «Tu brújula» (después del compromiso): un mensaje libre de la persona a su yo
+ *  del futuro, para cuando vuelva a sentirse bloqueada. Una guía práctica para no
+ *  olvidar lo aprendido. */
+export interface BrujulaData {
+  /** Mensaje libre a su yo del futuro. */
+  mensaje?: string;
+  /** @deprecated Antiguas cuatro preguntas guía (herida/necesidad/miedo/don).
+   *  Se conservan para leer recorridos guardados con el formato anterior. */
+  herida?: string;
+  /** @deprecated ver `mensaje`. */
+  necesidad?: string;
+  /** @deprecated ver `mensaje`. */
+  miedo?: string;
+  /** @deprecated ver `mensaje`. */
+  don?: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -286,14 +360,36 @@ export interface RelacionHuellaNudo {
   huellas: string[];
   /** Nudos agrupados. */
   nudos: string[];
+  /** Necesidades no cubiertas agrupadas (etiquetas de `NECESIDADES`). */
+  necesidades?: string[];
   /** Descripción libre: lo que la persona reconoce. */
   texto: string;
 }
+
+/** «Necesidades no cubiertas»: las que la persona marcó como que le faltaron o
+ *  las vivió solo a veces (no plenamente recibidas). Son la tercera pieza de la
+ *  herida: Huella + Nudo + Necesidad no cubierta = Herida. Devuelve etiquetas. */
+export function necesidadesNoCubiertas(data: LineaDeVidaData): string[] {
+  const m = data?.necesidades || {};
+  return NECESIDADES
+    .filter((n) => m[n.key] === "falto" || m[n.key] === "a-veces")
+    .map((n) => n.necesidad);
+}
+
+// ── «Heridas» (listado) — textos editables ──
+export const HERIDAS_LISTA = {
+  titulo: "Tus heridas",
+  frase:
+    "Esto es lo que llevas dentro y tratabas de ocultarte. Ya no tienes que seguir fingiendo.",
+};
 
 // ── «Los Nudos» — textos editables ──
 export const NUDOS = {
   titulo: "Nudos",
   intro: [] as string[],
+  // Propósito de la página (se muestra bajo la pregunta principal).
+  proposito:
+    "Descubre las decisiones inconscientes, creencias y mecanismos de supervivencia que nacieron de esas experiencias.",
   apoyo:
     "Un nudo puede ser un miedo, una herida, una creencia, un conflicto repetido o una dificultad que parece acompañarte desde hace años. No busques explicaciones perfectas. Simplemente observa aquello que sientes presente en tu vida hoy.",
   pregunta: "¿Qué conflictos o nudos hay en tu Vida?",
@@ -367,8 +463,8 @@ export interface Necesidad {
 }
 
 export const NECESIDADES_INTRO = {
-  titulo: "Las necesidades de la infancia",
-  subtitulo: "Lo que todo niño necesita para crecer sano, y la respuesta que recibió de quienes lo cuidaron.",
+  titulo: "Necesidades no cubiertas",
+  subtitulo: "¿Qué necesitabas y no recibiste?",
   texto:
     "Ya has recordado tu historia y nombrado tus nudos. Detente ahora en lo que un niño necesita para crecer sano: abre cada necesidad y, sin juzgar a nadie, marca cómo lo viviste tú. No hay respuestas correctas: solo tu verdad.",
 };
@@ -566,6 +662,8 @@ export interface DonReconocido {
   texto: string;
   /** Arquetipos de la carta astral que la persona une a este don. */
   arquetipos: ArquetipoRef[];
+  /** Recuerdos («Lo que recordaste de ti») que la persona une a este don. */
+  recuerdos?: string[];
 }
 
 export interface PreguntaDon {
@@ -582,7 +680,7 @@ export const DONES_INTRO = {
     "Un don no es lo que aprendiste con esfuerzo: es lo que se te da con naturalidad, eso que los demás valoran en ti aunque tú no le des importancia. No busques la respuesta perfecta. Responde despacio, con sinceridad. Nadie más leerá esto.",
   // Página espejo: lo que va a ver.
   espejo:
-    "Estas son tus respuestas, junto a los arquetipos de tu carta astral. Léelas sin prisa. ¿Qué dones ves aparecer en ti? Nómbralos: son tuyos.",
+    "Relaciona lo que recordaste de ti con tus arquetipos. Encuentra así tus fortalezas. No te olvides de lo que ya eres y de todo de lo que ya eres capaz.",
 };
 
 // Las 15 preguntas que destilan el don. Abiertas: el usuario escribe.
@@ -684,7 +782,7 @@ export interface PreguntaMiedo {
 export const MIEDOS_ENFRENTAR_INTRO = {
   titulo: "Enfrenta tus miedos",
   intro:
-    "Ahora mira cada miedo de frente, de uno en uno. Una vez que se hace, dejan de ser tan grandes como parecían.",
+    "Detrás de nuestros miedos están nuestros mayores dones",
 };
 
 // Preguntas para enfrentar cada miedo (decatastrofizar + recursos + autocompasión).
@@ -899,12 +997,7 @@ export const ACE_CONSECUENCIAS = {
   titulo: "¿Qué se sabe de estas experiencias?",
   intro:
     "El estudio ACE observó una relación de «dosis-respuesta»: cuantas más experiencias adversas, mayor es el riesgo de dificultades más adelante. Importante: son probabilidades en grandes grupos de personas, no una predicción sobre ti.",
-  puntos: [
-    "A mayor puntuación, mayor riesgo de dificultades emocionales como ansiedad, depresión o baja autoestima.",
-    "Se asocia también con más dificultad para regular las emociones y para sostener relaciones sanas.",
-    "En la salud física, se ha relacionado con un mayor riesgo de enfermedades crónicas a lo largo de la vida.",
-    "Y con una mayor tendencia a buscar alivio en conductas de riesgo (tabaco, alcohol u otras).",
-  ],
+  puntos: [ ],
 };
 
 // Mensaje de esperanza y resiliencia — el cierre imprescindible para no dejar a
@@ -918,18 +1011,16 @@ export const ACE_ESPERANZA = {
     "Este recorrido —recordar, comprender, integrar— es exactamente ese trabajo. No estás mirando tu herida para quedarte en ella, sino para transformarla.",
   ],
   // Recordatorio honesto (coherente con el «Aviso importante» del inicio).
-  caveat:
-    "Este test no es un diagnóstico ni sustituye a una valoración profesional. Es solo una brújula para conocerte mejor. Si algo de esto remueve demasiado, busca apoyo: pedir ayuda también es cuidarse.",
 };
 
 /** Ruta pública del audio de estimulación bilateral (auriculares recomendados). */
 export const REGULACION_AUDIO_SRC = "/audio/estimulacion-bilateral.mp3";
 
 export const REGULACION = {
-  titulo: "Regulación",
-  // Reencuadre honesto: se vende la calma/descarga, no la cura del trauma.
+  titulo: "Narra",
+  // Reencuadre: narrar la experiencia para integrarla en la propia historia.
   intro:
-    "Este no es un ejercicio clínico ni sustituye a una terapia. Es un espacio para descargar y regularte: mientras escuchas el audio de estimulación bilateral, escribe lo que necesites. Ve despacio. Aquí nadie te lee.",
+    "La mejor forma de sanar es ponerle narrativa a la experiencia traumática para integrarla en tu historia. Se recomienda pedir una llamada para este apartado.",
   // Preparación (lugar seguro) antes de tocar nada.
   preparacion: {
     titulo: "Antes de empezar",

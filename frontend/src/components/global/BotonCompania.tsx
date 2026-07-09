@@ -45,7 +45,7 @@ export function BotonCompania({
   precio = 20,
   etiqueta = "¿Quieres compañía?",
   titulo = "¿Prefieres hacerlo acompañado?",
-  texto = "Puedes recorrer este tramo junto a María. Agenda una llamada, no hace falta hacerlo todo de forma individual.",
+  texto = "Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.",
   llamadaTitulo = "Reserva tu llamada",
   llamadaSubtitulo,
 }: BotonCompaniaProps) {

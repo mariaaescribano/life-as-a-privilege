@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -443,6 +444,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
 
       {ilustracionesModal}
 
+      <IndiceAyurveda />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />

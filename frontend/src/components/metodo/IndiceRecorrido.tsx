@@ -1,0 +1,165 @@
+// ─────────────────────────────────────────────────────────────────────────
+// IndiceRecorrido · botón flotante «☰ Índice» + popup con todas las páginas del
+// recorrido, numeradas y pulsables. La página actual se detecta por la ruta y
+// se resalta. Al pulsar una página, salta directamente.
+//
+// Se renderiza desde AyudaRecorrido (presente en todas las páginas), así que
+// aparece en todo el recorrido sin tocar cada página.
+// ─────────────────────────────────────────────────────────────────────────
+import React, { useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { RECORRIDO_INDICE, RECORRIDO_TOTAL, type PasoRecorrido } from "./psicologiaRecorrido";
+import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
+
+const PAPEL = "#fbf4e8";
+
+// Botón + índice, reutilizable por cualquier disciplina. Por defecto usa el
+// recorrido y los colores de psicología; pásale `indice`/`total` y los colores
+// de otra disciplina para reutilizarlo (p. ej. astrología).
+export function IndiceRecorrido({
+  indice = RECORRIDO_INDICE,
+  total = RECORRIDO_TOTAL,
+  tinta = neuropsicologiaTxt,
+  bg = neuropsicologiaBg,
+  nom = neuropsicologiaNom,
+  defaultExpId = "linea-de-vida",
+  paramKey = "experienciaId",
+  acento,
+}: {
+  indice?: PasoRecorrido[];
+  total?: number;
+  tinta?: string;
+  bg?: string;
+  nom?: string;
+  defaultExpId?: string;
+  /** Nombre del parámetro de ruta que identifica el recorrido (psicología usa
+   *  «experienciaId»; ayurveda usa «dosha»). */
+  paramKey?: string;
+  /** Color de acento para resaltar la página actual y los números. Por defecto
+   *  la propia tinta; ayurveda le pasa el color del dosha para diferenciarlo. */
+  acento?: string;
+} = {}) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams<Record<string, string>>();
+  const [open, setOpen] = useState(false);
+  useLockBodyScroll(open);
+
+  const TINTA = tinta;
+  const ACENTO = acento || tinta;
+  const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${bg}`;
+
+  // El id del recorrido: el de la URL (según `paramKey`) o el por defecto.
+  const expId = params[paramKey] || defaultExpId;
+
+  // Página actual: la del índice cuya ruta coincide con la URL (la más larga
+  // que casa, para que «/…/linea-de-vida» no la robe la página base).
+  const pathname = location.pathname.replace(/\/+$/, "");
+  const actual = indice
+    .filter((p) => p.ruta(expId).replace(/\/+$/, "") === pathname)
+    .sort((a, b) => b.ruta(expId).length - a.ruta(expId).length)[0]?.n ?? null;
+
+  const ir = (p: PasoRecorrido) => {
+    setOpen(false);
+    navigate(p.ruta(expId));
+  };
+
+  return (
+    <>
+      {/* Botón flotante (abajo a la izquierda, sobre «Mis notas») */}
+      <Flex
+        as="button"
+        onClick={() => setOpen(true)}
+        position="fixed"
+        bottom={{ base: "74px", md: "88px" }}
+        left={{ base: "16px", md: "26px" }}
+        zIndex={1000}
+        align="center"
+        gap={2}
+        pl={{ base: 3, md: 4 }}
+        pr={{ base: 4, md: 5 }}
+        py={{ base: "9px", md: "12px" }}
+        borderRadius="full"
+        overflow="hidden"
+        border={`1.5px solid ${TINTA}`}
+        boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${bg}66`}
+        cursor="pointer"
+        transition="all 0.22s ease"
+        _hover={{ transform: "translateY(-2px)", boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 26px ${bg}aa` }}
+        aria-label="Abrir índice del recorrido"
+      >
+        <DisciplinaBgLayer nom={nom} borderRadius="full" />
+        <Box as="span" position="relative" zIndex={1} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1"
+             style={{ textShadow: `0 1px 6px ${PAPEL}` }}>☰</Box>
+        <Text position="relative" zIndex={1} color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
+              fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em" lineHeight="1"
+              style={{ textShadow: `0 1px 6px ${PAPEL}` }}>
+          Índice
+        </Text>
+      </Flex>
+
+      {/* Popup con el índice */}
+      {open && (
+        <Box position="fixed" inset={0} zIndex={2500} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
+             sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+             onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="640px" my="auto"
+               borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}
+                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
+                       "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
+              <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={2}
+                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+
+              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}
+                    style={{ textShadow: INK_SHADOW }}>
+                Índice del recorrido
+              </Text>
+              <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+              <Box display="grid" gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }} gap={{ base: 2.5, md: 3 }}>
+                {indice.map((p) => {
+                  const esActual = p.n === actual;
+                  return (
+                    <Flex key={p.n} as="button" onClick={() => ir(p)} align="center" gap={3} textAlign="left" w="100%"
+                          px={{ base: 3, md: 3.5 }} py={{ base: 2.5, md: 3 }} borderRadius="xl"
+                          bg={esActual ? ACENTO : "rgba(255,251,243,0.62)"}
+                          border={`1.5px solid ${esActual ? ACENTO : `${TINTA}2e`}`}
+                          boxShadow={esActual ? `0 4px 16px ${ACENTO}55` : "none"}
+                          cursor="pointer" transition="all 0.16s"
+                          _hover={{ transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)",
+                                    boxShadow: esActual ? `0 6px 20px ${ACENTO}66` : `0 2px 10px ${ACENTO}22` }}>
+                      <Flex flexShrink={0} align="center" justify="center" w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }}
+                            borderRadius="full" bg={esActual ? PAPEL : `${ACENTO}`}
+                            color={esActual ? ACENTO : PAPEL} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>
+                        {p.n}
+                      </Flex>
+                      <Text flex="1" minW={0} color={esActual ? PAPEL : TINTA} fontWeight={esActual ? "700" : "600"}
+                            fontSize={{ base: "sm", md: "md" }} lineHeight="1.25" noOfLines={1}
+                            style={esActual ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
+                        {p.titulo}
+                      </Text>
+                    </Flex>
+                  );
+                })}
+              </Box>
+
+              <Text color={TINTA} fontSize="xs" textAlign="center" opacity={0.6} mt={5}
+                    style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+                {total} páginas · pulsa una para ir
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </>
+  );
+}

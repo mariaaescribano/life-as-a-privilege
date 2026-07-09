@@ -12,6 +12,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -196,6 +197,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                   <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.04em" mb={3}>
                     {e.pregunta}
                   </Text>
+                  <Box h="1px" w="100%" mb={4} bgGradient={`linear(to-r, ${ayurvedaTxt}55, transparent)`} />
                   <Flex align="stretch" gap={4}>
                     <Box flexShrink={0} w="4px" borderRadius="full" bg={meta.color} />
                     <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.8">
@@ -306,6 +308,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
       </Flex>
 
       {ilustracionesModal}
+      <IndiceAyurveda />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>

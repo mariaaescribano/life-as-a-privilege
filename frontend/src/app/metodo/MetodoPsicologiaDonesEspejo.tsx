@@ -20,6 +20,7 @@ import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
@@ -103,8 +104,13 @@ function coercionarDones(raw: unknown): DonReconocido[] {
   if (!Array.isArray(raw)) return [];
   return raw.map((x: any) =>
     typeof x === "string"
-      ? { id: nuevoId(), texto: x, arquetipos: [] }
-      : { id: x?.id || nuevoId(), texto: typeof x?.texto === "string" ? x.texto : "", arquetipos: Array.isArray(x?.arquetipos) ? x.arquetipos : [] },
+      ? { id: nuevoId(), texto: x, arquetipos: [], recuerdos: [] }
+      : {
+          id: x?.id || nuevoId(),
+          texto: typeof x?.texto === "string" ? x.texto : "",
+          arquetipos: Array.isArray(x?.arquetipos) ? x.arquetipos : [],
+          recuerdos: Array.isArray(x?.recuerdos) ? x.recuerdos : [],
+        },
   );
 }
 
@@ -216,7 +222,7 @@ export default function MetodoPsicologiaDonesEspejo() {
     let id = activaId;
     let base = dones;
     if (!id || !base.some((x) => x.id === id)) {
-      const nueva: DonReconocido = { id: nuevoId(), texto: "", arquetipos: [] };
+      const nueva: DonReconocido = { id: nuevoId(), texto: "", arquetipos: [], recuerdos: [] };
       base = [...base, nueva]; id = nueva.id; setActivaId(id);
     }
     commit(base.map((x) => (x.id === id ? mut(x) : x)));
@@ -230,10 +236,20 @@ export default function MetodoPsicologiaDonesEspejo() {
         : [...d.arquetipos, { cuerpoKey: a.cuerpoKey, faceta: a.faceta, signo: a.signo, casa: a.casa }],
     }));
 
+  const toggleRecuerdo = (texto: string) =>
+    conActiva((d) => ({
+      ...d,
+      recuerdos: (d.recuerdos || []).includes(texto)
+        ? (d.recuerdos || []).filter((x) => x !== texto)
+        : [...(d.recuerdos || []), texto],
+    }));
+
   const updateTexto = (id: string, texto: string) =>
     commit(dones.map((d) => (d.id === id ? { ...d, texto } : d)));
   const removeArq = (id: string, a: ArquetipoRef) =>
     commit(dones.map((d) => (d.id === id ? { ...d, arquetipos: d.arquetipos.filter((x) => arquetipoKey(x) !== arquetipoKey(a)) } : d)));
+  const removeRecuerdo = (id: string, texto: string) =>
+    commit(dones.map((d) => (d.id === id ? { ...d, recuerdos: (d.recuerdos || []).filter((x) => x !== texto) } : d)));
   const borrarDon = (id: string) => {
     const next = dones.filter((d) => d.id !== id);
     commit(next);
@@ -260,6 +276,7 @@ export default function MetodoPsicologiaDonesEspejo() {
 
   const activa = dones.find((d) => d.id === activaId) || null;
   const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
+  const recuerdoEnActiva = (texto: string) => !!activa?.recuerdos?.includes(texto);
 
   // Solo las RESPUESTAS (sin la pregunta) — más impactante.
   const respondidas = DONES_PREGUNTAS
@@ -280,7 +297,7 @@ export default function MetodoPsicologiaDonesEspejo() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 12, total: 16 }}
+              step={{ current: 14, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Recuérdate", onClick: irARecuerdate }}
@@ -288,10 +305,7 @@ export default function MetodoPsicologiaDonesEspejo() {
             />
 
             {/* Intro */}
-            <Text color={CREMA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.7" maxW="700px" style={{ textShadow: "0 1px 12px rgba(0,0,0,0.35)" }}>
-              {DONES_INTRO.espejo}
-            </Text>
+            <IntroRecorrido>{DONES_INTRO.espejo}</IntroRecorrido>
 
             {/* ════════ TRES COLUMNAS: lo que escribiste · arquetipos · unir ════════ */}
             <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} align="stretch">
@@ -305,7 +319,11 @@ export default function MetodoPsicologiaDonesEspejo() {
                     <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
                       <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
                             letterSpacing="0.03em" style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                        Lo que escribiste
+                        Lo que recordaste de ti
+                      </Text>
+                      <Text color={TINTA} fontSize="xs" fontStyle="italic" textAlign="center" opacity={0.82} mt={1.5}
+                            style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+                        Toca lo que quieras unir al don activo.
                       </Text>
                       <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
                            bgGradient={`linear(to-r, transparent, ${TINTA}88, transparent)`} />
@@ -313,14 +331,23 @@ export default function MetodoPsicologiaDonesEspejo() {
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_TINTA}>
                       {respondidas.length > 0 ? (
                         <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
-                          {respondidas.map((r, i) => (
-                            <Box key={i} borderRadius="xl" bg="rgba(255,251,243,0.66)" border={`1px solid ${TINTA}26`}
-                                 px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}>
-                              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65">
-                                {r}
-                              </Text>
-                            </Box>
-                          ))}
+                          {respondidas.map((r, i) => {
+                            const on = recuerdoEnActiva(r);
+                            return (
+                              <Flex as="button" key={i} onClick={() => toggleRecuerdo(r)} textAlign="left" w="100%"
+                                    align="flex-start" gap={2.5} borderRadius="xl"
+                                    bg={on ? `${ORO}2e` : "rgba(255,251,243,0.66)"}
+                                    border={`1.5px solid ${on ? ORO : `${TINTA}26`}`}
+                                    boxShadow={on ? `0 0 14px ${ORO}55` : "none"}
+                                    px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }} cursor="pointer" transition="all 0.16s"
+                                    _hover={{ transform: "translateY(-1px)", boxShadow: on ? `0 0 18px ${ORO}77` : `0 0 10px ${TINTA}22` }}>
+                                <Text flex="1" color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65">
+                                  {r}
+                                </Text>
+                                {on && <Box as="span" color={TINTA} fontWeight="700" flexShrink={0} mt="2px">✓</Box>}
+                              </Flex>
+                            );
+                          })}
                         </Flex>
                       ) : (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={4} textAlign="center" px={4}>
@@ -403,6 +430,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                                      onActivar={() => setActivaId(d.id)}
                                      onTexto={(v) => updateTexto(d.id, v)}
                                      onQuitarArq={(a) => removeArq(d.id, a)}
+                                     onQuitarRecuerdo={(t) => removeRecuerdo(d.id, t)}
                                      onBorrar={() => borrarDon(d.id)} />
                           ))}
                         </Flex>
@@ -526,11 +554,14 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
   );
 }
 
-// Una etiqueta de don: su nombre + los arquetipos unidos. Editable, elegante.
-function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onBorrar }: {
+// Una etiqueta de don: su nombre + los recuerdos y arquetipos unidos. Editable.
+function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onQuitarRecuerdo, onBorrar }: {
   d: DonReconocido; activa: boolean;
-  onActivar: () => void; onTexto: (v: string) => void; onQuitarArq: (a: ArquetipoRef) => void; onBorrar: () => void;
+  onActivar: () => void; onTexto: (v: string) => void;
+  onQuitarArq: (a: ArquetipoRef) => void; onQuitarRecuerdo: (t: string) => void; onBorrar: () => void;
 }) {
+  const recuerdos = d.recuerdos || [];
+  const vacio = d.arquetipos.length === 0 && recuerdos.length === 0;
   return (
     <Box onClick={onActivar} position="relative" borderRadius="xl" overflow="hidden" cursor="pointer"
          bg="rgba(255,251,243,0.88)" border={`1px solid ${activa ? ORO : `${TINTA}33`}`}
@@ -551,17 +582,21 @@ function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onBorrar }: {
                _hover={{ bg: `${TINTA}26` }} title="Borrar don">✕</Box>
         </Flex>
 
-        {/* Arquetipos unidos */}
+        {/* Recuerdos + arquetipos unidos */}
         <Box borderRadius="lg" border={`1.5px dashed ${activa ? `${ORO}aa` : `${TINTA}33`}`}
              bg={`${TINTA}06`} px={3} py={2.5} minH="46px">
-          {d.arquetipos.length === 0 ? (
+          {vacio ? (
             <Flex align="center" justify="center" minH="30px" textAlign="center">
               <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">
-                {activa ? "Toca arriba una carta de «Tus arquetipos» para unirla." : "Pulsa este don para activarlo."}
+                {activa ? "Toca arriba lo que recordaste o una carta de «Tus arquetipos» para unirlo." : "Pulsa este don para activarlo."}
               </Text>
             </Flex>
           ) : (
             <Flex wrap="wrap" gap={2}>
+              {recuerdos.map((r) => (
+                <Chip key={`r-${r}`} onRemove={() => onQuitarRecuerdo(r)}
+                      icon={<RecuerdoGlyph />} label={r} maxLabelW="150px" />
+              ))}
               {d.arquetipos.map((a) => (
                 <Chip key={arquetipoKey(a)} onRemove={() => onQuitarArq(a)}
                       icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={14} />}
@@ -575,12 +610,21 @@ function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onBorrar }: {
   );
 }
 
-function Chip({ icon, label, onRemove }: { icon: React.ReactNode; label: string; onRemove: () => void }) {
+// Glifo de «recuerdo» (lo que la persona recordó de sí): una cita/comilla.
+const RecuerdoGlyph = () => (
+  <Box as="span" lineHeight="1" flexShrink={0} style={{ fontSize: "14px", color: TINTA }}>❝</Box>
+);
+
+function Chip({ icon, label, onRemove, maxLabelW }: {
+  icon: React.ReactNode; label: string; onRemove: () => void; maxLabelW?: string;
+}) {
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
-          bg={`${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}44`}>
+          bg={`${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}44`} maxW="100%">
       {icon}
-      <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
+      <Text fontSize="xs" fontWeight="600" lineHeight="1.2" maxW={maxLabelW} noOfLines={maxLabelW ? 1 : undefined}>
+        {label}
+      </Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"
            bg={`${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
            fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title="Quitar">✕</Box>

@@ -35,7 +35,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Conócete sin juicios",
         items: [
-          "Comprende qué fuerzas mueven tu personalidad, qué conflictos internos se repiten y por qué vuelves una y otra vez a los mismos patrones. Todo ello a través de una lectura interpretada por María.",
+          "Comprende qué fuerzas mueven tu personalidad, qué conflictos internos se repiten y por qué vuelves una y otra vez a los mismos patrones. Todo ello a través de una lectura que interpreto personalmente.",
         ],
       },
       {
@@ -47,7 +47,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Acompañamiento personal: No estás solo",
         items: [
-          "Si quieres profundizar, puedes agendar sesiones con María para lo que necesites. Comprenderás mejor tu carta y aprenderás a utilizarla como una herramienta de autoconocimiento para toda tu Vida.",
+          "Si quieres profundizar, puedes agendar sesiones conmigo para lo que necesites. Comprenderás mejor tu carta y aprenderás a utilizarla como una herramienta de autoconocimiento para toda tu Vida.",
         ],
         aviso: "Opcional. Se cobra aparte",
       },

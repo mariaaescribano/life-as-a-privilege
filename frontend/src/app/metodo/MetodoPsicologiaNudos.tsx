@@ -127,7 +127,7 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 5, total: 16 }}
+              step={{ current: 7, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
@@ -155,6 +155,9 @@ export default function MetodoPsicologiaNudos() {
                       {NUDOS.pregunta}
                     </Text>
                   </Flex>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
+                    {NUDOS.proposito}
+                  </Text>
                 </Flex>
 
                 {/* Entrada para añadir nudos */}

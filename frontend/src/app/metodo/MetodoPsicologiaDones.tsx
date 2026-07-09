@@ -191,7 +191,7 @@ export default function MetodoPsicologiaDones() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 11, total: 16 }}
+              step={{ current: 13, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Relación", onClick: irARelacion }}

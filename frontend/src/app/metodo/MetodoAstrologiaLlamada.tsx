@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { AgendarLlamada } from "../../components/global/AgendarLlamada";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
@@ -49,6 +49,16 @@ export default function MetodoAstrologiaLlamada() {
             next={{ label: "Cursos →", onClick: () => navigate("/metodo/astrologia/cursos") }}
           />
 
+          <Text
+            color={`${astrologiaTxt}ee`}
+            fontSize={{ base: "md", md: "lg" }}
+            textAlign="center"
+            lineHeight="1.8"
+            style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
+          >
+            Integra tus arquetipos: agenda una llamada y no te quedes con dudas.
+          </Text>
+
           <AgendarLlamada
             color={astrologiaTxt}
             bgColor={astrologiaBg}
@@ -56,42 +66,12 @@ export default function MetodoAstrologiaLlamada() {
             precio={20}
             titulo="Reserva tu llamada de astrología"
           />
-
-          {/* Nota debajo del box de la llamada, con fondo de astrología */}
-          <Box
-            position="relative"
-            w="100%"
-            borderRadius="2xl"
-            overflow="hidden"
-            boxShadow={`0 0 18px rgba(255,255,255,0.1), 0 0 30px ${astrologiaTxt}1a`}
-          >
-            <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
-              <Text
-                color={`${astrologiaTxt}ee`}
-                fontSize={{ base: "md", md: "lg" }}
-                lineHeight="1.9"
-                style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
-              >
-                Da el paso para integrar tus arquetipos: agenda una llamada y no te quedes con dudas.
-              </Text>
-              <Text
-                color={`${astrologiaTxt}bb`}
-                fontSize={{ base: "xs", md: "sm" }}
-                fontStyle="italic"
-                mt={3}
-                lineHeight="1.6"
-                style={{ textShadow: `0 0 8px ${astrologiaTxt}33` }}
-              >
-                La llamada es opcional pero recomendada. Puedes avanzar a los cursos.
-              </Text>
-            </Box>
-          </Box>
         </Flex>
       </Flex>
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
 
+      <IndiceAstrologia />
       <SiteFooter />
     </Box>
   );

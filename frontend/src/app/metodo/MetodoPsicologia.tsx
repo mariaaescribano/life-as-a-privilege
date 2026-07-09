@@ -128,8 +128,8 @@ export default function MetodoPsicologia() {
 
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Vuelve"
-            pageLabel="1/16"
+            title="Vuelve a ti"
+            pageLabel="1/18"
             bgColor={`${neuropsicologiaBg}dd`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
@@ -155,25 +155,38 @@ export default function MetodoPsicologia() {
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
-                fontSize={{ base: "3xl", md: "5xl" }}
-                fontWeight="700"
-                letterSpacing="0.02em"
-                lineHeight="1.2"
-                mb={5}
-                style={{ textShadow: INK_SHADOW }}
-              >
-                Vuelve a tu historia
-              </Text>
-              <Text
-                color={TINTA}
                 fontSize={{ base: "sm", md: "md" }}
                 lineHeight="1.8"
-                opacity={0.72}
                 maxW="560px"
                 mx="auto"
+                style={{ textShadow: INK_SHADOW }}
               >
-                Antes de comprender tu mente, hay que recordar la Vida que te formó. Esta sección de El Recorrido es para reconstruir tu historia. El propósito es volver a unir tus fragmentaciones.
+                Nuestra historia marca nuestra Vida, todo lo que no hemos gestionado o que hemos callado sigue pulsando y guiando nuestro pensamiento. En este recorrido te conocerás en profundidad y verás con claridad dónde estás, por qué y para qué. El propósito es volver a unir tus fragmentaciones.
               </Text>
+
+              {/* ── Recomendación: no hacerlo en solitario ── */}
+              <Box mt={{ base: 7, md: 9 }} mx="auto" maxW="560px">
+                <Box h="1px" w="55%" maxW="220px" mx="auto" mb={{ base: 6, md: 7 }} bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
+                <Text
+                  color={TINTA}
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="700"
+                  letterSpacing="0.04em"
+                  lineHeight="1.6"
+                  mb={3}
+                  style={{ textShadow: INK_SHADOW }}
+                >
+                  Se recomienda no hacer este recorrido de manera individual.
+                </Text>
+                <Text
+                  color={TINTA}
+                  fontSize={{ base: "sm", md: "md" }}
+                  lineHeight="1.8"
+                  style={{ textShadow: INK_SHADOW }}
+                >
+                  Aunque si llevas años en terapia y trabajando en ti, es posible. Sea como sea, siempre tendrás el botón abajo a la derecha por si necesitas mi ayuda.
+                </Text>
+              </Box>
             </Box>
           </Box>
 

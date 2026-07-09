@@ -10,6 +10,7 @@ import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle"
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { useCursosData } from "../../data/cursosApi";
@@ -189,6 +190,7 @@ export default function MetodoAyurvedaDoshaCursos() {
         onTest={testPagos ? testUnlockTcm : undefined}
       />
 
+      <IndiceAyurveda />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>

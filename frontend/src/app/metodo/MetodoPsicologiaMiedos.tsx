@@ -140,11 +140,11 @@ export default function MetodoPsicologiaMiedos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 13, total: 16 }}
+              step={{ current: 15, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Dones", onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`) }}
-              next={{ label: "Enfréntalos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`) }}
+              next={{ label: "Atrévete →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`) }}
             />
 
             {/* Box principal: pregunta + entrada + ejemplos */}

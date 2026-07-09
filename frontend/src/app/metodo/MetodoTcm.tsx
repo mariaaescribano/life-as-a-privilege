@@ -159,17 +159,6 @@ export default function MetodoTcm() {
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
-                fontSize={{ base: "3xl", md: "5xl" }}
-                fontWeight="700"
-                letterSpacing="0.02em"
-                lineHeight="1.2"
-                mb={5}
-                style={{ textShadow: INK_SHADOW }}
-              >
-                El equilibrio con la naturaleza
-              </Text>
-              <Text
-                color={TINTA}
                 fontSize={{ base: "sm", md: "md" }}
                 lineHeight="1.9"
                 opacity={0.9}

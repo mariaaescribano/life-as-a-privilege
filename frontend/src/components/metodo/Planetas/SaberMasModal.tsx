@@ -319,7 +319,17 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           {/* Navegación del carrusel — solo cuando hay dos facetas (signo + casa).
               Se lee una, y con el botón se pasa a la siguiente (y se puede volver). */}
           {multi && (
-            <Flex align="center" justify="center" gap={4} mt={{ base: 7, md: 8 }}>
+            <>
+            {/* Ralla horizontal que separa el texto de la navegación */}
+            <Box
+              h="1px"
+              w="60%"
+              mx="auto"
+              mt={{ base: 7, md: 8 }}
+              bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}
+              boxShadow={`0 0 6px ${color}33`}
+            />
+            <Flex align="center" justify="center" gap={4} mt={{ base: 5, md: 6 }}>
               <Box
                 as="button"
                 onClick={() => irSlide(idx - 1)}
@@ -386,6 +396,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
                 <Text fontSize="2xl" lineHeight="1">›</Text>
               </Box>
             </Flex>
+            </>
           )}
 
         </Box>

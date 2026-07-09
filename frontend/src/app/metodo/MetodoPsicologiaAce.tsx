@@ -14,27 +14,21 @@
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Box, Flex, Text,
-  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
-} from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
   experienciaById,
   ACE_INTRO,
   ACE_PREGUNTAS,
-  ACE_CONSECUENCIAS,
-  ACE_ESPERANZA,
-  aceScore,
   aceRespondidas,
   aceCompleto,
-  aceBanda,
   type LineaDeVidaData,
   type AceRespuesta,
 } from "../../components/metodo/psicologiaRecorrido";
@@ -59,7 +53,6 @@ export default function MetodoPsicologiaAce() {
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, AceRespuesta>>({});
   const [guardando, setGuardando] = useState(false);
-  const [infoOpen, setInfoOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
   const resultadoRef = useRef<HTMLDivElement | null>(null);
   const yaCompleto = useRef(false);
@@ -112,7 +105,7 @@ export default function MetodoPsicologiaAce() {
     ).catch(() => { /* silencioso */ }).finally(() => setGuardando(false));
 
     // Al completar la última respuesta por primera vez, llevamos la vista al
-    // resultado con suavidad (sin robar el foco si la persona ya lo había visto).
+    // botón de resultado con suavidad.
     const data: LineaDeVidaData = { ...dataRef.current, ace: { respuestas: next } };
     if (aceCompleto(data) && !yaCompleto.current) {
       yaCompleto.current = true;
@@ -129,8 +122,6 @@ export default function MetodoPsicologiaAce() {
   const respondidas = aceRespondidas(data);
   const total = ACE_PREGUNTAS.length;
   const completo = aceCompleto(data);
-  const score = aceScore(data);
-  const banda = aceBanda(score);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -145,39 +136,21 @@ export default function MetodoPsicologiaAce() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 7, total: 16 }}
+            step={{ current: 3, total: 20 }}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Necesidades", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
-            next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
+            prev={{ label: "← Problemas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
+            next={{
+              label: "Resultado →",
+              onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`),
+              disabled: !completo,
+              disabledTooltip: "Responde las 10 preguntas para ver tu resultado.",
+            }}
           />
 
           {/* ── Sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}
           <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} w="100%" maxW="640px">
-            <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
-                  textAlign="center" lineHeight="1.6" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.3)" }}>
-              {ACE_INTRO.subtituloTurquesa}
-            </Text>
-
-            <Box
-              as="button"
-              onClick={() => setInfoOpen(true)}
-              px={5}
-              py={2}
-              borderRadius="full"
-              bg="rgba(255,255,255,0.1)"
-              border="1px solid rgba(255,255,255,0.45)"
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.04em"
-              cursor="pointer"
-              transition="all 0.2s"
-              _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-1px)" }}
-            >
-              ¿Qué es el test ACE?
-            </Box>
+            <IntroRecorrido>{ACE_INTRO.subtituloTurquesa}</IntroRecorrido>
 
             {/* Progreso */}
             <Flex align="center" gap={3} w="100%" maxW="380px">
@@ -194,7 +167,7 @@ export default function MetodoPsicologiaAce() {
 
           {/* ── Las 10 preguntas ── */}
           <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
-            {ACE_PREGUNTAS.map((p, i) => {
+            {ACE_PREGUNTAS.map((p) => {
               const elegido = respuestas[p.key];
               return (
                 <Box key={p.key} position="relative" w="100%" borderRadius="2xl" overflow="hidden"
@@ -206,10 +179,6 @@ export default function MetodoPsicologiaAce() {
 
                     {/* Texto de la pregunta */}
                     <Box flex="1" minW={0}>
-                      <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.16em"
-                            textTransform="uppercase" opacity={0.6} mb={1.5} style={{ textShadow: INK_SHADOW }}>
-                        {i + 1}. {p.categoria}
-                      </Text>
                       <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.5"
                             style={{ textShadow: INK_SHADOW }}>
                         {p.pregunta}
@@ -227,7 +196,6 @@ export default function MetodoPsicologiaAce() {
                       {(["si", "no"] as AceRespuesta[]).map((op) => {
                         const activo = elegido === op;
                         const esSi = op === "si";
-                        const acento = esSi ? "#c5613e" : "#3f9d6b";
                         return (
                           <Box
                             key={op}
@@ -237,18 +205,18 @@ export default function MetodoPsicologiaAce() {
                             px={5}
                             py={2.5}
                             borderRadius="full"
-                            bg={activo ? acento : "rgba(255,251,243,0.55)"}
-                            border={`1.5px solid ${activo ? acento : `${TINTA}55`}`}
+                            bg={activo ? TINTA : "rgba(255,251,243,0.55)"}
+                            border={`1.5px solid ${activo ? TINTA : `${TINTA}55`}`}
                             color={activo ? PAPEL : TINTA}
                             fontFamily="'EB Garamond', serif"
                             fontWeight="700"
                             fontSize={{ base: "md", md: "md" }}
                             letterSpacing="0.03em"
                             cursor="pointer"
-                            boxShadow={activo ? `0 4px 16px ${acento}66` : "none"}
+                            boxShadow={activo ? `0 4px 16px ${TINTA}66` : "none"}
                             transition="all 0.18s"
-                            _hover={{ transform: "translateY(-2px)", bg: activo ? acento : `${acento}22`,
-                                      boxShadow: `0 6px 20px ${acento}55` }}
+                            _hover={{ transform: "translateY(-2px)", bg: activo ? TINTA : `${TINTA}22`,
+                                      boxShadow: `0 6px 20px ${TINTA}55` }}
                             style={activo ? { textShadow: "0 1px 3px rgba(60,28,10,0.45)" } : { textShadow: `0 1px 2px ${PAPEL}` }}
                           >
                             {esSi ? "Sí" : "No"}{activo ? " ✓" : ""}
@@ -266,155 +234,39 @@ export default function MetodoPsicologiaAce() {
             <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">Guardando…</Text>
           )}
 
-          {/* ── Resultado (aparece al completar las 10) ── */}
+          {/* ── Al completar las 10: invitación a ver el resultado ── */}
           {completo && (
             <Box ref={resultadoRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
-              <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
-
-                {/* Puntuación + banda */}
-                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                     border={azulBorde} boxShadow={glowPanel}>
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                  <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
-                        gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}>
-                    <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em"
-                          textTransform="uppercase" opacity={0.65} style={{ textShadow: INK_SHADOW }}>
-                      Tu puntuación ACE
-                    </Text>
-
-                    {/* Círculo con la cifra */}
-                    <Flex align="center" justify="center" w={{ base: "116px", md: "134px" }} h={{ base: "116px", md: "134px" }}
-                          borderRadius="full" bg="rgba(255,251,243,0.72)" border={`3px solid ${banda.color}`}
-                          boxShadow={`0 0 26px ${banda.color}66`} sx={{ backdropFilter: "blur(4px)" }}>
-                      <Text color={banda.color} fontSize={{ base: "5xl", md: "6xl" }} fontWeight="700" lineHeight="1"
-                            style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                        {score}
-                      </Text>
-                      <Text color={`${banda.color}cc`} fontSize={{ base: "xl", md: "2xl" }} fontWeight="600"
-                            alignSelf="flex-end" mb={{ base: 4, md: 5 }}>
-                        /10
-                      </Text>
-                    </Flex>
-
-                    <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
-                          style={{ textShadow: INK_SHADOW }}>
-                      {banda.titulo}
-                    </Text>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                          maxW="560px" style={{ textShadow: INK_SHADOW }}>
-                      {banda.texto}
-                    </Text>
-                  </Flex>
-                </Box>
-
-                {/* Consecuencias (dosis-respuesta) */}
-                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                     border={azulBorde} boxShadow={glowPanel}>
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                  <Flex position="relative" zIndex={1} direction="column" gap={{ base: 4, md: 5 }}
-                        px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                    <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                          lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                      {ACE_CONSECUENCIAS.titulo}
-                    </Text>
-                    <Box h="1px" w="55%" maxW="240px" mx="auto"
-                         bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                          style={{ textShadow: INK_SHADOW }}>
-                      {ACE_CONSECUENCIAS.intro}
-                    </Text>
-                    <Flex direction="column" gap={3}>
-                      {ACE_CONSECUENCIAS.puntos.map((p, i) => (
-                        <Flex key={i} align="flex-start" gap={3}>
-                          <Box mt="9px" w="7px" h="7px" borderRadius="full" bg={TINTA} flexShrink={0}
-                               boxShadow={`0 0 8px ${TINTA}88`} />
-                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" opacity={0.92}
-                                style={{ textShadow: INK_SHADOW }}>
-                            {p}
-                          </Text>
-                        </Flex>
-                      ))}
-                    </Flex>
-                  </Flex>
-                </Box>
-
-                {/* Esperanza / resiliencia */}
-                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                     border={azulBorde} boxShadow={glowPanel}>
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                  <Flex position="relative" zIndex={1} direction="column" gap={{ base: 4, md: 5 }}
-                        px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                    <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                          lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                      {ACE_ESPERANZA.titulo}
-                    </Text>
-                    <Box h="1px" w="55%" maxW="240px" mx="auto"
-                         bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                    {ACE_ESPERANZA.texto.map((t, i) => (
-                      <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                            style={{ textShadow: INK_SHADOW }}>
-                        {t}
-                      </Text>
-                    ))}
-                    <Box mt={1} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }} borderRadius="xl"
-                         bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}33`} sx={{ backdropFilter: "blur(4px)" }}>
-                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7">
-                        {ACE_ESPERANZA.caveat}
-                      </Text>
+              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                   border={azulBorde} boxShadow={glowPanel}>
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
+                      gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 9, md: 11 }}>
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
+                        style={{ textShadow: INK_SHADOW }}>
+                    Has terminado el test.
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
+                        maxW="520px" style={{ textShadow: INK_SHADOW }}>
+                    Vamos a ver qué significa tu resultado y cómo estas experiencias influyen en ti hoy.
+                  </Text>
+                  <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`)}
+                       position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
+                       bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
+                       fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
+                       boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
+                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                    <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
+                      Ver mi resultado →
                     </Box>
-
-                    {/* Seguir el recorrido */}
-                    <Flex justify="center" pt={2}>
-                      <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)}
-                           position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
-                           bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
-                           fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                        <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
-                          Continuar a Heridas →
-                        </Box>
-                      </Box>
-                    </Flex>
-                  </Flex>
-                </Box>
-              </Flex>
+                  </Box>
+                </Flex>
+              </Box>
             </Box>
           )}
         </Flex>
       </Flex>
-
-      {/* ── Popup: qué es el test ACE ── */}
-      <Modal isOpen={infoOpen} onClose={() => setInfoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
-        <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
-          <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <ModalCloseButton color={TINTA} zIndex={3} />
-            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-              <Flex direction="column" gap={4}>
-                <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
-                      lineHeight="1.25" style={{ textShadow: INK_SHADOW }}>
-                  {ACE_INTRO.titulo}
-                </Text>
-                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
-                      opacity={0.8} style={{ textShadow: INK_SHADOW }}>
-                  {ACE_INTRO.subtitulo}
-                </Text>
-                <Box h="1px" w="55%" maxW="240px" mx="auto"
-                     bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                {ACE_INTRO.que.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                        style={{ textShadow: INK_SHADOW }}>
-                    {p}
-                  </Text>
-                ))}
-              </Flex>
-            </ModalBody>
-          </Box>
-        </ModalContent>
-      </Modal>
 
       <AyudaRecorrido pagina="ace" />
 

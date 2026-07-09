@@ -10,8 +10,8 @@ export const turquesa = "#48C0B5";
 
 // Fisiología
 export const fisiologiaNom = "Fisiología";
-export const  fisiologiaTxt= "#d4c4ef";
-export const  fisiologiaBg = "#3b098b";
+export const  fisiologiaTxt= "#c8b5d1";
+export const  fisiologiaBg = "#331c35";
 export function FisiologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } })  {
   return (
     <Box

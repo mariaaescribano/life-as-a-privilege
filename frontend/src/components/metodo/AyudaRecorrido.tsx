@@ -9,7 +9,8 @@ import { AgendarLlamada } from "../global/AgendarLlamada";
 import { CursoCardDetalle } from "../aprendizaje/CursoCardDetalle";
 import { useCursosData } from "../../data/cursosApi";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { NUDOS, MIEDOS } from "./psicologiaRecorrido";
+import { NUDOS, MIEDOS, NECESIDADES_INTRO } from "./psicologiaRecorrido";
+import { IndiceRecorrido } from "./IndiceRecorrido";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -41,7 +42,7 @@ const EJEMPLOS_BOX: Partial<Record<string, {
   variante?: "frases" | "chips" | "herida" | "relacion";
   ejemplos?: string[];
   triadas?: { huella: string; nudo: string; herida: string }[];
-  relaciones?: { herida: string; arquetipo: string; relacionTitulo: string; comprension: string }[];
+  relaciones?: { herida: string; arquetipo: string; relacionTitulo: string; comprension?: string }[];
 }>> = {
   problema: {
     titulo: "Ejemplos de problemas",
@@ -99,21 +100,14 @@ const EJEMPLOS_BOX: Partial<Record<string, {
     ],
   },
   integracion: {
-    titulo: "Ejemplos de relaciones",
+    titulo: "Ejemplo de relación",
     subtitulo: "(ejemplo sencillo orientativo)",
     variante: "relacion",
     relaciones: [
       {
-        herida: "Aprendí que expresar lo que siento genera conflicto.",
-        arquetipo: "Marte en Cáncer (evita la confrontación directa).",
-        relacionTitulo: "Represión de mi poder",
-        comprension: "Prefiero callar mis necesidades antes que arriesgarme a discutir o incomodar a otros.",
-      },
-      {
-        herida: "Aprendí que equivocarme hacía que valiera menos.",
-        arquetipo: "Ascendente en Virgo.",
-        relacionTitulo: "Perfeccionismo exagerado",
-        comprension: "Me exijo demasiado y me cuesta disfrutar las cosas si no salen exactamente como esperaba.",
+        herida: "Reprimir mis emociones",
+        arquetipo: "Saturno en Cáncer",
+        relacionTitulo: "Represión emocional por ausencia de permiso en el pasado",
       },
     ],
   },
@@ -205,11 +199,13 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
         "La celda cambia de color según lo que marques. Puedes cambiar tu respuesta cuando quieras.",
       ],
     },
+    // «Orientación» en esta página abre el popup explicativo de cómo funciona
+    // (antes era un botón «¿Cómo funciona?» propio de la página).
     orientacion: {
-      titulo: "Orientación",
+      titulo: NECESIDADES_INTRO.titulo,
       cuerpo: [
-        "No se trata de juzgar a nadie, sino de reconocer tu experiencia.",
-        "Lo que marques aquí te ayudará a mirar tu historia con más claridad en los siguientes pasos.",
+        NECESIDADES_INTRO.subtitulo,
+        NECESIDADES_INTRO.texto,
       ],
     },
   },
@@ -327,12 +323,15 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
         "Ponle un título y describe qué dejó en ti esa experiencia.",
       ],
     },
+    // «Orientación» en esta página abre el popup de «cómo se hace» (antes era un
+    // botón propio de la página, encima de las tres columnas).
     orientacion: {
-      titulo: "Orientación",
+      titulo: "¿Cómo se hace?",
       cuerpo: [
-        "No busques la herida «correcta». Busca la que reconoces.",
-        "Una experiencia puede dejar varias creencias; y una creencia venir de varias experiencias.",
-        "Nombrarla y verla con claridad ya es un paso.",
+        "Toca las huellas, los nudos y las necesidades no cubiertas que sientas parte de una misma herida: se iluminan con su color.",
+        "Cuando la tengas reunida, pulsa «He terminado esta herida».",
+        "Ponle un nombre y pulsa «Guardar herida».",
+        "La herida aparece abajo, en su propio color. Verás todas juntas en la página «Tus heridas».",
       ],
     },
   },
@@ -588,6 +587,9 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
 
   return (
     <>
+      {/* Índice del recorrido (botón flotante abajo a la izquierda) */}
+      <IndiceRecorrido />
+
       <Flex position="fixed" bottom={{ base: 4, md: 6 }} right={{ base: 4, md: 6 }} zIndex={20}
             direction="column" align="flex-end" gap={2}>
         {esInicio ? (
@@ -653,7 +655,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                 ¿Prefieres hacerlo acompañado?
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
-                Puedes recorrer este tramo junto a María. Agenda una llamada, no hace falta hacerlo todo de forma individual.
+                Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.
               </Text>
               <Box as="button" onClick={() => { setAcompPreguntaOpen(false); setCompaniaOpen(true); }}
                    px={9} py={3} borderRadius="full" bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}
@@ -685,7 +687,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
               disciplinaNom={neuropsicologiaNom}
               precio={60}
               titulo="¿Prefieres compañía?"
-              subtitulo="Recorre el camino junto a María. Agenda una llamada · horario peninsular España"
+              subtitulo="Recorre el camino conmigo. Agenda una llamada · horario peninsular España"
             />
           </Box>
         </Box>
@@ -741,42 +743,39 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                   ))}
                 </Flex>
               ) : ejemplosBox.variante === "relacion" ? (
-                <Flex direction="column" gap={4}>
+                <Flex direction="column" gap={6}>
                   {(ejemplosBox.relaciones ?? []).map((r, i) => (
-                    <Box key={i} px={{ base: 4, md: 5 }} py={{ base: 4, md: 4 }} borderRadius="xl"
-                         bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
-                         sx={{ backdropFilter: "blur(4px)" }}>
-                      <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.2em" textTransform="uppercase"
-                            opacity={0.55} mb={2.5}>
-                        Ejemplo {i + 1}
-                      </Text>
-                      <Flex direction="column" gap={2.5}>
-                        <Box>
-                          <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                                opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Herida</Text>
-                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
-                            «{r.herida}»
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                                opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Arquetipo</Text>
-                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
-                            {r.arquetipo}
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                                opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Relación</Text>
-                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.4">
-                            {r.relacionTitulo}
-                          </Text>
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={0.5} opacity={0.92}>
+                    <Flex key={i} direction="column" gap={3}>
+                      <Box>
+                        <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Herida</Text>
+                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6"
+                              style={{ textShadow: INK_SHADOW }}>
+                          «{r.herida}»
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Arquetipo</Text>
+                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                          {r.arquetipo}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Relación</Text>
+                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.4"
+                              style={{ textShadow: INK_SHADOW }}>
+                          {r.relacionTitulo}
+                        </Text>
+                        {r.comprension && (
+                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={0.5} opacity={0.92}
+                                style={{ textShadow: INK_SHADOW }}>
                             {r.comprension}
                           </Text>
-                        </Box>
-                      </Flex>
-                    </Box>
+                        )}
+                      </Box>
+                    </Flex>
                   ))}
                 </Flex>
               ) : ejemplosBox.variante === "chips" ? (

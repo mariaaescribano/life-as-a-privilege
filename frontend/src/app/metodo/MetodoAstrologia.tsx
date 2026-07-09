@@ -4,6 +4,7 @@ import { Box, Flex, Input, Select, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
@@ -279,7 +280,7 @@ export default function MetodoAstrologia() {
                   </Text>
                   <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto"
                         style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                    Necesitamos tus datos de nacimiento para que María pueda leer tu carta.
+                    Necesito tus datos de nacimiento para poder leer tu carta.
                   </Text>
 
                   <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
@@ -535,7 +536,7 @@ export default function MetodoAstrologia() {
             <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
               <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center"
                     style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}>
-                Tu carta está en proceso. María personalmente leerá tu carta. Mientras tanto, puedes continuar para ver tus arquetipos.
+                Tu carta está en proceso. Yo misma leeré tu carta. Mientras tanto, puedes continuar para ver tus arquetipos.
               </Text>
               <Flex justify="flex-end" mt={6}>
                 <Box as="button" onClick={() => setProcesoOpen(false)}
@@ -552,6 +553,7 @@ export default function MetodoAstrologia() {
       )}
 
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <IndiceAstrologia />
       <SiteFooter />
     </Box>
   );

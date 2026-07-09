@@ -90,9 +90,9 @@ export default function MetodoPsicologiaProblema() {
     }
   };
 
-  const irALineaDeVida = async () => {
+  const irAAce = async () => {
     await guardarSiCambio();
-    navigate(`/metodo/psicologia/${exp!.id}`);
+    navigate(`/metodo/psicologia/${exp!.id}/ace`);
   };
 
   if (loading) {
@@ -110,14 +110,14 @@ export default function MetodoPsicologiaProblema() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Problemas"
-            pageLabel="2/16"
+            pageLabel="2/18"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Vuelve", onClick: () => { void guardarSiCambio(); navigate("/metodo/psicologia"); } }}
-            next={{ label: "Línea de Vida →", onClick: irALineaDeVida }}
+            next={{ label: "ACE →", onClick: irAAce }}
           />
 
           {/* Problema dentro de un box con fondo de psicología */}

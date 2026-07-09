@@ -19,9 +19,10 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
+import { BotonGuardar } from "../../components/global/BotonGuardar";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
   experienciaById,
@@ -60,7 +61,6 @@ export default function MetodoPsicologiaRegulacion() {
 
   const [loading, setLoading] = useState(true);
   const [texto, setTexto] = useState("");
-  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
   // Audio de estimulación bilateral.
@@ -73,14 +73,10 @@ export default function MetodoPsicologiaRegulacion() {
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<string | null>(null);
-  const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
   useEffect(() => {
     montado.current = true;
-    return () => {
-      montado.current = false;
-      if (okTimer.current) clearTimeout(okTimer.current);
-    };
+    return () => { montado.current = false; };
   }, []);
 
   useEffect(() => {
@@ -114,33 +110,34 @@ export default function MetodoPsicologiaRegulacion() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
-    if (montado.current) setEstadoGuardado("guardando");
     try {
       const regulacion: RegulacionData = { ...(dataRef.current.regulacion || {}), texto: next };
       const data = { ...dataRef.current, regulacion };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
-      if (montado.current) {
-        setEstadoGuardado("ok");
-        if (okTimer.current) clearTimeout(okTimer.current);
-        okTimer.current = setTimeout(() => { if (montado.current) setEstadoGuardado("idle"); }, 2200);
-      }
       return true;
     } catch {
-      if (montado.current) setEstadoGuardado("idle");
       return false;
     }
   };
 
+  // Autoguardado silencioso mientras escribe (respaldo); el guardado explícito lo
+  // hace el botón «Guardar».
   const commit = (next: string) => {
     setTexto(next);
-    setEstadoGuardado("guardando");
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       if (pendiente.current !== null) { void persistir(pendiente.current); pendiente.current = null; }
     }, 900);
+  };
+
+  // Guardado explícito (botón): vuelca lo pendiente y persiste de inmediato.
+  const guardarAhora = async (): Promise<boolean> => {
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    pendiente.current = null;
+    return persistir(texto);
   };
 
   // Flush + pausa del audio al desmontar.
@@ -179,7 +176,7 @@ export default function MetodoPsicologiaRegulacion() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
-  const irAHeridas = () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`);
+  const irAHeridas = () => navigate(`/metodo/psicologia/${exp.id}/heridas-lista`);
   const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
 
   return (
@@ -210,24 +207,19 @@ export default function MetodoPsicologiaRegulacion() {
 
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Regulación"
+              title="Narra"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 9, total: 16 }}
+              step={{ current: 11, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Heridas", onClick: irAHeridas }}
               next={{ label: "Relación →", onClick: irARelacion }}
             />
 
-            {/* Intro · reencuadre honesto (no es EMDR ni terapia) */}
-            <Flex direction="column" align="center" gap={3} textAlign="center" maxW="640px">
-              <Text color={CREMA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.7"
-                    style={{ textShadow: "0 1px 12px rgba(0,0,0,0.35)" }}>
-                {REGULACION.intro}
-              </Text>
-            </Flex>
+            {/* Intro */}
+            <IntroRecorrido>{REGULACION.intro}</IntroRecorrido>
 
             {/* Preparación · lugar seguro (texto directo sobre la acuarela, sin cajas) */}
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
@@ -338,7 +330,7 @@ export default function MetodoPsicologiaRegulacion() {
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 6, md: 8 }}>
                 <Box mb={{ base: 5, md: 6 }}>
-                  <SeccionTitulo>Suelta lo que necesites</SeccionTitulo>
+                  <SeccionTitulo>Junta los fragmentos de tus recuerdos. Narra tu dolor para darle un sentido.</SeccionTitulo>
                 </Box>
                 <Textarea
                   value={texto}
@@ -356,8 +348,9 @@ export default function MetodoPsicologiaRegulacion() {
                   _hover={{ borderColor: `${TINTA}55` }}
                   _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.9)" }}
                 />
-                <Flex justify="flex-end" mt={3}>
-                  <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                <Flex justify="flex-end" mt={4}>
+                  <BotonGuardar onSave={guardarAhora} bg={TINTA} fg={neuropsicologiaBg}
+                                minW="150px" px={7} py={2.5} fontSize={{ base: "sm", md: "md" }} />
                 </Flex>
               </Box>
             </Box>

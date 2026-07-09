@@ -43,7 +43,7 @@ const disciplinas: Disciplina[] = [
     txt: astrologiaTxt,
     desc: recorridoContenido.astrologia.desc,
     capturas: [
-      { src: "/capturasRecorrido/astro/1.png",  titulo: "Tus datos para que María te haga la lectura." },
+      { src: "/capturasRecorrido/astro/1.png",  titulo: "Tus datos para que te haga la lectura." },
       { src: "/capturasRecorrido/astro/2.png",  titulo: "Minicomic: entiende qué es una carta astral" },
       { src: "/capturasRecorrido/astro/3.png",  titulo: "Básico" },
       { src: "/capturasRecorrido/astro/4.png",  titulo: "La lectura de todas las partes de ti" },

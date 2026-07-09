@@ -33,7 +33,6 @@ const DOSHA_CARD: Record<Dosha, {
     Icon: VataIcon,
     elemento: "Aire y Éter",
     esencia: "El movimiento.",
-    bgImg: "/img/fondos/vata.png",
   },
   pitta: {
     label: "Pitta",
@@ -41,7 +40,6 @@ const DOSHA_CARD: Record<Dosha, {
     Icon: PittaIcon,
     elemento: "Fuego y Agua",
     esencia: "La transformación.",
-    bgImg: "/img/fondos/pitta.png",
   },
   kapha: {
     label: "Kapha",

@@ -4,6 +4,7 @@ import { Box, Flex, Portal, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
@@ -340,6 +341,7 @@ export default function MetodoAstrologiaCasas() {
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <IndiceAstrologia />
       <SiteFooter />
     </Box>
   );
@@ -443,7 +445,7 @@ function CasaBox({
           ) : (
             <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic"
                   noOfLines={2}>
-              María aún no ha escrito la lectura de esta casa. Estará disponible pronto.
+              Aún no he escrito la lectura de esta casa. Estará disponible pronto.
             </Text>
           )}
         </Box>

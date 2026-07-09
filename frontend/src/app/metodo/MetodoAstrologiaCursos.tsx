@@ -4,6 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
@@ -215,6 +216,7 @@ export default function MetodoAstrologiaCursos() {
       />
 
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <IndiceAstrologia />
       <SiteFooter />
     </Box>
   );

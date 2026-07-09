@@ -177,13 +177,13 @@ export default function MetodoPsicologiaExperiencia() {
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Línea de Vida"
-              pageLabel="3/16"
+              pageLabel="5/18"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Problemas", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/problema`); } }}
+              prev={{ label: "← Resultado ACE", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
               next={{ label: completa ? "Huellas →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }}
             />
 
@@ -218,6 +218,11 @@ export default function MetodoPsicologiaExperiencia() {
                         const est = colorNodo(estado);
                         const prevRecorrido = i > 0 ? estadoDelAno(data, arr[i - 1]) !== "vacio" : false;
                         const conectorOn = prevRecorrido && estado !== "vacio";
+                        // La gestación no es un hito aparte: es el inicio de la vida.
+                        // Su conector con el año 0 va siempre encendido para que se
+                        // lea como parte de él.
+                        const esGestacionAAno0 = arr[i - 1] === ANO_GESTACION;
+                        const conectorLit = conectorOn || esGestacionAAno0;
                         return (
                           <React.Fragment key={edadAno}>
                             {i > 0 && (
@@ -226,8 +231,8 @@ export default function MetodoPsicologiaExperiencia() {
                                 maxW={{ base: "26px", md: "52px" }}
                                 h="2px"
                                 mt={{ base: "21px", md: "27px" }}
-                                bg={conectorOn ? TINTA : `${TINTA}30`}
-                                boxShadow={conectorOn ? `0 0 8px ${TINTA}66` : "none"}
+                                bg={conectorLit ? TINTA : `${TINTA}30`}
+                                boxShadow={conectorLit ? `0 0 8px ${TINTA}66` : "none"}
                                 transition="all 0.3s ease"
                               />
                             )}
@@ -253,9 +258,17 @@ export default function MetodoPsicologiaExperiencia() {
                                 transition="all 0.22s ease"
                                 _hover={{ transform: "translateY(-3px)", boxShadow: `0 0 20px ${TINTA}99, 0 6px 18px rgba(94,45,16,0.3)` }}
                               >
-                                {edadAno === ANO_GESTACION ? <GestacionGlyph /> : edadAno}
+                                {edadAno === ANO_GESTACION ? null : edadAno}
                               </Box>
-                              <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} opacity={0.65} whiteSpace="nowrap">
+                              <Text
+                                color={TINTA}
+                                fontSize={{ base: "2xs", md: "xs" }}
+                                opacity={0.65}
+                                textAlign="center"
+                                lineHeight="1.15"
+                                whiteSpace={edadAno === ANO_GESTACION ? "normal" : "nowrap"}
+                                maxW={edadAno === ANO_GESTACION ? { base: "48px", md: "60px" } : undefined}
+                              >
                                 {edadAno === ANO_GESTACION ? "Antes de nacer" : anoNatural(edad, edadAno, anioActual)}
                               </Text>
                             </Flex>
@@ -402,15 +415,6 @@ export default function MetodoPsicologiaExperiencia() {
     </Box>
   );
 }
-
-// Glifo del nodo de gestación: un corazón (la llegada al mundo, el recibimiento).
-// Hereda el color del texto del nodo (`currentColor`).
-const GestacionGlyph = () => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-       w={{ base: "20px", md: "24px" }} h={{ base: "20px", md: "24px" }} fill="currentColor">
-    <path d="m480-147-44-40q-101-91-167-157T162-608q-25-42-37.5-83T112-777q0-90 62-153t150-63q52 0 99 22t57 34q10-12 57-34t99-22q88 0 150 63t62 153q0 43-12.5 84T798-344q-42 66-107 132T524-187l-44 40Z" />
-  </Box>
-);
 
 const FlechaTramo =({ dir, disabled, onClick }: { dir: "prev" | "next"; disabled: boolean; onClick: () => void }) => (
   <Box
@@ -584,7 +588,6 @@ function PaginaDeAno({
           <Flex direction="column" align="center" textAlign="center" gap={1} mb={{ base: 7, md: 9 }}>
             {edadAno === ANO_GESTACION ? (
               <>
-                <Box color={TINTA} mb={1} style={{ filter: `drop-shadow(${INK_SHADOW})` }}><GestacionGlyph /></Box>
                 <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.15" style={{ textShadow: INK_SHADOW }}>
                   Antes de nacer
                 </Text>

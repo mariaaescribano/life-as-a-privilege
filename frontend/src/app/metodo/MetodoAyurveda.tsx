@@ -123,7 +123,7 @@ export default function MetodoAyurveda() {
 
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Equilibra"
+            title="Equilibra tu naturaleza"
             pageLabel="1/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
@@ -149,21 +149,10 @@ export default function MetodoAyurveda() {
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
-                fontSize={{ base: "3xl", md: "5xl" }}
-                fontWeight="700"
-                letterSpacing="0.02em"
-                lineHeight="1.2"
-                mb={5}
-                style={{ textShadow: INK_SHADOW }}
-              >
-                Vuelve a tu naturaleza
-              </Text>
-              <Text
-                color={TINTA}
-                fontSize={{ base: "sm", md: "md" }}
-                lineHeight="1.8"
-                opacity={0.78}
-                maxW="560px"
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="1.85"
+                opacity={1}
+                maxW="600px"
                 mx="auto"
               >
                 El Ayurveda enseña que cada persona nace con una constitución única —su dosha— y que la salud es el equilibrio de esa naturaleza. Esta tercera etapa de El Recorrido es para reconocer tu constitución, entender tus desequilibrios y aprender a vivir en armonía contigo mismo.

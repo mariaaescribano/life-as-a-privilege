@@ -10,6 +10,7 @@ import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
   experienciaById,
@@ -43,7 +44,6 @@ export default function MetodoPsicologiaNecesidades() {
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, EstadoNecesidad>>({});
   const [abierta, setAbierta] = useState<Necesidad | null>(null);
-  const [infoOpen, setInfoOpen] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
@@ -115,39 +115,16 @@ export default function MetodoPsicologiaNecesidades() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 6, total: 16 }}
+            step={{ current: 8, total: 20 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
-            next={{ label: "ACE →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
+            next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
           />
 
           {/* ── Directo sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}
           <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} w="100%" maxW="640px">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.7" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.28)" }}>
-              {NECESIDADES_INTRO.subtitulo}
-            </Text>
-
-            <Box
-              as="button"
-              onClick={() => setInfoOpen(true)}
-              px={5}
-              py={2}
-              borderRadius="full"
-              bg="rgba(255,255,255,0.1)"
-              border="1px solid rgba(255,255,255,0.45)"
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.04em"
-              cursor="pointer"
-              transition="all 0.2s"
-              _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-1px)" }}
-            >
-              ¿Cómo funciona?
-            </Box>
+            <IntroRecorrido>{NECESIDADES_INTRO.subtitulo}</IntroRecorrido>
 
             {/* Progreso — sobre el turquesa, en color psicología */}
             <Flex align="center" gap={3} w="100%" maxW="380px">
@@ -257,15 +234,14 @@ export default function MetodoPsicologiaNecesidades() {
                     {abierta.necesidad}
                   </Text>
 
-                  <Box w="100%" maxW="460px" px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }} borderRadius="xl"
-                       bg="rgba(255,251,243,0.74)" border={`1px solid ${TINTA}33`} sx={{ backdropFilter: "blur(4px)" }}>
-                    <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.7} mb={1.5}>
-                      Una respuesta sana
-                    </Text>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
-                      {abierta.respuesta}
-                    </Text>
-                  </Box>
+                  <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
+                    Una respuesta sana
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" maxW="460px" style={{ textShadow: INK_SHADOW }}>
+                    {abierta.respuesta}
+                  </Text>
 
                   <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} mt={1} />
 
@@ -307,31 +283,6 @@ export default function MetodoPsicologiaNecesidades() {
                   </Flex>
                 </Flex>
               )}
-            </ModalBody>
-          </Box>
-        </ModalContent>
-      </Modal>
-
-      {/* ── Popup: explicación de las necesidades de la infancia ── */}
-      <Modal isOpen={infoOpen} onClose={() => setInfoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
-        <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
-          <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <ModalCloseButton color={TINTA} zIndex={3} />
-            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-              <Flex direction="column" align="center" textAlign="center" gap={4}>
-                <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK_SHADOW }}>
-                  {NECESIDADES_INTRO.titulo}
-                </Text>
-                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85} style={{ textShadow: INK_SHADOW }}>
-                  {NECESIDADES_INTRO.subtitulo}
-                </Text>
-                <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.9}>
-                  {NECESIDADES_INTRO.texto}
-                </Text>
-              </Flex>
             </ModalBody>
           </Box>
         </ModalContent>

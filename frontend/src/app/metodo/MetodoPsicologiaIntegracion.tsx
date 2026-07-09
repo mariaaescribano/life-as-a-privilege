@@ -8,6 +8,7 @@ import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
@@ -330,12 +331,17 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 10, total: 16 }}
+              step={{ current: 12, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Regulación", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
+              prev={{ label: "← Narra", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
               next={{ label: "Recuérdate →", onClick: irARecuerdate }}
             />
+
+            {/* Intro: la idea de la proyección */}
+            <IntroRecorrido>
+              Tus heridas suelen ser proyecciones de tus arquetipos: los elegimos para sanarlos e integrarlos en nosotros.
+            </IntroRecorrido>
 
             {/* ════════ TRES COLUMNAS ════════ */}
             <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} align="stretch">

@@ -4,6 +4,7 @@ import { Box, Flex, Portal, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
@@ -205,7 +206,7 @@ export default function MetodoAstrologiaAspectos() {
 
           {/* Título + subtítulo centrados */}
           <Flex direction="column" align="center" textAlign="center" mb={{ base: 2, md: 4 }}>
-            <Text color={astrologiaTxt} fontSize={{ base: "l", md: "xl" }} fontWeight="700" mb={2} fontStyle="italic"
+            <Text color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} mb={2} fontStyle="italic"
                   letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
               Cada aspecto es una relación entre dos planetas. Pulsa para leer.
             </Text>
@@ -417,7 +418,7 @@ export default function MetodoAstrologiaAspectos() {
                   renderParrafos(textoAbierto, astrologiaTxt)
                 ) : (
                   <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" fontSize={{ base: "md", md: "lg" }}>
-                    María aún no ha escrito la lectura de este aspecto. Estará disponible pronto.
+                    Aún no he escrito la lectura de este aspecto. Estará disponible pronto.
                   </Text>
                 )}
               </Box>
@@ -429,6 +430,7 @@ export default function MetodoAstrologiaAspectos() {
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <IndiceAstrologia />
       <SiteFooter />
     </Box>
   );
