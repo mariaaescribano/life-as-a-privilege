@@ -73,6 +73,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           position={[x, y, 0]}
           focused={i === focusedIdx}
           onClick={() => setFocusedIdx(i)}
+          // Salen uno a uno: un pequeño desfase por orden (tras aparecer la caja).
+          appearDelay={0.5 + i * 0.14}
         />
       );
     });
@@ -293,6 +295,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
             aspectos={carta.aspectos}
             cusps={carta.cusps}
             radio={R_PLANETS}
+            // Arranca cuando ya ha salido el último planeta (ver appearDelay).
+            startDelay={0.5 + (planetasOrdenados.length - 1) * 0.14 + 0.5}
           />
           {planetMeshes}
 

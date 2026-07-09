@@ -6,6 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { Reveal } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -252,6 +253,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 6, md: 7 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
@@ -264,8 +266,10 @@ export default function MetodoAyurvedaDoshaCuerpo() {
             extra={ilustracionesBtn}
             next={{ label: "Equilibrio →", onClick: irSiguiente, disabled: !guardado, disabledTooltip: "Guarda tu reflexión para continuar." }}
           />
+          </Reveal>
 
-          {/* ── HERO ── */}
+          {/* ── HERO (primer box: entra al montar, siempre visible) ── */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
@@ -279,9 +283,11 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               </Flex>
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── SECCIONES (Tu energía, Tu digestión, Tu descanso…) ── */}
           {c.secciones.map((sec, si) => (
+            <Reveal key={si} inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel key={si} color={meta.color}>
               <SeccionTitulo color={meta.color}>{sec.titulo}</SeccionTitulo>
               <Flex direction="column" gap={3}>
@@ -290,9 +296,11 @@ export default function MetodoAyurvedaDoshaCuerpo() {
                 ))}
               </Flex>
             </Panel>
+            </Reveal>
           ))}
 
           {/* ── TU CUERPO (lista) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.cuerpo.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={4}>{c.cuerpo.intro}</Text>
@@ -301,8 +309,10 @@ export default function MetodoAyurvedaDoshaCuerpo() {
             </Flex>
             <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(c.cuerpo.cierre)}</Text>
           </Panel>
+          </Reveal>
 
           {/* ── ¿TE RECONOCES? (local) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.reconoces.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>{c.reconoces.intro}</Text>
@@ -312,8 +322,10 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── LO QUE EL AYURVEDA QUIERE QUE RECUERDES ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.recuerda.titulo}</SeccionTitulo>
             <Flex direction="column" gap={3}>
@@ -322,8 +334,10 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── REFLEXIÓN (texto libre · SE GUARDA) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={reflexionRef} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
@@ -366,8 +380,10 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               </Flex>
             </Panel>
           </Box>
+          </Reveal>
 
           {/* ── CIERRE + Continuar ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (
@@ -395,6 +411,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               )}
             </Flex>
           </Panel>
+          </Reveal>
         </Flex>
       </Flex>
 

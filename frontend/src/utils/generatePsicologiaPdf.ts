@@ -121,14 +121,24 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   const ensureSpace = (needed: number) => {
     if (y + needed > pageH - 18) {
       drawFooter(page); doc.addPage(); page++;
-      fillBackground(); drawMiniHeader(); y = 28;
+      fillBackground(); drawMiniHeader(); y = 34;
     }
   };
 
   // ── Bloques reutilizables ──────────────────────────────────────────────
+  // Cada sección va precedida de un adorno de separación (menos la primera),
+  // para que el documento respire y cada bloque quede bien delimitado.
+  let primeraSeccion = true;
   const sectionTitle = (title: string) => {
-    ensureSpace(22);
-    y += 5;
+    ensureSpace(30);
+    if (!primeraSeccion) {
+      y += 8;
+      ornament(y);
+      y += 10;
+    } else {
+      y += 5;
+      primeraSeccion = false;
+    }
     doc.setFont(GARAMOND, "bold"); doc.setFontSize(17); doc.setTextColor(...INK);
     doc.text(title, MARGIN, y);
     y += 3;

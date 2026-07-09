@@ -7,6 +7,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { Reveal } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -264,6 +265,7 @@ export default function MetodoAyurvedaDoshaIntro() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 6, md: 7 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
@@ -281,8 +283,10 @@ export default function MetodoAyurvedaDoshaIntro() {
               disabledTooltip: "Guarda tu respuesta para continuar.",
             }}
           />
+          </Reveal>
 
-          {/* ── HERO ── */}
+          {/* ── HERO (primer box: entra al montar, siempre visible) ── */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
@@ -298,8 +302,10 @@ export default function MetodoAyurvedaDoshaIntro() {
               </Flex>
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── PRINCIPIO DEL DOSHA ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" gap={3.5}>
               <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" textAlign="center"
@@ -314,8 +320,10 @@ export default function MetodoAyurvedaDoshaIntro() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── ¿TE RECONOCES? (casillas — NO se guardan) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
               {c.reconoces.titulo}
@@ -342,8 +350,10 @@ export default function MetodoAyurvedaDoshaIntro() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── LO QUE DESCUBRIRÁS ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" mb={2} style={{ textShadow: INK_SHADOW }}>
               {c.descubriras.titulo}
@@ -381,8 +391,10 @@ export default function MetodoAyurvedaDoshaIntro() {
               })}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── PREGUNTA FINAL (texto libre · SE GUARDA) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={finalRef} w="100%">
             <Panel color={meta.color}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
@@ -440,8 +452,10 @@ export default function MetodoAyurvedaDoshaIntro() {
               </Flex>
             </Panel>
           </Box>
+          </Reveal>
 
           {/* ── CIERRE ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.slice(0, -1).map((p, i) => (
@@ -485,6 +499,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               )}
             </Flex>
           </Panel>
+          </Reveal>
         </Flex>
       </Flex>
 

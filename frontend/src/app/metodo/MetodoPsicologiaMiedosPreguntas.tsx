@@ -19,6 +19,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
@@ -151,22 +152,27 @@ export default function MetodoPsicologiaMiedosPreguntas() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 7, md: 9 }}>
 
-            <MetodoStepHeader
-              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Atrévete"
-              bgColor={`${neuropsicologiaBg}f0`}
-              color={neuropsicologiaTxt}
-              nom={neuropsicologiaNom}
-              step={{ current: 16, total: 20 }}
-              mb={0}
-              boxShadow={glowHeader}
-              prev={{ label: "← Miedos", onClick: irAMiedos }}
-              next={{ label: "Integración →", onClick: irAIntegracion }}
-            />
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <MetodoStepHeader
+                icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+                title="Atrévete"
+                bgColor={`${neuropsicologiaBg}f0`}
+                color={neuropsicologiaTxt}
+                nom={neuropsicologiaNom}
+                step={{ current: 16, total: 20 }}
+                mb={0}
+                boxShadow={glowHeader}
+                prev={{ label: "← Miedos", onClick: irAMiedos }}
+                next={{ label: "Integración →", onClick: irAIntegracion }}
+              />
+            </Reveal>
 
             {/* Intro */}
-            <IntroRecorrido>{MIEDOS_ENFRENTAR_INTRO.intro}</IntroRecorrido>
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+              <IntroRecorrido>{MIEDOS_ENFRENTAR_INTRO.intro}</IntroRecorrido>
+            </Reveal>
 
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             {miedos.length === 0 ? (
               // Estado vacío: aún no ha nombrado ningún miedo.
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
@@ -188,13 +194,14 @@ export default function MetodoPsicologiaMiedosPreguntas() {
             ) : (
               <>
   
-                {/* Tarjetas de miedo — limpias. Al tocar, se abre el popup guiado. */}
-                <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
+                {/* Tarjetas de miedo · aparecen de una en una. Al tocar, se abre el popup guiado. */}
+                <RevealStagger display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }} stagger={0.1} delayChildren={0.1}>
                   {miedos.map((m) => {
                     const respondidas = miedoRespondidas(m);
                     const completo = respondidas >= total;
                     return (
-                      <Box key={m.id} as="button" onClick={() => setAbiertoId(m.id)}
+                      <RevealItem key={m.id} direction="up" distance={26} scaleFrom={0.97} duration={0.5} w="100%">
+                      <Box as="button" onClick={() => setAbiertoId(m.id)}
                            position="relative" w="100%" borderRadius="2xl" overflow="hidden" textAlign="left"
                            bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}
                            cursor="pointer" transition="transform 0.16s, filter 0.16s"
@@ -220,9 +227,10 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                           </Flex>
                         </Flex>
                       </Box>
+                      </RevealItem>
                     );
                   })}
-                </Flex>
+                </RevealStagger>
 
                 {/* Autoguardado global */}
                 <Flex justify="center">
@@ -230,6 +238,7 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                 </Flex>
               </>
             )}
+            </Reveal>
 
           </Flex>
         </Flex>
@@ -306,10 +315,6 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
         <Box position="relative" zIndex={1} flexShrink={0} borderBottom={`1px solid ${TINTA}55`}
              px={{ base: 6, md: 9 }} pt={{ base: 6, md: 7 }} pb={{ base: 3.5, md: 4 }}>
           <Flex direction="column" align="center" textAlign="center" gap={0.5}>
-            <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
-                  opacity={0.6} style={{ textShadow: INK_SHADOW }}>
-              Tu miedo
-            </Text>
             <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.25"
                   style={{ textShadow: INK_SHADOW }}>
               {miedo.texto}

@@ -12,6 +12,7 @@ import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { SaberMasModal } from "../../components/metodo/Planetas";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ZODIAC_SIGNS, cuerpoByKey, soloClavesPlaneta, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
@@ -144,20 +145,27 @@ export default function MetodoAstrologiaSolAscLuna() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
-          <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Sol, Luna y Ascendente"
-            bgColor={`${astrologiaBg}dd`}
-            color={astrologiaTxt}
-            space
-            step={{ current: 2, total: 8 }}
-            mb={0}
-            prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
-            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={headerNext}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title="Sol, Luna y Ascendente"
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              step={{ current: 2, total: 8 }}
+              mb={0}
+              prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              next={headerNext}
+            />
+          </Reveal>
 
-          <Box
+          <Reveal
+            direction="up"
+            distance={34}
+            scaleFrom={0.97}
+            delay={0.12}
+            duration={0.75}
             position="relative"
             w="100%"
             borderRadius="2xl"
@@ -171,12 +179,16 @@ export default function MetodoAstrologiaSolAscLuna() {
                 Tu Luna (el hogar al que llegaste y tus sentimientos), tu Sol (tu esencia) y tu Ascendente (cómo percibes al mundo). Léelos los tres.
               </Text> */}
 
-              <Flex
-                direction={{ base: "column", md: "row" }}
-                align="center"
+              <RevealStagger
+                display="flex"
+                flexDirection={{ base: "column", md: "row" }}
+                alignItems="center"
                 mt="5px"
-                justify="center"
+                justifyContent="center"
                 gap={{ base: 7, md: 6 }}
+                stagger={0.14}
+                delayChildren={0.3}
+                amount={0.2}
               >
                 {TRIO.map((key) => {
                   const cuerpo = cuerpoByKey(key);
@@ -184,20 +196,30 @@ export default function MetodoAstrologiaSolAscLuna() {
                   const v = data[key] ?? {};
                   const esSol = key === "sol";
                   return (
-                    <TrioCard
+                    <RevealItem
                       key={key}
-                      cuerpo={cuerpo}
-                      signo={v.signo}
-                      casa={cuerpo.conCasa ? v.casa : undefined}
-                      destacado={esSol}
-                      leido={esLeido(key)}
-                      onLeer={() => abrirLectura(key)}
-                    />
+                      direction="up"
+                      distance={30}
+                      scaleFrom={0.9}
+                      duration={0.7}
+                      w={{ base: "100%", md: "auto" }}
+                      display="flex"
+                      justifyContent="center"
+                    >
+                      <TrioCard
+                        cuerpo={cuerpo}
+                        signo={v.signo}
+                        casa={cuerpo.conCasa ? v.casa : undefined}
+                        destacado={esSol}
+                        leido={esLeido(key)}
+                        onLeer={() => abrirLectura(key)}
+                      />
+                    </RevealItem>
                   );
                 })}
-              </Flex>
+              </RevealStagger>
             </Box>
-          </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

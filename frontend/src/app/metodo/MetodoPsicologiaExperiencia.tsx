@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -23,6 +24,7 @@ import {
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -37,6 +39,10 @@ const CREMA = "rgba(255,255,255,0.92)";    // texto sobre el fondo teal de la p�
 // Halo claro (crema + color de la disciplina) para despegar la tinta oscura del
 // fondo de acuarela y que se lea bien.
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
+
+// `motion(Box)` casteado: evita el choque de tipos entre el `transition` de
+// Chakra (string) y el de framer (objeto). Se usa para «pintar» la timeline.
+const MotionBox = motion(Box) as any;
 
 export default function MetodoPsicologiaExperiencia() {
   const navigate = useNavigate();
@@ -174,20 +180,23 @@ export default function MetodoPsicologiaExperiencia() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
-            <MetodoStepHeader
-              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Línea de Vida"
-              pageLabel="5/18"
-              bgColor={`${neuropsicologiaBg}f0`}
-              color={neuropsicologiaTxt}
-              nom={neuropsicologiaNom}
-              mb={0}
-              boxShadow={glowHeader}
-              prev={{ label: "← Resultado ACE", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
-              next={{ label: completa ? "Huellas →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }}
-            />
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <MetodoStepHeader
+                icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+                title="Línea de Vida"
+                pageLabel="5/18"
+                bgColor={`${neuropsicologiaBg}f0`}
+                color={neuropsicologiaTxt}
+                nom={neuropsicologiaNom}
+                mb={0}
+                boxShadow={glowHeader}
+                prev={{ label: "← Resultado ACE", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
+                next={{ label: completa ? "Huellas →" : "Recorre toda tu vida", onClick: irAHuellas, disabled: !completa, disabledTooltip: "Marca cada año como completado o sin recuerdos" }}
+              />
+            </Reveal>
 
             {/* ───────────────── LÍNEA DE VIDA ───────────────── */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <Flex direction="column" align="center" w="100%" gap={6}>
                 {/* Contenedor editorial de la timeline */}
                 <Box
@@ -223,20 +232,40 @@ export default function MetodoPsicologiaExperiencia() {
                         // lea como parte de él.
                         const esGestacionAAno0 = arr[i - 1] === ANO_GESTACION;
                         const conectorLit = conectorOn || esGestacionAAno0;
+                        // Se «pinta» de izquierda a derecha: círculo, línea,
+                        // círculo, línea… Cada elemento entra con un retraso
+                        // incremental según su posición visual (nodo i = 2·i;
+                        // conector previo = 2·i − 1). Se re-dibuja al cambiar de tramo.
+                        const STEP = 0.13;
+                        const BASE = 0.3;
+                        const delayNodo = BASE + i * 2 * STEP;
+                        const delayConector = BASE + (i * 2 - 1) * STEP;
                         return (
                           <React.Fragment key={edadAno}>
                             {i > 0 && (
-                              <Box
+                              <MotionBox
                                 flex="1"
                                 maxW={{ base: "26px", md: "52px" }}
                                 h="2px"
                                 mt={{ base: "21px", md: "27px" }}
                                 bg={conectorLit ? TINTA : `${TINTA}30`}
                                 boxShadow={conectorLit ? `0 0 8px ${TINTA}66` : "none"}
-                                transition="all 0.3s ease"
+                                style={{ transformOrigin: "left center" }}
+                                initial={{ scaleX: 0, opacity: 0 }}
+                                animate={{ scaleX: 1, opacity: 1 }}
+                                transition={{ delay: delayConector, duration: 0.3, ease: "easeOut" }}
                               />
                             )}
-                            <Flex direction="column" align="center" gap={1.5} flexShrink={0}>
+                            <MotionBox
+                              display="flex"
+                              flexDirection="column"
+                              alignItems="center"
+                              gap={1.5}
+                              flexShrink={0}
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: delayNodo, duration: 0.42, ease: [0.34, 1.56, 0.64, 1] }}
+                            >
                               <Box
                                 as="button"
                                 onClick={() => setAnoAbierto(edadAno)}
@@ -271,7 +300,7 @@ export default function MetodoPsicologiaExperiencia() {
                               >
                                 {edadAno === ANO_GESTACION ? "Antes de nacer" : anoNatural(edad, edadAno, anioActual)}
                               </Text>
-                            </Flex>
+                            </MotionBox>
                           </React.Fragment>
                         );
                       })}
@@ -311,6 +340,7 @@ export default function MetodoPsicologiaExperiencia() {
                   Se recomienda buscar fotos de todas las edades de tu Vida.
                 </Text>
               </Flex>
+            </Reveal>
 
         </Flex>
       </Flex>

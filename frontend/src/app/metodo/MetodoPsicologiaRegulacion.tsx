@@ -24,6 +24,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import {
   experienciaById,
   REGULACION,
@@ -42,7 +43,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const CREMA = "rgba(255,255,255,0.92)";
 const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
@@ -205,6 +205,7 @@ export default function MetodoPsicologiaRegulacion() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Narra"
@@ -217,36 +218,18 @@ export default function MetodoPsicologiaRegulacion() {
               prev={{ label: "← Heridas", onClick: irAHeridas }}
               next={{ label: "Relación →", onClick: irARelacion }}
             />
+            </Reveal>
 
             {/* Intro */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <IntroRecorrido>{REGULACION.intro}</IntroRecorrido>
+            </Reveal>
 
-            {/* Preparación · lugar seguro (texto directo sobre la acuarela, sin cajas) */}
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 8 }}>
-                <Box mb={{ base: 6, md: 7 }}>
-                  <SeccionTitulo>{REGULACION.preparacion.titulo}</SeccionTitulo>
-                </Box>
-                <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
-                  {REGULACION.preparacion.pasos.map((p, i) => (
-                    <Flex key={i} align="flex-start" gap={3}>
-                      <Box flexShrink={0} w="26px" h="26px" borderRadius="full" bg={TINTA} color={PAPEL}
-                           display="flex" alignItems="center" justifyContent="center" fontSize="sm" fontWeight="700" mt="2px"
-                           style={{ boxShadow: `0 1px 6px ${neuropsicologiaBg}` }}>
-                        {i + 1}
-                      </Box>
-                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                        {p}
-                      </Text>
-                    </Flex>
-                  ))}
-                </Flex>
-              </Box>
-            </Box>
+            {/* «Antes de empezar» (preparación) ya no vive aquí: se abre como popup
+                desde el botón «Orientación» (ver AyudaRecorrido). */}
 
             {/* ── Reproductor del audio de estimulación bilateral ── */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -323,8 +306,10 @@ export default function MetodoPsicologiaRegulacion() {
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
 
             {/* Escritura de descarga */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -354,6 +339,7 @@ export default function MetodoPsicologiaRegulacion() {
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
 
           </Flex>
         </Flex>

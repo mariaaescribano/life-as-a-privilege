@@ -18,7 +18,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
+import { Reveal } from "../../components/global/Reveal";
+import { type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   experienciaById,
@@ -48,8 +49,6 @@ export default function MetodoPsicologiaBrujula() {
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendiente = useRef<BrujulaData | null>(null);
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
   useEffect(() => {
@@ -109,23 +108,10 @@ export default function MetodoPsicologiaBrujula() {
     }
   };
 
-  // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
-  const commit = (next: BrujulaData) => {
-    setBrujula(next);
-    setEstadoGuardado("guardando");
-    pendiente.current = next;
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
-    }, 900);
-  };
-
-  // Flush al desmontar.
-  useEffect(() => () => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    if (pendiente.current) void persistir(pendiente.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Guardado MANUAL: no se guarda mientras se escribe; el usuario pulsa «Guardar»
+  // cuando termina. Al navegar también se guarda para no perder el mensaje.
+  const guardarManual = () => { if (estadoGuardado !== "guardando") void persistir(brujula); };
+  const irA = async (ruta: string) => { await persistir(brujula); navigate(ruta); };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
@@ -138,27 +124,32 @@ export default function MetodoPsicologiaBrujula() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 6, md: 8 }}>
 
-            <MetodoStepHeader
-              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Brújula"
-              bgColor={`${neuropsicologiaBg}f0`}
-              color={neuropsicologiaTxt}
-              nom={neuropsicologiaNom}
-              maxW="100%"
-              step={{ current: 19, total: 20 }}
-              mb={0}
-              boxShadow={glowHeader}
-              prev={{ label: "← Compromiso", onClick: () => navigate(`/metodo/psicologia/${exp.id}/compromiso`) }}
-              next={{ label: "Síntesis →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/sintesis`) }}
-            />
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <MetodoStepHeader
+                icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+                title="Brújula"
+                bgColor={`${neuropsicologiaBg}f0`}
+                color={neuropsicologiaTxt}
+                nom={neuropsicologiaNom}
+                maxW="100%"
+                step={{ current: 19, total: 20 }}
+                mb={0}
+                boxShadow={glowHeader}
+                prev={{ label: "← Compromiso", onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
+                next={{ label: "Síntesis →", onClick: () => void irA(`/metodo/psicologia/${exp.id}/sintesis`) }}
+              />
+            </Reveal>
 
             {/* Intro */}
-            <IntroRecorrido>
-              Habrá días en que vuelvas a sentirte bloqueado. Déjate ahora un mensaje para tu yo
-              del futuro: esta será tu brújula para volver a ti.
-            </IntroRecorrido>
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+              <IntroRecorrido>
+                Escríbete un mensaje para el próximo momento difícil. No para juzgarte:
+                para recordar el camino que ya conoces.
+              </IntroRecorrido>
+            </Reveal>
 
             {/* ── La brújula: un mensaje libre a tu yo del futuro ── */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Box position="relative" w="100%" maxW="100%" borderRadius="2xl" overflow="hidden"
                  border={azulBorde} boxShadow={glowPanel} bgColor={neuropsicologiaBg}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -166,19 +157,14 @@ export default function MetodoPsicologiaBrujula() {
                 <Flex direction="column" align="center" gap={3} mb={{ base: 7, md: 8 }} textAlign="center">
                   <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                         lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    Cuando vuelvas a bloquearte
+                    Cuando vuelvas a bloquearte, recuerda...
                   </Text>
                   <Box h="2px" w="72px" bg={`${TINTA}66`} borderRadius="full" />
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7"
-                        maxW="620px" opacity={0.9} style={{ textShadow: INK_SHADOW }}>
-                    Escríbete un mensaje para el próximo momento difícil. No para juzgarte:
-                    para recordar el camino que ya conoces.
-                  </Text>
                 </Flex>
 
                 <Textarea
                   value={brujula.mensaje || ""}
-                  onChange={(e) => commit({ ...brujula, mensaje: e.target.value })}
+                  onChange={(e) => { setBrujula({ ...brujula, mensaje: e.target.value }); setEstadoGuardado("idle"); }}
                   placeholder="Yo del futuro, cuando vuelvas a sentirte bloqueado, recuerda…"
                   minH={{ base: "200px", md: "240px" }}
                   bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
@@ -192,17 +178,41 @@ export default function MetodoPsicologiaBrujula() {
                   _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
                 />
 
-                <Flex justify="center" mt={{ base: 6, md: 7 }}>
-                  <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                {/* Guardado manual: botón abajo a la derecha (no se guarda al escribir) */}
+                <Flex justify="flex-end" mt={{ base: 6, md: 7 }}>
+                  <Box
+                    as="button"
+                    onClick={guardarManual}
+                    px={{ base: 8, md: 10 }}
+                    py={3}
+                    borderRadius="full"
+                    bg={TINTA}
+                    color={PAPEL}
+                    border={`1px solid ${TINTA}`}
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight="700"
+                    fontSize={{ base: "md", md: "lg" }}
+                    letterSpacing="0.04em"
+                    cursor={estadoGuardado === "guardando" ? "wait" : "pointer"}
+                    boxShadow={`0 0 18px ${TINTA}66, 0 0 44px ${TINTA}33`}
+                    transition="all 0.2s"
+                    _hover={estadoGuardado === "guardando" ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` }}
+                    style={{ textShadow: "0 1px 3px rgba(60,28,10,0.45)" }}
+                  >
+                    {estadoGuardado === "guardando" ? "Guardando…" : estadoGuardado === "ok" ? "Guardado ✓" : "Guardar"}
+                  </Box>
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
 
             {/* Cierre */}
+            <Reveal direction="up" distance={20} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.7" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
               Esta es tu guía práctica para no olvidar lo aprendido. Vuelve a ella siempre que la necesites.
             </Text>
+            </Reveal>
 
           </Flex>
         </Flex>

@@ -33,6 +33,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
@@ -251,23 +252,28 @@ export default function MetodoPsicologiaMapa() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="880px" gap={{ base: 8, md: 10 }}>
 
-            <MetodoStepHeader
-              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Integración"
-              bgColor={`${neuropsicologiaBg}f0`}
-              color={neuropsicologiaTxt}
-              nom={neuropsicologiaNom}
-              step={{ current: 17, total: 20 }}
-              mb={0}
-              boxShadow={glowHeader}
-              prev={{ label: "← Miedos", onClick: () => ir("miedos-preguntas") }}
-              next={{ label: "Compromiso →", onClick: () => setFelicitarOpen(true) }}
-            />
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <MetodoStepHeader
+                icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+                title="Integración"
+                bgColor={`${neuropsicologiaBg}f0`}
+                color={neuropsicologiaTxt}
+                nom={neuropsicologiaNom}
+                step={{ current: 17, total: 20 }}
+                mb={0}
+                boxShadow={glowHeader}
+                prev={{ label: "← Miedos", onClick: () => ir("miedos-preguntas") }}
+                next={{ label: "Compromiso →", onClick: () => setFelicitarOpen(true) }}
+              />
+            </Reveal>
 
             {/* Intro: el sentido de la página */}
-            <IntroRecorrido>Cada pieza que fuiste reuniendo se enhebra aquí. El mapa de ti mismo.</IntroRecorrido>
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+              <IntroRecorrido>Cada pieza que fuiste reuniendo se enhebra aquí. El mapa de ti mismo.</IntroRecorrido>
+            </Reveal>
 
             {/* ════════ EL HILO ════════ */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Box position="relative" w="100%">
 
               <Estacion num={1} label="De dónde vengo" apoyo="El problema con el que llegaste">
@@ -421,8 +427,10 @@ export default function MetodoPsicologiaMapa() {
               </Estacion>
 
             </Box>
+            </Reveal>
 
             {/* Cierre + autoguardado (del ejercicio de transformación) */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Flex direction="column" align="center" gap={4} textAlign="center" maxW="640px">
               <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7"
                     style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
@@ -430,6 +438,7 @@ export default function MetodoPsicologiaMapa() {
               </Text>
               {relaciones.length > 0 && <AutoguardadoIndicador estado={estadoGuardado} color="rgba(255,255,255,0.9)" />}
             </Flex>
+            </Reveal>
 
           </Flex>
         </Flex>
@@ -517,7 +526,9 @@ function Estacion({ num, label, apoyo, dorado, last, children }: {
 }) {
   const acento = dorado ? ORO : TINTA;
   return (
-    <Box>
+    // Cada estación se revela al asomar en pantalla: el hilo se va dibujando de
+    // arriba abajo, una estación tras otra, según haces scroll.
+    <Reveal inView direction="up" distance={24} duration={0.55} amount={0.3} w="100%">
       {/* Tarjeta */}
       <Box position="relative" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -544,7 +555,7 @@ function Estacion({ num, label, apoyo, dorado, last, children }: {
                bgGradient={`linear(to-b, ${TINTA}66, ${TINTA}22)`} />
         </Flex>
       )}
-    </Box>
+    </Reveal>
   );
 }
 

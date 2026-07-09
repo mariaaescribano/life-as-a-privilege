@@ -20,6 +20,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
@@ -124,6 +125,7 @@ export default function MetodoPsicologiaHuellasNudos() {
 
   const dataRef = useRef<LineaDeVidaData>({});
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const heridasRef = useRef<HTMLDivElement>(null);
   const montado = useRef(true);
   useLockBodyScroll(nombreOpen);
 
@@ -198,6 +200,9 @@ export default function MetodoPsicologiaHuellasNudos() {
     setGuardadaFlash(titulo);
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => { if (montado.current) setGuardadaFlash(null); }, 2800);
+    // La rejilla está abajo del todo: baja hasta ella para que la nueva herida
+    // se vea aparecer, sin tener que recargar ni buscarla a mano.
+    setTimeout(() => { if (montado.current) heridasRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 140);
     await persistir(next);
   };
 
@@ -246,6 +251,7 @@ export default function MetodoPsicologiaHuellasNudos() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 7, md: 9 }}>
 
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Heridas"
@@ -258,16 +264,19 @@ export default function MetodoPsicologiaHuellasNudos() {
               prev={{ label: "← Necesidades", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
               next={{ label: "Tus heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/heridas-lista`) }}
             />
+            </Reveal>
 
             {/* Intro */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
             <IntroRecorrido>
               Una experiencia que deja huella puede activar o generar una necesidad no cubierta. Para darle sentido, nuestra mente crea un nudo: una creencia sobre nosotros mismos que intenta protegernos, pero que termina limitándonos. De esa combinación nace la herida emocional.
             </IntroRecorrido>
+            </Reveal>
 
-            {/* ════════ TRES COLUMNAS DE FUENTES ════════ */}
-            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 6, lg: 6 }} align="stretch">
+            {/* ════════ TRES COLUMNAS DE FUENTES · aparecen de izquierda a derecha ════════ */}
+            <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 6, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
               {columnas.map((col) => (
-                <Flex key={col.key} direction="column" flex="1" minW={0}>
+                <RevealItem key={col.key} direction="up" distance={30} scaleFrom={0.96} duration={0.6} display="flex" flexDirection="column" flex="1" minW={0}>
                   <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
                     <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" h="100%">
@@ -286,11 +295,12 @@ export default function MetodoPsicologiaHuellasNudos() {
                       </Box>
                     </Flex>
                   </Box>
-                </Flex>
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
 
             {/* ════════ HERIDA EN CURSO + botón terminar ════════ */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Flex direction="column" align="center" gap={3} w="100%" maxW="920px">
               {totalSel === 0 ? (
                 <Text color={PAPEL} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85} textAlign="center"
@@ -339,12 +349,14 @@ export default function MetodoPsicologiaHuellasNudos() {
                 </Flex>
               )}
             </Flex>
+            </Reveal>
 
             {/* ════════ SEPARADOR MANDALA + REJILLA DE HERIDAS ════════ */}
             {heridas.length > 0 && (
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
               <>
                 <MandalaDivider />
-                <Flex direction="column" align="center" gap={4} w="100%">
+                <Flex ref={heridasRef} direction="column" align="center" gap={4} w="100%" scrollMarginTop="90px">
                   <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em"
                         style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
                     Tus heridas
@@ -352,6 +364,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                   <HeridaGrid heridas={heridas} onBorrar={(id) => void borrarHerida(id)} />
                 </Flex>
               </>
+              </Reveal>
             )}
 
           </Flex>

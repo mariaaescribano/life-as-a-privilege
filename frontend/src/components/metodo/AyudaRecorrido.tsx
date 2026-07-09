@@ -9,7 +9,7 @@ import { AgendarLlamada } from "../global/AgendarLlamada";
 import { CursoCardDetalle } from "../aprendizaje/CursoCardDetalle";
 import { useCursosData } from "../../data/cursosApi";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { NUDOS, MIEDOS, NECESIDADES_INTRO } from "./psicologiaRecorrido";
+import { NUDOS, MIEDOS, NECESIDADES_INTRO, REGULACION } from "./psicologiaRecorrido";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 
 const TINTA = neuropsicologiaTxt;
@@ -565,6 +565,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
   const [companiaOpen, setCompaniaOpen] = useState(false);           // calendario de reserva
   const [cursoOpen, setCursoOpen] = useState(false);
   const [ejemplosOpen, setEjemplosOpen] = useState(false);           // box de ejemplos (págs. con EJEMPLOS_BOX)
+  const [preparacionOpen, setPreparacionOpen] = useState(false);     // box «Antes de empezar» (pág. regulación)
 
   const contenido = AYUDA_RECORRIDO[pagina];
   const esInicio = pagina === "inicio";
@@ -580,7 +581,7 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
   const ejemplosBox = EJEMPLOS_BOX[pagina as string];
 
   // Bloquea el scroll del fondo mientras cualquier popup esté abierto.
-  useLockBodyScroll(!!abierto || acompPreguntaOpen || companiaOpen || cursoOpen || ejemplosOpen);
+  useLockBodyScroll(!!abierto || acompPreguntaOpen || companiaOpen || cursoOpen || ejemplosOpen || preparacionOpen);
 
   if (!contenido) return null;
   const sec = abierto ? contenido[abierto] : null;
@@ -601,7 +602,11 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
           <>
             <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>Ejemplo</BotonAyuda>
             <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
-            <BotonAyuda onClick={() => (curso ? setCursoOpen(true) : setAbierto("orientacion"))}>Orientación</BotonAyuda>
+            <BotonAyuda onClick={() => {
+              if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
+              else if (curso) setCursoOpen(true);
+              else setAbierto("orientacion");
+            }}>Orientación</BotonAyuda>
           </>
         )}
       </Flex>
@@ -838,6 +843,66 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
                 El curso estará disponible pronto.
               </Text>
             )}
+          </Box>
+        </Box>
+      )}
+
+      {/* Popup «Orientación» de Regulación → «Antes de empezar» (pasos numerados)
+          + el cuidado («Cuídate aquí»). Antes era un box fijo en la página. */}
+      {preparacionOpen && (
+        <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
+             sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+             onClick={() => setPreparacionOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="520px" my="auto"
+               borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}
+                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 sx={{ "&::-webkit-scrollbar": { width: "6px" }, "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "9999px" } }}>
+              <Box as="button" onClick={() => setPreparacionOpen(false)} position="absolute" top={3} right={3} zIndex={2}
+                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" lineHeight="1.3"
+                    pr={6} style={{ textShadow: INK_SHADOW }}>
+                {REGULACION.preparacion.titulo}
+              </Text>
+              <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+              <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
+                {REGULACION.preparacion.pasos.map((p, i) => (
+                  <Flex key={i} align="flex-start" gap={3}>
+                    <Box flexShrink={0} w="26px" h="26px" borderRadius="full" bg={TINTA} color={PAPEL}
+                         display="flex" alignItems="center" justifyContent="center" fontSize="sm" fontWeight="700" mt="2px"
+                         style={{ boxShadow: `0 1px 6px ${neuropsicologiaBg}` }}>
+                      {i + 1}
+                    </Box>
+                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                      {p}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+
+              {/* Cuidado (antes «Cuídate aquí», popup propio de Orientación) */}
+              {contenido.orientacion && (
+                <>
+                  <Box h="1px" w="55%" maxW="220px" mx="auto" my={6} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
+                        style={{ textShadow: INK_SHADOW }}>
+                    {contenido.orientacion.titulo}
+                  </Text>
+                  <Flex direction="column" gap={3} mt={4}>
+                    {contenido.orientacion.cuerpo.map((p, i) => (
+                      <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                            style={{ textShadow: INK_SHADOW }}>
+                        {p}
+                      </Text>
+                    ))}
+                  </Flex>
+                </>
+              )}
+            </Box>
           </Box>
         </Box>
       )}

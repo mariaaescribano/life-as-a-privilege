@@ -20,6 +20,7 @@ import {
 } from "../../components/metodo/Planetas";
 import { cuerpoByKey, CUERPOS, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
@@ -167,21 +168,28 @@ export default function MetodoAstrologiaCartaAstral() {
         pb={{ base: 12, md: 16 }}
       >
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={{ base: 6, md: 8 }}>
-          <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Arquetipos"
-            bgColor={`${astrologiaBg}dd`}
-            color={astrologiaTxt}
-            space
-            step={{ current: 3, total: 8 }}
-            mb={0}
-            prev={{ label: "← Sol, Luna y Asc.", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
-            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={headerNext}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title="Arquetipos"
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              step={{ current: 3, total: 8 }}
+              mb={0}
+              prev={{ label: "← Sol, Luna y Asc.", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              next={headerNext}
+            />
+          </Reveal>
 
           {/* ── Box estrellado contenedor de la carta ── */}
-          <Box
+          <Reveal
+            direction="up"
+            distance={34}
+            scaleFrom={0.96}
+            delay={0.12}
+            duration={0.8}
             position="relative"
             w="100%"
             borderRadius="2xl"
@@ -207,7 +215,7 @@ export default function MetodoAstrologiaCartaAstral() {
               />
 
             </Flex>
-          </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

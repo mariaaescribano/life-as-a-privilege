@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -113,9 +114,10 @@ export default function MetodoAyurvedaTarjetas() {
           pt={{ base: 8, md: 12 }}
           pb={{ base: 14, md: 20 }}
         >
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Las tres energías"
+            title="Los tres Doṣhas"
             pageLabel="4/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
@@ -124,8 +126,10 @@ export default function MetodoAyurvedaTarjetas() {
             prev={{ label: "← Resultado", onClick: () => navigate("/metodo/ayurveda/resultado") }}
             extra={ilustracionesBtn}
           />
+          </Reveal>
 
           {/* Intro */}
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
           <Text
             color="rgba(255,255,255,0.85)"
             fontSize={{ base: "md", md: "lg" }}
@@ -135,24 +139,28 @@ export default function MetodoAyurvedaTarjetas() {
           >
             Las tres dosha viven en ti, pero unos predominan más que otros. Descúbrelos primero.
           </Text>
+          </Reveal>
 
-          {/* 3 tarjetas */}
-          <Flex
+          {/* 3 tarjetas · salen una tras otra empezando por la izquierda */}
+          <RevealStagger
             w="100%"
             maxW="1000px"
+            display="flex"
             gap={{ base: 5, md: 6 }}
-            direction={{ base: "column", md: "row" }}
-            align="stretch"
-            justify="center"
+            flexDirection={{ base: "column", md: "row" }}
+            alignItems="stretch"
+            justifyContent="center"
             mt={{ base: 1, md: 3 }}
+            stagger={0.18}
+            delayChildren={0.2}
           >
             {DOSHAS.map((d) => {
               const cfg = DOSHA_CARD[d];
               const Icon = cfg.Icon;
               const destacada = predomina(d);
               return (
+                <RevealItem key={d} direction="up" distance={30} scaleFrom={0.94} duration={0.6} flex="1" display="flex">
                 <Box
-                  key={d}
                   onClick={() => navigate(`/metodo/ayurveda/dosha/${d}`)}
                   cursor="pointer"
                   position="relative"
@@ -228,9 +236,10 @@ export default function MetodoAyurvedaTarjetas() {
                     </Text>
                   </Box>
                 </Box>
+                </RevealItem>
               );
             })}
-          </Flex>
+          </RevealStagger>
         </Flex>
       </Box>
 

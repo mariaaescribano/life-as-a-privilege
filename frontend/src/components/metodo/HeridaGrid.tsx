@@ -8,6 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 import React from "react";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { RevealStagger, RevealItem } from "../global/Reveal";
 import { NudoEspiralIcon } from "./NudoEspiralIcon";
 import { HeridaIcon } from "./HeridaIcon";
 import { neuropsicologiaTxt } from "../../GlobalVariables";
@@ -25,10 +26,10 @@ export const PALETA_HERIDA = [
 export const colorHeridaIdx = (i: number): string => PALETA_HERIDA[((i % PALETA_HERIDA.length) + PALETA_HERIDA.length) % PALETA_HERIDA.length];
 
 // Glifos de pieza (mismos que en la construcción).
-export const HuellaGlyph = ({ size = 13 }: { size?: number }) => (
+export const HuellaGlyph = ({ size = 15 }: { size?: number }) => (
   <Box as="span" lineHeight="1" flexShrink={0} style={{ fontSize: `${size}px`, color: TINTA }}>◈</Box>
 );
-export const NecesidadGlyph = ({ size = 13 }: { size?: number }) => (
+export const NecesidadGlyph = ({ size = 15 }: { size?: number }) => (
   <Box as="span" lineHeight="1" flexShrink={0} style={{ fontSize: `${size}px`, color: TINTA }}>◇</Box>
 );
 
@@ -48,10 +49,10 @@ export function MandalaDivider() {
 /** Pieza dentro de una herida (chip de solo lectura). */
 function Pieza({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <Flex align="center" gap={1.5} px={2.5} py={1} borderRadius="full"
+    <Flex align="center" gap={2} px={3} py={1.5} borderRadius="full"
           bg={`${PAPEL}d9`} color={TINTA} border={`1px solid ${TINTA}30`}>
       {icon}
-      <Text fontSize="2xs" fontWeight="600" lineHeight="1.2" noOfLines={1}>{label}</Text>
+      <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="600" lineHeight="1.25" noOfLines={1}>{label}</Text>
     </Flex>
   );
 }
@@ -103,12 +104,12 @@ export function HeridaCard({ herida, color, onBorrar }: {
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
           {vacia ? (
             <Flex align="center" justify="center" h="100%">
-              <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">Sin piezas.</Text>
+              <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize={{ base: "sm", md: "md" }}>Sin piezas.</Text>
             </Flex>
           ) : (
-            <Flex wrap="wrap" gap={1.5}>
+            <Flex wrap="wrap" gap={2}>
               {herida.huellas.map((t) => <Pieza key={`h-${t}`} icon={<HuellaGlyph />} label={t} />)}
-              {herida.nudos.map((t) => <Pieza key={`n-${t}`} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t} />)}
+              {herida.nudos.map((t) => <Pieza key={`n-${t}`} icon={<NudoEspiralIcon size={15} color={TINTA} strokeWidth={2} />} label={t} />)}
               {necesidades.map((t) => <Pieza key={`q-${t}`} icon={<NecesidadGlyph />} label={t} />)}
             </Flex>
           )}
@@ -125,13 +126,16 @@ export function HeridaGrid({ heridas, onBorrar }: {
   onBorrar?: (id: string) => void;
 }) {
   return (
-    <Box display="grid" w="100%"
+    // Las heridas entran de izquierda a derecha, una tras otra (en cascada).
+    <RevealStagger display="grid" w="100%"
          gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
-         gap={{ base: 4, md: 5 }}>
+         gap={{ base: 4, md: 5 }} stagger={0.06} delayChildren={0.12}>
       {heridas.map((h, i) => (
-        <HeridaCard key={h.id} herida={h} color={colorHeridaIdx(i)}
-                    onBorrar={onBorrar ? () => onBorrar(h.id) : undefined} />
+        <RevealItem key={h.id} direction="up" distance={28} scaleFrom={0.95} duration={0.5}>
+          <HeridaCard herida={h} color={colorHeridaIdx(i)}
+                      onBorrar={onBorrar ? () => onBorrar(h.id) : undefined} />
+        </RevealItem>
       ))}
-    </Box>
+    </RevealStagger>
   );
 }

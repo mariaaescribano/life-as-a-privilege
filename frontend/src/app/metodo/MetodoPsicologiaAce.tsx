@@ -33,6 +33,7 @@ import {
   type AceRespuesta,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -130,25 +131,28 @@ export default function MetodoPsicologiaAce() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
-          <MetodoStepHeader
-            icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title="ACE"
-            bgColor={`${neuropsicologiaBg}f0`}
-            color={neuropsicologiaTxt}
-            nom={neuropsicologiaNom}
-            step={{ current: 3, total: 20 }}
-            mb={0}
-            boxShadow={glowHeader}
-            prev={{ label: "← Problemas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
-            next={{
-              label: "Resultado →",
-              onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`),
-              disabled: !completo,
-              disabledTooltip: "Responde las 10 preguntas para ver tu resultado.",
-            }}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+              title="ACE"
+              bgColor={`${neuropsicologiaBg}f0`}
+              color={neuropsicologiaTxt}
+              nom={neuropsicologiaNom}
+              step={{ current: 3, total: 20 }}
+              mb={0}
+              boxShadow={glowHeader}
+              prev={{ label: "← Problemas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
+              next={{
+                label: "Resultado →",
+                onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`),
+                disabled: !completo,
+                disabledTooltip: "Responde las 10 preguntas para ver tu resultado.",
+              }}
+            />
+          </Reveal>
 
           {/* ── Sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} w="100%" maxW="640px">
             <IntroRecorrido>{ACE_INTRO.subtituloTurquesa}</IntroRecorrido>
 
@@ -164,13 +168,15 @@ export default function MetodoPsicologiaAce() {
               </Text>
             </Flex>
           </Flex>
+          </Reveal>
 
-          {/* ── Las 10 preguntas ── */}
+          {/* ── Las 10 preguntas · aparecen de una en una al hacer scroll ── */}
           <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
             {ACE_PREGUNTAS.map((p) => {
               const elegido = respuestas[p.key];
               return (
-                <Box key={p.key} position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                <Reveal key={p.key} inView direction="up" distance={26} duration={0.55} amount={0.2} w="100%">
+                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
@@ -226,6 +232,7 @@ export default function MetodoPsicologiaAce() {
                     </Flex>
                   </Flex>
                 </Box>
+                </Reveal>
               );
             })}
           </Flex>
@@ -236,6 +243,7 @@ export default function MetodoPsicologiaAce() {
 
           {/* ── Al completar las 10: invitación a ver el resultado ── */}
           {completo && (
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%">
             <Box ref={resultadoRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                    border={azulBorde} boxShadow={glowPanel}>
@@ -264,6 +272,7 @@ export default function MetodoPsicologiaAce() {
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
           )}
         </Flex>
       </Flex>

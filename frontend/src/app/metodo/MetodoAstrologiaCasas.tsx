@@ -15,6 +15,7 @@ import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 // Check pequeño para marcar una casa ya leída.
@@ -197,20 +198,27 @@ export default function MetodoAstrologiaCasas() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
-          <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Casas"
-            bgColor={`${astrologiaBg}dd`}
-            color={astrologiaTxt}
-            space
-            step={{ current: 5, total: 8 }}
-            mb={0}
-            prev={{ label: "← Puntos clave", onClick: () => navigate("/metodo/astrologia/lectura") }}
-            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={headerNext}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title="Casas"
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              step={{ current: 5, total: 8 }}
+              mb={0}
+              prev={{ label: "← Puntos clave", onClick: () => navigate("/metodo/astrologia/lectura") }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              next={headerNext}
+            />
+          </Reveal>
 
-          <Box
+          <Reveal
+            direction="up"
+            distance={34}
+            scaleFrom={0.97}
+            delay={0.12}
+            duration={0.75}
             position="relative"
             w="100%"
             borderRadius="2xl"
@@ -229,20 +237,26 @@ export default function MetodoAstrologiaCasas() {
               py={{ base: 7, md: 9 }}
             >
               {/* ── BOX de la casa seleccionada (arriba en móvil, dcha en desktop) ── */}
-              <Flex
+              <Reveal
+                direction="left"
+                distance={30}
+                delay={0.3}
+                duration={0.7}
+                display="flex"
                 order={{ base: 0, lg: 1 }}
                 flex="1"
                 w="100%"
-                direction="column"
-                justify="center"
+                flexDirection="column"
+                justifyContent="center"
                 minH={{ lg: "253px" }}
               >
                 <CasaBox info={info} textoSel={textoSel} sel={sel}
                          leida={leidos.has(String(sel))} onLeer={() => marcarLeido(String(sel))} />
-              </Flex>
+              </Reveal>
 
               {/* ── RUEDA giratoria ── */}
-              <Flex order={{ base: 1, lg: 0 }} flex="1" justify="center" align="center" w="100%">
+              <Reveal direction="right" distance={30} delay={0.22} duration={0.7}
+                      display="flex" order={{ base: 1, lg: 0 }} flex="1" justifyContent="center" alignItems="center" w="100%">
                 <Box w="100%" maxW="340px">
                   <Box
                     as="svg"
@@ -333,9 +347,9 @@ export default function MetodoAstrologiaCasas() {
                     </Text>
                   )}
                 </Box>
-              </Flex>
+              </Reveal>
             </Flex>
-          </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

@@ -8,6 +8,7 @@ import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   experienciaById,
   aniosConRecuerdo,
@@ -128,6 +129,7 @@ export default function MetodoPsicologiaHuellas() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Huellas"
@@ -145,14 +147,18 @@ export default function MetodoPsicologiaHuellas() {
               disabledTooltip: "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
             }}
           />
+          </Reveal>
 
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Flex direction="column" align="center" textAlign="center" gap={2} maxW="620px">
             <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.9} lineHeight="1.8">
               Recorre tu historia. Marca con ◈ los recuerdos que dejaron huella en ti.
             </Text>
           </Flex>
+          </Reveal>
 
           {anios.length === 0 ? (
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={8} py={12}>
@@ -161,9 +167,11 @@ export default function MetodoPsicologiaHuellas() {
                 </Text>
               </Box>
             </Box>
+            </Reveal>
           ) : (
             <>
               {/* Cuaderno: dos páginas unidas por la espiral (ordenador) */}
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
               <Flex
                 w="100%"
                 align="stretch"
@@ -228,8 +236,10 @@ export default function MetodoPsicologiaHuellas() {
                   onToggle={toggleItem}
                 />
               </Flex>
+              </Reveal>
 
               {/* Botones para pasar de página */}
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
               <Flex align="center" justify="center" gap={6} mt={1}>
                 <FlechaPagina dir="prev" disabled={spreadActual === 0} onClick={() => setSpread((s) => Math.max(0, s - 1))} />
                 <Text color={CREMA} fontSize="sm" opacity={0.9} letterSpacing="0.06em" minW="60px" textAlign="center">
@@ -237,6 +247,7 @@ export default function MetodoPsicologiaHuellas() {
                 </Text>
                 <FlechaPagina dir="next" disabled={spreadActual >= totalSpreads - 1} onClick={() => setSpread((s) => Math.min(totalSpreads - 1, s + 1))} />
               </Flex>
+              </Reveal>
             </>
           )}
 
@@ -357,11 +368,12 @@ const Pagina = ({
             </Text>
           </Box>
         ) : (
-          items.map((it, i) => {
+          <RevealStagger key={edadAno} stagger={0.08} delayChildren={0.05}>
+          {items.map((it, i) => {
             const marcado = itemMarcado(data, edadAno, it);
             return (
+              <RevealItem key={`${i}-${it}`} direction="up" distance={18} duration={0.45}>
               <Box
-                key={`${i}-${it}`}
                 position="relative"
                 px={{ base: 6, md: 8 }}
                 py={{ base: 4, md: 5 }}
@@ -401,8 +413,10 @@ const Pagina = ({
                   </Text>
                 </Flex>
               </Box>
+              </RevealItem>
             );
-          })
+          })}
+          </RevealStagger>
         )}
         </Box>
         {/* Franja final vacía: respiración elegante, como un ítem más. Solo

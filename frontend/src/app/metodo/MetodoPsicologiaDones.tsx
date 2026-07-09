@@ -19,6 +19,7 @@ import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/glo
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import {
   experienciaById,
   DONES_PREGUNTAS,
@@ -185,6 +186,7 @@ export default function MetodoPsicologiaDones() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Recuérdate"
@@ -202,8 +204,10 @@ export default function MetodoPsicologiaDones() {
                 disabledTooltip: "Responde o marca «Sin ideas» las 15 preguntas para descubrir tus dones.",
               }}
             />
+            </Reveal>
 
             {/* ── LA BARAJA: una carta (pregunta) cada vez ── */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -257,9 +261,11 @@ export default function MetodoPsicologiaDones() {
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
 
             {/* Navegación entre preguntas — mismas flechas que en Huellas, con
                 los puntos de progreso en medio (coherencia del programa). */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Flex align="center" justify="center" gap={{ base: 3, md: 5 }} w="100%">
               <FlechaPagina dir="prev" disabled={esPrimera} onClick={anterior} />
               <Flex justify="center" align="center" wrap="wrap" gap={2} maxW="520px">
@@ -278,6 +284,7 @@ export default function MetodoPsicologiaDones() {
               </Flex>
               <FlechaPagina dir="next" disabled={esUltima} onClick={siguiente} />
             </Flex>
+            </Reveal>
 
           </Flex>
         </Flex>

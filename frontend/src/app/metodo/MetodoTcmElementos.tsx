@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { Box, Flex, Text, Modal, ModalOverlay, ModalContent, IconButton } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -15,7 +15,7 @@ import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido,
   testInicialCompleto, viajeCompleto, type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
-import { tieneContenido, INTRO_CINCO_ELEMENTOS, FOTO_ELEMENTO, COMIC_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { tieneContenido, COMIC_INTRO_ELEMENTOS, FOTO_ELEMENTO, COMIC_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
@@ -33,6 +33,7 @@ export default function MetodoTcmElementos() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
   const [comicEl, setComicEl] = useState<Elemento | null>(null);
+  const [introIdx, setIntroIdx] = useState(0);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -118,24 +119,95 @@ export default function MetodoTcmElementos() {
             }}
           />
 
-          {/* Intro (Módulo 1) */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 6, md: 8 }} textAlign="center">
-              <Flex direction="column" gap={3} maxW="640px" mx="auto">
-                {INTRO_CINCO_ELEMENTOS.map((t, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" opacity={0.92}
-                        style={{ textShadow: INK_SHADOW }}>
-                    {t}
+          {/* Intro (Módulo 1) · cómic de 4 viñetas: foto a la izquierda, texto
+              a la derecha, navegable con flechas. Mismo estilo que las
+              Ilustraciones pero inline (sin popup y sobre el fondo actual). */}
+          {(() => {
+            const total = COMIC_INTRO_ELEMENTOS.length;
+            const vin = COMIC_INTRO_ELEMENTOS[introIdx];
+            const isFirst = introIdx === 0;
+            const isLast = introIdx === total - 1;
+            return (
+              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+
+                {/* Línea de luz superior */}
+                <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}
+                     bgGradient={`linear(to-r, transparent, ${tcmTxt}aa, transparent)`} />
+
+                <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
+                      align="center" justify="center" gap={{ base: 5, md: 10 }}
+                      px={{ base: 6, md: 12 }} py={{ base: 7, md: 9 }}>
+
+                  {/* Foto (viñeta) */}
+                  <Box key={`foto-${introIdx}`} w={{ base: "80%", md: "300px" }} maxW={{ base: "260px", md: "300px" }}
+                       aspectRatio={1} flexShrink={0} position="relative"
+                       sx={{ filter: `drop-shadow(0 0 20px rgba(255,255,255,0.25)) drop-shadow(0 0 60px ${tcmTxt}44)` }}>
+                    <Box as="img" src={encodeURI(vin.src)} alt={`Los Cinco Elementos (${introIdx + 1}/${total})`}
+                         w="100%" h="100%" borderRadius="lg" style={{ objectFit: "contain" }} />
+                  </Box>
+
+                  {/* Separador elegante: rayita horizontal en móvil, vertical en escritorio */}
+                  <Box flexShrink={0} alignSelf="center" borderRadius="full"
+                       w={{ base: "52px", md: "1px" }} h={{ base: "1px", md: "150px" }}
+                       bgGradient={{
+                         base: `linear(to-r, transparent, ${tcmTxt}aa, transparent)`,
+                         md: `linear(to-b, transparent, ${tcmTxt}aa, transparent)`,
+                       }} />
+
+                  {/* Texto — misma tipografía que el cómic de Astrología
+                      (ComicViewer): grande, ligero, con aire entre líneas. */}
+                  <Flex direction="column" gap={3} flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
+                    <Text key={`txt-${introIdx}`} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
+                          letterSpacing="0.02em" fontWeight="400" textAlign={{ base: "center", md: "left" }}
+                          style={{ textShadow: INK_SHADOW }}>
+                      {vin.texto}
+                    </Text>
+                  </Flex>
+                </Flex>
+
+                {/* Controles de navegación — flechas redondas con glow, como
+                    las del ComicViewer de Astrología. */}
+                <Flex position="relative" zIndex={1} align="center" justify="center" gap={6}
+                      pb={{ base: 5, md: 6 }} mt={{ base: -1, md: -2 }}>
+                  <IconButton aria-label="Anterior" onClick={() => setIntroIdx((i) => Math.max(i - 1, 0))}
+                    isDisabled={isFirst} variant="ghost" color={tcmTxt} opacity={isFirst ? 0.25 : 1}
+                    borderRadius="full" w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
+                    minW={{ base: "42px", md: "48px" }}
+                    bg={`${tcmTxt}10`} border={`1px solid ${tcmTxt}33`}
+                    boxShadow={isFirst ? "none" : `0 0 14px ${tcmTxt}44, 0 0 32px ${tcmTxt}22`}
+                    _hover={isFirst ? {} : { bg: `${tcmTxt}22`, borderColor: `${tcmTxt}88`, boxShadow: `0 0 22px ${tcmTxt}66, 0 0 50px ${tcmTxt}33` }}
+                    icon={
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill={tcmTxt}
+                        style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${tcmTxt}cc) drop-shadow(0 0 14px ${tcmTxt}77)` }}>
+                        <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+                      </Box>
+                    } />
+                  <Text color={`${tcmTxt}cc`} fontSize="sm" fontStyle="italic" letterSpacing="0.18em"
+                        minW="52px" textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                    {introIdx + 1} / {total}
                   </Text>
-                ))}
-              </Flex>
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" mt={5}
-                    letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
-                Pulsa sobre cada elemento para descubrir qué representa.
-              </Text>
-            </Box>
-          </Box>
+                  <IconButton aria-label="Siguiente" onClick={() => setIntroIdx((i) => Math.min(i + 1, total - 1))}
+                    isDisabled={isLast} variant="ghost" color={tcmTxt} opacity={isLast ? 0.25 : 1}
+                    borderRadius="full" w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
+                    minW={{ base: "42px", md: "48px" }}
+                    bg={`${tcmTxt}10`} border={`1px solid ${tcmTxt}33`}
+                    boxShadow={isLast ? "none" : `0 0 14px ${tcmTxt}44, 0 0 32px ${tcmTxt}22`}
+                    _hover={isLast ? {} : { bg: `${tcmTxt}22`, borderColor: `${tcmTxt}88`, boxShadow: `0 0 22px ${tcmTxt}66, 0 0 50px ${tcmTxt}33` }}
+                    icon={
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill={tcmTxt}
+                        style={{ filter: isLast ? "none" : `drop-shadow(0 0 6px ${tcmTxt}cc) drop-shadow(0 0 14px ${tcmTxt}77)` }}>
+                        <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                      </Box>
+                    } />
+                </Flex>
+
+                {/* Línea de luz inferior */}
+                <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
+                     bgGradient={`linear(to-r, transparent, ${tcmTxt}aa, transparent)`} />
+              </Box>
+            );
+          })()}
 
           {/* La estrella interactiva */}
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>

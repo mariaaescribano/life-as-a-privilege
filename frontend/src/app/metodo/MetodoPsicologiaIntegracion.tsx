@@ -10,6 +10,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
@@ -325,6 +326,7 @@ export default function MetodoPsicologiaIntegracion() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 8, md: 10 }}>
 
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Relación"
@@ -337,16 +339,20 @@ export default function MetodoPsicologiaIntegracion() {
               prev={{ label: "← Narra", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
               next={{ label: "Recuérdate →", onClick: irARecuerdate }}
             />
+            </Reveal>
 
             {/* Intro: la idea de la proyección */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <IntroRecorrido>
               Tus heridas suelen ser proyecciones de tus arquetipos: los elegimos para sanarlos e integrarlos en nosotros.
             </IntroRecorrido>
+            </Reveal>
 
             {/* ════════ TRES COLUMNAS ════════ */}
-            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} align="stretch">
+            <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
 
               {/* ── COLUMNA 1 · HERIDAS ── */}
+              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -374,8 +380,10 @@ export default function MetodoPsicologiaIntegracion() {
                   </Flex>
                 </Box>
               </Flex>
+              </RevealItem>
 
               {/* ── COLUMNA 2 · ARQUETIPOS ── */}
+              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -412,8 +420,10 @@ export default function MetodoPsicologiaIntegracion() {
                   </Flex>
                 </Box>
               </Flex>
+              </RevealItem>
 
               {/* ── COLUMNA 3 · RELACIONES ── */}
+              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1.05" minW={0}>
                 <Box position="relative" borderRadius="2xl" overflow="hidden" h={COL_H}
                      border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
@@ -464,7 +474,8 @@ export default function MetodoPsicologiaIntegracion() {
                   </Flex>
                 </Box>
               </Flex>
-            </Flex>
+              </RevealItem>
+            </RevealStagger>
 
           </Flex>
         </Flex>

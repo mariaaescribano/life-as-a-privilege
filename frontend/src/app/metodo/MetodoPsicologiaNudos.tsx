@@ -8,6 +8,7 @@ import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import {
   experienciaById,
@@ -121,6 +122,7 @@ export default function MetodoPsicologiaNudos() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 7, md: 9 }}>
 
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Nudos"
@@ -133,9 +135,11 @@ export default function MetodoPsicologiaNudos() {
               prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
               next={{ label: "Necesidades →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
             />
+            </Reveal>
 
 
             {/* Box principal: pregunta + entrada + ejemplos + nudos seleccionados */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <Box
               position="relative"
               w="100%"
@@ -243,8 +247,10 @@ export default function MetodoPsicologiaNudos() {
 
               </Flex>
             </Box>
+            </Reveal>
 
             {/* Box «Mis Nudos»: la selección final del usuario */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Box
               position="relative"
               w="100%"
@@ -319,6 +325,7 @@ export default function MetodoPsicologiaNudos() {
                 </Text>
               </Flex>
             </Box>
+            </Reveal>
           </Flex>
         </Flex>
       </Box>

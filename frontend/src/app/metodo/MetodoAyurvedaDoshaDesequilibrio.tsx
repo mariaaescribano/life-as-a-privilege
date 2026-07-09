@@ -10,6 +10,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -254,6 +255,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 6, md: 7 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
@@ -266,8 +268,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
             extra={ilustracionesBtn}
             next={{ label: "Cuidarte →", onClick: irSiguiente, disabled: !guardado, disabledTooltip: "Guarda tu reflexión para continuar." }}
           />
+          </Reveal>
 
-          {/* ── HERO ── */}
+          {/* ── HERO (primer box: entra al montar, siempre visible) ── */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
@@ -281,8 +285,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               </Flex>
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── LO QUE AUMENTA (casillas, local) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.aumenta.titulo}</SeccionTitulo>
             <Flex direction="column" gap={3}>
@@ -291,8 +297,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── ¿CUÁNTAS HAS MARCADO? (dinámico) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.marcado.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>
@@ -334,8 +342,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               })}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── LAS PRIMERAS SEÑALES ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.senales.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
@@ -348,8 +358,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
             </Flex>
             <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(c.senales.cierre)}</Text>
           </Panel>
+          </Reveal>
 
           {/* ── ¿CÓMO VOLVER AL EQUILIBRIO? ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.equilibrio.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
@@ -366,8 +378,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── REFLEXIÓN (texto libre · SE GUARDA) ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={reflexionRef} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
@@ -410,8 +424,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               </Flex>
             </Panel>
           </Box>
+          </Reveal>
 
           {/* ── CIERRE + Continuar ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (
@@ -439,6 +455,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               )}
             </Flex>
           </Panel>
+          </Reveal>
         </Flex>
       </Flex>
 

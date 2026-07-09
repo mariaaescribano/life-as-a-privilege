@@ -14,6 +14,7 @@ import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -126,23 +127,26 @@ export default function MetodoPsicologia() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
-          <MetodoStepHeader
-            icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Vuelve a ti"
-            pageLabel="1/18"
-            bgColor={`${neuropsicologiaBg}dd`}
-            color={neuropsicologiaTxt}
-            nom={neuropsicologiaNom}
-            mb={0}
-            boxShadow={glowHeader}
-            prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/cursos") }}
-            next={{
-              label: "Problema →",
-              onClick: irAProblema,
-            }}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
+              title="Vuelve a ti"
+              pageLabel="1/18"
+              bgColor={`${neuropsicologiaBg}dd`}
+              color={neuropsicologiaTxt}
+              nom={neuropsicologiaNom}
+              mb={0}
+              boxShadow={glowHeader}
+              prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/cursos") }}
+              next={{
+                label: "Problema →",
+                onClick: irAProblema,
+              }}
+            />
+          </Reveal>
 
           {/* ── Intro contemplativa (misma fuerza que el header: sin velo) ── */}
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
           <Box
             position="relative"
             w="100%"
@@ -189,8 +193,10 @@ export default function MetodoPsicologia() {
               </Box>
             </Box>
           </Box>
+          </Reveal>
 
           {/* ── Disparador del aviso: abre el popup en mitad de la página ── */}
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Box
             as="button"
             onClick={() => setAvisoOpen(true)}
@@ -213,6 +219,7 @@ export default function MetodoPsicologia() {
           >
             <Box as="span" fontSize="md">⚠</Box> Aviso importante
           </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

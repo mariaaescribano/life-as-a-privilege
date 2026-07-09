@@ -13,6 +13,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -149,6 +150,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 6, md: 7 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title="Tu recorrido"
@@ -160,8 +162,10 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             extra={ilustracionesBtn}
             next={{ label: "Cursos →", onClick: irCursos }}
           />
+          </Reveal>
 
-          {/* ── HERO ── */}
+          {/* ── HERO (primer box: entra al montar, siempre visible) ── */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
@@ -188,8 +192,10 @@ export default function MetodoAyurvedaDoshaRecorrido() {
               </Text>
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── Tus respuestas ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {entradas.length > 0 ? (
             <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
               {entradas.map((e, i) => (
@@ -214,9 +220,11 @@ export default function MetodoAyurvedaDoshaRecorrido() {
               </Text>
             </Panel>
           )}
+          </Reveal>
 
           {/* ── Tu compromiso ── */}
           {compromiso && (
+            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel color={meta.color}>
               <Flex direction="column" align="center" textAlign="center" gap={3}>
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.16em" textTransform="uppercase">
@@ -228,9 +236,11 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 </Text>
               </Flex>
             </Panel>
+            </Reveal>
           )}
 
           {/* ── Tu día ideal ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" lineHeight="1.3" mb={2} style={{ textShadow: INK_SHADOW }}>
               Este es el día ideal que te has propuesto
@@ -278,6 +288,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
               </Text>
             )}
           </Panel>
+          </Reveal>
 
           {/* ── Cierre · A por todas ── */}
           {/* <Panel color={meta.color}>

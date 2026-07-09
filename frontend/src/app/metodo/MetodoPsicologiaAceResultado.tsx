@@ -28,6 +28,7 @@ import {
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -95,25 +96,30 @@ export default function MetodoPsicologiaAceResultado() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
-          <MetodoStepHeader
-            icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title="Tu resultado"
-            bgColor={`${neuropsicologiaBg}f0`}
-            color={neuropsicologiaTxt}
-            nom={neuropsicologiaNom}
-            step={{ current: 4, total: 20 }}
-            mb={0}
-            boxShadow={glowHeader}
-            prev={{ label: "← ACE", onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
-            next={{ label: "Línea de Vida →", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+              title="Tu resultado"
+              bgColor={`${neuropsicologiaBg}f0`}
+              color={neuropsicologiaTxt}
+              nom={neuropsicologiaNom}
+              step={{ current: 4, total: 20 }}
+              mb={0}
+              boxShadow={glowHeader}
+              prev={{ label: "← ACE", onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
+              next={{ label: "Línea de Vida →", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
+            />
+          </Reveal>
 
           {/* Sobre el turquesa: el título de la página */}
-          <IntroRecorrido>¿Qué significa tu resultado ACE?</IntroRecorrido>
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.7} w="100%" display="flex" justifyContent="center">
+            <IntroRecorrido>¿Qué significa tu resultado ACE?</IntroRecorrido>
+          </Reveal>
 
           <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
 
             {/* Puntuación + banda */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -148,14 +154,18 @@ export default function MetodoPsicologiaAceResultado() {
                 </Text>
               </Flex>
             </Box>
+            </Reveal>
 
             {/* Consecuencias (dosis-respuesta) — una sola frase entre los boxes */}
+            <Reveal direction="up" distance={20} delay={0.32} duration={0.7} w="100%">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" fontWeight="600"
                   textAlign="center" lineHeight="1.7" maxW="560px" mx="auto">
               Cuantas más experiencias adversas, mayor es el riesgo de enfermedades y dificultades.
             </Text>
+            </Reveal>
 
             {/* Esperanza / resiliencia */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -190,6 +200,7 @@ export default function MetodoPsicologiaAceResultado() {
                 </Flex>
               </Flex>
             </Box>
+            </Reveal>
           </Flex>
         </Flex>
       </Flex>

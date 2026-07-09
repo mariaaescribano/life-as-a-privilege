@@ -28,6 +28,7 @@ export function IndiceRecorrido({
   defaultExpId = "linea-de-vida",
   paramKey = "experienciaId",
   acento,
+  luz = true,
 }: {
   indice?: PasoRecorrido[];
   total?: number;
@@ -41,6 +42,9 @@ export function IndiceRecorrido({
   /** Color de acento para resaltar la página actual y los números. Por defecto
    *  la propia tinta; ayurveda le pasa el color del dosha para diferenciarlo. */
   acento?: string;
+  /** Si es false, el texto del botón «Índice» no lleva halo claro: usa una
+   *  sombra tenue con el color de fondo (como «Mis notas»). Astrología lo pide. */
+  luz?: boolean;
 } = {}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,6 +55,22 @@ export function IndiceRecorrido({
   const TINTA = tinta;
   const ACENTO = acento || tinta;
   const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${bg}`;
+
+  // Contraste: algunas disciplinas tienen la «tinta» clara (astrología) y otras
+  // oscura (psicología). Para que los números y títulos SIEMPRE se vean, elegimos
+  // el color según la luminancia del fondo: sobre fondo claro → el color oscuro
+  // de la disciplina (que suele ser su `bg`); sobre fondo oscuro → crema.
+  const hexLum = (hex: string): number => {
+    const h = (hex || "").replace("#", "");
+    const n = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+    const r = parseInt(n.slice(0, 2), 16), g = parseInt(n.slice(2, 4), 16), b = parseInt(n.slice(4, 6), 16);
+    return Number.isFinite(r + g + b) ? 0.299 * r + 0.587 * g + 0.114 * b : 128;
+  };
+  const OSCURO = hexLum(TINTA) <= hexLum(bg) ? TINTA : bg;
+  const contraste = (fondo: string) => (hexLum(fondo) < 140 ? PAPEL : OSCURO);
+  // Sombra del texto del botón flotante: por defecto un halo claro (PAPEL);
+  // si `luz` es false, una sombra tenue con el fondo, igual que «Mis notas».
+  const BTN_TEXT_SHADOW = luz ? `0 1px 6px ${PAPEL}` : `0 1px 6px ${bg}cc`;
 
   // El id del recorrido: el de la URL (según `paramKey`) o el por defecto.
   const expId = params[paramKey] || defaultExpId;
@@ -93,10 +113,10 @@ export function IndiceRecorrido({
       >
         <DisciplinaBgLayer nom={nom} borderRadius="full" />
         <Box as="span" position="relative" zIndex={1} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1"
-             style={{ textShadow: `0 1px 6px ${PAPEL}` }}>☰</Box>
+             style={{ textShadow: BTN_TEXT_SHADOW }}>☰</Box>
         <Text position="relative" zIndex={1} color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
               fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em" lineHeight="1"
-              style={{ textShadow: `0 1px 6px ${PAPEL}` }}>
+              style={{ textShadow: BTN_TEXT_SHADOW }}>
           Índice
         </Text>
       </Flex>
@@ -115,9 +135,9 @@ export function IndiceRecorrido({
                  sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
               <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={2}
-                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
-                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
-                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="lg" lineHeight="1"
+                   cursor="pointer" opacity={0.8} transition="all 0.15s" style={{ textShadow: INK_SHADOW }}
+                   _hover={{ opacity: 1, transform: "scale(1.12)" }}>✕</Box>
 
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}
                     style={{ textShadow: INK_SHADOW }}>
@@ -138,13 +158,13 @@ export function IndiceRecorrido({
                           _hover={{ transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)",
                                     boxShadow: esActual ? `0 6px 20px ${ACENTO}66` : `0 2px 10px ${ACENTO}22` }}>
                       <Flex flexShrink={0} align="center" justify="center" w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }}
-                            borderRadius="full" bg={esActual ? PAPEL : `${ACENTO}`}
-                            color={esActual ? ACENTO : PAPEL} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>
+                            borderRadius="full" bg={esActual ? PAPEL : ACENTO}
+                            color={contraste(esActual ? PAPEL : ACENTO)} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>
                         {p.n}
                       </Flex>
-                      <Text flex="1" minW={0} color={esActual ? PAPEL : TINTA} fontWeight={esActual ? "700" : "600"}
+                      <Text flex="1" minW={0} color={esActual ? contraste(ACENTO) : OSCURO} fontWeight={esActual ? "700" : "600"}
                             fontSize={{ base: "sm", md: "md" }} lineHeight="1.25" noOfLines={1}
-                            style={esActual ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
+                            style={esActual && contraste(ACENTO) === PAPEL ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
                         {p.titulo}
                       </Text>
                     </Flex>

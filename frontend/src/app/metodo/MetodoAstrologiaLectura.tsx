@@ -4,6 +4,7 @@ import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -14,7 +15,10 @@ import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+
+const MotionBox = motion(Box) as any;
 
 interface Reto { id: string; titulo: string; texto: string; }
 
@@ -76,18 +80,23 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
   const glow = `drop-shadow(0 0 6px ${astrologiaTxt}) drop-shadow(0 0 16px ${astrologiaTxt}cc)`;
   const glowFuerte = `drop-shadow(0 0 12px ${astrologiaTxt}) drop-shadow(0 0 30px ${astrologiaTxt})`;
   return (
-    <Box
+    <MotionBox
       as="button"
       onClick={onOpen}
       aria-label={leido ? "Punto clave leído (abrir de nuevo)" : "Abrir punto clave"}
       position="absolute"
       top={top}
       left={left}
-      transform="translate(-50%, -50%)"
-      transition="transform 0.25s ease"
       cursor="pointer"
       zIndex={2}
-      _hover={{ transform: "translate(-50%, -50%) scale(1.18)" }}
+      // Entrada: la estrella "se enciende" (aparece con un pequeño estallido de
+      // escala) en cascada según su índice; conserva el centrado y el hover.
+      // Al MONTAR (no whileInView) para que siempre ocurra al cambiar de página.
+      initial={{ opacity: 0, scale: 0.15 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.18 }}
+      transition={{ delay: 0.35 + (index % 10) * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      transformTemplate={(_: any, generated: string) => `translate(-50%, -50%) ${generated}`}
       sx={{
         "@keyframes retoTwinkle": {
           "0%, 100%": { filter: glow, opacity: 0.9 },
@@ -119,7 +128,7 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
           </Box>
         )}
       </Box>
-    </Box>
+    </MotionBox>
   );
 }
 
@@ -173,27 +182,30 @@ export default function MetodoAstrologiaLectura() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
-          <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Puntos clave"
-            bgColor={`${astrologiaBg}dd`}
-            color={astrologiaTxt}
-            space
-            step={{ current: 4, total: 8 }}
-            mb={0}
-            prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
-            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={{
-              label: "Casas →",
-              onClick: () => navigate("/metodo/astrologia/casas"),
-              disabled: !todosRetosLeidos,
-              disabledTooltip: "Lee todos tus puntos clave para continuar.",
-            }}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title="Puntos clave"
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              step={{ current: 4, total: 8 }}
+              mb={0}
+              prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              next={{
+                label: "Casas →",
+                onClick: () => navigate("/metodo/astrologia/casas"),
+                disabled: !todosRetosLeidos,
+                disabledTooltip: "Lee todos tus puntos clave para continuar.",
+              }}
+            />
+          </Reveal>
 
           {/* Texto sobre el fondo (área azul), debajo del header y encima del
               box: el box de las estrellas queda solo para las estrellas. */}
-          <Flex direction="column" align="center" gap={3}>
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%"
+                  display="flex" flexDirection="column" alignItems="center" gap={3}>
             <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px"
                   style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
               Pulsa sobre cada estrella para descubrir tus puntos clave.
@@ -207,9 +219,14 @@ export default function MetodoAstrologiaLectura() {
                   : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}
               </Text>
             )}
-          </Flex>
+          </Reveal>
 
-          <Box
+          <Reveal
+            direction="up"
+            distance={34}
+            scaleFrom={0.97}
+            delay={0.22}
+            duration={0.75}
             position="relative"
             w="100%"
             borderRadius="2xl"
@@ -232,7 +249,7 @@ export default function MetodoAstrologiaLectura() {
                 </Text>
               )}
             </Box>
-          </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

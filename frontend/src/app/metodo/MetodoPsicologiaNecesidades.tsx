@@ -12,6 +12,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import {
   experienciaById,
   NECESIDADES,
@@ -109,6 +110,7 @@ export default function MetodoPsicologiaNecesidades() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="1040px" gap={{ base: 7, md: 9 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Necesidades"
@@ -121,8 +123,10 @@ export default function MetodoPsicologiaNecesidades() {
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
             next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
           />
+          </Reveal>
 
           {/* ── Directo sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} w="100%" maxW="640px">
             <IntroRecorrido>{NECESIDADES_INTRO.subtitulo}</IntroRecorrido>
 
@@ -138,21 +142,25 @@ export default function MetodoPsicologiaNecesidades() {
               </Text>
             </Flex>
           </Flex>
+          </Reveal>
 
-          {/* ── Grid de celdas ── */}
+          {/* ── Grid de celdas · van apareciendo una a una al bajar el scroll
+                 (con un leve desfase izquierda→derecha dentro de cada fila) ── */}
           <Box
             display="grid"
             w="100%"
             gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
             gap={{ base: 4, md: 5 }}
           >
-            {NECESIDADES.map((n) => {
+            {NECESIDADES.map((n, idx) => {
               const op = opcionNecesidad(respuestas[n.key]);
               const marcada = !!op;
               const acento = op?.color ?? AZUL;
               return (
+                <Reveal key={n.key} inView direction="up" distance={26} duration={0.5} amount={0.25} delay={(idx % 3) * 0.06} display="flex">
                 <Flex
-                  key={n.key}
+                  flex="1"
+                  minW={0}
                   direction="column"
                   align="center"
                   justify="space-between"
@@ -207,6 +215,7 @@ export default function MetodoPsicologiaNecesidades() {
                     {marcada ? `${op!.label} ✓` : "Reflexionar"}
                   </Box>
                 </Flex>
+                </Reveal>
               );
             })}
           </Box>
@@ -235,10 +244,6 @@ export default function MetodoPsicologiaNecesidades() {
                   </Text>
 
                   <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
-                    Una respuesta sana
-                  </Text>
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" maxW="460px" style={{ textShadow: INK_SHADOW }}>
                     {abierta.respuesta}
                   </Text>

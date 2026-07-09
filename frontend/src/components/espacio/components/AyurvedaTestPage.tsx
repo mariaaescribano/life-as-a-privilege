@@ -5,6 +5,7 @@ import axios from "axios";
 import { MetodoStepHeader } from "../../metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../global/DisciplinaBgLayer";
 import { HinduismoIlustracionesModal } from "../../metodo/HinduismoIlustracionesModal";
+import { Reveal } from "../../global/Reveal";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import {
@@ -429,10 +430,10 @@ export default function AyurvedaTestPage({
             </Box>
           </Box>
 
-          {/* Preguntas */}
+          {/* Preguntas · cada box va apareciendo al bajar (los visibles ya salen al cargar) */}
           {preguntasAyurveda.map((p, qi) => (
+            <Reveal key={qi} inView direction="up" distance={26} duration={0.5} amount={0.15} w="100%" maxW="850px">
             <Box
-              key={qi}
               position="relative"
               overflow="hidden"
               w="100%" maxW="850px"
@@ -485,6 +486,7 @@ export default function AyurvedaTestPage({
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
           ))}
 
           {/* Botón enviar */}

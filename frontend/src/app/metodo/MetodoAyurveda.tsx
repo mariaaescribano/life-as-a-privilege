@@ -9,6 +9,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { Reveal } from "../../components/global/Reveal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -121,6 +122,7 @@ export default function MetodoAyurveda() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
             title="Equilibra tu naturaleza"
@@ -136,8 +138,10 @@ export default function MetodoAyurveda() {
               onClick: () => navigate("/metodo/ayurveda/test"),
             }}
           />
+          </Reveal>
 
           {/* ── Intro contemplativa ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box
             position="relative"
             w="100%"
@@ -159,8 +163,10 @@ export default function MetodoAyurveda() {
               </Text>
             </Box>
           </Box>
+          </Reveal>
 
           {/* ── Disparador del aviso ── */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
           <Box
             as="button"
             onClick={() => setAvisoOpen(true)}
@@ -183,6 +189,7 @@ export default function MetodoAyurveda() {
           >
             <Box as="span" fontSize="md">⚠</Box> Aviso importante
           </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

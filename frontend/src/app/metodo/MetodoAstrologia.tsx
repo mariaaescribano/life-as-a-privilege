@@ -10,6 +10,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { TextoCartaExplicativo } from "../../components/metodo/TextoCartaExplicativo";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   API_URL,
@@ -235,21 +236,28 @@ export default function MetodoAstrologia() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
           {/* ── Header de disciplina ── */}
-          <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Astrología"
-            bgColor={`${astrologiaBg}dd`}
-            color={astrologiaTxt}
-            space
-            step={{ current: 1, total: 8 }}
-            mb={0}
-            prev={headerPrev}
-            extra={headerExtra}
-            next={headerNext}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title="Astrología"
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              step={{ current: 1, total: 8 }}
+              mb={0}
+              prev={headerPrev}
+              extra={headerExtra}
+              next={headerNext}
+            />
+          </Reveal>
 
           {/* ── Caja principal con SpaceBg ── */}
-          <Box
+          <Reveal
+            direction="up"
+            distance={34}
+            scaleFrom={0.97}
+            delay={0.12}
+            duration={0.75}
             position="relative"
             w="100%"
             borderRadius="2xl"
@@ -271,21 +279,27 @@ export default function MetodoAstrologia() {
                 </Flex>
               )}
 
-              {/* ── ESTADO A — formulario ── */}
+              {/* ── ESTADO A — formulario (entra en cascada) ── */}
               {!yaSolicitado && (
-                <Flex direction="column" gap={5}>
-                  <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
-                    Tu Carta Astral
-                  </Text>
-                  <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto"
-                        style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                    Necesito tus datos de nacimiento para poder leer tu carta.
-                  </Text>
+                <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
+                  <RevealItem>
+                    <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
+                          style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
+                      Tu Carta Astral
+                    </Text>
+                  </RevealItem>
+                  <RevealItem>
+                    <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto"
+                          style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
+                      Necesito tus datos de nacimiento para poder leer tu carta.
+                    </Text>
+                  </RevealItem>
 
-                  <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
+                  <RevealItem>
+                    <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
+                  </RevealItem>
 
-                  <Box>
+                  <RevealItem>
                     <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
                       Fecha de nacimiento
                     </Text>
@@ -370,9 +384,9 @@ export default function MetodoAstrologia() {
                         {dia} de {MESES.find((m) => m.num === mes)?.nombre.toLowerCase()} de {anio}
                       </Text>
                     )}
-                  </Box>
+                  </RevealItem>
 
-                  <Box>
+                  <RevealItem>
                     <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
                       Hora de nacimiento
                     </Text>
@@ -396,18 +410,20 @@ export default function MetodoAstrologia() {
                         "::-webkit-calendar-picker-indicator": { filter: "invert(0.9)" },
                       }}
                     />
-                  </Box>
-                  <Campo label="País" value={pais} onChange={setPais} color={astrologiaTxt} placeholder="Ej: España" />
-                  <Flex direction={{ base: "column", md: "row" }} gap={4}>
+                  </RevealItem>
+                  <RevealItem>
+                    <Campo label="País" value={pais} onChange={setPais} color={astrologiaTxt} placeholder="Ej: España" />
+                  </RevealItem>
+                  <RevealItem display="flex" flexDirection={{ base: "column", md: "row" }} gap={4}>
                     <Campo label="Lugar (ciudad)" value={lugar} onChange={setLugar} color={astrologiaTxt} placeholder="Ej: Madrid" />
                     <Campo label="Región / provincia" value={region} onChange={setRegion} color={astrologiaTxt} placeholder="Ej: Comunidad de Madrid" />
-                  </Flex>
+                  </RevealItem>
 
                   {error && (
                     <Text color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>
                   )}
 
-                  <Flex justify="flex-end" mt={4}>
+                  <RevealItem display="flex" justifyContent="flex-end" mt={4}>
                     <Box
                       as="button"
                       onClick={() => { if (camposCompletos) abrirConfirmacion(); }}
@@ -435,12 +451,12 @@ export default function MetodoAstrologia() {
                     >
                       Recibir mi lectura
                     </Box>
-                  </Flex>
-                </Flex>
+                  </RevealItem>
+                </RevealStagger>
               )}
 
             </Box>
-          </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

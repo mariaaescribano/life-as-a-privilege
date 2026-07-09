@@ -21,12 +21,12 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import {
   experienciaById,
   type LineaDeVidaData,
-  type Constelacion,
   type CompromisoData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
@@ -42,44 +42,12 @@ const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
-// Scroll interno fino, en el mismo marrón.
-const SCROLL_SX = {
-  scrollbarWidth: "thin" as const,
-  scrollbarColor: `${TINTA}66 transparent`,
-  "&::-webkit-scrollbar": { width: "7px" },
-  "&::-webkit-scrollbar-thumb": { background: `${TINTA}66`, borderRadius: "8px" },
-};
-
-const relTitulo = (c: Constelacion): string => (c.titulo || "").trim() || "Relación sin título";
-
-// Caja de resumen (misma altura, scroll vertical interno). Título con línea de
-// separación. Se usan dos en fila: «De dónde vengo» y «Me comprometo a vivir».
-function CajaResumen({ titulo, children }: { titulo: string; children: React.ReactNode }) {
-  return (
-    <Box position="relative" flex="1" minW={0} borderRadius="2xl" overflow="hidden"
-         border={azulBorde} boxShadow={glowPanel} bgColor={neuropsicologiaBg}
-         h={{ base: "300px", md: "440px" }}>
-      <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-      <Flex position="relative" zIndex={1} direction="column" h="100%" px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
-        <Text flexShrink={0} color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-              letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>{titulo}</Text>
-        <Box flexShrink={0} h="1px" w="100%" my={{ base: 3, md: 3.5 }} bg={`${TINTA}33`} />
-        <Box flex="1" minH={0} overflowY="auto" pr={2} sx={SCROLL_SX}>
-          {children}
-        </Box>
-      </Flex>
-    </Box>
-  );
-}
-
 export default function MetodoPsicologiaCompromiso() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [problema, setProblema] = useState("");
-  const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [compromiso, setCompromiso] = useState<CompromisoData>({});
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
@@ -113,8 +81,6 @@ export default function MetodoPsicologiaCompromiso() {
         });
         const d: LineaDeVidaData = psi.data?.data || {};
         dataRef.current = d;
-        setProblema(typeof d["problema-actual"] === "string" ? (d["problema-actual"] as string) : "");
-        setRelaciones(Array.isArray(d.constelaciones) ? d.constelaciones.map((c) => ({ ...c })) : []);
         setCompromiso(d.compromiso && typeof d.compromiso === "object" ? d.compromiso : {});
       } catch {
         // silencioso
@@ -175,18 +141,6 @@ export default function MetodoPsicologiaCompromiso() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
-  // El usuario suele escribir varios problemas en un mismo texto (uno por línea).
-  const problemas = problema.split(/\n+/).map((s) => s.trim()).filter(Boolean);
-  // Solo las relaciones con una verdad más sana escrita (la respuesta a
-  // «¿Qué verdad más sana quieres practicar?» del Mapa).
-  const compromisos = relaciones
-    .map((c) => ({
-      titulo: relTitulo(c),
-      patron: (c.verdadSana || "").trim(),
-      coste: (c.coste || "").trim(),
-    }))
-    .filter((x) => x.patron.length > 0);
-
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -195,110 +149,35 @@ export default function MetodoPsicologiaCompromiso() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="860px" gap={{ base: 6, md: 8 }}>
 
-            <MetodoStepHeader
-              icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Compromiso"
-              bgColor={`${neuropsicologiaBg}f0`}
-              color={neuropsicologiaTxt}
-              nom={neuropsicologiaNom}
-              maxW="100%"
-              step={{ current: 18, total: 20 }}
-              mb={0}
-              boxShadow={glowHeader}
-              prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
-              next={{ label: "Brújula →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
-            />
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <MetodoStepHeader
+                icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
+                title="Compromiso"
+                bgColor={`${neuropsicologiaBg}f0`}
+                color={neuropsicologiaTxt}
+                nom={neuropsicologiaNom}
+                maxW="100%"
+                step={{ current: 18, total: 20 }}
+                mb={0}
+                boxShadow={glowHeader}
+                prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
+                next={{ label: "Brújula →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
+              />
+            </Reveal>
 
             {/* Intro */}
-            <IntroRecorrido>
-              Ya entiendes tu historia. Este es tu compromiso: frente a lo que te trajo hasta aquí,
-              esto es lo que eliges vivir a partir de ahora.
-            </IntroRecorrido>
-
-            {/* ── Dos cajas en fila: de dónde vengo · me comprometo a vivir ── */}
-            <Flex w="100%" direction={{ base: "column", md: "row" }} gap={{ base: 6, md: 6 }} align="stretch">
-
-              <CajaResumen titulo="De dónde vengo">
-                {problemas.length > 0 ? (
-                  <Flex direction="column" gap={{ base: 4, md: 5 }}>
-                    {problemas.map((p, i) => (
-                      <Box key={i} pl={{ base: 4, md: 5 }} borderLeft={`3px solid ${TINTA}66`}>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                              lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                          {p}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7}
-                        style={{ textShadow: INK_SHADOW }}>
-                    Aquí aparecerá el problema con el que empezaste tu camino.
-                  </Text>
-                )}
-              </CajaResumen>
-
-              <CajaResumen titulo="Me comprometo a vivir">
-                {compromisos.length > 0 ? (
-                  <Flex direction="column" gap={{ base: 4, md: 4 }}>
-                    {compromisos.map((x, i) => (
-                      <Box key={i} position="relative" borderRadius="xl" overflow="hidden"
-                           bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
-                           pl={{ base: 5, md: 6 }} pr={{ base: 4, md: 5 }} py={{ base: 4, md: 4 }}>
-                        <Box position="absolute" left="0" top="0" bottom="0" w="4px" bg={TINTA} />
-                        <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.16em"
-                              textTransform="uppercase" opacity={0.7} mb={x.coste ? 3 : 1.5}>
-                          {x.titulo}
-                        </Text>
-
-                        {x.coste && (
-                          <Box mb={3.5} pb={3.5} borderBottom={`1px solid ${TINTA}26`}>
-                            <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.12em"
-                                  textTransform="uppercase" opacity={0.55} mb={1}>
-                              El coste de sostenerlo
-                            </Text>
-                            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                                  lineHeight="1.6" opacity={0.78}>
-                              {x.coste}
-                            </Text>
-                          </Box>
-                        )}
-
-                        <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.12em"
-                              textTransform="uppercase" opacity={0.55} mb={1}>
-                          Me comprometo a
-                        </Text>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="600" fontStyle="italic"
-                              lineHeight="1.55">
-                          «{x.patron}»
-                        </Text>
-                      </Box>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7}
-                        style={{ textShadow: INK_SHADOW }}>
-                    Aquí aparecerán las verdades más sanas que escribas en el Mapa, en
-                    «¿Qué verdad más sana quieres practicar?».
-                  </Text>
-                )}
-              </CajaResumen>
-
-            </Flex>
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+              <IntroRecorrido>
+                Ya entiendes tu historia. Toma consciencia de qué no pudieron darte y comprométete a tratarte con cariño un poco más todos los días.
+              </IntroRecorrido>
+            </Reveal>
 
             {/* ── Mi compromiso conmigo mismo: las dos preguntas ── */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%">
             <Box position="relative" w="100%" maxW="100%" borderRadius="2xl" overflow="hidden"
                  border={azulBorde} boxShadow={glowPanel} bgColor={neuropsicologiaBg}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                <Flex direction="column" align="center" gap={3} mb={{ base: 7, md: 8 }} textAlign="center">
-                  <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-                        lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    Mi compromiso conmigo mismo
-                  </Text>
-                  <Box h="2px" w="72px" bg={`${TINTA}66`} borderRadius="full" />
-                </Flex>
-
                 <Flex direction="column" gap={{ base: 6, md: 7 }}>
                   <PreguntaCompromiso
                     numero={1}
@@ -328,6 +207,7 @@ export default function MetodoPsicologiaCompromiso() {
                 </Flex>
               </Box>
             </Box>
+            </Reveal>
 
           </Flex>
         </Flex>

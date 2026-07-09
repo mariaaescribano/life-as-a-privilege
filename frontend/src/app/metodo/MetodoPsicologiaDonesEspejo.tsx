@@ -22,6 +22,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
@@ -50,7 +51,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const CREMA = "rgba(255,255,255,0.92)";
 const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 const COL_H = { base: "440px", md: "520px", lg: "600px" } as const;
@@ -291,6 +291,7 @@ export default function MetodoPsicologiaDonesEspejo() {
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 7, md: 9 }}>
 
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title="Dones"
@@ -303,14 +304,18 @@ export default function MetodoPsicologiaDonesEspejo() {
               prev={{ label: "← Recuérdate", onClick: irARecuerdate }}
               next={{ label: "Miedos →", onClick: irAMiedos }}
             />
+            </Reveal>
 
             {/* Intro */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <IntroRecorrido>{DONES_INTRO.espejo}</IntroRecorrido>
+            </Reveal>
 
             {/* ════════ TRES COLUMNAS: lo que escribiste · arquetipos · unir ════════ */}
-            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} align="stretch">
+            <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
 
               {/* ── COLUMNA 1 · LO QUE ESCRIBISTE (solo respuestas) ── */}
+              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -367,8 +372,10 @@ export default function MetodoPsicologiaDonesEspejo() {
                   </Flex>
                 </Box>
               </Flex>
+              </RevealItem>
 
               {/* ── COLUMNA 2 · TUS ARQUETIPOS (fondo de estrellas, como en Relación) ── */}
+              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -404,8 +411,10 @@ export default function MetodoPsicologiaDonesEspejo() {
                   </Flex>
                 </Box>
               </Flex>
+              </RevealItem>
 
               {/* ── COLUMNA 3 · TUS DONES (unir arquetipos → etiqueta) ── */}
+              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1.05" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={`1px solid ${ORO}66`} boxShadow={`0 0 22px ${ORO}2e, ${glowPanel}`}>
@@ -451,7 +460,8 @@ export default function MetodoPsicologiaDonesEspejo() {
                   </Flex>
                 </Box>
               </Flex>
-            </Flex>
+              </RevealItem>
+            </RevealStagger>
 
           </Flex>
         </Flex>

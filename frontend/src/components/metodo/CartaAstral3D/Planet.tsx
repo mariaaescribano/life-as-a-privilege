@@ -9,7 +9,13 @@ interface PlanetProps {
   position: [number, number, number];
   focused: boolean;
   onClick?: () => void;
+  /** Retraso (en segundos) de la entrada del planeta, para que salgan uno a uno. */
+  appearDelay?: number;
 }
+
+// Duración de la aparición de cada planeta (escala 0→1 + fundido).
+const APPEAR_DUR = 0.5;
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const SERIF = "500 170px 'Times New Roman', Georgia, 'DejaVu Serif', serif";
 
@@ -46,9 +52,11 @@ function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
   return tex;
 }
 
-export function Planet({ cuerpo, position, focused, onClick }: PlanetProps) {
+export function Planet({ cuerpo, position, focused, onClick, appearDelay = 0 }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
   const spriteRef = useRef<THREE.Sprite>(null);
+  // Tiempo acumulado desde el montaje: controla la aparición escalonada.
+  const elapsedRef = useRef(0);
 
   const glyphTexture = useMemo(
     () => buildGlyphTexture(cuerpo.symbol, cuerpo.color),
@@ -59,13 +67,21 @@ export function Planet({ cuerpo, position, focused, onClick }: PlanetProps) {
   const targetBright = focused ? 1.6 : 1;
 
   useFrame((_, delta) => {
+    elapsedRef.current += delta;
+    // Progreso de la ENTRADA (0 antes de su turno → 1 cuando ya ha aparecido).
+    const t = Math.max(0, elapsedRef.current - appearDelay);
+    const appear = easeOutCubic(Math.min(1, t / APPEAR_DUR));
+
     if (groupRef.current) {
+      // La escala deseada combina el estado (enfocado o no) con la entrada.
+      const desired = targetScale * appear;
       const cur = groupRef.current.scale.x;
-      const next = cur + (targetScale - cur) * Math.min(1, delta * 6);
+      const next = cur + (desired - cur) * Math.min(1, delta * 10);
       groupRef.current.scale.setScalar(next);
     }
     if (spriteRef.current) {
       const m = spriteRef.current.material as THREE.SpriteMaterial;
+      m.opacity = appear; // se funde al entrar
       const factor = (m as unknown as { __factor?: number }).__factor ?? 1;
       const next = factor + (targetBright - factor) * Math.min(1, delta * 6);
       (m as unknown as { __factor?: number }).__factor = next;
@@ -90,6 +106,7 @@ export function Planet({ cuerpo, position, focused, onClick }: PlanetProps) {
     <group
       ref={groupRef}
       position={position}
+      scale={[0, 0, 0]}
       onClick={onClick}
       onPointerOver={onOver}
       onPointerOut={onOut}
@@ -98,6 +115,7 @@ export function Planet({ cuerpo, position, focused, onClick }: PlanetProps) {
         <spriteMaterial
           map={glyphTexture}
           transparent
+          opacity={0}
           depthWrite={false}
           toneMapped={false}
           blending={THREE.AdditiveBlending}

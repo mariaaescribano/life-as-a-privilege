@@ -6,6 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { Reveal } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -95,6 +96,7 @@ export default function MetodoAyurvedaResultado() {
           pt={{ base: 8, md: 12 }}
           pb={{ base: 14, md: 20 }}
         >
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
             title="Resultado"
@@ -107,8 +109,10 @@ export default function MetodoAyurvedaResultado() {
             extra={ilustracionesBtn}
             next={{ label: "Energías →", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
           />
+          </Reveal>
 
-          {/* Resultado principal — solo el resultado, sin consejos */}
+          {/* Resultado principal — solo el resultado, sin consejos (entra al montar) */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%" display="flex" justifyContent="center">
           <Box
             position="relative"
             overflow="hidden"
@@ -148,8 +152,10 @@ export default function MetodoAyurvedaResultado() {
               })}
             </Box>
           </Box>
+          </Reveal>
 
           {/* Nota breve, sin consejos todavía */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
           <Text
             color="rgba(255,255,255,0.75)"
             fontSize={{ base: "sm", md: "md" }}
@@ -161,6 +167,7 @@ export default function MetodoAyurvedaResultado() {
           >
             Esta es tu constitución según el test. En los siguientes pasos del Recorrido iremos descubriendo qué significa para ti.
           </Text>
+          </Reveal>
         </Flex>
       </Box>
 

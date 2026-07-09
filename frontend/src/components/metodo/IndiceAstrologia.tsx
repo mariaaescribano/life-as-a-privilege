@@ -14,6 +14,7 @@ export function IndiceAstrologia() {
       tinta={astrologiaTxt}
       bg={astrologiaBg}
       nom={astrologiaNom}
+      luz={false}
     />
   );
 }

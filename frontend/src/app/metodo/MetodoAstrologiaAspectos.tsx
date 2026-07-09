@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Portal, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Portal, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -18,6 +18,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 // Check pequeño para marcar un elemento ya leído.
@@ -191,21 +192,24 @@ export default function MetodoAstrologiaAspectos() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
-          <MetodoStepHeader
-            icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Aspectos"
-            bgColor={`${astrologiaBg}dd`}
-            color={astrologiaTxt}
-            space
-            step={{ current: 6, total: 8 }}
-            mb={0}
-            prev={{ label: "← Casas", onClick: () => navigate("/metodo/astrologia/casas") }}
-            extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
-            next={headerNext}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%">
+            <MetodoStepHeader
+              icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
+              title="Aspectos"
+              bgColor={`${astrologiaBg}dd`}
+              color={astrologiaTxt}
+              space
+              step={{ current: 6, total: 8 }}
+              mb={0}
+              prev={{ label: "← Casas", onClick: () => navigate("/metodo/astrologia/casas") }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              next={headerNext}
+            />
+          </Reveal>
 
           {/* Título + subtítulo centrados */}
-          <Flex direction="column" align="center" textAlign="center" mb={{ base: 2, md: 4 }}>
+          <Reveal direction="up" distance={18} delay={0.12} duration={0.6}
+                  display="flex" flexDirection="column" alignItems="center" textAlign="center" mb={{ base: 2, md: 4 }}>
             <Text color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} mb={2} fontStyle="italic"
                   letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
               Cada aspecto es una relación entre dos planetas. Pulsa para leer.
@@ -213,19 +217,20 @@ export default function MetodoAstrologiaAspectos() {
             {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">
               Cada aspecto es una conversación entre dos planetas. Pulsa para leer.
             </Text> */}
-          </Flex>
+          </Reveal>
 
           {aspectos.length === 0 ? (
             <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" py={6}>
               No hay aspectos calculados todavía.
             </Text>
           ) : (
-            <SimpleGrid w="100%" columns={1} spacing={{ base: 5, md: 6 }}>
+            <RevealStagger w="100%" display="flex" flexDirection="column" gap={{ base: 5, md: 6 }}
+                           stagger={0.1} delayChildren={0.25} inView={false}>
               {gruposPorPlaneta.map(({ cuerpo, items, desbloqueada, completa }, gi) => {
                 const anterior = gi > 0 ? gruposPorPlaneta[gi - 1].cuerpo.label : null;
                 return (
+                <RevealItem key={cuerpo.key} direction="up" distance={28} scaleFrom={0.97} duration={0.65}>
                 <Box
-                  key={cuerpo.key}
                   position="relative"
                   borderRadius="2xl"
                   overflow="hidden"
@@ -275,8 +280,19 @@ export default function MetodoAstrologiaAspectos() {
                           // escrita, para que vea de un vistazo lo que ya ha leído.
                           const leido = leidos.has(boxAspectoKey(cuerpo.key, aspecto));
                           return (
-                            <Flex
+                            // Cada aspecto se revela al asomar en pantalla: aparecen
+                            // de uno en uno según haces scroll (rueda o dedo).
+                            <Reveal
                               key={`${aspectoKey(aspecto)}-${idx}`}
+                              inView
+                              direction="up"
+                              distance={24}
+                              duration={0.55}
+                              delay={idx * 0.05}
+                              amount={0.3}
+                              w="100%"
+                            >
+                            <Flex
                               as="button"
                               onClick={desbloqueada ? () => abrirAspecto(aspecto, cuerpo.key) : undefined}
                               disabled={!desbloqueada}
@@ -347,14 +363,16 @@ export default function MetodoAstrologiaAspectos() {
                                 )}
                               </Flex>
                             </Flex>
+                            </Reveal>
                           );
                         })}
                     </Flex>
                   </Box>
                 </Box>
+                </RevealItem>
                 );
               })}
-            </SimpleGrid>
+            </RevealStagger>
           )}
         </Flex>
       </Flex>

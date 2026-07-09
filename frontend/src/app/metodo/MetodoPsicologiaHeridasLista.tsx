@@ -17,6 +17,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { HeridaGrid } from "../../components/metodo/HeridaGrid";
@@ -98,6 +99,7 @@ export default function MetodoPsicologiaHeridasLista() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="1100px" gap={{ base: 7, md: 9 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Tus heridas"
@@ -110,11 +112,15 @@ export default function MetodoPsicologiaHeridasLista() {
             prev={{ label: "← Heridas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
             next={{ label: "Narra →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
           />
+          </Reveal>
 
           {/* Frase de reconocimiento sobre el turquesa */}
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <IntroRecorrido>{HERIDAS_LISTA.frase}</IntroRecorrido>
+          </Reveal>
 
           {heridas.length === 0 ? (
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Box position="relative" w="100%" maxW="560px" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={4} px={6} py={{ base: 12, md: 16 }} textAlign="center">
@@ -131,6 +137,7 @@ export default function MetodoPsicologiaHeridasLista() {
                 </Box>
               </Flex>
             </Box>
+            </Reveal>
           ) : (
             <HeridaGrid heridas={heridas} onBorrar={(id) => void borrarHerida(id)} />
           )}

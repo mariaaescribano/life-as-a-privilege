@@ -47,13 +47,30 @@ export interface ContenidoElementoRico {
 }
 
 // Módulo 1 · introducción a los Cinco Elementos (Wu Xing). Es la intro de la
-// estrella (paso 4). Fuente: material del curso de Medicina China.
-export const INTRO_CINCO_ELEMENTOS: string[] = [
-  "Los Cinco Elementos (Wu Xing) —Madera, Fuego, Tierra, Metal y Agua— constituyen una de las bases teóricas fundamentales de la Medicina Tradicional China.",
-  "No son «cosas» literales ni meros símbolos: describen procesos dinámicos de la vida y la manera en que el Qi se transforma y se expresa en la naturaleza y en el ser humano.",
-  "Cada persona encarna el movimiento de los cinco elementos, y vivir en armonía con el Dao significa permitir que esos procesos se expresen sin obstrucción.",
-  "Un desequilibrio aparece cuando un elemento se vuelve excesivo (sobreactúa) o deficiente (rinde por debajo de lo normal). Los médicos de la antigua China los observaban mediante una atención profunda a la persona: su postura, su expresión, su voz, su pulso, sus hábitos, sus emociones y todos aquellos detalles sutiles que revelan el estado del Qi.",
-  "Cada elemento agrupa un órgano Zang (principal), un órgano Fu (víscera asociada), un tejido, un orificio sensorial, un líquido corporal, una emoción, un color, un sabor, una estación, un tipo de voz y un movimiento característico.",
+// estrella (paso 4), presentada como un cómic de 4 viñetas (foto + texto).
+// Fuente: material del curso de Medicina China.
+export interface VinetaIntro { src: string; texto: string; }
+export const COMIC_INTRO_ELEMENTOS: VinetaIntro[] = [
+  {
+    src: "/recorrido/tcm/elementos/elementos1.png",
+    texto:
+      "Los Cinco Elementos (Wu Xing) —Madera, Fuego, Tierra, Metal y Agua— constituyen una de las bases teóricas fundamentales de la Medicina Tradicional China. No son «cosas» literales ni meros símbolos: describen procesos dinámicos de la vida y la manera en que el Qi se transforma y se expresa en la naturaleza y en el ser humano.",
+  },
+  {
+    src: "/recorrido/tcm/elementos/elementos2.png",
+    texto:
+      "Cada persona encarna el movimiento de los cinco elementos, y vivir en armonía con el Dao significa permitir que esos procesos se expresen sin obstrucción.",
+  },
+  {
+    src: "/recorrido/tcm/elementos/elementos3.png",
+    texto:
+      "Un desequilibrio aparece cuando un elemento se vuelve excesivo (sobreactúa) o deficiente (rinde por debajo de lo normal). Los médicos de la antigua China los observaban mediante una atención profunda a la persona: su postura, su expresión, su voz, su pulso, sus hábitos, sus emociones y todos aquellos detalles sutiles que revelan el estado del Qi.",
+  },
+  {
+    src: "/recorrido/tcm/elementos/elementos4.png",
+    texto:
+      "Cada elemento agrupa un órgano Zang (principal), un órgano Fu (víscera asociada), un tejido, un orificio sensorial, un líquido corporal, una emoción, un color, un sabor, una estación, un tipo de voz y un movimiento característico.",
+  },
 ];
 
 const madera: ContenidoElementoRico = {

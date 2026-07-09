@@ -15,6 +15,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
+import { Reveal } from "../../components/global/Reveal";
 import { CompromisosBox } from "../../components/metodo/CompromisosBox";
 import {
   API_URL,
@@ -147,8 +148,17 @@ export default function MetodoAyurvedaDoshaDia() {
         dataRef.current = d;
         const guardadas = d?.doshaDia?.[doshaKey]?.bloques;
         if (Array.isArray(guardadas) && guardadas.length > 0) {
-          setBloques(guardadas);
-          idRef.current = Math.max(...guardadas.map((b: Bloque) => b.id ?? 0)) + 1;
+          // Normaliza datos antiguos: `alimentos` SIEMPRE array (evita crashes al
+          // renderizar/editar/exportar bloques guardados sin ese campo).
+          const norm: Bloque[] = guardadas.map((b: any) => ({
+            id: b.id ?? 0,
+            hora: b.hora ?? "",
+            actividad: b.actividad ?? "",
+            comida: !!b.comida,
+            alimentos: Array.isArray(b.alimentos) ? b.alimentos : [],
+          }));
+          setBloques(norm);
+          idRef.current = Math.max(...norm.map((b) => b.id ?? 0)) + 1;
           setGuardado(true);
         }
       } catch {
@@ -206,7 +216,7 @@ export default function MetodoAyurvedaDoshaDia() {
   const meta = DOSHA_META[doshaKey];
   const Icon = meta.Icon;
   const c = DOSHA_CUIDARTE[doshaKey];
-  const pool = (c?.equilibran?.opciones ?? c?.alimentosBuenos.items ?? []).map(limpia);
+  const pool = (c?.equilibran?.opciones ?? c?.alimentosBuenos?.items ?? []).map(limpia);
   const recomendaciones = c?.rutina ?? [];
 
   const ordenados = [...bloques].sort((a, b) => (a.hora || "99").localeCompare(b.hora || "99"));
@@ -218,6 +228,7 @@ export default function MetodoAyurvedaDoshaDia() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 6, md: 7 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
             title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
@@ -230,8 +241,10 @@ export default function MetodoAyurvedaDoshaDia() {
             extra={ilustracionesBtn}
             next={{ label: "Tu Recorrido →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
           />
+          </Reveal>
 
-          {/* HERO */}
+          {/* HERO (primer box: entra al montar, siempre visible) */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
@@ -243,13 +256,17 @@ export default function MetodoAyurvedaDoshaDia() {
               </Text>
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* Recordatorio de los compromisos escritos en Psicología */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <CompromisosBox />
+          </Reveal>
 
           {/* TU DÍA (lista editable) */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.12} w="100%">
           <Panel color={meta.color} tile>
-            <Flex align="center" justify="space-between" gap={3} mb={1} wrap="wrap">
+            <Flex align="center" justify="space-between" gap={3} mb={{ base: 4, md: 5 }} wrap="wrap">
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                 Tu día
               </Text>
@@ -308,9 +325,9 @@ export default function MetodoAyurvedaDoshaDia() {
                       <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
                         {b.actividad || (b.comida ? "Comida" : "Momento")}
                       </Text>
-                      {b.comida && b.alimentos.length > 0 && (
+                      {b.comida && (b.alimentos?.length ?? 0) > 0 && (
                         <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
-                          {b.alimentos.join(" · ")}
+                          {(b.alimentos || []).join(" · ")}
                         </Text>
                       )}
                     </Box>
@@ -333,9 +350,10 @@ export default function MetodoAyurvedaDoshaDia() {
               </Flex>
             )}
           </Panel>
+          </Reveal>
 
           {/* Guardar */}
-          <Flex w="100%" justify="flex-end">
+          <Reveal inView direction="up" distance={18} duration={0.55} amount={0.3} w="100%" display="flex" justifyContent="flex-end">
             <Box
               as="button" onClick={guardando ? undefined : guardar}
               minW="180px" px={9} py={3} borderRadius="full" bg={meta.color} color="#fff"
@@ -346,9 +364,10 @@ export default function MetodoAyurvedaDoshaDia() {
             >
               {guardando ? "Guardando…" : guardado ? "Guardado ✓" : "Guardar mi día"}
             </Box>
-          </Flex>
+          </Reveal>
 
           {/* Continuar → Tu Recorrido */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
@@ -374,6 +393,7 @@ export default function MetodoAyurvedaDoshaDia() {
               )}
             </Flex>
           </Panel>
+          </Reveal>
         </Flex>
       </Flex>
 

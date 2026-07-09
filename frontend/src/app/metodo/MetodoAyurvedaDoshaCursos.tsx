@@ -13,6 +13,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
+import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import {
   API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
@@ -114,6 +115,7 @@ export default function MetodoAyurvedaDoshaCursos() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1280px" gap={6}>
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "52px" }} />}
             title="Cursos para profundizar"
@@ -125,7 +127,9 @@ export default function MetodoAyurvedaDoshaCursos() {
             extra={ilustracionesBtn}
             next={{ label: tcmSuscrito ? "Med. China →" : "Med. China 🔒", onClick: onMedChina }}
           />
+          </Reveal>
 
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
           <Text
             color="rgba(255,255,255,0.88)"
             fontSize={{ base: "md", md: "lg" }}
@@ -136,7 +140,9 @@ export default function MetodoAyurvedaDoshaCursos() {
           >
             Si quieres profundizar en el Ayurveda, estos cursos te acompañan paso a paso.
           </Text>
+          </Reveal>
 
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {loading ? (
             <SpinnerTurquesa />
           ) : cursos.length > 0 ? (
@@ -176,6 +182,7 @@ export default function MetodoAyurvedaDoshaCursos() {
               </Box>
             </Box>
           )}
+          </Reveal>
         </Flex>
       </Flex>
 
