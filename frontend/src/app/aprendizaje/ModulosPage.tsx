@@ -50,7 +50,7 @@ export default function ModulosPage() {
               // de la propia disciplina (misma clave que la ruta /cursos/:slug).
               prev={
                 volver
-                  ? { label: "← Volver a El Recorrido", onClick: () => navigate(volver), small: true }
+                  ? { label: "← Volver a El Mapa", onClick: () => navigate(volver), small: true }
                   : { label: `← Cursos de ${modalidad.nom}`, onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`), small: true }
               }
             />

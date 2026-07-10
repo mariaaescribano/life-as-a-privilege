@@ -126,7 +126,7 @@ export default function AdminPsicologiaLectura() {
 
           {!haleAlgo ? (
             <LecturaVacio txt="rgba(255,255,255,0.92)">
-              Este usuario todavía no ha escrito nada en su recorrido de psicología.
+              Este usuario todavía no ha escrito nada en su mapa de psicología.
             </LecturaVacio>
           ) : (
             <>

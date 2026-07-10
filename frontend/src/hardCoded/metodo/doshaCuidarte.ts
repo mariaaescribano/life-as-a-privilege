@@ -228,7 +228,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué único hábito podrías empezar esta misma semana que te acerque un poco más al equilibrio?",
-      nota: "Lo recuperaremos al final del recorrido.",
+      nota: "Lo recuperaremos al final del mapa.",
       compromisoTitulo: "Mi compromiso",
       compromisoIntro: "Elige solo uno para esta semana.",
       compromisos: [
@@ -430,7 +430,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué pequeño hábito podrías incorporar esta semana para bajar un poco el ritmo sin dejar de cuidar de ti?",
-      nota: "Lo recuperaremos al final del recorrido.",
+      nota: "Lo recuperaremos al final del mapa.",
       compromisoTitulo: "Mi compromiso",
       compromisoIntro: "Elige solo uno para esta semana.",
       compromisos: [
@@ -625,7 +625,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué pequeño hábito podrías empezar esta semana para llenar tu vida de un poco más de movimiento?",
-      nota: "Lo recuperaremos al final del recorrido.",
+      nota: "Lo recuperaremos al final del mapa.",
       compromisoTitulo: "Mi compromiso",
       compromisoIntro: "Elige solo uno para esta semana.",
       compromisos: [

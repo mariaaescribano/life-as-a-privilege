@@ -239,7 +239,7 @@ export default function MetodoAyurvedaDoshaDia() {
             mb={0}
             prev={{ label: "← Estilo de vida", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Tu Recorrido →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
+            next={{ label: "Tu Mapa →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
           />
           </Reveal>
 
@@ -400,7 +400,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 display="inline-flex" alignItems="center" gap={2.5}
                 _hover={guardado ? { transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` } : {}}
               >
-                Tu Recorrido →
+                Tu Mapa →
               </Box>
               {!guardado && (
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">

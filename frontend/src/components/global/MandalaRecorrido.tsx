@@ -127,7 +127,7 @@ const disciplinas: Disciplina[] = [
       { src: "/capturasRecorrido/hinduismo/18.png", titulo: "¡Muy bien, creaste tu día!" },
       { src: "/capturasRecorrido/hinduismo/19.png", titulo: "Descárgalo en PDF" },
       { src: "/capturasRecorrido/hinduismo/20.png", titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/21.png", titulo: "Descarga en PDF tu recorrido" },
+      { src: "/capturasRecorrido/hinduismo/21.png", titulo: "Descarga en PDF tu mapa" },
       { src: "/capturasRecorrido/hinduismo/23.png", titulo: "No te olvides de las ilustraciones" },
       { src: "/capturasRecorrido/hinduismo/24.png", titulo: "Ejemplo" },
       { src: "/capturasRecorrido/hinduismo/25.png", titulo: "Ejemplo" },

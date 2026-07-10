@@ -165,7 +165,7 @@ export default function MetodoPsicologia() {
                 mx="auto"
                 style={{ textShadow: INK_SHADOW }}
               >
-                Nuestra historia marca nuestra Vida, todo lo que no hemos gestionado o que hemos callado sigue pulsando y guiando nuestro pensamiento. En este recorrido te conocerás en profundidad y verás con claridad dónde estás, por qué y para qué. El propósito es volver a unir tus fragmentaciones.
+                Nuestra historia marca nuestra Vida, todo lo que no hemos gestionado o que hemos callado sigue pulsando y guiando nuestro pensamiento. En este mapa te conocerás en profundidad y verás con claridad dónde estás, por qué y para qué. El propósito es volver a unir tus fragmentaciones.
               </Text>
 
               {/* ── Recomendación: no hacerlo en solitario ── */}
@@ -180,7 +180,7 @@ export default function MetodoPsicologia() {
                   mb={3}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Se recomienda no hacer este recorrido de manera individual.
+                  Se recomienda no hacer este mapa de manera individual.
                 </Text>
                 <Text
                   color={TINTA}
@@ -258,7 +258,7 @@ export default function MetodoPsicologia() {
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
                       style={{ textShadow: INK_SHADOW }}>
-                  Este recorrido no sustituye una terapia psicológica ni una evaluación profesional.
+                  Este mapa no sustituye una terapia psicológica ni una evaluación profesional.
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>

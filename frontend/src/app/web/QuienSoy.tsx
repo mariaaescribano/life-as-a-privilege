@@ -174,7 +174,7 @@ const QuienSoy = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.75s ease 0.5s, transform 0.75s ease 0.5s"
         >
-          Ingeniera informática. No existía lo que he construido: un recorrido donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
+          Ingeniera informática. No existía lo que he construido: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
         </Text>
 
         <Text

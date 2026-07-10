@@ -112,7 +112,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     doc.setDrawColor(...ACCENT); doc.setLineWidth(0.5);
     doc.line(MARGIN, bandH, PAGE_W - MARGIN, bandH);
     doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK);
-    doc.text("Mi recorrido", MARGIN, 15);
+    doc.text("Mi mapa", MARGIN, 15);
     doc.setFont(GARAMOND, "italic"); doc.setFontSize(10); doc.setTextColor(...ACCENT);
     doc.text("Psicología", PAGE_W - MARGIN, 15, { align: "right" });
   };
@@ -212,7 +212,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   fillBackground();
   drawWatercolorBand(58);
   doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi recorrido", PAGE_W / 2, 76, { align: "center" });
+  doc.text("Mi mapa", PAGE_W / 2, 76, { align: "center" });
   doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...ACCENT);
   doc.text("Psicología  ·  Tu historia, contada por ti", PAGE_W / 2, 85, { align: "center" });
   ornament(93);
@@ -365,7 +365,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   y += 8;
   doc.setFont(GARAMOND, "italic"); doc.setFontSize(10.5); doc.setTextColor(...MUTED);
   const cierre = doc.splitTextToSize(
-    "No mirabas tu historia para quedarte en ella, sino para transformarla. Este recorrido es la prueba de que ya empezaste.",
+    "No mirabas tu historia para quedarte en ella, sino para transformarla. Este mapa es la prueba de que ya empezaste.",
     CONTENT_W - 20,
   ) as string[];
   cierre.forEach((line, i) => doc.text(line, PAGE_W / 2, y + i * 5.5, { align: "center" }));

@@ -184,7 +184,7 @@ export default function AdminAstrologiaTextos() {
                 Interpretaciones de la carta
               </Text>
               <Text color="rgba(255,255,255,0.75)" fontSize="sm">
-                Arquetipos del recorrido · {totalPersonalizadas} celda{totalPersonalizadas === 1 ? "" : "s"} personalizada{totalPersonalizadas === 1 ? "" : "s"}
+                Arquetipos del mapa · {totalPersonalizadas} celda{totalPersonalizadas === 1 ? "" : "s"} personalizada{totalPersonalizadas === 1 ? "" : "s"}
               </Text>
             </Box>
             <Box as="button" onClick={guardando || !hayCambios ? undefined : onGuardar}

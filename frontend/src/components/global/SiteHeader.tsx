@@ -112,7 +112,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
                 _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
                 transition="text-shadow 0.25s ease"
               >
-                El Recorrido
+                El Mapa
               </Text>
               <Text
                 as="button"
@@ -186,7 +186,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             }}
             transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
           >
-            El Recorrido
+            El Mapa
           </Text>
           <Text
             as="button"

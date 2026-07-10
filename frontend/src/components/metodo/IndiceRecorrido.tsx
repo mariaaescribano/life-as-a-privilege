@@ -109,7 +109,7 @@ export function IndiceRecorrido({
         cursor="pointer"
         transition="all 0.22s ease"
         _hover={{ transform: "translateY(-2px)", boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 26px ${bg}aa` }}
-        aria-label="Abrir índice del recorrido"
+        aria-label="Abrir índice del mapa"
       >
         <DisciplinaBgLayer nom={nom} borderRadius="full" />
         <Box as="span" position="relative" zIndex={1} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1"
@@ -141,7 +141,7 @@ export function IndiceRecorrido({
 
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}
                     style={{ textShadow: INK_SHADOW }}>
-                Índice del recorrido
+                Índice del mapa
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 

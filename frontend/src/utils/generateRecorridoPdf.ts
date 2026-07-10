@@ -92,7 +92,7 @@ export async function generateRecorridoPdf(
     doc.setDrawColor(...doshaColor); doc.setLineWidth(0.5);
     doc.line(MARGIN, 18, PAGE_W - MARGIN, 18);
     doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK);
-    doc.text("Mi recorrido", MARGIN, 14);
+    doc.text("Mi mapa", MARGIN, 14);
     doc.setFont(GARAMOND, "normal"); doc.setFontSize(10); doc.setTextColor(...doshaColor);
     doc.text(`Dosha ${doshaLabel}`, PAGE_W - MARGIN, 14, { align: "right" });
   };
@@ -158,7 +158,7 @@ export async function generateRecorridoPdf(
   fillBackground();
   drawWatercolorBand(58);
   doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi recorrido", PAGE_W / 2, 76, { align: "center" });
+  doc.text("Mi mapa", PAGE_W / 2, 76, { align: "center" });
   doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
   doc.text(`Ayurveda  ·  Dosha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
   ornament(93);

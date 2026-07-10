@@ -50,7 +50,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
         "Suelo olvidarme de cuidar de mí cuando estoy ocupado.",
       ],
       cierre: [
-        "Cuantas más frases hayas marcado, más probable es que este recorrido resuene contigo.",
+        "Cuantas más frases hayas marcado, más probable es que este mapa resuene contigo.",
         "Y si alguna no encaja, no pasa nada.",
         "**El Ayurveda describe tendencias, no personas.**",
         "Cada ser humano es único.",
@@ -71,7 +71,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
     preguntaFinal: {
       titulo: "Una última pregunta antes de empezar…",
       pregunta: "Si pudieras cambiar una sola cosa de ti en este momento, ¿cuál sería?",
-      nota: "Guardaremos esta respuesta. Cuando termines el recorrido volveremos a ella.",
+      nota: "Guardaremos esta respuesta. Cuando termines el mapa volveremos a ella.",
     },
     cierre: [
       "*No necesitas convertirte en otra persona.*",
@@ -107,7 +107,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
         "Me cuesta desconectar o dejar de pensar en mis objetivos.",
       ],
       cierre: [
-        "Cuantas más frases hayas marcado, más probable es que este recorrido resuene contigo.",
+        "Cuantas más frases hayas marcado, más probable es que este mapa resuene contigo.",
         "Y si alguna no encaja, no pasa nada.",
         "**El Ayurveda describe tendencias, no personas.**",
         "Cada ser humano expresa su naturaleza de una forma única.",
@@ -128,7 +128,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
     preguntaFinal: {
       titulo: "Una última pregunta antes de empezar…",
       pregunta: "Si pudieras bajar un poco la intensidad de una parte de tu vida, ¿cuál sería?",
-      nota: "Guardaremos esta respuesta. Cuando termines el recorrido volveremos a ella.",
+      nota: "Guardaremos esta respuesta. Cuando termines el mapa volveremos a ella.",
     },
     cierre: [
       "*No necesitas apagar tu fuego, necesitas aprender a dirigirlo.*",
@@ -163,7 +163,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
         "A veces pospongo cambios que sé que necesito hacer.",
       ],
       cierre: [
-        "Cuantas más frases hayas marcado, más probable es que este recorrido resuene contigo.",
+        "Cuantas más frases hayas marcado, más probable es que este mapa resuene contigo.",
         "Y si alguna no encaja, no pasa nada.",
         "**El Ayurveda describe tendencias, no personas.**",
         "Cada ser humano expresa su naturaleza de una forma única.",
@@ -184,7 +184,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
     preguntaFinal: {
       titulo: "Una última pregunta antes de empezar…",
       pregunta: "Si pudieras soltar una sola cosa en este momento, ¿qué sería?",
-      nota: "Guardaremos esta respuesta. Cuando termines el recorrido volveremos a ella.",
+      nota: "Guardaremos esta respuesta. Cuando termines el mapa volveremos a ella.",
     },
     cierre: [
       "*No necesitas perder tu calma, necesitas recordar que la vida también crece cuando cambia.*",

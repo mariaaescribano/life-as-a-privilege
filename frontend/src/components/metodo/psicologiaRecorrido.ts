@@ -876,7 +876,7 @@ export const ACE_INTRO = {
   que: [
     "«ACE» son las siglas en inglés de Adverse Childhood Experiences: experiencias adversas en la infancia. Nace de uno de los mayores estudios de salud jamás realizados (CDC-Kaiser, más de 17.000 personas), que descubrió algo tan sencillo como revelador: lo que vivimos de niños deja una huella real en la salud y en la vida adulta.",
     "El test son 10 preguntas de sí o no sobre lo que ocurrió en tu hogar antes de los 18 años: maltrato, abandono y disfunción familiar. Cada «sí» suma un punto, del 0 al 10. No mide quién eres ni cuánto vales: solo pone nombre a lo que cargaste.",
-    "Responde con calma y con honestidad. Nadie más lo verá. Y recuerda algo antes de empezar: una puntuación alta no es una condena — es, precisamente, el punto de partida de este recorrido.",
+    "Responde con calma y con honestidad. Nadie más lo verá. Y recuerda algo antes de empezar: una puntuación alta no es una condena — es, precisamente, el punto de partida de este mapa.",
   ],
   // Frase breve sobre el turquesa, encima del test.
   subtituloTurquesa: "Antes de los 18 años, ¿viviste alguna de estas situaciones en tu hogar?",
@@ -968,7 +968,7 @@ export const ACE_BANDAS: AceBanda[] = [
     titulo: "Sin experiencias adversas registradas",
     color: "#3f9d6b",
     texto:
-      "Según el test, tu infancia estuvo relativamente libre de estas adversidades concretas. Es una base valiosa. Aun así, ninguna vida está libre de heridas: este recorrido sigue siendo para ti, porque el dolor no siempre cabe en diez preguntas.",
+      "Según el test, tu infancia estuvo relativamente libre de estas adversidades concretas. Es una base valiosa. Aun así, ninguna vida está libre de heridas: este mapa sigue siendo para ti, porque el dolor no siempre cabe en diez preguntas.",
   },
   {
     min: 1, max: 3,
@@ -1009,7 +1009,7 @@ export const ACE_ESPERANZA = {
   texto: [
     "El cerebro y el cuerpo tienen una capacidad enorme de sanar. Lo que se aprendió en la adversidad también puede reaprenderse en la seguridad.",
     "El factor que más protege, según la propia ciencia, es sencillo: las relaciones seguras y el sostén emocional. Un solo vínculo de confianza puede cambiarlo todo.",
-    "Este recorrido —recordar, comprender, integrar— es exactamente ese trabajo. No estás mirando tu herida para quedarte en ella, sino para transformarla.",
+    "Este mapa —recordar, comprender, integrar— es exactamente ese trabajo. No estás mirando tu herida para quedarte en ella, sino para transformarla.",
   ],
   // Recordatorio honesto (coherente con el «Aviso importante» del inicio).
 };

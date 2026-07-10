@@ -103,7 +103,7 @@ export default function AdminAyurvedaLectura() {
 
           {doshasConDatos.length === 0 ? (
             <LecturaVacio txt="rgba(255,255,255,0.92)">
-              Este usuario todavía no ha escrito nada en su recorrido de {disc.nombre.toLowerCase()}.
+              Este usuario todavía no ha escrito nada en su mapa de {disc.nombre.toLowerCase()}.
             </LecturaVacio>
           ) : (
             doshasConDatos.map((k) => {

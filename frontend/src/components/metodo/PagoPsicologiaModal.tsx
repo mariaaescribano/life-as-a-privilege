@@ -58,7 +58,7 @@ export function PagoPsicologiaModal({ isOpen, onClose, onPagar, loading, error, 
               letterSpacing="0.015em"
               textAlign="center"
             >
-              Continúa el Recorrido con Psicología: reconstruye tu historia y comprende cómo se construyó tu mente.
+              Continúa el Mapa con Psicología: reconstruye tu historia y comprende cómo se construyó tu mente.
             </Text>
 
             <Text

@@ -86,7 +86,7 @@ const OpinionesSection: React.FC = () => {
               textShadow="0 0 16px rgba(255,255,255,0.56), 0 0 34px rgba(255,255,255,0.32), 0 0 66px rgba(180,255,245,0.24)"
               whiteSpace="nowrap"
             >
-              El Recorrido
+              El Mapa
             </Text>
             <Box
               as="span"

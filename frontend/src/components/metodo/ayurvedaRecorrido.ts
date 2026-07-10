@@ -16,7 +16,7 @@ export const AYURVEDA_INDICE: PasoRecorrido[] = [
   { n: 5, titulo: "Alimentación",   ruta: (d) => `/metodo/ayurveda/dosha/${d}/cuidarte` },
   { n: 6, titulo: "Estilo de vida", ruta: (d) => `/metodo/ayurveda/dosha/${d}/estilo` },
   { n: 7, titulo: "Tu día",         ruta: (d) => `/metodo/ayurveda/dosha/${d}/dia` },
-  { n: 8, titulo: "Tu recorrido",   ruta: (d) => `/metodo/ayurveda/dosha/${d}/recorrido` },
+  { n: 8, titulo: "Tu mapa",   ruta: (d) => `/metodo/ayurveda/dosha/${d}/recorrido` },
   { n: 9, titulo: "Cursos",         ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
 ];
 

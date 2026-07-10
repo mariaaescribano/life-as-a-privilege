@@ -30,7 +30,7 @@ export const recorridoContenido: Record<
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     modalDesc:
-      "Tu carta natal no predice tu futuro: describe cómo estás configurado. Qué partes tuyas tienen más peso, qué tensiones internas arrastras, qué te cuesta y qué te sale solo. Es el primer paso de El Recorrido porque sin saber de dónde partes, cualquier trabajo posterior va a ciegas.",
+      "Tu carta natal no predice tu futuro: describe cómo estás configurado. Qué partes tuyas tienen más peso, qué tensiones internas arrastras, qué te cuesta y qué te sale solo. Es el primer paso de El Mapa porque sin saber de dónde partes, cualquier trabajo posterior va a ciegas.",
     contenido: [
       {
         titulo: "Conócete sin juicios",
@@ -254,7 +254,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Sesiones individuales",
         items: [
-          "Reflexionaremos sobre quién eras al empezar este recorrido, qué has comprendido y quién te estás convirtiendo después de atravesarlo.",
+          "Reflexionaremos sobre quién eras al empezar este mapa, qué has comprendido y quién te estás convirtiendo después de atravesarlo.",
         ],
         aviso: "Opcional. Se cobra aparte",
       },

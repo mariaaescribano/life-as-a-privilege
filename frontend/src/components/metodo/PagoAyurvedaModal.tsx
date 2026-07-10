@@ -58,7 +58,7 @@ export function PagoAyurvedaModal({ isOpen, onClose, onPagar, loading, error, on
               letterSpacing="0.015em"
               textAlign="center"
             >
-              Continúa el Recorrido con Ayurveda: descubre tu constitución y aprende a vivir en equilibrio con tu naturaleza.
+              Continúa el Mapa con Ayurveda: descubre tu constitución y aprende a vivir en equilibrio con tu naturaleza.
             </Text>
 
             <Text

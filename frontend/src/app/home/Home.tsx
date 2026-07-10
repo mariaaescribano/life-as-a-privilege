@@ -518,7 +518,7 @@ const Home = () => {
               textShadow="0 0 18px rgba(255,255,255,0.75), 0 0 38px rgba(255,255,255,0.45), 0 0 70px rgba(180,255,245,0.35)"
               mb={{ base: 10, md: 8 }}
             >
-              Te damos la bienvenida al Recorrido{name ? `, ${name}` : ""}
+              Te damos la bienvenida al Mapa{name ? `, ${name}` : ""}
             </Text>
 
             {/* <Text
@@ -634,14 +634,14 @@ const Home = () => {
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
                   d.name === astrologiaNom
-                    ? "Haz clic en Astrología para empezar tu recorrido."
+                    ? "Haz clic en Astrología para empezar tu mapa."
                     : d.name === neuropsicologiaNom && clickable
                     ? "Desbloquea Psicología para empezar la 2ª disciplina."
                     : d.name === ayurvedaNom && clickable
                     ? "Desbloquea Ayurveda para empezar la 3ª disciplina."
                     : d.name === tcmNom && clickable
                     ? "Desbloquea Medicina China para empezar la 4ª disciplina."
-                    : "El Recorrido se hace en orden — por favor, completa la disciplina anterior.";
+                    : "El Mapa se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
                   <Box
@@ -864,7 +864,7 @@ const Home = () => {
         isOpen={pagoAyurExitoOpen}
         onAceptar={() => setPagoAyurExitoOpen(false)}
         titulo="Pago de Ayurveda realizado"
-        mensaje="Ya puedes empezar la 3ª disciplina del Recorrido."
+        mensaje="Ya puedes empezar la 3ª disciplina del Mapa."
       />
       <PagoAyurvedaModal
         isOpen={pagoAyurOpen}
@@ -878,7 +878,7 @@ const Home = () => {
         isOpen={pagoTcmExitoOpen}
         onAceptar={() => setPagoTcmExitoOpen(false)}
         titulo="Pago de Medicina China realizado"
-        mensaje="Ya puedes empezar la 4ª disciplina del Recorrido."
+        mensaje="Ya puedes empezar la 4ª disciplina del Mapa."
       />
       <PagoTcmModal
         isOpen={pagoTcmOpen}

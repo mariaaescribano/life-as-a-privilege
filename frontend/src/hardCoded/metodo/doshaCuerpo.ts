@@ -101,7 +101,7 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué señal de tu cuerpo llevas tiempo ignorando?",
-      nota: "La recuperaremos al final del recorrido.",
+      nota: "La recuperaremos al final del mapa.",
     },
     cierre: [
       "*Escuchar tu cuerpo es el primer paso para aprender a cuidarlo.*",
@@ -185,7 +185,7 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿En qué momento notas que tu cuerpo te pide bajar el ritmo, pero tu mente decide seguir?",
-      nota: "La recuperaremos al final del recorrido.",
+      nota: "La recuperaremos al final del mapa.",
     },
     cierre: [
       "*Escuchar tu cuerpo también es una forma de inteligencia.*",
@@ -268,7 +268,7 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué pequeño cambio llevas tiempo queriendo hacer, pero sigues posponiendo?",
-      nota: "La recuperaremos al final del recorrido.",
+      nota: "La recuperaremos al final del mapa.",
     },
     cierre: [
       "*Escuchar tu cuerpo también significa darle el movimiento que necesita.*",

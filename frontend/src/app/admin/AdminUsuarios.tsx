@@ -60,7 +60,7 @@ export default function AdminUsuarios() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="720px">
-          <AdminDisciplinaHeader disc={disc} subtitle="Usuarios del recorrido" />
+          <AdminDisciplinaHeader disc={disc} subtitle="Usuarios del mapa" />
 
           {!disc.disponible && (
             <Text color="rgba(255,220,180,0.85)" fontSize="sm" fontStyle="italic" mb={4}>
@@ -118,7 +118,7 @@ export default function AdminUsuarios() {
               ))}
               {filtrados.length === 0 && (
                 <Text color="rgba(255,255,255,0.6)" fontStyle="italic" textAlign="center" py={8}>
-                  {usuarios.length === 0 ? "No hay usuarios en el recorrido todavía." : "Ningún usuario coincide con la búsqueda."}
+                  {usuarios.length === 0 ? "No hay usuarios en el mapa todavía." : "Ningún usuario coincide con la búsqueda."}
                 </Text>
               )}
             </Flex>

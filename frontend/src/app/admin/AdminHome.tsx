@@ -36,7 +36,7 @@ export default function AdminHome() {
         <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.08em"
               textTransform="uppercase" lineHeight="1.15"
               textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.3)">
-          Administración de El Recorrido
+          Administración de El Mapa
         </Text>
         <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
           Elige una disciplina para escribir el contenido de tus usuarios.

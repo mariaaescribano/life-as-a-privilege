@@ -58,7 +58,7 @@ export function PagoTcmModal({ isOpen, onClose, onPagar, loading, error, onTest 
               letterSpacing="0.015em"
               textAlign="center"
             >
-              Continúa el Recorrido con la Medicina China: descubre cómo influyen en ti los Cinco Elementos y cómo volver al equilibrio de la salud.
+              Continúa el Mapa con la Medicina China: descubre cómo influyen en ti los Cinco Elementos y cómo volver al equilibrio de la salud.
             </Text>
 
             <Text

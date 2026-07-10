@@ -153,7 +153,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title="Tu recorrido"
+            title="Tu mapa"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
@@ -169,7 +169,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
-                Este ha sido tu recorrido
+                Este ha sido tu mapa
               </Text>
               <Separador />
               <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
@@ -185,7 +185,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${meta.color}aa` }}
               >
-                <Download size={18} /> Descargar mi recorrido
+                <Download size={18} /> Descargar mi mapa
               </Flex>
               <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">
                 Incluye tus respuestas, tu día ideal y, de regalo, qué equilibra y desequilibra tu {meta.label}.
@@ -216,7 +216,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           ) : (
             <Panel color={meta.color}>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" lineHeight="1.8">
-                Aún no has dejado respuestas en el recorrido. Cuando vuelvas atrás y las escribas, aparecerán aquí.
+                Aún no has dejado respuestas en el mapa. Cuando vuelvas atrás y las escribas, aparecerán aquí.
               </Text>
             </Panel>
           )}

@@ -246,7 +246,7 @@ export default function MetodoAyurvedaResultado() {
             lineHeight="1.7"
             mt={1}
           >
-            Esta es tu constitución según el test. En los siguientes pasos del Recorrido iremos descubriendo qué significa para ti.
+            Esta es tu constitución según el test. En los siguientes pasos del Mapa iremos descubriendo qué significa para ti.
           </Text>
           </Reveal>
         </Flex>

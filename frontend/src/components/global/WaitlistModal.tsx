@@ -165,7 +165,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   textAlign="center"
                   lineHeight="1.7"
                 >
-                  Te avisaré en cuando El Recorrido esté disponible.
+                  Te avisaré en cuando El Mapa esté disponible.
                 </Text>
                 <Box
                   as="button"

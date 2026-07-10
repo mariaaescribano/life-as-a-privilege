@@ -138,7 +138,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
     ejemplo: {
       titulo: "Un ejemplo",
       cuerpo: [
-        "El Recorrido te lleva de tu historia a tus patrones y a su raíz.",
+        "El Mapa te lleva de tu historia a tus patrones y a su raíz.",
         "Por ejemplo: recordarás un año de tu vida, marcarás lo que dejó huella, nombrarás un nudo como «miedo al rechazo» y descubrirás de dónde nace.",
       ],
     },

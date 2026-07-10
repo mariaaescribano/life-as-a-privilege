@@ -11,13 +11,14 @@ const DEFAULT_NOTIFY_EMAIL = 'darkcake141@gmail.com';
 
 @Injectable()
 export class SubscribeService {
-  async addEmail(email: string): Promise<void> {
+  async addEmail(email: string, origen?: string): Promise<void> {
     await fs.mkdir(dirname(FILE_PATH), { recursive: true });
-    await fs.appendFile(FILE_PATH, `${email}\n`, 'utf-8');
-    await this.sendNotification(email);
+    const linea = origen ? `${email} (${origen})\n` : `${email}\n`;
+    await fs.appendFile(FILE_PATH, linea, 'utf-8');
+    await this.sendNotification(email, origen);
   }
 
-  private async sendNotification(email: string): Promise<void> {
+  private async sendNotification(email: string, origen?: string): Promise<void> {
     const pass = (process.env.EMAIL_PASS ?? '').replace(/\s/g, '');
 
     const transporter = nodemailer.createTransport({
@@ -36,12 +37,16 @@ export class SubscribeService {
       return;
     }
 
+    const esVoluntario = origen === 'voluntario';
+    const subject = esVoluntario ? 'Nuevo voluntario' : 'Nuevo suscriptor';
+    const etiqueta = esVoluntario ? 'Nuevo voluntario' : 'Nuevo suscriptor';
+
     try {
       await transporter.sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
         to: notifyEmail,
-        subject: 'Nuevo suscriptor',
-        html: `<p>Nuevo suscriptor: <strong>${email}</strong></p>`,
+        subject,
+        html: `<p>${etiqueta}: <strong>${email}</strong></p>`,
       });
     } catch (err) {
       console.error('Error enviando notificación de suscripción:', err);

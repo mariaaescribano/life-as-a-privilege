@@ -201,7 +201,7 @@ export default function LogIn() {
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Entra a tu cuenta de El Recorrido
+          Entra a tu cuenta de El Mapa
         </Text>
       </Flex>
 

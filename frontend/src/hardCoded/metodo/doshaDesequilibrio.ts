@@ -92,7 +92,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué hábito crees que más está alimentando tu Vata en este momento?",
-      nota: "Lo recuperaremos al final del recorrido.",
+      nota: "Lo recuperaremos al final del mapa.",
     },
     cierre: [
       "*El equilibrio no aparece sin más, se construye con pequeñas decisiones repetidas cada día.*",
@@ -170,7 +170,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué hábito sientes que está alimentando más tu fuego en este momento?",
-      nota: "Lo recuperaremos al final del recorrido.",
+      nota: "Lo recuperaremos al final del mapa.",
     },
     cierre: [
       "*El fuego ilumina cuando está equilibrado, pero cuando nunca descansa, termina consumiéndose a sí mismo.*",
@@ -248,7 +248,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué pequeño cambio llevas tiempo queriendo hacer, pero sigues posponiendo?",
-      nota: "Lo recuperaremos al final del recorrido.",
+      nota: "Lo recuperaremos al final del mapa.",
     },
     cierre: [
       "*La naturaleza nunca permanece completamente quieta, cuando tú también vuelves a moverte, recuperas tu equilibrio.*",

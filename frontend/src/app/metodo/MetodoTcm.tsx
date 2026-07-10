@@ -180,7 +180,7 @@ export default function MetodoTcm() {
                 mx="auto"
                 style={{ textShadow: INK_SHADOW }}
               >
-                En este recorrido descubrirás tu equilibrio actual entre los cinco elementos, aprenderás a
+                En este mapa descubrirás tu equilibrio actual entre los cinco elementos, aprenderás a
                 reconocer tus desequilibrios y sabrás cómo cuidarte desde esta sabiduría milenaria.
               </Text>
             </Box>
@@ -244,7 +244,7 @@ export default function MetodoTcm() {
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
                       style={{ textShadow: INK_SHADOW }}>
-                  Este recorrido tiene un fin educativo y de autoconocimiento.
+                  Este mapa tiene un fin educativo y de autoconocimiento.
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>

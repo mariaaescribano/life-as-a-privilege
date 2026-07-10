@@ -245,7 +245,7 @@ const Welcome = () => {
             fontFamily="'EB Garamond', serif"
             maxW={{ base: "100%", md: "640px" }}
           >
-            Un recorrido de 8 disciplinas para comprenderte, integrando ciencia y tradición.
+            Un mapa de ocho disciplinas para comprenderte, integrando ciencia y tradición.
           </Text>
         </Box>
       </Flex>

@@ -7,9 +7,12 @@ export class SubscribeController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
-  async subscribe(@Body() body: { email: string }) {
+  async subscribe(@Body() body: { email: string; origen?: string }) {
     if (!body.email) return { success: false };
-    await this.subscribeService.addEmail(body.email.trim().toLowerCase());
+    await this.subscribeService.addEmail(
+      body.email.trim().toLowerCase(),
+      body.origen,
+    );
     return { success: true };
   }
 }

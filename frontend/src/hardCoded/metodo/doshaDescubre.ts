@@ -88,7 +88,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué parte de esta descripción ha hecho que te sientas más identificado?",
-      nota: "Guardaremos esta respuesta para recuperarla al final del recorrido.",
+      nota: "Guardaremos esta respuesta para recuperarla al final del mapa.",
     },
     cierre: [
       "*No necesitas perder tu creatividad, necesitas darle raíces.*",
@@ -158,7 +158,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿En qué aspecto de tu vida sientes que te exiges más de lo que te gustaría?",
-      nota: "Guardaremos esta respuesta para recuperarla al final del recorrido.",
+      nota: "Guardaremos esta respuesta para recuperarla al final del mapa.",
     },
     cierre: [
       "*No necesitas apagar tu fuego, necesitas aprender a dirigirlo.*",
@@ -227,7 +227,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     reflexion: {
       titulo: "Reflexiona",
       pregunta: "¿Qué hay en tu vida que sientes que ha llegado el momento de soltar o transformar?",
-      nota: "Guardaremos esta respuesta para recuperarla al final del recorrido.",
+      nota: "Guardaremos esta respuesta para recuperarla al final del mapa.",
     },
     cierre: [
       "*No necesitas perder tu calma, necesitas recordar que la vida también crece cuando cambia.*",

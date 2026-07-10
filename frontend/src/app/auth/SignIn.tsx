@@ -198,7 +198,7 @@ export default function SignIn() {
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Empieza El Recorrido de Life as a Privilege
+          Empieza El Mapa de Life as a Privilege
         </Text>
       </Flex>
 

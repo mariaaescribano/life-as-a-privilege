@@ -397,7 +397,7 @@ export default function MetodoPsicologiaSintesis() {
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
               <IntroRecorrido>
-                Aquí está todo tu recorrido, de principio a fin. Desde el problema con el que
+                Aquí está todo tu mapa, de principio a fin. Desde el problema con el que
                 llegaste hasta la carta que te escribiste. Léelo entero: esto eres tú.
               </IntroRecorrido>
             </Reveal>
@@ -456,7 +456,7 @@ export default function MetodoPsicologiaSintesis() {
                     <Box>
                       <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.2"
                             style={{ textShadow: INK_SHADOW }}>
-                        Llévate todo tu recorrido
+                        Llévate todo tu mapa
                       </Text>
                       <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6"
                             mt={2} maxW="520px" mx="auto" style={{ textShadow: INK_SHADOW }}>
@@ -478,7 +478,7 @@ export default function MetodoPsicologiaSintesis() {
                           <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
                         </Box>
                       )}
-                      {descargando ? "Preparando tu PDF…" : "Descargar mi recorrido"}
+                      {descargando ? "Preparando tu PDF…" : "Descargar mi mapa"}
                     </Box>
                   </Flex>
                 </Box>

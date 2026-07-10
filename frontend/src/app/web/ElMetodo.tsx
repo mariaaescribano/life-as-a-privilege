@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Input, Text, useBreakpointValue } from "@chakra-ui/react";
+import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
@@ -12,6 +13,7 @@ import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido"
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
 import {
+  API_URL,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
@@ -321,6 +323,33 @@ export default function ElMetodo() {
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  // Formulario de voluntario/a (dentro del aviso "Proyecto en desarrollo").
+  // El email se manda al backend con origen "voluntario" → notificación a
+  // darkcake141@gmail.com marcada como voluntario.
+  const [volEmail, setVolEmail] = useState("");
+  const [volSubmitting, setVolSubmitting] = useState(false);
+  const [volSubmitted, setVolSubmitted] = useState(false);
+  const [volError, setVolError] = useState<string | null>(null);
+
+  const handleVoluntario = async () => {
+    if (volSubmitting) return;
+    setVolError(null);
+    const cleanEmail = volEmail.trim().toLowerCase();
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setVolError("Introduce un email válido.");
+      return;
+    }
+    setVolSubmitting(true);
+    try {
+      await axios.post(`${API_URL}/subscribe`, { email: cleanEmail, origen: "voluntario" });
+      setVolSubmitted(true);
+    } catch {
+      setVolError("No se pudo enviar. Inténtalo de nuevo en un momento.");
+    } finally {
+      setVolSubmitting(false);
+    }
+  };
+
   // El recorrido aún no está acabado: en vez de mandar al registro/flujo
   // incompleto, abrimos el modal de "lista de espera" y guardamos el email.
   const handleApuntarme = () => {
@@ -399,7 +428,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.85s ease, transform 0.85s ease"
         >
-          EL RECORRIDO
+          EL MAPA
         </Text>
         <Text
           color="rgba(255,255,255,0.85)"
@@ -443,7 +472,7 @@ export default function ElMetodo() {
           transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes pero complementarias. Cada disciplina aporta una pieza distinta hasta formar una comprensión profunda y coherente de quién eres.
+          No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes para formar una comprensión profunda y coherente de quién eres.
         </Text>
       
       </Flex>
@@ -561,7 +590,7 @@ export default function ElMetodo() {
               transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
               transition="opacity 0.8s ease, transform 0.8s ease"
             >
-              Así es El Recorrido por dentro
+              Así es El Mapa por dentro
             </Text>
           </Flex>
 
@@ -583,15 +612,17 @@ export default function ElMetodo() {
           </Box>
 
           {/* ── LA CREADORA ── */}
-          {/* Separador con mandala en medio (mismo estilo y separación que el
-              de "Así es El Recorrido por dentro", para mantener coherencia). */}
+          {/* Separador con mandala en medio. La tarjeta de la creadora (debajo)
+              aporta su propio pt (40px móvil / 56px escritorio); compensamos con
+              mt igual y mb=0 para que el separador quede JUSTO en medio de los
+              dos paneles visibles. */}
           <Flex
             ref={creadoraReveal.ref}
             align="center"
             justify="center"
             gap={{ base: 4, md: 6 }}
-            mt={{ base: 8, md: 10 }}
-            mb={{ base: 8, md: 16 }}
+            mt={{ base: 10, md: 14 }}
+            mb={0}
             opacity={creadoraReveal.visible ? 1 : 0}
             transform={creadoraReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
             transition="opacity 0.8s ease, transform 0.8s ease"
@@ -824,13 +855,142 @@ export default function ElMetodo() {
         ref={botonesReveal.ref}
         direction="column"
         align="center"
-        pt={{ base: 24, md: 36 }}
+        pt={{ base: 16, md: 24 }}
         pb={{ base: 24, md: 32 }}
         gap={{ base: 12, md: 16 }}
         opacity={botonesReveal.visible ? 1 : 0}
         transform={botonesReveal.visible ? "translateY(0)" : "translateY(28px)"}
         transition="opacity 0.8s ease, transform 0.8s ease"
       >
+        {/* Aviso elegante: proyecto en desarrollo + búsqueda de voluntarios */}
+        <Flex
+          direction="column"
+          align="center"
+          textAlign="center"
+          gap={{ base: 3, md: 3.5 }}
+          maxW={{ base: "92vw", md: "640px" }}
+          px={{ base: 6, md: 9 }}
+          py={{ base: 6, md: 7 }}
+          borderRadius="2xl"
+          border="1px solid rgba(255,255,255,0.28)"
+          bg="rgba(255,255,255,0.07)"
+          sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
+          boxShadow="0 4px 20px rgba(0,0,0,0.14), 0 0 24px rgba(180,255,245,0.10)"
+        >
+          <Flex align="center" gap={2}>
+            <Text
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize={{ base: "xs", md: "sm" }}
+              letterSpacing="0.18em"
+              textTransform="uppercase"
+              textShadow="0 0 10px rgba(255,255,255,0.35)"
+            >
+              Proyecto en desarrollo
+            </Text>
+          </Flex>
+          <Text
+            color="rgba(255,255,255,0.9)"
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            fontSize={{ base: "sm", md: "md" }}
+            lineHeight="1.7"
+            letterSpacing="0.01em"
+            textShadow="0 0 10px rgba(255,255,255,0.22)"
+          >
+            El Mapa todavía está en desarrollo. Por eso busco a personas
+            voluntarias que quieran vivirlo a un precio muy reducido y acompañarme
+            con su feedback para seguir puliéndolo.
+          </Text>
+
+          {/* Mini-formulario de voluntario/a */}
+          {!volSubmitted ? (
+            <Flex direction="column" align="center" gap={3} w="100%" mt={{ base: 1, md: 1.5 }}>
+              <Flex
+                direction={{ base: "column", sm: "row" }}
+                align="center"
+                gap={3}
+                w="100%"
+                maxW="440px"
+              >
+                <Input
+                  placeholder="Tu email"
+                  type="email"
+                  value={volEmail}
+                  onChange={(e) => setVolEmail(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") void handleVoluntario(); }}
+                  isDisabled={volSubmitting}
+                  flex="1"
+                  w="100%"
+                  bg="rgba(255,255,255,0.10)"
+                  border="1px solid rgba(255,255,255,0.4)"
+                  color="white"
+                  borderRadius="full"
+                  textAlign="center"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "sm", md: "md" }}
+                  _placeholder={{ color: "rgba(255,255,255,0.55)" }}
+                  _hover={{ borderColor: "rgba(255,255,255,0.7)" }}
+                  _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.5)" }}
+                />
+                <Box
+                  as="button"
+                  onClick={handleVoluntario}
+                  disabled={volSubmitting}
+                  flexShrink={0}
+                  w={{ base: "100%", sm: "auto" }}
+                  px={{ base: 6, md: 7 }}
+                  py={{ base: "9px", md: "10px" }}
+                  borderRadius="full"
+                  bg="white"
+                  color="#008080"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontWeight="700"
+                  letterSpacing="0.06em"
+                  whiteSpace="nowrap"
+                  cursor={volSubmitting ? "not-allowed" : "pointer"}
+                  opacity={volSubmitting ? 0.6 : 1}
+                  boxShadow="0 4px 20px rgba(255,255,255,0.28)"
+                  transition="all 0.22s"
+                  _hover={volSubmitting ? {} : { transform: "translateY(-2px)", boxShadow: "0 8px 30px rgba(255,255,255,0.42)" }}
+                >
+                  {volSubmitting ? "Enviando…" : "Quiero ser voluntario/a"}
+                </Box>
+              </Flex>
+              {volError && (
+                <Text color="rgba(255,205,205,0.95)" fontSize="sm">
+                  {volError}
+                </Text>
+              )}
+            </Flex>
+          ) : (
+            <Flex direction="column" align="center" gap={1.5} mt={{ base: 1, md: 1.5 }}>
+              <Text fontSize="2xl" color="white" lineHeight="1">✓</Text>
+              <Text
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "md", md: "lg" }}
+                fontWeight="700"
+                letterSpacing="0.03em"
+                textShadow="0 0 10px rgba(255,255,255,0.3)"
+              >
+                ¡Gracias!
+              </Text>
+              <Text
+                color="rgba(255,255,255,0.85)"
+                fontFamily="'EB Garamond', serif"
+                fontStyle="italic"
+                fontSize={{ base: "sm", md: "md" }}
+                lineHeight="1.6"
+              >
+                Te escribiré para contarte cómo participar.
+              </Text>
+            </Flex>
+          )}
+        </Flex>
+
         {/* EMPEZAR (botón grande con mandala) */}
         <Flex
           as="button"
