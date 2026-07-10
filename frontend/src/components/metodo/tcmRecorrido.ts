@@ -36,12 +36,25 @@ import {
   letratcm21, letratcm22, letratcm23, letratcm24, letratcm25,
 } from "../../hardCoded/aprendizajes/TCM/LetraTCM";
 import { RECS_ELEMENTOS, type Recs } from "../espacio/data/tcmRecommendations";
+import type { PasoRecorrido } from "./psicologiaRecorrido";
 
 // ── Los cinco elementos ──────────────────────────────────────────────────
 export type Elemento = "madera" | "fuego" | "tierra" | "metal" | "agua";
 
 /** Orden canónico del ciclo de generación (Sheng). Rige el desbloqueo secuencial. */
 export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal", "agua"];
+
+// ── Índice del recorrido (botón «Índice», reutiliza IndiceRecorrido) ────────
+// Solo las páginas ya navegables (sin enlaces muertos). Se irá ampliando según
+// se construyan los pasos pendientes (perfil, ciclos, tu mapa, escucharte…).
+export const TCM_INDICE: PasoRecorrido[] = [
+  { n: 1, titulo: "Medicina China",     ruta: () => "/metodo/tcm" },
+  { n: 2, titulo: "Equilibrio",         ruta: () => "/metodo/tcm/equilibrio" },
+  { n: 3, titulo: "Mapa energético",    ruta: () => "/metodo/tcm/mapa" },
+  { n: 4, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
+];
+
+export const TCM_TOTAL = TCM_INDICE.length;
 
 // ── Tipos de test ──────────────────────────────────────────────────────────
 export interface OpcionPuntuada {
@@ -116,6 +129,16 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
           { key: "casi-nunca", texto: "Casi nunca", puntos: { madera: 0 } },
           { key: "a-veces", texto: "A veces, en épocas de estrés", puntos: { madera: 2 } },
           { key: "a-menudo", texto: "A menudo", puntos: { madera: 4 } },
+        ],
+      },
+      {
+        key: "madera-estancamiento",
+        pregunta:
+          "¿Notas distensión, plenitud o dolor en el pecho, los costados, las mamas o el bajo vientre, o un sabor ácido en la boca?",
+        opciones: [
+          { key: "no", texto: "No, apenas lo noto", puntos: { madera: 0 } },
+          { key: "a-veces", texto: "A veces, sobre todo con estrés", puntos: { madera: 2 } },
+          { key: "a-menudo", texto: "A menudo, de forma clara", puntos: { madera: 4 } },
         ],
       },
       {

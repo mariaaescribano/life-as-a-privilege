@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
@@ -199,6 +200,8 @@ export default function MetodoTcmEquilibrio() {
       </Flex>
 
       {ilustracionesModal}
+
+      <IndiceTcm />
 
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 

@@ -8,7 +8,6 @@
 // cada elemento vive en tcmRecorrido.ts (ELEMENTOS[el].miniTest).
 // ─────────────────────────────────────────────────────────────────────────
 import type { Elemento } from "./tcmRecorrido";
-import type { Vineta } from "./ComicViewer";
 
 export interface ParRige { clave: string; valor: string; }
 export interface FuncionElemento { titulo: string; texto: string; }
@@ -548,20 +547,89 @@ export const tieneContenido = (el: Elemento): boolean => !!CONTENIDO_ELEMENTOS[e
 
 // ─────────────────────────────────────────────────────────────────────────
 // CÓMIC de cada elemento (se abre al pinchar el elemento en la estrella).
-// Cada viñeta = { src: foto, paragraphs: [texto] }. El fondo y el box del
-// visor usan la foto del elemento (FOTO_ELEMENTO).
 //
-// ✍️  PLACEHOLDER: por ahora usa los párrafos de la intro con la foto del
-//     elemento. Se reemplazará por los textos y viñetas exactos que dé María,
-//     elemento a elemento.
+// Es una secuencia de PASOS. La mayoría son viñetas (foto + texto), pero uno
+// —a mitad del recorrido del elemento— es un mini-TEST: sus preguntas viven en
+// ELEMENTOS[el].miniTest (tcmRecorrido.ts) y su resultado se SUMA a la
+// puntuación agregada del recorrido (puntuaciones()), acercándonos al perfil
+// final. No se puede pasar del paso de test sin responderlo.
+//
+// El objetivo del recorrido es reconocer los DESEQUILIBRIOS de cada elemento:
+// por eso el arco es intro → exceso → deficiencia → test → cómo reequilibrar.
 // ─────────────────────────────────────────────────────────────────────────
-const comicDesde = (el: Elemento, textos: string[]): Vineta[] =>
-  textos.map((t) => ({ src: FOTO_ELEMENTO[el], paragraphs: [t] }));
+export interface PasoVineta { tipo: "vineta"; src: string; paragraphs: string[]; }
+/** Paso de mini-test. `intro` es el texto/contexto que precede a las preguntas
+ *  (las preguntas las pinta la página desde ELEMENTOS[el].miniTest). */
+export interface PasoTest { tipo: "test"; src: string; intro: string[]; }
+export type PasoComic = PasoVineta | PasoTest;
 
-export const COMIC_ELEMENTO: Record<Elemento, Vineta[]> = {
-  madera: comicDesde("madera", madera.intro),
-  fuego: comicDesde("fuego", fuego.intro),
-  tierra: comicDesde("tierra", tierra.intro),
-  metal: comicDesde("metal", metal.intro),
-  agua: comicDesde("agua", agua.intro),
+// Madera · viñetas con el texto del curso (voz de María). Foto de anclaje: verde.
+const comicMadera: PasoComic[] = [
+  {
+    tipo: "vineta",
+    src: FOTO_ELEMENTO.madera,
+    paragraphs: [
+      "La Madera representa el crecimiento, el ascenso, la dispersión y la fluidez. Es la energía de la primavera: todo lo que brota, se expande y busca moverse con libertad pertenece a la Madera. Rige el hígado, la vesícula biliar, los ojos y los tendones.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTO_ELEMENTO.madera,
+    paragraphs: [
+      "Cuando la Madera está en exceso, la energía asciende de forma descontrolada. Puede manifestarse como arrebatos de ira, rabia, impaciencia e irritabilidad, acompañados de una constante sensación de bloqueo o de prisa. Es frecuente encontrar tensión muscular en el cuello, la mandíbula y los hombros, así como ojos rojos o inyectados y dolores de cabeza ascendentes.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTO_ELEMENTO.madera,
+    paragraphs: [
+      "Cuando la Madera está deficiente, falta el impulso necesario para avanzar. Puede aparecer falta de iniciativa, dificultad para encontrar una dirección clara o para tomar decisiones. La persona se desanima con facilidad, teme actuar y puede mostrar baja motivación, timidez e indecisión. A nivel físico pueden aparecer ojos cansados, visión borrosa, tendones débiles, calambres o temblores.",
+    ],
+  },
+  {
+    tipo: "test",
+    src: FOTO_ELEMENTO.madera,
+    intro: [
+      "Cuando el Qi del Hígado pierde su capacidad de fluir libremente, aparece un estancamiento que afecta a la circulación de la Sangre y los líquidos, la secreción de bilis, la digestión, la menstruación y la espermiación. Reconócelo en ti:",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTO_ELEMENTO.madera,
+    paragraphs: [
+      "Para reequilibrar la Madera, favorece alimentos que apoyen el Hígado y el libre flujo del Qi: verduras amargas como diente de león, rúcula o kale; alimentos ácidos como limón, vinagre o encurtidos; hierbas frescas como menta, albahaca y perejil; germinados y té verde.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTO_ELEMENTO.madera,
+    paragraphs: [
+      "La Madera necesita movimiento, dirección y expresión: muévete por la mañana (estiramientos, Qi Gong o artes marciales), da forma a tu creatividad planificando o escribiendo nuevos proyectos y practica límites sanos para no acumular frustración. Descansa alrededor de las 22:30, cuando su energía empieza a relajarse, y elige un ejercicio dinámico pero no agresivo, de movimiento continuo y flexible, como el crecer de la primavera.",
+    ],
+  },
+];
+
+// Resto de elementos · se arma desde su contenido rico (mismo arco narrativo)
+// hasta que María pase el texto definitivo de cada uno.
+const comicDesdeRico = (c: ContenidoElementoRico): PasoComic[] => {
+  const src = FOTO_ELEMENTO[c.id];
+  const guiaTxt = [
+    `Para reequilibrar, en la mesa: ${c.guia.nutricion.join("; ")}.`,
+    `En tu día a día: ${c.guia.estiloDeVida.join("; ")}. Descanso: ${c.guia.descanso} Ejercicio: ${c.guia.ejercicio.join(", ")}.`,
+  ];
+  return [
+    { tipo: "vineta", src, paragraphs: [c.intro.join(" ")] },
+    { tipo: "vineta", src, paragraphs: [c.exceso.join(" ")] },
+    { tipo: "vineta", src, paragraphs: [c.deficiencia.join(" ")] },
+    { tipo: "test", src, intro: [c.desequilibrio[0]] },
+    { tipo: "vineta", src, paragraphs: guiaTxt },
+  ];
+};
+
+export const COMIC_ELEMENTO: Record<Elemento, PasoComic[]> = {
+  madera: comicMadera,
+  fuego: comicDesdeRico(fuego),
+  tierra: comicDesdeRico(tierra),
+  metal: comicDesdeRico(metal),
+  agua: comicDesdeRico(agua),
 };

@@ -12,6 +12,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 
@@ -150,7 +151,7 @@ export default function MetodoTcm() {
             mb={0}
             prev={{ label: "← Ayurveda", onClick: () => navigate(volverAyurvedaUrl) }}
             extra={ilustracionesBtn}
-            next={{ label: "Comenzar →", onClick: comenzar }}
+            next={{ label: "Equilibrio →", onClick: comenzar }}
           />
 
           {/* ── Bienvenida contemplativa ── */}
@@ -211,6 +212,8 @@ export default function MetodoTcm() {
       </Flex>
 
       {ilustracionesModal}
+
+      <IndiceTcm />
 
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 

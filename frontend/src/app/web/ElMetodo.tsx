@@ -8,7 +8,7 @@ import { WaitlistModal } from "../../components/global/WaitlistModal";
 import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 // Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
-import { RecorridoCarruseles } from "../../components/global/MandalaRecorrido";
+import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
 import {
@@ -479,7 +479,7 @@ export default function ElMetodo() {
           transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(10px)"}
           transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
         >
-          Cada disciplina observa una parte distinta del ser humano. Haz clic para explorarlas.
+          Cada disciplina observa una parte distinta del ser humano.
         </Text>
       </Flex>
       
@@ -574,10 +574,12 @@ export default function ElMetodo() {
           </Box>
           */}
 
-          {/* Cuadrícula de carruseles — capturas reales de cada disciplina,
-              visibles sin popup. Clic en una foto la abre en grande. */}
+          {/* Mandala + vídeo — a la izquierda el mandala interactivo, a la
+              derecha el box de la disciplina seleccionada con su vídeo (9:16
+              recortado a 1:1). Al pulsar una disciplina disponible, el box se
+              actualiza. */}
           <Box mt={{ base: 12, md: 20 }}>
-            <RecorridoCarruseles />
+            <RecorridoMandalaVideo />
           </Box>
 
           {/* ── LA CREADORA ── */}
@@ -588,8 +590,8 @@ export default function ElMetodo() {
             align="center"
             justify="center"
             gap={{ base: 4, md: 6 }}
-            mt={{ base: 6, md: 9 }}
-            mb={{ base: 5, md: 7 }}
+            mt={{ base: 8, md: 10 }}
+            mb={{ base: 8, md: 16 }}
             opacity={creadoraReveal.visible ? 1 : 0}
             transform={creadoraReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
             transition="opacity 0.8s ease, transform 0.8s ease"

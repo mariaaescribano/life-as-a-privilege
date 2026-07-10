@@ -153,10 +153,9 @@ export function IndiceRecorrido({
                           px={{ base: 3, md: 3.5 }} py={{ base: 2.5, md: 3 }} borderRadius="xl"
                           bg={esActual ? ACENTO : "rgba(255,251,243,0.62)"}
                           border={`1.5px solid ${esActual ? ACENTO : `${TINTA}2e`}`}
-                          boxShadow={esActual ? `0 4px 16px ${ACENTO}55` : "none"}
+                          boxShadow="none"
                           cursor="pointer" transition="all 0.16s"
-                          _hover={{ transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)",
-                                    boxShadow: esActual ? `0 6px 20px ${ACENTO}66` : `0 2px 10px ${ACENTO}22` }}>
+                          _hover={{ transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)" }}>
                       <Flex flexShrink={0} align="center" justify="center" w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }}
                             borderRadius="full" bg={esActual ? PAPEL : ACENTO}
                             color={contraste(esActual ? PAPEL : ACENTO)} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>

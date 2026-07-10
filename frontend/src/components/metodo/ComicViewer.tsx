@@ -85,6 +85,12 @@ interface ComicViewerProps {
   /** Color del texto de las viñetas. Por defecto = themeColor. Útil cuando el
    *  acento es un color poco legible sobre la foto (p.ej. verde de Madera). */
   textColor?: string;
+  /** Contenido extra por página (p.ej. un mini-test), bajo el texto de la viñeta.
+   *  Devuelve el JSX a pintar para ese índice, o null si no hay nada. */
+  pageExtra?: (index: number) => React.ReactNode;
+  /** Si devuelve true para la página actual, bloquea el avance (flecha derecha,
+   *  tecla → y swipe) hasta que deje de estarlo (p.ej. hasta responder el test). */
+  bloqueado?: (index: number) => boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -100,6 +106,8 @@ export function ComicViewer({
   disciplinaBgColor,
   textShadow = DEFAULT_TEXT_SHADOW,
   textColor,
+  pageExtra,
+  bloqueado,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   const [index, setIndex] = useState(0);
@@ -111,6 +119,9 @@ export function ComicViewer({
   const current = vinetas[index];
   const isFirst = index === 0;
   const isLast = index === total - 1;
+  // Página bloqueada: no se puede avanzar hasta cumplir su requisito (p.ej.
+  // responder el mini-test embebido). Sí se puede retroceder.
+  const blocked = bloqueado ? bloqueado(index) : false;
 
   useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 0;
@@ -125,6 +136,7 @@ export function ComicViewer({
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
         setIndex((i) => {
+          if (bloqueado && bloqueado(i)) return i; // página bloqueada: no avanzar
           if (i >= total - 1) {
             handleComplete();
             return i;
@@ -140,7 +152,7 @@ export function ComicViewer({
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [total, onBack]);
+  }, [total, onBack, bloqueado]);
 
   const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
   const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
@@ -157,6 +169,7 @@ export function ComicViewer({
     touchStart.current = null;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
       if (dx > 0) goPrev();
+      else if (blocked) return; // página bloqueada: no avanzar con swipe
       else if (isLast) handleComplete();
       else goNext();
     }
@@ -280,7 +293,8 @@ export function ComicViewer({
       {/* Flecha derecha (tick si es la última) */}
       <IconButton
         aria-label={isLast ? "Terminar" : "Siguiente"}
-        onClick={isLast ? handleComplete : goNext}
+        onClick={blocked ? undefined : (isLast ? handleComplete : goNext)}
+        isDisabled={blocked}
         position="fixed"
         right={{ base: 1, md: 6 }}
         top="50%"
@@ -288,14 +302,15 @@ export function ComicViewer({
         zIndex={10}
         variant="ghost"
         color={themeColor}
+        opacity={blocked ? 0.25 : 1}
         bg={{ base: "transparent", md: `${themeColor}10` }}
         border={{ base: "none", md: `1px solid ${themeColor}33` }}
         borderRadius="full"
         w={{ base: "32px", md: "60px" }}
         h={{ base: "32px", md: "60px" }}
         minW={{ base: "32px", md: "60px" }}
-        boxShadow={{ base: "none", md: `0 0 14px ${themeColor}44, 0 0 32px ${themeColor}22` }}
-        _hover={{
+        boxShadow={blocked ? "none" : { base: "none", md: `0 0 14px ${themeColor}44, 0 0 32px ${themeColor}22` }}
+        _hover={blocked ? {} : {
           bg: `${themeColor}22`,
           borderColor: `${themeColor}88`,
           boxShadow: `0 0 22px ${themeColor}66, 0 0 50px ${themeColor}33`,
@@ -507,6 +522,11 @@ export function ComicViewer({
               >
                 {fullText}
               </Text>
+              {/* Contenido extra de la página (p.ej. el mini-test del elemento). */}
+              {pageExtra && (() => {
+                const extra = pageExtra(index);
+                return extra ? <Box mt={{ base: 6, md: 7 }}>{extra}</Box> : null;
+              })()}
             </Box>
           </Flex>
 

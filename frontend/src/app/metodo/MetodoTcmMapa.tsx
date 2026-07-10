@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
@@ -114,12 +115,12 @@ export default function MetodoTcmMapa() {
           {/* ── La estrella de los 5 elementos ── */}
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 8 }}>
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={2}
+            <Box position="relative" zIndex={1} px={{ base: 3, md: 5 }} py={{ base: 3, md: 4 }}>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={0.5}
                     style={{ textShadow: INK_SHADOW }}>
                 Tu equilibrio ahora
               </Text>
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} textAlign="center" opacity={0.85} mb={5}
+              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} textAlign="center" opacity={0.85} mb={0.5}
                     lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
                 Cuanto más lejos del centro, más presente está ese elemento en ti hoy.
               </Text>
@@ -241,6 +242,8 @@ export default function MetodoTcmMapa() {
       </Flex>
 
       {ilustracionesModal}
+
+      <IndiceTcm />
 
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 

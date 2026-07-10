@@ -30,6 +30,9 @@ type Disciplina = {
   link: string;
   /** Por ahora solo Astrología está abierta. */
   enabled: boolean;
+  /** Vídeo 9:16 de recorrido de la disciplina (se recorta a 1:1 en pantalla).
+   *  Sin vídeo = aún no disponible en el mandala-vídeo. */
+  video?: string;
   renderIcon: (size: string) => React.ReactNode;
 };
 
@@ -65,6 +68,7 @@ const disciplinas: Disciplina[] = [
     ],
     link: "/espacio/questions/" + astrologiaNom,
     enabled: true,
+    video: "/videos/astrovideo.mp4",
     renderIcon: (size) => <AstrologiaIcon size={size} />,
   },
   {
@@ -96,6 +100,7 @@ const disciplinas: Disciplina[] = [
     ],
     link: "/espacio/questions/" + neuropsicologiaNom,
     enabled: true,
+    video: "/videos/psicovideo.mp4",
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
   },
   {
@@ -130,6 +135,7 @@ const disciplinas: Disciplina[] = [
     ],
     link: "/espacio/questions/" + ayurvedaNomLink,
     enabled: true,
+    video: "/videos/hinduismovideo.mp4",
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
   },
   {
@@ -186,7 +192,7 @@ const disciplinas: Disciplina[] = [
 
 // ── Círculo del mandala ──────────────────────────────────────────────────────
 const MandalaCircle = ({
-  disc, index, step, x, y, circleSize, iconSize, onSelect,
+  disc, index, step, x, y, circleSize, iconSize, onSelect, isSelected = false,
 }: {
   disc: Disciplina;
   index: number;
@@ -196,6 +202,7 @@ const MandalaCircle = ({
   circleSize: string;
   iconSize: string;
   onSelect: () => void;
+  isSelected?: boolean;
 }) => {
   const [entered, setEntered] = useState(false);
   const hasBg = hasDisciplinaBg(disc.nom);
@@ -203,14 +210,14 @@ const MandalaCircle = ({
   return (
     <MotionBox
       position="absolute"
-      cursor={disc.enabled ? "pointer" : "default"}
-      onClick={disc.enabled ? onSelect : undefined}
+      cursor="pointer"
+      onClick={onSelect}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-      animate={{ scale: 1, opacity: 1, x, y }}
-      transition={entered ? { duration: 0.15 } : { duration: 0.7, delay: index * 0.06 }}
+      animate={{ scale: isSelected ? 1.14 : 1, opacity: 1, x, y }}
+      transition={entered ? { duration: 0.25 } : { duration: 0.7, delay: index * 0.06 }}
       onAnimationComplete={() => { if (!entered) setEntered(true); }}
-      whileHover={disc.enabled ? { scale: 1.18 } : {}}
-      style={{ filter: disc.enabled ? undefined : "grayscale(0.55)" }}
+      whileHover={{ scale: isSelected ? 1.2 : 1.1 }}
+      style={{ filter: isSelected ? undefined : "grayscale(0.6)", zIndex: isSelected ? 3 : undefined }}
     >
       <Box
         position="relative"
@@ -220,9 +227,9 @@ const MandalaCircle = ({
         overflow="hidden"
         bg={hasBg ? "transparent" : disc.bg}
         border={`3px solid ${disc.txt}`}
-        opacity={disc.enabled ? 1 : 0.5}
-        boxShadow={disc.enabled
-          ? `0 0 20px ${disc.txt}bb, 0 2px 14px ${disc.txt}97`
+        opacity={isSelected ? 1 : 0.5}
+        boxShadow={isSelected
+          ? `0 0 22px ${disc.txt}, 0 0 44px ${disc.txt}aa, 0 2px 16px rgba(0,0,0,0.4)`
           : `0 0 10px ${disc.txt}55, 0 2px 10px rgba(0,0,0,0.3)`}
         display="flex"
         justifyContent="center"
@@ -831,6 +838,294 @@ export const RecorridoCarruseles = () => {
         />
       )}
     </>
+  );
+};
+
+// ── Box de vídeo de una disciplina ───────────────────────────────────────────
+// Fondo = imagen propia de la disciplina. Cabecera "nº. Nombre" + separador
+// horizontal y, debajo, el vídeo 9:16 recortado a 1:1 (sin tocar el original:
+// object-fit cover recorta arriba/abajo en pantalla).
+const VideoBox = ({ disc, step }: { disc: Disciplina; step: number }) => {
+  const accent = disc.txt;
+  const hasBg = hasDisciplinaBg(disc.nom);
+  const textGlow = `0 1px 3px ${disc.bg}, 0 0 10px ${disc.bg}, 0 0 20px ${disc.bg}`;
+
+  return (
+    <Flex
+      direction="column"
+      position="relative"
+      borderRadius="2xl"
+      overflow="hidden"
+      bg={disc.bg}
+      boxShadow={`0 10px 34px rgba(0,0,0,0.32), 0 0 26px ${accent}44`}
+    >
+      {/* Fondo del box: imagen propia de la disciplina */}
+      <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
+
+      {/* Cabecera: nº + icono + nombre */}
+      <Flex align="center" gap={3} px={{ base: 5, md: 6 }} pt={{ base: 4, md: 5 }} pb={{ base: 3, md: 3 }} position="relative" zIndex={1}>
+        <Box
+          position="relative"
+          w={{ base: "40px", md: "46px" }}
+          h={{ base: "40px", md: "46px" }}
+          borderRadius="full"
+          overflow="hidden"
+          flexShrink={0}
+          bg={hasBg ? "transparent" : disc.bg}
+          border={`2px solid ${accent}`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {hasBg && <DisciplinaBgLayer nom={disc.nom} borderRadius="full" />}
+          <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+            {disc.renderIcon("28px")}
+          </Box>
+        </Box>
+        <Flex align="baseline" gap={2} minW={0}>
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "xl", md: "2xl" }}
+            lineHeight="1.1"
+            opacity={0.9}
+            textShadow={textGlow}
+          >
+            {step}.
+          </Text>
+          <Text
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "xl", md: "2xl" }}
+            lineHeight="1.35"
+            letterSpacing="0.02em"
+            pb="0.12em"
+            whiteSpace="nowrap"
+            textShadow={textGlow}
+          >
+            {disc.nom}
+          </Text>
+        </Flex>
+      </Flex>
+
+      {/* Separador horizontal */}
+      <Box
+        mx={{ base: 5, md: 6 }}
+        h="1px"
+        position="relative"
+        zIndex={1}
+        bg={`linear-gradient(to right, transparent, ${accent}bb, transparent)`}
+      />
+
+      {/* Vídeo 9:16 recortado a cuadrado (1:1), o placeholder "En desarrollo"
+          para las disciplinas que aún no están disponibles. */}
+      <Box
+        position="relative"
+        zIndex={1}
+        m={{ base: 4, md: 5 }}
+        borderRadius="xl"
+        overflow="hidden"
+        sx={{ aspectRatio: "1 / 1" }}
+        boxShadow="0 6px 22px rgba(0,0,0,0.35)"
+      >
+        {disc.video ? (
+          <Box
+            as="video"
+            key={disc.video}
+            src={disc.video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            w="100%"
+            h="100%"
+            sx={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        ) : (
+          <Flex
+            w="100%"
+            h="100%"
+            direction="column"
+            align="center"
+            justify="center"
+            gap={4}
+            px={5}
+            textAlign="center"
+            bg="rgba(0,0,0,0.32)"
+            sx={{ backdropFilter: "blur(2px)" }}
+          >
+            <Box
+              as="svg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+              w={{ base: "40px", md: "48px" }}
+              h={{ base: "40px", md: "48px" }}
+              fill={accent}
+              opacity={0.9}
+              style={{ filter: `drop-shadow(0 0 10px ${accent}88)` }}
+            >
+              <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/>
+            </Box>
+            <Text
+              color={accent}
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="600"
+              letterSpacing="0.16em"
+              textTransform="uppercase"
+              textShadow={textGlow}
+            >
+              En desarrollo
+            </Text>
+          </Flex>
+        )}
+      </Box>
+    </Flex>
+  );
+};
+
+// ── Mandala + vídeo en fila ───────────────────────────────────────────────────
+// A la izquierda el mandala interactivo; a la derecha el box de la disciplina
+// seleccionada con su vídeo. Al pulsar un círculo (solo las disciplinas
+// disponibles), el box de la derecha se actualiza.
+export const RecorridoMandalaVideo = () => {
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
+  const firstEnabled = disciplinas.find((d) => d.enabled && d.video) ?? disciplinas[0];
+  const [selectedNom, setSelectedNom] = useState(firstEnabled.nom);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const selectedIndex = disciplinas.findIndex((d) => d.nom === selectedNom);
+  const selected = disciplinas[selectedIndex];
+
+  const isXs = windowWidth < 380;
+  const isSm = windowWidth < 480;
+  const isMd = windowWidth < 768;
+  const isLg = windowWidth < 1024;
+
+  // Mandala algo más contenido que el de página completa, porque va en fila
+  // junto al vídeo. (Tamaños reducidos ~10% para que respire mejor.)
+  const size       = isXs ? 216 : isSm ? 257 : isMd ? 297 : isLg ? 360 : 414;
+  const radius     = isXs ? 94 : isSm ? 115 : isMd ? 135 : isLg ? 151 : 171;
+  const circleSize = isXs ? "52px" : isSm ? "59px" : isMd ? "68px" : "83px";
+  const centerSize = isXs ? "101px" : isSm ? "112px" : isMd ? "130px" : "158px";
+  // Alto ceñido al diámetro real del mandala (2·(radio + medio círculo) + badge),
+  // para no dejar hueco muerto arriba/abajo, sobre todo en móvil.
+  const containerH = isXs ? "270px" : isSm ? "320px" : isMd ? "375px" : "470px";
+  const iconSize   = isXs ? "31px" : isSm ? "38px" : isMd ? "45px" : "47px";
+
+  const angleStep = (2 * Math.PI) / disciplinas.length;
+
+  return (
+    <Flex
+      direction={{ base: "column", lg: "row" }}
+      align="center"
+      justify="center"
+      gap={{ base: 6, lg: 10 }}
+      w="100%"
+    >
+      {/* ── Mandala (izquierda) ── */}
+      <Box
+        position="relative"
+        w={{ base: "100%", lg: "auto" }}
+        h={containerH}
+        flexShrink={0}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Box position="relative" w={`${size}px`} h={`${size}px`} display="flex" justifyContent="center" alignItems="center">
+          {/* life.png de fondo del mandala */}
+          <Box
+            position="absolute"
+            w="100%"
+            h="100%"
+            backgroundImage="url('/img/icono/life.png')"
+            backgroundSize="90%"
+            backgroundPosition="center"
+            backgroundRepeat="no-repeat"
+            opacity={0.13}
+            zIndex={0}
+            pointerEvents="none"
+          />
+
+          {/* Centro */}
+          <MotionBox
+            position="absolute"
+            w={centerSize}
+            h={centerSize}
+            borderRadius="full"
+            overflow="hidden"
+            boxShadow="0 8px 32px rgba(0,0,0,0.35), 0 0 28px rgba(107,196,200,0.55), 0 0 60px rgba(107,196,200,0.25)"
+            border="4px solid rgba(255,255,255,0.75)"
+            zIndex={1}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(255,255,255,0.06)"
+            sx={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.7 }}
+          >
+            <Image
+              src="/img/icono/life.png"
+              alt=""
+              w="70%"
+              h="70%"
+              objectFit="contain"
+              style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
+            />
+          </MotionBox>
+
+          {/* Círculos */}
+          {disciplinas.map((disc, index) => {
+            const angle = angleStep * index - Math.PI / 2;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            return (
+              <MandalaCircle
+                key={disc.nom}
+                disc={disc}
+                index={index}
+                step={index + 1}
+                x={x}
+                y={y}
+                circleSize={circleSize}
+                iconSize={iconSize}
+                isSelected={disc.nom === selectedNom}
+                onSelect={() => setSelectedNom(disc.nom)}
+              />
+            );
+          })}
+        </Box>
+      </Box>
+
+      {/* ── Box de vídeo (derecha) ── */}
+      <Box w={{ base: "100%", lg: "auto" }} flex={{ lg: 1 }} maxW={{ base: "396px", lg: "450px" }}>
+        <AnimatePresence mode="wait">
+          <MotionBox
+            key={selected.nom}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            w="100%"
+          >
+            <VideoBox disc={selected} step={selectedIndex + 1} />
+          </MotionBox>
+        </AnimatePresence>
+      </Box>
+    </Flex>
   );
 };
 
