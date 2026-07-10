@@ -171,8 +171,7 @@ export default function MetodoPsicologiaAce() {
           </Reveal>
 
           {/* ── Las 10 preguntas · entran EN CASCADA, una tras otra ── */}
-          <RevealStagger direction="up" distance={26} scaleFrom={0.97} duration={0.5}
-                         stagger={0.12} delayChildren={0.1} amount={0.15}
+          <RevealStagger stagger={0.12} delayChildren={0.1} amount={0.15}
                          display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
             {ACE_PREGUNTAS.map((p) => {
               const elegido = respuestas[p.key];
