@@ -7,7 +7,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -331,17 +331,18 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>
               {c.reconoces.intro}
             </Text>
-            <Flex direction="column" gap={3}>
+            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.reconoces.opciones.map((op) => (
-                <CheckRow
-                  key={op}
-                  label={op}
-                  color={meta.color}
-                  checked={reconoces.includes(op)}
-                  onToggle={() => toggleReconoce(op)}
-                />
+                <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
+                  <CheckRow
+                    label={op}
+                    color={meta.color}
+                    checked={reconoces.includes(op)}
+                    onToggle={() => toggleReconoce(op)}
+                  />
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
             <Flex direction="column" gap={2.5} mt={5}>
               {c.reconoces.cierre.map((p, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
@@ -361,12 +362,12 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" mb={6}>
               {c.descubriras.intro}
             </Text>
-            <Flex direction="column" gap={3.5}>
+            <RevealStagger inView display="flex" flexDirection="column" gap={3.5} stagger={0.08} delayChildren={0.05} amount={0.1}>
               {c.descubriras.items.map((it, i) => {
                 const ItemIcon = DESCUBRE_ICON[it.icon];
                 return (
+                  <RevealItem key={i} direction="up" distance={16} duration={0.5} w="100%">
                   <Flex
-                    key={i}
                     align="center"
                     gap={4}
                     px={{ base: 4, md: 5 }}
@@ -387,9 +388,10 @@ export default function MetodoAyurvedaDoshaIntro() {
                     </Flex>
                     <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{parseRich(it.texto)}</Text>
                   </Flex>
+                  </RevealItem>
                 );
               })}
-            </Flex>
+            </RevealStagger>
           </Panel>
           </Reveal>
 

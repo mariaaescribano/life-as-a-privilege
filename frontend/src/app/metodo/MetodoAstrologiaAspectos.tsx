@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Portal, Text } from "@chakra-ui/react";
+import { Box, Flex, Portal, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -87,6 +87,12 @@ export default function MetodoAstrologiaAspectos() {
   const [abierto, setAbierto] = useState<Aspecto | null>(null);
   const [casasTexto, setCasasTexto] = useState<Record<string, string>>({});
   const { leidos, marcarLeido, cargado } = useAstroLeidos("aspectos");
+  // En móvil el viewport es corto: si escalonamos los items con un `delay` fijo,
+  // los de más abajo terminan su animación estando aún fuera de pantalla y, al
+  // bajar, ya aparecen puestos (sin dinamismo). Por eso en móvil cada item se
+  // anima por su PROPIA entrada en pantalla (delay 0); en desktop mantenemos el
+  // escalonado en cascada, que ahí sí se ve bien.
+  const esMovil = useBreakpointValue({ base: true, md: false }) ?? false;
   // Para bloquear la ENTRADA a Aspectos: hay que haber leído todas las casas.
   const { leidos: casasLeidos, cargado: cargadoCasas } = useAstroLeidos("casas");
 
@@ -288,7 +294,7 @@ export default function MetodoAstrologiaAspectos() {
                               direction="up"
                               distance={24}
                               duration={0.55}
-                              delay={idx * 0.05}
+                              delay={esMovil ? 0 : idx * 0.05}
                               amount={0.3}
                               w="100%"
                             >

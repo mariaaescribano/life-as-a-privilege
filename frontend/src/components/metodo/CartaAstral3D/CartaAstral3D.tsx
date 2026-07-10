@@ -29,9 +29,12 @@ const R_HOUSES_INNER = 2.35;
 const R_PLANETS = 2.05;
 
 export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados }: CartaAstral3DProps) {
+  // Solo planetas que REALMENTE se dibujan (tienen glifo). Excluimos el
+  // ascendente y cualquier cuerpo sin ilustración: así los aspectos nunca
+  // trazan una raya hacia un punto vacío (donde no hay planeta).
   const planetasOrdenados = useMemo(() => {
     return [...carta.planetas]
-      .filter(p => p.planeta !== "ascendente")
+      .filter(p => p.planeta !== "ascendente" && !!cuerpoByKey(p.planeta))
       .sort((a, b) => a.grado - b.grado);
   }, [carta.planetas]);
 
@@ -73,8 +76,9 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           position={[x, y, 0]}
           focused={i === focusedIdx}
           onClick={() => setFocusedIdx(i)}
-          // Salen uno a uno: un pequeño desfase por orden (tras aparecer la caja).
-          appearDelay={0.5 + i * 0.14}
+          // Brotan uno a uno, alrededor de la rueda, con un desfase amplio para
+          // que sea pausado y solemne (más épico que rápido).
+          appearDelay={0.6 + i * 0.26}
         />
       );
     });
@@ -95,13 +99,15 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
       outline="none"
       sx={{ userSelect: "none" }}
     >
-      {/* ── Controles (flechas + etiqueta) ARRIBA del círculo ── */}
+      {/* ── Controles (flechas + etiqueta) DEBAJO del círculo (order flex) ── */}
       <Flex
+        order={1}
         align="center"
         justify="center"
-        gap={{ base: 4, md: 6 }}
+        gap={{ base: 3, md: 6 }}
         w="100%"
         maxW="520px"
+        mt={{ base: 1, md: 2 }}
       >
         <ArrowButton dir="left"  color={color} onClick={() => stepFocus(1)} />
 
@@ -109,9 +115,12 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           direction="column"
           align="stretch"
           gap={2}
-          flex="0 0 auto"
-          // Ancho FIJO: el botón no debe cambiar de tamaño al cambiar de planeta.
-          w={{ base: "220px", md: "300px" }}
+          // Se adapta al ancho disponible (no se desborda en pantallas estrechas)
+          // pero con un tope: así el botón tampoco cambia de tamaño al cambiar de
+          // planeta (el ancho lo fija el contenedor, no la longitud del nombre).
+          flex="1"
+          minW={0}
+          maxW="300px"
         >
           {focusedCuerpo && focused && (() => {
             const leido = !!completados?.[focusedCuerpo.key];
@@ -131,9 +140,9 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                 <Text
                   color="white"
                   fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "xl", md: "2xl" }}
                   fontWeight="700"
-                  letterSpacing="0.18em"
+                  letterSpacing="0.2em"
                   textTransform="uppercase"
                   lineHeight="1.1"
                   textAlign="center"
@@ -254,15 +263,20 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
         <ArrowButton dir="right" color={color} onClick={() => stepFocus(-1)}  />
       </Flex>
 
-      {/* ── Círculo de la carta ── */}
+      {/* ── Círculo de la carta (va ARRIBA; los controles debajo vía order) ── */}
       <Box
+        order={0}
         w={{ base: "100%", md: "80%" }}
         maxW="680px"
         mx="auto"
-        mt={{ base: 4, md: 8 }}
+        mt={0}
         position="relative"
         sx={{
-          aspectRatio: "1 / 1",
+          // Cuadrado A PRUEBA DE BALAS: algunos navegadores móviles no aplican
+          // bien `aspect-ratio` dentro de un flex, y el Canvas salía con alto ≠
+          // ancho → el círculo se veía ovalado. El truco del padding-bottom
+          // garantiza alto = ancho en todos los navegadores.
+          "&::before": { content: '""', display: "block", paddingBottom: "100%" },
           borderRadius: "9999px",
           overflow: "hidden",
           // Interior 15% más oscuro que el fondo (capa negra al 15% sobre el SpaceBg,
@@ -272,6 +286,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           border: `1px solid ${color}55`,
         }}
       >
+        {/* Capa absoluta que rellena el cuadrado (el ::before ocupa el flujo). */}
+        <Box position="absolute" inset={0}>
         <Canvas
           camera={{ position: [0, 0, 7], fov: 50 }}
           dpr={[1, 2]}
@@ -291,12 +307,12 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
             outerRadius={R_HOUSES_OUTER}
           />
           <Aspects
-            planetas={carta.planetas}
+            planetas={planetasOrdenados}
             aspectos={carta.aspectos}
             cusps={carta.cusps}
             radio={R_PLANETS}
-            // Arranca cuando ya ha salido el último planeta (ver appearDelay).
-            startDelay={0.5 + (planetasOrdenados.length - 1) * 0.14 + 0.5}
+            // Arranca cuando ya ha brotado el último planeta (ver appearDelay + APPEAR_DUR).
+            startDelay={0.6 + (planetasOrdenados.length - 1) * 0.26 + 1.1}
           />
           {planetMeshes}
 
@@ -309,6 +325,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
             />
           </EffectComposer>
         </Canvas>
+        </Box>
       </Box>
     </Flex>
   );
@@ -320,11 +337,11 @@ function ArrowButton({ dir, color, onClick }: { dir: "left" | "right"; color: st
     <Flex
       as="button"
       onClick={onClick}
-      w={{ base: "40px", md: "48px" }}
-      h={{ base: "40px", md: "48px" }}
+      w={{ base: "30px", md: "34px" }}
+      h={{ base: "30px", md: "34px" }}
       borderRadius="full"
       bg="rgba(255,255,255,0.06)"
-      border={`1px solid ${color}66`}
+      border={`1px solid ${color}55`}
       color="white"
       align="center"
       justify="center"
@@ -341,7 +358,7 @@ function ArrowButton({ dir, color, onClick }: { dir: "left" | "right"; color: st
       }}
       aria-label={isLeft ? "Anterior" : "Siguiente"}
     >
-      <Text fontSize={{ base: "xl", md: "2xl" }} lineHeight="1" style={{ textShadow: `0 0 8px ${color}cc` }}>
+      <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1" style={{ textShadow: `0 0 8px ${color}cc` }}>
         {isLeft ? "‹" : "›"}
       </Text>
     </Flex>

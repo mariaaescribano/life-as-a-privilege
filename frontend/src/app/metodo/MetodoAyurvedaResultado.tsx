@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -20,6 +21,43 @@ import { preguntasAyurveda } from "../../hardCoded/espacio/PreguntasAyurveda";
 
 type Dosha = "vata" | "pitta" | "kapha";
 const GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`;
+
+const MotionBox = motion(Box) as any;
+const EASE = [0.22, 1, 0.36, 1] as const;
+const POP = [0.34, 1.56, 0.64, 1] as const; // rebote suave para el "pop" del título
+
+// Coreografía del resultado: las barras se pintan una a una y, al terminar,
+// aparece el título del dosha principal con un pequeño rebote.
+const BARS_START = 0.35;  // arranque del pintado tras montar la tarjeta
+const BAR_STAGGER = 0.62; // separación entre una barra y la siguiente
+const BAR_DUR = 0.85;     // lo que tarda cada barra en rellenarse
+
+// Cuenta ascendente de un número (0 → target) sincronizada con el relleno de la
+// barra. Respeta prefers-reduced-motion (salta directo al valor).
+function useCountUp(target: number, delay: number, duration: number, enabled: boolean): number {
+  const [val, setVal] = useState(enabled ? 0 : target);
+  useEffect(() => {
+    if (!enabled) { setVal(target); return; }
+    setVal(0);
+    let raf = 0;
+    let startTs = 0;
+    const tick = (ts: number) => {
+      if (!startTs) startTs = ts;
+      const t = Math.min(1, (ts - startTs) / (duration * 1000));
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      setVal(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    const timer = setTimeout(() => { raf = requestAnimationFrame(tick); }, delay * 1000);
+    return () => { clearTimeout(timer); if (raf) cancelAnimationFrame(raf); };
+  }, [target, delay, duration, enabled]);
+  return val;
+}
+
+function CountUp({ value, delay, duration, enabled }: { value: number; delay: number; duration: number; enabled: boolean }) {
+  const v = useCountUp(value, delay, duration, enabled);
+  return <>{v}</>;
+}
 
 const DOSHA_CONFIG: Record<Dosha, { label: string; color: string; Icon: any }> = {
   vata:  { label: "Vata",  color: vataColor,  Icon: VataIcon },
@@ -41,6 +79,7 @@ export default function MetodoAyurvedaResultado() {
   const [loading, setLoading] = useState(true);
   const [resultado, setResultado] = useState<Resultado | null>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -83,6 +122,9 @@ export default function MetodoAyurvedaResultado() {
   const cfg = DOSHA_CONFIG[resultado.dosha];
   const PrincipalIcon = cfg.Icon;
 
+  // El título entra justo después de que la última barra termine de rellenarse.
+  const titleDelay = BARS_START + (DOSHAS.length - 1) * BAR_STAGGER + BAR_DUR + 0.25;
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -116,40 +158,79 @@ export default function MetodoAyurvedaResultado() {
           <Box
             position="relative"
             overflow="hidden"
-            w="100%" maxW="850px"
+            w="100%" maxW="1063px"
             borderRadius="2xl"
             boxShadow={GLOW}
             textAlign="center"
             mt={{ base: 2, md: 4 }}
+            transform="scale(0.8)"
+            transformOrigin="top center"
           >
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
-              <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
-                Tu Dosha principal es
-              </Text>
-              <Flex align="center" justify="center" gap={3} mb={6}>
-                <PrincipalIcon size="38px" color={cfg.color} />
-                <Text color={cfg.color} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em" fontStyle="italic">
-                  {cfg.label}
-                </Text>
-              </Flex>
-
-              {/* Barras de puntuación */}
-              {DOSHAS.map((d) => {
+              {/* Barras de puntuación — se pintan y rellenan una a una */}
+              {DOSHAS.map((d, i) => {
                 const pct = total > 0 ? Math.round((scores[d] / total) * 100) : 0;
                 const dc = DOSHA_CONFIG[d];
+                const start = BARS_START + i * BAR_STAGGER;
                 return (
-                  <Box key={d} mb={3} textAlign="left">
-                    <Flex justify="space-between" mb={1}>
-                      <Text color={dc.color} fontWeight="600" fontSize="md">{dc.label}</Text>
-                      <Text color={dc.color} fontWeight="600" fontSize="md">{scores[d]} / {total}</Text>
+                  <MotionBox
+                    key={d}
+                    mb={{ base: 3.5, md: 4 }}
+                    textAlign="left"
+                    initial={reduce ? false : { opacity: 0, y: 14 }}
+                    animate={reduce ? {} : { opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: start, ease: EASE }}
+                  >
+                    <Flex justify="space-between" mb={1.5}>
+                      <Text color={dc.color} fontWeight="600" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em">
+                        {dc.label}
+                      </Text>
+                      <Text color={dc.color} fontWeight="600" fontSize={{ base: "md", md: "lg" }}>
+                        <CountUp value={scores[d]} delay={start} duration={BAR_DUR} enabled={!reduce} /> / {total}
+                      </Text>
                     </Flex>
-                    <Box bg={`${dc.color}22`} borderRadius="full" h="8px" overflow="hidden">
-                      <Box bg={dc.color} h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.6s ease" />
+                    <Box bg={`${dc.color}22`} borderRadius="full" h="10px" overflow="hidden">
+                      <MotionBox
+                        bg={dc.color}
+                        h="100%"
+                        borderRadius="full"
+                        boxShadow={`0 0 12px ${dc.color}bb, 0 0 22px ${dc.color}55`}
+                        initial={reduce ? false : { width: "0%" }}
+                        animate={{ width: `${pct}%` }}
+                        transition={reduce ? { duration: 0 } : { duration: BAR_DUR, delay: start, ease: EASE }}
+                      />
                     </Box>
-                  </Box>
+                  </MotionBox>
                 );
               })}
+
+              {/* Título del dosha principal — aparece al terminar de pintarse las barras */}
+              <MotionBox
+                mt={{ base: 8, md: 9 }}
+                initial={reduce ? false : { opacity: 0, scale: 0.82, y: 12 }}
+                animate={reduce ? {} : { opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: titleDelay, ease: POP }}
+              >
+                <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
+                  Tu Dosha principal es
+                </Text>
+                <MotionBox
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={3}
+                  initial={reduce ? false : { opacity: 0, scale: 0.7 }}
+                  animate={reduce ? {} : { opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.7, delay: titleDelay + 0.18, ease: POP }}
+                  style={{ filter: `drop-shadow(0 0 18px ${cfg.color}88)` }}
+                >
+                  <PrincipalIcon size="42px" color={cfg.color} />
+                  <Text color={cfg.color} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="700" letterSpacing="0.1em" fontStyle="italic">
+                    {cfg.label}
+                  </Text>
+                </MotionBox>
+              </MotionBox>
             </Box>
           </Box>
           </Reveal>

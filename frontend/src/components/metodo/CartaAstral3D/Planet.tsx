@@ -13,8 +13,10 @@ interface PlanetProps {
   appearDelay?: number;
 }
 
-// Duración de la aparición de cada planeta (escala 0→1 + fundido).
-const APPEAR_DUR = 0.5;
+// Cada planeta BROTA en su propio sitio (escala 0→1 + fundido), sin moverse.
+// Lento y solemne: los planetas se van encendiendo uno a uno alrededor de la
+// rueda hasta formar el círculo completo.
+const APPEAR_DUR = 0.95;
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const SERIF = "500 170px 'Times New Roman', Georgia, 'DejaVu Serif', serif";
@@ -73,7 +75,7 @@ export function Planet({ cuerpo, position, focused, onClick, appearDelay = 0 }: 
     const appear = easeOutCubic(Math.min(1, t / APPEAR_DUR));
 
     if (groupRef.current) {
-      // La escala deseada combina el estado (enfocado o no) con la entrada.
+      // Brota EN SU SITIO: solo escala (no se mueve; la posición es la final).
       const desired = targetScale * appear;
       const cur = groupRef.current.scale.x;
       const next = cur + (desired - cur) * Math.min(1, delta * 10);

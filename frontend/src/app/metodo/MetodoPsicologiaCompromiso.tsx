@@ -24,6 +24,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import {
   experienciaById,
   type LineaDeVidaData,
@@ -215,6 +216,7 @@ export default function MetodoPsicologiaCompromiso() {
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 
+      <AyudaRecorrido pagina="compromiso" ocultarCompania />
       <SiteFooter />
     </Box>
   );
@@ -252,7 +254,7 @@ function PreguntaCompromiso({ numero, pregunta, valor, onChange, placeholder }: 
               "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
         _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
         _hover={{ borderColor: `${TINTA}55` }}
-        _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
+        _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
       />
     </Box>
   );

@@ -277,8 +277,15 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   /* ── 7 · Cómo me relaciono ── */
+  const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recordatorio"; label: string }[] = [
+    { key: "proteger", label: "Qué intentaba proteger" },
+    { key: "coste", label: "Qué me cuesta mantenerlo" },
+    { key: "verdadSana", label: "La verdad más sana que quiero practicar" },
+    { key: "recordatorio", label: "Lo que quiero recordar" },
+  ];
   const relaciones = (data.constelaciones || []).filter(
-    (c) => (c.titulo || "").trim() || (c.texto || "").trim() || (c.verdadSana || "").trim(),
+    (c) => (c.titulo || "").trim() || (c.texto || "").trim() ||
+      INTEGRACION_PREGUNTAS.some((p) => ((c[p.key] as string) || "").trim()),
   );
   if (relaciones.length > 0) {
     sectionTitle("Cómo me relaciono");
@@ -288,13 +295,11 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
         ...(c.arquetipos || []).map((a) => arquetipoLabel(a)),
       ].join("   ·   ");
       quote((c.titulo || "").trim() || "Relación", (c.texto || "").trim(), piezas || undefined);
-      if ((c.verdadSana || "").trim()) {
-        doc.setFont(GARAMOND, "italic"); doc.setFontSize(11.5); doc.setTextColor(...ACCENT);
-        const vLines = doc.splitTextToSize(`Me comprometo a: «${plain(c.verdadSana as string)}»`, CONTENT_W - 8) as string[];
-        ensureSpace(vLines.length * 6 + 2);
-        vLines.forEach((line) => { doc.text(line, MARGIN + 8, y); y += 5.8; });
-        y += 4;
-      }
+      INTEGRACION_PREGUNTAS.forEach((p) => {
+        const r = ((c[p.key] as string) || "").trim();
+        if (r) qaBlock(p.label, r);
+      });
+      y += 2;
     });
   }
 

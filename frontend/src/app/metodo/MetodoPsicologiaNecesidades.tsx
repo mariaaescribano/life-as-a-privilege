@@ -244,7 +244,7 @@ export default function MetodoPsicologiaNecesidades() {
                   </Text>
 
                   <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" maxW="460px" style={{ textShadow: INK_SHADOW }}>
+                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" maxW="460px" style={{ textShadow: INK_SHADOW }}>
                     {abierta.respuesta}
                   </Text>
 

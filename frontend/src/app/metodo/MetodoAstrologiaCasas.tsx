@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Portal, Text } from "@chakra-ui/react";
+import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -45,6 +46,12 @@ function renderConNegritas(texto: string, color: string): React.ReactNode {
     ),
   );
 }
+
+const MotionG = motion.g as any;
+const EASE_POP = [0.34, 1.56, 0.64, 1] as const; // rebote suave al aparecer cada casa
+// Entrada épica: las 12 casas «florecen» una a una desde el centro de la rueda.
+const CASA_APPEAR_BASE = 0.5;   // arranca tras asentarse la rueda
+const CASA_APPEAR_STEP = 0.09;  // separación entre una casa y la siguiente
 
 /* ── Geometría de la rueda ── */
 const VB = 320;                 // viewBox cuadrado
@@ -92,6 +99,7 @@ export default function MetodoAstrologiaCasas() {
 
   const [rot, setRot] = useState(rotParaCasa(1));
   const [sel, setSel] = useState<number>(1); // casa seleccionada 1..12
+  const reduce = useReducedMotion();
   const dragRef = useRef<{ startAng: number; startRot: number; moved: boolean } | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -236,14 +244,14 @@ export default function MetodoAstrologiaCasas() {
               px={{ base: 5, md: 8 }}
               py={{ base: 7, md: 9 }}
             >
-              {/* ── BOX de la casa seleccionada (arriba en móvil, dcha en desktop) ── */}
+              {/* ── BOX de la casa seleccionada (debajo del círculo en móvil, dcha en desktop) ── */}
               <Reveal
                 direction="left"
                 distance={30}
                 delay={0.3}
                 duration={0.7}
                 display="flex"
-                order={{ base: 0, lg: 1 }}
+                order={{ base: 1, lg: 1 }}
                 flex="1"
                 w="100%"
                 flexDirection="column"
@@ -254,9 +262,9 @@ export default function MetodoAstrologiaCasas() {
                          leida={leidos.has(String(sel))} onLeer={() => marcarLeido(String(sel))} />
               </Reveal>
 
-              {/* ── RUEDA giratoria ── */}
+              {/* ── RUEDA giratoria (las casas: arriba en móvil, izda en desktop) ── */}
               <Reveal direction="right" distance={30} delay={0.22} duration={0.7}
-                      display="flex" order={{ base: 1, lg: 0 }} flex="1" justifyContent="center" alignItems="center" w="100%">
+                      display="flex" order={{ base: 0, lg: 0 }} flex="1" justifyContent="center" alignItems="center" w="100%">
                 <Box w="100%" maxW="340px">
                   <Box
                     as="svg"
@@ -282,7 +290,13 @@ export default function MetodoAstrologiaCasas() {
                         const leida = escrita && leidos.has(String(casaNum));
                         const lp = pt(i * 30 + 15, R_LABEL);
                         return (
-                          <g key={i}>
+                          <MotionG
+                            key={i}
+                            initial={reduce ? false : { opacity: 0, scale: 0.3 }}
+                            animate={reduce ? {} : { opacity: 1, scale: 1 }}
+                            transition={{ delay: CASA_APPEAR_BASE + i * CASA_APPEAR_STEP, duration: 0.55, ease: EASE_POP }}
+                            style={{ transformBox: "view-box", transformOrigin: `${CX}px ${CY}px` }}
+                          >
                             <path
                               d={sectorPath(i)}
                               fill={activa ? `${astrologiaTxt}33` : `${astrologiaTxt}0a`}
@@ -318,7 +332,7 @@ export default function MetodoAstrologiaCasas() {
                                         style={{ filter: `drop-shadow(0 0 3px ${astrologiaTxt})` }} />
                               ) : null}
                             </g>
-                          </g>
+                          </MotionG>
                         );
                       })}
                     </g>

@@ -33,7 +33,7 @@ import {
   type AceRespuesta,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -170,12 +170,14 @@ export default function MetodoPsicologiaAce() {
           </Flex>
           </Reveal>
 
-          {/* ── Las 10 preguntas · aparecen de una en una al hacer scroll ── */}
-          <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
+          {/* ── Las 10 preguntas · entran EN CASCADA, una tras otra ── */}
+          <RevealStagger direction="up" distance={26} scaleFrom={0.97} duration={0.5}
+                         stagger={0.12} delayChildren={0.1} amount={0.15}
+                         display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
             {ACE_PREGUNTAS.map((p) => {
               const elegido = respuestas[p.key];
               return (
-                <Reveal key={p.key} inView direction="up" distance={26} duration={0.55} amount={0.2} w="100%">
+                <RevealItem key={p.key} w="100%">
                 <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -232,10 +234,10 @@ export default function MetodoPsicologiaAce() {
                     </Flex>
                   </Flex>
                 </Box>
-                </Reveal>
+                </RevealItem>
               );
             })}
-          </Flex>
+          </RevealStagger>
 
           {guardando && (
             <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">Guardando…</Text>

@@ -50,7 +50,8 @@ export function MandalaDivider() {
 function Pieza({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <Flex align="center" gap={2} px={3} py={1.5} borderRadius="full"
-          bg={`${PAPEL}d9`} color={TINTA} border={`1px solid ${TINTA}30`}>
+          bg={`${PAPEL}e8`} color={TINTA} border={`1px solid ${TINTA}30`}
+          boxShadow={`0 1px 3px rgba(40,18,4,0.10), inset 0 1px 0 ${PAPEL}`}>
       {icon}
       <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="600" lineHeight="1.25" noOfLines={1}>{label}</Text>
     </Flex>
@@ -67,35 +68,38 @@ export function HeridaCard({ herida, color, onBorrar }: {
   const necesidades = herida.necesidades || [];
   const vacia = herida.huellas.length === 0 && herida.nudos.length === 0 && necesidades.length === 0;
   return (
-    <Box position="relative" borderRadius="2xl" overflow="hidden"
-         sx={{ aspectRatio: "1 / 1" }}
-         boxShadow={`0 10px 30px rgba(40,18,4,0.18), 0 2px 8px rgba(40,18,4,0.12)`}
+    <Box position="relative" borderRadius="2xl" overflow="hidden" h="100%"
+         minH={{ base: "180px", md: "210px" }} maxH={{ base: "300px", md: "340px" }}
+         boxShadow={`0 12px 34px rgba(40,18,4,0.20), 0 2px 8px rgba(40,18,4,0.12)`}
          border={`1px solid ${TINTA}26`}>
-      {/* Lavado de color propio de la herida */}
+      {/* Lavado de color propio de la herida + brillo suave arriba */}
       <Box position="absolute" inset={0} bgGradient={`linear(155deg, ${PAPEL}, ${color})`} />
-      <Box position="absolute" inset={0} boxShadow={`inset 0 0 0 1px ${PAPEL}55`} pointerEvents="none" />
+      <Box position="absolute" inset={0} bgGradient={`radial(120% 80% at 20% 0%, ${PAPEL}cc, transparent 60%)`} pointerEvents="none" />
+      <Box position="absolute" inset={0} boxShadow={`inset 0 0 0 1px ${PAPEL}66, inset 0 1px 0 ${PAPEL}`} pointerEvents="none" />
 
-      <Flex position="relative" zIndex={1} direction="column" h="100%" px={{ base: 4, md: 5 }} py={{ base: 4, md: 4 }}>
+      <Flex position="relative" zIndex={1} direction="column" h="100%" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }}>
         {/* Cabecera: icono a la izquierda + título + borrar */}
         <Flex align="center" gap={2.5}>
-          <Flex flexShrink={0} align="center" justify="center" w={{ base: "30px", md: "36px" }} h={{ base: "30px", md: "36px" }}
-                borderRadius="full" bg={`${PAPEL}d9`} border={`1px solid ${TINTA}40`}
-                boxShadow={`0 1px 4px rgba(40,18,4,0.15)`}>
-            <HeridaIcon size={18} color={TINTA} />
+          <Flex flexShrink={0} align="center" justify="center" w={{ base: "34px", md: "40px" }} h={{ base: "34px", md: "40px" }}
+                borderRadius="full" bg={`${PAPEL}ec`} border={`1px solid ${TINTA}40`}
+                boxShadow={`0 2px 6px rgba(40,18,4,0.18), inset 0 1px 0 ${PAPEL}`}>
+            <HeridaIcon size={19} color={TINTA} />
           </Flex>
           <Text flex="1" minW={0} color={TINTA} fontWeight="700" lineHeight="1.2"
                 fontSize={{ base: "md", md: "lg" }} noOfLines={2} style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
             {herida.titulo || "Herida sin título"}
           </Text>
           {onBorrar && (
-            <Box as="button" onClick={onBorrar} flexShrink={0} w="22px" h="22px" borderRadius="full"
-                 bg={`${TINTA}14`} color={TINTA} display="flex" alignItems="center" justifyContent="center"
-                 fontSize="11px" cursor="pointer" _hover={{ bg: `${TINTA}26` }} title="Borrar herida">✕</Box>
+            <Box as="button" onClick={onBorrar} flexShrink={0} w="24px" h="24px" borderRadius="full"
+                 bg={`${PAPEL}b3`} color={TINTA} display="flex" alignItems="center" justifyContent="center"
+                 fontSize="11px" cursor="pointer" border={`1px solid ${TINTA}22`} transition="all 0.16s"
+                 _hover={{ bg: `${TINTA}22`, transform: "scale(1.08)" }} title="Borrar herida">✕</Box>
           )}
         </Flex>
 
-        {/* Raya horizontal bajo el título */}
-        <Box h="1px" w="100%" my={{ base: 2.5, md: 3 }} bg={`${TINTA}40`} flexShrink={0} />
+        {/* Raya horizontal bajo el título, en degradado */}
+        <Box h="1px" w="100%" my={{ base: 3, md: 3.5 }} flexShrink={0}
+             bgGradient={`linear(to-r, ${TINTA}55, ${TINTA}22, transparent)`} />
 
         {/* Piezas seleccionadas */}
         <Box flex="1" minH={0} overflowY="auto"

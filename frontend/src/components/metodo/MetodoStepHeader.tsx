@@ -5,7 +5,7 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer"
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 
 interface StepButton {
-  label: string;
+  label: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -232,11 +232,11 @@ export function MetodoStepHeader({
                 fontSize={
                   tallTitle
                     ? (compact
-                        ? (titleWraps ? { base: "lg", md: "3xl" } : { base: "2xl", md: "4xl" })
-                        : (titleWraps ? { base: "xl", md: "5xl" } : { base: "3xl", md: "6xl" }))
+                        ? (titleWraps ? { base: "xl", md: "3xl" } : { base: "3xl", md: "4xl" })
+                        : (titleWraps ? { base: "2xl", md: "5xl" } : { base: "4xl", md: "6xl" }))
                     : (compact
-                        ? (titleWraps ? { base: "md", md: "2xl" } : { base: "xl", md: "3xl" })
-                        : (titleWraps ? { base: "lg", md: "4xl" } : { base: "2xl", md: "5xl" }))
+                        ? (titleWraps ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" })
+                        : (titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "5xl" }))
                 }
                 fontWeight="700"
                 letterSpacing="0.05em"

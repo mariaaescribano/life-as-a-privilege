@@ -43,7 +43,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // mm:ss a partir de segundos (para el reproductor).
@@ -60,7 +59,8 @@ export default function MetodoPsicologiaRegulacion() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [texto, setTexto] = useState("");
+  // La persona puede añadir tantos fragmentos como quiera, uno debajo de otro.
+  const [fragmentos, setFragmentos] = useState<string[]>([""]);
   const dataRef = useRef<LineaDeVidaData>({});
 
   // Audio de estimulación bilateral.
@@ -72,7 +72,7 @@ export default function MetodoPsicologiaRegulacion() {
   const [volumen, setVolumen] = useState(0.85);
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendiente = useRef<string | null>(null);
+  const pendiente = useRef<string[] | null>(null);
   const montado = useRef(true);
   useEffect(() => {
     montado.current = true;
@@ -96,7 +96,15 @@ export default function MetodoPsicologiaRegulacion() {
         });
         const d: LineaDeVidaData = psi.data?.data || {};
         dataRef.current = d;
-        setTexto(typeof d.regulacion?.texto === "string" ? d.regulacion.texto : "");
+        // Migración: si ya hay fragmentos, los usamos; si no, arrancamos con el
+        // texto legado (un único bloque) o con un box vacío para empezar.
+        const frags = d.regulacion?.fragmentos;
+        if (Array.isArray(frags) && frags.length > 0) {
+          setFragmentos(frags);
+        } else {
+          const legado = typeof d.regulacion?.texto === "string" ? d.regulacion.texto : "";
+          setFragmentos(legado ? [legado] : [""]);
+        }
       } catch {
         // silencioso
       } finally {
@@ -106,12 +114,17 @@ export default function MetodoPsicologiaRegulacion() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
-  const persistir = async (next: string): Promise<boolean> => {
+  const persistir = async (next: string[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
     try {
-      const regulacion: RegulacionData = { ...(dataRef.current.regulacion || {}), texto: next };
+      // Guardamos los fragmentos y, por compatibilidad, una copia unificada en `texto`.
+      const regulacion: RegulacionData = {
+        ...(dataRef.current.regulacion || {}),
+        fragmentos: next,
+        texto: next.filter((t) => t.trim()).join("\n\n"),
+      };
       const data = { ...dataRef.current, regulacion };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
@@ -124,8 +137,8 @@ export default function MetodoPsicologiaRegulacion() {
 
   // Autoguardado silencioso mientras escribe (respaldo); el guardado explícito lo
   // hace el botón «Guardar».
-  const commit = (next: string) => {
-    setTexto(next);
+  const commit = (next: string[]) => {
+    setFragmentos(next);
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
@@ -133,11 +146,24 @@ export default function MetodoPsicologiaRegulacion() {
     }, 900);
   };
 
+  // Editar el fragmento i.
+  const editarFragmento = (i: number, valor: string) =>
+    commit(fragmentos.map((f, idx) => (idx === i ? valor : f)));
+
+  // Añadir un box vacío al final.
+  const anadirFragmento = () => commit([...fragmentos, ""]);
+
+  // Quitar un fragmento (dejando siempre al menos uno).
+  const quitarFragmento = (i: number) => {
+    const next = fragmentos.filter((_, idx) => idx !== i);
+    commit(next.length > 0 ? next : [""]);
+  };
+
   // Guardado explícito (botón): vuelca lo pendiente y persiste de inmediato.
   const guardarAhora = async (): Promise<boolean> => {
     if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
     pendiente.current = null;
-    return persistir(texto);
+    return persistir(fragmentos);
   };
 
   // Flush + pausa del audio al desmontar.
@@ -274,7 +300,7 @@ export default function MetodoPsicologiaRegulacion() {
                             <SliderFilledTrack bg={TINTA} />
                           </SliderTrack>
                           <SliderThumb boxSize="16px" bg={PAPEL} border={`2px solid ${TINTA}`}
-                                       boxShadow={`0 0 10px ${TINTA}66`} _focusVisible={{ boxShadow: `0 0 0 3px ${ORO}55` }} />
+                                       boxShadow={`0 0 10px ${TINTA}66`} _focusVisible={{ boxShadow: `0 0 0 3px ${TINTA}55` }} />
                         </Slider>
                         <Flex justify="space-between" mt={1.5}>
                           <Text color={TINTA} fontSize="sm" fontWeight="600" opacity={0.85}>{fmtTime(tiempo)}</Text>
@@ -294,7 +320,7 @@ export default function MetodoPsicologiaRegulacion() {
                             <SliderFilledTrack bg={TINTA} />
                           </SliderTrack>
                           <SliderThumb boxSize="14px" bg={PAPEL} border={`2px solid ${TINTA}`}
-                                       boxShadow={`0 0 8px ${TINTA}66`} _focusVisible={{ boxShadow: `0 0 0 3px ${ORO}55` }} />
+                                       boxShadow={`0 0 8px ${TINTA}66`} _focusVisible={{ boxShadow: `0 0 0 3px ${TINTA}55` }} />
                         </Slider>
                         <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px"
                              fill={TINTA} flexShrink={0}>
@@ -317,23 +343,55 @@ export default function MetodoPsicologiaRegulacion() {
                 <Box mb={{ base: 5, md: 6 }}>
                   <SeccionTitulo>Junta los fragmentos de tus recuerdos. Narra tu dolor para darle un sentido.</SeccionTitulo>
                 </Box>
-                <Textarea
-                  value={texto}
-                  onChange={(e) => commit(e.target.value)}
-                  placeholder={REGULACION.placeholder}
-                  minH={{ base: "220px", md: "300px" }}
-                  bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                  borderRadius="lg" px={4} py={3.5} fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                  sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                        "&::-webkit-scrollbar": { width: "8px" },
-                        "&::-webkit-scrollbar-track": { background: "transparent" },
-                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
-                  _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                  _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: ORO, boxShadow: `0 0 0 1px ${ORO}66`, bg: "rgba(255,251,243,0.9)" }}
-                />
-                <Flex justify="flex-end" mt={4}>
+
+                {/* Fragmentos: cada uno es un box de altura fija; si el texto lo
+                    supera, hace scroll vertical dentro del propio box. */}
+                <Flex direction="column" gap={{ base: 4, md: 5 }}>
+                  {fragmentos.map((frag, i) => (
+                    <Box key={i} position="relative">
+                      <Textarea
+                        value={frag}
+                        onChange={(e) => editarFragmento(i, e.target.value)}
+                        placeholder={i === 0 ? REGULACION.placeholder : "Escribe lo que recuerdes…"}
+                        h={{ base: "180px", md: "220px" }}
+                        maxH={{ base: "180px", md: "220px" }}
+                        resize="none"
+                        bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                        borderRadius="lg" pl={4} pr={fragmentos.length > 1 ? 12 : 4} py={3.5}
+                        fontFamily="'EB Garamond', serif"
+                        fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                        sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                              "&::-webkit-scrollbar": { width: "8px" },
+                              "&::-webkit-scrollbar-track": { background: "transparent" },
+                              "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+                        _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                        _hover={{ borderColor: `${TINTA}55` }}
+                        _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
+                      />
+                      {fragmentos.length > 1 && (
+                        <Box as="button" onClick={() => quitarFragmento(i)} title="Quitar este fragmento"
+                             position="absolute" top={2.5} right={2.5} w="26px" h="26px" borderRadius="full"
+                             bg={`${PAPEL}cc`} color={TINTA} border={`1px solid ${TINTA}33`}
+                             display="flex" alignItems="center" justifyContent="center"
+                             fontSize="12px" cursor="pointer" transition="all 0.16s"
+                             _hover={{ bg: TINTA, color: PAPEL }}>✕</Box>
+                      )}
+                    </Box>
+                  ))}
+                </Flex>
+
+                {/* Añadir otro fragmento */}
+                <Flex justify="center" mt={{ base: 4, md: 5 }}>
+                  <Box as="button" onClick={anadirFragmento} px={6} py={2.5} borderRadius="full"
+                       bg="rgba(255,251,243,0.72)" color={TINTA} border={`1.5px dashed ${TINTA}66`}
+                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                       letterSpacing="0.03em" cursor="pointer" transition="all 0.18s"
+                       _hover={{ bg: "rgba(255,251,243,0.92)", borderColor: TINTA, transform: "translateY(-2px)" }}>
+                    + Añadir
+                  </Box>
+                </Flex>
+
+                <Flex justify="flex-end" mt={{ base: 5, md: 6 }}>
                   <BotonGuardar onSave={guardarAhora} bg={TINTA} fg={neuropsicologiaBg}
                                 minW="150px" px={7} py={2.5} fontSize={{ base: "sm", md: "md" }} />
                 </Flex>

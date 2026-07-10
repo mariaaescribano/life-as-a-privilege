@@ -368,11 +368,13 @@ const Pagina = ({
             </Text>
           </Box>
         ) : (
-          <RevealStagger key={edadAno} stagger={0.08} delayChildren={0.05}>
+          // Los recuerdos entran de uno en uno (cascada suave). `delayChildren`
+          // espera a que el cuaderno ya esté visible para que se vea el uno-a-uno.
+          <RevealStagger key={edadAno} stagger={0.16} delayChildren={0.55}>
           {items.map((it, i) => {
             const marcado = itemMarcado(data, edadAno, it);
             return (
-              <RevealItem key={`${i}-${it}`} direction="up" distance={18} duration={0.45}>
+              <RevealItem key={`${i}-${it}`} direction="up" distance={22} scaleFrom={0.98} duration={0.55}>
               <Box
                 position="relative"
                 px={{ base: 6, md: 8 }}

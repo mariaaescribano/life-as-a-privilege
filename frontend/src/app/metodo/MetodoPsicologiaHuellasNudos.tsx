@@ -201,8 +201,9 @@ export default function MetodoPsicologiaHuellasNudos() {
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => { if (montado.current) setGuardadaFlash(null); }, 2800);
     // La rejilla está abajo del todo: baja hasta ella para que la nueva herida
-    // se vea aparecer, sin tener que recargar ni buscarla a mano.
-    setTimeout(() => { if (montado.current) heridasRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 140);
+    // se vea aparecer, sin tener que recargar ni buscarla a mano. Esperamos a que
+    // la Reveal (delay 0.42s) haya montado la rejilla antes de hacer scroll.
+    setTimeout(() => { if (montado.current) heridasRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, 500);
     await persistir(next);
   };
 
@@ -418,7 +419,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                 fontWeight="600" sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
                 _hover={{ borderColor: `${TINTA}66` }}
-                _focus={{ borderColor: `${TINTA}99`, boxShadow: `0 0 0 1px ${TINTA}44`, bg: "rgba(255,251,243,0.7)" }}
+                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.7)" }}
               />
               <Flex align="center" justify="center" gap={3} mt={8}>
                 <Box as="button" onClick={() => setNombreOpen(false)} px={6} py={2.5} borderRadius="full"

@@ -615,19 +615,10 @@ const Home = () => {
                 //   · Psicología: solo cuando está PAGADA (psicologia_suscrito).
                 // Ambas siguen con candado hasta que se pague / se pruebe el pago,
                 // pero siguen siendo clicables para poder abrir su pago.
-                const abierta =
-                  (d.name === astrologiaNom && metodoSuscrito !== false) ||
-                  (d.name === neuropsicologiaNom && psicologiaSuscrito === true) ||
-                  (d.name === ayurvedaNom && ayurvedaSuscrito === true) ||
-                  (d.name === tcmNom && tcmSuscrito === true);
-                // `clickable` = se puede pulsar. Psicología es pulsable —aunque siga
-                //   con candado— si ya se pagó Astrología, para poder abrir su pago.
-                //   Ayurveda igual: pulsable si ya se pagó Psicología (su prereq).
-                const clickable =
-                  d.name === astrologiaNom ||
-                  (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true)) ||
-                  (d.name === ayurvedaNom && (ayurvedaSuscrito === true || psicologiaSuscrito === true)) ||
-                  (d.name === tcmNom && (tcmSuscrito === true || ayurvedaSuscrito === true));
+                // ⚠️ TEMPORAL: todas las disciplinas desbloqueadas y clicables.
+                // Revertir a la lógica de suscripción cuando termines lo que ibas a hacer.
+                const abierta = true;
+                const clickable = true;
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
@@ -706,10 +697,10 @@ const Home = () => {
                             viewBox="0 -960 960 960"
                             w={{ base: "30px", md: "42px", lg: "50px" }}
                             h={{ base: "30px", md: "42px", lg: "50px" }}
-                            fill="white"
-                            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.65)) drop-shadow(0 0 18px rgba(255,255,255,0.35))" }}
+                            fill={d.txt}
+                            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.6)) drop-shadow(0 0 16px rgba(0,0,0,0.4))" }}
                           >
-                            <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
+                            <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
                           </Box>
                         </Box>
                       )}

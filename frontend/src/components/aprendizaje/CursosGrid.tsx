@@ -21,7 +21,7 @@ export function CursosGrid({ items }: { items: CursoGridItem[] }) {
   return (
     <SimpleGrid
       w="100%"
-      columns={{ base: 1, sm: 2, lg: 3 }}
+      columns={{ base: 1, md: 2, lg: 3 }}
       spacing={{ base: 4, md: 4 }}
       alignItems="start"
       sx={{

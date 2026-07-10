@@ -16,7 +16,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import {
-  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
+  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon, CandadoIcon,
 } from "../../GlobalVariables";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
@@ -125,7 +125,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             mb={0}
             prev={{ label: "← Tu Recorrido", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
             extra={ilustracionesBtn}
-            next={{ label: tcmSuscrito ? "Med. China →" : "Med. China 🔒", onClick: onMedChina }}
+            next={{ label: tcmSuscrito ? "Med. China →" : <>Med. China <CandadoIcon size="14px" /></>, onClick: onMedChina }}
           />
           </Reveal>
 

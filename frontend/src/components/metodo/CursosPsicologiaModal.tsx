@@ -148,7 +148,7 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="inside">
       <ModalOverlay bg="rgba(0,0,0,0.92)" sx={{ backdropFilter: "blur(20px)" }} />
-      <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} fontFamily="'EB Garamond', serif" minH="100vh">
+      <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} fontFamily="'EB Garamond', serif" minH="100vh" position="relative">
         {/* X cerrar — arriba a la derecha */}
         <Box
           as="button"

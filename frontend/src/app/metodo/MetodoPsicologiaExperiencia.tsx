@@ -297,6 +297,10 @@ export default function MetodoPsicologiaExperiencia() {
                                 lineHeight="1.15"
                                 whiteSpace={edadAno === ANO_GESTACION ? "normal" : "nowrap"}
                                 maxW={edadAno === ANO_GESTACION ? { base: "48px", md: "60px" } : undefined}
+                                // Reservamos 2 líneas siempre (la etiqueta de gestación
+                                // ocupa dos): así todos los tramos miden igual y el box
+                                // no cambia de altura al pasar de un tramo a otro.
+                                minH="2.3em"
                               >
                                 {edadAno === ANO_GESTACION ? "Antes de nacer" : anoNatural(edad, edadAno, anioActual)}
                               </Text>
@@ -392,7 +396,7 @@ export default function MetodoPsicologiaExperiencia() {
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}55`, fontStyle: "italic", fontSize: "lg", fontWeight: 400 }}
                 _hover={{ borderColor: `${TINTA}66` }}
-                _focus={{ borderColor: `${TINTA}99`, boxShadow: `0 0 0 1px ${TINTA}44`, bg: "rgba(255,251,243,0.6)" }}
+                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.6)" }}
               />
               <Box
                 as="button"

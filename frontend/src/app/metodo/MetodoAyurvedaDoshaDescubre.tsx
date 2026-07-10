@@ -6,7 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -305,9 +305,11 @@ export default function MetodoAyurvedaDoshaDescubre() {
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.dones.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={4}>{c.dones.intro}</Text>
-            <Flex direction="column" gap={2.5} mb={4}>
-              {c.dones.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
-            </Flex>
+            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+              {c.dones.items.map((it, i) => (
+                <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
+              ))}
+            </RevealStagger>
             <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{c.dones.cierre}</Text>
           </Panel>
           </Reveal>
@@ -321,9 +323,11 @@ export default function MetodoAyurvedaDoshaDescubre() {
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{p}</Text>
               ))}
             </Flex>
-            <Flex direction="column" gap={2.5} mb={4}>
-              {c.desafios.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
-            </Flex>
+            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+              {c.desafios.items.map((it, i) => (
+                <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
+              ))}
+            </RevealStagger>
             <Flex direction="column" gap={2}>
               {c.desafios.cierre.map((p, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{p}</Text>
@@ -337,11 +341,13 @@ export default function MetodoAyurvedaDoshaDescubre() {
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.reconoces.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>{c.reconoces.intro}</Text>
-            <Flex direction="column" gap={3}>
+            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.reconoces.opciones.map((op) => (
-                <CheckRow key={op} label={op} color={meta.color} checked={reconoces.includes(op)} onToggle={() => toggleReconoce(op)} />
+                <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
+                  <CheckRow label={op} color={meta.color} checked={reconoces.includes(op)} onToggle={() => toggleReconoce(op)} />
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
           </Panel>
           </Reveal>
 

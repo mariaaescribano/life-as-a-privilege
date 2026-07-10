@@ -1,6 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 void React;
+
+// Entrada: el anillo de casas SOLO se funde (no rota). Contiene los ejes
+// angulares (horizonte AC-DC y meridiano MC-IC), que son líneas fijas de la
+// carta: si rotaran, esas «rayas» se verían mal colocadas hasta encajar.
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+const H_DUR = 1.3;
+const H_DELAY = 0.2;
 
 interface HousesRingProps {
   innerRadius: number;
@@ -72,12 +80,25 @@ function buildTexture(): THREE.CanvasTexture {
 export function HousesRing({ innerRadius, outerRadius }: HousesRingProps) {
   const texture = useMemo(() => buildTexture(), []);
 
+  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const elapsed = useRef(0);
+
+  useFrame((_, delta) => {
+    if (elapsed.current > H_DELAY + H_DUR) return;
+    elapsed.current += delta;
+    const t = Math.max(0, elapsed.current - H_DELAY);
+    const p = easeOutCubic(Math.min(1, t / H_DUR));
+    if (matRef.current) matRef.current.opacity = p;
+  });
+
   return (
     <mesh>
       <ringGeometry args={[innerRadius, outerRadius, 128, 1]} />
       <meshBasicMaterial
+        ref={matRef}
         map={texture}
         transparent
+        opacity={0}
         side={THREE.DoubleSide}
         toneMapped={false}
       />

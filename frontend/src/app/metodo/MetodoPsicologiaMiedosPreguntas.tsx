@@ -362,7 +362,7 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
                         "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
                   _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                   _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
+                  _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
                 />
               </Box>
             );

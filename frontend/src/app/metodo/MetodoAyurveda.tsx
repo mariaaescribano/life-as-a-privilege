@@ -131,7 +131,7 @@ export default function MetodoAyurveda() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Compromiso", onClick: () => navigate("/metodo/psicologia/linea-de-vida/compromiso") }}
+            prev={{ label: "← Síntesis", onClick: () => navigate("/metodo/psicologia/linea-de-vida/sintesis") }}
             extra={ilustracionesBtn}
             next={{
               label: "Test →",

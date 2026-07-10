@@ -23,8 +23,9 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceRecorrido } from "../../components/metodo/IndiceRecorrido";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { generatePsicologiaPdf } from "../../utils/generatePsicologiaPdf";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
@@ -50,6 +51,15 @@ const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const ORO = "#c79a3c";            // dorado (los dones)
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
+
+// Las 4 preguntas de integración por relación (las mismas que en /mapa). Se
+// vuelcan aquí en Síntesis con lo que el usuario escribió.
+const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recordatorio"; label: string }[] = [
+  { key: "proteger", label: "Qué intentaba proteger" },
+  { key: "coste", label: "Qué me cuesta mantenerlo" },
+  { key: "verdadSana", label: "La verdad más sana que quiero practicar" },
+  { key: "recordatorio", label: "Lo que quiero recordar" },
+];
 
 /** Todas las huellas marcadas a lo largo de la línea de vida (sin duplicar). */
 function todasLasHuellas(d: LineaDeVidaData): string[] {
@@ -182,7 +192,8 @@ export default function MetodoPsicologiaSintesis() {
   const heridas = (data.heridas || []).filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
 
   const relaciones = (data.constelaciones || []).filter(
-    (c) => (c.titulo || "").trim() || (c.texto || "").trim() || (c.verdadSana || "").trim(),
+    (c) => (c.titulo || "").trim() || (c.texto || "").trim() ||
+      INTEGRACION_PREGUNTAS.some((p) => ((c[p.key] as string) || "").trim()),
   );
 
   const miedos = (data.miedos || []).filter((m) => (m.texto || "").trim());
@@ -214,32 +225,36 @@ export default function MetodoPsicologiaSintesis() {
   if (problemas.length > 0) bloques.push({
     titulo: "De dónde vengo",
     node: (
-      <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
-        {problemas.map((p, i) => <Cita key={i} texto={p} />)}
-      </Flex>
+      <Cascada gap={{ base: 3, md: 3.5 }}>
+        {problemas.map((p, i) => <Item key={i}><Cita texto={p} /></Item>)}
+      </Cascada>
     ),
   });
 
   if (aceListo && banda) bloques.push({
     titulo: "Lo que cargué",
     node: (
-      <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "flex-start" }} gap={{ base: 4, md: 6 }}>
-        <Flex flexShrink={0} direction="column" align="center" justify="center"
-              w={{ base: "88px", md: "100px" }} h={{ base: "88px", md: "100px" }} borderRadius="full"
-              bg="rgba(255,251,243,0.72)" border={`2px solid ${TINTA}`}
-              boxShadow={`0 4px 16px rgba(94,45,16,0.18)`}>
-          <Text color={TINTA} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" lineHeight="1">{score}</Text>
-          <Text color={`${TINTA}aa`} fontSize="xs" fontWeight="600" letterSpacing="0.08em">DE 10</Text>
-        </Flex>
-        <Box flex="1" textAlign={{ base: "center", md: "left" }}>
+      <RevealStagger inView once amount={0.18} stagger={0.22} delayChildren={0.1}
+        display="flex" flexDirection={{ base: "column", md: "row" }}
+        alignItems={{ base: "center", md: "flex-start" }} gap={{ base: 4, md: 6 }}>
+        <Item flexShrink={0} scaleFrom={0.85} duration={0.8}>
+          <Flex direction="column" align="center" justify="center"
+                w={{ base: "88px", md: "100px" }} h={{ base: "88px", md: "100px" }} borderRadius="full"
+                bg="rgba(255,251,243,0.72)" border={`2px solid ${TINTA}`}
+                boxShadow={`0 4px 16px rgba(94,45,16,0.18)`}>
+            <Text color={TINTA} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" lineHeight="1">{score}</Text>
+            <Text color={`${TINTA}aa`} fontSize="xs" fontWeight="600" letterSpacing="0.08em">DE 10</Text>
+          </Flex>
+        </Item>
+        <Item flex="1" textAlign={{ base: "center", md: "left" }}>
           <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
             {banda.titulo}
           </Text>
           <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
             {banda.texto}
           </Text>
-        </Box>
-      </Flex>
+        </Item>
+      </RevealStagger>
     ),
   });
 
@@ -250,83 +265,90 @@ export default function MetodoPsicologiaSintesis() {
   if (heridas.length > 0) bloques.push({
     titulo: "Mis heridas",
     node: (
-      <Flex direction="column" gap={{ base: 3.5, md: 4 }}>
+      <Cascada gap={{ base: 3.5, md: 4 }}>
         {heridas.map((h) => (
-          <Cita
-            key={h.id}
-            titulo={(h.titulo || "").trim() || "Herida"}
-            texto={(h.texto || "").trim()}
-            piezas={[...(h.huellas || []), ...(h.nudos || []), ...(h.necesidades || [])].filter(Boolean)}
-            piezasLabel="Se formó de"
-          />
+          <Item key={h.id}>
+            <Cita
+              titulo={(h.titulo || "").trim() || "Herida"}
+              texto={(h.texto || "").trim()}
+              piezas={[...(h.huellas || []), ...(h.nudos || []), ...(h.necesidades || [])].filter(Boolean)}
+              piezasLabel="Se formó de"
+            />
+          </Item>
         ))}
-      </Flex>
+      </Cascada>
     ),
   });
 
   if (relaciones.length > 0) bloques.push({
     titulo: "Cómo me relaciono",
     node: (
-      <Flex direction="column" gap={{ base: 3.5, md: 4 }}>
+      <Cascada gap={{ base: 3.5, md: 4 }}>
         {relaciones.map((c) => (
-          <Cita
-            key={c.id}
-            titulo={(c.titulo || "").trim() || "Relación"}
-            texto={(c.texto || "").trim()}
-            piezas={[...(c.nudos || []), ...(c.arquetipos || []).map((a) => arquetipoLabel(a))].filter(Boolean)}
-            piezasLabel="Piezas que uniste"
-            remate={(c.verdadSana || "").trim() ? { label: "Me comprometo a", texto: `«${(c.verdadSana as string).trim()}»` } : undefined}
-          />
+          <Item key={c.id}>
+            <Cita
+              titulo={(c.titulo || "").trim() || "Relación"}
+              texto={(c.texto || "").trim()}
+              piezas={[...(c.nudos || []), ...(c.arquetipos || []).map((a) => arquetipoLabel(a))].filter(Boolean)}
+              piezasLabel="Piezas que uniste"
+              preguntas={INTEGRACION_PREGUNTAS
+                .map((p) => ({ pregunta: p.label, resp: ((c[p.key] as string) || "").trim() }))
+                .filter((x) => x.resp)}
+            />
+          </Item>
         ))}
-      </Flex>
+      </Cascada>
     ),
   });
 
   if (miedos.length > 0) bloques.push({
     titulo: "Mis miedos",
     node: (
-      <Flex direction="column" gap={{ base: 3.5, md: 4 }}>
+      <Cascada gap={{ base: 3.5, md: 4 }}>
         {miedos.map((m) => (
-          <MiedoCard
-            key={m.id}
-            texto={(m.texto || "").trim()}
-            respuestas={MIEDOS_PREGUNTAS
-              .map((p) => ({ pregunta: p.pregunta, resp: (m.respuestas?.[p.key] || "").trim() }))
-              .filter((x) => x.resp)}
-          />
+          <Item key={m.id}>
+            <MiedoCard
+              texto={(m.texto || "").trim()}
+              respuestas={MIEDOS_PREGUNTAS
+                .map((p) => ({ pregunta: p.pregunta, resp: (m.respuestas?.[p.key] || "").trim() }))
+                .filter((x) => x.resp)}
+            />
+          </Item>
         ))}
-      </Flex>
+      </Cascada>
     ),
   });
 
   if (dones.length > 0) bloques.push({
     titulo: "Mis dones",
     node: (
-      <Flex wrap="wrap" gap={2.5}>
+      <Cascada wrap gap={2.5}>
         {dones.map((x, i) => (
-          <Flex key={i} align="center" gap={2} px={{ base: 4, md: 5 }} py={2} borderRadius="full"
-                bg={`${ORO}1f`} border={`1px solid ${ORO}88`} boxShadow={`0 2px 8px ${ORO}22`}>
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="14px" h="14px" flexShrink={0}>
-              <polygon points="12,2 14.9,8.6 22,9.3 16.5,14.1 18.3,21 12,17.3 5.7,21 7.5,14.1 2,9.3 9.1,8.6" fill={ORO} />
-            </Box>
-            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
-          </Flex>
+          <Item key={i} distance={14} scaleFrom={0.9} duration={0.6}>
+            <Flex align="center" gap={2} px={{ base: 4, md: 5 }} py={2} borderRadius="full"
+                  bg={`${ORO}1f`} border={`1px solid ${ORO}88`} boxShadow={`0 2px 8px ${ORO}22`}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="14px" h="14px" flexShrink={0}>
+                <polygon points="12,2 14.9,8.6 22,9.3 16.5,14.1 18.3,21 12,17.3 5.7,21 7.5,14.1 2,9.3 9.1,8.6" fill={ORO} />
+              </Box>
+              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
+            </Flex>
+          </Item>
         ))}
-      </Flex>
+      </Cascada>
     ),
   });
 
   if (hayCompromiso) bloques.push({
     titulo: "Mi compromiso conmigo mismo",
     node: (
-      <Flex direction="column" gap={{ base: 3.5, md: 4 }}>
+      <Cascada gap={{ base: 3.5, md: 4 }}>
         {(comp.necesitaste || "").trim() && (
-          <PreguntaRespuesta pregunta="¿Qué necesitaste que nadie pudo darte?" respuesta={(comp.necesitaste as string).trim()} />
+          <Item><PreguntaRespuesta pregunta="¿Qué necesitaste que nadie pudo darte?" respuesta={(comp.necesitaste as string).trim()} /></Item>
         )}
         {(comp.dartelo || "").trim() && (
-          <PreguntaRespuesta pregunta="¿Cómo puedes empezar a dártelo hoy?" respuesta={(comp.dartelo as string).trim()} />
+          <Item><PreguntaRespuesta pregunta="¿Cómo puedes empezar a dártelo hoy?" respuesta={(comp.dartelo as string).trim()} /></Item>
         )}
-      </Flex>
+      </Cascada>
     ),
   });
 
@@ -340,9 +362,9 @@ export default function MetodoPsicologiaSintesis() {
         {brujulaMensaje ? (
           <Cita texto={brujulaMensaje} />
         ) : (
-          <Flex direction="column" gap={{ base: 3.5, md: 4 }}>
-            {brujulaPreg.map(([q, v], i) => <PreguntaRespuesta key={i} pregunta={q} respuesta={v} />)}
-          </Flex>
+          <Cascada gap={{ base: 3.5, md: 4 }}>
+            {brujulaPreg.map(([q, v], i) => <Item key={i}><PreguntaRespuesta pregunta={q} respuesta={v} /></Item>)}
+          </Cascada>
         )}
       </Box>
     ),
@@ -376,12 +398,12 @@ export default function MetodoPsicologiaSintesis() {
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
               <IntroRecorrido>
                 Aquí está todo tu recorrido, de principio a fin. Desde el problema con el que
-                llegaste hasta la carta que te escribiste. Léelo entero: esto eres tú, contándote a ti mismo.
+                llegaste hasta la carta que te escribiste. Léelo entero: esto eres tú.
               </IntroRecorrido>
             </Reveal>
 
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             {nada ? (
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                    border={azulBorde} boxShadow={glowPanel} bgColor={neuropsicologiaBg}>
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -391,18 +413,27 @@ export default function MetodoPsicologiaSintesis() {
                   </Text>
                 </Box>
               </Box>
+              </Reveal>
             ) : (
               <Flex direction="column" align="center" w="100%">
-                {/* El recorrido completo, en orden, conectado con flechas hacia el siguiente */}
+                {/* El recorrido completo: cada etapa entra al ir bajando, como un
+                    camino que se va revelando ante ti (scroll reveal escalonado). */}
                 {bloques.map((b, i) => (
                   <React.Fragment key={b.titulo}>
-                    <Seccion numero={i + 1} titulo={b.titulo}>{b.node}</Seccion>
-                    {i < bloques.length - 1 && <FlechaConector />}
+                    <Reveal inView once amount={0.25} direction="up" distance={54} scaleFrom={0.9} blur duration={0.85} w="100%">
+                      <Seccion numero={i + 1} titulo={b.titulo}>{b.node}</Seccion>
+                    </Reveal>
+                    {i < bloques.length - 1 && (
+                      <Reveal inView once amount={0.8} direction="none" scaleFrom={0.2} duration={0.45}>
+                        <FlechaConector />
+                      </Reveal>
+                    )}
                   </React.Fragment>
                 ))}
 
-                {/* ── Descarga en PDF · CTA grande y elegante ── */}
-                <Box position="relative" w="100%" mt={{ base: 9, md: 12 }} borderRadius="2xl" overflow="hidden"
+                {/* ── Descarga en PDF · CTA grande y elegante (entrada épica) ── */}
+                <Reveal inView once amount={0.25} direction="up" distance={54} scaleFrom={0.9} blur duration={0.9} w="100%" mt={{ base: 9, md: 12 }}>
+                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                      border={`1px solid ${ORO}66`}
                      boxShadow={`0 0 0 1px ${ORO}22, 0 14px 46px rgba(94,45,16,0.28), 0 0 34px ${ORO}22`}
                      bgColor={neuropsicologiaBg}>
@@ -451,9 +482,9 @@ export default function MetodoPsicologiaSintesis() {
                     </Box>
                   </Flex>
                 </Box>
+                </Reveal>
               </Flex>
             )}
-            </Reveal>
 
           </Flex>
         </Flex>
@@ -470,6 +501,7 @@ export default function MetodoPsicologiaSintesis() {
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 
+      <IndiceRecorrido />
       <SiteFooter />
     </Box>
   );
@@ -484,6 +516,31 @@ export default function MetodoPsicologiaSintesis() {
 const CARD_BG = "rgba(255,251,243,0.72)";
 const CARD_BORDER = `1px solid ${TINTA}22`;
 const CARD_SHADOW = "0 2px 10px rgba(94,45,16,0.08)";
+
+// Cascada: contenedor que revela a sus hijos UNO A UNO al entrar en pantalla.
+// Cada hijo va envuelto en <Item>. `wrap` para layouts de píldoras (chips/dones).
+function Cascada({ children, gap, wrap = false }: { children: React.ReactNode; gap?: any; wrap?: boolean }) {
+  return (
+    <RevealStagger
+      inView once amount={0.18} stagger={0.18} delayChildren={0.1}
+      display="flex"
+      flexDirection={wrap ? "row" : "column"}
+      flexWrap={wrap ? "wrap" : "nowrap"}
+      gap={gap}
+    >
+      {children}
+    </RevealStagger>
+  );
+}
+
+// Un elemento de la cascada (sube + leve zoom al aparecer).
+function Item({ children, ...rest }: { children: React.ReactNode; [k: string]: any }) {
+  return (
+    <RevealItem direction="up" distance={18} scaleFrom={0.96} duration={0.75} {...rest}>
+      {children}
+    </RevealItem>
+  );
+}
 
 // Una sección: panel de acuarela con nº de paso + título y una fina separación.
 function Seccion({ numero, titulo, children }: { numero: number; titulo: string; children: React.ReactNode }) {
@@ -527,15 +584,27 @@ function FlechaConector() {
   );
 }
 
+// Flecha horizontal fina que conecta dos eslabones de la cadena de piezas.
+function ChainArrow() {
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+         w="15px" h="15px" fill={`${TINTA}99`} flexShrink={0} aria-hidden
+         style={{ filter: `drop-shadow(0 0 4px ${TINTA}44)` }}>
+      <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+    </Box>
+  );
+}
+
 // Tarjeta «cita»: título opcional + texto + piezas (chips) + remate opcional
 // (p. ej. el compromiso de una relación). Se usa en problema, heridas,
 // relaciones y el mensaje de la brújula.
-function Cita({ titulo, texto, piezas, piezasLabel, remate }: {
+function Cita({ titulo, texto, piezas, piezasLabel, remate, preguntas }: {
   titulo?: string;
   texto: string;
   piezas?: string[];
   piezasLabel?: string;
   remate?: { label: string; texto: string };
+  preguntas?: { pregunta: string; resp: string }[];
 }) {
   return (
     <Box bg={CARD_BG} borderRadius="xl" border={CARD_BORDER} borderLeft={`4px solid ${TINTA}`}
@@ -559,14 +628,27 @@ function Cita({ titulo, texto, piezas, piezasLabel, remate }: {
               {piezasLabel}
             </Text>
           )}
-          <Flex wrap="wrap" gap={1.5}>
+          {/* Los eslabones se encadenan de izquierda a derecha, conectados por una
+              flecha que aparece entre uno y otro: se lee como el «camino» que unió
+              esas piezas. */}
+          <RevealStagger inView once amount={0.3} stagger={0.13} delayChildren={0.05}
+            display="flex" flexWrap="wrap" alignItems="center" gap={1.5}>
             {piezas.map((p, i) => (
-              <Box key={i} px={{ base: 2.5, md: 3 }} py={1} borderRadius="full"
-                   bg="rgba(255,251,243,0.85)" border={`1px solid ${TINTA}30`}>
-                <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} fontWeight="600" opacity={0.9} lineHeight="1.2">{p}</Text>
-              </Box>
+              <React.Fragment key={i}>
+                {i > 0 && (
+                  <RevealItem direction="none" scaleFrom={0.3} duration={0.35} display="flex" alignItems="center">
+                    <ChainArrow />
+                  </RevealItem>
+                )}
+                <RevealItem direction="right" distance={16} scaleFrom={0.85} duration={0.5} display="flex">
+                  <Box px={{ base: 2.5, md: 3 }} py={1} borderRadius="full"
+                       bg="rgba(255,251,243,0.85)" border={`1px solid ${TINTA}30`}>
+                    <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} fontWeight="600" opacity={0.9} lineHeight="1.2">{p}</Text>
+                  </Box>
+                </RevealItem>
+              </React.Fragment>
             ))}
-          </Flex>
+          </RevealStagger>
         </Box>
       )}
       {remate && (
@@ -580,37 +662,59 @@ function Cita({ titulo, texto, piezas, piezasLabel, remate }: {
           </Text>
         </Box>
       )}
+      {preguntas && preguntas.length > 0 && (
+        <Flex direction="column" mt={3} pt={3} borderTop={`1px solid ${TINTA}1f`}>
+          {preguntas.map((x, i) => (
+            <Box key={i}
+                 mt={i === 0 ? 0 : { base: 3, md: 3.5 }}
+                 pt={i === 0 ? 0 : { base: 3, md: 3.5 }}
+                 borderTop={i === 0 ? undefined : `1px solid ${TINTA}1f`}>
+              <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.1em"
+                    textTransform="uppercase" opacity={0.6} mb={1}>
+                {x.pregunta}
+              </Text>
+              <Text color={`${TINTA}f2`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.65" whiteSpace="pre-wrap">
+                {x.resp}
+              </Text>
+            </Box>
+          ))}
+        </Flex>
+      )}
     </Box>
   );
 }
 
-// Lista de ítems como tarjetas crema con marcador (huellas, nudos).
+// Lista de ítems como tarjetas crema con marcador (huellas, nudos). Cascada.
 function Puntos({ items }: { items: string[] }) {
   return (
-    <Flex direction="column" gap={{ base: 2, md: 2.5 }}>
+    <Cascada gap={{ base: 2, md: 2.5 }}>
       {items.map((it, i) => (
-        <Flex key={i} align="flex-start" gap={3} bg={CARD_BG} borderRadius="lg" border={CARD_BORDER}
-              px={{ base: 3.5, md: 4 }} py={{ base: 2.5, md: 3 }}>
-          <Box flexShrink={0} w="7px" h="7px" borderRadius="full" bg={TINTA} mt={{ base: 2, md: 2.5 }}
-               boxShadow={`0 0 6px ${TINTA}55`} />
-          <Text color={`${TINTA}f2`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.55">{it}</Text>
-        </Flex>
+        <Item key={i}>
+          <Flex align="flex-start" gap={3} bg={CARD_BG} borderRadius="lg" border={CARD_BORDER}
+                px={{ base: 3.5, md: 4 }} py={{ base: 2.5, md: 3 }}>
+            <Box flexShrink={0} w="7px" h="7px" borderRadius="full" bg={TINTA} mt={{ base: 2, md: 2.5 }}
+                 boxShadow={`0 0 6px ${TINTA}55`} />
+            <Text color={`${TINTA}f2`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.55">{it}</Text>
+          </Flex>
+        </Item>
       ))}
-    </Flex>
+    </Cascada>
   );
 }
 
-// Chips en píldora (necesidades no cubiertas).
+// Chips en píldora (necesidades no cubiertas). Cascada en wrap.
 function Chips({ items }: { items: string[] }) {
   return (
-    <Flex wrap="wrap" gap={2.5}>
+    <Cascada wrap gap={2.5}>
       {items.map((x, i) => (
-        <Box key={i} px={{ base: 3.5, md: 4 }} py={2} borderRadius="full"
-             bg={CARD_BG} border={`1px solid ${TINTA}33`}>
-          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
-        </Box>
+        <Item key={i} distance={14} scaleFrom={0.9} duration={0.6}>
+          <Box px={{ base: 3.5, md: 4 }} py={2} borderRadius="full"
+               bg={CARD_BG} border={`1px solid ${TINTA}33`}>
+            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
+          </Box>
+        </Item>
       ))}
-    </Flex>
+    </Cascada>
   );
 }
 

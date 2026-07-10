@@ -27,8 +27,16 @@ interface Compromiso {
   patron: string;
 }
 
+// La «carta» que el usuario se escribe a sí mismo en la página de Compromiso
+// («comprométete»): sus dos respuestas (data.compromiso.{necesitaste,dartelo}).
+interface Carta {
+  necesitaste: string;
+  dartelo: string;
+}
+
 export function CompromisosBox() {
   const [compromisos, setCompromisos] = useState<Compromiso[]>([]);
+  const [carta, setCarta] = useState<Carta | null>(null);
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -48,7 +56,16 @@ export function CompromisosBox() {
             patron: (c?.verdadSana || "").trim(),
           }))
           .filter((x: Compromiso) => x.patron.length > 0);
-        if (!cancel) setCompromisos(lista);
+
+        // La carta a uno mismo escrita en «Compromiso».
+        const comp = d.compromiso && typeof d.compromiso === "object" ? d.compromiso : {};
+        const necesitaste = (comp.necesitaste || "").trim();
+        const dartelo = (comp.dartelo || "").trim();
+
+        if (!cancel) {
+          setCompromisos(lista);
+          setCarta(necesitaste || dartelo ? { necesitaste, dartelo } : null);
+        }
       } catch {
         // silencioso: si no hay datos, simplemente no mostramos el box
       }
@@ -56,7 +73,7 @@ export function CompromisosBox() {
     return () => { cancel = true; };
   }, []);
 
-  if (compromisos.length === 0) return null;
+  if (compromisos.length === 0 && !carta) return null;
 
   return (
     <Box
@@ -84,6 +101,55 @@ export function CompromisosBox() {
         </Flex>
 
         <Box h="1px" mb={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+        {/* La carta que el usuario se escribió a sí mismo en «Compromiso». */}
+        {carta && (
+          <Box
+            position="relative"
+            borderRadius="xl"
+            overflow="hidden"
+            bg="rgba(255,251,243,0.82)"
+            border={`1px solid ${TINTA}40`}
+            px={{ base: 5, md: 7 }}
+            py={{ base: 5, md: 6 }}
+            mb={compromisos.length > 0 ? { base: 5, md: 6 } : 0}
+          >
+            <Text
+              color={TINTA}
+              fontSize="2xs"
+              fontWeight="700"
+              letterSpacing="0.18em"
+              textTransform="uppercase"
+              opacity={0.7}
+              textAlign="center"
+              mb={4}
+            >
+              Tu carta para ti
+            </Text>
+            <Flex direction="column" gap={{ base: 4, md: 5 }}>
+              {carta.necesitaste && (
+                <Box>
+                  <Text color={`${TINTA}b0`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={1}>
+                    Lo que necesité que nadie pudo darme
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
+                    «{carta.necesitaste}»
+                  </Text>
+                </Box>
+              )}
+              {carta.dartelo && (
+                <Box>
+                  <Text color={`${TINTA}b0`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={1}>
+                    Cómo puedo empezar a dármelo hoy
+                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
+                    «{carta.dartelo}»
+                  </Text>
+                </Box>
+              )}
+            </Flex>
+          </Box>
+        )}
 
         <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
           {compromisos.map((x, i) => (

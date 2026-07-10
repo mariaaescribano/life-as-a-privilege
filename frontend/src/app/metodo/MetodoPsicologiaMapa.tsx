@@ -1,25 +1,14 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · INTEGRACIÓN  (ruta interna /mapa)
+// PÁGINA · INTEGRACIÓN  (ruta interna /mapa)  ·  17/20
 //
-// El mapa completo de ti mismo. Por primera vez, todo el recorrido se une en
-// un solo lugar: un hilo vertical que enhebra, en orden, las piezas que la
-// persona ha ido creando —y deja ver las conexiones entre ellas—:
+// Recupera TODAS las relaciones que el usuario compuso en la página «Relación»
+// (data.constelaciones) y las presenta como tarjetas. Al tocar una, se abre un
+// popup guiado tipo ritual —una pregunta por página, se avanza con flechas—
+// para «enfrentarse» a esa relación e integrarla: reconocer qué protegía, qué
+// cuesta, qué verdad más sana practicar y qué recordar. Una relación cada vez.
 //
-//   1. El problema con el que llegó       ·  data["problema-actual"]
-//   2. Lo que cargó (ACE)                 ·  data.ace
-//   3. Lo que dejó huella                 ·  data.anos[·].huellas
-//   4. Los nudos                          ·  data.nudos
-//   5. Lo que le faltó (necesidades)      ·  data.necesidades
-//   6. Sus heridas                        ·  data.heridas
-//   7. Cómo se relaciona                  ·  data.constelaciones
-//   8. Sus miedos                         ·  data.miedos
-//   9. Sus dones                          ·  data.dones.lista
-//
-// No se «rellena» nada nuevo aquí: es una página de contemplación. La única
-// interacción que se conserva es la transformación de cada RELACIÓN (el popup
-// guiado de 4 preguntas), porque su resultado (verdadSana / coste) es lo que
-// lee la página de Compromiso. Por eso las tarjetas de «Relación» siguen
-// abriéndolo.
+// Datos: lee/escribe data.constelaciones[·].{proteger, coste, verdadSana,
+//        recordatorio}. Su resultado (verdadSana / coste) alimenta Compromiso.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -33,19 +22,15 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
   experienciaById,
-  aceScore,
-  aceBanda,
-  aceCompleto,
-  necesidadesNoCubiertas,
   arquetipoKey,
   type LineaDeVidaData,
   type Constelacion,
-  type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
@@ -58,7 +43,7 @@ import {
 
 const TINTA = neuropsicologiaTxt; // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const ORO = "#c79a3c";            // acento dorado (el reverso luminoso: los dones)
+const CREMA = "rgba(255,255,255,0.92)";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // Corazón — se usa en el popup de felicitación.
@@ -68,8 +53,9 @@ const Corazon = ({ size = 22, color = TINTA }: { size?: number; color?: string }
   </Box>
 );
 
-// Los cuatro bloques del ejercicio de transformación (se conservan: alimentan
-// la página de Compromiso). La `key` es el campo de la constelación.
+// Los cuatro bloques del ejercicio de integración (se conservan tal cual: su
+// resultado alimenta la página de Compromiso). La `key` es el campo de la
+// constelación donde se guarda la respuesta.
 const BLOQUES: {
   key: "proteger" | "coste" | "verdadSana" | "recordatorio";
   pregunta: string;
@@ -111,19 +97,8 @@ const BLOQUES: {
 ];
 
 const relTitulo = (c: Constelacion): string => (c.titulo || "").trim() || "Relación sin título";
-const heridaTitulo = (h: RelacionHuellaNudo): string => (h.titulo || "").trim() || "Herida sin título";
-
-// Todas las huellas marcadas a lo largo de la línea de vida (sin duplicar).
-function todasLasHuellas(d: LineaDeVidaData): string[] {
-  const set = new Set<string>();
-  for (const ano of Object.values(d.anos || {})) {
-    for (const t of ano?.huellas || []) {
-      const s = (t || "").trim();
-      if (s) set.add(s);
-    }
-  }
-  return Array.from(set);
-}
+const relRespondidas = (c: Constelacion): number =>
+  BLOQUES.filter((b) => ((c[b.key] as string) || "").trim().length > 0).length;
 
 export default function MetodoPsicologiaMapa() {
   const navigate = useNavigate();
@@ -131,7 +106,6 @@ export default function MetodoPsicologiaMapa() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<LineaDeVidaData>({});
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
   const [felicitarOpen, setFelicitarOpen] = useState(false);
@@ -167,7 +141,6 @@ export default function MetodoPsicologiaMapa() {
         });
         const d: LineaDeVidaData = psi.data?.data || {};
         dataRef.current = d;
-        setData(d);
         const rels = Array.isArray(d.constelaciones)
           ? d.constelaciones.map((c) => ({ ...c, titulo: c.titulo ?? "" }))
           : [];
@@ -228,20 +201,7 @@ export default function MetodoPsicologiaMapa() {
   if (!exp) return null;
 
   const ir = (ruta: string) => navigate(`/metodo/psicologia/${exp.id}/${ruta}`);
-
-  // ── Las piezas del mapa ──
-  const problemas = (typeof data["problema-actual"] === "string" ? (data["problema-actual"] as string) : "")
-    .split(/\n+/).map((s) => s.trim()).filter(Boolean);
-  const aceHecho = aceCompleto(data);
-  const score = aceScore(data);
-  const banda = aceBanda(score);
-  const huellas = todasLasHuellas(data);
-  const nudos = (data.nudos || []).map((n) => (n || "").trim()).filter(Boolean);
-  const necesidades = necesidadesNoCubiertas(data);
-  const heridas = (data.heridas || []).filter((h) => heridaTitulo(h) || h.texto?.trim());
-  const miedos = (data.miedos || []).map((m) => (m.texto || "").trim()).filter(Boolean);
-  const dones = (data.dones?.lista || []).map((x) => (x.texto || "").trim()).filter(Boolean);
-
+  const total = BLOQUES.length;
   const abierta = relaciones.find((c) => c.id === abiertoId) || null;
 
   return (
@@ -249,8 +209,8 @@ export default function MetodoPsicologiaMapa() {
       <SiteHeader variant="private" />
 
       <Box position="relative" flex="1">
-        <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
-          <Flex direction="column" align="center" w="100%" maxW="880px" gap={{ base: 8, md: 10 }}>
+        <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+          <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 7, md: 9 }}>
 
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
@@ -262,189 +222,100 @@ export default function MetodoPsicologiaMapa() {
                 step={{ current: 17, total: 20 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Miedos", onClick: () => ir("miedos-preguntas") }}
+                prev={{ label: "← Atrévete", onClick: () => ir("miedos-preguntas") }}
                 next={{ label: "Compromiso →", onClick: () => setFelicitarOpen(true) }}
               />
             </Reveal>
 
-            {/* Intro: el sentido de la página */}
+            {/* Frase bajo el header */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>Cada pieza que fuiste reuniendo se enhebra aquí. El mapa de ti mismo.</IntroRecorrido>
+              <IntroRecorrido>
+                Nada ocurre por casualidad. Todo está al servicio de nuestro crecimiento. Si has tenido experiencias duras es porque eres capaz de darles un sentido, si no, no las habrías tenido.
+              </IntroRecorrido>
             </Reveal>
 
-            {/* ════════ EL HILO ════════ */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
-            <Box position="relative" w="100%">
-
-              <Estacion num={1} label="De dónde vengo" apoyo="El problema con el que llegaste">
-                {problemas.length > 0 ? (
-                  <Flex direction="column" gap={3}>
-                    {problemas.map((p, i) => (
-                      <Box key={i} pl={{ base: 4, md: 5 }} borderLeft={`3px solid ${TINTA}55`}>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7"
-                              style={{ textShadow: INK_SHADOW }}>
-                          {p}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Vacio texto="Aún no has escrito tu problema." accion="Ir al problema →" onClick={() => ir("problema")} />
-                )}
-              </Estacion>
-
-              <Estacion num={2} label="Lo que cargué" apoyo="Experiencias adversas en la infancia (ACE)">
-                {aceHecho ? (
-                  <Flex align="center" gap={{ base: 4, md: 5 }}>
-                    <Flex flexShrink={0} direction="column" align="center" justify="center"
-                          w={{ base: "68px", md: "76px" }} h={{ base: "68px", md: "76px" }} borderRadius="full"
-                          bg={`${banda.color}22`} border={`2px solid ${banda.color}`}>
-                      <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1">{score}</Text>
-                      <Text color={TINTA} fontSize="2xs" fontWeight="600" opacity={0.65}>/ 10</Text>
-                    </Flex>
-                    <Box minW={0}>
-                      <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.14em" textTransform="uppercase"
-                            opacity={0.65} mb={0.5}>{banda.etiqueta}</Text>
-                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.35"
-                            style={{ textShadow: INK_SHADOW }}>{banda.titulo}</Text>
-                    </Box>
-                  </Flex>
-                ) : (
-                  <Vacio texto="Aún no has completado el test ACE." accion="Ir al test →" onClick={() => ir("ace")} />
-                )}
-              </Estacion>
-
-              <Estacion num={3} label="Lo que dejó huella" apoyo="Los recuerdos que aún resuenan">
-                {huellas.length > 0 ? (
-                  <Pildoras items={huellas} />
-                ) : (
-                  <Vacio texto="Aún no has marcado tus huellas." accion="Ir a Huellas →" onClick={() => ir("huellas")} />
-                )}
-              </Estacion>
-
-              <Estacion num={4} label="Los nudos" apoyo="Los patrones que se repiten hoy">
-                {nudos.length > 0 ? (
-                  <Pildoras items={nudos} />
-                ) : (
-                  <Vacio texto="Aún no has nombrado tus nudos." accion="Ir a Nudos →" onClick={() => ir("nudos")} />
-                )}
-              </Estacion>
-
-              <Estacion num={5} label="Lo que me faltó" apoyo="Necesidades del niño no cubiertas">
-                {necesidades.length > 0 ? (
-                  <Pildoras items={necesidades} />
-                ) : (
-                  <Vacio texto="Aún no has marcado tus necesidades." accion="Ir a Necesidades →" onClick={() => ir("necesidades")} />
-                )}
-              </Estacion>
-
-              <Estacion num={6} label="Mis heridas" apoyo="Dónde nace cada nudo: huella + creencia + necesidad">
-                {heridas.length > 0 ? (
-                  <Flex direction="column" gap={3}>
-                    {heridas.map((h) => (
-                      <Box key={h.id} borderRadius="xl" bg="rgba(255,251,243,0.62)" border={`1px solid ${TINTA}2e`}
-                           px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.3" mb={2}
-                              style={{ textShadow: INK_SHADOW }}>{heridaTitulo(h)}</Text>
-                        <Flex wrap="wrap" gap={1.5} mb={h.texto?.trim() ? 2.5 : 0}>
-                          {(h.huellas || []).map((x) => <MiniChip key={`hu-${x}`} label={x} />)}
-                          {(h.nudos || []).map((x) => <MiniChip key={`nu-${x}`} label={x} />)}
-                          {(h.necesidades || []).map((x) => <MiniChip key={`ne-${x}`} label={x} />)}
-                        </Flex>
-                        {h.texto?.trim() && (
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" opacity={0.88}>
-                            {h.texto.trim()}
-                          </Text>
-                        )}
-                      </Box>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Vacio texto="Aún no has compuesto tus heridas." accion="Ir a Heridas →" onClick={() => ir("heridas-lista")} />
-                )}
-              </Estacion>
-
-              <Estacion num={7} label="Cómo me relaciono"
-                        apoyo="Tus heridas unidas a los arquetipos de tu carta">
-                {relaciones.length > 0 ? (
-                  <Flex direction="column" gap={3}>
-                    {relaciones.map((c) => {
-                      const hechas = BLOQUES.filter((b) => ((c[b.key] as string) || "").trim().length > 0).length;
-                      const completo = hechas >= BLOQUES.length;
-                      return (
-                        <Box key={c.id} as="button" onClick={() => setAbiertoId(c.id)} textAlign="left" w="100%"
-                             borderRadius="xl" bg="rgba(255,251,243,0.62)" border={`1px solid ${TINTA}2e`}
-                             px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }} cursor="pointer" transition="all 0.16s"
-                             _hover={{ bg: "rgba(255,251,243,0.8)", transform: "translateY(-1px)" }}>
-                          <Flex align="center" gap={2} mb={2}>
-                            <Text flex="1" minW={0} color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.3"
-                                  style={{ textShadow: INK_SHADOW }}>{relTitulo(c)}</Text>
-                            <Text flexShrink={0} color={TINTA} fontSize="2xs" fontWeight="700"
-                                  opacity={completo ? 1 : 0.6}>{completo ? "transformada ✓" : `transformar ${hechas}/${BLOQUES.length} ›`}</Text>
-                          </Flex>
-                          <Flex wrap="wrap" gap={1.5} mb={c.texto?.trim() ? 2.5 : 0}>
-                            {(c.nudos || []).map((x) => <MiniChip key={`n-${x}`} label={x} />)}
-                            {(c.arquetipos || []).map((a) => (
-                              <MiniChip key={`a-${arquetipoKey(a)}`} label={arquetipoLabel(a)} />
-                            ))}
-                          </Flex>
-                          {c.texto?.trim() && (
-                            <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" opacity={0.88}>
-                              {c.texto.trim()}
+            {relaciones.length === 0 ? (
+              // Estado vacío: aún no ha compuesto ninguna relación.
+              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
+                      px={{ base: 7, md: 11 }} py={{ base: 12, md: 16 }} textAlign="center">
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
+                    Aún no has compuesto tus relaciones. Vuelve a la página «Relación» para reunirlas y aquí les darás un sentido.
+                  </Text>
+                  <Box as="button" onClick={() => ir("integracion")} px={6} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
+                       fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
+                       boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                       _hover={{ transform: "translateY(-2px)" }}>
+                    Ir a Relación →
+                  </Box>
+                </Flex>
+              </Box>
+            ) : (
+              <>
+                {/* Tarjetas de relación · aparecen de una en una. Al tocar, se abre el popup guiado. */}
+                <RevealStagger display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }} stagger={0.1} delayChildren={0.1}>
+                  {relaciones.map((c) => {
+                    const hechas = relRespondidas(c);
+                    const completo = hechas >= total;
+                    return (
+                      <RevealItem key={c.id} direction="up" distance={26} scaleFrom={0.97} duration={0.5} w="100%">
+                      <Box as="button" onClick={() => setAbiertoId(c.id)}
+                           position="relative" w="100%" borderRadius="2xl" overflow="hidden" textAlign="left"
+                           bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}
+                           cursor="pointer" transition="transform 0.16s, filter 0.16s"
+                           _hover={{ transform: "translateY(-2px)", filter: "brightness(1.04)" }}>
+                        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                        <Flex position="relative" zIndex={1} direction="column" gap={2.5}
+                              px={{ base: 5, md: 7 }} py={{ base: 4, md: 5 }}>
+                          <Flex align="center" gap={3}>
+                            <Box flexShrink={0} display="flex" alignItems="center"
+                                 style={{ filter: `drop-shadow(0 1px 2px ${PAPEL})` }}>
+                              <RelacionIcon size={22} color={TINTA} opacity={0.9} />
+                            </Box>
+                            <Text flex="1" minW={0} color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                                  lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                              {relTitulo(c)}
                             </Text>
+                            <Flex align="center" gap={2} flexShrink={0}>
+                              <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
+                                    opacity={completo ? 1 : 0.65} style={{ textShadow: INK_SHADOW }}>
+                                {completo ? "✓" : `${hechas}/${total}`}
+                              </Text>
+                              <Box color={TINTA} opacity={0.8} transform="translateY(1px)">
+                                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor">
+                                  <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                                </Box>
+                              </Box>
+                            </Flex>
+                          </Flex>
+                          {(c.nudos.length > 0 || c.arquetipos.length > 0) && (
+                            <Flex wrap="wrap" gap={1.5}>
+                              {c.nudos.map((n) => <MiniChip key={`n-${n}`} label={n} />)}
+                              {c.arquetipos.map((a) => <MiniChip key={`a-${arquetipoKey(a)}`} label={arquetipoLabel(a)} />)}
+                            </Flex>
                           )}
-                        </Box>
-                      );
-                    })}
-                  </Flex>
-                ) : (
-                  <Vacio texto="Aún no has compuesto tus relaciones." accion="Ir a Relación →" onClick={() => ir("integracion")} />
-                )}
-              </Estacion>
+                        </Flex>
+                      </Box>
+                      </RevealItem>
+                    );
+                  })}
+                </RevealStagger>
 
-              <Estacion num={8} label="Mis miedos" apoyo="Lo que temes, mirado de frente">
-                {miedos.length > 0 ? (
-                  <Pildoras items={miedos} />
-                ) : (
-                  <Vacio texto="Aún no has nombrado tus miedos." accion="Ir a Miedos →" onClick={() => ir("miedos")} />
-                )}
-              </Estacion>
-
-              <Estacion num={9} label="Mis dones" apoyo="El reverso luminoso de todo lo anterior"
-                        dorado last>
-                {dones.length > 0 ? (
-                  <Flex wrap="wrap" gap={2}>
-                    {dones.map((x, i) => (
-                      <Flex key={i} align="center" px={{ base: 3.5, md: 4 }} py={2} borderRadius="full"
-                            bg={`${ORO}1f`} border={`1px solid ${ORO}88`}>
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
-                      </Flex>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Vacio texto="Aún no has reconocido tus dones." accion="Ir a Dones →" onClick={() => ir("dones")} />
-                )}
-              </Estacion>
-
-            </Box>
-            </Reveal>
-
-            {/* Cierre + autoguardado (del ejercicio de transformación) */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={4} textAlign="center" maxW="640px">
-              <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7"
-                    style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Esto eres tú, entero. No para quedarte a mirarlo, sino para seguir desde aquí.
-              </Text>
-              {relaciones.length > 0 && <AutoguardadoIndicador estado={estadoGuardado} color="rgba(255,255,255,0.9)" />}
-            </Flex>
+                {/* Autoguardado global */}
+                <Flex justify="center" mt={{ base: 5, md: 6 }}>
+                  <AutoguardadoIndicador estado={estadoGuardado} color={CREMA} />
+                </Flex>
+              </>
+            )}
             </Reveal>
 
           </Flex>
         </Flex>
       </Box>
 
-      {/* ── POPUP GUIADO (transformación de la relación · alimenta Compromiso) ── */}
+      {/* ── POPUP GUIADO (integración de la relación · alimenta Compromiso) ── */}
       {abierta && (
         <PopupIntegracion
           key={abierta.id}
@@ -515,65 +386,7 @@ function PopupFelicitacion({ onClose, onContinuar }: { onClose: () => void; onCo
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────
-// Estación del hilo: una tarjeta a todo el ancho. El título lleva debajo una
-// separación horizontal, y las tarjetas se relacionan entre sí mediante una
-// línea vertical que va de una a la siguiente (sin iconos).
-// ─────────────────────────────────────────────────────────────────────────
-function Estacion({ num, label, apoyo, dorado, last, children }: {
-  num: number; label: string; apoyo?: string;
-  dorado?: boolean; last?: boolean; children: React.ReactNode;
-}) {
-  const acento = dorado ? ORO : TINTA;
-  return (
-    // Cada estación se revela al asomar en pantalla: el hilo se va dibujando de
-    // arriba abajo, una estación tras otra, según haces scroll.
-    <Reveal inView direction="up" distance={24} duration={0.55} amount={0.3} w="100%">
-      {/* Tarjeta */}
-      <Box position="relative" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
-        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-        <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
-          <Flex align="baseline" gap={2}>
-            <Text color={acento} fontSize="2xs" fontWeight="700" opacity={0.6}>{String(num).padStart(2, "0")}</Text>
-            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.25"
-                  style={{ textShadow: INK_SHADOW }}>{label}</Text>
-          </Flex>
-          {apoyo && (
-            <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" opacity={0.72} mt={0.5}
-                  style={{ textShadow: INK_SHADOW }}>{apoyo}</Text>
-          )}
-          {/* Separación horizontal bajo el título */}
-          <Box h="1px" w="100%" my={{ base: 3.5, md: 4 }} bg={`${TINTA}2e`} />
-          {children}
-        </Box>
-      </Box>
-
-      {/* Línea vertical que relaciona esta caja con la siguiente */}
-      {!last && (
-        <Flex justify="center">
-          <Box w="2px" h={{ base: "28px", md: "38px" }} borderRadius="full"
-               bgGradient={`linear(to-b, ${TINTA}66, ${TINTA}22)`} />
-        </Flex>
-      )}
-    </Reveal>
-  );
-}
-
-// Fila de píldoras (chips) crema — para listas cortas (huellas, nudos, miedos…).
-function Pildoras({ items }: { items: string[] }) {
-  return (
-    <Flex wrap="wrap" gap={2}>
-      {items.map((x, i) => (
-        <Box key={i} px={{ base: 3.5, md: 4 }} py={2} borderRadius="full"
-             bg="rgba(255,251,243,0.66)" border={`1px solid ${TINTA}30`}>
-          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
-        </Box>
-      ))}
-    </Flex>
-  );
-}
-
-// Chip pequeño (dentro de las tarjetas de herida / relación).
+// Chip pequeño (piezas de la relación: nudos/heridas + arquetipos).
 function MiniChip({ label }: { label: string }) {
   return (
     <Box px={2.5} py={1} borderRadius="full" bg={`${TINTA}12`} border={`1px solid ${TINTA}33`}>
@@ -582,23 +395,10 @@ function MiniChip({ label }: { label: string }) {
   );
 }
 
-// Estado vacío de una estación: invita a completar el paso correspondiente.
-function Vacio({ texto, accion, onClick }: { texto: string; accion: string; onClick: () => void }) {
-  return (
-    <Flex align="center" gap={3} wrap="wrap">
-      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7}
-            style={{ textShadow: INK_SHADOW }}>{texto}</Text>
-      <Box as="button" onClick={onClick} px={4} py={1.5} borderRadius="full" bg={TINTA} color={PAPEL}
-           fontWeight="700" fontSize={{ base: "xs", md: "sm" }} cursor="pointer" transition="all 0.16s"
-           _hover={{ transform: "translateY(-1px)", filter: "brightness(1.08)" }}>{accion}</Box>
-    </Flex>
-  );
-}
-
 // ─────────────────────────────────────────────────────────────────────────
-// Popup guiado por relación: conversación con el guía (se conserva del mapa
-// anterior). Las preguntas ya respondidas quedan arriba como un hilo. Su
-// resultado (verdadSana / coste) es lo que lee la página de Compromiso.
+// Popup guiado por relación: una pregunta por página, se avanza con flechas.
+// «Enfrentarse» a la relación e integrarla. Su resultado (verdadSana / coste)
+// es lo que lee la página de Compromiso.
 // ─────────────────────────────────────────────────────────────────────────
 function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   c: Constelacion;
@@ -616,7 +416,7 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   const cuerpoRef = useRef<HTMLDivElement | null>(null);
   const actualRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
-    cuerpoRef.current?.scrollTo({ top: cuerpoRef.current.scrollHeight, behavior: "smooth" });
+    cuerpoRef.current?.scrollTo({ top: 0, behavior: "auto" });
     const t = setTimeout(() => actualRef.current?.focus(), 220);
     return () => clearTimeout(t);
   }, [paso]);
@@ -624,9 +424,12 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
   const siguiente = () => { if (esUltimo) onClose(); else setPaso((i) => Math.min(total - 1, i + 1)); };
 
+  const b = BLOQUES[paso];
+  const respuesta = (c[b.key] as string) || "";
+
   return (
     <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
-         px={{ base: 4, md: 10 }} py={{ base: 5, md: 10 }} bg="rgba(0,0,0,0.72)"
+         px={{ base: 3, md: 10 }} py={{ base: 4, md: 10 }} bg="rgba(0,0,0,0.82)"
          sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -659,78 +462,56 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
           </Flex>
         </Box>
 
-        {/* Cuerpo scrollable: la conversación con el guía, acumulativa */}
+        {/* Cuerpo scrollable: una pregunta por página */}
         <Box ref={cuerpoRef} position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
              px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
              sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
-          <Flex direction="column" gap={{ base: 5, md: 6 }}>
-            {BLOQUES.slice(0, paso + 1).map((b, i) => {
-              const esActual = i === paso;
-              const respuesta = (c[b.key] as string) || "";
-              return (
-                <Box key={b.key}>
-                  {/* Mensaje del guía: la pregunta */}
-                  <Flex align="flex-start" gap={{ base: 2.5, md: 3 }}>
-                    <Flex flexShrink={0} w={{ base: "30px", md: "34px" }} h={{ base: "30px", md: "34px" }}
-                          borderRadius="full" bg={`${TINTA}`} align="center" justify="center"
-                          boxShadow={`0 2px 10px ${TINTA}44`}>
-                      <NeuropsicologiaIcon size={{ base: "17px", md: "19px" }} />
-                    </Flex>
-                    <Box flex="1" pt={{ base: 0.5, md: 1 }} minW={0}>
-                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.35"
-                            style={{ textShadow: INK_SHADOW }}>
-                        {b.pregunta}
-                      </Text>
-                      {esActual && (
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.85} mt={1} lineHeight="1.55"
-                              style={{ textShadow: INK_SHADOW }}>
-                          {b.apoyo} <Box as="span" fontStyle="italic">Ej.: {b.ejemplos.join(" · ")}.</Box>
-                        </Text>
-                      )}
-                    </Box>
-                  </Flex>
+          <Box>
+            {/* La pregunta */}
+            <Box>
+              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.35"
+                    style={{ textShadow: INK_SHADOW }}>
+                {b.pregunta}
+              </Text>
+              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.82} mt={1} lineHeight="1.55"
+                    style={{ textShadow: INK_SHADOW }}>
+                {b.apoyo}
+              </Text>
 
-                  {/* La respuesta: campo activo si es la pregunta actual; si no,
-                      la cita de lo que la persona ya escribió (clicable para volver). */}
-                  {esActual ? (
-                    <Textarea
-                      ref={actualRef}
-                      value={respuesta}
-                      onChange={(e) => onUpdate(b.key, e.target.value)}
-                      placeholder={b.placeholder}
-                      mt={3}
-                      minH={{ base: "96px", md: "112px" }}
-                      bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                      borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                      sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
-                            "&::-webkit-scrollbar": { width: "8px" },
-                            "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
-                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                      _hover={{ borderColor: `${TINTA}55` }}
-                      _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
-                    />
-                  ) : (
-                    <Flex justify="flex-end" mt={2.5} pl={{ base: 6, md: 9 }}>
-                      <Box as="button" onClick={() => setPaso(i)} textAlign="left" maxW="88%"
-                           bg={respuesta.trim() ? `${TINTA}` : "transparent"}
-                           color={respuesta.trim() ? PAPEL : `${TINTA}88`}
-                           border={respuesta.trim() ? "none" : `1px dashed ${TINTA}55`}
-                           borderRadius="xl" borderBottomRightRadius="sm"
-                           px={{ base: 4, md: 4.5 }} py={{ base: 2.5, md: 3 }}
-                           fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" cursor="pointer"
-                           boxShadow={respuesta.trim() ? `0 2px 12px ${TINTA}3a` : "none"}
-                           transition="all 0.16s" _hover={{ transform: "translateY(-1px)", filter: "brightness(1.04)" }}
-                           sx={{ whiteSpace: "pre-wrap" }}>
-                        {respuesta.trim() ? respuesta : "Sin responder — toca para escribir"}
-                      </Box>
-                    </Flex>
-                  )}
-                </Box>
-              );
-            })}
-          </Flex>
+              {/* Ejemplos: 2 boxes blancos, ligeros y pequeños, en horizontal */}
+              <Flex gap={2} mt={2.5} wrap="wrap">
+                {b.ejemplos.slice(0, 2).map((ej, i) => (
+                  <Box key={i} px={2.5} py={1} borderRadius="md"
+                       bg="rgba(255,251,243,0.5)" border={`1px solid ${TINTA}22`}>
+                    <Text color={`${TINTA}cc`} fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
+                          lineHeight="1.3" noOfLines={1}>
+                      {ej}
+                    </Text>
+                  </Box>
+                ))}
+              </Flex>
+            </Box>
+
+            {/* La respuesta */}
+            <Textarea
+              ref={actualRef}
+              value={respuesta}
+              onChange={(e) => onUpdate(b.key, e.target.value)}
+              placeholder={b.placeholder}
+              mt={4}
+              minH={{ base: "120px", md: "150px" }}
+              bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
+              borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+              sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
+                    "&::-webkit-scrollbar": { width: "8px" },
+                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
+              _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+              _hover={{ borderColor: `${TINTA}55` }}
+              _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
+            />
+          </Box>
         </Box>
 
         {/* Footer: navegación abajo del todo + autoguardado */}
@@ -746,10 +527,12 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
                  _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>
               ‹ Anterior
             </Box>
+
             <Flex align="center" gap={2.5} flexShrink={0}>
               <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>
               <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
             </Flex>
+
             <Box as="button" onClick={siguiente}
                  px={{ base: 5, md: 6 }} py={2} borderRadius="full" bg={TINTA} color={PAPEL}
                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}

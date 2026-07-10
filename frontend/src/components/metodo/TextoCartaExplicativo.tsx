@@ -13,7 +13,7 @@ const MAPA4 = "/viñetas/astrologia/astro/mapa4.png";
 const VINETAS: { img: string; texto: string }[] = [
   {
     img: MAPA1,
-    texto: "Tu carta astral te muestra dónde se encuentran tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu experiencia en esta vida. También revela tus heridas más profundas y dónde fueron creadas.",
+    texto: "Tu carta astral te muestra dónde se encuentran tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu experiencia en esta Vida. También revela tus heridas más profundas y dónde fueron creadas.",
   },
   {
     img: MAPA1,

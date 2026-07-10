@@ -11,7 +11,6 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
@@ -538,7 +537,12 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer, onDragStart, onD
            ? `0 0 0 2px ${color}, 0 0 30px ${color}aa, 0 0 60px ${color}55, 0 10px 26px rgba(0,0,0,0.5)`
            : `0 0 18px ${color}55, 0 8px 22px rgba(0,0,0,0.45)`}
          transition="box-shadow 0.16s, border-color 0.16s">
-      <SpaceBg overlay="rgba(8,13,30,0.62)" />
+      {/* Fondo: la misma imagen de astrología que la columna, a opacidad completa.
+          Un velo muy suave mantiene legible la letra blanca sin tapar la imagen. */}
+      <Box position="absolute" inset="0" zIndex={0} borderRadius="14px" overflow="hidden">
+        <Box position="absolute" inset="0" bgImage="url('/img/astrologia/space.jpg')" bgSize="cover" bgPosition="center" />
+        <Box position="absolute" inset="0" bg="rgba(8,13,30,0.28)" />
+      </Box>
       {/* Ojo: abre el popup de ESTA faceta */}
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onLeer(); }}
            position="absolute" top="6px" right="6px" zIndex={2} w="24px" h="24px" borderRadius="full"
@@ -625,7 +629,7 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
                   fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" sx={{ caretColor: TINTA }}
                   _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                   _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,255,255,0.78)" }} />
+                  _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,255,255,0.78)" }} />
       </Box>
     </Box>
   );

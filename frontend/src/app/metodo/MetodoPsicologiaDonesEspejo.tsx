@@ -23,7 +23,6 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
 import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
 import { CUERPOS, cuerpoByKey, type Cuerpo } from "../../components/metodo/astrologiaData";
@@ -98,6 +97,23 @@ const nuevoId = (): string =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
     ? crypto.randomUUID()
     : `d-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+
+// Cada don toma un color propio (tonos medios que destacan sobre el crema).
+const PALETA_DON = [
+  "#caa24a", // oro
+  "#c67b5c", // terracota
+  "#7ba17d", // verde salvia
+  "#8f7bb0", // lavanda
+  "#5c93b0", // azul sereno
+  "#c77b98", // rosa palo
+  "#9aae6a", // oliva
+  "#b0885c", // ámbar tostado
+];
+function colorDon(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return PALETA_DON[h % PALETA_DON.length];
+}
 
 // Coerciona la lista guardada (admite el formato antiguo: string[]).
 function coercionarDones(raw: unknown): DonReconocido[] {
@@ -435,7 +451,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                       ) : (
                         <Flex direction="column" gap={{ base: 4, md: 5 }}>
                           {dones.map((d) => (
-                            <DonCard key={d.id} d={d} activa={d.id === activaId}
+                            <DonCard key={d.id} d={d} activa={d.id === activaId} color={colorDon(d.id)}
                                      onActivar={() => setActivaId(d.id)}
                                      onTexto={(v) => updateTexto(d.id, v)}
                                      onQuitarArq={(a) => removeArq(d.id, a)}
@@ -539,7 +555,12 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
            ? `0 0 0 2px ${color}, 0 0 30px ${color}aa, 0 0 60px ${color}55, 0 10px 26px rgba(0,0,0,0.5)`
            : `0 0 18px ${color}55, 0 8px 22px rgba(0,0,0,0.45)`}
          transition="box-shadow 0.16s, border-color 0.16s">
-      <SpaceBg overlay="rgba(8,13,30,0.62)" />
+      {/* Fondo: la misma imagen de astrología que la columna, a opacidad completa.
+          Un velo muy suave mantiene legible la letra blanca sin tapar la imagen. */}
+      <Box position="absolute" inset="0" zIndex={0} borderRadius="14px" overflow="hidden">
+        <Box position="absolute" inset="0" bgImage="url('/img/astrologia/space.jpg')" bgSize="cover" bgPosition="center" />
+        <Box position="absolute" inset="0" bg="rgba(8,13,30,0.28)" />
+      </Box>
       {/* Ojo: abre la lectura de esta faceta */}
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onLeer(); }}
            position="absolute" top="6px" right="6px" zIndex={2} w="24px" h="24px" borderRadius="full"
@@ -565,8 +586,9 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
 }
 
 // Una etiqueta de don: su nombre + los recuerdos y arquetipos unidos. Editable.
-function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onQuitarRecuerdo, onBorrar }: {
-  d: DonReconocido; activa: boolean;
+// Cada don recibe su propio `color`, que tiñe el marco, el icono y el acento.
+function DonCard({ d, activa, color, onActivar, onTexto, onQuitarArq, onQuitarRecuerdo, onBorrar }: {
+  d: DonReconocido; activa: boolean; color: string;
   onActivar: () => void; onTexto: (v: string) => void;
   onQuitarArq: (a: ArquetipoRef) => void; onQuitarRecuerdo: (t: string) => void; onBorrar: () => void;
 }) {
@@ -574,13 +596,15 @@ function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onQuitarRecuerdo,
   const vacio = d.arquetipos.length === 0 && recuerdos.length === 0;
   return (
     <Box onClick={onActivar} position="relative" borderRadius="xl" overflow="hidden" cursor="pointer"
-         bg="rgba(255,251,243,0.88)" border={`1px solid ${activa ? ORO : `${TINTA}33`}`}
-         boxShadow={activa ? `0 0 0 2px ${ORO}, 0 0 22px ${ORO}55` : `0 2px 12px ${TINTA}1f`}
+         bg="rgba(255,251,243,0.88)"
+         border={`1px solid ${activa ? color : `${TINTA}33`}`}
+         borderLeftWidth="5px" borderLeftColor={color}
+         boxShadow={activa ? `0 0 0 2px ${color}, 0 0 22px ${color}66` : `0 2px 12px ${TINTA}1f`}
          opacity={activa ? 1 : 0.92} transition="all 0.16s">
       <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
         {/* Nombre del don */}
         <Flex align="center" gap={2.5} mb={3}>
-          <DonIcon color={ORO} size={20} glow={`${ORO}66`} />
+          <DonIcon color={color} size={20} glow={`${color}66`} />
           <Input value={d.texto} onChange={(e) => onTexto(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
                  placeholder="Nombra tu don…" variant="unstyled" flex="1"
                  color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
@@ -593,8 +617,8 @@ function DonCard({ d, activa, onActivar, onTexto, onQuitarArq, onQuitarRecuerdo,
         </Flex>
 
         {/* Recuerdos + arquetipos unidos */}
-        <Box borderRadius="lg" border={`1.5px dashed ${activa ? `${ORO}aa` : `${TINTA}33`}`}
-             bg={`${TINTA}06`} px={3} py={2.5} minH="46px">
+        <Box borderRadius="lg" border={`1.5px dashed ${activa ? `${color}aa` : `${TINTA}33`}`}
+             bg={`${color}0f`} px={3} py={2.5} minH="46px">
           {vacio ? (
             <Flex align="center" justify="center" minH="30px" textAlign="center">
               <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">

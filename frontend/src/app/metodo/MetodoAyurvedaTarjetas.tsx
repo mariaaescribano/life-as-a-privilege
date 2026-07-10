@@ -137,20 +137,20 @@ export default function MetodoAyurvedaTarjetas() {
             maxW="680px"
             lineHeight="1.8"
           >
-            Las tres dosha viven en ti, pero unos predominan más que otros. Descúbrelos primero.
+            Los tres Doṣhas viven en ti, pero unos predominan más que otros. Descúbrelos primero.
           </Text>
           </Reveal>
 
           {/* 3 tarjetas · salen una tras otra empezando por la izquierda */}
           <RevealStagger
             w="100%"
-            maxW="1000px"
+            maxW="1040px"
             display="flex"
-            gap={{ base: 5, md: 6 }}
+            gap={{ base: 4, md: 5 }}
             flexDirection={{ base: "column", md: "row" }}
             alignItems="stretch"
             justifyContent="center"
-            mt={{ base: 1, md: 3 }}
+            mt={{ base: 1, md: 2 }}
             stagger={0.18}
             delayChildren={0.2}
           >
@@ -202,36 +202,36 @@ export default function MetodoAyurvedaTarjetas() {
                     </Box>
                   )}
 
-                  <Box position="relative" zIndex={1} px={{ base: 6, md: 7 }} py={{ base: 8, md: 9 }} textAlign="center">
+                  <Box position="relative" zIndex={1} px={{ base: 5, md: 5 }} py={{ base: 5, md: 6 }} textAlign="center">
                     <Flex
                       align="center"
                       justify="center"
-                      w={{ base: "72px", md: "84px" }}
-                      h={{ base: "72px", md: "84px" }}
+                      w={{ base: "56px", md: "62px" }}
+                      h={{ base: "56px", md: "62px" }}
                       mx="auto"
-                      mb={4}
+                      mb={3}
                       borderRadius="full"
                       bg={`${cfg.color}1f`}
                       border={`2px solid ${cfg.color}${destacada ? "" : "66"}`}
                       boxShadow={destacada ? `0 0 18px ${cfg.color}66` : "none"}
                     >
-                      <Icon size="46px" color={cfg.color} />
+                      <Icon size="34px" color={cfg.color} />
                     </Flex>
 
-                    <Text color={cfg.color} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" fontStyle="italic" letterSpacing="0.08em" lineHeight="1">
+                    <Text color={cfg.color} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" fontStyle="italic" letterSpacing="0.08em" lineHeight="1">
                       {cfg.label}
                     </Text>
-                    <Text color={`${ayurvedaTxt}aa`} fontSize={{ base: "xs", md: "sm" }} fontWeight="600" letterSpacing="0.18em" textTransform="uppercase" mt={2}>
+                    <Text color={`${ayurvedaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.18em" textTransform="uppercase" mt={2}>
                       {cfg.elemento}
                     </Text>
 
-                    <Box h="1px" w="60%" mx="auto" my={4} bgGradient={`linear(to-r, transparent, ${cfg.color}88, transparent)`} />
+                    <Box h="1px" w="60%" mx="auto" my={3} bgGradient={`linear(to-r, transparent, ${cfg.color}88, transparent)`} />
 
-                    <Text color={ayurvedaTxt} fontSize={{ base: "md", md: "md" }} lineHeight="1.7">
+                    <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.5">
                       {cfg.esencia}
                     </Text>
 
-                    <Text mt={5} color={cfg.color} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.05em">
+                    <Text mt={4} color={cfg.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.05em">
                       Descubrir {cfg.label} →
                     </Text>
                   </Box>

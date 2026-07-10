@@ -243,6 +243,13 @@ export default function MetodoAyurvedaDoshaDia() {
           />
           </Reveal>
 
+          {/* Recordatorio de los compromisos + carta escritos en Psicología.
+              Va ENCIMA del hero «Crea tu día» para que el usuario relea su
+              compromiso consigo mismo antes de diseñar su día. */}
+          <Reveal direction="up" distance={22} duration={0.6} w="100%">
+          <CompromisosBox />
+          </Reveal>
+
           {/* HERO (primer box: entra al montar, siempre visible) */}
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
@@ -256,11 +263,6 @@ export default function MetodoAyurvedaDoshaDia() {
               </Text>
             </Flex>
           </Panel>
-          </Reveal>
-
-          {/* Recordatorio de los compromisos escritos en Psicología */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
-          <CompromisosBox />
           </Reveal>
 
           {/* TU DÍA (lista editable) */}
@@ -312,7 +314,21 @@ export default function MetodoAyurvedaDoshaDia() {
                 </Flex>
               </Flex>
             ) : (
-              <Flex direction="column" gap={3.5}>
+              <Flex
+                direction="column"
+                gap={3.5}
+                // Si el usuario añade muchos momentos, la lista no crece sin
+                // límite: se vuelve scrollable dentro del box.
+                maxH={{ base: "460px", md: "560px" }}
+                overflowY="auto"
+                pr={{ base: 1, md: 2 }}
+                sx={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: `${ayurvedaTxt}99 transparent`,
+                  "&::-webkit-scrollbar": { width: "8px" },
+                  "&::-webkit-scrollbar-thumb": { background: `${ayurvedaTxt}66`, borderRadius: "9999px" },
+                }}
+              >
                 {ordenados.map((b) => (
                   <Flex key={b.id} align="flex-start" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
                         borderRadius="xl" bg="rgba(255,251,243,0.42)" border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}

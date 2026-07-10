@@ -387,9 +387,6 @@ export const HERIDAS_LISTA = {
 export const NUDOS = {
   titulo: "Nudos",
   intro: [] as string[],
-  // Propósito de la página (se muestra bajo la pregunta principal).
-  proposito:
-    "Descubre las decisiones inconscientes, creencias y mecanismos de supervivencia que nacieron de esas experiencias.",
   apoyo:
     "Un nudo puede ser un miedo, una herida, una creencia, un conflicto repetido o una dificultad que parece acompañarte desde hace años. No busques explicaciones perfectas. Simplemente observa aquello que sientes presente en tu vida hoy.",
   pregunta: "¿Qué conflictos o nudos hay en tu Vida?",
@@ -722,8 +719,12 @@ export const donesRespondidas = (data: LineaDeVidaData): number =>
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface RegulacionData {
-  /** Lo que la persona escribe durante la descarga (autoguardado). */
+  /** Lo que la persona escribe durante la descarga (autoguardado). Legado: un
+   *  único bloque. Se conserva para compatibilidad y como copia unificada. */
   texto?: string;
+  /** Fragmentos de escritura: la persona puede añadir tantos boxes como quiera,
+   *  uno debajo de otro. Cada string es un fragmento independiente. */
+  fragmentos?: string[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -1032,7 +1033,7 @@ export const REGULACION = {
     ],
   },
   // Placeholder del área de escritura.
-  placeholder: "Escribe lo que necesites soltar…",
+  placeholder: "Escribe lo que recuerdes…",
   // Botón de parada (siempre visible).
   botonParar: "Necesito parar",
   // Cierre de grounding: para volver al cuerpo y al presente antes de salir.

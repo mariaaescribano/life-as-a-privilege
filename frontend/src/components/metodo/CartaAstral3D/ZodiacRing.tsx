@@ -1,8 +1,20 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { ZODIAC_SIGNS } from "../astrologiaData";
 import { gradoAVisualRad } from "./types";
 void React;
+
+// Entrada «giro fantasma»: el anillo GIRA hasta encajar, pero va etéreo (muy
+// tenue) mientras gira —cuando sus líneas de signos aún no coinciden con casas
+// y planetas— y CRISTALIZA nítido justo al alinearse. Como la rotación decelera
+// (easeOutCubic), para cuando sube la opacidad ya está casi en su sitio, así que
+// el desajuste no se percibe. Se conserva la sensación de movimiento sin el bug.
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+const SPIN_DUR = 1.6;              // dura un poco más para disfrutar el giro
+const SPIN_FROM = Math.PI * 1.5;   // gira ~270° hasta encajar
+const GHOST = 0.16;                // opacidad tenue mientras gira (oculta el desajuste)
+const CRISP_FROM = 0.7;            // a partir de aquí (ya casi alineado) se vuelve nítido
 
 interface ZodiacRingProps {
   innerRadius: number;
@@ -111,12 +123,32 @@ export function ZodiacRing({ innerRadius, outerRadius, cusps }: ZodiacRingProps)
     [cusps, innerRadius, outerRadius],
   );
 
+  const meshRef = useRef<THREE.Mesh>(null);
+  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const elapsed = useRef(0);
+
+  useFrame((_, delta) => {
+    if (elapsed.current > SPIN_DUR) return; // ya asentado: no seguir calculando
+    elapsed.current += delta;
+    const p = Math.min(1, elapsed.current / SPIN_DUR);
+    // Rotación que decelera hasta encajar.
+    if (meshRef.current) meshRef.current.rotation.z = SPIN_FROM * (1 - easeOutCubic(p));
+    // Opacidad: tenue («fantasma») mientras gira; nítida al final, ya alineado.
+    if (matRef.current) {
+      matRef.current.opacity = p < CRISP_FROM
+        ? GHOST * easeOutCubic(Math.min(1, p / 0.2))               // aparece el fantasma
+        : GHOST + (1 - GHOST) * easeOutCubic((p - CRISP_FROM) / (1 - CRISP_FROM)); // cristaliza
+    }
+  });
+
   return (
-    <mesh>
+    <mesh ref={meshRef}>
       <ringGeometry args={[innerRadius, outerRadius, 128, 1]} />
       <meshBasicMaterial
+        ref={matRef}
         map={texture}
         transparent
+        opacity={0}
         side={THREE.DoubleSide}
         toneMapped={false}
       />

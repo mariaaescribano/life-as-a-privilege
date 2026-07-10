@@ -506,6 +506,54 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  compromiso: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Pon en palabras lo que te faltó y un gesto concreto para dártelo hoy.",
+        "Por ejemplo: «Necesité que me dijeran que estaba bien equivocarme» → «Hoy, cuando falle, me hablaré con la misma suavidad con la que hablaría a un amigo.»",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Responde las dos preguntas con calma: qué necesitaste y cómo empezar a dártelo hoy.",
+        "No busques grandes propósitos: un gesto pequeño y real vale más.",
+        "Todo se guarda solo; pulsa Guardar cuando quieras.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "El compromiso no es contigo del pasado, sino contigo de hoy.",
+        "Elige algo que puedas cumplir de verdad: cuidarte se entrena en lo pequeño.",
+      ],
+    },
+  },
+  brujula: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Escríbete un mensaje para tu yo del futuro, para cuando vuelvas a bloquearte.",
+        "Por ejemplo: «Cuando sientas que no puedes, recuerda que ya cruzaste esto antes. Respira, pide ayuda y da un solo paso.»",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Escribe con tus palabras lo que te gustaría recordar en un momento difícil.",
+        "Háblate con cariño, como le hablarías a alguien a quien quieres.",
+        "Se guarda solo; podrás releerlo siempre que lo necesites.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No es para juzgarte: es para recordarte el camino que ya conoces.",
+        "Escríbelo desde tu parte más serena, la que sabe que esto también pasará.",
+      ],
+    },
+  },
   sintesis: {
     ejemplo: {
       titulo: "Un ejemplo",
@@ -558,7 +606,7 @@ function BotonAyuda({ children, onClick }: { children: React.ReactNode; onClick:
  *  reserva de llamada para hacer el recorrido acompañado) y «Orientación» (que
  *  abre un popup con un curso de acceso libre). El resto de páginas mantiene los
  *  3 botones informativos de siempre. */
-export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRIDO }) {
+export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof typeof AYUDA_RECORRIDO; ocultarCompania?: boolean }) {
   const [abierto, setAbierto] = useState<keyof Ayuda | null>(null);
   // Popups especiales de la página inicio.
   const [acompPreguntaOpen, setAcompPreguntaOpen] = useState(false); // paso previo "¿Necesitas ayuda?"
@@ -601,7 +649,9 @@ export function AyudaRecorrido({ pagina }: { pagina: keyof typeof AYUDA_RECORRID
         ) : (
           <>
             <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>Ejemplo</BotonAyuda>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
+            {!ocultarCompania && (
+              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
+            )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
               else if (curso) setCursoOpen(true);

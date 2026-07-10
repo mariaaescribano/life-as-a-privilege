@@ -159,9 +159,6 @@ export default function MetodoPsicologiaNudos() {
                       {NUDOS.pregunta}
                     </Text>
                   </Flex>
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                    {NUDOS.proposito}
-                  </Text>
                 </Flex>
 
                 {/* Entrada para añadir nudos */}
@@ -182,7 +179,7 @@ export default function MetodoPsicologiaNudos() {
                     sx={{ caretColor: TINTA }}
                     _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                     _hover={{ borderColor: `${TINTA}55` }}
-                    _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.85)" }}
+                    _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.85)" }}
                   />
                   <Box
                     as="button"

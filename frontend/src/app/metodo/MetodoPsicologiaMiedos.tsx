@@ -191,7 +191,7 @@ export default function MetodoPsicologiaMiedos() {
                     sx={{ caretColor: TINTA }}
                     _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                     _hover={{ borderColor: `${TINTA}55` }}
-                    _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.85)" }}
+                    _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.85)" }}
                   />
                   <Box
                     as="button"

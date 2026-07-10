@@ -21,6 +21,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import {
   experienciaById,
   type LineaDeVidaData,
@@ -175,7 +176,7 @@ export default function MetodoPsicologiaBrujula() {
                         "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
                   _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                   _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: `${TINTA}88`, boxShadow: `0 0 0 1px ${TINTA}33`, bg: "rgba(255,251,243,0.92)" }}
+                  _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
                 />
 
                 {/* Guardado manual: botón abajo a la derecha (no se guarda al escribir) */}
@@ -210,7 +211,7 @@ export default function MetodoPsicologiaBrujula() {
             <Reveal direction="up" distance={20} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.7" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Esta es tu guía práctica para no olvidar lo aprendido. Vuelve a ella siempre que la necesites.
+              Gracias por no abandonarte.
             </Text>
             </Reveal>
 
@@ -220,6 +221,7 @@ export default function MetodoPsicologiaBrujula() {
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 
+      <AyudaRecorrido pagina="brujula" ocultarCompania />
       <SiteFooter />
     </Box>
   );

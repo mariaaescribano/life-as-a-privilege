@@ -250,10 +250,11 @@ export default function MetodoTcmElementos() {
                               stroke={leido ? "white" : activo ? color : `${tcmTxt}55`}
                               strokeWidth={leido ? 3 : 2}
                               style={activo ? { filter: `drop-shadow(0 0 5px ${color})` } : undefined} />
-                      {/* candado si bloqueado */}
+                      {/* candado si bloqueado (icono blanco, no emoji) */}
                       {!activo && (
-                        <text x={v.x} y={v.y} fill="white" fontSize={16}
-                              textAnchor="middle" dominantBaseline="central">🔒</text>
+                        <path fill="white"
+                              transform={`translate(${v.x} ${v.y}) scale(0.021) translate(-480 500)`}
+                              d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
                       )}
                       {/* insignia ✓ si leído */}
                       {leido && (
