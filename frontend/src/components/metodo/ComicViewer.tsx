@@ -444,6 +444,13 @@ export function ComicViewer({
                 ? `${disciplinaBgColor}${fondoNitido ? "30" : "55"}`
                 : "rgba(8,13,30,0.55)"}
             />
+            {/* Velo oscuro en TODAS las viñetas del cómic de TCM (fondoNitido),
+                para que el texto y las opciones se lean bien sobre la pintura.
+                Opacidad ~20% menor que la del test para que no quede tan oscuro. */}
+            {fondoNitido && (
+              <Box position="absolute" inset="0"
+                   bgGradient="linear(to-b, rgba(0,0,0,0.53), rgba(0,0,0,0.4))" />
+            )}
           </Box>
 
           {!isDisciplinaMode && <Stars />}

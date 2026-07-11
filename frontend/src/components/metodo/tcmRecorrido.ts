@@ -50,7 +50,11 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 export const TCM_INDICE: PasoRecorrido[] = [
   { n: 1, titulo: "Medicina China",     ruta: () => "/metodo/tcm" },
   { n: 2, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
-  { n: 3, titulo: "Tu perfil energético", ruta: () => "/metodo/tcm/perfil" },
+  { n: 3, titulo: "Equilibrio", ruta: () => "/metodo/tcm/perfil" },
+  { n: 4, titulo: "Los ciclos", ruta: () => "/metodo/tcm/ciclos" },
+  { n: 5, titulo: "Diagnóstico final", ruta: () => "/metodo/tcm/diagnostico" },
+  { n: 6, titulo: "Tu lengua", ruta: () => "/metodo/tcm/lengua" },
+  { n: 7, titulo: "Lee tu lengua", ruta: () => "/metodo/tcm/lengua/leer" },
 ];
 
 export const TCM_TOTAL = TCM_INDICE.length;
@@ -1275,6 +1279,38 @@ export function balanceElemento(
   if (!alguna) return null;
   const orden: Balance[] = ["exceso", "deficiencia", "equilibrio"];
   return orden.reduce((max, b) => (conteo[b] > conteo[max] ? b : max), "equilibrio" as Balance);
+}
+
+/** Conteo de respuestas por estado (A/B/C) de los tests de balance del elemento. */
+export function conteoBalance(
+  el: Elemento,
+  respuestas: Record<string, string> | undefined,
+): { equilibrio: number; exceso: number; deficiencia: number; total: number } {
+  const c = { equilibrio: 0, exceso: 0, deficiencia: 0, total: 0 };
+  if (!respuestas) return c;
+  for (const t of testsDeElemento(el)) {
+    for (const q of t.preguntas) {
+      const op = q.opciones.find((o) => o.key === respuestas[q.key]);
+      if (!op) continue;
+      c[op.balance] += 1;
+      c.total += 1;
+    }
+  }
+  return c;
+}
+
+/**
+ * Posición del elemento en el eje Deficiencia (−1) ↔ Equilibrio (0) ↔ Exceso (+1),
+ * a partir de sus respuestas de balance. `null` si aún no hay respuestas.
+ * Es lo que alimenta las barras/termómetro del perfil.
+ */
+export function posicionBalance(
+  el: Elemento,
+  respuestas: Record<string, string> | undefined,
+): number | null {
+  const c = conteoBalance(el, respuestas);
+  if (c.total === 0) return null;
+  return (c.exceso - c.deficiencia) / c.total;
 }
 
 /** Puntos de un elemento usando sus tests de balance si existen; si no, el

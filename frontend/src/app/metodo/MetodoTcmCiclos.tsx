@@ -1,0 +1,129 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import axios from "axios";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceTcm } from "../../components/metodo/IndiceTcm";
+import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
+import { CICLO_SHENG, CICLO_KE, type Elemento } from "../../components/metodo/tcmRecorrido";
+import { EstrellaCiclo, RelacionBox, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
+
+const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
+
+export default function MetodoTcmCiclos() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [sel, setSel] = useState<Relacion | null>(null);
+  const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) { navigate("/welcome"); return; }
+
+    (async () => {
+      try {
+        const me = await axios.get(`${API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
+      } catch {
+        navigate("/metodo/tcm");
+        return;
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [navigate]);
+
+  const abrir = (ciclo: Ciclo, origen: Elemento) => {
+    const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
+    setSel({ ciclo, origen, destino });
+  };
+
+  if (loading) {
+    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  }
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
+
+          <MetodoStepHeader
+            icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
+            title="Equilibrio y desequilibrio"
+            pageLabel="8/12"
+            compact
+            bgColor={`${tcmBg}dd`}
+            color={tcmTxt}
+            nom={tcmNom}
+            mb={0}
+            prev={{ label: "← Equilibrio", onClick: () => navigate("/metodo/tcm/perfil") }}
+            extra={ilustracionesBtn}
+            next={{ label: "Diagnóstico final →", onClick: () => navigate("/metodo/tcm/diagnostico") }}
+          />
+
+          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                textAlign="center" maxW="640px" style={{ textShadow: INK_SHADOW }}>
+            Los Cinco Elementos no viven aislados: se relacionan en dos ciclos. Cuando
+            fluyen, hay equilibrio; cuando se alteran, aparece el desequilibrio. Toca
+            cada rayita para descubrir la relación.
+          </Text>
+
+          {/* ── Las dos estrellas ── */}
+          <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
+            <EstrellaCiclo
+              titulo="Ciclo generador"
+              pinyin="Sheng"
+              hanzi="生"
+              subtitulo=""
+              ciclo="sheng"
+              onEdge={abrir}
+            />
+            <EstrellaCiclo
+              titulo="Ciclo de control"
+              pinyin="Ke"
+              hanzi="克"
+              subtitulo=""
+              ciclo="ke"
+              onEdge={abrir}
+            />
+          </Flex>
+
+          <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="640px"
+                lineHeight="1.6">
+            En el ciclo generador la energía avanza por el perímetro (Madera → Fuego →
+            Tierra → Metal → Agua). En el ciclo de control cruza la estrella: cada
+            elemento frena al que tiene enfrente para mantener el conjunto en armonía.
+          </Text>
+        </Flex>
+      </Flex>
+
+      {ilustracionesModal}
+
+      {/* ── Box de ilustración: la relación entre los dos elementos ── */}
+      <Modal isOpen={!!sel} onClose={() => setSel(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
+        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(14px)" }} />
+        <ModalContent bg="transparent" border="none" boxShadow="none" fontFamily="'EB Garamond', serif"
+                      mx={4} my={{ base: 6, md: 10 }}>
+          {sel && <RelacionBox rel={sel} onClose={() => setSel(null)} />}
+        </ModalContent>
+      </Modal>
+
+      <IndiceTcm />
+
+      <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
+
+      <SiteFooter />
+    </Box>
+  );
+}

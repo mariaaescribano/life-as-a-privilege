@@ -84,6 +84,10 @@ import MetodoTcm from "./app/metodo/MetodoTcm";
 import MetodoTcmElementos from "./app/metodo/MetodoTcmElementos";
 import MetodoTcmElemento from "./app/metodo/MetodoTcmElemento";
 import MetodoTcmPerfil from "./app/metodo/MetodoTcmPerfil";
+import MetodoTcmCiclos from "./app/metodo/MetodoTcmCiclos";
+import MetodoTcmDiagnostico from "./app/metodo/MetodoTcmDiagnostico";
+import MetodoTcmLengua from "./app/metodo/MetodoTcmLengua";
+import MetodoTcmLenguaLeer from "./app/metodo/MetodoTcmLenguaLeer";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -196,6 +200,10 @@ export default function App()
       <Route path="/metodo/tcm/elementos" element={<PrivateRoute><MetodoTcmElementos /></PrivateRoute>} />
       <Route path="/metodo/tcm/elemento/:elemento" element={<PrivateRoute><MetodoTcmElemento /></PrivateRoute>} />
       <Route path="/metodo/tcm/perfil" element={<PrivateRoute><MetodoTcmPerfil /></PrivateRoute>} />
+      <Route path="/metodo/tcm/ciclos" element={<PrivateRoute><MetodoTcmCiclos /></PrivateRoute>} />
+      <Route path="/metodo/tcm/diagnostico" element={<PrivateRoute><MetodoTcmDiagnostico /></PrivateRoute>} />
+      <Route path="/metodo/tcm/lengua" element={<PrivateRoute><MetodoTcmLengua /></PrivateRoute>} />
+      <Route path="/metodo/tcm/lengua/leer" element={<PrivateRoute><MetodoTcmLenguaLeer /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

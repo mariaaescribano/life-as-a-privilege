@@ -523,14 +523,14 @@ export const CONTENIDO_ELEMENTOS: Record<Elemento, ContenidoElementoRico> = {
   madera, fuego, tierra, metal, agua,
 };
 
-// Fotos artísticas de cada elemento (/public/img/tcm). Se usan como fondo de las
-// viñetas del cómic de cada elemento. Madera = verde.png.
+// Fotos artísticas de cada elemento (/public/recorrido/tcm/fondos). Se usan como
+// fondo de las viñetas del cómic de cada elemento. Madera = verde.png.
 export const FOTO_ELEMENTO: Record<Elemento, string> = {
-  madera: "/img/tcm/verde.png",
-  fuego: "/img/tcm/fuego.png",
-  tierra: "/img/tcm/tierra.png",
-  metal: "/img/tcm/metal.png",
-  agua: "/img/tcm/agua.png",
+  madera: "/recorrido/tcm/fondos/verde.png",
+  fuego: "/recorrido/tcm/fondos/fuego.png",
+  tierra: "/recorrido/tcm/fondos/tierra.png",
+  metal: "/recorrido/tcm/fondos/metal.png",
+  agua: "/recorrido/tcm/fondos/agua.png",
 };
 
 // Iconos circulares de cada elemento (/public/recorrido/tcm/icons). Van dentro de

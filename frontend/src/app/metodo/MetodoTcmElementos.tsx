@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, Modal, ModalOverlay, ModalContent, IconButton } from "@chakra-ui/react";
+import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,27 +9,21 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
-import { ComicViewer } from "../../components/metodo/ComicViewer";
+import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
-  ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido,
-  viajeCompleto, testsDeElemento, testCompleto, puntosElemento,
-  type DatosTcm, type Elemento, type PreguntaTest, type TestElemento,
+  ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido, viajeCompleto,
+  type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
-import { tieneContenido, COMIC_INTRO_ELEMENTOS, FOTO_ELEMENTO, ICONO_ELEMENTO, COMIC_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { tieneContenido, COMIC_INTRO_ELEMENTOS, ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
-// Preposición del título del test según el género del elemento ("de la Madera",
-// "del Fuego"…), para que quede "TEST DE LA MADERA".
-const TEST_PREP: Record<Elemento, string> = {
-  madera: "de la", fuego: "del", tierra: "de la", metal: "del", agua: "del",
-};
 // Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
-const CX = 160, CY = 170, R = 120, FOTO_R = 24;
+const CX = 160, CY = 170, R = 120, FOTO_R = 32;
 function vertice(i: number, radio: number) {
   const ang = (-90 + i * 72) * (Math.PI / 180);
   return { x: CX + radio * Math.cos(ang), y: CY + radio * Math.sin(ang) };
@@ -41,8 +35,6 @@ export default function MetodoTcmElementos() {
   const [data, setData] = useState<DatosTcm>({});
   const [comicEl, setComicEl] = useState<Elemento | null>(null);
   const [introIdx, setIntroIdx] = useState(0);
-  // Respuestas del mini-test embebido en el cómic del elemento abierto.
-  const [respuestasTest, setRespuestasTest] = useState<Record<string, string>>({});
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -74,54 +66,11 @@ export default function MetodoTcmElementos() {
     disponible: tieneContenido(el),
   })), [data]);
 
-  // Pinchar un elemento abre su cómic (no navega a otra página). Prerrellenamos
-  // el mini-test con lo que ya se hubiese respondido, para que no se repita.
+  // Pinchar un elemento abre su cómic (no navega a otra página). El autoguardado,
+  // los tests y el "marcar como leído" los gestiona ElementoComicModal.
   const abrir = (el: Elemento, desbloqueado: boolean, disponible: boolean) => {
     if (!desbloqueado || !disponible) return;
-    setRespuestasTest(data.elementos?.[el]?.miniTest?.respuestas ?? {});
     setComicEl(el);
-  };
-
-  // Persiste el estado del elemento (respuestas + puntos, y opcionalmente leído).
-  // Se llama en CADA respuesta (autoguardado) y al terminar el cómic. Los puntos
-  // salen de los tests de balance del elemento (o del mini-test antiguo si aún no
-  // están migrados) y alimentan el radar/perfil.
-  const persistir = async (el: Elemento, respuestas: Record<string, string>, leido?: boolean) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-    const puntos = puntosElemento(el, respuestas);
-    const next: DatosTcm = {
-      ...data,
-      elementos: {
-        ...data.elementos,
-        [el]: {
-          ...data.elementos?.[el],
-          ...(leido ? { leido: true } : {}),
-          miniTest: { respuestas, puntos },
-        },
-      },
-    };
-    setData(next);
-    if (userId && token) {
-      try {
-        await axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
-          { headers: { Authorization: `Bearer ${token}` } });
-      } catch { /* el estado local ya refleja el cambio */ }
-    }
-  };
-
-  // Autoguardado: cada vez que el usuario marca una opción, se guarda al instante.
-  const elegirTest = (preguntaKey: string, opcionKey: string) => {
-    if (!comicEl) return;
-    const next = { ...respuestasTest, [preguntaKey]: opcionKey };
-    setRespuestasTest(next);
-    void persistir(comicEl, next);
-  };
-
-  // Al terminar el cómic, marcamos el elemento como leído (✓ + desbloquea el
-  // siguiente). Las respuestas ya se fueron guardando en cada paso.
-  const marcarLeido = async (el: Elemento) => {
-    await persistir(el, respuestasTest, true);
   };
 
   if (loading) {
@@ -221,7 +170,7 @@ export default function MetodoTcmElementos() {
             </Flex>
           </Box>
 
-          <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="560px" lineHeight="1.6">
+          <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="560px" lineHeight="1.8">
             Los elementos se abren en orden (Madera → Fuego → Tierra → Metal → Agua). Al leer cada uno, se marca con ✓.
           </Text>
 
@@ -264,8 +213,8 @@ export default function MetodoTcmElementos() {
                   {/* Texto — misma tipografía que el cómic de Astrología
                       (ComicViewer): grande, ligero, con aire entre líneas. */}
                   <Flex direction="column" gap={3} flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
-                    <Text key={`txt-${introIdx}`} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
-                          letterSpacing="0.02em" fontWeight="400" textAlign={{ base: "center", md: "left" }}
+                    <Text key={`txt-${introIdx}`} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="2.15"
+                          letterSpacing="0.03em" fontWeight="400" textAlign={{ base: "center", md: "left" }}
                           style={{ textShadow: INK_SHADOW }}>
                       {vin.texto}
                     </Text>
@@ -339,79 +288,12 @@ export default function MetodoTcmElementos() {
       {ilustracionesModal}
 
       {/* Cómic del elemento: fondo y box con la foto del elemento; cerrable en cualquier momento. */}
-      <Modal isOpen={!!comicEl} onClose={() => setComicEl(null)} size="full" scrollBehavior="outside">
-        <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
-        <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100vh" position="relative">
-          {comicEl && (() => {
-            const pasos = COMIC_ELEMENTO[comicEl];
-            const tests = testsDeElemento(comicEl);
-            const miniTest = ELEMENTOS[comicEl].miniTest; // legacy (elementos sin migrar)
-            const vinetas = pasos.map((p) => ({
-              src: p.src,
-              paragraphs: p.tipo === "vineta" ? p.paragraphs : (p.intro ?? []),
-            }));
-            const legacyRespondido = miniTest.every((q) => !!respuestasTest[q.key]);
-            // Test (de balance) que corresponde a una página de test concreta.
-            const testDePaso = (i: number): TestElemento | null => {
-              const p = pasos[i];
-              if (p?.tipo !== "test" || !p.testKey) return null;
-              return tests.find((t) => t.key === p.testKey) ?? null;
-            };
-            const cabecera = `Test ${TEST_PREP[comicEl]} ${ELEMENTOS[comicEl].nombre}`;
-            return (
-              <ComicViewer
-                key={comicEl}
-                vinetas={vinetas}
-                themeColor={ELEMENTOS[comicEl].color}
-                textColor="#ffffff"
-                disciplinaBgImage={FOTO_ELEMENTO[comicEl]}
-                disciplinaBgColor={ELEMENTOS[comicEl].color}
-                fondoNitido
-                bloqueado={(i) => {
-                  if (pasos[i]?.tipo !== "test") return false;
-                  const t = testDePaso(i);
-                  return t ? !testCompleto(t, respuestasTest) : !legacyRespondido;
-                }}
-                sinFoto={(i) => pasos[i]?.tipo === "test"}
-                separarFrases
-                pageExtra={(i, api) => {
-                  if (pasos[i]?.tipo !== "test") return null;
-                  const t = testDePaso(i);
-                  if (t) {
-                    const idx = tests.findIndex((x) => x.key === t.key);
-                    return (
-                      <TestBalanceComic
-                        key={t.key}
-                        test={t}
-                        testNum={idx + 1}
-                        testTotal={tests.length}
-                        cabecera={cabecera}
-                        respuestas={respuestasTest}
-                        onElegir={elegirTest}
-                        color={ELEMENTOS[comicEl].color}
-                        completo={testCompleto(t, respuestasTest)}
-                        onContinuar={api.goNext}
-                      />
-                    );
-                  }
-                  // Fallback: mini-test antiguo (elementos aún sin migrar).
-                  return (
-                    <MiniTestComic
-                      titulo={cabecera}
-                      preguntas={miniTest}
-                      respuestas={respuestasTest}
-                      onElegir={elegirTest}
-                      color={ELEMENTOS[comicEl].color}
-                    />
-                  );
-                }}
-                onClose={() => setComicEl(null)}
-                onComplete={() => { const el = comicEl; setComicEl(null); if (el) void marcarLeido(el); }}
-              />
-            );
-          })()}
-        </ModalContent>
-      </Modal>
+      <ElementoComicModal
+        elemento={comicEl}
+        data={data}
+        onChangeData={setData}
+        onClose={() => setComicEl(null)}
+      />
 
       <IndiceTcm />
 
@@ -419,205 +301,5 @@ export default function MetodoTcmElementos() {
 
       <SiteFooter />
     </Box>
-  );
-}
-
-// ── Mini-test embebido en el cómic del elemento ────────────────────────────
-// Se pinta bajo el texto de la viñeta de test. Mientras falte alguna respuesta,
-// ComicViewer bloquea el avance (ver `bloqueado`). Al terminar el cómic, las
-// respuestas se guardan y sus puntos se suman a la puntuación del recorrido.
-function MiniTestComic({
-  titulo,
-  preguntas,
-  respuestas,
-  onElegir,
-  color,
-}: {
-  titulo: string;
-  preguntas: PreguntaTest[];
-  respuestas: Record<string, string>;
-  onElegir: (preguntaKey: string, opcionKey: string) => void;
-  color: string;
-}) {
-  const faltan = preguntas.some((q) => !respuestas[q.key]);
-  return (
-    <Flex direction="column" gap={5} textAlign="left">
-      {/* Título del test + separación horizontal */}
-      <Box>
-        <Text
-          color="white"
-          fontSize={{ base: "lg", md: "2xl" }}
-          fontWeight="800"
-          letterSpacing="0.14em"
-          textAlign="center"
-          textTransform="uppercase"
-          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}
-        >
-          {titulo}
-        </Text>
-        <Box
-          mt={3}
-          h="1px"
-          w="100%"
-          bgGradient={`linear(to-r, transparent, ${color}cc, transparent)`}
-        />
-      </Box>
-
-      {preguntas.map((q, i) => (
-        <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={2.5}
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
-            {i + 1}. {q.pregunta}
-          </Text>
-          <Flex direction="column" gap={2}>
-            {q.opciones.map((op) => {
-              const sel = respuestas[q.key] === op.key;
-              return (
-                <Box
-                  key={op.key}
-                  as="button"
-                  onClick={() => onElegir(q.key, op.key)}
-                  textAlign="left"
-                  px={{ base: 3.5, md: 4 }}
-                  py={{ base: 2, md: 2.5 }}
-                  borderRadius="lg"
-                  bg={sel ? `${color}44` : "rgba(255,255,255,0.08)"}
-                  border={`1px solid ${sel ? color : "rgba(255,255,255,0.15)"}`}
-                  color="white"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.5"
-                  cursor="pointer"
-                  transition="all 0.15s"
-                  boxShadow={sel ? `0 0 14px ${color}88` : "none"}
-                  _hover={{ bg: sel ? `${color}55` : "rgba(255,255,255,0.14)" }}
-                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
-                >
-                  {op.texto}
-                </Box>
-              );
-            })}
-          </Flex>
-        </Box>
-      ))}
-      <Text color="rgba(255,255,255,0.75)" fontSize="xs" fontStyle="italic"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
-        {faltan ? "Responde para continuar →" : "¡Listo! Ya puedes continuar →"}
-      </Text>
-
-    </Flex>
-  );
-}
-
-// ── Test de balance (A/B/C = equilibrio/exceso/deficiencia) ─────────────────
-// Cabecera + subtítulo + separador + preguntas. El botón va abajo a la derecha:
-// "Guardar" → muestra "Guardado ✓" y pasa a "Continuar →" (avanza el cómic). Las
-// respuestas se autoguardan en cada clic (ver elegirTest), así que Guardar es
-// solo la confirmación visual antes de continuar.
-function TestBalanceComic({
-  test, testNum, testTotal, cabecera, respuestas, onElegir, color, completo, onContinuar,
-}: {
-  test: TestElemento;
-  testNum: number;
-  testTotal: number;
-  cabecera: string;
-  respuestas: Record<string, string>;
-  onElegir: (preguntaKey: string, opcionKey: string) => void;
-  color: string;
-  completo: boolean;
-  onContinuar: () => void;
-}) {
-  const [guardado, setGuardado] = useState(false);
-  return (
-    <Flex direction="column" gap={5} textAlign="left">
-      {/* Cabecera + subtítulo + separación horizontal */}
-      <Box>
-        <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="800"
-              letterSpacing="0.14em" textAlign="center" textTransform="uppercase"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
-          {cabecera}{testTotal > 1 ? ` · ${testNum} de ${testTotal}` : ""}
-        </Text>
-        {test.titulo && (
-          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                textAlign="center" mt={1.5} style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
-            {test.titulo}
-          </Text>
-        )}
-        <Box mt={3} h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${color}cc, transparent)`} />
-      </Box>
-
-      {test.preguntas.map((q, i) => (
-        <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={3}
-                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.95)" }}>
-            {i + 1}. {q.pregunta}{q.opcional ? " (opcional)" : ""}
-          </Text>
-          <Flex direction="column" gap={2}>
-            {q.opciones.map((op) => {
-              const sel = respuestas[q.key] === op.key;
-              return (
-                <Box
-                  key={op.key}
-                  as="button"
-                  onClick={() => { setGuardado(false); onElegir(q.key, op.key); }}
-                  textAlign="left"
-                  px={{ base: 4, md: 5 }}
-                  py={{ base: 2.5, md: 3 }}
-                  borderRadius="lg"
-                  bg={sel ? `${color}66` : "rgba(0,0,0,0.42)"}
-                  border={`1px solid ${sel ? color : "rgba(255,255,255,0.22)"}`}
-                  color="white"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight="1.55"
-                  cursor="pointer"
-                  transition="all 0.15s"
-                  boxShadow={sel ? `0 0 14px ${color}88` : "none"}
-                  _hover={{ bg: sel ? `${color}77` : "rgba(0,0,0,0.55)" }}
-                  // Blur del fondo tras la opción → la letra se lee mucho mejor
-                  // sobre la foto del elemento.
-                  sx={{ backdropFilter: "blur(8px)" }}
-                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}
-                >
-                  {op.texto}
-                </Box>
-              );
-            })}
-          </Flex>
-        </Box>
-      ))}
-
-      {/* Botón abajo a la derecha: Guardar → Guardado ✓ → Continuar → */}
-      <Flex justify="flex-end" align="center" gap={3} mt={1}>
-        {guardado && (
-          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
-                style={{ textShadow: `0 1px 4px rgba(0,0,0,0.85), 0 0 12px ${color}` }}>
-            Guardado ✓
-          </Text>
-        )}
-        <Box
-          as="button"
-          onClick={() => { if (guardado) { onContinuar(); } else if (completo) { setGuardado(true); } }}
-          opacity={!guardado && !completo ? 0.45 : 1}
-          cursor={!guardado && !completo ? "not-allowed" : "pointer"}
-          px={8}
-          py={3}
-          borderRadius="full"
-          bg={`${color}33`}
-          border={`1px solid ${color}`}
-          color="white"
-          fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "md", md: "lg" }}
-          fontWeight="700"
-          letterSpacing="0.08em"
-          transition="all 0.18s ease"
-          boxShadow={`0 0 16px ${color}55`}
-          _hover={!guardado && !completo ? {} : { bg: `${color}55`, boxShadow: `0 0 26px ${color}88` }}
-          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
-        >
-          {guardado ? "Continuar →" : "Guardar"}
-        </Box>
-      </Flex>
-    </Flex>
   );
 }
