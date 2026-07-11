@@ -81,9 +81,9 @@ export function ElementoComicModal({
   };
 
   return (
-    <Modal isOpen={!!elemento} onClose={onClose} size="full" scrollBehavior="outside">
+    <Modal isOpen={!!elemento} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
-      <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100vh" position="relative">
+      <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100vh" position="relative" sx={{ transform: "none !important" }}>
         {elemento && (() => {
           const pasos = COMIC_ELEMENTO[elemento];
           const tests = testsDeElemento(elemento);

@@ -143,15 +143,19 @@ export default function MetodoTcmLengua() {
 }
 
 // ── Bloque de una dimensión (título + subtítulo + cajitas de variantes) ──────
+// Las cajitas se ordenan por longitud de descripción para que las de textos
+// parecidos caigan juntas en la misma fila → alturas uniformes.
 function DimensionBloque({ dimension }: { dimension: DimensionLengua }) {
+  const opciones = [...dimension.opciones].sort((a, b) => a.lectura.length - b.lectura.length);
   return (
     <Panel titulo={dimension.titulo} color={tcmTxt}>
       <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}
             maxW="700px" style={{ textShadow: INK_SHADOW }}>
         {dimension.subtitulo}
       </Text>
-      <Flex wrap="wrap" gap={{ base: 3, md: 4 }} justify="center">
-        {dimension.opciones.map((op) => (
+      {/* align=stretch → todas las cajitas de una fila comparten la misma altura */}
+      <Flex wrap="wrap" gap={{ base: 3, md: 4 }} justify="center" align="stretch">
+        {opciones.map((op) => (
           <VarianteCard key={op.key} opcion={op} />
         ))}
       </Flex>
@@ -159,17 +163,19 @@ function DimensionBloque({ dimension }: { dimension: DimensionLengua }) {
   );
 }
 
-// ── Cajita ilustrada: foto + nombre + lectura ────────────────────────────────
+// ── Cajita ilustrada: foto + título · separador · texto (todas mismo alto/ancho) ─
 function VarianteCard({ opcion }: { opcion: OpcionLengua }) {
   return (
-    <Box w={{ base: "100%", sm: "calc(50% - 8px)", md: "calc(33.333% - 11px)" }}
-         borderRadius="xl" overflow="hidden" bg="rgba(0,0,0,0.28)"
-         border={`1px solid ${opcion.equilibrio ? `${tcmTxt}88` : "rgba(255,255,255,0.16)"}`}
-         boxShadow={opcion.equilibrio ? `0 0 16px ${tcmTxt}44` : "none"}
-         sx={{ backdropFilter: "blur(6px)" }}>
+    <Flex direction="column"
+          w={{ base: "100%", sm: "calc(50% - 8px)", md: "calc(33.333% - 11px)" }}
+          borderRadius="xl" overflow="hidden" bg="rgba(0,0,0,0.28)"
+          border={`1px solid ${opcion.equilibrio ? `${tcmTxt}88` : "rgba(255,255,255,0.16)"}`}
+          boxShadow={opcion.equilibrio ? `0 0 16px ${tcmTxt}44` : "none"}
+          sx={{ backdropFilter: "blur(6px)" }}>
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
-      <Box px={4} py={3.5}>
-        <Flex align="center" gap={2} mb={1.5}>
+      {/* flex=1 para que el bloque de texto rellene la altura estirada de la fila */}
+      <Flex direction="column" flex="1" px={4} py={3.5}>
+        <Flex align="center" gap={2}>
           <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
                 style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
             {opcion.nombre}
@@ -179,12 +185,13 @@ function VarianteCard({ opcion }: { opcion: OpcionLengua }) {
                   textTransform="uppercase">· sana</Text>
           )}
         </Flex>
+        <Box h="1px" w="100%" my={2.5} bgGradient={`linear(to-r, ${tcmTxt}aa, transparent)`} />
         <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.6"
               style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}>
           {opcion.lectura}
         </Text>
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   );
 }
 

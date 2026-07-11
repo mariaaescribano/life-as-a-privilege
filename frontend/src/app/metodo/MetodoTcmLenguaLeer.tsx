@@ -11,9 +11,9 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
-import { type DatosTcm } from "../../components/metodo/tcmRecorrido";
+import { ELEMENTOS, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import {
-  DIMENSIONES_SELECCIONABLES, lenguaObsKey, opcionElegida, lenguaCompleta,
+  DIMENSIONES_SELECCIONABLES, lenguaObsKey, opcionElegida, lenguaCompleta, patronesPredominantes,
   type OpcionLengua, type LenguaDim,
 } from "../../components/metodo/tcmLenguaContenido";
 
@@ -94,19 +94,30 @@ export default function MetodoTcmLenguaLeer() {
             natural, por la mañana y antes de comer o beber, y saca la lengua sin forzar.
           </Text>
 
-          {/* ── HERRAMIENTA · lee tu propia lengua ── */}
-          <Panel titulo="Lee tu propia lengua" color={tcmTxt}>
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  lineHeight="1.7" mb={5} maxW="640px" style={{ textShadow: INK_SHADOW }}>
-              Elige lo que más se parezca a la tuya en cada apartado. No hay respuestas correctas: es una
-              foto de tu momento.
-            </Text>
+          {/* ── HERRAMIENTA · lee tu propia lengua ──
+              Un solo box, pero cada apartado repite la imagen de fondo TCM (a su
+              propia altura, para que no se deforme al ser el box tan grande) y va
+              separado por líneas horizontales. */}
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+               boxShadow={CAJA_GLOW} bg="rgba(0,0,0,0.28)">
+            {/* Cabecera: título + intro */}
+            <Banda>
+              <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.1em"
+                    textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
+                Lee tu propia lengua
+              </Text>
+              <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                    lineHeight="1.7" maxW="640px" style={{ textShadow: INK_SHADOW }}>
+                Elige lo que más se parezca a la tuya en cada apartado. No hay respuestas correctas.
+              </Text>
+            </Banda>
+            <Separador />
 
-            <Flex direction="column" gap={7}>
-              {DIMENSIONES_SELECCIONABLES.map((d) => {
-                const elegida = opcionElegida(d.dim, data.observarte);
-                return (
-                  <Box key={d.dim}>
+            {DIMENSIONES_SELECCIONABLES.map((d) => {
+              const elegida = opcionElegida(d.dim, data.observarte);
+              return (
+                <React.Fragment key={d.dim}>
+                  <Banda>
                     <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700}
                           letterSpacing="0.08em" textTransform="uppercase" mb={3}
                           style={{ textShadow: INK_SHADOW }}>
@@ -122,11 +133,12 @@ export default function MetodoTcmLenguaLeer() {
                         />
                       ))}
                     </Flex>
-                  </Box>
-                );
-              })}
-            </Flex>
-          </Panel>
+                  </Banda>
+                  <Separador />
+                </React.Fragment>
+              );
+            })}
+          </Box>
 
           {/* ── LECTURA · síntesis de las tres elecciones ── */}
           {lenguaCompleta(data.observarte) && <LecturaLengua observarte={data.observarte} />}
@@ -194,6 +206,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
 
   const todasSanas = elegidas.every((x) => x.opcion.equilibrio);
   const resumen = elegidas.map((x) => x.opcion.nombre.toLowerCase()).join(" · ");
+  const patrones = patronesPredominantes(observarte);
 
   return (
     <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
@@ -204,63 +217,95 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
               textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
           Tu lengua hoy
         </Text>
-        <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight={700} lineHeight="1.4" mb={5}
+        <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight={700} lineHeight="1.4"
               style={{ textShadow: "0 1px 8px rgba(0,0,0,0.7)" }}>
           {resumen}
         </Text>
 
-        {todasSanas ? (
-          <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
+        {todasSanas || patrones.length === 0 ? (
+          <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" mt={5}
                 style={{ textShadow: INK_SHADOW }}>
             Tu lengua refleja un buen equilibrio: la Sangre nutre, el Qi circula y el Yin y el Yang se
             sostienen. Cuídalo con lo que ya sabes de tu recorrido y vuelve a observarte de vez en cuando:
             la lengua cambia contigo.
           </Text>
         ) : (
-          <Flex direction="column" gap={4}>
-            {elegidas.map(({ dim, opcion }) => (
-              <Box key={dim.dim}>
-                <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} mb={1}
-                      style={{ textShadow: INK_SHADOW }}>
-                  {dim.titulo}: {opcion.nombre}
-                </Text>
-                <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
-                      style={{ textShadow: INK_SHADOW }}>
-                  {opcion.lectura}
-                </Text>
-              </Box>
-            ))}
-            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
-                  fontStyle="italic" mt={1} style={{ textShadow: INK_SHADOW }}>
-              Observa qué signos se repiten: si varios apuntan al calor, al frío, a la humedad o a una
-              deficiencia, ahí tienes una pista de por dónde acompañar tu equilibrio. Vuelve a mirar tu
-              lengua en unos días y compara.
+          <>
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                  lineHeight="1.7" mt={2} mb={6} style={{ textShadow: INK_SHADOW }}>
+              Esto es lo que tu lengua sugiere hoy y cómo puedes acompañar tu equilibrio. Cuantas más
+              señales apuntan a un mismo patrón, más presente está.
             </Text>
-          </Flex>
+
+            <Flex direction="column" gap={6}>
+              {patrones.map(({ patron, info, veces }) => {
+                const E = ELEMENTOS[info.elemento];
+                return (
+                  <Box key={patron} pl={{ base: 4, md: 5 }} borderLeft={`3px solid ${E.color}`}>
+                    <Flex align="center" gap={2.5} wrap="wrap" mb={1.5}>
+                      <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
+                            style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
+                        {info.nombre}
+                      </Text>
+                      <Box px={2.5} py={0.5} borderRadius="full" bg={`${E.color}33`}
+                           border={`1px solid ${E.color}`} sx={{ backdropFilter: "blur(4px)" }}>
+                        <Text color="white" fontSize="2xs" fontWeight={700} letterSpacing="0.06em"
+                              textTransform="uppercase">{E.nombre}</Text>
+                      </Box>
+                      {veces > 1 && (
+                        <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic">
+                          {veces} señales
+                        </Text>
+                      )}
+                    </Flex>
+                    <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={3}
+                          style={{ textShadow: INK_SHADOW }}>
+                      {info.senal}
+                    </Text>
+                    <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.08em"
+                          textTransform="uppercase" mb={2} style={{ textShadow: INK_SHADOW }}>
+                      Cómo equilibrarlo
+                    </Text>
+                    <Flex direction="column" gap={1.5}>
+                      {info.comoEquilibrar.map((c, i) => (
+                        <Flex key={i} gap={2.5} align="flex-start">
+                          <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px"
+                               borderRadius="full" bg={E.color} boxShadow={`0 0 6px ${E.color}`} />
+                          <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                                style={{ textShadow: INK_SHADOW }}>{c}</Text>
+                        </Flex>
+                      ))}
+                    </Flex>
+                  </Box>
+                );
+              })}
+            </Flex>
+
+            <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" mt={6} lineHeight="1.6"
+                  style={{ textShadow: INK_SHADOW }}>
+              Vuelve a mirar tu lengua dentro de unos días y compara: es tu forma de ver, poco a poco, cómo
+              tus cuidados van reequilibrándote.
+            </Text>
+          </>
         )}
       </Box>
     </Box>
   );
 }
 
-function Panel({ titulo, color, children }: {
-  titulo: string; color: string; children: React.ReactNode;
-}) {
+// ── Banda de un apartado: repite la imagen de fondo TCM a su propia altura ────
+function Banda({ children }: { children: React.ReactNode }) {
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+    <Box position="relative" overflow="hidden">
+      <DisciplinaBgLayer nom={tcmNom} borderRadius={0} />
       <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}>
-        {titulo && (
-          <>
-            <Text color={color} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.1em"
-                  textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
-              {titulo}
-            </Text>
-            <Box h="1px" w="100%" mb={4} bg={`${color}88`} />
-          </>
-        )}
         {children}
       </Box>
     </Box>
   );
+}
+
+// ── Separador horizontal (color de la disciplina) entre apartados ────────────
+function Separador() {
+  return <Box h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${tcmTxt}cc, transparent)`} />;
 }

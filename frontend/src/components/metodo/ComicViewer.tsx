@@ -27,6 +27,10 @@ const twinkle = keyframes`
 export interface Vineta {
   src: string;
   paragraphs: string[];
+  /** Encabezado opcional sobre el texto (p.ej. "La Madera genera el Fuego"). */
+  titulo?: string;
+  /** Antetítulo pequeño en mayúsculas sobre el título (p.ej. "Ciclo generador"). */
+  eyebrow?: string;
 }
 
 const Stars = () => {
@@ -262,6 +266,8 @@ export function ComicViewer({
         boxShadow="0 2px 12px rgba(0,0,0,0.45)"
         sx={{ backdropFilter: "blur(4px)" }}
         _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
+        _focus={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
+        _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
         icon={
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill="#ffffff"
             style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
@@ -282,6 +288,8 @@ export function ComicViewer({
           variant="ghost"
           color={themeColor}
           _hover={{ bg: `${themeColor}22` }}
+          _focus={{ boxShadow: "none" }}
+          _focusVisible={{ boxShadow: "none" }}
           icon={
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill={themeColor}>
               <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
@@ -312,6 +320,8 @@ export function ComicViewer({
         boxShadow={isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
         sx={{ backdropFilter: "blur(4px)" }}
         _hover={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+        _focus={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+        _focusVisible={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
         icon={
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
             style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
@@ -342,6 +352,8 @@ export function ComicViewer({
         boxShadow={blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
         sx={{ backdropFilter: "blur(4px)" }}
         _hover={blocked ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+        _focus={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+        _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
         icon={
           isLast ? (
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
@@ -588,6 +600,26 @@ export function ComicViewer({
                 scrollbarColor: `${themeColor}55 transparent`,
               }}
             >
+              {/* Encabezado opcional (antetítulo + título + separador) */}
+              {current.eyebrow && (
+                <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.14em"
+                      textTransform="uppercase" mb={2} textAlign={{ base: "center", md: "left" }}
+                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+                  {current.eyebrow}
+                </Text>
+              )}
+              {current.titulo && (
+                <>
+                  <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
+                        textAlign={{ base: "center", md: "left" }}
+                        style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+                    {current.titulo}
+                  </Text>
+                  <Box h="1px" w="100%" my={4}
+                       bgGradient="linear(to-r, rgba(255,255,255,0.9), transparent)" />
+                </>
+              )}
+
               {/* Cada bloque se pinta con separación (línea en blanco) respecto
                   al anterior. Con `separarFrases`, además, cada frase (tras un
                   punto) es su propio bloque → texto más aireado y limpio. */}
@@ -601,7 +633,8 @@ export function ComicViewer({
                 <Text
                   key={i}
                   color={textColor ?? themeColor}
-                  fontSize={{ base: "2xl", md: "3xl" }}
+                  // Cómic de elementos TCM (fondoNitido): letra más pequeña.
+                  fontSize={fondoNitido ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" }}
                   lineHeight="1.9"
                   letterSpacing="0.02em"
                   textAlign={{ base: "center", md: "left" }}

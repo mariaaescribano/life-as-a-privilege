@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -19,7 +19,7 @@ import {
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import {
-  EstrellaCiclo, RelacionBox,
+  EstrellaCiclo, RelacionModal,
   verticePentagono, segmentoPentagono, idxElemento,
   type Ciclo, type Relacion,
 } from "../../components/metodo/tcmCiclosVisual";
@@ -125,7 +125,7 @@ export default function MetodoTcmDiagnostico() {
           {/* ── BOX 3 y 4 · Relación a relación (popup por cada una) ── */}
           <Text color="white" fontStyle="italic" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                 textAlign="center" maxW="660px" mt={1} style={{ textShadow: INK_SHADOW }}>
-            Y ahora, repasa cada relación con calma. Toca cualquier rayita para leer qué le
+            Repasa cada relación con calma. Todas te interesan, pues todas hablan de ti. Toca cualquier flecha para leer.
             hace un elemento a otro, órgano a órgano.
           </Text>
           <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
@@ -165,14 +165,8 @@ export default function MetodoTcmDiagnostico() {
         onClose={() => setComicEl(null)}
       />
 
-      {/* Popup de una relación (Box 3 y 4) */}
-      <Modal isOpen={!!sel} onClose={() => setSel(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(14px)" }} />
-        <ModalContent bg="transparent" border="none" boxShadow="none" fontFamily="'EB Garamond', serif"
-                      mx={4} my={{ base: 6, md: 10 }}>
-          {sel && <RelacionBox rel={sel} onClose={() => setSel(null)} />}
-        </ModalContent>
-      </Modal>
+      {/* Popup de la relación (reutiliza el ComicViewer inmersivo) */}
+      <RelacionModal rel={sel} onClose={() => setSel(null)} />
 
       <IndiceTcm />
 

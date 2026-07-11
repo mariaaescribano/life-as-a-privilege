@@ -14,8 +14,8 @@ const ESTADO_COLOR: Record<Balance, string> = {
   equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e",
 };
 
-// Geometría del pentágono selector.
-const CX = 160, CY = 158, R = 106, FOTO_R = 42;
+// Geometría del pentágono selector (centrada en el viewBox 400×348).
+const CX = 200, CY = 184, R = 110, FOTO_R = 52;
 function vertice(i: number, radio: number) {
   const ang = (-90 + i * 72) * (Math.PI / 180);
   return { x: CX + radio * Math.cos(ang), y: CY + radio * Math.sin(ang) };
@@ -43,12 +43,12 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
   return (
     <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
       {/* Izquierda · la estrella de los cinco elementos (selector) */}
-      <Box w={{ base: "100%", md: "460px" }} flexShrink={0}>
+      <Box w={{ base: "100%", md: "540px" }} flexShrink={0}>
         <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
           <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-          <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }} h="100%">
-            <Flex justify="center" align="center" h="100%" minH={{ md: "420px" }}>
-              <Box as="svg" viewBox="0 0 320 300" w={{ base: "300px", md: "410px" }} h="auto" overflow="visible">
+          <Box position="relative" zIndex={1} px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }} h="100%">
+            <Flex justify="center" align="center" h="100%" minH={{ md: "440px" }}>
+              <Box as="svg" viewBox="0 0 400 348" w={{ base: "340px", md: "480px" }} h="auto" overflow="visible">
                 <defs>
                   {ORDEN_ELEMENTOS.map((el, i) => {
                     const v = vertice(i, R);
@@ -63,7 +63,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                          fill="none" stroke={`${tcmTxt}55`} strokeWidth={1.5} />
                 {ORDEN_ELEMENTOS.map((el, i) => {
                   const v = vertice(i, R);
-                  const label = vertice(i, R + 62);
+                  const label = vertice(i, R + 64);
                   const Ei = ELEMENTOS[el];
                   const activo = el === elActivo;
                   return (
@@ -76,7 +76,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                       <circle cx={v.x} cy={v.y} r={FOTO_R} fill="none"
                               stroke={activo ? "white" : `${Ei.color}aa`} strokeWidth={activo ? 3 : 2}
                               style={{ filter: `drop-shadow(0 0 ${activo ? 7 : 3}px ${Ei.color})` }} />
-                      <text x={label.x} y={label.y} fill="white" fontSize={13} fontWeight={activo ? 800 : 600}
+                      <text x={label.x} y={label.y} fill="white" fontSize={15} fontWeight={activo ? 800 : 600}
                             textAnchor="middle" dominantBaseline="middle"
                             style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
                         {Ei.nombre}

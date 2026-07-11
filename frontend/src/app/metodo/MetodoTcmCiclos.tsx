@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, type Elemento } from "../../components/metodo/tcmRecorrido";
-import { EstrellaCiclo, RelacionBox, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
+import { EstrellaCiclo, RelacionModal, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 
@@ -60,7 +60,7 @@ export default function MetodoTcmCiclos() {
 
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Equilibrio y desequilibrio"
+            title="Los Ciclos"
             pageLabel="8/12"
             compact
             bgColor={`${tcmBg}dd`}
@@ -110,14 +110,8 @@ export default function MetodoTcmCiclos() {
 
       {ilustracionesModal}
 
-      {/* ── Box de ilustración: la relación entre los dos elementos ── */}
-      <Modal isOpen={!!sel} onClose={() => setSel(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
-        <ModalOverlay bg="rgba(0,0,0,0.72)" sx={{ backdropFilter: "blur(14px)" }} />
-        <ModalContent bg="transparent" border="none" boxShadow="none" fontFamily="'EB Garamond', serif"
-                      mx={4} my={{ base: 6, md: 10 }}>
-          {sel && <RelacionBox rel={sel} onClose={() => setSel(null)} />}
-        </ModalContent>
-      </Modal>
+      {/* Popup de la relación (reutiliza el ComicViewer inmersivo) */}
+      <RelacionModal rel={sel} onClose={() => setSel(null)} />
 
       <IndiceTcm />
 
