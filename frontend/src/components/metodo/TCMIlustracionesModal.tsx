@@ -231,7 +231,19 @@ export function TCMIlustracionesModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
-      <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
+      {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE). Ponerla
+          dentro del ModalContent fallaba: Chakra le aplica un `transform` de
+          animación y un `position:fixed` dentro de un ancestro transformado deja
+          de referirse al viewport → quedaban huecos. */}
+      <ModalOverlay
+        bg={tcmBg}
+        sx={{
+          backgroundImage: `linear-gradient(${tcmBg}33, ${tcmBg}33), url('/img/fondos/tcm.png')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
       <ModalContent
         bg="transparent"
         border="none"
@@ -242,34 +254,6 @@ export function TCMIlustracionesModal({
         minH="100vh"
         position="relative"
       >
-        {/* Fondo: foto de TCM blureada, ocupando todo el espacio sin zoom. */}
-        <Box
-          position="fixed"
-          inset="0"
-          pointerEvents="none"
-          zIndex={0}
-          bg={tcmBg}
-          overflow="hidden"
-        >
-          <Box
-            as="img"
-            src="/img/fondos/tcm.png"
-            alt=""
-            loading="eager"
-            position="absolute"
-            top="-14px"
-            left="-14px"
-            right="-14px"
-            bottom="-14px"
-            w="calc(100% + 28px)"
-            h="calc(100% + 28px)"
-            style={{
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-          />
-          <Box position="absolute" inset="0" bg={`${tcmBg}55`} />
-        </Box>
 
         {/* X cerrar */}
         <IconButton
@@ -357,8 +341,11 @@ export function TCMIlustracionesModal({
                     as="button"
                     onClick={() => elegirCapitulo(opt.key)}
                     position="relative"
+                    display="flex"
+                    flexDirection="column"
                     flex="1"
                     w="100%"
+                    p={0}
                     minW={{ base: "auto", sm: "280px", md: "300px" }}
                     maxW={{ base: "300px", md: "360px" }}
                     borderRadius="2xl"

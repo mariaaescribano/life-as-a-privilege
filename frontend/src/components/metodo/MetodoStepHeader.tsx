@@ -165,6 +165,10 @@ export function MetodoStepHeader({
   // En el header de Medicina China los botones llevan un fondo blanco mínimo
   // (casi transparente) para que el texto se lea sobre su fondo.
   const btnWhiteBg = headerNom === tcmNom;
+  // En TCM queremos que TODOS los títulos del recorrido salgan igual de grandes:
+  // desactivamos el auto-encogido (que hacía más pequeños los títulos largos como
+  // «Los Cinco Elementos») y, si no cabe en una línea, dejamos que envuelva.
+  const tituloUniforme = headerNom === tcmNom;
   // En todo el recorrido de Psicología, el header lleva un botón "Cursos" que
   // abre la pantalla completa con los cursos orientativos de la disciplina.
   const isPsico = headerNom === neuropsicologiaNom;
@@ -196,6 +200,13 @@ export function MetodoStepHeader({
     });
     return () => cancelAnimationFrame(id);
   }, [title]);
+  // Con título uniforme (TCM) no encogemos nunca: el título mantiene su tamaño
+  // grande y, si hace falta, envuelve a dos líneas (whiteSpace:normal).
+  const titleWrapsEff = tituloUniforme ? false : titleWraps;
+  // TCM quiere sus títulos igual de GRANDES que el resto de disciplinas, así que
+  // ignoramos el `compact` que traen sus páginas (era el que los encogía). Fuera
+  // de TCM, `compact` sigue funcionando igual (tests con nombres largos).
+  const compactEff = tituloUniforme ? false : compact;
   return (
     <>
     <Box
@@ -231,18 +242,18 @@ export function MetodoStepHeader({
                 color={color}
                 fontSize={
                   tallTitle
-                    ? (compact
-                        ? (titleWraps ? { base: "xl", md: "3xl" } : { base: "3xl", md: "4xl" })
-                        : (titleWraps ? { base: "2xl", md: "5xl" } : { base: "4xl", md: "6xl" }))
-                    : (compact
-                        ? (titleWraps ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" })
-                        : (titleWraps ? { base: "xl", md: "4xl" } : { base: "3xl", md: "5xl" }))
+                    ? (compactEff
+                        ? (titleWrapsEff ? { base: "xl", md: "3xl" } : { base: "3xl", md: "4xl" })
+                        : (titleWrapsEff ? { base: "2xl", md: "5xl" } : { base: "4xl", md: "6xl" }))
+                    : (compactEff
+                        ? (titleWrapsEff ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" })
+                        : (titleWrapsEff ? { base: "xl", md: "4xl" } : { base: "3xl", md: "5xl" }))
                 }
                 fontWeight="700"
                 letterSpacing="0.05em"
                 lineHeight={tallTitle ? "1.75" : "1.3"}
                 textAlign="center"
-                whiteSpace="nowrap"
+                whiteSpace={tituloUniforme ? "normal" : "nowrap"}
                 overflow="hidden"
                 textOverflow="ellipsis"
                 // El rabito de la "g" (descendente) baja por debajo de la línea

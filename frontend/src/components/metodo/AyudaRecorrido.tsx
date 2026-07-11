@@ -41,7 +41,7 @@ const EJEMPLOS_BOX: Partial<Record<string, {
   subtitulo?: string;
   variante?: "frases" | "chips" | "herida" | "relacion";
   ejemplos?: string[];
-  triadas?: { huella: string; nudo: string; herida: string }[];
+  triadas?: { huella: string; necesidad: string; nudo: string; herida: string }[];
   relaciones?: { herida: string; arquetipo: string; relacionTitulo: string; comprension?: string }[];
 }>> = {
   problema: {
@@ -117,11 +117,13 @@ const EJEMPLOS_BOX: Partial<Record<string, {
     triadas: [
       {
         huella: "Mis padres discutían mucho cuando era pequeño.",
+        necesidad: "Seguridad emocional.",
         nudo: "Miedo al conflicto.",
         herida: "Aprendí que cuando alguien levanta la voz algo malo va a pasar; por eso evito discutir, aunque me calle lo que siento.",
       },
       {
         huella: "Mis padres criticaban mucho mis errores.",
+        necesidad: "Validación emocional.",
         nudo: "Perfeccionismo.",
         herida: "Aprendí que equivocarme hacía que valiera menos.",
       },
@@ -309,8 +311,9 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
     ejemplo: {
       titulo: "Un ejemplo",
       cuerpo: [
-        "Una herida une una experiencia con la creencia que dejó en ti.",
+        "Una herida une una experiencia con la necesidad que dejó sin cubrir y la creencia que nació de ahí.",
         "Huella: «Mis padres discutían mucho cuando era pequeño».",
+        "Necesidad no cubierta: «Seguridad emocional».",
         "Nudo: «Miedo al conflicto».",
         "Y tú escribes: «Aprendí que cuando alguien levanta la voz algo malo va a pasar; por eso evito discutir, aunque me calle lo que siento.»",
       ],
@@ -534,7 +537,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
     ejemplo: {
       titulo: "Un ejemplo",
       cuerpo: [
-        "Escríbete un mensaje para tu yo del futuro, para cuando vuelvas a bloquearte.",
+        "Escríbete una carta para tu yo del futuro, para cuando vuelvas a bloquearte.",
         "Por ejemplo: «Cuando sientas que no puedes, recuerda que ya cruzaste esto antes. Respira, pide ayuda y da un solo paso.»",
       ],
     },
@@ -782,7 +785,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                          bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
                          sx={{ backdropFilter: "blur(4px)" }}>
                       <Flex direction="column" gap={2.5}>
-                        {([["Huella", t.huella], ["Nudo", t.nudo], ["Herida", t.herida]] as const).map(([label, texto]) => (
+                        {([["Huella", t.huella], ["Necesidad no cubierta", t.necesidad], ["Nudo", t.nudo], ["Herida", t.herida]] as const).map(([label, texto]) => (
                           <Box key={label}>
                             <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
                                   opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>

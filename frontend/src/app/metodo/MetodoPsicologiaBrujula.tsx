@@ -128,7 +128,7 @@ export default function MetodoPsicologiaBrujula() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Brújula"
+                title="Carta"
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -144,7 +144,7 @@ export default function MetodoPsicologiaBrujula() {
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
               <IntroRecorrido>
-                Escríbete un mensaje para el próximo momento difícil. No para juzgarte:
+                Escríbete una carta para el próximo momento difícil. No para juzgarte:
                 para recordar el camino que ya conoces.
               </IntroRecorrido>
             </Reveal>

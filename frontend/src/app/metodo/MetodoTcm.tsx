@@ -127,7 +127,7 @@ export default function MetodoTcm() {
 
   const comenzar = () => {
     if (!suscrito) { setPagoOpen(true); return; }
-    navigate("/metodo/tcm/equilibrio");
+    navigate("/metodo/tcm/elementos");
   };
 
   if (loading) {
@@ -144,14 +144,15 @@ export default function MetodoTcm() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Medicina China"
-            pageLabel="1/14"
+            pageLabel="1/12"
+            compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
             prev={{ label: "← Ayurveda", onClick: () => navigate(volverAyurvedaUrl) }}
             extra={ilustracionesBtn}
-            next={{ label: "Equilibrio →", onClick: comenzar }}
+            next={{ label: "Los 5 elementos →", onClick: comenzar }}
           />
 
           {/* ── Bienvenida contemplativa ── */}

@@ -343,8 +343,7 @@ export default function MetodoPsicologiaIntegracion() {
             {/* Intro: la idea de la proyección */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <IntroRecorrido>
-              Tus heridas suelen ser proyecciones de tus arquetipos: los elegimos para sanarlos e integrarlos en nosotros.
-            </IntroRecorrido>
+              Tus arquetipos muestran dónde y cómo fuiste herido. Relaciona tus Heridas con tus Arquetipos, ponles nombre y deja de cargar con ellas en silencio. </IntroRecorrido>
             </Reveal>
 
             {/* ════════ TRES COLUMNAS ════════ */}

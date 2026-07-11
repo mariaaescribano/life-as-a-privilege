@@ -124,7 +124,7 @@ export function CompromisosBox() {
               textAlign="center"
               mb={4}
             >
-              Tu carta para ti
+              Tu compromiso contigo
             </Text>
             <Flex direction="column" gap={{ base: 4, md: 5 }}>
               {carta.necesitaste && (

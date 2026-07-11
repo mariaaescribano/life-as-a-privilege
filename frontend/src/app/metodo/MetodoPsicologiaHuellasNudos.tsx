@@ -230,17 +230,17 @@ export default function MetodoPsicologiaHuellasNudos() {
       vacio: { texto: "Aún no has marcado huellas en tu línea de vida.", accion: "Ir a Huellas →", ruta: `/metodo/psicologia/${exp.id}/huellas` },
     },
     {
+      key: "nec", titulo: "Necesidades no cubiertas", apoyo: "Lo que necesitabas y no recibiste.",
+      icono: <NecesidadIcon size={20} color={TINTA} />, piezaIcono: <NecesidadIcon size={18} color={TINTA} />,
+      items: necesidades, sel: selNec, set: setSelNec,
+      vacio: { texto: "Aún no has marcado necesidades no cubiertas.", accion: "Ir a Necesidades →", ruta: `/metodo/psicologia/${exp.id}/necesidades` },
+    },
+    {
       key: "nudo", titulo: "Tus nudos", apoyo: "La creencia o conflicto que dejó.",
       icono: <NudoEspiralIcon size={20} color={TINTA} strokeWidth={1.7} opacity={0.9} />,
       piezaIcono: <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.7} opacity={0.9} />,
       items: nudos, sel: selNudos, set: setSelNudos,
       vacio: { texto: "Aún no has nombrado tus nudos.", accion: "Ir a Nudos →", ruta: `/metodo/psicologia/${exp.id}/nudos` },
-    },
-    {
-      key: "nec", titulo: "Necesidades no cubiertas", apoyo: "Lo que necesitabas y no recibiste.",
-      icono: <NecesidadIcon size={20} color={TINTA} />, piezaIcono: <NecesidadIcon size={18} color={TINTA} />,
-      items: necesidades, sel: selNec, set: setSelNec,
-      vacio: { texto: "Aún no has marcado necesidades no cubiertas.", accion: "Ir a Necesidades →", ruta: `/metodo/psicologia/${exp.id}/necesidades` },
     },
   ];
 
@@ -270,7 +270,7 @@ export default function MetodoPsicologiaHuellasNudos() {
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
             <IntroRecorrido>
-              Una experiencia que deja huella puede activar o generar una necesidad no cubierta. Para darle sentido, nuestra mente crea un nudo: una creencia sobre nosotros mismos que intenta protegernos, pero que termina limitándonos. De esa combinación nace la herida emocional.
+             Una experiencia que deja Huella puede dejar una necesidad emocional sin cubrir. Para dar sentido a ese dolor y evitar que vuelva a repetirse, la mente crea un Nudo: una creencia protectora que, aunque nace para ayudarnos, acaba limitando nuestra forma de vivir. La unión de la experiencia, la necesidad no cubierta y ese nudo constituye una Herida emocional.
             </IntroRecorrido>
             </Reveal>
 
@@ -314,13 +314,13 @@ export default function MetodoPsicologiaHuellasNudos() {
                     <Chip key={`sh-${t}`} tint={colorEnCurso} icon={<HuellaIcon size={13} color={TINTA} />} label={t}
                           onRemove={() => toggle(selHuellas, setSelHuellas, t)} />
                   ))}
-                  {selNudos.map((t) => (
-                    <Chip key={`sn-${t}`} tint={colorEnCurso} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t}
-                          onRemove={() => toggle(selNudos, setSelNudos, t)} />
-                  ))}
                   {selNec.map((t) => (
                     <Chip key={`sq-${t}`} tint={colorEnCurso} icon={<NecesidadIcon size={13} color={TINTA} />} label={t}
                           onRemove={() => toggle(selNec, setSelNec, t)} />
+                  ))}
+                  {selNudos.map((t) => (
+                    <Chip key={`sn-${t}`} tint={colorEnCurso} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t}
+                          onRemove={() => toggle(selNudos, setSelNudos, t)} />
                   ))}
                 </Flex>
               )}
@@ -400,13 +400,13 @@ export default function MetodoPsicologiaHuellasNudos() {
                   <Chip key={`ph-${t}`} tint={colorEnCurso} icon={<HuellaIcon size={13} color={TINTA} />} label={t}
                         onRemove={() => toggle(selHuellas, setSelHuellas, t)} />
                 ))}
-                {selNudos.map((t) => (
-                  <Chip key={`pn-${t}`} tint={colorEnCurso} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t}
-                        onRemove={() => toggle(selNudos, setSelNudos, t)} />
-                ))}
                 {selNec.map((t) => (
                   <Chip key={`pq-${t}`} tint={colorEnCurso} icon={<NecesidadIcon size={13} color={TINTA} />} label={t}
                         onRemove={() => toggle(selNec, setSelNec, t)} />
+                ))}
+                {selNudos.map((t) => (
+                  <Chip key={`pn-${t}`} tint={colorEnCurso} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t}
+                        onRemove={() => toggle(selNudos, setSelNudos, t)} />
                 ))}
               </Flex>
 

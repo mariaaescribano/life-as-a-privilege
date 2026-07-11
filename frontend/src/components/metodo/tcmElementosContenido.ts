@@ -7,7 +7,7 @@
 // El texto es la voz del curso de Medicina China. La puntuación/mini-test de
 // cada elemento vive en tcmRecorrido.ts (ELEMENTOS[el].miniTest).
 // ─────────────────────────────────────────────────────────────────────────
-import type { Elemento } from "./tcmRecorrido";
+import { testsDeElemento, type Elemento } from "./tcmRecorrido";
 
 export interface ParRige { clave: string; valor: string; }
 export interface FuncionElemento { titulo: string; texto: string; }
@@ -523,14 +523,24 @@ export const CONTENIDO_ELEMENTOS: Record<Elemento, ContenidoElementoRico> = {
   madera, fuego, tierra, metal, agua,
 };
 
-// Fotos artísticas de cada elemento (/public/img/tcm). Van dentro de los círculos
-// del radar y de la estrella. Madera = verde.png.
+// Fotos artísticas de cada elemento (/public/img/tcm). Se usan como fondo de las
+// viñetas del cómic de cada elemento. Madera = verde.png.
 export const FOTO_ELEMENTO: Record<Elemento, string> = {
   madera: "/img/tcm/verde.png",
   fuego: "/img/tcm/fuego.png",
   tierra: "/img/tcm/tierra.png",
   metal: "/img/tcm/metal.png",
   agua: "/img/tcm/agua.png",
+};
+
+// Iconos circulares de cada elemento (/public/recorrido/tcm/icons). Van dentro de
+// los círculos del radar (MetodoTcmMapa) y de la estrella (MetodoTcmElementos).
+export const ICONO_ELEMENTO: Record<Elemento, string> = {
+  madera: "/recorrido/tcm/icons/madera.png",
+  fuego: "/recorrido/tcm/icons/fuego.png",
+  tierra: "/recorrido/tcm/icons/tierra.png",
+  metal: "/recorrido/tcm/icons/metal.png",
+  agua: "/recorrido/tcm/icons/agua.png",
 };
 
 // Ilustración de cada elemento (mismas que el modal de Ilustraciones). Se muestra
@@ -558,78 +568,294 @@ export const tieneContenido = (el: Elemento): boolean => !!CONTENIDO_ELEMENTOS[e
 // por eso el arco es intro → exceso → deficiencia → test → cómo reequilibrar.
 // ─────────────────────────────────────────────────────────────────────────
 export interface PasoVineta { tipo: "vineta"; src: string; paragraphs: string[]; }
-/** Paso de mini-test. `intro` es el texto/contexto que precede a las preguntas
- *  (las preguntas las pinta la página desde ELEMENTOS[el].miniTest). */
-export interface PasoTest { tipo: "test"; src: string; intro: string[]; }
+/** Paso de test. `testKey` indica QUÉ test de balance pinta (cada elemento tiene
+ *  2 → 2 pasos de test). En los cómics se deja un ÚNICO marcador de test
+ *  (sin testKey); `expandirTests` lo sustituye por un paso por cada test del
+ *  elemento. `intro` es texto legacy (mini-test antiguo, aún sin migrar). */
+export interface PasoTest { tipo: "test"; src: string; intro?: string[]; testKey?: string; }
 export type PasoComic = PasoVineta | PasoTest;
 
-// Madera · viñetas con el texto del curso (voz de María). Foto de anclaje: verde.
+// Fotos del cómic de Madera (/public/recorrido/tcm/madera): 1 intro/qué rige,
+// 2 exceso, 3 deficiencia, 4 reequilibrar (nutrición + estilo de vida).
+const FOTOS_MADERA = {
+  intro: "/recorrido/tcm/madera/madera1.png",
+  exceso: "/recorrido/tcm/madera/madera2.png",
+  deficiencia: "/recorrido/tcm/madera/madera3.png",
+  reequilibrar: "/recorrido/tcm/madera/madera4.png",
+};
+
+// Madera · viñetas con el texto del curso (voz de María).
 const comicMadera: PasoComic[] = [
   {
     tipo: "vineta",
-    src: FOTO_ELEMENTO.madera,
+    src: FOTOS_MADERA.intro,
     paragraphs: [
-      "La Madera representa el crecimiento, el ascenso, la dispersión y la fluidez. Es la energía de la primavera: todo lo que brota, se expande y busca moverse con libertad pertenece a la Madera. Rige el hígado, la vesícula biliar, los ojos y los tendones.",
+      "La Madera representa el crecimiento, el ascenso, la dispersión y la fluidez. Es la energía de la primavera: todo lo que brota, se expande y busca moverse con libertad pertenece a la Madera.",
+      "Rige el hígado, la vesícula biliar, los ojos y los tendones.",
     ],
   },
   {
     tipo: "vineta",
-    src: FOTO_ELEMENTO.madera,
+    src: FOTOS_MADERA.exceso,
     paragraphs: [
-      "Cuando la Madera está en exceso, la energía asciende de forma descontrolada. Puede manifestarse como arrebatos de ira, rabia, impaciencia e irritabilidad, acompañados de una constante sensación de bloqueo o de prisa. Es frecuente encontrar tensión muscular en el cuello, la mandíbula y los hombros, así como ojos rojos o inyectados y dolores de cabeza ascendentes.",
+      "Cuando la Madera está en exceso, la energía asciende de forma descontrolada. Puede manifestarse como arrebatos de ira, rabia, impaciencia e irritabilidad, acompañados de una constante sensación de bloqueo o de prisa.",
+      "Es frecuente encontrar tensión muscular en el cuello, la mandíbula y los hombros, así como ojos rojos o inyectados y dolores de cabeza ascendentes.",
     ],
   },
   {
     tipo: "vineta",
-    src: FOTO_ELEMENTO.madera,
+    src: FOTOS_MADERA.deficiencia,
     paragraphs: [
-      "Cuando la Madera está deficiente, falta el impulso necesario para avanzar. Puede aparecer falta de iniciativa, dificultad para encontrar una dirección clara o para tomar decisiones. La persona se desanima con facilidad, teme actuar y puede mostrar baja motivación, timidez e indecisión. A nivel físico pueden aparecer ojos cansados, visión borrosa, tendones débiles, calambres o temblores.",
+      "Cuando la Madera está deficiente, falta el impulso necesario para avanzar. Puede aparecer falta de iniciativa, dificultad para encontrar una dirección clara o para tomar decisiones. La persona se desanima con facilidad, teme actuar y puede mostrar baja motivación, timidez e indecisión.",
+      "A nivel físico pueden aparecer ojos cansados, visión borrosa, tendones débiles, calambres o temblores.",
     ],
   },
   {
+    // El paso de test se muestra sin foto: solo el box del test (título +
+    // preguntas + botón Guardar). El texto de intro se convirtió en preguntas
+    // del mini-test (ver madera-estancamiento y madera-flujo en tcmRecorrido).
     tipo: "test",
-    src: FOTO_ELEMENTO.madera,
-    intro: [
-      "Cuando el Qi del Hígado pierde su capacidad de fluir libremente, aparece un estancamiento que afecta a la circulación de la Sangre y los líquidos, la secreción de bilis, la digestión, la menstruación y la espermiación. Reconócelo en ti:",
+    src: FOTOS_MADERA.deficiencia,
+    intro: [],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_MADERA.reequilibrar,
+    paragraphs: [
+      "Para reequilibrar la Madera, favorece alimentos que apoyen el Hígado y el libre flujo del Qi:",
+      "Verduras amargas como diente de león, rúcula o kale; alimentos ácidos como limón, vinagre o encurtidos; hierbas frescas como menta, albahaca y perejil; germinados y té verde.",
     ],
   },
   {
     tipo: "vineta",
-    src: FOTO_ELEMENTO.madera,
+    src: FOTOS_MADERA.reequilibrar,
     paragraphs: [
-      "Para reequilibrar la Madera, favorece alimentos que apoyen el Hígado y el libre flujo del Qi: verduras amargas como diente de león, rúcula o kale; alimentos ácidos como limón, vinagre o encurtidos; hierbas frescas como menta, albahaca y perejil; germinados y té verde.",
-    ],
-  },
-  {
-    tipo: "vineta",
-    src: FOTO_ELEMENTO.madera,
-    paragraphs: [
-      "La Madera necesita movimiento, dirección y expresión: muévete por la mañana (estiramientos, Qi Gong o artes marciales), da forma a tu creatividad planificando o escribiendo nuevos proyectos y practica límites sanos para no acumular frustración. Descansa alrededor de las 22:30, cuando su energía empieza a relajarse, y elige un ejercicio dinámico pero no agresivo, de movimiento continuo y flexible, como el crecer de la primavera.",
+      "La Madera necesita movimiento, dirección y expresión: muévete por la mañana (estiramientos, Qi Gong o artes marciales), da forma a tu creatividad planificando o escribiendo nuevos proyectos y practica límites sanos para no acumular frustración.",
+      "Descansa alrededor de las 22:30, cuando su energía empieza a relajarse, y elige un ejercicio dinámico pero no agresivo, de movimiento continuo y flexible, como el crecer de la primavera.",
     ],
   },
 ];
 
-// Resto de elementos · se arma desde su contenido rico (mismo arco narrativo)
-// hasta que María pase el texto definitivo de cada uno.
-const comicDesdeRico = (c: ContenidoElementoRico): PasoComic[] => {
-  const src = FOTO_ELEMENTO[c.id];
+// Fotos del cómic de Fuego (/public/recorrido/tcm/fuego).
+const FOTOS_FUEGO = {
+  intro: "/recorrido/tcm/fuego/fuego1.png",
+  exceso: "/recorrido/tcm/fuego/fuego2.png",
+  deficiencia: "/recorrido/tcm/fuego/fuego3.png",
+  nutricion: "/recorrido/tcm/fuego/fuego4.png",
+  estilo: "/recorrido/tcm/fuego/fuego5.png",
+};
+
+// Fuego · viñetas con el texto del curso (voz de María).
+const comicFuego: PasoComic[] = [
+  {
+    tipo: "vineta",
+    src: FOTOS_FUEGO.intro,
+    paragraphs: [
+      "El Fuego representa el calor, lo ardiente y el ascenso. En el cuerpo, el Fuego es la fuerza que calienta, impulsa y enciende la conciencia, favoreciendo la vitalidad, la comunicación y la presencia. Rige el Corazón, el intestino delgado y la tez.",
+      "Un Fuego en equilibrio es cálido, expresivo y carismático. La persona se relaciona con los demás desde la autenticidad, disfrutando de una comunicación y una intimidad sanas. A nivel físico suele manifestarse con un buen descanso, un ritmo cardíaco estable y una sensación general de vitalidad y presencia.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_FUEGO.exceso,
+    paragraphs: [
+      "Cuando el Fuego está en exceso, la energía asciende de forma descontrolada. Puede manifestarse como inquietud, ansiedad, pánico o insomnio. Es frecuente hablar en exceso, reír de forma nerviosa o mostrar una necesidad constante de estimulación y contacto social.",
+      "También pueden aparecer palpitaciones, sensación de calor en el pecho o en la cara, sobreapego, celos y reacciones emocionales intensas o dramáticas, con tendencia a la sobre-socialización.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_FUEGO.deficiencia,
+    paragraphs: [
+      "Cuando el Fuego está deficiente, disminuye la capacidad de conectar con uno mismo y con los demás. Puede aparecer un aplanamiento emocional, dificultad para expresar afecto o establecer vínculos profundos, así como una sensación de soledad o de no ser comprendido.",
+      "A nivel físico son frecuentes las manos y pies fríos, la fatiga en la zona del corazón, los olvidos, la falta de entusiasmo, una voz baja y la tendencia a evitar la interacción social.",
+    ],
+  },
+  {
+    // Test sin foto: solo el box del test (título + preguntas + Guardar).
+    tipo: "test",
+    src: FOTOS_FUEGO.deficiencia,
+    intro: [],
+  },
+  {
+    // La foto de esta viñeta es la MISMA que la de la última (estilo/fuego5).
+    tipo: "vineta",
+    src: FOTOS_FUEGO.estilo,
+    paragraphs: [
+      "Para reequilibrar el Fuego, favorece alimentos hidratantes como pepino, sandía y lechuga; alimentos amargos como lechuga romana, cacao y quinoa.",
+      "Frutos rojos como cerezas y bayas de espino blanco; e infusiones refrescantes de crisantemo e hibisco.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_FUEGO.estilo,
+    paragraphs: [
+      "El Fuego necesita conexión, alegría y una mente tranquila. Descansa antes de las 23:00 y elige un ejercicio que combine movimiento y disfrute.",
+      "El Fuego se revela en la forma en que nos relacionamos, expresamos lo que sentimos y compartimos nuestra presencia con los demás.",
+    ],
+  },
+];
+
+// Fotos del cómic de Metal (/public/recorrido/tcm/metal): 4 fotos; la 4ª se
+// reutiliza en las dos viñetas de reequilibrar.
+const FOTOS_METAL = {
+  intro: "/recorrido/tcm/metal/metal1.png",
+  exceso: "/recorrido/tcm/metal/metal2.png",
+  deficiencia: "/recorrido/tcm/metal/metal3.png",
+  reequilibrar: "/recorrido/tcm/metal/metal4.png",
+};
+
+// Metal · viñetas con el texto del curso (voz de María).
+const comicMetal: PasoComic[] = [
+  {
+    tipo: "vineta",
+    src: FOTOS_METAL.intro,
+    paragraphs: [
+      "El Metal representa la capacidad de purificar, descender y astringir. En el cuerpo, el Metal gobierna el intercambio con el exterior: gracias a él respiramos, filtramos y dejamos ir, tanto a nivel físico como emocional. Rige el pulmón, el intestino grueso, la piel y la nariz.",
+      "Un Metal en equilibrio es disciplinado, organizado y posee una gran claridad moral. La persona sabe establecer límites sanos, ordenar su vida y soltar aquello que ya ha cumplido su función.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_METAL.exceso,
+    paragraphs: [
+      "Cuando el Metal está en exceso, la necesidad de orden puede convertirse en perfeccionismo, rigidez y una actitud excesivamente crítica hacia uno mismo y hacia los demás. Es frecuente desarrollar hábitos muy rígidos.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_METAL.deficiencia,
+    paragraphs: [
+      "Cuando el Metal está deficiente, aparece una profunda tristeza y dificultad para dejar ir personas, situaciones o experiencias del pasado. Puede manifestarse con un sistema inmunitario debilitado, respiración superficial, falta de orden y sensación de desorganización en la vida cotidiana.",
+    ],
+  },
+  {
+    // Test sin foto: solo el box del test (título + preguntas + Guardar).
+    tipo: "test",
+    src: FOTOS_METAL.deficiencia,
+    intro: [],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_METAL.reequilibrar,
+    paragraphs: [
+      "Para reequilibrar el Metal, favorece alimentos blancos como daikon, ajo y cebolla; rábanos, peras y manzanas; alimentos que humedecen el Pulmón como la miel o el congee de arroz; setas y algas; e infusiones tibias de jengibre o regaliz.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_METAL.reequilibrar,
+    paragraphs: [
+      "El Metal necesita respirar, ordenar y soltar. Practica ejercicios de respiración y Qi Gong para fortalecer y expandir el Pulmón, y crea rituales que aporten significado y faciliten el cierre de etapas.",
+      "Descansa en una habitación profundamente oscura y silenciosa, favoreciendo un descanso reparador y una respiración tranquila, y elige actividades que mejoren la postura, la respiración y la capacidad pulmonar. Aprender a soltar personas, experiencias y etapas de forma saludable protege el Qi del Pulmón y permite que la energía siga fluyendo.",
+    ],
+  },
+];
+
+// Fotos del cómic de Agua (/public/recorrido/tcm/agua).
+const FOTOS_AGUA = {
+  intro: "/recorrido/tcm/agua/agua1.png",
+  exceso: "/recorrido/tcm/agua/agua2.png",
+  deficiencia: "/recorrido/tcm/agua/agua3.png",
+  nutricion: "/recorrido/tcm/agua/agua4.png",
+  estilo: "/recorrido/tcm/agua/agua5.png",
+};
+
+// Agua · viñetas con el texto del curso (voz de María).
+const comicAgua: PasoComic[] = [
+  {
+    tipo: "vineta",
+    src: FOTOS_AGUA.intro,
+    paragraphs: [
+      "El Agua representa la capacidad de humedecer, descender, enfriar y almacenar. Representa la esencia, la herencia y la base sobre la que se desarrolla todo crecimiento físico, mental y espiritual. Rige el riñón (donde se almacena la Esencia), la vejiga, los huesos y el cabello.",
+      "Un Agua en equilibrio aporta quietud interior, una voluntad fuerte y una profunda sensación de estabilidad.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_AGUA.exceso,
+    paragraphs: [
+      "Cuando el Agua está en exceso, el miedo puede llegar a ser paralizante, favoreciendo la evitación, el aislamiento y la dificultad para avanzar. Es frecuente la aparición de retención de líquidos, hinchazón, sensación de frío crónico y una preocupación constante.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_AGUA.deficiencia,
+    paragraphs: [
+      "Cuando el Agua está deficiente, las reservas de energía comienzan a agotarse. Puede manifestarse como envejecimiento precoz, caída del cabello, debilidad en la zona lumbar y las rodillas, así como una profunda sensación de agotamiento que no mejora completamente con el descanso.",
+    ],
+  },
+  {
+    // Test sin foto: solo el box del test (título + preguntas + Guardar).
+    tipo: "test",
+    src: FOTOS_AGUA.deficiencia,
+    intro: [],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_AGUA.nutricion,
+    paragraphs: [
+      "Para nutrir el Agua, favorece alimentos negros o azulados como frijol negro, algas y arándanos; alimentos ricos en minerales como el sésamo y las nueces; caldo de huesos; especias calientes como el clavo y el ajo; y pescado y marisco.",
+      "Para protegerla, evita el exceso de sal, los ambientes que generen miedo o estrés continuado, el exceso de trabajo, la deshidratación y el agotamiento de las reservas, el exceso de crudos o fríos —sobre todo en invierno— y el abuso de cafeína, que agota el Qi del Riñón.",
+    ],
+  },
+  {
+    tipo: "vineta",
+    src: FOTOS_AGUA.estilo,
+    paragraphs: [
+      "El Agua necesita descanso, silencio y una adecuada conservación de la energía. Practica el silencio, la meditación o cualquier actividad que favorezca la calma interior, y prioriza el esfuerzo constante frente a los grandes impulsos de voluntad.",
+      "Acuéstate temprano durante el invierno, favoreciendo la conservación de la Esencia (Jing), y elige actividades que fortalezcan el cuerpo sin agotar las reservas.",
+    ],
+  },
+];
+
+// Fotos del cómic de Tierra (/public/recorrido/tcm/tierra): 4 fotos.
+const FOTOS_TIERRA = {
+  intro: "/recorrido/tcm/tierra/tierra1.png",
+  exceso: "/recorrido/tcm/tierra/tierra2.png",
+  deficiencia: "/recorrido/tcm/tierra/tierra3.png",
+  reequilibrar: "/recorrido/tcm/tierra/tierra4.png",
+};
+
+// Elementos que aún se arman desde su contenido rico (mismo arco narrativo).
+// Los arrays de texto se pasan como párrafos (con saltos de línea) y el test va
+// sin foto ni intro (solo el box del test).
+const comicDesdeRico = (
+  c: ContenidoElementoRico,
+  fotos: { intro: string; exceso: string; deficiencia: string; reequilibrar: string },
+): PasoComic[] => {
   const guiaTxt = [
     `Para reequilibrar, en la mesa: ${c.guia.nutricion.join("; ")}.`,
     `En tu día a día: ${c.guia.estiloDeVida.join("; ")}. Descanso: ${c.guia.descanso} Ejercicio: ${c.guia.ejercicio.join(", ")}.`,
   ];
   return [
-    { tipo: "vineta", src, paragraphs: [c.intro.join(" ")] },
-    { tipo: "vineta", src, paragraphs: [c.exceso.join(" ")] },
-    { tipo: "vineta", src, paragraphs: [c.deficiencia.join(" ")] },
-    { tipo: "test", src, intro: [c.desequilibrio[0]] },
-    { tipo: "vineta", src, paragraphs: guiaTxt },
+    { tipo: "vineta", src: fotos.intro, paragraphs: c.intro },
+    { tipo: "vineta", src: fotos.exceso, paragraphs: c.exceso },
+    { tipo: "vineta", src: fotos.deficiencia, paragraphs: c.deficiencia },
+    { tipo: "test", src: fotos.deficiencia, intro: [] },
+    { tipo: "vineta", src: fotos.reequilibrar, paragraphs: guiaTxt },
   ];
 };
 
+// Coloca los 2 tests de balance del elemento AL PRINCIPIO del cómic (antes del
+// contenido educativo). Es deliberado: si el usuario leyera antes las
+// descripciones de exceso/deficiencia, se autoetiquetaría y respondería sesgado.
+// Respondiendo primero, la autoevaluación es más espontánea y el perfil, más
+// fiable. Luego llega el aprendizaje (intro → exceso → deficiencia → reequilibrar).
+// Si el elemento aún no tiene tests nuevos, deja el marcador legacy en su sitio.
+const expandirTests = (el: Elemento, pasos: PasoComic[]): PasoComic[] => {
+  const tests = testsDeElemento(el);
+  if (tests.length === 0) return pasos;
+  const sinTest = pasos.filter((p) => p.tipo !== "test");
+  const src = pasos.find((p) => p.tipo === "test")?.src ?? sinTest[0]?.src ?? "";
+  const testPasos = tests.map((t) => ({ tipo: "test", src, testKey: t.key }) as PasoComic);
+  return [...testPasos, ...sinTest];
+};
+
 export const COMIC_ELEMENTO: Record<Elemento, PasoComic[]> = {
-  madera: comicMadera,
-  fuego: comicDesdeRico(fuego),
-  tierra: comicDesdeRico(tierra),
-  metal: comicDesdeRico(metal),
-  agua: comicDesdeRico(agua),
+  madera: expandirTests("madera", comicMadera),
+  fuego: expandirTests("fuego", comicFuego),
+  tierra: expandirTests("tierra", comicDesdeRico(tierra, FOTOS_TIERRA)),
+  metal: expandirTests("metal", comicMetal),
+  agua: expandirTests("agua", comicAgua),
 };

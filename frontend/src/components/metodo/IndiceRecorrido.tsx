@@ -139,8 +139,7 @@ export function IndiceRecorrido({
                    cursor="pointer" opacity={0.8} transition="all 0.15s" style={{ textShadow: INK_SHADOW }}
                    _hover={{ opacity: 1, transform: "scale(1.12)" }}>✕</Box>
 
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}
-                    style={{ textShadow: INK_SHADOW }}>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}>
                 Índice del mapa
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />

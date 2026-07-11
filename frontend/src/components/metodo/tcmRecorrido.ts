@@ -49,9 +49,8 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 // se construyan los pasos pendientes (perfil, ciclos, tu mapa, escucharte…).
 export const TCM_INDICE: PasoRecorrido[] = [
   { n: 1, titulo: "Medicina China",     ruta: () => "/metodo/tcm" },
-  { n: 2, titulo: "Equilibrio",         ruta: () => "/metodo/tcm/equilibrio" },
-  { n: 3, titulo: "Mapa energético",    ruta: () => "/metodo/tcm/mapa" },
-  { n: 4, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
+  { n: 2, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
+  { n: 3, titulo: "Tu perfil energético", ruta: () => "/metodo/tcm/perfil" },
 ];
 
 export const TCM_TOTAL = TCM_INDICE.length;
@@ -71,6 +70,31 @@ export interface PreguntaTest {
   pregunta: string;
   apoyo?: string;
   opciones: OpcionPuntuada[];
+}
+
+// ── Tests de balance (A/B/C = equilibrio/exceso/deficiencia) ─────────────────
+// Modelo nuevo de los tests de cada elemento (2 por elemento). Cada opción marca
+// el estado del elemento; el resultado (mayoría) alimenta el perfil. A=equilibrio,
+// B=exceso, C=deficiencia, de forma consistente en todas las preguntas.
+export type Balance = "equilibrio" | "exceso" | "deficiencia";
+
+export interface OpcionBalance {
+  key: string;            // "a" | "b" | "c" (estable, no cambiar tras publicar)
+  texto: string;
+  balance: Balance;
+}
+export interface PreguntaBalance {
+  key: string;            // única: p.ej. "madera-t1-q1" (estable)
+  pregunta: string;
+  /** Preguntas opcionales (p.ej. la de mujeres) no bloquean el avance. */
+  opcional?: boolean;
+  opciones: OpcionBalance[];
+}
+export interface TestElemento {
+  key: string;            // "madera-t1", "madera-t2" (estable)
+  /** Subtítulo del test (bajo el "TEST DE LA MADERA"). */
+  titulo?: string;
+  preguntas: PreguntaBalance[];
 }
 
 // ── Contenido de cada elemento (pasos 4-8: "El viaje") ──────────────────────
@@ -102,7 +126,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
   madera: {
     id: "madera",
     nombre: "Madera",
-    color: "#4c9a5e",
+    color: "#6f9463",
     significado:
       "La Madera es el impulso que empuja hacia arriba, como el brote que rompe la tierra en primavera. Es la energía de crecer, decidir, planificar y avanzar. Cuando fluye, hay claridad y capacidad de emprender; cuando se estanca, aparece la frustración.",
     organos: "Hígado (yin) y Vesícula Biliar (yang)",
@@ -142,12 +166,62 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
         ],
       },
       {
+        key: "madera-flujo",
+        pregunta:
+          "Cuando el Qi del Hígado no fluye, el estancamiento puede afectar a la digestión, la secreción de bilis, la circulación de la Sangre o el ciclo menstrual. ¿Notas alteraciones en alguno de estos?",
+        opciones: [
+          { key: "no", texto: "No, todo funciona con normalidad", puntos: { madera: 0 } },
+          { key: "a-veces", texto: "A veces, sobre todo en épocas de estrés", puntos: { madera: 2 } },
+          { key: "a-menudo", texto: "A menudo: digestión, ciclo o circulación alterados", puntos: { madera: 4 } },
+        ],
+      },
+      {
         key: "madera-decision",
         pregunta: "Ante una decisión, ¿cómo te sueles sentir?",
         opciones: [
           { key: "claro", texto: "Con claridad, decido y avanzo", puntos: { madera: 0 } },
           { key: "dudo", texto: "Dudo bastante antes de decidir", puntos: { madera: 2 } },
           { key: "bloqueo", texto: "Me bloqueo o lo evito", puntos: { madera: 3 } },
+        ],
+      },
+      {
+        key: "madera-ojos-tendones",
+        pregunta:
+          "Los ojos y los tendones son el principal termómetro de la Madera. ¿Notas molestias visuales, tensión en los tendones, rigidez o pérdida de flexibilidad?",
+        opciones: [
+          { key: "no", texto: "No, mi vista y mi cuerpo están flexibles", puntos: { madera: 0 } },
+          { key: "a-veces", texto: "A veces: vista cansada o cuerpo algo rígido", puntos: { madera: 2 } },
+          { key: "a-menudo", texto: "A menudo: molestias visuales, tendones tensos o rígidos", puntos: { madera: 4 } },
+        ],
+      },
+      {
+        key: "madera-movimiento",
+        pregunta:
+          "La Madera necesita movimiento y libre expresión del Qi. ¿Te mueves con regularidad y dejas salir la ira o la frustración, o tiendes a reprimirlas?",
+        opciones: [
+          { key: "fluye", texto: "Me muevo a menudo y expreso lo que siento", puntos: { madera: 0 } },
+          { key: "irregular", texto: "Voy a rachas; a veces me la trago", puntos: { madera: 2 } },
+          { key: "reprimo", texto: "Me muevo poco y suelo reprimir la frustración", puntos: { madera: 4 } },
+        ],
+      },
+      {
+        key: "madera-sudoracion",
+        pregunta:
+          "El sabor ácido de la Madera consolida los fluidos e inhibe la sudoración. ¿Sudas de forma excesiva o notas que pierdes fluidos con facilidad?",
+        opciones: [
+          { key: "no", texto: "No, mi sudoración es normal", puntos: { madera: 0 } },
+          { key: "a-veces", texto: "A veces sudo más de la cuenta", puntos: { madera: 2 } },
+          { key: "a-menudo", texto: "A menudo: sudoración excesiva o fluidos que se escapan", puntos: { madera: 3 } },
+        ],
+      },
+      {
+        key: "madera-rostro",
+        pregunta:
+          "En la observación del rostro, un tinte azul verdoso puede indicar desequilibrio de la Madera. ¿Has notado ese tono en alguna zona de tu cara?",
+        opciones: [
+          { key: "no", texto: "No, mi tez tiene buen color", puntos: { madera: 0 } },
+          { key: "a-veces", texto: "Alguna vez, de forma sutil", puntos: { madera: 2 } },
+          { key: "si", texto: "Sí, un tinte azul verdoso apreciable", puntos: { madera: 3 } },
         ],
       },
     ],
@@ -605,6 +679,497 @@ export const OBSERVACIONES: SeccionObservacion[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────
+// TESTS DE BALANCE · 2 por elemento (A=equilibrio, B=exceso, C=deficiencia)
+// Los va pasando María. Añadir un test = añadir aquí (los `key` son estables).
+// ─────────────────────────────────────────────────────────────────────────
+const abc = (a: string, b: string, c: string): OpcionBalance[] => [
+  { key: "a", texto: a, balance: "equilibrio" },
+  { key: "b", texto: b, balance: "exceso" },
+  { key: "c", texto: c, balance: "deficiencia" },
+];
+
+export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
+  madera: [
+    {
+      key: "madera-t1",
+      titulo: "¿Cómo está tu elemento Madera?",
+      preguntas: [
+        { key: "madera-t1-q1", pregunta: "Cuando aparece una oportunidad nueva…", opciones: abc(
+          "Me ilusiono, la evalúo y, si tiene sentido, doy el paso.",
+          "Quiero aprovecharla cuanto antes y me impaciento si las cosas no avanzan rápido.",
+          "Me cuesta decidirme y suelo dejar pasar la oportunidad por miedo o dudas.") },
+        { key: "madera-t1-q2", pregunta: "Cuando alguien no hace las cosas como tú esperabas…", opciones: abc(
+          "Intento comprender la situación y buscar una solución.",
+          "Me irrito con facilidad y siento ganas de corregir o controlar.",
+          "Prefiero no decir nada, aunque por dentro me moleste.") },
+        { key: "madera-t1-q3", pregunta: "¿Cómo afrontas los cambios?", opciones: abc(
+          "Suelo adaptarme sin perder mi rumbo.",
+          "Quiero que todo se resuelva inmediatamente y me frustra la espera.",
+          "Los cambios me generan inseguridad y prefiero quedarme en lo conocido.") },
+        { key: "madera-t1-q4", pregunta: "Cuando tienes un objetivo importante…", opciones: abc(
+          "Elaboro un plan y avanzo paso a paso.",
+          "Me obsesiono con conseguirlo y me exijo demasiado.",
+          "Me cuesta empezar o abandono antes de intentarlo.") },
+        { key: "madera-t1-q5", pregunta: "Cuando surge un conflicto…", opciones: abc(
+          "Hablo con claridad y respeto para resolverlo.",
+          "Reacciono con enfado o me cuesta controlar el tono.",
+          "Evito el conflicto aunque eso me perjudique.") },
+        { key: "madera-t1-q6", pregunta: "¿Cómo describirías tu energía habitual?", opciones: abc(
+          "Constante y flexible.",
+          "Intensa, acelerada y con sensación de ir siempre deprisa.",
+          "Baja, con dificultad para arrancar o mantener el impulso.") },
+        { key: "madera-t1-q7", pregunta: "¿Te resulta fácil tomar decisiones?", opciones: abc(
+          "Sí, suelo decidir con seguridad.",
+          "Sí, pero a veces decido demasiado rápido.",
+          "Me cuesta mucho decidir y cambio de opinión con frecuencia.") },
+        { key: "madera-t1-q8", pregunta: "Cuando las cosas no salen como esperabas…", opciones: abc(
+          "Busco una alternativa y continúo.",
+          "Me enfado y siento mucha frustración.",
+          "Me desanimo y pierdo las ganas de seguir.") },
+        { key: "madera-t1-q9", pregunta: "¿Cómo sientes tu cuerpo cuando atraviesas épocas de estrés?", opciones: abc(
+          "Noto cierta tensión, pero consigo liberarla.",
+          "Se me cargan el cuello, los hombros o la mandíbula con frecuencia.",
+          "Me siento sin fuerza, con sensación de rigidez o debilidad muscular.") },
+        { key: "madera-t1-q10", pregunta: "¿Cómo describirías tu carácter?", opciones: abc(
+          "Decidido, pero flexible.",
+          "Muy competitivo, impaciente o dominante.",
+          "Reservado, inseguro o con dificultad para hacerme valer.") },
+        { key: "madera-t1-q11", pregunta: "¿Cómo reaccionas cuando algo bloquea tus planes?", opciones: abc(
+          "Busco otro camino.",
+          "Me desespero porque siento que todo va demasiado lento.",
+          "Me paralizo y no sé cómo continuar.") },
+        { key: "madera-t1-q12", pregunta: "¿Eres capaz de visualizar con facilidad nuevos caminos para tu vida?", opciones: abc(
+          "Sí, suelo tener una visión clara de hacia dónde quiero ir.",
+          "Tengo muchos planes e ideas y quiero hacerlos todos cuanto antes.",
+          "Me cuesta imaginar el futuro y me da miedo salir de mi zona de confort.") },
+      ],
+    },
+    {
+      key: "madera-t2",
+      titulo: "Tu Qi: cuerpo y emociones",
+      preguntas: [
+        { key: "madera-t2-q1", pregunta: "Cuando atraviesas una época de estrés…", opciones: abc(
+          "Consigo expresar lo que siento y recupero el equilibrio con relativa facilidad.",
+          "Siento una presión o un nudo en el pecho, el estómago o el abdomen que parece acompañar mis emociones.",
+          "Me cuesta identificar lo que siento, pero noto que algo «se queda dentro».") },
+        { key: "madera-t2-q2", pregunta: "¿Cómo suele reaccionar tu digestión cuando estás preocupado o enfadado?", opciones: abc(
+          "Apenas noto cambios.",
+          "Aparecen hinchazón, sensación de plenitud o digestiones pesadas.",
+          "Pierdo el apetito o noto que mi digestión se vuelve muy irregular.") },
+        { key: "madera-t2-q3", pregunta: "Cuando reprimes una emoción durante varios días…", opciones: abc(
+          "Busco una forma saludable de expresarla.",
+          "Acabo sintiendo mucha tensión física o emocional.",
+          "Me desconecto de lo que siento y me cuesta hablar de ello.") },
+        { key: "madera-t2-q4", pregunta: "¿Sueles notar tensión o molestias en alguna de estas zonas sin una causa clara?", opciones: abc(
+          "Rara vez.",
+          "Pecho, costillas, abdomen, mamas o bajo vientre.",
+          "No dolor, pero sí sensación de bloqueo o rigidez general.") },
+        { key: "madera-t2-q5", pregunta: "¿Cómo sientes que fluyen tus emociones?", opciones: abc(
+          "Las vivo, las expreso y después siguen su curso.",
+          "Se acumulan hasta que exploto.",
+          "Me cuesta sentirlas o expresarlas y tiendo a guardármelas.") },
+        { key: "madera-t2-q6", pregunta: "¿Notas que tus síntomas físicos cambian según tu estado emocional?", opciones: abc(
+          "Apenas lo noto.",
+          "Sí, cuando tengo estrés aparecen molestias digestivas, tensión o sensación de presión.",
+          "No estoy seguro, aunque suelo sentirme más apagado cuando paso por momentos difíciles.") },
+        { key: "madera-t2-q7", pregunta: "En las mujeres (opcional). Antes o durante la menstruación…", opcional: true, opciones: abc(
+          "Apenas noto cambios importantes.",
+          "Siento más tensión, distensión, irritabilidad o molestias en los pechos o el abdomen.",
+          "Me siento con muy poca energía o emocionalmente bloqueada.") },
+        { key: "madera-t2-q8", pregunta: "En los últimos meses…", opciones: abc(
+          "Siento que mi energía fluye y avanzo con naturalidad.",
+          "Tengo la sensación de estar «atascado», como si algo no terminara de desbloquearse.",
+          "Más que bloqueado, siento que me falta impulso para moverme hacia delante.") },
+      ],
+    },
+  ],
+  fuego: [
+    {
+      key: "fuego-t1",
+      titulo: "¿Cómo está tu elemento Fuego?",
+      preguntas: [
+        { key: "fuego-t1-q1", pregunta: "Cuando estás con otras personas…", opciones: abc(
+          "Disfruto de la compañía, pero también de mis momentos de tranquilidad.",
+          "Necesito estar rodeado de gente o buscando constantemente nuevos estímulos.",
+          "Suelo mantenerme al margen y me cuesta abrirme.") },
+        { key: "fuego-t1-q2", pregunta: "¿Cómo expresas lo que sientes?", opciones: abc(
+          "Lo hago con naturalidad y sinceridad.",
+          "Mis emociones son muy intensas y a veces me cuesta contenerlas.",
+          "Me cuesta expresar lo que siento, incluso con personas cercanas.") },
+        { key: "fuego-t1-q3", pregunta: "¿Cómo suele ser tu descanso?", opciones: abc(
+          "Duermo bien y me levanto descansado.",
+          "Me cuesta desconectar, doy muchas vueltas a la cabeza o me despierto durante la noche.",
+          "Duermo, pero aun así me levanto sin energía o con sensación de apatía.") },
+        { key: "fuego-t1-q4", pregunta: "Cuando alguien no responde como esperabas…", opciones: abc(
+          "Lo acepto sin darle demasiadas vueltas.",
+          "Me afecta mucho y puedo reaccionar de forma impulsiva o intensa.",
+          "Prefiero alejarme antes que mostrar cómo me siento.") },
+        { key: "fuego-t1-q5", pregunta: "¿Cómo describirías tu forma de relacionarte?", opciones: abc(
+          "Cercana, auténtica y equilibrada.",
+          "Muy intensa; necesito mucha atención o contacto.",
+          "Reservada; me cuesta crear vínculos profundos.") },
+        { key: "fuego-t1-q6", pregunta: "¿Qué ocurre cuando tienes tiempo libre?", opciones: abc(
+          "Alterno momentos de actividad y de calma.",
+          "Necesito estar haciendo algo o viendo gente constantemente.",
+          "Me cuesta encontrar ilusión o motivación para hacer planes.") },
+        { key: "fuego-t1-q7", pregunta: "¿Cómo reaccionas cuando estás nervioso?", opciones: abc(
+          "Intento calmarme y recuperar el equilibrio.",
+          "Hablo mucho, me cuesta parar o siento una gran inquietud.",
+          "Me cierro, hablo poco y prefiero aislarme.") },
+        { key: "fuego-t1-q8", pregunta: "¿Cómo sientes tu energía emocional?", opciones: abc(
+          "Estable y alegre la mayor parte del tiempo.",
+          "Muy cambiante, pasando de la euforia al agotamiento con facilidad.",
+          "Bastante apagada o con dificultad para entusiasmarme.") },
+        { key: "fuego-t1-q9", pregunta: "¿Cómo te sientes cuando estás solo?", opciones: abc(
+          "Disfruto tanto de la soledad como de la compañía.",
+          "Me incomoda y necesito distraerme o contactar con alguien.",
+          "Estoy acostumbrado, aunque a veces siento que me cuesta conectar con los demás.") },
+        { key: "fuego-t1-q10", pregunta: "¿Sientes que las personas suelen comprender cómo te sientes?", opciones: abc(
+          "Sí, normalmente consigo expresarme con claridad.",
+          "A veces siento que mis emociones desbordan a los demás.",
+          "Muchas veces siento que no consigo transmitir lo que llevo dentro.") },
+        { key: "fuego-t1-q11", pregunta: "¿Cómo describirías tu entusiasmo por la vida?", opciones: abc(
+          "Tengo ilusión por nuevos proyectos sin perder la calma.",
+          "Me entusiasmo muchísimo al principio, pero me acelero con facilidad.",
+          "Me cuesta ilusionarme o encontrar aquello que me inspire.") },
+        { key: "fuego-t1-q12", pregunta: "¿Qué frase describe mejor tu momento actual?", opciones: abc(
+          "Me siento conectado conmigo mismo y con las personas que quiero.",
+          "Vivo con mucha intensidad y me cuesta bajar el ritmo.",
+          "Siento que me falta calor, ilusión o conexión con los demás.") },
+      ],
+    },
+    {
+      key: "fuego-t2",
+      titulo: "Tu Corazón: cuerpo y energía",
+      preguntas: [
+        { key: "fuego-t2-q1", pregunta: "Cuando atraviesas una época de mucho estrés o intensidad emocional…", opciones: abc(
+          "Mi cuerpo apenas cambia y consigo mantener la calma.",
+          "Noto palpitaciones, calor en el pecho o la cara, o me cuesta relajarme.",
+          "Me siento débil, con poca energía o noto las manos y los pies fríos.") },
+        { key: "fuego-t2-q2", pregunta: "¿Cómo describirías tu concentración?", opciones: abc(
+          "Me resulta fácil mantener la atención y pensar con claridad.",
+          "Mi mente va demasiado deprisa y salto de un pensamiento a otro.",
+          "Me cuesta concentrarme, tengo olvidos o siento la mente apagada.") },
+        { key: "fuego-t2-q3", pregunta: "¿Cómo suele reaccionar tu cuerpo cuando tus emociones se desbordan?", opciones: abc(
+          "Soy consciente de ellas y consigo recuperar el equilibrio.",
+          "Mi cara se enrojece, siento calor o mi corazón late con fuerza.",
+          "Me siento agotado y sin fuerza para reaccionar.") },
+        { key: "fuego-t2-q4", pregunta: "¿Has notado alguno de estos síntomas con frecuencia?", opciones: abc(
+          "Ninguno de forma habitual.",
+          "Sabor amargo en la boca, sensación de calor o tendencia a sonrojarme fácilmente.",
+          "Sensación de frío, especialmente en manos y pies, o mala circulación.") },
+        { key: "fuego-t2-q5", pregunta: "¿Cómo sientes la energía de tu corazón?", opciones: abc(
+          "Estable, tranquila y con vitalidad.",
+          "Muy acelerada o intensa, como si me costara bajar el ritmo.",
+          "Débil o apagada, con poca resistencia física o emocional.") },
+        { key: "fuego-t2-q6", pregunta: "Cuando te miras al espejo…", opciones: abc(
+          "Mi rostro suele reflejar vitalidad y naturalidad.",
+          "Con frecuencia noto la cara muy enrojecida o con sensación de calor.",
+          "Mi rostro se ve apagado o sin demasiado brillo.") },
+      ],
+    },
+  ],
+  tierra: [
+    {
+      key: "tierra-t1",
+      titulo: "¿Cómo está tu elemento Tierra?",
+      preguntas: [
+        { key: "tierra-t1-q1", pregunta: "Cuando alguien cercano necesita ayuda…", opciones: abc(
+          "Le apoyo sin olvidarme de mis propias necesidades.",
+          "Me implico tanto que termino intentando resolverle la vida.",
+          "Me cuesta ponerme en primer lugar y suelo decir que sí aunque no pueda.") },
+        { key: "tierra-t1-q2", pregunta: "¿Cómo es tu relación con la comida?", opciones: abc(
+          "Como con tranquilidad y suelo quedar satisfecho.",
+          "Como por ansiedad, preocupación o para sentirme mejor.",
+          "Después de comer suelo sentirme pesado, hinchado o con poca energía.") },
+        { key: "tierra-t1-q3", pregunta: "Cuando aparece un cambio importante…", opciones: abc(
+          "Lo valoro con calma y me adapto si es necesario.",
+          "Me cuesta soltar lo conocido y necesito que todo permanezca igual.",
+          "Me siento inseguro y busco que otros decidan por mí.") },
+        { key: "tierra-t1-q4", pregunta: "¿Qué ocurre con tus pensamientos cuando tienes un problema?", opciones: abc(
+          "Reflexiono, saco conclusiones y sigo adelante.",
+          "Le doy vueltas una y otra vez sin encontrar una solución.",
+          "Me bloqueo y dudo de mi capacidad para resolverlo.") },
+        { key: "tierra-t1-q5", pregunta: "¿Cómo cuidas de ti?", opciones: abc(
+          "Dedico tiempo tanto a mí como a las personas que quiero.",
+          "Cuido mucho de los demás y me cuesta delegar o soltar el control.",
+          "Me olvido de mis propias necesidades para atender las de los demás.") },
+        { key: "tierra-t1-q6", pregunta: "¿Cómo describirías tu autoestima en este momento?", opciones: abc(
+          "Me siento seguro de quién soy, sin necesidad de demostrar nada.",
+          "Necesito sentir que soy útil o necesario para los demás.",
+          "Me cuesta reconocer mi propio valor y suelo poner a los demás por delante.") },
+        { key: "tierra-t1-q7", pregunta: "¿Cómo responde tu digestión habitualmente?", opciones: abc(
+          "Es ligera y estable.",
+          "Tiendo a comer más de la cuenta o siento pesadez con frecuencia.",
+          "Suelo tener hinchazón, digestiones lentas o heces blandas.") },
+        { key: "tierra-t1-q8", pregunta: "¿Cómo sientes tu energía a lo largo del día?", opciones: abc(
+          "Se mantiene bastante estable.",
+          "Tengo energía, pero a veces la gasto en exceso preocupándome por todo.",
+          "Me siento cansado, especialmente después de comer.") },
+        { key: "tierra-t1-q9", pregunta: "Cuando alguien tiene un problema…", opciones: abc(
+          "Escucho, acompaño y confío en que encontrará su camino.",
+          "Siento la necesidad de intervenir y hacerme cargo de la situación.",
+          "Absorbo sus emociones y termino agotado.") },
+        { key: "tierra-t1-q10", pregunta: "¿Qué papel tiene el dulce en tu vida?", opciones: abc(
+          "Lo disfruto de vez en cuando, sin depender de él.",
+          "Lo busco cuando estoy preocupado o necesito consuelo.",
+          "Tengo antojos frecuentes de dulce, especialmente cuando estoy cansado o decaído.") },
+        { key: "tierra-t1-q11", pregunta: "¿Cómo describirías tu cuerpo en este momento?", opciones: abc(
+          "Me siento fuerte y estable.",
+          "Tiendo a acumular peso o líquidos con facilidad.",
+          "Noto poca fuerza muscular o sensación de debilidad.") },
+        { key: "tierra-t1-q12", pregunta: "¿Qué frase describe mejor tu momento actual?", opciones: abc(
+          "Me siento nutrido y capaz de cuidar de los demás sin perderme a mí mismo.",
+          "Me cuesta soltar el control y me preocupo demasiado por quienes quiero.",
+          "Siento que necesito volver a cuidar de mí y recuperar mi propio centro.") },
+      ],
+    },
+    {
+      key: "tierra-t2",
+      titulo: "Tu Bazo: transformación y sostén",
+      preguntas: [
+        { key: "tierra-t2-q1", pregunta: "Después de comer…", opciones: abc(
+          "Me siento saciado y con energía para continuar el día.",
+          "Siento pesadez, sueño o necesito descansar.",
+          "Me quedo sin fuerzas y noto que cualquier comida me agota.") },
+        { key: "tierra-t2-q2", pregunta: "¿Cómo describirías tu cuerpo últimamente?", opciones: abc(
+          "Ligero y con una energía estable.",
+          "Siento retención de líquidos, hinchazón o acumulación de mucosidad con facilidad.",
+          "Me siento débil, con poca fuerza física o tono muscular.") },
+        { key: "tierra-t2-q3", pregunta: "¿Has notado alguno de estos signos con frecuencia?", opciones: abc(
+          "Ninguno de ellos.",
+          "Sensación de boca pastosa o un sabor dulce o grasiento sin una causa evidente.",
+          "Aparición de hematomas con facilidad o pequeños sangrados sin golpes importantes.") },
+        { key: "tierra-t2-q4", pregunta: "¿Cómo responde tu mente durante el día?", opciones: abc(
+          "Me siento centrado y pienso con claridad.",
+          "Me cuesta dejar de dar vueltas a las mismas preocupaciones.",
+          "Tengo dificultad para concentrarme y siento la mente cansada o «nublada».") },
+        { key: "tierra-t2-q5", pregunta: "¿Cómo te sientes físicamente al levantarte por la mañana?", opciones: abc(
+          "Descansado y con ganas de empezar el día.",
+          "Me noto pesado o con sensación de hinchazón.",
+          "Me cuesta arrancar y siento que mi energía tarda mucho en despertar.") },
+        { key: "tierra-t2-q6", pregunta: "¿Qué frase describe mejor cómo recibes el cuidado y el afecto?", opciones: abc(
+          "Sé cuidar de los demás y también permitirme recibir.",
+          "Me cuesta soltar el control y siento que debo hacerme cargo de todo.",
+          "Me cuesta sentirme sostenido y, a menudo, olvido cuidar de mí mismo.") },
+        { key: "tierra-t2-q7", pregunta: "Cuando tienes muchas cosas en la cabeza…", opciones: abc(
+          "Las organizo y voy resolviéndolas poco a poco.",
+          "No puedo dejar de pensar en ellas, incluso cuando intento descansar.",
+          "Me abruman y termino sin saber por dónde empezar.") },
+      ],
+    },
+  ],
+  metal: [
+    {
+      key: "metal-t1",
+      titulo: "¿Cómo está tu elemento Metal?",
+      preguntas: [
+        { key: "metal-t1-q1", pregunta: "Cuando una etapa de tu vida termina…", opciones: abc(
+          "Agradezco lo vivido y sigo adelante.",
+          "Me cuesta aceptar el cambio y necesito que todo permanezca como estaba.",
+          "Me aferro al pasado y me cuesta cerrar ciclos.") },
+        { key: "metal-t1-q2", pregunta: "¿Cómo describirías tu forma de organizar tu vida?", opciones: abc(
+          "Mantengo un orden que me aporta tranquilidad sin volverme rígido.",
+          "Necesito que todo esté bajo control y me incomoda mucho el desorden.",
+          "Me cuesta organizarme y siento que el caos me supera.") },
+        { key: "metal-t1-q3", pregunta: "Cuando alguien cruza uno de tus límites…", opciones: abc(
+          "Lo expreso con respeto y claridad.",
+          "Reacciono de forma tajante o muy crítica.",
+          "Me cuesta decir que no y termino cediendo.") },
+        { key: "metal-t1-q4", pregunta: "¿Cómo vives los errores?", opciones: abc(
+          "Los veo como una oportunidad para aprender.",
+          "Soy muy exigente conmigo mismo y me cuesta aceptar la imperfección.",
+          "Me desanimo con facilidad y dudo de mi propio valor.") },
+        { key: "metal-t1-q5", pregunta: "¿Cómo te adaptas a los cambios inesperados?", opciones: abc(
+          "Suelo adaptarme sin perder mi equilibrio.",
+          "Me generan mucha incomodidad porque rompen mis planes.",
+          "Me desorganizan y siento que pierdo el rumbo.") },
+        { key: "metal-t1-q6", pregunta: "¿Qué relación tienes con el pasado?", opciones: abc(
+          "Lo recuerdo con cariño, pero no condiciona mi presente.",
+          "Me cuesta aceptar que algunas cosas ya no volverán a ser como antes.",
+          "Hay personas o situaciones que todavía no consigo soltar.") },
+        { key: "metal-t1-q7", pregunta: "¿Cómo describirías tu respiración la mayor parte del tiempo?", opciones: abc(
+          "Profunda y tranquila.",
+          "Tensa o contenida cuando necesito controlar una situación.",
+          "Superficial, como si respirara sin llenar completamente los pulmones.") },
+        { key: "metal-t1-q8", pregunta: "¿Cómo responde tu cuerpo habitualmente?", opciones: abc(
+          "Rara vez enfermo y me recupero con facilidad.",
+          "Suelo tener estreñimiento, congestión nasal o problemas de piel cuando estoy bajo presión.",
+          "Me resfrío con facilidad o siento que mis defensas son bajas.") },
+        { key: "metal-t1-q9", pregunta: "¿Cómo reaccionas cuando alguien hace las cosas de una forma diferente a la tuya?", opciones: abc(
+          "Respeto que existan diferentes maneras de hacer las cosas.",
+          "Me cuesta no corregir o señalar lo que considero incorrecto.",
+          "Me adapto a los demás, incluso cuando va en contra de lo que pienso.") },
+        { key: "metal-t1-q10", pregunta: "¿Cómo sientes tu autoestima?", opciones: abc(
+          "Reconozco mi valor sin necesidad de compararme.",
+          "Soy muy crítico conmigo mismo y rara vez siento que es suficiente.",
+          "Me cuesta reconocer mis cualidades y el entorno influye mucho en cómo me siento.") },
+        { key: "metal-t1-q11", pregunta: "¿Has notado alguno de estos síntomas con frecuencia?", opciones: abc(
+          "Ninguno de ellos.",
+          "Piel sensible, estreñimiento o congestión nasal persistente.",
+          "Resfriados frecuentes, respiración superficial o problemas recurrentes de piel.") },
+        { key: "metal-t1-q12", pregunta: "¿Qué frase describe mejor tu momento actual?", opciones: abc(
+          "Vivo con orden y flexibilidad, sabiendo qué conservar y qué dejar marchar.",
+          "Necesito que todo sea perfecto y me cuesta relajar el control.",
+          "Siento que necesito recuperar mi estructura, fortalecer mis límites y aprender a soltar.") },
+        { key: "metal-t1-q13", pregunta: "Cuando alguien te decepciona…", opciones: abc(
+          "Expreso lo que siento y sigo adelante.",
+          "Me vuelvo más duro o distante para no volver a sufrir.",
+          "Me cuesta cerrar esa herida y sigo reviviéndola durante mucho tiempo.") },
+        { key: "metal-t1-q14", pregunta: "¿Cómo es tu espacio personal?", opciones: abc(
+          "Ordenado de una forma que me hace sentir bien.",
+          "Muy organizado; me incomoda cuando algo está fuera de su sitio.",
+          "Me cuesta mantener el orden y eso termina afectando a mi bienestar.") },
+      ],
+    },
+    {
+      key: "metal-t2",
+      titulo: "Tu Pulmón: aire y defensa",
+      preguntas: [
+        { key: "metal-t2-q1", pregunta: "¿Cómo describirías tu respiración en el día a día?", opciones: abc(
+          "Profunda, tranquila y siento que el aire entra con facilidad.",
+          "A veces siento el pecho tenso o necesito suspirar con frecuencia.",
+          "Suelo respirar de forma superficial o siento que no lleno completamente los pulmones.") },
+        { key: "metal-t2-q2", pregunta: "¿Cómo responde tu cuerpo a los cambios de estación o cuando hay personas enfermas cerca?", opciones: abc(
+          "Suelo mantenerme sano o me recupero con facilidad.",
+          "Mi cuerpo aguanta bien, aunque el estrés suele reflejarse en la piel o la respiración.",
+          "Me resfrío con facilidad o siento que mis defensas están bajas.") },
+        { key: "metal-t2-q3", pregunta: "¿Has notado alguno de estos signos con frecuencia?", opciones: abc(
+          "Ninguno de ellos.",
+          "Congestión nasal, problemas respiratorios o alteraciones en la piel.",
+          "Resfriados frecuentes, piel seca o una sensación de debilidad general.") },
+        { key: "metal-t2-q4", pregunta: "Cuando atraviesas una etapa emocional difícil…", opciones: abc(
+          "Mi respiración se mantiene tranquila y poco a poco recupero el equilibrio.",
+          "Noto el pecho cerrado, suspiro con frecuencia o siento que necesito tomar aire.",
+          "Me falta energía, mi voz pierde fuerza o siento que cualquier esfuerzo me cansa.") },
+        { key: "metal-t2-q5", pregunta: "Cuando te miras al espejo…", opciones: abc(
+          "Mi rostro refleja vitalidad y buen color.",
+          "Noto que el estrés se refleja rápidamente en mi piel o en mi expresión.",
+          "Mi rostro suele verse pálido o con poca luminosidad.") },
+        { key: "metal-t2-q6", pregunta: "¿Has notado alguno de estos síntomas sin una causa clara?", opciones: abc(
+          "No especialmente.",
+          "Un sabor picante en la boca o una mayor sensibilidad en la nariz y la piel.",
+          "Piel seca, nariz sensible o tendencia a enfermar con facilidad.") },
+        { key: "metal-t2-q7", pregunta: "Cuando la vida te obliga a cerrar una etapa…", opciones: abc(
+          "Me doy tiempo para sentirla y, poco a poco, consigo seguir adelante.",
+          "Intento mantener el control y me cuesta aceptar que las cosas cambien.",
+          "Siento que una parte de mí sigue aferrada al pasado y me cuesta volver a respirar con ligereza.") },
+      ],
+    },
+  ],
+  agua: [
+    {
+      key: "agua-t1",
+      titulo: "¿Cómo está tu elemento Agua?",
+      preguntas: [
+        { key: "agua-t1-q1", pregunta: "Cuando aparece un problema importante…", opciones: abc(
+          "Mantengo la calma y busco la mejor manera de afrontarlo.",
+          "Mi primera reacción es protegerme y evitar correr riesgos.",
+          "Siento que no tengo energía suficiente para enfrentarlo.") },
+        { key: "agua-t1-q2", pregunta: "¿Cómo describirías tu nivel de energía?", opciones: abc(
+          "Constante y estable durante la mayor parte del día.",
+          "Tengo energía, pero la gasto estando siempre en alerta.",
+          "Me siento agotado con frecuencia, incluso después de descansar.") },
+        { key: "agua-t1-q3", pregunta: "¿Qué relación tienes con el miedo?", opciones: abc(
+          "Lo escucho, pero no dejo que decida por mí.",
+          "Muchas decisiones están condicionadas por el miedo a perder seguridad.",
+          "Vivo con una sensación de preocupación o inquietud casi constante.") },
+        { key: "agua-t1-q4", pregunta: "¿Cómo afrontas los cambios importantes?", opciones: abc(
+          "Confío en mi capacidad para adaptarme.",
+          "Prefiero evitar los cambios y mantener lo conocido.",
+          "Me generan mucha inseguridad porque siento que no podré con ellos.") },
+        { key: "agua-t1-q5", pregunta: "¿Cómo sientes tu fuerza interior?", opciones: abc(
+          "Confío en mí incluso cuando aparecen dificultades.",
+          "Necesito controlar el entorno para sentirme seguro.",
+          "Dudo de mis recursos y siento que mis reservas son limitadas.") },
+        { key: "agua-t1-q6", pregunta: "¿Cómo describirías tu descanso?", opciones: abc(
+          "Me recupero bien después de dormir.",
+          "Duermo, pero sigo despertándome preocupado o en tensión.",
+          "Aunque descanse, siento que nunca termino de recuperar la energía.") },
+        { key: "agua-t1-q7", pregunta: "¿Cómo responde tu cuerpo al frío?", opciones: abc(
+          "Lo tolero con normalidad.",
+          "Suelo tener mucho frío o retener líquidos con facilidad.",
+          "El frío me afecta mucho y siento una falta de vitalidad general.") },
+        { key: "agua-t1-q8", pregunta: "¿Cómo es tu relación con el esfuerzo?", opciones: abc(
+          "Sé cuándo avanzar y cuándo descansar.",
+          "Evito situaciones que me hagan sentir vulnerable o inseguro.",
+          "Tengo la sensación de vivir siempre al límite de mis fuerzas.") },
+        { key: "agua-t1-q9", pregunta: "¿Cómo describirías tu vitalidad en este momento?", opciones: abc(
+          "Me siento fuerte y con capacidad de recuperación.",
+          "Intento conservar energía porque temo quedarme sin recursos.",
+          "Siento que llevo demasiado tiempo funcionando con las reservas.") },
+        { key: "agua-t1-q10", pregunta: "¿Cómo reaccionas ante la incertidumbre?", opciones: abc(
+          "La acepto como parte de la vida.",
+          "Necesito controlar lo que va a pasar para sentirme tranquilo.",
+          "Me genera ansiedad y una sensación constante de inseguridad.") },
+        { key: "agua-t1-q11", pregunta: "¿Has notado alguno de estos signos con frecuencia?", opciones: abc(
+          "Ninguno de ellos.",
+          "Retención de líquidos, sensación de frío o hinchazón.",
+          "Molestias en la zona lumbar o las rodillas, caída del cabello o disminución de la libido.") },
+        { key: "agua-t1-q12", pregunta: "¿Qué frase describe mejor tu momento actual?", opciones: abc(
+          "Me siento conectado con mi energía y confío en la vida.",
+          "Vivo intentando protegerme y controlar lo que pueda ocurrir.",
+          "Necesito recuperar mis fuerzas y volver a sentir que tengo reservas.") },
+        { key: "agua-t1-q13", pregunta: "¿Cómo responde tu cuerpo después de una época de mucho esfuerzo?", opciones: abc(
+          "Me recupero con relativa rapidez.",
+          "Retengo líquidos o siento el cuerpo pesado.",
+          "Tardo mucho tiempo en recuperar la energía.") },
+        { key: "agua-t1-q14", pregunta: "¿Cómo sientes la parte baja de tu espalda y tus rodillas?", opciones: abc(
+          "Fuertes y estables.",
+          "Suelo notar frío o rigidez en esa zona.",
+          "Con frecuencia siento debilidad, molestias o falta de fuerza.") },
+        { key: "agua-t1-q15", pregunta: "¿Cómo describirías tu energía vital?", opciones: abc(
+          "Tengo una buena resistencia física y emocional.",
+          "Vivo con la necesidad de ahorrar energía por si ocurre algo.",
+          "Siento que mis «baterías» nunca llegan a cargarse del todo.") },
+        { key: "agua-t1-q16", pregunta: "¿Has notado alguno de estos signos sin una causa clara?", opciones: abc(
+          "No especialmente.",
+          "Sensación persistente de frío, especialmente en el cuerpo o las extremidades.",
+          "Caída del cabello, disminución del deseo sexual o agotamiento prolongado.") },
+        { key: "agua-t1-q17", pregunta: "Cuando no sabes qué ocurrirá mañana…", opciones: abc(
+          "Confío en que encontraré la manera de adaptarme.",
+          "Necesito tenerlo todo previsto para sentirme seguro.",
+          "La incertidumbre me agota y siento que no tengo recursos para afrontarla.") },
+      ],
+    },
+    {
+      key: "agua-t2",
+      titulo: "Tu Riñón: reservas y esencia",
+      preguntas: [
+        { key: "agua-t2-q1", pregunta: "¿Cómo describirías tu respiración la mayor parte del tiempo?", opciones: abc(
+          "Profunda, tranquila y estable.",
+          "A veces la contengo sin darme cuenta cuando estoy preocupado o necesito controlar una situación.",
+          "Siento que me cuesta respirar profundamente o que mi respiración es superficial.") },
+        { key: "agua-t2-q2", pregunta: "¿Cómo responde tu cuerpo con los líquidos?", opciones: abc(
+          "No suelo tener problemas de retención ni urinarios.",
+          "Retengo líquidos o me siento hinchado con facilidad.",
+          "Tengo molestias urinarias o siento que mi metabolismo del agua no funciona con normalidad.") },
+        { key: "agua-t2-q3", pregunta: "¿Has notado alguno de estos signos con frecuencia?", opciones: abc(
+          "Ninguno de ellos.",
+          "Sensación de sabor salado en la boca sin una causa evidente.",
+          "Ojeras oscuras, caída del cabello o debilidad en huesos y articulaciones.") },
+        { key: "agua-t2-q4", pregunta: "¿Cómo sientes actualmente tu cuerpo?", opciones: abc(
+          "Fuerte, estable y con buena capacidad de recuperación.",
+          "Siento frío con facilidad o noto que mi cuerpo retiene líquidos.",
+          "Me noto más frágil de lo habitual, especialmente en la zona lumbar, las rodillas o el cabello.") },
+        { key: "agua-t2-q5", pregunta: "¿Cómo describirías la salud de tu cabello, tus huesos y tu audición?", opciones: abc(
+          "En general se mantienen fuertes y saludables.",
+          "No noto grandes cambios, aunque el frío o la humedad me afectan bastante.",
+          "He notado caída del cabello, pérdida de fuerza ósea o cambios en la audición.") },
+        { key: "agua-t2-q6", pregunta: "Cuando te miras al espejo…", opciones: abc(
+          "Mi rostro refleja vitalidad y descanso.",
+          "A veces noto la cara apagada cuando paso épocas de mucho estrés.",
+          "Con frecuencia observo ojeras oscuras o una expresión de agotamiento, incluso después de descansar.") },
+        { key: "agua-t2-q7", pregunta: "Cuando llevas varias semanas con mucho trabajo o estrés…", opciones: abc(
+          "Consigo recuperarme dedicándome tiempo y descansando.",
+          "Aguanto porque siento que no puedo bajar el ritmo, aunque mi cuerpo me pida parar.",
+          "Tengo la sensación de que cada vez recupero menos energía y voy funcionando «en reserva».") },
+      ],
+    },
+  ],
+};
+
+// ─────────────────────────────────────────────────────────────────────────
 // TIPOS DE DATOS · lo que se guarda en metodo_tcm.data
 // ─────────────────────────────────────────────────────────────────────────
 export type Puntuaciones = Record<Elemento, number>;
@@ -649,6 +1214,77 @@ export function puntuarTest(
     }
   }
   return acc;
+}
+
+// ── Tests de balance: helpers ───────────────────────────────────────────────
+/** Los 2 tests de un elemento (o [] si aún no se han pasado). */
+export function testsDeElemento(el: Elemento): TestElemento[] {
+  return TESTS_ELEMENTO[el] ?? [];
+}
+
+/** ¿Están respondidas todas las preguntas NO opcionales de un test? */
+export function testCompleto(
+  test: TestElemento,
+  respuestas: Record<string, string> | undefined,
+): boolean {
+  if (!respuestas) return false;
+  return test.preguntas.every((q) => q.opcional || !!respuestas[q.key]);
+}
+
+/**
+ * Puntos de "carga" del elemento a partir de las respuestas de sus tests de
+ * balance: exceso y deficiencia suman carga (el elemento demanda atención),
+ * equilibrio no. Es lo que alimenta el radar/perfil (mayor carga = más presente).
+ */
+export function puntuarBalance(
+  el: Elemento,
+  respuestas: Record<string, string> | undefined,
+): Partial<Puntuaciones> {
+  const acc = cero();
+  if (!respuestas) return acc;
+  for (const t of testsDeElemento(el)) {
+    for (const q of t.preguntas) {
+      const opKey = respuestas[q.key];
+      if (!opKey) continue;
+      const op = q.opciones.find((o) => o.key === opKey);
+      if (!op) continue;
+      if (op.balance !== "equilibrio") acc[el] += 1;
+    }
+  }
+  return acc;
+}
+
+/** Balance mayoritario del elemento (equilibrio/exceso/deficiencia), o null si
+ *  no hay respuestas. No se muestra al usuario (de momento), pero queda para el
+ *  perfil. Empate → gana el que más "desequilibra" (exceso o deficiencia). */
+export function balanceElemento(
+  el: Elemento,
+  respuestas: Record<string, string> | undefined,
+): Balance | null {
+  if (!respuestas) return null;
+  const conteo: Record<Balance, number> = { equilibrio: 0, exceso: 0, deficiencia: 0 };
+  let alguna = false;
+  for (const t of testsDeElemento(el)) {
+    for (const q of t.preguntas) {
+      const op = q.opciones.find((o) => o.key === respuestas[q.key]);
+      if (!op) continue;
+      conteo[op.balance] += 1;
+      alguna = true;
+    }
+  }
+  if (!alguna) return null;
+  const orden: Balance[] = ["exceso", "deficiencia", "equilibrio"];
+  return orden.reduce((max, b) => (conteo[b] > conteo[max] ? b : max), "equilibrio" as Balance);
+}
+
+/** Puntos de un elemento usando sus tests de balance si existen; si no, el
+ *  mini-test antiguo (transición mientras se migran los 5 elementos). */
+export function puntosElemento(
+  el: Elemento,
+  respuestas: Record<string, string> | undefined,
+): Partial<Puntuaciones> {
+  if (testsDeElemento(el).length > 0) return puntuarBalance(el, respuestas);
+  return puntuarTest(ELEMENTOS[el].miniTest, respuestas);
 }
 
 /**

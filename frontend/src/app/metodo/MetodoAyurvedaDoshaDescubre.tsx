@@ -238,7 +238,7 @@ export default function MetodoAyurvedaDoshaDescubre() {
                 Estamos preparando esta sección
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
-                «Descubre quién eres» para {meta.label} estará disponible muy pronto.
+                «Tu tendencia mental» para {meta.label} estará disponible muy pronto.
               </Text>
             </Panel>
           </Flex>

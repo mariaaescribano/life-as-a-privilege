@@ -14,13 +14,18 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido,
-  testInicialCompleto, viajeCompleto, puntuarTest,
-  type DatosTcm, type Elemento, type PreguntaTest,
+  viajeCompleto, testsDeElemento, testCompleto, puntosElemento,
+  type DatosTcm, type Elemento, type PreguntaTest, type TestElemento,
 } from "../../components/metodo/tcmRecorrido";
-import { tieneContenido, COMIC_INTRO_ELEMENTOS, FOTO_ELEMENTO, COMIC_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { tieneContenido, COMIC_INTRO_ELEMENTOS, FOTO_ELEMENTO, ICONO_ELEMENTO, COMIC_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
+// Preposición del título del test según el género del elemento ("de la Madera",
+// "del Fuego"…), para que quede "TEST DE LA MADERA".
+const TEST_PREP: Record<Elemento, string> = {
+  madera: "de la", fuego: "del", tierra: "de la", metal: "del", agua: "del",
+};
 // Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
@@ -52,7 +57,6 @@ export default function MetodoTcmElementos() {
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
-        if (!testInicialCompleto(d)) { navigate("/metodo/tcm/equilibrio"); return; }
         setData(d);
       } catch {
         navigate("/metodo/tcm");
@@ -78,25 +82,22 @@ export default function MetodoTcmElementos() {
     setComicEl(el);
   };
 
-  const elegirTest = (preguntaKey: string, opcionKey: string) => {
-    setRespuestasTest((prev) => ({ ...prev, [preguntaKey]: opcionKey }));
-  };
-
-  // Al terminar el cómic, marcamos el elemento como leído (✓ + desbloquea el
-  // siguiente) y guardamos el mini-test: sus puntos se suman a la puntuación
-  // agregada del recorrido (perfil final).
-  const marcarLeido = async (el: Elemento) => {
+  // Persiste el estado del elemento (respuestas + puntos, y opcionalmente leído).
+  // Se llama en CADA respuesta (autoguardado) y al terminar el cómic. Los puntos
+  // salen de los tests de balance del elemento (o del mini-test antiguo si aún no
+  // están migrados) y alimentan el radar/perfil.
+  const persistir = async (el: Elemento, respuestas: Record<string, string>, leido?: boolean) => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    const puntos = puntuarTest(ELEMENTOS[el].miniTest, respuestasTest);
+    const puntos = puntosElemento(el, respuestas);
     const next: DatosTcm = {
       ...data,
       elementos: {
         ...data.elementos,
         [el]: {
           ...data.elementos?.[el],
-          leido: true,
-          miniTest: { respuestas: respuestasTest, puntos },
+          ...(leido ? { leido: true } : {}),
+          miniTest: { respuestas, puntos },
         },
       },
     };
@@ -105,8 +106,22 @@ export default function MetodoTcmElementos() {
       try {
         await axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
           { headers: { Authorization: `Bearer ${token}` } });
-      } catch { /* el estado local ya refleja el ✓ */ }
+      } catch { /* el estado local ya refleja el cambio */ }
     }
+  };
+
+  // Autoguardado: cada vez que el usuario marca una opción, se guarda al instante.
+  const elegirTest = (preguntaKey: string, opcionKey: string) => {
+    if (!comicEl) return;
+    const next = { ...respuestasTest, [preguntaKey]: opcionKey };
+    setRespuestasTest(next);
+    void persistir(comicEl, next);
+  };
+
+  // Al terminar el cómic, marcamos el elemento como leído (✓ + desbloquea el
+  // siguiente). Las respuestas ya se fueron guardando en cada paso.
+  const marcarLeido = async (el: Elemento) => {
+    await persistir(el, respuestasTest, true);
   };
 
   if (loading) {
@@ -123,17 +138,17 @@ export default function MetodoTcmElementos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Cinco Elementos"
-            pageLabel="4/14"
+            pageLabel="2/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Mapa", onClick: () => navigate("/metodo/tcm/mapa") }}
+            prev={{ label: "← Medicina China", onClick: () => navigate("/metodo/tcm") }}
             extra={ilustracionesBtn}
             next={{
               label: "Tu perfil →",
-              onClick: () => {},
+              onClick: () => navigate("/metodo/tcm/perfil"),
               disabled: !viajeCompleto(data),
               disabledTooltip: "Recorre los cinco elementos para ver tu perfil completo",
             }}
@@ -167,9 +182,9 @@ export default function MetodoTcmElementos() {
                   return (
                     <g key={el} style={{ cursor: activo ? "pointer" : "not-allowed" }}
                        onClick={() => abrir(el, desbloqueado, disponible)}>
-                      {/* base + foto del elemento */}
+                      {/* base + icono del elemento */}
                       <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
-                      <image href={FOTO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
+                      <image href={ICONO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
                              width={FOTO_R * 2} height={FOTO_R * 2}
                              clipPath={`url(#hub-clip-${el})`} preserveAspectRatio="xMidYMid slice"
                              opacity={activo ? 1 : 0.35} />
@@ -329,15 +344,20 @@ export default function MetodoTcmElementos() {
         <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100vh" position="relative">
           {comicEl && (() => {
             const pasos = COMIC_ELEMENTO[comicEl];
-            const miniTest = ELEMENTOS[comicEl].miniTest;
-            // ComicViewer trabaja con viñetas (foto + texto). El paso de test se
-            // muestra como una viñeta cuyo texto es el contexto del test, y sus
-            // preguntas se pintan debajo con `pageExtra`.
+            const tests = testsDeElemento(comicEl);
+            const miniTest = ELEMENTOS[comicEl].miniTest; // legacy (elementos sin migrar)
             const vinetas = pasos.map((p) => ({
               src: p.src,
-              paragraphs: p.tipo === "vineta" ? p.paragraphs : p.intro,
+              paragraphs: p.tipo === "vineta" ? p.paragraphs : (p.intro ?? []),
             }));
-            const testRespondido = miniTest.every((q) => !!respuestasTest[q.key]);
+            const legacyRespondido = miniTest.every((q) => !!respuestasTest[q.key]);
+            // Test (de balance) que corresponde a una página de test concreta.
+            const testDePaso = (i: number): TestElemento | null => {
+              const p = pasos[i];
+              if (p?.tipo !== "test" || !p.testKey) return null;
+              return tests.find((t) => t.key === p.testKey) ?? null;
+            };
+            const cabecera = `Test ${TEST_PREP[comicEl]} ${ELEMENTOS[comicEl].nombre}`;
             return (
               <ComicViewer
                 key={comicEl}
@@ -346,17 +366,45 @@ export default function MetodoTcmElementos() {
                 textColor="#ffffff"
                 disciplinaBgImage={FOTO_ELEMENTO[comicEl]}
                 disciplinaBgColor={ELEMENTOS[comicEl].color}
-                bloqueado={(i) => pasos[i]?.tipo === "test" && !testRespondido}
-                pageExtra={(i) =>
-                  pasos[i]?.tipo === "test" ? (
+                fondoNitido
+                bloqueado={(i) => {
+                  if (pasos[i]?.tipo !== "test") return false;
+                  const t = testDePaso(i);
+                  return t ? !testCompleto(t, respuestasTest) : !legacyRespondido;
+                }}
+                sinFoto={(i) => pasos[i]?.tipo === "test"}
+                separarFrases
+                pageExtra={(i, api) => {
+                  if (pasos[i]?.tipo !== "test") return null;
+                  const t = testDePaso(i);
+                  if (t) {
+                    const idx = tests.findIndex((x) => x.key === t.key);
+                    return (
+                      <TestBalanceComic
+                        key={t.key}
+                        test={t}
+                        testNum={idx + 1}
+                        testTotal={tests.length}
+                        cabecera={cabecera}
+                        respuestas={respuestasTest}
+                        onElegir={elegirTest}
+                        color={ELEMENTOS[comicEl].color}
+                        completo={testCompleto(t, respuestasTest)}
+                        onContinuar={api.goNext}
+                      />
+                    );
+                  }
+                  // Fallback: mini-test antiguo (elementos aún sin migrar).
+                  return (
                     <MiniTestComic
+                      titulo={cabecera}
                       preguntas={miniTest}
                       respuestas={respuestasTest}
                       onElegir={elegirTest}
                       color={ELEMENTOS[comicEl].color}
                     />
-                  ) : null
-                }
+                  );
+                }}
                 onClose={() => setComicEl(null)}
                 onComplete={() => { const el = comicEl; setComicEl(null); if (el) void marcarLeido(el); }}
               />
@@ -379,11 +427,13 @@ export default function MetodoTcmElementos() {
 // ComicViewer bloquea el avance (ver `bloqueado`). Al terminar el cómic, las
 // respuestas se guardan y sus puntos se suman a la puntuación del recorrido.
 function MiniTestComic({
+  titulo,
   preguntas,
   respuestas,
   onElegir,
   color,
 }: {
+  titulo: string;
   preguntas: PreguntaTest[];
   respuestas: Record<string, string>;
   onElegir: (preguntaKey: string, opcionKey: string) => void;
@@ -392,6 +442,27 @@ function MiniTestComic({
   const faltan = preguntas.some((q) => !respuestas[q.key]);
   return (
     <Flex direction="column" gap={5} textAlign="left">
+      {/* Título del test + separación horizontal */}
+      <Box>
+        <Text
+          color="white"
+          fontSize={{ base: "lg", md: "2xl" }}
+          fontWeight="800"
+          letterSpacing="0.14em"
+          textAlign="center"
+          textTransform="uppercase"
+          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}
+        >
+          {titulo}
+        </Text>
+        <Box
+          mt={3}
+          h="1px"
+          w="100%"
+          bgGradient={`linear(to-r, transparent, ${color}cc, transparent)`}
+        />
+      </Box>
+
       {preguntas.map((q, i) => (
         <Box key={q.key}>
           <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={2.5}
@@ -433,6 +504,120 @@ function MiniTestComic({
             style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
         {faltan ? "Responde para continuar →" : "¡Listo! Ya puedes continuar →"}
       </Text>
+
+    </Flex>
+  );
+}
+
+// ── Test de balance (A/B/C = equilibrio/exceso/deficiencia) ─────────────────
+// Cabecera + subtítulo + separador + preguntas. El botón va abajo a la derecha:
+// "Guardar" → muestra "Guardado ✓" y pasa a "Continuar →" (avanza el cómic). Las
+// respuestas se autoguardan en cada clic (ver elegirTest), así que Guardar es
+// solo la confirmación visual antes de continuar.
+function TestBalanceComic({
+  test, testNum, testTotal, cabecera, respuestas, onElegir, color, completo, onContinuar,
+}: {
+  test: TestElemento;
+  testNum: number;
+  testTotal: number;
+  cabecera: string;
+  respuestas: Record<string, string>;
+  onElegir: (preguntaKey: string, opcionKey: string) => void;
+  color: string;
+  completo: boolean;
+  onContinuar: () => void;
+}) {
+  const [guardado, setGuardado] = useState(false);
+  return (
+    <Flex direction="column" gap={5} textAlign="left">
+      {/* Cabecera + subtítulo + separación horizontal */}
+      <Box>
+        <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="800"
+              letterSpacing="0.14em" textAlign="center" textTransform="uppercase"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
+          {cabecera}{testTotal > 1 ? ` · ${testNum} de ${testTotal}` : ""}
+        </Text>
+        {test.titulo && (
+          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                textAlign="center" mt={1.5} style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
+            {test.titulo}
+          </Text>
+        )}
+        <Box mt={3} h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${color}cc, transparent)`} />
+      </Box>
+
+      {test.preguntas.map((q, i) => (
+        <Box key={q.key}>
+          <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={3}
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.95)" }}>
+            {i + 1}. {q.pregunta}{q.opcional ? " (opcional)" : ""}
+          </Text>
+          <Flex direction="column" gap={2}>
+            {q.opciones.map((op) => {
+              const sel = respuestas[q.key] === op.key;
+              return (
+                <Box
+                  key={op.key}
+                  as="button"
+                  onClick={() => { setGuardado(false); onElegir(q.key, op.key); }}
+                  textAlign="left"
+                  px={{ base: 4, md: 5 }}
+                  py={{ base: 2.5, md: 3 }}
+                  borderRadius="lg"
+                  bg={sel ? `${color}66` : "rgba(0,0,0,0.42)"}
+                  border={`1px solid ${sel ? color : "rgba(255,255,255,0.22)"}`}
+                  color="white"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "md", md: "lg" }}
+                  lineHeight="1.55"
+                  cursor="pointer"
+                  transition="all 0.15s"
+                  boxShadow={sel ? `0 0 14px ${color}88` : "none"}
+                  _hover={{ bg: sel ? `${color}77` : "rgba(0,0,0,0.55)" }}
+                  // Blur del fondo tras la opción → la letra se lee mucho mejor
+                  // sobre la foto del elemento.
+                  sx={{ backdropFilter: "blur(8px)" }}
+                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}
+                >
+                  {op.texto}
+                </Box>
+              );
+            })}
+          </Flex>
+        </Box>
+      ))}
+
+      {/* Botón abajo a la derecha: Guardar → Guardado ✓ → Continuar → */}
+      <Flex justify="flex-end" align="center" gap={3} mt={1}>
+        {guardado && (
+          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
+                style={{ textShadow: `0 1px 4px rgba(0,0,0,0.85), 0 0 12px ${color}` }}>
+            Guardado ✓
+          </Text>
+        )}
+        <Box
+          as="button"
+          onClick={() => { if (guardado) { onContinuar(); } else if (completo) { setGuardado(true); } }}
+          opacity={!guardado && !completo ? 0.45 : 1}
+          cursor={!guardado && !completo ? "not-allowed" : "pointer"}
+          px={8}
+          py={3}
+          borderRadius="full"
+          bg={`${color}33`}
+          border={`1px solid ${color}`}
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "lg" }}
+          fontWeight="700"
+          letterSpacing="0.08em"
+          transition="all 0.18s ease"
+          boxShadow={`0 0 16px ${color}55`}
+          _hover={!guardado && !completo ? {} : { bg: `${color}55`, boxShadow: `0 0 26px ${color}88` }}
+          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
+        >
+          {guardado ? "Continuar →" : "Guardar"}
+        </Box>
+      </Flex>
     </Flex>
   );
 }

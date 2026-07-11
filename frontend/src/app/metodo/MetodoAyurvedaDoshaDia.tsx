@@ -17,6 +17,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { Reveal } from "../../components/global/Reveal";
 import { CompromisosBox } from "../../components/metodo/CompromisosBox";
+import { CartaBox } from "../../components/metodo/CartaBox";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -264,6 +265,12 @@ export default function MetodoAyurvedaDoshaDia() {
             </Flex>
           </Panel>
           </Reveal>
+
+          {/* CARTA (solo lectura): la carta que el usuario se escribió a su yo
+              del futuro en Psicología. Va justo ANTES de «Tu día» para releerla
+              antes de diseñar el día (coherencia entre disciplinas). Si no hay
+              carta escrita, el componente no renderiza nada (ni hueco). */}
+          <CartaBox />
 
           {/* TU DÍA (lista editable) */}
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.12} w="100%">

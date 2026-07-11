@@ -12,7 +12,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, puntuarTest, elementoDesbloqueado,
-  testInicialCompleto, type DatosTcm, type Elemento,
+  type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { CONTENIDO_ELEMENTOS, IMAGEN_ELEMENTO, tieneContenido } from "../../components/metodo/tcmElementosContenido";
 
@@ -59,7 +59,6 @@ export default function MetodoTcmElemento() {
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
-        if (!testInicialCompleto(d)) { navigate("/metodo/tcm/equilibrio"); return; }
         if (!elementoDesbloqueado(d, el)) { navigate("/metodo/tcm/elementos"); return; }
         dataRef.current = d;
         setRespuestas(d.elementos?.[el]?.miniTest?.respuestas ?? {});

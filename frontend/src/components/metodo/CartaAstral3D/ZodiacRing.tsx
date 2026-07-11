@@ -5,16 +5,21 @@ import { ZODIAC_SIGNS } from "../astrologiaData";
 import { gradoAVisualRad } from "./types";
 void React;
 
-// Entrada «giro fantasma»: el anillo GIRA hasta encajar, pero va etéreo (muy
-// tenue) mientras gira —cuando sus líneas de signos aún no coinciden con casas
-// y planetas— y CRISTALIZA nítido justo al alinearse. Como la rotación decelera
-// (easeOutCubic), para cuando sube la opacidad ya está casi en su sitio, así que
-// el desajuste no se percibe. Se conserva la sensación de movimiento sin el bug.
+// Entrada «materialización»: el anillo aparece SIEMPRE en su ángulo final (nunca
+// gira), así que sus líneas de signos jamás se desajustan de las casas ni de los
+// planetas. La sensación de movimiento la da un fundido + un ligero scale-in
+// concéntrico con un pequeño rebote (easeOutBack): la rueda "cristaliza" en su
+// sitio. Antes se hacía con un giro de 270° tenue, pero el desajuste se percibía.
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-const SPIN_DUR = 1.6;              // dura un poco más para disfrutar el giro
-const SPIN_FROM = Math.PI * 1.5;   // gira ~270° hasta encajar
-const GHOST = 0.16;                // opacidad tenue mientras gira (oculta el desajuste)
-const CRISP_FROM = 0.7;            // a partir de aquí (ya casi alineado) se vuelve nítido
+// easeOutBack: llega a 1 con un leve sobreimpulso → da vida al scale sin rotar.
+const easeOutBack = (t: number) => {
+  const c1 = 1.70158;
+  const c3 = c1 + 1;
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+};
+const APPEAR_DUR = 1.2;            // duración de la materialización
+const SCALE_FROM = 0.82;           // escala inicial (crece hasta 1, concéntrico)
+const FADE_FRAC = 0.6;             // el fundido completa en el primer 60% del tiempo
 
 interface ZodiacRingProps {
   innerRadius: number;
@@ -128,21 +133,22 @@ export function ZodiacRing({ innerRadius, outerRadius, cusps }: ZodiacRingProps)
   const elapsed = useRef(0);
 
   useFrame((_, delta) => {
-    if (elapsed.current > SPIN_DUR) return; // ya asentado: no seguir calculando
+    if (elapsed.current > APPEAR_DUR) return; // ya asentado: no seguir calculando
     elapsed.current += delta;
-    const p = Math.min(1, elapsed.current / SPIN_DUR);
-    // Rotación que decelera hasta encajar.
-    if (meshRef.current) meshRef.current.rotation.z = SPIN_FROM * (1 - easeOutCubic(p));
-    // Opacidad: tenue («fantasma») mientras gira; nítida al final, ya alineado.
+    const p = Math.min(1, elapsed.current / APPEAR_DUR);
+    // Scale-in concéntrico con leve rebote. SIN rotación → siempre alineado.
+    if (meshRef.current) {
+      const s = SCALE_FROM + (1 - SCALE_FROM) * easeOutBack(p);
+      meshRef.current.scale.setScalar(s);
+    }
+    // Fundido de entrada (completa en el primer 60% para que se lea nítido pronto).
     if (matRef.current) {
-      matRef.current.opacity = p < CRISP_FROM
-        ? GHOST * easeOutCubic(Math.min(1, p / 0.2))               // aparece el fantasma
-        : GHOST + (1 - GHOST) * easeOutCubic((p - CRISP_FROM) / (1 - CRISP_FROM)); // cristaliza
+      matRef.current.opacity = easeOutCubic(Math.min(1, p / FADE_FRAC));
     }
   });
 
   return (
-    <mesh ref={meshRef}>
+    <mesh ref={meshRef} scale={SCALE_FROM}>
       <ringGeometry args={[innerRadius, outerRadius, 128, 1]} />
       <meshBasicMaterial
         ref={matRef}

@@ -328,19 +328,11 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     bulletList(dones);
   }
 
-  /* ── 10 · Mi compromiso ── */
-  const comp = data.compromiso || {};
-  if ((comp.necesitaste || "").trim() || (comp.dartelo || "").trim()) {
-    sectionTitle("Mi compromiso conmigo mismo");
-    if ((comp.necesitaste || "").trim()) qaBlock("¿Qué necesitaste que nadie pudo darte?", comp.necesitaste as string);
-    if ((comp.dartelo || "").trim()) qaBlock("¿Cómo puedes empezar a dártelo hoy?", comp.dartelo as string);
-  }
-
-  /* ── 11 · Mi brújula ── */
+  /* ── 10 · Mi carta ── */
   const b = data.brujula || {};
   if ((b.mensaje || "").trim()) {
     // Formato nuevo: un mensaje libre a su yo del futuro.
-    sectionTitle("Mi brújula");
+    sectionTitle("Mi carta");
     paragraph("Para cuando vuelva a sentirme bloqueado:", { italic: true, color: MUTED, size: 11 });
     paragraph(b.mensaje as string);
   } else {
@@ -352,10 +344,18 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
       ["¿Qué don puedes utilizar ahora?", b.don],
     ];
     if (brujulaPreg.some(([, v]) => (v || "").trim())) {
-      sectionTitle("Mi brújula");
+      sectionTitle("Mi carta");
       paragraph("Para cuando vuelva a sentirme bloqueado:", { italic: true, color: MUTED, size: 11 });
       brujulaPreg.forEach(([q, v]) => { if ((v || "").trim()) qaBlock(q, v as string); });
     }
+  }
+
+  /* ── 11 · Mi compromiso ── */
+  const comp = data.compromiso || {};
+  if ((comp.necesitaste || "").trim() || (comp.dartelo || "").trim()) {
+    sectionTitle("Mi compromiso conmigo mismo");
+    if ((comp.necesitaste || "").trim()) qaBlock("¿Qué necesitaste que nadie pudo darte?", comp.necesitaste as string);
+    if ((comp.dartelo || "").trim()) qaBlock("¿Cómo puedes empezar a dártelo hoy?", comp.dartelo as string);
   }
 
   /* Cierre */

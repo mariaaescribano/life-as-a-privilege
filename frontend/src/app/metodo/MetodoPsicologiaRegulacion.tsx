@@ -341,7 +341,7 @@ export default function MetodoPsicologiaRegulacion() {
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 6, md: 8 }}>
                 <Box mb={{ base: 5, md: 6 }}>
-                  <SeccionTitulo>Junta los fragmentos de tus recuerdos. Narra tu dolor para darle un sentido.</SeccionTitulo>
+                  <SeccionTitulo>Junta los fragmentos de tus recuerdos. Pon en palabras tu dolor para darle sentido y empezar a integrarlo.</SeccionTitulo>
                 </Box>
 
                 {/* Fragmentos: cada uno es un box de altura fija; si el texto lo

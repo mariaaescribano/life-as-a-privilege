@@ -86,11 +86,25 @@ interface ComicViewerProps {
    *  acento es un color poco legible sobre la foto (p.ej. verde de Madera). */
   textColor?: string;
   /** Contenido extra por página (p.ej. un mini-test), bajo el texto de la viñeta.
-   *  Devuelve el JSX a pintar para ese índice, o null si no hay nada. */
-  pageExtra?: (index: number) => React.ReactNode;
+   *  Devuelve el JSX a pintar para ese índice, o null si no hay nada. Recibe
+   *  `api` para poder avanzar el cómic desde dentro (botón "Continuar →"). */
+  pageExtra?: (index: number, api: { goNext: () => void; isLast: boolean }) => React.ReactNode;
   /** Si devuelve true para la página actual, bloquea el avance (flecha derecha,
    *  tecla → y swipe) hasta que deje de estarlo (p.ej. hasta responder el test). */
   bloqueado?: (index: number) => boolean;
+  /** Si devuelve true para una página, esa página se muestra SIN foto: solo el
+   *  texto/box a todo el ancho (p.ej. el paso de test del cómic de elemento). */
+  sinFoto?: (index: number) => boolean;
+  /** Si true, cada frase (tras un punto) se pinta como un bloque aparte con
+   *  doble separación, para un texto más aireado y limpio (cómics de TCM). */
+  separarFrases?: boolean;
+  /** Solo en modo disciplina: si true, la foto de FONDO (a pantalla completa,
+   *  detrás del box) se ve NÍTIDA (blur muy suave) y apenas oscurecida, cubriendo
+   *  todo el viewport, en vez del fondo muy blureado + pantalla negra. El box
+   *  (foto izquierda + texto derecha) NO cambia. Útil cuando la foto de la
+   *  disciplina es protagonista (cómic de elementos de TCM). No afecta a las
+   *  Ilustraciones (Hinduismo / TCM). */
+  fondoNitido?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -108,11 +122,24 @@ export function ComicViewer({
   textColor,
   pageExtra,
   bloqueado,
+  sinFoto,
+  separarFrases,
+  fondoNitido,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
+  // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
+  // elementos de TCM) muestra la foto casi nítida y a plena pantalla; el resto
+  // del modo disciplina la deja muy blureada + pantalla negra para contrastar
+  // con la foto nítida del box del texto.
+  const bgBlurPx = isDisciplinaMode ? (fondoNitido ? 26 : 20) : 0;
+  const bgSpreadPx = bgBlurPx > 0 ? bgBlurPx + 8 : 0; // compensa el sangrado del blur
+  const bgOverlay = isDisciplinaMode
+    ? (fondoNitido ? "rgba(0,0,0,0.38)" : "rgba(0,0,0,0.45)")
+    : "rgba(0,0,0,0.35)";
   const [index, setIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const contentRef = useRef<HTMLDivElement>(null);
+  const textScrollRef = useRef<HTMLDivElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const total = vinetas.length;
@@ -122,9 +149,12 @@ export function ComicViewer({
   // Página bloqueada: no se puede avanzar hasta cumplir su requisito (p.ej.
   // responder el mini-test embebido). Sí se puede retroceder.
   const blocked = bloqueado ? bloqueado(index) : false;
+  // Página sin foto: solo el texto/box a todo el ancho (p.ej. el paso de test).
+  const hideFoto = sinFoto ? sinFoto(index) : false;
 
   useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 0;
+    if (textScrollRef.current) textScrollRef.current.scrollTop = 0;
   }, [index]);
 
   const handleComplete = () => {
@@ -175,9 +205,6 @@ export function ComicViewer({
     }
   };
 
-  // Todo el texto de la viñeta como un único bloque, sin saltos de línea.
-  const fullText = current.paragraphs.join(" ");
-
   const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
   return (
@@ -202,22 +229,22 @@ export function ComicViewer({
           alt=""
           loading="eager"
           position="absolute"
-          top={isDisciplinaMode ? "-30px" : "0"}
-          left={isDisciplinaMode ? "-30px" : "0"}
-          right={isDisciplinaMode ? "-30px" : "0"}
-          bottom={isDisciplinaMode ? "-30px" : "0"}
-          w={isDisciplinaMode ? "calc(100% + 60px)" : "100%"}
-          h={isDisciplinaMode ? "calc(100% + 60px)" : "100%"}
+          top={`-${bgSpreadPx}px`}
+          left={`-${bgSpreadPx}px`}
+          right={`-${bgSpreadPx}px`}
+          bottom={`-${bgSpreadPx}px`}
+          w={`calc(100% + ${bgSpreadPx * 2}px)`}
+          h={`calc(100% + ${bgSpreadPx * 2}px)`}
           style={{
             objectFit: "cover",
             objectPosition: "center",
-            filter: isDisciplinaMode ? "blur(20px)" : undefined,
+            filter: bgBlurPx > 0 ? `blur(${bgBlurPx}px)` : undefined,
           }}
         />
-        <Box position="absolute" inset="0" bg={isDisciplinaMode ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.35)"} />
+        <Box position="absolute" inset="0" bg={bgOverlay} />
       </Box>
 
-      {/* X cerrar */}
+      {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo */}
       <IconButton
         aria-label="Cerrar"
         onClick={onClose}
@@ -226,10 +253,18 @@ export function ComicViewer({
         right={{ base: 3, md: 5 }}
         zIndex={10}
         variant="ghost"
-        color={themeColor}
-        _hover={{ bg: `${themeColor}22` }}
+        borderRadius="full"
+        w={{ base: "42px", md: "48px" }}
+        h={{ base: "42px", md: "48px" }}
+        minW={{ base: "42px", md: "48px" }}
+        bg="rgba(0,0,0,0.5)"
+        border={`1px solid ${themeColor}aa`}
+        boxShadow="0 2px 12px rgba(0,0,0,0.45)"
+        sx={{ backdropFilter: "blur(4px)" }}
+        _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
         icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px" fill={themeColor}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill="#ffffff"
+            style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </Box>
         }
@@ -267,24 +302,19 @@ export function ComicViewer({
         zIndex={10}
         variant="ghost"
         color={themeColor}
-        opacity={isFirst ? 0.25 : 1}
-        bg={{ base: "transparent", md: `${themeColor}10` }}
-        border={{ base: "none", md: `1px solid ${themeColor}33` }}
+        opacity={isFirst ? 0.3 : 1}
+        bg="rgba(0,0,0,0.5)"
+        border={`1px solid ${themeColor}aa`}
         borderRadius="full"
-        w={{ base: "32px", md: "60px" }}
-        h={{ base: "32px", md: "60px" }}
-        minW={{ base: "32px", md: "60px" }}
-        boxShadow={isFirst
-          ? "none"
-          : { base: "none", md: `0 0 14px ${themeColor}44, 0 0 32px ${themeColor}22` }}
-        _hover={isFirst ? {} : {
-          bg: `${themeColor}22`,
-          borderColor: `${themeColor}88`,
-          boxShadow: `0 0 22px ${themeColor}66, 0 0 50px ${themeColor}33`,
-        }}
+        w={{ base: "40px", md: "60px" }}
+        h={{ base: "40px", md: "60px" }}
+        minW={{ base: "40px", md: "60px" }}
+        boxShadow={isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
+        sx={{ backdropFilter: "blur(4px)" }}
+        _hover={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
         icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={themeColor}
-            style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${themeColor}cc) drop-shadow(0 0 14px ${themeColor}77)` }}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+            style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
             <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
           </Box>
         }
@@ -302,28 +332,25 @@ export function ComicViewer({
         zIndex={10}
         variant="ghost"
         color={themeColor}
-        opacity={blocked ? 0.25 : 1}
-        bg={{ base: "transparent", md: `${themeColor}10` }}
-        border={{ base: "none", md: `1px solid ${themeColor}33` }}
+        opacity={blocked ? 0.3 : 1}
+        bg="rgba(0,0,0,0.5)"
+        border={`1px solid ${themeColor}aa`}
         borderRadius="full"
-        w={{ base: "32px", md: "60px" }}
-        h={{ base: "32px", md: "60px" }}
-        minW={{ base: "32px", md: "60px" }}
-        boxShadow={blocked ? "none" : { base: "none", md: `0 0 14px ${themeColor}44, 0 0 32px ${themeColor}22` }}
-        _hover={blocked ? {} : {
-          bg: `${themeColor}22`,
-          borderColor: `${themeColor}88`,
-          boxShadow: `0 0 22px ${themeColor}66, 0 0 50px ${themeColor}33`,
-        }}
+        w={{ base: "40px", md: "60px" }}
+        h={{ base: "40px", md: "60px" }}
+        minW={{ base: "40px", md: "60px" }}
+        boxShadow={blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
+        sx={{ backdropFilter: "blur(4px)" }}
+        _hover={blocked ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
         icon={
           isLast ? (
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={themeColor}
-              style={{ filter: `drop-shadow(0 0 6px ${themeColor}cc) drop-shadow(0 0 14px ${themeColor}77)` }}>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+              style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
               <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
             </Box>
           ) : (
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "30px" }} h={{ base: "22px", md: "30px" }} fill={themeColor}
-              style={{ filter: `drop-shadow(0 0 6px ${themeColor}cc) drop-shadow(0 0 14px ${themeColor}77)` }}>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+              style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </Box>
           )
@@ -372,7 +399,11 @@ export function ComicViewer({
           overflow="hidden"
           animation={`${fadeIn} 0.55s ease both`}
           boxShadow={
-            isDisciplinaMode && disciplinaBgColor
+            fondoNitido
+              // Cómic de elementos TCM: SIN glow de color, solo una sombra suave
+              // de profundidad para separar el box del fondo blureado.
+              ? "0 24px 70px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.22)"
+              : isDisciplinaMode && disciplinaBgColor
               ? `0 0 22px ${disciplinaBgColor}88, 0 0 50px ${disciplinaBgColor}55, 0 0 18px ${themeColor}44, 0 0 40px ${themeColor}22, inset 0 0 20px rgba(0,0,0,0.35)`
               : `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${themeColor}1a, 0 0 48px ${themeColor}10, inset 0 0 20px rgba(0,0,0,0.35)`
           }
@@ -407,7 +438,11 @@ export function ComicViewer({
             <Box
               position="absolute"
               inset="0"
-              bg={isDisciplinaMode && disciplinaBgColor ? `${disciplinaBgColor}55` : "rgba(8,13,30,0.55)"}
+              // Velo de color sobre la foto del box. En TCM (fondoNitido) va más
+              // suave (~19%) para que la pintura de tinta respire y se vea nítida.
+              bg={isDisciplinaMode && disciplinaBgColor
+                ? `${disciplinaBgColor}${fondoNitido ? "30" : "55"}`
+                : "rgba(8,13,30,0.55)"}
             />
           </Box>
 
@@ -424,21 +459,23 @@ export function ComicViewer({
             zIndex={3}
           />
 
-          {/* Área de contenido scrollable: foto + texto.
-              Escritorio: foto a la izquierda, texto a la derecha (fila).
-              Móvil: foto arriba, texto abajo (columna) con una rayita corta
-              y elegante entre medias. */}
+          {/* Área de contenido: foto + texto.
+              Escritorio: foto FIJA a la izquierda (centrada) y texto a la
+              derecha con su PROPIO scroll vertical — la foto no se mueve y el
+              texto arranca siempre en el mismo sitio (arriba, con margen).
+              Móvil: foto arriba, texto abajo (columna) con scroll conjunto y
+              una rayita corta y elegante entre medias. */}
           <Flex
             ref={contentRef}
             direction={{ base: "column", md: "row" }}
-            align="center"
+            align={{ base: "center", md: "stretch" }}
             justify="center"
             gap={{ base: 5, md: 10 }}
             position="relative"
             zIndex={2}
             flex="1"
             minH={0}
-            overflowY="auto"
+            overflowY={{ base: "auto", md: "hidden" }}
             overflowX="hidden"
             px={{ base: 5, md: 10 }}
             py={{ base: 9, md: 10 }}
@@ -450,17 +487,18 @@ export function ComicViewer({
               },
             }}
           >
+            {!hideFoto && (
             <Box
               w={{ base: "90%", md: "380px" }}
               maxW={{ base: "300px", md: "380px" }}
               aspectRatio={1}
               flexShrink={0}
+              alignSelf="center"
               position="relative"
               sx={{
                 filter: `
-                  drop-shadow(0 0 24px rgba(255,255,255,0.3))
-                  drop-shadow(0 0 50px rgba(180,210,255,0.24))
-                  drop-shadow(0 0 90px ${themeColor}55)
+                  drop-shadow(0 0 12px rgba(255,255,255,0.14))
+                  drop-shadow(0 0 30px ${themeColor}33)
                 `,
               }}
             >
@@ -495,9 +533,11 @@ export function ComicViewer({
                 </Flex>
               )}
             </Box>
+            )}
 
             {/* Separador elegante: rayita horizontal y corta en móvil,
-                vertical entre foto y texto en escritorio. */}
+                vertical entre foto y texto en escritorio. Se oculta sin foto. */}
+            {!hideFoto && (
             <Box
               flexShrink={0}
               alignSelf="center"
@@ -509,22 +549,65 @@ export function ComicViewer({
                 md: `linear(to-b, transparent, ${themeColor}aa, transparent)`,
               }}
             />
+            )}
 
-            <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
-              <Text
-                color={textColor ?? themeColor}
-                fontSize={{ base: "xl", md: "2xl" }}
-                lineHeight="1.9"
-                letterSpacing="0.02em"
-                textAlign={{ base: "center", md: "left" }}
-                fontWeight="400"
-                style={{ textShadow }}
-              >
-                {fullText}
-              </Text>
+            <Box
+              ref={textScrollRef}
+              flex="1"
+              minW={0}
+              w={{ base: "100%", md: "auto" }}
+              alignSelf={{ base: "auto", md: "stretch" }}
+              // Escritorio: contenedor con su propio scroll vertical. El texto
+              // arranca arriba (flex-start) con un margen superior constante, así
+              // que empieza siempre en el mismo sitio sin cortarse por arriba.
+              maxH={{ base: "none", md: "100%" }}
+              overflowY={{ base: "visible", md: "auto" }}
+              overflowX="hidden"
+              display="flex"
+              flexDirection="column"
+              justifyContent="flex-start"
+              pt={{ base: 0, md: 6 }}
+              pb={{ base: 0, md: 6 }}
+              pr={{ base: 0, md: 4 }}
+              sx={{
+                "&::-webkit-scrollbar": { width: "6px" },
+                "&::-webkit-scrollbar-track": { background: "transparent" },
+                "&::-webkit-scrollbar-thumb": {
+                  background: `${themeColor}55`,
+                  borderRadius: "3px",
+                },
+                "&::-webkit-scrollbar-thumb:hover": { background: `${themeColor}88` },
+                scrollbarWidth: "thin",
+                scrollbarColor: `${themeColor}55 transparent`,
+              }}
+            >
+              {/* Cada bloque se pinta con separación (línea en blanco) respecto
+                  al anterior. Con `separarFrases`, además, cada frase (tras un
+                  punto) es su propio bloque → texto más aireado y limpio. */}
+              {(separarFrases
+                ? current.paragraphs
+                    .flatMap((p) => p.split(/(?<=\.)\s+/))
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                : current.paragraphs
+              ).map((bloque, i) => (
+                <Text
+                  key={i}
+                  color={textColor ?? themeColor}
+                  fontSize={{ base: "2xl", md: "3xl" }}
+                  lineHeight="1.9"
+                  letterSpacing="0.02em"
+                  textAlign={{ base: "center", md: "left" }}
+                  fontWeight="400"
+                  mt={i === 0 ? 0 : { base: 5, md: 6 }}
+                  style={{ textShadow }}
+                >
+                  {bloque}
+                </Text>
+              ))}
               {/* Contenido extra de la página (p.ej. el mini-test del elemento). */}
               {pageExtra && (() => {
-                const extra = pageExtra(index);
+                const extra = pageExtra(index, { goNext, isLast });
                 return extra ? <Box mt={{ base: 6, md: 7 }}>{extra}</Box> : null;
               })()}
             </Box>

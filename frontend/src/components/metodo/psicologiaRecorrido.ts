@@ -52,7 +52,7 @@ const lineaDeVida: ExperienciaPsicologia = {
 
   problemaInicial: {
     key: "problema-actual",
-    pregunta: "¿Qué problemas te acompañan hagas lo que hagas? ¿Qué se repite en tu vida?",
+    pregunta: "¿Cuál es tu problema actual? ¿Por qué estás aquí?",
     apoyo: "",
     placeholder: "Empieza por aquí…",
   },
@@ -119,7 +119,7 @@ export const RECORRIDO_INDICE: PasoRecorrido[] = [
   { n: 16, titulo: "Atrévete",        ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
   { n: 17, titulo: "Integración",     ruta: (id) => `/metodo/psicologia/${id}/mapa` },
   { n: 18, titulo: "Compromiso",      ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
-  { n: 19, titulo: "Brújula",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
+  { n: 19, titulo: "Carta",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
   { n: 20, titulo: "Síntesis",     ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
 ];
 
@@ -211,8 +211,8 @@ export interface LineaDeVidaData {
    *  a escribir ahora. Mirada hacia adelante, no análisis del pasado. */
   proximoCapitulo?: string;
   /** «Las Necesidades del Niño»: para cada necesidad (por `key`), cómo siente el
-   *  usuario que la vivió en su infancia. Material reflexivo previo a la línea
-   *  de vida. */
+   *  usuario que la vivió en su infancia. Material reflexivo previo a «Heridas»
+   *  (es la tercera pieza: Huella + Nudo + Necesidad no cubierta = Herida). */
   necesidades?: Record<string, EstadoNecesidad>;
   /** «Dones»: el reverso luminoso del recorrido. `respuestas` guarda las
    *  respuestas a las preguntas de la primera página (por `key`); `lista` son
@@ -380,7 +380,7 @@ export function necesidadesNoCubiertas(data: LineaDeVidaData): string[] {
 export const HERIDAS_LISTA = {
   titulo: "Tus heridas",
   frase:
-    "Esto es lo que llevas dentro y tratabas de ocultarte. Ya no tienes que seguir fingiendo.",
+    "Estas son las heridas que han marcado tu historia. Ahora puedes empezar a sanar esas heridas hasta que se conviertan en cicatrices.",
 };
 
 // ── «Los Nudos» — textos editables ──
@@ -389,7 +389,7 @@ export const NUDOS = {
   intro: [] as string[],
   apoyo:
     "Un nudo puede ser un miedo, una herida, una creencia, un conflicto repetido o una dificultad que parece acompañarte desde hace años. No busques explicaciones perfectas. Simplemente observa aquello que sientes presente en tu vida hoy.",
-  pregunta: "¿Qué conflictos o nudos hay en tu Vida?",
+  pregunta: "¿Qué nudos dirigen tu Vida y te impiden avanzar?",
   ejemplos: [
     "Miedo al abandono",
     "Necesidad de aprobación",
@@ -438,7 +438,7 @@ export const INTEGRACION = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────
-// «Las Necesidades del Niño» — material reflexivo previo a la Línea de Vida.
+// «Las Necesidades del Niño» — material reflexivo previo a «Heridas».
 //
 // Un grid de celdas: cada necesidad de la infancia junto a la respuesta sana
 // que un cuidador ofrece. El usuario abre cada celda y marca cómo lo vivió.
@@ -1021,7 +1021,7 @@ export const REGULACION = {
   titulo: "Narra",
   // Reencuadre: narrar la experiencia para integrarla en la propia historia.
   intro:
-    "La mejor forma de sanar es ponerle narrativa a la experiencia traumática para integrarla en tu historia. Se recomienda pedir una llamada para este apartado.",
+  "Poner en palabras lo vivido ayuda a darle sentido e integrarlo en tu historia. Es así como las heridas pueden convertirse en cicatrices. Si quieres profundizar en este proceso, te recomendamos solicitar una llamada.",
   // Preparación (lugar seguro) antes de tocar nada.
   preparacion: {
     titulo: "Antes de empezar",

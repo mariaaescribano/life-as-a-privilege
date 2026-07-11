@@ -338,22 +338,8 @@ export default function MetodoPsicologiaSintesis() {
     ),
   });
 
-  if (hayCompromiso) bloques.push({
-    titulo: "Mi compromiso conmigo mismo",
-    node: (
-      <Cascada gap={{ base: 3.5, md: 4 }}>
-        {(comp.necesitaste || "").trim() && (
-          <Item><PreguntaRespuesta pregunta="¿Qué necesitaste que nadie pudo darte?" respuesta={(comp.necesitaste as string).trim()} /></Item>
-        )}
-        {(comp.dartelo || "").trim() && (
-          <Item><PreguntaRespuesta pregunta="¿Cómo puedes empezar a dártelo hoy?" respuesta={(comp.dartelo as string).trim()} /></Item>
-        )}
-      </Cascada>
-    ),
-  });
-
   if (hayBrujula) bloques.push({
-    titulo: "Mi brújula",
+    titulo: "Mi carta",
     node: (
       <Box>
         <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} mb={3} style={{ textShadow: INK_SHADOW }}>
@@ -367,6 +353,20 @@ export default function MetodoPsicologiaSintesis() {
           </Cascada>
         )}
       </Box>
+    ),
+  });
+
+  if (hayCompromiso) bloques.push({
+    titulo: "Mi compromiso conmigo mismo",
+    node: (
+      <Cascada gap={{ base: 3.5, md: 4 }}>
+        {(comp.necesitaste || "").trim() && (
+          <Item><PreguntaRespuesta pregunta="¿Qué necesitaste que nadie pudo darte?" respuesta={(comp.necesitaste as string).trim()} /></Item>
+        )}
+        {(comp.dartelo || "").trim() && (
+          <Item><PreguntaRespuesta pregunta="¿Cómo puedes empezar a dártelo hoy?" respuesta={(comp.dartelo as string).trim()} /></Item>
+        )}
+      </Cascada>
     ),
   });
 
@@ -389,7 +389,7 @@ export default function MetodoPsicologiaSintesis() {
                 step={{ current: 20, total: 20 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Brújula", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
+                prev={{ label: "← Carta", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
                 next={{ label: "Ayurveda →", onClick: onAyurveda }}
               />
             </Reveal>

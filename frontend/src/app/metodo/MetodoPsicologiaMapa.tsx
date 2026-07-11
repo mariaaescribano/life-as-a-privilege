@@ -230,7 +230,7 @@ export default function MetodoPsicologiaMapa() {
             {/* Frase bajo el header */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
               <IntroRecorrido>
-                Nada ocurre por casualidad. Todo está al servicio de nuestro crecimiento. Si has tenido experiencias duras es porque eres capaz de darles un sentido, si no, no las habrías tenido.
+                Nada de lo que has vivido puede cambiarse. Pero sí puedes cambiar el significado que tiene en tu historia. Dale un sentido a tu dolor para que deje de convertirse en sufrimiento.
               </IntroRecorrido>
             </Reveal>
 

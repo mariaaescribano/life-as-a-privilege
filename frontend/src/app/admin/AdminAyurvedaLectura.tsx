@@ -144,7 +144,7 @@ export default function AdminAyurvedaLectura() {
                   )}
 
                   {(descubre || "").trim() && (
-                    <LecturaCard nom={ayurvedaNom} txt={TXT} overlay={OVERLAY} accent={meta.color} titulo="Descubre quién eres">
+                    <LecturaCard nom={ayurvedaNom} txt={TXT} overlay={OVERLAY} accent={meta.color} titulo="Tu tendencia mental">
                       <QA txt={TXT} pregunta={cDes?.reflexion?.pregunta} respuesta={descubre} />
                     </LecturaCard>
                   )}

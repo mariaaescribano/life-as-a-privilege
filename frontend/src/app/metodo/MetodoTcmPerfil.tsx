@@ -13,13 +13,12 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, puntuaciones, elementoPredominante, elementosAApoyar,
-  recomendacionesElemento, testInicialCompleto, type DatosTcm,
+  balanceElemento, viajeCompleto, type DatosTcm, type Elemento, type Balance,
 } from "../../components/metodo/tcmRecorrido";
-import { FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
 const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
-// Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 // Coordenadas de los 5 vértices del pentágono, empezando arriba.
@@ -29,7 +28,31 @@ function vertice(i: number, radio: number) {
   return { x: CX + radio * Math.cos(ang), y: CY + radio * Math.sin(ang) };
 }
 
-export default function MetodoTcmMapa() {
+// ── Estado de cada elemento (leído de los tests de balance) ──────────────────
+const ESTADO_LABEL: Record<Balance, string> = {
+  equilibrio: "En equilibrio",
+  exceso: "En exceso",
+  deficiencia: "En deficiencia",
+};
+// Verde = equilibrio, rojo = exceso, ámbar = deficiencia (misma paleta de los elementos).
+const ESTADO_COLOR: Record<Balance, string> = {
+  equilibrio: "#6f9463",
+  exceso: "#d1495b",
+  deficiencia: "#c8963e",
+};
+
+/** Descripción del estado, reutilizando el contenido ya definido en ELEMENTOS. */
+function textoEstado(el: Elemento, balance: Balance): string {
+  const E = ELEMENTOS[el];
+  if (balance === "equilibrio") {
+    return E.emocion.split("En desequilibrio")[0].replace(/^En equilibrio:\s*/i, "").replace(/\.\s*$/, "").trim();
+  }
+  const prefijo = balance === "exceso" ? "exceso" : "deficiencia";
+  const linea = E.desequilibrios.find((d) => d.toLowerCase().startsWith(prefijo));
+  return linea ? linea.replace(/^(Exceso|Deficiencia):\s*/i, "").trim() : "";
+}
+
+export default function MetodoTcmPerfil() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
@@ -52,8 +75,8 @@ export default function MetodoTcmMapa() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const d: DatosTcm = res.data?.data ?? {};
-        // Sin test inicial no hay mapa que mostrar.
-        if (!testInicialCompleto(d)) { navigate("/metodo/tcm/equilibrio"); return; }
+        // El perfil completo requiere haber recorrido los cinco elementos.
+        if (!viajeCompleto(d)) { navigate("/metodo/tcm/elementos"); return; }
         setData(d);
       } catch {
         navigate("/metodo/tcm");
@@ -69,7 +92,15 @@ export default function MetodoTcmMapa() {
   const aApoyar = useMemo(() => elementosAApoyar(data), [data]);
   const maxPunto = Math.max(1, ...ORDEN_ELEMENTOS.map((el) => puntos[el]));
 
-  // Polígono de tu equilibrio (cada vértice escalado por su puntuación).
+  // Estado (equilibrio/exceso/deficiencia) de cada elemento a partir de sus tests.
+  const estados = useMemo(() => {
+    const out: Partial<Record<Elemento, Balance | null>> = {};
+    for (const el of ORDEN_ELEMENTOS) {
+      out[el] = balanceElemento(el, data.elementos?.[el]?.miniTest?.respuestas);
+    }
+    return out;
+  }, [data]);
+
   const puntosPoligono = ORDEN_ELEMENTOS.map((el, i) => {
     const radio = 32 + (puntos[el] / maxPunto) * (R_REF - 32);
     const v = vertice(i, radio);
@@ -81,12 +112,6 @@ export default function MetodoTcmMapa() {
   }
 
   const elPred = ELEMENTOS[predominante];
-  const recs = recomendacionesElemento(aApoyar[0] ?? predominante);
-  const tresRecomendaciones = [
-    recs.estiloDeVida?.[0],
-    recs.nutricion?.[0],
-    recs.infusiones?.[0],
-  ].filter(Boolean) as string[];
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -97,36 +122,49 @@ export default function MetodoTcmMapa() {
 
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Mapa energético"
-            pageLabel="3/14"
+            title="Tu perfil energético"
+            pageLabel="7/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Test", onClick: () => navigate("/metodo/tcm/equilibrio") }}
+            prev={{ label: "← Los 5 elementos", onClick: () => navigate("/metodo/tcm/elementos") }}
             extra={ilustracionesBtn}
-            next={{
-              label: "Los 5 elementos →",
-              onClick: () => navigate("/metodo/tcm/elementos"),
-            }}
           />
 
-          {/* ── La estrella de los 5 elementos ── */}
+          {/* ── Síntesis introductoria ── */}
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}>
+              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2}
+                    style={{ textShadow: INK_SHADOW }}>
+                Ya has recorrido los cinco elementos
+              </Text>
+              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.8"
+                    style={{ textShadow: INK_SHADOW }}>
+                No eres un elemento: eres un equilibrio. Este es tu retrato completo, integrando tu punto de
+                partida y lo que has ido descubriendo en cada elemento. Recuerda que es una fotografía de este
+                momento, no una etiqueta fija: cambia contigo.
+              </Text>
+            </Box>
+          </Box>
+
+          {/* ── La estrella de los 5 elementos (equilibrio completo) ── */}
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 3, md: 5 }} py={{ base: 3, md: 4 }}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={0.5}
                     style={{ textShadow: INK_SHADOW }}>
-                Tu equilibrio ahora
+                Tu equilibrio completo
               </Text>
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} textAlign="center" opacity={0.85} mb={0.5}
                     lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                Cuanto más lejos del centro, más presente está ese elemento en ti hoy.
+                Cuanto más lejos del centro, más presente y demandante está ese elemento en ti.
               </Text>
 
               <Flex justify="center">
-                <Box as="svg" viewBox="0 0 320 372" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
+                <Box as="svg" viewBox="0 0 320 320" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
                   <defs>
                     {ORDEN_ELEMENTOS.map((el, i) => {
                       const v = vertice(i, R_REF);
@@ -138,32 +176,27 @@ export default function MetodoTcmMapa() {
                     })}
                   </defs>
 
-                  {/* pentágono de referencia */}
                   <polygon
                     points={ORDEN_ELEMENTOS.map((_, i) => { const v = vertice(i, R_REF); return `${v.x},${v.y}`; }).join(" ")}
                     fill="none" stroke={`${tcmTxt}44`} strokeWidth={1}
                   />
-                  {/* radios */}
                   {ORDEN_ELEMENTOS.map((_, i) => {
                     const v = vertice(i, R_REF);
                     return <line key={i} x1={CX} y1={CY} x2={v.x} y2={v.y} stroke={`${tcmTxt}22`} strokeWidth={1} />;
                   })}
-                  {/* tu polígono (tu equilibrio) */}
                   <polygon points={puntosPoligono} fill={`${tcmTxt}33`} stroke={tcmTxt} strokeWidth={2} />
-                  {/* punto de tu puntuación en cada eje */}
                   {ORDEN_ELEMENTOS.map((el, i) => {
                     const radio = 32 + (puntos[el] / maxPunto) * (R_REF - 32);
                     const v = vertice(i, radio);
                     return <circle key={el} cx={v.x} cy={v.y} r={4} fill={ELEMENTOS[el].color} stroke="white" strokeWidth={1} />;
                   })}
-                  {/* foto de cada elemento en su vértice exterior */}
                   {ORDEN_ELEMENTOS.map((el, i) => {
                     const v = vertice(i, R_REF);
                     const label = vertice(i, R_REF + 46);
                     return (
                       <g key={el}>
                         <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
-                        <image href={FOTO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
+                        <image href={ICONO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
                                width={FOTO_R * 2} height={FOTO_R * 2}
                                clipPath={`url(#tcm-clip-${el})`} preserveAspectRatio="xMidYMid slice" />
                         <circle cx={v.x} cy={v.y} r={FOTO_R} fill="none" stroke="white" strokeWidth={2}
@@ -181,6 +214,50 @@ export default function MetodoTcmMapa() {
             </Box>
           </Box>
 
+          {/* ── El estado de cada elemento ── */}
+          <Panel titulo="El estado de cada elemento" color={tcmTxt} full>
+            <Flex direction="column" gap={4}>
+              {ORDEN_ELEMENTOS.map((el) => {
+                const E = ELEMENTOS[el];
+                const estado = estados[el] ?? null;
+                return (
+                  <Flex key={el} align="flex-start" gap={4}
+                        borderTop={el === ORDEN_ELEMENTOS[0] ? undefined : `1px solid ${tcmTxt}22`}
+                        pt={el === ORDEN_ELEMENTOS[0] ? 0 : 4}>
+                    <Box flexShrink={0} w="46px" h="46px" borderRadius="full" overflow="hidden"
+                         border={`2px solid ${E.color}`}
+                         style={{ boxShadow: `0 0 8px ${E.color}88` }}>
+                      <img src={ICONO_ELEMENTO[el]} alt={E.nombre}
+                           style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </Box>
+                    <Box flex="1">
+                      <Flex align="center" gap={3} wrap="wrap" mb={1}>
+                        <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700">
+                          {E.nombre}
+                        </Text>
+                        {estado ? (
+                          <Box px={2.5} py={0.5} borderRadius="full"
+                               bg={`${ESTADO_COLOR[estado]}33`} border={`1px solid ${ESTADO_COLOR[estado]}`}>
+                            <Text color="white" fontSize="xs" fontWeight={700} letterSpacing="0.04em">
+                              {ESTADO_LABEL[estado]}
+                            </Text>
+                          </Box>
+                        ) : (
+                          <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic">
+                            sin datos suficientes
+                          </Text>
+                        )}
+                      </Flex>
+                      <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
+                        {estado ? textoEstado(el, estado) : E.significado}
+                      </Text>
+                    </Box>
+                  </Flex>
+                );
+              })}
+            </Flex>
+          </Panel>
+
           {/* ── Predominante · a apoyar ── */}
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} w="100%">
             <Panel titulo="Elemento predominante" color={elPred.color}>
@@ -188,7 +265,7 @@ export default function MetodoTcmMapa() {
                 {elPred.nombre}
               </Text>
               <Text color="rgba(255,255,255,0.9)" fontSize="sm" lineHeight="1.7">
-                {elPred.emocion}
+                Es el que más presencia y demanda tiene hoy en ti. Escucharlo es la clave de tu reequilibrio.
               </Text>
             </Panel>
             <Panel titulo="Elemento(s) que piden apoyo" color={ELEMENTOS[aApoyar[0] ?? predominante].color}>
@@ -200,38 +277,6 @@ export default function MetodoTcmMapa() {
               </Text>
             </Panel>
           </SimpleGrid>
-
-          {/* ── Fortalezas · retos ── */}
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} w="100%">
-            <Panel titulo="Tus fortalezas" color={tcmTxt}>
-              <Flex direction="column" gap={1.5}>
-                {elPred.fortalezas.map((f) => (
-                  <Text key={f} color="rgba(255,255,255,0.92)" fontSize="sm" lineHeight="1.6">· {f}</Text>
-                ))}
-              </Flex>
-            </Panel>
-            <Panel titulo="Posibles retos" color={tcmTxt}>
-              <Flex direction="column" gap={1.5}>
-                {ELEMENTOS[aApoyar[0] ?? predominante].desequilibrios.map((d) => (
-                  <Text key={d} color="rgba(255,255,255,0.92)" fontSize="sm" lineHeight="1.6">· {d}</Text>
-                ))}
-              </Flex>
-            </Panel>
-          </SimpleGrid>
-
-          {/* ── 3 recomendaciones inmediatas ── */}
-          <Panel titulo="Tres cuidados para empezar hoy" color={tcmTxt} full>
-            <Flex direction="column" gap={2.5}>
-              {tresRecomendaciones.map((r, i) => (
-                <Flex key={i} align="flex-start" gap={3}>
-                  <Box flexShrink={0} w="24px" h="24px" borderRadius="full" bg={`${tcmTxt}33`}
-                       border={`1px solid ${tcmTxt}`} display="flex" alignItems="center" justifyContent="center"
-                       color="white" fontWeight={700} fontSize="sm">{i + 1}</Box>
-                  <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">{r}</Text>
-                </Flex>
-              ))}
-            </Flex>
-          </Panel>
 
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="620px"
                 lineHeight="1.6">
@@ -264,7 +309,6 @@ function Panel({ titulo, color, children, full }: {
               textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
           {titulo}
         </Text>
-        {/* Separación horizontal entre el título y la respuesta: línea entera. */}
         <Box h="1px" w="100%" mb={4} bg={`${color}88`} />
         {children}
       </Box>

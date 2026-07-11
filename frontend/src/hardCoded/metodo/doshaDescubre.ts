@@ -1,4 +1,4 @@
-// Contenido de la página «Descubre quién eres» (paso posterior a la intro del
+// Contenido de la página «Tu tendencia mental» (paso posterior a la intro del
 // dosha en el recorrido de Ayurveda). Una entrada por dosha. Texto con
 // **negrita** y *cursiva* (mini-parser en la página). Vata completo; Pitta y
 // Kapha se rellenarán con el mismo formato.
@@ -28,7 +28,7 @@ export interface DoshaDescubre {
 
 export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
   vata: {
-    titulo: "Descubre quién eres",
+    titulo: "Tu tendencia mental",
     intro: [
       "Antes de aprender qué comer o qué hábitos te ayudan, hay algo mucho más importante.",
       "Comprender tu naturaleza.",
@@ -95,7 +95,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     ],
   },
   pitta: {
-    titulo: "Descubre quién eres",
+    titulo: "Tu tendencia mental",
     intro: [
       "Antes de aprender qué comer o qué hábitos te ayudan, hay algo mucho más importante.",
       "Comprender tu naturaleza.",
@@ -165,7 +165,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     ],
   },
   kapha: {
-    titulo: "Descubre quién eres",
+    titulo: "Tu tendencia mental",
     intro: [
       "Antes de aprender qué comer o qué hábitos te ayudan, hay algo mucho más importante.",
       "Comprender tu naturaleza.",

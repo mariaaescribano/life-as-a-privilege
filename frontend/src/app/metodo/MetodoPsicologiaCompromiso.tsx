@@ -162,14 +162,14 @@ export default function MetodoPsicologiaCompromiso() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
-                next={{ label: "Brújula →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
+                next={{ label: "Carta →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
               />
             </Reveal>
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
               <IntroRecorrido>
-                Ya entiendes tu historia. Toma consciencia de qué no pudieron darte y comprométete a tratarte con cariño un poco más todos los días.
+               Ya entiendes tu historia. Toma conciencia de lo que no pudieron darte y comprométete a tratarte con un poco más de cariño cada día.
               </IntroRecorrido>
             </Reveal>
 
