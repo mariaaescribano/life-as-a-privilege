@@ -7,9 +7,6 @@ IMAGENES
 
 Estructuras: mitocondria.png, ribosoma.png
 Niveles 2-3: celula.png, tejido.png, organo.png, sistema.png, cuerpo.png
-Macromoléculas: enzima.png, adn.png, membrana.png, carbohidrato.png
-receptores de hormonas de las membranas celulares,
-Moléculas: carbono.png
 
 
 

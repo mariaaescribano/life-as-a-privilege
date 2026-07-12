@@ -198,7 +198,33 @@ const ORGANOS: Organo[] = [
         texto: <>El hígado almacena vitaminas como la A, D, B₁₂ y K, además de minerales como el hierro y el cobre. Actúa como un almacén estratégico que libera estos nutrientes cuando el organismo los necesita, evitando que dependamos únicamente de lo que comemos cada día.</>,
       },
     ] },
-  { key: "pancreas",  label: "Páncreas",  foto: "/recorrido/fisiologia/organos/pancreas.png",  hotspot: { top: 47, left: 57 }, celulas: pick("celulas-beta", "celulas-alfa", "celulas-delta", "celulas-acinares", "celulas-ductales", "celulas-pp") },
+  { key: "pancreas",  label: "Páncreas",  foto: "/recorrido/fisiologia/organos/pancreas.png",  hotspot: { top: 47, left: 57 }, celulas: pick("celulas-beta", "celulas-alfa", "celulas-delta", "celulas-acinares", "celulas-ductales", "celulas-pp"),
+    consejos: [
+      {
+        titular: "Tu páncreas sabe cuánto azúcar hay en tu sangre.",
+        texto: <>Cada vez que comes, el páncreas mide continuamente la cantidad de glucosa que circula por la sangre. Si sube demasiado, libera insulina para que las células puedan utilizarla o almacenarla. Si baja, libera glucagón para que el hígado vuelva a liberar glucosa.</>,
+      },
+      {
+        titular: "La diabetes puede dejarte ciego.",
+        texto: <>En la diabetes tipo 1, el sistema inmunitario destruye las células que producen insulina. En la tipo 2, las células del cuerpo dejan de responder correctamente a esa hormona. En ambos casos, la glucosa permanece demasiado tiempo en la sangre, haciendo que las arterias se peguen entre ellas, dificultando la llegada de sangre y nutrientes a nervios, ojos y riñones, deteriorándolas y haciendo que pierdan su funcionamiento con el tiempo.</>,
+      },
+      {
+        titular: "Tu páncreas también fabrica tus enzimas digestivas.",
+        texto: <>Cada comida hace que el páncreas libere enzimas capaces de digerir proteínas, grasas y carbohidratos. Sin ellas, gran parte de los nutrientes atravesarían el intestino sin poder ser absorbidos.</>,
+      },
+      {
+        titular: "El exceso de azúcar obliga a tu páncreas a trabajar más.",
+        texto: <>Cuando consumes con frecuencia grandes cantidades de azúcar y calorías, el organismo necesita producir cada vez más insulina para mantener estable la glucosa en sangre. Durante años, ese esfuerzo continuo puede favorecer que las células beta pierdan parte de su capacidad para funcionar correctamente.</>,
+      },
+      {
+        titular: "El alcohol también puede inflamar el páncreas.",
+        texto: <>El páncreas fabrica enzimas muy potentes que normalmente permanecen inactivas hasta llegar al intestino. El alcohol aumenta el riesgo de que estas enzimas se activen antes de tiempo y empiecen a dañar el propio páncreas, provocando una pancreatitis.</>,
+      },
+      {
+        titular: "El páncreas trabaja en silencio.",
+        texto: <>A diferencia del estómago o del intestino, el páncreas suele pasar desapercibido. Sin embargo, regula la glucosa en sangre y produce la mayor parte de las enzimas digestivas. Cuando enferma, puede afectar prácticamente a todo el organismo antes de dar síntomas claros.</>,
+      },
+    ] },
   { key: "rinones",   label: "Riñones",   foto: "/recorrido/fisiologia/organos/rinones.png",   hotspot: { top: 52, left: 50 }, celulas: pick("podocitos", "celulas-tubulares", "tubulo-proximal", "asa-henle", "tubulo-distal"),
     consejos: [
       {
@@ -238,12 +264,204 @@ const ORGANOS: Organo[] = [
         texto: <>El color, la cantidad y la frecuencia con la que orinas dicen mucho sobre cómo está funcionando tu organismo. Una orina muy oscura suele indicar que necesitas más agua. La presencia de sangre, espuma persistente o cambios mantenidos en la cantidad de orina pueden ser señales de que algo no funciona bien en los riñones y conviene consultarlo con un profesional sanitario.</>,
       },
     ] },
-  { key: "intestino", label: "Intestino", foto: "/recorrido/fisiologia/organos/intestino.png", hotspot: { top: 62, left: 50 }, celulas: pick("enterocitos", "caliciformes", "paneth", "enteroendocrinas", "celula-madre-intestinal") },
-  { key: "tiroides",  label: "Tiroides",  foto: "/recorrido/fisiologia/organos/tiroides.png",  hotspot: { top: 27, left: 50 }, celulas: pick("tirocito", "celula-c") },
-  { key: "piel",      label: "Piel",      foto: "/recorrido/fisiologia/organos/piel.png",      hotspot: { top: 24, left: 22 }, celulas: pick("queratinocitos", "melanocitos", "langerhans", "endoteliales", "merkel") },
-  { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.png",   hotspot: { top: 58, left: 72 }, celulas: pick("miocitos", "musculares-lisas", "satelite") },
-  { key: "huesos",    label: "Huesos",    foto: "/recorrido/fisiologia/organos/huesos.png",    hotspot: { top: 82, left: 44 }, celulas: pick("osteoblastos", "osteoclastos", "osteocitos", "condrocito") },
-  { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 80 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas") },
+  { key: "intestino", label: "Intestino", foto: "/recorrido/fisiologia/organos/intestino.png", hotspot: { top: 62, left: 50 }, celulas: pick("enterocitos", "caliciformes", "paneth", "enteroendocrinas", "celula-madre-intestinal"),
+    consejos: [
+      {
+        titular: "Tu intestino delgado decide qué entra en tu cuerpo.",
+        texto: <>Todo lo que comes llega hasta el intestino delgado, pero no todo consigue atravesarlo. Sus células absorben los nutrientes que necesitas y bloquean muchas sustancias potencialmente peligrosas. Es la mayor superficie de intercambio de todo el organismo.</>,
+      },
+      {
+        titular: "No eres lo que comes… eres lo que absorbes.",
+        texto: <>Puedes llevar la mejor alimentación del mundo, pero si tu intestino no absorbe correctamente los nutrientes, tus células no podrán utilizarlos. Por eso enfermedades como la celiaquía o la enfermedad de Crohn pueden afectar a todo el organismo.</>,
+      },
+      {
+        titular: "La grasa necesita ayuda para entrar.",
+        texto: <>A diferencia del azúcar o los aminoácidos, las grasas no pueden absorberse fácilmente porque no se mezclan con el agua. Por eso la bilis las divide en pequeñas gotas y las enzimas pancreáticas terminan de digerirlas antes de que el intestino pueda absorberlas.</>,
+      },
+      {
+        titular: "Tu intestino se renueva constantemente.",
+        texto: <>Las células que recubren el intestino viven solo unos pocos días. Después son sustituidas por otras nuevas para mantener una barrera sana capaz de absorber nutrientes sin dejar pasar microorganismos peligrosos. Por eso se dice que el ayuno es tan saludable, pero depende de tu estilo de vida. Si eres alguien muy sedentario sí te beneficiarás.</>,
+      },
+      {
+        titular: "Tu sistema inmunitario vigila cada bocado.",
+        texto: <>Cada comida introduce miles de moléculas nuevas en el organismo. El intestino debe decidir cuáles son inofensivas y cuáles representan una amenaza. Gran parte del sistema inmunitario trabaja en el intestino para mantener ese equilibrio.</>,
+      },
+      {
+        titular: "La fibra alimenta a quienes te cuidan.",
+        texto: <>Nosotros no podemos digerir la fibra, pero las bacterias del colon sí. Al fermentarla producen moléculas que alimentan las células del intestino, reducen la inflamación y ayudan a mantener una microbiota sana.</>,
+      },
+      {
+        titular: "No todas las bacterias son malas.",
+        texto: <>En el colon viven billones de microorganismos. Muchos fabrican vitaminas, impiden que crezcan bacterias peligrosas y colaboran con el sistema inmunitario. Sin ellos sería mucho más difícil mantenernos sanos.</>,
+      },
+      {
+        titular: "El colon también recicla el agua.",
+        texto: <>Cuando el contenido intestinal llega al colon todavía contiene mucha agua. Su principal trabajo es recuperarla antes de formar las heces. Si absorbe demasiada aparece estreñimiento; si absorbe muy poca, diarrea.</>,
+      },
+      {
+        titular: "Tu microbiota cambia con cada comida.",
+        texto: <>Las bacterias intestinales se alimentan de lo que tú comes. Una dieta rica en frutas, verduras, legumbres y cereales integrales favorece una microbiota más diversa. En cambio, una alimentación pobre en fibra hace que este ecosistema pierda riqueza y estabilidad.</>,
+      },
+      {
+        titular: "Tu segundo cerebro vive en el intestino.",
+        texto: <>El intestino contiene cientos de millones de neuronas que controlan gran parte de la digestión sin necesidad de consultar continuamente al cerebro. Además, ambos órganos se comunican constantemente a través del nervio vago, hormonas y moléculas producidas por la microbiota. Por eso las emociones pueden afectar al intestino… y el intestino también influye en cómo nos sentimos.</>,
+      },
+    ] },
+  { key: "tiroides",  label: "Tiroides",  foto: "/recorrido/fisiologia/organos/tiroides.png",  hotspot: { top: 27, left: 50 }, celulas: pick("tirocito", "celula-c"),
+    consejos: [
+      {
+        titular: "Tu tiroides decide a qué velocidad funciona tu cuerpo.",
+        texto: <>Las hormonas tiroideas actúan como el «acelerador» del organismo. Regulan la cantidad de energía que consumen tus células, la temperatura corporal, el ritmo del corazón y hasta la velocidad con la que funcionan muchos órganos.</>,
+      },
+      {
+        titular: "Sin yodo el metabolismo va más lento.",
+        texto: <>El yodo es una pieza imprescindible para producir las hormonas tiroideas. Como el cuerpo no puede fabricarlo, debe obtenerse a través de la alimentación. Por eso utilizar sal yodada o consumir pescado y marisco de forma habitual ayuda a mantener una tiroides sana.</>,
+      },
+      {
+        titular: "La tiroides habla con el cerebro constantemente.",
+        texto: <>El cerebro controla la tiroides mediante una hormona llamada TSH. Si detecta que hay pocas hormonas tiroideas, le ordena producir más; si hay demasiadas, reduce la señal. Es un sistema de control muy preciso que mantiene el metabolismo en equilibrio.</>,
+      },
+      {
+        titular: "Demasiado rápido… o demasiado lento.",
+        texto: <>Cuando la tiroides produce demasiadas hormonas, todo el organismo se acelera: aumenta el pulso, aparece nerviosismo y se pierde peso con facilidad. Cuando produce pocas, ocurre lo contrario: cansancio, sensación de frío, estreñimiento y dificultad para concentrarse.</>,
+      },
+      {
+        titular: "No siempre es culpa de la tiroides.",
+        texto: <>El cansancio, la caída del pelo o el aumento de peso pueden tener muchas causas diferentes. Aunque estos síntomas aparecen en algunas enfermedades tiroideas, también pueden deberse a falta de sueño, estrés, anemia, una mala alimentación o muchos otros problemas. Por eso es importante confirmar el diagnóstico antes de pensar que la tiroides es la responsable.</>,
+      },
+    ] },
+  { key: "piel",      label: "Piel",      foto: "/recorrido/fisiologia/organos/piel.png",      hotspot: { top: 24, left: 22 }, celulas: pick("queratinocitos", "melanocitos", "langerhans", "endoteliales", "merkel"),
+    consejos: [
+      {
+        titular: "Tu piel es el órgano más grande de tu cuerpo.",
+        texto: <>La piel puede ocupar cerca de dos metros cuadrados y representa alrededor del 15 % de tu peso corporal. Es la primera barrera que te protege frente a golpes, microorganismos, sustancias químicas y la pérdida de agua.</>,
+      },
+      {
+        titular: "El Sol envejece tu piel… incluso cuando no te quemas.",
+        texto: <>La radiación ultravioleta atraviesa la piel y daña el ADN de sus células. Aunque no aparezca una quemadura, ese daño se va acumulando con los años y favorece las arrugas, las manchas y el cáncer de piel.<br /><br />Además, algunos fotones de la radiación ultravioleta aportan tanta energía que alteran las moléculas de tus células y favorecen la formación de radicales libres (ROS). Estas moléculas son muy inestables y «roban» electrones a otras para estabilizarse, desencadenando una reacción en cadena que acelera el envejecimiento y el daño celular.</>,
+      },
+      {
+        titular: "Broncearse también es una señal de alarma.",
+        texto: <>El bronceado no significa que la piel esté más sana. Es la respuesta de los melanocitos al detectar daño por radiación ultravioleta. Fabrican melanina para intentar absorber parte de esa radiación y proteger el ADN de las células, pero esa protección nunca es completa.</>,
+      },
+      {
+        titular: "La luz del Sol no basta para fabricar vitamina D.",
+        texto: <>La radiación ultravioleta inicia la producción de vitamina D en la piel, pero esa molécula todavía es inactiva. Después debe viajar al hígado, donde sufre una primera transformación, y finalmente al riñón, donde se activa por completo. Solo entonces puede ayudar a absorber calcio y mantener fuertes los huesos y los músculos. Por eso enfermedades del hígado, como el hígado graso avanzado, o del riñón también pueden reducir los niveles de vitamina D.</>,
+      },
+      {
+        titular: "La piel también tiene su propio sistema inmunitario.",
+        texto: <>Entre las células de la piel viven células inmunitarias que detectan bacterias, virus y otros microorganismos antes de que entren en el organismo. La mayoría de las infecciones nunca llegan más allá gracias a esta primera línea de defensa.</>,
+      },
+      {
+        titular: "Tus heridas se reparan mejor de lo que imaginas.",
+        texto: <>Cuando te haces un corte, las plaquetas cierran la herida en minutos, creando una barrera junto a un montón de desafortunados glóbulos rojos que pasaban por ahí. Después llegan células inmunitarias para evitar infecciones y, finalmente, los fibroblastos fabrican colágeno para reconstruir el tejido. Una simple herida pone en marcha a millones de células trabajando al mismo tiempo con un único objetivo: protegerte.</>,
+      },
+      {
+        titular: "Tu piel también tiene un ecosistema.",
+        texto: <>Sobre ella viven millones de bacterias, hongos y otros microorganismos que forman la microbiota cutánea. La mayoría son beneficiosos: ocupan espacio, dificultan el crecimiento de microbios peligrosos y colaboran con el sistema inmunitario para mantener la piel sana.</>,
+      },
+    ] },
+  { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.png",   hotspot: { top: 58, left: 72 }, celulas: pick("miocitos", "musculares-lisas", "satelite"),
+    consejos: [
+      {
+        titular: "Tus músculos: o los usas… o tu cuerpo los descompone.",
+        texto: <>Los músculos son uno de los mayores consumidores de energía del organismo. Cuando haces ejercicio, pueden captar glucosa de la sangre con mucha menos dependencia de la insulina y también utilizan grasas y cuerpos cetónicos como combustible. Pero mantener músculo cuesta mucha energía. Si pasas semanas sin usarlo, el organismo empieza a desmontarlo para reutilizar sus proteínas en otros tejidos. El sedentarismo hace que, literalmente, tu cuerpo se «coma» a tu músculo.</>,
+      },
+      {
+        titular: "Si no los usas, tu cuerpo deja de mantenerlos.",
+        texto: <>El músculo es muy caro de mantener. Si pasas semanas sin utilizarlo, el organismo interpreta que ya no lo necesita y empieza a reducir su tamaño para ahorrar energía. Por eso perdemos fuerza tan rápidamente tras una lesión, una hospitalización o largos periodos de inactividad.</>,
+      },
+      {
+        titular: "La fuerza también protege tus huesos.",
+        texto: <>Cada vez que un músculo se contrae, tira del hueso al que está unido. Ese pequeño esfuerzo estimula a los huesos para fabricar más tejido óseo y hacerse más resistentes. Entrenar fuerza no solo desarrolla músculo: también ayuda a prevenir la osteoporosis.</>,
+      },
+      {
+        titular: "El movimiento alimenta tus articulaciones.",
+        texto: <>El cartílago no tiene vasos sanguíneos. Obtiene el oxígeno y los nutrientes gracias al líquido sinovial, que entra y sale de él cada vez que una articulación se mueve, como si fuera una esponja. Permanecer inmóvil durante mucho tiempo reduce ese intercambio, mientras que el movimiento moderado ayuda a mantener el cartílago sano y lubricado.</>,
+      },
+      {
+        titular: "Tus músculos también ayudan al corazón.",
+        texto: <>Al caminar o mover las piernas, los músculos comprimen las venas y empujan la sangre de vuelta hacia el corazón. Por eso se conocen como el «segundo corazón». Permanecer muchas horas sentado dificulta este retorno y favorece la hinchazón de las piernas.</>,
+      },
+      {
+        titular: "Dormir también construye músculo.",
+        texto: <>La mayor parte de la reparación muscular ocurre mientras duermes. Durante el sueño aumenta la liberación de hormonas como la hormona del crecimiento y la testosterona, mientras disminuye el cortisol. Al mismo tiempo, las células satélite reparan las pequeñas lesiones producidas durante el ejercicio y ayudan a que el músculo se vuelva más fuerte. Entrenar sin descansar limita estas adaptaciones.</>,
+      },
+      {
+        titular: "Tus músculos también hablan con el resto del cuerpo.",
+        texto: <>Cuando haces ejercicio, los músculos liberan moléculas llamadas mioquinas. Estas viajan por la sangre y ayudan a mejorar el funcionamiento del cerebro, el sistema inmunitario, el hígado y el tejido adiposo. Por eso el ejercicio reduce la inflamación, mejora la memoria, ayuda a controlar la glucosa y protege mucho más que los propios músculos.</>,
+      },
+    ] },
+  { key: "huesos",    label: "Huesos",    foto: "/recorrido/fisiologia/organos/huesos.png",    hotspot: { top: 82, left: 44 }, celulas: pick("osteoblastos", "osteoclastos", "osteocitos", "condrocito"),
+    consejos: [
+      {
+        titular: "Tus huesos están vivos.",
+        texto: <>Los huesos no son estructuras rígidas e inertes. Cada día destruyen pequeñas zonas dañadas y construyen hueso nuevo. Gracias a este remodelado continuo pueden adaptarse a los esfuerzos y reparar pequeños desperfectos antes de que se conviertan en fracturas.</>,
+      },
+      {
+        titular: "El ejercicio le dice a tus huesos que se hagan más fuertes.",
+        texto: <>Cada salto, cada paseo y cada peso que levantas ejerce una pequeña tensión sobre el hueso. Como respuesta, las células óseas reciben el mensaje de fabricar más tejido óseo. Por eso el ejercicio de fuerza y el impacto moderado ayudan a prevenir la osteoporosis.</>,
+      },
+      {
+        titular: "Sin vitamina D, el calcio sirve de poco.",
+        texto: <>Puedes consumir mucho calcio, pero si no tienes suficiente vitamina D absorberás mucho menos en el intestino. Es recomendado obtener la vitamina D con la alimentación o con suplementos, obtenerla del sol es realmente difícil debido a que hace falta 3 activaciones distintas.</>,
+      },
+      {
+        titular: "Tus huesos son los ahorros del calcio.",
+        texto: <>El calcio es imprescindible para que funcionen los músculos, los nervios y el corazón. Si la sangre necesita más calcio y no lo obtiene de la alimentación, el organismo lo extrae de los huesos. Durante años, este proceso puede debilitarlos si no se repone adecuadamente.</>,
+      },
+      {
+        titular: "La osteoporosis empieza mucho antes de la primera fractura.",
+        texto: <>Los huesos pueden perder densidad durante años sin producir ningún síntoma. Cuando aparece la primera fractura, la enfermedad suele llevar mucho tiempo desarrollándose. Algunos estudios aseguran que tiene sus comienzos en la menopausia. Mantener una buena alimentación y hacer ejercicio de fuerza desde joven es la mejor forma de prevenirla.</>,
+      },
+      {
+        titular: "Nunca es tarde para fortalecer tus huesos.",
+        texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la vida. Moverte hoy sigue siendo una inversión para el esqueleto de mañana.</>,
+      },
+    ] },
+  { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 80 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
+    consejos: [
+      {
+        titular: "Tu sangre es un órgano líquido.",
+        texto: <>La sangre no solo transporta oxígeno. Lleva nutrientes, hormonas, células inmunitarias y recoge los desechos que producen tus órganos. Es la red que conecta todas las partes del cuerpo y permite que trabajen como un solo sistema.</>,
+      },
+      {
+        titular: "Tus glóbulos rojos viven solo cuatro meses.",
+        texto: <>Los eritrocitos transportan oxígeno gracias a una proteína llamada hemoglobina. Como no tienen núcleo, no pueden repararse cuando envejecen. Después de unos 120 días son retirados por el bazo y el hígado y sustituidos por otros nuevos fabricados en la médula ósea.</>,
+      },
+      {
+        titular: "Tus huesos esconden una fábrica de sangre.",
+        texto: <>En la infancia, casi todos los huesos contienen médula ósea roja, el tejido que fabrica las células sanguíneas. Con la edad, parte de esa médula se transforma en médula amarilla, rica en grasa. Aun así, la médula roja que permanece en la pelvis, las vértebras, las costillas o el esternón sigue produciendo glóbulos rojos, glóbulos blancos y plaquetas durante toda la vida.</>,
+      },
+      {
+        titular: "El hierro no da energía… permite fabricarla.",
+        texto: <>Muchas personas creen que el hierro «da energía». En realidad, su función principal es formar parte de la hemoglobina, la molécula que transporta el oxígeno. Sin suficiente hierro, llega menos oxígeno a las células y estas producen menos energía, por eso aparece el cansancio.</>,
+      },
+      {
+        titular: "Tu sistema inmunitario nunca duerme.",
+        texto: <>Millones de glóbulos blancos patrullan constantemente la sangre y los tejidos buscando virus, bacterias o células dañadas. La mayoría de las veces eliminan estas amenazas sin que llegues a darte cuenta de que estaban ahí.</>,
+      },
+      {
+        titular: "La inflamación también puede ser un problema.",
+        texto: <>La inflamación es una herramienta esencial para reparar tejidos y combatir infecciones. Pero si permanece activada durante meses o años, empieza a dañar los propios órganos y favorece enfermedades como la diabetes, la aterosclerosis o algunos tipos de cáncer.</>,
+      },
+      {
+        titular: "Las plaquetas son los primeros albañiles del cuerpo.",
+        texto: <>Cuando te haces una herida, las plaquetas llegan en segundos y forman un tapón para evitar que sigas perdiendo sangre. Después liberan señales que atraen a otras células encargadas de reparar el tejido dañado.</>,
+      },
+      {
+        titular: "Tu sangre también reparte los mensajes.",
+        texto: <>Las hormonas viajan por la sangre como cartas con una dirección muy concreta. Cuando llegan a un órgano, solo las células que tienen el «buzón» adecuado, llamado receptor, pueden leer el mensaje y responder. Así se coordinan órganos que están muy alejados entre sí.</>,
+      },
+      {
+        titular: "La sangre no siempre es roja.",
+        texto: <>Los glóbulos rojos contienen hemoglobina, una proteína rica en hierro que cambia ligeramente de color según transporte o no oxígeno. Por eso la sangre arterial es de un rojo más brillante y la venosa de un rojo más oscuro. Aunque las venas parezcan azules bajo la piel, la sangre que circula por ellas sigue siendo roja.</>,
+      },
+      {
+        titular: "Donar sangre activa la fábrica.",
+        texto: <>Después de una donación, el organismo detecta que ha perdido parte de su sangre y los riñones producen más eritropoyetina, una hormona que estimula la médula ósea para fabricar nuevos glóbulos rojos. En pocas semanas, el volumen de sangre y las células perdidas vuelven a recuperarse. Una sola donación puede ayudar a salvar varias vidas.</>,
+      },
+    ] },
   { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.png", hotspot: { top: 70, left: 28 }, celulas: pick("fibroblastos", "mastocito") },
   { key: "grasa",     label: "Tejido graso", foto: "/recorrido/fisiologia/organos/grasa.png",   hotspot: { top: 50, left: 34 }, celulas: pick("adipocitos-blancos", "adipocitos-marrones") },
 ];
