@@ -13,6 +13,9 @@ import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { VINETAS_ORIGEN as ORIGEN_TAOISMO } from "../../components/metodo/TCMIlustracionesModal";
+import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 
@@ -36,6 +39,7 @@ export default function MetodoTcm() {
   // dosha del usuario), no en el inicio. Se resuelve con el dosha guardado.
   const [volverAyurvedaUrl, setVolverAyurvedaUrl] = useState("/metodo/ayurveda");
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+  const intro = useIntroComic("metodo-tcm"); // cómic del Origen (taoísmo), 1ª vez
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -75,6 +79,9 @@ export default function MetodoTcm() {
         const tcmSuscrito = !!me.data?.tcm_suscrito;
         setSuscrito(tcmSuscrito);
         if (!tcmSuscrito) { setPagoOpen(true); return; }
+
+        // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen (taoísmo).
+        void intro.checkAndOpen();
       } catch {
         navigate("/home");
         return;
@@ -144,7 +151,7 @@ export default function MetodoTcm() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Medicina China"
-            pageLabel="1/12"
+            pageLabel="1/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -213,6 +220,17 @@ export default function MetodoTcm() {
       </Flex>
 
       {ilustracionesModal}
+
+      {/* Intro (1ª vez): cómic del Origen según el taoísmo. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        vinetas={ORIGEN_TAOISMO}
+        themeColor={tcmTxt}
+        disciplinaBgImage="/img/fondos/tcm.png"
+        disciplinaBgColor={tcmBg}
+        onFinish={intro.finish}
+        onClose={intro.close}
+      />
 
       <IndiceTcm />
 

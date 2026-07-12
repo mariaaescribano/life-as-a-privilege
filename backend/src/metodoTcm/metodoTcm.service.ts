@@ -19,8 +19,9 @@ export class MetodoTcmService {
     return data ?? null;
   }
 
-  // Solo el campo `data` (progreso de etapas) es editable desde el cliente.
-  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data']);
+  // `data` (progreso de etapas) e `intro_visto` (cómic de intro ya visto) son
+  // los únicos campos editables desde el cliente.
+  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data', 'intro_visto']);
 
   async actualizar(userId: string, patch: Record<string, any>): Promise<{ success: boolean }> {
     const filtered = Object.fromEntries(

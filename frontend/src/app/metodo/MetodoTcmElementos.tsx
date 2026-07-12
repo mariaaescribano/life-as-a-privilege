@@ -87,7 +87,7 @@ export default function MetodoTcmElementos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Cinco Elementos"
-            pageLabel="2/12"
+            pageLabel="2/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -96,7 +96,7 @@ export default function MetodoTcmElementos() {
             prev={{ label: "← Medicina China", onClick: () => navigate("/metodo/tcm") }}
             extra={ilustracionesBtn}
             next={{
-              label: "Tu perfil →",
+              label: "Tu equilibrio →",
               onClick: () => navigate("/metodo/tcm/perfil"),
               disabled: !viajeCompleto(data),
               disabledTooltip: "Recorre los cinco elementos para ver tu perfil completo",

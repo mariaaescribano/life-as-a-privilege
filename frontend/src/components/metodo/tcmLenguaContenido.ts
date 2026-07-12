@@ -113,6 +113,23 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
     ],
   },
 
+  // ── PUNTOS Y VENAS (junto al movimiento) ─────────────────────────────────────
+  {
+    dim: "puntos",
+    titulo: "Puntos y venas",
+    subtitulo: "Detalles finos: papilas alteradas en la superficie y las venas de debajo de la lengua.",
+    opciones: [
+      { key: "normal", nombre: "Sin puntos ni venas marcadas", src: IMG("puntos-normal"), equilibrio: true,
+        lectura: "Superficie uniforme y venas sublinguales apenas visibles, ni dilatadas ni oscuras: lo normal." },
+      { key: "puntos-rojos", nombre: "Puntos rojos", src: IMG("puntos-rojos"),
+        lectura: "Papilas enrojecidas que sobresalen: siempre indican Calor. Su localización señala el órgano (p. ej., en el área del pecho, Calor tóxico en el Pulmón o la mama)." },
+      { key: "vesiculas", nombre: "Vesículas blancas", src: IMG("puntos-vesiculas"),
+        lectura: "Papilas que sobresalen con color blanco: suelen indicar Humedad." },
+      { key: "venas", nombre: "Venas sublinguales púrpuras", src: IMG("puntos-venas"),
+        lectura: "Bajo la lengua, venas oscuras o dilatadas: estasis de Sangre en fase temprana. Puede aparecer antes de que el resto de la lengua se vuelva púrpura." },
+    ],
+  },
+
   // ── SABURRA (la capa lingual) ───────────────────────────────────────────────
   {
     dim: "saburra",
@@ -152,23 +169,6 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
         lectura: "Frío o deficiencia de Yang: el organismo no transforma ni moviliza bien los líquidos y se acumulan." },
       { key: "lacada", nombre: "Brillante o «lacada»", src: IMG("humedad-lacada"), patrones: ["def-yin"],
         lectura: "Lisa y brillante como barnizada: colapso de Yin, un agotamiento profundo de los fluidos. Signo de gran importancia." },
-    ],
-  },
-
-  // ── PUNTOS Y VENAS ──────────────────────────────────────────────────────────
-  {
-    dim: "puntos",
-    titulo: "Puntos y venas",
-    subtitulo: "Detalles finos: papilas alteradas en la superficie y las venas de debajo de la lengua.",
-    opciones: [
-      { key: "normal", nombre: "Sin puntos ni venas marcadas", src: IMG("puntos-normal"), equilibrio: true,
-        lectura: "Superficie uniforme y venas sublinguales apenas visibles, ni dilatadas ni oscuras: lo normal." },
-      { key: "puntos-rojos", nombre: "Puntos rojos", src: IMG("puntos-rojos"),
-        lectura: "Papilas enrojecidas que sobresalen: siempre indican Calor. Su localización señala el órgano (p. ej., en el área del pecho, Calor tóxico en el Pulmón o la mama)." },
-      { key: "vesiculas", nombre: "Vesículas blancas", src: IMG("puntos-vesiculas"),
-        lectura: "Papilas que sobresalen con color blanco: suelen indicar Humedad." },
-      { key: "venas", nombre: "Venas sublinguales púrpuras", src: IMG("puntos-venas"),
-        lectura: "Bajo la lengua, venas oscuras o dilatadas: estasis de Sangre en fase temprana. Puede aparecer antes de que el resto de la lengua se vuelva púrpura." },
     ],
   },
 ];

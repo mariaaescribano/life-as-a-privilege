@@ -98,7 +98,7 @@ export default function MetodoTcmDiagnostico() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Diagnóstico final"
-            pageLabel="9/12"
+            pageLabel="5/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -117,6 +117,10 @@ export default function MetodoTcmDiagnostico() {
           {/* ── BOX 1 · Estrella-perfil (lo que ocurre en ti ahora mismo) ── */}
           <Panel titulo="" color={tcmTxt}>
             <EstrellaPerfil estados={estados} onElemento={(el) => setComicEl(el)} />
+            <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center"
+                  mt={2} lineHeight="1.6">
+              Los elementos iluminados son los que más necesitan de tu atención.
+            </Text>
           </Panel>
 
           {/* ── BOX 2 · La estrella de los cinco elementos + tu mensaje (de Equilibrio) ── */}
@@ -125,7 +129,7 @@ export default function MetodoTcmDiagnostico() {
           {/* ── BOX 3 y 4 · Relación a relación (popup por cada una) ── */}
           <Text color="white" fontStyle="italic" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                 textAlign="center" maxW="660px" mt={1} style={{ textShadow: INK_SHADOW }}>
-            Repasa cada relación con calma. Todas te interesan, pues todas hablan de ti. Toca cualquier flecha para leer.
+            Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti. Toca cualquier flecha para leer.
             hace un elemento a otro, órgano a órgano.
           </Text>
           <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">

@@ -31,8 +31,7 @@
 // guion = editar LetraTCM.ts; editar hierbas/nutrición = editar tcmRecommendations.ts.
 import {
   letratcm1, letratcm2, letratcm3, letratcm4, letratcm5, letratcm6, letratcm7,
-  letratcm8, letratcm9, letratcm10, letratcm11, letratcm12, letratcm13, letratcm14,
-  letratcm15, letratcm16, letratcm17, letratcm18, letratcm19, letratcm20,
+  letratcm8, letratcm9, letratcm15,
   letratcm21, letratcm22, letratcm23, letratcm24, letratcm25,
 } from "../../hardCoded/aprendizajes/TCM/LetraTCM";
 import { RECS_ELEMENTOS, type Recs } from "../espacio/data/tcmRecommendations";
@@ -55,6 +54,7 @@ export const TCM_INDICE: PasoRecorrido[] = [
   { n: 5, titulo: "Diagnóstico final", ruta: () => "/metodo/tcm/diagnostico" },
   { n: 6, titulo: "Tu lengua", ruta: () => "/metodo/tcm/lengua" },
   { n: 7, titulo: "Lee tu lengua", ruta: () => "/metodo/tcm/lengua/leer" },
+  { n: 8, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
 ];
 
 export const TCM_TOTAL = TCM_INDICE.length;
@@ -631,22 +631,81 @@ export const CICLO_KE: Record<Elemento, Elemento> = {
 /** Textos introductorios de cada ciclo (guion del curso). */
 export const CICLO_INTRO = { sheng: letratcm9, ke: letratcm15 };
 
-/** Explicación fisiológica de "X genera Y" (Sheng), indexada por el elemento origen X. */
-export const SHENG_EXPLICACION: Record<Elemento, string> = {
-  madera: letratcm14, // La Madera genera el Fuego (hígado → corazón)
-  fuego: letratcm10,  // El Fuego genera la Tierra (corazón → bazo)
-  tierra: letratcm11, // La Tierra genera el Metal (bazo → pulmón)
-  metal: letratcm12,  // El Metal genera el Agua (pulmón → riñón)
-  agua: letratcm13,   // El Agua genera la Madera (riñón → hígado)
+/** Explicación fisiológica de "X genera Y" (Sheng), indexada por el elemento
+ *  origen X. Cada elemento del array es un PÁRRAFO (respeta los saltos de línea). */
+export const SHENG_EXPLICACION: Record<Elemento, string[]> = {
+  // La Madera genera el Fuego (hígado → corazón)
+  madera: [
+    "La Madera genera el Fuego, lo que nos dice que el hígado influye en el corazón y que la expansión y el crecimiento interior generan amor y pasión.",
+    "El hígado es el gran regulador de la sangre, puede retener sangre para no sobrecargar al corazón. El hígado es el encargado de gestionar los lípidos, la glucosa y el colesterol. Todos sabemos que demasiado colesterol en la sangre afecta al corazón irremediablemente, por ello un hígado regulado favorece un metabolismo adecuado.",
+    "Además, el hígado se encarga de crear las enzimas que hacen que la sangre pueda cumplir su función, además de permitir la creación de plasma.",
+    "Si tenemos un hígado regulado, tendremos un corazón protegido y una sangre fuerte.",
+  ],
+  // El Fuego genera la Tierra (corazón → bazo)
+  fuego: [
+    "El Fuego genera la Tierra, esto en nuestros órganos quiere decir que el estado del corazón afecta al bazo y emocionalmente que la pasión y el amor generan estabilidad.",
+    "El corazón se dedica a bombear sangre a todo el cuerpo, el bazo, en cambio, se dedica a filtrar las células de sangre, asegurándose de que solo las células flexibles y saludables vuelven a la circulación.",
+    "Según la medicina tradicional china, el bazo convierte los nutrientes en qi. Esto tiene sentido, porque se ha demostrado que el bazo es capaz de usar los nutrientes para crear más sangre.",
+    "También tradicionalmente se dice que el bazo mantiene la sangre en las arterias y venas. Recordemos que el bazo se considera parte del sistema inmunitario, por lo que si filtra correctamente las toxinas de la sangre reducirá la inflamación, el proceso en el cual la sangre sale de las arterias para entrar en los órganos.",
+    "En conclusión, el corazón y la sangre que bombea influyen directamente en la función que nuestro bazo hará para mantener nuestro equilibrio.",
+  ],
+  // La Tierra genera el Metal (bazo → pulmón)
+  tierra: [
+    "La Tierra genera Metal, en nuestros órganos se relaciona con que el bazo influye al pulmón, y en nuestras emociones con que la transformación y nutrición generan paz interior.",
+    "Ambos son órganos importantes del sistema inmunitario. El bazo filtra la sangre y nos protege. La sangre filtrada vuelve a llegar al pulmón, donde se produce el intercambio de CO2 por oxígeno nuevo para seguir circulando.",
+    "El bazo se asegura de que solo células saludables sean capaces de volver a la circulación, esto es fundamental a la hora de transportar oxígeno. El bazo se asegura de limpiar la sangre, lo que dejará menos toxinas y peligros para los pulmones, permitiendo que estos se puedan ocupar de filtrar las toxinas de la respiración, en vez de tener que hacerse cargo también de las que ya hay en el cuerpo.",
+    "Un correcto funcionamiento del bazo influye directamente en nuestros pulmones.",
+  ],
+  // El Metal genera el Agua (pulmón → riñón)
+  metal: [
+    "El Metal genera el Agua, esto quiere decir que nuestra paz interior genera sabiduría y que nuestros pulmones influyen en nuestros riñones.",
+    "¿Cómo es esto posible? La medicina china, cuando habla del riñón, no siempre habla de los riñones, sino de las glándulas suprarrenales, esas glándulas que viven arriba de los riñones, produciendo hormonas. Por ello, la respiración está directamente relacionada con la liberación de cortisol.",
+    "Si mantenemos una respiración calmada y tranquila, el cuerpo no tendrá necesidad de estresarse y, por tanto, no hará falta liberar cortisol, manteniendo así un equilibrio interno.",
+  ],
+  // El Agua genera la Madera (riñón → hígado)
+  agua: [
+    "El Agua genera la Madera, lo que quiere decir que el riñón influye en el hígado, y que la intuición y la sabiduría generan crecimiento.",
+    "Se ha demostrado que cuanto más cortisol generamos —que recordemos que este cortisol viene de los riñones indirectamente—, incrementa la función del hígado, dado que tiene más hormonas que gestionar.",
+    "Si el riñón no necesita liberar hormonas estresantes como la adrenalina o el cortisol y solo se dedica a filtrar la sangre, el hígado estará menos sobrecargado, permitiendo que tenga una función eficiente.",
+    "Recordemos también que los riñones regulan los electrolitos de la sangre y la presión arterial. Esto puede influenciar a nuestro hígado, porque el hígado es el gran regulador de la sangre y de las enzimas que viajan en ellas.",
+    "Un correcto funcionamiento de los riñones deja al hígado tranquilo, preparado para cumplir con la función que tiene que hacer.",
+  ],
 };
 
-/** Explicación fisiológica de "X controla Y" (Ke), indexada por el elemento origen X. */
-export const KE_EXPLICACION: Record<Elemento, string> = {
-  madera: letratcm16, // La Madera controla la Tierra (hígado → bazo)
-  tierra: letratcm17, // La Tierra controla el Agua (bazo → riñón)
-  agua: letratcm18,   // El Agua controla el Fuego (riñón → corazón)
-  fuego: letratcm19,  // El Fuego controla el Metal (corazón → pulmón)
-  metal: letratcm20,  // El Metal controla la Madera (pulmón → hígado)
+/** Explicación fisiológica de "X controla Y" (Ke), indexada por el elemento
+ *  origen X. Cada elemento del array es un PÁRRAFO (respeta los saltos de línea). */
+export const KE_EXPLICACION: Record<Elemento, string[]> = {
+  // La Madera controla la Tierra (hígado → bazo)
+  madera: [
+    "La Madera controla a la Tierra, esto quiere decir que el hígado influye en el bazo, y que el enfado degenera la estabilidad.",
+    "El hígado detoxifica nuestra sangre, pero cuando la detoxificación es insuficiente, aumenta la carga de toxinas de las que el bazo tiene que hacerse cargo. Pero el bazo no está preparado para esta carga, por lo que es sobrecargado y, como consecuencia, se degenera.",
+    "Una de las formas de sobrecargar al hígado es con el exceso de enfado. Cada vez que estamos enfadados, generamos grandes cantidades de cortisol para poder manifestar ese enfado.",
+    "Por eso, una de las formas de cuidarte es encontrar la causa por la que estás enfadado y poder gestionarla, para que así no tengas que hacerte daño.",
+  ],
+  // La Tierra controla el Agua (bazo → riñón)
+  tierra: [
+    "La Tierra controla al Agua, lo que quiere decir que el bazo controla los riñones, y que la preocupación trae miedo.",
+    "El bazo se encarga de detoxificar nuestra sangre, pero si esta acción no es suficiente o está sobrecargada, afecta directamente a nuestros riñones, que también se encargan de filtrar la sangre.",
+  ],
+  // El Agua controla el Fuego (riñón → corazón)
+  agua: [
+    "El Agua controla al Fuego, por lo tanto los riñones controlan al corazón, y el miedo causa sobreagitación mental.",
+    "El riñón regula electrolitos, y estos electrolitos regulan la contracción cardíaca. Por lo que cuando la regulación no es correcta o el riñón está sobrecargado, pueden producirse contracciones irregulares.",
+    "Unos riñones intranquilos provocan un corazón arrítmico.",
+  ],
+  // El Fuego controla el Metal (corazón → pulmón)
+  fuego: [
+    "El Fuego controla al Metal, lo que quiere decir que el corazón influye en los pulmones, y que la agitación mental puede causar tristeza, dolor o apego.",
+    "La frecuencia con la que el corazón bombea sangre afecta la frecuencia con que las células sanguíneas recogen oxígeno en los pulmones. Por lo que si un corazón late arrítmicamente, la función pulmonar y el intercambio de dióxido de carbono por oxígeno se verá afectado.",
+    "La conclusión es que si un corazón late arrítmicamente afectará a la oxigenación celular de todo el cuerpo.",
+  ],
+  // El Metal controla la Madera (pulmón → hígado)
+  metal: [
+    "El Metal controla la Madera, lo que significa que los pulmones controlan al hígado, y que un exceso de dolor generará falta de dirección en la Vida y enfado.",
+    "La velocidad y el cómo respiramos afecta inmediatamente a nuestro cuerpo a través del sistema nervioso.",
+    "Si respiramos de forma irregular o intranquila, esto genera estrés, lo que hace que nuestro hígado tenga que trabajar más para gestionar todo ese cortisol y adrenalina. Esta manifestación de confusión mental retroalimentará nuestro deterioro físico.",
+    "Una respiración sostenida, constante y hecha por la nariz permite que le recordemos a nuestro cuerpo que estamos a salvo.",
+  ],
 };
 
 // ─────────────────────────────────────────────────────────────────────────

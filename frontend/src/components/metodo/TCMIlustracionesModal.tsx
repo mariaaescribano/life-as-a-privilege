@@ -19,7 +19,9 @@ import type { Vineta } from "./ComicViewer";
 //  placeholder para que el ComicViewer no rompa.)
 // ────────────────────────────────────────────────────────────────────────────
 
-const VINETAS_ORIGEN: Vineta[] = [
+// Se exporta para reutilizarlo como intro de Medicina China (cómic del Origen
+// según el taoísmo) sin duplicar el contenido.
+export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/tcm/origen/origentcm1.png",
     paragraphs: [
@@ -29,7 +31,7 @@ const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/tcm/origen/origentcm2.png",
     paragraphs: [
-      "El Qi se diferenció en Yang, energía masculina, Qi del Cielo, y Yin, energía femenina, recibimiento, Qi de la Tierra.",
+      "El Qi se diferenció en Yang, energía masculina, Qi del Cielo, y Yin, energía femenina, Qi de la Tierra.",
       "De su interacción nació el universo.",
     ],
   },
@@ -44,7 +46,7 @@ const VINETAS_ORIGEN: Vineta[] = [
     src: "/viñetas/tcm/origen/origentcm4.png",
     paragraphs: [
       "La esencia (Jing) es la manifestación individualizada de la energía primordial, del Qi.",
-      "Es la porción de la Esencia infinita que se condensa para dar origen al cuerpo, sostener la vida y expresar la singularidad de cada ser.",
+      "Es la porción de la Esencia infinita que se condensa para dar origen al cuerpo, sostener la Vida y expresar la singularidad de cada ser.",
     ],
   },
   {
@@ -56,13 +58,13 @@ const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/tcm/origen/origentcm6.png",
     paragraphs: [
-      "El taoísmo enseña que el sentido de la vida es recordar que somos una manifestación del Dao.",
+      "El taoísmo enseña que el sentido de la Vida es recordar que somos una manifestación del Dao.",
       "Al cultivar el Jing, equilibrar el Qi y aclarar el Shen, dejamos de luchar contra la corriente de la existencia y aprendemos a vivir con naturalidad, armonía y plenitud.",
     ],
   },
 ];
 
-const VINETAS_ELEMENTOS: Vineta[] = [
+export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/5tcm.png",
     paragraphs: [
@@ -113,7 +115,7 @@ const VINETAS_ELEMENTOS: Vineta[] = [
   },
 ];
 
-const VINETAS_YIN_YANG: Vineta[] = [
+export const VINETAS_YIN_YANG: Vineta[] = [
   {
     src: "/viñetas/tcm/yinyang/yinyang.png",
     paragraphs: [
@@ -132,7 +134,7 @@ const VINETAS_YIN_YANG: Vineta[] = [
   },
 ];
 
-const VINETAS_ALMA: Vineta[] = [
+export const VINETAS_ALMA: Vineta[] = [
   {
     src: "/viñetas/tcm/alma/alma1.png",
     paragraphs: [

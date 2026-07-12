@@ -19,7 +19,9 @@ import type { Vineta } from "./ComicViewer";
 //  una viñeta placeholder para que el ComicViewer no rompa.)
 // ────────────────────────────────────────────────────────────────────────────
 
-const VINETAS_ORIGEN: Vineta[] = [
+// Se exporta para reutilizarlo como intro de Ayurveda (cómic del Origen con
+// ilustraciones de hinduismo) sin duplicar el contenido.
+export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen1.png",
     paragraphs: [
@@ -76,7 +78,7 @@ const VINETAS_ORIGEN: Vineta[] = [
   },
 ];
 
-const VINETAS_ELEMENTOS: Vineta[] = [
+export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/hinduismo/elementos/elementosayurveda.png",
     paragraphs: [
@@ -121,7 +123,7 @@ const VINETAS_ELEMENTOS: Vineta[] = [
   },
 ];
 
-const VINETAS_DOSHAS: Vineta[] = [
+export const VINETAS_DOSHAS: Vineta[] = [
   {
     src: "/viñetas/hinduismo/doshas/doshasportada.png",
     paragraphs: [

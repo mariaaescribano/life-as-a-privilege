@@ -12,6 +12,9 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { INTRO_PSICOLOGIA } from "../../components/metodo/comicPsicologiaIntro";
+import { useIntroComic } from "../../hooks/useIntroComic";
 import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
@@ -38,6 +41,7 @@ export default function MetodoPsicologia() {
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
+  const intro = useIntroComic("metodo-psicologia"); // cómic de intro, 1ª vez
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -60,6 +64,9 @@ export default function MetodoPsicologia() {
         const psicoSuscrito = !!me.data?.psicologia_suscrito;
         setSuscrito(psicoSuscrito);
         if (!psicoSuscrito) { setPagoOpen(true); return; }
+
+        // Ya tiene acceso: si es la 1ª vez, muestra el cómic de intro.
+        void intro.checkAndOpen();
       } catch {
         navigate("/home");
         return;
@@ -222,6 +229,18 @@ export default function MetodoPsicologia() {
           </Reveal>
         </Flex>
       </Flex>
+
+      {/* Intro (1ª vez): cómic de psicología (nuestra historia / apego). */}
+      <IntroComicModal
+        isOpen={intro.open}
+        vinetas={INTRO_PSICOLOGIA}
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={`0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`}
+        onFinish={intro.finish}
+        onClose={intro.close}
+      />
 
       <AyudaRecorrido pagina="inicio" />
 

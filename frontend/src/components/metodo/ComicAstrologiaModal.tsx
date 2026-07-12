@@ -23,7 +23,7 @@ const fadeInScale = keyframes`
 // El frontend del cómic es el mismo (ComicViewer) que usa el del inicio.
 // ────────────────────────────────────────────────────────────────────────────
 
-const VINETAS_PLANETAS: Vineta[] = [
+export const VINETAS_PLANETAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/planetas/sol.png",
     paragraphs: [
@@ -124,7 +124,7 @@ const VINETAS_PLANETAS: Vineta[] = [
   },
 ];
 
-const VINETAS_SIGNOS: Vineta[] = [
+export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/aries.png",
     paragraphs: [
@@ -224,7 +224,7 @@ const VINETAS_SIGNOS: Vineta[] = [
   },
 ];
 
-const VINETAS_CASAS: Vineta[] = [
+export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa1.png",
     paragraphs: [

@@ -109,6 +109,8 @@ interface ComicViewerProps {
    *  disciplina es protagonista (cómic de elementos de TCM). No afecta a las
    *  Ilustraciones (Hinduismo / TCM). */
   fondoNitido?: boolean;
+  /** Viñeta por la que empezar (para abrir directamente en una concreta). */
+  initialIndex?: number;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -129,6 +131,7 @@ export function ComicViewer({
   sinFoto,
   separarFrases,
   fondoNitido,
+  initialIndex = 0,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
@@ -140,7 +143,8 @@ export function ComicViewer({
   const bgOverlay = isDisciplinaMode
     ? (fondoNitido ? "rgba(0,0,0,0.38)" : "rgba(0,0,0,0.45)")
     : "rgba(0,0,0,0.35)";
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(() =>
+    Math.min(Math.max(initialIndex, 0), Math.max(vinetas.length - 1, 0)));
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const contentRef = useRef<HTMLDivElement>(null);
   const textScrollRef = useRef<HTMLDivElement>(null);
@@ -221,7 +225,10 @@ export function ComicViewer({
             distinción con la foto nítida del box del texto. */}
       <Box
         position="fixed"
-        inset="0"
+        top="-40px"
+        left="-40px"
+        right="-40px"
+        bottom="-40px"
         pointerEvents="none"
         zIndex={0}
         overflow="hidden"
@@ -453,7 +460,7 @@ export function ComicViewer({
               // Velo de color sobre la foto del box. En TCM (fondoNitido) va más
               // suave (~19%) para que la pintura de tinta respire y se vea nítida.
               bg={isDisciplinaMode && disciplinaBgColor
-                ? `${disciplinaBgColor}${fondoNitido ? "30" : "55"}`
+                ? `${disciplinaBgColor}${fondoNitido ? "12" : "55"}`
                 : "rgba(8,13,30,0.55)"}
             />
             {/* Velo oscuro en TODAS las viñetas del cómic de TCM (fondoNitido),
@@ -461,7 +468,7 @@ export function ComicViewer({
                 Opacidad ~20% menor que la del test para que no quede tan oscuro. */}
             {fondoNitido && (
               <Box position="absolute" inset="0"
-                   bgGradient="linear(to-b, rgba(0,0,0,0.53), rgba(0,0,0,0.4))" />
+                   bgGradient="linear(to-b, rgba(0,0,0,0.18), rgba(0,0,0,0.1))" />
             )}
           </Box>
 

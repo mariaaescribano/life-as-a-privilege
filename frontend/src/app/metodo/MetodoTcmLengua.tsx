@@ -13,17 +13,47 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   LENGUA_DIMENSIONES, LENGUA_ZONAS,
-  type DimensionLengua, type OpcionLengua,
+  type LenguaDim, type OpcionLengua,
 } from "../../components/metodo/tcmLenguaContenido";
+
+// ── Agrupación visual de las cajitas de lengua ──────────────────────────────
+// Las 30 fotos se reparten en grupos que llenan filas completas de 3 (6 ó 3 por
+// box) para que la página se vea uniforme. Es solo presentación: la herramienta
+// «Lee tu lengua» sigue usando las dimensiones (color/forma/saburra/humedad) tal
+// cual, sin verse afectada.
+const dimOf = (d: LenguaDim) => LENGUA_DIMENSIONES.find((x) => x.dim === d)!;
+const opOf = (d: LenguaDim, key: string) => dimOf(d).opciones.find((o) => o.key === key)!;
+const sin = (d: LenguaDim, keys: string[]) => dimOf(d).opciones.filter((o) => !keys.includes(o.key));
+
+interface GrupoLengua { titulo: string; subtitulo: string; opciones: OpcionLengua[]; }
+const GRUPOS_LENGUA: GrupoLengua[] = [
+  // El color (6)
+  { titulo: dimOf("color").titulo, subtitulo: dimOf("color").subtitulo, opciones: dimOf("color").opciones },
+  // El cuerpo · la forma (6): forma ×5 + la lengua estable (referencia de movimiento)
+  { titulo: "El cuerpo · la forma", subtitulo: dimOf("forma").subtitulo,
+    opciones: [...dimOf("forma").opciones, opOf("movimiento", "normal")] },
+  // El cuerpo · el movimiento (3)
+  { titulo: "El movimiento", subtitulo: dimOf("movimiento").subtitulo,
+    opciones: sin("movimiento", ["normal"]) },
+  // La superficie · la saburra (6)
+  { titulo: dimOf("saburra").titulo, subtitulo: dimOf("saburra").subtitulo,
+    opciones: sin("saburra", ["pelada"]) },
+  // La superficie · humedad y detalles (6): saburra pelada + humedad ×4 + lengua sin puntos
+  { titulo: "La superficie · humedad y detalles", subtitulo: dimOf("humedad").subtitulo,
+    opciones: [opOf("saburra", "pelada"), ...dimOf("humedad").opciones, opOf("puntos", "normal")] },
+  // Puntos y venas (3)
+  { titulo: dimOf("puntos").titulo, subtitulo: dimOf("puntos").subtitulo,
+    opciones: sin("puntos", ["normal"]) },
+];
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 // Consejos prácticos de observación (Módulo "el método"): breves, no teoría.
 const COMO_MIRAR = [
-  "Por la mañana, antes de comer o beber (el café, la remolacha o la cúrcuma tiñen la lengua).",
+  "Por la mañana, antes de lavarte los dientes y antes de comer o beber.",
   "Con luz natural siempre que puedas.",
-  "Saca la lengua relajada, sin forzarla, y solo unos segundos.",
+  "Saca la lengua relajada y sin forzarla.",
   "Fíjate también en dónde aparece el cambio: cada zona habla de un órgano.",
 ];
 
@@ -65,7 +95,7 @@ export default function MetodoTcmLengua() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Tu lengua"
-            pageLabel="10/12"
+            pageLabel="6/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -96,31 +126,40 @@ export default function MetodoTcmLengua() {
             </Flex>
           </Panel>
 
-          {/* ── Las dimensiones (cajitas ilustradas) ── */}
-          {LENGUA_DIMENSIONES.map((d) => (
-            <DimensionBloque key={d.dim} dimension={d} />
-          ))}
-
-          {/* ── Mapa de las zonas ── */}
+          {/* ── Mapa de las zonas (primero: foto a la izquierda + zonas a la derecha) ── */}
           <Panel titulo="El mapa de la lengua" color={tcmTxt}>
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  lineHeight="1.7" mb={4} maxW="640px" style={{ textShadow: INK_SHADOW }}>
-              No solo importa qué cambia, sino en qué parte de la lengua aparece: cada zona se relaciona
-              con unos órganos.
-            </Text>
-            <Flex direction="column" gap={2.5}>
-              {LENGUA_ZONAS.map((z) => (
-                <Flex key={z.key} gap={2.5} align="flex-start">
-                  <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
-                       bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
-                  <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                        style={{ textShadow: INK_SHADOW }}>
-                    <Text as="span" fontWeight={700} color="white">{z.zona}:</Text> {z.organos}.
-                  </Text>
+            <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align={{ base: "stretch", md: "flex-start" }}>
+              <Box flexShrink={0} w={{ base: "100%", md: "300px" }} borderRadius="xl" overflow="hidden"
+                   border={`1px solid ${tcmTxt}55`} boxShadow={`0 0 18px ${tcmTxt}33`}>
+                <img src={encodeURI("/recorrido/tcm/lengua/mapalengua.png")} alt="Mapa de la lengua"
+                     style={{ width: "100%", height: "auto", display: "block" }} />
+              </Box>
+              <Box flex="1" minW={0}>
+                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                      lineHeight="1.7" mb={4} style={{ textShadow: INK_SHADOW }}>
+                  No solo importa qué cambia, sino en qué parte de la lengua aparece: cada zona se relaciona
+                  con unos órganos.
+                </Text>
+                <Flex direction="column" gap={2.5}>
+                  {LENGUA_ZONAS.map((z) => (
+                    <Flex key={z.key} gap={2.5} align="flex-start">
+                      <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
+                           bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
+                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                            style={{ textShadow: INK_SHADOW }}>
+                        <Text as="span" fontWeight={700} color="white">{z.zona}:</Text> {z.organos}.
+                      </Text>
+                    </Flex>
+                  ))}
                 </Flex>
-              ))}
+              </Box>
             </Flex>
           </Panel>
+
+          {/* ── Las capas de observación (cajitas ilustradas, agrupadas de 6) ── */}
+          {GRUPOS_LENGUA.map((g) => (
+            <DimensionBloque key={g.titulo} grupo={g} />
+          ))}
 
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.6">
@@ -145,13 +184,13 @@ export default function MetodoTcmLengua() {
 // ── Bloque de una dimensión (título + subtítulo + cajitas de variantes) ──────
 // Las cajitas se ordenan por longitud de descripción para que las de textos
 // parecidos caigan juntas en la misma fila → alturas uniformes.
-function DimensionBloque({ dimension }: { dimension: DimensionLengua }) {
-  const opciones = [...dimension.opciones].sort((a, b) => a.lectura.length - b.lectura.length);
+function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
+  const opciones = [...grupo.opciones].sort((a, b) => a.lectura.length - b.lectura.length);
   return (
-    <Panel titulo={dimension.titulo} color={tcmTxt}>
+    <Panel titulo={grupo.titulo} color={tcmTxt}>
       <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}
             maxW="700px" style={{ textShadow: INK_SHADOW }}>
-        {dimension.subtitulo}
+        {grupo.subtitulo}
       </Text>
       {/* align=stretch → todas las cajitas de una fila comparten la misma altura */}
       <Flex wrap="wrap" gap={{ base: 3, md: 4 }} justify="center" align="stretch">

@@ -11,7 +11,9 @@ import type { Vineta } from "./ComicViewer";
 // otros cómics son las viñetas (foto + texto). El frontend del cómic
 // (layout, animaciones, navegación) es el mismo en todos: ComicViewer.
 
-const VINETAS: Vineta[] = [
+// Se exporta para reutilizarlo como intro de Astrología (cómic del Origen «según
+// la espiritualidad») sin duplicar el contenido.
+export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
   {
     src: "/viñetas/comicInicio/viñeta1.png",
     paragraphs: [
@@ -22,7 +24,7 @@ const VINETAS: Vineta[] = [
   {
     src: "/viñetas/comicInicio/viñeta2.png",
     paragraphs: [
-      "Un día, lo infinito quiso saber qué se siente al recibir amor.",
+      "Un día, lo infinito quiso saber qué se siente al recibir Amor.",
       "Para poder sentirlo, tuvo que manifestarse en dos.",
     ],
   },
@@ -71,8 +73,8 @@ const VINETAS: Vineta[] = [
   {
     src: "/viñetas/comicInicio/viñeta9.png",
     paragraphs: [
-      "Parte de ese polvo se reunió en planetas. Uno quedó a la distancia justa.",
-      "El ayurveda lo había nombrado antes que la geología: cinco elementos —tierra, agua, fuego, aire, energía— combinándose para sostener Vida.",
+      "Ese polvo estelar se unió para formar planetas. El nuestro halló el lugar perfecto.",
+      "A lo largo de la historia, las culturas han hablado de elementos distintos. Sin embargo, todas están de acuerdo en una cosa: tierra, agua, fuego, aire y energía se unen para crear la Vida.",
     ],
   },
   {
@@ -93,20 +95,21 @@ const VINETAS: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta12.png",
     paragraphs: [
       "No estás aquí por casualidad ni por castigo. No has sido abandonado ni expulsado.",
-      "Estás aquí para recordar que eres y estás formado por Amor. Para recordarlo, atravesarás cosas difíciles. Forma parte del camino. Tiene su para qué. No es maldad ni castigo.",
+      "Estás aquí para recordar que eres una manifestación de Dios y estás formado por Amor.",
+      "Para recordarlo, atravesarás cosas difíciles y dolorosas. Forma parte del camino. El propósito es no convertir el dolor en sufrimiento, sino aprender a aceptarlo."
     ],
   },
   {
     src: "/viñetas/comicInicio/viñeta13.png",
     paragraphs: [
       "En el instante exacto en que naciste, el cielo tenía una configuración que no se repetirá.",
-      "Esa es tu carta natal. Te dice cómo está dispuesto tu mapa y tu camino para volver a casa.",
+      "Esa es tu carta natal. Te dice desde dónde y para qué actúas. Es tu camino para volver a casa.",
     ],
   },
   {
     src: "/viñetas/comicInicio/viñeta14.png",
     paragraphs: [
-      "El Mapa te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y dar sentido a tu dolor.",
+      "El Mapa te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y recordar el sentido de tu Vida.",
       "Obtendrás herramientas que te ayudarán en tu camino, el cual tienes que caminar con tu valentía y fortaleza. Nadie hará por ti lo que tú puedes hacer por ti.",
     ],
   },
@@ -132,7 +135,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
       >
         {/* key={isOpen}: al reabrir el modal, ComicViewer se remonta y
             empieza desde la viñeta 1 con estado limpio. */}
-        <ComicViewer key={String(isOpen)} vinetas={VINETAS} onClose={onClose} />
+        <ComicViewer key={String(isOpen)} vinetas={ORIGEN_ESPIRITUALIDAD} onClose={onClose} />
       </ModalContent>
     </Modal>
   );

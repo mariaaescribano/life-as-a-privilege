@@ -10,7 +10,6 @@ import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
-import { ComicUniversoModal } from "../../components/metodo/ComicUniversoModal";
 import axios from "axios";
 import {
   API_URL,
@@ -82,7 +81,6 @@ const Home = () => {
   const [pagoTcmError, setPagoTcmError] = useState<string | null>(null);
   const [pagoTcmExitoOpen, setPagoTcmExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
-  const [comicOpen, setComicOpen] = useState(false);
 
   const continuarAstrologia = async () => {
     navigate("/metodo/astrologia");
@@ -776,65 +774,6 @@ const Home = () => {
         )}
       </Box>
 
-      {/* Botón inline "El inicio de todo" — solo en móvil, debajo del mandala.
-          En desktop usamos el botón flotante de más abajo (no colisiona con nada). */}
-      <Flex
-        display={{ base: "flex", md: "none" }}
-        justify="center"
-        px={5}
-        // Separación arriba mínima (el mandala ya tiene su propio margen) y
-        // separación abajo amplia para no pegarse al footer.
-        mt={{ base: -8, sm: -6 }}
-        pb={{ base: 8, sm: 10 }}
-      >
-        <Box
-          as="button"
-          onClick={() => setComicOpen(true)}
-          px={5}
-          py={3}
-          borderRadius="full"
-          bg="rgba(0,40,40,0.55)"
-          border="1px solid rgba(255,255,255,0.55)"
-          color="white"
-          fontFamily="'EB Garamond', serif"
-          fontSize="md"
-          fontWeight="600"
-          letterSpacing="0.04em"
-          cursor="pointer"
-          boxShadow="0 0 18px rgba(255,255,255,0.25), 0 0 38px rgba(180,255,245,0.18), 0 6px 24px rgba(0,0,0,0.35)"
-          transition="all 0.25s ease"
-          _hover={{
-            transform: "translateY(-2px)",
-            bg: "rgba(0,60,60,0.7)",
-            boxShadow: "0 0 28px rgba(255,255,255,0.45), 0 0 60px rgba(180,255,245,0.3), 0 8px 28px rgba(0,0,0,0.4)",
-          }}
-          display="inline-flex"
-          alignItems="center"
-          gap={3}
-          sx={{ backdropFilter: "blur(6px)" }}
-        >
-          <Image
-            src="/img/icono/life.png"
-            alt=""
-            h="22px"
-            objectFit="contain"
-            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55))" }}
-          />
-          <Box as="span">El inicio de todo</Box>
-          <Box
-            as="svg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            w="20px"
-            h="20px"
-            fill="white"
-            style={{ filter: "drop-shadow(0 0 5px rgba(255,255,255,0.55))" }}
-          >
-            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-          </Box>
-        </Box>
-      </Flex>
-
       <SiteFooter />
 
       <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => setPagoExitoOpen(false)} />
@@ -889,61 +828,6 @@ const Home = () => {
         onTest={testPagos ? () => testUnlock("tcm") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
-
-      {/* Botón flotante "El inicio de todo" — solo en desktop (en móvil se
-          renderiza inline debajo del mandala para no chocar con el footer). */}
-      <Box
-        as="button"
-        onClick={() => setComicOpen(true)}
-          position="fixed"
-          bottom={{ base: 4, md: 6 }}
-          right={{ base: 4, md: 6 }}
-          zIndex={50}
-          px={{ base: 4, md: 5 }}
-          py={{ base: 2.5, md: 3 }}
-          borderRadius="full"
-          bg="rgba(0,40,40,0.55)"
-          border="1px solid rgba(255,255,255,0.55)"
-          color="white"
-          fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "md", md: "lg" }}
-          fontWeight="600"
-          letterSpacing="0.04em"
-          cursor="pointer"
-          boxShadow="0 0 18px rgba(255,255,255,0.25), 0 0 38px rgba(180,255,245,0.18), 0 6px 24px rgba(0,0,0,0.35)"
-          transition="all 0.25s ease"
-          _hover={{
-            transform: "translateY(-2px)",
-            bg: "rgba(0,60,60,0.7)",
-            boxShadow: "0 0 28px rgba(255,255,255,0.45), 0 0 60px rgba(180,255,245,0.3), 0 8px 28px rgba(0,0,0,0.4)",
-          }}
-          display={{ base: "none", md: "inline-flex" }}
-          alignItems="center"
-          gap={3}
-          sx={{ backdropFilter: "blur(6px)" }}
-        >
-          <Image
-            src="/img/icono/life.png"
-            alt=""
-            h={{ base: "22px", md: "26px" }}
-            objectFit="contain"
-            style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55))" }}
-          />
-          <Box as="span">El inicio de todo</Box>
-          <Box
-            as="svg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            w={{ base: "20px", md: "22px" }}
-            h={{ base: "20px", md: "22px" }}
-            fill="white"
-            style={{ filter: "drop-shadow(0 0 5px rgba(255,255,255,0.55))" }}
-          >
-            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-          </Box>
-        </Box>
-
-      <ComicUniversoModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
     </Box>
   );
 };

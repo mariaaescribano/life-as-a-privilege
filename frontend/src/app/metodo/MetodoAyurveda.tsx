@@ -12,6 +12,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal } from "../../components/global/Reveal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { VINETAS_ORIGEN as ORIGEN_HINDUISMO } from "../../components/metodo/HinduismoIlustracionesModal";
+import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import {
@@ -39,6 +42,7 @@ export default function MetodoAyurveda() {
   const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
+  const intro = useIntroComic("metodo-ayurveda"); // cómic del Origen (hinduismo), 1ª vez
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -61,6 +65,9 @@ export default function MetodoAyurveda() {
         const ayurSuscrito = !!me.data?.ayurveda_suscrito;
         setSuscrito(ayurSuscrito);
         if (!ayurSuscrito) { setPagoOpen(true); return; }
+
+        // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen (hinduismo).
+        void intro.checkAndOpen();
       } catch {
         navigate("/home");
         return;
@@ -207,6 +214,18 @@ export default function MetodoAyurveda() {
       />
 
       {ilustracionesModal}
+
+      {/* Intro (1ª vez): cómic del Origen con ilustraciones de hinduismo. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        vinetas={ORIGEN_HINDUISMO}
+        themeColor={ayurvedaTxt}
+        disciplinaBgImage="/img/fondos/hinduismo.png"
+        disciplinaBgColor={ayurvedaBg}
+        textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
+        onFinish={intro.finish}
+        onClose={intro.close}
+      />
 
       {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}
       <Modal isOpen={avisoOpen} onClose={() => setAvisoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>

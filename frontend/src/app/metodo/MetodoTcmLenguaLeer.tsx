@@ -78,7 +78,7 @@ export default function MetodoTcmLenguaLeer() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Lee tu lengua"
-            pageLabel="11/12"
+            pageLabel="7/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -86,6 +86,7 @@ export default function MetodoTcmLenguaLeer() {
             mb={0}
             prev={{ label: "← El curso", onClick: () => navigate("/metodo/tcm/lengua") }}
             extra={ilustracionesBtn}
+            next={{ label: "Cursos →", onClick: () => navigate("/metodo/tcm/cursos") }}
           />
 
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"

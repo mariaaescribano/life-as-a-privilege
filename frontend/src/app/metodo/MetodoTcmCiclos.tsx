@@ -61,13 +61,13 @@ export default function MetodoTcmCiclos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Ciclos"
-            pageLabel="8/12"
+            pageLabel="4/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Equilibrio", onClick: () => navigate("/metodo/tcm/perfil") }}
+            prev={{ label: "← Tu equilibrio", onClick: () => navigate("/metodo/tcm/perfil") }}
             extra={ilustracionesBtn}
             next={{ label: "Diagnóstico final →", onClick: () => navigate("/metodo/tcm/diagnostico") }}
           />

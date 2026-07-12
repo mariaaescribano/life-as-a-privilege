@@ -194,23 +194,25 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
   );
 }
 
-// ── Divide el texto del guion en párrafos legibles ──────────────────────────
-function enParrafos(texto: string, porParrafo = 2): string[] {
-  const limpio = texto
-    .replace(/\.(?=[^\s\d])/g, ". ")
-    .replace(/\s+/g, " ")
-    .trim();
-  const frases = limpio.split(/(?<=\.)\s+/).filter(Boolean);
-  const parrafos: string[] = [];
-  for (let i = 0; i < frases.length; i += porParrafo) {
-    parrafos.push(frases.slice(i, i + porParrafo).join(" "));
+// Orden de recorrido de cada ciclo: se camina el mapa desde la Madera.
+//  · Sheng (generador): madera → fuego → tierra → metal → agua.
+//  · Ke (control):      madera → tierra → agua → fuego → metal.
+function ordenCiclo(ciclo: Ciclo): Elemento[] {
+  const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;
+  const orden: Elemento[] = [];
+  let el: Elemento = "madera";
+  for (let i = 0; i < ORDEN_ELEMENTOS.length; i++) {
+    orden.push(el);
+    el = mapa[el];
   }
-  return parrafos;
+  return orden;
 }
 
 // ── Popup de una relación: REUTILIZA el ComicViewer (inmersivo, con scroll) ──
-// Fondo a pantalla completa Y fondo del box = foto del CICLO (generador /
-// controlador). Foto de la izquierda = la de la pareja de esta relación.
+// Muestra TODAS las relaciones del ciclo como viñetas EN ORDEN; las flechas
+// (izq/der) navegan por ellas. Arranca en la relación que pulsó el usuario.
+// Fondo (pantalla completa + box) = foto del CICLO (generador / controlador).
+// Foto de la izquierda = la de la pareja de cada relación.
 export function RelacionModal({ rel, onClose }: { rel: Relacion | null; onClose: () => void }) {
   return (
     <Modal isOpen={!!rel} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
@@ -218,23 +220,31 @@ export function RelacionModal({ rel, onClose }: { rel: Relacion | null; onClose:
       <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0}
                     minH="100vh" position="relative" sx={{ transform: "none !important" }}>
         {rel && (() => {
-          const { ciclo, origen, destino } = rel;
-          const O = ELEMENTOS[origen], D = ELEMENTOS[destino];
+          const { ciclo } = rel;
+          const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;
+          const orden = ordenCiclo(ciclo);
+          const eyebrow = ciclo === "sheng" ? "Ciclo generador" : "Ciclo de control";
           const verbo = ciclo === "sheng" ? "genera" : "controla a";
-          const titulo = `${cap(ARTICULO[origen])} ${O.nombre} ${verbo} ${ARTICULO[destino]} ${D.nombre}`;
-          const texto = ciclo === "sheng" ? SHENG_EXPLICACION[origen] : KE_EXPLICACION[origen];
+          const vinetas = orden.map((origen) => {
+            const destino = mapa[origen];
+            const O = ELEMENTOS[origen], D = ELEMENTOS[destino];
+            return {
+              src: FOTO_RELACION[ciclo][origen],
+              eyebrow,
+              titulo: `${cap(ARTICULO[origen])} ${O.nombre} ${verbo} ${ARTICULO[destino]} ${D.nombre}`,
+              paragraphs: ciclo === "sheng" ? SHENG_EXPLICACION[origen] : KE_EXPLICACION[origen],
+            };
+          });
+          const initialIndex = Math.max(orden.indexOf(rel.origen), 0);
           return (
             <ComicViewer
-              vinetas={[{
-                src: FOTO_RELACION[ciclo][origen],
-                eyebrow: ciclo === "sheng" ? "Ciclo generador" : "Ciclo de control",
-                titulo,
-                paragraphs: enParrafos(texto),
-              }]}
-              themeColor={O.color}
+              key={`${ciclo}-${rel.origen}`}
+              vinetas={vinetas}
+              initialIndex={initialIndex}
+              themeColor={tcmTxt}
               textColor="#ffffff"
               disciplinaBgImage={FONDO_CICLO[ciclo]}
-              disciplinaBgColor={O.color}
+              disciplinaBgColor={tcmBg}
               fondoNitido
               onClose={onClose}
             />

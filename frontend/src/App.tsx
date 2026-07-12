@@ -27,6 +27,7 @@ import Contacto from "./app/web/Contacto";
 import Opiniones from "./app/web/Opiniones";
 import ElMetodo from "./app/web/ElMetodo";
 import MaterialesGratuitos from "./app/web/MaterialesGratuitos";
+import Ilustraciones from "./app/web/Ilustraciones";
 import CheckoutMetodo from "./app/web/CheckoutMetodo";
 import MetodoAstrologia from "./app/metodo/MetodoAstrologia";
 import MetodoAstrologiaCartaAstral from "./app/metodo/MetodoAstrologiaCartaAstral";
@@ -88,6 +89,7 @@ import MetodoTcmCiclos from "./app/metodo/MetodoTcmCiclos";
 import MetodoTcmDiagnostico from "./app/metodo/MetodoTcmDiagnostico";
 import MetodoTcmLengua from "./app/metodo/MetodoTcmLengua";
 import MetodoTcmLenguaLeer from "./app/metodo/MetodoTcmLenguaLeer";
+import MetodoTcmCursos from "./app/metodo/MetodoTcmCursos";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -140,6 +142,7 @@ export default function App()
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
+      <Route path="/ilustraciones" element={<Ilustraciones />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
       <Route path="/metodo/astrologia/solascendenteluna" element={<PrivateRoute><MetodoAstrologiaSolAscLuna /></PrivateRoute>} />
@@ -204,6 +207,7 @@ export default function App()
       <Route path="/metodo/tcm/diagnostico" element={<PrivateRoute><MetodoTcmDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua" element={<PrivateRoute><MetodoTcmLengua /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua/leer" element={<PrivateRoute><MetodoTcmLenguaLeer /></PrivateRoute>} />
+      <Route path="/metodo/tcm/cursos" element={<PrivateRoute><MetodoTcmCursos /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

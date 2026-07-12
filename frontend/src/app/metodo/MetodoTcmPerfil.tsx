@@ -102,8 +102,8 @@ export default function MetodoTcmPerfil() {
 
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Equilibrio"
-            pageLabel="7/12"
+            title="Tu equilibrio"
+            pageLabel="3/8"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

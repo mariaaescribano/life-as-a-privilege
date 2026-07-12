@@ -8,6 +8,9 @@ import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
+import { useIntroComic } from "../../hooks/useIntroComic";
 import { TextoCartaExplicativo } from "../../components/metodo/TextoCartaExplicativo";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -71,6 +74,7 @@ interface Estado {
   region?: string | null;
   solicitud_enviada_at?: string | null;
   link_carta?: string | null;
+  intro_visto?: boolean | null;
 }
 
 
@@ -91,6 +95,7 @@ export default function MetodoAstrologia() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comicAstroOpen, setComicAstroOpen] = useState(false);
+  const intro = useIntroComic("metodo-astrologia"); // cómic del Origen (espiritualidad), 1ª vez
 
   // Popup de confirmación de datos antes de enviar la solicitud
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -129,6 +134,8 @@ export default function MetodoAstrologia() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEstado(res.data ?? null);
+        // Primera vez que entra: cómic del Origen (según la espiritualidad).
+        if (!res.data?.intro_visto) intro.openNow();
       } catch {
         setEstado(null);
       } finally {
@@ -463,6 +470,14 @@ export default function MetodoAstrologia() {
       <ComicAstrologiaModal
         isOpen={comicAstroOpen}
         onClose={() => setComicAstroOpen(false)}
+      />
+
+      {/* Intro (1ª vez): cómic del Origen según la espiritualidad. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        vinetas={ORIGEN_ESPIRITUALIDAD}
+        onFinish={intro.finish}
+        onClose={intro.close}
       />
 
       {/* ── POPUP: confirmar datos antes de enviar ── */}

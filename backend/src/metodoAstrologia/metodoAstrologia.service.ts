@@ -164,7 +164,7 @@ export class MetodoAstrologiaService {
   // Campos que el cliente puede modificar vía PATCH. Columnas sensibles como
   // link_carta, carta_natal_json, solicitud_enviada_at, latitud/longitud, etc.
   // las gestiona el backend/administración y NO deben escribirse desde el front.
-  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data', 'aviso_visto']);
+  private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data', 'aviso_visto', 'intro_visto']);
 
   // ── PATCH parcial (solo campos permitidos) ──
   async actualizar(userId: string, patch: Record<string, any>): Promise<{ success: boolean }> {

@@ -273,6 +273,12 @@ export function AgendarLlamada({
 
             <Box h="1px" bg={`${color}22`} borderRadius="full" />
 
+            {/* Zona de pasos con alto fijo: así el box no crece/encoge al avanzar
+                de un paso a otro (evita el «salto» que marea al usuario). El paso
+                más alto es el 1 (rejilla de días), así que reservamos ese alto y
+                los demás pasos se alinean arriba dentro del mismo espacio. */}
+            <Box minH={{ base: "420px", md: "340px" }}>
+
             {/* PASO 1: Día */}
             {step === 1 && (
               <Flex direction="column" gap={4}>
@@ -406,6 +412,7 @@ export function AgendarLlamada({
                 </Box>
               </Flex>
             )}
+            </Box>
           </Flex>
         )}
       </Box>

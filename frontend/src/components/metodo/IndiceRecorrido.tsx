@@ -54,7 +54,6 @@ export function IndiceRecorrido({
 
   const TINTA = tinta;
   const ACENTO = acento || tinta;
-  const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${bg}`;
 
   // Contraste: algunas disciplinas tienen la «tinta» clara (astrología) y otras
   // oscura (psicología). Para que los números y títulos SIEMPRE se vean, elegimos
