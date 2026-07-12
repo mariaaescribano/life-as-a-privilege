@@ -98,10 +98,12 @@ import MetodoFisiologiaMoleculas from "./app/metodo/MetodoFisiologiaMoleculas";
 import MetodoFisiologiaMacromoleculas from "./app/metodo/MetodoFisiologiaMacromoleculas";
 import MetodoFisiologiaEstructuras from "./app/metodo/MetodoFisiologiaEstructuras";
 import MetodoFisiologiaCelula from "./app/metodo/MetodoFisiologiaCelula";
+import MetodoFisiologiaTodasCelulas from "./app/metodo/MetodoFisiologiaTodasCelulas";
 import MetodoFisiologiaTejidos from "./app/metodo/MetodoFisiologiaTejidos";
 import MetodoFisiologiaOrganos from "./app/metodo/MetodoFisiologiaOrganos";
 import MetodoFisiologiaSistemas from "./app/metodo/MetodoFisiologiaSistemas";
 import MetodoFisiologiaOrganismo from "./app/metodo/MetodoFisiologiaOrganismo";
+import MetodoFisiologiaAnalitica from "./app/metodo/MetodoFisiologiaAnalitica";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -228,10 +230,12 @@ export default function App()
       <Route path="/metodo/fisiologia/macromoleculas" element={<PrivateRoute><MetodoFisiologiaMacromoleculas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/estructuras" element={<PrivateRoute><MetodoFisiologiaEstructuras /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/celula" element={<PrivateRoute><MetodoFisiologiaCelula /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/todas-tus-celulas" element={<PrivateRoute><MetodoFisiologiaTodasCelulas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/tejidos" element={<PrivateRoute><MetodoFisiologiaTejidos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/organos" element={<PrivateRoute><MetodoFisiologiaOrganos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/organismo" element={<PrivateRoute><MetodoFisiologiaOrganismo /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/analitica" element={<PrivateRoute><MetodoFisiologiaAnalitica /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

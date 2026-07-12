@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
@@ -10,6 +10,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import {
   API_URL,
   fisiologiaBg,
@@ -46,7 +47,7 @@ const PRE = "/recorrido/fisiologia/pre";
 
 const MACROS: MacroDef[] = [
   {
-    id: "proteina", nombre: "Proteínas", monomero: "aminoácido", monomeroPl: "aminoácidos",
+    id: "proteina", nombre: "Enzimas", monomero: "aminoácido", monomeroPl: "aminoácidos",
     glow: "#7fd6c2", glyph: "A", n: 4, forma: "cadena",
     desc: "Realizan la mayoría de las funciones de la célula.",
     resultado: [
@@ -276,7 +277,6 @@ function Estacion({
 
               {/* texto */}
               <Flex flex="1" direction="column" gap={3.5} textAlign={{ base: "center", md: "left" }}>
-                <Text fontSize={{ base: "2xl", md: "3xl" }}>✨</Text>
                 <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
                       style={{ textShadow: INK }}>¡Has formado {def.nombre.toLowerCase()}!</Text>
                 <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
@@ -318,6 +318,82 @@ function MacroDibujada({ def }: { def: MacroDef }) {
         })}
       </Box>
     </Box>
+  );
+}
+
+// ── Box rectangular de una macromolécula ────────────────────────────────────
+// Foto a la izquierda: se ve si ya está formada; si no, un «?». El resto (nombre,
+// descripción, acción) siempre visible. Al formarla aparece la foto + un tick y
+// el borde se ilumina → sensación de recorrido.
+function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick: () => void }) {
+  return (
+    <MBox whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 300, damping: 24 }} w="100%">
+      <Box
+        as="button"
+        onClick={onClick}
+        w="100%"
+        textAlign="left"
+        position="relative"
+        borderRadius="2xl"
+        overflow="hidden"
+        cursor="pointer"
+        border={`1px solid ${hecha ? m.glow : "rgba(255,255,255,0.16)"}`}
+        boxShadow={hecha
+          ? `0 0 20px ${m.glow}44, 0 4px 18px rgba(0,0,0,0.22), inset 0 0 24px ${m.glow}12`
+          : "0 4px 18px rgba(0,0,0,0.22)"}
+        transition="all 0.25s ease"
+        _hover={{ borderColor: m.glow, boxShadow: `0 0 24px ${m.glow}55, 0 8px 26px rgba(0,0,0,0.3)` }}
+        _active={{ transform: "translateY(-1px)" }}
+      >
+        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+        <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 6 }} p={{ base: 4, md: 5 }}>
+          {/* Foto (o «?» si aún no está hecha) */}
+          <Box
+            flexShrink={0}
+            w={{ base: "96px", md: "128px" }}
+            h={{ base: "96px", md: "128px" }}
+            borderRadius="xl"
+            overflow="hidden"
+            position="relative"
+            bg="rgba(10,7,20,0.5)"
+            border={`1px solid ${hecha ? `${m.glow}77` : "rgba(255,255,255,0.14)"}`}
+            boxShadow={hecha ? `0 0 16px ${m.glow}55, inset 0 0 18px ${m.glow}14` : "none"}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {hecha ? (
+              <Image src={m.resultadoImg} alt={m.nombre} w="100%" h="100%" objectFit="contain"
+                     fallback={<MacroDibujada def={m} />} />
+            ) : (
+              <Text color="rgba(255,255,255,0.5)" fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
+                    style={{ textShadow: INK }}>?</Text>
+            )}
+          </Box>
+
+          {/* Texto */}
+          <Box flex="1" minW={0}>
+            <Flex align="center" gap={2.5}>
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                    style={{ textShadow: INK }}>{m.nombre}</Text>
+              {hecha && (
+                <Flex as="span" align="center" justify="center" flexShrink={0}
+                      w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} borderRadius="full"
+                      bg={m.glow} color={fisiologiaBg} fontSize={{ base: "xs", md: "sm" }} fontWeight="900"
+                      boxShadow={`0 0 10px ${m.glow}aa`}>✓</Flex>
+              )}
+            </Flex>
+            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
+                  style={{ textShadow: INK }}>{m.desc}</Text>
+            <Text color={hecha ? m.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="700"
+                  letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
+              {hecha ? "Formada · ver de nuevo" : `Construir · ${m.n} ${m.monomeroPl}`}
+            </Text>
+          </Box>
+        </Flex>
+      </Box>
+    </MBox>
   );
 }
 
@@ -390,7 +466,6 @@ export default function MetodoFisiologiaMacromoleculas() {
   }
 
   const defActiva = MACROS.find((m) => m.id === activa) || null;
-  const todas = formadas.length === MACROS.length;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -402,7 +477,7 @@ export default function MetodoFisiologiaMacromoleculas() {
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Macromoléculas"
-            pageLabel="5/"
+            pageLabel="4/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
@@ -410,6 +485,7 @@ export default function MetodoFisiologiaMacromoleculas() {
             mb={0}
             prev={{ label: "← Moléculas", onClick: () => navigate("/metodo/fisiologia/moleculas") }}
             extra={celulasBtn}
+            next={{ label: "Estructuras →", onClick: () => navigate("/metodo/fisiologia/estructuras") }}
           />
 
           {!activa && (
@@ -420,117 +496,39 @@ export default function MetodoFisiologiaMacromoleculas() {
               </Text>
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                     maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Encadenando moléculas pequeñas se forman las macromoléculas. Construye las cuatro que sostienen tu vida.
+                Encadenando moléculas pequeñas se forman las macromoléculas. Construye las cuatro que sostienen tu Vida.
               </Text>
             </MBox>
           )}
 
-          {/* ── BOX ── */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-               boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
-            <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-              <AnimatePresence mode="wait">
-                {defActiva ? (
-                  <Estacion
-                    key={defActiva.id}
-                    def={defActiva}
-                    yaFormada={formadas.includes(defActiva.id)}
-                    onFormar={() => formar(defActiva.id)}
-                    onVolver={() => setActiva(null)}
-                  />
-                ) : (
-                  <MBox key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={{ base: 4, md: 5 }}>
-                      {MACROS.map((m) => {
-                        const hecha = formadas.includes(m.id);
-                        return (
-                          <MBox key={m.id} whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                            <Box as="button" onClick={() => setActiva(m.id)} w="100%" textAlign="left"
-                                 position="relative" borderRadius="xl" overflow="hidden" cursor="pointer"
-                                 px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}
-                                 border={`1px solid ${hecha ? m.glow : "rgba(255,255,255,0.16)"}`}
-                                 bg="rgba(10,7,20,0.42)"
-                                 sx={{ backdropFilter: "blur(2px)",
-                                       boxShadow: hecha ? `0 0 18px ${m.glow}44, inset 0 0 24px ${m.glow}12` : "none" }}
-                                 transition="all 0.2s"
-                                 _hover={{ borderColor: m.glow, boxShadow: `0 0 20px ${m.glow}44` }}>
-                              <Flex align="center" gap={4}>
-                                {/* mini-perla */}
-                                <Box position="relative" w={{ base: "48px", md: "56px" }} h={{ base: "48px", md: "56px" }}
-                                     flexShrink={0} borderRadius="full"
-                                     sx={{ background: perla(m.glow), boxShadow: `0 0 12px ${m.glow}88` }}
-                                     display="flex" alignItems="center" justifyContent="center">
-                                  <Text color="rgba(0,0,0,0.55)" fontWeight="900" fontSize="lg">{m.glyph}</Text>
-                                </Box>
-                                <Box flex="1" minW={0}>
-                                  <Flex align="center" gap={2}>
-                                    <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                                          style={{ textShadow: INK }}>{m.nombre}</Text>
-                                    {hecha && (
-                                      <Box as="span" color={m.glow} fontSize="md" fontWeight="800"
-                                           style={{ filter: `drop-shadow(0 0 6px ${m.glow})` }}>✓</Box>
-                                    )}
-                                  </Flex>
-                                  <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }}
-                                        lineHeight="1.5" mt={0.5} style={{ textShadow: INK }}>{m.desc}</Text>
-                                  <Text color={hecha ? m.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="600"
-                                        letterSpacing="0.04em" mt={2}>
-                                    {hecha ? "Formada · ver de nuevo" : `Construir · ${m.n} ${m.monomeroPl}`}
-                                  </Text>
-                                </Box>
-                              </Flex>
-                            </Box>
-                          </MBox>
-                        );
-                      })}
-                    </SimpleGrid>
-
-                    {/* progreso + cierre */}
-                    <Flex direction="column" align="center" gap={3} mt={7}>
-                      <Flex gap={2}>
-                        {MACROS.map((m) => (
-                          <Box key={m.id} w="10px" h="10px" borderRadius="full"
-                               bg={formadas.includes(m.id) ? m.glow : "rgba(255,255,255,0.22)"}
-                               boxShadow={formadas.includes(m.id) ? `0 0 10px ${m.glow}` : "none"} transition="all 0.3s" />
-                        ))}
-                      </Flex>
-
-                      <AnimatePresence>
-                        {todas && (
-                          <MBox key="cierre" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }} textAlign="center" mt={2} maxW="680px">
-                            <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2}
-                                  style={{ textShadow: INK }}>
-                              🎉 ¡Has formado las cuatro macromoléculas!
-                            </Text>
-                            <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
-                                  mb={5} style={{ textShadow: INK }}>
-                              Proteínas, ADN, lípidos y carbohidratos son las piezas con las que la célula construye,
-                              se informa, se envuelve y se alimenta. Con ellas, la materia da el salto a la vida.
-                            </Text>
-                            <Box as="button" onClick={() => navigate("/metodo/fisiologia/estructuras")}
-                                 px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                                 letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                                 boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                              Estructuras celulares →
-                            </Box>
-                          </MBox>
-                        )}
-                      </AnimatePresence>
-                    </Flex>
-                  </MBox>
-                )}
-              </AnimatePresence>
+          {defActiva ? (
+            /* ── Box de construcción (Estación) ── */
+            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                 boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+              <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+              <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
+                <Estacion
+                  key={defActiva.id}
+                  def={defActiva}
+                  yaFormada={formadas.includes(defActiva.id)}
+                  onFormar={() => formar(defActiva.id)}
+                  onVolver={() => setActiva(null)}
+                />
+              </Box>
             </Box>
-          </Box>
+          ) : (
+            /* ── 4 boxes: uno por macromolécula ── */
+            <Flex direction="column" w="100%" maxW="760px" gap={{ base: 4, md: 5 }}>
+              {MACROS.map((m) => (
+                <MacroCard key={m.id} m={m} hecha={formadas.includes(m.id)} onClick={() => setActiva(m.id)} />
+              ))}
+            </Flex>
+          )}
         </Flex>
       </Flex>
 
       {celulasModal}
+      <IndiceFisiologia />
       <SiteFooter />
     </Box>
   );

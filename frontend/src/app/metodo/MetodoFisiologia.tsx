@@ -144,7 +144,7 @@ export default function MetodoFisiologia() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Cursos de Med. China", onClick: () => navigate("/metodo/tcm/cursos") }}
+            prev={{ label: "← Med. China", onClick: () => navigate("/metodo/tcm/cursos") }}
             extra={celulasBtn}
             next={{ label: "Comenzar →", onClick: comenzar }}
           />
@@ -156,8 +156,8 @@ export default function MetodoFisiologia() {
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
                 <Text
                   color="white"
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.9"
+                  fontSize={{ base: "md", md: "lg" }}
+                  lineHeight="1.95"
                   opacity={0.92}
                   maxW="600px"
                   mx="auto"
@@ -169,8 +169,8 @@ export default function MetodoFisiologia() {
                 </Text>
                 <Text
                   color="white"
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.9"
+                  fontSize={{ base: "md", md: "lg" }}
+                  lineHeight="1.95"
                   opacity={0.92}
                   maxW="600px"
                   mx="auto"

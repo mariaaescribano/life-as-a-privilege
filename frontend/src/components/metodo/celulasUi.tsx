@@ -11,7 +11,7 @@ const TXT = fisiologiaTxt;
    Fondo = foto de Fisiología. Dentro: foto de la célula, una rallita
    elegante, el nombre y "Leer más →" abajo a la derecha.
 ───────────────────────────────────────── */
-export function CelulaCard({ celula, onClick }: { celula: Celula; onClick: () => void }) {
+export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula; onClick: () => void; visto?: boolean }) {
   const [imgErr, setImgErr] = useState(false);
 
   return (
@@ -22,10 +22,12 @@ export function CelulaCard({ celula, onClick }: { celula: Celula; onClick: () =>
       position="relative"
       overflow="hidden"
       borderRadius="2xl"
-      border={`1px solid ${TXT}33`}
+      border={visto ? `1px solid ${TXT}aa` : `1px solid ${TXT}33`}
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
-      boxShadow={`0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${TXT}26`}
+      boxShadow={visto
+        ? `0 4px 18px rgba(0,0,0,0.22), 0 0 22px ${TXT}66`
+        : `0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${TXT}26`}
       transition="all 0.22s ease"
       _hover={{
         transform: "translateY(-4px)",
@@ -36,6 +38,27 @@ export function CelulaCard({ celula, onClick }: { celula: Celula; onClick: () =>
     >
       {/* Fondo: misma imagen que el header de Fisiología (sin velo) */}
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+      {/* Sello de "descubierta": aparece cuando el usuario ya la ha visitado */}
+      {visto && (
+        <Flex
+          position="absolute"
+          top="10px"
+          right="10px"
+          zIndex={2}
+          align="center"
+          justify="center"
+          w="26px"
+          h="26px"
+          borderRadius="full"
+          bg={TXT}
+          boxShadow={`0 0 10px ${TXT}, 0 1px 4px rgba(0,0,0,0.5)`}
+        >
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="#1a1226">
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </Box>
+        </Flex>
+      )}
 
       <Flex direction="column" position="relative" zIndex={1} p={{ base: 4, md: 5 }} gap={3} h="100%">
         {/* Foto de la célula — cuadrada 1:1 (como es la foto real) */}
@@ -59,7 +82,6 @@ export function CelulaCard({ celula, onClick }: { celula: Celula; onClick: () =>
             />
           ) : (
             <Flex w="100%" h="100%" align="center" justify="center">
-              <Text fontSize="34px" opacity={0.35}>🔬</Text>
             </Flex>
           )}
         </Box>
@@ -185,7 +207,6 @@ export function CelulaModal({
         <Image src={encodeURI(celula.foto)} alt={celula.nombre} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
       ) : (
         <Flex w="100%" h="100%" align="center" justify="center">
-          <Text fontSize="48px" opacity={0.3}>🔬</Text>
         </Flex>
       )}
     </Box>

@@ -150,7 +150,7 @@ export function PagoFisiologiaModal({ isOpen, onClose, onPagar, loading, error, 
                 transition="all 0.2s"
                 _hover={loading ? {} : { bg: "rgba(255,255,255,0.28)", transform: "translateY(-1px)" }}
               >
-                💳 Pago de prueba (sin cobro real)
+                Pago de prueba (sin cobro real)
               </Box>
             )}
 

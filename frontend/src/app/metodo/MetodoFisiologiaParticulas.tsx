@@ -10,6 +10,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import {
   API_URL,
   fisiologiaBg,
@@ -275,12 +276,12 @@ export default function MetodoFisiologiaParticulas() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="1120px" gap={6}>
 
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Partículas"
-            pageLabel="2/"
+            pageLabel="1/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
@@ -288,7 +289,7 @@ export default function MetodoFisiologiaParticulas() {
             mb={0}
             prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
             extra={celulasBtn}
-            next={{ label: "Átomo →", onClick: () => navigate("/metodo/fisiologia/atomos") }}
+            next={{ label: "Átomo →", onClick: () => navigate("/metodo/fisiologia/atomos"), disabled: !completo, disabledTooltip: "Primero construye la partícula" }}
           />
 
           {/* Instrucción (solo mientras construye) */}
@@ -307,19 +308,18 @@ export default function MetodoFisiologiaParticulas() {
             )}
           </AnimatePresence>
 
-          {/* ── BOX RECTANGULAR ── */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-               boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
-            <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+          {/* ── FASE A (box de construir) / FASE B (dos boxes) ── */}
+          <AnimatePresence mode="wait">
 
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-              <AnimatePresence mode="wait">
-
-                {/* ───────── FASE A · construir ───────── */}
-                {!completo && (
-                  <MBox key="construir"
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.4 }}>
+            {/* ───────── FASE A · construir ───────── */}
+            {!completo && (
+              <MBox key="construir" w="100%"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.4 }}>
+                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                     boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                  <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
                     <Flex direction={{ base: "column", md: "row" }} align="center"
                           gap={{ base: 8, md: 10 }} pl={{ md: 4 }}>
 
@@ -375,19 +375,25 @@ export default function MetodoFisiologiaParticulas() {
                         </Flex>
                       </Flex>
                     </Flex>
-                  </MBox>
-                )}
+                  </Box>
+                </Box>
+              </MBox>
+            )}
 
-                {/* ───────── FASE B · protón + texto ───────── */}
-                {completo && (
-                  <MBox key="resultado"
-                        initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}>
-                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 7, md: 12 }}>
+            {/* ───────── FASE B · dos boxes: protón | texto ───────── */}
+            {completo && (
+              <MBox key="resultado" w="100%"
+                    initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}>
+                <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-                      {/* Protón (izquierda) */}
-                      <Flex flexShrink={0} justify="center" align="center" position="relative"
-                            w={{ base: "260px", md: "320px" }} h={{ base: "260px", md: "320px" }}>
+                  {/* ── Box izquierda · protón ── */}
+                  <Box position="relative" flex={{ base: "1 1 auto", md: "0 0 42%" }} borderRadius="2xl" overflow="hidden"
+                       boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} direction="column" justify="center" align="center"
+                          px={{ base: 6, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "300px", md: "360px" }} gap={4}>
+                      <Box position="relative" w={{ base: "230px", md: "300px" }} h={{ base: "230px", md: "300px" }}>
                         <Box position="absolute" inset="-6%" borderRadius="full"
                              animation={`${shimmer} 3.6s ease-in-out infinite`} pointerEvents="none"
                              sx={{ boxShadow: `0 0 50px ${fisiologiaTxt}55, 0 0 90px ${GLOW.down}33` }} />
@@ -395,57 +401,50 @@ export default function MetodoFisiologiaParticulas() {
                                w="100%" h="100%" objectFit="contain"
                                style={{ filter: `drop-shadow(0 0 18px ${fisiologiaTxt}44)` }}
                                fallback={<Box w="100%" h="100%" borderRadius="full" bg={fisiologiaBg} />} />
-                      </Flex>
-
-                      {/* Texto (derecha) */}
-                      <Flex flex="1" direction="column" gap={4} textAlign={{ base: "center", md: "left" }}>
-                        <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
-                              letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
-                          ¡Enhorabuena! Has construido una partícula.
-                        </Text>
-                        <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
-                             bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
-                        <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" style={{ textShadow: INK }}>
-                          Las partículas están formadas por <b>quarks</b>, unas partículas fundamentales, y por
-                          <b> gluones</b>, que los mantienen unidos.
-                        </Text>
-                        <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" style={{ textShadow: INK }}>
-                          A nivel cuántico, este interior es extraordinariamente dinámico: los campos cuánticos generan
-                          continuamente partículas virtuales que aparecen y desaparecen durante tiempos brevísimos.
-                        </Text>
-                        <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
-                          Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.
-                        </Text>
-
-                        <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
-                          <Box as="button" onClick={reiniciar}
-                               px={6} py={2.5} borderRadius="full" bg="transparent"
-                               color="rgba(255,255,255,0.85)" border="1px solid rgba(255,255,255,0.45)"
-                               fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
-                               letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                               _hover={{ borderColor: "white", color: "white" }}>
-                            ↺ Construir de nuevo
-                          </Box>
-                          <Box as="button" onClick={() => navigate("/metodo/fisiologia/atomos")}
-                               px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                               fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                               letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                               boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                               _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
-                            Continuar →
-                          </Box>
-                        </Flex>
-                      </Flex>
+                      </Box>
+                      {/* Rehacer: acción discreta bajo el dibujo */}
+                      <Box as="button" onClick={reiniciar}
+                           display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
+                           bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)"
+                           border="1px solid rgba(255,255,255,0.28)"
+                           fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                           letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                           _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                        ↺ Construir de nuevo
+                      </Box>
                     </Flex>
-                  </MBox>
-                )}
-              </AnimatePresence>
-            </Box>
-          </Box>
+                  </Box>
+
+                  {/* ── Box derecha · texto ── */}
+                  <Box position="relative" flex="1" borderRadius="2xl" overflow="hidden"
+                       boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
+                          px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
+                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                            letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
+                        ¡Enhorabuena! Has construido una partícula.
+                      </Text>
+                      <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
+                           bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
+                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" style={{ textShadow: INK }}>
+                        Las partículas están formadas por <b>quarks</b>, unas partículas fundamentales que aparecen y desaparecen constantemente, y por
+                        <b> gluones</b>, que los mantienen unidos.
+                      </Text>
+                      <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
+                        Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.
+                      </Text>
+                    </Flex>
+                  </Box>
+                </Flex>
+              </MBox>
+            )}
+          </AnimatePresence>
         </Flex>
       </Flex>
 
       {celulasModal}
+      <IndiceFisiologia />
       <SiteFooter />
     </Box>
   );

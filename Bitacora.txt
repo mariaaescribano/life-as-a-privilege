@@ -8,7 +8,385 @@ IMAGENES
 Estructuras: mitocondria.png, ribosoma.png
 Niveles 2-3: celula.png, tejido.png, organo.png, sistema.png, cuerpo.png
 Macromoléculas: aminoacido.png, nucleotido.png, fosfolipido.png, glucosa.png, proteina.png, adn.png, membrana.png, carbohidrato.png
+receptores de hormonas de las membranas celulares,
 Moléculas: carbono.png
+
+
+
+
+
+
+Texto
+
+Cada una de tus células es una pequeña ciudad viva. En su interior, millones de procesos ocurren al servicio de tu existencia.
+
+Imagen
+
+Sin perder estilo órgano, visceral humano (pasa foto de fisio)
+
+Una ciudad circular.
+
+Muros alrededor (la membrana).
+
+Muchísimo movimiento.
+
+Todo elegante, como una ciudad antigua iluminada.
+
+-
+
+
+Viñeta 2 — La membrana
+Texto
+
+La membrana celular protege la ciudad y controla cuidadosamente qué puede entrar y qué debe salir. 
+
+Imagen
+
+Una muralla.
+
+Guardias abriendo puertas.
+
+Pero haz que siga pareciendo una célula, al fin y al cabo es un comic de células tiene que seguir siéndolo.
+
+Entran:
+
+Oxígeno
+Agua
+Nutrientes
+
+Salen:
+
+Desechos
+
+
+-
+
+Viñeta 3 — El núcleo
+Texto
+
+En el núcleo se guarda el ADN: el gran libro de instrucciones que contiene toda la información necesaria para que la célula funcione.
+
+Imagen
+
+En el centro del nucleo:
+
+Un libro brillante con muchas paginas, abierto e iluminado lanzando hilos dorados (ADN).
+
+Los ribosomas esperan instrucciones.
+
+-
+
+
+Viñeta 4 — Los ribosomas
+Texto
+
+Los ribosomas leen las instrucciones del ADN y construyen proteínas, las herramientas que permiten trabajar a la célula.
+
+Imagen
+
+Pequeños artesanos.
+
+Van ensamblando piezas.
+
+Algunas terminan siendo...
+
+...enzimas.
+
+-
+
+Viñeta 5 — Las enzimas ⭐ (haría esta enorme)
+Texto
+
+Las enzimas son las trabajadoras de la célula. Aceleran miles de reacciones químicas y hacen posible que la vida ocurra. Sin ellas, muchas reacciones tardarían años o incluso siglos en producirse.
+
+Imagen
+
+Aquí puedes hacer algo precioso.
+
+Una enorme ciudad.
+
+Miles de pequeños personajes luminosos (las enzimas).
+
+Cada uno tiene un trabajo distinto:
+
+uno construye
+otro recicla
+otro transporta
+otro repara
+otro corta
+otro une moléculas
+
+Como una colonia de hormigas.
+
+Todo perfectamente organizado.
+
+Que el lector piense:
+
+"Madre mía... esto está vivo."
+
+-
+
+Viñeta 6 — La mitocondria
+Texto
+
+Toda esa actividad necesita energía. Las mitocondrias transforman los nutrientes y el oxígeno en el combustible, científicamente llamado ATP, que alimenta toda la ciudad.
+
+Imagen
+
+Una enorme central energética.
+
+De ella salen ríos de luz dorada.
+
+Toda la ciudad se ilumina.
+
+-
+
+Viñeta 7 — Todo funciona junto
+Texto
+
+Ninguna estructura podría mantener viva la célula por sí sola. Solo cuando todas trabajan juntas aparece aquello que llamamos vida.
+
+Imagen
+
+Vista completa.
+
+El núcleo.
+
+Los ribosomas.
+
+Las enzimas.
+
+La mitocondria.
+
+La membrana.
+
+Todo conectado mediante líneas doradas.
+
+-
+
+
+Última viñeta (la más bonita)
+Texto
+
+En una sola célula ocurren millones de reacciones cada segundo. Y tu cuerpo está formado por billones de ellas. Mientras lees estas palabras, un universo entero trabaja en silencio para mantenerte con vida.
+
+Imagen
+
+Zoom progresivo:
+
+Ciudad celular
+
+↓
+
+Tejido
+
+↓
+
+Órgano
+
+↓
+
+Persona
+
+↓
+
+La Tierra
+
+↓
+
+El Universo.
+
+
+
+
+
+
+
+
+
+
+
+
+## 1. El cerebro
+
+**Texto**
+
+> Miles de millones de células
+> conviven en un tejido vivo.
+> Intercambian información,
+> energía y moléculas.
+> Ninguna funciona aislada.
+> El cerebro es
+> un ecosistema celular.
+
+**Imagen**
+
+Corte tridimensional de corteza cerebral. Se distinguen neuronas, astrocitos, vasos sanguíneos y microglía en la misma escena, con una iluminación suave y colores naturales.
+
+---
+
+## 2. Neurona
+
+**Texto**
+
+> Recibo miles de señales.
+> Las integro en mí.
+> Si son suficientemente importantes, sigo traspasando las señales en forma de neurotransmisores,
+llegando así a la siguiente neurona.
+Una corriente de neurotransmisores en una dirección concreta, genera un pensamiento.
+Hay miles de pensamientos cada segundo, por eso es tan importante practicar la atención.
+
+**Imagen**
+
+Primer plano de una neurona piramidal realista. Las dendritas reciben múltiples sinapsis mientras un potencial de acción avanza por el axón. En la terminación axónica se observan vesículas fusionándose con la membrana.
+
+---
+
+## 3. Astrocito
+
+**Texto**
+
+> Rodeo neuronas y capilares.
+> Cojo nutrientes de la sangre y los distribuyo a las neuronas, asegurándome que tienen la suficiente energía.
+ Regulo agua e iones.
+> Reciclo neurotransmisores.
+> También participo
+> en la plasticidad sináptica.
+
+**Imagen**
+
+Un astrocito de aspecto estrellado extendiendo sus prolongaciones hacia varias sinapsis y un capilar. Se aprecia el contacto simultáneo con ambos (sinapsis tripartita).
+
+---
+
+## 4. Microglía
+
+**Texto**
+
+> Soy tu protector. Exploro continuamente
+> el tejido nervioso.
+> Detecto daño,
+> elimino restos celulares
+> y remodelo conexiones.
+> Mantengo el equilibrio
+> del sistema.
+
+**Imagen**
+
+Microglía ramificada inspeccionando el tejido. Una prolongación engloba restos celulares mientras otra contacta una sinapsis. El resto del tejido permanece intacto.
+
+---
+
+## 5. Oligodendrocito
+
+**Texto**
+
+> Envuelvo los axones
+> con mielina.
+> Esta cubierta acelera
+> la conducción eléctrica.
+> Una sola célula
+> puede mielinizar
+> varios axones.
+
+**Imagen**
+
+Un oligodendrocito central con varias prolongaciones formando vainas de mielina alrededor de diferentes axones. Se distinguen claramente los nodos de Ranvier.
+
+---
+
+## 6. Endotelio
+
+**Texto**
+
+> Formamos los capilares
+> del cerebro.
+> Regulamos el paso
+> de sustancias.
+> Así protegemos
+> el equilibrio químico
+> del tejido nervioso.
+
+**Imagen**
+
+Capilar cerebral ampliado. Las células endoteliales aparecen unidas por uniones estrechas, rodeadas por la membrana basal, pericitos y pies de astrocitos.
+
+---
+
+## 7. Pericito
+
+**Texto**
+
+> Rodeo los capilares.
+> Regulo el flujo sanguíneo.
+> Refuerzo la barrera
+> hematoencefálica.
+> También participo
+> en la reparación
+> vascular.
+
+**Imagen**
+
+Detalle de un capilar donde un pericito abraza externamente el vaso mientras un astrocito contacta la pared.
+
+---
+
+## 8. Ependimaria
+
+**Texto**
+
+> Revisto los ventrículos.
+> Mis cilios impulsan
+> el líquido cefalorraquídeo.
+> Así distribuye nutrientes
+> y elimina residuos
+> por todo el sistema.
+
+**Imagen**
+
+Sección del ventrículo cerebral mostrando el epitelio ependimario con cientos de cilios moviendo el líquido.
+
+---
+
+## Estilo visual que propondría
+
+No haría ilustraciones "de libro", sino algo parecido a un **documental microscópico**:
+
+* células con morfología real;
+* proporciones anatómicas correctas;
+* profundidad de campo (algunas células desenfocadas al fondo);
+* iluminación volumétrica como si hubiera una fuente de luz en el tejido;
+* colores suaves (azules, violetas, verdes y ocres), evitando los fluorescentes artificiales;
+* pequeñas etiquetas discretas o flechas solo cuando sean imprescindibles.
+
+La sensación debería ser la de que el lector **se ha encogido hasta unas pocas micras y está caminando por el cerebro**, viendo cómo las células interactúan realmente. Ese estilo transmite mucho mejor la idea de "ecosistema" que las metáforas visuales demasiado evidentes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

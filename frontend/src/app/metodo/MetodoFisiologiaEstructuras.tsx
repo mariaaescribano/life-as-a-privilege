@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
@@ -10,6 +10,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { ComicCelulaModal } from "../../components/metodo/ComicCelulaModal";
 import {
   API_URL,
   fisiologiaBg,
@@ -79,7 +81,7 @@ const ESTRUCTURAS: EstDef[] = [
   },
   {
     id: "ribosoma", nombre: "Ribosoma", glow: "#7fd6c2", forma: "cluster",
-    desc: "La fábrica de proteínas.",
+    desc: "La fábrica de enzimas.",
     ingredientes: [{ macro: "proteina", n: 3, label: "proteína" }, { macro: "adn", n: 1, label: "ARN" }],
     resultado: [
       "Hecho de ARN y de proteínas, el ribosoma lee las instrucciones que vienen del ADN.",
@@ -304,7 +306,6 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
               </Flex>
 
               <Flex flex="1" direction="column" gap={3.5} textAlign={{ base: "center", md: "left" }}>
-                <Text fontSize={{ base: "2xl", md: "3xl" }}>✨</Text>
                 <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
                   ¡Has construido {def.id === "adn" ? "el ADN" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
                 </Text>
@@ -331,14 +332,97 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
   );
 }
 
+// ── Box rectangular de una estructura ───────────────────────────────────────
+// Foto a la izquierda: se ve si ya está construida; si no, un «?». El resto
+// (nombre, descripción, acción) siempre visible. Al construirla aparece la foto
+// + un tick y el borde se ilumina → sensación de recorrido.
+function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: () => void }) {
+  return (
+    <MBox whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 300, damping: 24 }} w="100%">
+      <Box
+        as="button"
+        onClick={onClick}
+        w="100%"
+        textAlign="left"
+        position="relative"
+        borderRadius="2xl"
+        overflow="hidden"
+        cursor="pointer"
+        border={`1px solid ${hecha ? e.glow : "rgba(255,255,255,0.16)"}`}
+        boxShadow={hecha
+          ? `0 0 20px ${e.glow}44, 0 4px 18px rgba(0,0,0,0.22), inset 0 0 24px ${e.glow}12`
+          : "0 4px 18px rgba(0,0,0,0.22)"}
+        transition="all 0.25s ease"
+        _hover={{ borderColor: e.glow, boxShadow: `0 0 24px ${e.glow}55, 0 8px 26px rgba(0,0,0,0.3)` }}
+        _active={{ transform: "translateY(-1px)" }}
+      >
+        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+        <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 6 }} p={{ base: 4, md: 5 }}>
+          {/* Foto (o «?» si aún no está hecha) */}
+          <Box
+            flexShrink={0}
+            w={{ base: "96px", md: "128px" }}
+            h={{ base: "96px", md: "128px" }}
+            borderRadius="xl"
+            overflow="hidden"
+            position="relative"
+            bg="rgba(10,7,20,0.5)"
+            border={`1px solid ${hecha ? `${e.glow}77` : "rgba(255,255,255,0.14)"}`}
+            boxShadow={hecha ? `0 0 16px ${e.glow}55, inset 0 0 18px ${e.glow}14` : "none"}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {hecha ? (
+              <Image src={e.resultadoImg} alt={e.nombre} w="100%" h="100%" objectFit="contain"
+                     fallback={<EstDibujada def={e} />} />
+            ) : (
+              <Text color="rgba(255,255,255,0.5)" fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
+                    style={{ textShadow: INK }}>?</Text>
+            )}
+          </Box>
+
+          {/* Texto */}
+          <Box flex="1" minW={0}>
+            <Flex align="center" gap={2.5}>
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                    style={{ textShadow: INK }}>{e.nombre}</Text>
+              {hecha && (
+                <Flex as="span" align="center" justify="center" flexShrink={0}
+                      w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} borderRadius="full"
+                      bg={e.glow} color={fisiologiaBg} fontSize={{ base: "xs", md: "sm" }} fontWeight="900"
+                      boxShadow={`0 0 10px ${e.glow}aa`}>✓</Flex>
+              )}
+            </Flex>
+            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
+                  style={{ textShadow: INK }}>{e.desc}</Text>
+            <Text color={hecha ? e.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="700"
+                  letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
+              {hecha ? "Construida · ver de nuevo" : "Construir"}
+            </Text>
+          </Box>
+        </Flex>
+      </Box>
+    </MBox>
+  );
+}
+
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaEstructuras() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [formadas, setFormadas] = useState<EstId[]>([]);
   const [activa, setActiva] = useState<EstId | null>(null);
+  const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
+
+  // Al terminar las 4 estructuras se pasa por un cómic-puente y de ahí, a
+  // «Crea la célula» (sin volver a la página de Niveles).
+  const irSiguiente = () => setComicOpen(true);
+  const comicContinuar = () => { setComicOpen(false); navigate("/metodo/fisiologia/celula"); };
+  const comicCerrar = () => setComicOpen(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -395,7 +479,6 @@ export default function MetodoFisiologiaEstructuras() {
   }
 
   const defActiva = ESTRUCTURAS.find((e) => e.id === activa) || null;
-  const todas = formadas.length === ESTRUCTURAS.length;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -407,7 +490,7 @@ export default function MetodoFisiologiaEstructuras() {
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Estructuras celulares"
-            pageLabel="6/"
+            pageLabel="5/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
@@ -415,6 +498,7 @@ export default function MetodoFisiologiaEstructuras() {
             mb={0}
             prev={{ label: "← Macromoléculas", onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
             extra={celulasBtn}
+            next={{ label: "Crea la célula →", onClick: irSiguiente }}
           />
 
           {!activa && (
@@ -430,105 +514,35 @@ export default function MetodoFisiologiaEstructuras() {
             </MBox>
           )}
 
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-               boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
-            <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-              <AnimatePresence mode="wait">
-                {defActiva ? (
-                  <Estacion
-                    key={defActiva.id}
-                    def={defActiva}
-                    yaFormada={formadas.includes(defActiva.id)}
-                    onFormar={() => formar(defActiva.id)}
-                    onVolver={() => setActiva(null)}
-                  />
-                ) : (
-                  <MBox key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={{ base: 4, md: 5 }}>
-                      {ESTRUCTURAS.map((e) => {
-                        const hecha = formadas.includes(e.id);
-                        return (
-                          <MBox key={e.id} whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                            <Box as="button" onClick={() => setActiva(e.id)} w="100%" textAlign="left"
-                                 position="relative" borderRadius="xl" overflow="hidden" cursor="pointer"
-                                 px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}
-                                 border={`1px solid ${hecha ? e.glow : "rgba(255,255,255,0.16)"}`}
-                                 bg="rgba(10,7,20,0.42)"
-                                 sx={{ backdropFilter: "blur(2px)",
-                                       boxShadow: hecha ? `0 0 18px ${e.glow}44, inset 0 0 24px ${e.glow}12` : "none" }}
-                                 transition="all 0.2s"
-                                 _hover={{ borderColor: e.glow, boxShadow: `0 0 20px ${e.glow}44` }}>
-                              <Flex align="center" gap={4}>
-                                <Box position="relative" w={{ base: "48px", md: "56px" }} h={{ base: "48px", md: "56px" }}
-                                     flexShrink={0} borderRadius="full"
-                                     sx={{ background: perlaBg(e.glow), boxShadow: `0 0 12px ${e.glow}88` }} />
-                                <Box flex="1" minW={0}>
-                                  <Flex align="center" gap={2}>
-                                    <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                                          style={{ textShadow: INK }}>{e.nombre}</Text>
-                                    {hecha && (
-                                      <Box as="span" color={e.glow} fontSize="md" fontWeight="800"
-                                           style={{ filter: `drop-shadow(0 0 6px ${e.glow})` }}>✓</Box>
-                                    )}
-                                  </Flex>
-                                  <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }}
-                                        lineHeight="1.5" mt={0.5} style={{ textShadow: INK }}>{e.desc}</Text>
-                                  <Text color={hecha ? e.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="600"
-                                        letterSpacing="0.04em" mt={2}>
-                                    {hecha ? "Construida · ver de nuevo" : "Construir →"}
-                                  </Text>
-                                </Box>
-                              </Flex>
-                            </Box>
-                          </MBox>
-                        );
-                      })}
-                    </SimpleGrid>
-
-                    <Flex direction="column" align="center" gap={3} mt={7}>
-                      <Flex gap={2}>
-                        {ESTRUCTURAS.map((e) => (
-                          <Box key={e.id} w="10px" h="10px" borderRadius="full"
-                               bg={formadas.includes(e.id) ? e.glow : "rgba(255,255,255,0.22)"}
-                               boxShadow={formadas.includes(e.id) ? `0 0 10px ${e.glow}` : "none"} transition="all 0.3s" />
-                        ))}
-                      </Flex>
-
-                      <AnimatePresence>
-                        {todas && (
-                          <MBox key="cierre" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }} textAlign="center" mt={2} maxW="680px">
-                            <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK }}>
-                              🎉 ¡Has construido las cuatro estructuras!
-                            </Text>
-                            <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
-                                  mb={5} style={{ textShadow: INK }}>
-                              Con un ADN que guarda las instrucciones, ribosomas que fabrican, mitocondrias que dan energía
-                              y una membrana que lo envuelve todo… ya tienes las piezas de una célula viva.
-                            </Text>
-                            <Box as="button" onClick={() => navigate("/metodo/fisiologia/niveles")}
-                                 px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                                 letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                                 boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                              Continuar →
-                            </Box>
-                          </MBox>
-                        )}
-                      </AnimatePresence>
-                    </Flex>
-                  </MBox>
-                )}
-              </AnimatePresence>
+          {defActiva ? (
+            /* ── Box de construcción (Estación) ── */
+            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                 boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+              <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+              <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
+                <Estacion
+                  key={defActiva.id}
+                  def={defActiva}
+                  yaFormada={formadas.includes(defActiva.id)}
+                  onFormar={() => formar(defActiva.id)}
+                  onVolver={() => setActiva(null)}
+                />
+              </Box>
             </Box>
-          </Box>
+          ) : (
+            /* ── 4 boxes: uno por estructura ── */
+            <Flex direction="column" w="100%" maxW="760px" gap={{ base: 4, md: 5 }}>
+              {ESTRUCTURAS.map((e) => (
+                <EstCard key={e.id} e={e} hecha={formadas.includes(e.id)} onClick={() => setActiva(e.id)} />
+              ))}
+            </Flex>
+          )}
         </Flex>
       </Flex>
 
       {celulasModal}
+      <ComicCelulaModal isOpen={comicOpen} onContinue={comicContinuar} onClose={comicCerrar} />
+      <IndiceFisiologia />
       <SiteFooter />
     </Box>
   );

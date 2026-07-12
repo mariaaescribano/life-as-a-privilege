@@ -19,6 +19,8 @@ import {
   VINETAS_ALMA as TCM_ALMA,
 } from "./TCMIlustracionesModal";
 import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrologiaModal";
+import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
+import { CELULA_VIVA } from "./comicCelulaViva";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Galería de ILUSTRACIONES (página /ilustraciones). Reúne todas las series de
@@ -88,6 +90,28 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     themeColor: tcmTxt,
     disciplinaBgImage: "/img/fondos/tcm.png",
     disciplinaBgColor: tcmBg,
+  },
+
+  // ── Fisiología ──
+  {
+    id: "fisio-estrella",
+    titulo: "La Estrella",
+    disciplina: "Fisiología",
+    cover: "/viñetas/fisiologia/estrellas/star6.png",
+    vinetas: ESTRELLA_ATOMOS,
+    themeColor: fisiologiaTxt,
+    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgColor: fisiologiaBg,
+  },
+  {
+    id: "fisio-celula",
+    titulo: "La Vida secreta de la célula",
+    disciplina: "Fisiología",
+    cover: "/viñetas/fisiologia/celulaviva/celula1.png",
+    vinetas: CELULA_VIVA,
+    themeColor: fisiologiaTxt,
+    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgColor: fisiologiaBg,
   },
 
   // ── Astrología ──

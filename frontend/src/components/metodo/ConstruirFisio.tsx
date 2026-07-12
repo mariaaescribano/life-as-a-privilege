@@ -10,6 +10,7 @@ import SpinnerTurquesa from "../global/Spinner";
 import { MetodoStepHeader } from "./MetodoStepHeader";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { useTusCelulas } from "./TusCelulasModal";
+import { IndiceFisiologia } from "./IndiceFisiologia";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -41,13 +42,15 @@ export interface ConstruirFisioProps {
   piezas: PiezaDef[];
   zonaLabel: string;
   forma: FormaFisio;
-  emoji?: string;
   resultTitulo: string;
   resultParrafos: React.ReactNode[];
   resultImg?: string;
   glow: string;
   dataKey: string;
   next: { label: string; ruta: string };
+  /** Botón derecho del header (opcional). Independiente del «Continuar» del box
+   *  de resultado. P.ej. Célula → «Todas tus células →». */
+  headerNext?: { label: string; ruta: string };
 }
 
 interface Pieza { id: string; def: PiezaDef; }
@@ -213,6 +216,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             mb={0}
             prev={{ label: props.prev.label, onClick: () => navigate(props.prev.ruta) }}
             extra={celulasBtn}
+            next={props.headerNext ? { label: props.headerNext.label, onClick: () => navigate(props.headerNext!.ruta) } : undefined}
           />
 
           <AnimatePresence>
@@ -296,7 +300,6 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                       </Flex>
 
                       <Flex flex="1" direction="column" gap={4} textAlign={{ base: "center", md: "left" }}>
-                        <Text fontSize={{ base: "2xl", md: "3xl" }}>{props.emoji ?? "✨"}</Text>
                         <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
                           {props.resultTitulo}
                         </Text>
@@ -337,6 +340,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
       </Flex>
 
       {celulasModal}
+      <IndiceFisiologia />
       <SiteFooter />
     </Box>
   );

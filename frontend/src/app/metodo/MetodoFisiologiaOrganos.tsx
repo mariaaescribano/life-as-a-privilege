@@ -8,14 +8,13 @@ export default function MetodoFisiologiaOrganos() {
   return (
     <ConstruirFisio
       title="Órganos"
-      pageLabel="9/"
+      pageLabel="4/4"
       prev={{ label: "← Tejidos", ruta: "/metodo/fisiologia/tejidos" }}
       introTitulo="Forma un órgano"
       instruccion="Combina varios tejidos para formar un órgano."
       zonaLabel="reúne los tejidos"
       forma="cluster"
       glow="#cfa6e0"
-      emoji="🫀"
       piezas={[
         { tipo: "tejido", color: "#cfa6e0", glyph: "T", label: "tejido", n: 4, img: `${PRE}/tejido.png` },
       ]}

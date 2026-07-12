@@ -242,7 +242,7 @@ const FisiologiaEspacio = () => {
                     </Text>
                     <Divider borderColor={fisiologiaTxt} opacity={0.25} />
                     <Text fontSize="sm" color={fisiologiaTxt} fontWeight="700">
-                      🌿 Plantas y remedios naturales
+                      Plantas y remedios naturales
                     </Text>
                     <VStack spacing={2} align="stretch">
                       {organo.resultado.plantas.map((p, i) => (
@@ -255,7 +255,6 @@ const FisiologiaEspacio = () => {
                   </>
                 ) : (
                   <VStack spacing={3} align="center" py={4}>
-                    <Text fontSize="4xl">✨</Text>
                     <Text fontSize="lg" color={fisiologiaTxt} fontWeight="700" textAlign="center">
                       Tu {organo.nombre.toLowerCase()} parece estar bien
                     </Text>

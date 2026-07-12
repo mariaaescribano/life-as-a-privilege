@@ -8,14 +8,13 @@ export default function MetodoFisiologiaTejidos() {
   return (
     <ConstruirFisio
       title="Tejidos"
-      pageLabel="8/"
-      prev={{ label: "← Célula", ruta: "/metodo/fisiologia/celula" }}
+      pageLabel="3/4"
+      prev={{ label: "← Todas tus células", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
       introTitulo="Forma un tejido"
       instruccion="Reúne varias células iguales para formar un tejido."
       zonaLabel="agrupa las células"
       forma="cluster"
       glow="#8fd6a8"
-      emoji="🧫"
       piezas={[
         { tipo: "celula", color: "#8fd6a8", glyph: "C", label: "célula", n: 6, img: `${PRE}/celula.png` },
       ]}

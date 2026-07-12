@@ -15,7 +15,19 @@ const FISIO_IMG = "/img/fondos/fisio.png";
 /** Popup INMERSIVO de "Tus células": la foto de Fisiología cubre toda la
  *  pantalla y encima aparecen todas las células (los boxes). El usuario puede
  *  pulsar cualquiera para leer su ficha. Se abre desde el `extra` del header. */
-export function TusCelulasModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export function TusCelulasModal({
+  isOpen,
+  onClose,
+  titulo = "Tus células",
+  celulas = CELULAS,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  /** Título del popup. Por defecto «Tus células»; los órganos pasan su nombre. */
+  titulo?: string;
+  /** Lista de células a mostrar. Por defecto todas las de Fisiología. */
+  celulas?: Celula[];
+}) {
   const [selected, setSelected] = useState<Celula | null>(null);
 
   // Bloquea el scroll de la página de fondo mientras el popup está abierto. Se
@@ -103,21 +115,28 @@ export function TusCelulasModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               lineHeight="1.1"
               style={{ textShadow: `0 0 14px ${BG}cc, 0 0 34px ${BG}88, 0 2px 6px rgba(0,0,0,0.6)` }}
             >
-              Tus células
+              {titulo}
             </Text>
           </Flex>
 
           {/* Rejilla de células — 4 en ordenador, 1 en móvil */}
-          <SimpleGrid
-            w="100%"
-            maxW="1200px"
-            columns={{ base: 1, sm: 2, md: 4 }}
-            spacing={{ base: 5, md: 6 }}
-          >
-            {CELULAS.map((celula) => (
-              <CelulaCard key={celula.id} celula={celula} onClick={() => setSelected(celula)} />
-            ))}
-          </SimpleGrid>
+          {celulas.length > 0 ? (
+            <SimpleGrid
+              w="100%"
+              maxW="1200px"
+              columns={{ base: 1, sm: 2, md: 4 }}
+              spacing={{ base: 5, md: 6 }}
+            >
+              {celulas.map((celula) => (
+                <CelulaCard key={celula.id} celula={celula} onClick={() => setSelected(celula)} />
+              ))}
+            </SimpleGrid>
+          ) : (
+            <Text color={`${TXT}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
+                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
+              Pronto podrás explorar las células de este órgano.
+            </Text>
+          )}
         </Flex>
       </Box>
 
@@ -126,7 +145,7 @@ export function TusCelulasModal({ isOpen, onClose }: { isOpen: boolean; onClose:
       {selected && (
         <CelulaModal
           celula={selected}
-          celulas={CELULAS}
+          celulas={celulas}
           onSelect={setSelected}
           onClose={() => setSelected(null)}
         />

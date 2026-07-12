@@ -26,13 +26,23 @@ interface Nivel {
   titulo: string;
   sub: string;
   ruta?: string;
-  locked: boolean;
+  /** Flag de metodo_fisiologia.data que debe estar en true para desbloquear
+   *  este nivel. Ausente = siempre abierto (Nivel 1). El Nivel 2 se abre al
+   *  terminar el Nivel 1 (estructuras_hecho); el Nivel 3 al terminar el 2
+   *  (organos_hecho). */
+  requiere?: string;
+  /** Antetítulo (por defecto «Nivel {n}»). P.ej. la práctica usa «Práctica». */
+  eyebrow?: string;
+  /** Si es "gota", la tarjeta muestra el icono de análisis en vez del número. */
+  iconKind?: "gota";
 }
 
 const NIVELES: Nivel[] = [
-  { n: 1, titulo: "La materia", sub: "De qué estás hecho.", ruta: "/metodo/fisiologia/particulas", locked: false },
-  { n: 2, titulo: "La vida", sub: "Cuando la materia se vuelve viva.", ruta: "/metodo/fisiologia/celula", locked: false },
-  { n: 3, titulo: "El cuerpo", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/sistemas", locked: false },
+  { n: 1, titulo: "MATERIA", sub: "De qué estás hecho.", ruta: "/metodo/fisiologia/particulas" },
+  { n: 2, titulo: "VIDA", sub: "Cuando la materia se vuelve viva.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho" },
+  { n: 3, titulo: "SISTEMAS", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/sistemas", requiere: "organos_hecho" },
+  // 4ª tarjeta · práctica (no es un nivel del ascenso): va DESPUÉS de Sistemas.
+  { n: 4, titulo: "TU ANALÍTICA", sub: "Aprende a leer tu análisis de sangre.", ruta: "/metodo/fisiologia/analitica", eyebrow: "Práctica", iconKind: "gota" },
 ];
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
@@ -44,9 +54,17 @@ const Candado = ({ size }: { size: any }) => (
   </Box>
 );
 
+// SVG gota (análisis de sangre) para la tarjeta de práctica.
+const Gota = ({ size }: { size: any }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={size} h={size} fill={fisiologiaTxt}
+       style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
+    <path d="M480-80q-133 0-226.5-92.5T160-396q0-97 76.5-210T480-880q167 161 243.5 274T800-396q0 131-93.5 223.5T480-80Z" />
+  </Box>
+);
+
 // ── Caja de un nivel (tarjeta VERTICAL, para ir las 3 en fila) ──────────────
-function NivelBox({ nivel, onEnter }: { nivel: Nivel; onEnter: () => void }) {
-  const locked = nivel.locked;
+function NivelBox({ nivel, locked, onEnter }: { nivel: Nivel; locked: boolean; onEnter: () => void }) {
   return (
     <Box
       as={locked ? "div" : "button"}
@@ -77,16 +95,20 @@ function NivelBox({ nivel, onEnter }: { nivel: Nivel; onEnter: () => void }) {
                          overlay={locked ? "rgba(0,0,0,0.6)" : `${fisiologiaBg}66`} />
 
       <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
-            h="100%" gap={{ base: 2.5, md: 3 }} px={{ base: 5, md: 6 }} py={{ base: 7, md: 9 }}>
-        {/* Círculo con el número del nivel (candado encima si está bloqueado) */}
-        <Box position="relative" flexShrink={0} w={{ base: "60px", md: "72px" }} h={{ base: "60px", md: "72px" }} mb={1}>
+            h="100%" gap={{ base: 2, md: 2.5 }} px={{ base: 5, md: 4 }} py={{ base: 6, md: 7 }}>
+        {/* Círculo con el número del nivel (o icono de práctica; candado si bloqueado) */}
+        <Box position="relative" flexShrink={0} w={{ base: "54px", md: "62px" }} h={{ base: "54px", md: "62px" }} mb={1}>
           <Box w="100%" h="100%" borderRadius="full"
                border={`2px solid ${locked ? `${fisiologiaTxt}88` : fisiologiaTxt}`}
                bg={`${fisiologiaBg}cc`} display="flex" alignItems="center" justifyContent="center">
-            <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" lineHeight="1"
-                  style={{ textShadow: `0 1px 6px ${fisiologiaBg}` }}>
-              {nivel.n}
-            </Text>
+            {nivel.iconKind === "gota" ? (
+              <Gota size={{ base: "26px", md: "30px" }} />
+            ) : (
+              <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1"
+                    style={{ textShadow: `0 1px 6px ${fisiologiaBg}` }}>
+                {nivel.n}
+              </Text>
+            )}
           </Box>
           {locked && (
             <Box position="absolute" inset={0} borderRadius="full" bg="rgba(0,0,0,0.55)"
@@ -98,13 +120,13 @@ function NivelBox({ nivel, onEnter }: { nivel: Nivel; onEnter: () => void }) {
 
         <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase"
               style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
-          Nivel {nivel.n}
+          {nivel.eyebrow ?? `Nivel ${nivel.n}`}
         </Text>
-        <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.2"
+        <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700} lineHeight="1.2"
               style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
           {nivel.titulo}
         </Text>
-        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6"
+        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.55"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
           {locked ? "Próximamente" : nivel.sub}
         </Text>
@@ -139,6 +161,8 @@ function NivelBox({ nivel, onEnter }: { nivel: Nivel; onEnter: () => void }) {
 export default function MetodoFisiologiaNiveles() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // Flags de progreso (metodo_fisiologia.data) que desbloquean cada nivel.
+  const [flags, setFlags] = useState<Record<string, boolean>>({});
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   useEffect(() => {
@@ -158,6 +182,14 @@ export default function MetodoFisiologiaNiveles() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+
+        // Progreso guardado: sirve para desbloquear los niveles 2 y 3.
+        try {
+          const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setFlags(r.data?.data ?? {});
+        } catch { /* sin fila todavía → todo bloqueado salvo Nivel 1 */ }
       } catch {
         navigate("/metodo/fisiologia");
         return;
@@ -176,7 +208,7 @@ export default function MetodoFisiologiaNiveles() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1040px" gap={7}>
+        <Flex direction="column" align="center" w="100%" maxW="1200px" gap={7}>
 
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
@@ -198,19 +230,77 @@ export default function MetodoFisiologiaNiveles() {
             </Text>
           </Reveal>
 
-          {/* Las 3 en fila (en móvil se apilan). Entran una tras otra de
-              izquierda a derecha (direction="right" entra desde la izquierda),
-              con retraso escalonado, para darle dinamismo. */}
+          {/* Las 4 tarjetas en fila (en móvil se apilan). Entran de izquierda a
+              derecha con retraso escalonado. La 4ª (TU ANALÍTICA) va tras Sistemas. */}
           <Flex direction={{ base: "column", md: "row" }} align="stretch"
-                justify="center" gap={{ base: 4, md: 5 }} w="100%">
-            {NIVELES.map((nivel, i) => (
-              <Reveal key={nivel.n} direction="right" distance={44} delay={0.15 * i} duration={0.6}
-                      flex={{ md: 1 }} w="100%" maxW={{ base: "380px", md: "none" }}
-                      mx={{ base: "auto", md: 0 }} display="flex">
-                <NivelBox nivel={nivel} onEnter={() => nivel.ruta && navigate(nivel.ruta)} />
-              </Reveal>
-            ))}
+                justify="center" gap={{ base: 4, md: 4 }} w="100%">
+            {NIVELES.map((nivel, i) => {
+              const locked = nivel.requiere ? !flags[nivel.requiere] : false;
+              return (
+                <Reveal key={nivel.n} direction="right" distance={44} delay={0.15 * i} duration={0.6}
+                        flex={{ md: 1 }} w="100%" maxW={{ base: "380px", md: "none" }}
+                        mx={{ base: "auto", md: 0 }} display="flex">
+                  <NivelBox nivel={nivel} locked={locked}
+                            onEnter={() => { if (!locked && nivel.ruta) navigate(nivel.ruta); }} />
+                </Reveal>
+              );
+            })}
           </Flex>
+
+          {/* ── 4ª caja · práctica (no es un nivel del ascenso): leer tu propia
+              analítica. Abierta siempre. ── */}
+          <Reveal direction="up" distance={22} delay={0.5} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <Box as="button" onClick={() => navigate("/metodo/fisiologia/analitica")}
+                 position="relative" w="100%" maxW="760px" borderRadius="2xl" overflow="hidden"
+                 cursor="pointer" textAlign="left"
+                 border={`1px solid ${fisiologiaTxt}77`}
+                 boxShadow={`0 0 16px ${fisiologiaTxt}26, 0 0 40px ${fisiologiaTxt}16, inset 0 0 24px rgba(0,0,0,0.25)`}
+                 transition="all 0.25s ease"
+                 _hover={{ transform: "translateY(-4px)", borderColor: fisiologiaTxt,
+                           boxShadow: `0 0 26px ${fisiologiaTxt}88, 0 0 64px ${fisiologiaTxt}44, inset 0 0 24px rgba(0,0,0,0.2)` }}
+                 _active={{ transform: "translateY(-1px)" }}>
+              <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}66`} />
+              <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 5 }}
+                    px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+                {/* Icono: gota (análisis de sangre) */}
+                <Box flexShrink={0} w={{ base: "56px", md: "64px" }} h={{ base: "56px", md: "64px" }}
+                     borderRadius="full" border={`2px solid ${fisiologiaTxt}`} bg={`${fisiologiaBg}cc`}
+                     display="flex" alignItems="center" justifyContent="center">
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                       w={{ base: "28px", md: "32px" }} h={{ base: "28px", md: "32px" }} fill={fisiologiaTxt}
+                       style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
+                    <path d="M480-80q-133 0-226.5-92.5T160-396q0-97 76.5-210T480-880q167 161 243.5 274T800-396q0 131-93.5 223.5T480-80Z" />
+                  </Box>
+                </Box>
+
+                <Box flex="1" minW={0}>
+                  <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase"
+                        style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
+                    Práctica
+                  </Text>
+                  <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.2"
+                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+                    TU ANALÍTICA
+                  </Text>
+                  <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={0.5}
+                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+                    Aprende a leer tu análisis de sangre.
+                  </Text>
+                </Box>
+
+                <Flex flexShrink={0} align="center" gap={1.5} color={fisiologiaTxt}>
+                  <Text display={{ base: "none", sm: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight={700}
+                        letterSpacing="0.04em" style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
+                    Entrar
+                  </Text>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                       w="18px" h="18px" fill="currentColor" style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}>
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                  </Box>
+                </Flex>
+              </Flex>
+            </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

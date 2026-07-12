@@ -8,14 +8,13 @@ export default function MetodoFisiologiaCelula() {
   return (
     <ConstruirFisio
       title="Célula"
-      pageLabel="7/"
+      pageLabel="1/2"
       prev={{ label: "← Estructuras", ruta: "/metodo/fisiologia/estructuras" }}
       introTitulo="Construye una célula"
       instruccion="Reúne las estructuras dentro del citoplasma para formar una célula viva."
       zonaLabel="el citoplasma"
       forma="cluster"
       glow="#8fd6a8"
-      emoji="🔬"
       piezas={[
         { tipo: "adn", color: "#9ab6f0", glyph: "N", label: "ADN", n: 1, img: `${PRE}/adn.png` },
         { tipo: "membrana", color: "#f2c86b", glyph: "L", label: "membrana", n: 1, img: `${PRE}/membrana.png` },
@@ -29,7 +28,8 @@ export default function MetodoFisiologiaCelula() {
         <>Todo funciona a la vez, como una ciudad diminuta. Tu cuerpo tiene alrededor de <b>37 billones</b> de ellas.</>,
       ]}
       dataKey="celula_hecho"
-      next={{ label: "Tejidos →", ruta: "/metodo/fisiologia/tejidos" }}
+      next={{ label: "Todas tus células →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
+      headerNext={{ label: "Todas tus células →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
     />
   );
 }

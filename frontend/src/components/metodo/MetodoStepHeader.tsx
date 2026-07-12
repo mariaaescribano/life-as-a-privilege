@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
-import { astrologiaNom, neuropsicologiaNom, tcmNom } from "../../GlobalVariables";
+import { astrologiaNom, fisiologiaNom, neuropsicologiaNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 
@@ -168,7 +168,7 @@ export function MetodoStepHeader({
   // En TCM queremos que TODOS los títulos del recorrido salgan igual de grandes:
   // desactivamos el auto-encogido (que hacía más pequeños los títulos largos como
   // «Los Cinco Elementos») y, si no cabe en una línea, dejamos que envuelva.
-  const tituloUniforme = headerNom === tcmNom;
+  const tituloUniforme = headerNom === tcmNom || headerNom === fisiologiaNom;
   // En todo el recorrido de Psicología, el header lleva un botón "Cursos" que
   // abre la pantalla completa con los cursos orientativos de la disciplina.
   const isPsico = headerNom === neuropsicologiaNom;

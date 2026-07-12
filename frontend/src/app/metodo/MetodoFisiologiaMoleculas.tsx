@@ -10,6 +10,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import {
   API_URL,
   fisiologiaBg,
@@ -38,15 +39,15 @@ const BOND = "#f2e2b0"; // color del enlace
 
 // Tamaños del átomo según contexto.
 const S_DRAG: Record<Tipo, any> = {
-  oxigeno: { base: "72px", md: "92px" }, hidrogeno: { base: "46px", md: "58px" }, carbono: { base: "64px", md: "82px" },
+  oxigeno: { base: "84px", md: "108px" }, hidrogeno: { base: "54px", md: "68px" }, carbono: { base: "76px", md: "96px" },
 };
 const S_ZONA: Record<Tipo, any> = {
-  oxigeno: { base: "72px", md: "88px" }, hidrogeno: { base: "42px", md: "52px" }, carbono: { base: "62px", md: "78px" },
+  oxigeno: { base: "84px", md: "104px" }, hidrogeno: { base: "50px", md: "62px" }, carbono: { base: "74px", md: "92px" },
 };
 const S_BIG: Record<Tipo, any> = {
   oxigeno: { base: "96px", md: "116px" }, hidrogeno: { base: "54px", md: "66px" }, carbono: { base: "82px", md: "102px" },
 };
-const S_MINI: Record<Tipo, any> = { oxigeno: "42px", hidrogeno: "24px", carbono: "36px" };
+const S_MINI: Record<Tipo, any> = { oxigeno: "66px", hidrogeno: "40px", carbono: "58px" };
 
 // ── Moléculas del recorrido (en orden) ──────────────────────────────────────
 // slots[0] = átomo central (al que se enlazan los demás). x/y en % del panel.
@@ -55,7 +56,6 @@ interface Mol {
   key: string;
   nombre: string;
   formula: string;
-  emoji: string;
   instruccion: string;
   slots: Slot[];
   titulo: string;
@@ -67,7 +67,6 @@ const MOLS: Mol[] = [
     key: "agua",
     nombre: "agua",
     formula: "H₂O",
-    emoji: "💧",
     instruccion: "Une un oxígeno y dos hidrógenos dentro de la zona de enlace.",
     slots: [
       { tipo: "oxigeno", x: 50, y: 60 },
@@ -77,15 +76,13 @@ const MOLS: Mol[] = [
     titulo: "¡Has formado una molécula de agua!",
     parrafos: [
       <>Una <b>molécula</b> nace cuando varios átomos se unen <b>compartiendo electrones</b>: esa unión es un <b>enlace</b>. Aquí, un oxígeno se une a dos hidrógenos y forman el <b>agua</b>, H₂O.</>,
-      <>El agua es la <b>molécula de la vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células.</>,
-      <>Y no es un detalle menor: alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
+      <>El agua es la <b>molécula de la Vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células. Alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
     ],
   },
   {
     key: "co2",
     nombre: "dióxido de carbono",
     formula: "CO₂",
-    emoji: "🌬️",
     instruccion: "Une un carbono y dos oxígenos dentro de la zona de enlace.",
     slots: [
       { tipo: "carbono", x: 50, y: 50 },
@@ -102,7 +99,6 @@ const MOLS: Mol[] = [
     key: "o2",
     nombre: "oxígeno",
     formula: "O₂",
-    emoji: "🫧",
     instruccion: "Une dos oxígenos dentro de la zona de enlace.",
     slots: [
       { tipo: "oxigeno", x: 34, y: 50 },
@@ -349,7 +345,7 @@ export default function MetodoFisiologiaMoleculas() {
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Moléculas"
-            pageLabel="4/"
+            pageLabel="3/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
@@ -357,23 +353,16 @@ export default function MetodoFisiologiaMoleculas() {
             mb={0}
             prev={{ label: "← Átomos", onClick: () => navigate("/metodo/fisiologia/atomos") }}
             extra={celulasBtn}
+            next={{ label: "Macromoléculas →", onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
           />
 
           {/* Instrucción (solo mientras forma una molécula) */}
           <AnimatePresence>
             {!completo && !terminado && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase" mb={1}
-                      style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
-                  Molécula {indice + 1} de {MOLS.length} · {mol.formula}
-                </Text>
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" fontStyle="italic"
                       letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                   Forma una molécula de {mol.nombre}
-                </Text>
-                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                      style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  {mol.instruccion}
                 </Text>
               </MBox>
             )}
@@ -383,6 +372,21 @@ export default function MetodoFisiologiaMoleculas() {
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
             <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+            {/* Botón «volver a hacer» arriba a la derecha del box (vista final) */}
+            {terminado && (
+              <Box as="button" onClick={empezarDeCero}
+                   position="absolute" top={{ base: 3, md: 4 }} right={{ base: 3, md: 4 }} zIndex={3}
+                   display="inline-flex" alignItems="center" gap={1.5}
+                   px={{ base: 3, md: 4 }} py={{ base: 1.5, md: 2 }} borderRadius="full"
+                   bg="rgba(0,0,0,0.4)" border={`1px solid ${fisiologiaTxt}aa`} color={fisiologiaTxt}
+                   fontFamily="'EB Garamond', serif" fontWeight={700} fontSize={{ base: "2xs", md: "xs" }}
+                   letterSpacing="0.04em" cursor="pointer" sx={{ backdropFilter: "blur(4px)" }}
+                   transition="all 0.2s"
+                   _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: fisiologiaTxt, transform: "translateY(-1px)" }}>
+                ↺ Volver a hacer
+              </Box>
+            )}
 
             <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
               <AnimatePresence mode="wait">
@@ -476,7 +480,6 @@ export default function MetodoFisiologiaMoleculas() {
 
                       {/* Texto (derecha) */}
                       <Flex flex="1" direction="column" gap={4} textAlign={{ base: "center", md: "left" }}>
-                        <Text fontSize={{ base: "2xl", md: "3xl" }}>{mol.emoji}</Text>
                         <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                               letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
                           {mol.titulo}
@@ -525,15 +528,15 @@ export default function MetodoFisiologiaMoleculas() {
                           <MBox key={m.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.15 * i, duration: 0.6, ease: "easeOut" }}
                                 display="flex" flexDirection="column" alignItems="center" gap={2}>
-                            <Box position="relative" w={{ base: "128px", md: "156px" }} h={{ base: "128px", md: "156px" }}>
+                            <Box position="relative" w={{ base: "190px", md: "240px" }} h={{ base: "190px", md: "240px" }}>
                               <Box position="absolute" inset="0"
                                    sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
                                 <MoleculaFormada mol={m} tam={S_MINI} />
                               </Box>
                             </Box>
-                            <Text color="white" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                            <Text color="white" fontWeight="700" fontSize={{ base: "lg", md: "xl" }}
                                   style={{ textShadow: INK }}>{m.formula}</Text>
-                            <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                            <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                                   textAlign="center">{m.nombre}</Text>
                           </MBox>
                         ))}
@@ -545,25 +548,6 @@ export default function MetodoFisiologiaMoleculas() {
                           Las moléculas más importantes para la Vida, son parte de ti.
                         </Text>
                       </Box>
-
-                      <Flex gap={4} wrap="wrap" justify="center">
-                        <Box as="button" onClick={empezarDeCero}
-                             px={6} py={2.5} borderRadius="full" bg="transparent"
-                             color="rgba(255,255,255,0.85)" border="1px solid rgba(255,255,255,0.45)"
-                             fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
-                             letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                             _hover={{ borderColor: "white", color: "white" }}>
-                          ↺ Empezar de nuevo
-                        </Box>
-                        <Box as="button" onClick={() => navigate("/metodo/fisiologia/macromoleculas")}
-                             px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                             fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                             letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                             boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                             _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
-                          Macromoléculas →
-                        </Box>
-                      </Flex>
                     </Flex>
                   </MBox>
                 )}
@@ -574,6 +558,7 @@ export default function MetodoFisiologiaMoleculas() {
       </Flex>
 
       {celulasModal}
+      <IndiceFisiologia />
       <SiteFooter />
     </Box>
   );

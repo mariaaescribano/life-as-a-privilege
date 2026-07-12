@@ -9,14 +9,13 @@ export default function MetodoFisiologiaOrganismo() {
   return (
     <ConstruirFisio
       title="El cuerpo"
-      pageLabel="11/"
+      pageLabel="2/2"
       prev={{ label: "← Sistemas", ruta: "/metodo/fisiologia/sistemas" }}
       introTitulo="Construye un ser humano"
       instruccion="Reúne todos los sistemas para formar un organismo completo."
       zonaLabel="reúne los sistemas"
       forma="cluster"
       glow={fisiologiaTxt}
-      emoji="🌟"
       piezas={[
         { tipo: "sistema", color: fisiologiaTxt, glyph: "S", label: "sistema", n: 5, img: `${PRE}/sistema.png` },
       ]}
