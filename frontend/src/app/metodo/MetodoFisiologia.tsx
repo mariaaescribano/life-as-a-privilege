@@ -138,7 +138,6 @@ export default function MetodoFisiologia() {
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Fisiología"
-            pageLabel="1/"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}

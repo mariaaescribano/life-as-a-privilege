@@ -247,60 +247,6 @@ export default function MetodoFisiologiaNiveles() {
             })}
           </Flex>
 
-          {/* ── 4ª caja · práctica (no es un nivel del ascenso): leer tu propia
-              analítica. Abierta siempre. ── */}
-          <Reveal direction="up" distance={22} delay={0.5} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Box as="button" onClick={() => navigate("/metodo/fisiologia/analitica")}
-                 position="relative" w="100%" maxW="760px" borderRadius="2xl" overflow="hidden"
-                 cursor="pointer" textAlign="left"
-                 border={`1px solid ${fisiologiaTxt}77`}
-                 boxShadow={`0 0 16px ${fisiologiaTxt}26, 0 0 40px ${fisiologiaTxt}16, inset 0 0 24px rgba(0,0,0,0.25)`}
-                 transition="all 0.25s ease"
-                 _hover={{ transform: "translateY(-4px)", borderColor: fisiologiaTxt,
-                           boxShadow: `0 0 26px ${fisiologiaTxt}88, 0 0 64px ${fisiologiaTxt}44, inset 0 0 24px rgba(0,0,0,0.2)` }}
-                 _active={{ transform: "translateY(-1px)" }}>
-              <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}66`} />
-              <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 5 }}
-                    px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
-                {/* Icono: gota (análisis de sangre) */}
-                <Box flexShrink={0} w={{ base: "56px", md: "64px" }} h={{ base: "56px", md: "64px" }}
-                     borderRadius="full" border={`2px solid ${fisiologiaTxt}`} bg={`${fisiologiaBg}cc`}
-                     display="flex" alignItems="center" justifyContent="center">
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                       w={{ base: "28px", md: "32px" }} h={{ base: "28px", md: "32px" }} fill={fisiologiaTxt}
-                       style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
-                    <path d="M480-80q-133 0-226.5-92.5T160-396q0-97 76.5-210T480-880q167 161 243.5 274T800-396q0 131-93.5 223.5T480-80Z" />
-                  </Box>
-                </Box>
-
-                <Box flex="1" minW={0}>
-                  <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase"
-                        style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
-                    Práctica
-                  </Text>
-                  <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.2"
-                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
-                    TU ANALÍTICA
-                  </Text>
-                  <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={0.5}
-                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-                    Aprende a leer tu análisis de sangre.
-                  </Text>
-                </Box>
-
-                <Flex flexShrink={0} align="center" gap={1.5} color={fisiologiaTxt}>
-                  <Text display={{ base: "none", sm: "block" }} fontSize={{ base: "sm", md: "md" }} fontWeight={700}
-                        letterSpacing="0.04em" style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
-                    Entrar
-                  </Text>
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                       w="18px" h="18px" fill="currentColor" style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}>
-                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-                  </Box>
-                </Flex>
-              </Flex>
-            </Box>
-          </Reveal>
         </Flex>
       </Flex>
 

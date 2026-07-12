@@ -402,16 +402,6 @@ export default function MetodoFisiologiaParticulas() {
                                style={{ filter: `drop-shadow(0 0 18px ${fisiologiaTxt}44)` }}
                                fallback={<Box w="100%" h="100%" borderRadius="full" bg={fisiologiaBg} />} />
                       </Box>
-                      {/* Rehacer: acción discreta bajo el dibujo */}
-                      <Box as="button" onClick={reiniciar}
-                           display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-                           bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)"
-                           border="1px solid rgba(255,255,255,0.28)"
-                           fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
-                           letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                           _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                        ↺ Construir de nuevo
-                      </Box>
                     </Flex>
                   </Box>
 
@@ -435,6 +425,18 @@ export default function MetodoFisiologiaParticulas() {
                         Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.
                       </Text>
                     </Flex>
+                  </Box>
+                </Flex>
+
+                {/* Construir de nuevo — centrado, fuera del box, abajo */}
+                <Flex justify="center" w="100%" mt={{ base: 5, md: 6 }}>
+                  <Box as="button" onClick={reiniciar}
+                       display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+                       bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                       fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                       letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                       _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                    ↺ Construir de nuevo
                   </Box>
                 </Flex>
               </MBox>

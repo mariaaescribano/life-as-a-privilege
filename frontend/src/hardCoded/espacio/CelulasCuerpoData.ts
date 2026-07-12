@@ -401,4 +401,253 @@ export const celulas: Celula[] = [
     cuidados:
       "Se benefician enormemente del ejercicio cardiovascular, buena alimentación y con unos niveles de LDL y cortisol bajos.",
   },
+
+  // ── Sistema nervioso (nuevas) ──
+  {
+    id: "endotelial-cerebral",
+    nombre: "Célula endotelial cerebral",
+    foto: "/viñetas/fisiologia/celulas/endotelialcerebral.png",
+    descripcion:
+      "Recubren los vasos sanguíneos del cerebro y forman la barrera hematoencefálica: una frontera extraordinariamente selectiva que decide qué entra y qué no al tejido nervioso. Unidas entre sí de forma muy estrecha, protegen a las neuronas de toxinas, patógenos y cambios bruscos de la sangre, mientras dejan pasar el oxígeno y los nutrientes esenciales.",
+    cuidados:
+      "Se benefician del ejercicio, el control de la tensión arterial y una dieta antiinflamatoria que cuide los vasos.",
+  },
+  {
+    id: "pericito",
+    nombre: "Pericito",
+    foto: "/viñetas/fisiologia/celulas/pericito.png",
+    descripcion:
+      "Abrazan los capilares más pequeños envolviéndolos por fuera. Regulan el flujo de sangre ajustando el diámetro del capilar y participan en el mantenimiento de la barrera hematoencefálica y en la reparación de los vasos. Son guardianes silenciosos de la microcirculación.",
+    cuidados:
+      "Se cuidan con buena salud vascular: ejercicio, azúcar en sangre estable y evitar el tabaco.",
+  },
+  {
+    id: "celula-madre-neural",
+    nombre: "Célula madre neural",
+    foto: "/viñetas/fisiologia/celulas/madreneural.png",
+    descripcion:
+      "Son las células capaces de generar nuevas neuronas y células gliales. Aunque gran parte del cerebro se forma antes de nacer, en algunas zonas siguen produciendo neuronas durante toda la vida (neurogénesis), participando en el aprendizaje y la memoria.",
+    cuidados:
+      "Favorece la neurogénesis con ejercicio, aprendizaje continuo, buen sueño y manejo del estrés.",
+  },
+
+  // ── Sistema respiratorio (nuevas) ──
+  {
+    id: "celula-ciliada",
+    nombre: "Célula ciliada",
+    foto: "/viñetas/fisiologia/celulas/ciliada.png",
+    descripcion:
+      "Recubren las vías respiratorias y están cubiertas de cilios, diminutos “pelillos” que se mueven de forma coordinada como un campo de trigo al viento. Con ese movimiento arrastran hacia arriba el moco cargado de polvo, partículas y microbios para expulsarlo, manteniendo limpios los pulmones.",
+    cuidados:
+      "Protégelas evitando el humo del tabaco (que paraliza los cilios) y respirando aire limpio y bien hidratado.",
+  },
+  {
+    id: "celula-club",
+    nombre: "Célula club (Clara)",
+    foto: "/viñetas/fisiologia/celulas/club.png",
+    descripcion:
+      "Viven en las vías respiratorias pequeñas. Secretan sustancias protectoras que ayudan a detoxificar el aire inhalado, defienden frente a la inflamación y participan en la regeneración del epitelio respiratorio cuando se daña.",
+    cuidados:
+      "Se benefician de un entorno respiratorio limpio y de evitar contaminantes y humo.",
+  },
+
+  // ── Sistema cardiovascular (nuevas) ──
+  {
+    id: "marcapasos",
+    nombre: "Célula marcapasos (nodo sinusal)",
+    foto: "/viñetas/fisiologia/celulas/marcapasos.png",
+    descripcion:
+      "Son las células que marcan el ritmo del corazón. Generan de forma espontánea el impulso eléctrico que inicia cada latido y lo hacen sin necesidad de una orden externa. Ese impulso se propaga por todo el corazón y coordina la contracción, sosteniendo el pulso de la vida.",
+    cuidados:
+      "Se equilibran con buena forma cardiovascular, descanso y regulación del sistema nervioso (respira, medita).",
+  },
+  {
+    id: "purkinje",
+    nombre: "Célula de Purkinje",
+    foto: "/viñetas/fisiologia/celulas/purkinje.png",
+    descripcion:
+      "Forman una red de conducción rápida que lleva el impulso eléctrico hasta las paredes de los ventrículos del corazón. Gracias a ellas, la contracción del músculo cardíaco es coordinada y potente, permitiendo que la sangre se bombee con fuerza en cada latido.",
+    cuidados:
+      "Dependen de un corazón sano: ejercicio, buen equilibrio de electrolitos y control del estrés.",
+  },
+
+  // ── Sangre e inmunidad (nuevas) ──
+  {
+    id: "plaquetas",
+    nombre: "Plaquetas",
+    foto: "/viñetas/fisiologia/celulas/plaquetas.png",
+    descripcion:
+      "Son fragmentos celulares que vigilan la integridad de los vasos sanguíneos. Cuando hay una herida, acuden rápidamente, se agrupan y forman un tapón inicial que detiene el sangrado, activando después la cascada de coagulación para sellar la lesión.",
+    cuidados:
+      "Se benefician de buena hidratación, vitamina K y una alimentación equilibrada.",
+  },
+  {
+    id: "eosinofilos",
+    nombre: "Eosinófilos",
+    foto: "/viñetas/fisiologia/celulas/eosinofilos.png",
+    descripcion:
+      "Son células del sistema inmunitario especializadas en defender frente a parásitos y en participar en las reacciones alérgicas. Liberan sustancias potentes que destruyen amenazas grandes que no pueden fagocitarse.",
+    cuidados:
+      "Se equilibran con un sistema inmune sano y evitando la inflamación alérgica crónica.",
+  },
+  {
+    id: "basofilos",
+    nombre: "Basófilos",
+    foto: "/viñetas/fisiologia/celulas/basofilos.png",
+    descripcion:
+      "Son células inmunitarias que liberan histamina y otras sustancias que desencadenan la respuesta inflamatoria y alérgica. Ayudan a atraer a otras células defensivas hacia la zona donde hay una amenaza.",
+    cuidados:
+      "Se benefician de un sistema inmune regulado y de evitar desencadenantes alérgicos innecesarios.",
+  },
+  {
+    id: "monocitos",
+    nombre: "Monocitos",
+    foto: "/viñetas/fisiologia/celulas/monocitos.png",
+    descripcion:
+      "Circulan por la sangre como reserva móvil del sistema inmune. Cuando detectan una infección o daño, migran a los tejidos y se transforman en macrófagos o células dendríticas, fagocitando amenazas y activando la respuesta inmune.",
+    cuidados:
+      "Se apoyan con buen descanso, nutrición adecuada y una dieta antiinflamatoria.",
+  },
+
+  // ── Sistema digestivo · Estómago (nuevas) ──
+  {
+    id: "parietal",
+    nombre: "Célula parietal",
+    foto: "/viñetas/fisiologia/celulas/parietal.png",
+    descripcion:
+      "Producen el ácido clorhídrico del estómago, que ayuda a descomponer los alimentos y a eliminar microorganismos. También fabrican el factor intrínseco, imprescindible para absorber la vitamina B12 más adelante en el intestino.",
+    cuidados:
+      "Se cuidan con horarios de comida regulares, control del estrés y evitando el abuso de antiácidos sin necesidad.",
+  },
+  {
+    id: "principal",
+    nombre: "Célula principal",
+    foto: "/viñetas/fisiologia/celulas/principal.png",
+    descripcion:
+      "Secretan pepsinógeno, que en contacto con el ácido del estómago se transforma en pepsina, la enzima que comienza a digerir las proteínas de los alimentos.",
+    cuidados:
+      "Se benefician de comer con calma y masticar bien para facilitar la digestión.",
+  },
+  {
+    id: "mucosa-gastrica",
+    nombre: "Célula mucosa gástrica",
+    foto: "/viñetas/fisiologia/celulas/mucosagastrica.png",
+    descripcion:
+      "Producen una capa de moco y bicarbonato que recubre el estómago y lo protege de su propio ácido. Sin este escudo, el ácido dañaría la pared gástrica.",
+    cuidados:
+      "Protégelas evitando el exceso de alcohol, tabaco y antiinflamatorios que debilitan la capa protectora.",
+  },
+  {
+    id: "enteroendocrinas-gastricas",
+    nombre: "Célula enteroendocrina gástrica",
+    foto: "/viñetas/fisiologia/celulas/enteroendocrinasgastricas.png",
+    descripcion:
+      "“Sienten” lo que llega al estómago y responden produciendo hormonas como la gastrina, que regula la secreción de ácido y coordina la actividad digestiva con el resto del cuerpo.",
+    cuidados:
+      "Se equilibran con una alimentación regular y ritmos de comida estables.",
+  },
+
+  // ── Sistema digestivo · Intestino (nueva) ──
+  {
+    id: "celula-madre-intestinal",
+    nombre: "Célula madre intestinal",
+    foto: "/viñetas/fisiologia/celulas/madreintestinal.png",
+    descripcion:
+      "Viven en el fondo de las criptas intestinales y se dividen sin descanso para renovar por completo el revestimiento del intestino cada pocos días. Gracias a ellas, la frontera intestinal se mantiene siempre joven y funcional.",
+    cuidados:
+      "Se favorecen con una microbiota sana, fibra y baja inflamación intestinal.",
+  },
+
+  // ── Tiroides (nuevas) ──
+  {
+    id: "tirocito",
+    nombre: "Tirocito",
+    foto: "/viñetas/fisiologia/celulas/tirocito.png",
+    descripcion:
+      "Son las células principales de la tiroides. Producen las hormonas tiroideas (T3 y T4) a partir de yodo, hormonas que regulan el metabolismo de todo el cuerpo: la velocidad a la que quemamos energía, la temperatura, el ritmo cardíaco y hasta el estado de ánimo.",
+    cuidados:
+      "Se benefician de un aporte adecuado de yodo y selenio, y de un buen equilibrio del estrés.",
+  },
+  {
+    id: "celula-c",
+    nombre: "Célula C (parafolicular)",
+    foto: "/viñetas/fisiologia/celulas/celulac.png",
+    descripcion:
+      "Producen calcitonina, una hormona que ayuda a bajar el nivel de calcio en la sangre cuando está demasiado alto, favoreciendo su depósito en el hueso. Participan en el delicado equilibrio del calcio del cuerpo.",
+    cuidados:
+      "Se apoyan con una buena salud ósea y niveles equilibrados de calcio y vitamina D.",
+  },
+
+  // ── Riñón (nuevas) ──
+  {
+    id: "tubulo-proximal",
+    nombre: "Célula del túbulo proximal",
+    foto: "/viñetas/fisiologia/celulas/tubuloproximal.png",
+    descripcion:
+      "Son las primeras en trabajar sobre el filtrado que sale del glomérulo. Recuperan la mayor parte del agua, la glucosa, los aminoácidos y las sales útiles, devolviéndolos a la sangre para que no se pierdan por la orina.",
+    cuidados:
+      "Se cuidan con buena hidratación, azúcar en sangre estable y evitando la tensión arterial alta.",
+  },
+  {
+    id: "asa-henle",
+    nombre: "Célula del asa de Henle",
+    foto: "/viñetas/fisiologia/celulas/asahenle.png",
+    descripcion:
+      "Crean un gradiente de concentración de sales dentro del riñón que permite concentrar la orina y ahorrar agua cuando el cuerpo la necesita. Son clave para mantener el equilibrio de líquidos.",
+    cuidados:
+      "Se benefician de una hidratación constante y de un consumo moderado de sal.",
+  },
+  {
+    id: "tubulo-distal",
+    nombre: "Célula del túbulo distal",
+    foto: "/viñetas/fisiologia/celulas/tubulodistal.png",
+    descripcion:
+      "Realizan el ajuste fino del filtrado: bajo el control de hormonas como la aldosterona, deciden cuánta sal y agua reabsorber y cuánto potasio eliminar, afinando el equilibrio interno y la tensión arterial.",
+    cuidados:
+      "Se apoyan con equilibrio electrolítico, hidratación y buena regulación hormonal.",
+  },
+
+  // ── Músculo (nueva) ──
+  {
+    id: "satelite",
+    nombre: "Célula satélite",
+    foto: "/viñetas/fisiologia/celulas/satelite.png",
+    descripcion:
+      "Son las células madre del músculo. Descansan junto a las fibras musculares y, cuando el músculo se daña o se somete a esfuerzo, se activan para repararlo y hacerlo crecer. Son la razón por la que el músculo se fortalece con el entrenamiento.",
+    cuidados:
+      "Se activan con ejercicio de fuerza, suficiente proteína y buen descanso.",
+  },
+
+  // ── Esqueleto (nueva) ──
+  {
+    id: "condrocito",
+    nombre: "Condrocito",
+    foto: "/viñetas/fisiologia/celulas/condrocito.png",
+    descripcion:
+      "Son las células del cartílago. Fabrican y mantienen la matriz flexible y resistente que recubre las articulaciones y amortigua el roce entre los huesos. El cartílago se nutre lentamente y con poca sangre, por lo que se repara con dificultad.",
+    cuidados:
+      "Se benefician del movimiento suave y regular, un peso saludable y una buena hidratación de las articulaciones.",
+  },
+
+  // ── Piel (nueva) ──
+  {
+    id: "merkel",
+    nombre: "Célula de Merkel",
+    foto: "/viñetas/fisiologia/celulas/merkel.png",
+    descripcion:
+      "Son receptores del tacto situados en las capas profundas de la piel, sobre todo en zonas muy sensibles como las yemas de los dedos. Detectan la presión suave y los detalles finos de las texturas, conectando la piel con el sistema nervioso.",
+    cuidados:
+      "Se mantienen sanas cuidando la piel y el sistema nervioso: buena nutrición, hidratación y descanso.",
+  },
+
+  // ── Tejido conectivo (nueva) ──
+  {
+    id: "mastocito",
+    nombre: "Mastocito",
+    foto: "/viñetas/fisiologia/celulas/mastocito.png",
+    descripcion:
+      "Son centinelas del tejido conectivo. Almacenan histamina y otras sustancias que liberan ante una amenaza o un alérgeno, desencadenando la inflamación y atrayendo a otras células inmunes. Son protagonistas de las reacciones alérgicas.",
+    cuidados:
+      "Se equilibran evitando desencadenantes alérgicos y manteniendo baja la inflamación crónica.",
+  },
 ];

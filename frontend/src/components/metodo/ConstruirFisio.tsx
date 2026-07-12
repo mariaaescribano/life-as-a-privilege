@@ -230,13 +230,13 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             )}
           </AnimatePresence>
 
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-               boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
-            <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-              <AnimatePresence mode="wait">
-                {!completo ? (
-                  <MBox key="a" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4 }}>
+          <AnimatePresence mode="wait">
+            {!completo ? (
+              <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4 }}>
+                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                     boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                  <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
                     <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 8, md: 10 }} pl={{ md: 4 }}>
 
                       {/* Zona de ensamblaje */}
@@ -285,57 +285,78 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                         </Flex>
                       </Flex>
                     </Flex>
-                  </MBox>
-                ) : (
-                  <MBox key="b" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}>
-                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 7, md: 12 }}>
-                      <Flex flexShrink={0} justify="center" align="center" position="relative"
-                            w={{ base: "250px", md: "310px" }} h={{ base: "250px", md: "310px" }}>
+                  </Box>
+                </Box>
+              </MBox>
+            ) : (
+              <MBox key="b" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}>
+                <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
+
+                  {/* ── Box foto ── */}
+                  <Box position="relative" flex={{ base: "1 1 auto", md: "0 0 42%" }} borderRadius="2xl" overflow="hidden"
+                       boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} direction="column" justify="center" align="center"
+                          px={{ base: 6, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "280px", md: "360px" }}>
+                      <Box position="relative" w={{ base: "230px", md: "290px" }} h={{ base: "230px", md: "290px" }}>
                         <Box position="absolute" inset="-4%" borderRadius="full" pointerEvents="none"
                              animation={`${shimmer} 3.6s ease-in-out infinite`}
                              sx={{ boxShadow: `0 0 48px ${props.glow}55, 0 0 90px ${props.glow}33` }} />
                         <Image src={props.resultImg ?? ""} alt={props.resultTitulo} w="100%" h="100%" objectFit="contain"
                                style={{ filter: `drop-shadow(0 0 16px ${props.glow}55)` }}
                                fallback={<Dibujada piezas={puestas.length ? puestas : flat()} forma={props.forma} />} />
-                      </Flex>
+                      </Box>
+                    </Flex>
+                  </Box>
 
-                      <Flex flex="1" direction="column" gap={4} textAlign={{ base: "center", md: "left" }}>
-                        <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
-                          {props.resultTitulo}
+                  {/* ── Box texto ── */}
+                  <Box position="relative" flex="1" borderRadius="2xl" overflow="hidden"
+                       boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
+                          px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
+                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
+                        {props.resultTitulo}
+                      </Text>
+                      <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
+                           bgGradient={`linear(to-r, ${props.glow}aa, transparent)`} />
+                      {props.resultParrafos.map((p, i) => (
+                        <Text key={i} color={i === props.resultParrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
+                              fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
+                              fontWeight={i === props.resultParrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
+                          {p}
                         </Text>
-                        <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
-                             bgGradient={`linear(to-r, ${props.glow}aa, transparent)`} />
-                        {props.resultParrafos.map((p, i) => (
-                          <Text key={i} color={i === props.resultParrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
-                                fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
-                                fontWeight={i === props.resultParrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
-                            {p}
-                          </Text>
-                        ))}
-                        <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
-                          <Box as="button" onClick={reiniciar}
-                               px={6} py={2.5} borderRadius="full" bg="transparent" color="rgba(255,255,255,0.85)"
-                               border="1px solid rgba(255,255,255,0.45)" fontFamily="'EB Garamond', serif" fontWeight="600"
-                               fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                               _hover={{ borderColor: "white", color: "white" }}>
-                            ↺ Construir de nuevo
-                          </Box>
-                          <Box as="button" onClick={() => navigate(props.next.ruta)}
-                               px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                               fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                               letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                               boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                               _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                            {props.next.label}
-                          </Box>
-                        </Flex>
+                      ))}
+                      <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
+                        <Box as="button" onClick={() => navigate(props.next.ruta)}
+                             px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
+                             fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                             letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
+                             boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+                             _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
+                          {props.next.label}
+                        </Box>
                       </Flex>
                     </Flex>
-                  </MBox>
-                )}
-              </AnimatePresence>
-            </Box>
-          </Box>
+                  </Box>
+                </Flex>
+              </MBox>
+            )}
+          </AnimatePresence>
+
+          {/* Construir de nuevo — centrado, fuera del box, abajo */}
+          {completo && (
+            <Flex justify="center" w="100%">
+              <Box as="button" onClick={reiniciar}
+                   display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                   letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                   _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                ↺ Construir de nuevo
+              </Box>
+            </Flex>
+          )}
         </Flex>
       </Flex>
 

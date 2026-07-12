@@ -195,6 +195,21 @@ function EstDibujada({ def }: { def: EstDef }) {
   );
 }
 
+// ── Caja rectangular con el fondo/brillo de Fisiología (reutilizable) ────────
+function PanelBox({ children, minH, px, py, ...rest }: any) {
+  return (
+    <Box position="relative" borderRadius="2xl" overflow="hidden"
+         boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}
+         {...rest}>
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+      <Box position="relative" zIndex={1} h="100%"
+           px={px ?? { base: 5, md: 9 }} py={py ?? { base: 7, md: 9 }} minH={minH}>
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
 // ═════════════════════════════════════════════════════════════════════════
 // Estación de una estructura celular
 // ═════════════════════════════════════════════════════════════════════════
@@ -237,7 +252,8 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
 
       <AnimatePresence mode="wait">
         {!completo ? (
-          <MBox key="a" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <PanelBox minH={{ md: "360px" }}>
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK }}>
               {def.nombre}
             </Text>
@@ -290,40 +306,51 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
                      boxShadow={i < puestas.length ? `0 0 10px ${def.glow}` : "none"} transition="all 0.3s" />
               ))}
             </Flex>
+            </PanelBox>
           </MBox>
         ) : (
-          <MBox key="b" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+          // ── FASE B · resultado (2 cajas: foto | texto) ──
+          <MBox key="b" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.55, ease: "easeOut" }}>
-            <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 6, md: 10 }}>
-              <Flex flexShrink={0} justify="center" align="center" position="relative"
-                    w={{ base: "220px", md: "280px" }} h={{ base: "220px", md: "280px" }}>
-                <Box position="absolute" inset="-4%" borderRadius="full" pointerEvents="none"
-                     animation={`${shimmer} 3.6s ease-in-out infinite`}
-                     sx={{ boxShadow: `0 0 46px ${def.glow}55, 0 0 88px ${def.glow}33` }} />
-                <Image src={def.resultadoImg} alt={def.nombre} w="100%" h="100%" objectFit="contain"
-                       style={{ filter: `drop-shadow(0 0 16px ${def.glow}55)` }}
-                       fallback={<EstDibujada def={def} />} />
-              </Flex>
+            <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-              <Flex flex="1" direction="column" gap={3.5} textAlign={{ base: "center", md: "left" }}>
-                <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
-                  ¡Has construido {def.id === "adn" ? "el ADN" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
-                </Text>
-                <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
-                     bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
-                {def.resultado.map((p, i) => (
-                  <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }}
-                        lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
-                ))}
-                <Box as="button" onClick={onVolver} alignSelf={{ base: "center", md: "flex-start" }} mt={2}
-                     px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                     letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                     boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                     _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                  Volver a las estructuras →
-                </Box>
-              </Flex>
+              {/* Caja 1 · imagen de la estructura */}
+              <PanelBox flexShrink={0} w={{ base: "100%", md: "auto" }}>
+                <Flex h="100%" justify="center" align="center">
+                  <Flex flexShrink={0} justify="center" align="center" position="relative"
+                        w={{ base: "220px", md: "280px" }} h={{ base: "220px", md: "280px" }}>
+                    <Box position="absolute" inset="-4%" borderRadius="full" pointerEvents="none"
+                         animation={`${shimmer} 3.6s ease-in-out infinite`}
+                         sx={{ boxShadow: `0 0 46px ${def.glow}55, 0 0 88px ${def.glow}33` }} />
+                    <Image src={def.resultadoImg} alt={def.nombre} w="100%" h="100%" objectFit="contain"
+                           style={{ filter: `drop-shadow(0 0 16px ${def.glow}55)` }}
+                           fallback={<EstDibujada def={def} />} />
+                  </Flex>
+                </Flex>
+              </PanelBox>
+
+              {/* Caja 2 · texto */}
+              <PanelBox flex="1">
+                <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
+                  <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
+                    ¡Has construido {def.id === "adn" ? "el ADN" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
+                  </Text>
+                  <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
+                       bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
+                  {def.resultado.map((p, i) => (
+                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }}
+                          lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
+                  ))}
+                  <Box as="button" onClick={onVolver} alignSelf={{ base: "center", md: "flex-start" }} mt={2}
+                       px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
+                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                       letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
+                       boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
+                    Volver a las estructuras →
+                  </Box>
+                </Flex>
+              </PanelBox>
             </Flex>
           </MBox>
         )}
@@ -515,20 +542,14 @@ export default function MetodoFisiologiaEstructuras() {
           )}
 
           {defActiva ? (
-            /* ── Box de construcción (Estación) ── */
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
-              <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-                <Estacion
-                  key={defActiva.id}
-                  def={defActiva}
-                  yaFormada={formadas.includes(defActiva.id)}
-                  onFormar={() => formar(defActiva.id)}
-                  onVolver={() => setActiva(null)}
-                />
-              </Box>
-            </Box>
+            /* ── Estación (cada fase trae sus propias cajas) ── */
+            <Estacion
+              key={defActiva.id}
+              def={defActiva}
+              yaFormada={formadas.includes(defActiva.id)}
+              onFormar={() => formar(defActiva.id)}
+              onVolver={() => setActiva(null)}
+            />
           ) : (
             /* ── 4 boxes: uno por estructura ── */
             <Flex direction="column" w="100%" maxW="760px" gap={{ base: 4, md: 5 }}>

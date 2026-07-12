@@ -298,17 +298,9 @@ export default function MetodoFisiologiaAtomos() {
           <AnimatePresence>
             {!completo && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase" mb={1}
-                      style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
-                  Átomo {idx + 1} de {ATOMOS.length} · {def.nombre}
-                </Text>
                 <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
                       letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                   Construye un átomo de {def.nombre}
-                </Text>
-                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                      style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  {def.instruccion}
                 </Text>
               </MBox>
             )}
@@ -404,14 +396,6 @@ export default function MetodoFisiologiaAtomos() {
                                style={{ filter: `drop-shadow(0 0 18px ${fisiologiaTxt}44)` }}
                                fallback={<AtomoDibujado def={def} />} />
                       </Box>
-                      <Box as="button" onClick={reiniciar}
-                           display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-                           bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
-                           fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
-                           letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                           _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                        ↺ Construir de nuevo
-                      </Box>
                     </Flex>
                   </Box>
 
@@ -447,6 +431,18 @@ export default function MetodoFisiologiaAtomos() {
                         </Box>
                       )}
                     </Flex>
+                  </Box>
+                </Flex>
+
+                {/* Construir de nuevo — centrado, fuera del box, abajo */}
+                <Flex justify="center" w="100%" mt={{ base: 5, md: 6 }}>
+                  <Box as="button" onClick={reiniciar}
+                       display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+                       bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                       fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                       letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                       _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                    ↺ Construir de nuevo
                   </Box>
                 </Flex>
               </MBox>

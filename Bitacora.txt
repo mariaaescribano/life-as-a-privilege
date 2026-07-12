@@ -7,7 +7,7 @@ IMAGENES
 
 Estructuras: mitocondria.png, ribosoma.png
 Niveles 2-3: celula.png, tejido.png, organo.png, sistema.png, cuerpo.png
-Macromoléculas: aminoacido.png, nucleotido.png, fosfolipido.png, glucosa.png, proteina.png, adn.png, membrana.png, carbohidrato.png
+Macromoléculas: enzima.png, adn.png, membrana.png, carbohidrato.png
 receptores de hormonas de las membranas celulares,
 Moléculas: carbono.png
 
@@ -201,23 +201,17 @@ El Universo.
 
 
 
+xxxCOMICS
 
 
-
-
-
+xxxEL CEREBRO
+La sensación debería ser la de que el lector **se ha encogido hasta unas pocas micras y está caminando por el cerebro**, viendo cómo las células interactúan realmente. Ese estilo transmite mucho mejor la idea de "ecosistema" que las metáforas visuales demasiado evidentes.
 
 ## 1. El cerebro
 
 **Texto**
 
-> Miles de millones de células
-> conviven en un tejido vivo.
-> Intercambian información,
-> energía y moléculas.
-> Ninguna funciona aislada.
-> El cerebro es
-> un ecosistema celular.
+El cerebro es un ecosistema celular. Miles de millones de células conviven en un tejido vivo. Intercambian información, energía y moléculas. Ninguna funciona aislada.
 
 **Imagen**
 
@@ -229,12 +223,11 @@ Corte tridimensional de corteza cerebral. Se distinguen neuronas, astrocitos, va
 
 **Texto**
 
-> Recibo miles de señales.
-> Las integro en mí.
-> Si son suficientemente importantes, sigo traspasando las señales en forma de neurotransmisores,
-llegando así a la siguiente neurona.
-Una corriente de neurotransmisores en una dirección concreta, genera un pensamiento.
-Hay miles de pensamientos cada segundo, por eso es tan importante practicar la atención.
+Recibo miles de señales, las integro en mí.
+
+Si son suficientemente importantes, sigo traspasando las señales en forma de neurotransmisores, llevando este mensaje a la siguiente neurona.
+
+Una corriente de neurotransmisores en una dirección concreta genera un pensamiento. Hay miles de pensamientos cada segundo, por eso es tan importante practicar la atención.
 
 **Imagen**
 
@@ -246,12 +239,7 @@ Primer plano de una neurona piramidal realista. Las dendritas reciben múltiples
 
 **Texto**
 
-> Rodeo neuronas y capilares.
-> Cojo nutrientes de la sangre y los distribuyo a las neuronas, asegurándome que tienen la suficiente energía.
- Regulo agua e iones.
-> Reciclo neurotransmisores.
-> También participo
-> en la plasticidad sináptica.
+Rodeo neuronas y capilares. Regulo agua e iones. Cojo nutrientes de la sangre y los distribuyo a las neuronas, asegurándome que tienen la suficiente energía. Reciclo neurotransmisores. También participo en la plasticidad sináptica.
 
 **Imagen**
 
@@ -263,13 +251,9 @@ Un astrocito de aspecto estrellado extendiendo sus prolongaciones hacia varias s
 
 **Texto**
 
-> Soy tu protector. Exploro continuamente
-> el tejido nervioso.
-> Detecto daño,
-> elimino restos celulares
-> y remodelo conexiones.
-> Mantengo el equilibrio
-> del sistema.
+Soy tu protector. Exploro continuamente el tejido nervioso.
+
+Detecto daño, elimino restos celulares y remodelo conexiones. Mantengo el equilibrio del sistema.
 
 **Imagen**
 
@@ -281,13 +265,9 @@ Microglía ramificada inspeccionando el tejido. Una prolongación engloba restos
 
 **Texto**
 
-> Envuelvo los axones
-> con mielina.
-> Esta cubierta acelera
-> la conducción eléctrica.
-> Una sola célula
-> puede mielinizar
-> varios axones.
+Envuelvo los cuerpos de las neuronas (los axones) con mielina. Esta cubierta acelera la conducción eléctrica, haciendo que tus pensamientos sean más rápidos y eficaces.
+
+Una sola célula puede mielinizar varios axones, creando así conexiones neuronales, participando en la neuroplasticidad.
 
 **Imagen**
 
@@ -299,13 +279,7 @@ Un oligodendrocito central con varias prolongaciones formando vainas de mielina 
 
 **Texto**
 
-> Formamos los capilares
-> del cerebro.
-> Regulamos el paso
-> de sustancias.
-> Así protegemos
-> el equilibrio químico
-> del tejido nervioso.
+Formamos los capilares del cerebro. Regulamos el paso de sustancias. Así protegemos el equilibrio químico del tejido nervioso.
 
 **Imagen**
 
@@ -317,13 +291,7 @@ Capilar cerebral ampliado. Las células endoteliales aparecen unidas por uniones
 
 **Texto**
 
-> Rodeo los capilares.
-> Regulo el flujo sanguíneo.
-> Refuerzo la barrera
-> hematoencefálica.
-> También participo
-> en la reparación
-> vascular.
+Rodeo los capilares. Regulo el flujo sanguíneo. Refuerzo la barrera hematoencefálica. También participo en la reparación vascular.
 
 **Imagen**
 
@@ -335,31 +303,163 @@ Detalle de un capilar donde un pericito abraza externamente el vaso mientras un 
 
 **Texto**
 
-> Revisto los ventrículos.
-> Mis cilios impulsan
-> el líquido cefalorraquídeo.
-> Así distribuye nutrientes
-> y elimina residuos
-> por todo el sistema.
+Revisto los ventrículos. Mis cilios impulsan el líquido cefalorraquídeo. Así distribuye nutrientes y elimina residuos por todo el sistema.
 
 **Imagen**
 
 Sección del ventrículo cerebral mostrando el epitelio ependimario con cientos de cilios moviendo el líquido.
 
+-
+
+TIROIDES
+
+## 1. La tiroides
+
+**Texto**
+
+La tiroides regula la velocidad del organismo.
+Sus células captan yodo, fabrican hormonas y ajustan el metabolismo de casi todos los tejidos.
+
+**Imagen**
+
+Corte histológico realista mostrando varios folículos tiroideos llenos de coloide, rodeados por una densa red de capilares.
+
 ---
 
-## Estilo visual que propondría
+## 2. Células foliculares (tirocitos)
 
-No haría ilustraciones "de libro", sino algo parecido a un **documental microscópico**:
+**Texto**
 
-* células con morfología real;
-* proporciones anatómicas correctas;
-* profundidad de campo (algunas células desenfocadas al fondo);
-* iluminación volumétrica como si hubiera una fuente de luz en el tejido;
-* colores suaves (azules, violetas, verdes y ocres), evitando los fluorescentes artificiales;
-* pequeñas etiquetas discretas o flechas solo cuando sean imprescindibles.
+Captamos yodo de la sangre.
+Lo incorporamos a la tiroglobulina para producir T₃ y T₄.
+Cuando el organismo las necesita, liberamos estas hormonas al torrente sanguíneo.
 
-La sensación debería ser la de que el lector **se ha encogido hasta unas pocas micras y está caminando por el cerebro**, viendo cómo las células interactúan realmente. Ese estilo transmite mucho mejor la idea de "ecosistema" que las metáforas visuales demasiado evidentes.
+**Imagen**
+
+Primer plano de un folículo tiroideo. Los tirocitos forman una capa continua alrededor del coloide, captando yodo desde un capilar y secretando hormonas hacia la sangre.
+
+---
+
+## 3. Coloide
+
+**Texto**
+
+No soy una célula, sino una reserva.
+Aquí se almacena la tiroglobulina, la proteína sobre la que se sintetizan las hormonas tiroideas cuando el organismo las necesita.
+
+**Imagen**
+
+Detalle del interior de un folículo lleno de coloide rosado, rodeado por una única capa de tirocitos.
+
+---
+
+## 4. Células C (parafoliculares)
+
+**Texto**
+
+Producimos calcitonina.
+Esta hormona ayuda a disminuir el calcio en sangre favoreciendo su depósito en el hueso y contribuyendo al equilibrio mineral.
+
+**Imagen**
+
+Células C situadas entre dos folículos, junto a un capilar, liberando calcitonina hacia la circulación.
+
+---
+
+## 5. Capilares
+
+**Texto**
+
+Llevamos yodo y oxígeno a la glándula.
+También distribuimos las hormonas tiroideas y la calcitonina por todo el organismo, conectando la tiroides con cada tejido.
+
+**Imagen**
+
+Red de capilares rodeando estrechamente los folículos, mostrando el intercambio continuo de sustancias entre la sangre y las células tiroideas.
+
+
+-
+
+ESTóMAGO
+
+## 1. El estómago
+
+**Texto**
+
+El estómago almacena y transforma los alimentos.
+Aquí, distintas células trabajan juntas para iniciar la digestión, eliminar microorganismos y convertir el alimento en moléculas que el intestino puede gestionar.
+
+**Imagen**
+
+Corte de la mucosa gástrica mostrando las fositas y glándulas gástricas con diferentes tipos celulares y una red de capilares.
+
+---
+
+## 2. Células parietales
+
+**Texto**
+
+Producimos ácido clorhídrico, que activa las enzimas digestivas y destruye muchos microorganismos.
+También secretamos el factor intrínseco, esencial para absorber la vitamina B₁₂.
+
+**Imagen**
+
+Primer plano de una célula parietal grande, con abundantes mitocondrias y canalículos secretando ácido hacia la luz del estómago.
+
+---
+
+## 3. Células principales
+
+**Texto**
+
+Liberamos pepsinógeno, una enzima inactiva.
+El ácido del estómago lo transforma en pepsina, que comienza la digestión de las proteínas.
+
+**Imagen**
+
+Células principales en la base de una glándula gástrica, secretando gránulos de pepsinógeno hacia la luz.
+
+---
+
+## 4. Células mucosas
+
+**Texto**
+
+Recubrimos la superficie del estómago con una capa de moco rica en bicarbonato.
+Esta barrera protege el tejido del ácido y de las enzimas digestivas.
+
+**Imagen**
+
+Vista de la superficie del estómago cubierta por una capa transparente de moco que separa el epitelio del contenido ácido.
+
+---
+
+## 5. Células enteroendocrinas
+
+**Texto**
+
+Liberamos hormonas que regulan la digestión.
+Coordinamos la producción de ácido, los movimientos del estómago y la comunicación con otros órganos digestivos.
+
+**Imagen**
+
+Células dispersas entre las glándulas, liberando hormonas hacia los capilares cercanos.
+
+---
+
+## 6. Capilares
+
+**Texto**
+
+Aportamos oxígeno y nutrientes a la mucosa.
+También recogemos las hormonas producidas en el estómago para distribuirlas por el organismo.
+
+**Imagen**
+
+Red de capilares rodeando las glándulas gástricas, muy próxima a todas las células secretoras.
+
+
+-
 
 
 
@@ -373,7 +473,10 @@ La sensación debería ser la de que el lector **se ha encogido hasta unas pocas
 
 
 
-
+xxx MAS COSAS PARA FISIO:
+Hacer pagina especializada para neurotransmisores
+Otra para hormonas 
+Otra para la sangre
 
 
 

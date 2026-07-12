@@ -21,6 +21,8 @@ export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula;
       textAlign="left"
       position="relative"
       overflow="hidden"
+      w="100%"
+      h="100%"
       borderRadius="2xl"
       border={visto ? `1px solid ${TXT}aa` : `1px solid ${TXT}33`}
       cursor="pointer"
@@ -441,6 +443,219 @@ export function CelulaModal({
           />
         </>
       )}
+    </Box>
+  );
+}
+
+/* ─────────────────────────────────────────
+   CONSEJO — un titular (frase) que abre un modal inmersivo.
+───────────────────────────────────────── */
+export interface Consejo {
+  /** Frase titular que se ve en el box y arriba del modal. */
+  titular: string;
+  /** Texto largo que aparece a la derecha de la foto dentro del modal. */
+  texto: React.ReactNode;
+}
+
+/* ─────────────────────────────────────────
+   MODAL DE CONSEJO — distinto al de célula: el titular va ARRIBA (ancho
+   completo) con una rallita horizontal, y debajo la foto (izq) y el texto (der).
+───────────────────────────────────────── */
+export function ConsejoModal({
+  consejo,
+  foto,
+  label,
+  onClose,
+}: {
+  consejo: Consejo;
+  /** Foto del órgano (la misma que aparece arriba en el panel). */
+  foto: string;
+  label: string;
+  onClose: () => void;
+}) {
+  const [imgErr, setImgErr] = useState(false);
+
+  useEffect(() => { setImgErr(false); }, [foto]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [onClose]);
+
+  const scrollbarSx = {
+    "&::-webkit-scrollbar": { width: "5px" },
+    "&::-webkit-scrollbar-track": { bg: "transparent" },
+    "&::-webkit-scrollbar-thumb": { bg: TXT + "55", borderRadius: "full" },
+  };
+
+  const Foto = ({ w }: { w: string }) => (
+    <Box
+      flexShrink={0}
+      w={w}
+      aspectRatio={1}
+      alignSelf="center"
+      borderRadius="xl"
+      overflow="hidden"
+      boxShadow="0 8px 32px rgba(0,0,0,0.3)"
+      bg={TXT + "12"}
+    >
+      {!imgErr ? (
+        <Image src={encodeURI(foto)} alt={label} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
+      ) : (
+        <Flex w="100%" h="100%" align="center" justify="center" textAlign="center" px={3}>
+          <Text color={`${TXT}aa`} fontSize="xs" fontStyle="italic">Foto de {label} (próximamente)</Text>
+        </Flex>
+      )}
+    </Box>
+  );
+
+  // Titular arriba + rallita horizontal (ancho completo).
+  const Titular = ({ size }: { size: any }) => (
+    <>
+      <Text
+        color={TXT}
+        fontSize={size}
+        fontWeight="700"
+        fontFamily="'EB Garamond', serif"
+        letterSpacing="0.02em"
+        lineHeight="1.25"
+        textAlign="center"
+        px={{ base: 2, md: 10 }}
+        flexShrink={0}
+        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+      >
+        {consejo.titular}
+      </Text>
+      <Box
+        alignSelf="center"
+        w={{ base: "120px", md: "160px" }}
+        h="1px"
+        borderRadius="full"
+        bgGradient={`linear(to-r, transparent, ${TXT}, transparent)`}
+        my={{ base: 3, md: 4 }}
+        flexShrink={0}
+      />
+    </>
+  );
+
+  const Texto = () => (
+    <Text
+      color={TXT}
+      fontSize={{ base: "md", md: "lg" }}
+      lineHeight="1.8"
+      letterSpacing="0.02em"
+      fontFamily="'EB Garamond', serif"
+      style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
+    >
+      {consejo.texto}
+    </Text>
+  );
+
+  return (
+    <Box
+      position="fixed"
+      inset={0}
+      zIndex={1100}
+      bg="rgba(0,40,20,0.62)"
+      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      px={{ base: 4, md: 6 }}
+      py={{ base: 4, md: 6 }}
+      onClick={onClose}
+    >
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        position="relative"
+        overflow="hidden"
+        w={{ base: "95%", md: "920px" }}
+        h={{ base: "auto", md: "460px" }}
+        maxH={{ base: "calc(100dvh - 32px)", md: "460px" }}
+        borderRadius="24px"
+        border={`1px solid ${TXT}33`}
+        boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 26px ${TXT}33`}
+      >
+        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.4)" />
+
+        {/* Botón cerrar */}
+        <Box
+          as="button"
+          position="absolute"
+          top="14px"
+          right="14px"
+          w="34px"
+          h="34px"
+          borderRadius="full"
+          bg={TXT + "18"}
+          border={`1px solid ${TXT}33`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          color={TXT}
+          fontSize="16px"
+          fontWeight="700"
+          cursor="pointer"
+          transition="all 0.18s"
+          _hover={{ bg: TXT + "33" }}
+          onClick={onClose}
+          zIndex={2}
+        >
+          ✕
+        </Box>
+
+        {/* ── MÓVIL: titular → rallita → foto → texto ── */}
+        <Flex
+          display={{ base: "flex", md: "none" }}
+          position="relative"
+          zIndex={1}
+          direction="column"
+          p={5}
+          pt={12}
+          maxH="calc(100dvh - 32px)"
+          overflowY="auto"
+          sx={scrollbarSx}
+        >
+          <Titular size="2xl" />
+          <Foto w="100%" />
+          <Box mt={4}><Texto /></Box>
+        </Flex>
+
+        {/* ── ORDENADOR: titular arriba (ancho completo) → rallita → foto izq + texto der ── */}
+        <Flex
+          display={{ base: "none", md: "flex" }}
+          position="relative"
+          zIndex={1}
+          h="100%"
+          direction="column"
+          p={7}
+          pt={9}
+        >
+          <Titular size="3xl" />
+          <Flex direction="row" flex="1" minH={0}>
+            <Foto w="260px" />
+            {/* Rallita vertical entre foto y texto */}
+            <Box
+              flexShrink={0}
+              alignSelf="center"
+              w="1px"
+              h="80%"
+              borderRadius="full"
+              bgGradient={`linear(to-b, transparent, ${TXT}, transparent)`}
+              mx={6}
+            />
+            <Flex direction="column" flex="1" minW={0} minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
+              <Texto />
+            </Flex>
+          </Flex>
+        </Flex>
+      </Box>
     </Box>
   );
 }
