@@ -136,7 +136,7 @@ export function IndiceRecorrido({
                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
               <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={2}
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="lg" lineHeight="1"
-                   cursor="pointer" opacity={0.8} transition="all 0.15s" style={{ textShadow: INK_SHADOW }}
+                   cursor="pointer" opacity={0.8} transition="all 0.15s"
                    _hover={{ opacity: 1, transform: "scale(1.12)" }}>✕</Box>
 
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}>
@@ -170,8 +170,7 @@ export function IndiceRecorrido({
                 })}
               </Box>
 
-              <Text color={TINTA} fontSize="xs" textAlign="center" opacity={0.6} mt={5}
-                    style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+              <Text color={TINTA} fontSize="xs" textAlign="center" opacity={0.6} mt={5}>
                 {total} páginas · pulsa una para ir
               </Text>
             </Box>
