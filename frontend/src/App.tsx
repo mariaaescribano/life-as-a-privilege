@@ -91,9 +91,17 @@ import MetodoTcmLengua from "./app/metodo/MetodoTcmLengua";
 import MetodoTcmLenguaLeer from "./app/metodo/MetodoTcmLenguaLeer";
 import MetodoTcmCursos from "./app/metodo/MetodoTcmCursos";
 import MetodoFisiologia from "./app/metodo/MetodoFisiologia";
+import MetodoFisiologiaNiveles from "./app/metodo/MetodoFisiologiaNiveles";
 import MetodoFisiologiaParticulas from "./app/metodo/MetodoFisiologiaParticulas";
 import MetodoFisiologiaAtomos from "./app/metodo/MetodoFisiologiaAtomos";
 import MetodoFisiologiaMoleculas from "./app/metodo/MetodoFisiologiaMoleculas";
+import MetodoFisiologiaMacromoleculas from "./app/metodo/MetodoFisiologiaMacromoleculas";
+import MetodoFisiologiaEstructuras from "./app/metodo/MetodoFisiologiaEstructuras";
+import MetodoFisiologiaCelula from "./app/metodo/MetodoFisiologiaCelula";
+import MetodoFisiologiaTejidos from "./app/metodo/MetodoFisiologiaTejidos";
+import MetodoFisiologiaOrganos from "./app/metodo/MetodoFisiologiaOrganos";
+import MetodoFisiologiaSistemas from "./app/metodo/MetodoFisiologiaSistemas";
+import MetodoFisiologiaOrganismo from "./app/metodo/MetodoFisiologiaOrganismo";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -213,9 +221,17 @@ export default function App()
       <Route path="/metodo/tcm/lengua/leer" element={<PrivateRoute><MetodoTcmLenguaLeer /></PrivateRoute>} />
       <Route path="/metodo/tcm/cursos" element={<PrivateRoute><MetodoTcmCursos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia" element={<PrivateRoute><MetodoFisiologia /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/niveles" element={<PrivateRoute><MetodoFisiologiaNiveles /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/particulas" element={<PrivateRoute><MetodoFisiologiaParticulas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/atomos" element={<PrivateRoute><MetodoFisiologiaAtomos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/moleculas" element={<PrivateRoute><MetodoFisiologiaMoleculas /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/macromoleculas" element={<PrivateRoute><MetodoFisiologiaMacromoleculas /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/estructuras" element={<PrivateRoute><MetodoFisiologiaEstructuras /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/celula" element={<PrivateRoute><MetodoFisiologiaCelula /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/tejidos" element={<PrivateRoute><MetodoFisiologiaTejidos /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/organos" element={<PrivateRoute><MetodoFisiologiaOrganos /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/organismo" element={<PrivateRoute><MetodoFisiologiaOrganismo /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

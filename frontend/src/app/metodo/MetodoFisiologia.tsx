@@ -121,7 +121,7 @@ export default function MetodoFisiologia() {
     // En modo test dejamos avanzar aunque la BD no reporte la suscripción todavía
     // (columna fisiologia_suscrito pendiente de crear).
     if (!suscrito && !testPagos) { setPagoOpen(true); return; }
-    navigate("/metodo/fisiologia/particulas");
+    navigate("/metodo/fisiologia/niveles");
   };
 
   if (loading) {
@@ -146,7 +146,7 @@ export default function MetodoFisiologia() {
             mb={0}
             prev={{ label: "← Cursos de Med. China", onClick: () => navigate("/metodo/tcm/cursos") }}
             extra={celulasBtn}
-            next={{ label: "Construye una partícula →", onClick: comenzar }}
+            next={{ label: "Comenzar →", onClick: comenzar }}
           />
 
           {/* ── Bienvenida contemplativa ── */}

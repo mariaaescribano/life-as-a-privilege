@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
@@ -23,66 +23,203 @@ const MBox = motion(Box);
 // Halo oscuro para leer el texto claro sobre el fondo morado de Fisiología.
 const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
 
-// Colores heredados de la página de Átomos (misma estética dibujada).
-const C_PROTON = "#e08a8a";
-const C_ELECTRON = "#8ab6e6";
+// ── Átomos ────────────────────────────────────────────────────────────────
+type Tipo = "oxigeno" | "hidrogeno" | "carbono";
 
-const esferaProton = `radial-gradient(circle at 34% 30%, #ffffff 0%, ${C_PROTON} 34%, ${C_PROTON}dd 62%, ${C_PROTON}77 100%)`;
-const esferaElectron = `radial-gradient(circle at 34% 30%, #ffffff 0%, ${C_ELECTRON} 34%, ${C_ELECTRON}dd 62%, ${C_ELECTRON}77 100%)`;
+const GLOW: Record<Tipo, string> = { oxigeno: "#e08a8a", hidrogeno: "#8ab6e6", carbono: "#a9a2b3" };
+const LABEL: Record<Tipo, string> = { oxigeno: "oxígeno", hidrogeno: "hidrógeno", carbono: "carbono" };
+const GLYPH: Record<Tipo, string> = { oxigeno: "O", hidrogeno: "H", carbono: "C" };
+const IMG: Record<Tipo, string> = {
+  oxigeno: "/recorrido/fisiologia/pre/oxigeno.png",
+  hidrogeno: "/recorrido/fisiologia/pre/hidrogeno.png",
+  carbono: "/recorrido/fisiologia/pre/carbono.png",
+};
+const BOND = "#f2e2b0"; // color del enlace
 
+// Tamaños del átomo según contexto.
+const S_DRAG: Record<Tipo, any> = {
+  oxigeno: { base: "72px", md: "92px" }, hidrogeno: { base: "46px", md: "58px" }, carbono: { base: "64px", md: "82px" },
+};
+const S_ZONA: Record<Tipo, any> = {
+  oxigeno: { base: "72px", md: "88px" }, hidrogeno: { base: "42px", md: "52px" }, carbono: { base: "62px", md: "78px" },
+};
+const S_BIG: Record<Tipo, any> = {
+  oxigeno: { base: "96px", md: "116px" }, hidrogeno: { base: "54px", md: "66px" }, carbono: { base: "82px", md: "102px" },
+};
+const S_MINI: Record<Tipo, any> = { oxigeno: "42px", hidrogeno: "24px", carbono: "36px" };
+
+// ── Moléculas del recorrido (en orden) ──────────────────────────────────────
+// slots[0] = átomo central (al que se enlazan los demás). x/y en % del panel.
+interface Slot { tipo: Tipo; x: number; y: number; }
+interface Mol {
+  key: string;
+  nombre: string;
+  formula: string;
+  emoji: string;
+  instruccion: string;
+  slots: Slot[];
+  titulo: string;
+  parrafos: React.ReactNode[];
+}
+
+const MOLS: Mol[] = [
+  {
+    key: "agua",
+    nombre: "agua",
+    formula: "H₂O",
+    emoji: "💧",
+    instruccion: "Une un oxígeno y dos hidrógenos dentro de la zona de enlace.",
+    slots: [
+      { tipo: "oxigeno", x: 50, y: 60 },
+      { tipo: "hidrogeno", x: 27, y: 32 },
+      { tipo: "hidrogeno", x: 73, y: 32 },
+    ],
+    titulo: "¡Has formado una molécula de agua!",
+    parrafos: [
+      <>Una <b>molécula</b> nace cuando varios átomos se unen <b>compartiendo electrones</b>: esa unión es un <b>enlace</b>. Aquí, un oxígeno se une a dos hidrógenos y forman el <b>agua</b>, H₂O.</>,
+      <>El agua es la <b>molécula de la vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células.</>,
+      <>Y no es un detalle menor: alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
+    ],
+  },
+  {
+    key: "co2",
+    nombre: "dióxido de carbono",
+    formula: "CO₂",
+    emoji: "🌬️",
+    instruccion: "Une un carbono y dos oxígenos dentro de la zona de enlace.",
+    slots: [
+      { tipo: "carbono", x: 50, y: 50 },
+      { tipo: "oxigeno", x: 16, y: 50 },
+      { tipo: "oxigeno", x: 84, y: 50 },
+    ],
+    titulo: "¡Has formado dióxido de carbono!",
+    parrafos: [
+      <>Un átomo de <b>carbono</b> se une a dos de <b>oxígeno</b>: es el <b>CO₂</b>, el gas que exhalas en cada respiración.</>,
+      <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la vida</b>.</>,
+    ],
+  },
+  {
+    key: "o2",
+    nombre: "oxígeno",
+    formula: "O₂",
+    emoji: "🫧",
+    instruccion: "Une dos oxígenos dentro de la zona de enlace.",
+    slots: [
+      { tipo: "oxigeno", x: 34, y: 50 },
+      { tipo: "oxigeno", x: 66, y: 50 },
+    ],
+    titulo: "¡Has formado una molécula de oxígeno!",
+    parrafos: [
+      <>Dos átomos de oxígeno se unen y forman el <b>O₂</b>: el oxígeno que respiras.</>,
+      <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la vida tal como la conoces no existiría.</>,
+    ],
+  },
+];
+
+interface Pieza { id: string; tipo: Tipo; slot: number; }
+const piezasDe = (i: number): Pieza[] =>
+  MOLS[i].slots.map((s, idx) => ({ id: `${MOLS[i].key}-${idx}`, tipo: s.tipo, slot: idx }));
+
+const esfera = (t: Tipo): string =>
+  `radial-gradient(circle at 34% 30%, #ffffff 0%, ${GLOW[t]} 34%, ${GLOW[t]}dd 62%, ${GLOW[t]}77 100%)`;
+
+const pulse = keyframes`
+  0%, 100% { transform: scale(1);    opacity: 0.5; }
+  50%      { transform: scale(1.05); opacity: 0.85; }
+`;
 const shimmer = keyframes`
   0%, 100% { opacity: 0.55; }
   50%      { opacity: 1; }
 `;
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-`;
-const spinRev = keyframes`
-  from { transform: rotate(360deg); }
-  to   { transform: rotate(0deg); }
+const sway = keyframes`
+  0%, 100% { transform: rotate(-2.2deg); }
+  50%      { transform: rotate(2.2deg); }
 `;
 
-// ─────────────────────────────────────────────────────────────────────────
-// Un átomo de Hidrógeno dibujado: núcleo (1 protón) + 1 electrón en órbita.
-// `electronVisible` permite ocultar el electrón propio cuando se comparte en
-// el enlace (fase molécula).
-// ─────────────────────────────────────────────────────────────────────────
-function AtomoH({
-  size, electronVisible = true, girando = false, sentido = 1,
-}: {
-  size: any;
-  electronVisible?: boolean;
-  girando?: boolean;
-  sentido?: 1 | -1;
-}) {
+// ── Átomo (imagen con reserva a esfera dibujada) ────────────────────────────
+function Atomo({ tipo, size }: { tipo: Tipo; size: any }) {
+  const c = GLOW[tipo];
   return (
-    <Box position="relative" w={size} h={size} borderRadius="full"
-         display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
-      {/* órbita */}
-      <Box position="absolute" inset="0" borderRadius="full"
-           border={`1.5px ${girando ? "solid" : "dashed"} ${C_ELECTRON}66`} pointerEvents="none" />
-      {/* electrón propio */}
-      {electronVisible && (
-        <Box position="absolute" inset="0"
-             sx={girando ? { animation: `${sentido === 1 ? spin : spinRev} 6s linear infinite` } : undefined}
-             pointerEvents="none">
-          <Box position="absolute" left="0%" top="50%" transform="translate(-50%,-50%)"
-               w={{ base: "18px", md: "22px" }} h={{ base: "18px", md: "22px" }} borderRadius="full"
-               sx={{ background: esferaElectron, boxShadow: `0 0 10px ${C_ELECTRON}aa, 0 0 22px ${C_ELECTRON}55` }} />
-        </Box>
-      )}
-      {/* núcleo (1 protón) */}
-      <Box position="relative" w="46%" h="46%" borderRadius="full"
-           display="flex" alignItems="center" justifyContent="center"
-           sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
-                 boxShadow: `inset 0 0 22px rgba(0,0,0,0.92), 0 0 16px ${fisiologiaTxt}22` }}>
-        <Box w="62%" h="62%" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
-             sx={{ background: esferaProton, boxShadow: `0 0 10px ${C_PROTON}aa, 0 0 22px ${C_PROTON}55` }}>
-          <Text color="rgba(0,0,0,0.5)" fontWeight="900" lineHeight="1"
-                fontSize={{ base: "xs", md: "sm" }} style={{ userSelect: "none" }}>+</Text>
-        </Box>
+    <Box w={size} h={size} borderRadius="full" overflow="hidden" pointerEvents="none"
+         sx={{ boxShadow: `0 0 12px ${c}aa, 0 0 26px ${c}55` }}>
+      <Image src={IMG[tipo]} alt={LABEL[tipo]} w="100%" h="100%" objectFit="cover" draggable={false}
+             fallback={
+               <Box w="100%" h="100%" display="flex" alignItems="center" justifyContent="center" sx={{ background: esfera(tipo) }}>
+                 <Text color="rgba(0,0,0,0.5)" fontWeight="900" lineHeight="1"
+                       fontSize={{ base: "sm", md: "md" }} style={{ userSelect: "none" }}>{GLYPH[tipo]}</Text>
+               </Box>
+             } />
+    </Box>
+  );
+}
+
+// ── Ficha arrastrable ───────────────────────────────────────────────────────
+function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (p: Pieza, r: DOMRect) => void; }) {
+  const [arrastrando, setArrastrando] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const glow = GLOW[pieza.tipo];
+
+  return (
+    <MBox
+      ref={ref}
+      drag
+      dragSnapToOrigin
+      dragElastic={0.12}
+      dragMomentum={false}
+      onDragStart={() => setArrastrando(true)}
+      onDragEnd={() => { setArrastrando(false); if (ref.current) onSoltar(pieza, ref.current.getBoundingClientRect()); }}
+      whileDrag={{ scale: 1.16, zIndex: 60 }}
+      whileHover={{ scale: 1.07, y: -2 }}
+      initial={{ opacity: 0, x: 16 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, scale: 0.5 }}
+      transition={{ type: "spring", stiffness: 320, damping: 26 }}
+      cursor="grab"
+      position="relative"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      gap={1}
+      flexShrink={0}
+      style={{ touchAction: "none" }}
+    >
+      <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${glow}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
+        <Atomo tipo={pieza.tipo} size={S_DRAG[pieza.tipo]} />
       </Box>
+      <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+            letterSpacing="0.06em" textTransform="uppercase" pointerEvents="none"
+            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+        {LABEL[pieza.tipo]}
+      </Text>
+    </MBox>
+  );
+}
+
+// ── Enlaces (líneas del átomo central a los demás slots colocados) ──────────
+function Enlaces({ mol, placed }: { mol: Mol; placed: number[] }) {
+  const centro = mol.slots[0];
+  return (
+    <Box as="svg" viewBox="0 0 100 100" position="absolute" inset="0" w="100%" h="100%" pointerEvents="none"
+         style={{ overflow: "visible" }}>
+      {mol.slots.map((s, i) => {
+        if (i === 0 || !placed.includes(0) || !placed.includes(i)) return null;
+        return <line key={i} x1={centro.x} y1={centro.y} x2={s.x} y2={s.y} stroke={BOND} strokeWidth={2.6}
+                     strokeLinecap="round" opacity={0.85} />;
+      })}
+    </Box>
+  );
+}
+
+// ── Molécula ya formada (celebración / resumen) ─────────────────────────────
+function MoleculaFormada({ mol, tam }: { mol: Mol; tam: Record<Tipo, any> }) {
+  return (
+    <Box position="relative" w="100%" h="100%">
+      <Enlaces mol={mol} placed={mol.slots.map((_, i) => i)} />
+      {mol.slots.map((s, i) => (
+        <Box key={i} position="absolute" left={`${s.x}%`} top={`${s.y}%`} transform="translate(-50%,-50%)">
+          <Atomo tipo={s.tipo} size={tam[s.tipo]} />
+        </Box>
+      ))}
     </Box>
   );
 }
@@ -91,9 +228,14 @@ function AtomoH({
 export default function MetodoFisiologiaMoleculas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [unido, setUnido] = useState(false);
+  const [indice, setIndice] = useState(0);
+  const [pendientes, setPendientes] = useState<Pieza[]>(() => piezasDe(0));
+  const [colocadas, setColocadas] = useState<Pieza[]>([]);
+  const [completo, setCompleto] = useState(false);
+  const [terminado, setTerminado] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
+  const zonaRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
 
   useEffect(() => {
@@ -103,8 +245,6 @@ export default function MetodoFisiologiaMoleculas() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        // ¿Modo test de pagos? Nos deja entrar aunque la columna fisiologia_suscrito
-        // aún no exista en la BD (ALTER TABLE pendiente) — como en el resto de páginas.
         let testEnabled = false;
         try {
           const t = await axios.get(`${API_URL}/payment/test/enabled`);
@@ -120,7 +260,7 @@ export default function MetodoFisiologiaMoleculas() {
             headers: { Authorization: `Bearer ${token}` },
           });
           dataRef.current = r.data?.data ?? {};
-          if (dataRef.current?.moleculas_hecho) setUnido(true);
+          if (dataRef.current?.moleculas_hecho) setTerminado(true);
         } catch { /* sin fila todavía */ }
       } catch {
         navigate("/metodo/fisiologia");
@@ -145,16 +285,59 @@ export default function MetodoFisiologiaMoleculas() {
     } catch { /* se reintenta la próxima vez */ }
   };
 
-  const juntar = () => {
-    setUnido(true);
-    void guardarHecho();
+  const mol = MOLS[indice];
+
+  // ¿El centro de la ficha soltada cae dentro de la zona de enlace?
+  const soltar = (pieza: Pieza, rect: DOMRect) => {
+    const el = zonaRef.current;
+    if (!el) return;
+    const c = el.getBoundingClientRect();
+    const cx = c.left + c.width / 2, cy = c.top + c.height / 2, radio = c.width / 2;
+    const px = rect.left + rect.width / 2, py = rect.top + rect.height / 2;
+    if (Math.hypot(px - cx, py - cy) > radio + rect.width / 2) return;
+
+    setPendientes((prev) => prev.filter((p) => p.id !== pieza.id));
+    setColocadas((prev) => {
+      const next = [...prev, pieza];
+      if (next.length === mol.slots.length) setTimeout(() => setCompleto(true), 800);
+      return next;
+    });
   };
 
-  const reiniciar = () => setUnido(false);
+  // Reiniciar la molécula ACTUAL (volver a colocar sus átomos).
+  const reiniciar = () => { setPendientes(piezasDe(indice)); setColocadas([]); setCompleto(false); };
+
+  // Tras la mini celebración: crear la siguiente molécula, o terminar.
+  const siguiente = () => {
+    if (indice < MOLS.length - 1) {
+      const ni = indice + 1;
+      setIndice(ni);
+      setPendientes(piezasDe(ni));
+      setColocadas([]);
+      setCompleto(false);
+    } else {
+      setTerminado(true);
+      void guardarHecho();
+    }
+  };
+
+  // Desde el resumen final: rehacer todo desde la primera molécula.
+  const empezarDeCero = () => {
+    setIndice(0);
+    setPendientes(piezasDe(0));
+    setColocadas([]);
+    setCompleto(false);
+    setTerminado(false);
+  };
 
   if (loading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
+
+  const total = mol.slots.length;
+  const hechas = colocadas.length;
+  const placedSlots = colocadas.map((p) => p.slot);
+  const esUltima = indice === MOLS.length - 1;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -176,151 +359,215 @@ export default function MetodoFisiologiaMoleculas() {
             extra={celulasBtn}
           />
 
-          {/* Frase explicativa bajo el header */}
-          <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="600"
-                  maxW="560px" lineHeight="1.7" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Los átomos se combinan entre ellos y así forman moléculas.
-            </Text>
-          </MBox>
+          {/* Instrucción (solo mientras forma una molécula) */}
+          <AnimatePresence>
+            {!completo && !terminado && (
+              <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
+                <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase" mb={1}
+                      style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
+                  Molécula {indice + 1} de {MOLS.length} · {mol.formula}
+                </Text>
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
+                      letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  Forma una molécula de {mol.nombre}
+                </Text>
+                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                      style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  {mol.instruccion}
+                </Text>
+              </MBox>
+            )}
+          </AnimatePresence>
 
           {/* ── BOX RECTANGULAR ── */}
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
             <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
 
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 8, md: 10 }} minH={{ md: "380px" }}>
-              <Flex direction="column" align="center" gap={{ base: 7, md: 8 }}>
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
+              <AnimatePresence mode="wait">
 
-                {/* ─── Escenario: dos átomos que se juntan ─── */}
-                <Box position="relative" w="100%" h={{ base: "230px", md: "260px" }}
-                     display="flex" alignItems="center" justifyContent="center">
+                {/* ───────── FASE A · enlazar ───────── */}
+                {!completo && !terminado && (
+                  <MBox key={`construir-${mol.key}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4 }}>
+                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 8, md: 10 }} pl={{ md: 4 }}>
 
-                  {/* halo cuando ya es molécula */}
-                  <AnimatePresence>
-                    {unido && (
-                      <MBox key="halo" position="absolute"
-                            w={{ base: "300px", md: "360px" }} h={{ base: "170px", md: "200px" }}
-                            borderRadius="full" pointerEvents="none"
-                            initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-                            sx={{ animation: `${shimmer} 3.6s ease-in-out infinite`,
-                                  boxShadow: `0 0 50px ${C_ELECTRON}44, 0 0 90px ${C_PROTON}33` }} />
-                    )}
-                  </AnimatePresence>
+                      {/* Zona de enlace (izquierda) */}
+                      <Flex flexShrink={0} justify="center" align="center" w={{ base: "100%", md: "auto" }} pl={{ md: 2 }}>
+                        <Box ref={zonaRef} position="relative"
+                             w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
+                             borderRadius="full" display="flex" alignItems="center" justifyContent="center">
+                          <Box position="absolute" inset="-12px" borderRadius="full"
+                               border={`1.5px dashed ${fisiologiaTxt}55`}
+                               animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
+                          <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
+                               sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
+                                     boxShadow: `inset 0 0 40px rgba(0,0,0,0.9), 0 0 24px ${fisiologiaTxt}22` }} />
 
-                  {/* nube de electrones compartida (el enlace) */}
-                  <AnimatePresence>
-                    {unido && (
-                      <MBox key="nube" position="absolute"
-                            w={{ base: "168px", md: "208px" }} h={{ base: "96px", md: "116px" }}
-                            borderRadius="full" pointerEvents="none"
-                            initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-                            transition={{ delay: 0.35, type: "spring", stiffness: 220, damping: 22 }}
-                            border={`1.5px solid ${C_ELECTRON}55`}
-                            sx={{ background: `radial-gradient(ellipse at center, ${C_ELECTRON}22 0%, transparent 70%)` }} />
-                    )}
-                  </AnimatePresence>
+                          <Enlaces mol={mol} placed={placedSlots} />
 
-                  {/* Átomo izquierdo */}
-                  <MBox position="absolute"
-                        animate={{ x: unido ? (typeof window !== "undefined" && window.innerWidth < 768 ? -42 : -52) : (typeof window !== "undefined" && window.innerWidth < 768 ? -105 : -140) }}
-                        transition={{ type: "spring", stiffness: 120, damping: 18 }}>
-                    <AtomoH size={{ base: "128px", md: "156px" }}
-                            electronVisible={!unido} girando={unido} sentido={1} />
+                          {/* átomos colocados */}
+                          {colocadas.map((p) => {
+                            const pos = mol.slots[p.slot];
+                            return (
+                              <MBox key={p.id} position="absolute" left={`${pos.x}%`} top={`${pos.y}%`}
+                                    transform="translate(-50%, -50%)"
+                                    initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 340, damping: 20 }}>
+                                <Atomo tipo={p.tipo} size={S_ZONA[p.tipo]} />
+                              </MBox>
+                            );
+                          })}
+
+                          {hechas === 0 && (
+                            <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
+                                  fontSize={{ base: "sm", md: "md" }} fontStyle="italic" pointerEvents="none"
+                                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
+                              zona de enlace
+                            </Text>
+                          )}
+                        </Box>
+                      </Flex>
+
+                      {/* Piezas a arrastrar (derecha) */}
+                      <Flex flex="1" direction="column" align="center" gap={4} w="100%">
+                        <Flex wrap="wrap" justify="center" align="center" gap={{ base: 4, md: 6 }} maxW="360px">
+                          <AnimatePresence>
+                            {pendientes.map((p) => (
+                              <FichaArrastrable key={p.id} pieza={p} onSoltar={soltar} />
+                            ))}
+                          </AnimatePresence>
+                          {pendientes.length === 0 && (
+                            <Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…enlazando…</Text>
+                          )}
+                        </Flex>
+
+                        <Flex justify="center" gap={2} mt={2}>
+                          {Array.from({ length: total }).map((_, i) => (
+                            <Box key={i} w="9px" h="9px" borderRadius="full"
+                                 bg={i < hechas ? fisiologiaTxt : "rgba(255,255,255,0.22)"}
+                                 boxShadow={i < hechas ? `0 0 10px ${fisiologiaTxt}` : "none"}
+                                 transition="all 0.3s" />
+                          ))}
+                        </Flex>
+                      </Flex>
+                    </Flex>
                   </MBox>
+                )}
 
-                  {/* Átomo derecho */}
-                  <MBox position="absolute"
-                        animate={{ x: unido ? (typeof window !== "undefined" && window.innerWidth < 768 ? 42 : 52) : (typeof window !== "undefined" && window.innerWidth < 768 ? 105 : 140) }}
-                        transition={{ type: "spring", stiffness: 120, damping: 18 }}>
-                    <AtomoH size={{ base: "128px", md: "156px" }}
-                            electronVisible={!unido} girando={unido} sentido={-1} />
-                  </MBox>
+                {/* ───────── FASE B · molécula formada + texto ───────── */}
+                {completo && !terminado && (
+                  <MBox key={`resultado-${mol.key}`} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}>
+                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 7, md: 12 }}>
 
-                  {/* par de electrones COMPARTIDOS entre los dos núcleos (aparece al unirse) */}
-                  <AnimatePresence>
-                    {unido && (
-                      <MBox key="compartidos" position="absolute" display="flex" gap={{ base: 2, md: 3 }}
-                            initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-                            transition={{ delay: 0.5, type: "spring", stiffness: 300, damping: 20 }}>
-                        {[0, 1].map((i) => (
-                          <Box key={i} w={{ base: "16px", md: "20px" }} h={{ base: "16px", md: "20px" }}
-                               borderRadius="full"
-                               sx={{ background: esferaElectron, boxShadow: `0 0 12px ${C_ELECTRON}, 0 0 26px ${C_ELECTRON}88` }} />
+                      {/* Molécula ya formada (izquierda) */}
+                      <Flex flexShrink={0} justify="center" align="center" position="relative"
+                            w={{ base: "260px", md: "320px" }} h={{ base: "260px", md: "320px" }}>
+                        <Box position="absolute" inset="-4%" borderRadius="full"
+                             animation={`${shimmer} 3.6s ease-in-out infinite`} pointerEvents="none"
+                             sx={{ boxShadow: `0 0 50px ${fisiologiaTxt}55, 0 0 90px ${GLOW.oxigeno}33` }} />
+                        <Box position="relative" w="100%" h="100%"
+                             sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
+                          <MoleculaFormada mol={mol} tam={S_BIG} />
+                        </Box>
+                      </Flex>
+
+                      {/* Texto (derecha) */}
+                      <Flex flex="1" direction="column" gap={4} textAlign={{ base: "center", md: "left" }}>
+                        <Text fontSize={{ base: "2xl", md: "3xl" }}>{mol.emoji}</Text>
+                        <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                              letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
+                          {mol.titulo}
+                        </Text>
+                        <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
+                             bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
+                        {mol.parrafos.map((p, i) => (
+                          <Text key={i} color={i === mol.parrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
+                                fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
+                                fontWeight={i === mol.parrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
+                            {p}
+                          </Text>
                         ))}
-                      </MBox>
-                    )}
-                  </AnimatePresence>
 
-                  {/* etiqueta H + H / H₂ */}
-                  <Box position="absolute" bottom={{ base: "-6px", md: "0" }} left="50%" transform="translateX(-50%)">
-                    <Text color={fisiologiaTxt} fontWeight="700" letterSpacing="0.1em"
-                          fontSize={{ base: "sm", md: "md" }} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
-                      {unido ? "H₂" : "H  +  H"}
-                    </Text>
-                  </Box>
-                </Box>
+                        <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
+                          <Box as="button" onClick={reiniciar}
+                               px={6} py={2.5} borderRadius="full" bg="transparent"
+                               color="rgba(255,255,255,0.85)" border="1px solid rgba(255,255,255,0.45)"
+                               fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
+                               letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
+                               _hover={{ borderColor: "white", color: "white" }}>
+                            ↺ Formar de nuevo
+                          </Box>
+                          <Box as="button" onClick={siguiente}
+                               px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
+                               fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                               letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
+                               boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+                               _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
+                            {esUltima ? "Ver las moléculas de la vida →" : `Crear una molécula de ${MOLS[indice + 1].nombre} →`}
+                          </Box>
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  </MBox>
+                )}
 
-                {/* ─── Acción / resultado ─── */}
-                <AnimatePresence mode="wait">
-                  {!unido ? (
-                    <MBox key="accion" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                          textAlign="center">
-                      <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}
-                            style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                        Tienes dos átomos de hidrógeno. Únelos para crear una molécula.
-                      </Text>
-                      <Box as="button" onClick={juntar}
-                           px={9} py={3} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                           fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
-                           letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                           boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
-                        Juntar (crear enlace)
+                {/* ───────── FASE C · las 3 moléculas de la vida ───────── */}
+                {terminado && (
+                  <MBox key="final" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}>
+                    <Flex direction="column" align="center" gap={{ base: 7, md: 9 }} py={{ base: 2, md: 4 }}>
+
+                      <Flex wrap="wrap" justify="center" align="flex-start" gap={{ base: 6, md: 12 }}>
+                        {MOLS.map((m, i) => (
+                          <MBox key={m.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.15 * i, duration: 0.6, ease: "easeOut" }}
+                                display="flex" flexDirection="column" alignItems="center" gap={2}>
+                            <Box position="relative" w={{ base: "128px", md: "156px" }} h={{ base: "128px", md: "156px" }}>
+                              <Box position="absolute" inset="0"
+                                   sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
+                                <MoleculaFormada mol={m} tam={S_MINI} />
+                              </Box>
+                            </Box>
+                            <Text color="white" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                                  style={{ textShadow: INK }}>{m.formula}</Text>
+                            <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                                  textAlign="center">{m.nombre}</Text>
+                          </MBox>
+                        ))}
+                      </Flex>
+
+                      <Box textAlign="center" maxW="640px">
+                       <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                              lineHeight="1.35" style={{ textShadow: INK }}>
+                          Las moléculas más importantes para la Vida, son parte de ti.
+                        </Text>
                       </Box>
-                    </MBox>
-                  ) : (
-                    <MBox key="resultado" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                          transition={{ delay: 0.4, duration: 0.5 }}
-                          maxW="640px" textAlign="center">
-                      <Text fontSize={{ base: "2xl", md: "3xl" }} mb={2}>🎉</Text>
-                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
-                            lineHeight="1.25" mb={4} style={{ textShadow: INK }}>
-                        ¡Has creado una molécula de hidrógeno (H₂)!
-                      </Text>
-                      <Box h="1px" w={{ base: "60%", md: "50%" }} mx="auto" mb={4}
-                           bgGradient={`linear(to-r, transparent, ${fisiologiaTxt}88, transparent)`} />
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" mb={3} style={{ textShadow: INK }}>
-                        Los átomos se unen <b>compartiendo sus electrones</b>: esa unión es un <b>enlace</b>. Al
-                        compartirlos, cada átomo se completa y el conjunto se vuelve estable.
-                      </Text>
-                      <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
-                        Encadenando átomos así se forma <b>todo</b>: el agua (H₂O), el aire que respiras, el azúcar
-                        que te da energía… y cada molécula de tu cuerpo.
-                      </Text>
 
-                      <Flex gap={4} mt={6} wrap="wrap" justify="center">
-                        <Box as="button" onClick={reiniciar}
+                      <Flex gap={4} wrap="wrap" justify="center">
+                        <Box as="button" onClick={empezarDeCero}
                              px={6} py={2.5} borderRadius="full" bg="transparent"
                              color="rgba(255,255,255,0.85)" border="1px solid rgba(255,255,255,0.45)"
                              fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
                              letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
                              _hover={{ borderColor: "white", color: "white" }}>
-                          ↺ Separar de nuevo
+                          ↺ Empezar de nuevo
                         </Box>
-                        <Box as="button" onClick={() => navigate("/metodo/fisiologia")}
+                        <Box as="button" onClick={() => navigate("/metodo/fisiologia/macromoleculas")}
                              px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
                              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                              letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
                              boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
                              _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
-                          Continuar el recorrido →
+                          Macromoléculas →
                         </Box>
                       </Flex>
-                    </MBox>
-                  )}
-                </AnimatePresence>
-              </Flex>
+                    </Flex>
+                  </MBox>
+                )}
+              </AnimatePresence>
             </Box>
           </Box>
         </Flex>

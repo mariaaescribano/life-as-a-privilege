@@ -150,8 +150,8 @@ function PiezaInterna({ tipo, x, y }: { tipo: Tipo; x: number; y: number }) {
       position="absolute"
       left={`${x}%`}
       top={`${y}%`}
-      w={{ base: "34px", md: "44px" }}
-      h={{ base: "34px", md: "44px" }}
+      w={{ base: "48px", md: "62px" }}
+      h={{ base: "48px", md: "62px" }}
       borderRadius="full"
       overflow="hidden"
       transform="translate(-50%, -50%)"
@@ -286,9 +286,9 @@ export default function MetodoFisiologiaParticulas() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Fisiología", onClick: () => navigate("/metodo/fisiologia") }}
+            prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
             extra={celulasBtn}
-            next={{ label: "Construye un átomo →", onClick: () => navigate("/metodo/fisiologia/atomos") }}
+            next={{ label: "Átomo →", onClick: () => navigate("/metodo/fisiologia/atomos") }}
           />
 
           {/* Instrucción (solo mientras construye) */}
@@ -399,7 +399,6 @@ export default function MetodoFisiologiaParticulas() {
 
                       {/* Texto (derecha) */}
                       <Flex flex="1" direction="column" gap={4} textAlign={{ base: "center", md: "left" }}>
-                        <Text fontSize={{ base: "2xl", md: "3xl" }}>🎉</Text>
                         <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                               letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
                           ¡Enhorabuena! Has construido una partícula.
@@ -408,7 +407,7 @@ export default function MetodoFisiologiaParticulas() {
                              bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
                         <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" style={{ textShadow: INK }}>
                           Las partículas están formadas por <b>quarks</b>, unas partículas fundamentales, y por
-                          <b> gluones</b>, que mantienen unidos a los quarks mediante la <b>interacción fuerte</b>.
+                          <b> gluones</b>, que los mantienen unidos.
                         </Text>
                         <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" style={{ textShadow: INK }}>
                           A nivel cuántico, este interior es extraordinariamente dinámico: los campos cuánticos generan
@@ -433,7 +432,7 @@ export default function MetodoFisiologiaParticulas() {
                                letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
                                boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
                                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
-                            Continuar el recorrido →
+                            Continuar →
                           </Box>
                         </Flex>
                       </Flex>

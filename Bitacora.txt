@@ -3,72 +3,12 @@
 USAR OBJ+ID : userId
 ---------------------------------------------
 
-- hacer mini diario de notas --> abajo a la izquierda, poder escribir lo que sea cuando se quiera, permitir que tenga varios tipos de clasificaciones
+IMAGENES
 
-
-xxx Después de cada recorfinal de cada recorrido hacer una especie de pdf con toda la información??
-
-
-- boton abajo a la derecha siempre para permitir que pueda agendar una llamada conmigo
-EN el recorrido, quiero abajo un botón a la derecha siempre que diga ¿Quieres compañía? y que al pulsar te salga un popup
-de "Puedes hacer este tramo ocn María. Agenda tu llamada..." reutiliza el componente que ya hay en Psicologia, pero el boton, los boxes y las letras adaptalo a la disciplina en la q estés
-Una vez que el usuario selecciona, primero tiene que proceder al pago y luego me llega un email
-
-
-- en heridas en el recorrido de psicología, poner pequeña explicación, tipo un icono de i rodeado de un circulo y cuando pulses que se abra un popup explicando
-los pasos que hay que hacer, tipo: 1. Creas una nueva herida 2. Juntas ahí los nudos y huellas que identificques 3. Le pones nombre o descripción 4. Cuando crees más heridas, recuerda que debes de pulsarlas antes de añadir más elemenetos en ella
-o algo así que se entienda
-
-
-- Además cuando le des al boton de guardar, tanto en heridas como en recorrido, que salga un spinner dentro del botón (el boton bkoqueado, claro) y cuando se haya guardado bien en la bd te sale un "Guardado" o un tick, 
-pero que el usuario sepa que lo ha guardado
-
-- en compromiso en el box de abajo, poner las respuestas de ¿Qué coste tiene mantener este patrón? de forma elegante. Pon el titulo de es patrón y a lo que el usuario se ha comprometido, para consolidarlo
-
-- q desde Compromiso se pueda abonar ayurveda y empezar, mismo estilo y patron que de astrologia a psicologia (honestamente, no se por que lo volviste a hacer de zero, si ya estaba hecho) 
-
-- poner boton de pago de prueba a ayurveda 
-
-AYURVEDA 
-- Equilibra 1/— --> poner numero total de cuantos pasos hay, en total hay 4 porque acaba en Tres energías. 
-- cambiar Tarjetas por Energías en el header, sera mas comprensble
-- poner en cada dosha el numero de paginas q hay Dosha: Vata
-
-- ponerse de acuerdo con el header y los botones, si un boton esta desactivado, se desactiva, no se pone un candado. Has vuelto a hacer lo mismo pero de formas distintas, entiendes a lo q me refiero?
-
-
-- poner día de ejemplo en creando día de ayurveda
-poner día de ejemplo en creando día de ayurveda, que el usuario pueda ver un ejemplo (que se abra un popup)
-tipo
-6:00 Lavarse los dientes y meditar 
-8:00 Entreno
-9:00 Trabajo
-13:00 Pausa para comer
-18:00 Salir del trabajo
-
-
-
-
-
-- traer el compromiso q te has hecho en psicología, q sea un popup que el usuario vea, q no se le olvide lo q se acaba de comprometer
-
-
-
--/metodo/ayurveda/dosha/kapha/cursos es igual de estetica q los de astrología??
-- poner Tu recorrido antes q cursos
-
-
-xxx poder descaragrase día ideal en Tu recorrido 
-cuando el usuario este biendo su día ideal final en Tu recorrido de ayurveda, que pueda descargar su día ideal
-xxx poder descargarse todo el trabajo + consejos de que equilibra y desequilibra a su dosha (pequeño recordatorio de take away)
-también, si lo desea, que haya un botón para descargarse toda la pagina de tu recorrido (incluido el día ideal) incluyendo además como de regalo lo que desequilibra y equilibra al dosha el cual esta investigando
-
-
-
-xxxhacer todo otra vez pero falso, para sacar fotos y subirlas
-
-
-
+Estructuras: mitocondria.png, ribosoma.png
+Niveles 2-3: celula.png, tejido.png, organo.png, sistema.png, cuerpo.png
+Macromoléculas: aminoacido.png, nucleotido.png, fosfolipido.png, glucosa.png, proteina.png, adn.png, membrana.png, carbohidrato.png
+Moléculas: carbono.png
 
 
 
