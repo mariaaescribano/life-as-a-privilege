@@ -32,6 +32,7 @@ const metodoAstrologia_module_1 = require("./metodoAstrologia/metodoAstrologia.m
 const metodoPsicologia_module_1 = require("./metodoPsicologia/metodoPsicologia.module");
 const metodoAyurveda_module_1 = require("./metodoAyurveda/metodoAyurveda.module");
 const metodoTcm_module_1 = require("./metodoTcm/metodoTcm.module");
+const metodoFisiologia_module_1 = require("./metodoFisiologia/metodoFisiologia.module");
 const metodoNotas_module_1 = require("./metodoNotas/metodoNotas.module");
 const booking_module_1 = require("./booking/booking.module");
 const cursos_module_1 = require("./cursos/cursos.module");
@@ -70,6 +71,7 @@ exports.AppModule = AppModule = __decorate([
             metodoPsicologia_module_1.MetodoPsicologiaModule,
             metodoAyurveda_module_1.MetodoAyurvedaModule,
             metodoTcm_module_1.MetodoTcmModule,
+            metodoFisiologia_module_1.MetodoFisiologiaModule,
             metodoNotas_module_1.MetodoNotasModule,
             booking_module_1.BookingModule,
             cursos_module_1.CursosModule,

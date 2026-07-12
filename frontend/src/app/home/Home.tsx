@@ -9,6 +9,7 @@ import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
+import { PagoFisiologiaModal } from "../../components/metodo/PagoFisiologiaModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import axios from "axios";
 import {
@@ -61,6 +62,7 @@ const Home = () => {
   const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
   const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(null);
   const [tcmSuscrito, setTcmSuscrito] = useState<boolean | null>(null);
+  const [fisiologiaSuscrito, setFisiologiaSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
@@ -80,6 +82,11 @@ const Home = () => {
   const [pagoTcmLoading, setPagoTcmLoading] = useState(false);
   const [pagoTcmError, setPagoTcmError] = useState<string | null>(null);
   const [pagoTcmExitoOpen, setPagoTcmExitoOpen] = useState(false);
+  // Pago de Fisiología (5ª disciplina)
+  const [pagoFisioOpen, setPagoFisioOpen] = useState(false);
+  const [pagoFisioLoading, setPagoFisioLoading] = useState(false);
+  const [pagoFisioError, setPagoFisioError] = useState<string | null>(null);
+  const [pagoFisioExitoOpen, setPagoFisioExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
 
   const continuarAstrologia = async () => {
@@ -153,7 +160,7 @@ const Home = () => {
   };
 
   // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
-  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm") => {
+  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm" | "fisiologia") => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     try {
@@ -178,7 +185,7 @@ const Home = () => {
         setAyurvedaSuscrito(true);
         setPagoAyurOpen(false);
         setPagoAyurExitoOpen(true);
-      } else {
+      } else if (scope === "tcm") {
         // TCM desbloquea también toda la cadena anterior.
         setMetodoSuscrito(true);
         setPsicologiaSuscrito(true);
@@ -186,13 +193,23 @@ const Home = () => {
         setTcmSuscrito(true);
         setPagoTcmOpen(false);
         setPagoTcmExitoOpen(true);
+      } else {
+        // Fisiología desbloquea también toda la cadena anterior.
+        setMetodoSuscrito(true);
+        setPsicologiaSuscrito(true);
+        setAyurvedaSuscrito(true);
+        setTcmSuscrito(true);
+        setFisiologiaSuscrito(true);
+        setPagoFisioOpen(false);
+        setPagoFisioExitoOpen(true);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
       if (scope === "metodo") setPagoError(msg);
       else if (scope === "psicologia") setPagoPsicoError(msg);
       else if (scope === "ayurveda") setPagoAyurError(msg);
-      else setPagoTcmError(msg);
+      else if (scope === "tcm") setPagoTcmError(msg);
+      else setPagoFisioError(msg);
     }
   };
 
@@ -301,6 +318,41 @@ const Home = () => {
     }
   };
 
+  // Fisiología (5ª disciplina): clic en su círculo del mandala.
+  const irFisiologia = () => {
+    if (fisiologiaSuscrito) {
+      navigate("/metodo/fisiologia");
+    } else {
+      setPagoFisioError(null);
+      setPagoFisioOpen(true);
+    }
+  };
+
+  const pagarFisiologia = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoFisioLoading(true);
+    setPagoFisioError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/fisiologia/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoFisioError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoFisioLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoFisioError(
+        status === 403
+          ? "Necesitas completar el pago de Medicina China antes de adquirir Fisiología."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoFisioLoading(false);
+    }
+  };
+
   const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
   const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
   const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
@@ -333,6 +385,7 @@ const Home = () => {
     const psicologiaPagado = url.searchParams.get("psicologia_pagado");
     const ayurvedaPagado = url.searchParams.get("ayurveda_pagado");
     const tcmPagado = url.searchParams.get("tcm_pagado");
+    const fisiologiaPagado = url.searchParams.get("fisiologia_pagado");
 
     const cargarSuscripcion = async () => {
       try {
@@ -344,12 +397,14 @@ const Home = () => {
         setPsicologiaSuscrito(!!me.data?.psicologia_suscrito);
         setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
         setTcmSuscrito(!!me.data?.tcm_suscrito);
+        setFisiologiaSuscrito(!!me.data?.fisiologia_suscrito);
         return suscrito;
       } catch {
         setMetodoSuscrito(false);
         setPsicologiaSuscrito(false);
         setAyurvedaSuscrito(false);
         setTcmSuscrito(false);
+        setFisiologiaSuscrito(false);
         return false;
       }
     };
@@ -434,6 +489,27 @@ const Home = () => {
           if (res.data?.ok) {
             setTcmSuscrito(true);
             setPagoTcmExitoOpen(true);
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else if (fisiologiaPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("fisiologia_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/fisiologia/verify`, {
+          params: { session_id: fisiologiaPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            setFisiologiaSuscrito(true);
+            setPagoFisioExitoOpen(true);
           }
         })
         .catch(async () => {
@@ -628,6 +704,8 @@ const Home = () => {
                   ? irAyurveda
                   : d.name === tcmNom
                   ? irTcm
+                  : d.name === fisiologiaNom
+                  ? irFisiologia
                   : () => navigate(d.link);
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
@@ -639,6 +717,8 @@ const Home = () => {
                     ? "Desbloquea Ayurveda para empezar la 3ª disciplina."
                     : d.name === tcmNom && clickable
                     ? "Desbloquea Medicina China para empezar la 4ª disciplina."
+                    : d.name === fisiologiaNom && clickable
+                    ? "Desbloquea Fisiología para empezar la 5ª disciplina."
                     : "El Mapa se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
@@ -826,6 +906,20 @@ const Home = () => {
         loading={pagoTcmLoading}
         error={pagoTcmError}
         onTest={testPagos ? () => testUnlock("tcm") : undefined}
+      />
+      <PagoExitoModal
+        isOpen={pagoFisioExitoOpen}
+        onAceptar={() => setPagoFisioExitoOpen(false)}
+        titulo="Pago de Fisiología realizado"
+        mensaje="Ya puedes empezar la 5ª disciplina del Mapa."
+      />
+      <PagoFisiologiaModal
+        isOpen={pagoFisioOpen}
+        onClose={() => { setPagoFisioOpen(false); setPagoFisioError(null); }}
+        onPagar={pagarFisiologia}
+        loading={pagoFisioLoading}
+        error={pagoFisioError}
+        onTest={testPagos ? () => testUnlock("fisiologia") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
     </Box>

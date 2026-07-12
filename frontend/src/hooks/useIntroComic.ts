@@ -13,6 +13,13 @@ import { API_URL } from "../GlobalVariables";
 //   · close():        cierra sin marcar (podrá reaparecer al reentrar).
 export function useIntroComic(endpointBase: string) {
   const [open, setOpen] = useState(false);
+  // Respaldo local: si el backend aún no tiene la tabla del recorrido (ALTER/CREATE
+  // pendiente), el GET/PATCH fallan. Con este flag por dispositivo garantizamos
+  // que la intro SÍ aparezca la primera vez y NO se repita tras pulsar «Leído».
+  const localKey = `intro_visto_${endpointBase}`;
+  const vistoLocal = () => {
+    try { return !!localStorage.getItem(localKey); } catch { return false; }
+  };
 
   const checkAndOpen = useCallback(async () => {
     const userId = sessionStorage.getItem("userId");
@@ -22,16 +29,21 @@ export function useIntroComic(endpointBase: string) {
       const res = await axios.get(`${API_URL}/${endpointBase}/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.data?.intro_visto) setOpen(true);
+      // Abrimos si ni la BD ni el flag local la dan por vista (así, aunque el
+      // PATCH no llegara a persistir, no reaparece una vez marcada localmente).
+      if (!res.data?.intro_visto && !vistoLocal()) setOpen(true);
     } catch {
-      // Si la consulta falla, no forzamos la intro.
+      // Backend no disponible (p.ej. tabla aún no creada): usamos el flag local.
+      if (!vistoLocal()) setOpen(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpointBase]);
 
   const openNow = useCallback(() => setOpen(true), []);
 
   const finish = useCallback(async () => {
     setOpen(false);
+    try { localStorage.setItem(localKey, "1"); } catch { /* sin almacenamiento */ }
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return;
@@ -42,8 +54,9 @@ export function useIntroComic(endpointBase: string) {
         { headers: { Authorization: `Bearer ${token}` } },
       );
     } catch {
-      // Si el guardado falla, la intro reaparecerá la próxima vez (aceptable).
+      // Si el guardado falla, el flag local ya evita que reaparezca en este equipo.
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpointBase]);
 
   const close = useCallback(() => setOpen(false), []);

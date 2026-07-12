@@ -24,6 +24,7 @@ import { MetodoAstrologiaModule } from './metodoAstrologia/metodoAstrologia.modu
 import { MetodoPsicologiaModule } from './metodoPsicologia/metodoPsicologia.module';
 import { MetodoAyurvedaModule } from './metodoAyurveda/metodoAyurveda.module';
 import { MetodoTcmModule } from './metodoTcm/metodoTcm.module';
+import { MetodoFisiologiaModule } from './metodoFisiologia/metodoFisiologia.module';
 import { MetodoNotasModule } from './metodoNotas/metodoNotas.module';
 import { BookingModule } from './booking/booking.module';
 import { CursosModule } from './cursos/cursos.module';
@@ -60,6 +61,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     MetodoPsicologiaModule,
     MetodoAyurvedaModule,
     MetodoTcmModule,
+    MetodoFisiologiaModule,
     MetodoNotasModule,
     BookingModule,
     CursosModule,

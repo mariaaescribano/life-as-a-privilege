@@ -266,6 +266,72 @@ export class PaymentService {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
+  // Fisiología — quinta disciplina de «El Recorrido». Requiere haber pagado
+  // antes la cuarta disciplina (Medicina China → tcm_suscrito). Mismo importe y
+  // mismo flujo: checkout → Stripe → verify → flag en BD.
+  // ─────────────────────────────────────────────────────────────────────────
+  async createFisiologiaCheckout(userId: string) {
+    // Prerrequisito: el recorrido se hace en orden, así que Fisiología solo se
+    // puede adquirir si ya se pagó la cuarta disciplina (Medicina China).
+    const user = (await this.userService.getUserById(userId)) as any;
+    if (!user?.tcm_suscrito) {
+      throw new ForbiddenException(
+        'Necesitas completar el pago de Medicina China antes de adquirir Fisiología.',
+      );
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+    const session = await this.stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: 'Fisiología — quinta disciplina de El Recorrido' },
+            unit_amount: 2000,
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: { userId, scope: 'fisiologia' },
+      success_url: `${frontendUrl}/home?fisiologia_pagado={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}/home`,
+    });
+
+    if (!session.url) {
+      throw new BadRequestException('Stripe no devolvió URL de checkout');
+    }
+
+    return { url: session.url };
+  }
+
+  async verifyFisiologiaCheckout(sessionId: string, userId: string) {
+    if (!sessionId) throw new BadRequestException('session_id requerido');
+
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
+
+    if (session.payment_status !== 'paid') {
+      return { ok: false as const, reason: 'unpaid' };
+    }
+    if (session.metadata?.scope !== 'fisiologia') {
+      return { ok: false as const, reason: 'wrong-scope' };
+    }
+    if (session.metadata?.userId !== userId) {
+      return { ok: false as const, reason: 'wrong-user' };
+    }
+
+    await this.userService.marcarSuscritoFisiologia(userId);
+    return { ok: true as const };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
   // MODO TEST — desbloqueo sin pasar por Stripe. SOLO se activa si la variable
   // de entorno ALLOW_TEST_PAGOS === 'true' (nunca en producción). Marca los
   // flags directamente para poder probar el recorrido sin cobro real.
@@ -274,24 +340,28 @@ export class PaymentService {
     return process.env.ALLOW_TEST_PAGOS === 'true';
   }
 
-  async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'all') {
+  async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'all') {
     if (!PaymentService.testPagosHabilitado()) {
       throw new ForbiddenException('El modo test de pagos no está habilitado.');
     }
-    // Cadena de prerrequisitos: Medicina China requiere Ayurveda, que requiere
-    // Psicología, que a su vez requiere Astrología. Al desbloquear una disciplina,
-    // desbloqueamos también las anteriores para respetar el orden del recorrido.
-    if (scope === 'metodo' || scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'all') {
+    // Cadena de prerrequisitos: Fisiología requiere Medicina China, que requiere
+    // Ayurveda, que requiere Psicología, que a su vez requiere Astrología. Al
+    // desbloquear una disciplina, desbloqueamos también las anteriores para
+    // respetar el orden del recorrido.
+    if (scope === 'metodo' || scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'all') {
       await this.userService.marcarSuscritoMetodo(userId);
     }
-    if (scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'all') {
+    if (scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'all') {
       await this.userService.marcarSuscritoPsicologia(userId);
     }
-    if (scope === 'ayurveda' || scope === 'tcm' || scope === 'all') {
+    if (scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'all') {
       await this.userService.marcarSuscritoAyurveda(userId);
     }
-    if (scope === 'tcm' || scope === 'all') {
+    if (scope === 'tcm' || scope === 'fisiologia' || scope === 'all') {
       await this.userService.marcarSuscritoTcm(userId);
+    }
+    if (scope === 'fisiologia' || scope === 'all') {
+      await this.userService.marcarSuscritoFisiologia(userId);
     }
     return { ok: true as const };
   }

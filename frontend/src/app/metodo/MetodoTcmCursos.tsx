@@ -14,7 +14,10 @@ import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle"
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
-import { API_URL, tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon } from "../../GlobalVariables";
+import {
+  API_URL, tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon,
+  fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon,
+} from "../../GlobalVariables";
 
 export default function MetodoTcmCursos() {
   const navigate = useNavigate();
@@ -67,6 +70,7 @@ export default function MetodoTcmCursos() {
             mb={0}
             prev={{ label: "← Lee tu lengua", onClick: () => navigate("/metodo/tcm/lengua/leer") }}
             extra={ilustracionesBtn}
+            next={{ label: "Fisiología →", onClick: () => navigate("/metodo/fisiologia") }}
           />
           </Reveal>
 
@@ -124,6 +128,11 @@ export default function MetodoTcmCursos() {
             </Box>
           )}
           </Reveal>
+
+          {/* ── Siguiente disciplina · Fisiología (bloqueada hasta pagar) ── */}
+          <Reveal inView direction="up" distance={20} delay={0.1} duration={0.6} amount={0.2} w="100%" display="flex" justifyContent="center">
+            <SiguienteFisiologia onClick={() => navigate("/metodo/fisiologia")} />
+          </Reveal>
         </Flex>
       </Flex>
 
@@ -134,6 +143,86 @@ export default function MetodoTcmCursos() {
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 
       <SiteFooter />
+    </Box>
+  );
+}
+
+// ── Botón a la siguiente disciplina (Fisiología), con candado BLANCO porque
+//    primero hay que pagarla. Al pulsarlo lleva a /metodo/fisiologia, que abre
+//    su modal de pago si aún no está desbloqueada. ─────────────────────────────
+function SiguienteFisiologia({ onClick }: { onClick: () => void }) {
+  return (
+    <Box
+      as="button"
+      onClick={onClick}
+      position="relative"
+      w="100%"
+      maxW="520px"
+      borderRadius="2xl"
+      overflow="hidden"
+      cursor="pointer"
+      textAlign="left"
+      border={`1px solid ${fisiologiaTxt}55`}
+      boxShadow={`0 0 16px ${fisiologiaTxt}22, 0 0 40px ${fisiologiaTxt}14, inset 0 0 24px rgba(0,0,0,0.25)`}
+      transition="all 0.25s ease"
+      _hover={{
+        transform: "translateY(-4px)",
+        borderColor: fisiologiaTxt,
+        boxShadow: `0 0 26px ${fisiologiaTxt}88, 0 0 64px ${fisiologiaTxt}44, inset 0 0 24px rgba(0,0,0,0.2)`,
+      }}
+      _active={{ transform: "translateY(-1px)" }}
+    >
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}88`} />
+      <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 5 }} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+        {/* Icono de la disciplina con candado blanco encima */}
+        <Box position="relative" flexShrink={0} w={{ base: "56px", md: "64px" }} h={{ base: "56px", md: "64px" }}>
+          <Box
+            w="100%" h="100%" borderRadius="full" overflow="hidden"
+            border={`2px solid ${fisiologiaTxt}`}
+            bg={`${fisiologiaBg}cc`}
+            display="flex" alignItems="center" justifyContent="center"
+          >
+            <FisiologiaIcon size={{ base: "28px", md: "32px" }} />
+          </Box>
+          <Box
+            position="absolute" inset={0} borderRadius="full"
+            bg="rgba(0,0,0,0.5)"
+            display="flex" alignItems="center" justifyContent="center"
+            sx={{ backdropFilter: "blur(2px)" }}
+          >
+            <Box
+              as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+              w={{ base: "24px", md: "28px" }} h={{ base: "24px", md: "28px" }} fill="#ffffff"
+              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}
+            >
+              <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
+            </Box>
+          </Box>
+        </Box>
+
+        <Box flex="1" minW={0}>
+          <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase"
+                style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
+            Siguiente disciplina
+          </Text>
+          <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700} lineHeight="1.2"
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+            Fisiología
+          </Text>
+          <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" mt={0.5}
+                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+            Desbloquéala para continuar el Mapa.
+          </Text>
+        </Box>
+
+        <Box
+          as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+          w="22px" h="22px" fill="#ffffff" flexShrink={0}
+          style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}
+        >
+          <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+        </Box>
+      </Flex>
     </Box>
   );
 }

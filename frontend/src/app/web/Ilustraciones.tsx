@@ -4,6 +4,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { StarsLayer } from "../../components/global/StarsLayer";
 
 // Página /ilustraciones — galería con TODAS las series de viñetas de todas las
 // disciplinas. Al pulsar una, se abre el popup inmersivo con el estilo de su
@@ -18,6 +19,9 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
       onClick={onOpen}
       position="relative"
       w="100%"
+      h="100%"
+      display="flex"
+      flexDirection="column"
       borderRadius="2xl"
       overflow="hidden"
       border={`1px solid ${c}55`}
@@ -38,7 +42,7 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
       }}
     >
       {/* Portada */}
-      <Box position="relative" w="100%" aspectRatio={1} overflow="hidden" borderBottom={`1px solid ${c}44`} bg="rgba(0,0,0,0.35)">
+      <Box position="relative" w="100%" aspectRatio={1} flexShrink={0} overflow="hidden" borderBottom="1px solid rgba(255,255,255,0.9)" bg="rgba(0,0,0,0.35)">
         {!coverFailed ? (
           <Box
             as="img"
@@ -49,7 +53,7 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
             inset="0"
             w="100%"
             h="100%"
-            style={{ objectFit: "cover", objectPosition: "center" }}
+            style={{ objectFit: "cover", objectPosition: "top" }}
             onError={() => setCoverFailed(true)}
           />
         ) : (
@@ -59,9 +63,40 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
         )}
       </Box>
 
-      {/* Pie: disciplina + título */}
-      <Flex direction="column" align="center" gap={1} py={{ base: 4, md: 4 }} px={3}>
-        <Text color={`${c}cc`} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase">
+      {/* Pie: disciplina + título. Su fondo es la imagen de la disciplina a la
+          que pertenece (o el cielo estrellado en Astrología, que no tiene
+          imagen), con un velo oscuro para que el texto siga legible. */}
+      <Flex
+        direction="column"
+        align="center"
+        justify="center"
+        flex="1"
+        gap={1}
+        py={{ base: 4, md: 4 }}
+        px={3}
+        position="relative"
+        overflow="hidden"
+      >
+        {/* Fondo de la disciplina */}
+        <Box position="absolute" inset="0" zIndex={0} pointerEvents="none">
+          {entry.disciplinaBgImage ? (
+            <>
+              <Box
+                position="absolute"
+                inset="0"
+                bgColor={entry.disciplinaBgColor}
+                bgImage={`url('${encodeURI(entry.disciplinaBgImage)}')`}
+                bgSize="cover"
+                bgPosition="center"
+                bgRepeat="no-repeat"
+              />
+            </>
+          ) : (
+            <StarsLayer borderRadius="0" overlay="rgba(8,13,30,0.32)" />
+          )}
+        </Box>
+
+        <Text color={c} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase" position="relative" zIndex={1}>
           {entry.disciplina}
         </Text>
         <Text
@@ -71,12 +106,13 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
           letterSpacing="0.04em"
           textAlign="center"
           lineHeight="1.2"
-          style={{ textShadow: `0 0 12px ${c}aa, 0 0 26px ${c}55` }}
+          position="relative"
+          zIndex={1}
         >
           {entry.titulo}
         </Text>
         <Flex align="center" gap={1.5} mt={1.5} color={c} fontSize="2xs" letterSpacing="0.18em" textTransform="uppercase"
-              style={{ textShadow: `0 0 10px ${c}aa` }}>
+              position="relative" zIndex={1}>
           <Text as="span">Ver</Text>
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="currentColor">
             <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />

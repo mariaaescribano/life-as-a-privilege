@@ -141,10 +141,19 @@ export class UserService {
     // existir todavía si está pendiente el ALTER TABLE → caemos al intento 2).
     const full = await this.databaseService.getClient()
       .from('user')
-      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra')
       .eq('id', id)
       .single();
     if (full.data) return full.data;
+
+    // Intento 1b: sin fisiologia_* (por si aún no se ha migrado esa columna) para no
+    // perder el resto de flags que sí existen.
+    const conTcm = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra')
+      .eq('id', id)
+      .single();
+    if (conTcm.data) return conTcm.data;
 
     // Intento 2: sin ayurveda_* (por si aún no se ha migrado esa columna) para no
     // perder los flags de metodo/psicologia que sí existen.
@@ -344,6 +353,35 @@ export class UserService {
 
     if (tryUpdate.error) {
       console.warn('[user.service] update tcm_* falló (¿columnas no creadas?):', tryUpdate.error.message);
+      const { data, error } = await this.databaseService.getClient()
+        .from('user')
+        .select('id, name, email')
+        .eq('id', id)
+        .single();
+      if (error || !data) throw new NotFoundException('Usuario no encontrado');
+      return data;
+    }
+
+    if (!tryUpdate.data) throw new NotFoundException('Usuario no encontrado');
+    return tryUpdate.data;
+  }
+
+  // --------- Marcar usuario como suscrito a Fisiología (5ª disciplina) ---------
+  async marcarSuscritoFisiologia(id: string) {
+    // Mismo patrón que marcarSuscritoTcm: si las columnas fisiologia_* aún no
+    // existen (ALTER TABLE pendiente), no rompe el flujo.
+    const tryUpdate = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        fisiologia_suscrito: true,
+        fisiologia_fecha_compra: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select('id, name, email')
+      .single();
+
+    if (tryUpdate.error) {
+      console.warn('[user.service] update fisiologia_* falló (¿columnas no creadas?):', tryUpdate.error.message);
       const { data, error } = await this.databaseService.getClient()
         .from('user')
         .select('id, name, email')

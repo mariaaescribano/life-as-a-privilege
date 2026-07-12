@@ -90,6 +90,10 @@ import MetodoTcmDiagnostico from "./app/metodo/MetodoTcmDiagnostico";
 import MetodoTcmLengua from "./app/metodo/MetodoTcmLengua";
 import MetodoTcmLenguaLeer from "./app/metodo/MetodoTcmLenguaLeer";
 import MetodoTcmCursos from "./app/metodo/MetodoTcmCursos";
+import MetodoFisiologia from "./app/metodo/MetodoFisiologia";
+import MetodoFisiologiaParticulas from "./app/metodo/MetodoFisiologiaParticulas";
+import MetodoFisiologiaAtomos from "./app/metodo/MetodoFisiologiaAtomos";
+import MetodoFisiologiaMoleculas from "./app/metodo/MetodoFisiologiaMoleculas";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -208,6 +212,10 @@ export default function App()
       <Route path="/metodo/tcm/lengua" element={<PrivateRoute><MetodoTcmLengua /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua/leer" element={<PrivateRoute><MetodoTcmLenguaLeer /></PrivateRoute>} />
       <Route path="/metodo/tcm/cursos" element={<PrivateRoute><MetodoTcmCursos /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia" element={<PrivateRoute><MetodoFisiologia /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/particulas" element={<PrivateRoute><MetodoFisiologiaParticulas /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/atomos" element={<PrivateRoute><MetodoFisiologiaAtomos /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/moleculas" element={<PrivateRoute><MetodoFisiologiaMoleculas /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

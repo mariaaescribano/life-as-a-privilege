@@ -306,7 +306,7 @@ function Banda({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Separador horizontal (color de la disciplina) entre apartados ────────────
+// ── Separador horizontal (blanco) entre apartados ────────────────────────────
 function Separador() {
-  return <Box h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${tcmTxt}cc, transparent)`} />;
+  return <Box h="1px" w="100%" bgGradient="linear(to-r, transparent, rgba(255,255,255,0.85), transparent)" />;
 }

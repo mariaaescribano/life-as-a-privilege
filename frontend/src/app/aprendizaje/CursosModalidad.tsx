@@ -13,11 +13,12 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import { HinduismoIlustracionesModal } from "../../components/metodo/HinduismoIlustracionesModal";
 import { TCMIlustracionesModal } from "../../components/metodo/TCMIlustracionesModal";
 import { ContactModal } from "../../components/global/ContactModal";
+import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCursosData } from "../../data/cursosApi";
 import type { ModalidadInfo } from "../../hardCoded/cursos";
-import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, CelulasOrganosIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
+import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
 
 
 // Decodifica un slug de URL (p.ej. "Astrolog%C3%ADa" → "Astrología"). Si ya
@@ -99,6 +100,8 @@ export default function CursosModalidad() {
   const [ilustracionesAstroOpen, setIlustracionesAstroOpen] = useState(false);
   const [ilustracionesTCMOpen, setIlustracionesTCMOpen] = useState(false);
   const [testsTCMOpen, setTestsTCMOpen] = useState(false);
+  // Popup inmersivo "Tus células" (solo Fisiología).
+  const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   // Botones contextuales que entran dentro del header de la disciplina.
   // Cada disciplina con tests/material extra define los suyos; el resto deja
@@ -134,7 +137,7 @@ export default function CursosModalidad() {
     }
     if (moduloId === fisiologiaNom) {
       return {
-        extra: { label: "Tus células", onClick: () => navigate("/espacio/celulas-cuerpo"), icon: <CelulasOrganosIcon size="16px" /> },
+        extra: celulasBtn,
       };
     }
     return {};
@@ -291,6 +294,9 @@ export default function CursosModalidad() {
 
       {/* ── FOOTER ── */}
       <SiteFooter />
+
+      {/* ── POPUP INMERSIVO "TUS CÉLULAS" (Fisiología) ── */}
+      {celulasModal}
 
       {/* ── MODAL ¿QUIERES SABER MÁS? ── */}
       <ContactModal

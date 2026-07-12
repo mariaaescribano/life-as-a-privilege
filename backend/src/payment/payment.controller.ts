@@ -54,6 +54,18 @@ export class PaymentController {
     return await this.paymentService.verifyTcmCheckout(sessionId, req.user.userId);
   }
 
+  @Post('fisiologia/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createFisiologiaCheckout(@Req() req: any) {
+    return await this.paymentService.createFisiologiaCheckout(req.user.userId);
+  }
+
+  @Get('fisiologia/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyFisiologiaCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyFisiologiaCheckout(sessionId, req.user.userId);
+  }
+
   // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
   @Get('test/enabled')
   testEnabled() {
@@ -62,7 +74,7 @@ export class PaymentController {
 
   @Post('test/unlock')
   @UseGuards(JwtAuthGuard)
-  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'all' }) {
+  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'all' }) {
     return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
   }
 
