@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import type { Curso } from "../../hardCoded/cursos";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
+import SpinnerTurquesa from "../global/Spinner";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -37,6 +38,7 @@ export function CursoCardDetalle({
 }) {
   const navigate = useNavigate();
   const [leccionesOpen, setLeccionesOpen] = useState(false);
+  const [fotoOk, setFotoOk] = useState(false); // portada del curso ya cargada
 
   const handleAcceder = () => {
     if (curso.precio === null) navigate(curso.cursoLink);
@@ -72,12 +74,20 @@ export function CursoCardDetalle({
       <Flex direction="column" position="relative" zIndex={1} h="100%" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }} gap={{ base: 3, md: 3 }}>
         {/* Foto del curso (16:9) — protagonista de la tarjeta */}
         <Box
+          position="relative"
           borderRadius="xl"
           overflow="hidden"
           w="100%"
           sx={{ aspectRatio: "16 / 9" }}
         >
-          <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block" />
+          <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block"
+                 onLoad={() => setFotoOk(true)}
+                 opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
+          {!fotoOk && (
+            <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+              <SpinnerTurquesa fullScreen={false} color={color} />
+            </Box>
+          )}
         </Box>
 
         {/* Descripción (secundaria) */}

@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
 import { ELEMENTOS, ORDEN_ELEMENTOS, type Elemento, type Balance } from "./tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO, CONTENIDO_ELEMENTOS } from "./tcmElementosContenido";
 
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
+
+// Los 5 elementos del selector «florecen» uno a uno al asomar el box en pantalla.
+const MotionG = motion.g as any;
+const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
+const STAR_BASE = 0.1, STAR_STEP = 0.13, STAR_DUR = 0.55;
 
 const ESTADO_LABEL: Record<Balance, string> = {
   equilibrio: "En equilibrio", exceso: "En exceso", deficiencia: "En deficiencia",
@@ -35,6 +41,11 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
   const [elActivo, setElActivo] = useState<Elemento>(predominante);
   useEffect(() => { setElActivo(predominante); }, [predominante]);
 
+  const reduce = useReducedMotion();
+  const starRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(starRef, { once: true, amount: 0.3 });
+  const enter = reduce || inView;
+
   const E = ELEMENTOS[elActivo];
   const C = CONTENIDO_ELEMENTOS[elActivo];
   const balance = estados[elActivo]?.balance ?? null;
@@ -47,7 +58,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
         <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
           <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
           <Box position="relative" zIndex={1} px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }} h="100%">
-            <Flex justify="center" align="center" h="100%" minH={{ md: "440px" }}>
+            <Flex ref={starRef} justify="center" align="center" h="100%" minH={{ md: "440px" }}>
               <Box as="svg" viewBox="0 0 400 348" w={{ base: "340px", md: "480px" }} h="auto" overflow="visible">
                 <defs>
                   {ORDEN_ELEMENTOS.map((el, i) => {
@@ -67,7 +78,12 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                   const Ei = ELEMENTOS[el];
                   const activo = el === elActivo;
                   return (
-                    <g key={el} style={{ cursor: "pointer" }} onClick={() => setElActivo(el)}>
+                    <MotionG key={el}
+                             initial={reduce ? false : { opacity: 0, scale: 0.3 }}
+                             animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 })}
+                             transition={{ delay: STAR_BASE + i * STAR_STEP, duration: STAR_DUR, ease: EASE_POP }}
+                             style={{ cursor: "pointer", transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}
+                             onClick={() => setElActivo(el)}>
                       <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
                       <image href={ICONO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
                              width={FOTO_R * 2} height={FOTO_R * 2}
@@ -81,7 +97,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                             style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
                         {Ei.nombre}
                       </text>
-                    </g>
+                    </MotionG>
                   );
                 })}
               </Box>

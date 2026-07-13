@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { tcmBg, tcmTxt } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, CICLO_SHENG, CICLO_KE,
@@ -88,6 +89,16 @@ function cSegmento(a: number, b: number) {
 // Sombra negra para los títulos (no roja).
 const TITLE_SHADOW = "0 2px 8px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.85)";
 
+// ── Coreografía de entrada de la estrella (se dispara al asomar en pantalla) ──
+// Primero FLORECEN los 5 elementos (uno a uno desde su vértice) y DESPUÉS salen
+// las flechas una a una, siguiendo el recorrido del ciclo (brotan del elemento
+// de origen hacia el de destino). En desktop las dos estrellas están a la vez en
+// pantalla → animan juntas; en móvil, apiladas, cada una espera a su scroll.
+const MotionG = motion.g as any;
+const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
+const CIC_ELEM_BASE = 0.12, CIC_ELEM_STEP = 0.12, CIC_ELEM_DUR = 0.5;
+const CIC_ARROW_BASE = 0.95, CIC_ARROW_STEP = 0.24, CIC_ARROW_DUR = 0.5;
+
 // ── Estrella de un ciclo (pentágono con iconos + rayitas clicables) ──────────
 export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge }: {
   titulo: string;
@@ -99,6 +110,14 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
 }) {
   const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;
   const [hover, setHover] = useState<Elemento | null>(null);
+
+  // Disparo al asomar en pantalla; `walk` = orden de recorrido para escalonar
+  // las flechas (madera→fuego→… en Sheng, madera→tierra→… en Ke).
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
+  const enter = reduce || inView;
+  const walk = ordenCiclo(ciclo);
 
   return (
     <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
@@ -123,9 +142,11 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
         <Box mx="auto" mt={5} mb={2} w="62%" maxW="240px" h="1px"
              bgGradient="linear(to-r, transparent, rgba(255,255,255,0.9), transparent)" />
 
-        <Flex justify="center" mt={{ base: 4, md: 6 }}>
+        <Flex ref={ref} justify="center" mt={{ base: 4, md: 6 }}>
           <Box as="svg" viewBox="0 0 400 348" w="100%" maxW={{ base: "400px", md: "600px" }} h="auto" overflow="visible">
-            {/* Rayitas (aristas del ciclo) — se dibujan primero, bajo los iconos */}
+            {/* Rayitas (aristas del ciclo) — se dibujan primero, bajo los iconos.
+                Cada flecha BROTA de su elemento de origen (escala desde `inicio`),
+                una a una en el orden del ciclo, después de que florezcan los iconos. */}
             {ORDEN_ELEMENTOS.map((origen) => {
               const destino = mapa[origen];
               const { inicio, fin, ux, uy } = cSegmento(idxElemento(origen), idxElemento(destino));
@@ -140,7 +161,11 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
               const p2 = { x: bc.x + px * aw, y: bc.y + py * aw };
               const p3 = { x: bc.x - px * aw, y: bc.y - py * aw };
               return (
-                <g key={`${ciclo}-${origen}`} style={{ cursor: "pointer" }}
+                <MotionG key={`${ciclo}-${origen}`}
+                   initial={reduce ? false : { opacity: 0, scale: 0.55 }}
+                   animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.55 })}
+                   transition={{ delay: CIC_ARROW_BASE + walk.indexOf(origen) * CIC_ARROW_STEP, duration: CIC_ARROW_DUR, ease: EASE_POP }}
+                   style={{ cursor: "pointer", transformBox: "view-box", transformOrigin: `${inicio.x}px ${inicio.y}px` }}
                    onClick={() => onEdge(ciclo, origen)}
                    onMouseEnter={() => setHover(origen)} onMouseLeave={() => setHover(null)}>
                   <line x1={inicio.x} y1={inicio.y} x2={fin.x} y2={fin.y}
@@ -153,7 +178,7 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
                   <polygon points={`${fin.x},${fin.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`}
                            fill={color} opacity={activo ? 1 : 0.9}
                            style={{ filter: `drop-shadow(0 0 ${activo ? 6 : 2}px ${color})` }} />
-                </g>
+                </MotionG>
               );
             })}
 
@@ -172,7 +197,11 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
               const label = cVertice(i, C_R + 54);
               const color = ELEMENTOS[el].color;
               return (
-                <g key={el}>
+                <MotionG key={el}
+                  initial={reduce ? false : { opacity: 0, scale: 0.3 }}
+                  animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 })}
+                  transition={{ delay: CIC_ELEM_BASE + i * CIC_ELEM_STEP, duration: CIC_ELEM_DUR, ease: EASE_POP }}
+                  style={{ transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}>
                   <circle cx={v.x} cy={v.y} r={C_FOTO_R + 2} fill={tcmBg} opacity={0.55} />
                   <image href={ICONO_ELEMENTO[el]} x={v.x - C_FOTO_R} y={v.y - C_FOTO_R}
                          width={C_FOTO_R * 2} height={C_FOTO_R * 2}
@@ -184,7 +213,7 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
                         style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}>
                     {ELEMENTOS[el].nombre}
                   </text>
-                </g>
+                </MotionG>
               );
             })}
           </Box>

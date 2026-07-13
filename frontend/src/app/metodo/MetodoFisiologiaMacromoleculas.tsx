@@ -514,13 +514,9 @@ export default function MetodoFisiologiaMacromoleculas() {
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
-                    style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Las grandes moléculas de la vida
-              </Text>
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                     maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Encadenando moléculas pequeñas se forman las macromoléculas. Construye las cuatro que sostienen tu Vida.
+                Las grandes moléculas de la Vida.
               </Text>
             </MBox>
           )}

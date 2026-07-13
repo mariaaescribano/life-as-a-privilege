@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { useInView, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -10,14 +11,16 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoPredominante,
   balanceElemento, conteoBalance, viajeCompleto,
   type DatosTcm, type Elemento, type Balance,
 } from "../../components/metodo/tcmRecorrido";
-import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { TcmEstrellaDetalle } from "../../components/metodo/TcmEstrellaDetalle";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
@@ -88,8 +91,20 @@ export default function MetodoTcmPerfil() {
     return out;
   }, [data]);
 
+  // Las barras suben una a una cuando el box asoma en pantalla.
+  const reduce = useReducedMotion();
+  const barrasRef = useRef<HTMLDivElement | null>(null);
+  const barrasInView = useInView(barrasRef, { once: true, amount: 0.4 });
+  const barrasEnter = reduce || barrasInView;
 
-  if (loading) {
+  // No quitamos el spinner hasta que los iconos/fotos de los elementos estén
+  // descargados, para que las estrellas no aparezcan con los círculos vacíos.
+  const iconosListos = usePrecargarImagenes([
+    ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
+    ...ORDEN_ELEMENTOS.map((el) => FOTO_ELEMENTO[el]),
+  ]);
+
+  if (loading || !iconosListos) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -100,6 +115,7 @@ export default function MetodoTcmPerfil() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Tu equilibrio"
@@ -113,13 +129,17 @@ export default function MetodoTcmPerfil() {
             extra={ilustracionesBtn}
             next={{ label: "Los ciclos →", onClick: () => navigate("/metodo/tcm/ciclos") }}
           />
+          </Reveal>
 
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="620px" style={{ textShadow: INK_SHADOW }}>
             Eres un equilibrio entre los Cinco Elementos. Este es tu punto de partida para recuperar tu armonía. Cuanta más altura, más desequilibrio hay en dicho Elemento. Los que están vacíos es que están equilibrados.
           </Text>
+          </Reveal>
 
           {/* ── Box 1 · Columnas por estado (equilibrio = barra vacía) ── */}
+          <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
           <Panel titulo="" color={tcmTxt} full>
             {/* Leyenda de estados */}
             <Flex justify="center" gap={{ base: 3, md: 6 }} wrap="wrap" mb={5}>
@@ -136,11 +156,12 @@ export default function MetodoTcmPerfil() {
 
             <Box>
               {/* Zona de barras */}
-              <Box h={{ base: "180px", md: "240px" }}>
+              <Box ref={barrasRef} h={{ base: "180px", md: "240px" }}>
                 <Flex h="100%" align="flex-end" justify="space-between"
                       gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }}>
-                  {ORDEN_ELEMENTOS.map((el) => (
-                    <ColumnaBalance key={el} balance={estados[el]?.balance ?? null} nivel={estados[el]?.nivel ?? null} />
+                  {ORDEN_ELEMENTOS.map((el, i) => (
+                    <ColumnaBalance key={el} index={i} enter={barrasEnter}
+                                    balance={estados[el]?.balance ?? null} nivel={estados[el]?.nivel ?? null} />
                   ))}
                 </Flex>
               </Box>
@@ -173,15 +194,20 @@ export default function MetodoTcmPerfil() {
               </Flex>
             </Box>
           </Panel>
+          </Reveal>
 
           {/* ── Box 2 · Estrella selectora + detalle (componente compartido con Diagnóstico) ── */}
-          <TcmEstrellaDetalle estados={estados} predominante={predominante} />
+          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
+            <TcmEstrellaDetalle estados={estados} predominante={predominante} />
+          </Reveal>
 
+          <Reveal inView direction="up" distance={14} duration={0.6} amount={0.3} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="620px"
                 lineHeight="1.6">
             Esta valoración tiene un fin educativo y de autoconocimiento. No constituye un diagnóstico clínico
             ni sustituye la valoración de un profesional cualificado.
           </Text>
+          </Reveal>
         </Flex>
       </Flex>
 
@@ -200,23 +226,31 @@ export default function MetodoTcmPerfil() {
 // Los elementos EN EQUILIBRIO (o sin datos) salen con la barra vacía: solo se
 // dibuja barra cuando hay desequilibrio (exceso/deficiencia), en su color de
 // estado y con la altura = `nivel` (cuánto desequilibrio hay).
-function ColumnaBalance({ balance, nivel }: { balance: Balance | null; nivel: number | null }) {
+function ColumnaBalance({ balance, nivel, index, enter }: {
+  balance: Balance | null; nivel: number | null; index: number; enter: boolean;
+}) {
   const enDesequilibrio = balance === "exceso" || balance === "deficiencia";
   const color = enDesequilibrio ? ESTADO_COLOR[balance] : ESTADO_COLOR.equilibrio;
   // Barra vacía si está en equilibrio o sin datos; si no, altura por nivel.
   const alturaPct = enDesequilibrio ? Math.max((nivel ?? 0) * 100, 12) : 0;
+  // Entrada escalonada: cada barra arranca en 0 y SUBE a su altura, una tras
+  // otra (retraso por índice), con una curva con leve rebote para dar emoción.
+  const delay = `${index * 0.16}s`;
   return (
     <Flex flex="1" direction="column" align="center" justify="flex-end" h="100%" minW={0}>
       {enDesequilibrio ? (
-        <Box w={{ base: "70%", md: "62%" }} maxW="64px" h={`${alturaPct}%`}
+        <Box w={{ base: "70%", md: "62%" }} maxW="64px" h={enter ? `${alturaPct}%` : "0%"}
              borderTopRadius="md" bgGradient={`linear(to-t, ${color}cc, ${color})`}
-             transition="height 0.5s cubic-bezier(0.22,1,0.36,1)"
-             style={{ boxShadow: `0 0 12px ${color}88, inset 0 1px 0 rgba(255,255,255,0.4)` }} />
+             transition="height 0.85s cubic-bezier(0.34,1.4,0.64,1)"
+             style={{ transitionDelay: delay, boxShadow: `0 0 12px ${color}88, inset 0 1px 0 rgba(255,255,255,0.4)` }} />
       ) : (
-        // Zócalo tenue: marca "vacío = en equilibrio" sin dibujar columna.
+        // Zócalo tenue: marca "vacío = en equilibrio" sin dibujar columna. Aparece
+        // (fundido + leve subida) en su turno, para acompañar a las barras.
         <Box w={{ base: "70%", md: "62%" }} maxW="64px" h="4px" borderRadius="full"
-             bg={`${ESTADO_COLOR.equilibrio}aa`}
-             style={{ boxShadow: `0 0 10px ${ESTADO_COLOR.equilibrio}66` }} />
+             bg={`${ESTADO_COLOR.equilibrio}aa`} opacity={enter ? 1 : 0}
+             transform={enter ? "translateY(0)" : "translateY(6px)"}
+             transition="opacity 0.5s ease, transform 0.5s ease"
+             style={{ transitionDelay: delay, boxShadow: `0 0 10px ${ESTADO_COLOR.equilibrio}66` }} />
       )}
     </Flex>
   );

@@ -38,6 +38,18 @@ const EyeIcon = () => (
   </Box>
 );
 
+const SPACE_IMG = "/img/astrologia/space.jpg";
+
+// Precarga una imagen; resuelve al cargar o al fallar (para que el spinner
+// nunca se quede colgado si la foto no existe).
+const precargarImagen = (src: string): Promise<void> =>
+  new Promise((resolve) => {
+    const img = new window.Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+  });
+
 /* Fondo espacial con degradado cósmico de respaldo */
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
   <Box
@@ -53,7 +65,7 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
   >
     <Box
       as="img"
-      src="/img/astrologia/space.jpg"
+      src={SPACE_IMG}
       alt=""
       loading="eager"
       position="absolute"
@@ -138,9 +150,12 @@ export default function MetodoAstrologia() {
         if (!res.data?.intro_visto) intro.openNow();
       } catch {
         setEstado(null);
-      } finally {
-        setLoading(false);
       }
+      // No quitamos el spinner hasta que el fondo espacial esté descargado,
+      // para que la página no aparezca con el degradado de respaldo y luego
+      // salte la foto.
+      await precargarImagen(SPACE_IMG);
+      setLoading(false);
     })();
   }, []);
 

@@ -184,6 +184,7 @@ export default function MetodoFisiologiaAtomos() {
   const [pendientes, setPendientes] = useState<Pieza[]>(() => piezasDe(0));
   const [colocadas, setColocadas] = useState<Pieza[]>([]);
   const [completo, setCompleto] = useState(false);
+  const [imgOk, setImgOk] = useState(false); // foto del átomo del resultado ya cargada
   const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
@@ -263,7 +264,7 @@ export default function MetodoFisiologiaAtomos() {
   const reiniciar = () => { setColocadas([]); setPendientes(piezasDe(idx)); setCompleto(false); };
   const siguienteAtomo = () => {
     const ni = idx + 1;
-    setIdx(ni); setPendientes(piezasDe(ni)); setColocadas([]); setCompleto(false);
+    setIdx(ni); setPendientes(piezasDe(ni)); setColocadas([]); setCompleto(false); setImgOk(false);
   };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -393,8 +394,16 @@ export default function MetodoFisiologiaAtomos() {
                              animation={`${shimmer} 3.6s ease-in-out infinite`} pointerEvents="none"
                              sx={{ boxShadow: `0 0 50px ${GLOW.electron}44, 0 0 90px ${GLOW.proton}33` }} />
                         <Image src={def.img} alt={`Átomo de ${def.nombre}`} w="100%" h="100%" objectFit="contain"
+                               fallbackStrategy="onError"
+                               onLoad={() => setImgOk(true)}
+                               opacity={imgOk ? 1 : 0} transition="opacity 0.5s ease"
                                style={{ filter: `drop-shadow(0 0 18px ${fisiologiaTxt}44)` }}
                                fallback={<AtomoDibujado def={def} />} />
+                        {!imgOk && (
+                          <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+                            <SpinnerTurquesa fullScreen={false} />
+                          </Box>
+                        )}
                       </Box>
                     </Flex>
                   </Box>

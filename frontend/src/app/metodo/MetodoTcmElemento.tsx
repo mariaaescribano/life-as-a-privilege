@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, puntuarTest, elementoDesbloqueado,
@@ -239,6 +240,7 @@ export default function MetodoTcmElemento() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="760px" gap={6}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={`${c.nombre} ${c.hanzi}`}
@@ -250,8 +252,10 @@ export default function MetodoTcmElemento() {
             prev={{ label: "← La estrella", onClick: () => navigate("/metodo/tcm/elementos") }}
             extra={ilustracionesBtn}
           />
+          </Reveal>
 
           {/* Puntos de progreso */}
+          <Reveal direction="up" distance={12} delay={0.1} duration={0.55} display="flex" justifyContent="center">
           <Flex align="center" gap={2} wrap="wrap" justify="center">
             {momentos.map((_, i) => (
               <Box key={i} onClick={() => setPaso(i)} cursor="pointer"
@@ -260,8 +264,10 @@ export default function MetodoTcmElemento() {
                    transition="all 0.3s" />
             ))}
           </Flex>
+          </Reveal>
 
           {/* La pantalla del momento actual (con transición al cambiar) */}
+          <Reveal direction="up" distance={30} scaleFrom={0.98} delay={0.18} duration={0.7} w="100%">
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
                sx={{ "@keyframes momentoIn": { from: { opacity: 0, transform: "translateY(16px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
@@ -287,8 +293,10 @@ export default function MetodoTcmElemento() {
               </Flex>
             </Box>
           </Box>
+          </Reveal>
 
           {/* Navegación atrás / seguir */}
+          <Reveal direction="up" distance={16} delay={0.26} duration={0.6} w="100%">
           <Flex w="100%" justify="space-between" align="center" gap={4}>
             <NavBtn label={paso === 0 ? "‹ La estrella" : "‹ Atrás"} onClick={retroceder} />
             <Text color="rgba(255,255,255,0.5)" fontSize="sm" fontStyle="italic">
@@ -302,6 +310,7 @@ export default function MetodoTcmElemento() {
               tooltip={avanzarBloqueado ? "Responde el mini-test para terminar" : undefined}
             />
           </Flex>
+          </Reveal>
         </Flex>
       </Flex>
 

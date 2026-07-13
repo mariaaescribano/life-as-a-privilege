@@ -17,6 +17,7 @@ import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { VINETAS_ORIGEN as ORIGEN_TAOISMO } from "../../components/metodo/TCMIlustracionesModal";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 
 // Tinta rojiza clara con halo oscuro (granate) para leer sobre el fondo de TCM.
@@ -148,6 +149,7 @@ export default function MetodoTcm() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Medicina China"
@@ -161,8 +163,10 @@ export default function MetodoTcm() {
             extra={ilustracionesBtn}
             next={{ label: "Los 5 elementos →", onClick: comenzar }}
           />
+          </Reveal>
 
           {/* ── Bienvenida contemplativa ── */}
+          <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
@@ -193,8 +197,10 @@ export default function MetodoTcm() {
               </Text>
             </Box>
           </Box>
+          </Reveal>
 
           {/* ── Disparador del aviso ── */}
+          <Reveal direction="up" distance={18} delay={0.24} duration={0.6} display="flex" justifyContent="center">
           <Box
             as="button"
             onClick={() => setAvisoOpen(true)}
@@ -216,6 +222,7 @@ export default function MetodoTcm() {
           >
             <Box as="span" fontSize="md">⚠</Box> Aviso importante
           </Box>
+          </Reveal>
         </Flex>
       </Flex>
 

@@ -9,9 +9,12 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
-import { CICLO_SHENG, CICLO_KE, type Elemento } from "../../components/metodo/tcmRecorrido";
+import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento } from "../../components/metodo/tcmRecorrido";
+import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 
@@ -47,7 +50,11 @@ export default function MetodoTcmCiclos() {
     setSel({ ciclo, origen, destino });
   };
 
-  if (loading) {
+  // No quitamos el spinner hasta que los iconos de los elementos estén
+  // descargados, para que las estrellas no aparezcan con los círculos vacíos.
+  const iconosListos = usePrecargarImagenes(ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]));
+
+  if (loading || !iconosListos) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -58,6 +65,7 @@ export default function MetodoTcmCiclos() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Ciclos"
@@ -71,16 +79,24 @@ export default function MetodoTcmCiclos() {
             extra={ilustracionesBtn}
             next={{ label: "Diagnóstico final →", onClick: () => navigate("/metodo/tcm/diagnostico") }}
           />
+          </Reveal>
 
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="640px" style={{ textShadow: INK_SHADOW }}>
             Los Cinco Elementos no viven aislados: se relacionan en dos ciclos. Cuando
             fluyen, hay equilibrio; cuando se alteran, aparece el desequilibrio. Toca
             cada rayita para descubrir la relación.
           </Text>
+          </Reveal>
 
-          {/* ── Las dos estrellas ── */}
+          {/* ── Las dos estrellas ──
+              Ambas cajas entran con el MISMO timing (sin desfase entre sí): en
+              desktop están a la vez en pantalla → animan juntas; en móvil, cada
+              una espera a su propio scroll (`inView`). La coreografía interna
+              (elementos → flechas) la lleva la propia EstrellaCiclo. */}
           <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
+            <Reveal inView direction="right" distance={30} scaleFrom={0.97} duration={0.6} amount={0.2} w="100%" display="flex">
             <EstrellaCiclo
               titulo="Ciclo generador"
               pinyin="Sheng"
@@ -89,6 +105,8 @@ export default function MetodoTcmCiclos() {
               ciclo="sheng"
               onEdge={abrir}
             />
+            </Reveal>
+            <Reveal inView direction="left" distance={30} scaleFrom={0.97} duration={0.6} amount={0.2} w="100%" display="flex">
             <EstrellaCiclo
               titulo="Ciclo de control"
               pinyin="Ke"
@@ -97,14 +115,17 @@ export default function MetodoTcmCiclos() {
               ciclo="ke"
               onEdge={abrir}
             />
+            </Reveal>
           </Flex>
 
+          <Reveal inView direction="up" distance={14} duration={0.6} amount={0.3} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="640px"
                 lineHeight="1.6">
             En el ciclo generador la energía avanza por el perímetro (Madera → Fuego →
             Tierra → Metal → Agua). En el ciclo de control cruza la estrella: cada
             elemento frena al que tiene enfrente para mantener el conjunto en armonía.
           </Text>
+          </Reveal>
         </Flex>
       </Flex>
 

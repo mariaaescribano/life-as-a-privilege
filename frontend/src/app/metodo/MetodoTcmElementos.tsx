@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
+import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -11,6 +12,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido, viajeCompleto,
@@ -22,6 +24,13 @@ const TINTA = tcmTxt;
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 // Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
+
+// Entrada épica de la estrella: los 5 elementos «florecen» uno a uno desde su
+// sitio, con un leve rebote (mismo espíritu que las 12 casas de Astrología).
+const MotionG = motion.g as any;
+const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
+const ESTRELLA_APPEAR_BASE = 0.45; // arranca tras asentarse el box
+const ESTRELLA_APPEAR_STEP = 0.12; // separación entre un elemento y el siguiente
 
 const CX = 160, CY = 170, R = 120, FOTO_R = 32;
 function vertice(i: number, radio: number) {
@@ -35,7 +44,12 @@ export default function MetodoTcmElementos() {
   const [data, setData] = useState<DatosTcm>({});
   const [comicEl, setComicEl] = useState<Elemento | null>(null);
   const [introIdx, setIntroIdx] = useState(0);
+  const [vinOk, setVinOk] = useState(false); // foto de la viñeta actual ya cargada
+  const reduce = useReducedMotion();
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+
+  // Al cambiar de viñeta, ocultamos la nueva foto hasta que cargue (spinner).
+  useEffect(() => { setVinOk(false); }, [introIdx]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -84,6 +98,7 @@ export default function MetodoTcmElementos() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Cinco Elementos"
@@ -102,8 +117,10 @@ export default function MetodoTcmElementos() {
               disabledTooltip: "Recorre los cinco elementos para ver tu perfil completo",
             }}
           />
+          </Reveal>
 
           {/* La estrella interactiva */}
+          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 6 }} py={{ base: 7, md: 9 }}>
@@ -129,7 +146,11 @@ export default function MetodoTcmElementos() {
                   const activo = desbloqueado && disponible;
                   const color = ELEMENTOS[el].color;
                   return (
-                    <g key={el} style={{ cursor: activo ? "pointer" : "not-allowed" }}
+                    <MotionG key={el} style={{ cursor: activo ? "pointer" : "not-allowed",
+                               transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}
+                       initial={reduce ? false : { opacity: 0, scale: 0.3 }}
+                       animate={reduce ? {} : { opacity: 1, scale: 1 }}
+                       transition={{ delay: ESTRELLA_APPEAR_BASE + i * ESTRELLA_APPEAR_STEP, duration: 0.6, ease: EASE_POP }}
                        onClick={() => abrir(el, desbloqueado, disponible)}>
                       {/* base + icono del elemento */}
                       <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
@@ -163,16 +184,19 @@ export default function MetodoTcmElementos() {
                             style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
                         {ELEMENTOS[el].nombre}
                       </text>
-                    </g>
+                    </MotionG>
                   );
                 })}
               </Box>
             </Flex>
           </Box>
+          </Reveal>
 
+          <Reveal direction="up" distance={14} delay={0.2} duration={0.6} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="560px" lineHeight="1.8">
             Los elementos se abren en orden (Madera → Fuego → Tierra → Metal → Agua). Al leer cada uno, se marca con ✓.
           </Text>
+          </Reveal>
 
           {/* Intro (Módulo 1) · cómic de 4 viñetas: foto a la izquierda, texto
               a la derecha, navegable con flechas. Mismo estilo que las
@@ -183,6 +207,7 @@ export default function MetodoTcmElementos() {
             const isFirst = introIdx === 0;
             const isLast = introIdx === total - 1;
             return (
+              <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
                 <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
@@ -199,7 +224,14 @@ export default function MetodoTcmElementos() {
                        aspectRatio={1} flexShrink={0} position="relative"
                        sx={{ filter: `drop-shadow(0 0 20px rgba(255,255,255,0.25)) drop-shadow(0 0 60px ${tcmTxt}44)` }}>
                     <Box as="img" src={encodeURI(vin.src)} alt={`Los Cinco Elementos (${introIdx + 1}/${total})`}
-                         w="100%" h="100%" borderRadius="lg" style={{ objectFit: "contain" }} />
+                         w="100%" h="100%" borderRadius="lg"
+                         onLoad={() => setVinOk(true)}
+                         style={{ objectFit: "contain", opacity: vinOk ? 1 : 0, transition: "opacity 0.5s ease" }} />
+                    {!vinOk && (
+                      <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+                        <SpinnerTurquesa fullScreen={false} color={tcmTxt} />
+                      </Box>
+                    )}
                   </Box>
 
                   {/* Separador elegante: rayita horizontal en móvil, vertical en escritorio */}
@@ -280,6 +312,7 @@ export default function MetodoTcmElementos() {
                 <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
                      bgGradient={`linear(to-r, transparent, ${tcmTxt}aa, transparent)`} />
               </Box>
+              </Reveal>
             );
           })()}
         </Flex>

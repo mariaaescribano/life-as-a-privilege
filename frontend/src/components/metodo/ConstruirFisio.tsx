@@ -142,6 +142,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
   const [pendientes, setPendientes] = useState<Pieza[]>(flat);
   const [puestas, setPuestas] = useState<Pieza[]>([]);
   const [completo, setCompleto] = useState(false);
+  const [imgOk, setImgOk] = useState(false); // foto del resultado ya cargada
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const zonaRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
@@ -303,8 +304,16 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                              animation={`${shimmer} 3.6s ease-in-out infinite`}
                              sx={{ boxShadow: `0 0 48px ${props.glow}55, 0 0 90px ${props.glow}33` }} />
                         <Image src={props.resultImg ?? ""} alt={props.resultTitulo} w="100%" h="100%" objectFit="contain"
+                               fallbackStrategy="onError"
+                               onLoad={() => setImgOk(true)}
+                               opacity={imgOk ? 1 : 0} transition="opacity 0.5s ease"
                                style={{ filter: `drop-shadow(0 0 16px ${props.glow}55)` }}
                                fallback={<Dibujada piezas={puestas.length ? puestas : flat()} forma={props.forma} />} />
+                        {props.resultImg && !imgOk && (
+                          <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+                            <SpinnerTurquesa fullScreen={false} />
+                          </Box>
+                        )}
                       </Box>
                     </Flex>
                   </Box>

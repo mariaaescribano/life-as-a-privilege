@@ -15,6 +15,7 @@ import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon, CandadoIcon,
 } from "../../GlobalVariables";
@@ -101,13 +102,15 @@ export default function MetodoAyurvedaDoshaCursos() {
     }
   };
 
-  if (!doshaKey) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
-  }
-
   const cursos = [...(cursosData[ayurvedaNomLink]?.cursos ?? [])].sort(
     (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
   );
+  // No mostramos las tarjetas hasta que las portadas estén descargadas.
+  const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));
+
+  if (!doshaKey) {
+    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  }
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -143,8 +146,8 @@ export default function MetodoAyurvedaDoshaCursos() {
           </Reveal>
 
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
-          {loading ? (
-            <SpinnerTurquesa />
+          {loading || !fotosListas ? (
+            <SpinnerTurquesa fullScreen={false} />
           ) : cursos.length > 0 ? (
             cursos.length === 1 ? (
               <Flex

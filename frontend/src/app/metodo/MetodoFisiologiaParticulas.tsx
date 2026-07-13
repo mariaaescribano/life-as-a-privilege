@@ -74,6 +74,7 @@ function FichaArrastrable({
   disabled: boolean;
 }) {
   const [arrastrando, setArrastrando] = useState(false);
+  const [imgOk, setImgOk] = useState(false); // foto de la ficha ya cargada
   const ref = useRef<HTMLDivElement>(null);
   const glow = GLOW[pieza.tipo];
 
@@ -125,8 +126,17 @@ function FichaArrastrable({
           w="100%" h="100%" objectFit="cover"
           draggable={false}
           pointerEvents="none"
+          fallbackStrategy="onError"
+          onLoad={() => setImgOk(true)}
+          opacity={imgOk ? 1 : 0}
+          transition="opacity 0.4s ease"
           fallback={<Box w="100%" h="100%" bg={glow} />}
         />
+        {!imgOk && (
+          <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+            <SpinnerTurquesa fullScreen={false} size={22} thickness={2} />
+          </Box>
+        )}
       </Box>
       <Text
         color={fisiologiaTxt}
@@ -174,6 +184,7 @@ export default function MetodoFisiologiaParticulas() {
   const [pendientes, setPendientes] = useState<Pieza[]>(PIEZAS_INICIALES);
   const [colocadas, setColocadas] = useState<Pieza[]>([]);
   const [completo, setCompleto] = useState(false);
+  const [protonImgOk, setProtonImgOk] = useState(false); // foto del protón ya cargada
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   const nucleoRef = useRef<HTMLDivElement>(null);
@@ -399,8 +410,16 @@ export default function MetodoFisiologiaParticulas() {
                              sx={{ boxShadow: `0 0 50px ${fisiologiaTxt}55, 0 0 90px ${GLOW.down}33` }} />
                         <Image src={PROTON_IMG} alt="Protón: dos quarks up y un quark down unidos por gluones"
                                w="100%" h="100%" objectFit="contain"
+                               fallbackStrategy="onError"
+                               onLoad={() => setProtonImgOk(true)}
+                               opacity={protonImgOk ? 1 : 0} transition="opacity 0.5s ease"
                                style={{ filter: `drop-shadow(0 0 18px ${fisiologiaTxt}44)` }}
                                fallback={<Box w="100%" h="100%" borderRadius="full" bg={fisiologiaBg} />} />
+                        {!protonImgOk && (
+                          <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+                            <SpinnerTurquesa fullScreen={false} />
+                          </Box>
+                        )}
                       </Box>
                     </Flex>
                   </Box>

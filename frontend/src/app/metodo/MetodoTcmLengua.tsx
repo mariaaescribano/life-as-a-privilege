@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { useInView, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -10,11 +11,15 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   LENGUA_DIMENSIONES, LENGUA_ZONAS,
   type LenguaDim, type OpcionLengua,
 } from "../../components/metodo/tcmLenguaContenido";
+
+const MAPA_LENGUA = "/recorrido/tcm/lengua/mapalengua.png";
 
 // ── Agrupación visual de las cajitas de lengua ──────────────────────────────
 // Las 30 fotos se reparten en grupos que llenan filas completas de 3 (6 ó 3 por
@@ -81,7 +86,14 @@ export default function MetodoTcmLengua() {
     })();
   }, [navigate]);
 
-  if (loading) {
+  // No mostramos la página hasta que el mapa y todas las fotos de lengua estén
+  // descargados, para que las cajitas no aparezcan con el hueco vacío.
+  const fotosListas = usePrecargarImagenes([
+    encodeURI(MAPA_LENGUA),
+    ...LENGUA_DIMENSIONES.flatMap((d) => d.opciones.map((o) => encodeURI(o.src))),
+  ]);
+
+  if (loading || !fotosListas) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -92,6 +104,7 @@ export default function MetodoTcmLengua() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="960px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Tu lengua"
@@ -105,14 +118,18 @@ export default function MetodoTcmLengua() {
             extra={ilustracionesBtn}
             next={{ label: "Lee tu lengua →", onClick: () => navigate("/metodo/tcm/lengua/leer") }}
           />
+          </Reveal>
 
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="680px" style={{ textShadow: INK_SHADOW }}>
             La lengua es el espejo de las vísceras. Se lee por capas: el color, la forma, el movimiento,
             la saburra, la humedad y los pequeños detalles. Aprende a reconocer cada una y luego mira la tuya.
           </Text>
+          </Reveal>
 
           {/* ── Cómo mirar (práctico) ── */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
           <Panel titulo="Cómo mirar tu lengua" color={tcmTxt}>
             <Flex direction="column" gap={2.5}>
               {COMO_MIRAR.map((t, i) => (
@@ -125,13 +142,15 @@ export default function MetodoTcmLengua() {
               ))}
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── Mapa de las zonas (primero: foto a la izquierda + zonas a la derecha) ── */}
+          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
           <Panel titulo="El mapa de la lengua" color={tcmTxt}>
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align={{ base: "stretch", md: "flex-start" }}>
               <Box flexShrink={0} w={{ base: "100%", md: "300px" }} borderRadius="xl" overflow="hidden"
                    border={`1px solid ${tcmTxt}55`} boxShadow={`0 0 18px ${tcmTxt}33`}>
-                <img src={encodeURI("/recorrido/tcm/lengua/mapalengua.png")} alt="Mapa de la lengua"
+                <img src={encodeURI(MAPA_LENGUA)} alt="Mapa de la lengua"
                      style={{ width: "100%", height: "auto", display: "block" }} />
               </Box>
               <Box flex="1" minW={0}>
@@ -155,18 +174,23 @@ export default function MetodoTcmLengua() {
               </Box>
             </Flex>
           </Panel>
+          </Reveal>
 
           {/* ── Las capas de observación (cajitas ilustradas, agrupadas de 6) ── */}
           {GRUPOS_LENGUA.map((g) => (
-            <DimensionBloque key={g.titulo} grupo={g} />
+            <Reveal key={g.titulo} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.12} w="100%">
+              <DimensionBloque grupo={g} />
+            </Reveal>
           ))}
 
+          <Reveal inView direction="up" distance={14} duration={0.6} amount={0.5} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.6">
             Material con fin formativo. El diagnóstico por la lengua es una herramienta propia de la Medicina
             Tradicional China; no constituye un diagnóstico médico ni sustituye la valoración de un
             profesional sanitario cualificado.
           </Text>
+          </Reveal>
         </Flex>
       </Flex>
 
@@ -186,6 +210,11 @@ export default function MetodoTcmLengua() {
 // parecidos caigan juntas en la misma fila → alturas uniformes.
 function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
   const opciones = [...grupo.opciones].sort((a, b) => a.lectura.length - b.lectura.length);
+  // Las cajitas de lengua aparecen UNA A UNA cuando la fila asoma en pantalla.
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const enter = reduce || inView;
   return (
     <Panel titulo={grupo.titulo} color={tcmTxt}>
       <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}
@@ -193,9 +222,9 @@ function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
         {grupo.subtitulo}
       </Text>
       {/* align=stretch → todas las cajitas de una fila comparten la misma altura */}
-      <Flex wrap="wrap" gap={{ base: 3, md: 4 }} justify="center" align="stretch">
-        {opciones.map((op) => (
-          <VarianteCard key={op.key} opcion={op} />
+      <Flex ref={ref} wrap="wrap" gap={{ base: 3, md: 4 }} justify="center" align="stretch">
+        {opciones.map((op, i) => (
+          <VarianteCard key={op.key} opcion={op} index={i} enter={enter} />
         ))}
       </Flex>
     </Panel>
@@ -203,14 +232,17 @@ function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
 }
 
 // ── Cajita ilustrada: foto + título · separador · texto (todas mismo alto/ancho) ─
-function VarianteCard({ opcion }: { opcion: OpcionLengua }) {
+function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: number; enter: boolean }) {
   return (
     <Flex direction="column"
           w={{ base: "100%", sm: "calc(50% - 8px)", md: "calc(33.333% - 11px)" }}
           borderRadius="xl" overflow="hidden" bg="rgba(0,0,0,0.28)"
           border={`1px solid ${opcion.equilibrio ? `${tcmTxt}88` : "rgba(255,255,255,0.16)"}`}
           boxShadow={opcion.equilibrio ? `0 0 16px ${tcmTxt}44` : "none"}
-          sx={{ backdropFilter: "blur(6px)" }}>
+          opacity={enter ? 1 : 0}
+          transform={enter ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)"}
+          transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
+          sx={{ backdropFilter: "blur(6px)", transitionDelay: `${index * 0.07}s` }}>
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
       {/* flex=1 para que el bloque de texto rellene la altura estirada de la fila */}
       <Flex direction="column" flex="1" px={4} py={3.5}>
