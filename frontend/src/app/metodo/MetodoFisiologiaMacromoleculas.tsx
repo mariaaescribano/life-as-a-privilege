@@ -12,7 +12,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
@@ -143,8 +143,8 @@ function Perla({ pieza, glow, size }: { pieza: PiezaMacro; glow: string; size: a
 }
 
 // ── Ficha arrastrable (una pieza) ────────────────────────────────────────────
-function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar }: {
-  pieza: PiezaMacro; glow: string; mostrarLabel?: boolean; onSoltar: (rect: DOMRect) => void;
+function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0 }: {
+  pieza: PiezaMacro; glow: string; mostrarLabel?: boolean; onSoltar: (rect: DOMRect) => void; enterDelay?: number;
 }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -162,7 +162,7 @@ function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar }: {
       initial={{ opacity: 0, scale: 0.6 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.4 }}
-      transition={{ type: "spring", stiffness: 320, damping: 26 }}
+      transition={{ type: "spring", stiffness: 320, damping: 26, delay: enterDelay }}
       cursor="grab"
       flexShrink={0}
       display="flex"
@@ -266,66 +266,83 @@ function Estacion({
 
       <AnimatePresence mode="wait">
         {!completo ? (
-          // ── FASE A · encadenar ──
-          <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <PanelBox minH={{ md: "360px" }}>
+          // ── FASE A · encadenar (dos boxes: bandeja | piezas) ──
+          <MBox key="a" w="100%" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
                   style={{ textShadow: INK }}>{def.nombre}</Text>
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" mt={1} mb={6} style={{ textShadow: INK }}>
+                  textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
               {heterogenea
                 ? `Arrastra las ${total} piezas a la bandeja para formar el ${def.monomero}.`
                 : `Arrastra ${total} ${def.monomeroPl} a la bandeja para encadenarlos.`}
             </Text>
 
-            {/* Bandeja de ensamblaje */}
-            <Box ref={bandejaRef} position="relative" w="100%" h={{ base: "130px", md: "150px" }}
-                 borderRadius="2xl" overflow="hidden" mb={6}
-                 sx={{ background: "radial-gradient(ellipse at 50% 40%, #241d3c 0%, #150f26 55%, #060410 100%)",
-                       boxShadow: `inset 0 0 40px rgba(0,0,0,0.85), 0 0 20px ${def.glow}22` }}>
-              <Box position="absolute" inset="8px" borderRadius="xl" pointerEvents="none"
-                   border={`1.5px dashed ${def.glow}55`} animation={`${pulse} 3.4s ease-in-out infinite`} />
-              {/* piezas ya colocadas (en el orden en que se soltaron) */}
-              {puestas.map((pi, order) => {
-                const p = posEnBandeja(def.forma, order, total);
-                return (
-                  <MBox key={pi} position="absolute" left={`${p.x}%`} top={`${p.y}%`} transform="translate(-50%,-50%)"
-                        initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 340, damping: 20 }}>
-                    <Perla pieza={piezas[pi]} glow={def.glow} size={{ base: "34px", md: "42px" }} />
-                  </MBox>
-                );
-              })}
-              {puestas.length === 0 && (
-                <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
-                  <Text color={`${def.glow}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>bandeja de ensamblaje</Text>
-                </Flex>
-              )}
-            </Box>
+            <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-            {/* Piezas a arrastrar */}
-            <Flex wrap="wrap" justify="center" align="center" gap={{ base: 3, md: 4 }} minH="60px">
-              <AnimatePresence>
-                {pendientes.map((pi) => (
-                  <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={heterogenea}
-                                 onSoltar={(rect) => soltar(pi, rect)} />
-                ))}
-              </AnimatePresence>
-              {pendientes.length === 0 && (
-                <Text color={`${def.glow}bb`} fontSize="md" fontStyle="italic">…plegándose…</Text>
-              )}
-            </Flex>
+              {/* ── Box izquierda · bandeja de ensamblaje (aquí se llevan las piezas) · entra primero ── */}
+              <Reveal direction="up" distance={22} duration={0.5} delay={0}
+                      flex={{ base: "1 1 auto", md: "0 0 46%" }} display="flex">
+                <PanelBox w="100%" minH={{ base: "200px", md: "300px" }}>
+                  <Flex h="100%" align="center" justify="center">
+                    <Box ref={bandejaRef} position="relative" w="100%" h={{ base: "150px", md: "190px" }}
+                         borderRadius="2xl" overflow="hidden"
+                         sx={{ background: "radial-gradient(ellipse at 50% 40%, #241d3c 0%, #150f26 55%, #060410 100%)",
+                               boxShadow: `inset 0 0 40px rgba(0,0,0,0.85), 0 0 20px ${def.glow}22` }}>
+                      <Box position="absolute" inset="8px" borderRadius="xl" pointerEvents="none"
+                           border={`1.5px dashed ${def.glow}55`} animation={`${pulse} 3.4s ease-in-out infinite`} />
+                      {/* piezas ya colocadas (en el orden en que se soltaron) */}
+                      {puestas.map((pi, order) => {
+                        const p = posEnBandeja(def.forma, order, total);
+                        return (
+                          <MBox key={pi} position="absolute" left={`${p.x}%`} top={`${p.y}%`} transform="translate(-50%,-50%)"
+                                initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                                transition={{ type: "spring", stiffness: 340, damping: 20 }}>
+                            <Perla pieza={piezas[pi]} glow={def.glow} size={{ base: "34px", md: "42px" }} />
+                          </MBox>
+                        );
+                      })}
+                      {puestas.length === 0 && (
+                        <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
+                          <Text color={`${def.glow}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>bandeja de ensamblaje</Text>
+                        </Flex>
+                      )}
+                    </Box>
+                  </Flex>
+                </PanelBox>
+              </Reveal>
 
-            {/* progreso */}
-            <Flex justify="center" gap={2} mt={5}>
-              {Array.from({ length: total }).map((_, i) => (
-                <Box key={i} w="9px" h="9px" borderRadius="full"
-                     bg={i < puestas.length ? def.glow : "rgba(255,255,255,0.22)"}
-                     boxShadow={i < puestas.length ? `0 0 10px ${def.glow}` : "none"} transition="all 0.3s" />
-              ))}
+              {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después ── */}
+              {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
+              <Reveal direction="up" distance={22} duration={0.5} delay={0.18} flex="1" display="flex">
+                <PanelBox w="100%" overflow="visible" minH={{ base: "auto", md: "300px" }}>
+                  <Flex direction="column" align="center" justify="center" gap={5} h="100%">
+                    <Box display="grid" gridTemplateColumns="repeat(2, auto)"
+                         justifyContent="center" justifyItems="center"
+                         columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }} minH="60px">
+                      <AnimatePresence>
+                        {pendientes.map((pi, order) => (
+                          <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={heterogenea}
+                                         onSoltar={(rect) => soltar(pi, rect)} enterDelay={0.45 + order * 0.1} />
+                        ))}
+                      </AnimatePresence>
+                    </Box>
+                    {pendientes.length === 0 && (
+                      <Text color={`${def.glow}bb`} fontSize="md" fontStyle="italic">…plegándose…</Text>
+                    )}
+
+                    {/* progreso */}
+                    <Flex justify="center" gap={2}>
+                      {Array.from({ length: total }).map((_, i) => (
+                        <Box key={i} w="9px" h="9px" borderRadius="full"
+                             bg={i < puestas.length ? def.glow : "rgba(255,255,255,0.22)"}
+                             boxShadow={i < puestas.length ? `0 0 10px ${def.glow}` : "none"} transition="all 0.3s" />
+                      ))}
+                    </Flex>
+                  </Flex>
+                </PanelBox>
+              </Reveal>
             </Flex>
-            </PanelBox>
           </MBox>
         ) : (
           // ── FASE B · resultado (2 cajas: foto | texto) ──
@@ -364,8 +381,8 @@ function Estacion({
               </PanelBox>
             </Flex>
 
-            {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
-            <Flex justify="center" w="100%" mt={{ base: 5, md: 6 }}>
+            {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
+            <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
@@ -605,14 +622,16 @@ export default function MetodoFisiologiaMacromoleculas() {
               onVolver={() => setActiva(null)}
             />
           ) : (
-            /* ── 4 boxes en rejilla 2×2 ── */
-            <Flex wrap="wrap" justify="center" w="100%" maxW="850px" gap={{ base: 4, md: 5 }}>
+            /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro ── */
+            <RevealStagger stagger={0.12} delayChildren={0.1}
+                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="850px" gap={{ base: 4, md: 5 }}>
               {MACROS.map((m) => (
-                <Box key={m.id} flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
+                <RevealItem key={m.id} direction="up" distance={24} scaleFrom={0.97}
+                            flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
                   <MacroCard m={m} hecha={formadas.includes(m.id)} onClick={() => setActiva(m.id)} />
-                </Box>
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
           )}
         </Flex>
       </Flex>

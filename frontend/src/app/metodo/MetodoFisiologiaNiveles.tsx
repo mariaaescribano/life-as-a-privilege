@@ -177,6 +177,8 @@ export default function MetodoFisiologiaNiveles() {
   const [loading, setLoading] = useState(true);
   // Flags de progreso (metodo_fisiologia.data) que desbloquean cada nivel.
   const [flags, setFlags] = useState<Record<string, boolean>>({});
+  // ¿Ha pagado ya la Nutrición? (6ª disciplina, el siguiente paso tras Fisiología).
+  const [nutriSuscrito, setNutriSuscrito] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   useEffect(() => {
@@ -196,6 +198,7 @@ export default function MetodoFisiologiaNiveles() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        setNutriSuscrito(!!me.data?.nutricion_suscrito);
 
         // Progreso guardado: sirve para desbloquear los niveles 2 y 3.
         try {
@@ -235,6 +238,9 @@ export default function MetodoFisiologiaNiveles() {
             mb={0}
             prev={{ label: "← Introducción", onClick: () => navigate("/metodo/fisiologia") }}
             extra={celulasBtn}
+            next={nutriSuscrito
+              ? { label: "Nutrición →", onClick: () => navigate("/metodo/nutricion") }
+              : { label: "Nutrición", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/nutricion") }}
           />
           </Reveal>
 

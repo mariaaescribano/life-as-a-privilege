@@ -11,6 +11,9 @@ export interface Nutriente {
   label: string;
   emoji: string;
   color: string;
+  /** Foto de alimentos de este grupo donde se ven sus moléculas. Va en la
+   *  tarjeta de la cuadrícula (con el título debajo). */
+  img: string;
   resumen: string;
   tipos: NutrienteTipo[];
   queHacen: string[];
@@ -23,6 +26,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Carbohidratos",
     emoji: "🌾",
     color: "#e0a92e",
+    img: "/img/nutri/nutrientes/carbohidratos.png",
     resumen: "Tu principal fuente de energía.",
     tipos: [
       { nombre: "Simples (azúcares)", desc: "Glucosa, fructosa, sacarosa. Energía rápida, pico y bajada." },
@@ -40,6 +44,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Grasas",
     emoji: "🥑",
     color: "#e58a3c",
+    img: "/img/nutri/nutrientes/grasas.png",
     resumen: "Energía densa y ladrillos de tus membranas.",
     tipos: [
       { nombre: "Insaturadas", desc: "Mono y poliinsaturadas (omega-3, omega-6). Las más beneficiosas." },
@@ -58,6 +63,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Proteínas",
     emoji: "🥚",
     color: "#d75f5a",
+    img: "/img/nutri/nutrientes/proteinas.png",
     resumen: "El material con el que te reconstruyes.",
     tipos: [
       { nombre: "Completas", desc: "De origen animal: aportan todos los aminoácidos esenciales." },
@@ -75,6 +81,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Vitaminas",
     emoji: "🍊",
     color: "#e8b52e",
+    img: "/img/nutri/nutrientes/vitaminas.png",
     resumen: "Reguladoras: sin ellas nada funciona.",
     tipos: [
       { nombre: "Hidrosolubles", desc: "Vitamina C y grupo B. No se almacenan: hay que reponerlas a diario." },
@@ -92,6 +99,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Minerales",
     emoji: "🧂",
     color: "#6f93b8",
+    img: "/img/nutri/nutrientes/minerales.png",
     resumen: "Estructura, transporte y equilibrio.",
     tipos: [
       { nombre: "Macrominerales", desc: "Calcio, fósforo, magnesio, potasio, sodio. En cantidades mayores." },
@@ -109,6 +117,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Fibra",
     emoji: "🥬",
     color: "#6fa86b",
+    img: "/img/nutri/nutrientes/fibra.png",
     resumen: "No se absorbe, pero lo ordena todo.",
     tipos: [
       { nombre: "Soluble", desc: "Forma un gel: regula el azúcar y el colesterol, y alimenta a la microbiota." },

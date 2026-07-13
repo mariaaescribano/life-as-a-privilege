@@ -174,7 +174,7 @@ export default function MetodoNutricionNutrientes() {
             color={nutricionTxt}
             nom={nutricionNom}
             mb={0}
-            prev={{ label: "← Introducción", onClick: () => navigate("/metodo/nutricion/intro") }}
+            prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion") }}
           />
           </Reveal>
 
@@ -204,29 +204,43 @@ export default function MetodoNutricionNutrientes() {
                     transition={{ type: "spring", stiffness: 320, damping: 22 }}
                     w="100%" h="100%" textAlign="center"
                     borderRadius="2xl" overflow="hidden" position="relative"
-                    bg={`${n.color}1f`}
+                    display="flex" flexDirection="column"
+                    bg={nutricionBg}
                     border={`1.5px solid ${n.color}${visto ? "cc" : "66"}`}
                     sx={{ boxShadow: `0 0 18px ${n.color}33, inset 0 0 30px ${n.color}12` }}
-                    px={{ base: 3, md: 5 }} py={{ base: 5, md: 7 }}
                   >
-                    {visto && (
-                      <Box position="absolute" top={2.5} right={2.5} w={{ base: "20px", md: "22px" }} h={{ base: "20px", md: "22px" }}
-                           borderRadius="full" bg={n.color} display="flex" alignItems="center" justifyContent="center"
-                           sx={{ boxShadow: `0 0 10px ${n.color}` }}>
-                        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                             w="14px" h="14px" fill="#12210f">
-                          <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                    {/* Foto de alimentos del grupo (con sus moléculas) */}
+                    <Box
+                      position="relative"
+                      w="100%"
+                      sx={{ aspectRatio: "1 / 1" }}
+                      bgImage={`url('${n.img}')`}
+                      bgSize="cover"
+                      bgPosition="center"
+                      bgRepeat="no-repeat"
+                      bgColor={`${n.color}22`}
+                    >
+                      {visto && (
+                        <Box position="absolute" top={2.5} right={2.5} w={{ base: "20px", md: "22px" }} h={{ base: "20px", md: "22px" }}
+                             borderRadius="full" bg={n.color} display="flex" alignItems="center" justifyContent="center"
+                             sx={{ boxShadow: `0 0 10px ${n.color}` }}>
+                          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                               w="14px" h="14px" fill="#12210f">
+                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                          </Box>
                         </Box>
-                      </Box>
-                    )}
-                    <Box fontSize={{ base: "40px", md: "52px" }} lineHeight="1" mb={2}>{n.emoji}</Box>
-                    <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="800" lineHeight="1.15"
-                          style={{ textShadow: INK }}>
-                      {n.label}
-                    </Text>
-                    <Text color="rgba(255,255,255,0.78)" fontSize={{ base: "2xs", md: "xs" }} lineHeight="1.4" mt={1}>
-                      {n.resumen}
-                    </Text>
+                      )}
+                    </Box>
+                    {/* Título debajo de la foto */}
+                    <Box flex="1" display="flex" flexDirection="column" justifyContent="center"
+                         px={{ base: 3, md: 4 }} py={{ base: 3, md: 3.5 }} borderTop={`1px solid ${n.color}44`}>
+                      <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="800" lineHeight="1.15">
+                        {n.label}
+                      </Text>
+                      <Text color={`${nutricionTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} lineHeight="1.4" mt={1}>
+                        {n.resumen}
+                      </Text>
+                    </Box>
                   </MBox>
                 </Reveal>
               );

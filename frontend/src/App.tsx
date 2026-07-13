@@ -107,7 +107,6 @@ import MetodoFisiologiaAnalitica from "./app/metodo/MetodoFisiologiaAnalitica";
 import MetodoFisiologiaProfundiza from "./app/metodo/MetodoFisiologiaProfundiza";
 import MetodoFisiologiaTema from "./app/metodo/MetodoFisiologiaTema";
 import MetodoNutricion from "./app/metodo/MetodoNutricion";
-import MetodoNutricionIntro from "./app/metodo/MetodoNutricionIntro";
 import MetodoNutricionNutrientes from "./app/metodo/MetodoNutricionNutrientes";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
@@ -246,7 +245,6 @@ export default function App()
 
       {/* El Recorrido · Nutrición (6ª disciplina) */}
       <Route path="/metodo/nutricion" element={<PrivateRoute><MetodoNutricion /></PrivateRoute>} />
-      <Route path="/metodo/nutricion/intro" element={<PrivateRoute><MetodoNutricionIntro /></PrivateRoute>} />
       <Route path="/metodo/nutricion/nutrientes" element={<PrivateRoute><MetodoNutricionNutrientes /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

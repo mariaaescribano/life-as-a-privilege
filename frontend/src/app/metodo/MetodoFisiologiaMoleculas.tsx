@@ -413,74 +413,79 @@ export default function MetodoFisiologiaMoleculas() {
           <Box position="relative" w="100%">
               <AnimatePresence mode="wait">
 
-                {/* ───────── FASE A · enlazar ───────── */}
+                {/* ───────── FASE A · enlazar (dos boxes: zona | piezas) ───────── */}
                 {!completo && !terminado && (
                   <MBox key={`construir-${mol.key}`} w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                         exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4 }}>
-                   <PanelBox w="100%" minH={{ md: "360px" }}>
-                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 8, md: 10 }} pl={{ md: 4 }}>
+                   <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-                      {/* Zona de enlace (izquierda) */}
-                      <Flex flexShrink={0} justify="center" align="center" w={{ base: "100%", md: "auto" }} pl={{ md: 2 }}>
-                        <Box ref={zonaRef} position="relative"
-                             w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
-                             borderRadius="full" display="flex" alignItems="center" justifyContent="center">
-                          <Box position="absolute" inset="-12px" borderRadius="full"
-                               border={`1.5px dashed ${fisiologiaTxt}55`}
-                               animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
-                          <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
-                               sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
-                                     boxShadow: `inset 0 0 40px rgba(0,0,0,0.9), 0 0 24px ${fisiologiaTxt}22` }} />
+                      {/* Box izquierda · zona de enlace (aquí se llevan las piezas) */}
+                      <PanelBox flex={{ base: "1 1 auto", md: "0 0 46%" }} minH={{ base: "280px", md: "340px" }}>
+                        <Flex h="100%" justify="center" align="center">
+                          <Box ref={zonaRef} position="relative"
+                               w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
+                               borderRadius="full" display="flex" alignItems="center" justifyContent="center">
+                            <Box position="absolute" inset="-12px" borderRadius="full"
+                                 border={`1.5px dashed ${fisiologiaTxt}55`}
+                                 animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
+                            <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
+                                 sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
+                                       boxShadow: `inset 0 0 40px rgba(0,0,0,0.9), 0 0 24px ${fisiologiaTxt}22` }} />
 
-                          <Enlaces mol={mol} placed={placedSlots} />
+                            <Enlaces mol={mol} placed={placedSlots} />
 
-                          {/* átomos colocados */}
-                          {colocadas.map((p) => {
-                            const pos = mol.slots[p.slot];
-                            return (
-                              <MBox key={p.id} position="absolute" left={`${pos.x}%`} top={`${pos.y}%`}
-                                    transform="translate(-50%, -50%)"
-                                    initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ type: "spring", stiffness: 340, damping: 20 }}>
-                                <Atomo tipo={p.tipo} size={S_ZONA[p.tipo]} />
-                              </MBox>
-                            );
-                          })}
+                            {/* átomos colocados */}
+                            {colocadas.map((p) => {
+                              const pos = mol.slots[p.slot];
+                              return (
+                                <MBox key={p.id} position="absolute" left={`${pos.x}%`} top={`${pos.y}%`}
+                                      transform="translate(-50%, -50%)"
+                                      initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                                      transition={{ type: "spring", stiffness: 340, damping: 20 }}>
+                                  <Atomo tipo={p.tipo} size={S_ZONA[p.tipo]} />
+                                </MBox>
+                              );
+                            })}
 
-                          {hechas === 0 && (
-                            <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
-                                  fontSize={{ base: "sm", md: "md" }} fontStyle="italic" pointerEvents="none"
-                                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                              zona de enlace
-                            </Text>
-                          )}
-                        </Box>
-                      </Flex>
+                            {hechas === 0 && (
+                              <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
+                                    fontSize={{ base: "sm", md: "md" }} fontStyle="italic" pointerEvents="none"
+                                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
+                                zona de enlace
+                              </Text>
+                            )}
+                          </Box>
+                        </Flex>
+                      </PanelBox>
 
-                      {/* Piezas a arrastrar (derecha) — las 3 en una sola fila */}
-                      <Flex flex="1" direction="column" align="center" gap={4} w="100%">
-                        <Flex wrap="nowrap" justify="center" align="center" gap={{ base: 3, md: 5 }} maxW="100%">
-                          <AnimatePresence>
-                            {pendientes.map((p) => (
-                              <FichaArrastrable key={p.id} pieza={p} onSoltar={soltar} />
-                            ))}
-                          </AnimatePresence>
+                      {/* Box derecha · piezas a arrastrar (2 por fila) */}
+                      {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
+                      <PanelBox flex="1" overflow="visible" minH={{ base: "auto", md: "340px" }}>
+                        <Flex direction="column" align="center" justify="center" gap={5} h="100%">
+                          <Box display="grid" gridTemplateColumns="repeat(2, auto)"
+                               justifyContent="center" justifyItems="center"
+                               columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
+                            <AnimatePresence>
+                              {pendientes.map((p) => (
+                                <FichaArrastrable key={p.id} pieza={p} onSoltar={soltar} />
+                              ))}
+                            </AnimatePresence>
+                          </Box>
                           {pendientes.length === 0 && (
                             <Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…enlazando…</Text>
                           )}
-                        </Flex>
 
-                        <Flex justify="center" gap={2} mt={2}>
-                          {Array.from({ length: total }).map((_, i) => (
-                            <Box key={i} w="9px" h="9px" borderRadius="full"
-                                 bg={i < hechas ? fisiologiaTxt : "rgba(255,255,255,0.22)"}
-                                 boxShadow={i < hechas ? `0 0 10px ${fisiologiaTxt}` : "none"}
-                                 transition="all 0.3s" />
-                          ))}
+                          <Flex justify="center" gap={2}>
+                            {Array.from({ length: total }).map((_, i) => (
+                              <Box key={i} w="9px" h="9px" borderRadius="full"
+                                   bg={i < hechas ? fisiologiaTxt : "rgba(255,255,255,0.22)"}
+                                   boxShadow={i < hechas ? `0 0 10px ${fisiologiaTxt}` : "none"}
+                                   transition="all 0.3s" />
+                            ))}
+                          </Flex>
                         </Flex>
-                      </Flex>
-                    </Flex>
-                   </PanelBox>
+                      </PanelBox>
+                   </Flex>
                   </MBox>
                 )}
 
@@ -573,9 +578,9 @@ export default function MetodoFisiologiaMoleculas() {
               </AnimatePresence>
           </Box>
 
-          {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
+          {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
           {(completo || terminado) && (
-            <Flex justify="center" w="100%">
+            <Flex justify="flex-end" w="100%">
               <Box as="button" onClick={terminado ? empezarDeCero : reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"

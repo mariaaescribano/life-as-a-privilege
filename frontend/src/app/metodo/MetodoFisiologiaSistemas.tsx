@@ -13,6 +13,7 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { Reveal } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 
@@ -98,6 +99,10 @@ export default function MetodoFisiologiaSistemas() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+
+        // No mostramos la página hasta que TODAS las fotos de los sistemas estén
+        // descargadas, para que la rejilla no se rellene de golpe después.
+        await precargarImagenes(SISTEMAS.map((s) => encodeURI(s.foto)));
       } catch { navigate("/metodo/fisiologia"); return; }
       finally { setLoading(false); }
     })();

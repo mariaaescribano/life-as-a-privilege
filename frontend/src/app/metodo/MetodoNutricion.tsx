@@ -18,10 +18,10 @@ import {
   NutricionIcon,
 } from "../../GlobalVariables";
 
-// La imagen de fondo (nutri.png) es clara, así que oscurecemos con un velo para
-// que el texto blanco se lea, y usamos una sombra oscura fija (no derivada del
-// bg claro de la disciplina).
-const INK_SHADOW = `0 1px 3px rgba(20,32,20,0.95), 0 0 8px rgba(20,32,20,0.8), 0 2px 16px rgba(20,32,20,0.55)`;
+// La imagen de fondo (nutri.png) es clara y se muestra tal cual (sin velo), así
+// que el texto va en verde oscuro (nutricionTxt) con un halo claro que lo
+// despega de las zonas de la foto con más detalle.
+const TXT_HALO = `0 1px 2px rgba(255,255,255,0.9), 0 0 10px rgba(255,255,255,0.75), 0 0 22px rgba(228,248,225,0.6)`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,222,170,0.14), 0 0 20px ${nutricionTxt}1a`;
 
 export default function MetodoNutricion() {
@@ -111,7 +111,7 @@ export default function MetodoNutricion() {
 
   const comenzar = () => {
     if (!suscrito && !testPagos) { setPagoOpen(true); return; }
-    navigate("/metodo/nutricion/intro");
+    navigate("/metodo/nutricion/nutrientes");
   };
 
   if (loading) {
@@ -142,33 +142,30 @@ export default function MetodoNutricion() {
           {/* ── Bienvenida contemplativa ── */}
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-              <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
-              <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
-                <Text
-                  color="white"
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight="1.95"
-                  opacity={0.94}
-                  maxW="600px"
-                  mx="auto"
-                  mb={4}
-                  style={{ textShadow: INK_SHADOW }}
-                >
-                  Ya conoces el cuerpo que eres. Ahora descubre qué hay más allá de los alimentos que consumes
-                  cada día: por qué unos te nutren y otros te apagan, y cómo lo que comes moldea tu cuerpo y tu
-                  claridad mental.
-                </Text>
-                <Text
-                  color="white"
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight="1.95"
-                  opacity={0.94}
-                  maxW="600px"
-                  mx="auto"
-                  style={{ textShadow: INK_SHADOW }}
-                >
-                  Toma las riendas de tu alimentación, sin rodeos ni dogmas. Empecemos.
-                </Text>
+              {/* La foto de la disciplina se ve tal cual, sin velo oscuro: nutri.png
+                  es clara y el texto va en nutricionTxt (verde oscuro). */}
+              <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
+              <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }} textAlign="center">
+                {[
+                  "En esta disciplina explorarás cómo eres lo que comes; para ser exactos, eres lo que absorbes.",
+                  "Descubrirás cómo las moléculas que componen tus alimentos están al servicio de tu reconstrucción o de tu destrucción.",
+                  "Aquí no hay juicios: ningún alimento es, por sí mismo, bueno o malo, pero sus moléculas sí pueden ser dañinas o beneficiosas.",
+                  "Comprenderás cómo las moléculas de tu comida se transforman, literalmente, en ti.",
+                ].map((parrafo, i, arr) => (
+                  <Text
+                    key={i}
+                    color={nutricionTxt}
+                    fontSize={{ base: "md", md: "lg" }}
+                    fontWeight="600"
+                    lineHeight="1.95"
+                    maxW="600px"
+                    mx="auto"
+                    mb={i < arr.length - 1 ? 4 : 0}
+                    style={{ textShadow: TXT_HALO }}
+                  >
+                    {parrafo}
+                  </Text>
+                ))}
               </Box>
             </Box>
           </Reveal>

@@ -240,60 +240,67 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
           <AnimatePresence mode="wait">
             {!completo ? (
               <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4 }}>
-                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                     boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
-                  <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 8, md: 10 }} pl={{ md: 4 }}>
+                <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-                      {/* Zona de ensamblaje */}
-                      <Flex flexShrink={0} justify="center" align="center" w={{ base: "100%", md: "auto" }} pl={{ md: 2 }}>
-                        <Box ref={zonaRef} position="relative"
-                             w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
-                             borderRadius="full" display="flex" alignItems="center" justifyContent="center">
-                          <Box position="absolute" inset="-12px" borderRadius="full"
-                               border={`1.5px dashed ${props.glow}55`} animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
-                          <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
-                               sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
-                                     boxShadow: `inset 0 0 40px rgba(0,0,0,0.9), 0 0 24px ${props.glow}22` }} />
-                          {puestas.map((p, i) => {
-                            const q = pos(props.forma, i, total);
-                            return (
-                              <MBox key={p.id} position="absolute" left={`${q.x}%`} top={`${q.y}%`} transform="translate(-50%,-50%)"
-                                    initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ type: "spring", stiffness: 340, damping: 20 }}>
-                                <Perla def={p.def} size={{ base: "54px", md: "70px" }} />
-                              </MBox>
-                            );
-                          })}
-                          {puestas.length === 0 && (
-                            <Text position="relative" zIndex={2} color={`${props.glow}cc`} fontSize={{ base: "sm", md: "md" }}
-                                  fontStyle="italic" pointerEvents="none" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                              {props.zonaLabel}
-                            </Text>
-                          )}
-                        </Box>
-                      </Flex>
+                  {/* ── Box izquierda · zona de ensamblaje (aquí se llevan las piezas) ── */}
+                  <Box position="relative" flex={{ base: "1 1 auto", md: "0 0 46%" }} borderRadius="2xl" overflow="hidden"
+                       boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} justify="center" align="center"
+                          px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "280px", md: "340px" }}>
+                      <Box ref={zonaRef} position="relative"
+                           w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
+                           borderRadius="full" display="flex" alignItems="center" justifyContent="center">
+                        <Box position="absolute" inset="-12px" borderRadius="full"
+                             border={`1.5px dashed ${props.glow}55`} animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
+                        <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
+                             sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
+                                   boxShadow: `inset 0 0 40px rgba(0,0,0,0.9), 0 0 24px ${props.glow}22` }} />
+                        {puestas.map((p, i) => {
+                          const q = pos(props.forma, i, total);
+                          return (
+                            <MBox key={p.id} position="absolute" left={`${q.x}%`} top={`${q.y}%`} transform="translate(-50%,-50%)"
+                                  initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                                  transition={{ type: "spring", stiffness: 340, damping: 20 }}>
+                              <Perla def={p.def} size={{ base: "54px", md: "70px" }} />
+                            </MBox>
+                          );
+                        })}
+                        {puestas.length === 0 && (
+                          <Text position="relative" zIndex={2} color={`${props.glow}cc`} fontSize={{ base: "sm", md: "md" }}
+                                fontStyle="italic" pointerEvents="none" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
+                            {props.zonaLabel}
+                          </Text>
+                        )}
+                      </Box>
+                    </Flex>
+                  </Box>
 
-                      {/* Piezas */}
-                      <Flex flex="1" direction="column" align="center" gap={4} w="100%">
-                        <Flex wrap="wrap" justify="center" align="flex-start" gap={{ base: 3, md: 4 }} maxW="460px" minH="70px">
-                          <AnimatePresence>
-                            {pendientes.map((p) => (<Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />))}
-                          </AnimatePresence>
-                          {pendientes.length === 0 && (<Text color={`${props.glow}bb`} fontSize="md" fontStyle="italic">…uniéndose…</Text>)}
-                        </Flex>
-                        <Flex justify="center" gap={2} mt={2} wrap="wrap" maxW="320px">
-                          {Array.from({ length: total }).map((_, i) => (
-                            <Box key={i} w="9px" h="9px" borderRadius="full"
-                                 bg={i < puestas.length ? props.glow : "rgba(255,255,255,0.22)"}
-                                 boxShadow={i < puestas.length ? `0 0 10px ${props.glow}` : "none"} transition="all 0.3s" />
-                          ))}
-                        </Flex>
+                  {/* ── Box derecha · piezas a arrastrar (2 por fila) ── */}
+                  {/* Sin overflow:hidden para que la ficha no se recorte al arrastrarla al otro box. */}
+                  <Box position="relative" flex="1" borderRadius="2xl"
+                       boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} direction="column" align="center" justify="center" gap={5}
+                          px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "auto", md: "340px" }}>
+                      <Box display="grid" gridTemplateColumns="repeat(2, auto)"
+                           justifyContent="center" justifyItems="center"
+                           columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }} minH="70px">
+                        <AnimatePresence>
+                          {pendientes.map((p) => (<Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />))}
+                        </AnimatePresence>
+                      </Box>
+                      {pendientes.length === 0 && (<Text color={`${props.glow}bb`} fontSize="md" fontStyle="italic">…uniéndose…</Text>)}
+                      <Flex justify="center" gap={2} wrap="wrap" maxW="320px">
+                        {Array.from({ length: total }).map((_, i) => (
+                          <Box key={i} w="9px" h="9px" borderRadius="full"
+                               bg={i < puestas.length ? props.glow : "rgba(255,255,255,0.22)"}
+                               boxShadow={i < puestas.length ? `0 0 10px ${props.glow}` : "none"} transition="all 0.3s" />
+                        ))}
                       </Flex>
                     </Flex>
                   </Box>
-                </Box>
+                </Flex>
               </MBox>
             ) : (
               <MBox key="b" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}>
@@ -361,9 +368,9 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             )}
           </AnimatePresence>
 
-          {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
+          {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
           {completo && (
-            <Flex justify="center" w="100%">
+            <Flex justify="flex-end" w="100%">
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"

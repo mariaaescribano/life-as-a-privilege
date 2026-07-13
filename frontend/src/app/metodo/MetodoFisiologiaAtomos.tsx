@@ -113,7 +113,7 @@ function Esfera({ tipo, size, glow = true }: { tipo: Tipo; size: any; glow?: boo
 }
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
-function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => void }) {
+function FichaArrastrable({ pieza, onSoltar, enterDelay = 0 }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => void; enterDelay?: number }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const glow = GLOW[pieza.tipo];
@@ -126,7 +126,7 @@ function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (pieza:
       whileDrag={{ scale: 1.18, zIndex: 60 }}
       whileHover={{ scale: 1.07, y: -2 }}
       initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.5 }}
-      transition={{ type: "spring", stiffness: 320, damping: 26 }}
+      transition={{ type: "spring", stiffness: 320, damping: 26, delay: enterDelay }}
       cursor="grab" position="relative" display="flex" flexDirection="column" alignItems="center" gap={1}
       flexShrink={0} style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
@@ -313,71 +313,80 @@ export default function MetodoFisiologiaAtomos() {
 
           <AnimatePresence mode="wait">
 
-            {/* ───────── FASE A · construir ───────── */}
+            {/* ───────── FASE A · construir (dos boxes: átomo | piezas) ───────── */}
             {!completo && (
               <MBox key={`construir-${def.key}`} w="100%"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.4 }}>
-                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={GLOW_BOX}>
-                  <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-                  <Box position="relative" zIndex={1} px={{ base: 5, md: 10 }} py={{ base: 7, md: 9 }} minH={{ md: "360px" }}>
-                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 8, md: 10 }} pl={{ md: 4 }}>
+                    initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.3 }}>
+                <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-                      {/* Átomo (órbita + núcleo) */}
-                      <Flex flexShrink={0} justify="center" align="center" w={{ base: "100%", md: "auto" }} pl={{ md: 2 }}>
-                        <Box ref={orbitaRef} position="relative"
-                             w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
+                  {/* ── Box izquierda · átomo (aquí se llevan las piezas) · entra primero ── */}
+                  <Reveal direction="up" distance={22} duration={0.5} delay={0}
+                          position="relative" flex={{ base: "1 1 auto", md: "0 0 46%" }} borderRadius="2xl" overflow="hidden" boxShadow={GLOW_BOX}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} justify="center" align="center"
+                          px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "280px", md: "340px" }}>
+                      <Box ref={orbitaRef} position="relative"
+                           w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
+                           borderRadius="full" display="flex" alignItems="center" justifyContent="center">
+                        <Box position="absolute" inset="0" borderRadius="full"
+                             border={`1.5px dashed ${GLOW.electron}66`}
+                             animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
+                        {electrones.map((p, i) => (
+                          <PiezaPosada key={p.id} tipo={p.tipo} x={def.orbitaPos[i].x} y={def.orbitaPos[i].y}
+                                       size={{ base: "26px", md: "32px" }} />
+                        ))}
+                        <Box ref={nucleoRef} position="relative"
+                             w={{ base: "120px", md: "148px" }} h={{ base: "120px", md: "148px" }}
                              borderRadius="full" display="flex" alignItems="center" justifyContent="center">
-                          <Box position="absolute" inset="0" borderRadius="full"
-                               border={`1.5px dashed ${GLOW.electron}66`}
+                          <Box position="absolute" inset="-8px" borderRadius="full"
+                               border={`1.5px dashed ${GLOW.proton}66`}
                                animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
-                          {electrones.map((p, i) => (
-                            <PiezaPosada key={p.id} tipo={p.tipo} x={def.orbitaPos[i].x} y={def.orbitaPos[i].y}
-                                         size={{ base: "26px", md: "32px" }} />
+                          <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
+                               sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
+                                     boxShadow: `inset 0 0 34px rgba(0,0,0,0.92), 0 0 20px ${fisiologiaTxt}22` }} />
+                          {nucleares.map((p, i) => (
+                            <PiezaPosada key={p.id} tipo={p.tipo} x={def.nucleoCluster[i].x} y={def.nucleoCluster[i].y}
+                                         size={{ base: "30px", md: "38px" }} />
                           ))}
-                          <Box ref={nucleoRef} position="relative"
-                               w={{ base: "120px", md: "148px" }} h={{ base: "120px", md: "148px" }}
-                               borderRadius="full" display="flex" alignItems="center" justifyContent="center">
-                            <Box position="absolute" inset="-8px" borderRadius="full"
-                                 border={`1.5px dashed ${GLOW.proton}66`}
-                                 animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
-                            <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
-                                 sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
-                                       boxShadow: `inset 0 0 34px rgba(0,0,0,0.92), 0 0 20px ${fisiologiaTxt}22` }} />
-                            {nucleares.map((p, i) => (
-                              <PiezaPosada key={p.id} tipo={p.tipo} x={def.nucleoCluster[i].x} y={def.nucleoCluster[i].y}
-                                           size={{ base: "30px", md: "38px" }} />
-                            ))}
-                            {nucleares.length === 0 && (
-                              <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
-                                    fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" pointerEvents="none"
-                                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                                el núcleo
-                              </Text>
-                            )}
-                          </Box>
+                          {nucleares.length === 0 && (
+                            <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
+                                  fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" pointerEvents="none"
+                                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
+                              el núcleo
+                            </Text>
+                          )}
                         </Box>
-                      </Flex>
+                      </Box>
+                    </Flex>
+                  </Reveal>
 
-                      {/* Piezas a arrastrar */}
-                      <Flex flex="1" direction="column" align="center" gap={4} w="100%">
-                        <Flex wrap="wrap" justify="center" gap={{ base: 4, md: 5 }} maxW="360px">
-                          <AnimatePresence>
-                            {pendientes.map((p) => (<FichaArrastrable key={p.id} pieza={p} onSoltar={soltar} />))}
-                          </AnimatePresence>
-                          {pendientes.length === 0 && (<Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…formándose…</Text>)}
-                        </Flex>
-                        <Flex justify="center" gap={2} mt={2} wrap="wrap" maxW="320px">
-                          {Array.from({ length: total }).map((_, i) => (
-                            <Box key={i} w="9px" h="9px" borderRadius="full"
-                                 bg={i < hechas ? fisiologiaTxt : "rgba(255,255,255,0.22)"}
-                                 boxShadow={i < hechas ? `0 0 10px ${fisiologiaTxt}` : "none"} transition="all 0.3s" />
-                          ))}
-                        </Flex>
+                  {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después ── */}
+                  {/* Sin overflow:hidden para que la ficha no se recorte al arrastrarla al otro box. */}
+                  <Reveal direction="up" distance={22} duration={0.5} delay={0.18}
+                          position="relative" flex="1" borderRadius="2xl" boxShadow={GLOW_BOX}>
+                    <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                    <Flex position="relative" zIndex={1} direction="column" justify="center" align="center" gap={5}
+                          px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "auto", md: "340px" }}>
+                      <Box display="grid" gridTemplateColumns="repeat(2, auto)"
+                           justifyContent="center" justifyItems="center"
+                           columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
+                        <AnimatePresence>
+                          {pendientes.map((p, i) => (<FichaArrastrable key={p.id} pieza={p} onSoltar={soltar}
+                                                                       enterDelay={0.45 + i * 0.1} />))}
+                        </AnimatePresence>
+                      </Box>
+                      {pendientes.length === 0 && (<Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…formándose…</Text>)}
+                      <Flex justify="center" gap={2} wrap="wrap" maxW="320px">
+                        {Array.from({ length: total }).map((_, i) => (
+                          <Box key={i} w="9px" h="9px" borderRadius="full"
+                               bg={i < hechas ? fisiologiaTxt : "rgba(255,255,255,0.22)"}
+                               boxShadow={i < hechas ? `0 0 10px ${fisiologiaTxt}` : "none"} transition="all 0.3s" />
+                        ))}
                       </Flex>
                     </Flex>
-                  </Box>
-                </Box>
+                  </Reveal>
+                </Flex>
               </MBox>
             )}
 
@@ -447,8 +456,8 @@ export default function MetodoFisiologiaAtomos() {
                   </Box>
                 </Flex>
 
-                {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
-                <Flex justify="center" w="100%" mt={{ base: 5, md: 6 }}>
+                {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
+                <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
                   <Box as="button" onClick={reiniciar}
                        display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                        bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"

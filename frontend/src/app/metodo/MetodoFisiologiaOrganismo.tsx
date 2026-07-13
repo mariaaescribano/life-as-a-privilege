@@ -62,25 +62,33 @@ function PanelBox({ children, ...rest }: any) {
   );
 }
 
-// ── Ficha del sistema en la bandeja (foto circular + nombre; se toca para colocar) ──
-function SistemaFicha({ sistema, colocado, onColocar }: {
-  sistema: Sistema; colocado: boolean; onColocar: () => void;
+// ── Ficha del sistema en la bandeja (foto circular + nombre; se ARRASTRA al círculo) ──
+function SistemaFicha({ sistema, colocado, onSoltar }: {
+  sistema: Sistema; colocado: boolean; onSoltar: (rect: DOMRect) => void;
 }) {
+  const [arrastrando, setArrastrando] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   return (
     <MBox
-      as="button"
-      onClick={colocado ? undefined : onColocar}
+      ref={ref}
+      drag={!colocado}
+      dragSnapToOrigin
+      dragElastic={0.12}
+      dragMomentum={false}
+      onDragStart={() => setArrastrando(true)}
+      onDragEnd={() => { setArrastrando(false); if (ref.current) onSoltar(ref.current.getBoundingClientRect()); }}
+      whileDrag={{ scale: 1.14, zIndex: 60 }}
       whileHover={colocado ? undefined : { y: -3, scale: 1.04 }}
-      whileTap={colocado ? undefined : { scale: 0.95 }}
       transition={{ type: "spring", stiffness: 320, damping: 24 }}
       display="flex" flexDirection="column" alignItems="center" gap={2}
-      cursor={colocado ? "default" : "pointer"}
+      cursor={colocado ? "default" : "grab"}
       opacity={colocado ? 0.4 : 1}
       w={{ base: "92px", md: "116px" }}
       flexShrink={0}
-      style={{ WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
+      sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${sistema.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}
+      style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
-      <Box position="relative">
+      <Box position="relative" pointerEvents="none">
         <SistemaFoto sistema={sistema} size={{ base: "76px", md: "96px" }} />
         {colocado && (
           <Flex position="absolute" inset={0} align="center" justify="center" borderRadius="full"
@@ -94,7 +102,8 @@ function SistemaFicha({ sistema, colocado, onColocar }: {
         )}
       </Box>
       <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight="700" lineHeight="1.15"
-            textAlign="center" letterSpacing="0.02em" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
+            textAlign="center" letterSpacing="0.02em" pointerEvents="none"
+            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
         {sistema.label}
       </Text>
     </MBox>
@@ -117,6 +126,7 @@ export default function MetodoFisiologiaOrganismo() {
   const [cuerpoOk, setCuerpoOk] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
+  const circuloRef = useRef<HTMLDivElement>(null);
 
   const total = SISTEMAS.length;
 
@@ -165,6 +175,17 @@ export default function MetodoFisiologiaOrganismo() {
     });
   };
 
+  // ¿La ficha soltada cae dentro del círculo de ensamblaje? (viewport-based,
+  // funciona con scroll y en táctil, igual que en el resto de páginas).
+  const soltarEnCirculo = (s: Sistema, rect: DOMRect) => {
+    const el = circuloRef.current;
+    if (!el) return;
+    const c = el.getBoundingClientRect();
+    const cx = c.left + c.width / 2, cy = c.top + c.height / 2, radio = c.width / 2;
+    const px = rect.left + rect.width / 2, py = rect.top + rect.height / 2;
+    if (Math.hypot(px - cx, py - cy) <= radio + rect.width / 2) colocar(s);
+  };
+
   const reiniciar = () => { setColocados([]); setCompleto(false); setFrase(null); };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -193,13 +214,31 @@ export default function MetodoFisiologiaOrganismo() {
             next={{ label: "Niveles →", onClick: () => navigate("/metodo/fisiologia/niveles") }}
           />
 
+          {/* Instrucción inicial que, al colocar un sistema, se sustituye por su
+              frase «memorable» en grande y bien visible. */}
           {!completo && (
-            <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                    maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                 Construye un ser humano.
-              </Text>
-            </MBox>
+            <Flex w="100%" justify="center" align="center" minH={{ base: "64px", md: "84px" }} px={2}>
+              <AnimatePresence mode="wait">
+                {frase ? (
+                  <MBox key={frase} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5 }} textAlign="center">
+                    <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" fontStyle="italic"
+                          lineHeight="1.4" maxW="760px"
+                          style={{ textShadow: `0 1px 10px rgba(0,0,0,0.6), 0 0 22px ${fisiologiaTxt}66` }}>
+                      «{frase}»
+                    </Text>
+                  </MBox>
+                ) : (
+                  <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                        textAlign="center">
+                    <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                          maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                      Construye un ser humano.
+                    </Text>
+                  </MBox>
+                )}
+              </AnimatePresence>
+            </Flex>
           )}
 
           <AnimatePresence mode="wait">
@@ -213,8 +252,8 @@ export default function MetodoFisiologiaOrganismo() {
                   <PanelBox flex={{ base: "1 1 auto", md: "0 0 42%" }}>
                     <Flex direction="column" align="center" justify="center" h="100%"
                           px={{ base: 5, md: 7 }} py={{ base: 7, md: 8 }} gap={5}>
-                      {/* Círculo de ensamblaje */}
-                      <Box position="relative" w={{ base: "260px", md: "320px" }} h={{ base: "260px", md: "320px" }}
+                      {/* Círculo de ensamblaje (zona donde se sueltan los sistemas) */}
+                      <Box ref={circuloRef} position="relative" w={{ base: "260px", md: "320px" }} h={{ base: "260px", md: "320px" }}
                            flexShrink={0}>
                         <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
                              border={`1.5px dashed ${fisiologiaTxt}55`}
@@ -246,27 +285,12 @@ export default function MetodoFisiologiaOrganismo() {
                           </Flex>
                         )}
                       </Box>
-
-                      {/* Frase «memorable» del último sistema colocado */}
-                      <Box minH={{ base: "64px", md: "72px" }} display="flex" alignItems="center" justifyContent="center">
-                        <AnimatePresence mode="wait">
-                          {frase && (
-                            <MBox key={frase} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.5 }}>
-                              <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                                    textAlign="center" lineHeight="1.6" maxW="440px"
-                                    style={{ textShadow: `0 1px 8px rgba(0,0,0,0.6), 0 0 18px ${fisiologiaTxt}44` }}>
-                                «{frase}»
-                              </Text>
-                            </MBox>
-                          )}
-                        </AnimatePresence>
-                      </Box>
                     </Flex>
                   </PanelBox>
 
-                  {/* DERECHA · todos los sistemas */}
-                  <PanelBox flex="1">
+                  {/* DERECHA · todos los sistemas (se arrastran al círculo) */}
+                  {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
+                  <PanelBox flex="1" overflow="visible">
                     <Box px={{ base: 4, md: 6 }} py={{ base: 5, md: 7 }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
                             letterSpacing="0.12em" textTransform="uppercase" textAlign="center" mb={4}
@@ -276,7 +300,7 @@ export default function MetodoFisiologiaOrganismo() {
                       <Flex wrap="wrap" justify="center" gap={{ base: 3, md: 4 }}>
                         {SISTEMAS.map((s) => (
                           <SistemaFicha key={s.key} sistema={s} colocado={colocadosSet.has(s.key)}
-                                        onColocar={() => colocar(s)} />
+                                        onSoltar={(rect) => soltarEnCirculo(s, rect)} />
                         ))}
                       </Flex>
                     </Box>
@@ -329,27 +353,21 @@ export default function MetodoFisiologiaOrganismo() {
                             style={{ textShadow: INK }}>
                         Y ese organismo entero, vivo y en marcha en este mismo instante, <b>eres tú</b>.
                       </Text>
-
-                      <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }} align="center">
-                        <Box as="button" onClick={() => navigate("/metodo/fisiologia/niveles")}
-                             px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                             fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                             letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                             boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                             _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                          Volver a los niveles →
-                        </Box>
-                        <Box as="button" onClick={reiniciar}
-                             display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                             bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
-                             fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
-                             letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                             _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                          ↺ Volver a hacer
-                        </Box>
-                      </Flex>
                     </Flex>
                   </PanelBox>
+                </Flex>
+
+                {/* Volver a hacer — fuera del box, abajo a la derecha del todo
+                    («Volver a los niveles» ya está en el header como «Niveles →»). */}
+                <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
+                  <Box as="button" onClick={reiniciar}
+                       display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+                       bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                       fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                       letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                       _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                    ↺ Volver a hacer
+                  </Box>
                 </Flex>
               </MBox>
             )}

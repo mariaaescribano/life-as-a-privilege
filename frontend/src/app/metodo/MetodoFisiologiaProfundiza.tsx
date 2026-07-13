@@ -118,6 +118,7 @@ export default function MetodoFisiologiaProfundiza() {
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
+              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
               extra={celulasBtn}
             />
           </Reveal>

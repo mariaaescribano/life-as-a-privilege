@@ -12,7 +12,8 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { ComicCelulaModal } from "../../components/metodo/ComicCelulaModal";
 import {
   API_URL,
@@ -475,6 +476,14 @@ export default function MetodoFisiologiaEstructuras() {
           const g = dataRef.current?.estructuras_hechas;
           if (Array.isArray(g)) setFormadas(g.filter((x: any): x is EstId => ESTRUCTURAS.some((e) => e.id === x)));
         } catch { /* sin fila todavía */ }
+
+        // No mostramos la página hasta que TODAS las fotos estén descargadas
+        // (ladrillos + resultado circular + cuadrada de la rejilla), para que
+        // ninguna aparezca de golpe cuando el resto ya está en pantalla.
+        await precargarImagenes([
+          ...Object.values(MACRO).map((m) => m.img),
+          ...ESTRUCTURAS.flatMap((e) => [e.resultadoImg, e.cuadradoImg]),
+        ]);
       } catch {
         navigate("/metodo/fisiologia");
         return;
@@ -552,14 +561,16 @@ export default function MetodoFisiologiaEstructuras() {
               onVolver={() => setActiva(null)}
             />
           ) : (
-            /* ── 4 boxes en rejilla 2×2 (igual que Macromoléculas) ── */
-            <Flex wrap="wrap" justify="center" w="100%" maxW="880px" gap={{ base: 4, md: 5 }}>
+            /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro ── */
+            <RevealStagger stagger={0.12} delayChildren={0.1}
+                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="880px" gap={{ base: 4, md: 5 }}>
               {ESTRUCTURAS.map((e) => (
-                <Box key={e.id} flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
+                <RevealItem key={e.id} direction="up" distance={24} scaleFrom={0.97}
+                            flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
                   <EstCard e={e} hecha={formadas.includes(e.id)} onClick={() => setActiva(e.id)} />
-                </Box>
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
           )}
         </Flex>
       </Flex>

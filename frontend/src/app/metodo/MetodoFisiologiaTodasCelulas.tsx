@@ -11,7 +11,8 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { CelulaCard, CelulaModal, ConsejoModal, type Consejo } from "../../components/metodo/celulasUi";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -1042,6 +1043,10 @@ export default function MetodoFisiologiaTodasCelulas() {
           const leidas: string[] = dataRef.current?.[CURIOSIDADES_KEY] ?? [];
           if (Array.isArray(leidas) && leidas.length) setCuriosidadesLeidas(new Set(leidas));
         } catch { /* sin fila todavía */ }
+
+        // No mostramos la página hasta que TODAS las fotos de los órganos estén
+        // descargadas, para que la cuadrícula no se rellene de golpe después.
+        await precargarImagenes(ORGANOS.map((o) => encodeURI(o.foto)));
       } catch {
         navigate("/metodo/fisiologia");
         return;
@@ -1141,20 +1146,21 @@ export default function MetodoFisiologiaTodasCelulas() {
                 </Flex>
               </Reveal>
 
-              {/* ── Cuadrícula de tarjetas de órgano (Pokédex) ── */}
-              <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
-                <Box
-                  w="100%"
-                  display="grid"
-                  gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
-                  gap={{ base: 4, md: 6 }}
-                >
-                  {ORGANOS.map((o) => (
-                    <OrganoCard key={o.key} organo={o} vistas={vistas}
-                                onClick={() => abrirOrgano(o)} />
-                  ))}
-                </Box>
-              </Reveal>
+              {/* ── Cuadrícula de tarjetas de órgano (Pokédex) — entran en cascada ── */}
+              <RevealStagger
+                stagger={0.06}
+                delayChildren={0.15}
+                w="100%"
+                display="grid"
+                gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+                gap={{ base: 4, md: 6 }}
+              >
+                {ORGANOS.map((o) => (
+                  <RevealItem key={o.key} direction="up" distance={22} scaleFrom={0.97} display="flex">
+                    <OrganoCard organo={o} vistas={vistas} onClick={() => abrirOrgano(o)} />
+                  </RevealItem>
+                ))}
+              </RevealStagger>
             </>
           ) : (
             /* ── Ficha del órgano a pantalla completa ── */
