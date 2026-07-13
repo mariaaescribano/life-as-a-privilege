@@ -194,7 +194,6 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     foto: FOTO("neurotransmisores"),
     grupo: "Química interna",
     intro: "Pequeñas moléculas que llevan un mensaje de una neurona a otra. Antes de conocerlos, mira cómo tu cuerpo los fabrica.",
-    pista: "Pulsa cada mensajero para descubrir qué hace y cuándo lo notas.",
     comicIntro: NEUROTRANSMISORES_SINTESIS,
     fichas: NEUROTRANSMISORES,
   },

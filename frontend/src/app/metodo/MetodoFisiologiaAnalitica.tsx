@@ -11,7 +11,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { Reveal } from "../../components/global/Reveal";
 import {
-  ANALITICA, rangoDe, TODOS_MARCADORES, type Marcador, type Sexo,
+  rangoDe, TODOS_MARCADORES, type Marcador, type Sexo,
 } from "../../components/metodo/analiticaMarcadores";
 import {
   API_URL,
@@ -22,6 +22,8 @@ import {
 } from "../../GlobalVariables";
 
 const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
+// Mismo glow de caja que el resto de páginas de contenido de Fisiología (unidad visual).
+const GLOW_BOX = `0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`;
 const OK = "#8fd6b4";   // dentro de rango
 const OUT = "#e6b566";  // fuera de rango (bajo o alto)
 
@@ -67,10 +69,14 @@ function RangoBar({ min, max, value }: { min: number; max: number; value: number
 }
 
 // ── Tarjeta de un marcador ──────────────────────────────────────────────────
+// Cada tarjeta lleva la imagen de Fisiología de fondo (inmersiva). El texto de
+// qué significa ya NO va inline: al escribir un valor aparece el botón «Leer lo
+// que significa» que abre un popup hablándole de SU caso (bajo/normal/alto).
 function MarcadorCard({
-  m, sexo, valor, onChange, onBlur,
+  m, sexo, valor, onChange, onBlur, onLeer,
 }: {
-  m: Marcador; sexo: Sexo; valor: string; onChange: (v: string) => void; onBlur: () => void;
+  m: Marcador; sexo: Sexo; valor: string;
+  onChange: (v: string) => void; onBlur: () => void; onLeer: () => void;
 }) {
   const [min, max] = rangoDe(m.rango, sexo);
   const n = parse(valor);
@@ -79,57 +85,180 @@ function MarcadorCard({
   const chipTxt = estado === "bajo" ? "bajo" : estado === "alto" ? "alto" : "normal";
 
   return (
-    <Box borderRadius="xl" p={{ base: 4, md: 5 }} bg="rgba(255,255,255,0.06)"
-         border={`1px solid ${estado ? `${chipColor}66` : `${fisiologiaTxt}33`}`}
-         transition="border-color 0.2s">
-      <Flex justify="space-between" align="flex-start" gap={3} wrap="wrap">
-        <Box flex="1" minW="140px">
-          <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "md" }} lineHeight="1.25"
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-            {m.nombre}
+    <Box position="relative" borderRadius="xl" overflow="hidden" transition="all 0.25s"
+         border={`1px solid ${estado ? `${chipColor}77` : `${fisiologiaTxt}44`}`}
+         boxShadow={estado
+           ? `0 0 16px rgba(255,255,255,0.1), 0 0 32px ${chipColor}22, inset 0 0 46px rgba(0,0,0,0.4)`
+           : `0 0 14px rgba(255,255,255,0.08), inset 0 0 46px rgba(0,0,0,0.45)`}>
+      {/* Fondo inmersivo: la misma imagen de Fisiología en cada tarjeta */}
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="xl" overlay="rgba(16,9,26,0.62)" />
+
+      <Box position="relative" zIndex={1} p={{ base: 4, md: 5 }}>
+        <Flex justify="space-between" align="flex-start" gap={3} wrap="wrap">
+          <Box flex="1" minW="140px">
+            <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "md" }} lineHeight="1.25"
+                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.75)" }}>
+              {m.nombre}
+            </Text>
+            <Text color={`${fisiologiaTxt}dd`} fontSize="xs" fontStyle="italic"
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
+              Normal: {min}–{max} {m.unidad}
+            </Text>
+          </Box>
+
+          <Flex align="center" gap={2} flexShrink={0}>
+            <Input
+              value={valor}
+              onChange={(e) => onChange(e.target.value)}
+              onBlur={onBlur}
+              placeholder="—"
+              inputMode="decimal"
+              w={{ base: "84px", md: "96px" }}
+              h="40px"
+              textAlign="center"
+              color="white"
+              fontWeight="700"
+              bg="rgba(0,0,0,0.4)"
+              border={`1.5px solid ${fisiologiaTxt}77`}
+              borderRadius="lg"
+              _hover={{ borderColor: `${fisiologiaTxt}bb` }}
+              _focus={{ borderColor: fisiologiaTxt, boxShadow: `0 0 0 1px ${fisiologiaTxt}` }}
+              _placeholder={{ color: "rgba(255,255,255,0.4)" }}
+            />
+            <Text color={`${fisiologiaTxt}dd`} fontSize="xs" w="44px"
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>{m.unidad}</Text>
+            {estado && (
+              <Box px={2} py={0.5} borderRadius="full" bg={`${chipColor}22`} border={`1px solid ${chipColor}`}
+                   minW="52px" textAlign="center">
+                <Text color={chipColor} fontSize="2xs" fontWeight="700" textTransform="uppercase" letterSpacing="0.06em">
+                  {chipTxt}
+                </Text>
+              </Box>
+            )}
+          </Flex>
+        </Flex>
+
+        <Box mt={4}><RangoBar min={min} max={max} value={n} /></Box>
+
+        {/* Al escribir un valor: botón que abre el popup con SU caso */}
+        {n != null ? (
+          <Flex justify="center" mt={4}>
+            <Box as="button" onClick={onLeer}
+                 px={5} py={2} borderRadius="full"
+                 bg={`${fisiologiaTxt}1f`} color={fisiologiaTxt}
+                 border={`1.5px solid ${fisiologiaTxt}`}
+                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xs", md: "sm" }}
+                 letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
+                 boxShadow={`0 0 14px ${fisiologiaTxt}44`}
+                 _hover={{ bg: `${fisiologiaTxt}33`, transform: "translateY(-1px)", boxShadow: `0 0 24px ${fisiologiaTxt}77` }}>
+              Leer lo que significa →
+            </Box>
+          </Flex>
+        ) : (
+          <Text color="rgba(255,255,255,0.62)" fontSize="xs" fontStyle="italic" textAlign="center" mt={4}
+                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
+            Escribe tu valor para leer qué significa.
           </Text>
-          <Text color={`${fisiologiaTxt}cc`} fontSize="xs" fontStyle="italic">
-            Normal: {min}–{max} {m.unidad}
-          </Text>
+        )}
+      </Box>
+    </Box>
+  );
+}
+
+// ── Popup: le habla de SU caso según su valor (bajo / normal / alto) ─────────
+function MarcadorModal({
+  m, sexo, valor, onClose,
+}: {
+  m: Marcador; sexo: Sexo; valor: number; onClose: () => void;
+}) {
+  const [min, max] = rangoDe(m.rango, sexo);
+  const estado = estadoDe(valor, min, max);
+  const chipColor = estado === "normal" ? OK : OUT;
+  const chipTxt = estado === "bajo" ? "bajo" : estado === "alto" ? "alto" : "normal";
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", h); };
+  }, [onClose]);
+
+  const nom = m.nombre.toLowerCase();
+  const intro =
+    estado === "normal" ? `Tu ${nom} está dentro del rango normal.`
+    : estado === "bajo" ? `Tu ${nom} está por debajo del rango normal.`
+    : `Tu ${nom} está por encima del rango normal.`;
+  const cierre =
+    estado === "normal"
+      ? "En tu caso, este valor está en equilibrio: tu cuerpo lo mantiene justo donde debe."
+      : estado === "bajo"
+      ? "Que esté bajo no es un diagnóstico, pero sí una señal que merece una conversación con tu médico."
+      : "Que esté alto no significa enfermedad por sí solo; llévalo a tu médico para ponerlo en contexto.";
+
+  return (
+    <Box position="fixed" inset={0} zIndex={1100} bg="rgba(0,40,20,0.62)"
+         sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+         display="flex" alignItems="center" justifyContent="center"
+         px={{ base: 4, md: 6 }} py={{ base: 4, md: 6 }} onClick={onClose}>
+      <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" overflow="hidden"
+           w={{ base: "95%", md: "560px" }} maxH={{ base: "calc(100dvh - 32px)", md: "88vh" }}
+           borderRadius="24px" border={`1px solid ${chipColor}66`}
+           boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 30px ${chipColor}55`}>
+        {/* Fondo inmersivo de Fisiología */}
+        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.55)" />
+
+        <Box as="button" position="absolute" top="14px" right="14px" w="34px" h="34px" borderRadius="full"
+             bg={`${fisiologiaTxt}18`} border={`1px solid ${fisiologiaTxt}33`} color={fisiologiaTxt}
+             display="flex" alignItems="center" justifyContent="center" fontSize="16px" fontWeight="700"
+             cursor="pointer" zIndex={2} transition="all 0.18s" _hover={{ bg: `${fisiologiaTxt}33` }}
+             onClick={onClose}>
+          ✕
         </Box>
 
-        <Flex align="center" gap={2} flexShrink={0}>
-          <Input
-            value={valor}
-            onChange={(e) => onChange(e.target.value)}
-            onBlur={onBlur}
-            placeholder="—"
-            inputMode="decimal"
-            w={{ base: "84px", md: "96px" }}
-            h="40px"
-            textAlign="center"
-            color="white"
-            fontWeight="700"
-            bg="rgba(255,255,255,0.1)"
-            border={`1.5px solid ${fisiologiaTxt}66`}
-            borderRadius="lg"
-            _hover={{ borderColor: `${fisiologiaTxt}aa` }}
-            _focus={{ borderColor: fisiologiaTxt, boxShadow: `0 0 0 1px ${fisiologiaTxt}` }}
-            _placeholder={{ color: "rgba(255,255,255,0.4)" }}
-          />
-          <Text color={`${fisiologiaTxt}dd`} fontSize="xs" w="44px">{m.unidad}</Text>
-          {estado && (
-            <Box px={2} py={0.5} borderRadius="full" bg={`${chipColor}22`} border={`1px solid ${chipColor}`}
-                 minW="52px" textAlign="center">
-              <Text color={chipColor} fontSize="2xs" fontWeight="700" textTransform="uppercase" letterSpacing="0.06em">
+        <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 9, md: 10 }}
+             overflowY="auto" maxH={{ base: "calc(100dvh - 32px)", md: "88vh" }}
+             sx={{
+               "&::-webkit-scrollbar": { width: "5px" },
+               "&::-webkit-scrollbar-track": { bg: "transparent" },
+               "&::-webkit-scrollbar-thumb": { bg: `${fisiologiaTxt}55`, borderRadius: "full" },
+             }}>
+          <Flex justify="center" mb={3}>
+            <Box px={3} py={1} borderRadius="full" bg={`${chipColor}22`} border={`1px solid ${chipColor}`}>
+              <Text color={chipColor} fontSize="2xs" fontWeight="700" textTransform="uppercase" letterSpacing="0.1em">
                 {chipTxt}
               </Text>
             </Box>
-          )}
-        </Flex>
-      </Flex>
+          </Flex>
 
-      <Box mt={4}><RangoBar min={min} max={max} value={n} /></Box>
+          <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={1}
+                fontFamily="'EB Garamond', serif"
+                style={{ textShadow: `0 0 16px ${chipColor}66, 0 1px 4px rgba(0,0,0,0.6)` }}>
+            {m.nombre}
+          </Text>
+          <Text color="rgba(255,255,255,0.9)" fontSize="sm" textAlign="center" mb={5} style={{ textShadow: INK }}>
+            Tu valor: <b>{valor} {m.unidad}</b> · Normal: {min}–{max} {m.unidad}
+          </Text>
 
-      <Text color="rgba(255,255,255,0.86)" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.7" mt={3}
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-        {m.explica}
-      </Text>
+          <Box mb={6} maxW="360px" mx="auto"><RangoBar min={min} max={max} value={valor} /></Box>
+
+          <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" textAlign="center" mb={3}
+                style={{ textShadow: INK }}>
+            {intro} {m.explica}
+          </Text>
+          <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" textAlign="center"
+                style={{ textShadow: INK }}>
+            {cierre}
+          </Text>
+
+          <Box mt={6} mx="auto" maxW="440px" borderRadius="xl" px={4} py={3}
+               bg="rgba(0,0,0,0.3)" border={`1px solid ${fisiologiaTxt}44`}>
+            <Text color={fisiologiaTxt} fontSize="xs" lineHeight="1.7" textAlign="center"
+                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
+              Esto es educativo, no un diagnóstico. Los rangos son orientativos; coméntalo siempre con tu médico.
+            </Text>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }
@@ -140,6 +269,7 @@ export default function MetodoFisiologiaAnalitica() {
   const [loading, setLoading] = useState(true);
   const [sexo, setSexo] = useState<Sexo>("mujer");
   const [valores, setValores] = useState<Record<string, string>>({});
+  const [abierto, setAbierto] = useState<Marcador | null>(null); // marcador cuyo popup está abierto
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   const dataRef = useRef<Record<string, any>>({});
@@ -245,8 +375,7 @@ export default function MetodoFisiologiaAnalitica() {
 
           {/* Intro + aviso */}
           <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 boxShadow={`0 0 16px rgba(255,255,255,0.12), 0 0 40px ${fisiologiaTxt}16`}>
+            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={GLOW_BOX}>
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }} textAlign="center">
                 <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" maxW="620px" mx="auto"
@@ -290,33 +419,22 @@ export default function MetodoFisiologiaAnalitica() {
             </Box>
           </Reveal>
 
-          {/* Grupos de marcadores */}
-          {ANALITICA.map((g, gi) => (
-            <Reveal key={g.grupo} inView direction="up" distance={18} delay={0.04 * gi} duration={0.55} amount={0.1} w="100%">
-              <Box w="100%">
-                <Flex align="center" gap={2} mb={3} mt={2}>
-                  <Text fontSize={{ base: "lg", md: "xl" }}>{g.emoji}</Text>
-                  <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em"
-                        style={{ textShadow: `0 1px 6px ${fisiologiaBg}` }}>
-                    {g.grupo}
-                  </Text>
-                </Flex>
-                <Flex direction="column" gap={3}>
-                  {g.marcadores.map((m) => (
-                    <MarcadorCard key={m.id} m={m} sexo={sexo}
-                                  valor={valores[m.id] ?? ""}
-                                  onChange={(v) => cambiarValor(m.id, v)}
-                                  onBlur={guardarValores} />
-                  ))}
-                </Flex>
-              </Box>
-            </Reveal>
-          ))}
+          {/* Marcadores (sin títulos de grupo ni iconos): lista limpia de tarjetas */}
+          <Flex direction="column" gap={3} w="100%">
+            {TODOS_MARCADORES.map((m, i) => (
+              <Reveal key={m.id} inView direction="up" distance={16} delay={0.03 * (i % 6)} duration={0.5} amount={0.1} w="100%">
+                <MarcadorCard m={m} sexo={sexo}
+                              valor={valores[m.id] ?? ""}
+                              onChange={(v) => cambiarValor(m.id, v)}
+                              onBlur={guardarValores}
+                              onLeer={() => setAbierto(m)} />
+              </Reveal>
+            ))}
+          </Flex>
 
           {/* Cierre */}
           <Reveal inView direction="up" distance={18} duration={0.6} amount={0.2} w="100%">
-            <Box w="100%" borderRadius="2xl" overflow="hidden" position="relative"
-                 boxShadow={`0 0 16px rgba(255,255,255,0.12), 0 0 40px ${fisiologiaTxt}16`}>
+            <Box w="100%" borderRadius="2xl" overflow="hidden" position="relative" boxShadow={GLOW_BOX}>
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }} textAlign="center">
                 {rellenados.length > 0 && (
@@ -343,6 +461,16 @@ export default function MetodoFisiologiaAnalitica() {
           </Reveal>
         </Flex>
       </Flex>
+
+      {/* Popup con la explicación del caso del usuario (solo si tiene valor) */}
+      {abierto && parse(valores[abierto.id]) != null && (
+        <MarcadorModal
+          m={abierto}
+          sexo={sexo}
+          valor={parse(valores[abierto.id])!}
+          onClose={() => setAbierto(null)}
+        />
+      )}
 
       {celulasModal}
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />

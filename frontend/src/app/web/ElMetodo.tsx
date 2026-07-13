@@ -392,6 +392,7 @@ export default function ElMetodo() {
     >
       <SiteHeader variant="auto" />
 
+      <Box flex="1">
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
@@ -1147,6 +1148,7 @@ export default function ElMetodo() {
           </Flex>
         </Flex>
       </Flex>
+      </Box>
 
       {/* ── MODAL MODALIDAD ── */}
       {selectedCard && (

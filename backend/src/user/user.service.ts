@@ -137,14 +137,23 @@ export class UserService {
 
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
-    // Intento 1: con las columnas de las 4 disciplinas (ayurveda_*/tcm_* pueden no
-    // existir todavía si está pendiente el ALTER TABLE → caemos al intento 2).
+    // Intento 1: con las columnas de todas las disciplinas (nutricion_*/fisiologia_*
+    // pueden no existir todavía si está pendiente el ALTER TABLE → caemos al intento 1b).
     const full = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra, nutricion_suscrito, nutricion_fecha_compra')
+      .eq('id', id)
+      .single();
+    if (full.data) return full.data;
+
+    // Intento 1a: sin nutricion_* (por si aún no se ha migrado esa columna) para no
+    // perder el resto de flags que sí existen.
+    const conFisio = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra')
       .eq('id', id)
       .single();
-    if (full.data) return full.data;
+    if (conFisio.data) return conFisio.data;
 
     // Intento 1b: sin fisiologia_* (por si aún no se ha migrado esa columna) para no
     // perder el resto de flags que sí existen.
@@ -395,6 +404,35 @@ export class UserService {
     return tryUpdate.data;
   }
 
+  // --------- Marcar usuario como suscrito a Nutrición (6ª disciplina) ---------
+  async marcarSuscritoNutricion(id: string) {
+    // Mismo patrón que marcarSuscritoFisiologia: si las columnas nutricion_* aún
+    // no existen (ALTER TABLE pendiente), no rompe el flujo.
+    const tryUpdate = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        nutricion_suscrito: true,
+        nutricion_fecha_compra: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select('id, name, email')
+      .single();
+
+    if (tryUpdate.error) {
+      console.warn('[user.service] update nutricion_* falló (¿columnas no creadas?):', tryUpdate.error.message);
+      const { data, error } = await this.databaseService.getClient()
+        .from('user')
+        .select('id, name, email')
+        .eq('id', id)
+        .single();
+      if (error || !data) throw new NotFoundException('Usuario no encontrado');
+      return data;
+    }
+
+    if (!tryUpdate.data) throw new NotFoundException('Usuario no encontrado');
+    return tryUpdate.data;
+  }
+
   // --------- Eliminar usuario ---------
   // Borra la cuenta y TODOS los datos relacionados con ese usuario:
   // sus filas en cada tabla de disciplina/recorrido, sus reservas de llamada
@@ -419,6 +457,8 @@ export class UserService {
       { table: 'metodo_astrologia', column: 'user_id' },
       { table: 'metodo_ayurveda', column: 'user_id' },
       { table: 'metodo_tcm', column: 'user_id' },
+      { table: 'metodo_fisiologia', column: 'user_id' },
+      { table: 'metodo_nutricion', column: 'user_id' },
       { table: 'astrologia', column: 'userId' },
       { table: 'ayurveda', column: 'userId' },
       { table: 'ayurveda_respuestas', column: 'user_id' },

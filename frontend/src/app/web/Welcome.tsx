@@ -194,6 +194,7 @@ const Welcome = () => {
       {/* ── HEADER ── */}
       <SiteHeader variant="public" />
 
+      <Box flex="1">
       {/* ── MANDALA (elemento central, encima del título) ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
@@ -509,6 +510,7 @@ const Welcome = () => {
       >
         <SubscribeBox />
       </Flex>
+      </Box>
 
       {/* ── FOOTER ── */}
       <SiteFooter />

@@ -99,6 +99,7 @@ const QuienSoy = () => {
       {/* ── HEADER ── */}
       <SiteHeader variant="auto" />
 
+      <Box flex="1">
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
@@ -629,6 +630,7 @@ const QuienSoy = () => {
           ♊︎ Esto es solo el principio…
         </Text>
       </Flex>
+      </Box>
 
       {/* ── LIGHTBOX ── */}
       {lightboxIdx !== null && (

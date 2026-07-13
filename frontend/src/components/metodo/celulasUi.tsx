@@ -139,38 +139,46 @@ export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula;
 }
 
 /* ─────────────────────────────────────────
-   MODAL DE CÉLULA — nombre + foto + descripción
+   FICHA FISIOLOGÍA — MODAL ÚNICO Y REUTILIZABLE
+   Este es EL componente de modal de Fisiología. Lo usan la ficha de célula,
+   los consejos de los órganos y los sistemas del cuerpo. Estilo: foto a la
+   izquierda + rallita vertical + título arriba a la derecha + texto con scroll.
+   No dupliques este layout: pásale foto/título/párrafos y (opcional) flechas.
 ───────────────────────────────────────── */
-export function CelulaModal({
-  celula,
+export function FichaFisioModal({
+  foto,
+  alt = "",
+  titulo,
+  parrafos,
   onClose,
-  celulas,
-  onSelect,
+  onPrev,
+  onNext,
+  contador = null,
+  fotoFallback,
 }: {
-  celula: Celula;
+  /** Ruta de la imagen cuadrada de la izquierda. */
+  foto: string;
+  /** Texto alternativo de la imagen. */
+  alt?: string;
+  /** Título (nombre de la célula, titular del consejo, nombre del sistema…). */
+  titulo: React.ReactNode;
+  /** Uno o varios párrafos; se maquetan con el mismo estilo y separación. */
+  parrafos: React.ReactNode[];
   onClose: () => void;
-  /** Lista completa de células para poder navegar con flechas. */
-  celulas?: Celula[];
-  /** Cambia la célula mostrada (lo usan las flechas). */
-  onSelect?: (c: Celula) => void;
+  /** Si se pasan onPrev + onNext, aparecen las flechas y funciona el teclado. */
+  onPrev?: () => void;
+  onNext?: () => void;
+  /** Contador discreto abajo (p. ej. "3 / 8"). Opcional. */
+  contador?: string | null;
+  /** Qué mostrar si la foto falla (por defecto, nada). */
+  fotoFallback?: React.ReactNode;
 }) {
   const [imgErr, setImgErr] = useState(false);
+  const puedeNavegar = !!onPrev && !!onNext;
 
-  // Navegación cíclica entre células (tras la última vuelve a la primera).
-  const puedeNavegar = !!celulas && celulas.length > 1 && !!onSelect;
-  const idx = celulas ? celulas.findIndex((c) => c.id === celula.id) : -1;
-  const irAnterior = () => {
-    if (!puedeNavegar || idx < 0) return;
-    onSelect!(celulas![(idx - 1 + celulas!.length) % celulas!.length]);
-  };
-  const irSiguiente = () => {
-    if (!puedeNavegar || idx < 0) return;
-    onSelect!(celulas![(idx + 1) % celulas!.length]);
-  };
-
-  // Al cambiar de célula (con las flechas) el modal NO se desmonta, así que
+  // Al cambiar de ficha (con las flechas) el modal NO se desmonta, así que
   // reiniciamos el estado de error de imagen manualmente.
-  useEffect(() => { setImgErr(false); }, [celula.id]);
+  useEffect(() => { setImgErr(false); }, [foto]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -180,13 +188,12 @@ export function CelulaModal({
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowLeft") irAnterior();
-      else if (e.key === "ArrowRight") irSiguiente();
+      else if (e.key === "ArrowLeft") onPrev?.();
+      else if (e.key === "ArrowRight") onNext?.();
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onClose, puedeNavegar, idx]);
+  }, [onClose, onPrev, onNext]);
 
   const scrollbarSx = {
     "&::-webkit-scrollbar": { width: "5px" },
@@ -206,30 +213,20 @@ export function CelulaModal({
       bg={TXT + "12"}
     >
       {!imgErr ? (
-        <Image src={encodeURI(celula.foto)} alt={celula.nombre} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
+        <Image src={encodeURI(foto)} alt={alt} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
       ) : (
-        <Flex w="100%" h="100%" align="center" justify="center">
+        <Flex w="100%" h="100%" align="center" justify="center" textAlign="center" px={3}>
+          {fotoFallback}
         </Flex>
       )}
     </Box>
   );
 
-  // Cuerpo de la ficha: solo los textos (sin etiquetas), con un salto de línea
-  // entre la descripción y los cuidados.
-  const Cuerpo = () => (
+  const Parrafos = () => (
     <>
-      <Text
-        color={TXT}
-        fontSize={{ base: "md", md: "lg" }}
-        lineHeight="1.8"
-        letterSpacing="0.02em"
-        fontFamily="'EB Garamond', serif"
-        style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
-      >
-        {celula.descripcion}
-      </Text>
-      {celula.cuidados && (
+      {parrafos.map((p, i) => (
         <Text
+          key={i}
           color={TXT}
           fontSize={{ base: "md", md: "lg" }}
           lineHeight="1.8"
@@ -237,11 +234,29 @@ export function CelulaModal({
           fontFamily="'EB Garamond', serif"
           style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
         >
-          {celula.cuidados}
+          {p}
         </Text>
-      )}
+      ))}
     </>
   );
+
+  const flechaSx = {
+    position: "fixed" as const,
+    top: "50%",
+    transform: "translateY(-50%)",
+    zIndex: 3,
+    variant: "ghost" as const,
+    borderRadius: "full",
+    w: { base: "40px", md: "52px" },
+    h: { base: "40px", md: "52px" },
+    minW: { base: "40px", md: "52px" },
+    bg: "rgba(0,0,0,0.45)",
+    border: `1px solid ${TXT}aa`,
+    sx: { backdropFilter: "blur(4px)" },
+    _hover: { bg: "rgba(0,0,0,0.65)", borderColor: TXT },
+    _focus: { boxShadow: "none" },
+    _focusVisible: { boxShadow: "none" },
+  };
 
   return (
     <Box
@@ -262,12 +277,13 @@ export function CelulaModal({
         position="relative"
         overflow="hidden"
         w={{ base: "95%", md: "920px" }}
-        h={{ base: "auto", md: "380px" }}
+        h={{ base: "auto", md: "420px" }}
+        maxH={{ base: "calc(100dvh - 40px)", md: "420px" }}
         borderRadius="24px"
         border={`1px solid ${TXT}33`}
         boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 26px ${TXT}33`}
       >
-        {/* Fondo: foto de Fisiología (velo oscuro suave, sin morado tan fuerte) */}
+        {/* Fondo: foto de Fisiología con velo oscuro suave */}
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.4)" />
 
         {/* Botón cerrar */}
@@ -296,8 +312,7 @@ export function CelulaModal({
           ✕
         </Box>
 
-        {/* ── MÓVIL: título centrado → rallita → foto → textos. La caja crece
-              según el texto (con tope de viewport y scroll si hace falta). ── */}
+        {/* ── MÓVIL: título centrado → rallita → foto → texto ── */}
         <Flex
           display={{ base: "flex", md: "none" }}
           position="relative"
@@ -316,15 +331,14 @@ export function CelulaModal({
             fontSize="2xl"
             fontWeight="700"
             fontFamily="'EB Garamond', serif"
-            letterSpacing="0.03em"
+            letterSpacing="0.02em"
             lineHeight="1.2"
             textAlign="center"
             style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
           >
-            {celula.nombre}
+            {titulo}
           </Text>
 
-          {/* Mini rallita horizontal debajo del título */}
           <Box
             w="54px"
             h="1px"
@@ -336,7 +350,7 @@ export function CelulaModal({
           <Foto w="100%" />
 
           <Flex direction="column" gap={4} w="100%" mt={2}>
-            <Cuerpo />
+            <Parrafos />
           </Flex>
         </Flex>
 
@@ -368,14 +382,14 @@ export function CelulaModal({
               fontSize="3xl"
               fontWeight="700"
               fontFamily="'EB Garamond', serif"
-              letterSpacing="0.03em"
+              letterSpacing="0.02em"
               lineHeight="1.2"
               flexShrink={0}
               mb={3}
               pr="40px"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
             >
-              {celula.nombre}
+              {titulo}
             </Text>
 
             {/* Separación horizontal bajo el título (no afecta al scroll del texto) */}
@@ -389,306 +403,13 @@ export function CelulaModal({
             />
 
             {/* Solo el texto hace scroll (la foto no se mueve) */}
-            <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
-              <Cuerpo />
-            </Flex>
-          </Flex>
-        </Flex>
-      </Box>
-
-      {/* Flechas para pasar de una célula a otra (por encima del box) */}
-      {puedeNavegar && (
-        <>
-          <IconButton
-            aria-label="Célula anterior"
-            onClick={(e) => { e.stopPropagation(); irAnterior(); }}
-            position="fixed"
-            left={{ base: 1, md: 5 }}
-            top="50%"
-            transform="translateY(-50%)"
-            zIndex={3}
-            variant="ghost"
-            borderRadius="full"
-            w={{ base: "40px", md: "52px" }}
-            h={{ base: "40px", md: "52px" }}
-            minW={{ base: "40px", md: "52px" }}
-            bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${TXT}aa`}
-            sx={{ backdropFilter: "blur(4px)" }}
-            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
-            _focus={{ boxShadow: "none" }}
-            _focusVisible={{ boxShadow: "none" }}
-            icon={
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
-                style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-                <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-              </Box>
-            }
-          />
-          <IconButton
-            aria-label="Célula siguiente"
-            onClick={(e) => { e.stopPropagation(); irSiguiente(); }}
-            position="fixed"
-            right={{ base: 1, md: 5 }}
-            top="50%"
-            transform="translateY(-50%)"
-            zIndex={3}
-            variant="ghost"
-            borderRadius="full"
-            w={{ base: "40px", md: "52px" }}
-            h={{ base: "40px", md: "52px" }}
-            minW={{ base: "40px", md: "52px" }}
-            bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${TXT}aa`}
-            sx={{ backdropFilter: "blur(4px)" }}
-            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
-            _focus={{ boxShadow: "none" }}
-            _focusVisible={{ boxShadow: "none" }}
-            icon={
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
-                style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-              </Box>
-            }
-          />
-        </>
-      )}
-    </Box>
-  );
-}
-
-/* ─────────────────────────────────────────
-   CONSEJO — un titular (frase) que abre un modal inmersivo.
-───────────────────────────────────────── */
-export interface Consejo {
-  /** Frase titular que se ve en el box y arriba del modal. */
-  titular: string;
-  /** Texto largo que aparece a la derecha de la foto dentro del modal. */
-  texto: React.ReactNode;
-}
-
-/* ─────────────────────────────────────────
-   MODAL DE CONSEJO — distinto al de célula: el titular va ARRIBA (ancho
-   completo) con una rallita horizontal, y debajo la foto (izq) y el texto (der).
-───────────────────────────────────────── */
-export function ConsejoModal({
-  consejo,
-  foto,
-  label,
-  onClose,
-  consejos,
-  onSelect,
-}: {
-  consejo: Consejo;
-  /** Foto del órgano (la misma que aparece arriba en el panel). */
-  foto: string;
-  label: string;
-  onClose: () => void;
-  /** Lista completa de curiosidades del órgano, para navegar con flechas. */
-  consejos?: Consejo[];
-  /** Cambia la curiosidad mostrada (lo usan las flechas). */
-  onSelect?: (c: Consejo) => void;
-}) {
-  const [imgErr, setImgErr] = useState(false);
-
-  // Navegación cíclica entre las curiosidades del órgano (sin cerrar el modal).
-  const puedeNavegar = !!consejos && consejos.length > 1 && !!onSelect;
-  const total = consejos?.length ?? 0;
-  const idx = consejos ? consejos.findIndex((c) => c.titular === consejo.titular) : -1;
-  const irAnterior = () => { if (!puedeNavegar || idx < 0) return; onSelect!(consejos![(idx - 1 + total) % total]); };
-  const irSiguiente = () => { if (!puedeNavegar || idx < 0) return; onSelect!(consejos![(idx + 1) % total]); };
-
-  useEffect(() => { setImgErr(false); }, [foto]);
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowLeft") irAnterior();
-      else if (e.key === "ArrowRight") irSiguiente();
-    };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onClose, puedeNavegar, idx]);
-
-  const scrollbarSx = {
-    "&::-webkit-scrollbar": { width: "5px" },
-    "&::-webkit-scrollbar-track": { bg: "transparent" },
-    "&::-webkit-scrollbar-thumb": { bg: TXT + "55", borderRadius: "full" },
-  };
-
-  const Foto = ({ w }: { w: string }) => (
-    <Box
-      flexShrink={0}
-      w={w}
-      aspectRatio={1}
-      alignSelf="center"
-      borderRadius="xl"
-      overflow="hidden"
-      boxShadow={`0 10px 40px rgba(0,0,0,0.45), 0 0 24px ${TXT}22`}
-      bg={TXT + "12"}
-    >
-      {!imgErr ? (
-        <Image src={encodeURI(foto)} alt={label} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
-      ) : (
-        <Flex w="100%" h="100%" align="center" justify="center" textAlign="center" px={3}>
-          <Text color={`${TXT}aa`} fontSize="xs" fontStyle="italic">Foto de {label} (próximamente)</Text>
-        </Flex>
-      )}
-    </Box>
-  );
-
-  // Título destacado + separación elegante debajo (alineados con el texto).
-  const Titulo = ({ size, align = "left" }: { size: any; align?: "left" | "center" }) => (
-    <>
-      <Text
-        color={TXT}
-        fontSize={size}
-        fontWeight="700"
-        fontFamily="'EB Garamond', serif"
-        letterSpacing="0.015em"
-        lineHeight="1.18"
-        textAlign={align}
-        flexShrink={0}
-        style={{ textShadow: `0 1px 4px rgba(0,0,0,0.65), 0 0 22px ${TXT}44` }}
-      >
-        {consejo.titular}
-      </Text>
-      <Box
-        w={align === "center" ? { base: "120px", md: "160px" } : "100%"}
-        alignSelf={align === "center" ? "center" : "stretch"}
-        h="1.5px"
-        borderRadius="full"
-        bgGradient={align === "center"
-          ? `linear(to-r, transparent, ${TXT}, transparent)`
-          : `linear(to-r, ${TXT}, ${TXT}55, transparent)`}
-        my={{ base: 3, md: 5 }}
-        flexShrink={0}
-      />
-    </>
-  );
-
-  const Texto = () => (
-    <Text
-      color={TXT}
-      fontSize={{ base: "md", md: "lg" }}
-      lineHeight="1.85"
-      letterSpacing="0.02em"
-      fontFamily="'EB Garamond', serif"
-      style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
-    >
-      {consejo.texto}
-    </Text>
-  );
-
-  const contador = puedeNavegar ? `${idx + 1} / ${total}` : null;
-
-  return (
-    <Box
-      position="fixed"
-      inset={0}
-      zIndex={1100}
-      bg="rgba(0,30,16,0.72)"
-      sx={{ backdropFilter: "blur(22px)", WebkitBackdropFilter: "blur(22px)" }}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      px={{ base: 4, md: 6 }}
-      py={{ base: 4, md: 6 }}
-      onClick={onClose}
-    >
-      <Box
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        position="relative"
-        overflow="hidden"
-        w={{ base: "95%", md: "1000px" }}
-        h={{ base: "auto", md: "500px" }}
-        maxH={{ base: "calc(100dvh - 32px)", md: "500px" }}
-        borderRadius="24px"
-        border={`1px solid ${TXT}2a`}
-        boxShadow={`0 40px 100px rgba(0,0,0,0.6), 0 0 40px ${TXT}2a`}
-      >
-        {/* Fondo inmersivo: textura de Fisiología + viñeta radial para dar profundidad */}
-        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(16,9,26,0.34)" />
-        <Box
-          position="absolute"
-          inset={0}
-          borderRadius="24px"
-          pointerEvents="none"
-          zIndex={0}
-          sx={{ background: "radial-gradient(130% 120% at 30% 25%, rgba(0,0,0,0) 38%, rgba(0,0,0,0.5) 100%)" }}
-        />
-
-        {/* Botón cerrar */}
-        <Box
-          as="button"
-          position="absolute"
-          top="14px"
-          right="14px"
-          w="34px"
-          h="34px"
-          borderRadius="full"
-          bg={TXT + "18"}
-          border={`1px solid ${TXT}33`}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          color={TXT}
-          fontSize="16px"
-          fontWeight="700"
-          cursor="pointer"
-          transition="all 0.18s"
-          _hover={{ bg: TXT + "33" }}
-          onClick={onClose}
-          zIndex={3}
-        >
-          ✕
-        </Box>
-
-        {/* ── MÓVIL: foto → título → separación → texto ── */}
-        <Flex
-          display={{ base: "flex", md: "none" }}
-          position="relative"
-          zIndex={1}
-          direction="column"
-          p={5}
-          pt={12}
-          maxH="calc(100dvh - 32px)"
-          overflowY="auto"
-          sx={scrollbarSx}
-        >
-          <Foto w="100%" />
-          <Box mt={5}><Titulo size="2xl" align="center" /></Box>
-          <Texto />
-        </Flex>
-
-        {/* ── ORDENADOR: foto (izq) + columna derecha (título destacado → separación → texto) ── */}
-        <Flex
-          display={{ base: "none", md: "flex" }}
-          position="relative"
-          zIndex={1}
-          h="100%"
-          direction="row"
-          align="center"
-          p={9}
-          gap={10}
-        >
-          <Foto w="360px" />
-
-          <Flex direction="column" flex="1" minW={0} minH={0} h="100%" justify="center" pr="34px">
-            <Titulo size="4xl" />
-            <Flex direction="column" flex="0 1 auto" minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
-              <Texto />
+            <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={2} pb={contador ? 4 : 0} sx={scrollbarSx}>
+              <Parrafos />
             </Flex>
           </Flex>
         </Flex>
 
-        {/* Contador de curiosidades (discreto, abajo al centro) */}
+        {/* Contador discreto (abajo al centro) */}
         {contador && (
           <Text
             display={{ base: "none", md: "block" }}
@@ -709,28 +430,14 @@ export function ConsejoModal({
         )}
       </Box>
 
-      {/* Flechas para recorrer todas las curiosidades del órgano (sin salir) */}
+      {/* Flechas para pasar de una ficha a otra (por encima del box) */}
       {puedeNavegar && (
         <>
           <IconButton
-            aria-label="Curiosidad anterior"
-            onClick={(e) => { e.stopPropagation(); irAnterior(); }}
-            position="fixed"
+            aria-label="Anterior"
+            onClick={(e) => { e.stopPropagation(); onPrev!(); }}
             left={{ base: 1, md: 5 }}
-            top="50%"
-            transform="translateY(-50%)"
-            zIndex={3}
-            variant="ghost"
-            borderRadius="full"
-            w={{ base: "40px", md: "52px" }}
-            h={{ base: "40px", md: "52px" }}
-            minW={{ base: "40px", md: "52px" }}
-            bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${TXT}aa`}
-            sx={{ backdropFilter: "blur(4px)" }}
-            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
-            _focus={{ boxShadow: "none" }}
-            _focusVisible={{ boxShadow: "none" }}
+            {...flechaSx}
             icon={
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
                 style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
@@ -739,24 +446,10 @@ export function ConsejoModal({
             }
           />
           <IconButton
-            aria-label="Curiosidad siguiente"
-            onClick={(e) => { e.stopPropagation(); irSiguiente(); }}
-            position="fixed"
+            aria-label="Siguiente"
+            onClick={(e) => { e.stopPropagation(); onNext!(); }}
             right={{ base: 1, md: 5 }}
-            top="50%"
-            transform="translateY(-50%)"
-            zIndex={3}
-            variant="ghost"
-            borderRadius="full"
-            w={{ base: "40px", md: "52px" }}
-            h={{ base: "40px", md: "52px" }}
-            minW={{ base: "40px", md: "52px" }}
-            bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${TXT}aa`}
-            sx={{ backdropFilter: "blur(4px)" }}
-            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
-            _focus={{ boxShadow: "none" }}
-            _focusVisible={{ boxShadow: "none" }}
+            {...flechaSx}
             icon={
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
                 style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
@@ -767,5 +460,97 @@ export function ConsejoModal({
         </>
       )}
     </Box>
+  );
+}
+
+/* ─────────────────────────────────────────
+   MODAL DE CÉLULA — usa la ficha común.
+───────────────────────────────────────── */
+export function CelulaModal({
+  celula,
+  onClose,
+  celulas,
+  onSelect,
+}: {
+  celula: Celula;
+  onClose: () => void;
+  /** Lista completa de células para poder navegar con flechas. */
+  celulas?: Celula[];
+  /** Cambia la célula mostrada (lo usan las flechas). */
+  onSelect?: (c: Celula) => void;
+}) {
+  const puedeNavegar = !!celulas && celulas.length > 1 && !!onSelect;
+  const idx = celulas ? celulas.findIndex((c) => c.id === celula.id) : -1;
+  const salta = (d: number) => {
+    if (!puedeNavegar || idx < 0) return;
+    onSelect!(celulas![(idx + d + celulas!.length) % celulas!.length]);
+  };
+
+  return (
+    <FichaFisioModal
+      foto={celula.foto}
+      alt={celula.nombre}
+      titulo={celula.nombre}
+      parrafos={[celula.descripcion, celula.cuidados].filter(Boolean)}
+      onClose={onClose}
+      onPrev={puedeNavegar ? () => salta(-1) : undefined}
+      onNext={puedeNavegar ? () => salta(1) : undefined}
+    />
+  );
+}
+
+/* ─────────────────────────────────────────
+   CONSEJO — un titular (frase) que abre la ficha común.
+───────────────────────────────────────── */
+export interface Consejo {
+  /** Frase titular que se ve en el box y arriba del modal. */
+  titular: string;
+  /** Texto largo que aparece a la derecha de la foto dentro del modal. */
+  texto: React.ReactNode;
+}
+
+/* ─────────────────────────────────────────
+   MODAL DE CONSEJO — usa la ficha común (mismo estilo que la célula).
+───────────────────────────────────────── */
+export function ConsejoModal({
+  consejo,
+  foto,
+  label,
+  onClose,
+  consejos,
+  onSelect,
+}: {
+  consejo: Consejo;
+  /** Foto del órgano (la misma que aparece arriba en el panel). */
+  foto: string;
+  label: string;
+  onClose: () => void;
+  /** Lista completa de curiosidades del órgano, para navegar con flechas. */
+  consejos?: Consejo[];
+  /** Cambia la curiosidad mostrada (lo usan las flechas). */
+  onSelect?: (c: Consejo) => void;
+}) {
+  const puedeNavegar = !!consejos && consejos.length > 1 && !!onSelect;
+  const total = consejos?.length ?? 0;
+  const idx = consejos ? consejos.findIndex((c) => c.titular === consejo.titular) : -1;
+  const salta = (d: number) => {
+    if (!puedeNavegar || idx < 0) return;
+    onSelect!(consejos![(idx + d + total) % total]);
+  };
+
+  return (
+    <FichaFisioModal
+      foto={foto}
+      alt={label}
+      titulo={consejo.titular}
+      parrafos={[consejo.texto]}
+      onClose={onClose}
+      onPrev={puedeNavegar ? () => salta(-1) : undefined}
+      onNext={puedeNavegar ? () => salta(1) : undefined}
+      contador={puedeNavegar ? `${idx + 1} / ${total}` : null}
+      fotoFallback={
+        <Text color={`${TXT}aa`} fontSize="xs" fontStyle="italic">Foto de {label} (próximamente)</Text>
+      }
+    />
   );
 }

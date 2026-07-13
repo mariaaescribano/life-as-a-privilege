@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import {
   TEMAS_PROFUNDIZA,
@@ -117,7 +118,6 @@ export default function MetodoFisiologiaProfundiza() {
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
               extra={celulasBtn}
             />
           </Reveal>
@@ -137,6 +137,8 @@ export default function MetodoFisiologiaProfundiza() {
                        onClick={() => navigate(`/metodo/fisiologia/profundiza/${t.key}`)} />
             ))}
           </SimpleGrid>
+
+          <VolverFisio onClick={() => navigate("/metodo/fisiologia/niveles")} />
 
         </Flex>
       </Flex>

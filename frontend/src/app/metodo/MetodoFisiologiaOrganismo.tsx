@@ -73,27 +73,27 @@ function SistemaFicha({ sistema, colocado, onColocar }: {
       whileHover={colocado ? undefined : { y: -3, scale: 1.04 }}
       whileTap={colocado ? undefined : { scale: 0.95 }}
       transition={{ type: "spring", stiffness: 320, damping: 24 }}
-      display="flex" flexDirection="column" alignItems="center" gap={1.5}
+      display="flex" flexDirection="column" alignItems="center" gap={2}
       cursor={colocado ? "default" : "pointer"}
       opacity={colocado ? 0.4 : 1}
-      w={{ base: "72px", md: "92px" }}
+      w={{ base: "92px", md: "116px" }}
       flexShrink={0}
       style={{ WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
       <Box position="relative">
-        <SistemaFoto sistema={sistema} size={{ base: "58px", md: "74px" }} />
+        <SistemaFoto sistema={sistema} size={{ base: "76px", md: "96px" }} />
         {colocado && (
           <Flex position="absolute" inset={0} align="center" justify="center" borderRadius="full"
                 bg="rgba(0,0,0,0.45)">
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                 w={{ base: "22px", md: "26px" }} h={{ base: "22px", md: "26px" }} fill={fisiologiaTxt}
+                 w={{ base: "28px", md: "34px" }} h={{ base: "28px", md: "34px" }} fill={fisiologiaTxt}
                  style={{ filter: `drop-shadow(0 0 6px ${fisiologiaTxt})` }}>
               <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
             </Box>
           </Flex>
         )}
       </Box>
-      <Text color="white" fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700" lineHeight="1.15"
+      <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight="700" lineHeight="1.15"
             textAlign="center" letterSpacing="0.02em" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
         {sistema.label}
       </Text>
@@ -195,13 +195,9 @@ export default function MetodoFisiologiaOrganismo() {
 
           {!completo && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                    style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Construye un ser humano
-              </Text>
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                     maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Ve dándole su lugar a cada sistema. Uno a uno, irás formando un cuerpo entero.
+                 Construye un ser humano.
               </Text>
             </MBox>
           )}
@@ -211,27 +207,10 @@ export default function MetodoFisiologiaOrganismo() {
               // ── FASE A · dos boxes: bandeja de sistemas (izq) + círculo (der) ──
               <MBox key="montaje" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.4 }}>
-                <Flex direction={{ base: "column-reverse", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
+                <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-                  {/* IZQUIERDA · todos los sistemas */}
-                  <PanelBox flex={{ base: "1 1 auto", md: "0 0 44%" }}>
-                    <Box px={{ base: 4, md: 6 }} py={{ base: 5, md: 7 }}>
-                      <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
-                            letterSpacing="0.12em" textTransform="uppercase" textAlign="center" mb={4}
-                            style={{ textShadow: INK }}>
-                        Los sistemas · {colocados.length}/{total}
-                      </Text>
-                      <Flex wrap="wrap" justify="center" gap={{ base: 3, md: 4 }}>
-                        {SISTEMAS.map((s) => (
-                          <SistemaFicha key={s.key} sistema={s} colocado={colocadosSet.has(s.key)}
-                                        onColocar={() => colocar(s)} />
-                        ))}
-                      </Flex>
-                    </Box>
-                  </PanelBox>
-
-                  {/* DERECHA · el círculo donde se van manifestando */}
-                  <PanelBox flex="1">
+                  {/* IZQUIERDA · el círculo donde se van manifestando */}
+                  <PanelBox flex={{ base: "1 1 auto", md: "0 0 42%" }}>
                     <Flex direction="column" align="center" justify="center" h="100%"
                           px={{ base: 5, md: 7 }} py={{ base: 7, md: 8 }} gap={5}>
                       {/* Círculo de ensamblaje */}
@@ -284,6 +263,23 @@ export default function MetodoFisiologiaOrganismo() {
                         </AnimatePresence>
                       </Box>
                     </Flex>
+                  </PanelBox>
+
+                  {/* DERECHA · todos los sistemas */}
+                  <PanelBox flex="1">
+                    <Box px={{ base: 4, md: 6 }} py={{ base: 5, md: 7 }}>
+                      <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
+                            letterSpacing="0.12em" textTransform="uppercase" textAlign="center" mb={4}
+                            style={{ textShadow: INK }}>
+                        Los sistemas · {colocados.length}/{total}
+                      </Text>
+                      <Flex wrap="wrap" justify="center" gap={{ base: 3, md: 4 }}>
+                        {SISTEMAS.map((s) => (
+                          <SistemaFicha key={s.key} sistema={s} colocado={colocadosSet.has(s.key)}
+                                        onColocar={() => colocar(s)} />
+                        ))}
+                      </Flex>
+                    </Box>
                   </PanelBox>
                 </Flex>
               </MBox>

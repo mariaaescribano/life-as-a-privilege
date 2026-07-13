@@ -78,7 +78,7 @@ export default function MetodoAstrologiaPlanetas() {
       </Flex>
 
       {/* ── GRID DE PLANETAS ── */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
+      <Box flex="1" px={{ base: 5, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
         <Grid
           templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
           gap={{ base: 5, md: 6 }}

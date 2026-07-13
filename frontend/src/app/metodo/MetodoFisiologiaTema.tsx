@@ -12,6 +12,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
 import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
+import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import { temaByKey, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
@@ -123,7 +124,6 @@ export default function MetodoFisiologiaTema() {
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Profundiza", onClick: () => navigate("/metodo/fisiologia/profundiza") }}
               extra={celulasBtn}
             />
           </Reveal>
@@ -208,6 +208,8 @@ export default function MetodoFisiologiaTema() {
               </Flex>
             </Reveal>
           )}
+
+          <VolverFisio onClick={() => navigate("/metodo/fisiologia/profundiza")} />
 
         </Flex>
       </Flex>

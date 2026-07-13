@@ -66,6 +66,18 @@ export class PaymentController {
     return await this.paymentService.verifyFisiologiaCheckout(sessionId, req.user.userId);
   }
 
+  @Post('nutricion/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createNutricionCheckout(@Req() req: any) {
+    return await this.paymentService.createNutricionCheckout(req.user.userId);
+  }
+
+  @Get('nutricion/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyNutricionCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyNutricionCheckout(sessionId, req.user.userId);
+  }
+
   // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
   @Get('test/enabled')
   testEnabled() {
@@ -74,7 +86,7 @@ export class PaymentController {
 
   @Post('test/unlock')
   @UseGuards(JwtAuthGuard)
-  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'all' }) {
+  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'all' }) {
     return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
   }
 

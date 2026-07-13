@@ -10,8 +10,8 @@ export default function MetodoFisiologiaCelula() {
       title="Célula"
       pageLabel="1/4"
       prev={{ label: "← Estructuras", ruta: "/metodo/fisiologia/estructuras" }}
-      introTitulo="Construye una célula"
-      instruccion="Reúne las estructuras dentro del citoplasma para formar una célula viva."
+      introTitulo=""
+      instruccion="Construye una célula."
       zonaLabel="el citoplasma"
       forma="cluster"
       glow="#8fd6a8"
