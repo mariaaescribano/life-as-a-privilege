@@ -24,7 +24,7 @@ const NIVELES: { label: string; pasos: { titulo: string; path: string }[] }[] = 
     label: "VIDA",
     pasos: [
       { titulo: "Célula",            path: "/metodo/fisiologia/celula" },
-      { titulo: "Todas tus células", path: "/metodo/fisiologia/todas-tus-celulas" },
+      { titulo: "Las células de tus órganos", path: "/metodo/fisiologia/todas-tus-celulas" },
     ],
   },
   {

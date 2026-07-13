@@ -47,7 +47,11 @@ const S_ZONA: Record<Tipo, any> = {
 const S_BIG: Record<Tipo, any> = {
   oxigeno: { base: "96px", md: "116px" }, hidrogeno: { base: "54px", md: "66px" }, carbono: { base: "82px", md: "102px" },
 };
-const S_MINI: Record<Tipo, any> = { oxigeno: "88px", hidrogeno: "54px", carbono: "78px" };
+const S_MINI: Record<Tipo, any> = {
+  oxigeno: { base: "40px", md: "106px" },
+  hidrogeno: { base: "24px", md: "64px" },
+  carbono: { base: "34px", md: "94px" },
+};
 
 // ── Moléculas del recorrido (en orden) ──────────────────────────────────────
 // slots[0] = átomo central (al que se enlazan los demás). x/y en % del panel.
@@ -541,22 +545,22 @@ export default function MetodoFisiologiaMoleculas() {
                     </Box>
                     <Flex direction="column" align="center" gap={{ base: 7, md: 9 }} py={{ base: 2, md: 4 }}>
 
-                      <Flex wrap={{ base: "wrap", md: "nowrap" }} justify="center" align="flex-start" gap={{ base: 6, md: 4 }}>
+                      <Flex wrap="nowrap" justify="center" align="flex-start" gap={{ base: 1.5, md: 5 }} w="100%">
                         {MOLS.map((m, i) => (
                           <MBox key={m.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.15 * i, duration: 0.6, ease: "easeOut" }}
                                 flexShrink={0}
-                                display="flex" flexDirection="column" alignItems="center" gap={2}>
-                            <Box position="relative" w={{ base: "250px", md: "270px" }} h={{ base: "250px", md: "270px" }}>
+                                display="flex" flexDirection="column" alignItems="center" gap={{ base: 1, md: 2 }}>
+                            <Box position="relative" w={{ base: "92px", md: "300px" }} h={{ base: "92px", md: "300px" }}>
                               <Box position="absolute" inset="0"
                                    sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
                                 <MoleculaFormada mol={m} tam={S_MINI} />
                               </Box>
                             </Box>
-                            <Text color="white" fontWeight="700" fontSize={{ base: "lg", md: "xl" }}
+                            <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "xl" }}
                                   style={{ textShadow: INK }}>{m.formula}</Text>
-                            <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                                  textAlign="center">{m.nombre}</Text>
+                            <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "2xs", md: "md" }} fontStyle="italic"
+                                  textAlign="center" lineHeight="1.2">{m.nombre}</Text>
                           </MBox>
                         ))}
                       </Flex>

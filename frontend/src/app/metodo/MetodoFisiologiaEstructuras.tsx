@@ -551,10 +551,12 @@ export default function MetodoFisiologiaEstructuras() {
               onVolver={() => setActiva(null)}
             />
           ) : (
-            /* ── 4 boxes: uno por estructura ── */
-            <Flex direction="column" w="100%" maxW="760px" gap={{ base: 4, md: 5 }}>
+            /* ── 4 boxes en rejilla 2×2 (igual que Macromoléculas) ── */
+            <Flex wrap="wrap" justify="center" w="100%" maxW="880px" gap={{ base: 4, md: 5 }}>
               {ESTRUCTURAS.map((e) => (
-                <EstCard key={e.id} e={e} hecha={formadas.includes(e.id)} onClick={() => setActiva(e.id)} />
+                <Box key={e.id} flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
+                  <EstCard e={e} hecha={formadas.includes(e.id)} onClick={() => setActiva(e.id)} />
+                </Box>
               ))}
             </Flex>
           )}

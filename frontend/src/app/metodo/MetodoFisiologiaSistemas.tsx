@@ -14,11 +14,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 
-// ⚠️ PENDIENTE: la imagen del ser humano la pasará María (mañana).
-const HUMANO_IMG = "/recorrido/fisiologia/humano.png";
-
-// Tarjeta de un sistema: imagen arriba + nombre. Se colocan de 2 en 2 a la
-// derecha del ser humano.
+// Tarjeta de un sistema: imagen arriba + nombre. Se colocan en rejilla de 3.
 function SistemaBox({
   sistema,
   active,
@@ -50,10 +46,10 @@ function SistemaBox({
       _active={{ transform: "translateY(-1px)" }}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="xl" />
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={2.5}
-            p={{ base: 3, md: 3.5 }} h="100%">
+      <Flex position="relative" zIndex={1} direction="column" align="center" gap={3}
+            p={{ base: 4, md: 5 }} h="100%">
         {/* Imagen del sistema (pendiente) → de momento inicial con color de acento */}
-        <Box w="100%" aspectRatio={{ base: 1.5, md: 1.6 }} borderRadius="lg" overflow="hidden"
+        <Box w="100%" aspectRatio={{ base: 1.4, md: 1.5 }} borderRadius="lg" overflow="hidden"
              bg={`${sistema.color}22`} border={`1px solid ${sistema.color}66`}
              boxShadow={`0 0 12px ${sistema.color}44`}
              display="flex" alignItems="center" justifyContent="center">
@@ -61,14 +57,14 @@ function SistemaBox({
             <Image src={encodeURI(sistema.foto)} alt={sistema.label} w="100%" h="100%" objectFit="cover"
                    onError={() => setImgErr(true)} />
           ) : (
-            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "2xl", md: "3xl" }}
+            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
                   style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
               {sistema.label.charAt(0)}
             </Text>
           )}
         </Box>
         <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
-              fontSize={{ base: "sm", md: "md" }} letterSpacing="0.02em"
+              fontSize={{ base: "md", md: "lg" }} letterSpacing="0.02em"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65)" }}>
           {sistema.label}
         </Text>
@@ -80,7 +76,6 @@ function SistemaBox({
 export default function MetodoFisiologiaSistemas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [humanoErr, setHumanoErr] = useState(false);
   const [sistema, setSistema] = useState<Sistema | null>(null);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
@@ -118,7 +113,7 @@ export default function MetodoFisiologiaSistemas() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Todas tus células", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
+            prev={{ label: "← Las células de tus órganos", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
             extra={celulasBtn}
             next={{ label: "El cuerpo →", onClick: () => navigate("/metodo/fisiologia/organismo") }}
           />
@@ -132,37 +127,13 @@ export default function MetodoFisiologiaSistemas() {
             </Text>
           </Reveal>
 
-          {/* ── Humano a la izquierda + rejilla de sistemas (2 por fila) a la derecha ── */}
+          {/* ── Rejilla de sistemas: 3 por fila (2 en móvil) ── */}
           <Reveal direction="up" distance={22} duration={0.65} w="100%">
-            <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "flex-start" }}
-                  justify="center" gap={{ base: 8, md: 10 }} w="100%">
-
-              {/* Izquierda · ser humano */}
-              <Flex flexShrink={0} justify="center" align="center"
-                    w={{ base: "220px", md: "320px" }}
-                    h={{ base: "360px", md: "560px" }}
-                    position={{ md: "sticky" }} top={{ md: "90px" }}>
-                {!humanoErr ? (
-                  <Image src={HUMANO_IMG} alt="Ser humano" w="100%" h="100%" objectFit="contain"
-                         style={{ filter: `drop-shadow(0 0 22px ${fisiologiaTxt}55)` }}
-                         onError={() => setHumanoErr(true)} />
-                ) : (
-                  <Flex w="100%" h="100%" align="center" justify="center" direction="column" gap={2}
-                        border={`1px dashed ${fisiologiaTxt}55`} borderRadius="2xl" textAlign="center" px={4}>
-                    <Text color={`${fisiologiaTxt}cc`} fontSize="sm" fontStyle="italic">
-                      Ser humano (próximamente)
-                    </Text>
-                  </Flex>
-                )}
-              </Flex>
-
-              {/* Derecha · los 12 sistemas de 2 en 2 */}
-              <SimpleGrid columns={2} spacing={{ base: 3, md: 4 }} flex="1" w="100%">
-                {SISTEMAS.map((s) => (
-                  <SistemaBox key={s.key} sistema={s} active={sistema?.key === s.key} onClick={() => setSistema(s)} />
-                ))}
-              </SimpleGrid>
-            </Flex>
+            <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+              {SISTEMAS.map((s) => (
+                <SistemaBox key={s.key} sistema={s} active={sistema?.key === s.key} onClick={() => setSistema(s)} />
+              ))}
+            </SimpleGrid>
           </Reveal>
         </Flex>
       </Flex>

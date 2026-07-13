@@ -106,7 +106,7 @@ function Ficha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRect) => vo
       flexShrink={0} style={{ touchAction: "none" }}
     >
       <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${pieza.def.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
-        <Perla def={pieza.def} size={{ base: "44px", md: "54px" }} />
+        <Perla def={pieza.def} size={{ base: "80px", md: "104px" }} />
       </Box>
       <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
             letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
@@ -255,7 +255,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                               <MBox key={p.id} position="absolute" left={`${q.x}%`} top={`${q.y}%`} transform="translate(-50%,-50%)"
                                     initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: "spring", stiffness: 340, damping: 20 }}>
-                                <Perla def={p.def} size={{ base: "32px", md: "40px" }} />
+                                <Perla def={p.def} size={{ base: "54px", md: "70px" }} />
                               </MBox>
                             );
                           })}
@@ -270,7 +270,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
 
                       {/* Piezas */}
                       <Flex flex="1" direction="column" align="center" gap={4} w="100%">
-                        <Flex wrap="wrap" justify="center" align="flex-start" gap={{ base: 3, md: 4 }} maxW="380px" minH="70px">
+                        <Flex wrap="wrap" justify="center" align="flex-start" gap={{ base: 3, md: 4 }} maxW="460px" minH="70px">
                           <AnimatePresence>
                             {pendientes.map((p) => (<Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />))}
                           </AnimatePresence>

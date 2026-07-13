@@ -21,15 +21,15 @@ export default function MetodoFisiologiaCelula() {
         { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: "mitocondria", n: 2, img: `${PRE}/mitocondria.png` },
         { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: "ribosoma", n: 3, img: `${PRE}/ribosoma.png` },
       ]}
-      resultImg={`${PRE}/celula.png`}
+      resultImg={`${PRE}/celulaentera.png`}
       resultTitulo="¡Has construido una célula!"
       resultParrafos={[
         <>Una <b>célula</b> es la unidad más pequeña con vida propia: dentro de su membrana, el ADN guarda las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
         <>Todo funciona a la vez, como una ciudad diminuta. Tu cuerpo tiene alrededor de <b>37 billones</b> de ellas.</>,
       ]}
       dataKey="celula_hecho"
-      next={{ label: "Todas tus células →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
-      headerNext={{ label: "Todas tus células →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
+      next={{ label: "Las células de tus órganos →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
+      headerNext={{ label: "Las células de tus órganos →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
     />
   );
 }

@@ -54,7 +54,7 @@ const MACROS: MacroDef[] = [
       "Una proteína es una larga cadena de aminoácidos que se pliega en una forma precisa.",
       "De esa forma depende su función: hay proteínas que transportan, defienden, construyen o aceleran reacciones. Son las obreras de la célula.",
     ],
-    monomeroImg: `${PRE}/aminoacido.png`, resultadoImg: `${PRE}/proteina.png`,
+    monomeroImg: `${PRE}/aminoacido.png`, resultadoImg: `${PRE}/enzima.png`,
   },
   {
     id: "adn", nombre: "ADN", monomero: "nucleótido", monomeroPl: "nucleótidos",
@@ -74,7 +74,7 @@ const MACROS: MacroDef[] = [
       "Los fosfolípidos tienen una cabeza que ama el agua y dos colas que la repelen.",
       "Por eso se ordenan solos en una doble capa: la membrana que envuelve y protege cada una de tus células.",
     ],
-    monomeroImg: `${PRE}/fosfolipido.png`, resultadoImg: `${PRE}/membrana.png`,
+    monomeroImg: `${PRE}/fosfolipido.png`, resultadoImg: `${PRE}/fosfolipido.png`,
   },
   {
     id: "carbohidrato", nombre: "Carbohidratos", monomero: "glucosa", monomeroPl: "glucosas",

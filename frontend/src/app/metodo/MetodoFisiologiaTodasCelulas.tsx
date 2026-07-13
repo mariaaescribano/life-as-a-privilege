@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -16,14 +15,6 @@ import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } f
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(200,181,209,0.12), 0 0 20px ${fisiologiaTxt}1a, 0 0 48px ${fisiologiaTxt}10`;
-
-// ⚠️ PENDIENTE: la imagen de la silueta con los órganos la pasará María. Cuando
-// la tenga, cambia esta ruta y AJUSTA las coordenadas (top/left en %) de cada
-// órgano para que cada punto caiga sobre su órgano en la ilustración.
-const SILUETA_IMG = "/recorrido/fisiologia/silueta.png";
-
-// Ancho de la silueta. Fijo: en móvil NO se hace más pequeña que en ordenador.
-const SILUETA_W = "300px";
 
 // Helper para coger células por id de la lista plana de Fisiología.
 const pick = (...ids: string[]): Celula[] =>
@@ -43,6 +34,8 @@ interface Organo {
   hotspot: { top: number; left: number };
   /** Células de este órgano. */
   celulas: Celula[];
+  /** Descripción del órgano que aparece junto a la foto grande en la ficha. */
+  descripcion?: React.ReactNode;
   /** Consejos del órgano (frase titular + texto). Cada uno abre un modal
    *  inmersivo. ⚠️ PENDIENTE: María irá pasando los titulares y sus textos. */
   consejos?: Consejo[];
@@ -51,7 +44,8 @@ interface Organo {
 // Posiciones PROVISIONALES (se ajustarán sobre la imagen real). Las fotos de
 // los órganos están en /recorrido/fisiologia/organos/{key}.png.
 const ORGANOS: Organo[] = [
-  { key: "cerebro",   label: "Cerebro",   foto: "/recorrido/fisiologia/organos/cerebro.png",   hotspot: { top: 9,  left: 50 }, celulas: pick("neuronas", "astrocitos", "microglia", "oligodendrocitos", "ependimarias", "endotelial-cerebral", "pericito", "celula-madre-neural"),
+  { key: "cerebro",   label: "Cerebro",   foto: "/recorrido/fisiologia/organos/cerebro.png",   hotspot: { top: 10, left: 47 }, celulas: pick("neuronas", "astrocitos", "microglia", "oligodendrocitos", "ependimarias", "endotelial-cerebral", "pericito", "celula-madre-neural"),
+    descripcion: <>Es el centro de mando de todo tu cuerpo. Desde aquí piensas, sientes, recuerdas y controlas cada movimiento y casi cada función, muchas veces sin darte cuenta. Aunque pesa poco más de un kilo, gasta cerca de una quinta parte de toda tu energía.</>,
     consejos: [
       {
         titular: "Dormir te hace más inteligente.",
@@ -74,7 +68,8 @@ const ORGANOS: Organo[] = [
         texto: <>El cerebro intenta ahorrar energía. Cuando repites una acción una y otra vez, las conexiones que la controlan se vuelven más rápidas y eficientes. Así nacen los hábitos. Da igual si son buenos o malos: el cerebro aprende aquello que más practicas. Cada repetición deja una pequeña huella en el cableado cerebral.</>,
       },
     ] },
-  { key: "pulmones",  label: "Pulmones",  foto: "/recorrido/fisiologia/organos/pulmones.png",  hotspot: { top: 33, left: 40 }, celulas: pick("neumocitos-1", "neumocitos-2", "macrofagos-alveolares", "celula-ciliada", "celula-club"),
+  { key: "pulmones",  label: "Pulmones",  foto: "/recorrido/fisiologia/organos/pulmones.png",  hotspot: { top: 27, left: 42 }, celulas: pick("neumocitos-1", "neumocitos-2", "macrofagos-alveolares", "celula-ciliada", "celula-club"),
+    descripcion: <>Son el lugar donde tu sangre se encuentra con el aire. Con cada respiración capturan el oxígeno que necesitan tus células y expulsan el dióxido de carbono que les sobra. Trabajan sin descanso, unas 20.000 veces al día, casi siempre sin que tengas que pensar en ello.</>,
     consejos: [
       {
         titular: "Tus pulmones tienen un ejército de limpieza.",
@@ -97,7 +92,8 @@ const ORGANOS: Organo[] = [
         texto: <>Tus pulmones contienen alrededor de 500 millones de alvéolos. Son tan pequeños que apenas los vemos, pero juntos forman una superficie de intercambio de gases similar a una pista de tenis. Cuidarlos significa cuidar cada respiración que tomarás durante el resto de tu vida.</>,
       },
     ] },
-  { key: "corazon",   label: "Corazón",   foto: "/recorrido/fisiologia/organos/corazon.png",   hotspot: { top: 35, left: 55 }, celulas: pick("cardiomiocitos", "marcapasos", "purkinje"),
+  { key: "corazon",   label: "Corazón",   foto: "/recorrido/fisiologia/organos/corazon.png",   hotspot: { top: 29, left: 50 }, celulas: pick("cardiomiocitos", "marcapasos", "purkinje"),
+    descripcion: <>Es una bomba incansable, más o menos del tamaño de tu puño. Late unas 100.000 veces al día para empujar la sangre por todo el cuerpo y llevar oxígeno y nutrientes a cada rincón. No ha descansado ni un segundo desde antes de que nacieras.</>,
     consejos: [
       {
         titular: "Tu corazón también aprende a entrenar.",
@@ -120,7 +116,8 @@ const ORGANOS: Organo[] = [
         texto: <>Nuestro corazón evolucionó para un cuerpo que caminaba, corría y cargaba peso cada día. Pasar muchas horas sentado reduce la circulación, favorece la hipertensión y obliga al corazón a adaptarse a un estilo de vida para el que nunca fue diseñado. Cada paseo, cada escalera y cada minuto de actividad física son una inversión directa en su salud.</>,
       },
     ] },
-  { key: "estomago",  label: "Estómago",  foto: "/recorrido/fisiologia/organos/estomago.png",  hotspot: { top: 43, left: 55 }, celulas: pick("parietal", "principal", "mucosa-gastrica", "enteroendocrinas-gastricas"),
+  { key: "estomago",  label: "Estómago",  foto: "/recorrido/fisiologia/organos/estomago.png",  hotspot: { top: 37, left: 54 }, celulas: pick("parietal", "principal", "mucosa-gastrica", "enteroendocrinas-gastricas"),
+    descripcion: <>Es donde empieza de verdad la digestión. Guarda la comida, la mezcla y la baña en un ácido tan potente que deshace casi todo lo que comes, mientras un escudo de moco protege sus propias paredes para no digerirse a sí mismo.</>,
     consejos: [
       {
         titular: "El estrés deja tu estómago con menos defensas.",
@@ -143,7 +140,8 @@ const ORGANOS: Organo[] = [
         texto: <>Cuando estás estresado, el cerebro prioriza la supervivencia frente a la digestión. El cerebro le hace llegar esta orden al estómago a través del nervio vago. El estómago modifica sus movimientos, cambia la producción de ácido y se comunica constantemente con el sistema nervioso. Por eso los nervios pueden provocar náuseas, dolor o la sensación de tener un «nudo en el estómago».</>,
       },
     ] },
-  { key: "higado",    label: "Hígado",    foto: "/recorrido/fisiologia/organos/higado.png",    hotspot: { top: 45, left: 43 }, celulas: pick("hepatocitos", "kupffer", "estrelladas"),
+  { key: "higado",    label: "Hígado",    foto: "/recorrido/fisiologia/organos/higado.png",    hotspot: { top: 35, left: 43 }, celulas: pick("hepatocitos", "kupffer", "estrelladas"),
+    descripcion: <>Es la gran fábrica química de tu cuerpo. Filtra la sangre, transforma los nutrientes, fabrica proteínas y bilis, almacena energía y neutraliza sustancias tóxicas. Hace cientos de trabajos distintos a la vez y, además, es capaz de regenerarse.</>,
     consejos: [
       {
         titular: "Tu hígado trabaja incluso cuando tú descansas.",
@@ -198,7 +196,8 @@ const ORGANOS: Organo[] = [
         texto: <>El hígado almacena vitaminas como la A, D, B₁₂ y K, además de minerales como el hierro y el cobre. Actúa como un almacén estratégico que libera estos nutrientes cuando el organismo los necesita, evitando que dependamos únicamente de lo que comemos cada día.</>,
       },
     ] },
-  { key: "pancreas",  label: "Páncreas",  foto: "/recorrido/fisiologia/organos/pancreas.png",  hotspot: { top: 47, left: 57 }, celulas: pick("celulas-beta", "celulas-alfa", "celulas-delta", "celulas-acinares", "celulas-ductales", "celulas-pp"),
+  { key: "pancreas",  label: "Páncreas",  foto: "/recorrido/fisiologia/organos/pancreas.png",  hotspot: { top: 40, left: 49 }, celulas: pick("celulas-beta", "celulas-alfa", "celulas-delta", "celulas-acinares", "celulas-ductales", "celulas-pp"),
+    descripcion: <>Es un órgano discreto con un doble oficio. Regula el azúcar de tu sangre mediante hormonas como la insulina y el glucagón y, a la vez, fabrica las potentes enzimas que digieren gran parte de lo que comes.</>,
     consejos: [
       {
         titular: "Tu páncreas sabe cuánto azúcar hay en tu sangre.",
@@ -225,7 +224,8 @@ const ORGANOS: Organo[] = [
         texto: <>A diferencia del estómago o del intestino, el páncreas suele pasar desapercibido. Sin embargo, regula la glucosa en sangre y produce la mayor parte de las enzimas digestivas. Cuando enferma, puede afectar prácticamente a todo el organismo antes de dar síntomas claros.</>,
       },
     ] },
-  { key: "rinones",   label: "Riñones",   foto: "/recorrido/fisiologia/organos/rinones.png",   hotspot: { top: 52, left: 50 }, celulas: pick("podocitos", "celulas-tubulares", "tubulo-proximal", "asa-henle", "tubulo-distal"),
+  { key: "rinones",   label: "Riñones",   foto: "/recorrido/fisiologia/organos/rinones.png",   hotspot: { top: 43, left: 44 }, celulas: pick("podocitos", "celulas-tubulares", "tubulo-proximal", "asa-henle", "tubulo-distal"),
+    descripcion: <>Son los filtros de tu cuerpo. Cada día limpian toda tu sangre muchas veces, eliminan lo que sobra en forma de orina y deciden con precisión cuánta agua y sales conservar. Además, regulan la tensión y ayudan a fabricar sangre.</>,
     consejos: [
       {
         titular: "Tus riñones limpian toda tu sangre… una y otra vez.",
@@ -264,7 +264,8 @@ const ORGANOS: Organo[] = [
         texto: <>El color, la cantidad y la frecuencia con la que orinas dicen mucho sobre cómo está funcionando tu organismo. Una orina muy oscura suele indicar que necesitas más agua. La presencia de sangre, espuma persistente o cambios mantenidos en la cantidad de orina pueden ser señales de que algo no funciona bien en los riñones y conviene consultarlo con un profesional sanitario.</>,
       },
     ] },
-  { key: "intestino", label: "Intestino", foto: "/recorrido/fisiologia/organos/intestino.png", hotspot: { top: 62, left: 50 }, celulas: pick("enterocitos", "caliciformes", "paneth", "enteroendocrinas", "celula-madre-intestinal"),
+  { key: "intestino", label: "Intestino", foto: "/recorrido/fisiologia/organos/intestino.png", hotspot: { top: 47, left: 49 }, celulas: pick("enterocitos", "caliciformes", "paneth", "enteroendocrinas", "celula-madre-intestinal"),
+    descripcion: <>Es donde tu cuerpo decide qué entra y qué no. Absorbe los nutrientes a través de una superficie enorme y alberga billones de bacterias que te ayudan a digerir, te protegen y hasta se comunican con tu cerebro.</>,
     consejos: [
       {
         titular: "Tu intestino delgado decide qué entra en tu cuerpo.",
@@ -307,7 +308,8 @@ const ORGANOS: Organo[] = [
         texto: <>El intestino contiene cientos de millones de neuronas que controlan gran parte de la digestión sin necesidad de consultar continuamente al cerebro. Además, ambos órganos se comunican constantemente a través del nervio vago, hormonas y moléculas producidas por la microbiota. Por eso las emociones pueden afectar al intestino… y el intestino también influye en cómo nos sentimos.</>,
       },
     ] },
-  { key: "tiroides",  label: "Tiroides",  foto: "/recorrido/fisiologia/organos/tiroides.png",  hotspot: { top: 27, left: 50 }, celulas: pick("tirocito", "celula-c"),
+  { key: "tiroides",  label: "Tiroides",  foto: "/recorrido/fisiologia/organos/tiroides.png",  hotspot: { top: 20, left: 46 }, celulas: pick("tirocito", "celula-c"),
+    descripcion: <>Es una pequeña glándula con forma de mariposa en tu cuello. Marca el ritmo al que funciona todo tu cuerpo: la energía que gastas, la temperatura, el pulso… como un acelerador que trabaja en silencio.</>,
     consejos: [
       {
         titular: "Tu tiroides decide a qué velocidad funciona tu cuerpo.",
@@ -330,7 +332,8 @@ const ORGANOS: Organo[] = [
         texto: <>El cansancio, la caída del pelo o el aumento de peso pueden tener muchas causas diferentes. Aunque estos síntomas aparecen en algunas enfermedades tiroideas, también pueden deberse a falta de sueño, estrés, anemia, una mala alimentación o muchos otros problemas. Por eso es importante confirmar el diagnóstico antes de pensar que la tiroides es la responsable.</>,
       },
     ] },
-  { key: "piel",      label: "Piel",      foto: "/recorrido/fisiologia/organos/piel.png",      hotspot: { top: 24, left: 22 }, celulas: pick("queratinocitos", "melanocitos", "langerhans", "endoteliales", "merkel"),
+  { key: "piel",      label: "Piel",      foto: "/recorrido/fisiologia/organos/piel.png",      hotspot: { top: 22, left: 32 }, celulas: pick("queratinocitos", "melanocitos", "langerhans", "endoteliales", "merkel"),
+    descripcion: <>Es tu órgano más grande y tu primera frontera con el mundo. Te protege de golpes, microbios y del sol, regula tu temperatura y te permite sentir el tacto. Se renueva sin parar y se repara sola cuando se daña.</>,
     consejos: [
       {
         titular: "Tu piel es el órgano más grande de tu cuerpo.",
@@ -361,7 +364,8 @@ const ORGANOS: Organo[] = [
         texto: <>Sobre ella viven millones de bacterias, hongos y otros microorganismos que forman la microbiota cutánea. La mayoría son beneficiosos: ocupan espacio, dificultan el crecimiento de microbios peligrosos y colaboran con el sistema inmunitario para mantener la piel sana.</>,
       },
     ] },
-  { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.png",   hotspot: { top: 58, left: 72 }, celulas: pick("miocitos", "musculares-lisas", "satelite"),
+  { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.png",   hotspot: { top: 66, left: 43 }, celulas: pick("miocitos", "musculares-lisas", "satelite"),
+    descripcion: <>Es lo que te permite moverte, mantenerte en pie y hasta respirar. Se contrae y se relaja miles de veces al día, quema mucha energía y se vuelve más fuerte cuanto más lo usas. Si lo abandonas, tu cuerpo lo va desmontando.</>,
     consejos: [
       {
         titular: "Tus músculos: o los usas… o tu cuerpo los descompone.",
@@ -392,7 +396,8 @@ const ORGANOS: Organo[] = [
         texto: <>Cuando haces ejercicio, los músculos liberan moléculas llamadas mioquinas. Estas viajan por la sangre y ayudan a mejorar el funcionamiento del cerebro, el sistema inmunitario, el hígado y el tejido adiposo. Por eso el ejercicio reduce la inflamación, mejora la memoria, ayuda a controlar la glucosa y protege mucho más que los propios músculos.</>,
       },
     ] },
-  { key: "huesos",    label: "Huesos",    foto: "/recorrido/fisiologia/organos/huesos.png",    hotspot: { top: 82, left: 44 }, celulas: pick("osteoblastos", "osteoclastos", "osteocitos", "condrocito"),
+  { key: "huesos",    label: "Huesos",    foto: "/recorrido/fisiologia/organos/huesos.png",    hotspot: { top: 77, left: 55 }, celulas: pick("osteoblastos", "osteoclastos", "osteocitos", "condrocito"),
+    descripcion: <>Son mucho más que un simple armazón. Están vivos: se rompen y se reconstruyen cada día, sostienen tu cuerpo, protegen tus órganos, guardan tu calcio y en su interior fabrican la sangre.</>,
     consejos: [
       {
         titular: "Tus huesos están vivos.",
@@ -419,7 +424,8 @@ const ORGANOS: Organo[] = [
         texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la vida. Moverte hoy sigue siendo una inversión para el esqueleto de mañana.</>,
       },
     ] },
-  { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 80 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
+  { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 76 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
+    descripcion: <>Es un órgano líquido que conecta todo tu cuerpo. Transporta oxígeno, nutrientes y hormonas, retira los desechos y lleva a tu ejército de defensas allí donde haga falta. Es la red que hace que todo funcione como un solo sistema.</>,
     consejos: [
       {
         titular: "Tu sangre es un órgano líquido.",
@@ -462,69 +468,81 @@ const ORGANOS: Organo[] = [
         texto: <>Después de una donación, el organismo detecta que ha perdido parte de su sangre y los riñones producen más eritropoyetina, una hormona que estimula la médula ósea para fabricar nuevos glóbulos rojos. En pocas semanas, el volumen de sangre y las células perdidas vuelven a recuperarse. Una sola donación puede ayudar a salvar varias vidas.</>,
       },
     ] },
-  { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.png", hotspot: { top: 70, left: 28 }, celulas: pick("fibroblastos", "mastocito") },
-  { key: "grasa",     label: "Tejido graso", foto: "/recorrido/fisiologia/organos/grasa.png",   hotspot: { top: 50, left: 34 }, celulas: pick("adipocitos-blancos", "adipocitos-marrones") },
+  { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.png", hotspot: { top: 70, left: 57 }, celulas: pick("fibroblastos", "mastocito"),
+    descripcion: <>Es el pegamento y la estructura de tu cuerpo. El colágeno da forma y resistencia a la piel, los tendones, los huesos y los vasos, mientras sus células fabrican y reparan ese andamiaje durante toda la vida.</>,
+    consejos: [
+      {
+        titular: "El colágeno es el pegamento de tu cuerpo.",
+        texto: <>El colágeno es la proteína más abundante del organismo. Forma la estructura de la piel, los tendones, los ligamentos, los huesos, los vasos sanguíneos e incluso muchos órganos. Sin él, tu cuerpo literalmente se desmontaría.</>,
+      },
+      {
+        titular: "Los péptidos de colágeno despiertan a tus fibroblastos.",
+        texto: <>Cuando digieres colágeno, parte de él se rompe en pequeños péptidos que pueden llegar a la sangre. Algunos de estos péptidos actúan como una señal para los fibroblastos, estimulándolos para fabricar más colágeno… siempre que dispongan de los nutrientes necesarios, especialmente vitamina C. El colágeno que comes no va directamente a tu piel: ayuda a que sea tu propio cuerpo quien produzca más.</>,
+      },
+      {
+        titular: "La vitamina C es imprescindible para fabricar colágeno.",
+        texto: <>Los fibroblastos necesitan vitamina C para unir correctamente las fibras de colágeno. Sin ella, el tejido conectivo pierde resistencia y las heridas cicatrizan peor. De hecho, el escorbuto, una enfermedad causada por la falta de vitamina C, provoca sangrado de encías, heridas que no cicatrizan y una gran fragilidad del tejido conectivo.</>,
+      },
+      {
+        titular: "El azúcar también envejece el colágeno.",
+        texto: <>Cuando la glucosa permanece elevada durante mucho tiempo, puede unirse al colágeno formando enlaces que vuelven las fibras más rígidas y menos elásticas. Este proceso, llamado glicación, contribuye al envejecimiento de la piel, las arterias y muchos otros tejidos.</>,
+      },
+      {
+        titular: "Tus fibroblastos trabajan toda la vida.",
+        texto: <>El colágeno no dura para siempre. Los fibroblastos fabrican continuamente nuevas fibras mientras otras células eliminan las viejas o dañadas. Es un proceso lento, pero constante, que permite mantener resistentes los tejidos.</>,
+      },
+      {
+        titular: "El ejercicio también fortalece tu tejido conectivo.",
+        texto: <>Los tendones, los ligamentos y otras estructuras de colágeno responden al esfuerzo igual que los músculos. Cuando entrenas de forma progresiva, los fibroblastos producen fibras más fuertes y mejor organizadas. El reposo absoluto prolongado hace justo lo contrario: el tejido conectivo pierde resistencia.</>,
+      },
+      {
+        titular: "Dormir también reconstruye el colágeno.",
+        texto: <>Mientras duermes, el organismo cambia de un estado de actividad a uno de reparación. Disminuyen hormonas relacionadas con el estrés, como el cortisol, aumenta la liberación de hormona del crecimiento y se activan procesos de reparación en muchos tejidos. Es durante este tiempo cuando los fibroblastos aprovechan para sintetizar parte del nuevo colágeno que necesitarán la piel, los tendones y los ligamentos para recuperarse del desgaste diario.</>,
+      },
+      {
+        titular: "El Sol también rompe el colágeno.",
+        texto: <>La radiación ultravioleta no solo daña el ADN de las células de la piel. También activa unas enzimas llamadas metaloproteinasas, cuya función es cortar las fibras de colágeno dañadas. El problema aparece cuando la exposición solar es excesiva: se destruye colágeno más rápido de lo que los fibroblastos pueden reemplazarlo. Ese desequilibrio es una de las principales causas de las arrugas y la pérdida de firmeza de la piel.</>,
+      },
+    ] },
+  { key: "grasa",     label: "Tejido graso", foto: "/recorrido/fisiologia/organos/grasa.png",   hotspot: { top: 44, left: 60 }, celulas: pick("adipocitos-blancos", "adipocitos-marrones"),
+    descripcion: <>No es solo una reserva de energía: es un órgano activo. Protege, aísla del frío y fabrica hormonas que hablan con tu cerebro sobre el hambre y la energía que tienes almacenada. Bien cuidado, es un gran aliado.</>,
+    consejos: [
+      {
+        titular: "La grasa debería ser un aliado.",
+        texto: <>El tejido adiposo almacena energía para cuando el cuerpo la necesita. Además, protege órganos, ayuda a mantener la temperatura corporal y fabrica hormonas como la leptina, que informa al hipotálamo de cuánta energía tenemos almacenada y ayuda a regular el apetito. A partir de esa información, el cerebro ajusta el metabolismo, el gasto energético e incluso parte de la respuesta inmunitaria. Sin grasa, simplemente no podríamos vivir.</>,
+      },
+      {
+        titular: "Tus células de grasa también hablan con tu cerebro.",
+        texto: <>Los adipocitos producen una hormona llamada leptina, que informa al cerebro sobre cuánta energía tiene almacenada el organismo. Cuando este sistema funciona bien, ayuda a controlar el apetito. Sin embargo, el exceso de grasa durante años puede hacer que el cerebro deje de responder correctamente a esta señal, un fenómeno conocido como resistencia a la leptina. El resultado es que seguimos sintiendo hambre aunque tengamos reservas de energía de sobra.</>,
+      },
+      {
+        titular: "No toda la grasa es igual.",
+        texto: <>La grasa blanca almacena energía para el futuro. En cambio, la grasa marrón hace justo lo contrario: quema esa energía para producir calor. Los recién nacidos tienen mucha grasa marrón para mantener su temperatura, aunque los adultos también conservamos pequeñas cantidades. Además, ciertos hábitos pueden hacer que parte de la grasa blanca adquiera características similares a la grasa marrón, un proceso llamado «browning». Estas células desarrollan más mitocondrias, las pequeñas centrales energéticas de la célula. ¿Por qué una célula fabricaría más mitocondrias? Porque necesita producir más energía. La exposición al frío y el ejercicio físico favorecen este proceso y aumentan la capacidad del organismo para generar calor y consumir energía.</>,
+      },
+      {
+        titular: "Adelgazar no elimina tus células de grasa.",
+        texto: <>Cuando pierdes peso, los adipocitos no suelen desaparecer: simplemente se vacían y reducen su tamaño. Si vuelves a consumir más energía de la que necesitas, esas mismas células volverán a llenarse con facilidad.</>,
+      },
+      {
+        titular: "El exceso de comida rompe células.",
+        texto: <>Cuando el tejido adiposo acumula mucha más grasa de la que puede almacenar de forma saludable, los adipocitos aumentan tanto de tamaño que algunos dejan de recibir suficiente oxígeno y terminan muriendo. Al romperse, liberan su contenido y desencadenan una respuesta del sistema inmunitario. Los macrófagos acuden para eliminar esos restos, pero si la situación se mantiene durante años, el tejido adiposo permanece inflamado de forma crónica. Esa inflamación favorece la resistencia a la insulina y aumenta el riesgo de enfermedades cardiovasculares. Además, los macrófagos cargados de colesterol y grasas también participan en la formación de las placas de ateroma que estrechan las arterias.</>,
+      },
+      {
+        titular: "Hacer ejercicio también cambia tu grasa.",
+        texto: <>Cuando haces ejercicio, los músculos liberan moléculas llamadas mioquinas que favorecen que parte de la grasa blanca adquiera características similares a la grasa marrón. Este proceso hace que el tejido adiposo consuma más energía y mejore el metabolismo. Además, durante el ejercicio prolongado, los triglicéridos almacenados en el tejido adiposo se descomponen en ácidos grasos, que sirven como combustible para los músculos y otros órganos. El hígado también puede transformar parte de esos ácidos grasos en cuerpos cetónicos, especialmente durante ayunos prolongados o ejercicios de muy larga duración.</>,
+      },
+      {
+        titular: "Dormir poco también favorece ganar grasa.",
+        texto: <>Dormir menos de lo necesario altera hormonas como la leptina y la grelina, aumentando el apetito y haciendo que resulte más difícil sentirse saciado. Además, el cansancio reduce el gasto energético y favorece elegir alimentos más calóricos. Por eso descansar bien también ayuda a mantener un peso saludable.</>,
+      },
+      {
+        titular: "El problema no es la grasa… es dónde se acumula.",
+        texto: <>La grasa situada bajo la piel suele ser mucho menos perjudicial que la grasa que rodea órganos como el hígado, el páncreas o el intestino. Esta grasa visceral libera más moléculas inflamatorias directamente hacia la circulación que llega al hígado, favoreciendo la resistencia a la insulina, el hígado graso y la alteración del metabolismo. Con el tiempo aumenta el riesgo de diabetes tipo 2, hipertensión, enfermedad cardiovascular e incluso algunos tipos de cáncer. No toda la grasa tiene el mismo impacto sobre la salud: su localización importa tanto como su cantidad.</>,
+      },
+    ] },
 ];
 
-const pulse = keyframes`
-  0%   { transform: translate(-50%, -50%) scale(1);   box-shadow: 0 0 0 0 rgba(255,255,255,0.55); }
-  70%  { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 12px rgba(255,255,255,0); }
-  100% { transform: translate(-50%, -50%) scale(1);   box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-`;
-
-// Punto pulsable sobre un órgano.
-function Hotspot({ organo, active, onClick }: { organo: Organo; active: boolean; onClick: () => void }) {
-  return (
-    <Box
-      as="button"
-      onClick={onClick}
-      position="absolute"
-      top={`${organo.hotspot.top}%`}
-      left={`${organo.hotspot.left}%`}
-      transform="translate(-50%, -50%)"
-      zIndex={2}
-      display="flex"
-      alignItems="center"
-      gap={2}
-      cursor="pointer"
-      aria-label={`Ver células de ${organo.label}`}
-      sx={{ "&:hover .organo-label": { opacity: 1, transform: "translateX(0)" } }}
-    >
-      {/* Punto latiendo */}
-      <Box
-        w={{ base: "16px", md: "18px" }}
-        h={{ base: "16px", md: "18px" }}
-        borderRadius="full"
-        bg={active ? "white" : fisiologiaTxt}
-        border={`2px solid ${active ? fisiologiaTxt : "white"}`}
-        animation={active ? undefined : `${pulse} 2.4s ease-out infinite`}
-        boxShadow={active ? `0 0 12px ${fisiologiaTxt}, 0 0 4px #fff` : undefined}
-        flexShrink={0}
-      />
-      {/* Etiqueta del órgano */}
-      <Box
-        className="organo-label"
-        px={2.5}
-        py={1}
-        borderRadius="full"
-        bg={`${fisiologiaBg}e6`}
-        border={`1px solid ${fisiologiaTxt}77`}
-        opacity={{ base: 1, md: active ? 1 : 0 }}
-        transform={{ base: "none", md: active ? "translateX(0)" : "translateX(-6px)" }}
-        transition="all 0.2s ease"
-        pointerEvents="none"
-        whiteSpace="nowrap"
-      >
-        <Text color={fisiologiaTxt} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.06em"
-              style={{ textShadow: `0 1px 3px ${fisiologiaBg}` }}>
-          {organo.label}
-        </Text>
-      </Box>
-    </Box>
-  );
-}
-
-// Universo de células alcanzables desde la silueta (para el contador de progreso).
+// Universo de células alcanzables desde la galería (para el contador de progreso).
 const UNIVERSO = Array.from(new Set(ORGANOS.flatMap((o) => o.celulas.map((c) => c.id))));
 const TOTAL_CELULAS = UNIVERSO.length;
 
@@ -540,20 +558,151 @@ function FisioBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   );
 }
 
-// Flecha redonda del carrusel de células.
-function CarouselArrow({ dir, onClick, celulas }: { dir: "left" | "right"; onClick: () => void; celulas: Celula[] }) {
+// Tarjeta de órgano (estilo «Pokédex»): ilustración, nombre, "3/8 células" y
+// barra de progreso. Se resalta cuando el ratón pasa por su punto en el cuerpo
+// (y al revés) para que ambas formas de navegar estén sincronizadas.
+function OrganoCard({
+  organo,
+  vistas,
+  onClick,
+}: {
+  organo: Organo;
+  vistas: Set<string>;
+  onClick: () => void;
+}) {
+  const [imgErr, setImgErr] = useState(false);
+  const total = organo.celulas.length;
+  const hechas = organo.celulas.filter((c) => vistas.has(c.id)).length;
+  const completo = total > 0 && hechas === total;
+  const pct = total ? Math.round((hechas / total) * 100) : 0;
+
+  return (
+    <Box
+      as="button"
+      onClick={onClick}
+      textAlign="left"
+      position="relative"
+      overflow="hidden"
+      w="100%"
+      h="100%"
+      borderRadius="2xl"
+      border={completo ? `1px solid ${fisiologiaTxt}aa` : `1px solid ${fisiologiaTxt}33`}
+      cursor="pointer"
+      fontFamily="'EB Garamond', serif"
+      boxShadow={completo
+        ? `0 4px 18px rgba(0,0,0,0.22), 0 0 22px ${fisiologiaTxt}66`
+        : `0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${fisiologiaTxt}26`}
+      transition="all 0.22s ease"
+      _hover={{
+        transform: "translateY(-4px)",
+        borderColor: `${fisiologiaTxt}88`,
+        boxShadow: `0 10px 30px rgba(0,0,0,0.3), 0 0 26px ${fisiologiaTxt}55`,
+      }}
+      _active={{ transform: "translateY(-1px)" }}
+    >
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+      {/* Sello de "órgano completo" */}
+      {completo && (
+        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
+              w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
+              boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </Box>
+        </Flex>
+      )}
+
+      <Flex direction="column" position="relative" zIndex={1} p={{ base: 4, md: 6 }} gap={{ base: 3, md: 4 }} h="100%">
+        {/* Ilustración cuadrada del órgano */}
+        <Box borderRadius="xl" overflow="hidden" w="100%" aspectRatio={1} bg={`${fisiologiaTxt}14`}
+             boxShadow="0 4px 16px rgba(0,0,0,0.28)" flexShrink={0}>
+          {!imgErr ? (
+            <Image src={encodeURI(organo.foto)} alt={organo.label} w="100%" h="100%" objectFit="cover"
+                   onError={() => setImgErr(true)} />
+          ) : (
+            <Flex w="100%" h="100%" align="center" justify="center" />
+          )}
+        </Box>
+
+        {/* Nombre */}
+        <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "lg", md: "2xl" }} textAlign="center"
+              lineHeight="1.25" letterSpacing="0.02em"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.4)" }}>
+          {organo.label}
+        </Text>
+
+        {/* Progreso: "3/8 células" + barra */}
+        <Flex direction="column" gap={2.5} mt="auto">
+          <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "md" }} fontWeight={700}
+                textAlign="center" letterSpacing="0.04em"
+                style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
+            {total > 0 ? `${hechas}/${total} células` : "próximamente"}
+          </Text>
+          {total > 0 && (
+            <Box w="100%" h="7px" borderRadius="full" bg="rgba(255,255,255,0.18)" overflow="hidden">
+              <Box h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.5s ease"
+                   bgGradient={`linear(to-r, ${fisiologiaTxt}, #ffffff)`} boxShadow={`0 0 10px ${fisiologiaTxt}`} />
+            </Box>
+          )}
+        </Flex>
+      </Flex>
+    </Box>
+  );
+}
+
+// Flecha redonda del carrusel de células. Cuando no hay más hacia ese lado se
+// muestra desactivada (atenuada y sin click), para no engañar al usuario.
+function CarouselArrow({ dir, onClick, disabled }: { dir: "left" | "right"; onClick: () => void; disabled: boolean }) {
   const left = dir === "left";
   return (
     <Box
       as="button"
       aria-label={left ? "Anterior" : "Siguiente"}
-      onClick={onClick}
+      aria-disabled={disabled}
+      onClick={disabled ? undefined : onClick}
       flexShrink={0}
-      display={{ base: celulas.length > 1 ? "flex" : "none", md: celulas.length > 3 ? "flex" : "none" }}
+      display="flex"
       alignItems="center"
       justifyContent="center"
       w={{ base: "34px", md: "40px" }}
       h={{ base: "34px", md: "40px" }}
+      borderRadius="full"
+      bg="rgba(0,0,0,0.42)"
+      border={`1px solid ${fisiologiaTxt}${disabled ? "44" : "aa"}`}
+      color="#fff"
+      cursor={disabled ? "default" : "pointer"}
+      opacity={disabled ? 0.35 : 1}
+      pointerEvents={disabled ? "none" : "auto"}
+      transition="all 0.18s"
+      sx={{ backdropFilter: "blur(4px)" }}
+      _hover={disabled ? undefined : { bg: "rgba(0,0,0,0.62)", borderColor: fisiologiaTxt }}
+    >
+      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+           w={{ base: "20px", md: "24px" }} h={{ base: "20px", md: "24px" }} fill="#fff"
+           style={{ filter: `drop-shadow(0 0 4px ${fisiologiaTxt})` }}>
+        {left
+          ? <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+          : <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />}
+      </Box>
+    </Box>
+  );
+}
+
+// Flecha para navegar entre los consejos (uno visible cada vez).
+function ConsejoArrow({ dir, onClick }: { dir: "left" | "right"; onClick: () => void }) {
+  const left = dir === "left";
+  return (
+    <Box
+      as="button"
+      aria-label={left ? "Consejo anterior" : "Consejo siguiente"}
+      onClick={onClick}
+      flexShrink={0}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      w={{ base: "32px", md: "38px" }}
+      h={{ base: "32px", md: "38px" }}
       borderRadius="full"
       bg="rgba(0,0,0,0.42)"
       border={`1px solid ${fisiologiaTxt}aa`}
@@ -564,7 +713,7 @@ function CarouselArrow({ dir, onClick, celulas }: { dir: "left" | "right"; onCli
       _hover={{ bg: "rgba(0,0,0,0.62)", borderColor: fisiologiaTxt }}
     >
       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-           w={{ base: "20px", md: "24px" }} h={{ base: "20px", md: "24px" }} fill="#fff"
+           w={{ base: "18px", md: "22px" }} h={{ base: "18px", md: "22px" }} fill="#fff"
            style={{ filter: `drop-shadow(0 0 4px ${fisiologiaTxt})` }}>
         {left
           ? <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
@@ -588,6 +737,23 @@ function CelulasCarousel({
   const scroller = useRef<HTMLDivElement>(null);
   const GAP = 16; // px — debe coincidir con el gap del contenedor
   const many = celulas.length > 3; // solo entonces hay scroll en ordenador
+  // Si aún queda contenido a izq/der (para activar/desactivar cada flecha).
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const update = () => {
+    const el = scroller.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 2);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
+  };
+
+  // Recalcular al montar, al cambiar de órgano y al redimensionar la ventana.
+  useEffect(() => { update(); }, [celulas]);
+  useEffect(() => {
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   const scrollByCard = (dir: number) => {
     const el = scroller.current;
@@ -597,11 +763,14 @@ function CelulasCarousel({
     el.scrollBy({ left: dir * step, behavior: "smooth" });
   };
 
+  const hasOverflow = canLeft || canRight; // si no hay scroll posible, no hay flechas
+
   return (
     <Flex align="center" gap={{ base: 1.5, md: 3 }} w="100%">
-      <CarouselArrow dir="left" celulas={celulas} onClick={() => scrollByCard(-1)} />
+      {hasOverflow && <CarouselArrow dir="left" disabled={!canLeft} onClick={() => scrollByCard(-1)} />}
       <Flex
         ref={scroller}
+        onScroll={update}
         gap={`${GAP}px`}
         overflowX="auto"
         flex="1"
@@ -625,39 +794,67 @@ function CelulasCarousel({
           </Box>
         ))}
       </Flex>
-      <CarouselArrow dir="right" celulas={celulas} onClick={() => scrollByCard(1)} />
+      {hasOverflow && <CarouselArrow dir="right" disabled={!canRight} onClick={() => scrollByCard(1)} />}
     </Flex>
   );
 }
 
-// Panel de la derecha (o columna inferior en móvil): al pulsar un órgano se apilan
-// tres cajas → (1) foto (izq) + título (der), (2) consejos, (3) carrusel de sus células.
-function PanelDerecha({
+// Ficha de detalle del órgano a pantalla completa (sustituye a la galería al
+// pulsar una tarjeta). Apilado: (0) volver, (1) foto + título + descripción,
+// (2) sus células en línea (carrusel), (3) un consejo a la vez.
+function OrganoDetalle({
   organo,
   vistas,
   onCelula,
   onConsejo,
+  onBack,
 }: {
   organo: Organo;
   vistas: Set<string>;
   onCelula: (c: Celula) => void;
   onConsejo: (c: Consejo) => void;
+  onBack: () => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
-  useEffect(() => { setImgErr(false); }, [organo.key]);
+  // Índice del consejo visible (se ve uno cada vez y se navega con flechas).
+  const [consejoIdx, setConsejoIdx] = useState(0);
+  useEffect(() => { setImgErr(false); setConsejoIdx(0); }, [organo.key]);
 
   const vistasOrgano = organo.celulas.filter((c) => vistas.has(c.id)).length;
   const organoCompleto = organo.celulas.length > 0 && vistasOrgano === organo.celulas.length;
 
+  const consejos = organo.consejos ?? [];
+  const idx = consejos.length ? Math.min(consejoIdx, consejos.length - 1) : 0;
+  const consejoActual = consejos.length ? consejos[idx] : null;
+  const prevConsejo = () => setConsejoIdx((i) => (i - 1 + consejos.length) % consejos.length);
+  const nextConsejo = () => setConsejoIdx((i) => (i + 1) % consejos.length);
+
   return (
     <Flex direction="column" gap={{ base: 5, md: 6 }} w="100%">
-      {/* 1 · Foto (izquierda) + título (derecha) */}
+      {/* 0 · Volver a la galería */}
+      <Box as="button" onClick={onBack} alignSelf="flex-start"
+           display="inline-flex" alignItems="center" gap={2}
+           px={{ base: 4, md: 5 }} py={2} borderRadius="full"
+           bg={`${fisiologiaBg}cc`} border={`1px solid ${fisiologiaTxt}55`}
+           cursor="pointer" transition="all 0.2s"
+           _hover={{ borderColor: fisiologiaTxt, bg: `${fisiologiaBg}ee` }}>
+        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+             w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill={fisiologiaTxt}>
+          <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+        </Box>
+        <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.04em"
+              style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
+          Volver
+        </Text>
+      </Box>
+
+      {/* 1 · Foto (izquierda) + título + descripción (derecha) */}
       <FisioBox>
         <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 4, md: 7 }}
               px={{ base: 6, md: 8 }} py={{ base: 6, md: 8 }}>
           <Box
             flexShrink={0}
-            w={{ base: "170px", md: "210px" }}
+            w={{ base: "190px", md: "240px" }}
             aspectRatio={1}
             borderRadius="2xl"
             overflow="hidden"
@@ -691,45 +888,63 @@ function PanelDerecha({
                   : `${vistasOrgano} de ${organo.celulas.length} células descubiertas`}
               </Text>
             )}
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                  mt={{ base: 1, md: 2 }} fontStyle={organo.descripcion ? "normal" : "italic"}
+                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+              {organo.descripcion ?? `Descripción del ${organo.label.toLowerCase()} (próximamente).`}
+            </Text>
           </Flex>
         </Flex>
       </FisioBox>
 
-      {/* 2 · Consejos del órgano: cada titular abre un modal inmersivo */}
-      <FisioBox>
-        <Box px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
-          <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                letterSpacing="0.03em" mb={{ base: 3, md: 4 }} px={{ base: 2, md: 1 }}
-                style={{ textShadow: `0 0 12px ${fisiologiaBg}cc, 0 2px 6px rgba(0,0,0,0.5)` }}>
-            Consejos
-          </Text>
+      {/* 2 · Células en línea (carrusel, sin caja ni título) */}
+      {organo.celulas.length > 0 ? (
+        <CelulasCarousel celulas={organo.celulas} vistas={vistas} onCelula={onCelula} />
+      ) : (
+        <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+              textAlign="center" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>
+          Pronto podrás explorar las células de este órgano.
+        </Text>
+      )}
 
-          {organo.consejos && organo.consejos.length > 0 ? (
-            <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
-              {organo.consejos.map((c, i) => (
-                <Flex key={i} align="center" justify="space-between" gap={{ base: 3, md: 5 }} wrap="wrap"
-                      borderRadius="xl" bg="rgba(0,0,0,0.2)" border={`1px solid ${fisiologiaTxt}2a`}
-                      px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
-                  <Text color="rgba(255,255,255,0.95)" flex="1" minW={{ base: "100%", sm: "0" }}
-                        fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.4"
-                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-                    {c.titular}
+      {/* 3 · Consejos: un titular a la vez (sin título de sección), con flechas */}
+      <FisioBox>
+        <Box px={{ base: 4, md: 6 }} py={{ base: 6, md: 8 }}>
+          {consejoActual && consejos.length > 1 && (
+            <Flex justify="flex-end" mb={{ base: 2, md: 3 }}>
+              <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.06em">
+                {idx + 1} / {consejos.length}
+              </Text>
+            </Flex>
+          )}
+
+          {consejoActual ? (
+            <Flex align="center" gap={{ base: 2, md: 4 }}>
+              {consejos.length > 1 && <ConsejoArrow dir="left" onClick={prevConsejo} />}
+
+              <Flex flex="1" minW={0} direction="column" align="center" gap={{ base: 4, md: 5 }} textAlign="center">
+                <Flex align="center" justify="center" minH={{ base: "64px", md: "76px" }}>
+                  <Text color="rgba(255,255,255,0.97)" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                        lineHeight="1.35" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.55)" }}>
+                    {consejoActual.titular}
                   </Text>
-                  <Box as="button" onClick={() => onConsejo(c)} flexShrink={0}
-                       display="inline-flex" alignItems="center" gap={1.5}
-                       px={{ base: 4, md: 5 }} py={2} borderRadius="full"
-                       bg={fisiologiaTxt} color={fisiologiaBg}
-                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xs", md: "sm" }}
-                       letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                       boxShadow={`0 0 14px ${fisiologiaTxt}55`}
-                       _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${fisiologiaTxt}88` }}>
-                    Saber más →
-                  </Box>
                 </Flex>
-              ))}
+                <Box as="button" onClick={() => onConsejo(consejoActual)} flexShrink={0}
+                     display="inline-flex" alignItems="center" gap={1.5}
+                     px={{ base: 6, md: 7 }} py={2.5} borderRadius="full"
+                     bg={fisiologiaTxt} color={fisiologiaBg}
+                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                     letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
+                     boxShadow={`0 0 14px ${fisiologiaTxt}55`}
+                     _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${fisiologiaTxt}88` }}>
+                  Leer más →
+                </Box>
+              </Flex>
+
+              {consejos.length > 1 && <ConsejoArrow dir="right" onClick={nextConsejo} />}
             </Flex>
           ) : (
-            <Box w="100%" minH={{ base: "90px", md: "110px" }}
+            <Box w="100%" minH={{ base: "80px", md: "96px" }}
                  border={`1.5px dashed ${fisiologiaTxt}55`} borderRadius="xl"
                  display="flex" alignItems="center" justifyContent="center" textAlign="center" px={4} py={5}>
               <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
@@ -740,25 +955,6 @@ function PanelDerecha({
           )}
         </Box>
       </FisioBox>
-
-      {/* 3 · Carrusel de células del órgano */}
-      <FisioBox>
-        <Box px={{ base: 3, md: 5 }} py={{ base: 5, md: 6 }}>
-          <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                letterSpacing="0.03em" mb={{ base: 3, md: 4 }} px={{ base: 2, md: 1 }}
-                style={{ textShadow: `0 0 12px ${fisiologiaBg}cc, 0 2px 6px rgba(0,0,0,0.5)` }}>
-            Sus células
-          </Text>
-          {organo.celulas.length > 0 ? (
-            <CelulasCarousel celulas={organo.celulas} vistas={vistas} onCelula={onCelula} />
-          ) : (
-            <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                  px={{ base: 2, md: 1 }} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>
-              Pronto podrás explorar las células de este órgano.
-            </Text>
-          )}
-        </Box>
-      </FisioBox>
     </Flex>
   );
 }
@@ -766,12 +962,26 @@ function PanelDerecha({
 export default function MetodoFisiologiaTodasCelulas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // "galeria" = cuerpo-navegador + cuadrícula de órganos; "detalle" = ficha del
+  // órgano a pantalla completa (como una Pokédex).
+  const [vista, setVista] = useState<"galeria" | "detalle">("galeria");
   const [organo, setOrgano] = useState<Organo>(ORGANOS[0]);
   const [celula, setCelula] = useState<Celula | null>(null);
   const [consejo, setConsejo] = useState<Consejo | null>(null);
   const [vistas, setVistas] = useState<Set<string>>(new Set());
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
+
+  // Abre la ficha de un órgano (pantalla completa) y sube al principio.
+  const abrirOrgano = (o: Organo) => {
+    setOrgano(o);
+    setVista("detalle");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+  const volverGaleria = () => {
+    setVista("galeria");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -842,7 +1052,7 @@ export default function MetodoFisiologiaTodasCelulas() {
 
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Todas tus células"
+            title="Las células de tus órganos"
             pageLabel="2/2"
             compact
             bgColor={`${fisiologiaBg}dd`}
@@ -854,74 +1064,53 @@ export default function MetodoFisiologiaTodasCelulas() {
             next={{ label: "Sistemas →", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
           />
 
-          <Reveal direction="up" distance={18} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="640px"
-                  style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Tu cuerpo entero está hecho de células. Pulsa en cada órgano para descubrir las suyas.
-            </Text>
-          </Reveal>
+          {vista === "galeria" ? (
+            <>
 
-          {/* Barra de progreso: el usuario siente que va recorriendo un camino que se guarda */}
-          <Reveal direction="up" distance={14} duration={0.55} w="100%" display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={2} w="100%" maxW="440px">
-              <Flex align="center" justify="space-between" w="100%">
-                <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.06em"
-                      style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
-                  {vistasTotal === TOTAL_CELULAS && TOTAL_CELULAS > 0
-                    ? "✓ Has recorrido todas tus células"
-                    : `${vistasTotal} de ${TOTAL_CELULAS} células descubiertas`}
-                </Text>
-                <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}>
-                  {pct}%
-                </Text>
-              </Flex>
-              <Box w="100%" h="7px" borderRadius="full" bg="rgba(255,255,255,0.18)" overflow="hidden">
-                <Box h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.5s ease"
-                     bgGradient={`linear(to-r, ${fisiologiaTxt}, #ffffff)`}
-                     boxShadow={`0 0 12px ${fisiologiaTxt}`} />
-              </Box>
-            </Flex>
-          </Reveal>
-
-          {/* ── Dos columnas: box de la silueta (abraza la foto) + panel dinámico ── */}
-          <Reveal direction="up" distance={22} duration={0.65} w="100%">
-            <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "stretch" }}
-                  justify="center" gap={{ base: 8, md: 8 }} w="100%">
-
-              {/* Box de la silueta: apenas más grande que la foto */}
-              <Box position="relative" flexShrink={0} borderRadius="2xl" overflow="hidden"
-                   boxShadow={CAJA_GLOW} p={{ base: 4, md: 5 }} alignSelf={{ base: "center", md: "flex-start" }}>
-                <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-                <Box position="relative" zIndex={1} w={SILUETA_W} maxW="100%">
-                  <Box position="relative" w="100%" sx={{ aspectRatio: "1 / 2" }}>
-                    <Image
-                      src={SILUETA_IMG}
-                      alt="Silueta humana con órganos"
-                      w="100%" h="100%" objectFit="contain"
-                      fallback={
-                        <Flex w="100%" h="100%" align="center" justify="center" direction="column" gap={2}
-                              border={`1px dashed ${fisiologiaTxt}55`} borderRadius="2xl" textAlign="center" px={4}>
-                          <Text color={`${fisiologiaTxt}cc`} fontSize="sm" fontStyle="italic">
-                            Silueta con los órganos (próximamente)
-                          </Text>
-                        </Flex>
-                      }
-                    />
-                    {/* Puntos pulsables (posiciones provisionales) */}
-                    {ORGANOS.map((o) => (
-                      <Hotspot key={o.key} organo={o} active={organo.key === o.key} onClick={() => setOrgano(o)} />
-                    ))}
+              {/* Barra de progreso global: el usuario siente que recorre un camino que se guarda */}
+              <Reveal direction="up" distance={14} duration={0.55} w="100%" display="flex" justifyContent="center">
+                <Flex direction="column" align="center" gap={2} w="100%" maxW="440px">
+                  <Flex align="center" justify="space-between" w="100%">
+                    <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.06em"
+                          style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
+                      {vistasTotal === TOTAL_CELULAS && TOTAL_CELULAS > 0
+                        ? "✓ Has recorrido todas tus células"
+                        : `${vistasTotal} de ${TOTAL_CELULAS} células descubiertas`}
+                    </Text>
+                    <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}>
+                      {pct}%
+                    </Text>
+                  </Flex>
+                  <Box w="100%" h="7px" borderRadius="full" bg="rgba(255,255,255,0.18)" overflow="hidden">
+                    <Box h="100%" borderRadius="full" w={`${pct}%`} transition="width 0.5s ease"
+                         bgGradient={`linear(to-r, ${fisiologiaTxt}, #ffffff)`}
+                         boxShadow={`0 0 12px ${fisiologiaTxt}`} />
                   </Box>
-                </Box>
-              </Box>
+                </Flex>
+              </Reveal>
 
-              {/* Panel derecho: el órgano pulsado → foto+título, consejos y sus células */}
-              <Box flex="1" minW={0} w="100%">
-                <PanelDerecha organo={organo} vistas={vistas} onCelula={verCelula} onConsejo={setConsejo} />
-              </Box>
-            </Flex>
-          </Reveal>
+              {/* ── Cuadrícula de tarjetas de órgano (Pokédex) ── */}
+              <Reveal direction="up" distance={22} duration={0.65} w="100%">
+                <Box
+                  w="100%"
+                  display="grid"
+                  gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+                  gap={{ base: 4, md: 6 }}
+                >
+                  {ORGANOS.map((o) => (
+                    <OrganoCard key={o.key} organo={o} vistas={vistas}
+                                onClick={() => abrirOrgano(o)} />
+                  ))}
+                </Box>
+              </Reveal>
+            </>
+          ) : (
+            /* ── Ficha del órgano a pantalla completa ── */
+            <Reveal key={organo.key} direction="up" distance={18} duration={0.5} w="100%">
+              <OrganoDetalle organo={organo} vistas={vistas} onCelula={verCelula}
+                             onConsejo={setConsejo} onBack={volverGaleria} />
+            </Reveal>
+          )}
         </Flex>
       </Flex>
 
