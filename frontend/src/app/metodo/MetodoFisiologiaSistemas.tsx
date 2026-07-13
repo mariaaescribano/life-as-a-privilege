@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,6 +10,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
@@ -33,7 +35,7 @@ function SistemaBox({
       overflow="hidden"
       w="100%"
       h="100%"
-      borderRadius="xl"
+      borderRadius="2xl"
       border={`1px solid ${active ? fisiologiaTxt : `${fisiologiaTxt}44`}`}
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
@@ -41,15 +43,15 @@ function SistemaBox({
       boxShadow={active
         ? `0 6px 24px rgba(0,0,0,0.3), 0 0 24px ${sistema.color}, 0 0 14px ${fisiologiaTxt}66`
         : `0 4px 16px rgba(0,0,0,0.22), 0 0 14px ${fisiologiaTxt}1f`}
-      _hover={{ transform: "translateY(-3px)", borderColor: `${fisiologiaTxt}aa`,
-                boxShadow: `0 10px 28px rgba(0,0,0,0.32), 0 0 22px ${sistema.color}` }}
+      _hover={{ transform: "translateY(-4px)", borderColor: `${fisiologiaTxt}aa`,
+                boxShadow: `0 10px 30px rgba(0,0,0,0.32), 0 0 22px ${sistema.color}` }}
       _active={{ transform: "translateY(-1px)" }}
     >
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="xl" />
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={3}
-            p={{ base: 4, md: 5 }} h="100%">
-        {/* Imagen del sistema (pendiente) → de momento inicial con color de acento */}
-        <Box w="100%" aspectRatio={{ base: 1.4, md: 1.5 }} borderRadius="lg" overflow="hidden"
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
+            p={{ base: 4, md: 6 }} h="100%">
+        {/* Imagen cuadrada del sistema → de momento inicial con color de acento */}
+        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
              bg={`${sistema.color}22`} border={`1px solid ${sistema.color}66`}
              boxShadow={`0 0 12px ${sistema.color}44`}
              display="flex" alignItems="center" justifyContent="center">
@@ -63,9 +65,9 @@ function SistemaBox({
             </Text>
           )}
         </Box>
-        <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
-              fontSize={{ base: "md", md: "lg" }} letterSpacing="0.02em"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65)" }}>
+        <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.25" textAlign="center"
+              fontSize={{ base: "lg", md: "2xl" }} letterSpacing="0.02em"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.4)" }}>
           {sistema.label}
         </Text>
       </Flex>
@@ -78,6 +80,12 @@ export default function MetodoFisiologiaSistemas() {
   const [loading, setLoading] = useState(true);
   const [sistema, setSistema] = useState<Sistema | null>(null);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // La rejilla de sistemas aparece UNA A UNA en cuanto la página está lista.
+  // (No usamos useInView porque la rejilla solo se monta tras el loading y el
+  //  observer del nivel superior se engancharía antes de que exista → no se
+  //  vería nada.)
+  const reduce = useReducedMotion();
+  const [gridEnter, setGridEnter] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -95,6 +103,15 @@ export default function MetodoFisiologiaSistemas() {
     })();
   }, [navigate]);
 
+  // En cuanto la página deja de cargar, dejamos que las tarjetas entren
+  // escalonadas (un frame después, para que la transición se aprecie).
+  useEffect(() => {
+    if (loading) return;
+    if (reduce) { setGridEnter(true); return; }
+    const id = requestAnimationFrame(() => setGridEnter(true));
+    return () => cancelAnimationFrame(id);
+  }, [loading, reduce]);
+
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   return (
@@ -104,45 +121,53 @@ export default function MetodoFisiologiaSistemas() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Sistemas"
-            pageLabel="1/2"
+            pageLabel="3/4"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Las células de tus órganos", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
+            prev={{ label: "← Las células", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
             extra={celulasBtn}
             next={{ label: "El cuerpo →", onClick: () => navigate("/metodo/fisiologia/organismo") }}
           />
+          </Reveal>
 
-          <Reveal direction="up" distance={18} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px"
                   style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Varios órganos que colaboran forman un sistema. Pulsa cada sistema para conocerlo
-              y registrar cómo lo sientes.
+              Varios órganos que colaboran forman un sistema. Pulsa cada sistema para conocerlo.
             </Text>
           </Reveal>
 
-          {/* ── Rejilla de sistemas: 3 por fila (2 en móvil) ── */}
-          <Reveal direction="up" distance={22} duration={0.65} w="100%">
-            <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {SISTEMAS.map((s) => (
-                <SistemaBox key={s.key} sistema={s} active={sistema?.key === s.key} onClick={() => setSistema(s)} />
-              ))}
-            </SimpleGrid>
-          </Reveal>
+          {/* ── Rejilla de sistemas: 3 por fila (2 en móvil). Las tarjetas
+              aparecen una a una al hacer scroll (fundido + subida escalonada). ── */}
+          <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+            {SISTEMAS.map((s, i) => (
+              <Box key={s.key}
+                   opacity={gridEnter ? 1 : 0}
+                   transform={gridEnter ? "translateY(0) scale(1)" : "translateY(20px) scale(0.96)"}
+                   transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
+                   sx={{ transitionDelay: `${i * 0.07}s` }}>
+                <SistemaBox sistema={s} active={sistema?.key === s.key} onClick={() => setSistema(s)} />
+              </Box>
+            ))}
+          </SimpleGrid>
         </Flex>
       </Flex>
 
-      {/* Modal del sistema: su cómic + el test de autorregistro (contenido pendiente) */}
-      <SistemaModal sistema={sistema} onClose={() => setSistema(null)} />
+      {/* Modal inmersivo del sistema: imagen + descripción, con flechas para
+          moverse entre sistemas sin cerrar. */}
+      <SistemaModal sistema={sistema} sistemas={SISTEMAS} onSelect={setSistema} onClose={() => setSistema(null)} />
 
       {celulasModal}
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

@@ -135,6 +135,7 @@ export default function MetodoFisiologia() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Fisiología"
@@ -147,9 +148,10 @@ export default function MetodoFisiologia() {
             extra={celulasBtn}
             next={{ label: "Comenzar →", onClick: comenzar }}
           />
+          </Reveal>
 
           {/* ── Bienvenida contemplativa ── */}
-          <Reveal w="100%">
+          <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">

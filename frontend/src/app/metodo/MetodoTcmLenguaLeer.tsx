@@ -286,34 +286,36 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
         </Box>
       </Reveal>
 
-      {/* Un box por desequilibrio (sin franja lateral; título · elemento · señales) */}
-      {!sano && patrones.map(({ patron, info, veces }) => {
+      {/* Un box por desequilibrio, en rejilla de 2 columnas (menos extendidos) */}
+      {!sano && (
+      <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 5, md: 6 }} w="100%">
+      {patrones.map(({ patron, info, veces }) => {
         const E = ELEMENTOS[info.elemento];
         return (
-          <Reveal key={patron} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.2} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+          <Reveal key={patron} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.2} w="100%" h="100%">
+            <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
                  boxShadow={`${CAJA_GLOW}, 0 0 34px ${E.color}44`}>
               <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
-                {/* Título del patrón · p.ej. «Calor» */}
-                <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={800} lineHeight="1.1"
-                      style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${E.color}66` }}>
-                  {info.nombre}
-                </Text>
-                {/* Elemento (p.ej. «Fuego») + nº de señales */}
-                <Flex align="center" gap={3} mt={2} wrap="wrap">
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 7 }} py={{ base: 6, md: 7 }}>
+                {/* Cabecera del patrón · rediseñada: elemento arriba, título debajo */}
+                <Flex align="center" justify="space-between" gap={2} wrap="wrap">
                   <Flex align="center" gap={2}>
-                    <Box w="11px" h="11px" borderRadius="full" bg={E.color}
+                    <Box w="10px" h="10px" borderRadius="full" bg={E.color}
                          style={{ boxShadow: `0 0 8px ${E.color}` }} />
-                    <Text color={E.color} fontSize={{ base: "md", md: "lg" }} fontWeight={700} letterSpacing="0.04em"
+                    <Text color={E.color} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
                           style={{ textShadow: `0 0 10px ${E.color}66` }}>
                       {E.nombre}
                     </Text>
                   </Flex>
-                  <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic">
+                  <Text color="rgba(255,255,255,0.5)" fontSize="2xs" fontStyle="italic" letterSpacing="0.04em">
                     {veces} {veces === 1 ? "señal" : "señales"}
                   </Text>
                 </Flex>
+                {/* Título del patrón · p.ej. «Calor» */}
+                <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.15" mt={2}
+                      style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${E.color}66` }}>
+                  {info.nombre}
+                </Text>
 
                 {/* Separador horizontal blanco */}
                 <Box h="1px" w="100%" my={{ base: 4, md: 5 }} bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
@@ -344,6 +346,8 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
           </Reveal>
         );
       })}
+      </Box>
+      )}
 
       {/* Nota final */}
       {!sano && (
@@ -371,9 +375,9 @@ function Banda({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Separador horizontal BLANCO entre apartados ──────────────────────────────
+// ── Separador horizontal BLANCO entre apartados (blanco completo, de lado a lado) ─
 function Separador() {
-  return <Box h="1px" w="100%" bgGradient="linear(to-r, transparent, #ffffff, transparent)" />;
+  return <Box h="1px" w="100%" bg="#ffffff" />;
 }
 
 // ── Separador con el mandala en medio (entre el box de la herramienta y la

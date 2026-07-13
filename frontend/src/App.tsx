@@ -104,6 +104,8 @@ import MetodoFisiologiaOrganos from "./app/metodo/MetodoFisiologiaOrganos";
 import MetodoFisiologiaSistemas from "./app/metodo/MetodoFisiologiaSistemas";
 import MetodoFisiologiaOrganismo from "./app/metodo/MetodoFisiologiaOrganismo";
 import MetodoFisiologiaAnalitica from "./app/metodo/MetodoFisiologiaAnalitica";
+import MetodoFisiologiaProfundiza from "./app/metodo/MetodoFisiologiaProfundiza";
+import MetodoFisiologiaTema from "./app/metodo/MetodoFisiologiaTema";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -236,6 +238,8 @@ export default function App()
       <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/organismo" element={<PrivateRoute><MetodoFisiologiaOrganismo /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/analitica" element={<PrivateRoute><MetodoFisiologiaAnalitica /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/profundiza" element={<PrivateRoute><MetodoFisiologiaProfundiza /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/profundiza/:temaKey" element={<PrivateRoute><MetodoFisiologiaTema /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

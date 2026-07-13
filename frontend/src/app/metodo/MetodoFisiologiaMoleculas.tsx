@@ -11,6 +11,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
   fisiologiaBg,
@@ -48,9 +51,9 @@ const S_BIG: Record<Tipo, any> = {
   oxigeno: { base: "96px", md: "116px" }, hidrogeno: { base: "54px", md: "66px" }, carbono: { base: "82px", md: "102px" },
 };
 const S_MINI: Record<Tipo, any> = {
-  oxigeno: { base: "40px", md: "106px" },
-  hidrogeno: { base: "24px", md: "64px" },
-  carbono: { base: "34px", md: "94px" },
+  oxigeno: { base: "40px", md: "83px" },
+  hidrogeno: { base: "24px", md: "50px" },
+  carbono: { base: "34px", md: "73px" },
 };
 
 // ── Moléculas del recorrido (en orden) ──────────────────────────────────────
@@ -181,7 +184,7 @@ function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (p: Pie
       alignItems="center"
       gap={1}
       flexShrink={0}
-      style={{ touchAction: "none" }}
+      style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
       <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${glow}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
         <Atomo tipo={pieza.tipo} size={S_DRAG[pieza.tipo]} />
@@ -196,17 +199,21 @@ function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (p: Pie
 }
 
 // ── Enlaces (líneas del átomo central a los demás slots colocados) ──────────
+// Usamos un <svg> nativo con preserveAspectRatio="none": así el viewBox 100×100
+// se estira para llenar EXACTAMENTE el círculo, y las coordenadas (x/y en %) de
+// cada enlace coinciden con las posiciones de los átomos (left/top en %).
 function Enlaces({ mol, placed }: { mol: Mol; placed: number[] }) {
   const centro = mol.slots[0];
   return (
-    <Box as="svg" viewBox="0 0 100 100" position="absolute" inset="0" w="100%" h="100%" pointerEvents="none"
-         style={{ overflow: "visible" }}>
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none"
+         style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
+                  overflow: "visible", pointerEvents: "none" }}>
       {mol.slots.map((s, i) => {
         if (i === 0 || !placed.includes(0) || !placed.includes(i)) return null;
-        return <line key={i} x1={centro.x} y1={centro.y} x2={s.x} y2={s.y} stroke={BOND} strokeWidth={2.6}
+        return <line key={i} x1={centro.x} y1={centro.y} x2={s.x} y2={s.y} stroke={BOND} strokeWidth={1.8}
                      strokeLinecap="round" opacity={0.85} />;
       })}
-    </Box>
+    </svg>
   );
 }
 
@@ -345,7 +352,11 @@ export default function MetodoFisiologiaMoleculas() {
     setTerminado(false);
   };
 
-  if (loading) {
+  // No quitamos el spinner hasta que las fotos de los átomos estén descargadas,
+  // para que ni las fichas ni las moléculas aparezcan con la esfera de reserva.
+  const imgsListas = usePrecargarImagenes(Object.values(IMG));
+
+  if (loading || !imgsListas) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -359,8 +370,9 @@ export default function MetodoFisiologiaMoleculas() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Moléculas"
@@ -374,6 +386,7 @@ export default function MetodoFisiologiaMoleculas() {
             extra={celulasBtn}
             next={{ label: "Macromoléculas →", onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
           />
+          </Reveal>
 
           {/* Instrucción (solo mientras forma una molécula) */}
           <AnimatePresence>
@@ -510,14 +523,15 @@ export default function MetodoFisiologiaMoleculas() {
                             </Text>
                           ))}
 
-                          <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
+                          <Flex gap={4} mt="auto" pt={3} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
                             <Box as="button" onClick={siguiente}
-                                 px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                                 letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                                 boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}>
-                              {esUltima ? "Ver las moléculas de la vida →" : `Crear una molécula de ${MOLS[indice + 1].nombre} →`}
+                                 display="inline-flex" alignItems="center" gap={1.5}
+                                 bg="transparent" border="none" color={fisiologiaTxt}
+                                 fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
+                                 letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
+                                 style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
+                                 _hover={{ color: "white", transform: "translateX(3px)" }}>
+                              {esUltima ? "Ver las moléculas de la vida →" : "Siguiente →"}
                             </Box>
                           </Flex>
                         </Flex>
@@ -531,18 +545,6 @@ export default function MetodoFisiologiaMoleculas() {
                   <MBox key="final" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}>
                    <PanelBox w="100%" minH={{ md: "360px" }}>
-                    {/* Botón «volver a hacer» arriba a la derecha */}
-                    <Box as="button" onClick={empezarDeCero}
-                         position="absolute" top={{ base: 3, md: 4 }} right={{ base: 3, md: 4 }} zIndex={3}
-                         display="inline-flex" alignItems="center" gap={1.5}
-                         px={{ base: 3, md: 4 }} py={{ base: 1.5, md: 2 }} borderRadius="full"
-                         bg="rgba(0,0,0,0.4)" border={`1px solid ${fisiologiaTxt}aa`} color={fisiologiaTxt}
-                         fontFamily="'EB Garamond', serif" fontWeight={700} fontSize={{ base: "2xs", md: "xs" }}
-                         letterSpacing="0.04em" cursor="pointer" sx={{ backdropFilter: "blur(4px)" }}
-                         transition="all 0.2s"
-                         _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: fisiologiaTxt, transform: "translateY(-1px)" }}>
-                      ↺ Volver a hacer
-                    </Box>
                     <Flex direction="column" align="center" gap={{ base: 7, md: 9 }} py={{ base: 2, md: 4 }}>
 
                       <Flex wrap="nowrap" justify="center" align="flex-start" gap={{ base: 1.5, md: 5 }} w="100%">
@@ -551,7 +553,7 @@ export default function MetodoFisiologiaMoleculas() {
                                 transition={{ delay: 0.15 * i, duration: 0.6, ease: "easeOut" }}
                                 flexShrink={0}
                                 display="flex" flexDirection="column" alignItems="center" gap={{ base: 1, md: 2 }}>
-                            <Box position="relative" w={{ base: "92px", md: "300px" }} h={{ base: "92px", md: "300px" }}>
+                            <Box position="relative" w={{ base: "92px", md: "236px" }} h={{ base: "92px", md: "236px" }}>
                               <Box position="absolute" inset="0"
                                    sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
                                 <MoleculaFormada mol={m} tam={S_MINI} />
@@ -571,16 +573,16 @@ export default function MetodoFisiologiaMoleculas() {
               </AnimatePresence>
           </Box>
 
-          {/* Formar de nuevo — centrado, fuera del box, abajo (solo al ver la molécula formada) */}
-          {completo && !terminado && (
+          {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
+          {(completo || terminado) && (
             <Flex justify="center" w="100%">
-              <Box as="button" onClick={reiniciar}
+              <Box as="button" onClick={terminado ? empezarDeCero : reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                ↺ Formar de nuevo
+                ↺ Volver a hacer
               </Box>
             </Flex>
           )}
@@ -589,6 +591,7 @@ export default function MetodoFisiologiaMoleculas() {
 
       {celulasModal}
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

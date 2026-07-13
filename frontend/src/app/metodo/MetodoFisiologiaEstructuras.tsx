@@ -11,6 +11,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import { ComicCelulaModal } from "../../components/metodo/ComicCelulaModal";
 import {
   API_URL,
@@ -33,7 +35,7 @@ const MACRO: Record<Macro, { color: string; glyph: string; img: string }> = {
 };
 
 // ── Estructuras celulares ────────────────────────────────────────────────────
-type EstId = "adn" | "membrana" | "mitocondria" | "ribosoma";
+type EstId = "nucleo" | "membrana" | "mitocondria" | "ribosoma";
 type Forma = "helice" | "membrana" | "cluster";
 
 interface Ingrediente { macro: Macro; n: number; label: string; }
@@ -45,19 +47,20 @@ interface EstDef {
   desc: string;          // frase de la tarjeta
   ingredientes: Ingrediente[];
   resultado: string[];
-  resultadoImg: string;
+  resultadoImg: string;   // circular · se usa en el resultado (Fase B)
+  cuadradoImg: string;    // cuadrada · se usa en el box de la rejilla
 }
 
 const ESTRUCTURAS: EstDef[] = [
   {
-    id: "adn", nombre: "ADN", glow: "#9ab6f0", forma: "helice",
+    id: "nucleo", nombre: "Núcleo", glow: "#9ab6f0", forma: "cluster",
     desc: "Guarda y protege tu información genética.",
-    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }],
+    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "membrana" }],
     resultado: [
-      "El ADN se enrolla sobre sí mismo y se compacta para caber dentro de la célula, en el núcleo.",
-      "En él están escritas, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es tu manual de la vida.",
+      "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
+      "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la vida.",
     ],
-    resultadoImg: `${PRE}/adn.png`,
+    resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/adn.png`,
   },
   {
     id: "membrana", nombre: "Membrana celular", glow: "#f2c86b", forma: "membrana",
@@ -67,7 +70,7 @@ const ESTRUCTURAS: EstDef[] = [
       "Los fosfolípidos se ordenan solos en una doble capa, y las proteínas se incrustan como puertas y sensores.",
       "Así nace la membrana: la frontera viva que separa el interior de la célula del mundo exterior y controla el paso.",
     ],
-    resultadoImg: `${PRE}/membrana.png`,
+    resultadoImg: `${PRE}/circularmembrana.png`, cuadradoImg: `${PRE}/membrana.png`,
   },
   {
     id: "mitocondria", nombre: "Mitocondria", glow: "#e08a8a", forma: "cluster",
@@ -77,7 +80,7 @@ const ESTRUCTURAS: EstDef[] = [
       "Con sus membranas plegadas y muchísimas proteínas, la mitocondria transforma los nutrientes y el oxígeno en energía.",
       "Es la central eléctrica que fabrica el ATP, el combustible que mantiene en marcha cada proceso de tu cuerpo.",
     ],
-    resultadoImg: `${PRE}/mitocondria.png`,
+    resultadoImg: `${PRE}/circularmitocondria.png`, cuadradoImg: `${PRE}/mitocondria.png`,
   },
   {
     id: "ribosoma", nombre: "Ribosoma", glow: "#7fd6c2", forma: "cluster",
@@ -87,7 +90,7 @@ const ESTRUCTURAS: EstDef[] = [
       "Hecho de ARN y de proteínas, el ribosoma lee las instrucciones que vienen del ADN.",
       "Con ellas ensambla aminoácidos uno tras otro y fabrica nuevas proteínas: convierte la información genética en materia viva.",
     ],
-    resultadoImg: `${PRE}/ribosoma.png`,
+    resultadoImg: `${PRE}/circularribosoma.png`, cuadradoImg: `${PRE}/ribosoma.png`,
   },
 ];
 
@@ -162,10 +165,10 @@ function LadrilloFicha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRec
       alignItems="center"
       gap={1}
       flexShrink={0}
-      style={{ touchAction: "none" }}
+      style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
       <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${st.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
-        <Perla macro={pieza.macro} size={{ base: "44px", md: "54px" }} />
+        <Perla macro={pieza.macro} size={{ base: "62px", md: "80px" }} />
       </Box>
       <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
             letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
@@ -333,7 +336,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
               <PanelBox flex="1">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                   <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
-                    ¡Has construido {def.id === "adn" ? "el ADN" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
+                    ¡Has construido {def.id === "nucleo" ? "el núcleo" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
                   </Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
@@ -402,7 +405,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
             justifyContent="center"
           >
             {hecha ? (
-              <Image src={e.resultadoImg} alt={e.nombre} w="100%" h="100%" objectFit="contain"
+              <Image src={e.cuadradoImg} alt={e.nombre} w="100%" h="100%" objectFit="cover"
                      fallback={<EstDibujada def={e} />} />
             ) : (
               <Text color="rgba(255,255,255,0.5)" fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
@@ -514,6 +517,7 @@ export default function MetodoFisiologiaEstructuras() {
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Estructuras celulares"
@@ -527,6 +531,7 @@ export default function MetodoFisiologiaEstructuras() {
             extra={celulasBtn}
             next={{ label: "Crea la célula →", onClick: irSiguiente }}
           />
+          </Reveal>
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
@@ -566,6 +571,7 @@ export default function MetodoFisiologiaEstructuras() {
       {celulasModal}
       <ComicCelulaModal isOpen={comicOpen} onContinue={comicContinuar} onClose={comicCerrar} />
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

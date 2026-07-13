@@ -147,7 +147,12 @@ export default function MetodoAyurvedaDoshaCursos() {
 
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {loading || !fotosListas ? (
-            <SpinnerTurquesa fullScreen={false} />
+            <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
+              <SpinnerTurquesa fullScreen={false} />
+              <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                Cargando cursos…
+              </Text>
+            </Flex>
           ) : cursos.length > 0 ? (
             cursos.length === 1 ? (
               <Flex

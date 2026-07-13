@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { CelulaCard, CelulaModal, ConsejoModal, type Consejo } from "../../components/metodo/celulasUi";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
@@ -22,6 +23,8 @@ const pick = (...ids: string[]): Celula[] =>
 
 // Clave en metodo_fisiologia.data donde guardamos las células ya descubiertas.
 const VISTAS_KEY = "celulas_vistas";
+// Clave donde guardamos las curiosidades (consejos) ya leídas, por su titular.
+const CURIOSIDADES_KEY = "curiosidades_leidas";
 
 interface Organo {
   key: string;
@@ -540,6 +543,12 @@ const ORGANOS: Organo[] = [
         texto: <>La grasa situada bajo la piel suele ser mucho menos perjudicial que la grasa que rodea órganos como el hígado, el páncreas o el intestino. Esta grasa visceral libera más moléculas inflamatorias directamente hacia la circulación que llega al hígado, favoreciendo la resistencia a la insulina, el hígado graso y la alteración del metabolismo. Con el tiempo aumenta el riesgo de diabetes tipo 2, hipertensión, enfermedad cardiovascular e incluso algunos tipos de cáncer. No toda la grasa tiene el mismo impacto sobre la salud: su localización importa tanto como su cantidad.</>,
       },
     ] },
+  { key: "lengua",    label: "Lengua",         foto: "/recorrido/fisiologia/organos/lengua.png",   hotspot: { top: 16, left: 50 }, celulas: pick("gustativa-tipo2", "gustativa-tipo3", "soporte-gusto", "basal-gusto"),
+    descripcion: <>Es un órgano muscular ágil, cubierto de papilas que albergan los botones del gusto. Dentro de ellos, unas células especializadas detectan los cinco sabores —dulce, salado, ácido, amargo y umami— y envían la señal al cerebro. Además de saborear, la lengua mezcla y empuja los alimentos para tragarlos y es esencial para hablar.</> },
+  { key: "bazo",      label: "Bazo",           foto: "/recorrido/fisiologia/organos/bazo.png",     hotspot: { top: 38, left: 57 }, celulas: pick("macrofago-esplenico", "pulpa-blanca"),
+    descripcion: <>Es el gran filtro de la sangre. En su pulpa roja, los macrófagos retiran los glóbulos rojos viejos o dañados y reciclan su hierro; en su pulpa blanca vigila la sangre en busca de infecciones, como un ganglio linfático conectado directamente al torrente sanguíneo. También guarda una reserva de células defensivas lista para actuar.</> },
+  { key: "vesicula",  label: "Vesícula biliar", foto: "/recorrido/fisiologia/organos/vesicula.png", hotspot: { top: 36, left: 41 }, celulas: pick("colangiocito-vesicula", "muscular-vesicula"),
+    descripcion: <>Es una pequeña bolsa situada bajo el hígado que guarda y concentra la bilis entre comidas. Cuando comes grasa, se contrae y libera esa bilis al intestino para ayudar a digerirla y a absorber las vitaminas liposolubles. Trabaja en equipo con el hígado y el páncreas dentro del sistema digestivo.</> },
 ];
 
 // Universo de células alcanzables desde la galería (para el contador de progreso).
@@ -807,12 +816,14 @@ function OrganoDetalle({
   vistas,
   onCelula,
   onConsejo,
+  consejosLeidos,
   onBack,
 }: {
   organo: Organo;
   vistas: Set<string>;
   onCelula: (c: Celula) => void;
   onConsejo: (c: Consejo) => void;
+  consejosLeidos: Set<string>;
   onBack: () => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
@@ -826,11 +837,14 @@ function OrganoDetalle({
   const consejos = organo.consejos ?? [];
   const idx = consejos.length ? Math.min(consejoIdx, consejos.length - 1) : 0;
   const consejoActual = consejos.length ? consejos[idx] : null;
+  const consejoLeido = !!consejoActual && consejosLeidos.has(consejoActual.titular);
   const prevConsejo = () => setConsejoIdx((i) => (i - 1 + consejos.length) % consejos.length);
   const nextConsejo = () => setConsejoIdx((i) => (i + 1) % consejos.length);
 
   return (
-    <Flex direction="column" gap={{ base: 5, md: 6 }} w="100%">
+    /* Los tres boxes de la ficha se limitan al mismo ancho que la cabecera
+       (850px), a diferencia de la cuadrícula de tarjetas, que llega a 1100px. */
+    <Flex direction="column" gap={{ base: 5, md: 6 }} w="100%" maxW="850px" mx="auto">
       {/* 0 · Volver a la galería */}
       <Box as="button" onClick={onBack} alignSelf="flex-start"
            display="inline-flex" alignItems="center" gap={2}
@@ -910,11 +924,26 @@ function OrganoDetalle({
       {/* 3 · Consejos: un titular a la vez (sin título de sección), con flechas */}
       <FisioBox>
         <Box px={{ base: 4, md: 6 }} py={{ base: 6, md: 8 }}>
-          {consejoActual && consejos.length > 1 && (
-            <Flex justify="flex-end" mb={{ base: 2, md: 3 }}>
-              <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.06em">
-                {idx + 1} / {consejos.length}
-              </Text>
+          {consejoActual && (
+            <Flex justify="space-between" align="center" mb={{ base: 2, md: 3 }} minH="20px">
+              {/* Marca de curiosidad ya leída */}
+              {consejoLeido ? (
+                <Flex align="center" gap={1.5} color={fisiologiaTxt}
+                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                       w="15px" h="15px" fill="currentColor">
+                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                  </Box>
+                  <Text fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.08em" textTransform="uppercase">
+                    Leída
+                  </Text>
+                </Flex>
+              ) : <Box />}
+              {consejos.length > 1 && (
+                <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.06em">
+                  {idx + 1} / {consejos.length}
+                </Text>
+              )}
             </Flex>
           )}
 
@@ -937,7 +966,7 @@ function OrganoDetalle({
                      letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
                      boxShadow={`0 0 14px ${fisiologiaTxt}55`}
                      _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${fisiologiaTxt}88` }}>
-                  Leer más →
+                  {consejoLeido ? "Leer de nuevo →" : "Leer más →"}
                 </Box>
               </Flex>
 
@@ -969,6 +998,7 @@ export default function MetodoFisiologiaTodasCelulas() {
   const [celula, setCelula] = useState<Celula | null>(null);
   const [consejo, setConsejo] = useState<Consejo | null>(null);
   const [vistas, setVistas] = useState<Set<string>>(new Set());
+  const [curiosidadesLeidas, setCuriosidadesLeidas] = useState<Set<string>>(new Set());
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
 
@@ -1009,6 +1039,8 @@ export default function MetodoFisiologiaTodasCelulas() {
           dataRef.current = r.data?.data ?? {};
           const guardadas: string[] = dataRef.current?.[VISTAS_KEY] ?? [];
           if (Array.isArray(guardadas) && guardadas.length) setVistas(new Set(guardadas));
+          const leidas: string[] = dataRef.current?.[CURIOSIDADES_KEY] ?? [];
+          if (Array.isArray(leidas) && leidas.length) setCuriosidadesLeidas(new Set(leidas));
         } catch { /* sin fila todavía */ }
       } catch {
         navigate("/metodo/fisiologia");
@@ -1036,6 +1068,24 @@ export default function MetodoFisiologiaTodasCelulas() {
     }).catch(() => { /* se reintenta la próxima vez */ });
   };
 
+  // Abre una curiosidad y la marca como leída (se guarda en BD). Se usa tanto al
+  // pulsar «Leer más» como al navegar con las flechas dentro del modal.
+  const verConsejo = (c: Consejo) => {
+    setConsejo(c);
+    if (curiosidadesLeidas.has(c.titular)) return;
+    const next = new Set(curiosidadesLeidas);
+    next.add(c.titular);
+    setCuriosidadesLeidas(next);
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    const data = { ...dataRef.current, [CURIOSIDADES_KEY]: Array.from(next) };
+    dataRef.current = data;
+    axios.patch(`${API_URL}/metodo-fisiologia/${userId}`, { data }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => { /* se reintenta la próxima vez */ });
+  };
+
   const vistasTotal = UNIVERSO.filter((id) => vistas.has(id)).length;
   const pct = TOTAL_CELULAS ? Math.round((vistasTotal / TOTAL_CELULAS) * 100) : 0;
 
@@ -1050,25 +1100,27 @@ export default function MetodoFisiologiaTodasCelulas() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
 
-          <MetodoStepHeader
-            icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Las células de tus órganos"
-            pageLabel="2/2"
-            compact
-            bgColor={`${fisiologiaBg}dd`}
-            color={fisiologiaTxt}
-            nom={fisiologiaNom}
-            mb={0}
-            prev={{ label: "← Célula", onClick: () => navigate("/metodo/fisiologia/celula") }}
-            extra={celulasBtn}
-            next={{ label: "Sistemas →", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
+              title="Las células de tus órganos"
+              pageLabel="2/4"
+              compact
+              bgColor={`${fisiologiaBg}dd`}
+              color={fisiologiaTxt}
+              nom={fisiologiaNom}
+              mb={0}
+              prev={{ label: "← Célula", onClick: () => navigate("/metodo/fisiologia/celula") }}
+              extra={celulasBtn}
+              next={{ label: "Sistemas →", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
+            />
+          </Reveal>
 
           {vista === "galeria" ? (
             <>
 
               {/* Barra de progreso global: el usuario siente que recorre un camino que se guarda */}
-              <Reveal direction="up" distance={14} duration={0.55} w="100%" display="flex" justifyContent="center">
+              <Reveal direction="up" distance={14} delay={0.12} duration={0.55} w="100%" display="flex" justifyContent="center">
                 <Flex direction="column" align="center" gap={2} w="100%" maxW="440px">
                   <Flex align="center" justify="space-between" w="100%">
                     <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.06em"
@@ -1090,7 +1142,7 @@ export default function MetodoFisiologiaTodasCelulas() {
               </Reveal>
 
               {/* ── Cuadrícula de tarjetas de órgano (Pokédex) ── */}
-              <Reveal direction="up" distance={22} duration={0.65} w="100%">
+              <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
                 <Box
                   w="100%"
                   display="grid"
@@ -1108,7 +1160,8 @@ export default function MetodoFisiologiaTodasCelulas() {
             /* ── Ficha del órgano a pantalla completa ── */
             <Reveal key={organo.key} direction="up" distance={18} duration={0.5} w="100%">
               <OrganoDetalle organo={organo} vistas={vistas} onCelula={verCelula}
-                             onConsejo={setConsejo} onBack={volverGaleria} />
+                             onConsejo={verConsejo} consejosLeidos={curiosidadesLeidas}
+                             onBack={volverGaleria} />
             </Reveal>
           )}
         </Flex>
@@ -1131,11 +1184,14 @@ export default function MetodoFisiologiaTodasCelulas() {
           foto={organo.foto}
           label={organo.label}
           onClose={() => setConsejo(null)}
+          consejos={organo.consejos}
+          onSelect={verConsejo}
         />
       )}
 
       {celulasModal}
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

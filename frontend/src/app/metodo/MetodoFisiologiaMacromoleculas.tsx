@@ -11,6 +11,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
   fisiologiaBg,
@@ -40,10 +43,23 @@ interface MacroDef {
   desc: string;           // frase de la tarjeta
   resultado: string[];    // párrafos al formarla
   monomeroImg: string;    // /recorrido/fisiologia/pre/aminoacido.png …
-  resultadoImg: string;   // /recorrido/fisiologia/pre/proteina.png …
+  resultadoImg: string;   // circular · se usa en el resultado (Fase B)
+  cuadradoImg: string;    // cuadrada · se usa en el box de la rejilla
+  /** Para macromoléculas cuyas piezas NO son todas iguales (p.ej. el fosfolípido:
+   *  1 fosfato + 1 glicerol + 2 ácidos grasos). Si se define, la estación arrastra
+   *  ESTAS piezas concretas (con su propia foto) en vez de `n` monómeros iguales. */
+  componentes?: PiezaMacro[];
 }
 
+/** Una pieza arrastrable (monómero o componente) con su foto propia. */
+interface PiezaMacro { label: string; img: string; glyph: string; }
+
 const PRE = "/recorrido/fisiologia/pre";
+
+/** Lista de piezas a arrastrar: los `componentes` si existen, o `n` copias del monómero. */
+const piezasDe = (def: MacroDef): PiezaMacro[] =>
+  def.componentes ??
+  Array.from({ length: def.n }, () => ({ label: def.monomero, img: def.monomeroImg, glyph: def.glyph }));
 
 const MACROS: MacroDef[] = [
   {
@@ -54,7 +70,7 @@ const MACROS: MacroDef[] = [
       "Una proteína es una larga cadena de aminoácidos que se pliega en una forma precisa.",
       "De esa forma depende su función: hay proteínas que transportan, defienden, construyen o aceleran reacciones. Son las obreras de la célula.",
     ],
-    monomeroImg: `${PRE}/aminoacido.png`, resultadoImg: `${PRE}/enzima.png`,
+    monomeroImg: `${PRE}/aminoacido.png`, resultadoImg: `${PRE}/circularenzima.png`, cuadradoImg: `${PRE}/enzima.png`,
   },
   {
     id: "adn", nombre: "ADN", monomero: "nucleótido", monomeroPl: "nucleótidos",
@@ -64,17 +80,26 @@ const MACROS: MacroDef[] = [
       "El ADN es una cadena de nucleótidos —las letras A, T, C y G— enrollada en una doble hélice.",
       "El orden de esas letras es el manual de instrucciones para fabricar todas tus proteínas: es tu información genética.",
     ],
-    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/adn.png`,
+    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/adn.png`,
   },
   {
-    id: "lipido", nombre: "Lípidos", monomero: "fosfolípido", monomeroPl: "fosfolípidos",
-    glow: "#f2c86b", glyph: "L", n: 6, forma: "membrana",
+    id: "lipido", nombre: "Lípidos", monomero: "fosfolípido", monomeroPl: "piezas",
+    glow: "#f2c86b", glyph: "L", n: 4, forma: "membrana",
     desc: "Forman las membranas celulares.",
     resultado: [
-      "Los fosfolípidos tienen una cabeza que ama el agua y dos colas que la repelen.",
-      "Por eso se ordenan solos en una doble capa: la membrana que envuelve y protege cada una de tus células.",
+      "Un fosfolípido se forma uniendo un fosfato y un glicerol (la cabeza, que ama el agua) con dos ácidos grasos (las colas, que la repelen).",
+      "Por eso los fosfolípidos se ordenan solos en una doble capa: la membrana que envuelve y protege cada una de tus células.",
     ],
-    monomeroImg: `${PRE}/fosfolipido.png`, resultadoImg: `${PRE}/fosfolipido.png`,
+    monomeroImg: `${PRE}/fosfolipido.png`, resultadoImg: `${PRE}/circularfolipido.png`, cuadradoImg: `${PRE}/fosfolipido.png`,
+    // ⚠️ PENDIENTE: María subirá las fotos de estas 4 piezas del fosfolípido.
+    //    Rutas esperadas: pre/fosfato.png, pre/glicerol.png, pre/acidograso.png.
+    //    Mientras no existan, cada pieza cae a su esfera dibujada con su inicial.
+    componentes: [
+      { label: "fosfato", img: `${PRE}/fosfato.png`, glyph: "P" },
+      { label: "glicerol", img: `${PRE}/glicerol.png`, glyph: "G" },
+      { label: "ácido graso", img: `${PRE}/acidograso.png`, glyph: "A" },
+      { label: "ácido graso", img: `${PRE}/acidograso.png`, glyph: "A" },
+    ],
   },
   {
     id: "carbohidrato", nombre: "Carbohidratos", monomero: "glucosa", monomeroPl: "glucosas",
@@ -84,7 +109,7 @@ const MACROS: MacroDef[] = [
       "Uniendo muchas glucosas se forman los carbohidratos, como el glucógeno.",
       "Son la reserva de energía rápida del cuerpo: se guardan cuando sobra y se rompen cuando hace falta combustible.",
     ],
-    monomeroImg: `${PRE}/glucosa.png`, resultadoImg: `${PRE}/carbohidrato.png`,
+    monomeroImg: `${PRE}/glucosa.png`, resultadoImg: `${PRE}/circularcarbohidrato.png`, cuadradoImg: `${PRE}/carbohidrato.png`,
   },
 ];
 
@@ -100,24 +125,27 @@ const shimmer = keyframes`
 const perla = (c: string): string =>
   `radial-gradient(circle at 34% 30%, #ffffff 0%, ${c} 36%, ${c}dd 64%, ${c}77 100%)`;
 
-// ── Perla del monómero (imagen con reserva a esfera dibujada) ───────────────
-function Perla({ def, size }: { def: MacroDef; size: any }) {
+// ── Perla de una pieza (imagen con reserva a esfera dibujada) ───────────────
+function Perla({ pieza, glow, size }: { pieza: PiezaMacro; glow: string; size: any }) {
   return (
     <Box w={size} h={size} borderRadius="full" overflow="hidden" pointerEvents="none"
-         sx={{ boxShadow: `0 0 12px ${def.glow}aa, 0 0 24px ${def.glow}55` }}>
-      <Image src={def.monomeroImg} alt={def.monomero} w="100%" h="100%" objectFit="cover" draggable={false}
+         sx={{ boxShadow: `0 0 12px ${glow}aa, 0 0 24px ${glow}55` }}>
+      <Image src={pieza.img} alt={pieza.label} w="100%" h="100%" objectFit="cover" draggable={false}
+             fallbackStrategy="onError"
              fallback={
-               <Box w="100%" h="100%" display="flex" alignItems="center" justifyContent="center" sx={{ background: perla(def.glow) }}>
+               <Box w="100%" h="100%" display="flex" alignItems="center" justifyContent="center" sx={{ background: perla(glow) }}>
                  <Text color="rgba(0,0,0,0.55)" fontWeight="900" lineHeight="1"
-                       fontSize={{ base: "sm", md: "md" }} style={{ userSelect: "none" }}>{def.glyph}</Text>
+                       fontSize={{ base: "sm", md: "md" }} style={{ userSelect: "none" }}>{pieza.glyph}</Text>
                </Box>
              } />
     </Box>
   );
 }
 
-// ── Ficha arrastrable (un monómero) ─────────────────────────────────────────
-function MonomeroFicha({ def, onSoltar }: { def: MacroDef; onSoltar: (rect: DOMRect) => void }) {
+// ── Ficha arrastrable (una pieza) ────────────────────────────────────────────
+function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar }: {
+  pieza: PiezaMacro; glow: string; mostrarLabel?: boolean; onSoltar: (rect: DOMRect) => void;
+}) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   return (
@@ -137,10 +165,21 @@ function MonomeroFicha({ def, onSoltar }: { def: MacroDef; onSoltar: (rect: DOMR
       transition={{ type: "spring", stiffness: 320, damping: 26 }}
       cursor="grab"
       flexShrink={0}
-      style={{ touchAction: "none" }}
-      sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${def.glow}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      gap={1}
+      style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
+      sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${glow}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}
     >
-      <Perla def={def} size={{ base: "44px", md: "54px" }} />
+      <Perla pieza={pieza} glow={glow} size={{ base: "80px", md: "100px" }} />
+      {mostrarLabel && (
+        <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+              letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+          {pieza.label}
+        </Text>
+      )}
     </MBox>
   );
 }
@@ -179,11 +218,18 @@ function Estacion({
   onFormar: () => void;
   onVolver: () => void;
 }) {
-  const [puestos, setPuestos] = useState(0);
+  // Piezas a arrastrar (monómeros iguales o componentes distintos) y estado.
+  const piezas = piezasDe(def);
+  const total = piezas.length;
+  const heterogenea = !!def.componentes;
+  const [puestas, setPuestas] = useState<number[]>([]); // índices de piezas ya colocadas, en orden
   const [completo, setCompleto] = useState(yaFormada);
   const bandejaRef = useRef<HTMLDivElement>(null);
 
-  const soltar = (rect: DOMRect) => {
+  // Rehacer el ensamblaje de esta macromolécula (vuelve a la Fase A).
+  const reiniciar = () => { setPuestas([]); setCompleto(false); };
+
+  const soltar = (pi: number, rect: DOMRect) => {
     const el = bandejaRef.current;
     if (!el) return;
     const c = el.getBoundingClientRect();
@@ -192,16 +238,18 @@ function Estacion({
     const py = rect.top + rect.height / 2;
     const dentro = px >= c.left - m && px <= c.right + m && py >= c.top - m && py <= c.bottom + m;
     if (!dentro) return;
-    setPuestos((prev) => {
-      const next = prev + 1;
-      if (next >= def.n) {
+    setPuestas((prev) => {
+      if (prev.includes(pi)) return prev;
+      const next = [...prev, pi];
+      if (next.length >= total) {
         setTimeout(() => { setCompleto(true); onFormar(); }, 500);
       }
-      return Math.min(next, def.n);
+      return next;
     });
   };
 
-  const restantes = def.n - puestos;
+  // Índices de las piezas que aún quedan por arrastrar.
+  const pendientes = piezas.map((_, i) => i).filter((i) => !puestas.includes(i));
 
   return (
     <MBox key={def.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} w="100%">
@@ -225,7 +273,9 @@ function Estacion({
                   style={{ textShadow: INK }}>{def.nombre}</Text>
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" mt={1} mb={6} style={{ textShadow: INK }}>
-              Arrastra {def.n} {def.monomeroPl} a la bandeja para encadenarlos.
+              {heterogenea
+                ? `Arrastra las ${total} piezas a la bandeja para formar el ${def.monomero}.`
+                : `Arrastra ${total} ${def.monomeroPl} a la bandeja para encadenarlos.`}
             </Text>
 
             {/* Bandeja de ensamblaje */}
@@ -235,18 +285,18 @@ function Estacion({
                        boxShadow: `inset 0 0 40px rgba(0,0,0,0.85), 0 0 20px ${def.glow}22` }}>
               <Box position="absolute" inset="8px" borderRadius="xl" pointerEvents="none"
                    border={`1.5px dashed ${def.glow}55`} animation={`${pulse} 3.4s ease-in-out infinite`} />
-              {/* monómeros ya colocados */}
-              {Array.from({ length: puestos }).map((_, i) => {
-                const p = posEnBandeja(def.forma, i, def.n);
+              {/* piezas ya colocadas (en el orden en que se soltaron) */}
+              {puestas.map((pi, order) => {
+                const p = posEnBandeja(def.forma, order, total);
                 return (
-                  <MBox key={i} position="absolute" left={`${p.x}%`} top={`${p.y}%`} transform="translate(-50%,-50%)"
+                  <MBox key={pi} position="absolute" left={`${p.x}%`} top={`${p.y}%`} transform="translate(-50%,-50%)"
                         initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: "spring", stiffness: 340, damping: 20 }}>
-                    <Perla def={def} size={{ base: "34px", md: "42px" }} />
+                    <Perla pieza={piezas[pi]} glow={def.glow} size={{ base: "34px", md: "42px" }} />
                   </MBox>
                 );
               })}
-              {puestos === 0 && (
+              {puestas.length === 0 && (
                 <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
                   <Text color={`${def.glow}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                         style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>bandeja de ensamblaje</Text>
@@ -254,24 +304,25 @@ function Estacion({
               )}
             </Box>
 
-            {/* Monómeros a arrastrar */}
+            {/* Piezas a arrastrar */}
             <Flex wrap="wrap" justify="center" align="center" gap={{ base: 3, md: 4 }} minH="60px">
               <AnimatePresence>
-                {Array.from({ length: restantes }).map((_, i) => (
-                  <MonomeroFicha key={i} def={def} onSoltar={soltar} />
+                {pendientes.map((pi) => (
+                  <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={heterogenea}
+                                 onSoltar={(rect) => soltar(pi, rect)} />
                 ))}
               </AnimatePresence>
-              {restantes === 0 && (
+              {pendientes.length === 0 && (
                 <Text color={`${def.glow}bb`} fontSize="md" fontStyle="italic">…plegándose…</Text>
               )}
             </Flex>
 
             {/* progreso */}
             <Flex justify="center" gap={2} mt={5}>
-              {Array.from({ length: def.n }).map((_, i) => (
+              {Array.from({ length: total }).map((_, i) => (
                 <Box key={i} w="9px" h="9px" borderRadius="full"
-                     bg={i < puestos ? def.glow : "rgba(255,255,255,0.22)"}
-                     boxShadow={i < puestos ? `0 0 10px ${def.glow}` : "none"} transition="all 0.3s" />
+                     bg={i < puestas.length ? def.glow : "rgba(255,255,255,0.22)"}
+                     boxShadow={i < puestas.length ? `0 0 10px ${def.glow}` : "none"} transition="all 0.3s" />
               ))}
             </Flex>
             </PanelBox>
@@ -291,6 +342,7 @@ function Estacion({
                          animation={`${shimmer} 3.6s ease-in-out infinite`}
                          sx={{ boxShadow: `0 0 46px ${def.glow}55, 0 0 88px ${def.glow}33` }} />
                     <Image src={def.resultadoImg} alt={def.nombre} w="100%" h="100%" objectFit="contain"
+                           fallbackStrategy="onError"
                            style={{ filter: `drop-shadow(0 0 16px ${def.glow}55)` }}
                            fallback={<MacroDibujada def={def} />} />
                   </Flex>
@@ -308,16 +360,20 @@ function Estacion({
                     <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
-                  <Box as="button" onClick={onVolver} alignSelf={{ base: "center", md: "flex-start" }} mt={2}
-                       px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                       letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                       boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                    Volver a las macromoléculas →
-                  </Box>
                 </Flex>
               </PanelBox>
+            </Flex>
+
+            {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
+            <Flex justify="center" w="100%" mt={{ base: 5, md: 6 }}>
+              <Box as="button" onClick={reiniciar}
+                   display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                   letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                   _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                ↺ Volver a hacer
+              </Box>
             </Flex>
           </MBox>
         )}
@@ -388,7 +444,8 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
             justifyContent="center"
           >
             {hecha ? (
-              <Image src={m.resultadoImg} alt={m.nombre} w="100%" h="100%" objectFit="contain"
+              <Image src={m.cuadradoImg} alt={m.nombre} w="100%" h="100%" objectFit="cover"
+                     fallbackStrategy="onError"
                      fallback={<MacroDibujada def={m} />} />
             ) : (
               <Text color="rgba(255,255,255,0.5)" fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
@@ -445,12 +502,27 @@ export default function MetodoFisiologiaMacromoleculas() {
 
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        let yaFormadas: MacroId[] = [];
         try {
           const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           dataRef.current = r.data?.data ?? {};
           const guardadas = dataRef.current?.macromoleculas_hechas;
-          if (Array.isArray(guardadas)) setFormadas(guardadas.filter((x: any): x is MacroId => MACROS.some((m) => m.id === x)));
+          if (Array.isArray(guardadas)) {
+            yaFormadas = guardadas.filter((x: any): x is MacroId => MACROS.some((m) => m.id === x));
+            setFormadas(yaFormadas);
+          }
         } catch { /* sin fila todavía */ }
+        // No mostramos la página hasta que TODAS las fotos del juego estén
+        // descargadas (perlas de monómero, resultado circular y cuadrada de la
+        // rejilla), para que al ir de box en box formando no aparezca ninguna
+        // foto de golpe. El «?» de las no formadas depende de `hecha`, no de la
+        // carga, así que se sigue mostrando igual.
+        await precargarImagenes(
+          MACROS.flatMap((m) => [
+            m.monomeroImg, m.resultadoImg, m.cuadradoImg,
+            ...(m.componentes?.map((c) => c.img) ?? []),
+          ]),
+        );
       } catch {
         navigate("/metodo/fisiologia");
         return;
@@ -496,8 +568,9 @@ export default function MetodoFisiologiaMacromoleculas() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Macromoléculas"
@@ -511,6 +584,7 @@ export default function MetodoFisiologiaMacromoleculas() {
             extra={celulasBtn}
             next={{ label: "Estructuras →", onClick: () => navigate("/metodo/fisiologia/estructuras") }}
           />
+          </Reveal>
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
@@ -532,7 +606,7 @@ export default function MetodoFisiologiaMacromoleculas() {
             />
           ) : (
             /* ── 4 boxes en rejilla 2×2 ── */
-            <Flex wrap="wrap" justify="center" w="100%" maxW="880px" gap={{ base: 4, md: 5 }}>
+            <Flex wrap="wrap" justify="center" w="100%" maxW="850px" gap={{ base: 4, md: 5 }}>
               {MACROS.map((m) => (
                 <Box key={m.id} flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
                   <MacroCard m={m} hecha={formadas.includes(m.id)} onClick={() => setActiva(m.id)} />
@@ -545,6 +619,7 @@ export default function MetodoFisiologiaMacromoleculas() {
 
       {celulasModal}
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

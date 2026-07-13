@@ -4,6 +4,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -228,20 +229,22 @@ export default function MetodoFisiologiaAnalitica() {
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="820px" gap={6}>
 
-          <MetodoStepHeader
-            icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Tu analítica"
-            compact
-            bgColor={`${fisiologiaBg}dd`}
-            color={fisiologiaTxt}
-            nom={fisiologiaNom}
-            mb={0}
-            prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
-            extra={celulasBtn}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
+              title="Tu analítica"
+              compact
+              bgColor={`${fisiologiaBg}dd`}
+              color={fisiologiaTxt}
+              nom={fisiologiaNom}
+              mb={0}
+              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+              extra={celulasBtn}
+            />
+          </Reveal>
 
           {/* Intro + aviso */}
-          <Reveal w="100%">
+          <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  boxShadow={`0 0 16px rgba(255,255,255,0.12), 0 0 40px ${fisiologiaTxt}16`}>
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
@@ -342,6 +345,7 @@ export default function MetodoFisiologiaAnalitica() {
       </Flex>
 
       {celulasModal}
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

@@ -11,6 +11,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   fisiologiaBg,
@@ -105,7 +107,7 @@ function FichaArrastrable({
       alignItems="center"
       gap={1}
       flexShrink={0}
-      style={{ touchAction: "none" }}
+      style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
       <Box
         position="relative"
@@ -287,8 +289,9 @@ export default function MetodoFisiologiaParticulas() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1120px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Partículas"
@@ -302,6 +305,7 @@ export default function MetodoFisiologiaParticulas() {
             extra={celulasBtn}
             next={{ label: "Átomo →", onClick: () => navigate("/metodo/fisiologia/atomos"), disabled: !completo, disabledTooltip: "Primero construye la partícula" }}
           />
+          </Reveal>
 
           {/* Instrucción (solo mientras construye) */}
           <AnimatePresence>
@@ -447,7 +451,7 @@ export default function MetodoFisiologiaParticulas() {
                   </Box>
                 </Flex>
 
-                {/* Construir de nuevo — centrado, fuera del box, abajo */}
+                {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
                 <Flex justify="center" w="100%" mt={{ base: 5, md: 6 }}>
                   <Box as="button" onClick={reiniciar}
                        display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
@@ -455,7 +459,7 @@ export default function MetodoFisiologiaParticulas() {
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                        _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                    ↺ Construir de nuevo
+                    ↺ Volver a hacer
                   </Box>
                 </Flex>
               </MBox>
@@ -466,6 +470,7 @@ export default function MetodoFisiologiaParticulas() {
 
       {celulasModal}
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

@@ -6,9 +6,8 @@ import type { Vineta } from "./ComicViewer";
 // aparece en la galería de Ilustraciones.
 //
 // Imágenes: /viñetas/fisiologia/celulacomic/celula1.png … celula7.png (ya están,
-// una por viñeta 1-7). La 8ª (el zoom-out final «la más bonita») aún no tiene
-// foto: apunta a celula8.png y, mientras no exista, el ComicViewer pinta un
-// placeholder «próximamente».
+// una por viñeta 1-7). La 8ª (el zoom-out final) reutiliza celula1.png para
+// cerrar el círculo volviendo a la imagen de apertura.
 export const CELULA_VIVA: Vineta[] = [
   {
     src: "/viñetas/fisiologia/celulacomic/celula1.png",
@@ -61,7 +60,9 @@ export const CELULA_VIVA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/celulacomic/celula8.png",
+    // Zoom-out final: reutiliza la PRIMERA foto del cómic (celula1.png) para
+    // cerrar el círculo volviendo a la imagen de apertura.
+    src: "/viñetas/fisiologia/celulacomic/celula1.png",
     paragraphs: [
       "En una sola célula ocurren millones de reacciones cada segundo. Y tu cuerpo está formado por billones de ellas.",
       "Mientras lees estas palabras, un universo entero trabaja en silencio para mantenerte con vida.",

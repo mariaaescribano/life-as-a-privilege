@@ -4,6 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -33,14 +34,16 @@ interface Nivel {
   requiere?: string;
   /** Antetítulo (por defecto «Nivel {n}»). P.ej. la práctica usa «Práctica». */
   eyebrow?: string;
-  /** Si es "gota", la tarjeta muestra el icono de análisis en vez del número. */
-  iconKind?: "gota";
+  /** Icono del círculo en vez del número: "gota" (análisis) o "avanzado" (PROFUNDIZA). */
+  iconKind?: "gota" | "avanzado";
 }
 
 const NIVELES: Nivel[] = [
   { n: 1, titulo: "MATERIA", sub: "De qué estás hecho.", ruta: "/metodo/fisiologia/particulas" },
-  { n: 2, titulo: "VIDA", sub: "Cuando la materia se vuelve viva.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho" },
-  { n: 3, titulo: "SISTEMAS", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/sistemas", requiere: "organos_hecho" },
+  // VIDA absorbe Sistemas: célula → todas-tus-células → sistemas → organismo.
+  { n: 2, titulo: "VIDA", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho" },
+  // 3ª tarjeta · contenido avanzado para profundizar (todo abierto).
+  { n: 3, titulo: "PROFUNDIZA", sub: "Para los que quieren toda la verdad.", ruta: "/metodo/fisiologia/profundiza", eyebrow: "Avanzado", iconKind: "avanzado" },
   // 4ª tarjeta · práctica (no es un nivel del ascenso): va DESPUÉS de Sistemas.
   { n: 4, titulo: "TU ANALÍTICA", sub: "Aprende a leer tu análisis de sangre.", ruta: "/metodo/fisiologia/analitica", eyebrow: "Práctica", iconKind: "gota" },
 ];
@@ -54,12 +57,21 @@ const Candado = ({ size }: { size: any }) => (
   </Box>
 );
 
-// SVG gota (análisis de sangre) para la tarjeta de práctica.
+// SVG informe (análisis de sangre) para la tarjeta de práctica.
 const Gota = ({ size }: { size: any }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
        w={size} h={size} fill={fisiologiaTxt}
        style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
-    <path d="M480-80q-133 0-226.5-92.5T160-396q0-97 76.5-210T480-880q167 161 243.5 274T800-396q0 131-93.5 223.5T480-80Z" />
+    <path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" />
+  </Box>
+);
+
+// SVG «profundizar» (matraz/experimento) para la tarjeta avanzada.
+const Profundiza = ({ size }: { size: any }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={size} h={size} fill={fisiologiaTxt}
+       style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
+    <path d="M200-120v-80h200v-80q-83 0-141.5-58.5T200-480q0-61 33.5-111t90.5-73q8-34 35.5-55t62.5-21l-22-62 38-14-14-36 76-28 12 38 38-14 110 300-38 14 14 38-76 28-12-38-38 14-24-66q-15 14-34.5 21t-39.5 5q-22-2-41-13.5T338-582q-27 16-42.5 43T280-480q0 50 35 85t85 35h320v80H520v80h240v80H200Zm346-458 36-14-68-188-38 14 70 188Zm-97.5-33.5Q460-623 460-640t-11.5-28.5Q437-680 420-680t-28.5 11.5Q380-657 380-640t11.5 28.5Q403-600 420-600t28.5-11.5ZM546-578Zm-126-62Zm0 0Z" />
   </Box>
 );
 
@@ -103,6 +115,8 @@ function NivelBox({ nivel, locked, onEnter }: { nivel: Nivel; locked: boolean; o
                bg={`${fisiologiaBg}cc`} display="flex" alignItems="center" justifyContent="center">
             {nivel.iconKind === "gota" ? (
               <Gota size={{ base: "26px", md: "30px" }} />
+            ) : nivel.iconKind === "avanzado" ? (
+              <Profundiza size={{ base: "28px", md: "32px" }} />
             ) : (
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1"
                     style={{ textShadow: `0 1px 6px ${fisiologiaBg}` }}>
@@ -210,6 +224,7 @@ export default function MetodoFisiologiaNiveles() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1200px" gap={7}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Niveles"
@@ -221,8 +236,9 @@ export default function MetodoFisiologiaNiveles() {
             prev={{ label: "← Introducción", onClick: () => navigate("/metodo/fisiologia") }}
             extra={celulasBtn}
           />
+          </Reveal>
 
-          <Reveal direction="up" distance={18} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px"
                   style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
@@ -251,6 +267,7 @@ export default function MetodoFisiologiaNiveles() {
       </Flex>
 
       {celulasModal}
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );

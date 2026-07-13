@@ -650,4 +650,82 @@ export const celulas: Celula[] = [
     cuidados:
       "Se equilibran evitando desencadenantes alérgicos y manteniendo baja la inflamación crónica.",
   },
+
+  // ── Lengua (gusto) ──
+  {
+    id: "gustativa-tipo2",
+    nombre: "Célula gustativa (tipo II)",
+    foto: "/viñetas/fisiologia/celulas/gustativatipo2.png",
+    descripcion:
+      "Son las receptoras del dulce, el amargo y el umami. En su membrana llevan receptores acoplados a proteínas G que reconocen las moléculas del sabor; al activarse, liberan ATP como mensajero para avisar a las fibras del nervio del gusto, que llevan la señal hasta el cerebro. Viven dentro de los botones gustativos, apretadas como los gajos de una naranja.",
+    cuidados:
+      "Cuídalas evitando el tabaco y el exceso de alimentos muy calientes o irritantes, manteniendo una buena higiene bucal y un aporte adecuado de zinc, que ayuda a conservar el sentido del gusto.",
+  },
+  {
+    id: "gustativa-tipo3",
+    nombre: "Célula gustativa ácida (tipo III)",
+    foto: "/viñetas/fisiologia/celulas/gustativatipo3.png",
+    descripcion:
+      "Son las receptoras del sabor ácido y las únicas del botón gustativo que forman sinapsis clásicas con las fibras nerviosas, liberando serotonina y otros neurotransmisores. Además integran las señales de sus células vecinas, afinando la percepción final del sabor.",
+    cuidados:
+      "Se protegen moderando los alimentos y bebidas muy ácidos, que con el tiempo pueden irritar la mucosa, y cuidando la salud bucal general.",
+  },
+  {
+    id: "soporte-gusto",
+    nombre: "Célula de soporte (tipo I)",
+    foto: "/viñetas/fisiologia/celulas/soportegusto.png",
+    descripcion:
+      "Son la glía del gusto: sostienen y envuelven a las células receptoras, mantienen el equilibrio químico a su alrededor y limpian los neurotransmisores tras cada señal, igual que los astrocitos hacen con las neuronas. Se cree que también participan en la detección del sabor salado.",
+    cuidados:
+      "Se benefician de una buena hidratación y de una mucosa bucal sana, sin irritantes constantes.",
+  },
+  {
+    id: "basal-gusto",
+    nombre: "Célula basal (madre gustativa)",
+    foto: "/viñetas/fisiologia/celulas/basalgusto.png",
+    descripcion:
+      "Son las células madre de los botones gustativos. Se dividen sin descanso para reemplazar a las células del gusto, que se renuevan por completo cada una o dos semanas. Gracias a ellas recuperas el sentido del sabor después de quemarte la lengua con algo caliente.",
+    cuidados:
+      "Favorece su renovación con buena nutrición (proteína y zinc), evitando el tabaco y las agresiones repetidas a la lengua.",
+  },
+
+  // ── Bazo ──
+  {
+    id: "macrofago-esplenico",
+    nombre: "Macrófago esplénico (pulpa roja)",
+    foto: "/viñetas/fisiologia/celulas/macrofagoesplenico.png",
+    descripcion:
+      "Viven en la pulpa roja del bazo, el gran filtro de la sangre. Reconocen los glóbulos rojos viejos o dañados —que ya no logran pasar por los estrechos conductos del bazo— y los fagocitan, reciclando su hierro para fabricar hemoglobina nueva. También retiran bacterias y restos de la sangre que circula por ellos.",
+    cuidados:
+      "Se benefician de una buena salud general y de niveles adecuados de hierro; el bazo trabaja mejor con una sangre y un sistema inmune equilibrados.",
+  },
+  {
+    id: "pulpa-blanca",
+    nombre: "Linfocitos de la pulpa blanca",
+    foto: "/viñetas/fisiologia/celulas/pulpablanca.png",
+    descripcion:
+      "En la pulpa blanca del bazo se organizan los linfocitos B y T alrededor de las arterias, vigilando la sangre en busca de microorganismos. Cuando detectan una amenaza que viaja por el torrente sanguíneo, activan la respuesta inmune y fabrican anticuerpos. Es el cuartel defensivo conectado directamente a la sangre.",
+    cuidados:
+      "Se apoyan con buen descanso, nutrición adecuada y un sistema inmune equilibrado.",
+  },
+
+  // ── Vesícula biliar ──
+  {
+    id: "colangiocito-vesicula",
+    nombre: "Célula epitelial (colangiocito)",
+    foto: "/viñetas/fisiologia/celulas/colangiocito.png",
+    descripcion:
+      "Recubren el interior de la vesícula biliar. Su trabajo es concentrar la bilis que llega del hígado: absorben agua y sales del líquido biliar y las devuelven a la sangre, de modo que la bilis se vuelve mucho más concentrada mientras se guarda entre comidas. Están cubiertas de microvellosidades para absorber mejor.",
+    cuidados:
+      "Se benefician de comidas regulares que vacíen la vesícula y eviten que la bilis se estanque, buena hidratación y grasas saludables.",
+  },
+  {
+    id: "muscular-vesicula",
+    nombre: "Célula muscular lisa (vesícula)",
+    foto: "/viñetas/fisiologia/celulas/muscularvesicula.png",
+    descripcion:
+      "Forman la capa muscular de la pared de la vesícula. Cuando comes —sobre todo grasa—, el intestino libera la hormona colecistoquinina (CCK), que ordena a estas células contraerse y exprimir la vesícula para lanzar la bilis hacia el intestino, donde ayudará a digerir las grasas.",
+    cuidados:
+      "Se mantienen activas con comidas regulares y grasas saludables; los ayunos muy largos o las dietas muy bajas en grasa hacen que la vesícula se vacíe poco.",
+  },
 ];

@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import SpinnerTurquesa from "../global/Spinner";
 import { astrologiaTxt } from "../../GlobalVariables";
 
 // Frontend único del cómic: misma vista, misma maquetación, mismas animaciones.
@@ -146,6 +147,7 @@ export function ComicViewer({
   const [index, setIndex] = useState(() =>
     Math.min(Math.max(initialIndex, 0), Math.max(vinetas.length - 1, 0)));
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
+  const [imgLoaded, setImgLoaded] = useState<Record<number, boolean>>({}); // viñeta ya cargada
   const contentRef = useRef<HTMLDivElement>(null);
   const textScrollRef = useRef<HTMLDivElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -529,15 +531,26 @@ export function ComicViewer({
               }}
             >
               {!imgFailed[index] ? (
-                <Image
-                  src={encodeURI(current.src)}
-                  alt={`Viñeta ${index + 1}`}
-                  w="100%"
-                  h="100%"
-                  objectFit="contain"
-                  borderRadius="lg"
-                  onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
-                />
+                <>
+                  <Image
+                    src={encodeURI(current.src)}
+                    alt={`Viñeta ${index + 1}`}
+                    w="100%"
+                    h="100%"
+                    objectFit="contain"
+                    borderRadius="lg"
+                    opacity={imgLoaded[index] ? 1 : 0}
+                    transition="opacity 0.4s ease"
+                    onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
+                    onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
+                  />
+                  {/* Mientras la viñeta carga, spinner en su hueco. */}
+                  {!imgLoaded[index] && (
+                    <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+                      <SpinnerTurquesa fullScreen={false} color={themeColor} />
+                    </Box>
+                  )}
+                </>
               ) : (
                 <Flex
                   w="100%"

@@ -1,0 +1,229 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import axios from "axios";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
+import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
+import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
+import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
+import { temaByKey, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
+
+// Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
+function FichaBox({ ficha, temaColor, active, onClick }: {
+  ficha: Ficha; temaColor: string; active: boolean; onClick: () => void;
+}) {
+  const [imgErr, setImgErr] = useState(false);
+  const accent = ficha.color || temaColor;
+  return (
+    <Box
+      as="button"
+      onClick={onClick}
+      position="relative"
+      overflow="hidden"
+      w="100%"
+      h="100%"
+      borderRadius="2xl"
+      border={`1px solid ${active ? fisiologiaTxt : `${fisiologiaTxt}44`}`}
+      cursor="pointer"
+      fontFamily="'EB Garamond', serif"
+      transition="all 0.2s ease"
+      boxShadow={active
+        ? `0 6px 24px rgba(0,0,0,0.3), 0 0 24px ${accent}, 0 0 14px ${fisiologiaTxt}66`
+        : `0 4px 16px rgba(0,0,0,0.22), 0 0 14px ${fisiologiaTxt}1f`}
+      _hover={{ transform: "translateY(-4px)", borderColor: `${fisiologiaTxt}aa`,
+                boxShadow: `0 10px 30px rgba(0,0,0,0.32), 0 0 22px ${accent}` }}
+      _active={{ transform: "translateY(-1px)" }}
+    >
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
+            p={{ base: 4, md: 5 }} h="100%">
+        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
+             bg={`${accent}22`} border={`1px solid ${accent}66`} boxShadow={`0 0 12px ${accent}44`}
+             display="flex" alignItems="center" justifyContent="center">
+          {ficha.foto && !imgErr ? (
+            <Image src={encodeURI(ficha.foto)} alt={ficha.nombre} w="100%" h="100%" objectFit="cover"
+                   onError={() => setImgErr(true)} />
+          ) : (
+            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
+              {ficha.nombre.charAt(0)}
+            </Text>
+          )}
+        </Box>
+        {ficha.eyebrow && (
+          <Text color={accent} fontSize="3xs" fontWeight={700} letterSpacing="0.12em" textTransform="uppercase"
+                textAlign="center" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
+            {ficha.eyebrow}
+          </Text>
+        )}
+        <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
+              fontSize={{ base: "md", md: "lg" }} letterSpacing="0.02em"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65)" }}>
+          {ficha.nombre}
+        </Text>
+      </Flex>
+    </Box>
+  );
+}
+
+export default function MetodoFisiologiaTema() {
+  const navigate = useNavigate();
+  const { temaKey } = useParams<{ temaKey: string }>();
+  const [loading, setLoading] = useState(true);
+  const [ficha, setFicha] = useState<Ficha | null>(null);
+  const [comicAbierto, setComicAbierto] = useState(false);
+  const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+
+  const tema: TemaProfundiza | undefined = temaByKey(temaKey || "");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) { navigate("/welcome"); return; }
+    if (!tema) { navigate("/metodo/fisiologia/profundiza", { replace: true }); return; }
+    (async () => {
+      try {
+        let testEnabled = false;
+        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
+        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+      } catch { navigate("/metodo/fisiologia"); return; }
+      finally { setLoading(false); }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate, temaKey]);
+
+  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (!tema) return null;
+
+  const tieneComic = (tema.comicIntro?.length ?? 0) > 0;
+  const tieneFichas = tema.fichas.length > 0;
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
+
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
+              title={tema.label}
+              compact
+              bgColor={`${fisiologiaBg}dd`}
+              color={fisiologiaTxt}
+              nom={fisiologiaNom}
+              mb={0}
+              prev={{ label: "← Profundiza", onClick: () => navigate("/metodo/fisiologia/profundiza") }}
+              extra={celulasBtn}
+            />
+          </Reveal>
+
+          {tema.intro && (
+            <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                    textAlign="center" lineHeight="1.8" maxW="660px"
+                    style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                {tema.intro}
+              </Text>
+            </Reveal>
+          )}
+
+          {/* Botón «antes de empezar»: abre el cómic de síntesis. */}
+          {tieneComic && (
+            <Reveal direction="up" distance={16} delay={0.2} duration={0.55} display="flex" justifyContent="center">
+              <Box
+                as="button"
+                onClick={() => setComicAbierto(true)}
+                display="inline-flex"
+                alignItems="center"
+                gap={2.5}
+                px={{ base: 5, md: 7 }}
+                py={{ base: 2.5, md: 3 }}
+                borderRadius="full"
+                bg={fisiologiaTxt}
+                color={fisiologiaBg}
+                border={`1px solid ${fisiologiaTxt}`}
+                fontWeight="700"
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.03em"
+                cursor="pointer"
+                boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33, 0 2px 12px rgba(0,0,0,0.45)`}
+                transition="all 0.2s"
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}
+              >
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                     w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor">
+                  <path d="M320-200v-560l440 280-440 280Z" />
+                </Box>
+                Antes de empezar: mira cómo se fabrican
+              </Box>
+            </Reveal>
+          )}
+
+          {/* Rejilla de fichas, o mensaje de «en construcción». */}
+          {tieneFichas ? (
+            <>
+              {tema.pista && (
+                <Reveal direction="up" distance={12} delay={0.26} duration={0.5} display="flex" justifyContent="center">
+                  <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                        textAlign="center" style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
+                    {tema.pista}
+                  </Text>
+                </Reveal>
+              )}
+              <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+                {tema.fichas.map((f, i) => (
+                  <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
+                    <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
+                              onClick={() => setFicha(f)} />
+                  </Reveal>
+                ))}
+              </SimpleGrid>
+            </>
+          ) : (
+            <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Flex direction="column" align="center" gap={3} maxW="520px" textAlign="center"
+                    position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                    border={`1px dashed ${fisiologiaTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 10, md: 12 }}>
+                <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}88`} />
+                <Text position="relative" zIndex={1} fontSize="4xl">🔬</Text>
+                <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
+                      style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
+                  Estamos construyendo este apartado
+                </Text>
+                <Text position="relative" zIndex={1} color="rgba(255,255,255,0.82)" fontSize={{ base: "sm", md: "md" }}
+                      fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
+                  Muy pronto podrás explorarlo aquí. Sigue avanzando por el resto del recorrido.
+                </Text>
+              </Flex>
+            </Reveal>
+          )}
+
+        </Flex>
+      </Flex>
+
+      {/* Modal de la ficha (foto + explicación, con flechas). */}
+      <FichaExploraModal ficha={ficha} fichas={tema.fichas} temaColor={tema.color}
+                         onSelect={setFicha} onClose={() => setFicha(null)} />
+
+      {/* Cómic «antes de empezar». */}
+      {tieneComic && (
+        <ComicTemaModal isOpen={comicAbierto} vinetas={tema.comicIntro!} onClose={() => setComicAbierto(false)} />
+      )}
+
+      {celulasModal}
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
+      <SiteFooter />
+    </Box>
+  );
+}

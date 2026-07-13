@@ -9,7 +9,7 @@ export default function MetodoFisiologiaTejidos() {
     <ConstruirFisio
       title="Tejidos"
       pageLabel="3/4"
-      prev={{ label: "← Las células de tus órganos", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
+      prev={{ label: "← Las células", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
       introTitulo="Forma un tejido"
       instruccion="Reúne varias células iguales para formar un tejido."
       zonaLabel="agrupa las células"

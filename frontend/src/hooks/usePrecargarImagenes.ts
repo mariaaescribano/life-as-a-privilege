@@ -1,5 +1,23 @@
 import { useEffect, useState } from "react";
 
+// Versión imperativa: precarga una lista de imágenes y resuelve cuando TODAS han
+// terminado (cargadas o fallidas). Útil dentro de un efecto de carga, para
+// retener el spinner inicial sin re-disparar la espera cuando cambie el estado.
+export function precargarImagenes(urls: Array<string | undefined | null>): Promise<void> {
+  const lista = urls.filter(Boolean) as string[];
+  if (lista.length === 0) return Promise.resolve();
+  return new Promise((resolve) => {
+    let pendientes = lista.length;
+    const done = () => { if (--pendientes <= 0) resolve(); };
+    lista.forEach((src) => {
+      const img = new window.Image();
+      img.onload = done;
+      img.onerror = done;
+      img.src = src;
+    });
+  });
+}
+
 // Precarga una lista de imágenes y devuelve `true` cuando TODAS han terminado
 // (cargadas o fallidas). Sirve para no mostrar unas fotos/tarjetas hasta que sus
 // imágenes estén listas, y así evitar que el hueco vacío se rellene de golpe

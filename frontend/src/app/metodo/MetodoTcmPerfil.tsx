@@ -233,15 +233,19 @@ function ColumnaBalance({ balance, nivel, index, enter }: {
   const color = enDesequilibrio ? ESTADO_COLOR[balance] : ESTADO_COLOR.equilibrio;
   // Barra vacía si está en equilibrio o sin datos; si no, altura por nivel.
   const alturaPct = enDesequilibrio ? Math.max((nivel ?? 0) * 100, 12) : 0;
-  // Entrada escalonada: cada barra arranca en 0 y SUBE a su altura, una tras
-  // otra (retraso por índice), con una curva con leve rebote para dar emoción.
+  // Entrada escalonada: cada barra arranca "encogida" y CRECE hasta su altura,
+  // una tras otra (retraso por índice), con leve rebote para dar emoción.
+  // Animamos `scaleY` (no `height`): las transiciones de height en % dentro de
+  // flex no animan de forma fiable; el transform SIEMPRE lo hace.
   const delay = `${index * 0.16}s`;
   return (
     <Flex flex="1" direction="column" align="center" justify="flex-end" h="100%" minW={0}>
       {enDesequilibrio ? (
-        <Box w={{ base: "70%", md: "62%" }} maxW="64px" h={enter ? `${alturaPct}%` : "0%"}
+        <Box w={{ base: "70%", md: "62%" }} maxW="64px" h={`${alturaPct}%`}
              borderTopRadius="md" bgGradient={`linear(to-t, ${color}cc, ${color})`}
-             transition="height 0.85s cubic-bezier(0.34,1.4,0.64,1)"
+             transformOrigin="bottom center"
+             transform={enter ? "scaleY(1)" : "scaleY(0)"}
+             transition="transform 0.85s cubic-bezier(0.34,1.3,0.64,1)"
              style={{ transitionDelay: delay, boxShadow: `0 0 12px ${color}88, inset 0 1px 0 rgba(255,255,255,0.4)` }} />
       ) : (
         // Zócalo tenue: marca "vacío = en equilibrio" sin dibujar columna. Aparece

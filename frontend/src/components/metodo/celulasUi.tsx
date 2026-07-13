@@ -371,12 +371,22 @@ export function CelulaModal({
               letterSpacing="0.03em"
               lineHeight="1.2"
               flexShrink={0}
-              mb={4}
+              mb={3}
               pr="40px"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
             >
               {celula.nombre}
             </Text>
+
+            {/* Separación horizontal bajo el título (no afecta al scroll del texto) */}
+            <Box
+              flexShrink={0}
+              h="1.5px"
+              w="100%"
+              borderRadius="full"
+              bgGradient={`linear(to-r, ${TXT}, ${TXT}55, transparent)`}
+              mb={4}
+            />
 
             {/* Solo el texto hace scroll (la foto no se mueve) */}
             <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
@@ -466,14 +476,27 @@ export function ConsejoModal({
   foto,
   label,
   onClose,
+  consejos,
+  onSelect,
 }: {
   consejo: Consejo;
   /** Foto del órgano (la misma que aparece arriba en el panel). */
   foto: string;
   label: string;
   onClose: () => void;
+  /** Lista completa de curiosidades del órgano, para navegar con flechas. */
+  consejos?: Consejo[];
+  /** Cambia la curiosidad mostrada (lo usan las flechas). */
+  onSelect?: (c: Consejo) => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
+
+  // Navegación cíclica entre las curiosidades del órgano (sin cerrar el modal).
+  const puedeNavegar = !!consejos && consejos.length > 1 && !!onSelect;
+  const total = consejos?.length ?? 0;
+  const idx = consejos ? consejos.findIndex((c) => c.titular === consejo.titular) : -1;
+  const irAnterior = () => { if (!puedeNavegar || idx < 0) return; onSelect!(consejos![(idx - 1 + total) % total]); };
+  const irSiguiente = () => { if (!puedeNavegar || idx < 0) return; onSelect!(consejos![(idx + 1) % total]); };
 
   useEffect(() => { setImgErr(false); }, [foto]);
 
@@ -483,10 +506,15 @@ export function ConsejoModal({
   }, []);
 
   useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") irAnterior();
+      else if (e.key === "ArrowRight") irSiguiente();
+    };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, [onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onClose, puedeNavegar, idx]);
 
   const scrollbarSx = {
     "&::-webkit-scrollbar": { width: "5px" },
@@ -502,7 +530,7 @@ export function ConsejoModal({
       alignSelf="center"
       borderRadius="xl"
       overflow="hidden"
-      boxShadow="0 8px 32px rgba(0,0,0,0.3)"
+      boxShadow={`0 10px 40px rgba(0,0,0,0.45), 0 0 24px ${TXT}22`}
       bg={TXT + "12"}
     >
       {!imgErr ? (
@@ -515,30 +543,31 @@ export function ConsejoModal({
     </Box>
   );
 
-  // Titular arriba + rallita horizontal (ancho completo).
-  const Titular = ({ size }: { size: any }) => (
+  // Título destacado + separación elegante debajo (alineados con el texto).
+  const Titulo = ({ size, align = "left" }: { size: any; align?: "left" | "center" }) => (
     <>
       <Text
         color={TXT}
         fontSize={size}
         fontWeight="700"
         fontFamily="'EB Garamond', serif"
-        letterSpacing="0.02em"
-        lineHeight="1.25"
-        textAlign="center"
-        px={{ base: 2, md: 10 }}
+        letterSpacing="0.015em"
+        lineHeight="1.18"
+        textAlign={align}
         flexShrink={0}
-        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+        style={{ textShadow: `0 1px 4px rgba(0,0,0,0.65), 0 0 22px ${TXT}44` }}
       >
         {consejo.titular}
       </Text>
       <Box
-        alignSelf="center"
-        w={{ base: "120px", md: "160px" }}
-        h="1px"
+        w={align === "center" ? { base: "120px", md: "160px" } : "100%"}
+        alignSelf={align === "center" ? "center" : "stretch"}
+        h="1.5px"
         borderRadius="full"
-        bgGradient={`linear(to-r, transparent, ${TXT}, transparent)`}
-        my={{ base: 3, md: 4 }}
+        bgGradient={align === "center"
+          ? `linear(to-r, transparent, ${TXT}, transparent)`
+          : `linear(to-r, ${TXT}, ${TXT}55, transparent)`}
+        my={{ base: 3, md: 5 }}
         flexShrink={0}
       />
     </>
@@ -548,7 +577,7 @@ export function ConsejoModal({
     <Text
       color={TXT}
       fontSize={{ base: "md", md: "lg" }}
-      lineHeight="1.8"
+      lineHeight="1.85"
       letterSpacing="0.02em"
       fontFamily="'EB Garamond', serif"
       style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
@@ -557,13 +586,15 @@ export function ConsejoModal({
     </Text>
   );
 
+  const contador = puedeNavegar ? `${idx + 1} / ${total}` : null;
+
   return (
     <Box
       position="fixed"
       inset={0}
       zIndex={1100}
-      bg="rgba(0,40,20,0.62)"
-      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
+      bg="rgba(0,30,16,0.72)"
+      sx={{ backdropFilter: "blur(22px)", WebkitBackdropFilter: "blur(22px)" }}
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -575,14 +606,23 @@ export function ConsejoModal({
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
         overflow="hidden"
-        w={{ base: "95%", md: "920px" }}
-        h={{ base: "auto", md: "460px" }}
-        maxH={{ base: "calc(100dvh - 32px)", md: "460px" }}
+        w={{ base: "95%", md: "1000px" }}
+        h={{ base: "auto", md: "500px" }}
+        maxH={{ base: "calc(100dvh - 32px)", md: "500px" }}
         borderRadius="24px"
-        border={`1px solid ${TXT}33`}
-        boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 26px ${TXT}33`}
+        border={`1px solid ${TXT}2a`}
+        boxShadow={`0 40px 100px rgba(0,0,0,0.6), 0 0 40px ${TXT}2a`}
       >
-        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.4)" />
+        {/* Fondo inmersivo: textura de Fisiología + viñeta radial para dar profundidad */}
+        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(16,9,26,0.34)" />
+        <Box
+          position="absolute"
+          inset={0}
+          borderRadius="24px"
+          pointerEvents="none"
+          zIndex={0}
+          sx={{ background: "radial-gradient(130% 120% at 30% 25%, rgba(0,0,0,0) 38%, rgba(0,0,0,0.5) 100%)" }}
+        />
 
         {/* Botón cerrar */}
         <Box
@@ -605,12 +645,12 @@ export function ConsejoModal({
           transition="all 0.18s"
           _hover={{ bg: TXT + "33" }}
           onClick={onClose}
-          zIndex={2}
+          zIndex={3}
         >
           ✕
         </Box>
 
-        {/* ── MÓVIL: titular → rallita → foto → texto ── */}
+        {/* ── MÓVIL: foto → título → separación → texto ── */}
         <Flex
           display={{ base: "flex", md: "none" }}
           position="relative"
@@ -622,40 +662,110 @@ export function ConsejoModal({
           overflowY="auto"
           sx={scrollbarSx}
         >
-          <Titular size="2xl" />
           <Foto w="100%" />
-          <Box mt={4}><Texto /></Box>
+          <Box mt={5}><Titulo size="2xl" align="center" /></Box>
+          <Texto />
         </Flex>
 
-        {/* ── ORDENADOR: titular arriba (ancho completo) → rallita → foto izq + texto der ── */}
+        {/* ── ORDENADOR: foto (izq) + columna derecha (título destacado → separación → texto) ── */}
         <Flex
           display={{ base: "none", md: "flex" }}
           position="relative"
           zIndex={1}
           h="100%"
-          direction="column"
-          p={7}
-          pt={9}
+          direction="row"
+          align="center"
+          p={9}
+          gap={10}
         >
-          <Titular size="3xl" />
-          <Flex direction="row" flex="1" minH={0}>
-            <Foto w="260px" />
-            {/* Rallita vertical entre foto y texto */}
-            <Box
-              flexShrink={0}
-              alignSelf="center"
-              w="1px"
-              h="80%"
-              borderRadius="full"
-              bgGradient={`linear(to-b, transparent, ${TXT}, transparent)`}
-              mx={6}
-            />
-            <Flex direction="column" flex="1" minW={0} minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
+          <Foto w="360px" />
+
+          <Flex direction="column" flex="1" minW={0} minH={0} h="100%" justify="center" pr="34px">
+            <Titulo size="4xl" />
+            <Flex direction="column" flex="0 1 auto" minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
               <Texto />
             </Flex>
           </Flex>
         </Flex>
+
+        {/* Contador de curiosidades (discreto, abajo al centro) */}
+        {contador && (
+          <Text
+            display={{ base: "none", md: "block" }}
+            position="absolute"
+            bottom={4}
+            left="50%"
+            transform="translateX(-50%)"
+            zIndex={2}
+            color={`${TXT}aa`}
+            fontSize="xs"
+            fontStyle="italic"
+            letterSpacing="0.1em"
+            pointerEvents="none"
+            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}
+          >
+            {contador}
+          </Text>
+        )}
       </Box>
+
+      {/* Flechas para recorrer todas las curiosidades del órgano (sin salir) */}
+      {puedeNavegar && (
+        <>
+          <IconButton
+            aria-label="Curiosidad anterior"
+            onClick={(e) => { e.stopPropagation(); irAnterior(); }}
+            position="fixed"
+            left={{ base: 1, md: 5 }}
+            top="50%"
+            transform="translateY(-50%)"
+            zIndex={3}
+            variant="ghost"
+            borderRadius="full"
+            w={{ base: "40px", md: "52px" }}
+            h={{ base: "40px", md: "52px" }}
+            minW={{ base: "40px", md: "52px" }}
+            bg="rgba(0,0,0,0.45)"
+            border={`1px solid ${TXT}aa`}
+            sx={{ backdropFilter: "blur(4px)" }}
+            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
+            _focus={{ boxShadow: "none" }}
+            _focusVisible={{ boxShadow: "none" }}
+            icon={
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
+                style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+                <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+              </Box>
+            }
+          />
+          <IconButton
+            aria-label="Curiosidad siguiente"
+            onClick={(e) => { e.stopPropagation(); irSiguiente(); }}
+            position="fixed"
+            right={{ base: 1, md: 5 }}
+            top="50%"
+            transform="translateY(-50%)"
+            zIndex={3}
+            variant="ghost"
+            borderRadius="full"
+            w={{ base: "40px", md: "52px" }}
+            h={{ base: "40px", md: "52px" }}
+            minW={{ base: "40px", md: "52px" }}
+            bg="rgba(0,0,0,0.45)"
+            border={`1px solid ${TXT}aa`}
+            sx={{ backdropFilter: "blur(4px)" }}
+            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
+            _focus={{ boxShadow: "none" }}
+            _focusVisible={{ boxShadow: "none" }}
+            icon={
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
+                style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+              </Box>
+            }
+          />
+        </>
+      )}
     </Box>
   );
 }

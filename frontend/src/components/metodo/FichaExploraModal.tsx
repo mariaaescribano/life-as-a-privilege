@@ -2,54 +2,54 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import type { Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import type { Ficha } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 const TXT = fisiologiaTxt;
 
 /**
- * Modal inmersivo de un SISTEMA del cuerpo: la imagen del sistema a la izquierda
- * y, a la derecha, su nombre + descripción. Con flechas para pasar de un sistema
- * a otro (cíclicamente) sin necesidad de cerrar el modal.
+ * Modal inmersivo de una FICHA de PROFUNDIZA (neurotransmisor, hormona…): foto a
+ * la izquierda y, a la derecha, su nombre + explicación. Con flechas para pasar
+ * de una ficha a otra (cíclicamente) sin cerrar. Calco de SistemaModal, pero
+ * genérico: el título es el nombre de la ficha (no «Sistema x»).
  */
-export function SistemaModal({
-  sistema,
-  sistemas,
+export function FichaExploraModal({
+  ficha,
+  fichas,
+  temaColor,
   onSelect,
   onClose,
 }: {
-  sistema: Sistema | null;
-  /** Lista completa de sistemas para poder navegar con flechas. */
-  sistemas?: Sistema[];
-  /** Cambia el sistema mostrado (lo usan las flechas). */
-  onSelect?: (s: Sistema) => void;
+  ficha: Ficha | null;
+  /** Lista completa para navegar con flechas. */
+  fichas?: Ficha[];
+  /** Color del tema (por si la ficha no trae color propio). */
+  temaColor: string;
+  onSelect?: (f: Ficha) => void;
   onClose: () => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
 
-  // Navegación cíclica entre sistemas (tras el último vuelve al primero).
-  const puedeNavegar = !!sistemas && sistemas.length > 1 && !!onSelect;
-  const idx = sistema && sistemas ? sistemas.findIndex((s) => s.key === sistema.key) : -1;
+  const puedeNavegar = !!fichas && fichas.length > 1 && !!onSelect;
+  const idx = ficha && fichas ? fichas.findIndex((f) => f.key === ficha.key) : -1;
   const irAnterior = () => {
     if (!puedeNavegar || idx < 0) return;
-    onSelect!(sistemas![(idx - 1 + sistemas!.length) % sistemas!.length]);
+    onSelect!(fichas![(idx - 1 + fichas!.length) % fichas!.length]);
   };
   const irSiguiente = () => {
     if (!puedeNavegar || idx < 0) return;
-    onSelect!(sistemas![(idx + 1) % sistemas!.length]);
+    onSelect!(fichas![(idx + 1) % fichas!.length]);
   };
 
-  // Al cambiar de sistema (con las flechas) el modal NO se desmonta, así que
-  // reiniciamos el estado de error de imagen manualmente.
-  useEffect(() => { setImgErr(false); }, [sistema?.key]);
+  useEffect(() => { setImgErr(false); }, [ficha?.key]);
 
   useEffect(() => {
-    if (!sistema) return;
+    if (!ficha) return;
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
-  }, [sistema]);
+  }, [ficha]);
 
   useEffect(() => {
-    if (!sistema) return;
+    if (!ficha) return;
     const h = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       else if (e.key === "ArrowLeft") irAnterior();
@@ -58,10 +58,10 @@ export function SistemaModal({
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sistema, onClose, puedeNavegar, idx]);
+  }, [ficha, onClose, puedeNavegar, idx]);
 
-  if (!sistema) return null;
-  const accent = sistema.color;
+  if (!ficha) return null;
+  const accent = ficha.color || temaColor;
 
   const scrollbarSx = {
     "&::-webkit-scrollbar": { width: "5px" },
@@ -80,45 +80,58 @@ export function SistemaModal({
       boxShadow={`0 8px 32px rgba(0,0,0,0.3), 0 0 16px ${accent}44`}
       bg={TXT + "12"}
     >
-      {!imgErr ? (
-        <Image src={encodeURI(sistema.foto)} alt={sistema.label} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
+      {ficha.foto && !imgErr ? (
+        <Image src={encodeURI(ficha.foto)} alt={ficha.nombre} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
       ) : (
         <Flex w="100%" h="100%" align="center" justify="center">
           <Text color={accent} fontWeight="800" fontSize={{ base: "4xl", md: "5xl" }}
                 style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-            {sistema.label.charAt(0)}
+            {ficha.nombre.charAt(0)}
           </Text>
         </Flex>
       )}
     </Box>
   );
 
-  const Titulo = ({ size }: { size: any }) => (
-    <Text
-      color={TXT}
-      fontSize={size}
-      fontWeight="700"
-      fontFamily="'EB Garamond', serif"
-      letterSpacing="0.03em"
-      lineHeight="1.2"
-      flexShrink={0}
-      style={{ textShadow: `0 0 16px ${accent}, 0 1px 4px rgba(0,0,0,0.6)` }}
-    >
-      Sistema {sistema.label.toLowerCase()}
-    </Text>
+  const Encabezado = ({ size }: { size: any }) => (
+    <Box flexShrink={0}>
+      {ficha.eyebrow && (
+        <Text color={accent} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700}
+              letterSpacing="0.16em" textTransform="uppercase" mb={2}
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+          {ficha.eyebrow}
+        </Text>
+      )}
+      <Text
+        color={TXT}
+        fontSize={size}
+        fontWeight="700"
+        fontFamily="'EB Garamond', serif"
+        letterSpacing="0.03em"
+        lineHeight="1.2"
+        style={{ textShadow: `0 0 16px ${accent}, 0 1px 4px rgba(0,0,0,0.6)` }}
+      >
+        {ficha.nombre}
+      </Text>
+    </Box>
   );
 
   const Texto = () => (
-    <Text
-      color={TXT}
-      fontSize={{ base: "md", md: "lg" }}
-      lineHeight="1.8"
-      letterSpacing="0.02em"
-      fontFamily="'EB Garamond', serif"
-      style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
-    >
-      {sistema.descripcion}
-    </Text>
+    <>
+      {ficha.explicacion.map((p, i) => (
+        <Text
+          key={i}
+          color={TXT}
+          fontSize={{ base: "md", md: "lg" }}
+          lineHeight="1.8"
+          letterSpacing="0.02em"
+          fontFamily="'EB Garamond', serif"
+          style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
+        >
+          {p}
+        </Text>
+      ))}
+    </>
   );
 
   return (
@@ -126,7 +139,7 @@ export function SistemaModal({
       position="fixed"
       inset={0}
       zIndex={1100}
-      bg="rgba(0,40,20,0.62)"
+      bg="rgba(20,12,30,0.62)"
       sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       display="flex"
       alignItems="center"
@@ -146,7 +159,6 @@ export function SistemaModal({
         border={`1px solid ${accent}55`}
         boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 30px ${accent}55`}
       >
-        {/* Fondo: foto de Fisiología con velo oscuro suave */}
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.4)" />
 
         {/* Botón cerrar */}
@@ -175,13 +187,14 @@ export function SistemaModal({
           ✕
         </Box>
 
-        {/* ── MÓVIL: título centrado → rallita → foto → texto ── */}
+        {/* ── MÓVIL: encabezado centrado → rallita → foto → texto ── */}
         <Flex
           display={{ base: "flex", md: "none" }}
           position="relative"
           zIndex={1}
           direction="column"
           align="center"
+          textAlign="center"
           p={5}
           pt={12}
           gap={3}
@@ -189,19 +202,14 @@ export function SistemaModal({
           overflowY="auto"
           sx={scrollbarSx}
         >
-          <Titulo size="2xl" />
-          <Box
-            w="54px"
-            h="1px"
-            borderRadius="full"
-            bgGradient={`linear(to-r, transparent, ${accent}, transparent)`}
-            my={1}
-          />
+          <Encabezado size="2xl" />
+          <Box w="54px" h="1px" borderRadius="full"
+               bgGradient={`linear(to-r, transparent, ${accent}, transparent)`} my={1} />
           <Foto w="78%" />
-          <Box mt={2} w="100%"><Texto /></Box>
+          <Flex mt={2} w="100%" direction="column" gap={3} textAlign="left"><Texto /></Flex>
         </Flex>
 
-        {/* ── ORDENADOR: foto fija a la izquierda, título + texto a la derecha ── */}
+        {/* ── ORDENADOR: foto fija a la izquierda, encabezado + texto a la derecha ── */}
         <Flex
           display={{ base: "none", md: "flex" }}
           position="relative"
@@ -212,22 +220,13 @@ export function SistemaModal({
         >
           <Foto w="300px" />
 
-          {/* Rallita vertical entre foto y texto */}
-          <Box
-            flexShrink={0}
-            alignSelf="center"
-            w="1px"
-            h="76%"
-            borderRadius="full"
-            bgGradient={`linear(to-b, transparent, ${accent}, transparent)`}
-            mx={6}
-          />
+          <Box flexShrink={0} alignSelf="center" w="1px" h="76%" borderRadius="full"
+               bgGradient={`linear(to-b, transparent, ${accent}, transparent)`} mx={6} />
 
           <Flex direction="column" flex="1" minW={0} minH={0}>
             <Box mb={4} pr="40px" flexShrink={0}>
-              <Titulo size="3xl" />
+              <Encabezado size="3xl" />
             </Box>
-            {/* Solo el texto hace scroll (la foto no se mueve) */}
             <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={2} sx={scrollbarSx}>
               <Texto />
             </Flex>
@@ -235,11 +234,11 @@ export function SistemaModal({
         </Flex>
       </Box>
 
-      {/* Flechas para pasar de un sistema a otro (por encima del box) */}
+      {/* Flechas para pasar de una ficha a otra (por encima del box) */}
       {puedeNavegar && (
         <>
           <IconButton
-            aria-label="Sistema anterior"
+            aria-label="Ficha anterior"
             onClick={(e) => { e.stopPropagation(); irAnterior(); }}
             position="fixed"
             left={{ base: 1, md: 5 }}
@@ -265,7 +264,7 @@ export function SistemaModal({
             }
           />
           <IconButton
-            aria-label="Sistema siguiente"
+            aria-label="Ficha siguiente"
             onClick={(e) => { e.stopPropagation(); irSiguiente(); }}
             position="fixed"
             right={{ base: 1, md: 5 }}

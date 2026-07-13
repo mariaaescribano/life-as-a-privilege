@@ -23,15 +23,10 @@ const NIVELES: { label: string; pasos: { titulo: string; path: string }[] }[] = 
   {
     label: "VIDA",
     pasos: [
-      { titulo: "Célula",            path: "/metodo/fisiologia/celula" },
-      { titulo: "Las células de tus órganos", path: "/metodo/fisiologia/todas-tus-celulas" },
-    ],
-  },
-  {
-    label: "CUERPO",
-    pasos: [
-      { titulo: "Sistemas",  path: "/metodo/fisiologia/sistemas" },
-      { titulo: "Organismo", path: "/metodo/fisiologia/organismo" },
+      { titulo: "Célula",      path: "/metodo/fisiologia/celula" },
+      { titulo: "Las células", path: "/metodo/fisiologia/todas-tus-celulas" },
+      { titulo: "Sistemas",    path: "/metodo/fisiologia/sistemas" },
+      { titulo: "El cuerpo",   path: "/metodo/fisiologia/organismo" },
     ],
   },
 ];

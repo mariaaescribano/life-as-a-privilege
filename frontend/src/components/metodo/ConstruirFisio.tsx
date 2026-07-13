@@ -11,6 +11,8 @@ import { MetodoStepHeader } from "./MetodoStepHeader";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { useTusCelulas } from "./TusCelulasModal";
 import { IndiceFisiologia } from "./IndiceFisiologia";
+import { BotonCompania } from "../global/BotonCompania";
+import { Reveal } from "../global/Reveal";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -47,7 +49,9 @@ export interface ConstruirFisioProps {
   resultImg?: string;
   glow: string;
   dataKey: string;
-  next: { label: string; ruta: string };
+  /** Botón «Continuar» dentro del box de resultado. Opcional: si no se pasa, no
+   *  se pinta (p.ej. Célula, que avanza solo desde el header). */
+  next?: { label: string; ruta: string };
   /** Botón derecho del header (opcional). Independiente del «Continuar» del box
    *  de resultado. P.ej. Célula → «Todas tus células →». */
   headerNext?: { label: string; ruta: string };
@@ -103,7 +107,7 @@ function Ficha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRect) => vo
       initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.4 }}
       transition={{ type: "spring", stiffness: 320, damping: 26 }}
       cursor="grab" position="relative" display="flex" flexDirection="column" alignItems="center" gap={1}
-      flexShrink={0} style={{ touchAction: "none" }}
+      flexShrink={0} style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
       <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${pieza.def.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
         <Perla def={pieza.def} size={{ base: "80px", md: "104px" }} />
@@ -204,8 +208,9 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title={props.title}
@@ -219,6 +224,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             extra={celulasBtn}
             next={props.headerNext ? { label: props.headerNext.label, onClick: () => navigate(props.headerNext!.ruta) } : undefined}
           />
+          </Reveal>
 
           <AnimatePresence>
             {!completo && (
@@ -336,8 +342,9 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                           {p}
                         </Text>
                       ))}
+                      {props.next && (
                       <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
-                        <Box as="button" onClick={() => navigate(props.next.ruta)}
+                        <Box as="button" onClick={() => navigate(props.next!.ruta)}
                              px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
                              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                              letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
@@ -346,6 +353,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                           {props.next.label}
                         </Box>
                       </Flex>
+                      )}
                     </Flex>
                   </Box>
                 </Flex>
@@ -353,7 +361,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             )}
           </AnimatePresence>
 
-          {/* Construir de nuevo — centrado, fuera del box, abajo */}
+          {/* Volver a hacer — centrado, fuera del box, abajo (coherente con el resto del recorrido) */}
           {completo && (
             <Flex justify="center" w="100%">
               <Box as="button" onClick={reiniciar}
@@ -362,7 +370,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                ↺ Construir de nuevo
+                ↺ Volver a hacer
               </Box>
             </Flex>
           )}
@@ -371,6 +379,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
 
       {celulasModal}
       <IndiceFisiologia />
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>
   );
