@@ -69,15 +69,16 @@ export function FichaExploraModal({
     "&::-webkit-scrollbar-thumb": { bg: TXT + "55", borderRadius: "full" },
   };
 
-  const Foto = ({ w }: { w: string }) => (
+  const Foto = ({ w, h, self = "center" }: { w?: string; h?: string; self?: any }) => (
     <Box
       flexShrink={0}
       w={w}
+      h={h}
       aspectRatio={1}
-      alignSelf="center"
+      alignSelf={self}
       borderRadius="xl"
       overflow="hidden"
-      boxShadow={`0 8px 32px rgba(0,0,0,0.3), 0 0 16px ${accent}44`}
+      boxShadow="0 8px 32px rgba(0,0,0,0.3), 0 0 16px rgba(255,255,255,0.14)"
       bg={TXT + "12"}
     >
       {ficha.foto && !imgErr ? (
@@ -93,15 +94,8 @@ export function FichaExploraModal({
     </Box>
   );
 
-  const Encabezado = ({ size }: { size: any }) => (
-    <Box flexShrink={0}>
-      {ficha.eyebrow && (
-        <Text color={accent} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700}
-              letterSpacing="0.16em" textTransform="uppercase" mb={2}
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-          {ficha.eyebrow}
-        </Text>
-      )}
+  const Encabezado = ({ size, center }: { size: any; center?: boolean }) => (
+    <Box flexShrink={0} w={center ? "100%" : undefined}>
       <Text
         color={TXT}
         fontSize={size}
@@ -109,10 +103,17 @@ export function FichaExploraModal({
         fontFamily="'EB Garamond', serif"
         letterSpacing="0.03em"
         lineHeight="1.2"
+        textAlign={center ? "center" : "left"}
         style={{ textShadow: `0 0 16px ${accent}, 0 1px 4px rgba(0,0,0,0.6)` }}
       >
         {ficha.nombre}
       </Text>
+      {/* Línea horizontal bajo el título, en su color */}
+      <Box mt={3} h="1px" w={center ? "70%" : "100%"} mx={center ? "auto" : undefined}
+           borderRadius="full"
+           bgGradient={center
+             ? `linear(to-r, transparent, ${accent}, transparent)`
+             : `linear(to-r, ${accent}, ${accent}00)`} />
     </Box>
   );
 
@@ -156,8 +157,7 @@ export function FichaExploraModal({
         h={{ base: "auto", md: "420px" }}
         maxH={{ base: "calc(100dvh - 32px)", md: "420px" }}
         borderRadius="24px"
-        border={`1px solid ${accent}55`}
-        boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 30px ${accent}55`}
+        boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 44px ${accent}55, 0 0 90px ${accent}22`}
       >
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.4)" />
 
@@ -171,7 +171,6 @@ export function FichaExploraModal({
           h="34px"
           borderRadius="full"
           bg={TXT + "18"}
-          border={`1px solid ${TXT}33`}
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -202,9 +201,7 @@ export function FichaExploraModal({
           overflowY="auto"
           sx={scrollbarSx}
         >
-          <Encabezado size="2xl" />
-          <Box w="54px" h="1px" borderRadius="full"
-               bgGradient={`linear(to-r, transparent, ${accent}, transparent)`} my={1} />
+          <Encabezado size="2xl" center />
           <Foto w="78%" />
           <Flex mt={2} w="100%" direction="column" gap={3} textAlign="left"><Texto /></Flex>
         </Flex>
@@ -218,7 +215,7 @@ export function FichaExploraModal({
           direction="row"
           p={7}
         >
-          <Foto w="300px" />
+          <Foto h="100%" self="stretch" />
 
           <Box flexShrink={0} alignSelf="center" w="1px" h="76%" borderRadius="full"
                bgGradient={`linear(to-b, transparent, ${accent}, transparent)`} mx={6} />
@@ -251,9 +248,8 @@ export function FichaExploraModal({
             h={{ base: "40px", md: "52px" }}
             minW={{ base: "40px", md: "52px" }}
             bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${TXT}aa`}
             sx={{ backdropFilter: "blur(4px)" }}
-            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
+            _hover={{ bg: "rgba(0,0,0,0.65)" }}
             _focus={{ boxShadow: "none" }}
             _focusVisible={{ boxShadow: "none" }}
             icon={
@@ -277,9 +273,8 @@ export function FichaExploraModal({
             h={{ base: "40px", md: "52px" }}
             minW={{ base: "40px", md: "52px" }}
             bg="rgba(0,0,0,0.45)"
-            border={`1px solid ${TXT}aa`}
             sx={{ backdropFilter: "blur(4px)" }}
-            _hover={{ bg: "rgba(0,0,0,0.65)", borderColor: TXT }}
+            _hover={{ bg: "rgba(0,0,0,0.65)" }}
             _focus={{ boxShadow: "none" }}
             _focusVisible={{ boxShadow: "none" }}
             icon={

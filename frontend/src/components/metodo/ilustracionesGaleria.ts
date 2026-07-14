@@ -3,10 +3,12 @@ import {
   astrologiaTxt,
   ayurvedaBg, ayurvedaTxt,
   fisiologiaBg, fisiologiaTxt,
+  nutricionBg, nutricionTxt,
   tcmBg, tcmTxt,
 } from "../../GlobalVariables";
 import { ORIGEN_ESPIRITUALIDAD } from "./ComicUniversoModal";
 import { ORIGEN_CIENCIA } from "./ComicCienciaModal";
+import { NUTRICION_INTRO } from "./comicNutricionIntro";
 import {
   VINETAS_ORIGEN as HINDU_ORIGEN,
   VINETAS_ELEMENTOS as HINDU_ELEMENTOS,
@@ -165,6 +167,18 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgImage: "/img/fondos/hinduismo.png",
     disciplinaBgColor: ayurvedaBg,
     textShadow: hinduTextShadow,
+  },
+
+  // ── Nutrición ──
+  {
+    id: "nutricion-intro",
+    titulo: "Eres lo que absorbes",
+    disciplina: "Nutrición",
+    cover: "/viñetas/nutricion/intro/nutricomic1.png",
+    vinetas: NUTRICION_INTRO,
+    themeColor: nutricionTxt,
+    disciplinaBgImage: "/img/fondos/nutri.png",
+    disciplinaBgColor: nutricionBg,
   },
 
   // ── Medicina China ──

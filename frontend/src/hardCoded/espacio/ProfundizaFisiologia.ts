@@ -42,11 +42,15 @@ export type TemaProfundiza = {
   pista?: string;
   /** Cómic que se ofrece «antes de empezar» (opcional). */
   comicIntro?: Vineta[];
+  /** Si true, cada ficha se pinta con SU color propio (borde + brillo). Por
+   *  defecto las fichas van sobrias (borde quitado, brillo blanco). */
+  fichasColoreadas?: boolean;
   /** Las cajas del tema. Vacío = apartado en construcción. */
   fichas: Ficha[];
 };
 
-const FOTO = (k: string) => `/recorrido/fisiologia/profundiza/${k}.png`;
+// Portada (foto de la tarjeta del hub) de cada tema, en la subcarpeta /portadas.
+const PORTADA = (f: string) => `/recorrido/fisiologia/profundiza/portadas/${f}.png`;
 const NT = (k: string) => `/recorrido/fisiologia/profundiza/neurotransmisores/${k}.png`;
 // Foto de una ficha dentro de la subcarpeta de su tema (María las irá subiendo;
 // mientras no existan, cada caja muestra la inicial del nombre).
@@ -111,7 +115,7 @@ const NEUROTRANSMISORES_SINTESIS: Vineta[] = [
 // ── Las fichas de Neurotransmisores ────────────────────────────────────────
 const NEUROTRANSMISORES: Ficha[] = [
   {
-    key: "dopamina", nombre: "Dopamina", color: "#f2c86b", foto: NT("dopamina"),
+    key: "dopamina", nombre: "Dopamina", color: "#f2994a", foto: NT("dopamina"),
     eyebrow: "Motivación y recompensa",
     explicacion: [
       "Es el neurotransmisor del «quiero eso». No es el del placer, sino el que te motiva para conseguirlo.",
@@ -120,7 +124,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "serotonina", nombre: "Serotonina", color: "#9fe6b8", foto: NT("serotonina"),
+    key: "serotonina", nombre: "Serotonina", color: "#f2d24b", foto: NT("serotonina"),
     eyebrow: "Ánimo y calma",
     explicacion: [
       "Gran parte de la serotonina del organismo se produce en el intestino gracias a las células intestinales, influenciadas por la microbiota y por los alimentos que comemos. En el cerebro regula el estado de ánimo, la calma y la sensación de bienestar. También participa en el sueño, el apetito y la digestión.",
@@ -128,7 +132,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "gaba", nombre: "GABA", color: "#a7d9f2", foto: NT("gaba"),
+    key: "gaba", nombre: "GABA", color: "#5d6ae0", foto: NT("gaba"),
     eyebrow: "El freno",
     explicacion: [
       "Cuando estás muy estresado, para evitar un desbordamiento, algunas neuronas liberan GABA, el principal freno del cerebro. Reduce la actividad de otras neuronas para que todo no se dispare a la vez.",
@@ -137,7 +141,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "glutamato", nombre: "Glutamato", color: "#f28b8b", foto: NT("glutamato"),
+    key: "glutamato", nombre: "Glutamato", color: "#6cb8f2", foto: NT("glutamato"),
     eyebrow: "El acelerador",
     explicacion: [
       "El opuesto del GABA: es el principal neurotransmisor excitador del cerebro. Activa las neuronas y es clave para el aprendizaje, la memoria y la plasticidad cerebral.",
@@ -145,7 +149,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "acetilcolina", nombre: "Acetilcolina", color: "#c9a7ff", foto: NT("acetilcolina"),
+    key: "acetilcolina", nombre: "Acetilcolina", color: "#6bd39a", foto: NT("acetilcolina"),
     eyebrow: "Músculo y memoria",
     explicacion: [
       "Une el cerebro con los músculos: cada vez que mueves un dedo, es la acetilcolina la que transmite la orden desde la neurona al músculo y desencadena la liberación del calcio necesario para que la fibra muscular se contraiga. Además, es esencial para la atención, el aprendizaje y la memoria.",
@@ -153,7 +157,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "noradrenalina", nombre: "Noradrenalina", color: "#f2b48f", foto: NT("noradrenalina"),
+    key: "noradrenalina", nombre: "Noradrenalina", color: "#e85c52", foto: NT("noradrenalina"),
     eyebrow: "Alerta y foco",
     explicacion: [
       "Te pone en modo alerta: aumenta la atención, la energía y la capacidad de reaccionar ante el estrés. Es prima de la adrenalina, pero actúa principalmente como neurotransmisor dentro del cerebro.",
@@ -161,7 +165,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "endorfinas", nombre: "Endorfinas", color: "#e6a7d9", foto: NT("endorfinas"),
+    key: "endorfinas", nombre: "Endorfinas", color: "#f6bd82", foto: NT("endorfinas"),
     eyebrow: "Alivio y euforia",
     explicacion: [
       "Son los analgésicos naturales del cuerpo: reducen el dolor y producen una sensación de alivio y bienestar. También se liberan durante el ejercicio intenso, la risa, el contacto social e incluso en situaciones de estrés para ayudarnos a soportarlo.",
@@ -169,7 +173,7 @@ const NEUROTRANSMISORES: Ficha[] = [
     ],
   },
   {
-    key: "oxitocina", nombre: "Oxitocina", color: "#b8d98f", foto: NT("oxitocina"),
+    key: "oxitocina", nombre: "Oxitocina", color: "#ec86c1", foto: NT("oxitocina"),
     eyebrow: "Vínculo y confianza",
     explicacion: [
       "La llaman «la hormona del apego». Actúa también como mensajero cerebral y refuerza la confianza, el cariño y los vínculos con los demás. Nos ayuda a sentirnos seguros y favorece las relaciones sociales.",
@@ -182,7 +186,7 @@ const NEUROTRANSMISORES: Ficha[] = [
 // ── Hormonas (por la glándula que las secreta) ───────────────────────────────
 const HORMONAS: Ficha[] = [
   {
-    key: "insulina", nombre: "Insulina", color: "#9fe6b8", foto: SUB("hormonas", "insulina"),
+    key: "insulina", nombre: "Insulina", color: "#f4a9cb", foto: SUB("hormonas", "insulina"),
     eyebrow: "Páncreas · baja el azúcar",
     explicacion: [
       "La fabrica el páncreas cuando sube la glucosa en sangre, por ejemplo después de comer. Es la llave que abre las células para que la glucosa entre y se use como energía o se guarde.",
@@ -190,7 +194,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "glucagon", nombre: "Glucagón", color: "#f2c86b", foto: SUB("hormonas", "glucagon"),
+    key: "glucagon", nombre: "Glucagón", color: "#9b6ee0", foto: SUB("hormonas", "glucagon"),
     eyebrow: "Páncreas · sube el azúcar",
     explicacion: [
       "Es la contraparte de la insulina. Cuando la glucosa baja (ayuno, ejercicio), el páncreas libera glucagón para que el hígado suelte glucosa guardada y mantenga estable el nivel en sangre.",
@@ -198,7 +202,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "cortisol", nombre: "Cortisol", color: "#f2b48f", foto: SUB("hormonas", "cortisol"),
+    key: "cortisol", nombre: "Cortisol", color: "#6bd39a", foto: SUB("hormonas", "cortisol"),
     eyebrow: "Suprarrenal · el estrés",
     explicacion: [
       "Las glándulas suprarrenales lo liberan ante el estrés y también siguiendo un ritmo diario: sube por la mañana para despertarte y baja por la noche. Moviliza energía y te pone en alerta.",
@@ -206,7 +210,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "adrenalina", nombre: "Adrenalina", color: "#f28b8b", foto: SUB("hormonas", "adrenalina"),
+    key: "adrenalina", nombre: "Adrenalina", color: "#f6bd82", foto: SUB("hormonas", "adrenalina"),
     eyebrow: "Suprarrenal · la reacción inmediata",
     explicacion: [
       "Es la hormona del «lucha o huye». Ante un peligro, en segundos acelera el corazón, dilata las pupilas y libera energía para reaccionar.",
@@ -214,7 +218,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "tiroideas", nombre: "Hormonas tiroideas", color: "#a7d9f2", foto: SUB("hormonas", "tiroideas"),
+    key: "tiroideas", nombre: "Hormonas tiroideas", color: "#ec86c1", foto: SUB("hormonas", "tiroideas"),
     eyebrow: "Tiroides · el acelerador",
     explicacion: [
       "Las hormonas tiroideas (T3 y T4) marcan la velocidad a la que funcionan tus células: el gasto de energía, la temperatura y el ritmo del corazón.",
@@ -222,7 +226,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "testosterona", nombre: "Testosterona", color: "#e6c07f", foto: SUB("hormonas", "testosterona"),
+    key: "testosterona", nombre: "Testosterona", color: "#5d8ae0", foto: SUB("hormonas", "testosterona"),
     eyebrow: "Gónadas · fuerza y desarrollo",
     explicacion: [
       "Presente en ambos sexos, aunque más alta en hombres. Interviene en el desarrollo muscular y óseo, el deseo sexual, la energía y el ánimo.",
@@ -230,7 +234,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "estrogenos", nombre: "Estrógenos", color: "#e6a7d9", foto: SUB("hormonas", "estrogenos"),
+    key: "estrogenos", nombre: "Estrógenos", color: "#e86fb0", foto: SUB("hormonas", "estrogenos"),
     eyebrow: "Gónadas · el ciclo y mucho más",
     explicacion: [
       "Principales hormonas sexuales femeninas. Regulan el ciclo menstrual y la fertilidad, pero también protegen los huesos, el corazón y el cerebro.",
@@ -238,7 +242,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "progesterona", nombre: "Progesterona", color: "#e0b7e0", foto: SUB("hormonas", "progesterona"),
+    key: "progesterona", nombre: "Progesterona", color: "#c9a7ff", foto: SUB("hormonas", "progesterona"),
     eyebrow: "Gónadas · calma y embarazo",
     explicacion: [
       "Es la otra gran hormona sexual femenina. Prepara el útero para un posible embarazo y lo sostiene si ocurre; sube en la segunda mitad del ciclo menstrual.",
@@ -246,7 +250,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "melatonina", nombre: "Melatonina", color: "#c9a7ff", foto: SUB("hormonas", "melatonina"),
+    key: "melatonina", nombre: "Melatonina", color: "#6a4bc0", foto: SUB("hormonas", "melatonina"),
     eyebrow: "Pineal · el sueño",
     explicacion: [
       "La glándula pineal la libera cuando cae la luz: es la señal de que llega la noche y toca dormir. Sincroniza tu reloj interno con el día y la noche.",
@@ -254,7 +258,7 @@ const HORMONAS: Ficha[] = [
     ],
   },
   {
-    key: "crecimiento", nombre: "Hormona del crecimiento", color: "#9ab6f0", foto: SUB("hormonas", "crecimiento"),
+    key: "crecimiento", nombre: "Hormona del crecimiento", color: "#6fd6db", foto: SUB("hormonas", "crecimiento"),
     eyebrow: "Hipófisis · reparar y crecer",
     explicacion: [
       "La hipófisis la libera sobre todo durante el sueño profundo y el ejercicio. Estimula el crecimiento en la infancia y, de adulto, la reparación de tejidos y músculo.",
@@ -737,10 +741,11 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Neurotransmisores",
     resumen: "Los mensajeros de tu cerebro.",
     color: "#c9a7ff",
-    foto: FOTO("neurotransmisores"),
+    foto: PORTADA("portadaneurotransmisores"),
     grupo: "Química interna",
     intro: "Pequeñas moléculas que llevan un mensaje de una neurona a otra.",
     comicIntro: NEUROTRANSMISORES_SINTESIS,
+    fichasColoreadas: true,
     fichas: NEUROTRANSMISORES,
   },
   {
@@ -748,11 +753,12 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Hormonas",
     resumen: "Mensajeros que viajan por la sangre.",
     color: "#e6a7d9",
-    foto: FOTO("hormonas"),
+    foto: PORTADA("portadahormonas"),
     grupo: "Química interna",
-    intro: "Si los neurotransmisores hablan al oído, las hormonas gritan por megafonía: viajan por la sangre a todo el cuerpo. Aquí las veremos por el órgano que las secreta.",
+    intro: "Tus órganos se comunican a través de las hormonas; por eso, todo en tu cuerpo está conectado.",
     comicIntro: [], // «Cómo se sintetiza una hormona» — pendiente
     pista: "Pulsa cada hormona para leer qué hace en tu cuerpo.",
+    fichasColoreadas: true,
     fichas: HORMONAS,
   },
   {
@@ -760,7 +766,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Metabolismo",
     resumen: "De lo que comes a la energía.",
     color: "#f2c86b",
-    foto: FOTO("metabolismo"),
+    foto: PORTADA("metabolismoportada"),
     grupo: "Química interna",
     intro: "El conjunto de reacciones que convierten la comida en energía (ATP) y en materiales para construirte.",
     pista: "Pulsa cada pieza para ver cómo conviertes la comida en energía.",
@@ -773,7 +779,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Expresión génica y epigenética",
     resumen: "Mismo ADN, células distintas.",
     color: "#a7d9f2",
-    foto: FOTO("epigenetica"),
+    foto: PORTADA("epigeneticaportada"),
     grupo: "El código y la limpieza",
     intro: "Una neurona y un hepatocito tienen el MISMO ADN, pero funciones opuestas. ¿Cómo? Encendiendo y apagando genes distintos.",
     pista: "Pulsa cada caja para ver cómo se encienden y apagan tus genes.",
@@ -784,7 +790,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Detoxificación del hígado",
     resumen: "Cómo limpia tu cuerpo lo que no sirve.",
     color: "#f2b48f",
-    foto: FOTO("detoxificacion"),
+    foto: PORTADA("detoxificacionportada"),
     grupo: "El código y la limpieza",
     intro: "Tu hígado desactiva medicamentos, alcohol y toxinas en dos fases y los prepara para eliminarlos.",
     pista: "Pulsa cada fase para ver cómo limpia tu hígado.",
@@ -795,7 +801,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Estrés oxidativo y antioxidantes",
     resumen: "Radicales libres y cómo te defiendes.",
     color: "#f28b8b",
-    foto: FOTO("estres-oxidativo"),
+    foto: PORTADA("estresportada"),
     grupo: "El código y la limpieza",
     intro: "Cuando te da el sol o generas energía, aparecen radicales libres que dañan las células. Tu cuerpo tiene su propio ejército antioxidante.",
     pista: "Pulsa cada caja para entender el desgaste y cómo te defiendes.",
@@ -808,7 +814,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Sistema inmunitario",
     resumen: "El baile entre las células.",
     color: "#9fe6b8",
-    foto: FOTO("inmunitario"),
+    foto: PORTADA("inmunitarioportada"),
     grupo: "Vida y muerte celular",
     intro: "Cuando entra un patógeno, tus defensas responden por oleadas, coordinándose como en una coreografía.",
     pista: "Pulsa cada caja para ver cómo te defiende tu cuerpo.",
@@ -819,7 +825,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Envejecimiento celular",
     resumen: "Telómeros, senescencia y desgaste.",
     color: "#e8e0cf",
-    foto: FOTO("envejecimiento"),
+    foto: PORTADA("envejecimiento"),
     grupo: "Vida y muerte celular",
     intro: "Por qué las células envejecen: el reloj de los telómeros, las células que se «jubilan» y el desgaste oxidativo.",
     pista: "Pulsa cada caja para ver por qué envejecemos.",
@@ -830,7 +836,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Apoptosis y necrosis",
     resumen: "Las dos formas de morir de una célula.",
     color: "#c9a7ff",
-    foto: FOTO("apoptosis"),
+    foto: PORTADA("apoptosis"),
     grupo: "Vida y muerte celular",
     intro: "Una célula puede apagarse de forma ordenada y programada (apoptosis) o morir de golpe por una lesión (necrosis). No es lo mismo.",
     pista: "Pulsa cada caja para entender cómo mueren tus células.",
@@ -841,7 +847,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Regeneración",
     resumen: "Cuando te haces una herida.",
     color: "#f2b48f",
-    foto: FOTO("regeneracion"),
+    foto: PORTADA("regeneracion"),
     grupo: "Vida y muerte celular",
     intro: "Cómo tu cuerpo cierra una herida, paso a paso, hasta dejar apenas una cicatriz.",
     pista: "Pulsa cada paso para ver cómo cierras una herida.",
@@ -852,7 +858,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Homeostasis",
     resumen: "El cuerpo siempre buscando el equilibrio.",
     color: "#8fd0e6",
-    foto: FOTO("homeostasis"),
+    foto: PORTADA("homeostasis"),
     grupo: "Vida y muerte celular",
     intro: "Cómo tu cuerpo mantiene constantes la temperatura, la glucosa, el pH y la presión, pase lo que pase fuera.",
     pista: "Pulsa cada caja para ver cómo tu cuerpo se mantiene en equilibrio.",
@@ -863,7 +869,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Nervio vago",
     resumen: "El cable que te calma.",
     color: "#b8d98f",
-    foto: FOTO("nervio-vago"),
+    foto: PORTADA("nerviovago"),
     grupo: "Vida y muerte celular",
     intro: "El nervio más largo del sistema nervioso autónomo: conecta el cerebro con el corazón, los pulmones y el intestino, y es la llave de la calma.",
     pista: "Pulsa cada caja para conocer el nervio de la calma.",

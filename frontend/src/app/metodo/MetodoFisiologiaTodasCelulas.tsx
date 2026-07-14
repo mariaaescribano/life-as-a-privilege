@@ -53,7 +53,7 @@ const ORGANOS: Organo[] = [
     consejos: [
       {
         titular: "Dormir te hace más inteligente.",
-        texto: <>Mientras duermes, el cerebro no descansa: aprovecha para ponerse a punto. Los astrocitos facilitan una limpieza más profunda del tejido cerebral y la microglía patrulla eliminando restos celulares, vigilando posibles amenazas y ayudando a mantener las conexiones en buen estado. Además, durante el sueño se consolidan los recuerdos y se refuerzan los aprendizajes del día gracias a la neuroplasticidad, que ocurre en mayor o menor escala en cada momento de nuestra vida.</>,
+        texto: <>Mientras duermes, el cerebro no descansa: aprovecha para limpiar. Los astrocitos facilitan una limpieza más profunda del tejido cerebral y la microglía patrulla eliminando restos celulares, vigilando posibles amenazas y ayudando a mantener las conexiones en buen estado. Además, durante el sueño se consolidan los recuerdos y se refuerzan los aprendizajes del día gracias a la neuroplasticidad, que ocurre en mayor o menor escala en cada momento de nuestra vida.</>,
       },
       {
         titular: "El estrés hace que tu cerebro vea amenazas donde no las hay.",

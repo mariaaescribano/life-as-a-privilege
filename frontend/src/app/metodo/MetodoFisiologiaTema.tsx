@@ -13,12 +13,13 @@ import { Reveal } from "../../components/global/Reveal";
 import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
 import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
 import { VolverFisio } from "../../components/metodo/VolverFisio";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import { temaByKey, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
-function FichaBox({ ficha, temaColor, active, onClick }: {
-  ficha: Ficha; temaColor: string; active: boolean; onClick: () => void;
+function FichaBox({ ficha, temaColor, active, onClick, coloreado }: {
+  ficha: Ficha; temaColor: string; active: boolean; onClick: () => void; coloreado?: boolean;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const accent = ficha.color || temaColor;
@@ -31,22 +32,31 @@ function FichaBox({ ficha, temaColor, active, onClick }: {
       w="100%"
       h="100%"
       borderRadius="2xl"
-      border={`1px solid ${active ? fisiologiaTxt : `${fisiologiaTxt}44`}`}
+      border={coloreado ? `1px solid ${active ? accent : `${accent}66`}` : "none"}
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
       transition="all 0.2s ease"
-      boxShadow={active
-        ? `0 6px 24px rgba(0,0,0,0.3), 0 0 24px ${accent}, 0 0 14px ${fisiologiaTxt}66`
-        : `0 4px 16px rgba(0,0,0,0.22), 0 0 14px ${fisiologiaTxt}1f`}
-      _hover={{ transform: "translateY(-4px)", borderColor: `${fisiologiaTxt}aa`,
-                boxShadow: `0 10px 30px rgba(0,0,0,0.32), 0 0 22px ${accent}` }}
+      boxShadow={coloreado
+        ? (active
+            ? `0 6px 24px rgba(0,0,0,0.3), 0 0 26px ${accent}, 0 0 14px ${accent}88`
+            : `0 4px 16px rgba(0,0,0,0.22), 0 0 16px ${accent}55`)
+        : (active
+            ? "0 6px 24px rgba(0,0,0,0.3), 0 0 24px rgba(255,255,255,0.35)"
+            : "0 4px 16px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.12)")}
+      _hover={{ transform: "translateY(-4px)",
+                ...(coloreado ? { borderColor: accent } : {}),
+                boxShadow: coloreado
+                  ? `0 10px 30px rgba(0,0,0,0.32), 0 0 24px ${accent}`
+                  : "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
       _active={{ transform: "translateY(-1px)" }}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
       <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
             p={{ base: 4, md: 5 }} h="100%">
         <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg={`${accent}22`} border={`1px solid ${accent}66`} boxShadow={`0 0 12px ${accent}44`}
+             bg={`${accent}22`}
+             border={coloreado ? `1px solid ${accent}66` : "none"}
+             boxShadow={coloreado ? `0 0 12px ${accent}55` : "0 0 12px rgba(255,255,255,0.12)"}
              display="flex" alignItems="center" justifyContent="center">
           {ficha.foto && !imgErr ? (
             <Image src={encodeURI(ficha.foto)} alt={ficha.nombre} w="100%" h="100%" objectFit="cover"
@@ -96,6 +106,11 @@ export default function MetodoFisiologiaTema() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+
+        // No mostramos la página hasta que TODAS las fotos de las fichas estén
+        // descargadas: así la página y las fotos aparecen a la vez, nunca una
+        // rejilla que se rellena de golpe. (onerror también cuenta, no se cuelga.)
+        await precargarImagenes((tema?.fichas ?? []).map((f) => (f.foto ? encodeURI(f.foto) : null)));
       } catch { navigate("/metodo/fisiologia"); return; }
       finally { setLoading(false); }
     })();
@@ -186,7 +201,7 @@ export default function MetodoFisiologiaTema() {
                 {tema.fichas.map((f, i) => (
                   <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
                     <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
-                              onClick={() => setFicha(f)} />
+                              coloreado={tema.fichasColoreadas} onClick={() => setFicha(f)} />
                   </Reveal>
                 ))}
               </SimpleGrid>

@@ -65,7 +65,7 @@ export const CELULA_VIVA: Vineta[] = [
     src: "/viñetas/fisiologia/celulacomic/celula1.png",
     paragraphs: [
       "En una sola célula ocurren millones de reacciones cada segundo. Y tu cuerpo está formado por billones de ellas.",
-      "Mientras lees estas palabras, un universo entero trabaja en silencio para mantenerte con vida.",
+      "Mientras lees estas palabras, un universo entero trabaja en silencio para mantenerte con Vida.",
     ],
   },
 ];

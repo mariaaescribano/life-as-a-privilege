@@ -636,7 +636,7 @@ export function ComicViewer({
                     {current.titulo}
                   </Text>
                   <Box h="1px" w="100%" my={4}
-                       bgGradient="linear(to-r, rgba(255,255,255,0.9), transparent)" />
+                       bgGradient="linear(to-r, #ffffffe6, transparent)" />
                 </>
               )}
 

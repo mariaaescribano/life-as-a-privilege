@@ -7,6 +7,9 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { NUTRICION_INTRO } from "../../components/metodo/comicNutricionIntro";
+import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -32,6 +35,7 @@ export default function MetodoNutricion() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  const intro = useIntroComic("metodo-nutricion"); // cómic de intro, 1ª vez
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -59,6 +63,9 @@ export default function MetodoNutricion() {
         const nutriSuscrito = !!me.data?.nutricion_suscrito;
         setSuscrito(nutriSuscrito);
         if (!nutriSuscrito) { setPagoOpen(true); return; }
+
+        // Ya tiene acceso: si es la 1ª vez, muestra el cómic de intro.
+        void intro.checkAndOpen();
       } catch {
         navigate("/home");
         return;
@@ -104,6 +111,7 @@ export default function MetodoNutricion() {
       );
       setSuscrito(true);
       setPagoOpen(false);
+      void intro.checkAndOpen();
     } catch (err: any) {
       setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
@@ -171,6 +179,17 @@ export default function MetodoNutricion() {
           </Reveal>
         </Flex>
       </Flex>
+
+      {/* Intro (1ª vez): cómic de bienvenida de Nutrición. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        vinetas={NUTRICION_INTRO}
+        themeColor={nutricionTxt}
+        disciplinaBgImage="/img/fondos/nutri.png"
+        disciplinaBgColor={nutricionBg}
+        onFinish={intro.finish}
+        onClose={intro.close}
+      />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
 

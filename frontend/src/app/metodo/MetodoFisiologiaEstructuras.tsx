@@ -226,6 +226,9 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
   const bandejaRef = useRef<HTMLDivElement>(null);
   const totalN = piezasDe(def).length;
 
+  // Rehacer el ensamblaje de esta estructura (vuelve a la Fase A).
+  const reiniciar = () => { setPendientes(piezasDe(def)); setPuestas([]); setCompleto(false); };
+
   const soltar = (pieza: Pieza, rect: DOMRect) => {
     const el = bandejaRef.current;
     if (!el) return;
@@ -345,16 +348,20 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
                     <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
-                  <Box as="button" onClick={onVolver} alignSelf={{ base: "center", md: "flex-start" }} mt={2}
-                       px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
-                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                       letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
-                       boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                    Volver a las estructuras →
-                  </Box>
                 </Flex>
               </PanelBox>
+            </Flex>
+
+            {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
+            <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
+              <Box as="button" onClick={reiniciar}
+                   display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                   letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                   _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                ↺ Volver a hacer
+              </Box>
             </Flex>
           </MBox>
         )}
@@ -524,7 +531,7 @@ export default function MetodoFisiologiaEstructuras() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -563,7 +570,7 @@ export default function MetodoFisiologiaEstructuras() {
           ) : (
             /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro ── */
             <RevealStagger stagger={0.12} delayChildren={0.1}
-                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="880px" gap={{ base: 4, md: 5 }}>
+                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="850px" gap={{ base: 4, md: 5 }}>
               {ESTRUCTURAS.map((e) => (
                 <RevealItem key={e.id} direction="up" distance={24} scaleFrom={0.97}
                             flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">
