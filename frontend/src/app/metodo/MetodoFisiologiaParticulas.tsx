@@ -315,7 +315,7 @@ export default function MetodoFisiologiaParticulas() {
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
                 <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Construye una partícula
+                  Construye una partícula.
                 </Text>
               </MBox>
             )}

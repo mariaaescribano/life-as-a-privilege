@@ -57,12 +57,11 @@ const NT = (k: string) => `/recorrido/fisiologia/profundiza/neurotransmisores/${
 const SUB = (tema: string, k: string) => `/recorrido/fisiologia/profundiza/${tema}/${k}.png`;
 
 // ── Cómic «Cómo se sintetiza un neurotransmisor» ───────────────────────────
-// Imágenes: /viñetas/fisiologia/neurotransmisores/nt1.png … nt6.png
-// (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).
+// Imágenes: /viñetas/fisiologia/neurocomic/neurocomic1.png … neurocomic6.png
+// Sin encabezados (eyebrow): las viñetas van solo con su texto.
 const NEUROTRANSMISORES_SINTESIS: Vineta[] = [
   {
-    src: "/viñetas/fisiologia/neurotransmisores/nt1.png",
-    eyebrow: "La materia prima",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic1.png",
     paragraphs: [
       "Todo empieza en tu plato.",
       "Muchos neurotransmisores nacen de aminoácidos que sacas de la comida: el triptófano, la tirosina…",
@@ -70,40 +69,35 @@ const NEUROTRANSMISORES_SINTESIS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurotransmisores/nt2.png",
-    eyebrow: "La cadena de montaje",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic2.png",
     paragraphs: [
       "El aminoácido viaja hasta la neurona. Dentro, unas enzimas lo transforman paso a paso, como en una fábrica.",
       "Así la tirosina acaba convertida en dopamina; el triptófano, en serotonina.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurotransmisores/nt3.png",
-    eyebrow: "Guardados y listos",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic3.png",
     paragraphs: [
       "El neurotransmisor recién fabricado se guarda en pequeñas bolsas: las vesículas.",
       "Esperan cargadas en el extremo de la neurona, listas para disparar.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurotransmisores/nt4.png",
-    eyebrow: "La chispa",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic4.png",
     paragraphs: [
       "Llega un impulso eléctrico.",
       "Las vesículas se fusionan con la membrana y liberan el neurotransmisor al pequeño espacio entre dos neuronas: la sinapsis.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurotransmisores/nt5.png",
-    eyebrow: "El mensaje",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic5.png",
     paragraphs: [
       "El neurotransmisor cruza y encaja en su receptor, como una llave en su cerradura.",
       "Ese encaje ES el mensaje: la neurona siguiente lo recibe y reacciona.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurotransmisores/nt6.png",
-    eyebrow: "Apagar y reciclar",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic6.png",
     paragraphs: [
       "Después, el mensaje se apaga.",
       "Parte del neurotransmisor se recicla de vuelta a la neurona (recaptación) y parte se degrada.",

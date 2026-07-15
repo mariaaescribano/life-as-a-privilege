@@ -536,7 +536,7 @@ export default function MetodoFisiologiaMoleculas() {
                                  letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
                                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
                                  _hover={{ color: "white", transform: "translateX(3px)" }}>
-                              {esUltima ? "Ver las moléculas de la vida →" : "Siguiente →"}
+                              {esUltima ? "Ver las moléculas de la Vida →" : "Siguiente →"}
                             </Box>
                           </Flex>
                         </Flex>
