@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
-import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { fisiologiaTxt, fisiologiaNom } from "../../GlobalVariables";
+import { keyframes } from "@emotion/react";
+import { DisciplinaBgLayer, disciplinaBgImg } from "../global/DisciplinaBgLayer";
+import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const TXT = fisiologiaTxt;
+const BG = fisiologiaBg;
+const FISIO_IMG = disciplinaBgImg(fisiologiaNom) ?? "/img/fondos/fisio.png";
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
 
 /* ─────────────────────────────────────────
    TARJETA DE CÉLULA
@@ -140,10 +148,15 @@ export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula;
 
 /* ─────────────────────────────────────────
    FICHA FISIOLOGÍA — MODAL ÚNICO Y REUTILIZABLE
-   Este es EL componente de modal de Fisiología. Lo usan la ficha de célula,
-   los consejos de los órganos y los sistemas del cuerpo. Estilo: foto a la
-   izquierda + rallita vertical + título arriba a la derecha + texto con scroll.
-   No dupliques este layout: pásale foto/título/párrafos y (opcional) flechas.
+   Este es EL único box de lectura de Fisiología. Lo usan la ficha de célula,
+   los consejos de los órganos, los sistemas del cuerpo y las fichas de
+   Profundiza. Es EXACTAMENTE la misma caja que el visor de «Ilustraciones»
+   (ComicViewer): fondo a pantalla completa con la foto de Fisiología muy
+   difuminada + velo, y una caja con foto a la izquierda, rallita vertical y
+   título + texto a la derecha, con líneas de luz arriba/abajo, flechas
+   circulares flotantes y contador. El título va en lavanda (un poco más
+   oscurito que el blanco del cómic). No dupliques este layout: pásale
+   foto/título/párrafos y (opcional) flechas + acento.
 ───────────────────────────────────────── */
 export function FichaFisioModal({
   foto,
@@ -155,6 +168,7 @@ export function FichaFisioModal({
   onNext,
   contador = null,
   fotoFallback,
+  accent = TXT,
 }: {
   /** Ruta de la imagen cuadrada de la izquierda. */
   foto: string;
@@ -172,6 +186,8 @@ export function FichaFisioModal({
   contador?: string | null;
   /** Qué mostrar si la foto falla (por defecto, nada). */
   fotoFallback?: React.ReactNode;
+  /** Color de acento (glows, líneas, flechas, título). Por defecto el de Fisiología. */
+  accent?: string;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const puedeNavegar = !!onPrev && !!onNext;
@@ -196,66 +212,31 @@ export function FichaFisioModal({
   }, [onClose, onPrev, onNext]);
 
   const scrollbarSx = {
-    "&::-webkit-scrollbar": { width: "5px" },
-    "&::-webkit-scrollbar-track": { bg: "transparent" },
-    "&::-webkit-scrollbar-thumb": { bg: TXT + "55", borderRadius: "full" },
+    "&::-webkit-scrollbar": { width: "6px" },
+    "&::-webkit-scrollbar-track": { background: "transparent" },
+    "&::-webkit-scrollbar-thumb": { background: `${accent}55`, borderRadius: "3px" },
+    "&::-webkit-scrollbar-thumb:hover": { background: `${accent}88` },
+    scrollbarWidth: "thin" as const,
+    scrollbarColor: `${accent}55 transparent`,
   };
-
-  const Foto = ({ w }: { w: string }) => (
-    <Box
-      flexShrink={0}
-      w={w}
-      aspectRatio={1}
-      alignSelf="center"
-      borderRadius="xl"
-      overflow="hidden"
-      boxShadow="0 8px 32px rgba(0,0,0,0.3)"
-      bg={TXT + "12"}
-    >
-      {!imgErr ? (
-        <Image src={encodeURI(foto)} alt={alt} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
-      ) : (
-        <Flex w="100%" h="100%" align="center" justify="center" textAlign="center" px={3}>
-          {fotoFallback}
-        </Flex>
-      )}
-    </Box>
-  );
-
-  const Parrafos = () => (
-    <>
-      {parrafos.map((p, i) => (
-        <Text
-          key={i}
-          color={TXT}
-          fontSize={{ base: "md", md: "lg" }}
-          lineHeight="1.8"
-          letterSpacing="0.02em"
-          fontFamily="'EB Garamond', serif"
-          style={{ textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}
-        >
-          {p}
-        </Text>
-      ))}
-    </>
-  );
 
   const flechaSx = {
     position: "fixed" as const,
     top: "50%",
     transform: "translateY(-50%)",
-    zIndex: 3,
+    zIndex: 10,
     variant: "ghost" as const,
     borderRadius: "full",
-    w: { base: "40px", md: "52px" },
-    h: { base: "40px", md: "52px" },
-    minW: { base: "40px", md: "52px" },
-    bg: "rgba(0,0,0,0.45)",
-    border: `1px solid ${TXT}aa`,
+    w: { base: "40px", md: "60px" },
+    h: { base: "40px", md: "60px" },
+    minW: { base: "40px", md: "60px" },
+    bg: "rgba(0,0,0,0.5)",
+    border: `1px solid ${accent}aa`,
+    boxShadow: "0 2px 14px rgba(0,0,0,0.45)",
     sx: { backdropFilter: "blur(4px)" },
-    _hover: { bg: "rgba(0,0,0,0.65)", borderColor: TXT },
-    _focus: { boxShadow: "none" },
-    _focusVisible: { boxShadow: "none" },
+    _hover: { bg: "rgba(0,0,0,0.72)", borderColor: accent },
+    _focus: { boxShadow: "0 2px 14px rgba(0,0,0,0.45)" },
+    _focusVisible: { boxShadow: "0 2px 14px rgba(0,0,0,0.45)" },
   };
 
   return (
@@ -263,172 +244,70 @@ export function FichaFisioModal({
       position="fixed"
       inset={0}
       zIndex={1100}
-      bg="rgba(0,40,20,0.62)"
-      sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
       display="flex"
       alignItems="center"
       justifyContent="center"
-      px={{ base: 4, md: 6 }}
-      py={{ base: 4, md: 6 }}
+      px={{ base: 4, md: 20 }}
+      py={{ base: 12, md: 14 }}
       onClick={onClose}
     >
+      {/* Fondo a pantalla completa: foto de Fisiología muy difuminada + velo,
+          igual que el visor de Ilustraciones. */}
       <Box
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        position="relative"
+        position="fixed"
+        top="-40px"
+        left="-40px"
+        right="-40px"
+        bottom="-40px"
+        pointerEvents="none"
+        zIndex={0}
         overflow="hidden"
-        w={{ base: "95%", md: "920px" }}
-        h={{ base: "auto", md: "420px" }}
-        maxH={{ base: "calc(100dvh - 40px)", md: "420px" }}
-        borderRadius="24px"
-        border={`1px solid ${TXT}33`}
-        boxShadow={`0 32px 80px rgba(0,0,0,0.5), 0 0 26px ${TXT}33`}
+        bg={BG}
       >
-        {/* Fondo: foto de Fisiología con velo oscuro suave */}
-        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="24px" overlay="rgba(20,12,30,0.4)" />
-
-        {/* Botón cerrar */}
         <Box
-          as="button"
+          as="img"
+          src={FISIO_IMG}
+          alt=""
+          loading="eager"
           position="absolute"
-          top="14px"
-          right="14px"
-          w="34px"
-          h="34px"
-          borderRadius="full"
-          bg={TXT + "18"}
-          border={`1px solid ${TXT}33`}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          color={TXT}
-          fontSize="16px"
-          fontWeight="700"
-          cursor="pointer"
-          transition="all 0.18s"
-          _hover={{ bg: TXT + "33" }}
-          onClick={onClose}
-          zIndex={2}
-        >
-          ✕
-        </Box>
-
-        {/* ── MÓVIL: título centrado → rallita → foto → texto ── */}
-        <Flex
-          display={{ base: "flex", md: "none" }}
-          position="relative"
-          zIndex={1}
-          direction="column"
-          align="center"
-          p={5}
-          pt={12}
-          gap={3}
-          maxH="calc(100dvh - 40px)"
-          overflowY="auto"
-          sx={scrollbarSx}
-        >
-          <Text
-            color={TXT}
-            fontSize="2xl"
-            fontWeight="700"
-            fontFamily="'EB Garamond', serif"
-            letterSpacing="0.02em"
-            lineHeight="1.2"
-            textAlign="center"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-          >
-            {titulo}
-          </Text>
-
-          <Box
-            w="54px"
-            h="1px"
-            borderRadius="full"
-            bgGradient={`linear(to-r, transparent, ${TXT}, transparent)`}
-            my={1}
-          />
-
-          <Foto w="100%" />
-
-          <Flex direction="column" gap={4} w="100%" mt={2}>
-            <Parrafos />
-          </Flex>
-        </Flex>
-
-        {/* ── ORDENADOR: foto fija a la izquierda, texto con scroll a la derecha ── */}
-        <Flex
-          display={{ base: "none", md: "flex" }}
-          position="relative"
-          zIndex={1}
-          h="100%"
-          direction="row"
-          p={7}
-        >
-          <Foto w="300px" />
-
-          {/* Rallita vertical entre foto y texto */}
-          <Box
-            flexShrink={0}
-            alignSelf="center"
-            w="1px"
-            h="76%"
-            borderRadius="full"
-            bgGradient={`linear(to-b, transparent, ${TXT}, transparent)`}
-            mx={6}
-          />
-
-          <Flex direction="column" flex="1" minW={0} minH={0}>
-            <Text
-              color={TXT}
-              fontSize="3xl"
-              fontWeight="700"
-              fontFamily="'EB Garamond', serif"
-              letterSpacing="0.02em"
-              lineHeight="1.2"
-              flexShrink={0}
-              mb={3}
-              pr="40px"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-            >
-              {titulo}
-            </Text>
-
-            {/* Separación horizontal bajo el título (no afecta al scroll del texto) */}
-            <Box
-              flexShrink={0}
-              h="1.5px"
-              w="100%"
-              borderRadius="full"
-              bgGradient={`linear(to-r, ${TXT}, ${TXT}55, transparent)`}
-              mb={4}
-            />
-
-            {/* Solo el texto hace scroll (la foto no se mueve) */}
-            <Flex direction="column" gap={4} flex="1" minH={0} overflowY="auto" pr={2} pb={contador ? 4 : 0} sx={scrollbarSx}>
-              <Parrafos />
-            </Flex>
-          </Flex>
-        </Flex>
-
-        {/* Contador discreto (abajo al centro) */}
-        {contador && (
-          <Text
-            display={{ base: "none", md: "block" }}
-            position="absolute"
-            bottom={4}
-            left="50%"
-            transform="translateX(-50%)"
-            zIndex={2}
-            color={`${TXT}aa`}
-            fontSize="xs"
-            fontStyle="italic"
-            letterSpacing="0.1em"
-            pointerEvents="none"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}
-          >
-            {contador}
-          </Text>
-        )}
+          top="-28px"
+          left="-28px"
+          right="-28px"
+          bottom="-28px"
+          w="calc(100% + 56px)"
+          h="calc(100% + 56px)"
+          style={{ objectFit: "cover", objectPosition: "center", filter: "blur(20px)" }}
+        />
+        <Box position="absolute" inset="0" bg="rgba(0,0,0,0.45)" />
       </Box>
+
+      {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo */}
+      <IconButton
+        aria-label="Cerrar"
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        position="fixed"
+        top={{ base: 3, md: 5 }}
+        right={{ base: 3, md: 5 }}
+        zIndex={10}
+        variant="ghost"
+        borderRadius="full"
+        w={{ base: "42px", md: "48px" }}
+        h={{ base: "42px", md: "48px" }}
+        minW={{ base: "42px", md: "48px" }}
+        bg="rgba(0,0,0,0.5)"
+        border={`1px solid ${accent}aa`}
+        boxShadow="0 2px 12px rgba(0,0,0,0.45)"
+        sx={{ backdropFilter: "blur(4px)" }}
+        _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: accent }}
+        _focus={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
+        _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
+        icon={
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill="#ffffff"
+            style={{ filter: `drop-shadow(0 0 5px ${accent}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+          </Box>
+        }
+      />
 
       {/* Flechas para pasar de una ficha a otra (por encima del box) */}
       {puedeNavegar && (
@@ -436,11 +315,11 @@ export function FichaFisioModal({
           <IconButton
             aria-label="Anterior"
             onClick={(e) => { e.stopPropagation(); onPrev!(); }}
-            left={{ base: 1, md: 5 }}
+            left={{ base: 1, md: 6 }}
             {...flechaSx}
             icon={
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
-                style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+                style={{ filter: `drop-shadow(0 0 6px ${accent}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
                 <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
               </Box>
             }
@@ -448,17 +327,183 @@ export function FichaFisioModal({
           <IconButton
             aria-label="Siguiente"
             onClick={(e) => { e.stopPropagation(); onNext!(); }}
-            right={{ base: 1, md: 5 }}
+            right={{ base: 1, md: 6 }}
             {...flechaSx}
             icon={
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "22px", md: "28px" }} h={{ base: "22px", md: "28px" }} fill="#ffffff"
-                style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+                style={{ filter: `drop-shadow(0 0 6px ${accent}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
                 <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
               </Box>
             }
           />
         </>
       )}
+
+      {/* Caja única: foto + texto sobre la foto de la disciplina, con líneas de
+          luz arriba/abajo. El scroll ocurre DENTRO de la caja. */}
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        w="100%"
+        maxW={{ base: "360px", md: "900px" }}
+        h={{ base: "auto", md: "500px" }}
+        maxH={{ base: "calc(100dvh - 96px)", md: "500px" }}
+        display="flex"
+        flexDirection="column"
+        position="relative"
+        borderRadius="xl"
+        overflow="hidden"
+        animation={`${fadeIn} 0.5s ease both`}
+        boxShadow={`0 0 22px ${BG}88, 0 0 50px ${BG}55, 0 0 18px ${accent}44, 0 0 40px ${accent}22, inset 0 0 20px rgba(0,0,0,0.35)`}
+      >
+        {/* Fondo de la caja (foto de disciplina + velo) */}
+        <Box
+          position="absolute"
+          inset="0"
+          pointerEvents="none"
+          zIndex={0}
+          style={{ background: "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)" }}
+        >
+          <Box
+            as="img"
+            src={FISIO_IMG}
+            alt=""
+            loading="eager"
+            position="absolute"
+            inset="0"
+            w="100%"
+            h="100%"
+            style={{ objectFit: "cover", objectPosition: "center", filter: "saturate(1.05)" }}
+          />
+          <Box position="absolute" inset="0" bg={`${BG}66`} />
+        </Box>
+
+        {/* Línea de luz superior */}
+        <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={3}
+             bgGradient={`linear(to-r, transparent, ${accent}aa, transparent)`} />
+
+        {/* Área de contenido: foto (izq) + texto (der), como en Ilustraciones. */}
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          align={{ base: "center", md: "stretch" }}
+          justify="center"
+          gap={{ base: 5, md: 10 }}
+          position="relative"
+          zIndex={2}
+          flex="1"
+          minH={0}
+          overflowY={{ base: "auto", md: "hidden" }}
+          overflowX="hidden"
+          px={{ base: 5, md: 10 }}
+          py={{ base: 9, md: 10 }}
+          sx={scrollbarSx}
+        >
+          {/* Foto */}
+          <Box
+            w={{ base: "80%", md: "340px" }}
+            maxW={{ base: "260px", md: "340px" }}
+            aspectRatio={1}
+            flexShrink={0}
+            alignSelf="center"
+            position="relative"
+            borderRadius="lg"
+            overflow="hidden"
+            bg={`${accent}12`}
+            sx={{ filter: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${accent}33)` }}
+          >
+            {!imgErr && foto ? (
+              <Image src={encodeURI(foto)} alt={alt} w="100%" h="100%" objectFit="cover" onError={() => setImgErr(true)} />
+            ) : (
+              <Flex w="100%" h="100%" align="center" justify="center" textAlign="center" px={3}>
+                {fotoFallback}
+              </Flex>
+            )}
+          </Box>
+
+          {/* Separador: rayita corta en móvil, vertical entre foto y texto en escritorio */}
+          <Box
+            flexShrink={0}
+            alignSelf="center"
+            w={{ base: "52px", md: "1px" }}
+            h={{ base: "1px", md: "150px" }}
+            borderRadius="full"
+            bgGradient={{
+              base: `linear(to-r, transparent, ${accent}aa, transparent)`,
+              md: `linear(to-b, transparent, ${accent}aa, transparent)`,
+            }}
+          />
+
+          {/* Texto: título (lavanda, un poco más oscurito que el blanco) + línea + párrafos */}
+          <Box
+            flex="1"
+            minW={0}
+            w={{ base: "100%", md: "auto" }}
+            alignSelf={{ base: "auto", md: "stretch" }}
+            maxH={{ base: "none", md: "100%" }}
+            overflowY={{ base: "visible", md: "auto" }}
+            overflowX="hidden"
+            display="flex"
+            flexDirection="column"
+            justifyContent="flex-start"
+            pt={{ base: 0, md: 1 }}
+            pb={{ base: 0, md: 6 }}
+            pr={{ base: 0, md: 4 }}
+            sx={scrollbarSx}
+          >
+            <Text
+              color={accent}
+              fontSize={{ base: "2xl", md: "3xl" }}
+              fontWeight={700}
+              fontFamily="'EB Garamond', serif"
+              letterSpacing="0.02em"
+              lineHeight="1.2"
+              textAlign={{ base: "center", md: "left" }}
+              style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+            >
+              {titulo}
+            </Text>
+            <Box h="1px" w="100%" my={4}
+                 bgGradient={`linear(to-r, ${accent}, ${accent}55, transparent)`} />
+            <Flex direction="column" gap={4}>
+              {parrafos.map((p, i) => (
+                <Text
+                  key={i}
+                  color={TXT}
+                  fontSize={{ base: "md", md: "lg" }}
+                  lineHeight="1.85"
+                  letterSpacing="0.02em"
+                  fontFamily="'EB Garamond', serif"
+                  textAlign={{ base: "center", md: "left" }}
+                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
+                >
+                  {p}
+                </Text>
+              ))}
+            </Flex>
+          </Box>
+        </Flex>
+
+        {/* Línea de luz inferior */}
+        <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={3}
+             bgGradient={`linear(to-r, transparent, ${accent}aa, transparent)`} />
+
+        {/* Contador discreto (abajo a la derecha) */}
+        {contador && (
+          <Text
+            position="absolute"
+            bottom={{ base: 2, md: 3 }}
+            right={{ base: 3, md: 4 }}
+            zIndex={3}
+            color={`${accent}99`}
+            fontSize={{ base: "xs", md: "sm" }}
+            fontStyle="italic"
+            letterSpacing="0.18em"
+            pointerEvents="none"
+            style={{ textShadow: "0 0 10px rgba(255,255,255,0.4)" }}
+          >
+            {contador}
+          </Text>
+        )}
+      </Box>
     </Box>
   );
 }

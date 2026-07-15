@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -49,12 +49,21 @@ const PROTON_IMG = "/recorrido/fisiologia/pre/protonpordentro.png";
 const GLOW: Record<Tipo, string> = { up: "#8ab6e6", down: "#e08a8a", gluon: "#f2c86b" };
 const LABEL: Record<Tipo, string> = { up: "up quark", down: "down quark", gluon: "gluón" };
 
-// Posiciones (en %) donde se JUNTAN las piezas dentro del núcleo: un racimo
-// apretado en el centro (2 quarks arriba, 1 abajo, gluones intercalados).
-const CLUSTER: { x: number; y: number }[] = [
-  { x: 41, y: 43 }, { x: 59, y: 43 }, { x: 50, y: 60 },
-  { x: 50, y: 34 }, { x: 37, y: 55 }, { x: 63, y: 55 },
-];
+// Posiciones (en %) FIJAS por pieza dentro del núcleo, para reproducir el
+// esquema clásico del protón: los 3 quarks en los vértices de un triángulo y
+// cada gluón en el punto medio de la arista que une dos quarks (o sea, "entre"
+// ellos). Se indexa por id de la pieza (no por orden de colocación) para que
+// cada quark/gluón caiga siempre en su sitio.
+const CLUSTER: Record<string, { x: number; y: number }> = {
+  // Quarks → vértices del triángulo
+  u1: { x: 50, y: 32 }, // arriba
+  u2: { x: 34, y: 63 }, // abajo-izquierda
+  d1: { x: 66, y: 63 }, // abajo-derecha
+  // Gluones → en medio de cada arista (entre dos quarks)
+  g1: { x: 42, y: 47 }, // entre u1 y u2
+  g2: { x: 58, y: 47 }, // entre u1 y d1
+  g3: { x: 50, y: 63 }, // entre u2 y d1
+};
 
 const pulse = keyframes`
   0%, 100% { transform: scale(1);    opacity: 0.5; }
@@ -72,7 +81,8 @@ function FichaArrastrable({
   pieza, onSoltar, disabled, enterDelay = 0,
 }: {
   pieza: Pieza;
-  onSoltar: (pieza: Pieza, rect: DOMRect) => void;
+  /** Devuelve true si la ficha ha caído dentro del núcleo (acierto). */
+  onSoltar: (pieza: Pieza, rect: DOMRect) => boolean;
   disabled: boolean;
   /** Retraso de entrada, para que las fichas salgan una a una. */
   enterDelay?: number;
@@ -80,13 +90,21 @@ function FichaArrastrable({
   const [arrastrando, setArrastrando] = useState(false);
   const [imgOk, setImgOk] = useState(false); // foto de la ficha ya cargada
   const ref = useRef<HTMLDivElement>(null);
+  const controls = useAnimationControls();
   const glow = GLOW[pieza.tipo];
+
+  // Entrada: cada ficha aparece con su pequeño retraso.
+  useEffect(() => {
+    controls.start({
+      opacity: 1, x: 0,
+      transition: { type: "spring", stiffness: 320, damping: 26, delay: enterDelay },
+    });
+  }, [controls, enterDelay]);
 
   return (
     <MBox
       ref={ref}
       drag={!disabled}
-      dragSnapToOrigin
       dragElastic={0.12}
       dragMomentum={false}
       onDragStart={() => setArrastrando(true)}
@@ -94,14 +112,20 @@ function FichaArrastrable({
         setArrastrando(false);
         // Usamos el rect real de la ficha (viewport), no info.point, para que la
         // detección funcione aunque la página tenga scroll y en táctil.
-        if (ref.current) onSoltar(pieza, ref.current.getBoundingClientRect());
+        if (!ref.current) return;
+        const aceptada = onSoltar(pieza, ref.current.getBoundingClientRect());
+        // Si acierta en el núcleo, NO volvemos: la ficha desaparece donde está
+        // (fade de AnimatePresence). Si falla, regresa a su sitio.
+        if (!aceptada) {
+          controls.start({ x: 0, y: 0, transition: { type: "spring", stiffness: 320, damping: 26 } });
+        }
       }}
       whileDrag={{ scale: 1.18, zIndex: 60 }}
       whileHover={disabled ? undefined : { scale: 1.07, y: -2 }}
       initial={{ opacity: 0, x: 16 }}
-      animate={{ opacity: 1, x: 0 }}
+      animate={controls}
       exit={{ opacity: 0, scale: 0.5 }}
-      transition={{ type: "spring", stiffness: 320, damping: 26, delay: enterDelay }}
+      transition={{ type: "spring", stiffness: 320, damping: 26 }}
       cursor={disabled ? "default" : "grab"}
       position="relative"
       display="flex"
@@ -158,15 +182,20 @@ function FichaArrastrable({
 }
 
 // ── Pieza ya posada dentro del núcleo (se junta con las demás) ──────────────
+// Los gluones son algo más pequeños y quedan por detrás, de modo que parecen
+// el "muelle" que conecta dos quarks en la arista del triángulo.
 function PiezaInterna({ tipo, x, y }: { tipo: Tipo; x: number; y: number }) {
   const glow = GLOW[tipo];
+  const esGluon = tipo === "gluon";
+  const size = esGluon ? { base: "38px", md: "48px" } : { base: "50px", md: "64px" };
   return (
     <MBox
       position="absolute"
       left={`${x}%`}
       top={`${y}%`}
-      w={{ base: "48px", md: "62px" }}
-      h={{ base: "48px", md: "62px" }}
+      w={size}
+      h={size}
+      zIndex={esGluon ? 1 : 2}
       borderRadius="full"
       overflow="hidden"
       transform="translate(-50%, -50%)"
@@ -247,10 +276,10 @@ export default function MetodoFisiologiaParticulas() {
     } catch { /* se reintenta la próxima vez */ }
   };
 
-  // ¿La ficha soltada se solapa con el círculo del núcleo?
-  const soltarEnNucleo = (pieza: Pieza, rect: DOMRect) => {
+  // ¿La ficha soltada se solapa con el círculo del núcleo? Devuelve true si acierta.
+  const soltarEnNucleo = (pieza: Pieza, rect: DOMRect): boolean => {
     const el = nucleoRef.current;
-    if (!el) return;
+    if (!el) return false;
     const c = el.getBoundingClientRect();
     const cx = c.left + c.width / 2;
     const cy = c.top + c.height / 2;
@@ -270,7 +299,9 @@ export default function MetodoFisiologiaParticulas() {
         }
         return next;
       });
+      return true;
     }
+    return false;
   };
 
   const reiniciar = () => {
@@ -350,8 +381,8 @@ export default function MetodoFisiologiaParticulas() {
                              sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
                                    boxShadow: `inset 0 0 44px rgba(0,0,0,0.92), 0 0 24px ${fisiologiaTxt}22` }} />
                         {/* piezas dentro (juntándose) */}
-                        {colocadas.map((p, i) => (
-                          <PiezaInterna key={p.id} tipo={p.tipo} x={CLUSTER[i].x} y={CLUSTER[i].y} />
+                        {colocadas.map((p) => (
+                          <PiezaInterna key={p.id} tipo={p.tipo} x={CLUSTER[p.id].x} y={CLUSTER[p.id].y} />
                         ))}
                         {hechas === 0 && (
                           <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}

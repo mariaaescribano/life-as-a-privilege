@@ -39,7 +39,10 @@ const MACRO: Record<Macro, { color: string; glyph: string; img: string }> = {
 type EstId = "nucleo" | "membrana" | "mitocondria" | "ribosoma";
 type Forma = "helice" | "membrana" | "cluster";
 
-interface Ingrediente { macro: Macro; n: number; label: string; }
+interface Ingrediente { macro: Macro; n: number; label: string;
+  /** Foto propia de este ingrediente (si no, se usa la genérica del macro). */
+  img?: string;
+}
 interface EstDef {
   id: EstId;
   nombre: string;
@@ -56,17 +59,17 @@ const ESTRUCTURAS: EstDef[] = [
   {
     id: "nucleo", nombre: "Núcleo", glow: "#9ab6f0", forma: "cluster",
     desc: "Guarda y protege tu información genética.",
-    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "membrana" }],
+    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Membrana de núcleo" }],
     resultado: [
       "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
       "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la vida.",
     ],
-    resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/adn.png`,
+    resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/nucleo.png`,
   },
   {
     id: "membrana", nombre: "Membrana celular", glow: "#f2c86b", forma: "membrana",
     desc: "Envuelve la célula y decide qué entra y qué sale.",
-    ingredientes: [{ macro: "lipido", n: 4, label: "lípido" }, { macro: "proteina", n: 2, label: "proteína" }],
+    ingredientes: [{ macro: "lipido", n: 4, label: "lípido" }, { macro: "proteina", n: 2, label: "Receptores hormonales", img: `${PRE}/receptoresmembranacelular.png` }],
     resultado: [
       "Los fosfolípidos se ordenan solos en una doble capa, y las proteínas se incrustan como puertas y sensores.",
       "Así nace la membrana: la frontera viva que separa el interior de la célula del mundo exterior y controla el paso.",
@@ -76,7 +79,7 @@ const ESTRUCTURAS: EstDef[] = [
   {
     id: "mitocondria", nombre: "Mitocondria", glow: "#e08a8a", forma: "cluster",
     desc: "La central de energía de la célula.",
-    ingredientes: [{ macro: "lipido", n: 2, label: "membranas" }, { macro: "proteina", n: 3, label: "proteína" }],
+    ingredientes: [{ macro: "lipido", n: 2, label: "Membrana mitocondrial", img: `${PRE}/membranamitocondria.png` }, { macro: "proteina", n: 3, label: "Receptores", img: `${PRE}/receptoresmitocondria.png` }],
     resultado: [
       "Con sus membranas plegadas y muchísimas proteínas, la mitocondria transforma los nutrientes y el oxígeno en energía.",
       "Es la central eléctrica que fabrica el ATP, el combustible que mantiene en marcha cada proceso de tu cuerpo.",
@@ -86,7 +89,7 @@ const ESTRUCTURAS: EstDef[] = [
   {
     id: "ribosoma", nombre: "Ribosoma", glow: "#7fd6c2", forma: "cluster",
     desc: "La fábrica de enzimas.",
-    ingredientes: [{ macro: "proteina", n: 3, label: "proteína" }, { macro: "adn", n: 1, label: "ARN" }],
+    ingredientes: [{ macro: "proteina", n: 3, label: "Enzimas", img: `${PRE}/enzimasribosoma.png` }, { macro: "adn", n: 1, label: "ARN", img: `${PRE}/ARN.png` }],
     resultado: [
       "Hecho de ARN y de proteínas, el ribosoma lee las instrucciones que vienen del ADN.",
       "Con ellas ensambla aminoácidos uno tras otro y fabrica nuevas proteínas: convierte la información genética en materia viva.",
@@ -108,10 +111,10 @@ const perlaBg = (c: string): string =>
   `radial-gradient(circle at 34% 30%, #ffffff 0%, ${c} 36%, ${c}dd 64%, ${c}77 100%)`;
 
 // Piezas planas a arrastrar en una estación.
-interface Pieza { id: string; macro: Macro; label: string; }
+interface Pieza { id: string; macro: Macro; label: string; img?: string; }
 const piezasDe = (def: EstDef): Pieza[] =>
   def.ingredientes.flatMap((ing) =>
-    Array.from({ length: ing.n }, (_, i) => ({ id: `${def.id}-${ing.macro}-${i}`, macro: ing.macro, label: ing.label })));
+    Array.from({ length: ing.n }, (_, i) => ({ id: `${def.id}-${ing.macro}-${i}`, macro: ing.macro, label: ing.label, img: ing.img })));
 
 // Posición (%) de la pieza i dentro de la bandeja, según la forma.
 function posEnBandeja(forma: Forma, i: number, n: number): { x: number; y: number } {
@@ -123,12 +126,12 @@ function posEnBandeja(forma: Forma, i: number, n: number): { x: number; y: numbe
 }
 
 // ── Perla del ladrillo (imagen con reserva a esfera dibujada) ───────────────
-function Perla({ macro, size }: { macro: Macro; size: any }) {
+function Perla({ macro, size, img }: { macro: Macro; size: any; img?: string }) {
   const st = MACRO[macro];
   return (
     <Box w={size} h={size} borderRadius="full" overflow="hidden" pointerEvents="none"
          sx={{ boxShadow: `0 0 12px ${st.color}aa, 0 0 24px ${st.color}55` }}>
-      <Image src={st.img} alt="" w="100%" h="100%" objectFit="cover" draggable={false}
+      <Image src={img ?? st.img} alt="" w="100%" h="100%" objectFit="cover" draggable={false}
              fallback={
                <Box w="100%" h="100%" display="flex" alignItems="center" justifyContent="center" sx={{ background: perlaBg(st.color) }}>
                  <Text color="rgba(0,0,0,0.55)" fontWeight="900" lineHeight="1"
@@ -169,7 +172,7 @@ function LadrilloFicha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRec
       style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
       <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${st.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
-        <Perla macro={pieza.macro} size={{ base: "62px", md: "80px" }} />
+        <Perla macro={pieza.macro} img={pieza.img} size={{ base: "62px", md: "80px" }} />
       </Box>
       <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
             letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
@@ -282,7 +285,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
                   <MBox key={p.id} position="absolute" left={`${pos.x}%`} top={`${pos.y}%`} transform="translate(-50%,-50%)"
                         initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: "spring", stiffness: 340, damping: 20 }}>
-                    <Perla macro={p.macro} size={{ base: "34px", md: "42px" }} />
+                    <Perla macro={p.macro} img={p.img} size={{ base: "34px", md: "42px" }} />
                   </MBox>
                 );
               })}
@@ -490,6 +493,7 @@ export default function MetodoFisiologiaEstructuras() {
         await precargarImagenes([
           ...Object.values(MACRO).map((m) => m.img),
           ...ESTRUCTURAS.flatMap((e) => [e.resultadoImg, e.cuadradoImg]),
+          ...ESTRUCTURAS.flatMap((e) => e.ingredientes.map((ing) => ing.img)),
         ]);
       } catch {
         navigate("/metodo/fisiologia");

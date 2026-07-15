@@ -10,6 +10,10 @@
 // ─────────────────────────────────────────────────────────────────────────
 import type { Vineta } from "../../components/metodo/ComicViewer";
 
+// Clave en metodo_fisiologia.data donde guardamos las fichas ya leídas de
+// Profundiza. Estructura: { [temaKey]: string[] } (keys de fichas leídas).
+export const PROFUNDIZA_LEIDAS_KEY = "profundiza_leidas";
+
 // Una caja del tema: al pulsarla se abre el modal con su explicación.
 export type Ficha = {
   key: string;
@@ -261,62 +265,57 @@ const HORMONAS: Ficha[] = [
   },
 ];
 
-// ── Metabolismo (de la comida a la energía) ──────────────────────────────────
+// ── Metabolismo · la respiración celular (de la comida al ATP), paso a paso ──
 const METABOLISMO: Ficha[] = [
   {
-    key: "atp", nombre: "ATP", color: "#f2c86b", foto: SUB("metabolismo", "atp"),
-    eyebrow: "La moneda de energía",
+    key: "que-es", nombre: "Qué es", color: "#f2c86b", foto: SUB("metabolismo", "metabolismo1"),
     explicacion: [
-      "El ATP es la moneda energética de la célula: la energía de los alimentos se convierte en ATP, y las células lo gastan para todo (moverse, fabricar, bombear).",
-      "Fabricas y gastas casi tu peso corporal en ATP cada día; apenas se almacena, se produce al momento según lo necesitas.",
+      "La respiración celular es el proceso mediante el cual las células transforman los nutrientes de los alimentos (principalmente la glucosa) en ATP, la molécula que proporciona energía para que el organismo pueda funcionar.",
+      "Este proceso ocurre principalmente en las mitocondrias, conocidas como las «centrales energéticas» de la célula.",
     ],
   },
   {
-    key: "glucolisis", nombre: "Glucólisis", color: "#e6a7d9", foto: SUB("metabolismo", "glucolisis"),
-    eyebrow: "La vía rápida",
+    key: "glucolisis", nombre: "1. Glucólisis", color: "#e6a7d9", foto: SUB("metabolismo", "metabolismo2"),
     explicacion: [
-      "Es el primer paso: en el citoplasma, la glucosa se parte en dos y se obtiene algo de ATP rápido, sin necesidad de oxígeno.",
-      "Es la energía exprés: la que usas en un esfuerzo corto e intenso, como un sprint.",
+      "La respiración celular comienza en el citoplasma, fuera de la mitocondria. Cuando comemos carbohidratos, estos se convierten en glucosa, una molécula rica en energía. Durante la glucólisis, una molécula de glucosa (6 carbonos) se divide en dos moléculas más pequeñas llamadas piruvato (3 carbonos cada una).",
+      "En este proceso se obtienen 2 ATP (energía inmediata) y 2 NADH, unas moléculas que almacenan electrones para producir más energía después.",
+      "La glucólisis no necesita oxígeno, por eso puede ocurrir incluso cuando hacemos ejercicio intenso.",
     ],
   },
   {
-    key: "mitocondria", nombre: "Respiración celular", color: "#f28b8b", foto: SUB("metabolismo", "mitocondria"),
-    eyebrow: "La central de energía",
+    key: "piruvato-acetil-coa", nombre: "2. Del piruvato a acetil-CoA", color: "#f2b48f", foto: SUB("metabolismo", "metabolismo3"),
     explicacion: [
-      "En la mitocondria, y con oxígeno, se extrae casi toda la energía de los nutrientes en la cadena respiratoria. Es la parte lenta pero muchísimo más rentable.",
-      "Por eso el oxígeno es vital: sin él, las células solo pueden usar la vía rápida y sacan muy poca energía.",
+      "Los dos piruvatos entran en la mitocondria. Allí se transforman en una molécula llamada acetil-CoA, liberando dióxido de carbono (CO₂), que posteriormente expulsamos al respirar.",
+      "También se produce más NADH, que servirá para fabricar ATP más adelante. Esta etapa conecta la glucólisis con el ciclo de Krebs.",
     ],
   },
   {
-    key: "glucogeno", nombre: "Glucógeno", color: "#9fe6b8", foto: SUB("metabolismo", "glucogeno"),
-    eyebrow: "La despensa rápida",
+    key: "ciclo-krebs", nombre: "3. Ciclo de Krebs", color: "#f28b8b", foto: SUB("metabolismo", "metabolismo4"),
     explicacion: [
-      "El cuerpo guarda glucosa en forma de glucógeno en el hígado y los músculos. Es la reserva a la que recurre entre comidas o durante el ejercicio.",
-      "El del hígado mantiene estable el azúcar en sangre; el del músculo es combustible para ese propio músculo.",
+      "El acetil-CoA entra en una serie de reacciones químicas conocidas como ciclo de Krebs. Aquí no se produce mucha energía directamente, pero sí una gran cantidad de moléculas transportadoras: NADH y FADH₂.",
+      "Estas moléculas funcionan como pequeñas baterías cargadas de electrones. Durante esta etapa también se libera CO₂, que eliminamos al exhalar.",
     ],
   },
   {
-    key: "grasa-cetosis", nombre: "Grasa y cetosis", color: "#e6c07f", foto: SUB("metabolismo", "grasa-cetosis"),
-    eyebrow: "La reserva a largo plazo",
+    key: "cadena-electrones", nombre: "4. Cadena de transporte de electrones", color: "#9fe6b8", foto: SUB("metabolismo", "metabolismo5"),
     explicacion: [
-      "Cuando sobra energía, se guarda como grasa: la reserva más grande y duradera del cuerpo. En ayuno prolongado, el hígado transforma grasa en cuerpos cetónicos, un combustible alternativo para el cerebro.",
-      "Por eso puedes aguantar mucho tiempo sin comer: tu cuerpo cambia de combustible.",
+      "Esta es la fase donde se genera casi toda la energía. Los NADH y FADH₂ entregan sus electrones a una cadena de proteínas situada en la membrana interna de la mitocondria.",
+      "Cuando los electrones avanzan por esta cadena liberan energía, y esa energía bombea protones (H⁺) hacia un lado de la membrana. Se crea así una diferencia de concentración, como si se almacenara agua detrás de una presa.",
     ],
   },
   {
-    key: "anabolismo", nombre: "Construir y romper", color: "#a7d9f2", foto: SUB("metabolismo", "anabolismo"),
-    eyebrow: "Anabolismo y catabolismo",
+    key: "atp-sintasa", nombre: "5. ATP sintasa", color: "#a7d9f2", foto: SUB("metabolismo", "metabolismo6"),
     explicacion: [
-      "El metabolismo tiene dos caras: el catabolismo rompe moléculas para sacar energía, y el anabolismo usa energía para construir (músculo, tejidos, reservas).",
-      "Tu cuerpo alterna entre ambos según comas o ayunes, descanses o te esfuerces.",
+      "Los protones quieren volver al otro lado de la membrana, y solo pueden hacerlo atravesando una proteína llamada ATP sintasa. Al pasar los protones, la ATP sintasa gira y utiliza esa energía para fabricar ATP.",
+      "Es parecido a una central hidroeléctrica: el agua acumulada representa los protones, la turbina representa la ATP sintasa y la electricidad producida sería el ATP.",
+      "En esta etapa se producen aproximadamente 28-32 ATP, mucho más que en las etapas anteriores.",
     ],
   },
   {
-    key: "basal", nombre: "Metabolismo basal", color: "#c9a7ff", foto: SUB("metabolismo", "basal"),
-    eyebrow: "El gasto en reposo",
+    key: "oxigeno", nombre: "6. El papel del oxígeno", color: "#c9a7ff", foto: SUB("metabolismo", "metabolismo7"),
     explicacion: [
-      "Es la energía que gastas solo por estar vivo: respirar, latir, mantener la temperatura. Suele ser la mayor parte de lo que gastas al día.",
-      "Depende sobre todo de tu masa muscular, la edad y la genética; por eso tener músculo ayuda a gastar más incluso en reposo.",
+      "El oxígeno no produce energía directamente. Su función es recibir los electrones al final de la cadena de transporte. Cuando acepta esos electrones y se une a protones, forma agua (H₂O).",
+      "Sin oxígeno, la cadena se detiene, no se genera ATP suficiente y la célula acaba muriendo. Por eso respirar es imprescindible para producir energía.",
     ],
   },
 ];
@@ -324,7 +323,7 @@ const METABOLISMO: Ficha[] = [
 // ── Expresión génica y epigenética ───────────────────────────────────────────
 const EPIGENETICA: Ficha[] = [
   {
-    key: "metilacion", nombre: "Metilación del ADN", color: "#a7d9f2", foto: SUB("epigenetica", "metilacion"),
+    key: "metilacion", nombre: "Metilación del ADN", color: "#a7d9f2", foto: SUB("epigenetica", "epigenetica1"),
     eyebrow: "El interruptor de apagado",
     explicacion: [
       "Añadir pequeñas marcas químicas (grupos metilo) sobre el ADN suele silenciar un gen: sigue ahí, pero no se lee.",
@@ -332,7 +331,7 @@ const EPIGENETICA: Ficha[] = [
     ],
   },
   {
-    key: "histonas", nombre: "Histonas", color: "#9ab6f0", foto: SUB("epigenetica", "histonas"),
+    key: "histonas", nombre: "Histonas", color: "#9ab6f0", foto: SUB("epigenetica", "epigenetica2"),
     eyebrow: "Empaquetar para esconder o mostrar",
     explicacion: [
       "El ADN se enrolla en proteínas llamadas histonas. Si se enrolla apretado, el gen queda escondido; si se afloja, queda accesible para leerse.",
@@ -340,7 +339,7 @@ const EPIGENETICA: Ficha[] = [
     ],
   },
   {
-    key: "factores", nombre: "Factores de transcripción", color: "#9fe6b8", foto: SUB("epigenetica", "factores"),
+    key: "factores", nombre: "Factores de transcripción", color: "#9fe6b8", foto: SUB("epigenetica", "epigenetica3"),
     eyebrow: "Quién decide qué se lee",
     explicacion: [
       "Son proteínas que se pegan al ADN y activan o frenan la lectura de genes concretos, como interruptores que responden a señales de dentro y de fuera.",
@@ -348,7 +347,7 @@ const EPIGENETICA: Ficha[] = [
     ],
   },
   {
-    key: "ambiente", nombre: "El ambiente enciende genes", color: "#f2c86b", foto: SUB("epigenetica", "ambiente"),
+    key: "ambiente", nombre: "El ambiente enciende genes", color: "#f2c86b", foto: SUB("epigenetica", "epigenetica4"),
     eyebrow: "Tu vida deja huella",
     explicacion: [
       "La alimentación, el ejercicio, el estrés, el sueño o el tabaco pueden cambiar estas marcas epigenéticas y, con ellas, qué genes se expresan.",
@@ -356,7 +355,7 @@ const EPIGENETICA: Ficha[] = [
     ],
   },
   {
-    key: "herencia", nombre: "Herencia epigenética", color: "#e6a7d9", foto: SUB("epigenetica", "herencia"),
+    key: "herencia", nombre: "Herencia epigenética", color: "#e6a7d9", foto: SUB("epigenetica", "epigenetica5"),
     eyebrow: "A veces se hereda",
     explicacion: [
       "Algunas marcas epigenéticas pueden pasar de una generación a otra, de modo que las experiencias de los padres podrían influir un poco en los hijos.",
@@ -368,7 +367,7 @@ const EPIGENETICA: Ficha[] = [
 // ── Detoxificación del hígado ────────────────────────────────────────────────
 const DETOXIFICACION: Ficha[] = [
   {
-    key: "fase-1", nombre: "Fase I · transformar", color: "#f2c86b", foto: SUB("detoxificacion", "fase-1"),
+    key: "fase-1", nombre: "Fase I · transformar", color: "#f2c86b", foto: SUB("higado", "higado1"),
     eyebrow: "Abrir el paquete",
     explicacion: [
       "Unas enzimas del hígado (el grupo citocromo P450) modifican las sustancias tóxicas para hacerlas más manejables. A veces, de paso, las vuelven momentáneamente más reactivas.",
@@ -376,7 +375,7 @@ const DETOXIFICACION: Ficha[] = [
     ],
   },
   {
-    key: "fase-2", nombre: "Fase II · neutralizar", color: "#9fe6b8", foto: SUB("detoxificacion", "fase-2"),
+    key: "fase-2", nombre: "Fase II · neutralizar", color: "#9fe6b8", foto: SUB("higado", "higado2"),
     eyebrow: "Hacerlas inofensivas",
     explicacion: [
       "El hígado une esas sustancias a otras moléculas (conjugación) para volverlas solubles en agua e inofensivas.",
@@ -384,7 +383,7 @@ const DETOXIFICACION: Ficha[] = [
     ],
   },
   {
-    key: "fase-3", nombre: "Fase III · eliminar", color: "#a7d9f2", foto: SUB("detoxificacion", "fase-3"),
+    key: "fase-3", nombre: "Fase III · eliminar", color: "#a7d9f2", foto: SUB("higado", "higado3"),
     eyebrow: "Sacarlas fuera",
     explicacion: [
       "Ya neutralizadas, las sustancias se expulsan: por la orina (riñón) o por la bilis hacia el intestino y las heces.",
@@ -392,7 +391,7 @@ const DETOXIFICACION: Ficha[] = [
     ],
   },
   {
-    key: "glutation", nombre: "Glutatión", color: "#c9a7ff", foto: SUB("detoxificacion", "glutation"),
+    key: "glutation", nombre: "Glutatión", color: "#c9a7ff", foto: SUB("higado", "higado4"),
     eyebrow: "El antioxidante maestro",
     explicacion: [
       "Es la molécula estrella de la desintoxicación y la defensa antioxidante del hígado: neutraliza tóxicos y radicales libres.",
@@ -400,7 +399,7 @@ const DETOXIFICACION: Ficha[] = [
     ],
   },
   {
-    key: "mito-detox", nombre: "Los «detox» de moda", color: "#f2b48f", foto: SUB("detoxificacion", "mito-detox"),
+    key: "mito-detox", nombre: "Los «detox» de moda", color: "#f2b48f", foto: SUB("higado", "higado5"),
     eyebrow: "Lo que de verdad ayuda",
     explicacion: [
       "Tu hígado y tus riñones ya te desintoxican cada segundo, mejor que cualquier zumo o producto «detox».",
@@ -412,7 +411,7 @@ const DETOXIFICACION: Ficha[] = [
 // ── Estrés oxidativo y antioxidantes ─────────────────────────────────────────
 const ESTRES_OXIDATIVO: Ficha[] = [
   {
-    key: "radicales", nombre: "Radicales libres", color: "#f28b8b", foto: SUB("estres-oxidativo", "radicales"),
+    key: "radicales", nombre: "Radicales libres", color: "#f28b8b", foto: SUB("estres", "estres1"),
     eyebrow: "Moléculas inestables (ROS)",
     explicacion: [
       "Son moléculas inestables que se generan al producir energía o al recibir radiación (el sol). Les falta un electrón y lo «roban» a otras moléculas, dañándolas.",
@@ -420,7 +419,7 @@ const ESTRES_OXIDATIVO: Ficha[] = [
     ],
   },
   {
-    key: "dano", nombre: "El daño oxidativo", color: "#f2b48f", foto: SUB("estres-oxidativo", "dano"),
+    key: "dano", nombre: "El daño oxidativo", color: "#f2b48f", foto: SUB("estres", "estres2"),
     eyebrow: "Cuando se acumula",
     explicacion: [
       "En exceso, los radicales libres dañan el ADN, las grasas de las membranas y las proteínas. Ese desgaste, sumado con los años, acelera el envejecimiento.",
@@ -428,7 +427,7 @@ const ESTRES_OXIDATIVO: Ficha[] = [
     ],
   },
   {
-    key: "antioxidantes-propios", nombre: "Tu ejército interno", color: "#9fe6b8", foto: SUB("estres-oxidativo", "antioxidantes-propios"),
+    key: "antioxidantes-propios", nombre: "Tu ejército interno", color: "#9fe6b8", foto: SUB("estres", "estres3"),
     eyebrow: "Antioxidantes propios",
     explicacion: [
       "El cuerpo fabrica sus propios antioxidantes (glutatión, superóxido dismutasa, catalasa) que neutralizan los radicales antes de que hagan daño.",
@@ -436,7 +435,7 @@ const ESTRES_OXIDATIVO: Ficha[] = [
     ],
   },
   {
-    key: "antioxidantes-dieta", nombre: "Los de la comida", color: "#a7d9f2", foto: SUB("estres-oxidativo", "antioxidantes-dieta"),
+    key: "antioxidantes-dieta", nombre: "Los de la comida", color: "#a7d9f2", foto: SUB("estres", "estres4"),
     eyebrow: "Antioxidantes de la dieta",
     explicacion: [
       "Vitamina C, vitamina E y los polifenoles de frutas, verduras, té o aceite de oliva ayudan a frenar el daño oxidativo.",
@@ -444,7 +443,7 @@ const ESTRES_OXIDATIVO: Ficha[] = [
     ],
   },
   {
-    key: "hormesis", nombre: "Hormesis", color: "#f2c86b", foto: SUB("estres-oxidativo", "hormesis"),
+    key: "hormesis", nombre: "Hormesis", color: "#f2c86b", foto: SUB("estres", "estres5"),
     eyebrow: "Un poco de estrés te fortalece",
     explicacion: [
       "El ejercicio genera radicales libres… y aun así es sano: ese pequeño estrés entrena a tus defensas antioxidantes para ser más fuertes.",
@@ -456,51 +455,92 @@ const ESTRES_OXIDATIVO: Ficha[] = [
 // ── Sistema inmunitario ──────────────────────────────────────────────────────
 const INMUNITARIO: Ficha[] = [
   {
-    key: "innata", nombre: "Inmunidad innata", color: "#f2c86b", foto: SUB("inmunitario", "innata"),
-    eyebrow: "Primera línea",
+    key: "macrofagos", nombre: "1. Macrófagos", color: "#f2c86b", foto: SUB("inmunitario", "macrofagos"),
     explicacion: [
-      "Es la defensa rápida y general: la piel, las mucosas y células como los macrófagos y neutrófilos que atacan a cualquier intruso en cuestión de minutos.",
-      "No distingue al enemigo con precisión, pero gana tiempo mientras se prepara la respuesta específica.",
+      "Los macrófagos son grandes células del sistema inmunitario que viven en casi todos los tejidos del cuerpo.",
+      "Su principal función es fagocitar, es decir, rodear y engullir bacterias, virus, células muertas y otros restos para destruirlos. Dentro del macrófago existen compartimentos llenos de enzimas que degradan todo ese material, lo convierten en otras moléculas y pueden reutilizar parte de ellas o presentarlas a otras células.",
+      "Pero los macrófagos no solo limpian. Después de destruir al invasor, colocan pequeños fragmentos del microorganismo (antígenos) en su superficie para avisar al resto del sistema inmunitario de qué enemigo han encontrado.",
+      "Además, liberan sustancias químicas llamadas citocinas, que atraen a otras células defensivas y ayudan a iniciar la inflamación.",
+      "Son nuestros guardianes más serenos y, cuando hay una infección no muy grave, muchas veces la controlan ellos solos sin necesidad de reclutar grandes cantidades de neutrófilos, ya que estos tienden a causar más daño a los tejidos cuando la respuesta es muy intensa.",
     ],
   },
   {
-    key: "adaptativa", nombre: "Inmunidad adaptativa", color: "#9ab6f0", foto: SUB("inmunitario", "adaptativa"),
-    eyebrow: "Defensa a medida",
+    key: "neutrofilos", nombre: "2. Neutrófilos", color: "#f2b48f", foto: SUB("inmunitario", "neutrofilos"),
+    eyebrow: "Los soldados de respuesta rápida",
     explicacion: [
-      "Los linfocitos B y T aprenden a reconocer un patógeno concreto: los B fabrican anticuerpos y los T destruyen las células infectadas.",
-      "Tarda unos días la primera vez, pero es precisa y deja memoria.",
+      "Los neutrófilos son los glóbulos blancos más abundantes de la sangre y llegan muy rápidamente al lugar de una infección.",
+      "Son soldados casi suicidas, cuya misión es destruir microorganismos lo antes posible. Para ello pueden fagocitar bacterias, liberar sustancias antimicrobianas o expulsar su ADN formando unas redes llamadas NETs (trampas extracelulares de neutrófilos), que atrapan y ayudan a eliminar los patógenos, suicidándose en el proceso pero siendo letalmente eficientes.",
+      "Aunque son muy eficaces, viven poco tiempo. Tras cumplir su función suelen morir para no causar daños innecesarios y, junto con bacterias y restos celulares, forman parte del pus o del moco que aparece en algunas infecciones. Cuanto más verdoso sea el moco, más neutrófilos muertos suele contener.",
     ],
   },
   {
-    key: "inflamacion", nombre: "La inflamación", color: "#f28b8b", foto: SUB("inmunitario", "inflamacion"),
-    eyebrow: "La señal de alarma",
+    key: "dendriticas", nombre: "3. Células dendríticas", color: "#9fe6b8", foto: SUB("inmunitario", "dendriticas"),
+    eyebrow: "Las mensajeras del sistema inmunitario",
     explicacion: [
-      "La zona se enrojece, se hincha y duele porque llegan sangre y células de defensa para reparar y combatir.",
-      "Útil y necesaria a corto plazo; dañina si se vuelve crónica, pues se asocia a muchas enfermedades.",
+      "Las células dendríticas son los «scouts» que recorren todo nuestro cuerpo en busca de lo que no forma parte de nosotros. Si lo encuentran, cogen una muestra y se la presentan a los linfocitos T.",
+      "Patrullan constantemente tejidos como la piel y las mucosas buscando microorganismos. Cuando encuentran uno, capturan fragmentos del patógeno y viajan hasta los ganglios linfáticos.",
+      "Allí presentan esos fragmentos a los linfocitos T. Gracias a esta presentación, los linfocitos T pueden reconocer exactamente qué microorganismo ha invadido el organismo y comenzar una respuesta mucho más específica.",
+      "Por eso las células dendríticas son el puente entre la inmunidad innata y la adaptativa.",
     ],
   },
   {
-    key: "memoria", nombre: "Memoria y vacunas", color: "#9fe6b8", foto: SUB("inmunitario", "memoria"),
-    eyebrow: "Aprender del pasado",
+    key: "linfocitos-t", nombre: "4. Linfocitos T", color: "#9ab6f0", foto: SUB("inmunitario", "linfocitos-t"),
+    eyebrow: "Los coordinadores y eliminadores",
     explicacion: [
-      "Tras vencer a un patógeno, el cuerpo guarda células de memoria: la próxima vez responde en horas. En eso se basan las vacunas.",
-      "Una vacuna enseña al sistema inmunitario sin que tengas que pasar la enfermedad.",
+      "Los linfocitos T son capaces de detectar qué microorganismo está atacando gracias a las muestras que les presentan las células dendríticas, y de activar la respuesta inmunitaria adecuada.",
+      "Los linfocitos T nacen creando un receptor aleatorio a partir de los genes que tenemos. Por eso nacen millones de linfocitos T diferentes y se dice que podemos reconocer prácticamente cualquier bacteria o virus. Pero tener la capacidad de reconocerlos no quiere decir que ya seamos inmunes frente a ellos.",
+      "Para poder permanecer en el sistema inmunitario, las células T tienen que pasar las terribles pruebas del timo, donde hay células «profesoras» que se aseguran de que no reconozcan como enemigo a lo que forma parte del propio cuerpo, evitando así posibles enfermedades autoinmunes. Debido a esto, solo aproximadamente el 2 % de las células T que nacen consiguen aprobar.",
     ],
   },
   {
-    key: "autoinmunidad", nombre: "Autoinmunidad", color: "#c9a7ff", foto: SUB("inmunitario", "autoinmunidad"),
-    eyebrow: "Cuando se confunde",
+    key: "linfocitos-t-colaboradores", nombre: "5. Linfocitos T colaboradores", color: "#8fd0e6", foto: SUB("inmunitario", "linfocitos-t-colaboradores"),
     explicacion: [
-      "A veces el sistema inmunitario ataca por error a células propias: eso es la autoinmunidad (como en la diabetes tipo 1 o la tiroiditis).",
-      "Distinguir lo propio de lo ajeno es uno de sus mayores retos.",
+      "Estos actúan como coordinadores de toda la respuesta inmunitaria.",
+      "Cuando reconocen un antígeno presentado por una célula dendrítica, liberan citocinas que activan a los macrófagos (les ordenan atacar y aumentan su capacidad para hacerlo), a los linfocitos B cuyo receptor reconoce el mismo antígeno y, si hace falta, a los linfocitos T citotóxicos, que son realmente agresivos.",
+      "Sin ellos, la respuesta inmunitaria sería mucho menos eficaz.",
     ],
   },
   {
-    key: "fiebre", nombre: "La fiebre", color: "#f2b48f", foto: SUB("inmunitario", "fiebre"),
-    eyebrow: "Un arma, no un fallo",
+    key: "linfocitos-t-citotoxicos", nombre: "6. Linfocitos T citotóxicos", color: "#a7d9f2", foto: SUB("inmunitario", "linfocitos-t-citotoxicos"),
     explicacion: [
-      "Subir la temperatura no es un error: dificulta la vida a muchos microbios y acelera tus defensas.",
-      "Por eso la fiebre moderada suele ser una aliada, no una enemiga.",
+      "Su función es destruir células del propio organismo que estén infectadas por virus o que se hayan vuelto cancerosas. Lo hacen de sopetón: perforan la membrana de la célula infectada e inducen su muerte programada (apoptosis).",
+      "De esta manera eliminan el problema sin dañar excesivamente los tejidos vecinos.",
+    ],
+  },
+  {
+    key: "linfocitos-b", nombre: "7. Linfocitos B", color: "#c9a7ff", foto: SUB("inmunitario", "linfocitos-b"),
+    eyebrow: "Los fabricantes de anticuerpos",
+    explicacion: [
+      "Los linfocitos B también pertenecen a la inmunidad adaptativa.",
+      "Cada linfocito B reconoce un único tipo de antígeno. Cuando encuentra el suyo y recibe ayuda de un linfocito T colaborador, comienza a multiplicarse.",
+      "Después se transforma en una célula plasmática, cuya misión es fabricar enormes cantidades de anticuerpos.",
+      "Algunos linfocitos B se convierten en células de memoria, capaces de responder mucho más rápido si el mismo microorganismo vuelve a entrar en el cuerpo. Esta memoria es la base del funcionamiento de las vacunas.",
+    ],
+  },
+  {
+    key: "natural-killers", nombre: "8. Natural killers (NK)", color: "#e6a7d9", foto: SUB("inmunitario", "natural-killers"),
+    explicacion: [
+      "Son células capaces de matar sin necesidad de una activación específica previa.",
+      "Buscan células que presentan signos de estar infectadas o de haberse vuelto cancerosas, las aniquilan y continúan con su misión. Gracias a ello, muchas células cancerosas son eliminadas antes de que lleguen a formar un tumor.",
+    ],
+  },
+  {
+    key: "inflamacion", nombre: "9. Inflamación", color: "#f28b8b", foto: SUB("inmunitario", "inflamacion"),
+    explicacion: [
+      "La inflamación es un mecanismo de defensa que aparece cuando existe una infección o una lesión.",
+      "Los macrófagos y otras células liberan sustancias como las citocinas, y otras liberan mediadores como la histamina, que producen varios cambios: los vasos sanguíneos se dilatan, aumenta el flujo de sangre y los vasos se vuelven más permeables, permitiendo que las células del sistema inmunitario lleguen al lugar afectado.",
+      "Como consecuencia aparecen los signos clásicos de la inflamación: enrojecimiento, calor, hinchazón, dolor y, a veces, pérdida temporal de la función.",
+      "Aunque resulte molesta, la inflamación es una herramienta fundamental para eliminar el agente causante y comenzar la reparación del tejido.",
+    ],
+  },
+  {
+    key: "anticuerpos", nombre: "10. Anticuerpos", color: "#f2994a", foto: SUB("inmunitario", "anticuerpos"),
+    eyebrow: "Las armas de precisión",
+    explicacion: [
+      "Los anticuerpos, también llamados inmunoglobulinas, son proteínas producidas por las células plasmáticas, que derivan de los linfocitos B.",
+      "Cada anticuerpo reconoce un antígeno muy concreto, como si fuera una llave diseñada para una única cerradura.",
+      "Cuando se unen al microorganismo pueden neutralizar virus y toxinas, impidiendo que infecten las células o ejerzan su efecto, y marcar bacterias para que los macrófagos y neutrófilos las fagociten con mayor facilidad (opsonización).",
+      "Gracias a los anticuerpos, el sistema inmunitario puede atacar de forma muy específica al invasor sin afectar al resto del organismo.",
     ],
   },
 ];
@@ -508,7 +548,7 @@ const INMUNITARIO: Ficha[] = [
 // ── Envejecimiento celular ───────────────────────────────────────────────────
 const ENVEJECIMIENTO: Ficha[] = [
   {
-    key: "telomeros", nombre: "Telómeros", color: "#a7d9f2", foto: SUB("envejecimiento", "telomeros"),
+    key: "telomeros", nombre: "Telómeros", color: "#a7d9f2", foto: SUB("envejecimiento", "envejecimiento1"),
     eyebrow: "El reloj de las divisiones",
     explicacion: [
       "Son los extremos protectores de los cromosomas. Cada vez que una célula se divide, se acortan un poco.",
@@ -516,7 +556,7 @@ const ENVEJECIMIENTO: Ficha[] = [
     ],
   },
   {
-    key: "senescencia", nombre: "Senescencia", color: "#c9a7ff", foto: SUB("envejecimiento", "senescencia"),
+    key: "senescencia", nombre: "Senescencia", color: "#c9a7ff", foto: SUB("envejecimiento", "envejecimiento2"),
     eyebrow: "Células «zombie»",
     explicacion: [
       "Algunas células dañadas ni mueren ni se dividen: se «jubilan» (senescencia) pero siguen ahí, liberando señales inflamatorias.",
@@ -524,7 +564,7 @@ const ENVEJECIMIENTO: Ficha[] = [
     ],
   },
   {
-    key: "mitocondrias", nombre: "Motores que se desgastan", color: "#f28b8b", foto: SUB("envejecimiento", "mitocondrias"),
+    key: "mitocondrias", nombre: "Motores que se desgastan", color: "#f28b8b", foto: SUB("envejecimiento", "envejecimiento3"),
     eyebrow: "Mitocondrias cansadas",
     explicacion: [
       "Con la edad, las mitocondrias funcionan peor y generan más radicales libres, lo que a su vez las daña más: un círculo vicioso.",
@@ -532,7 +572,7 @@ const ENVEJECIMIENTO: Ficha[] = [
     ],
   },
   {
-    key: "inflammaging", nombre: "Inflamación de fondo", color: "#f2b48f", foto: SUB("envejecimiento", "inflammaging"),
+    key: "inflammaging", nombre: "Inflamación de fondo", color: "#f2b48f", foto: SUB("envejecimiento", "envejecimiento4"),
     eyebrow: "«Inflammaging»",
     explicacion: [
       "El envejecimiento se acompaña de una inflamación crónica de bajo grado, silenciosa, que va deteriorando los tejidos.",
@@ -540,7 +580,7 @@ const ENVEJECIMIENTO: Ficha[] = [
     ],
   },
   {
-    key: "autofagia", nombre: "Autofagia", color: "#9fe6b8", foto: SUB("envejecimiento", "autofagia"),
+    key: "autofagia", nombre: "Autofagia", color: "#9fe6b8", foto: SUB("envejecimiento", "envejecimiento5"),
     eyebrow: "El reciclaje que te cuida",
     explicacion: [
       "Es el sistema de reciclaje de la célula: elimina piezas viejas o dañadas y reutiliza sus materiales.",
@@ -552,7 +592,7 @@ const ENVEJECIMIENTO: Ficha[] = [
 // ── Apoptosis y necrosis ─────────────────────────────────────────────────────
 const APOPTOSIS: Ficha[] = [
   {
-    key: "apoptosis", nombre: "Apoptosis", color: "#9fe6b8", foto: SUB("apoptosis", "apoptosis"),
+    key: "apoptosis", nombre: "Apoptosis", color: "#9fe6b8", foto: SUB("apoptosis", "apoptosis1"),
     eyebrow: "Morir con orden",
     explicacion: [
       "Es la muerte celular programada: la célula se desmonta de forma limpia y ordenada, y sus restos se reciclan sin dañar a las vecinas.",
@@ -560,7 +600,7 @@ const APOPTOSIS: Ficha[] = [
     ],
   },
   {
-    key: "necrosis", nombre: "Necrosis", color: "#f28b8b", foto: SUB("apoptosis", "necrosis"),
+    key: "necrosis", nombre: "Necrosis", color: "#f28b8b", foto: SUB("apoptosis", "apoptosis2"),
     eyebrow: "Morir de golpe",
     explicacion: [
       "Es la muerte por lesión (un golpe, falta de oxígeno, una toxina): la célula se rompe de forma descontrolada y su contenido se derrama.",
@@ -568,7 +608,7 @@ const APOPTOSIS: Ficha[] = [
     ],
   },
   {
-    key: "util", nombre: "Por qué es necesaria", color: "#a7d9f2", foto: SUB("apoptosis", "util"),
+    key: "util", nombre: "Por qué es necesaria", color: "#a7d9f2", foto: SUB("apoptosis", "apoptosis3"),
     eyebrow: "Una muerte que da vida",
     explicacion: [
       "La apoptosis esculpe el cuerpo (por ejemplo, separa los dedos en el embrión) y elimina células viejas, dañadas o peligrosas.",
@@ -576,7 +616,7 @@ const APOPTOSIS: Ficha[] = [
     ],
   },
   {
-    key: "cancer", nombre: "Cuando falla: el cáncer", color: "#c9a7ff", foto: SUB("apoptosis", "cancer"),
+    key: "cancer", nombre: "Cuando falla: el cáncer", color: "#c9a7ff", foto: SUB("apoptosis", "apoptosis4"),
     eyebrow: "Células que no obedecen",
     explicacion: [
       "Si una célula dañada esquiva la apoptosis, puede seguir dividiéndose sin control: ese es uno de los orígenes del cáncer.",
@@ -588,7 +628,7 @@ const APOPTOSIS: Ficha[] = [
 // ── Regeneración (cerrar una herida, paso a paso) ─────────────────────────────
 const REGENERACION: Ficha[] = [
   {
-    key: "hemostasia", nombre: "1 · Detener la sangre", color: "#f28b8b", foto: SUB("regeneracion", "hemostasia"),
+    key: "hemostasia", nombre: "1 · Detener la sangre", color: "#f28b8b", foto: SUB("regeneracion", "regeneracion1"),
     eyebrow: "Hemostasia",
     explicacion: [
       "En segundos, las plaquetas forman un tapón y se activa la coagulación para cerrar la herida y frenar la hemorragia.",
@@ -596,7 +636,7 @@ const REGENERACION: Ficha[] = [
     ],
   },
   {
-    key: "inflamacion", nombre: "2 · Limpiar", color: "#f2b48f", foto: SUB("regeneracion", "inflamacion"),
+    key: "inflamacion", nombre: "2 · Limpiar", color: "#f2b48f", foto: SUB("regeneracion", "regeneracion2"),
     eyebrow: "Inflamación",
     explicacion: [
       "Llegan células de defensa que eliminan microbios y restos de tejido dañado. La zona se enrojece e hincha: es normal y necesario.",
@@ -604,7 +644,7 @@ const REGENERACION: Ficha[] = [
     ],
   },
   {
-    key: "proliferacion", nombre: "3 · Reconstruir", color: "#9fe6b8", foto: SUB("regeneracion", "proliferacion"),
+    key: "proliferacion", nombre: "3 · Reconstruir", color: "#9fe6b8", foto: SUB("regeneracion", "regeneracion3"),
     eyebrow: "Proliferación",
     explicacion: [
       "Los fibroblastos fabrican colágeno, crecen nuevos vasos sanguíneos y las células de la piel cubren la herida.",
@@ -612,7 +652,7 @@ const REGENERACION: Ficha[] = [
     ],
   },
   {
-    key: "remodelacion", nombre: "4 · Rematar", color: "#a7d9f2", foto: SUB("regeneracion", "remodelacion"),
+    key: "remodelacion", nombre: "4 · Rematar", color: "#a7d9f2", foto: SUB("regeneracion", "regeneracion4"),
     eyebrow: "Remodelación",
     explicacion: [
       "Durante semanas o meses, el tejido nuevo se reorganiza y gana fuerza; a veces queda una cicatriz.",
@@ -620,7 +660,7 @@ const REGENERACION: Ficha[] = [
     ],
   },
   {
-    key: "celulas-madre", nombre: "Las células madre", color: "#c9a7ff", foto: SUB("regeneracion", "celulas-madre"),
+    key: "celulas-madre", nombre: "Las células madre", color: "#c9a7ff", foto: SUB("regeneracion", "regeneracion5"),
     eyebrow: "Las que lo hacen posible",
     explicacion: [
       "Son células «en blanco» que pueden convertirse en distintos tipos y reemplazar a las que se pierden. Renuevan piel, sangre o intestino constantemente.",
@@ -640,7 +680,7 @@ const HOMEOSTASIS: Ficha[] = [
     ],
   },
   {
-    key: "temperatura", nombre: "Temperatura", color: "#f2b48f", foto: SUB("homeostasis", "temperatura"),
+    key: "temperatura", nombre: "Temperatura", color: "#f2b48f", foto: SUB("homeostasis", "homeostasis1"),
     eyebrow: "Siempre unos 37 °C",
     explicacion: [
       "Si tienes calor, sudas y dilatas los vasos; si tienes frío, tiritas y los cierras.",
@@ -648,7 +688,7 @@ const HOMEOSTASIS: Ficha[] = [
     ],
   },
   {
-    key: "glucosa", nombre: "Azúcar en sangre", color: "#9fe6b8", foto: SUB("homeostasis", "glucosa"),
+    key: "glucosa", nombre: "Azúcar en sangre", color: "#9fe6b8", foto: SUB("homeostasis", "homeostasis2"),
     eyebrow: "Ni mucho ni poco",
     explicacion: [
       "Insulina y glucagón suben o bajan la glucosa para mantenerla en un margen estrecho, comas o ayunes.",
@@ -656,7 +696,7 @@ const HOMEOSTASIS: Ficha[] = [
     ],
   },
   {
-    key: "agua-sales", nombre: "Agua y sales", color: "#a7d9f2", foto: SUB("homeostasis", "agua-sales"),
+    key: "agua-sales", nombre: "Agua y sales", color: "#a7d9f2", foto: SUB("homeostasis", "homeostasis3"),
     eyebrow: "El equilibrio interno",
     explicacion: [
       "Los riñones y varias hormonas ajustan cuánta agua y sales conservas o eliminas, según bebas, sudes o comas.",
@@ -664,7 +704,7 @@ const HOMEOSTASIS: Ficha[] = [
     ],
   },
   {
-    key: "ph", nombre: "El pH de la sangre", color: "#c9a7ff", foto: SUB("homeostasis", "ph"),
+    key: "ph", nombre: "El pH de la sangre", color: "#c9a7ff", foto: SUB("homeostasis", "homeostasis4"),
     eyebrow: "Un margen muy estrecho",
     explicacion: [
       "La sangre se mantiene en un pH muy estable (alrededor de 7,4). Los pulmones y los riñones lo corrigen sin descanso.",
@@ -676,7 +716,7 @@ const HOMEOSTASIS: Ficha[] = [
 // ── Nervio vago ──────────────────────────────────────────────────────────────
 const NERVIO_VAGO: Ficha[] = [
   {
-    key: "que-es", nombre: "El cable más largo", color: "#b8d98f", foto: SUB("nervio-vago", "que-es"),
+    key: "que-es", nombre: "El cable más largo", color: "#b8d98f", foto: SUB("nerviovago", "nerviovago1"),
     eyebrow: "Qué es",
     explicacion: [
       "El nervio vago es el más largo del sistema nervioso autónomo: sale del cerebro y llega al corazón, los pulmones y casi todo el aparato digestivo.",
@@ -684,7 +724,7 @@ const NERVIO_VAGO: Ficha[] = [
     ],
   },
   {
-    key: "parasimpatico", nombre: "El modo «calma»", color: "#9fe6b8", foto: SUB("nervio-vago", "parasimpatico"),
+    key: "parasimpatico", nombre: "El modo «calma»", color: "#9fe6b8", foto: SUB("nerviovago", "nerviovago2"),
     eyebrow: "Reposo y digestión",
     explicacion: [
       "Es la cara principal del sistema parasimpático, el de «reposo y digestión»: frena el corazón, favorece la digestión y te relaja.",
@@ -692,7 +732,7 @@ const NERVIO_VAGO: Ficha[] = [
     ],
   },
   {
-    key: "intestino-cerebro", nombre: "Eje intestino-cerebro", color: "#a7d9f2", foto: SUB("nervio-vago", "intestino-cerebro"),
+    key: "intestino-cerebro", nombre: "Eje intestino-cerebro", color: "#a7d9f2", foto: SUB("nerviovago", "nerviovago3"),
     eyebrow: "Dos cerebros hablando",
     explicacion: [
       "Gran parte de la información que sube del intestino al cerebro viaja por el vago, incluidas señales de la microbiota.",
@@ -700,7 +740,7 @@ const NERVIO_VAGO: Ficha[] = [
     ],
   },
   {
-    key: "tono", nombre: "El tono vagal", color: "#c9a7ff", foto: SUB("nervio-vago", "tono"),
+    key: "tono", nombre: "El tono vagal", color: "#c9a7ff", foto: SUB("nerviovago", "nerviovago4"),
     eyebrow: "Se puede entrenar",
     explicacion: [
       "Un buen «tono vagal» significa que recuperas la calma con facilidad tras el estrés. Se entrena: respiración lenta, exhalar largo, exponerse al frío, cantar.",
@@ -708,7 +748,7 @@ const NERVIO_VAGO: Ficha[] = [
     ],
   },
   {
-    key: "corazon", nombre: "El freno del corazón", color: "#f2b48f", foto: SUB("nervio-vago", "corazon"),
+    key: "corazon", nombre: "El freno del corazón", color: "#f2b48f", foto: SUB("nerviovago", "nerviovago5"),
     eyebrow: "Variabilidad cardíaca",
     explicacion: [
       "El vago marca el ritmo de base del corazón: lo frena en reposo. La variabilidad de tu frecuencia cardíaca refleja lo bien que funciona.",
@@ -762,8 +802,8 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     color: "#f2c86b",
     foto: PORTADA("metabolismoportada"),
     grupo: "Química interna",
-    intro: "El conjunto de reacciones que convierten la comida en energía (ATP) y en materiales para construirte.",
-    pista: "Pulsa cada pieza para ver cómo conviertes la comida en energía.",
+    intro: "La respiración celular: cómo tus células convierten la comida (sobre todo la glucosa) en ATP, la energía que te mantiene en marcha.",
+    pista: "Pulsa cada paso para seguir el recorrido de la comida hasta el ATP.",
     fichas: METABOLISMO,
   },
 

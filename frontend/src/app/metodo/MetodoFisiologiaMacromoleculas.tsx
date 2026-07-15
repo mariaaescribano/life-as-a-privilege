@@ -91,14 +91,11 @@ const MACROS: MacroDef[] = [
       "Por eso los fosfolípidos se ordenan solos en una doble capa: la membrana que envuelve y protege cada una de tus células.",
     ],
     monomeroImg: `${PRE}/fosfolipido.png`, resultadoImg: `${PRE}/circularfolipido.png`, cuadradoImg: `${PRE}/fosfolipido.png`,
-    // ⚠️ PENDIENTE: María subirá las fotos de estas 4 piezas del fosfolípido.
-    //    Rutas esperadas: pre/fosfato.png, pre/glicerol.png, pre/acidograso.png.
-    //    Mientras no existan, cada pieza cae a su esfera dibujada con su inicial.
     componentes: [
       { label: "fosfato", img: `${PRE}/fosfato.png`, glyph: "P" },
       { label: "glicerol", img: `${PRE}/glicerol.png`, glyph: "G" },
-      { label: "ácido graso", img: `${PRE}/acidograso.png`, glyph: "A" },
-      { label: "ácido graso", img: `${PRE}/acidograso.png`, glyph: "A" },
+      { label: "ácido graso saturado", img: `${PRE}/acidosgrasossaturados.png`, glyph: "A" },
+      { label: "ácido graso insaturado", img: `${PRE}/acidosgrasosinsaturados.png`, glyph: "A" },
     ],
   },
   {

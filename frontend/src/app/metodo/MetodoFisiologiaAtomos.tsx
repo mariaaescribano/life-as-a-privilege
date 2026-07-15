@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -113,20 +113,32 @@ function Esfera({ tipo, size, glow = true }: { tipo: Tipo; size: any; glow?: boo
 }
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
-function FichaArrastrable({ pieza, onSoltar, enterDelay = 0 }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => void; enterDelay?: number }) {
+function FichaArrastrable({ pieza, onSoltar, enterDelay = 0 }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => boolean; enterDelay?: number }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const controls = useAnimationControls();
   const glow = GLOW[pieza.tipo];
+  // Entrada: cada ficha aparece con su pequeño retraso.
+  useEffect(() => {
+    controls.start({ opacity: 1, x: 0, transition: { type: "spring", stiffness: 320, damping: 26, delay: enterDelay } });
+  }, [controls, enterDelay]);
   return (
     <MBox
       ref={ref}
-      drag dragSnapToOrigin dragElastic={0.12} dragMomentum={false}
+      drag dragElastic={0.12} dragMomentum={false}
       onDragStart={() => setArrastrando(true)}
-      onDragEnd={() => { setArrastrando(false); if (ref.current) onSoltar(pieza, ref.current.getBoundingClientRect()); }}
+      onDragEnd={() => {
+        setArrastrando(false);
+        if (!ref.current) return;
+        const aceptada = onSoltar(pieza, ref.current.getBoundingClientRect());
+        // Si acierta (núcleo u órbita), NO vuelve: desaparece donde está.
+        // Si falla, regresa a su sitio.
+        if (!aceptada) controls.start({ x: 0, y: 0, transition: { type: "spring", stiffness: 320, damping: 26 } });
+      }}
       whileDrag={{ scale: 1.18, zIndex: 60 }}
       whileHover={{ scale: 1.07, y: -2 }}
-      initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.5 }}
-      transition={{ type: "spring", stiffness: 320, damping: 26, delay: enterDelay }}
+      initial={{ opacity: 0, x: 16 }} animate={controls} exit={{ opacity: 0, scale: 0.5 }}
+      transition={{ type: "spring", stiffness: 320, damping: 26 }}
       cursor="grab" position="relative" display="flex" flexDirection="column" alignItems="center" gap={1}
       flexShrink={0} style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
@@ -247,9 +259,9 @@ export default function MetodoFisiologiaAtomos() {
     return Math.hypot(px - cx, py - cy) <= radio + rect.width / 2;
   };
 
-  const soltar = (pieza: Pieza, rect: DOMRect) => {
+  const soltar = (pieza: Pieza, rect: DOMRect): boolean => {
     const acierta = pieza.tipo === "electron" ? dentroDe(orbitaRef.current, rect) : dentroDe(nucleoRef.current, rect);
-    if (!acierta) return;
+    if (!acierta) return false;
     setPendientes((prev) => prev.filter((p) => p.id !== pieza.id));
     setColocadas((prev) => {
       const next = [...prev, pieza];
@@ -261,6 +273,7 @@ export default function MetodoFisiologiaAtomos() {
       }
       return next;
     });
+    return true;
   };
 
   const reiniciar = () => { setColocadas([]); setPendientes(piezasDe(idx)); setCompleto(false); };

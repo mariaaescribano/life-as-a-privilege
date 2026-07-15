@@ -545,11 +545,81 @@ const ORGANOS: Organo[] = [
       },
     ] },
   { key: "lengua",    label: "Lengua",         foto: "/recorrido/fisiologia/organos/lengua.png",   hotspot: { top: 16, left: 50 }, celulas: pick("gustativa-tipo2", "gustativa-tipo3", "soporte-gusto", "basal-gusto"),
-    descripcion: <>Es un órgano muscular ágil, cubierto de papilas que albergan los botones del gusto. Dentro de ellos, unas células especializadas detectan los cinco sabores —dulce, salado, ácido, amargo y umami— y envían la señal al cerebro. Además de saborear, la lengua mezcla y empuja los alimentos para tragarlos y es esencial para hablar.</> },
+    descripcion: <>Es un órgano muscular ágil, cubierto de papilas que albergan los botones del gusto. Dentro de ellos, unas células especializadas detectan los cinco sabores —dulce, salado, ácido, amargo y umami— y envían la señal al cerebro. Además de saborear, la lengua mezcla y empuja los alimentos para tragarlos y es esencial para hablar.</>,
+    consejos: [
+      {
+        titular: "Ráspate la lengua: una práctica tradicional del Ayurveda.",
+        texto: <>Raspar la lengua una vez al día ayuda a eliminar bacterias, restos de alimentos y células muertas que se acumulan en su superficie, especialmente al despertar. Esta sencilla rutina puede mejorar el aliento y contribuir a una mejor higiene bucal. La evidencia científica actual indica que sus beneficios se deben principalmente a la eliminación de la placa lingual y los microorganismos acumulados.</>,
+      },
+      {
+        titular: "La lengua tiene huellas únicas.",
+        texto: <>Al igual que las huellas dactilares, cada lengua posee un patrón de líneas y surcos exclusivo que la diferencia de cualquier otra. Esta característica ha despertado el interés de los científicos, quienes han investigado su posible uso como método de identificación biométrica. Aunque todavía no se emplea de forma habitual, demuestra lo sorprendente y única que es esta parte de nuestro cuerpo.</>,
+      },
+      {
+        titular: "La lengua es un conjunto de músculos muy potente.",
+        texto: <>Aunque muchas personas piensan que la lengua es un solo músculo, en realidad está formada por ocho músculos que trabajan de manera coordinada. Gracias a ellos podemos hablar, masticar, tragar e incluso respirar correctamente. Su gran flexibilidad y resistencia la convierten en una de las partes más importantes del cuerpo para realizar actividades cotidianas.</>,
+      },
+      {
+        titular: "La lengua puede detectar cinco sabores principales.",
+        texto: <>Las papilas gustativas de la lengua nos permiten reconocer los sabores dulce, salado, ácido, amargo y umami. Durante mucho tiempo se creyó que cada sabor se percibía en una zona específica, pero hoy sabemos que casi toda la lengua puede detectar todos ellos. Además, el olfato juega un papel fundamental para disfrutar plenamente del sabor de los alimentos.</>,
+      },
+      {
+        titular: "La lengua se regenera constantemente.",
+        texto: <>La superficie de la lengua renueva sus células de forma continua, lo que permite que pequeñas heridas o irritaciones cicatricen con rapidez. Este proceso de regeneración ayuda a mantener sanas las papilas gustativas y protege la boca frente a bacterias y otros agentes externos. Una buena higiene bucal es esencial para conservar la lengua en buen estado.</>,
+      },
+      {
+        titular: "La lengua es esencial para comunicarnos.",
+        texto: <>Hablar sería prácticamente imposible sin la lengua, ya que interviene en la formación de la mayoría de los sonidos del lenguaje. Trabaja junto con los labios, los dientes y el paladar para articular las palabras con claridad. Gracias a su precisión y rapidez de movimiento, podemos expresar ideas, emociones y comunicarnos con las demás personas cada día.</>,
+      },
+    ] },
   { key: "bazo",      label: "Bazo",           foto: "/recorrido/fisiologia/organos/bazo.png",     hotspot: { top: 38, left: 57 }, celulas: pick("macrofago-esplenico", "pulpa-blanca"),
-    descripcion: <>Es el gran filtro de la sangre. En su pulpa roja, los macrófagos retiran los glóbulos rojos viejos o dañados y reciclan su hierro; en su pulpa blanca vigila la sangre en busca de infecciones, como un ganglio linfático conectado directamente al torrente sanguíneo. También guarda una reserva de células defensivas lista para actuar.</> },
+    descripcion: <>Es el gran filtro de la sangre. En su pulpa roja, los macrófagos retiran los glóbulos rojos viejos o dañados y reciclan su hierro; en su pulpa blanca vigila la sangre en busca de infecciones, como un ganglio linfático conectado directamente al torrente sanguíneo. También guarda una reserva de células defensivas lista para actuar.</>,
+    consejos: [
+      {
+        titular: "El bazo es el mayor órgano del sistema linfático.",
+        texto: <>Aunque muchas personas apenas saben dónde está, el bazo es el órgano más grande del sistema linfático. Se encuentra en la parte superior izquierda del abdomen, justo debajo de las costillas. Su función principal es ayudar al sistema inmunitario a combatir infecciones y filtrar la sangre. Además, participa en la producción y almacenamiento de algunas células de defensa del organismo.</>,
+      },
+      {
+        titular: "Actúa como un filtro natural de la sangre.",
+        texto: <>El bazo revisa constantemente la sangre para eliminar glóbulos rojos envejecidos o dañados y reciclar componentes como el hierro. En él vive parte del sistema inmunitario que revisa el torrente sanguíneo buscando bacterias, virus y otros microorganismos. Gracias a este proceso, ayuda a mantener la sangre en buen estado y refuerza las defensas del cuerpo frente a posibles infecciones.</>,
+      },
+      {
+        titular: "Puede almacenar una reserva de sangre.",
+        texto: <>Una de las funciones menos conocidas del bazo es que actúa como un pequeño depósito de sangre. En determinadas situaciones, como una hemorragia importante o un esfuerzo físico intenso, puede liberar parte de esa reserva para ayudar al organismo. Esta capacidad es mucho más desarrollada en algunos animales, pero también existe en los seres humanos.</>,
+      },
+      {
+        titular: "Se puede vivir sin bazo.",
+        texto: <>Aunque el bazo desempeña funciones muy importantes, es posible vivir sin él. Cuando debe extirparse por una lesión o enfermedad, otros órganos, como el hígado y los ganglios linfáticos, asumen parte de su trabajo. Sin embargo, las personas sin bazo tienen un mayor riesgo de sufrir ciertas infecciones, por lo que suelen necesitar vacunas específicas y algunas precauciones adicionales.</>,
+      },
+      {
+        titular: "El bazo cambia de tamaño según las necesidades del cuerpo.",
+        texto: <>El tamaño del bazo no siempre es el mismo. Puede aumentar temporalmente durante algunas infecciones, enfermedades de la sangre o problemas hepáticos, ya que trabaja más intensamente para filtrar la sangre y activar la respuesta inmunitaria. En condiciones normales mide alrededor de 12 centímetros, pero su tamaño puede variar según la edad, la constitución física y el estado de salud de cada persona.</>,
+      },
+    ] },
   { key: "vesicula",  label: "Vesícula biliar", foto: "/recorrido/fisiologia/organos/vesicula.png", hotspot: { top: 36, left: 41 }, celulas: pick("colangiocito-vesicula", "muscular-vesicula"),
-    descripcion: <>Es una pequeña bolsa situada bajo el hígado que guarda y concentra la bilis entre comidas. Cuando comes grasa, se contrae y libera esa bilis al intestino para ayudar a digerirla y a absorber las vitaminas liposolubles. Trabaja en equipo con el hígado y el páncreas dentro del sistema digestivo.</> },
+    descripcion: <>Es una pequeña bolsa situada bajo el hígado que guarda y concentra la bilis entre comidas. Cuando comes grasa, se contrae y libera esa bilis al intestino para ayudar a digerirla y a absorber las vitaminas liposolubles. Trabaja en equipo con el hígado y el páncreas dentro del sistema digestivo.</>,
+    consejos: [
+      {
+        titular: "La vesícula biliar es un pequeño almacén de bilis.",
+        texto: <>Aunque es un órgano pequeño, la vesícula biliar cumple una función muy importante en la digestión. Se encuentra debajo del hígado y su principal tarea es almacenar y concentrar la bilis que este produce. Cuando comemos alimentos, especialmente grasas, libera esa bilis hacia el intestino para facilitar la digestión y la absorción de los nutrientes.</>,
+      },
+      {
+        titular: "La bilis ayuda a digerir las grasas.",
+        texto: <>La vesícula no produce bilis, sino que la guarda hasta que el cuerpo la necesita. La bilis actúa como un detergente natural que descompone las grasas en partículas más pequeñas, permitiendo que las enzimas digestivas las procesen con mayor facilidad. Gracias a este proceso, el organismo puede absorber vitaminas esenciales como la A, D, E y K.</>,
+      },
+      {
+        titular: "Se puede vivir sin vesícula biliar.",
+        texto: <>Aunque la vesícula facilita la digestión, no es un órgano indispensable para vivir. Si debe extirparse por cálculos o inflamación, el hígado sigue produciendo bilis, que pasa directamente al intestino. La mayoría de las personas pueden llevar una vida normal después de la cirugía, aunque algunas necesitan adaptar su alimentación durante un tiempo.</>,
+      },
+      {
+        titular: "Los cálculos biliares son muy frecuentes.",
+        texto: <>Una de las enfermedades más comunes de la vesícula son los cálculos biliares, también conocidos como «piedras». Se forman cuando algunos componentes de la bilis, como el colesterol, se endurecen y crean pequeñas acumulaciones. Muchas personas nunca presentan síntomas, pero en otros casos pueden provocar dolor intenso, inflamación o la necesidad de una intervención quirúrgica.</>,
+      },
+      {
+        titular: "La vesícula se contrae cada vez que comes grasas.",
+        texto: <>Cada vez que ingerimos alimentos ricos en grasa, el intestino libera una hormona llamada colecistoquinina. Esta hormona envía la señal para que la vesícula se contraiga y expulse la bilis almacenada. Es un proceso automático que ocurre varias veces al día y que resulta esencial para que la digestión de las grasas sea eficiente. Se ha demostrado que se contrae mejor cuando dicha grasa es insaturada, una prueba de que el cuerpo responde mejor a las moléculas que mayor beneficio le aportan.</>,
+      },
+    ] },
 ];
 
 // Universo de células alcanzables desde la galería (para el contador de progreso).
@@ -992,6 +1062,10 @@ function OrganoDetalle({
 export default function MetodoFisiologiaTodasCelulas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // Mientras precargamos las fotos del órgano que se acaba de abrir (foto grande
+  // + todas las fotos de sus células), mostramos el spinner: la ficha del órgano
+  // no aparece hasta que TODO esté descargado.
+  const [organoLoading, setOrganoLoading] = useState(false);
   // "galeria" = cuerpo-navegador + cuadrícula de órganos; "detalle" = ficha del
   // órgano a pantalla completa (como una Pokédex).
   const [vista, setVista] = useState<"galeria" | "detalle">("galeria");
@@ -1003,10 +1077,19 @@ export default function MetodoFisiologiaTodasCelulas() {
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
 
-  // Abre la ficha de un órgano (pantalla completa) y sube al principio.
-  const abrirOrgano = (o: Organo) => {
+  // Abre la ficha de un órgano (pantalla completa). No la mostramos hasta que
+  // TODAS sus fotos (la del órgano + la de cada una de sus células) estén
+  // descargadas: mientras tanto, spinner a pantalla completa.
+  const abrirOrgano = async (o: Organo) => {
+    setOrganoLoading(true);
     setOrgano(o);
+    window.scrollTo({ top: 0, behavior: "auto" });
+    await precargarImagenes([
+      encodeURI(o.foto),
+      ...o.celulas.map((c) => encodeURI(c.foto)),
+    ]);
     setVista("detalle");
+    setOrganoLoading(false);
     window.scrollTo({ top: 0, behavior: "auto" });
   };
   const volverGaleria = () => {
@@ -1094,7 +1177,7 @@ export default function MetodoFisiologiaTodasCelulas() {
   const vistasTotal = UNIVERSO.filter((id) => vistas.has(id)).length;
   const pct = TOTAL_CELULAS ? Math.round((vistasTotal / TOTAL_CELULAS) * 100) : 0;
 
-  if (loading) {
+  if (loading || organoLoading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 

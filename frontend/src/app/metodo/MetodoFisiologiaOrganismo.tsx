@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -63,26 +63,45 @@ function PanelBox({ children, ...rest }: any) {
 }
 
 // ── Ficha del sistema en la bandeja (foto circular + nombre; se ARRASTRA al círculo) ──
-function SistemaFicha({ sistema, colocado, onSoltar }: {
-  sistema: Sistema; colocado: boolean; onSoltar: (rect: DOMRect) => void;
+// La bandeja solo muestra 6 a la vez: al soltar una en el círculo desaparece
+// (no vuelve atrás) y entra la siguiente, manteniendo la actividad compacta.
+function SistemaFicha({ sistema, onSoltar }: {
+  sistema: Sistema;
+  /** Devuelve true si la ficha ha caído dentro del círculo (acierto). */
+  onSoltar: (rect: DOMRect) => boolean;
 }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const controls = useAnimationControls();
+
+  // Entrada al montarse (cada nueva ficha aparece con un pequeño fundido).
+  useEffect(() => {
+    controls.start({ opacity: 1, scale: 1, transition: { type: "spring", stiffness: 320, damping: 24 } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <MBox
       ref={ref}
-      drag={!colocado}
-      dragSnapToOrigin
+      drag
       dragElastic={0.12}
       dragMomentum={false}
       onDragStart={() => setArrastrando(true)}
-      onDragEnd={() => { setArrastrando(false); if (ref.current) onSoltar(ref.current.getBoundingClientRect()); }}
+      onDragEnd={() => {
+        setArrastrando(false);
+        if (!ref.current) return;
+        const aceptado = onSoltar(ref.current.getBoundingClientRect());
+        // Si acierta en el círculo, NO vuelve: desaparece (exit). Si falla, regresa.
+        if (!aceptado) controls.start({ x: 0, y: 0, transition: { type: "spring", stiffness: 320, damping: 26 } });
+      }}
       whileDrag={{ scale: 1.14, zIndex: 60 }}
-      whileHover={colocado ? undefined : { y: -3, scale: 1.04 }}
+      whileHover={{ y: -3, scale: 1.04 }}
+      initial={{ opacity: 0, scale: 0.6 }}
+      animate={controls}
+      exit={{ opacity: 0, scale: 0.5 }}
       transition={{ type: "spring", stiffness: 320, damping: 24 }}
       display="flex" flexDirection="column" alignItems="center" gap={2}
-      cursor={colocado ? "default" : "grab"}
-      opacity={colocado ? 0.4 : 1}
+      cursor="grab"
       w={{ base: "92px", md: "116px" }}
       flexShrink={0}
       sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${sistema.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}
@@ -90,16 +109,6 @@ function SistemaFicha({ sistema, colocado, onSoltar }: {
     >
       <Box position="relative" pointerEvents="none">
         <SistemaFoto sistema={sistema} size={{ base: "76px", md: "96px" }} />
-        {colocado && (
-          <Flex position="absolute" inset={0} align="center" justify="center" borderRadius="full"
-                bg="rgba(0,0,0,0.45)">
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                 w={{ base: "28px", md: "34px" }} h={{ base: "28px", md: "34px" }} fill={fisiologiaTxt}
-                 style={{ filter: `drop-shadow(0 0 6px ${fisiologiaTxt})` }}>
-              <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-            </Box>
-          </Flex>
-        )}
       </Box>
       <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight="700" lineHeight="1.15"
             textAlign="center" letterSpacing="0.02em" pointerEvents="none"
@@ -177,13 +186,15 @@ export default function MetodoFisiologiaOrganismo() {
 
   // ¿La ficha soltada cae dentro del círculo de ensamblaje? (viewport-based,
   // funciona con scroll y en táctil, igual que en el resto de páginas).
-  const soltarEnCirculo = (s: Sistema, rect: DOMRect) => {
+  // Devuelve true si acierta (para que la ficha no vuelva atrás y desaparezca).
+  const soltarEnCirculo = (s: Sistema, rect: DOMRect): boolean => {
     const el = circuloRef.current;
-    if (!el) return;
+    if (!el) return false;
     const c = el.getBoundingClientRect();
     const cx = c.left + c.width / 2, cy = c.top + c.height / 2, radio = c.width / 2;
     const px = rect.left + rect.width / 2, py = rect.top + rect.height / 2;
-    if (Math.hypot(px - cx, py - cy) <= radio + rect.width / 2) colocar(s);
+    if (Math.hypot(px - cx, py - cy) <= radio + rect.width / 2) { colocar(s); return true; }
+    return false;
   };
 
   const reiniciar = () => { setColocados([]); setCompleto(false); setFrase(null); };
@@ -196,8 +207,8 @@ export default function MetodoFisiologiaOrganismo() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
+      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 4, md: 5 }}>
 
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
@@ -297,11 +308,15 @@ export default function MetodoFisiologiaOrganismo() {
                             style={{ textShadow: INK }}>
                         Los sistemas · {colocados.length}/{total}
                       </Text>
-                      <Flex wrap="wrap" justify="center" gap={{ base: 3, md: 4 }}>
-                        {SISTEMAS.map((s) => (
-                          <SistemaFicha key={s.key} sistema={s} colocado={colocadosSet.has(s.key)}
-                                        onSoltar={(rect) => soltarEnCirculo(s, rect)} />
-                        ))}
+                      {/* Solo 6 a la vez: al soltar uno en el círculo desaparece de aquí
+                          y entra el siguiente que quede por colocar. */}
+                      <Flex wrap="wrap" justify="center" gap={{ base: 3, md: 4 }} minH={{ base: "200px", md: "240px" }}>
+                        <AnimatePresence mode="popLayout">
+                          {SISTEMAS.filter((s) => !colocadosSet.has(s.key)).slice(0, 6).map((s) => (
+                            <SistemaFicha key={s.key} sistema={s}
+                                          onSoltar={(rect) => soltarEnCirculo(s, rect)} />
+                          ))}
+                        </AnimatePresence>
                       </Flex>
                     </Box>
                   </PanelBox>

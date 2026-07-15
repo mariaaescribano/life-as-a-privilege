@@ -14,11 +14,12 @@ import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
 import {
   TEMAS_PROFUNDIZA,
+  PROFUNDIZA_LEIDAS_KEY,
   type TemaProfundiza,
 } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 // Tarjeta de un tema: imagen arriba + nombre + frase corta. Rejilla de 3.
-function TemaBox({ tema, onClick, delay }: { tema: TemaProfundiza; onClick: () => void; delay: number }) {
+function TemaBox({ tema, onClick, delay, completo = false }: { tema: TemaProfundiza; onClick: () => void; delay: number; completo?: boolean }) {
   const [imgErr, setImgErr] = useState(false);
   const enConstruccion = tema.fichas.length === 0;
   return (
@@ -40,6 +41,18 @@ function TemaBox({ tema, onClick, delay }: { tema: TemaProfundiza; onClick: () =
         _active={{ transform: "translateY(-1px)" }}
       >
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}55`} />
+
+        {/* Sello de "tema completado": aparece cuando se han leído todas sus fichas */}
+        {completo && (
+          <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
+                w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
+                boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
+              <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+            </Box>
+          </Flex>
+        )}
+
         <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
               p={{ base: 4, md: 5 }} h="100%">
           <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
@@ -81,6 +94,7 @@ function TemaBox({ tema, onClick, delay }: { tema: TemaProfundiza; onClick: () =
 export default function MetodoFisiologiaProfundiza() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [leidasMap, setLeidasMap] = useState<Record<string, string[]>>({});
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   useEffect(() => {
@@ -94,10 +108,23 @@ export default function MetodoFisiologiaProfundiza() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        // Fichas leídas por tema, para el check de las portadas completadas.
+        try {
+          const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+          const mapa = r.data?.data?.[PROFUNDIZA_LEIDAS_KEY];
+          if (mapa && typeof mapa === "object") setLeidasMap(mapa);
+        } catch { /* sin fila todavía */ }
       } catch { navigate("/metodo/fisiologia"); return; }
       finally { setLoading(false); }
     })();
   }, [navigate]);
+
+  // Un tema está "completo" cuando se han leído TODAS sus fichas.
+  const temaCompleto = (t: TemaProfundiza): boolean => {
+    if (t.fichas.length === 0) return false;
+    const leidas = new Set(leidasMap[t.key] ?? []);
+    return t.fichas.every((f) => leidas.has(f.key));
+  };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
@@ -133,7 +160,7 @@ export default function MetodoFisiologiaProfundiza() {
           {/* Todos los temas en una sola rejilla (sin rótulos de bloque). */}
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
             {TEMAS_PROFUNDIZA.map((t, i) => (
-              <TemaBox key={t.key} tema={t} delay={0.05 * i}
+              <TemaBox key={t.key} tema={t} delay={0.05 * i} completo={temaCompleto(t)}
                        onClick={() => navigate(`/metodo/fisiologia/profundiza/${t.key}`)} />
             ))}
           </SimpleGrid>

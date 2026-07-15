@@ -38,7 +38,6 @@ const IMG: Record<Tipo, string> = {
   hidrogeno: "/recorrido/fisiologia/pre/hidrogeno.png",
   carbono: "/recorrido/fisiologia/pre/carbono.png",
 };
-const BOND = "#f2e2b0"; // color del enlace
 
 // Tamaños del átomo según contexto.
 const S_DRAG: Record<Tipo, any> = {
@@ -67,6 +66,8 @@ interface Mol {
   slots: Slot[];
   titulo: string;
   parrafos: React.ReactNode[];
+  /** Foto de la molécula ya formada (celebración/resumen). Fallback: los átomos. */
+  resultadoImg?: string;
 }
 
 const MOLS: Mol[] = [
@@ -76,15 +77,16 @@ const MOLS: Mol[] = [
     formula: "H₂O",
     instruccion: "Une un oxígeno y dos hidrógenos dentro de la zona de enlace.",
     slots: [
-      { tipo: "oxigeno", x: 50, y: 60 },
-      { tipo: "hidrogeno", x: 27, y: 32 },
-      { tipo: "hidrogeno", x: 73, y: 32 },
+      { tipo: "oxigeno", x: 50, y: 55 },
+      { tipo: "hidrogeno", x: 34, y: 44 },
+      { tipo: "hidrogeno", x: 66, y: 44 },
     ],
     titulo: "¡Has formado una molécula de agua!",
     parrafos: [
       <>Una <b>molécula</b> nace cuando varios átomos se unen <b>compartiendo electrones</b>: esa unión es un <b>enlace</b>. Aquí, un oxígeno se une a dos hidrógenos y forman el <b>agua</b>, H₂O.</>,
       <>El agua es la <b>molécula de la Vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células. Alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
     ],
+    resultadoImg: "/recorrido/fisiologia/pre/h2o.png",
   },
   {
     key: "co2",
@@ -93,14 +95,15 @@ const MOLS: Mol[] = [
     instruccion: "Une un carbono y dos oxígenos dentro de la zona de enlace.",
     slots: [
       { tipo: "carbono", x: 50, y: 50 },
-      { tipo: "oxigeno", x: 16, y: 50 },
-      { tipo: "oxigeno", x: 84, y: 50 },
+      { tipo: "oxigeno", x: 28, y: 50 },
+      { tipo: "oxigeno", x: 72, y: 50 },
     ],
     titulo: "¡Has formado dióxido de carbono!",
     parrafos: [
       <>Un átomo de <b>carbono</b> se une a dos de <b>oxígeno</b>: es el <b>CO₂</b>, el gas que exhalas en cada respiración.</>,
       <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la vida</b>.</>,
     ],
+    resultadoImg: "/recorrido/fisiologia/pre/co2.png",
   },
   {
     key: "o2",
@@ -108,14 +111,15 @@ const MOLS: Mol[] = [
     formula: "O₂",
     instruccion: "Une dos oxígenos dentro de la zona de enlace.",
     slots: [
-      { tipo: "oxigeno", x: 34, y: 50 },
-      { tipo: "oxigeno", x: 66, y: 50 },
+      { tipo: "oxigeno", x: 37, y: 50 },
+      { tipo: "oxigeno", x: 63, y: 50 },
     ],
     titulo: "¡Has formado una molécula de oxígeno!",
     parrafos: [
       <>Dos átomos de oxígeno se unen y forman el <b>O₂</b>: el oxígeno que respiras.</>,
       <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la vida tal como la conoces no existiría.</>,
     ],
+    resultadoImg: "/recorrido/fisiologia/pre/o2.png",
   },
 ];
 
@@ -198,36 +202,30 @@ function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (p: Pie
   );
 }
 
-// ── Enlaces (líneas del átomo central a los demás slots colocados) ──────────
-// Usamos un <svg> nativo con preserveAspectRatio="none": así el viewBox 100×100
-// se estira para llenar EXACTAMENTE el círculo, y las coordenadas (x/y en %) de
-// cada enlace coinciden con las posiciones de los átomos (left/top en %).
-function Enlaces({ mol, placed }: { mol: Mol; placed: number[] }) {
-  const centro = mol.slots[0];
-  return (
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none"
-         style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
-                  overflow: "visible", pointerEvents: "none" }}>
-      {mol.slots.map((s, i) => {
-        if (i === 0 || !placed.includes(0) || !placed.includes(i)) return null;
-        return <line key={i} x1={centro.x} y1={centro.y} x2={s.x} y2={s.y} stroke={BOND} strokeWidth={1.8}
-                     strokeLinecap="round" opacity={0.85} />;
-      })}
-    </svg>
-  );
-}
-
 // ── Molécula ya formada (celebración / resumen) ─────────────────────────────
+// Sin líneas de enlace: los átomos se colocan solapados y se leen como una
+// molécula por su propia proximidad.
 function MoleculaFormada({ mol, tam }: { mol: Mol; tam: Record<Tipo, any> }) {
   return (
     <Box position="relative" w="100%" h="100%">
-      <Enlaces mol={mol} placed={mol.slots.map((_, i) => i)} />
       {mol.slots.map((s, i) => (
         <Box key={i} position="absolute" left={`${s.x}%`} top={`${s.y}%`} transform="translate(-50%,-50%)">
           <Atomo tipo={s.tipo} size={tam[s.tipo]} />
         </Box>
       ))}
     </Box>
+  );
+}
+
+// ── Molécula formada VISUAL: usa la foto de la molécula si existe; si falta o
+// falla, cae a los átomos ensamblados (MoleculaFormada). ─────────────────────
+function MoleculaVisual({ mol, tam }: { mol: Mol; tam: Record<Tipo, any> }) {
+  const [err, setErr] = useState(false);
+  if (!mol.resultadoImg || err) return <MoleculaFormada mol={mol} tam={tam} />;
+  return (
+    <Image src={encodeURI(mol.resultadoImg)} alt={mol.nombre} w="100%" h="100%" objectFit="contain"
+           draggable={false} onError={() => setErr(true)}
+           style={{ filter: "drop-shadow(0 0 16px rgba(255,255,255,0.18))" }} />
   );
 }
 
@@ -352,9 +350,12 @@ export default function MetodoFisiologiaMoleculas() {
     setTerminado(false);
   };
 
-  // No quitamos el spinner hasta que las fotos de los átomos estén descargadas,
-  // para que ni las fichas ni las moléculas aparezcan con la esfera de reserva.
-  const imgsListas = usePrecargarImagenes(Object.values(IMG));
+  // No quitamos el spinner hasta que las fotos de los átomos (y de las moléculas
+  // ya formadas) estén descargadas, para que nada aparezca con la reserva.
+  const imgsListas = usePrecargarImagenes([
+    ...Object.values(IMG),
+    ...MOLS.map((m) => m.resultadoImg),
+  ]);
 
   if (loading || !imgsListas) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -362,7 +363,6 @@ export default function MetodoFisiologiaMoleculas() {
 
   const total = mol.slots.length;
   const hechas = colocadas.length;
-  const placedSlots = colocadas.map((p) => p.slot);
   const esUltima = indice === MOLS.length - 1;
 
   return (
@@ -432,9 +432,7 @@ export default function MetodoFisiologiaMoleculas() {
                                  sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 46%, #05040a 100%)",
                                        boxShadow: `inset 0 0 40px rgba(0,0,0,0.9), 0 0 24px ${fisiologiaTxt}22` }} />
 
-                            <Enlaces mol={mol} placed={placedSlots} />
-
-                            {/* átomos colocados */}
+                            {/* átomos colocados (solapados, sin líneas de enlace) */}
                             {colocadas.map((p) => {
                               const pos = mol.slots[p.slot];
                               return (
@@ -505,7 +503,7 @@ export default function MetodoFisiologiaMoleculas() {
                                  sx={{ boxShadow: `0 0 50px ${fisiologiaTxt}55, 0 0 90px ${GLOW.oxigeno}33` }} />
                             <Box position="relative" w="100%" h="100%"
                                  sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
-                              <MoleculaFormada mol={mol} tam={S_BIG} />
+                              <MoleculaVisual mol={mol} tam={S_BIG} />
                             </Box>
                           </Flex>
                         </Flex>
@@ -561,7 +559,7 @@ export default function MetodoFisiologiaMoleculas() {
                             <Box position="relative" w={{ base: "92px", md: "236px" }} h={{ base: "92px", md: "236px" }}>
                               <Box position="absolute" inset="0"
                                    sx={{ animation: `${sway} 6s ease-in-out infinite`, transformOrigin: "50% 55%" }}>
-                                <MoleculaFormada mol={m} tam={S_MINI} />
+                                <MoleculaVisual mol={m} tam={S_MINI} />
                               </Box>
                             </Box>
                             <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "xl" }}

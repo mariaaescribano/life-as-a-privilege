@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -15,11 +15,11 @@ import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
 import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
-import { temaByKey, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { temaByKey, PROFUNDIZA_LEIDAS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
-function FichaBox({ ficha, temaColor, active, onClick, coloreado }: {
-  ficha: Ficha; temaColor: string; active: boolean; onClick: () => void; coloreado?: boolean;
+function FichaBox({ ficha, temaColor, active, leido = false, onClick, coloreado }: {
+  ficha: Ficha; temaColor: string; active: boolean; leido?: boolean; onClick: () => void; coloreado?: boolean;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const accent = ficha.color || temaColor;
@@ -51,6 +51,18 @@ function FichaBox({ ficha, temaColor, active, onClick, coloreado }: {
       _active={{ transform: "translateY(-1px)" }}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+      {/* Sello de "ficha ya leída" */}
+      {leido && (
+        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
+              w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
+              boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </Box>
+        </Flex>
+      )}
+
       <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
             p={{ base: 4, md: 5 }} h="100%">
         <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
@@ -89,8 +101,10 @@ export default function MetodoFisiologiaTema() {
   const { temaKey } = useParams<{ temaKey: string }>();
   const [loading, setLoading] = useState(true);
   const [ficha, setFicha] = useState<Ficha | null>(null);
+  const [leidas, setLeidas] = useState<Set<string>>(new Set());
   const [comicAbierto, setComicAbierto] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  const dataRef = useRef<Record<string, any>>({});
 
   const tema: TemaProfundiza | undefined = temaByKey(temaKey || "");
 
@@ -107,6 +121,15 @@ export default function MetodoFisiologiaTema() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
 
+        // Cargamos las fichas ya leídas de este tema (para los checks).
+        try {
+          const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+          dataRef.current = r.data?.data ?? {};
+          const mapa = dataRef.current?.[PROFUNDIZA_LEIDAS_KEY] ?? {};
+          const arr: string[] = Array.isArray(mapa?.[temaKey || ""]) ? mapa[temaKey || ""] : [];
+          if (arr.length) setLeidas(new Set(arr));
+        } catch { /* sin fila todavía */ }
+
         // No mostramos la página hasta que TODAS las fotos de las fichas estén
         // descargadas: así la página y las fotos aparecen a la vez, nunca una
         // rejilla que se rellena de golpe. (onerror también cuenta, no se cuelga.)
@@ -122,6 +145,26 @@ export default function MetodoFisiologiaTema() {
 
   const tieneComic = (tema.comicIntro?.length ?? 0) > 0;
   const tieneFichas = tema.fichas.length > 0;
+
+  // Abre una ficha y la marca como leída (se guarda en BD). Se usa tanto al
+  // pulsar la caja como al navegar con las flechas dentro del modal.
+  const verFicha = (f: Ficha) => {
+    setFicha(f);
+    if (leidas.has(f.key)) return;
+    const next = new Set(leidas);
+    next.add(f.key);
+    setLeidas(next);
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    const mapa = { ...(dataRef.current?.[PROFUNDIZA_LEIDAS_KEY] ?? {}) };
+    mapa[tema.key] = Array.from(next);
+    const data = { ...dataRef.current, [PROFUNDIZA_LEIDAS_KEY]: mapa };
+    dataRef.current = data;
+    axios.patch(`${API_URL}/metodo-fisiologia/${userId}`, { data }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => { /* se reintenta la próxima vez */ });
+  };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -201,7 +244,8 @@ export default function MetodoFisiologiaTema() {
                 {tema.fichas.map((f, i) => (
                   <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
                     <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
-                              coloreado={tema.fichasColoreadas} onClick={() => setFicha(f)} />
+                              leido={leidas.has(f.key)}
+                              coloreado={tema.fichasColoreadas} onClick={() => verFicha(f)} />
                   </Reveal>
                 ))}
               </SimpleGrid>
@@ -232,7 +276,7 @@ export default function MetodoFisiologiaTema() {
 
       {/* Modal de la ficha (foto + explicación, con flechas). */}
       <FichaExploraModal ficha={ficha} fichas={tema.fichas} temaColor={tema.color}
-                         onSelect={setFicha} onClose={() => setFicha(null)} />
+                         onSelect={verFicha} onClose={() => setFicha(null)} />
 
       {/* Cómic «antes de empezar». */}
       {tieneComic && (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useReducedMotion } from "framer-motion";
@@ -21,10 +21,13 @@ import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiolog
 function SistemaBox({
   sistema,
   active,
+  visto = false,
   onClick,
 }: {
   sistema: Sistema;
   active: boolean;
+  /** true si el usuario ya ha abierto su viñeta → muestra el check. */
+  visto?: boolean;
   onClick: () => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
@@ -37,18 +40,31 @@ function SistemaBox({
       w="100%"
       h="100%"
       borderRadius="2xl"
-      border={`1px solid ${active ? fisiologiaTxt : `${fisiologiaTxt}44`}`}
+      border={`1px solid ${active || visto ? fisiologiaTxt : `${fisiologiaTxt}44`}`}
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
       transition="all 0.2s ease"
       boxShadow={active
         ? `0 6px 24px rgba(0,0,0,0.3), 0 0 24px ${sistema.color}, 0 0 14px ${fisiologiaTxt}66`
+        : visto
+        ? `0 4px 18px rgba(0,0,0,0.22), 0 0 22px ${fisiologiaTxt}66`
         : `0 4px 16px rgba(0,0,0,0.22), 0 0 14px ${fisiologiaTxt}1f`}
       _hover={{ transform: "translateY(-4px)", borderColor: `${fisiologiaTxt}aa`,
                 boxShadow: `0 10px 30px rgba(0,0,0,0.32), 0 0 22px ${sistema.color}` }}
       _active={{ transform: "translateY(-1px)" }}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+      {/* Sello de "viñeta ya leída" */}
+      {visto && (
+        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
+              w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
+              boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </Box>
+        </Flex>
+      )}
       <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
             p={{ base: 4, md: 6 }} h="100%">
         {/* Imagen cuadrada del sistema → de momento inicial con color de acento */}
@@ -76,10 +92,15 @@ function SistemaBox({
   );
 }
 
+// Clave en metodo_fisiologia.data donde guardamos los sistemas ya vistos.
+const SISTEMAS_VISTOS_KEY = "sistemas_vistos";
+
 export default function MetodoFisiologiaSistemas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [sistema, setSistema] = useState<Sistema | null>(null);
+  const [vistos, setVistos] = useState<Set<string>>(new Set());
+  const dataRef = useRef<Record<string, any>>({});
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   // La rejilla de sistemas aparece UNA A UNA en cuanto la página está lista.
   // (No usamos useInView porque la rejilla solo se monta tras el loading y el
@@ -100,6 +121,14 @@ export default function MetodoFisiologiaSistemas() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
 
+        // Cargamos los sistemas ya vistos para retomar el camino (checks).
+        try {
+          const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+          dataRef.current = r.data?.data ?? {};
+          const guardados: string[] = dataRef.current?.[SISTEMAS_VISTOS_KEY] ?? [];
+          if (Array.isArray(guardados) && guardados.length) setVistos(new Set(guardados));
+        } catch { /* sin fila todavía */ }
+
         // No mostramos la página hasta que TODAS las fotos de los sistemas estén
         // descargadas, para que la rejilla no se rellene de golpe después.
         await precargarImagenes(SISTEMAS.map((s) => encodeURI(s.foto)));
@@ -107,6 +136,24 @@ export default function MetodoFisiologiaSistemas() {
       finally { setLoading(false); }
     })();
   }, [navigate]);
+
+  // Abre la viñeta de un sistema y lo marca como visto (se guarda en BD). Se usa
+  // tanto al pulsar la tarjeta como al navegar con las flechas dentro del modal.
+  const verSistema = (s: Sistema) => {
+    setSistema(s);
+    if (vistos.has(s.key)) return;
+    const next = new Set(vistos);
+    next.add(s.key);
+    setVistos(next);
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    const data = { ...dataRef.current, [SISTEMAS_VISTOS_KEY]: Array.from(next) };
+    dataRef.current = data;
+    axios.patch(`${API_URL}/metodo-fisiologia/${userId}`, { data }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => { /* se reintenta la próxima vez */ });
+  };
 
   // En cuanto la página deja de cargar, dejamos que las tarjetas entren
   // escalonadas (un frame después, para que la transición se aprecie).
@@ -159,7 +206,7 @@ export default function MetodoFisiologiaSistemas() {
                    transform={gridEnter ? "translateY(0) scale(1)" : "translateY(20px) scale(0.96)"}
                    transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
                    sx={{ transitionDelay: `${i * 0.07}s` }}>
-                <SistemaBox sistema={s} active={sistema?.key === s.key} onClick={() => setSistema(s)} />
+                <SistemaBox sistema={s} active={sistema?.key === s.key} visto={vistos.has(s.key)} onClick={() => verSistema(s)} />
               </Box>
             ))}
           </SimpleGrid>
@@ -168,7 +215,7 @@ export default function MetodoFisiologiaSistemas() {
 
       {/* Modal inmersivo del sistema: imagen + descripción, con flechas para
           moverse entre sistemas sin cerrar. */}
-      <SistemaModal sistema={sistema} sistemas={SISTEMAS} onSelect={setSistema} onClose={() => setSistema(null)} />
+      <SistemaModal sistema={sistema} sistemas={SISTEMAS} onSelect={verSistema} onClose={() => setSistema(null)} />
 
       {celulasModal}
       <IndiceFisiologia />
