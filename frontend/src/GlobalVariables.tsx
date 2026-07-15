@@ -12,6 +12,23 @@ export const turquesa = "#48C0B5";
 export const fisiologiaNom = "Fisiología";
 export const  fisiologiaTxt= "#c8b5d1";
 export const  fisiologiaBg = "#331c35";
+
+// Recorrido (juegos de arrastrar): nada se puede SELECCIONAR con el ratón (no se
+// pone azul al hacer clic/arrastrar/doble-clic), pero el DRAG sigue funcionando
+// —seleccionar y arrastrar no son lo mismo—. Los inputs/textareas mantienen la
+// selección para poder escribir/copiar. Se aplica en el <Box> raíz de cada página.
+export const noSelectSx = {
+  userSelect: "none",
+  WebkitUserSelect: "none",
+  MozUserSelect: "none",
+  msUserSelect: "none",
+  WebkitTouchCallout: "none",
+  WebkitTapHighlightColor: "transparent",
+  "input, textarea, [contenteditable='true']": {
+    userSelect: "text",
+    WebkitUserSelect: "text",
+  },
+} as const;
 export function FisiologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } })  {
   return (
     <Box

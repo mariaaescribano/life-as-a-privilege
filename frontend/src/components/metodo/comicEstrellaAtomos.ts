@@ -11,7 +11,7 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
   {
     src: "/viñetas/fisiologia/estrellas/star1.png",
     paragraphs: [
-      "Para crear una estrella, las formadoras de los átomos...",
+      "Para crear una estrella, las creadoras de los átomos...",
       "La gravedad reúne enormes nubes de hidrógeno, llamadas nebulosa.",
       "Poco a poco va naciendo una estrella.",
     ],

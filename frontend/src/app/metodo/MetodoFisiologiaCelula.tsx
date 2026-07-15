@@ -16,7 +16,8 @@ export default function MetodoFisiologiaCelula() {
       forma="cluster"
       glow="#8fd6a8"
       piezas={[
-        { tipo: "adn", color: "#9ab6f0", glyph: "N", label: "ADN", n: 1, img: `${PRE}/adn.png` },
+        { tipo: "nucleo", color: "#b79af0", glyph: "Nu", label: "núcleo", n: 1, img: `${PRE}/nucleo.png` },
+        { tipo: "adn", color: "#9ab6f0", glyph: "N", label: "ADN", n: 1, img: `${PRE}/ADN.png` },
         { tipo: "membrana", color: "#f2c86b", glyph: "L", label: "membrana", n: 1, img: `${PRE}/membrana.png` },
         { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: "mitocondria", n: 2, img: `${PRE}/mitocondria.png` },
         { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: "ribosoma", n: 3, img: `${PRE}/ribosoma.png` },
@@ -24,11 +25,14 @@ export default function MetodoFisiologiaCelula() {
       resultImg={`${PRE}/celulaentera.png`}
       resultTitulo="¡Has construido una célula!"
       resultParrafos={[
-        <>Una <b>célula</b> es la unidad más pequeña con vida propia: dentro de su membrana, el ADN guarda las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
+        <>Una <b>célula</b> es la unidad más pequeña con vida propia: dentro de su membrana, el núcleo guarda el ADN con las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
         <>Todo funciona a la vez, como una ciudad diminuta. Tu cuerpo tiene alrededor de <b>37 billones</b> de ellas.</>,
       ]}
       dataKey="celula_hecho"
       headerNext={{ label: "Órganos →", ruta: "/metodo/fisiologia/todas-tus-celulas" }}
+      lockNextUntilComplete
+      lockNextTooltip="Primero crea la célula"
+      notaPie="Una célula real tiene muchos más orgánulos; aquí la hemos simplificado con fines de estudio."
     />
   );
 }

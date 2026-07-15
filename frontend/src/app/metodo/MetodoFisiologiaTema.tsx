@@ -14,7 +14,7 @@ import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
 import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
 import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
+import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { temaByKey, PROFUNDIZA_LEIDAS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
@@ -49,8 +49,19 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick, coloreado 
                   ? `0 10px 30px rgba(0,0,0,0.32), 0 0 24px ${accent}`
                   : "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
       _active={{ transform: "translateY(-1px)" }}
+      // Solo en temas NO coloreados (todos menos Neurotransmisores y Hormonas):
+      // al hacer hover, encender un brillo INTERIOR del color propio de la caja.
+      sx={!coloreado ? { "&:hover .fichaGlowInset": { opacity: 1 } } : undefined}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+
+      {/* Brillo interior (por dentro) del color de la caja, solo al hover.
+          Va sobre el fondo pero bajo el contenido (el texto se lee igual). */}
+      {!coloreado && (
+        <Box className="fichaGlowInset" position="absolute" inset={0} borderRadius="2xl"
+             pointerEvents="none" zIndex={1} opacity={0} transition="opacity 0.25s ease"
+             boxShadow={`inset 0 0 30px ${accent}aa, inset 0 0 12px ${accent}66`} />
+      )}
 
       {/* Sello de "ficha ya leída" */}
       {leido && (
@@ -167,7 +178,7 @@ export default function MetodoFisiologiaTema() {
   };
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>

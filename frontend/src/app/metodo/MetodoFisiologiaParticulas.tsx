@@ -13,13 +13,13 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
   API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
 
@@ -219,6 +219,8 @@ export default function MetodoFisiologiaParticulas() {
   const [completo, setCompleto] = useState(false);
   const [protonImgOk, setProtonImgOk] = useState(false); // foto del protón ya cargada
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Reserva la altura del box de piezas para que no encoja al arrastrarlas fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
 
   const nucleoRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
@@ -318,7 +320,7 @@ export default function MetodoFisiologiaParticulas() {
   const hechas = colocadas.length;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -403,8 +405,9 @@ export default function MetodoFisiologiaParticulas() {
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" align="center" gap={5}
                           px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "auto", md: "320px" }}>
-                      <Box display="grid" gridTemplateColumns="repeat(2, auto)"
-                           justifyContent="center" justifyItems="center"
+                      <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
+                           justifyContent="center" justifyItems="center" alignContent="center"
+                           minH={piezasMinH ? `${piezasMinH}px` : undefined}
                            columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
                         <AnimatePresence>
                           {pendientes.map((p, i) => (

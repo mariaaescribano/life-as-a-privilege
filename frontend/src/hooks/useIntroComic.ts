@@ -13,12 +13,14 @@ import { API_URL } from "../GlobalVariables";
 //   · close():        cierra sin marcar (podrá reaparecer al reentrar).
 export function useIntroComic(endpointBase: string) {
   const [open, setOpen] = useState(false);
-  // Respaldo local: si el backend aún no tiene la tabla del recorrido (ALTER/CREATE
-  // pendiente), el GET/PATCH fallan. Con este flag por dispositivo garantizamos
-  // que la intro SÍ aparezca la primera vez y NO se repita tras pulsar «Leído».
-  const localKey = `intro_visto_${endpointBase}`;
-  const vistoLocal = () => {
-    try { return !!localStorage.getItem(localKey); } catch { return false; }
+  // Respaldo local POR USUARIO: si el backend aún no persiste el flag (tabla del
+  // recorrido sin crear, o GET que devuelve null al no existir la fila), este
+  // flag garantiza que la intro NO se repita tras pulsar «Leído». Va por usuario
+  // (no por dispositivo) para poder honrarlo también cuando el backend responde,
+  // sin que se filtre entre cuentas distintas en el mismo navegador.
+  const localKey = (userId: string) => `intro_visto_${endpointBase}_${userId}`;
+  const vistoLocal = (userId: string) => {
+    try { return !!localStorage.getItem(localKey(userId)); } catch { return false; }
   };
 
   const checkAndOpen = useCallback(async () => {
@@ -29,12 +31,14 @@ export function useIntroComic(endpointBase: string) {
       const res = await axios.get(`${API_URL}/${endpointBase}/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Abrimos si ni la BD ni el flag local la dan por vista (así, aunque el
-      // PATCH no llegara a persistir, no reaparece una vez marcada localmente).
-      if (!res.data?.intro_visto && !vistoLocal()) setOpen(true);
+      // La BD manda, pero el flag local (por usuario) actúa de respaldo: si el
+      // backend aún no persiste `intro_visto` (tabla sin crear → GET devuelve
+      // null), no reabrimos el cómic si este usuario ya pulsó «Leído» aquí.
+      if (!res.data?.intro_visto && !vistoLocal(userId)) setOpen(true);
     } catch {
-      // Backend no disponible (p.ej. tabla aún no creada): usamos el flag local.
-      if (!vistoLocal()) setOpen(true);
+      // Backend no disponible (p.ej. tabla aún no creada): usamos el flag local
+      // como respaldo para que salga la 1ª vez y no se repita tras «Leído».
+      if (!vistoLocal(userId)) setOpen(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpointBase]);
@@ -43,9 +47,13 @@ export function useIntroComic(endpointBase: string) {
 
   const finish = useCallback(async () => {
     setOpen(false);
-    try { localStorage.setItem(localKey, "1"); } catch { /* sin almacenamiento */ }
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
+    // Marca local por usuario ANTES del PATCH: aunque el guardado en BD falle
+    // (tabla sin crear), la intro ya no reaparecerá para este usuario aquí.
+    if (userId) {
+      try { localStorage.setItem(localKey(userId), "1"); } catch { /* sin almacenamiento */ }
+    }
     if (!userId || !token) return;
     try {
       await axios.patch(

@@ -39,6 +39,7 @@ export function SistemaModal({
       foto={sistema.foto}
       alt={sistema.label}
       titulo={`Sistema ${sistema.label.toLowerCase()}`}
+      claves={sistema.claves}
       parrafos={[sistema.descripcion]}
       onClose={onClose}
       onPrev={puedeNavegar ? () => salta(-1) : undefined}

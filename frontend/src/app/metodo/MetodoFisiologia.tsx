@@ -19,8 +19,7 @@ import {
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 // Halo oscuro para leer el texto claro sobre el fondo morado de Fisiología.
 const INK_SHADOW = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
@@ -129,7 +128,7 @@ export default function MetodoFisiologia() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>

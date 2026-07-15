@@ -32,6 +32,10 @@ interface IntroComicModalProps {
   disciplinaBgColor?: string;
   /** Sombra del texto de las viñetas (opcional; ComicViewer tiene su default). */
   textShadow?: string;
+  /** Color de la LETRA de las viñetas, si difiere del acento (themeColor). P.ej.
+   *  Nutrición: acento claro (nutricionBg) para cajas/líneas y letra oscura
+   *  (nutricionTxt) para que se lea sobre el fondo claro. */
+  textColor?: string;
 }
 
 export function IntroComicModal({
@@ -43,6 +47,7 @@ export function IntroComicModal({
   disciplinaBgImage,
   disciplinaBgColor,
   textShadow,
+  textColor,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -66,6 +71,7 @@ export function IntroComicModal({
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
+          textColor={textColor}
           pageExtra={(_index, { isLast }) =>
             isLast ? (
               <Box display="flex" justifyContent="center">

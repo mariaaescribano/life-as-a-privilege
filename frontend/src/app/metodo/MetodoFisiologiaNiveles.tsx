@@ -15,8 +15,7 @@ import {
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 // ── Niveles del recorrido de Fisiología ──────────────────────────────────
 // «Bajar a lo más pequeño y volver a subir, nivel a nivel». No son disciplinas:
@@ -27,11 +26,15 @@ interface Nivel {
   titulo: string;
   sub: string;
   ruta?: string;
-  /** Flag de metodo_fisiologia.data que debe estar en true para desbloquear
+  /** Flag(es) de metodo_fisiologia.data que deben estar en true para desbloquear
    *  este nivel. Ausente = siempre abierto (Nivel 1). El Nivel 2 se abre al
-   *  terminar el Nivel 1 (estructuras_hecho); el Nivel 3 al terminar el 2
-   *  (organos_hecho). */
-  requiere?: string;
+   *  terminar el Nivel 1 (estructuras_hecho). PROFUNDIZA se abre al superar los
+   *  dos primeros niveles (estructuras_hecho + organismo_hecho). Si es array,
+   *  se exigen todos. */
+  requiere?: string | string[];
+  /** Flag que marca este nivel como SUPERADO (se muestra un tick arriba-derecha).
+   *  Nivel 1 acaba en estructuras; Nivel 2 (VIDA) acaba en organismo. */
+  superado?: string;
   /** Antetítulo (por defecto «Nivel {n}»). P.ej. la práctica usa «Práctica». */
   eyebrow?: string;
   /** Icono del círculo en vez del número: "gota" (análisis) o "avanzado" (PROFUNDIZA). */
@@ -39,11 +42,11 @@ interface Nivel {
 }
 
 const NIVELES: Nivel[] = [
-  { n: 1, titulo: "MATERIA", sub: "De qué estás hecho.", ruta: "/metodo/fisiologia/particulas" },
+  { n: 1, titulo: "MATERIA", sub: "De qué estás hecho.", ruta: "/metodo/fisiologia/particulas", superado: "estructuras_hecho" },
   // VIDA absorbe Sistemas: célula → todas-tus-células → sistemas → organismo.
-  { n: 2, titulo: "VIDA", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho" },
-  // 3ª tarjeta · contenido avanzado para profundizar (todo abierto).
-  { n: 3, titulo: "PROFUNDIZA", sub: "Para los que quieren toda la verdad.", ruta: "/metodo/fisiologia/profundiza", eyebrow: "Avanzado", iconKind: "avanzado" },
+  { n: 2, titulo: "VIDA", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho", superado: "organismo_hecho" },
+  // 3ª tarjeta · contenido avanzado: bloqueado hasta superar los dos primeros niveles.
+  { n: 3, titulo: "PROFUNDIZA", sub: "Para los que quieren toda la verdad.", ruta: "/metodo/fisiologia/profundiza", requiere: ["estructuras_hecho", "organismo_hecho"], eyebrow: "Avanzado", iconKind: "avanzado" },
   // 4ª tarjeta · práctica (no es un nivel del ascenso): va DESPUÉS de Sistemas.
   { n: 4, titulo: "TU ANALÍTICA", sub: "Aprende a leer tu análisis de sangre.", ruta: "/metodo/fisiologia/analitica", eyebrow: "Práctica", iconKind: "gota" },
 ];
@@ -75,8 +78,22 @@ const Profundiza = ({ size }: { size: any }) => (
   </Box>
 );
 
+// Tick de «nivel superado» (esquina superior derecha de la tarjeta).
+const TickSuperado = () => (
+  <Flex position="absolute" top={{ base: 2.5, md: 3 }} right={{ base: 2.5, md: 3 }} zIndex={2}
+        w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }} borderRadius="full"
+        align="center" justify="center"
+        bg={`${fisiologiaBg}cc`} border={`2px solid ${fisiologiaTxt}`}
+        style={{ boxShadow: `0 0 10px ${fisiologiaTxt}88` }}>
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+         w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill={fisiologiaTxt}>
+      <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+    </Box>
+  </Flex>
+);
+
 // ── Caja de un nivel (tarjeta VERTICAL, para ir las 3 en fila) ──────────────
-function NivelBox({ nivel, locked, onEnter }: { nivel: Nivel; locked: boolean; onEnter: () => void }) {
+function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: boolean; done: boolean; onEnter: () => void }) {
   return (
     <Box
       as={locked ? "div" : "button"}
@@ -105,6 +122,9 @@ function NivelBox({ nivel, locked, onEnter }: { nivel: Nivel; locked: boolean; o
           oscuro extra para que se lean "apagados". */}
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl"
                          overlay={locked ? "rgba(0,0,0,0.6)" : `${fisiologiaBg}66`} />
+
+      {/* Tick de nivel superado (arriba a la derecha) */}
+      {done && <TickSuperado />}
 
       <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
             h="100%" gap={{ base: 2, md: 2.5 }} px={{ base: 5, md: 4 }} py={{ base: 6, md: 7 }}>
@@ -177,8 +197,6 @@ export default function MetodoFisiologiaNiveles() {
   const [loading, setLoading] = useState(true);
   // Flags de progreso (metodo_fisiologia.data) que desbloquean cada nivel.
   const [flags, setFlags] = useState<Record<string, boolean>>({});
-  // ¿Ha pagado ya la Nutrición? (6ª disciplina, el siguiente paso tras Fisiología).
-  const [nutriSuscrito, setNutriSuscrito] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   useEffect(() => {
@@ -198,7 +216,6 @@ export default function MetodoFisiologiaNiveles() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
-        setNutriSuscrito(!!me.data?.nutricion_suscrito);
 
         // Progreso guardado: sirve para desbloquear los niveles 2 y 3.
         try {
@@ -221,7 +238,7 @@ export default function MetodoFisiologiaNiveles() {
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -238,9 +255,7 @@ export default function MetodoFisiologiaNiveles() {
             mb={0}
             prev={{ label: "← Introducción", onClick: () => navigate("/metodo/fisiologia") }}
             extra={celulasBtn}
-            next={nutriSuscrito
-              ? { label: "Nutrición →", onClick: () => navigate("/metodo/nutricion") }
-              : { label: "Nutrición", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/nutricion") }}
+            next={{ label: "Cursos →", onClick: () => navigate("/metodo/fisiologia/cursos") }}
           />
           </Reveal>
 
@@ -248,7 +263,7 @@ export default function MetodoFisiologiaNiveles() {
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px"
                   style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Subes nivel a nivel, de lo más pequeño hasta el milagro entero que eres.
+              Descubre poco a poco, de las partículas que te forman hasta el ecosistema mágico que eres.
             </Text>
           </Reveal>
 
@@ -257,12 +272,16 @@ export default function MetodoFisiologiaNiveles() {
           <Flex direction={{ base: "column", md: "row" }} align="stretch"
                 justify="center" gap={{ base: 4, md: 4 }} w="100%">
             {NIVELES.map((nivel, i) => {
-              const locked = nivel.requiere ? !flags[nivel.requiere] : false;
+              const reqs = nivel.requiere
+                ? (Array.isArray(nivel.requiere) ? nivel.requiere : [nivel.requiere])
+                : [];
+              const locked = reqs.some((f) => !flags[f]);
+              const done = !!nivel.superado && !!flags[nivel.superado];
               return (
                 <Reveal key={nivel.n} direction="right" distance={44} delay={0.15 * i} duration={0.6}
                         flex={{ md: 1 }} w="100%" maxW={{ base: "380px", md: "none" }}
                         mx={{ base: "auto", md: 0 }} display="flex">
-                  <NivelBox nivel={nivel} locked={locked}
+                  <NivelBox nivel={nivel} locked={locked} done={done}
                             onEnter={() => { if (!locked && nivel.ruta) navigate(nivel.ruta); }} />
                 </Reveal>
               );

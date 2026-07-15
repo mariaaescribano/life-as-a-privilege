@@ -14,13 +14,13 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicEstrellaModal } from "../../components/metodo/ComicEstrellaModal";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
   API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
 const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
@@ -76,7 +76,7 @@ const ATOMOS: AtomoDef[] = [
     instruccion: "Lleva los 2 protones y 2 neutrones al núcleo, y los 2 electrones a su órbita.",
     titulo: "¡Has construido un átomo de Helio!",
     parrafos: [
-      <>El <b>helio</b> suma <b>2 protones</b> y <b>2 neutrones</b> en el núcleo, con <b>2 electrones</b> girando alrededor. Fue el segundo elemento del universo y, con su primera capa completa, es estable y apenas reacciona.</>,
+      <>El <b>helio</b> fue el segundo elemento del universo en ser creado.</>,
       <>Cambiando el número de protones se obtienen todos los elementos: tu cuerpo es, sobre todo, hidrógeno, oxígeno, carbono y nitrógeno, los mismos átomos que forman las estrellas.</>,
     ],
   },
@@ -199,8 +199,11 @@ export default function MetodoFisiologiaAtomos() {
   const [colocadas, setColocadas] = useState<Pieza[]>([]);
   const [completo, setCompleto] = useState(false);
   const [imgOk, setImgOk] = useState(false); // foto del átomo del resultado ya cargada
+  const [particulasOk, setParticulasOk] = useState(false); // fotos de protón/electrón precargadas
   const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Reserva la altura del box de piezas para que no encoja al arrastrarlas fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
 
   const nucleoRef = useRef<HTMLDivElement>(null);
   const orbitaRef = useRef<HTMLDivElement>(null);
@@ -233,6 +236,23 @@ export default function MetodoFisiologiaAtomos() {
       finally { setLoading(false); }
     })();
   }, [navigate]);
+
+  // Precarga de las fotos de protón y electrón: la página no se muestra hasta
+  // que ambas estén ya cargadas (si alguna falla, se desbloquea igualmente para
+  // no quedarse en el spinner para siempre; entra el fallback dibujado).
+  useEffect(() => {
+    const fotos = [IMG.proton, IMG.electron];
+    let cargadas = 0;
+    let cancelado = false;
+    const marcar = () => { cargadas += 1; if (!cancelado && cargadas >= fotos.length) setParticulasOk(true); };
+    fotos.forEach((src) => {
+      const img = new window.Image();
+      img.onload = marcar;
+      img.onerror = marcar;
+      img.src = src;
+    });
+    return () => { cancelado = true; };
+  }, []);
 
   const guardarHecho = async () => {
     const userId = sessionStorage.getItem("userId");
@@ -282,7 +302,7 @@ export default function MetodoFisiologiaAtomos() {
     setIdx(ni); setPendientes(piezasDe(ni)); setColocadas([]); setCompleto(false); setImgOk(false);
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !particulasOk) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   const total = def.piezas.length;
   const hechas = colocadas.length;
@@ -290,7 +310,7 @@ export default function MetodoFisiologiaAtomos() {
   const electrones = colocadas.filter((p) => p.tipo === "electron");
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -381,8 +401,9 @@ export default function MetodoFisiologiaAtomos() {
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" align="center" gap={5}
                           px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "auto", md: "340px" }}>
-                      <Box display="grid" gridTemplateColumns="repeat(2, auto)"
-                           justifyContent="center" justifyItems="center"
+                      <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
+                           justifyContent="center" justifyItems="center" alignContent="center"
+                           minH={piezasMinH ? `${piezasMinH}px` : undefined}
                            columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
                         <AnimatePresence>
                           {pendientes.map((p, i) => (<FichaArrastrable key={p.id} pieza={p} onSoltar={soltar}

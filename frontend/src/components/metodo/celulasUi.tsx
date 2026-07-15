@@ -162,6 +162,7 @@ export function FichaFisioModal({
   foto,
   alt = "",
   titulo,
+  claves,
   parrafos,
   onClose,
   onPrev,
@@ -176,6 +177,8 @@ export function FichaFisioModal({
   alt?: string;
   /** Título (nombre de la célula, titular del consejo, nombre del sistema…). */
   titulo: React.ReactNode;
+  /** Las 3 (o pocas) cosas clave, en cajas blancas bajo el título. Opcional. */
+  claves?: string[];
   /** Uno o varios párrafos; se maquetan con el mismo estilo y separación. */
   parrafos: React.ReactNode[];
   onClose: () => void;
@@ -456,13 +459,40 @@ export function FichaFisioModal({
               fontFamily="'EB Garamond', serif"
               letterSpacing="0.02em"
               lineHeight="1.2"
+              mb={{ base: 4, md: 5 }}
               textAlign={{ base: "center", md: "left" }}
               style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
             >
               {titulo}
             </Text>
-            <Box h="1px" w="100%" my={4}
-                 bgGradient={`linear(to-r, ${accent}, ${accent}55, transparent)`} />
+
+            {/* Las 3 claves: cajas blancas apiladas con un punto de acento.
+                Lo primero que se ve, para aprender la célula en 3-5 segundos. */}
+            {claves && claves.length > 0 && (
+              <Flex direction="column" gap={{ base: 2, md: 2.5 }} mb={{ base: 5, md: 6 }} w="100%">
+                {claves.map((c, i) => (
+                  <Flex
+                    key={i}
+                    align="center"
+                    gap={3}
+                    bg="rgba(255,255,255,0.96)"
+                    borderRadius="lg"
+                    px={{ base: 3.5, md: 4 }}
+                    py={{ base: 2, md: 2.5 }}
+                    boxShadow="0 2px 10px rgba(0,0,0,0.28)"
+                  >
+                    <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={accent}
+                         boxShadow={`0 0 8px ${accent}`} />
+                    <Text color={BG} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
+                          lineHeight="1.3" letterSpacing="0.01em" fontFamily="'EB Garamond', serif"
+                          textAlign="left">
+                      {c}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+            )}
+
             <Flex direction="column" gap={4}>
               {parrafos.map((p, i) => (
                 <Text
@@ -536,6 +566,7 @@ export function CelulaModal({
       foto={celula.foto}
       alt={celula.nombre}
       titulo={celula.nombre}
+      claves={celula.claves}
       parrafos={[celula.descripcion, celula.cuidados].filter(Boolean)}
       onClose={onClose}
       onPrev={puedeNavegar ? () => salta(-1) : undefined}
@@ -552,6 +583,9 @@ export interface Consejo {
   titular: string;
   /** Texto largo que aparece a la derecha de la foto dentro del modal. */
   texto: React.ReactNode;
+  /** Las 3 ideas clave de la curiosidad (resumen del texto). Se muestran en
+   *  cajas blancas bajo el titular, para captarla en 3-5 s. */
+  claves?: string[];
 }
 
 /* ─────────────────────────────────────────
@@ -588,6 +622,7 @@ export function ConsejoModal({
       foto={foto}
       alt={label}
       titulo={consejo.titular}
+      claves={consejo.claves}
       parrafos={[consejo.texto]}
       onClose={onClose}
       onPrev={puedeNavegar ? () => salta(-1) : undefined}

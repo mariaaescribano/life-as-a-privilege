@@ -3,12 +3,15 @@ import {
   astrologiaTxt,
   ayurvedaBg, ayurvedaTxt,
   fisiologiaBg, fisiologiaTxt,
+  neuropsicologiaBg, neuropsicologiaTxt,
   nutricionBg, nutricionTxt,
   tcmBg, tcmTxt,
 } from "../../GlobalVariables";
 import { ORIGEN_ESPIRITUALIDAD } from "./ComicUniversoModal";
 import { ORIGEN_CIENCIA } from "./ComicCienciaModal";
 import { NUTRICION_INTRO } from "./comicNutricionIntro";
+import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
+import { INTRO_PSICOLOGIA } from "./comicPsicologiaIntro";
 import {
   VINETAS_ORIGEN as HINDU_ORIGEN,
   VINETAS_ELEMENTOS as HINDU_ELEMENTOS,
@@ -47,10 +50,18 @@ export interface IlustracionEntry {
   disciplinaBgImage?: string;
   disciplinaBgColor?: string;
   textShadow?: string;
+  /** Color de la LETRA si difiere del acento (themeColor). P.ej. Nutrición usa
+   *  acento claro (nutricionBg) y letra oscura (nutricionTxt). */
+  textColor?: string;
+  /** Color del texto/borde de la TARJETA de la galería si difiere del acento del
+   *  cómic (themeColor). Útil cuando el acento del cómic es claro (nutricionBg) y
+   *  quedaría ilegible sobre la portada clara de la tarjeta → usar nutricionTxt. */
+  cardColor?: string;
 }
 
 const hinduTextShadow = `0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`;
 const astroTextShadow = `0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`;
+const psicoTextShadow = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── EL ORIGEN (primero) ──
@@ -169,16 +180,45 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     textShadow: hinduTextShadow,
   },
 
-  // ── Nutrición ──
+  // ── Psicología ──
+  {
+    id: "psicologia-intro",
+    titulo: "El origen del sufrimiento",
+    disciplina: "Psicología",
+    cover: "/viñetas/sufrimiento/sufrimiento1.png",
+    vinetas: INTRO_PSICOLOGIA,
+    themeColor: neuropsicologiaTxt,
+    disciplinaBgImage: "/img/fondos/psciologia.png",
+    disciplinaBgColor: neuropsicologiaBg,
+    textShadow: psicoTextShadow,
+  },
+
+  // ── Nutrición ── (acento claro nutricionBg + letra oscura nutricionTxt, sin sombra)
   {
     id: "nutricion-intro",
     titulo: "Eres lo que absorbes",
     disciplina: "Nutrición",
     cover: "/viñetas/nutricion/intro/nutricomic1.png",
     vinetas: NUTRICION_INTRO,
-    themeColor: nutricionTxt,
+    themeColor: nutricionBg,
+    textColor: nutricionTxt,
+    cardColor: nutricionTxt,
     disciplinaBgImage: "/img/fondos/nutri.png",
     disciplinaBgColor: nutricionBg,
+    textShadow: "none",
+  },
+  {
+    id: "nutricion-calorias",
+    titulo: "Las calorías no existen",
+    disciplina: "Nutrición",
+    cover: "/viñetas/nutricion/calorias/nutricalorias1.png",
+    vinetas: NUTRICION_CALORIAS,
+    themeColor: nutricionBg,
+    textColor: nutricionTxt,
+    cardColor: nutricionTxt,
+    disciplinaBgImage: "/img/fondos/nutri.png",
+    disciplinaBgColor: nutricionBg,
+    textShadow: "none",
   },
 
   // ── Medicina China ──

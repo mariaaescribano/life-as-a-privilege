@@ -12,7 +12,10 @@ import { StarsLayer } from "../../components/global/StarsLayer";
 
 function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () => void }) {
   const [coverFailed, setCoverFailed] = useState(false);
-  const c = entry.themeColor;
+  // Color del texto/borde de la tarjeta: `cardColor` si la entrada lo define
+  // (p.ej. Nutrición, cuyo acento de cómic es claro e ilegible aquí), si no el
+  // acento del cómic (themeColor).
+  const c = entry.cardColor ?? entry.themeColor;
   return (
     <Box
       as="button"
@@ -208,6 +211,7 @@ export default function Ilustraciones() {
         disciplinaBgImage={abierta?.disciplinaBgImage}
         disciplinaBgColor={abierta?.disciplinaBgColor}
         textShadow={abierta?.textShadow}
+        textColor={abierta?.textColor}
       />
     </Box>
   );

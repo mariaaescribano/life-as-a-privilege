@@ -5,12 +5,16 @@ export type Celula = {
   descripcion: string;
   /** Cómo cuidar esta célula concreta (segundo texto del popup). */
   cuidados?: string;
+  /** Las 3 cosas clave que hace la célula (resumen de la descripción). Se
+   *  muestran en cajas blancas al abrir la ficha, para aprenderla en 3-5 s. */
+  claves?: string[];
 };
 
 // Lista plana de células (Fisiología). Fotos en /viñetas/fisiologia/celulas/.
 export const celulas: Celula[] = [
   {
     id: "neuronas",
+    claves: ["Transmiten impulsos eléctricos", "Se comunican con neurotransmisores", "Sostienen pensamiento y memoria"],
     nombre: "Neuronas",
     foto: "/viñetas/fisiologia/celulas/neuronas.png",
     descripcion:
@@ -20,6 +24,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "astrocitos",
+    claves: ["Nutren a las neuronas", "Mantienen la barrera sangre-cerebro", "Limpian los neurotransmisores"],
     nombre: "Astrocitos",
     foto: "/viñetas/fisiologia/celulas/astrocitos.png",
     descripcion:
@@ -29,6 +34,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "microglia",
+    claves: ["Vigilancia inmune del cerebro", "Detectan restos y amenazas", "Limpian y reciclan el entorno"],
     nombre: "Microglía",
     foto: "/viñetas/fisiologia/celulas/microglia.png",
     descripcion:
@@ -38,6 +44,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "oligodendrocitos",
+    claves: ["Producen mielina", "Aceleran la transmisión nerviosa", "Favorecen aprender y adaptarse"],
     nombre: "Oligodendrocitos",
     foto: "/viñetas/fisiologia/celulas/oligodendrocitos.png",
     descripcion:
@@ -47,6 +54,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "ependimarias",
+    claves: ["Producen líquido cefalorraquídeo", "Nutren y protegen el cerebro", "Mantienen el equilibrio del entorno"],
     nombre: "Células ependimarias",
     foto: "/viñetas/fisiologia/celulas/ependimarias.png",
     descripcion:
@@ -56,6 +64,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "hepatocitos",
+    claves: ["Desintoxican el cuerpo", "Transforman nutrientes en energía", "Producen bilis y proteínas"],
     nombre: "Hepatocitos",
     foto: "/viñetas/fisiologia/celulas/hepatocitos.png",
     descripcion:
@@ -65,6 +74,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "kupffer",
+    claves: ["Inmunidad del hígado", "Filtran la sangre del intestino", "Eliminan bacterias y toxinas"],
     nombre: "Células de Kupffer",
     foto: "/viñetas/fisiologia/celulas/kupffer.png",
     descripcion:
@@ -74,6 +84,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "estrelladas",
+    claves: ["Almacenan vitamina A", "Reparan el tejido del hígado", "En exceso, crean fibrosis"],
     nombre: "Células estrelladas",
     foto: "/viñetas/fisiologia/celulas/estrelladas.png",
     descripcion:
@@ -85,6 +96,7 @@ export const celulas: Celula[] = [
   // ── Páncreas ──
   {
     id: "celulas-beta",
+    claves: ["Producen insulina", "Permiten usar la glucosa", "Regulan el azúcar en sangre"],
     nombre: "Células beta",
     foto: "/viñetas/fisiologia/celulas/celulasbeta.png",
     descripcion:
@@ -94,6 +106,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celulas-alfa",
+    claves: ["Producen glucagón", "Se activan con azúcar baja", "Movilizan las reservas de energía"],
     nombre: "Células alfa",
     foto: "/viñetas/fisiologia/celulas/alfa.png",
     descripcion:
@@ -103,6 +116,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celulas-delta",
+    claves: ["Producen somatostatina", "Freno hormonal inteligente", "Equilibran insulina y glucagón"],
     nombre: "Células delta",
     foto: "/viñetas/fisiologia/celulas/celulasdelta.png",
     descripcion:
@@ -112,6 +126,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celulas-acinares",
+    claves: ["Producen enzimas digestivas", "Digieren grasas y proteínas", "Descomponen los carbohidratos"],
     nombre: "Células acinares",
     foto: "/viñetas/fisiologia/celulas/acinares.png",
     descripcion:
@@ -119,6 +134,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celulas-ductales",
+    claves: ["Producen bicarbonato", "Neutralizan el ácido gástrico", "Facilitan la digestión"],
     nombre: "Células ductales",
     foto: "/viñetas/fisiologia/celulas/ductales.png",
     descripcion:
@@ -126,6 +142,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celulas-pp",
+    claves: ["Producen polipéptido pancreático", "Coordinan la actividad digestiva", "Ayudan a controlar el apetito"],
     nombre: "Células PP (gamma)",
     foto: "/viñetas/fisiologia/celulas/gamma.png",
     descripcion:
@@ -137,6 +154,7 @@ export const celulas: Celula[] = [
   // ── Piel ──
   {
     id: "queratinocitos",
+    claves: ["Forman la barrera de la piel", "Protegen del mundo exterior", "Se renuevan sin cesar"],
     nombre: "Queratinocitos",
     foto: "/viñetas/fisiologia/celulas/queratinocitos.png",
     descripcion:
@@ -146,6 +164,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "melanocitos",
+    claves: ["Producen melanina", "Dan color a la piel", "Protegen el ADN del sol"],
     nombre: "Melanocitos",
     foto: "/viñetas/fisiologia/celulas/melanocitos.png",
     descripcion:
@@ -155,6 +174,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "langerhans",
+    claves: ["Centinelas de la piel", "Detectan microbios y daño", "Activan la defensa cutánea"],
     nombre: "Células de Langerhans",
     foto: "/viñetas/fisiologia/celulas/langerhans.png",
     descripcion:
@@ -166,6 +186,7 @@ export const celulas: Celula[] = [
   // ── Intestino ──
   {
     id: "enterocitos",
+    claves: ["Absorben los nutrientes", "Frontera del intestino", "Bloquean sustancias dañinas"],
     nombre: "Enterocitos",
     foto: "/viñetas/fisiologia/celulas/enterocitos.png",
     descripcion:
@@ -175,6 +196,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "caliciformes",
+    claves: ["Producen el moco intestinal", "Escudo frente a bacterias", "Evitan la inflamación"],
     nombre: "Células caliciformes",
     foto: "/viñetas/fisiologia/celulas/caliciformes.png",
     descripcion:
@@ -184,6 +206,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "paneth",
+    claves: ["Guardianas del intestino", "Liberan antimicrobianos", "Equilibran la microbiota"],
     nombre: "Células de Paneth",
     foto: "/viñetas/fisiologia/celulas/paneth.png",
     descripcion:
@@ -193,6 +216,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "enteroendocrinas",
+    claves: ["Detectan los nutrientes", "Producen hormonas digestivas", "Puente intestino-cerebro"],
     nombre: "Células enteroendocrinas",
     foto: "/viñetas/fisiologia/celulas/enteroendocrinas.png",
     descripcion:
@@ -204,6 +228,7 @@ export const celulas: Celula[] = [
   // ── Músculo ──
   {
     id: "miocitos",
+    claves: ["Contraen el músculo", "Hacen posible el movimiento", "Usan calcio para activarse"],
     nombre: "Fibra muscular (miocitos)",
     foto: "/viñetas/fisiologia/celulas/miocitos.png",
     descripcion:
@@ -213,6 +238,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "cardiomiocitos",
+    claves: ["Músculo del corazón", "Laten de forma automática", "Mantienen la circulación"],
     nombre: "Cardiomiocitos",
     foto: "/viñetas/fisiologia/celulas/cardiomiocitos.png",
     descripcion:
@@ -222,6 +248,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "musculares-lisas",
+    claves: ["Mueven los órganos internos", "Contracción involuntaria", "Regulan flujo y tono"],
     nombre: "Células musculares lisas",
     foto: "/viñetas/fisiologia/celulas/musculareslisas.png",
     descripcion:
@@ -233,6 +260,7 @@ export const celulas: Celula[] = [
   // ── Hueso ──
   {
     id: "osteoblastos",
+    claves: ["Construyen hueso nuevo", "Fabrican la matriz ósea", "Mineralizan el esqueleto"],
     nombre: "Osteoblastos",
     foto: "/viñetas/fisiologia/celulas/osteoblastos.png",
     descripcion:
@@ -242,6 +270,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "osteoclastos",
+    claves: ["Degradan el hueso viejo", "Permiten renovar el hueso", "Liberan calcio si hace falta"],
     nombre: "Osteoclastos",
     foto: "/viñetas/fisiologia/celulas/osteoclastos.png",
     descripcion:
@@ -251,6 +280,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "osteocitos",
+    claves: ["Sensores del hueso", "Detectan presión y carga", "Adaptan el hueso al esfuerzo"],
     nombre: "Osteocitos",
     foto: "/viñetas/fisiologia/celulas/osteocitos.png",
     descripcion:
@@ -262,6 +292,7 @@ export const celulas: Celula[] = [
   // ── Sangre e inmunidad ──
   {
     id: "eritrocitos",
+    claves: ["Transportan oxígeno", "Llenos de hemoglobina", "Permiten producir energía"],
     nombre: "Eritrocitos",
     foto: "/viñetas/fisiologia/celulas/eritrocitos.png",
     descripcion:
@@ -271,6 +302,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "neutrofilos",
+    claves: ["Primeros ante la infección", "Fagocitan microorganismos", "Soldados que se sacrifican"],
     nombre: "Neutrófilos",
     foto: "/viñetas/fisiologia/celulas/neutrofilos.png",
     descripcion:
@@ -280,6 +312,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "linfocitos-b",
+    claves: ["Producen anticuerpos", "Reconocen antígenos", "Marcan patógenos para eliminarlos"],
     nombre: "Linfocitos B",
     foto: "/viñetas/fisiologia/celulas/bcells.png",
     descripcion:
@@ -289,6 +322,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "linfocitos-t",
+    claves: ["Coordinan la respuesta inmune", "Reconocen antígenos", "Destruyen células infectadas"],
     nombre: "Linfocitos T",
     foto: "/viñetas/fisiologia/celulas/tcells.png",
     descripcion:
@@ -298,6 +332,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "macrofagos",
+    claves: ["Fagocitan bacterias y restos", "Reciclan células muertas", "Evitan inflamación en el tejido"],
     nombre: "Macrófagos",
     foto: "/viñetas/fisiologia/celulas/macrofagos.png",
     descripcion:
@@ -307,6 +342,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "dendriticas",
+    claves: ["Centinelas del sistema inmune", "Capturan al patógeno", "Activan a los linfocitos T"],
     nombre: "Células dendríticas",
     foto: "/viñetas/fisiologia/celulas/dendriticas.png",
     descripcion:
@@ -318,6 +354,7 @@ export const celulas: Celula[] = [
   // ── Pulmón ──
   {
     id: "neumocitos-1",
+    claves: ["Forman la pared del alvéolo", "Permiten el intercambio de gases", "Dejan pasar el oxígeno"],
     nombre: "Neumocitos tipo I",
     foto: "/viñetas/fisiologia/celulas/neumocitos1.png",
     descripcion:
@@ -327,6 +364,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "neumocitos-2",
+    claves: ["Producen surfactante", "Evitan que el alvéolo colapse", "Reparan el pulmón"],
     nombre: "Neumocitos tipo II",
     foto: "/viñetas/fisiologia/celulas/neumocitos2.png",
     descripcion:
@@ -336,6 +374,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "macrofagos-alveolares",
+    claves: ["Defensa del pulmón", "Eliminan polvo y microbios", "Limpian el aire que entra"],
     nombre: "Macrófagos alveolares",
     foto: "/viñetas/fisiologia/celulas/pulmonesmacrofagos.png",
     descripcion:
@@ -347,6 +386,7 @@ export const celulas: Celula[] = [
   // ── Riñón ──
   {
     id: "podocitos",
+    claves: ["Filtran la sangre en el riñón", "Dejan pasar los desechos", "Retienen proteínas útiles"],
     nombre: "Podocitos",
     foto: "/viñetas/fisiologia/celulas/podocitos.png",
     descripcion:
@@ -356,6 +396,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celulas-tubulares",
+    claves: ["Reabsorben agua y sales", "Recuperan nutrientes útiles", "Mantienen el equilibrio interno"],
     nombre: "Células tubulares",
     foto: "/viñetas/fisiologia/celulas/tubulares.png",
     descripcion:
@@ -367,6 +408,7 @@ export const celulas: Celula[] = [
   // ── Tejido conectivo ──
   {
     id: "fibroblastos",
+    claves: ["Producen colágeno", "Dan estructura y elasticidad", "Reparan los tejidos"],
     nombre: "Fibroblastos",
     foto: "/viñetas/fisiologia/celulas/fibroblastos.png",
     descripcion:
@@ -376,6 +418,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "adipocitos-blancos",
+    claves: ["Almacenan energía", "Liberan leptina", "Informan al cerebro de las reservas"],
     nombre: "Adipocitos blancos",
     foto: "/viñetas/fisiologia/celulas/adipocitos.png",
     descripcion:
@@ -385,6 +428,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "adipocitos-marrones",
+    claves: ["Queman grasa como combustible", "Generan calor", "Mantienen la temperatura"],
     nombre: "Adipocitos marrones",
     foto: "/viñetas/fisiologia/celulas/marron.png",
     descripcion:
@@ -394,6 +438,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "endoteliales",
+    claves: ["Recubren los vasos sanguíneos", "Regulan flujo y coagulación", "Clave para el corazón"],
     nombre: "Células endoteliales",
     foto: "/viñetas/fisiologia/celulas/endoteliales.png",
     descripcion:
@@ -405,6 +450,7 @@ export const celulas: Celula[] = [
   // ── Sistema nervioso (nuevas) ──
   {
     id: "endotelial-cerebral",
+    claves: ["Forman la barrera hematoencefálica", "Deciden qué entra al cerebro", "Protegen a las neuronas"],
     nombre: "Célula endotelial cerebral",
     foto: "/viñetas/fisiologia/celulas/endotelialcerebral.png",
     descripcion:
@@ -414,6 +460,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "pericito",
+    claves: ["Abrazan los capilares", "Regulan el flujo de sangre", "Guardan la microcirculación"],
     nombre: "Pericito",
     foto: "/viñetas/fisiologia/celulas/pericito.png",
     descripcion:
@@ -423,6 +470,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celula-madre-neural",
+    claves: ["Generan nuevas neuronas", "Neurogénesis de por vida", "Apoyan aprendizaje y memoria"],
     nombre: "Célula madre neural",
     foto: "/viñetas/fisiologia/celulas/madreneural.png",
     descripcion:
@@ -434,6 +482,7 @@ export const celulas: Celula[] = [
   // ── Sistema respiratorio (nuevas) ──
   {
     id: "celula-ciliada",
+    claves: ["Cubiertas de cilios", "Arrastran el moco hacia arriba", "Mantienen limpios los pulmones"],
     nombre: "Célula ciliada",
     foto: "/viñetas/fisiologia/celulas/ciliada.png",
     descripcion:
@@ -443,6 +492,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celula-club",
+    claves: ["Detoxifican el aire inhalado", "Defienden de la inflamación", "Regeneran el epitelio"],
     nombre: "Célula club (Clara)",
     foto: "/viñetas/fisiologia/celulas/club.png",
     descripcion:
@@ -454,6 +504,7 @@ export const celulas: Celula[] = [
   // ── Sistema cardiovascular (nuevas) ──
   {
     id: "marcapasos",
+    claves: ["Marcan el ritmo del corazón", "Generan el impulso del latido", "Coordinan la contracción"],
     nombre: "Célula marcapasos (nodo sinusal)",
     foto: "/viñetas/fisiologia/celulas/marcapasos.png",
     descripcion:
@@ -463,6 +514,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "purkinje",
+    claves: ["Conducción eléctrica rápida", "Llevan el impulso a los ventrículos", "Bombeo fuerte y coordinado"],
     nombre: "Célula de Purkinje",
     foto: "/viñetas/fisiologia/celulas/purkinje.png",
     descripcion:
@@ -474,6 +526,7 @@ export const celulas: Celula[] = [
   // ── Sangre e inmunidad (nuevas) ──
   {
     id: "plaquetas",
+    claves: ["Vigilan los vasos", "Forman el tapón de una herida", "Activan la coagulación"],
     nombre: "Plaquetas",
     foto: "/viñetas/fisiologia/celulas/plaquetas.png",
     descripcion:
@@ -483,6 +536,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "eosinofilos",
+    claves: ["Defienden de parásitos", "Participan en las alergias", "Destruyen amenazas grandes"],
     nombre: "Eosinófilos",
     foto: "/viñetas/fisiologia/celulas/eosinofilos.png",
     descripcion:
@@ -492,6 +546,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "basofilos",
+    claves: ["Liberan histamina", "Desencadenan la inflamación", "Atraen otras defensas"],
     nombre: "Basófilos",
     foto: "/viñetas/fisiologia/celulas/basofilos.png",
     descripcion:
@@ -501,6 +556,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "monocitos",
+    claves: ["Reserva móvil del sistema inmune", "Migran a los tejidos", "Se vuelven macrófagos"],
     nombre: "Monocitos",
     foto: "/viñetas/fisiologia/celulas/monocitos.png",
     descripcion:
@@ -512,6 +568,7 @@ export const celulas: Celula[] = [
   // ── Sistema digestivo · Estómago (nuevas) ──
   {
     id: "parietal",
+    claves: ["Producen ácido gástrico", "Descomponen los alimentos", "Permiten absorber la B12"],
     nombre: "Célula parietal",
     foto: "/viñetas/fisiologia/celulas/parietal.png",
     descripcion:
@@ -521,6 +578,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "principal",
+    claves: ["Secretan pepsinógeno", "Se activa como pepsina", "Empiezan a digerir proteínas"],
     nombre: "Célula principal",
     foto: "/viñetas/fisiologia/celulas/principal.png",
     descripcion:
@@ -530,6 +588,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "mucosa-gastrica",
+    claves: ["Producen moco protector", "Escudo frente al ácido", "Protegen la pared del estómago"],
     nombre: "Célula mucosa gástrica",
     foto: "/viñetas/fisiologia/celulas/mucosagastrica.png",
     descripcion:
@@ -539,6 +598,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "enteroendocrinas-gastricas",
+    claves: ["Detectan lo que llega al estómago", "Producen gastrina", "Regulan la secreción de ácido"],
     nombre: "Célula enteroendocrina gástrica",
     foto: "/viñetas/fisiologia/celulas/enteroendocrinasgastricas.png",
     descripcion:
@@ -550,6 +610,7 @@ export const celulas: Celula[] = [
   // ── Sistema digestivo · Intestino (nueva) ──
   {
     id: "celula-madre-intestinal",
+    claves: ["Renuevan el intestino", "Se dividen sin descanso", "Mantienen la frontera joven"],
     nombre: "Célula madre intestinal",
     foto: "/viñetas/fisiologia/celulas/madreintestinal.png",
     descripcion:
@@ -561,6 +622,7 @@ export const celulas: Celula[] = [
   // ── Tiroides (nuevas) ──
   {
     id: "tirocito",
+    claves: ["Producen hormonas tiroideas", "Regulan el metabolismo", "Usan yodo para fabricarlas"],
     nombre: "Tirocito",
     foto: "/viñetas/fisiologia/celulas/tirocito.png",
     descripcion:
@@ -570,6 +632,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "celula-c",
+    claves: ["Producen calcitonina", "Bajan el calcio en sangre", "Lo depositan en el hueso"],
     nombre: "Célula C (parafolicular)",
     foto: "/viñetas/fisiologia/celulas/celulac.png",
     descripcion:
@@ -581,6 +644,7 @@ export const celulas: Celula[] = [
   // ── Riñón (nuevas) ──
   {
     id: "tubulo-proximal",
+    claves: ["Primeras en filtrar la orina", "Recuperan agua y glucosa", "Devuelven lo útil a la sangre"],
     nombre: "Célula del túbulo proximal",
     foto: "/viñetas/fisiologia/celulas/tubuloproximal.png",
     descripcion:
@@ -590,6 +654,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "asa-henle",
+    claves: ["Concentran la orina", "Ahorran agua", "Equilibran los líquidos"],
     nombre: "Célula del asa de Henle",
     foto: "/viñetas/fisiologia/celulas/asahenle.png",
     descripcion:
@@ -599,6 +664,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "tubulo-distal",
+    claves: ["Ajuste fino del filtrado", "Regulan sal, agua y potasio", "Afinan la tensión arterial"],
     nombre: "Célula del túbulo distal",
     foto: "/viñetas/fisiologia/celulas/tubulodistal.png",
     descripcion:
@@ -610,6 +676,7 @@ export const celulas: Celula[] = [
   // ── Músculo (nueva) ──
   {
     id: "satelite",
+    claves: ["Células madre del músculo", "Reparan las fibras", "Hacen crecer el músculo"],
     nombre: "Célula satélite",
     foto: "/viñetas/fisiologia/celulas/satelite.png",
     descripcion:
@@ -621,6 +688,7 @@ export const celulas: Celula[] = [
   // ── Esqueleto (nueva) ──
   {
     id: "condrocito",
+    claves: ["Células del cartílago", "Amortiguan las articulaciones", "Se reparan con dificultad"],
     nombre: "Condrocito",
     foto: "/viñetas/fisiologia/celulas/condrocito.png",
     descripcion:
@@ -632,6 +700,7 @@ export const celulas: Celula[] = [
   // ── Piel (nueva) ──
   {
     id: "merkel",
+    claves: ["Receptores del tacto", "Detectan la presión suave", "Perciben texturas finas"],
     nombre: "Célula de Merkel",
     foto: "/viñetas/fisiologia/celulas/merkel.png",
     descripcion:
@@ -643,6 +712,7 @@ export const celulas: Celula[] = [
   // ── Tejido conectivo (nueva) ──
   {
     id: "mastocito",
+    claves: ["Centinelas del tejido", "Almacenan histamina", "Protagonistas de las alergias"],
     nombre: "Mastocito",
     foto: "/viñetas/fisiologia/celulas/mastocito.png",
     descripcion:
@@ -654,6 +724,7 @@ export const celulas: Celula[] = [
   // ── Lengua (gusto) ──
   {
     id: "gustativa-tipo2",
+    claves: ["Detectan dulce, amargo y umami", "Reconocen las moléculas del sabor", "Avisan al nervio del gusto"],
     nombre: "Célula gustativa (tipo II)",
     foto: "/viñetas/fisiologia/celulas/gustativatipo2.png",
     descripcion:
@@ -663,6 +734,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "gustativa-tipo3",
+    claves: ["Detectan el sabor ácido", "Forman sinapsis con el nervio", "Afinan la percepción del sabor"],
     nombre: "Célula gustativa ácida (tipo III)",
     foto: "/viñetas/fisiologia/celulas/gustativatipo3.png",
     descripcion:
@@ -672,6 +744,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "soporte-gusto",
+    claves: ["La glía del gusto", "Sostienen a las receptoras", "Limpian tras cada señal"],
     nombre: "Célula de soporte (tipo I)",
     foto: "/viñetas/fisiologia/celulas/soportegusto.png",
     descripcion:
@@ -681,6 +754,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "basal-gusto",
+    claves: ["Madre del gusto", "Renuevan el sabor cada semana", "Recuperan el gusto tras quemarte"],
     nombre: "Célula basal (madre gustativa)",
     foto: "/viñetas/fisiologia/celulas/basalgusto.png",
     descripcion:
@@ -692,6 +766,7 @@ export const celulas: Celula[] = [
   // ── Bazo ──
   {
     id: "macrofago-esplenico",
+    claves: ["Filtran la sangre en el bazo", "Retiran glóbulos rojos viejos", "Reciclan el hierro"],
     nombre: "Macrófago esplénico (pulpa roja)",
     foto: "/viñetas/fisiologia/celulas/macrofagoesplenico.png",
     descripcion:
@@ -701,6 +776,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "pulpa-blanca",
+    claves: ["Cuartel inmune del bazo", "Vigilan la sangre", "Fabrican anticuerpos"],
     nombre: "Linfocitos de la pulpa blanca",
     foto: "/viñetas/fisiologia/celulas/pulpablanca.png",
     descripcion:
@@ -712,6 +788,7 @@ export const celulas: Celula[] = [
   // ── Vesícula biliar ──
   {
     id: "colangiocito-vesicula",
+    claves: ["Recubren la vesícula", "Concentran la bilis", "Absorben agua y sales"],
     nombre: "Célula epitelial (colangiocito)",
     foto: "/viñetas/fisiologia/celulas/colangiocito.png",
     descripcion:
@@ -721,6 +798,7 @@ export const celulas: Celula[] = [
   },
   {
     id: "muscular-vesicula",
+    claves: ["Músculo de la vesícula", "Responden a la CCK", "Exprimen la bilis al comer"],
     nombre: "Célula muscular lisa (vesícula)",
     foto: "/viñetas/fisiologia/celulas/muscularvesicula.png",
     descripcion:

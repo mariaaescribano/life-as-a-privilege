@@ -14,7 +14,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
+import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 
 // Tarjeta de un sistema: imagen arriba + nombre. Se colocan en rejilla de 3.
@@ -167,7 +167,7 @@ export default function MetodoFisiologiaSistemas() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -185,7 +185,9 @@ export default function MetodoFisiologiaSistemas() {
             mb={0}
             prev={{ label: "← Las células", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
             extra={celulasBtn}
-            next={{ label: "El cuerpo →", onClick: () => navigate("/metodo/fisiologia/organismo") }}
+            next={{ label: "El cuerpo →", onClick: () => navigate("/metodo/fisiologia/organismo"),
+                    disabled: vistos.size < SISTEMAS.length,
+                    disabledTooltip: "Primero lee todos los sistemas" }}
           />
           </Reveal>
 

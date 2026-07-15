@@ -14,13 +14,13 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
   API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
 
@@ -67,7 +67,7 @@ const MACROS: MacroDef[] = [
     glow: "#7fd6c2", glyph: "A", n: 4, forma: "cadena",
     desc: "Realizan la mayoría de las funciones de la célula.",
     resultado: [
-      "Una proteína es una larga cadena de aminoácidos que se pliega en una forma precisa.",
+      "Una proteína es una larga cadena de aminoácidos que se construye voluntariamente cuando la célula lo necesita y que cumple una función concreta.",
       "De esa forma depende su función: hay proteínas que transportan, defienden, construyen o aceleran reacciones. Son las obreras de la célula.",
     ],
     monomeroImg: `${PRE}/aminoacido.png`, resultadoImg: `${PRE}/circularenzima.png`, cuadradoImg: `${PRE}/enzima.png`,
@@ -80,7 +80,7 @@ const MACROS: MacroDef[] = [
       "El ADN es una cadena de nucleótidos —las letras A, T, C y G— enrollada en una doble hélice.",
       "El orden de esas letras es el manual de instrucciones para fabricar todas tus proteínas: es tu información genética.",
     ],
-    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/adn.png`,
+    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/ADN.png`,
   },
   {
     id: "lipido", nombre: "Lípidos", monomero: "fosfolípido", monomeroPl: "piezas",
@@ -208,12 +208,14 @@ function PanelBox({ children, minH, px, py, ...rest }: any) {
 // Estación de una macromolécula (se remonta al cambiar de estación).
 // ═════════════════════════════════════════════════════════════════════════
 function Estacion({
-  def, yaFormada, onFormar, onVolver,
+  def, yaFormada, onFormar, onVolver, onSiguiente,
 }: {
   def: MacroDef;
   yaFormada: boolean;
   onFormar: () => void;
   onVolver: () => void;
+  /** Avanza a la siguiente macromolécula sin formar; en la última vuelve al menú. */
+  onSiguiente: () => void;
 }) {
   // Piezas a arrastrar (monómeros iguales o componentes distintos) y estado.
   const piezas = piezasDe(def);
@@ -222,6 +224,8 @@ function Estacion({
   const [puestas, setPuestas] = useState<number[]>([]); // índices de piezas ya colocadas, en orden
   const [completo, setCompleto] = useState(yaFormada);
   const bandejaRef = useRef<HTMLDivElement>(null);
+  // Reserva la altura del box de piezas para que no encoja al arrastrarlas fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
 
   // Rehacer el ensamblaje de esta macromolécula (vuelve a la Fase A).
   const reiniciar = () => { setPuestas([]); setCompleto(false); };
@@ -314,9 +318,10 @@ function Estacion({
               <Reveal direction="up" distance={22} duration={0.5} delay={0.18} flex="1" display="flex">
                 <PanelBox w="100%" overflow="visible" minH={{ base: "auto", md: "300px" }}>
                   <Flex direction="column" align="center" justify="center" gap={5} h="100%">
-                    <Box display="grid" gridTemplateColumns="repeat(2, auto)"
-                         justifyContent="center" justifyItems="center"
-                         columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }} minH="60px">
+                    <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
+                         justifyContent="center" justifyItems="center" alignContent="center"
+                         columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }}
+                         minH={piezasMinH ? `${piezasMinH}px` : "60px"}>
                       <AnimatePresence>
                         {pendientes.map((pi, order) => (
                           <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={heterogenea}
@@ -378,8 +383,10 @@ function Estacion({
               </PanelBox>
             </Flex>
 
-            {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
-            <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
+            {/* Acciones — fuera del box, abajo a la derecha del todo.
+                «Siguiente →» lleva a la próxima macromolécula sin formar (y en la
+                última, de vuelta al menú de las 4), sin tener que volver a mano. */}
+            <Flex justify="flex-end" align="center" gap={3} w="100%" mt={{ base: 5, md: 6 }} wrap="wrap">
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
@@ -387,6 +394,15 @@ function Estacion({
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
                 ↺ Volver a hacer
+              </Box>
+              <Box as="button" onClick={onSiguiente}
+                   display="inline-flex" alignItems="center" gap={2} px={7} py={2} borderRadius="full"
+                   bg={fisiologiaTxt} color={fisiologiaBg}
+                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                   letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
+                   boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+                   _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
+                Siguiente →
               </Box>
             </Flex>
           </MBox>
@@ -571,6 +587,14 @@ export default function MetodoFisiologiaMacromoleculas() {
     });
   };
 
+  // «Siguiente →» desde el resultado: salta a la primera macromolécula que aún
+  // no esté formada; si están las 4, vuelve al menú de las 4 cajas. Como no hay
+  // orden fijo, «la última» es simplemente la que completa el conjunto.
+  const irSiguiente = () => {
+    const siguiente = MACROS.find((m) => !formadas.includes(m.id));
+    setActiva(siguiente ? siguiente.id : null);
+  };
+
   if (loading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
@@ -578,7 +602,7 @@ export default function MetodoFisiologiaMacromoleculas() {
   const defActiva = MACROS.find((m) => m.id === activa) || null;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -617,6 +641,7 @@ export default function MetodoFisiologiaMacromoleculas() {
               yaFormada={formadas.includes(defActiva.id)}
               onFormar={() => formar(defActiva.id)}
               onVolver={() => setActiva(null)}
+              onSiguiente={irSiguiente}
             />
           ) : (
             /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro ── */

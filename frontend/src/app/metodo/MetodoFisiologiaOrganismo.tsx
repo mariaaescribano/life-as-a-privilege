@@ -12,9 +12,9 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
-  API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon,
-} from "../../GlobalVariables";
+  API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { SISTEMAS, FRASE_ORGANISMO, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 
 const MBox = motion(Box);
@@ -75,8 +75,11 @@ function SistemaFicha({ sistema, onSoltar }: {
   const controls = useAnimationControls();
 
   // Entrada al montarse (cada nueva ficha aparece con un pequeño fundido).
+  // Solo opacidad: NO tocamos `scale` en la entrada para que whileHover/whileDrag
+  // partan siempre de scale=1 y no reviertan a un valor pequeño (bug de encoger
+  // al pasar el ratón por encima).
   useEffect(() => {
-    controls.start({ opacity: 1, scale: 1, transition: { type: "spring", stiffness: 320, damping: 24 } });
+    controls.start({ opacity: 1, transition: { type: "spring", stiffness: 320, damping: 24 } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -96,7 +99,7 @@ function SistemaFicha({ sistema, onSoltar }: {
       }}
       whileDrag={{ scale: 1.14, zIndex: 60 }}
       whileHover={{ y: -3, scale: 1.04 }}
-      initial={{ opacity: 0, scale: 0.6 }}
+      initial={{ opacity: 0 }}
       animate={controls}
       exit={{ opacity: 0, scale: 0.5 }}
       transition={{ type: "spring", stiffness: 320, damping: 24 }}
@@ -134,6 +137,8 @@ export default function MetodoFisiologiaOrganismo() {
   const [frase, setFrase] = useState<string | null>(null);
   const [cuerpoOk, setCuerpoOk] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Reserva la altura del box de sistemas para que no encoja al arrastrarlos fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
   const dataRef = useRef<Record<string, any>>({});
   const circuloRef = useRef<HTMLDivElement>(null);
 
@@ -204,7 +209,7 @@ export default function MetodoFisiologiaOrganismo() {
   const colocadosSet = new Set(colocados);
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }} pb={{ base: 12, md: 16 }}>
@@ -222,7 +227,8 @@ export default function MetodoFisiologiaOrganismo() {
             mb={0}
             prev={{ label: "← Sistemas", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
             extra={celulasBtn}
-            next={{ label: "Niveles →", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+            next={{ label: "Niveles →", onClick: () => navigate("/metodo/fisiologia/niveles"),
+                    disabled: !completo, disabledTooltip: "Primero crea al ser humano" }}
           />
 
           {/* Instrucción inicial que, al colocar un sistema, se sustituye por su
@@ -310,7 +316,9 @@ export default function MetodoFisiologiaOrganismo() {
                       </Text>
                       {/* Solo 6 a la vez: al soltar uno en el círculo desaparece de aquí
                           y entra el siguiente que quede por colocar. */}
-                      <Flex wrap="wrap" justify="center" gap={{ base: 3, md: 4 }} minH={{ base: "200px", md: "240px" }}>
+                      <Flex ref={piezasRef} wrap="wrap" justify="center" align="center" alignContent="center"
+                            gap={{ base: 3, md: 4 }}
+                            minH={piezasMinH ? `${piezasMinH}px` : { base: "200px", md: "240px" }}>
                         <AnimatePresence mode="popLayout">
                           {SISTEMAS.filter((s) => !colocadosSet.has(s.key)).slice(0, 6).map((s) => (
                             <SistemaFicha key={s.key} sistema={s}

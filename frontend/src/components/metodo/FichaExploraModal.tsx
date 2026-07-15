@@ -39,6 +39,7 @@ export function FichaExploraModal({
       foto={ficha.foto || ""}
       alt={ficha.nombre}
       titulo={ficha.nombre}
+      claves={ficha.claves}
       parrafos={ficha.explicacion}
       accent={accent}
       onClose={onClose}

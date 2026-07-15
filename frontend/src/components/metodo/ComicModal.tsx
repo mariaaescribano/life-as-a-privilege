@@ -20,6 +20,9 @@ interface ComicModalProps {
   disciplinaBgImage?: string;
   disciplinaBgColor?: string;
   textShadow?: string;
+  /** Color de la LETRA si difiere del acento (themeColor). P.ej. Nutrición usa
+   *  acento claro (nutricionBg) y letra oscura (nutricionTxt). */
+  textColor?: string;
 }
 
 export function ComicModal({
@@ -30,6 +33,7 @@ export function ComicModal({
   disciplinaBgImage,
   disciplinaBgColor,
   textShadow,
+  textColor,
 }: ComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -52,6 +56,7 @@ export function ComicModal({
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
+          textColor={textColor}
         />
       </ModalContent>
     </Modal>

@@ -1,97 +1,82 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Box, Flex, Text, SimpleGrid,
-  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
-} from "@chakra-ui/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Box, Flex, Text, Image, SimpleGrid } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { ComicMicrobiotaModal } from "../../components/metodo/ComicMicrobiotaModal";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import { NUTRIENTES, type Nutriente } from "../../hardCoded/espacio/NutrientesNutricion";
 
-const MBox = motion(Box);
-const INK = `0 1px 3px rgba(20,32,20,0.9), 0 0 8px rgba(20,32,20,0.7)`;
-
-// ── Detalle de un nutriente (dentro del modal) ───────────────────────────────
-function NutrienteDetalle({ n }: { n: Nutriente }) {
+// Tarjeta de un grupo de nutrientes. Mismo aspecto que las de Fisiología ·
+// Profundiza (fondo de la disciplina difuminado + imagen dentro + título), pero
+// con el fondo de Nutrición. Al ver el grupo (abrir su modal), aparece un tick
+// verde de la gama de Nutrición arriba a la derecha.
+function NutrienteBox({ n, visto, onClick, delay }: { n: Nutriente; visto: boolean; onClick: () => void; delay: number }) {
+  const [imgErr, setImgErr] = useState(false);
   return (
-    <Flex direction="column" gap={5}>
-      <Flex align="center" gap={3}>
-        <Box fontSize={{ base: "40px", md: "48px" }} lineHeight="1">{n.emoji}</Box>
-        <Box>
-          <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="800" lineHeight="1.1"
-                style={{ textShadow: INK }}>
+    <Reveal direction="up" distance={20} delay={delay} duration={0.55} w="100%" display="flex">
+      <Box
+        as="button"
+        onClick={onClick}
+        position="relative"
+        overflow="hidden"
+        w="100%"
+        h="100%"
+        borderRadius="2xl"
+        cursor="pointer"
+        fontFamily="'EB Garamond', serif"
+        transition="all 0.2s ease"
+        boxShadow="0 4px 16px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.12)"
+        _hover={{ transform: "translateY(-4px)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
+        _active={{ transform: "translateY(-1px)" }}
+      >
+        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
+
+        {/* Tick de "grupo visto": verde de la gama de Nutrición (círculo nutricionTxt
+            + check nutricionBg). Aparece al abrir el detalle del grupo. */}
+        {visto && (
+          <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
+                w="24px" h="24px" borderRadius="full" bg={nutricionTxt}
+                boxShadow={`0 0 10px ${nutricionTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill={nutricionBg}>
+              <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+            </Box>
+          </Flex>
+        )}
+
+        <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
+              p={{ base: 4, md: 5 }} h="100%">
+          <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
+               bg={`${n.color}22`}
+               boxShadow="0 0 12px rgba(255,255,255,0.12)"
+               display="flex" alignItems="center" justifyContent="center">
+            {!imgErr ? (
+              <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="cover"
+                     onError={() => setImgErr(true)} />
+            ) : (
+              <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
+                    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
+                {n.label.charAt(0)}
+              </Text>
+            )}
+          </Box>
+          <Text color={nutricionTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
+                fontSize={{ base: "sm", md: "md" }} letterSpacing="0.02em"
+                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65)" }}>
             {n.label}
           </Text>
-          <Text color={n.color} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" fontWeight="600">
-            {n.resumen}
-          </Text>
-        </Box>
-      </Flex>
-
-      <Box h="1px" bgGradient={`linear(to-r, ${n.color}, transparent)`} />
-
-      {/* Tipos */}
-      <Box>
-        <Text color={n.color} fontSize="xs" fontWeight="800" letterSpacing="0.14em"
-              textTransform="uppercase" mb={2.5}>
-          Tipos
-        </Text>
-        <Flex direction="column" gap={2.5}>
-          {n.tipos.map((t) => (
-            <Box key={t.nombre} pl={3} borderLeft={`2px solid ${n.color}88`}>
-              <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "md" }}>{t.nombre}</Text>
-              <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
-                {t.desc}
-              </Text>
-            </Box>
-          ))}
         </Flex>
       </Box>
-
-      {/* Qué hacen */}
-      <Box>
-        <Text color={n.color} fontSize="xs" fontWeight="800" letterSpacing="0.14em"
-              textTransform="uppercase" mb={2.5}>
-          Qué hacen
-        </Text>
-        <Flex direction="column" gap={2}>
-          {n.queHacen.map((q, i) => (
-            <Flex key={i} gap={2.5} align="flex-start">
-              <Box mt="9px" w="6px" h="6px" borderRadius="full" bg={n.color} flexShrink={0}
-                   sx={{ boxShadow: `0 0 8px ${n.color}` }} />
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.65">
-                {q}
-              </Text>
-            </Flex>
-          ))}
-        </Flex>
-      </Box>
-
-      {/* Dónde encontrarlo */}
-      <Box>
-        <Text color={n.color} fontSize="xs" fontWeight="800" letterSpacing="0.14em"
-              textTransform="uppercase" mb={2.5}>
-          Dónde encontrarlo
-        </Text>
-        <Flex wrap="wrap" gap={2}>
-          {n.donde.map((d) => (
-            <Box key={d} px={3} py={1.5} borderRadius="full" bg={`${n.color}22`}
-                 border={`1px solid ${n.color}66`}>
-              <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight="600">{d}</Text>
-            </Box>
-          ))}
-        </Flex>
-      </Box>
-    </Flex>
+    </Reveal>
   );
 }
 
@@ -100,7 +85,7 @@ export default function MetodoNutricionNutrientes() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [explorados, setExplorados] = useState<string[]>([]);
-  const [abierto, setAbierto] = useState<Nutriente | null>(null);
+  const [microOpen, setMicroOpen] = useState(false); // cómic de transición a la microbiota
   const dataRef = useRef<Record<string, any>>({});
 
   const total = NUTRIENTES.length;
@@ -143,19 +128,19 @@ export default function MetodoNutricionNutrientes() {
     } catch { /* se reintenta al próximo toque */ }
   };
 
+  // Al pinchar un grupo: lo marca como explorado (tick) y navega a su página.
   const abrir = (n: Nutriente) => {
-    setAbierto(n);
     if (!explorados.includes(n.key)) {
       const nuevos = [...explorados, n.key];
       setExplorados(nuevos);
       void guardar(nuevos);
     }
+    navigate(`/metodo/nutricion/nutrientes/${n.key}`);
   };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   const exploradosSet = new Set(explorados);
-  const completo = explorados.length >= total;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -175,99 +160,33 @@ export default function MetodoNutricionNutrientes() {
             nom={nutricionNom}
             mb={0}
             prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion") }}
+            extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+            next={{ label: "Microbiota →", onClick: () => setMicroOpen(true) }}
           />
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={2}>
-              <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                    textAlign="center" lineHeight="1.8" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Toca cada grupo para descubrir sus tipos, qué hacen dentro de ti y dónde encontrarlo.
-              </Text>
-              <Text color={completo ? "#bff0b3" : "rgba(255,255,255,0.8)"} fontSize="xs" fontWeight="700"
-                    letterSpacing="0.12em" textTransform="uppercase">
-                {completo ? "✓ Los has explorado todos" : `Explorados · ${explorados.length}/${total}`}
-              </Text>
-            </Flex>
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                  textAlign="center" lineHeight="1.8" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+              Toca cada grupo para descubrir sus tipos, qué hacen dentro de ti y dónde encontrarlo.
+            </Text>
           </Reveal>
 
-          <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 5 }} w="100%">
-            {NUTRIENTES.map((n, i) => {
-              const visto = exploradosSet.has(n.key);
-              return (
-                <Reveal key={n.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%">
-                  <MBox
-                    as="button"
-                    onClick={() => abrir(n)}
-                    whileHover={{ y: -4, scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    transition={{ type: "spring", stiffness: 320, damping: 22 }}
-                    w="100%" h="100%" textAlign="center"
-                    borderRadius="2xl" overflow="hidden" position="relative"
-                    display="flex" flexDirection="column"
-                    bg={nutricionBg}
-                    border={`1.5px solid ${n.color}${visto ? "cc" : "66"}`}
-                    sx={{ boxShadow: `0 0 18px ${n.color}33, inset 0 0 30px ${n.color}12` }}
-                  >
-                    {/* Foto de alimentos del grupo (con sus moléculas) */}
-                    <Box
-                      position="relative"
-                      w="100%"
-                      sx={{ aspectRatio: "1 / 1" }}
-                      bgImage={`url('${n.img}')`}
-                      bgSize="cover"
-                      bgPosition="center"
-                      bgRepeat="no-repeat"
-                      bgColor={`${n.color}22`}
-                    >
-                      {visto && (
-                        <Box position="absolute" top={2.5} right={2.5} w={{ base: "20px", md: "22px" }} h={{ base: "20px", md: "22px" }}
-                             borderRadius="full" bg={n.color} display="flex" alignItems="center" justifyContent="center"
-                             sx={{ boxShadow: `0 0 10px ${n.color}` }}>
-                          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                               w="14px" h="14px" fill="#12210f">
-                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                          </Box>
-                        </Box>
-                      )}
-                    </Box>
-                    {/* Título debajo de la foto */}
-                    <Box flex="1" display="flex" flexDirection="column" justifyContent="center"
-                         px={{ base: 3, md: 4 }} py={{ base: 3, md: 3.5 }} borderTop={`1px solid ${n.color}44`}>
-                      <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="800" lineHeight="1.15">
-                        {n.label}
-                      </Text>
-                      <Text color={`${nutricionTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} lineHeight="1.4" mt={1}>
-                        {n.resumen}
-                      </Text>
-                    </Box>
-                  </MBox>
-                </Reveal>
-              );
-            })}
+          <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+            {NUTRIENTES.map((n, i) => (
+              <NutrienteBox key={n.key} n={n} visto={exploradosSet.has(n.key)}
+                            delay={0.05 * i} onClick={() => abrir(n)} />
+            ))}
           </SimpleGrid>
         </Flex>
       </Flex>
 
-      {/* Modal de detalle */}
-      <Modal isOpen={!!abierto} onClose={() => setAbierto(null)} size={{ base: "sm", md: "lg" }} isCentered scrollBehavior="inside">
-        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
-        <ModalContent bg="#0a3d3d" border={`1px solid ${abierto?.color ?? "#fff"}55`} borderRadius="2xl"
-                      boxShadow={`0 16px 60px rgba(0,0,0,0.5), 0 0 40px ${abierto?.color ?? "#fff"}22`}
-                      mx={{ base: 4, md: 0 }} fontFamily="'EB Garamond', serif" overflow="hidden">
-          <ModalCloseButton color="white" />
-          <ModalBody px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
-            <AnimatePresence mode="wait">
-              {abierto && (
-                <MBox key={abierto.key} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }}>
-                  <NutrienteDetalle n={abierto} />
-                </MBox>
-              )}
-            </AnimatePresence>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      {/* Transición a la Microbiota: cómic «La microbiota». */}
+      <ComicMicrobiotaModal
+        isOpen={microOpen}
+        onContinue={() => { setMicroOpen(false); navigate("/metodo/nutricion/microbiota"); }}
+        onClose={() => setMicroOpen(false)}
+      />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
       <SiteFooter />

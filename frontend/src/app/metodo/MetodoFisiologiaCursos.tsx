@@ -1,0 +1,222 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import axios from "axios";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { Reveal } from "../../components/global/Reveal";
+import {
+  API_URL,
+  fisiologiaBg,
+  fisiologiaNom,
+  fisiologiaTxt,
+  FisiologiaIcon,
+  noSelectSx,
+} from "../../GlobalVariables";
+
+// ── Cursos para profundizar (Fisiología) ────────────────────────────────────
+// Página-hub que va DESPUÉS de Niveles. Aquí se listarán los cursos avanzados de
+// Fisiología. De momento no hay ninguno: se deja el enrutado y el diseño listos;
+// María solo tendrá que ir añadiendo objetos a CURSOS y el resto funciona solo.
+interface Curso {
+  key: string;
+  titulo: string;
+  /** Frase corta bajo el título en la tarjeta. */
+  resumen: string;
+  /** Foto de portada del curso (opcional; si falta, se pinta la inicial). */
+  foto?: string;
+  /** Ruta a la que lleva el curso (cuando exista). */
+  ruta?: string;
+  /** Si true, la tarjeta se muestra como «Próximamente» (no navegable). */
+  proximamente?: boolean;
+}
+
+// Aún no hay cursos de Fisiología. Al añadir objetos aquí, aparecerán solos.
+const CURSOS: Curso[] = [];
+
+// SVG candado (mismo que usa la caja de disciplina bloqueada).
+const Candado = ({ size }: { size: any }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={size} h={size} fill="#ffffff"
+       style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}>
+    <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
+  </Box>
+);
+
+// ── Tarjeta de un curso ──────────────────────────────────────────────────────
+function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
+  const [imgErr, setImgErr] = useState(false);
+  const bloqueado = !!curso.proximamente || !curso.ruta;
+  return (
+    <Box
+      as={bloqueado ? "div" : "button"}
+      onClick={bloqueado ? undefined : onEnter}
+      position="relative"
+      w="100%"
+      h="100%"
+      borderRadius="2xl"
+      overflow="hidden"
+      cursor={bloqueado ? "default" : "pointer"}
+      aria-disabled={bloqueado}
+      border={`1px solid ${bloqueado ? `${fisiologiaTxt}33` : `${fisiologiaTxt}77`}`}
+      opacity={bloqueado ? 0.78 : 1}
+      boxShadow={bloqueado
+        ? "inset 0 0 24px rgba(0,0,0,0.35)"
+        : `0 0 16px ${fisiologiaTxt}26, 0 0 40px ${fisiologiaTxt}16, inset 0 0 24px rgba(0,0,0,0.25)`}
+      transition="all 0.25s ease"
+      _hover={bloqueado ? undefined : {
+        transform: "translateY(-6px)",
+        borderColor: fisiologiaTxt,
+        boxShadow: `0 0 26px ${fisiologiaTxt}88, 0 0 64px ${fisiologiaTxt}44, inset 0 0 24px rgba(0,0,0,0.2)`,
+      }}
+      _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}
+    >
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl"
+                         overlay={bloqueado ? "rgba(0,0,0,0.55)" : `${fisiologiaBg}66`} />
+
+      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
+            p={{ base: 4, md: 5 }} h="100%">
+        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
+             bg={`${fisiologiaTxt}14`} boxShadow="0 4px 16px rgba(0,0,0,0.28)"
+             display="flex" alignItems="center" justifyContent="center">
+          {curso.foto && !imgErr ? (
+            <Image src={encodeURI(curso.foto)} alt={curso.titulo} w="100%" h="100%" objectFit="cover"
+                   onError={() => setImgErr(true)} />
+          ) : (
+            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
+              {curso.titulo.charAt(0)}
+            </Text>
+          )}
+        </Box>
+        <Text color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }} textAlign="center"
+              lineHeight="1.25" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+          {curso.titulo}
+        </Text>
+        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+              textAlign="center" lineHeight="1.5" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+          {curso.resumen}
+        </Text>
+        <Box flex="1" minH={{ base: 1, md: 2 }} />
+        <Text color={`${fisiologiaTxt}cc`} fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
+              textTransform="uppercase">
+          {bloqueado ? "Próximamente" : "Entrar →"}
+        </Text>
+      </Flex>
+    </Box>
+  );
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+export default function MetodoFisiologiaCursos() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  // ¿Ha pagado ya la Nutrición? (6ª disciplina, el siguiente paso tras Fisiología).
+  const [nutriSuscrito, setNutriSuscrito] = useState(false);
+  const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) { navigate("/welcome"); return; }
+    (async () => {
+      try {
+        let testEnabled = false;
+        try {
+          const t = await axios.get(`${API_URL}/payment/test/enabled`);
+          testEnabled = !!t.data?.enabled;
+        } catch { /* sin modo test */ }
+
+        const me = await axios.get(`${API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        setNutriSuscrito(!!me.data?.nutricion_suscrito);
+      } catch {
+        navigate("/metodo/fisiologia");
+        return;
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [navigate]);
+
+  if (loading) {
+    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  }
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
+
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
+              title="Cursos"
+              compact
+              bgColor={`${fisiologiaBg}dd`}
+              color={fisiologiaTxt}
+              nom={fisiologiaNom}
+              mb={0}
+              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+              extra={celulasBtn}
+              next={nutriSuscrito
+                ? { label: "Nutrición →", onClick: () => navigate("/metodo/nutricion") }
+                : { label: "Nutrición", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/nutricion") }}
+            />
+          </Reveal>
+
+          <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                  textAlign="center" lineHeight="1.8" maxW="640px"
+                  style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+              Cursos para profundizar en lo que más te interese de tu cuerpo.
+            </Text>
+          </Reveal>
+
+          {CURSOS.length > 0 ? (
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+              {CURSOS.map((c, i) => (
+                <Reveal key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
+                  <CursoBox curso={c} onEnter={() => { if (c.ruta) navigate(c.ruta); }} />
+                </Reveal>
+              ))}
+            </SimpleGrid>
+          ) : (
+            /* ── Aún no hay cursos: estado vacío elegante ── */
+            <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Flex direction="column" align="center" gap={3} maxW="560px" textAlign="center"
+                    position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                    border={`1px dashed ${fisiologiaTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>
+                <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}88`} />
+                <Text position="relative" zIndex={1} fontSize="4xl">🎓</Text>
+                <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
+                      style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
+                  Estamos preparando los cursos
+                </Text>
+                <Text position="relative" zIndex={1} color="rgba(255,255,255,0.82)" fontSize={{ base: "sm", md: "md" }}
+                      fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
+                  Pronto podrás profundizar aquí con cursos avanzados de Fisiología. Mientras tanto, sigue explorando el recorrido.
+                </Text>
+              </Flex>
+            </Reveal>
+          )}
+
+        </Flex>
+      </Flex>
+
+      {celulasModal}
+      <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
+      <SiteFooter />
+    </Box>
+  );
+}

@@ -34,7 +34,7 @@ export const CELULA_VIVA: Vineta[] = [
     src: "/viñetas/fisiologia/celulacomic/celula4.png",
     titulo: "Los ribosomas",
     paragraphs: [
-      "Los ribosomas leen las instrucciones del ADN y construyen proteínas, las herramientas que permiten trabajar a la célula.",
+      "Los ribosomas leen las instrucciones del ADN y construyen enzimas, las herramientas que permiten trabajar a la célula.",
     ],
   },
   {
@@ -49,14 +49,14 @@ export const CELULA_VIVA: Vineta[] = [
     src: "/viñetas/fisiologia/celulacomic/celula6.png",
     titulo: "La mitocondria",
     paragraphs: [
-      "Toda esa actividad necesita energía. Las mitocondrias transforman los nutrientes y el oxígeno en el combustible, científicamente llamado ATP, que alimenta toda la ciudad.",
+      "Toda esa actividad necesita energía. Las mitocondrias transforman los nutrientes y el oxígeno en el combustible, científicamente llamado ATP, que alimenta todas las partes de la célula.",
     ],
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula7.png",
     titulo: "Todo funciona junto",
     paragraphs: [
-      "Ninguna estructura podría mantener viva la célula por sí sola. Solo cuando todas trabajan juntas aparece aquello que llamamos vida.",
+      "Ninguna estructura podría mantener viva la célula por sí sola. Solo cuando todas trabajan juntas aparece aquello que llamamos Vida.",
     ],
   },
   {

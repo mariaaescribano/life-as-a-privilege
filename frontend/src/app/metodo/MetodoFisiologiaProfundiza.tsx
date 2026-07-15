@@ -11,7 +11,8 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { VolverFisio } from "../../components/metodo/VolverFisio";
-import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import {
   TEMAS_PROFUNDIZA,
   PROFUNDIZA_LEIDAS_KEY,
@@ -114,6 +115,10 @@ export default function MetodoFisiologiaProfundiza() {
           const mapa = r.data?.data?.[PROFUNDIZA_LEIDAS_KEY];
           if (mapa && typeof mapa === "object") setLeidasMap(mapa);
         } catch { /* sin fila todavía */ }
+
+        // No mostramos la página hasta que TODAS las fotos de los temas estén
+        // descargadas, para que la rejilla no se rellene de golpe después.
+        await precargarImagenes(TEMAS_PROFUNDIZA.map((t) => encodeURI(t.foto)));
       } catch { navigate("/metodo/fisiologia"); return; }
       finally { setLoading(false); }
     })();
@@ -129,7 +134,7 @@ export default function MetodoFisiologiaProfundiza() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>

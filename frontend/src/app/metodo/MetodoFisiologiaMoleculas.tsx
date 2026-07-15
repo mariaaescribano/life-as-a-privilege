@@ -14,13 +14,13 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
   API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
 
@@ -101,7 +101,7 @@ const MOLS: Mol[] = [
     titulo: "¡Has formado dióxido de carbono!",
     parrafos: [
       <>Un átomo de <b>carbono</b> se une a dos de <b>oxígeno</b>: es el <b>CO₂</b>, el gas que exhalas en cada respiración.</>,
-      <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la vida</b>.</>,
+      <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la Vida</b>.</>,
     ],
     resultadoImg: "/recorrido/fisiologia/pre/co2.png",
   },
@@ -254,6 +254,8 @@ export default function MetodoFisiologiaMoleculas() {
   const [completo, setCompleto] = useState(false);
   const [terminado, setTerminado] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Reserva la altura del box de piezas para que no encoja al arrastrarlas fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
 
   const zonaRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
@@ -366,7 +368,7 @@ export default function MetodoFisiologiaMoleculas() {
   const esUltima = indice === MOLS.length - 1;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -384,7 +386,7 @@ export default function MetodoFisiologiaMoleculas() {
             mb={0}
             prev={{ label: "← Átomos", onClick: () => navigate("/metodo/fisiologia/atomos") }}
             extra={celulasBtn}
-            next={{ label: "Macromoléculas →", onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
+            next={{ label: "Macromoléculas →", onClick: () => navigate("/metodo/fisiologia/macromoleculas"), disabled: !terminado, disabledTooltip: "Primero forma las tres moléculas de la Vida" }}
           />
           </Reveal>
 
@@ -460,8 +462,9 @@ export default function MetodoFisiologiaMoleculas() {
                       {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
                       <PanelBox flex="1" overflow="visible" minH={{ base: "auto", md: "340px" }}>
                         <Flex direction="column" align="center" justify="center" gap={5} h="100%">
-                          <Box display="grid" gridTemplateColumns="repeat(2, auto)"
-                               justifyContent="center" justifyItems="center"
+                          <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
+                               justifyContent="center" justifyItems="center" alignContent="center"
+                               minH={piezasMinH ? `${piezasMinH}px` : undefined}
                                columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
                             <AnimatePresence>
                               {pendientes.map((p) => (

@@ -6,10 +6,24 @@ export interface NutrienteTipo {
   desc: string;
 }
 
+// Tarjeta de la página de detalle (p.ej. Glucosa, Fructosa…). Al pincharla se
+// abre una ficha tipo cómic (foto + título + texto), como en Fisiología.
+export interface NutrienteTarjeta {
+  key: string;
+  titulo: string;
+  /** Foto cuadrada de la molécula/tipo. PENDIENTE de subir:
+   *  /img/nutri/nutrientes/<grupo>/<key>.png */
+  foto: string;
+  parrafos: string[];
+  /** Color propio de la tarjeta (para el círculo de vitaminas: cada una uno). */
+  color?: string;
+  /** Etiqueta corta para el nodo del círculo (p.ej. «A», «B»). */
+  sigla?: string;
+}
+
 export interface Nutriente {
   key: string;
   label: string;
-  emoji: string;
   color: string;
   /** Foto de alimentos de este grupo donde se ven sus moléculas. Va en la
    *  tarjeta de la cuadrícula (con el título debajo). */
@@ -18,13 +32,17 @@ export interface Nutriente {
   tipos: NutrienteTipo[];
   queHacen: string[];
   donde: string[];
+  /** Tarjetas de detalle (moléculas/tipos), cada una abre su ficha cómic. */
+  tarjetas?: NutrienteTarjeta[];
+  /** Si true, las tarjetas se muestran como un CÍRCULO de colores (p.ej. las
+   *  vitaminas), en vez de la rejilla de tarjetas. */
+  tarjetasCirculo?: boolean;
 }
 
 export const NUTRIENTES: Nutriente[] = [
   {
     key: "carbohidratos",
     label: "Carbohidratos",
-    emoji: "🌾",
     color: "#e0a92e",
     img: "/img/nutri/nutrientes/carbohidratos.png",
     resumen: "Tu principal fuente de energía.",
@@ -38,11 +56,41 @@ export const NUTRIENTES: Nutriente[] = [
       "El exceso se guarda como glucógeno (hígado y músculo) o como grasa.",
     ],
     donde: ["Avena", "Arroz y pan integral", "Legumbres", "Fruta", "Patata y boniato"],
+    tarjetas: [
+      {
+        key: "glucosa",
+        titulo: "Glucosa",
+        foto: "/img/nutri/nutrientes/carbohidratos/glucosa.png",
+        parrafos: [
+          "Es la molécula que nuestras células utilizan con más frecuencia para fabricar ATP, la energía.",
+          "Cuando la ingerimos, pasa a la sangre y se libera insulina, la hormona que les dice a las células que capten la glucosa para usarla. Si hay más glucosa de la que el organismo necesita y las reservas de glucógeno están llenas, el hígado transforma la glucosa en triglicéridos y los almacena en grasa para guardarlo como reserva.",
+        ],
+      },
+      {
+        key: "fructosa",
+        titulo: "Fructosa",
+        foto: "/img/nutri/nutrientes/carbohidratos/fructosa.png",
+        parrafos: [
+          "Es la molécula característica de las frutas y la miel. A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
+          "Cuando se consume dentro de una fruta, la fibra hace que se absorba lentamente. Sin embargo, cuando se consume en grandes cantidades y sin fibra (como en refrescos o zumos), el hígado recibe una carga muy rápida que favorece la producción de grasa, gasta las reservas y altera el metabolismo.",
+        ],
+      },
+      {
+        key: "galactosa",
+        titulo: "Galactosa",
+        foto: "/img/nutri/nutrientes/carbohidratos/galactosa.png",
+        parrafos: [
+          "La galactosa forma parte de la lactosa, la molécula de carbohidratos presente en la leche.",
+          "Para absorberla, primero debemos romper la lactosa gracias a una enzima llamada lactasa, que la divide en glucosa y galactosa.",
+          "Las personas con intolerancia a la lactosa producen poca lactasa, por lo que la lactosa llega al intestino sin digerir y provoca síntomas como gases, hinchazón o diarrea.",
+          "Una vez absorbida, la galactosa suele transformarse en glucosa para que el organismo pueda utilizarla.",
+        ],
+      },
+    ],
   },
   {
     key: "grasas",
     label: "Grasas",
-    emoji: "🥑",
     color: "#e58a3c",
     img: "/img/nutri/nutrientes/grasas.png",
     resumen: "Energía densa y ladrillos de tus membranas.",
@@ -57,11 +105,41 @@ export const NUTRIENTES: Nutriente[] = [
       "Transportan las vitaminas A, D, E y K, y son base de muchas hormonas.",
     ],
     donde: ["Aceite de oliva", "Aguacate", "Frutos secos y semillas", "Pescado azul", "Huevo"],
+    tarjetas: [
+      {
+        key: "insaturadas",
+        titulo: "Grasas insaturadas",
+        foto: "/img/nutri/nutrientes/grasas/insaturadas.png",
+        parrafos: [
+          "Son las grasas más habituales en alimentos como el aceite de oliva, los frutos secos, las semillas, el aguacate y el pescado azul.",
+          "Su estructura presenta una o varias curvaturas que ayudan a mantener las membranas celulares flexibles y favorecen el funcionamiento normal de las células.",
+          "Son las grasas más eficientes para nuestras células y con las que ha evolucionado durante millones de años.",
+        ],
+      },
+      {
+        key: "saturadas",
+        titulo: "Grasas saturadas",
+        foto: "/img/nutri/nutrientes/grasas/saturadas.png",
+        parrafos: [
+          "Se encuentran principalmente en productos de origen animal, como la carne o los lácteos, aunque también en algunos vegetales como el aceite de coco.",
+          "Sus moléculas son rectas y pueden empaquetarse con mayor facilidad, haciendo que las membranas celulares sean más rígidas y menos eficientes. Nuestro cuerpo también las utiliza, pero un consumo elevado y mantenido puede favorecer alteraciones cardiovasculares, especialmente cuando su consumo desplaza a las grasas insaturadas.",
+        ],
+      },
+      {
+        key: "trans",
+        titulo: "Grasas trans",
+        foto: "/img/nutri/nutrientes/grasas/trans.png",
+        parrafos: [
+          "La mayoría de las grasas trans presentes en la alimentación se generan durante procesos industriales que modifican aceites vegetales para hacerlos más estables. Es decir, su estructura molecular no existe en la naturaleza, sino que se creó en un laboratorio.",
+          "Su forma altera el funcionamiento normal de las membranas celulares y se asocia con un aumento del colesterol LDL, una disminución del HDL y un mayor riesgo de enfermedad cardiovascular. Por eso se recomienda consumir la menor cantidad posible.",
+          "Recuerda que no cumplen ninguna función beneficiosa conocida y su consumo debe minimizarse.",
+        ],
+      },
+    ],
   },
   {
     key: "proteinas",
     label: "Proteínas",
-    emoji: "🥚",
     color: "#d75f5a",
     img: "/img/nutri/nutrientes/proteinas.png",
     resumen: "El material con el que te reconstruyes.",
@@ -75,11 +153,37 @@ export const NUTRIENTES: Nutriente[] = [
       "Forman enzimas, anticuerpos y muchas hormonas.",
     ],
     donde: ["Huevo", "Pescado y carne", "Lácteos", "Legumbres y tofu", "Frutos secos"],
+    tarjetas: [
+      {
+        key: "esenciales",
+        titulo: "Aminoácidos esenciales",
+        foto: "/img/nutri/nutrientes/proteinas/esenciales.png",
+        parrafos: [
+          "Son los aminoácidos que nuestro cuerpo no puede fabricar o no puede producir en cantidad suficiente pero son necesarios. Por eso debemos obtenerlos a través de la alimentación.",
+          "Son imprescindibles para fabricar músculos, enzimas, hormonas, anticuerpos y miles de proteínas diferentes.",
+        ],
+      },
+      {
+        key: "no-esenciales",
+        titulo: "Aminoácidos no esenciales",
+        foto: "/img/nutri/nutrientes/proteinas/no-esenciales.png",
+        parrafos: [
+          "Nuestro cuerpo puede fabricar estos aminoácidos a partir de otras moléculas, por lo que no es imprescindible obtenerlos directamente de los alimentos. Aun así, siguen siendo igual de importantes, ya que participan en la construcción y reparación de todos los tejidos.",
+        ],
+      },
+      {
+        key: "condicionalmente-esenciales",
+        titulo: "Aminoácidos condicionalmente esenciales",
+        foto: "/img/nutri/nutrientes/proteinas/condicionalmente-esenciales.png",
+        parrafos: [
+          "Normalmente nuestro cuerpo puede producirlos, pero en determinadas situaciones —como el crecimiento, una enfermedad, una infección o una lesión importante— la demanda aumenta tanto que es necesario obtener una mayor cantidad a través de la alimentación.",
+        ],
+      },
+    ],
   },
   {
     key: "vitaminas",
     label: "Vitaminas",
-    emoji: "🍊",
     color: "#e8b52e",
     img: "/img/nutri/nutrientes/vitaminas.png",
     resumen: "Reguladoras: sin ellas nada funciona.",
@@ -93,11 +197,117 @@ export const NUTRIENTES: Nutriente[] = [
       "La vitamina D se fabrica en la piel con la luz del sol.",
     ],
     donde: ["Fruta y verdura", "Verduras de hoja verde", "Huevo e hígado", "Sol (vitamina D)", "Cereales integrales"],
+    tarjetasCirculo: true,
+    tarjetas: [
+      {
+        key: "a", sigla: "A", titulo: "Vitamina A (Retinol)", color: "#ef8e3a",
+        foto: "/img/nutri/nutrientes/vitaminas/a.png",
+        parrafos: [
+          "Sin la vitamina A no podríamos ver.",
+          "La vitamina A se transforma en retinal, una molécula que forma parte de la rodopsina, el pigmento de la retina que nos permite ver.",
+          "Es esencial para el desarrollo del sistema inmunitario y para que su respuesta no sea exagerada.",
+          "La vitamina A regula qué genes se activan en las células epiteliales. Gracias a ello, las células de la piel se renuevan correctamente (protegiéndonos eficazmente) y las mucosas producen la cantidad adecuada de moco.",
+        ],
+      },
+      {
+        key: "b1", sigla: "B1", titulo: "Vitamina B1 (Tiamina)", color: "#f2c230",
+        foto: "/img/nutri/nutrientes/vitaminas/b1.png",
+        parrafos: [
+          "Activa las enzimas que transforman los carbohidratos en energía y es imprescindible para el funcionamiento del cerebro, los nervios y los músculos. Sin ella, las células tendrían muchas dificultades para obtener energía de la glucosa.",
+        ],
+      },
+      {
+        key: "b2", sigla: "B2", titulo: "Vitamina B2 (Riboflavina)", color: "#ecbb2f",
+        foto: "/img/nutri/nutrientes/vitaminas/b2.png",
+        parrafos: [
+          "Participa en numerosas reacciones metabólicas relacionadas con la producción de energía, para ser exactos que se convierten en activadores de las enzimas que transportan electrones durante la respiración celular.",
+          "También ayuda a mantener la piel, los ojos y las mucosas en buen estado y contribuye a proteger las células frente al estrés oxidativo.",
+        ],
+      },
+      {
+        key: "b3", sigla: "B3", titulo: "Vitamina B3 (Niacina)", color: "#e6b02c",
+        foto: "/img/nutri/nutrientes/vitaminas/b3.png",
+        parrafos: [
+          "Es necesaria para fabricar las moléculas que permiten obtener energía a partir de los alimentos.",
+          "Es decir, se transforma en NAD⁺ y NADP⁺, moléculas que transportan electrones entre enzimas durante cientos de reacciones metabólicas.",
+          "Además, participa en la reparación del ADN y en el funcionamiento normal del sistema nervioso y la piel.",
+        ],
+      },
+      {
+        key: "b5", sigla: "B5", titulo: "Vitamina B5 (Ácido pantoténico)", color: "#dda829",
+        foto: "/img/nutri/nutrientes/vitaminas/b5.png",
+        parrafos: [
+          "Forma parte de la coenzima A (CoA), una molécula imprescindible para que las enzimas puedan fabricar y degradar grasas, producir energía y sintetizar colesterol y hormonas.",
+        ],
+      },
+      {
+        key: "b6", sigla: "B6", titulo: "Vitamina B6 (Piridoxina)", color: "#efc94c",
+        foto: "/img/nutri/nutrientes/vitaminas/b6.png",
+        parrafos: [
+          "Activa a las enzimas que participan en la transformación de los aminoácidos y en la fabricación de neurotransmisores, hemoglobina y anticuerpos.",
+          "Debido a esto, es fundamental para el sistema nervioso y el sistema inmunitario.",
+        ],
+      },
+      {
+        key: "b7", sigla: "B7", titulo: "Vitamina B7 (Biotina)", color: "#e4be3c",
+        foto: "/img/nutri/nutrientes/vitaminas/b7.png",
+        parrafos: [
+          "Actúa como coenzima de las carboxilasas, un grupo de enzimas que permiten fabricar glucosa, sintetizar ácidos grasos y aprovechar algunos aminoácidos para obtener energía. Por ello, participa en el mantenimiento de la piel, el cabello y las uñas.",
+        ],
+      },
+      {
+        key: "b9", sigla: "B9", titulo: "Vitamina B9 (Ácido fólico o Folato)", color: "#d6a336",
+        foto: "/img/nutri/nutrientes/vitaminas/b9.png",
+        parrafos: [
+          "Activa a la enzima que transporta pequeños fragmentos de carbono necesarios para fabricar ADN y ARN. Sin ella, las células no podrían dividirse correctamente.",
+          "Durante el embarazo es especialmente importante porque participa en el correcto desarrollo del sistema nervioso del bebé. Sin esta vitamina, el bebé podría fallecer.",
+        ],
+      },
+      {
+        key: "b12", sigla: "B12", titulo: "Vitamina B12 (Cobalamina)", color: "#c99a32",
+        foto: "/img/nutri/nutrientes/vitaminas/b12.png",
+        parrafos: [
+          "Activa a las enzimas que regeneran el folato activo y participan en la formación de ADN, glóbulos rojos y mielina, la capa que recubre muchas neuronas.",
+          "Solo la producen ciertos microorganismos, por lo que se obtiene principalmente de alimentos de origen animal o de alimentos suplementados.",
+        ],
+      },
+      {
+        key: "c", sigla: "C", titulo: "Vitamina C (Ácido ascórbico)", color: "#6fb84c",
+        foto: "/img/nutri/nutrientes/vitaminas/c.png",
+        parrafos: [
+          "Actúa como antioxidante, dona electrones a enzimas que fabrican colágeno, permitiendo estabilizar sus fibras. Mejora la absorción del hierro de origen vegetal, manteniéndolo en una forma más fácil de absorber.",
+          "Contribuye al funcionamiento normal del sistema inmunitario, es decir ayuda a estimular la producción y función de las células inmunes, además de actuar como antioxidante que protege a estas células de daños.",
+        ],
+      },
+      {
+        key: "d", sigla: "D", titulo: "Vitamina D (Calciferol)", color: "#4a90d9",
+        foto: "/img/nutri/nutrientes/vitaminas/d.png",
+        parrafos: [
+          "Facilita la absorción del calcio y del fósforo, ayudando a mantener huesos y dientes fuertes.",
+          "Además, participa en el funcionamiento del sistema inmunitario y de los músculos. Nuestro cuerpo puede fabricarla gracias a la luz solar, pero es muy complicada de fabricar por lo que se recomienda tomarla como suplemento.",
+        ],
+      },
+      {
+        key: "e", sigla: "E", titulo: "Vitamina E (Tocoferol)", color: "#9b6fc7",
+        foto: "/img/nutri/nutrientes/vitaminas/e.png",
+        parrafos: [
+          "Es uno de los principales antioxidantes del organismo.",
+          "Protege las membranas celulares porque se incorpora a ellas y dona electrones para calmar a los radicales libres antes de que puedan dañar los lípidos que forman la membrana.",
+        ],
+      },
+      {
+        key: "k", sigla: "K", titulo: "Vitamina K (Filoquinona y Menaquinonas)", color: "#d9534f",
+        foto: "/img/nutri/nutrientes/vitaminas/k.png",
+        parrafos: [
+          "Es imprescindible para que la sangre coagule correctamente cuando sufrimos una herida. También participa en el mantenimiento de los huesos regulando el uso del calcio.",
+          "Parte de la vitamina K también puede ser producida por algunas bacterias de nuestra microbiota intestinal.",
+        ],
+      },
+    ],
   },
   {
     key: "minerales",
     label: "Minerales",
-    emoji: "🧂",
     color: "#6f93b8",
     img: "/img/nutri/nutrientes/minerales.png",
     resumen: "Estructura, transporte y equilibrio.",
@@ -111,11 +321,71 @@ export const NUTRIENTES: Nutriente[] = [
       "Permiten el impulso nervioso, la contracción muscular y el equilibrio de líquidos.",
     ],
     donde: ["Lácteos", "Verduras de hoja", "Legumbres", "Marisco y pescado", "Frutos secos"],
+    tarjetas: [
+      {
+        key: "sodio",
+        titulo: "Sodio (Na⁺)",
+        foto: "/img/nutri/nutrientes/minerales/sodio.png",
+        parrafos: [
+          "Es el principal electrolito fuera de las células.",
+          "Regula la cantidad de agua del organismo y permite que los nervios transmitan impulsos eléctricos.",
+          "El sodio sube la presión arterial porque retiene agua y por eso, aumenta el volumen de la sangre.",
+          "Profundiza: La bomba sodio-potasio (Na⁺/K⁺-ATPasa) utiliza ATP para expulsar sodio de la célula e introducir potasio, creando lo necesario para la transmisión de impulsos nerviosos, la contracción muscular y el transporte de muchas moléculas, como la glucosa o algunos aminoácidos.",
+        ],
+      },
+      {
+        key: "potasio",
+        titulo: "Potasio (K⁺)",
+        foto: "/img/nutri/nutrientes/minerales/potasio.png",
+        parrafos: [
+          "Es el principal electrolito dentro de las células.",
+          "Gracias a la diferencia generada por la bomba sodio-potasio, el potasio puede salir temporalmente de la célula durante un impulso nervioso y volver después a su estado inicial.",
+          "Este movimiento permite que neuronas, músculos y corazón transmitan señales eléctricas de forma coordinada.",
+        ],
+      },
+      {
+        key: "calcio",
+        titulo: "Calcio (Ca²⁺)",
+        foto: "/img/nutri/nutrientes/minerales/calcio.png",
+        parrafos: [
+          "Además de formar parte de los huesos y dientes, el calcio actúa como una señal química dentro de las células.",
+          "Permite que los músculos se contraigan, que las neuronas liberen neurotransmisores y que la sangre pueda coagular correctamente.",
+        ],
+      },
+      {
+        key: "magnesio",
+        titulo: "Magnesio (Mg²⁺)",
+        foto: "/img/nutri/nutrientes/minerales/magnesio.png",
+        parrafos: [
+          "El ATP casi nunca existe libre dentro de las células. Normalmente está unido a un ion de magnesio formando Mg-ATP, la forma que necesitan la mayoría de las enzimas.",
+          "Sin magnesio, muchas de ellas no podrían utilizar la energía almacenada en el ATP, por lo que la célula sería mucho menos eficiente.",
+          "Además, se necesita para activar cientos de enzimas implicadas en la síntesis de ADN, ARN y proteínas, así como en la respiración celular y la producción de energía.",
+        ],
+      },
+      {
+        key: "cloruro",
+        titulo: "Cloruro (Cl⁻)",
+        foto: "/img/nutri/nutrientes/minerales/cloruro.png",
+        parrafos: [
+          "Presente en gran parte del líquido que rodea a las células y acompaña al sodio para mantener el equilibrio eléctrico y el movimiento del agua entre los distintos tejidos.",
+          "También desempeña una función esencial en el estómago: las células de la mucosa gástrica combinan cloruro con protones (H⁺) para formar ácido clorhídrico (HCl), imprescindible para desnaturalizar las proteínas de los alimentos, activar la enzima pepsina y destruir muchos microorganismos que ingerimos.",
+        ],
+      },
+      {
+        key: "fosfato",
+        titulo: "Fosfato (PO₄³⁻)",
+        foto: "/img/nutri/nutrientes/minerales/fosfato.png",
+        parrafos: [
+          "El fosfato es uno de los componentes más importantes de la vida.",
+          "Forma parte del ATP, donde almacena la energía química; del ADN y el ARN, donde une los nucleótidos formando su estructura; y de los fosfolípidos, que construyen las membranas celulares.",
+          "Además, muchas enzimas regulan la actividad de otras proteínas añadiéndoles o retirándoles un grupo fosfato, un proceso llamado fosforilación, que actúa como un auténtico interruptor molecular.",
+        ],
+      },
+    ],
   },
   {
     key: "fibra",
     label: "Fibra",
-    emoji: "🥬",
     color: "#6fa86b",
     img: "/img/nutri/nutrientes/fibra.png",
     resumen: "No se absorbe, pero lo ordena todo.",
@@ -129,5 +399,225 @@ export const NUTRIENTES: Nutriente[] = [
       "Es el alimento de las bacterias buenas de tu intestino.",
     ],
     donde: ["Verduras", "Fruta con piel", "Legumbres", "Avena", "Cereales integrales"],
+    tarjetas: [
+      {
+        key: "soluble",
+        titulo: "Fibra soluble",
+        foto: "/img/nutri/nutrientes/fibra/soluble.png",
+        parrafos: [
+          "Se disuelve en agua y forma un gel dentro del intestino. Ese gel ralentiza la digestión, hace que la glucosa llegue más lentamente a la sangre y ayuda a reducir los niveles de colesterol.",
+          "Se encuentra en alimentos como la avena, las legumbres, las manzanas o las semillas de chía.",
+        ],
+      },
+      {
+        key: "insoluble",
+        titulo: "Fibra insoluble",
+        foto: "/img/nutri/nutrientes/fibra/insoluble.png",
+        parrafos: [
+          "No se disuelve en agua y apenas cambia durante la digestión. Aumenta el volumen del contenido intestinal y facilita su paso, ayudando a mantener un tránsito intestinal saludable.",
+          "Se encuentra sobre todo en cereales integrales, verduras, frutos secos y la piel de muchas frutas.",
+        ],
+      },
+      {
+        key: "fermentable",
+        titulo: "Fibra fermentable",
+        foto: "/img/nutri/nutrientes/fibra/fermentable.png",
+        parrafos: [
+          "Algunas fibras pueden ser fermentadas por las bacterias del intestino grueso. Al hacerlo producen ácidos grasos de cadena corta, como el butirato, el propionato y el acetato, que ayudan a mantener sana la pared intestinal y participan en la regulación del metabolismo y del sistema inmunitario.",
+        ],
+      },
+    ],
+  },
+  {
+    key: "colesterol",
+    label: "Colesterol",
+    color: "#e6c34d",
+    img: "/img/nutri/nutrientes/colesterol.png",
+    resumen: "Ni bueno ni malo: materia prima esencial.",
+    tipos: [
+      { nombre: "HDL", desc: "El que retira el colesterol sobrante y lo lleva al hígado. El «que limpia»." },
+      { nombre: "LDL", desc: "El que reparte colesterol a las células. En exceso se acumula en las arterias." },
+    ],
+    queHacen: [
+      "Forma parte de la membrana de todas tus células y les da firmeza.",
+      "Es la base con la que se fabrican hormonas, vitamina D y sales biliares.",
+      "El cuerpo fabrica la mayor parte en el hígado; solo una parte viene de la dieta.",
+    ],
+    donde: ["Huevo", "Vísceras", "Marisco", "Lácteos enteros", "Carnes grasas"],
+  },
+  {
+    key: "etanol",
+    label: "Etanol",
+    color: "#b56576",
+    img: "/img/nutri/nutrientes/etanol.png",
+    resumen: "Alcohol: energía vacía que el cuerpo prioriza.",
+    tipos: [
+      { nombre: "Etanol", desc: "El único alcohol que bebemos. Se forma al fermentar azúcares." },
+      { nombre: "Metanol y otros", desc: "Tóxicos: no son aptos para el consumo." },
+    ],
+    queHacen: [
+      "Aporta 7 kcal por gramo, pero sin vitaminas ni minerales: «calorías vacías».",
+      "El cuerpo lo trata como un tóxico y lo procesa en el hígado antes que nada.",
+      "Mientras lo elimina, frena la quema de grasa y sobrecarga el hígado.",
+    ],
+    donde: ["Vino", "Cerveza", "Licores y destilados", "Fermentados alcohólicos"],
+    tarjetas: [
+      {
+        key: "etanol",
+        titulo: "Etanol (CH₃CH₂OH)",
+        foto: "/img/nutri/nutrientes/etanol/etanol.png",
+        parrafos: [
+          "Es la molécula presente en las bebidas alcohólicas.",
+          "Aporta energía (7 kcal por gramo, casi las mismas que la grasa, es decir el alcohol es muy calórico), pero no es un nutriente esencial ni participa en la construcción de tejidos.",
+          "Cuando llega al hígado, el organismo prioriza eliminarlo porque puede resultar tóxico para las células. Es más, aunque lo elimine rápidamente, siempre causa algún daño secundario. Nuestras acciones no son gratis.",
+        ],
+      },
+      {
+        key: "acetaldehido",
+        titulo: "Acetaldehído (CH₃CHO)",
+        foto: "/img/nutri/nutrientes/etanol/acetaldehido.png",
+        parrafos: [
+          "Es la primera molécula que se forma cuando el hígado metaboliza el etanol.",
+          "Es mucho más reactiva y tóxica que el propio alcohol, pudiendo dañar proteínas, membranas y ADN si permanece demasiado tiempo en las células. Por eso el organismo intenta transformarla rápidamente.",
+        ],
+      },
+      {
+        key: "acetato",
+        titulo: "Acetato (CH₃COO⁻)",
+        foto: "/img/nutri/nutrientes/etanol/acetato.png",
+        parrafos: [
+          "Es el producto final del metabolismo del alcohol. Es una molécula mucho menos tóxica que puede utilizarse para producir energía o eliminarse.",
+          "Transformar el acetaldehído en acetato es uno de los principales objetivos del hígado tras consumir alcohol.",
+        ],
+      },
+    ],
+  },
+  {
+    key: "agua",
+    label: "Agua",
+    color: "#4aa3c7",
+    img: "/img/nutri/nutrientes/agua.png",
+    resumen: "El medio donde ocurre toda la vida.",
+    tipos: [
+      { nombre: "Agua intracelular", desc: "La que está dentro de las células: unos dos tercios del total." },
+      { nombre: "Agua extracelular", desc: "La que rodea las células y forma el plasma de la sangre." },
+    ],
+    queHacen: [
+      "Es el medio donde ocurren todas las reacciones químicas del cuerpo.",
+      "Transporta oxígeno, nutrientes y hormonas, y elimina los desechos.",
+      "Regula la temperatura y lubrica articulaciones, ojos y cerebro.",
+    ],
+    donde: ["Agua", "Frutas y verduras", "Caldos y sopas", "Infusiones", "Lácteos"],
+  },
+  {
+    key: "fitoquimicos",
+    label: "Fitoquímicos",
+    color: "#8e5aa8",
+    img: "/img/nutri/nutrientes/fitoquimicos.png",
+    resumen: "La defensa de las plantas, a tu favor.",
+    tipos: [
+      { nombre: "Flavonoides", desc: "Pigmentos antioxidantes de frutas, verduras y té." },
+      { nombre: "Carotenoides", desc: "Los pigmentos naranjas y rojos (zanahoria, tomate)." },
+      { nombre: "Glucosinolatos", desc: "De las crucíferas (brócoli): activan enzimas protectoras." },
+    ],
+    queHacen: [
+      "Muchos actúan como antioxidantes y neutralizan radicales libres.",
+      "Otros activan genes que hacen fabricar enzimas protectoras propias.",
+      "Cada color esconde una familia distinta con funciones distintas.",
+    ],
+    donde: ["Frutas de colores", "Verduras", "Legumbres", "Frutos secos", "Especias (cúrcuma)"],
+    tarjetas: [
+      {
+        key: "antocianinas",
+        titulo: "Antocianinas",
+        foto: "/img/nutri/nutrientes/fitoquimicos/antocianinas.png",
+        parrafos: [
+          "Son los pigmentos que dan el color morado, azul y rojo intenso a alimentos como los arándanos, las moras, las cerezas o la col lombarda.",
+          "En las plantas ayudan a proteger frente a la radiación ultravioleta y al estrés ambiental.",
+          "En nuestro organismo actúan como antioxidantes, es decir, donan electrones a radicales libres (moléculas que buscan electrones) antes de que dañen proteínas, grasas o ADN.",
+          "Además, pueden mejorar la función del endotelio, la capa que recubre el interior de los vasos sanguíneos, favoreciendo una buena salud cardiovascular.",
+        ],
+      },
+      {
+        key: "carotenoides",
+        titulo: "Carotenoides",
+        foto: "/img/nutri/nutrientes/fitoquimicos/carotenoides.png",
+        parrafos: [
+          "Son pigmentos amarillos, naranjas y rojos presentes en zanahorias, calabazas, tomates, pimientos y muchas frutas.",
+          "En las plantas capturan parte de la energía de la luz y las protegen del exceso de radiación solar.",
+          "Algunos, como el betacaroteno, pueden transformarse en vitamina A. Otros, como la luteína y la zeaxantina, se acumulan en la retina, donde ayudan a filtrar la luz azul y protegen las células fotorreceptoras frente al daño oxidativo.",
+        ],
+      },
+      {
+        key: "flavonoides",
+        titulo: "Flavonoides",
+        foto: "/img/nutri/nutrientes/fitoquimicos/flavonoides.png",
+        parrafos: [
+          "Constituyen una de las familias más abundantes de fitoquímicos y se encuentran en frutas, verduras, cebolla, cacao, té y cítricos.",
+          "Muchas de estas moléculas actúan como antioxidantes, pero también regulan la actividad de enzimas y proteínas implicadas en la inflamación, la coagulación y la función de los vasos sanguíneos.",
+          "Algunos incluso favorecen la producción de óxido nítrico, ayudando a que las arterias se relajen.",
+        ],
+      },
+      {
+        key: "glucosinolatos",
+        titulo: "Glucosinolatos",
+        foto: "/img/nutri/nutrientes/fitoquimicos/glucosinolatos.png",
+        parrafos: [
+          "Son compuestos característicos del brócoli, la col, la coliflor o las coles de Bruselas.",
+          "Mientras la planta permanece intacta apenas reaccionan, pero al cortarla o masticarla entran en contacto con una enzima, que los transforma en moléculas como el sulforafano.",
+          "Estas aumentan la producción de enzimas antioxidantes y de desintoxicación propias de nuestras células.",
+        ],
+      },
+      {
+        key: "polifenoles",
+        titulo: "Polifenoles",
+        foto: "/img/nutri/nutrientes/fitoquimicos/polifenoles.png",
+        parrafos: [
+          "Los polifenoles son una gran familia que engloba miles de fitoquímicos, incluidos muchos flavonoides.",
+          "Se encuentran en el aceite de oliva virgen extra, el cacao, el café, las uvas, el té y numerosos frutos.",
+          "Más que actuar directamente como antioxidantes, muchos funcionan como moléculas señalizadoras que modifican la expresión de genes relacionados con la inflamación, el metabolismo y la protección frente al estrés oxidativo.",
+        ],
+      },
+      {
+        key: "fitoesteroles",
+        titulo: "Fitoesteroles",
+        foto: "/img/nutri/nutrientes/fitoquimicos/fitoesteroles.png",
+        parrafos: [
+          "Son moléculas vegetales con una estructura muy parecida al colesterol.",
+          "Durante la digestión compiten con él por los mismos transportadores del intestino, reduciendo así la cantidad de colesterol que conseguimos absorber.",
+          "Como consecuencia, el hígado capta más colesterol de la sangre para compensar esa pérdida, contribuyendo a disminuir los niveles de colesterol LDL.",
+        ],
+      },
+      {
+        key: "terpenos",
+        titulo: "Terpenos",
+        foto: "/img/nutri/nutrientes/fitoquimicos/terpenos.png",
+        parrafos: [
+          "Son una enorme familia de moléculas aromáticas presentes en hierbas, especias, cítricos y muchas plantas medicinales.",
+          "En la naturaleza sirven para atraer polinizadores, repeler insectos o defenderse de microorganismos.",
+          "Algunos, como el limoneno, el mentol o el pineno, también muestran propiedades antioxidantes, antiinflamatorias y antimicrobianas para nosotros.",
+        ],
+      },
+      {
+        key: "licopeno",
+        titulo: "Licopeno",
+        foto: "/img/nutri/nutrientes/fitoquimicos/licopeno.png",
+        parrafos: [
+          "El licopeno es un carotenoide responsable del intenso color rojo del tomate, la sandía y el pomelo rosa.",
+          "Destaca por su capacidad para neutralizar el oxígeno singlete, una forma muy reactiva del oxígeno que puede dañar las membranas celulares y el ADN.",
+          "Diversos estudios lo relacionan con una mejor salud cardiovascular y con la protección de algunos tejidos, como la próstata, aunque todavía se sigue investigando su papel exacto.",
+        ],
+      },
+      {
+        key: "isoflavonas",
+        titulo: "Isoflavonas",
+        foto: "/img/nutri/nutrientes/fitoquimicos/isoflavonas.png",
+        parrafos: [
+          "Son flavonoides presentes principalmente en la soja, el tofu, el tempeh y otros derivados.",
+          "Su estructura se parece a la de los estrógenos humanos, por lo que pueden unirse a algunos de sus receptores, aunque con una intensidad mucho menor.",
+          "Dependiendo del tejido, pueden activar o bloquear parcialmente esos receptores, motivo por el que se estudian por su posible papel en la salud ósea, cardiovascular y en el alivio de algunos síntomas de la menopausia.",
+        ],
+      },
+    ],
   },
 ];

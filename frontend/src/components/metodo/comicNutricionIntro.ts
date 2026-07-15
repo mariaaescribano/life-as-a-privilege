@@ -11,6 +11,7 @@ export const NUTRICION_INTRO: Vineta[] = [
     src: "/viñetas/nutricion/intro/nutricomic1.png",
     paragraphs: [
       "Todo lo que está vivo está formado por átomos, moléculas y células.",
+      "El universo invierte cierta cantidad de partículas para experimentarse de forma supuestamente individual. Pero cuando esa forma se descompone, las partículas se reutilizan para seguir creando Vida."
     ],
   },
   {
@@ -23,7 +24,8 @@ export const NUTRICION_INTRO: Vineta[] = [
   {
     src: "/viñetas/nutricion/intro/nutricomic3.png",
     paragraphs: [
-      "Cuando comemos, miles de enzimas trabajan a nuestro servicio para descomponer los alimentos en moléculas cada vez más pequeñas. Después, nuestro cuerpo las absorbe, las transporta y las utiliza para fabricar nuevas células, reparar tejidos y seguir funcionando.",
+      "Cuando comemos, miles de enzimas trabajan a nuestro servicio para descomponer los alimentos en moléculas cada vez más pequeñas.",
+      "Después, nuestro cuerpo las absorbe, las transporta y las utiliza para fabricar nuevas células, reparar tejidos y seguir funcionando."
     ],
   },
   {
@@ -37,8 +39,8 @@ export const NUTRICION_INTRO: Vineta[] = [
     src: "/viñetas/nutricion/intro/nutricomic5.png",
     paragraphs: [
       "Pero no todos los alimentos aportan las mismas moléculas.",
-      "Durante millones de años, la naturaleza fue nuestra única fuente de alimento. Sin embargo, hoy podemos consumir productos diseñados por la industria cuya composición es muy diferente de aquella para la que evolucionó nuestro organismo.",
-      "Ahora existe una paradoja: puedes deteriorarte con aquello que, en teoría, debería ayudarte a reconstruirte.",
+      "Durante millones de años, la naturaleza fue nuestra única fuente de alimento. Sin embargo, hoy podemos consumir productos cuya composición molecular es ajena a nuestro organismo.",
+      "Ahora hay que tener cuidado, pues lo que debería de reconstruirte puede destruirte.",
     ],
   },
   {

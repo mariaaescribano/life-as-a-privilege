@@ -629,15 +629,11 @@ export function ComicViewer({
                 </Text>
               )}
               {current.titulo && (
-                <>
-                  <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
-                        textAlign={{ base: "center", md: "left" }}
-                        style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
-                    {current.titulo}
-                  </Text>
-                  <Box h="1px" w="100%" my={4}
-                       bgGradient="linear(to-r, #ffffffe6, transparent)" />
-                </>
+                <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
+                      mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}
+                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+                  {current.titulo}
+                </Text>
               )}
 
               {/* Cada bloque se pinta con separación (línea en blanco) respecto

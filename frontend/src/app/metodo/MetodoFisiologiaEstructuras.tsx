@@ -14,14 +14,14 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
 import { ComicCelulaModal } from "../../components/metodo/ComicCelulaModal";
 import {
   API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
-  FisiologiaIcon,
-} from "../../GlobalVariables";
+  FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
 const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
@@ -31,7 +31,7 @@ const PRE = "/recorrido/fisiologia/pre";
 type Macro = "proteina" | "adn" | "lipido";
 const MACRO: Record<Macro, { color: string; glyph: string; img: string }> = {
   proteina: { color: "#7fd6c2", glyph: "P", img: `${PRE}/proteina.png` },
-  adn:      { color: "#9ab6f0", glyph: "N", img: `${PRE}/adn.png` },
+  adn:      { color: "#9ab6f0", glyph: "N", img: `${PRE}/ADN.png` },
   lipido:   { color: "#f2c86b", glyph: "L", img: `${PRE}/fosfolipido.png` },
 };
 
@@ -59,12 +59,12 @@ const ESTRUCTURAS: EstDef[] = [
   {
     id: "nucleo", nombre: "Núcleo", glow: "#9ab6f0", forma: "cluster",
     desc: "Guarda y protege tu información genética.",
-    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Membrana de núcleo" }],
+    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Membrana de núcleo", img: `${PRE}/membrana.png` }],
     resultado: [
       "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
       "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la vida.",
     ],
-    resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/nucleo.png`,
+    resultadoImg: `${PRE}/nucleo.png`, cuadradoImg: `${PRE}/nucleo.png`,
   },
   {
     id: "membrana", nombre: "Membrana celular", glow: "#f2c86b", forma: "membrana",
@@ -91,8 +91,8 @@ const ESTRUCTURAS: EstDef[] = [
     desc: "La fábrica de enzimas.",
     ingredientes: [{ macro: "proteina", n: 3, label: "Enzimas", img: `${PRE}/enzimasribosoma.png` }, { macro: "adn", n: 1, label: "ARN", img: `${PRE}/ARN.png` }],
     resultado: [
-      "Hecho de ARN y de proteínas, el ribosoma lee las instrucciones que vienen del ADN.",
-      "Con ellas ensambla aminoácidos uno tras otro y fabrica nuevas proteínas: convierte la información genética en materia viva.",
+      "Hecho de proteínas y de ARN(r), el ribosoma lee las instrucciones ARN(m), que vienen del ADN.",
+      "Con ellas ensambla aminoácidos uno tras otro y fabrica nuevas enzimas: convierte la información genética en materia viva.",
     ],
     resultadoImg: `${PRE}/circularribosoma.png`, cuadradoImg: `${PRE}/ribosoma.png`,
   },
@@ -220,14 +220,18 @@ function PanelBox({ children, minH, px, py, ...rest }: any) {
 // ═════════════════════════════════════════════════════════════════════════
 // Estación de una estructura celular
 // ═════════════════════════════════════════════════════════════════════════
-function Estacion({ def, yaFormada, onFormar, onVolver }: {
+function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
   def: EstDef; yaFormada: boolean; onFormar: () => void; onVolver: () => void;
+  /** Avanza a la siguiente estructura sin construir; en la última vuelve al menú. */
+  onSiguiente: () => void;
 }) {
   const [pendientes, setPendientes] = useState<Pieza[]>(() => piezasDe(def));
   const [puestas, setPuestas] = useState<Pieza[]>(() => (yaFormada ? piezasDe(def) : []));
   const [completo, setCompleto] = useState(yaFormada);
   const bandejaRef = useRef<HTMLDivElement>(null);
   const totalN = piezasDe(def).length;
+  // Reserva la altura de la zona de piezas para que no encoja al arrastrarlas fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
 
   // Rehacer el ensamblaje de esta estructura (vuelve a la Fase A).
   const reiniciar = () => { setPendientes(piezasDe(def)); setPuestas([]); setCompleto(false); };
@@ -263,15 +267,16 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
       <AnimatePresence mode="wait">
         {!completo ? (
           <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <PanelBox minH={{ md: "360px" }}>
+            {/* Título y frase FUERA del box, arriba (no dentro del panel) */}
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK }}>
               {def.nombre}
             </Text>
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" mt={1} mb={6} style={{ textShadow: INK }}>
+                  textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
               Arrastra las macromoléculas a la zona para ensamblarla.
             </Text>
 
+            <PanelBox minH={{ md: "360px" }}>
             {/* Bandeja */}
             <Box ref={bandejaRef} position="relative" w="100%" h={{ base: "150px", md: "170px" }}
                  borderRadius="2xl" overflow="hidden" mb={6}
@@ -298,7 +303,8 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
             </Box>
 
             {/* Piezas a arrastrar */}
-            <Flex wrap="wrap" justify="center" align="flex-start" gap={{ base: 3, md: 4 }} minH="70px">
+            <Flex ref={piezasRef} wrap="wrap" justify="center" align="center" alignContent="center"
+                  gap={{ base: 3, md: 4 }} minH={piezasMinH ? `${piezasMinH}px` : "70px"}>
               <AnimatePresence>
                 {pendientes.map((p) => (
                   <LadrilloFicha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />
@@ -355,8 +361,10 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
               </PanelBox>
             </Flex>
 
-            {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
-            <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
+            {/* Acciones — fuera del box, abajo a la derecha del todo.
+                «Siguiente →» lleva a la próxima estructura sin construir (y en la
+                última, de vuelta al menú de las 4), sin tener que volver a mano. */}
+            <Flex justify="flex-end" align="center" gap={3} w="100%" mt={{ base: 5, md: 6 }} wrap="wrap">
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
@@ -364,6 +372,15 @@ function Estacion({ def, yaFormada, onFormar, onVolver }: {
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
                 ↺ Volver a hacer
+              </Box>
+              <Box as="button" onClick={onSiguiente}
+                   display="inline-flex" alignItems="center" gap={2} px={7} py={2} borderRadius="full"
+                   bg={fisiologiaTxt} color={fisiologiaBg}
+                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                   letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
+                   boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+                   _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
+                Siguiente →
               </Box>
             </Flex>
           </MBox>
@@ -524,6 +541,14 @@ export default function MetodoFisiologiaEstructuras() {
     });
   };
 
+  // «Siguiente →» desde el resultado: salta a la primera estructura que aún no
+  // esté construida; si están las 4, vuelve al menú de las 4 cajas. Como no hay
+  // orden fijo, «la última» es simplemente la que completa el conjunto.
+  const irSiguienteEstacion = () => {
+    const siguiente = ESTRUCTURAS.find((e) => !formadas.includes(e.id));
+    setActiva(siguiente ? siguiente.id : null);
+  };
+
   if (loading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
@@ -531,7 +556,7 @@ export default function MetodoFisiologiaEstructuras() {
   const defActiva = ESTRUCTURAS.find((e) => e.id === activa) || null;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -570,6 +595,7 @@ export default function MetodoFisiologiaEstructuras() {
               yaFormada={formadas.includes(defActiva.id)}
               onFormar={() => formar(defActiva.id)}
               onVolver={() => setActiva(null)}
+              onSiguiente={irSiguienteEstacion}
             />
           ) : (
             /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro ── */

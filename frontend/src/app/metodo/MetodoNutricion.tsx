@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { ComicCaloriasModal } from "../../components/metodo/ComicCaloriasModal";
 import { NUTRICION_INTRO } from "../../components/metodo/comicNutricionIntro";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -35,6 +36,7 @@ export default function MetodoNutricion() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  const [caloriasOpen, setCaloriasOpen] = useState(false); // cómic de transición a nutrientes
   const intro = useIntroComic("metodo-nutricion"); // cómic de intro, 1ª vez
 
   useEffect(() => {
@@ -119,8 +121,9 @@ export default function MetodoNutricion() {
 
   const comenzar = () => {
     if (!suscrito && !testPagos) { setPagoOpen(true); return; }
-    navigate("/metodo/nutricion/nutrientes");
+    setCaloriasOpen(true); // cómic de transición «Las calorías no existen»
   };
+  const caloriasContinuar = () => { setCaloriasOpen(false); navigate("/metodo/nutricion/nutrientes"); };
 
   if (loading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -142,7 +145,8 @@ export default function MetodoNutricion() {
             color={nutricionTxt}
             nom={nutricionNom}
             mb={0}
-            prev={{ label: "← Fisiología", onClick: () => navigate("/metodo/fisiologia/profundiza") }}
+            prev={{ label: "← Fisiología", onClick: () => navigate("/metodo/fisiologia/cursos") }}
+            extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
             next={{ label: "Comenzar →", onClick: comenzar }}
           />
           </Reveal>
@@ -184,11 +188,20 @@ export default function MetodoNutricion() {
       <IntroComicModal
         isOpen={intro.open}
         vinetas={NUTRICION_INTRO}
-        themeColor={nutricionTxt}
+        themeColor={nutricionBg}
+        textColor={nutricionTxt}
         disciplinaBgImage="/img/fondos/nutri.png"
         disciplinaBgColor={nutricionBg}
+        textShadow="none"
         onFinish={intro.finish}
         onClose={intro.close}
+      />
+
+      {/* Transición a Los nutrientes: cómic «Las calorías no existen». */}
+      <ComicCaloriasModal
+        isOpen={caloriasOpen}
+        onContinue={caloriasContinuar}
+        onClose={() => setCaloriasOpen(false)}
       />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />

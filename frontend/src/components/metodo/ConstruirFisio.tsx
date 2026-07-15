@@ -13,7 +13,8 @@ import { useTusCelulas } from "./TusCelulasModal";
 import { IndiceFisiologia } from "./IndiceFisiologia";
 import { BotonCompania } from "../global/BotonCompania";
 import { Reveal } from "../global/Reveal";
-import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon } from "../../GlobalVariables";
+import { useReservarAltura } from "../../hooks/useReservarAltura";
+import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Componente reutilizable de "ensamblar el siguiente nivel": arrastras unas
@@ -55,6 +56,13 @@ export interface ConstruirFisioProps {
   /** Botón derecho del header (opcional). Independiente del «Continuar» del box
    *  de resultado. P.ej. Célula → «Todas tus células →». */
   headerNext?: { label: string; ruta: string };
+  /** Si true, el botón «next» del header queda BLOQUEADO hasta completar el
+   *  ensamblaje (p.ej. Célula: no se avanza sin haber creado la célula). */
+  lockNextUntilComplete?: boolean;
+  /** Tooltip del botón bloqueado (cuando lockNextUntilComplete y aún no está hecho). */
+  lockNextTooltip?: string;
+  /** Nota discreta al pie de la página (blanco, cursiva, pequeña). */
+  notaPie?: React.ReactNode;
 }
 
 interface Pieza { id: string; def: PiezaDef; }
@@ -148,6 +156,8 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
   const [completo, setCompleto] = useState(false);
   const [imgOk, setImgOk] = useState(false); // foto del resultado ya cargada
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Reserva la altura del box de piezas para que no encoja al arrastrarlas fuera.
+  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
   const zonaRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
   const total = props.piezas.reduce((s, d) => s + d.n, 0);
@@ -204,7 +214,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -222,7 +232,12 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             mb={0}
             prev={{ label: props.prev.label, onClick: () => navigate(props.prev.ruta) }}
             extra={celulasBtn}
-            next={props.headerNext ? { label: props.headerNext.label, onClick: () => navigate(props.headerNext!.ruta) } : undefined}
+            next={props.headerNext ? {
+              label: props.headerNext.label,
+              onClick: () => navigate(props.headerNext!.ruta),
+              disabled: props.lockNextUntilComplete ? !completo : false,
+              disabledTooltip: props.lockNextTooltip ?? "Termina de construirlo primero",
+            } : undefined}
           />
           </Reveal>
 
@@ -283,9 +298,10 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" align="center" justify="center" gap={5}
                           px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "auto", md: "340px" }}>
-                      <Box display="grid" gridTemplateColumns="repeat(2, auto)"
-                           justifyContent="center" justifyItems="center"
-                           columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }} minH="70px">
+                      <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
+                           justifyContent="center" justifyItems="center" alignContent="center"
+                           columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }}
+                           minH={piezasMinH ? `${piezasMinH}px` : "70px"}>
                         <AnimatePresence>
                           {pendientes.map((p) => (<Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />))}
                         </AnimatePresence>
@@ -380,6 +396,15 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                 ↺ Volver a hacer
               </Box>
             </Flex>
+          )}
+
+          {/* Nota discreta al pie (aclaración didáctica) */}
+          {props.notaPie && (
+            <Text color="white" fontStyle="italic" textAlign="center" opacity={0.72}
+                  fontSize={{ base: "2xs", md: "xs" }} maxW="600px" lineHeight="1.6" mt={2}
+                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.45)" }}>
+              {props.notaPie}
+            </Text>
           )}
         </Flex>
       </Flex>

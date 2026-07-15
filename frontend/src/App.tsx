@@ -92,6 +92,7 @@ import MetodoTcmLenguaLeer from "./app/metodo/MetodoTcmLenguaLeer";
 import MetodoTcmCursos from "./app/metodo/MetodoTcmCursos";
 import MetodoFisiologia from "./app/metodo/MetodoFisiologia";
 import MetodoFisiologiaNiveles from "./app/metodo/MetodoFisiologiaNiveles";
+import MetodoFisiologiaCursos from "./app/metodo/MetodoFisiologiaCursos";
 import MetodoFisiologiaParticulas from "./app/metodo/MetodoFisiologiaParticulas";
 import MetodoFisiologiaAtomos from "./app/metodo/MetodoFisiologiaAtomos";
 import MetodoFisiologiaMoleculas from "./app/metodo/MetodoFisiologiaMoleculas";
@@ -108,6 +109,10 @@ import MetodoFisiologiaProfundiza from "./app/metodo/MetodoFisiologiaProfundiza"
 import MetodoFisiologiaTema from "./app/metodo/MetodoFisiologiaTema";
 import MetodoNutricion from "./app/metodo/MetodoNutricion";
 import MetodoNutricionNutrientes from "./app/metodo/MetodoNutricionNutrientes";
+import MetodoNutricionNutriente from "./app/metodo/MetodoNutricionNutriente";
+import MetodoNutricionMicrobiota from "./app/metodo/MetodoNutricionMicrobiota";
+import MetodoNutricionAlimentos from "./app/metodo/MetodoNutricionAlimentos";
+import MetodoNutricionAlimento from "./app/metodo/MetodoNutricionAlimento";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -228,6 +233,7 @@ export default function App()
       <Route path="/metodo/tcm/cursos" element={<PrivateRoute><MetodoTcmCursos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia" element={<PrivateRoute><MetodoFisiologia /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/niveles" element={<PrivateRoute><MetodoFisiologiaNiveles /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/cursos" element={<PrivateRoute><MetodoFisiologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/particulas" element={<PrivateRoute><MetodoFisiologiaParticulas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/atomos" element={<PrivateRoute><MetodoFisiologiaAtomos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/moleculas" element={<PrivateRoute><MetodoFisiologiaMoleculas /></PrivateRoute>} />
@@ -246,6 +252,10 @@ export default function App()
       {/* El Recorrido · Nutrición (6ª disciplina) */}
       <Route path="/metodo/nutricion" element={<PrivateRoute><MetodoNutricion /></PrivateRoute>} />
       <Route path="/metodo/nutricion/nutrientes" element={<PrivateRoute><MetodoNutricionNutrientes /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/nutrientes/:key" element={<PrivateRoute><MetodoNutricionNutriente /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/microbiota" element={<PrivateRoute><MetodoNutricionMicrobiota /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
