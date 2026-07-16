@@ -123,9 +123,13 @@ function SistemaFicha({ sistema, onSoltar }: {
 }
 
 // ── Posición (en %) de un sistema en el anillo del círculo ───────────────────
-function posEnAnillo(i: number, total: number): { x: number; y: number } {
+// `radio` es el radio del anillo en % del contenedor. Debe ser menor que el
+// radio del disco negro (menos la mitad de la foto) para que las fotos queden
+// DENTRO del disco: en Fase A el disco está a `inset 12%` (radio 38%), así que
+// el anillo va a 26%; en el AnilloFinal el disco ocupa todo (radio 50%) y cabe a 37%.
+function posEnAnillo(i: number, total: number, radio = 37): { x: number; y: number } {
   const ang = (i / total) * Math.PI * 2 - Math.PI / 2; // empieza arriba
-  return { x: 50 + Math.cos(ang) * 37, y: 50 + Math.sin(ang) * 37 };
+  return { x: 50 + Math.cos(ang) * radio, y: 50 + Math.sin(ang) * radio };
 }
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -282,7 +286,7 @@ export default function MetodoFisiologiaOrganismo() {
                         {/* sistemas colocados, en anillo */}
                         {colocados.map((key, i) => {
                           const s = SISTEMAS.find((x) => x.key === key)!;
-                          const p = posEnAnillo(i, total);
+                          const p = posEnAnillo(i, total, 26); // dentro del disco negro (radio 38%)
                           return (
                             <MBox key={key} position="absolute" left={`${p.x}%`} top={`${p.y}%`}
                                   transform="translate(-50%,-50%)"
