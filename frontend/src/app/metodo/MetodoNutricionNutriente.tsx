@@ -9,14 +9,14 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
-import { NutrienteComic } from "../../components/metodo/NutrienteComic";
+import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { NUTRIENTES, type Nutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
+import { NUTRIENTES, rutaListaNutriente, type Nutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Página de detalle de UN grupo de nutrientes (Carbohidratos, Grasas…).
@@ -104,6 +104,7 @@ export default function MetodoNutricionNutriente() {
   const [loading, setLoading] = useState(true);
 
   const [fichaIdx, setFichaIdx] = useState<number | null>(null); // tarjeta abierta
+  const [comicOpen, setComicOpen] = useState(false); // ilustración (cómic) del grupo
 
   const n = nutrienteByKey(key || "");
 
@@ -138,6 +139,7 @@ export default function MetodoNutricionNutriente() {
   if (!n) return null;
 
   const comic = comicNutrienteByKey(n.key);
+  const esSecundario = rutaListaNutriente(n.key).endsWith("secundarios");
 
   // Subgrupos de tarjetas (p.ej. «⚡ Electrolitos» / «🧱 Minerales»): agrupamos
   // las tarjetas consecutivas por su `grupo` conservando el índice GLOBAL (el que
@@ -161,7 +163,7 @@ export default function MetodoNutricionNutriente() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Los nutrientes"
+              title={esSecundario ? "Nutrientes secundarios" : "Los nutrientes"}
               compact
               maxW="1000px"
               bgColor={`${nutricionBg}dd`}
@@ -174,41 +176,59 @@ export default function MetodoNutricionNutriente() {
 
           {/* Botón «← Volver» */}
           <Reveal direction="up" distance={12} delay={0.08} duration={0.5} w="100%" display="flex">
-            <VolverNutri onClick={() => navigate("/metodo/nutricion/nutrientes")} />
+            <VolverNutri onClick={() => navigate(rutaListaNutriente(n.key))} />
           </Reveal>
 
-          {/* 2 · Box grande: foto del grupo (izq) + título + descripción (der) */}
+          {/* 2 · Box grande: foto del grupo (izq) + título + descripción (der) +
+              botón «VER ILUSTRACIÓN» que abre el cómic del grupo (su introducción). */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
             <SeccionBox>
-              <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 5, md: 8 }}
-                    p={{ base: 5, md: 8 }}>
-                <Box w={{ base: "100%", md: "300px" }} flexShrink={0} aspectRatio={1}
-                     borderRadius="xl" overflow="hidden" bg={`${n.color}22`}
-                     boxShadow="0 4px 18px rgba(0,0,0,0.25)">
-                  <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="cover"
-                         fallback={<FotoPlaceholder label={n.label} color={n.color} />} />
-                </Box>
-                <Flex direction="column" gap={3} flex="1" textAlign={{ base: "center", md: "left" }}
-                      align={{ base: "center", md: "flex-start" }}>
-                  <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="800" lineHeight="1.1">
-                    {n.label}
-                  </Text>
-                  <Box h="2px" w="64px" bgGradient={`linear(to-r, ${n.color}, transparent)`} />
-                  <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                        fontWeight="600" lineHeight="1.6" maxW="440px">
-                    {n.resumen}
-                  </Text>
+              <Flex direction="column" gap={{ base: 5, md: 6 }} p={{ base: 5, md: 8 }}>
+                <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 5, md: 8 }}>
+                  <Box w={{ base: "100%", md: "300px" }} flexShrink={0} aspectRatio={1}
+                       borderRadius="xl" overflow="hidden" bg={`${n.color}22`}
+                       boxShadow="0 4px 18px rgba(0,0,0,0.25)">
+                    <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="cover"
+                           fallback={<FotoPlaceholder label={n.label} color={n.color} />} />
+                  </Box>
+                  <Flex direction="column" gap={3} flex="1" textAlign={{ base: "center", md: "left" }}
+                        align={{ base: "center", md: "flex-start" }}>
+                    <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="800" lineHeight="1.1">
+                      {n.label}
+                    </Text>
+                    <Box h="2px" w="64px" bgGradient={`linear(to-r, ${n.color}, transparent)`} />
+                    <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                          fontWeight="600" lineHeight="1.6" maxW="440px">
+                      {n.resumen}
+                    </Text>
+                  </Flex>
                 </Flex>
+
+                {/* Botón que abre la ilustración (intro del nutriente): abajo a la
+                    derecha en escritorio, centrado en móvil. Bien visible. */}
+                {comic && (
+                  <Flex justify={{ base: "center", md: "flex-end" }} w="100%">
+                    <Box as="button" onClick={() => setComicOpen(true)}
+                         display="inline-flex" alignItems="center" gap={2.5}
+                         px={{ base: 7, md: 9 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
+                         bg={nutricionTxt} color={nutricionBg}
+                         fontWeight="800" fontSize={{ base: "sm", md: "md" }}
+                         letterSpacing="0.08em" textTransform="uppercase" cursor="pointer"
+                         boxShadow={`0 0 18px ${nutricionTxt}55, 0 4px 16px rgba(0,0,0,0.25)`}
+                         transition="all 0.2s"
+                         _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 26px ${nutricionTxt}88, 0 6px 22px rgba(0,0,0,0.3)` }}
+                         _active={{ transform: "translateY(0)" }}>
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor">
+                        <path d="M320-200v-560l440 280-440 280Z" />
+                      </Box>
+                      Ver ilustración
+                    </Box>
+                  </Flex>
+                )}
               </Flex>
             </SeccionBox>
           </Reveal>
-
-          {/* 3 · Cómic del grupo: foto 1:1 (izq) + texto (der) con scroll. */}
-          {comic && (
-            <Reveal direction="up" distance={20} delay={0.18} duration={0.6} w="100%">
-              <NutrienteComic vinetas={comic} />
-            </Reveal>
-          )}
 
           {/* 4 · Tarjetas (moléculas/tipos). En círculo de colores (vitaminas) o
               en rejilla estilo «Todas tus células». Cada una abre su ficha cómic. */}
@@ -254,6 +274,12 @@ export default function MetodoNutricionNutriente() {
       {n.tarjetas && fichaIdx !== null && (
         <NutrienteFichaModal tarjetas={n.tarjetas} index={fichaIdx}
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
+      )}
+
+      {/* Ilustración (cómic) del grupo, a pantalla completa (misma estructura que
+          las ilustraciones de otras disciplinas). */}
+      {comic && (
+        <NutrienteIlustracionModal isOpen={comicOpen} vinetas={comic} onClose={() => setComicOpen(false)} />
       )}
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />

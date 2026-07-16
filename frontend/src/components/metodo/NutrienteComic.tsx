@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
 import SpinnerTurquesa from "../global/Spinner";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
+import { nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import type { Vineta } from "./ComicViewer";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -14,7 +14,6 @@ import type { Vineta } from "./ComicViewer";
 // ─────────────────────────────────────────────────────────────────────────
 
 const TINTA = nutricionTxt;
-const INK_SHADOW = `0 1px 3px ${nutricionBg}f5, 0 0 8px ${nutricionBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,222,170,0.12), 0 0 20px ${nutricionTxt}1a`;
 
 // Flecha lateral circular grande (estilo Ilustraciones), superpuesta al borde
@@ -148,9 +147,8 @@ export function NutrienteComic({ vinetas }: { vinetas: Vineta[] }) {
                 scrollbarColor: `${nutricionTxt}44 transparent`,
               }}>
           {v.paragraphs.map((p, k) => (
-            <Text key={`${idx}-${k}`} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.95"
-                  letterSpacing="0.02em" fontWeight="400" textAlign={{ base: "center", md: "left" }}
-                  style={{ textShadow: INK_SHADOW }}>
+            <Text key={`${idx}-${k}`} color={TINTA} fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.95"
+                  letterSpacing="0.02em" fontWeight="400" textAlign={{ base: "center", md: "left" }}>
               {p}
             </Text>
           ))}

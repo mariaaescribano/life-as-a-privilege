@@ -692,3 +692,19 @@ export const NUTRIENTES: Nutriente[] = [
     ],
   },
 ];
+
+// El recorrido de nutrientes se divide en DOS páginas para hacer más trayecto:
+//   · /metodo/nutricion/nutrientes            → NUTRIENTES_PRINCIPALES (hasta Fibra)
+//   · /metodo/nutricion/nutrientes-secundarios → NUTRIENTES_SECUNDARIOS (el resto)
+// La página de detalle sigue buscando en NUTRIENTES (la lista completa), así que
+// ambos grupos funcionan igual al abrir una tarjeta.
+const CORTE_SECUNDARIOS = NUTRIENTES.findIndex((n) => n.key === "fibra") + 1;
+export const NUTRIENTES_PRINCIPALES = NUTRIENTES.slice(0, CORTE_SECUNDARIOS);
+export const NUTRIENTES_SECUNDARIOS = NUTRIENTES.slice(CORTE_SECUNDARIOS);
+
+// Dado un key de nutriente, indica a qué página de la rejilla pertenece (para
+// que el botón «Volver» del detalle regrese a la página correcta).
+export const rutaListaNutriente = (key: string): string =>
+  NUTRIENTES_SECUNDARIOS.some((n) => n.key === key)
+    ? "/metodo/nutricion/nutrientes-secundarios"
+    : "/metodo/nutricion/nutrientes";

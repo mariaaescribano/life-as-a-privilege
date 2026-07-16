@@ -159,20 +159,56 @@ export default function MetodoNutricion() {
               <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }} textAlign="center">
                 {[
-                  "En esta disciplina explorarás cómo eres lo que comes; para ser exactos, eres lo que absorbes.",
-                  "Descubrirás cómo las moléculas que componen tus alimentos están al servicio de tu reconstrucción o de tu destrucción.",
-                  "Aquí no hay juicios: ningún alimento es, por sí mismo, bueno o malo, pero sus moléculas sí pueden ser dañinas o beneficiosas.",
-                  "Comprenderás cómo las moléculas de tu comida se transforman, literalmente, en ti.",
-                ].map((parrafo, i, arr) => (
+                  "En esta disciplina explorarás cómo eres lo que comes; para ser exactos, eres lo que absorbes. Descubrirás cómo las moléculas que componen tus alimentos están al servicio de tu reconstrucción o de tu destrucción.",
+                ].map((parrafo, i) => (
                   <Text
-                    key={i}
+                    key={`a-${i}`}
                     color={nutricionTxt}
                     fontSize={{ base: "md", md: "lg" }}
                     fontWeight="600"
                     lineHeight="1.95"
                     maxW="600px"
                     mx="auto"
-                    mb={i < arr.length - 1 ? 4 : 0}
+                    style={{ textShadow: TXT_HALO }}
+                  >
+                    {parrafo}
+                  </Text>
+                ))}
+
+                {/* Separador horizontal elegante: línea que se desvanece en los
+                    extremos con un pequeño rombo central. */}
+                <Flex align="center" justify="center" gap={3} my={{ base: 6, md: 8 }} maxW="600px" mx="auto">
+                  <Box
+                    flex="1"
+                    h="1px"
+                    bgGradient={`linear(to-r, ${nutricionTxt}00, ${nutricionTxt}66)`}
+                  />
+                  <Box
+                    w="7px"
+                    h="7px"
+                    transform="rotate(45deg)"
+                    bg={nutricionTxt}
+                    opacity={0.7}
+                    flexShrink={0}
+                  />
+                  <Box
+                    flex="1"
+                    h="1px"
+                    bgGradient={`linear(to-r, ${nutricionTxt}66, ${nutricionTxt}00)`}
+                  />
+                </Flex>
+
+                {[
+                  "Aquí no hay juicios: ningún alimento es, por sí mismo, bueno o malo, pero sus moléculas sí pueden ser dañinas o beneficiosas. Comprenderás cómo las moléculas de tu comida se transforman, literalmente, en ti.",
+                ].map((parrafo, i) => (
+                  <Text
+                    key={`b-${i}`}
+                    color={nutricionTxt}
+                    fontSize={{ base: "md", md: "lg" }}
+                    fontWeight="600"
+                    lineHeight="1.95"
+                    maxW="600px"
+                    mx="auto"
                     style={{ textShadow: TXT_HALO }}
                   >
                     {parrafo}

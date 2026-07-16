@@ -170,6 +170,9 @@ export function FichaFisioModal({
   contador = null,
   fotoFallback,
   accent = TXT,
+  bgImage = FISIO_IMG,
+  bgColor = BG,
+  txtColor = TXT,
 }: {
   /** Ruta de la imagen cuadrada de la izquierda. */
   foto: string;
@@ -191,6 +194,13 @@ export function FichaFisioModal({
   fotoFallback?: React.ReactNode;
   /** Color de acento (glows, líneas, flechas, título). Por defecto el de Fisiología. */
   accent?: string;
+  /** Foto de fondo de la disciplina (pantalla completa + fondo del box). Por
+   *  defecto la de Fisiología; Nutrición pasa la suya (nutri.png). */
+  bgImage?: string;
+  /** Color base de la disciplina (velo del fondo + glow del box). Por defecto Fisiología. */
+  bgColor?: string;
+  /** Color del texto de los párrafos. Por defecto el de Fisiología. */
+  txtColor?: string;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const puedeNavegar = !!onPrev && !!onNext;
@@ -265,11 +275,11 @@ export function FichaFisioModal({
         pointerEvents="none"
         zIndex={0}
         overflow="hidden"
-        bg={BG}
+        bg={bgColor}
       >
         <Box
           as="img"
-          src={FISIO_IMG}
+          src={bgImage}
           alt=""
           loading="eager"
           position="absolute"
@@ -356,7 +366,7 @@ export function FichaFisioModal({
         borderRadius="xl"
         overflow="hidden"
         animation={`${fadeIn} 0.5s ease both`}
-        boxShadow={`0 0 22px ${BG}88, 0 0 50px ${BG}55, 0 0 18px ${accent}44, 0 0 40px ${accent}22, inset 0 0 20px rgba(0,0,0,0.35)`}
+        boxShadow={`0 0 22px ${bgColor}88, 0 0 50px ${bgColor}55, 0 0 18px ${accent}44, 0 0 40px ${accent}22, inset 0 0 20px rgba(0,0,0,0.35)`}
       >
         {/* Fondo de la caja (foto de disciplina + velo) */}
         <Box
@@ -368,7 +378,7 @@ export function FichaFisioModal({
         >
           <Box
             as="img"
-            src={FISIO_IMG}
+            src={bgImage}
             alt=""
             loading="eager"
             position="absolute"
@@ -377,7 +387,7 @@ export function FichaFisioModal({
             h="100%"
             style={{ objectFit: "cover", objectPosition: "center", filter: "saturate(1.05)" }}
           />
-          <Box position="absolute" inset="0" bg={`${BG}66`} />
+          <Box position="absolute" inset="0" bg={`${bgColor}66`} />
         </Box>
 
         {/* Línea de luz superior */}
@@ -483,7 +493,7 @@ export function FichaFisioModal({
                   >
                     <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={accent}
                          boxShadow={`0 0 8px ${accent}`} />
-                    <Text color={BG} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
+                    <Text color={bgColor} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
                           lineHeight="1.3" letterSpacing="0.01em" fontFamily="'EB Garamond', serif"
                           textAlign="left">
                       {c}
@@ -497,7 +507,7 @@ export function FichaFisioModal({
               {parrafos.map((p, i) => (
                 <Text
                   key={i}
-                  color={TXT}
+                  color={txtColor}
                   fontSize={{ base: "md", md: "lg" }}
                   lineHeight="1.85"
                   letterSpacing="0.02em"

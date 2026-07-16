@@ -109,6 +109,9 @@ import MetodoFisiologiaProfundiza from "./app/metodo/MetodoFisiologiaProfundiza"
 import MetodoFisiologiaTema from "./app/metodo/MetodoFisiologiaTema";
 import MetodoNutricion from "./app/metodo/MetodoNutricion";
 import MetodoNutricionNutrientes from "./app/metodo/MetodoNutricionNutrientes";
+import MetodoNutricionNutrientesSecundarios from "./app/metodo/MetodoNutricionNutrientesSecundarios";
+import MetodoNutricionPlato from "./app/metodo/MetodoNutricionPlato";
+import MetodoNutricionMitos from "./app/metodo/MetodoNutricionMitos";
 import MetodoNutricionNutriente from "./app/metodo/MetodoNutricionNutriente";
 import MetodoNutricionMicrobiota from "./app/metodo/MetodoNutricionMicrobiota";
 import MetodoNutricionAlimentos from "./app/metodo/MetodoNutricionAlimentos";
@@ -252,8 +255,11 @@ export default function App()
       {/* El Recorrido · Nutrición (6ª disciplina) */}
       <Route path="/metodo/nutricion" element={<PrivateRoute><MetodoNutricion /></PrivateRoute>} />
       <Route path="/metodo/nutricion/nutrientes" element={<PrivateRoute><MetodoNutricionNutrientes /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/nutrientes-secundarios" element={<PrivateRoute><MetodoNutricionNutrientesSecundarios /></PrivateRoute>} />
       <Route path="/metodo/nutricion/nutrientes/:key" element={<PrivateRoute><MetodoNutricionNutriente /></PrivateRoute>} />
       <Route path="/metodo/nutricion/microbiota" element={<PrivateRoute><MetodoNutricionMicrobiota /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/plato" element={<PrivateRoute><MetodoNutricionPlato /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />
 

@@ -9,12 +9,13 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { ComicMicrobiotaModal } from "../../components/metodo/ComicMicrobiotaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import {
-  NUTRIENTES, NUTRIENTES_PRINCIPALES, type Nutriente,
+  NUTRIENTES, NUTRIENTES_SECUNDARIOS, type Nutriente,
 } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // Tarjeta de un grupo de nutrientes. Mismo aspecto que las de Fisiología ·
@@ -82,15 +83,16 @@ function NutrienteBox({ n, visto, onClick, delay }: { n: Nutriente; visto: boole
 }
 
 // ═════════════════════════════════════════════════════════════════════════
-export default function MetodoNutricionNutrientes() {
+export default function MetodoNutricionNutrientesSecundarios() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [explorados, setExplorados] = useState<string[]>([]);
+  const [microOpen, setMicroOpen] = useState(false); // cómic de transición a la microbiota
   const dataRef = useRef<Record<string, any>>({});
 
-  // Esta página muestra solo los nutrientes principales (hasta Fibra); el resto
-  // va en «Nutrientes secundarios». El flag «hecho» se calcula sobre el TOTAL de
-  // ambas páginas para no marcar el recorrido como completo antes de tiempo.
+  // Segunda página del recorrido de nutrientes: los secundarios (colesterol,
+  // etanol, agua, fitoquímicos). El flag «hecho» se calcula sobre el TOTAL de
+  // ambas páginas, así que solo se marca completo cuando se han visto todos.
   const total = NUTRIENTES.length;
 
   useEffect(() => {
@@ -113,7 +115,7 @@ export default function MetodoNutricionNutrientes() {
 
         // No mostramos la página hasta que TODAS las portadas de los grupos
         // estén descargadas, para que ninguna aparezca de golpe.
-        await precargarImagenes(NUTRIENTES_PRINCIPALES.map((x) => x.img));
+        await precargarImagenes(NUTRIENTES_SECUNDARIOS.map((x) => x.img));
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();
@@ -160,16 +162,16 @@ export default function MetodoNutricionNutrientes() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-            title="Los nutrientes"
+            title="Nutrientes secundarios"
             compact
             maxW="1000px"
             bgColor={`${nutricionBg}dd`}
             color={nutricionTxt}
             nom={nutricionNom}
             mb={0}
-            prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion") }}
+            prev={{ label: "← Los nutrientes", onClick: () => navigate("/metodo/nutricion/nutrientes") }}
             extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-            next={{ label: "Secundarios →", onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
+            next={{ label: "Microbiota →", onClick: () => setMicroOpen(true) }}
           />
           </Reveal>
 
@@ -181,13 +183,20 @@ export default function MetodoNutricionNutrientes() {
           </Reveal>
 
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-            {NUTRIENTES_PRINCIPALES.map((n, i) => (
+            {NUTRIENTES_SECUNDARIOS.map((n, i) => (
               <NutrienteBox key={n.key} n={n} visto={exploradosSet.has(n.key)}
                             delay={0.05 * i} onClick={() => abrir(n)} />
             ))}
           </SimpleGrid>
         </Flex>
       </Flex>
+
+      {/* Transición a la Microbiota: cómic «La microbiota». */}
+      <ComicMicrobiotaModal
+        isOpen={microOpen}
+        onContinue={() => { setMicroOpen(false); navigate("/metodo/nutricion/microbiota"); }}
+        onClose={() => setMicroOpen(false)}
+      />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
       <SiteFooter />

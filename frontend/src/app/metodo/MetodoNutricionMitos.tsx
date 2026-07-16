@@ -11,14 +11,15 @@ import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { MICROBIOTA_TARJETAS } from "../../hardCoded/espacio/MicrobiotaNutricion";
+import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
 
 // ═════════════════════════════════════════════════════════════════════════
-// Apartado «Microbiota» del recorrido de Nutrición. Se llega desde Los
-// nutrientes (botón «Microbiota →» → cómic de transición → aquí). Muestra 3
-// tarjetas (glutamato, acetato, butirato); cada una abre su ficha tipo cómic.
+// Apartado «Preguntas y mitos» del recorrido de Nutrición. Se llega desde la
+// actividad del plato de Harvard. Cada pregunta es una tarjeta con su viñeta;
+// al pulsarla se abre la respuesta en el visor de ilustración (foto + texto +
+// fondo de la disciplina), y se puede pasar de un mito a otro con las flechas.
 // ═════════════════════════════════════════════════════════════════════════
-export default function MetodoNutricionMicrobiota() {
+export default function MetodoNutricionMitos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
@@ -51,29 +52,29 @@ export default function MetodoNutricionMicrobiota() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="La microbiota"
+              title="Preguntas y mitos"
               compact
               maxW="1000px"
               bgColor={`${nutricionBg}dd`}
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Nutrientes secundarios", onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
-              next={{ label: "Crea tu plato →", onClick: () => navigate("/metodo/nutricion/plato") }}
+              prev={{ label: "← Tu plato", onClick: () => navigate("/metodo/nutricion/plato") }}
             />
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Tres de las moléculas que fabrican las bacterias de tu intestino. Toca cada una para descubrir qué hacen por ti.
+                  textAlign="center" lineHeight="1.8" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+              Estas son algunas de las preguntas y mitos que más se repiten. Toca cada uno para descubrir qué dice
+              de verdad la ciencia.
             </Text>
           </Reveal>
 
           <Reveal direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {MICROBIOTA_TARJETAS.map((tar, i) => (
-                <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+              {MITOS_NUTRICION.map((m, i) => (
+                <TarjetaNutri key={m.key} titulo={m.titulo} foto={m.foto}
                               onClick={() => setFichaIdx(i)} />
               ))}
             </SimpleGrid>
@@ -82,9 +83,9 @@ export default function MetodoNutricionMicrobiota() {
         </Flex>
       </Flex>
 
-      {/* Ficha tipo cómic de la molécula seleccionada. */}
+      {/* Respuesta en el visor de ilustración (foto + texto + fondo cambiado). */}
       {fichaIdx !== null && (
-        <NutrienteFichaModal tarjetas={MICROBIOTA_TARJETAS} index={fichaIdx}
+        <NutrienteFichaModal tarjetas={MITOS_NUTRICION} index={fichaIdx}
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
       )}
 

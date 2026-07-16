@@ -680,12 +680,14 @@ export function ComicViewer({
             zIndex={3}
           />
 
-          {/* Contador de página */}
+          {/* Contador de página. Usa el color del texto (si se pasó, p.ej. el
+              verde oscuro de Nutrición) para que sea legible sobre fotos claras;
+              si no, cae en el acento como el resto de cómics. */}
           <Text
             position="absolute"
             bottom={{ base: 2, md: 3 }}
             right={{ base: 3, md: 4 }}
-            color={`${themeColor}99`}
+            color={`${textColor ?? themeColor}99`}
             fontSize={{ base: "xs", md: "sm" }}
             fontStyle="italic"
             letterSpacing="0.18em"
