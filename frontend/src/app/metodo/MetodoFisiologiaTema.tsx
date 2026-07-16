@@ -18,8 +18,10 @@ import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, no
 import { temaByKey, PROFUNDIZA_LEIDAS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
-function FichaBox({ ficha, temaColor, active, leido = false, onClick, coloreado }: {
-  ficha: Ficha; temaColor: string; active: boolean; leido?: boolean; onClick: () => void; coloreado?: boolean;
+// Todos los temas usan la MISMA iluminación (la de Neurotransmisores/Hormonas):
+// borde + glow del color propio de la ficha en TODO el box, no solo en la imagen.
+function FichaBox({ ficha, temaColor, active, leido = false, onClick }: {
+  ficha: Ficha; temaColor: string; active: boolean; leido?: boolean; onClick: () => void;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const accent = ficha.color || temaColor;
@@ -32,36 +34,18 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick, coloreado 
       w="100%"
       h="100%"
       borderRadius="2xl"
-      border={coloreado ? `1px solid ${active ? accent : `${accent}66`}` : "none"}
+      border={`1px solid ${active ? accent : `${accent}66`}`}
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
       transition="all 0.2s ease"
-      boxShadow={coloreado
-        ? (active
-            ? `0 6px 24px rgba(0,0,0,0.3), 0 0 26px ${accent}, 0 0 14px ${accent}88`
-            : `0 4px 16px rgba(0,0,0,0.22), 0 0 16px ${accent}55`)
-        : (active
-            ? "0 6px 24px rgba(0,0,0,0.3), 0 0 24px rgba(255,255,255,0.35)"
-            : "0 4px 16px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.12)")}
-      _hover={{ transform: "translateY(-4px)",
-                ...(coloreado ? { borderColor: accent } : {}),
-                boxShadow: coloreado
-                  ? `0 10px 30px rgba(0,0,0,0.32), 0 0 24px ${accent}`
-                  : "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
+      boxShadow={active
+        ? `0 6px 24px rgba(0,0,0,0.3), 0 0 26px ${accent}, 0 0 14px ${accent}88`
+        : `0 4px 16px rgba(0,0,0,0.22), 0 0 16px ${accent}55`}
+      _hover={{ transform: "translateY(-4px)", borderColor: accent,
+                boxShadow: `0 10px 30px rgba(0,0,0,0.32), 0 0 24px ${accent}` }}
       _active={{ transform: "translateY(-1px)" }}
-      // Solo en temas NO coloreados (todos menos Neurotransmisores y Hormonas):
-      // al hacer hover, encender un brillo INTERIOR del color propio de la caja.
-      sx={!coloreado ? { "&:hover .fichaGlowInset": { opacity: 1 } } : undefined}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-
-      {/* Brillo interior (por dentro) del color de la caja, solo al hover.
-          Va sobre el fondo pero bajo el contenido (el texto se lee igual). */}
-      {!coloreado && (
-        <Box className="fichaGlowInset" position="absolute" inset={0} borderRadius="2xl"
-             pointerEvents="none" zIndex={1} opacity={0} transition="opacity 0.25s ease"
-             boxShadow={`inset 0 0 30px ${accent}aa, inset 0 0 12px ${accent}66`} />
-      )}
 
       {/* Sello de "ficha ya leída" */}
       {leido && (
@@ -78,8 +62,8 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick, coloreado 
             p={{ base: 4, md: 5 }} h="100%">
         <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
              bg={`${accent}22`}
-             border={coloreado ? `1px solid ${accent}66` : "none"}
-             boxShadow={coloreado ? `0 0 12px ${accent}55` : "0 0 12px rgba(255,255,255,0.12)"}
+             border={`1px solid ${accent}66`}
+             boxShadow={`0 0 12px ${accent}55`}
              display="flex" alignItems="center" justifyContent="center">
           {ficha.foto && !imgErr ? (
             <Image src={encodeURI(ficha.foto)} alt={ficha.nombre} w="100%" h="100%" objectFit="cover"
@@ -255,8 +239,7 @@ export default function MetodoFisiologiaTema() {
                 {tema.fichas.map((f, i) => (
                   <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
                     <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
-                              leido={leidas.has(f.key)}
-                              coloreado={tema.fichasColoreadas} onClick={() => verFicha(f)} />
+                              leido={leidas.has(f.key)} onClick={() => verFicha(f)} />
                   </Reveal>
                 ))}
               </SimpleGrid>
