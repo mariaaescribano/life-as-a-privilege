@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
@@ -59,6 +60,7 @@ export default function MetodoNutricionMicrobiota() {
               nom={nutricionNom}
               mb={0}
               prev={{ label: "← Nutrientes secundarios", onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
+              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{ label: "Crea tu plato →", onClick: () => navigate("/metodo/nutricion/plato") }}
             />
           </Reveal>
@@ -87,6 +89,8 @@ export default function MetodoNutricionMicrobiota() {
         <NutrienteFichaModal tarjetas={MICROBIOTA_TARJETAS} index={fichaIdx}
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
       )}
+
+      <IndiceNutricion />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
       <SiteFooter />

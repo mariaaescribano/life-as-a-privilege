@@ -26,6 +26,7 @@ import { MetodoAyurvedaModule } from './metodoAyurveda/metodoAyurveda.module';
 import { MetodoTcmModule } from './metodoTcm/metodoTcm.module';
 import { MetodoFisiologiaModule } from './metodoFisiologia/metodoFisiologia.module';
 import { MetodoNutricionModule } from './metodoNutricion/metodoNutricion.module';
+import { MetodoCabalaModule } from './metodoCabala/metodoCabala.module';
 import { MetodoNotasModule } from './metodoNotas/metodoNotas.module';
 import { BookingModule } from './booking/booking.module';
 import { CursosModule } from './cursos/cursos.module';
@@ -64,6 +65,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     MetodoTcmModule,
     MetodoFisiologiaModule,
     MetodoNutricionModule,
+    MetodoCabalaModule,
     MetodoNotasModule,
     BookingModule,
     CursosModule,

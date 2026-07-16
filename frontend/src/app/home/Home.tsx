@@ -11,6 +11,7 @@ import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { PagoFisiologiaModal } from "../../components/metodo/PagoFisiologiaModal";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
+import { PagoCabalaModal } from "../../components/metodo/PagoCabalaModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import axios from "axios";
 import {
@@ -65,6 +66,7 @@ const Home = () => {
   const [tcmSuscrito, setTcmSuscrito] = useState<boolean | null>(null);
   const [fisiologiaSuscrito, setFisiologiaSuscrito] = useState<boolean | null>(null);
   const [nutricionSuscrito, setNutricionSuscrito] = useState<boolean | null>(null);
+  const [cabalaSuscrito, setCabalaSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
@@ -94,6 +96,11 @@ const Home = () => {
   const [pagoNutriLoading, setPagoNutriLoading] = useState(false);
   const [pagoNutriError, setPagoNutriError] = useState<string | null>(null);
   const [pagoNutriExitoOpen, setPagoNutriExitoOpen] = useState(false);
+  // Pago de Cábala (7ª disciplina)
+  const [pagoCabalaOpen, setPagoCabalaOpen] = useState(false);
+  const [pagoCabalaLoading, setPagoCabalaLoading] = useState(false);
+  const [pagoCabalaError, setPagoCabalaError] = useState<string | null>(null);
+  const [pagoCabalaExitoOpen, setPagoCabalaExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
 
   const continuarAstrologia = async () => {
@@ -167,7 +174,7 @@ const Home = () => {
   };
 
   // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
-  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm" | "fisiologia" | "nutricion") => {
+  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm" | "fisiologia" | "nutricion" | "cabala") => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     try {
@@ -209,7 +216,7 @@ const Home = () => {
         setFisiologiaSuscrito(true);
         setPagoFisioOpen(false);
         setPagoFisioExitoOpen(true);
-      } else {
+      } else if (scope === "nutricion") {
         // Nutrición desbloquea también toda la cadena anterior.
         setMetodoSuscrito(true);
         setPsicologiaSuscrito(true);
@@ -219,6 +226,17 @@ const Home = () => {
         setNutricionSuscrito(true);
         setPagoNutriOpen(false);
         setPagoNutriExitoOpen(true);
+      } else {
+        // Cábala desbloquea también toda la cadena anterior.
+        setMetodoSuscrito(true);
+        setPsicologiaSuscrito(true);
+        setAyurvedaSuscrito(true);
+        setTcmSuscrito(true);
+        setFisiologiaSuscrito(true);
+        setNutricionSuscrito(true);
+        setCabalaSuscrito(true);
+        setPagoCabalaOpen(false);
+        setPagoCabalaExitoOpen(true);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
@@ -227,7 +245,8 @@ const Home = () => {
       else if (scope === "ayurveda") setPagoAyurError(msg);
       else if (scope === "tcm") setPagoTcmError(msg);
       else if (scope === "fisiologia") setPagoFisioError(msg);
-      else setPagoNutriError(msg);
+      else if (scope === "nutricion") setPagoNutriError(msg);
+      else setPagoCabalaError(msg);
     }
   };
 
@@ -406,6 +425,41 @@ const Home = () => {
     }
   };
 
+  // Cábala (7ª disciplina): clic en su círculo del mandala.
+  const irCabala = () => {
+    if (cabalaSuscrito) {
+      navigate("/metodo/cabala");
+    } else {
+      setPagoCabalaError(null);
+      setPagoCabalaOpen(true);
+    }
+  };
+
+  const pagarCabala = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoCabalaLoading(true);
+    setPagoCabalaError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/cabala/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoCabalaError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoCabalaLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoCabalaError(
+        status === 403
+          ? "Necesitas completar el pago de Nutrición antes de adquirir Cábala."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoCabalaLoading(false);
+    }
+  };
+
   const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
   const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
   const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
@@ -440,6 +494,7 @@ const Home = () => {
     const tcmPagado = url.searchParams.get("tcm_pagado");
     const fisiologiaPagado = url.searchParams.get("fisiologia_pagado");
     const nutricionPagado = url.searchParams.get("nutricion_pagado");
+    const cabalaPagado = url.searchParams.get("cabala_pagado");
 
     const cargarSuscripcion = async () => {
       try {
@@ -453,6 +508,7 @@ const Home = () => {
         setTcmSuscrito(!!me.data?.tcm_suscrito);
         setFisiologiaSuscrito(!!me.data?.fisiologia_suscrito);
         setNutricionSuscrito(!!me.data?.nutricion_suscrito);
+        setCabalaSuscrito(!!me.data?.cabala_suscrito);
         return suscrito;
       } catch {
         setMetodoSuscrito(false);
@@ -461,6 +517,7 @@ const Home = () => {
         setTcmSuscrito(false);
         setFisiologiaSuscrito(false);
         setNutricionSuscrito(false);
+        setCabalaSuscrito(false);
         return false;
       }
     };
@@ -587,6 +644,27 @@ const Home = () => {
           if (res.data?.ok) {
             setNutricionSuscrito(true);
             setPagoNutriExitoOpen(true);
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else if (cabalaPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("cabala_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/cabala/verify`, {
+          params: { session_id: cabalaPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            setCabalaSuscrito(true);
+            setPagoCabalaExitoOpen(true);
           }
         })
         .catch(async () => {
@@ -785,6 +863,8 @@ const Home = () => {
                   ? irFisiologia
                   : d.name === nutricionNom
                   ? irNutricion
+                  : d.name === cabalaNom
+                  ? irCabala
                   : () => navigate(d.link);
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
@@ -800,6 +880,8 @@ const Home = () => {
                     ? "Desbloquea Fisiología para empezar la 5ª disciplina."
                     : d.name === nutricionNom && clickable
                     ? "Desbloquea Nutrición para empezar la 6ª disciplina."
+                    : d.name === cabalaNom && clickable
+                    ? "Desbloquea Cábala para empezar la 7ª disciplina."
                     : "El Mapa se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
@@ -1015,6 +1097,20 @@ const Home = () => {
         loading={pagoNutriLoading}
         error={pagoNutriError}
         onTest={testPagos ? () => testUnlock("nutricion") : undefined}
+      />
+      <PagoExitoModal
+        isOpen={pagoCabalaExitoOpen}
+        onAceptar={() => setPagoCabalaExitoOpen(false)}
+        titulo="Pago de Cábala realizado"
+        mensaje="Ya puedes empezar la 7ª disciplina del Mapa."
+      />
+      <PagoCabalaModal
+        isOpen={pagoCabalaOpen}
+        onClose={() => { setPagoCabalaOpen(false); setPagoCabalaError(null); }}
+        onPagar={pagarCabala}
+        loading={pagoCabalaLoading}
+        error={pagoCabalaError}
+        onTest={testPagos ? () => testUnlock("cabala") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
     </Box>

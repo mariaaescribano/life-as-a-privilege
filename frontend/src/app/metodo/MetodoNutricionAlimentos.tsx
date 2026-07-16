@@ -9,6 +9,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { AlimentoOpcionesModal } from "../../components/metodo/AlimentoOpcionesModal";
+import { NutricionIlustracionesModal } from "../../components/metodo/NutricionIlustracionesModal";
+import { NutricionMaterialesModal } from "../../components/metodo/NutricionMaterialesModal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { ALIMENTOS, GRUPOS_ALIMENTOS, type Alimento, type GrupoAlimento } from "../../hardCoded/espacio/AlimentosNutricion";
 
@@ -72,6 +75,9 @@ export default function MetodoNutricionAlimentos() {
   const [loading, setLoading] = useState(true);
   const [grupo, setGrupo] = useState<GrupoAlimento>(GRUPOS_ALIMENTOS[0].key);
   const [vistos, setVistos] = useState<string[]>([]);
+  const [seleccion, setSeleccion] = useState<Alimento | null>(null); // alimento del popup
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false); // galería de cómics
+  const [materialesOpen, setMaterialesOpen] = useState(false); // todos los alimentos juntos
   const dataRef = useRef<Record<string, any>>({});
 
   useEffect(() => {
@@ -96,6 +102,8 @@ export default function MetodoNutricionAlimentos() {
     })();
   }, [navigate]);
 
+  // Al pulsar un alimento: marca como visto y abre el popup con las dos opciones
+  // (Ilustraciones / Los materiales de los alimentos). Ya no navega directamente.
   const abrir = (a: Alimento) => {
     if (!vistos.includes(a.key)) {
       const nuevos = [...vistos, a.key];
@@ -109,7 +117,7 @@ export default function MetodoNutricionAlimentos() {
           { headers: { Authorization: `Bearer ${token}` } }).catch(() => { /* se reintenta */ });
       }
     }
-    navigate(`/metodo/nutricion/alimentos/${a.key}`);
+    setSeleccion(a);
   };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -195,6 +203,22 @@ export default function MetodoNutricionAlimentos() {
 
         </Flex>
       </Flex>
+
+      {/* Popup con las dos opciones del alimento (Ilustraciones / Los materiales
+          de los alimentos). El de Ilustraciones queda «Próximamente» hasta subir
+          la portada y su contenido. */}
+      <AlimentoOpcionesModal
+        alimento={seleccion}
+        onClose={() => setSeleccion(null)}
+        onIlustraciones={() => { setSeleccion(null); setIlustracionesOpen(true); }}
+        onMateriales={() => { setSeleccion(null); setMaterialesOpen(true); }}
+      />
+
+      {/* Galería con TODOS los cómics de Nutrición (portada = última viñeta). */}
+      <NutricionIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
+
+      {/* Todos los alimentos juntos + detalle estilo cómic (sin foto a la izquierda). */}
+      <NutricionMaterialesModal isOpen={materialesOpen} onClose={() => setMaterialesOpen(false)} />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
       <SiteFooter />

@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { PLATO_MACROS, platoMacroByKey, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
@@ -253,6 +254,7 @@ export default function MetodoNutricionPlato() {
               nom={nutricionNom}
               mb={0}
               prev={{ label: "← Microbiota", onClick: () => navigate("/metodo/nutricion/microbiota") }}
+              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{ label: "Preguntas y mitos →", onClick: () => navigate("/metodo/nutricion/mitos") }}
             />
           </Reveal>
@@ -423,6 +425,8 @@ export default function MetodoNutricionPlato() {
           </Box>
         </Flex>
       )}
+
+      <IndiceNutricion />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
       <SiteFooter />

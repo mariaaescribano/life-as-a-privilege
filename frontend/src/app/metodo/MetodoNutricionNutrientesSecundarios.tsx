@@ -8,6 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicMicrobiotaModal } from "../../components/metodo/ComicMicrobiotaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -197,6 +198,8 @@ export default function MetodoNutricionNutrientesSecundarios() {
         onContinue={() => { setMicroOpen(false); navigate("/metodo/nutricion/microbiota"); }}
         onClose={() => setMicroOpen(false)}
       />
+
+      <IndiceNutricion />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
       <SiteFooter />

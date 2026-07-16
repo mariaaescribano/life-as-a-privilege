@@ -134,6 +134,12 @@ export const ALIMENTOS: Alimento[] = [
   { key: "platano", nombre: "Plátano", grupo: "fruta", emoji: "🍌", resumen: "Energía y potasio.",
     macros: { carbohidrato: 93, proteina: 4, grasa: 3 },
     moleculas: ["glucosa", "fructosa", "almidon", "fibra", "potasio", "vitamina-c", "agua"] },
+  { key: "naranja", nombre: "Naranja", grupo: "fruta", emoji: "🍊", resumen: "Vitamina C y fibra, con su pulpa entera.",
+    macros: { carbohidrato: 92, proteina: 5, grasa: 3 },
+    moleculas: ["fructosa", "glucosa", "sacarosa", "fibra", "pectina", "vitamina-c", "folato", "potasio", "polifenoles", "agua"] },
+  { key: "zumo-naranja", nombre: "Zumo de naranja", grupo: "fruta", emoji: "🧃", resumen: "La misma fruta sin fibra: azúcar libre que llega de golpe.",
+    macros: { carbohidrato: 95, proteina: 3, grasa: 2 },
+    moleculas: ["fructosa", "glucosa", "sacarosa", "vitamina-c", "folato", "potasio", "agua"] },
 
   // ── Verdura ──
   { key: "brocoli", nombre: "Brócoli", grupo: "verdura", emoji: "🥦", resumen: "Fibra, vitamina C y protectores.",

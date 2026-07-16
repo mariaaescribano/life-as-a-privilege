@@ -12,6 +12,7 @@ import { ComicCaloriasModal } from "../../components/metodo/ComicCaloriasModal";
 import { NUTRICION_INTRO } from "../../components/metodo/comicNutricionIntro";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import {
@@ -25,7 +26,6 @@ import {
 // La imagen de fondo (nutri.png) es clara y se muestra tal cual (sin velo), así
 // que el texto va en verde oscuro (nutricionTxt) con un halo claro que lo
 // despega de las zonas de la foto con más detalle.
-const TXT_HALO = `0 1px 2px rgba(255,255,255,0.9), 0 0 10px rgba(255,255,255,0.75), 0 0 22px rgba(228,248,225,0.6)`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,222,170,0.14), 0 0 20px ${nutricionTxt}1a`;
 
 export default function MetodoNutricion() {
@@ -169,7 +169,6 @@ export default function MetodoNutricion() {
                     lineHeight="1.95"
                     maxW="600px"
                     mx="auto"
-                    style={{ textShadow: TXT_HALO }}
                   >
                     {parrafo}
                   </Text>
@@ -209,7 +208,6 @@ export default function MetodoNutricion() {
                     lineHeight="1.95"
                     maxW="600px"
                     mx="auto"
-                    style={{ textShadow: TXT_HALO }}
                   >
                     {parrafo}
                   </Text>
@@ -239,6 +237,8 @@ export default function MetodoNutricion() {
         onContinue={caloriasContinuar}
         onClose={() => setCaloriasOpen(false)}
       />
+
+      <IndiceNutricion />
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
 

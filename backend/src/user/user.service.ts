@@ -137,14 +137,24 @@ export class UserService {
 
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
-    // Intento 1: con las columnas de todas las disciplinas (nutricion_*/fisiologia_*
-    // pueden no existir todavía si está pendiente el ALTER TABLE → caemos al intento 1b).
+    // Intento 1: con las columnas de todas las disciplinas (cabala_*/nutricion_*/
+    // fisiologia_* pueden no existir todavía si está pendiente el ALTER TABLE →
+    // caemos a los intentos siguientes).
     const full = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra, nutricion_suscrito, nutricion_fecha_compra, cabala_suscrito, cabala_fecha_compra')
+      .eq('id', id)
+      .single();
+    if (full.data) return full.data;
+
+    // Intento 1·: sin cabala_* (por si aún no se ha migrado esa columna) para no
+    // perder el resto de flags que sí existen.
+    const conNutricion = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra, nutricion_suscrito, nutricion_fecha_compra')
       .eq('id', id)
       .single();
-    if (full.data) return full.data;
+    if (conNutricion.data) return conNutricion.data;
 
     // Intento 1a: sin nutricion_* (por si aún no se ha migrado esa columna) para no
     // perder el resto de flags que sí existen.
@@ -420,6 +430,35 @@ export class UserService {
 
     if (tryUpdate.error) {
       console.warn('[user.service] update nutricion_* falló (¿columnas no creadas?):', tryUpdate.error.message);
+      const { data, error } = await this.databaseService.getClient()
+        .from('user')
+        .select('id, name, email')
+        .eq('id', id)
+        .single();
+      if (error || !data) throw new NotFoundException('Usuario no encontrado');
+      return data;
+    }
+
+    if (!tryUpdate.data) throw new NotFoundException('Usuario no encontrado');
+    return tryUpdate.data;
+  }
+
+  // --------- Marcar usuario como suscrito a Cábala (7ª disciplina) ---------
+  async marcarSuscritoCabala(id: string) {
+    // Mismo patrón que marcarSuscritoNutricion: si las columnas cabala_* aún no
+    // existen (ALTER TABLE pendiente), no rompe el flujo.
+    const tryUpdate = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        cabala_suscrito: true,
+        cabala_fecha_compra: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select('id, name, email')
+      .single();
+
+    if (tryUpdate.error) {
+      console.warn('[user.service] update cabala_* falló (¿columnas no creadas?):', tryUpdate.error.message);
       const { data, error } = await this.databaseService.getClient()
         .from('user')
         .select('id, name, email')

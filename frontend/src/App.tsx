@@ -116,6 +116,10 @@ import MetodoNutricionNutriente from "./app/metodo/MetodoNutricionNutriente";
 import MetodoNutricionMicrobiota from "./app/metodo/MetodoNutricionMicrobiota";
 import MetodoNutricionAlimentos from "./app/metodo/MetodoNutricionAlimentos";
 import MetodoNutricionAlimento from "./app/metodo/MetodoNutricionAlimento";
+import MetodoNutricionCursos from "./app/metodo/MetodoNutricionCursos";
+import MetodoCabala from "./app/metodo/MetodoCabala";
+import MetodoCabalaArbol from "./app/metodo/MetodoCabalaArbol";
+import MetodoCabalaSefira from "./app/metodo/MetodoCabalaSefira";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -262,6 +266,11 @@ export default function App()
       <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/cursos" element={<PrivateRoute><MetodoNutricionCursos /></PrivateRoute>} />
+
+      <Route path="/metodo/cabala" element={<PrivateRoute><MetodoCabala /></PrivateRoute>} />
+      <Route path="/metodo/cabala/arbol" element={<PrivateRoute><MetodoCabalaArbol /></PrivateRoute>} />
+      <Route path="/metodo/cabala/sefira/:key" element={<PrivateRoute><MetodoCabalaSefira /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
