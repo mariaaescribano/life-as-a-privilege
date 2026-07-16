@@ -519,7 +519,7 @@ const INMUNITARIO: Ficha[] = [
     ],
   },
   {
-    key: "dendriticas", nombre: "3. Células dendríticas", color: "#9fe6b8", foto: SUB("inmunitario", "dendriticas"),
+    key: "dendriticas", nombre: "3. Células dendríticas", color: "#9fe6b8", foto: SUB("inmunitario", "dendritica"),
     eyebrow: "Las mensajeras del sistema inmunitario",
     claves: ["Exploradoras del cuerpo", "Presentan al patógeno", "Puente hacia la defensa específica"],
     explicacion: [
@@ -530,7 +530,7 @@ const INMUNITARIO: Ficha[] = [
     ],
   },
   {
-    key: "linfocitos-t", nombre: "4. Linfocitos T", color: "#9ab6f0", foto: SUB("inmunitario", "linfocitos-t"),
+    key: "linfocitos-t", nombre: "4. Linfocitos T", color: "#9ab6f0", foto: SUB("inmunitario", "tcell"),
     eyebrow: "Los coordinadores y eliminadores",
     claves: ["Detectan y coordinan la defensa", "Un receptor único cada uno", "Se «gradúan» en el timo"],
     explicacion: [
@@ -540,7 +540,7 @@ const INMUNITARIO: Ficha[] = [
     ],
   },
   {
-    key: "linfocitos-t-colaboradores", nombre: "5. Linfocitos T colaboradores", color: "#8fd0e6", foto: SUB("inmunitario", "linfocitos-t-colaboradores"),
+    key: "linfocitos-t-colaboradores", nombre: "5. Linfocitos T colaboradores", color: "#8fd0e6", foto: SUB("inmunitario", "colaborador"),
     claves: ["Coordinan la respuesta inmune", "Activan a las demás defensas", "Sin ellos, todo falla"],
     explicacion: [
       "Estos actúan como coordinadores de toda la respuesta inmunitaria.",
@@ -549,7 +549,7 @@ const INMUNITARIO: Ficha[] = [
     ],
   },
   {
-    key: "linfocitos-t-citotoxicos", nombre: "6. Linfocitos T citotóxicos", color: "#a7d9f2", foto: SUB("inmunitario", "linfocitos-t-citotoxicos"),
+    key: "linfocitos-t-citotoxicos", nombre: "6. Linfocitos T citotóxicos", color: "#a7d9f2", foto: SUB("inmunitario", "citotoxic"),
     claves: ["Matan células infectadas", "Inducen su apoptosis", "Precisos con el tejido sano"],
     explicacion: [
       "Su función es destruir células del propio organismo que estén infectadas por virus o que se hayan vuelto cancerosas. Lo hacen de sopetón: perforan la membrana de la célula infectada e inducen su muerte programada (apoptosis).",
@@ -557,7 +557,7 @@ const INMUNITARIO: Ficha[] = [
     ],
   },
   {
-    key: "linfocitos-b", nombre: "7. Linfocitos B", color: "#c9a7ff", foto: SUB("inmunitario", "linfocitos-b"),
+    key: "linfocitos-b", nombre: "7. Linfocitos B", color: "#c9a7ff", foto: SUB("inmunitario", "bcell"),
     eyebrow: "Los fabricantes de anticuerpos",
     claves: ["Fabrican anticuerpos", "Cada uno, un antígeno", "Crean memoria: las vacunas"],
     explicacion: [
@@ -568,7 +568,7 @@ const INMUNITARIO: Ficha[] = [
     ],
   },
   {
-    key: "natural-killers", nombre: "8. Natural killers (NK)", color: "#e6a7d9", foto: SUB("inmunitario", "natural-killers"),
+    key: "natural-killers", nombre: "8. Natural killers (NK)", color: "#e6a7d9", foto: SUB("inmunitario", "killercells"),
     claves: ["Matan sin aviso previo", "Buscan células infectadas", "Frenan el cáncer temprano"],
     explicacion: [
       "Son células capaces de matar sin necesidad de una activación específica previa.",
@@ -859,7 +859,7 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     grupo: "Química interna",
     intro: "Tus órganos se comunican a través de las hormonas; por eso, todo en tu cuerpo está conectado.",
     comicIntro: [], // «Cómo se sintetiza una hormona» — pendiente
-    pista: "Pulsa cada hormona para leer qué hace en tu cuerpo.",
+    pista: "",
     fichasColoreadas: true,
     fichas: HORMONAS,
   },

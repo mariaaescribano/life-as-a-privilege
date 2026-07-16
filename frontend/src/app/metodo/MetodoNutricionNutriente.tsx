@@ -14,8 +14,9 @@ import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { NUTRIENTES, type Nutriente } from "../../hardCoded/espacio/NutrientesNutricion";
+import { NUTRIENTES, type Nutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Página de detalle de UN grupo de nutrientes (Carbohidratos, Grasas…).
@@ -118,6 +119,15 @@ export default function MetodoNutricionNutriente() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+
+        // No mostramos la página hasta que sus fotos estén descargadas: la foto
+        // del grupo, las viñetas del cómic y las fotos de las tarjetas, para que
+        // ninguna aparezca de golpe cuando el resto ya está en pantalla.
+        await precargarImagenes([
+          n.img,
+          ...(comicNutrienteByKey(n.key)?.map((v) => v.src) ?? []),
+          ...(n.tarjetas?.map((t) => t.foto) ?? []),
+        ]);
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();
@@ -128,6 +138,17 @@ export default function MetodoNutricionNutriente() {
   if (!n) return null;
 
   const comic = comicNutrienteByKey(n.key);
+
+  // Subgrupos de tarjetas (p.ej. «⚡ Electrolitos» / «🧱 Minerales»): agrupamos
+  // las tarjetas consecutivas por su `grupo` conservando el índice GLOBAL (el que
+  // usa el modal de ficha). Si ninguna define `grupo`, queda un único grupo.
+  const subgruposTarjetas: { grupo?: string; items: { tar: NutrienteTarjeta; idx: number }[] }[] = [];
+  (n.tarjetas ?? []).forEach((tar, idx) => {
+    const ultimo = subgruposTarjetas[subgruposTarjetas.length - 1];
+    if (ultimo && ultimo.grupo === tar.grupo) ultimo.items.push({ tar, idx });
+    else subgruposTarjetas.push({ grupo: tar.grupo, items: [{ tar, idx }] });
+  });
+  const hayVariosSubgrupos = subgruposTarjetas.length > 1;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -197,12 +218,31 @@ export default function MetodoNutricionNutriente() {
                 <NutrienteCirculo tarjetas={n.tarjetas} tituloCentro={n.label}
                                   onSelect={(i) => setFichaIdx(i)} />
               ) : (
-                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-                  {n.tarjetas.map((tar, i) => (
-                    <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}
-                                  onClick={() => setFichaIdx(i)} />
+                <Flex direction="column" w="100%" gap={{ base: 6, md: 8 }}>
+                  {subgruposTarjetas.map((g, gi) => (
+                    <Box key={g.grupo ?? gi} w="100%">
+                      {/* Encabezado del subgrupo con línea horizontal a los lados
+                          (solo si hay más de un subgrupo, p.ej. Electrolitos/Minerales). */}
+                      {hayVariosSubgrupos && g.grupo && (
+                        <Flex align="center" gap={4} mb={{ base: 4, md: 5 }}>
+                          <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${nutricionTxt}66)`} />
+                          <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }}
+                                letterSpacing="0.06em" textTransform="uppercase" whiteSpace="nowrap"
+                                style={{ textShadow: `0 1px 4px ${nutricionBg}` }}>
+                            {g.grupo}
+                          </Text>
+                          <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${nutricionTxt}66)`} />
+                        </Flex>
+                      )}
+                      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+                        {g.items.map(({ tar, idx }) => (
+                          <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}
+                                        onClick={() => setFichaIdx(idx)} />
+                        ))}
+                      </SimpleGrid>
+                    </Box>
                   ))}
-                </SimpleGrid>
+                </Flex>
               )}
             </Reveal>
           )}

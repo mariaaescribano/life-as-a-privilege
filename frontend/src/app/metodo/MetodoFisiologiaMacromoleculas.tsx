@@ -49,6 +49,10 @@ interface MacroDef {
    *  1 fosfato + 1 glicerol + 2 ácidos grasos). Si se define, la estación arrastra
    *  ESTAS piezas concretas (con su propia foto) en vez de `n` monómeros iguales. */
   componentes?: PiezaMacro[];
+  /** Cadena de monómeros del MISMO tipo pero con foto distinta (p.ej. el ADN:
+   *  4 nucleótidos A, T, C y G). Conserva la semántica de «encadenar» (no la de
+   *  «formar un monómero» de `componentes`), pero cada pieza lleva su foto. */
+  monomerosVariados?: PiezaMacro[];
 }
 
 /** Una pieza arrastrable (monómero o componente) con su foto propia. */
@@ -56,9 +60,9 @@ interface PiezaMacro { label: string; img: string; glyph: string; }
 
 const PRE = "/recorrido/fisiologia/pre";
 
-/** Lista de piezas a arrastrar: los `componentes` si existen, o `n` copias del monómero. */
+/** Lista de piezas a arrastrar: los `componentes`, los `monomerosVariados`, o `n` copias del monómero. */
 const piezasDe = (def: MacroDef): PiezaMacro[] =>
-  def.componentes ??
+  def.componentes ?? def.monomerosVariados ??
   Array.from({ length: def.n }, () => ({ label: def.monomero, img: def.monomeroImg, glyph: def.glyph }));
 
 const MACROS: MacroDef[] = [
@@ -81,6 +85,12 @@ const MACROS: MacroDef[] = [
       "El orden de esas letras es el manual de instrucciones para fabricar todas tus proteínas: es tu información genética.",
     ],
     monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/ADN.png`,
+    monomerosVariados: [
+      { label: "A", img: `${PRE}/nucleotidoa.png`, glyph: "A" },
+      { label: "T", img: `${PRE}/nucleotidot.png`, glyph: "T" },
+      { label: "C", img: `${PRE}/nucleotidoc.png`, glyph: "C" },
+      { label: "G", img: `${PRE}/nucleotidog.png`, glyph: "G" },
+    ],
   },
   {
     id: "lipido", nombre: "Lípidos", monomero: "fosfolípido", monomeroPl: "piezas",
@@ -220,7 +230,9 @@ function Estacion({
   // Piezas a arrastrar (monómeros iguales o componentes distintos) y estado.
   const piezas = piezasDe(def);
   const total = piezas.length;
-  const heterogenea = !!def.componentes;
+  const heterogenea = !!def.componentes;          // «forma un monómero» (fosfolípido)
+  const variada = !!def.monomerosVariados;         // cadena de monómeros distintos (ADN)
+  const conLabel = heterogenea || variada;         // muestra la etiqueta de cada pieza
   const [puestas, setPuestas] = useState<number[]>([]); // índices de piezas ya colocadas, en orden
   const [completo, setCompleto] = useState(yaFormada);
   const bandejaRef = useRef<HTMLDivElement>(null);
@@ -324,7 +336,7 @@ function Estacion({
                          minH={piezasMinH ? `${piezasMinH}px` : "60px"}>
                       <AnimatePresence>
                         {pendientes.map((pi, order) => (
-                          <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={heterogenea}
+                          <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={conLabel}
                                          onSoltar={(rect) => soltar(pi, rect)} enterDelay={0.45 + order * 0.1} />
                         ))}
                       </AnimatePresence>
@@ -551,6 +563,7 @@ export default function MetodoFisiologiaMacromoleculas() {
           MACROS.flatMap((m) => [
             m.monomeroImg, m.resultadoImg, m.cuadradoImg,
             ...(m.componentes?.map((c) => c.img) ?? []),
+            ...(m.monomerosVariados?.map((c) => c.img) ?? []),
           ]),
         );
       } catch {
@@ -627,7 +640,7 @@ export default function MetodoFisiologiaMacromoleculas() {
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                    maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                    maxW="620px">
                 Las grandes moléculas de la Vida.
               </Text>
             </MBox>

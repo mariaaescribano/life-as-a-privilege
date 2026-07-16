@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicMicrobiotaModal } from "../../components/metodo/ComicMicrobiotaModal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
@@ -107,6 +108,10 @@ export default function MetodoNutricionNutrientes() {
           const guardados = dataRef.current?.nutrientes_explorados;
           if (Array.isArray(guardados)) setExplorados(guardados);
         } catch { /* sin fila todavía */ }
+
+        // No mostramos la página hasta que TODAS las portadas de los grupos
+        // estén descargadas, para que ninguna aparezca de golpe.
+        await precargarImagenes(NUTRIENTES.map((x) => x.img));
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();

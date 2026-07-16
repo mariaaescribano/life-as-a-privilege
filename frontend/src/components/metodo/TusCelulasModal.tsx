@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
+import axios from "axios";
 import { CelulaCard, CelulaModal } from "./celulasUi";
 import {
+  API_URL,
   CelulasOrganosIcon,
   fisiologiaBg,
   fisiologiaTxt,
@@ -11,6 +13,9 @@ import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/Celulas
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
 const FISIO_IMG = "/img/fondos/fisio.png";
+// Clave en metodo_fisiologia.data donde se guardan las células ya descubiertas
+// (misma que usa la página «Todas tus células»).
+const VISTAS_KEY = "celulas_vistas";
 
 /** Popup INMERSIVO de "Tus células": la foto de Fisiología cubre toda la
  *  pantalla y encima aparecen todas las células (los boxes). El usuario puede
@@ -29,6 +34,24 @@ export function TusCelulasModal({
   celulas?: Celula[];
 }) {
   const [selected, setSelected] = useState<Celula | null>(null);
+  // Células que el usuario ya ha visto (para pintar el tick arriba a la derecha).
+  const [vistas, setVistas] = useState<Set<string>>(new Set());
+
+  // Al abrir el popup, traemos del backend las células ya descubiertas.
+  useEffect(() => {
+    if (!isOpen) return;
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    (async () => {
+      try {
+        const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`,
+          { headers: { Authorization: `Bearer ${token}` } });
+        const g = r.data?.data?.[VISTAS_KEY];
+        if (Array.isArray(g)) setVistas(new Set(g));
+      } catch { /* sin datos todavía */ }
+    })();
+  }, [isOpen]);
 
   // Bloquea el scroll de la página de fondo mientras el popup está abierto. Se
   // reafirma cuando se cierra una ficha (selected → null), porque la ficha
@@ -128,7 +151,8 @@ export function TusCelulasModal({
               spacing={{ base: 5, md: 6 }}
             >
               {celulas.map((celula) => (
-                <CelulaCard key={celula.id} celula={celula} onClick={() => setSelected(celula)} />
+                <CelulaCard key={celula.id} celula={celula} visto={vistas.has(celula.id)}
+                            onClick={() => setSelected(celula)} />
               ))}
             </SimpleGrid>
           ) : (

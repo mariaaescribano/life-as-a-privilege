@@ -59,7 +59,7 @@ const ESTRUCTURAS: EstDef[] = [
   {
     id: "nucleo", nombre: "Núcleo", glow: "#9ab6f0", forma: "cluster",
     desc: "Guarda y protege tu información genética.",
-    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Membrana de núcleo", img: `${PRE}/membrana.png` }],
+    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Barrera nuclear", img: `${PRE}/barreranuclear.png` }],
     resultado: [
       "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
       "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la vida.",
@@ -581,7 +581,7 @@ export default function MetodoFisiologiaEstructuras() {
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                    maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                    maxW="640px">
                 Proteínas, ADN y lípidos se ensamblan para formar las partes de la célula. Construye las cuatro.
               </Text>
             </MBox>

@@ -394,16 +394,16 @@ export default function MetodoFisiologiaMoleculas() {
           <AnimatePresence>
             {!completo && !terminado && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" fontStyle="italic"
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Forma una molécula de {mol.nombre}
+                  Forma una molécula de {mol.nombre}.
                 </Text>
               </MBox>
             )}
             {terminado && (
               <MBox key="cierre" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                     textAlign="center" maxW="640px">
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" fontStyle="italic"
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" lineHeight="1.35" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                   Las moléculas más importantes para la Vida, son parte de ti.
                 </Text>

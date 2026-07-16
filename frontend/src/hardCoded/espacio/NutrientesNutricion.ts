@@ -19,6 +19,10 @@ export interface NutrienteTarjeta {
   color?: string;
   /** Etiqueta corta para el nodo del círculo (p.ej. «A», «B»). */
   sigla?: string;
+  /** Subgrupo al que pertenece la tarjeta (p.ej. «⚡ Electrolitos», «🧱 Minerales»).
+   *  Si varias tarjetas tienen distinto `grupo`, la rejilla los separa con un
+   *  encabezado y una línea horizontal entre subgrupos. */
+  grupo?: string;
 }
 
 export interface Nutriente {
@@ -44,7 +48,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "carbohidratos",
     label: "Carbohidratos",
     color: "#e0a92e",
-    img: "/img/nutri/nutrientes/carbohidratos.png",
+    img: "/recorrido/nutricion/portadas/carbs.png",
     resumen: "Tu principal fuente de energía.",
     tipos: [
       { nombre: "Simples (azúcares)", desc: "Glucosa, fructosa, sacarosa. Energía rápida, pico y bajada." },
@@ -60,7 +64,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "glucosa",
         titulo: "Glucosa",
-        foto: "/img/nutri/nutrientes/carbohidratos/glucosa.png",
+        foto: "/recorrido/nutricion/moleculas/glucosa.png",
         parrafos: [
           "Es la molécula que nuestras células utilizan con más frecuencia para fabricar ATP, la energía.",
           "Cuando la ingerimos, pasa a la sangre y se libera insulina, la hormona que les dice a las células que capten la glucosa para usarla. Si hay más glucosa de la que el organismo necesita y las reservas de glucógeno están llenas, el hígado transforma la glucosa en triglicéridos y los almacena en grasa para guardarlo como reserva.",
@@ -69,7 +73,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "fructosa",
         titulo: "Fructosa",
-        foto: "/img/nutri/nutrientes/carbohidratos/fructosa.png",
+        foto: "/recorrido/nutricion/moleculas/fructosa.png",
         parrafos: [
           "Es la molécula característica de las frutas y la miel. A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
           "Cuando se consume dentro de una fruta, la fibra hace que se absorba lentamente. Sin embargo, cuando se consume en grandes cantidades y sin fibra (como en refrescos o zumos), el hígado recibe una carga muy rápida que favorece la producción de grasa, gasta las reservas y altera el metabolismo.",
@@ -78,7 +82,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "galactosa",
         titulo: "Galactosa",
-        foto: "/img/nutri/nutrientes/carbohidratos/galactosa.png",
+        foto: "/recorrido/nutricion/moleculas/galactosa.png",
         parrafos: [
           "La galactosa forma parte de la lactosa, la molécula de carbohidratos presente en la leche.",
           "Para absorberla, primero debemos romper la lactosa gracias a una enzima llamada lactasa, que la divide en glucosa y galactosa.",
@@ -92,7 +96,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "grasas",
     label: "Grasas",
     color: "#e58a3c",
-    img: "/img/nutri/nutrientes/grasas.png",
+    img: "/recorrido/nutricion/portadas/grasas.png",
     resumen: "Energía densa y ladrillos de tus membranas.",
     tipos: [
       { nombre: "Insaturadas", desc: "Mono y poliinsaturadas (omega-3, omega-6). Las más beneficiosas." },
@@ -109,7 +113,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "insaturadas",
         titulo: "Grasas insaturadas",
-        foto: "/img/nutri/nutrientes/grasas/insaturadas.png",
+        foto: "/recorrido/nutricion/moleculas/insaturado.png",
         parrafos: [
           "Son las grasas más habituales en alimentos como el aceite de oliva, los frutos secos, las semillas, el aguacate y el pescado azul.",
           "Su estructura presenta una o varias curvaturas que ayudan a mantener las membranas celulares flexibles y favorecen el funcionamiento normal de las células.",
@@ -119,7 +123,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "saturadas",
         titulo: "Grasas saturadas",
-        foto: "/img/nutri/nutrientes/grasas/saturadas.png",
+        foto: "/recorrido/nutricion/moleculas/saturado.png",
         parrafos: [
           "Se encuentran principalmente en productos de origen animal, como la carne o los lácteos, aunque también en algunos vegetales como el aceite de coco.",
           "Sus moléculas son rectas y pueden empaquetarse con mayor facilidad, haciendo que las membranas celulares sean más rígidas y menos eficientes. Nuestro cuerpo también las utiliza, pero un consumo elevado y mantenido puede favorecer alteraciones cardiovasculares, especialmente cuando su consumo desplaza a las grasas insaturadas.",
@@ -128,7 +132,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "trans",
         titulo: "Grasas trans",
-        foto: "/img/nutri/nutrientes/grasas/trans.png",
+        foto: "/recorrido/nutricion/moleculas/trans.png",
         parrafos: [
           "La mayoría de las grasas trans presentes en la alimentación se generan durante procesos industriales que modifican aceites vegetales para hacerlos más estables. Es decir, su estructura molecular no existe en la naturaleza, sino que se creó en un laboratorio.",
           "Su forma altera el funcionamiento normal de las membranas celulares y se asocia con un aumento del colesterol LDL, una disminución del HDL y un mayor riesgo de enfermedad cardiovascular. Por eso se recomienda consumir la menor cantidad posible.",
@@ -141,7 +145,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "proteinas",
     label: "Proteínas",
     color: "#d75f5a",
-    img: "/img/nutri/nutrientes/proteinas.png",
+    img: "/recorrido/nutricion/portadas/prote.png",
     resumen: "El material con el que te reconstruyes.",
     tipos: [
       { nombre: "Completas", desc: "De origen animal: aportan todos los aminoácidos esenciales." },
@@ -185,7 +189,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "vitaminas",
     label: "Vitaminas",
     color: "#e8b52e",
-    img: "/img/nutri/nutrientes/vitaminas.png",
+    img: "/recorrido/nutricion/portadas/vitaminas.png",
     resumen: "Reguladoras: sin ellas nada funciona.",
     tipos: [
       { nombre: "Hidrosolubles", desc: "Vitamina C y grupo B. No se almacenan: hay que reponerlas a diario." },
@@ -309,7 +313,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "minerales",
     label: "Minerales",
     color: "#6f93b8",
-    img: "/img/nutri/nutrientes/minerales.png",
+    img: "/recorrido/nutricion/portadas/minerales.png",
     resumen: "Estructura, transporte y equilibrio.",
     tipos: [
       { nombre: "Macrominerales", desc: "Calcio, fósforo, magnesio, potasio, sodio. En cantidades mayores." },
@@ -326,6 +330,7 @@ export const NUTRIENTES: Nutriente[] = [
         key: "sodio",
         titulo: "Sodio (Na⁺)",
         foto: "/img/nutri/nutrientes/minerales/sodio.png",
+        grupo: "⚡ Electrolitos",
         parrafos: [
           "Es el principal electrolito fuera de las células.",
           "Regula la cantidad de agua del organismo y permite que los nervios transmitan impulsos eléctricos.",
@@ -337,6 +342,7 @@ export const NUTRIENTES: Nutriente[] = [
         key: "potasio",
         titulo: "Potasio (K⁺)",
         foto: "/img/nutri/nutrientes/minerales/potasio.png",
+        grupo: "⚡ Electrolitos",
         parrafos: [
           "Es el principal electrolito dentro de las células.",
           "Gracias a la diferencia generada por la bomba sodio-potasio, el potasio puede salir temporalmente de la célula durante un impulso nervioso y volver después a su estado inicial.",
@@ -347,6 +353,7 @@ export const NUTRIENTES: Nutriente[] = [
         key: "calcio",
         titulo: "Calcio (Ca²⁺)",
         foto: "/img/nutri/nutrientes/minerales/calcio.png",
+        grupo: "⚡ Electrolitos",
         parrafos: [
           "Además de formar parte de los huesos y dientes, el calcio actúa como una señal química dentro de las células.",
           "Permite que los músculos se contraigan, que las neuronas liberen neurotransmisores y que la sangre pueda coagular correctamente.",
@@ -356,6 +363,7 @@ export const NUTRIENTES: Nutriente[] = [
         key: "magnesio",
         titulo: "Magnesio (Mg²⁺)",
         foto: "/img/nutri/nutrientes/minerales/magnesio.png",
+        grupo: "⚡ Electrolitos",
         parrafos: [
           "El ATP casi nunca existe libre dentro de las células. Normalmente está unido a un ion de magnesio formando Mg-ATP, la forma que necesitan la mayoría de las enzimas.",
           "Sin magnesio, muchas de ellas no podrían utilizar la energía almacenada en el ATP, por lo que la célula sería mucho menos eficiente.",
@@ -366,6 +374,7 @@ export const NUTRIENTES: Nutriente[] = [
         key: "cloruro",
         titulo: "Cloruro (Cl⁻)",
         foto: "/img/nutri/nutrientes/minerales/cloruro.png",
+        grupo: "⚡ Electrolitos",
         parrafos: [
           "Presente en gran parte del líquido que rodea a las células y acompaña al sodio para mantener el equilibrio eléctrico y el movimiento del agua entre los distintos tejidos.",
           "También desempeña una función esencial en el estómago: las células de la mucosa gástrica combinan cloruro con protones (H⁺) para formar ácido clorhídrico (HCl), imprescindible para desnaturalizar las proteínas de los alimentos, activar la enzima pepsina y destruir muchos microorganismos que ingerimos.",
@@ -375,10 +384,72 @@ export const NUTRIENTES: Nutriente[] = [
         key: "fosfato",
         titulo: "Fosfato (PO₄³⁻)",
         foto: "/img/nutri/nutrientes/minerales/fosfato.png",
+        grupo: "⚡ Electrolitos",
         parrafos: [
           "El fosfato es uno de los componentes más importantes de la vida.",
           "Forma parte del ATP, donde almacena la energía química; del ADN y el ARN, donde une los nucleótidos formando su estructura; y de los fosfolípidos, que construyen las membranas celulares.",
           "Además, muchas enzimas regulan la actividad de otras proteínas añadiéndoles o retirándoles un grupo fosfato, un proceso llamado fosforilación, que actúa como un auténtico interruptor molecular.",
+        ],
+      },
+      {
+        key: "hierro",
+        titulo: "Hierro (Fe)",
+        foto: "/img/nutri/nutrientes/minerales/hierro.png",
+        grupo: "🧱 Minerales",
+        parrafos: [
+          "Es un componente esencial de la hemoglobina de los glóbulos rojos y de la mioglobina de los músculos.",
+          "Permite transportar oxígeno desde los pulmones hasta los tejidos y participar en la producción de energía dentro de las mitocondrias.",
+          "Además, forma parte de numerosas enzimas implicadas en la respiración celular y en la síntesis de ADN.",
+        ],
+      },
+      {
+        key: "zinc",
+        titulo: "Zinc (Zn)",
+        foto: "/img/nutri/nutrientes/minerales/zinc.png",
+        grupo: "🧱 Minerales",
+        parrafos: [
+          "Participa como cofactor en más de 300 enzimas implicadas en la síntesis de ADN y proteínas, la división celular, la cicatrización y el metabolismo de los nutrientes.",
+          "Además, es fundamental para el correcto funcionamiento del sistema inmunitario y ayuda a regular la expresión de numerosos genes.",
+        ],
+      },
+      {
+        key: "cobre",
+        titulo: "Cobre (Cu)",
+        foto: "/img/nutri/nutrientes/minerales/cobre.png",
+        grupo: "🧱 Minerales",
+        parrafos: [
+          "El cobre participa en enzimas que intervienen en la producción de energía, la formación del tejido conectivo y la protección frente al estrés oxidativo.",
+          "También es necesario para el metabolismo del hierro y para la síntesis de hemoglobina, por lo que contribuye indirectamente al transporte de oxígeno.",
+        ],
+      },
+      {
+        key: "yodo",
+        titulo: "Yodo (I)",
+        foto: "/img/nutri/nutrientes/minerales/yodo.png",
+        grupo: "🧱 Minerales",
+        parrafos: [
+          "El yodo es imprescindible para fabricar las hormonas tiroideas (T₃ y T₄).",
+          "Estas hormonas regulan el metabolismo, el crecimiento, el desarrollo del sistema nervioso y el consumo de energía por las células.",
+        ],
+      },
+      {
+        key: "selenio",
+        titulo: "Selenio (Se)",
+        foto: "/img/nutri/nutrientes/minerales/selenio.png",
+        grupo: "🧱 Minerales",
+        parrafos: [
+          "Forma parte de varias enzimas antioxidantes que protegen a las células frente al daño causado por los radicales libres.",
+          "Además, participa en el funcionamiento de la glándula tiroides y contribuye al correcto funcionamiento del sistema inmunitario.",
+        ],
+      },
+      {
+        key: "manganeso",
+        titulo: "Manganeso (Mn)",
+        foto: "/img/nutri/nutrientes/minerales/manganeso.png",
+        grupo: "🧱 Minerales",
+        parrafos: [
+          "Actúa como cofactor de diversas enzimas implicadas en el metabolismo de carbohidratos, proteínas y grasas.",
+          "También participa en la formación del hueso y en mecanismos antioxidantes celulares.",
         ],
       },
     ],
@@ -387,7 +458,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "fibra",
     label: "Fibra",
     color: "#6fa86b",
-    img: "/img/nutri/nutrientes/fibra.png",
+    img: "/recorrido/nutricion/portadas/fibra.png",
     resumen: "No se absorbe, pero lo ordena todo.",
     tipos: [
       { nombre: "Soluble", desc: "Forma un gel: regula el azúcar y el colesterol, y alimenta a la microbiota." },
@@ -449,7 +520,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "etanol",
     label: "Etanol",
     color: "#b56576",
-    img: "/img/nutri/nutrientes/etanol.png",
+    img: "/recorrido/nutricion/portadas/alcohol.png",
     resumen: "Alcohol: energía vacía que el cuerpo prioriza.",
     tipos: [
       { nombre: "Etanol", desc: "El único alcohol que bebemos. Se forma al fermentar azúcares." },
@@ -496,7 +567,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "agua",
     label: "Agua",
     color: "#4aa3c7",
-    img: "/img/nutri/nutrientes/agua.png",
+    img: "/recorrido/nutricion/portadas/agua.png",
     resumen: "El medio donde ocurre toda la vida.",
     tipos: [
       { nombre: "Agua intracelular", desc: "La que está dentro de las células: unos dos tercios del total." },
@@ -513,7 +584,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "fitoquimicos",
     label: "Fitoquímicos",
     color: "#8e5aa8",
-    img: "/img/nutri/nutrientes/fitoquimicos.png",
+    img: "/recorrido/nutricion/portadas/fitoquimico.png",
     resumen: "La defensa de las plantas, a tu favor.",
     tipos: [
       { nombre: "Flavonoides", desc: "Pigmentos antioxidantes de frutas, verduras y té." },
