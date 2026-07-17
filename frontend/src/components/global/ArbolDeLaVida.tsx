@@ -18,10 +18,23 @@ export interface Sefira {
   y: number
 }
 
+export interface Sendero {
+  num: number
+  from: SefiraKey
+  to: SefiraKey
+}
+
 interface Props {
   onSefiraClick?: (sefira: Sefira) => void
   maxWidth?: string
   suppressInternalModal?: boolean
+  /** 'sefirot' (por defecto): protagonistas las sefirot. 'senderos': protagonistas
+   *  los 22 caminos (destacados y clicables), sefirot atenuadas. */
+  variant?: 'sefirot' | 'senderos'
+  /** En variant 'senderos': se llama al pulsar un camino. */
+  onSenderoClick?: (sendero: Sendero) => void
+  /** Camino resaltado (num) en variant 'senderos'. */
+  selectedSendero?: number | null
 }
 
 const R = 34
@@ -207,11 +220,15 @@ function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void 
 }
 
 /* ─── Componente principal ─────────────────────────────── */
-export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false }: Props) {
+export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false, variant = 'sefirot', onSenderoClick, selectedSendero = null }: Props) {
   const [hovered, setHovered] = useState<SefiraKey | null>(null)
   const [open, setOpen]       = useState<Sefira | null>(null)
+  const [hoveredPath, setHoveredPath] = useState<number | null>(null)
+
+  const esSenderos = variant === 'senderos'
 
   const handleClick = (sefira: Sefira) => {
+    if (esSenderos) return
     if (!suppressInternalModal) setOpen(sefira)
     onSefiraClick?.(sefira)
   }
@@ -238,6 +255,10 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               @keyframes treePulse {
                 0%,100% { opacity: 0.55; }
                 50%      { opacity: 0.85; }
+              }
+              @keyframes senderoBadge {
+                from { opacity: 0; }
+                to   { opacity: 1; }
               }
             `}</style>
             {/* Filtro de brillo dorado — reposo */}
@@ -274,33 +295,101 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
             </filter>
           </defs>
 
-          {/* Senderos — animados */}
+          {/* Senderos — animados. En variant 'senderos' son los protagonistas:
+              destacados, clicables y con su número (11-32). */}
           {PATHS.map(({ num, from, to }, idx) => {
             const s = sefiraMap[from]
             const e = sefiraMap[to]
             const len = Math.hypot(e.x - s.x, e.y - s.y)
+
+            if (!esSenderos) {
+              return (
+                <line
+                  key={num}
+                  x1={s.x} y1={s.y}
+                  x2={e.x} y2={e.y}
+                  stroke={`${cabalaTxt}55`}
+                  strokeWidth="2"
+                  style={{
+                    pointerEvents: 'none',
+                    strokeDasharray: len + 4,
+                    strokeDashoffset: len + 4,
+                    animation: `pathDraw 0.7s ease ${idx * 0.045}s forwards`,
+                  }}
+                />
+              )
+            }
+
+            const active = hoveredPath === num || selectedSendero === num
+            const mx = (s.x + e.x) / 2
+            const my = (s.y + e.y) / 2
             return (
-              <line
+              <g
                 key={num}
-                x1={s.x} y1={s.y}
-                x2={e.x} y2={e.y}
-                stroke={`${cabalaTxt}55`}
-                strokeWidth="2"
-                style={{
-                  pointerEvents: 'none',
-                  strokeDasharray: len + 4,
-                  strokeDashoffset: len + 4,
-                  animation: `pathDraw 0.7s ease ${idx * 0.045}s forwards`,
-                }}
-              />
+                style={{ cursor: 'pointer' }}
+                onMouseEnter={() => setHoveredPath(num)}
+                onMouseLeave={() => setHoveredPath(null)}
+                onClick={() => onSenderoClick?.({ num, from, to })}
+              >
+                {/* Zona de click ancha (invisible) */}
+                <line x1={s.x} y1={s.y} x2={e.x} y2={e.y} stroke="transparent" strokeWidth="22" strokeLinecap="round" />
+                {/* Línea visible */}
+                <line
+                  x1={s.x} y1={s.y}
+                  x2={e.x} y2={e.y}
+                  stroke={cabalaTxt}
+                  strokeWidth={active ? 5 : 3}
+                  strokeLinecap="round"
+                  filter={active ? 'url(#sefira-glow-hover)' : 'url(#sefira-glow)'}
+                  style={{
+                    pointerEvents: 'none',
+                    opacity: active ? 1 : 0.8,
+                    strokeDasharray: len + 4,
+                    strokeDashoffset: len + 4,
+                    animation: `pathDraw 0.7s ease ${idx * 0.04}s forwards`,
+                    transition: 'stroke-width 0.15s, opacity 0.15s',
+                  }}
+                />
+                {/* Insignia con el número del sendero */}
+                <g style={{ pointerEvents: 'none', opacity: 0, animation: `senderoBadge 0.4s ease ${0.7 + idx * 0.04}s forwards` }}>
+                  <circle cx={mx} cy={my} r={active ? 12 : 10} fill={cabalaBg} stroke={cabalaTxt} strokeWidth={active ? 2.5 : 1.5} />
+                  <text x={mx} y={my + 3} textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fill={cabalaTxt} style={{ fill: cabalaTxt }}>
+                    {num}
+                  </text>
+                </g>
+              </g>
             )
           })}
 
-          {/* Sefirot */}
+          {/* Sefirot. En variant 'senderos' quedan atenuadas (secundarias). */}
           {SEFIROT.map((sefira) => {
             const isOpen    = open?.key === sefira.key
             const isHovered = hovered === sefira.key
             const active    = isOpen || isHovered
+
+            // Modo senderos: círculos huecos y tenues, sin interacción.
+            if (esSenderos) {
+              return (
+                <g
+                  key={sefira.key}
+                  style={{
+                    pointerEvents: 'none',
+                    opacity: 0,
+                    transformOrigin: `${sefira.x}px ${sefira.y}px`,
+                    animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
+                  }}
+                >
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill={cabalaBg} stroke={`${cabalaTxt}55`} strokeWidth={1.5} />
+                  <text
+                    x={sefira.x} y={sefira.y + 4}
+                    textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fontStyle="italic"
+                    fill={`${cabalaTxt}66`} style={{ fill: `${cabalaTxt}66` }}
+                  >
+                    {sefira.hebrewName}
+                  </text>
+                </g>
+              )
+            }
 
             const fillColor   = active ? cabalaTxt : `${cabalaTxt}cc`
             const strokeColor = active ? cabalaTxt : `${cabalaTxt}88`

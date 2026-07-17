@@ -19,7 +19,7 @@ export const NUTRICION_MICROBIOTA: Vineta[] = [
     src: "/viñetas/nutricion/microbiota/microbiota2.png",
     paragraphs: [
       "Su alimento favorito es la fibra dietética. Como nuestro intestino no tiene las enzimas necesarias para digerirla, la microbiota la fermenta.",
-      "Durante ese proceso produce ácidos grasos de cadena corta, que alimentan a las células del intestino y ayudan a regular el metabolismo.",
+      "Durante ese proceso produce ácidos grasos de cadena corta (acetato, propionato, butirato), que alimentan a las células del intestino y ayudan a regular el metabolismo.",
       "Algunos microorganismos también producen vitaminas, como la K y algunas del grupo B, y moléculas que ayudan a mantener un sistema inmunitario equilibrado.",
     ],
   },
@@ -33,8 +33,8 @@ export const NUTRICION_MICROBIOTA: Vineta[] = [
   {
     src: "/viñetas/nutricion/microbiota/microbiota4.png",
     paragraphs: [
-      "Cuidar tu microbiota es cuidar de ti. Cuanta mayor variedad de alimentos vegetales consumes, más diversa suele ser tu microbiota, y esa diversidad se asocia con una mejor salud.",
-      "Ahora vamos a descubrir tres de las moléculas que produce y cómo ayudan a tu organismo.",
+      "Cuidar tu microbiota es cuidar de ti.",
+      "Cuanta mayor variedad de alimentos vegetales consumes, más diversa suele ser tu microbiota, y esa diversidad se asocia con una mejor salud.",
     ],
   },
 ];

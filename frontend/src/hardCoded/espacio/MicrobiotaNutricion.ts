@@ -8,18 +8,19 @@ import type { NutrienteTarjeta } from "./NutrientesNutricion";
 // /img/nutri/nutrientes/microbiota/<key>.png
 export const MICROBIOTA_TARJETAS: NutrienteTarjeta[] = [
   {
-    key: "glutamato",
-    titulo: "Glutamato",
-    foto: "/img/nutri/nutrientes/microbiota/glutamato.png",
+    key: "propionato",
+    titulo: "Propionato",
+    foto: "/recorrido/nutricion/moleculas/propionato.png",
     parrafos: [
-      "El glutamato es uno de los principales mensajeros químicos del cerebro. Algunas bacterias de la microbiota pueden producirlo o influir en sus niveles.",
-      "Es una de las vías por las que el intestino y el cerebro se comunican constantemente.",
+      "Es otro de los ácidos grasos de cadena corta que las bacterias fabrican al fermentar la fibra.",
+      "Viaja hasta el hígado, donde participa en la regulación de la producción de glucosa y del metabolismo del colesterol.",
+      "También ayuda a prolongar la sensación de saciedad, influyendo en el apetito.",
     ],
   },
   {
     key: "acetato",
     titulo: "Acetato",
-    foto: "/img/nutri/nutrientes/microbiota/acetato.png",
+    foto: "/recorrido/nutricion/moleculas/acetato.png",
     parrafos: [
       "Es uno de los ácidos grasos de cadena corta que las bacterias fabrican al fermentar la fibra.",
       "Se absorbe y viaja por la sangre, donde sirve de fuente de energía y de molécula que ayuda a regular el metabolismo.",
@@ -28,7 +29,7 @@ export const MICROBIOTA_TARJETAS: NutrienteTarjeta[] = [
   {
     key: "butirato",
     titulo: "Butirato",
-    foto: "/img/nutri/nutrientes/microbiota/butirato.png",
+    foto: "/recorrido/nutricion/moleculas/butirato.png",
     parrafos: [
       "Es el ácido graso de cadena corta preferido por las células del colon: es su principal alimento.",
       "Ayuda a mantener sana y unida la pared intestinal y participa en la regulación de la inflamación y del sistema inmunitario.",

@@ -74,21 +74,8 @@ export interface SefiraContenido {
   clave: string[];
 }
 
-// Nº total de páginas del recorrido (Intro + Árbol + 10 sefirot + Da'at).
-export const CABALA_TOTAL_PAGINAS = 13;
-
-const stub = (key: CabalaPageKey, numero: number, titulo: string): SefiraContenido => ({
-  key,
-  numero,
-  titulo,
-  frase: "",
-  intro: [],
-  equilibrado: { items: [] },
-  desequilibrado: { items: [] },
-  preguntas: { items: [] },
-  autoevaluacion: { items: [] },
-  clave: [],
-});
+// Nº total de páginas (Intro + Árbol + 11 dimensiones + Diagnóstico + 22 Senderos).
+export const CABALA_TOTAL_PAGINAS = 15;
 
 const KETER: SefiraContenido = {
   key: "kether",
@@ -620,6 +607,325 @@ const TIFERET: SefiraContenido = {
   ],
 };
 
+const NETZACH: SefiraContenido = {
+  key: "netzach",
+  numero: 8,
+  titulo: "Netzach",
+  frase: "¿Soy capaz de sostener ese camino en el tiempo?",
+  intro: [
+    "Netzaj es la capacidad de mantener el compromiso con aquello que consideramos importante, incluso cuando el camino se vuelve difícil.",
+    "Esta dimensión no habla de avanzar sin descanso ni de ignorar las dificultades. Habla de desarrollar la fortaleza necesaria para seguir caminando sin perder de vista aquello que da sentido al esfuerzo.",
+    "En lugar de preguntarnos «¿Por qué esto es tan difícil?», empezamos a preguntarnos «¿Qué puedo aprender mientras continúo avanzando?».",
+  ],
+  equilibrado: {
+    intro: "Una persona con un Netzaj desarrollado:",
+    items: [
+      "Mantiene el compromiso con sus objetivos a largo plazo.",
+      "Tolera la frustración sin abandonar fácilmente.",
+      "Aprende de los errores en lugar de desanimarse.",
+      "Ajusta su estrategia cuando es necesario sin perder el propósito.",
+      "Mantiene la motivación conectándose con el significado de lo que hace.",
+      "Reconoce que el progreso suele ser gradual.",
+    ],
+  },
+  desequilibrado: {
+    intro: "Cuando esta dimensión necesita fortalecerse es frecuente:",
+    items: [
+      "Abandonar proyectos ante las primeras dificultades.",
+      "Depender exclusivamente de la motivación para actuar.",
+      "Posponer constantemente aquello que requiere esfuerzo.",
+      "Cambiar de dirección cada vez que aparece un obstáculo.",
+      "Confundir una dificultad temporal con una incapacidad personal.",
+      "Perder confianza cuando los resultados tardan en llegar.",
+    ],
+    extra: {
+      intro: "En el extremo opuesto, un exceso de Netzaj puede manifestarse como:",
+      items: [
+        "Insistir en un camino que ya no tiene sentido.",
+        "No reconocer cuándo es necesario descansar o cambiar de estrategia.",
+        "Confundir perseverancia con obstinación.",
+        "Medir el valor personal únicamente por el rendimiento.",
+      ],
+    },
+  },
+  preguntas: {
+    items: [
+      "¿Qué proyecto importante he abandonado antes de tiempo?",
+      "¿Qué suele hacerme renunciar: el miedo, el cansancio o la falta de resultados inmediatos?",
+      "¿Qué objetivo sigue siendo importante para mí aunque avance lentamente?",
+      "¿Cómo reacciono cuando algo no sale como esperaba?",
+      "¿Necesito ser más perseverante o más flexible?",
+      "¿Qué me recuerda por qué empecé este camino?",
+    ],
+  },
+  ejercicio: {
+    titulo: "La línea del compromiso",
+    intro: "Piensa en un objetivo personal que hayas mantenido durante un tiempo o que hayas abandonado.",
+    promptsIntro: "Escribe:",
+    prompts: [
+      "¿Qué me motivó a comenzar?",
+      "¿Cuándo apareció la primera dificultad?",
+      "¿Qué pensé en ese momento?",
+      "¿Qué hice después?",
+      "Si hoy retomara ese camino, ¿qué haría de forma diferente?",
+    ],
+    footer: [
+      "Luego identifica un compromiso pequeño, pero significativo, que puedas sostener durante los próximos siete días.",
+      "No elijas algo extraordinario. El objetivo es demostrarte que la constancia se construye con acciones repetidas, no con esfuerzos heroicos.",
+      "Al finalizar la semana, reflexiona sobre cómo cambió tu confianza al cumplir ese compromiso.",
+    ],
+  },
+  autoevaluacion: {
+    intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
+    items: [
+      "Mantengo mis compromisos incluso cuando disminuye la motivación.",
+      "Aprendo de los obstáculos en lugar de rendirme.",
+      "Soy paciente con los procesos que requieren tiempo.",
+      "Ajusto mi estrategia sin abandonar mis valores.",
+      "Confío en que los pequeños avances sostenidos generan grandes cambios.",
+      "Sé distinguir entre descansar y renunciar.",
+    ],
+  },
+  clave: [
+    "Desarrollar Netzaj es comprender que la transformación no depende de la intensidad con la que comienzas, sino de la fidelidad con la que permaneces. La grandeza no suele construirse en momentos extraordinarios, sino en la suma de decisiones cotidianas que, una tras otra, mantienen vivo el camino hacia aquello que realmente importa.",
+  ],
+};
+
+const HOD: SefiraContenido = {
+  key: "hod",
+  numero: 9,
+  titulo: "Hod",
+  frase: "¿Puedo expresar con autenticidad lo que he aprendido?",
+  intro: [
+    "Hod es la capacidad de expresar quién eres y lo que has aprendido de una manera auténtica, clara y respetuosa.",
+    "Expresar no significa hablar más. Significa encontrar las palabras, los gestos y las acciones que reflejan con fidelidad nuestra experiencia interior.",
+    "La humildad no consiste en pensar menos de uno mismo. Consiste en reconocer que nuestra perspectiva es valiosa, pero no es la única posible.",
+  ],
+  equilibrado: {
+    intro: "Una persona con un Hod desarrollado:",
+    items: [
+      "Expresa sus ideas con claridad y respeto.",
+      "Escucha activamente antes de responder.",
+      "Comparte su experiencia sin necesidad de imponerla.",
+      "Acepta que otras personas puedan pensar diferente.",
+      "Reconoce cuando no sabe algo.",
+      "Comunica con coherencia entre lo que siente, piensa y dice.",
+      "Tolera los malentendidos sin reaccionar de forma defensiva.",
+    ],
+  },
+  desequilibrado: {
+    intro: "Cuando esta dimensión necesita fortalecerse es frecuente:",
+    items: [
+      "Buscar constantemente aprobación al comunicarse.",
+      "Hablar para demostrar conocimiento o superioridad.",
+      "Callar por miedo a ser juzgado.",
+      "Frustrarse cuando otros no comprenden el propio punto de vista.",
+      "Justificar excesivamente las propias decisiones.",
+      "Utilizar la comunicación para controlar, manipular o evitar la vulnerabilidad.",
+    ],
+    extra: {
+      intro: "En el extremo opuesto, un exceso de humildad mal entendida puede manifestarse como:",
+      items: [
+        "Minimizar constantemente las propias capacidades.",
+        "Evitar compartir ideas valiosas por inseguridad.",
+        "Ceder la propia voz para evitar conflictos.",
+        "Dudar de la propia experiencia incluso cuando es valiosa.",
+      ],
+    },
+  },
+  preguntas: {
+    items: [
+      "¿Me siento libre de expresar lo que realmente pienso y siento?",
+      "¿Qué busco cuando hablo: comprender, ser comprendido o tener razón?",
+      "¿Cómo reacciono cuando alguien no comparte mi opinión?",
+      "¿Hay conversaciones que sigo evitando por miedo al juicio o al conflicto?",
+      "¿Escucho para comprender o para responder?",
+      "¿Qué parte de mi comunicación refleja autenticidad y cuál refleja necesidad de aprobación?",
+    ],
+  },
+  ejercicio: {
+    titulo: "Escuchar antes de responder",
+    intro: "Durante una conversación importante esta semana, proponte hacer una pausa antes de responder.",
+    promptsIntro: "Mientras la otra persona habla, observa:",
+    prompts: [
+      "¿Qué estoy sintiendo?",
+      "¿Qué impulso aparece: defenderme, convencer, justificarme o escuchar?",
+      "¿Qué necesita realmente esta conversación?",
+    ],
+    footer: [
+      "Antes de responder, formula primero una frase que demuestre que has comprendido el punto de vista del otro. Después expresa tu propia perspectiva utilizando frases como: «Desde mi experiencia…», «Lo que yo observo es…», «Podría estar equivocado, pero…».",
+      "Al finalizar, reflexiona: ¿cómo cambió la conversación cuando prioricé comprender antes que convencer?",
+    ],
+  },
+  autoevaluacion: {
+    intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
+    items: [
+      "Expreso mis ideas con claridad y autenticidad.",
+      "Escucho con apertura antes de responder.",
+      "No necesito convencer a los demás para sentir que mi opinión tiene valor.",
+      "Puedo reconocer cuando me equivoco o no tengo una respuesta.",
+      "Comunico mis emociones sin agresividad ni evasión.",
+      "Respeto las diferencias sin sentir amenazada mi identidad.",
+    ],
+  },
+  clave: [
+    "Cada vez que escuchas con verdadera atención, expresas una idea con honestidad o aceptas una diferencia sin sentir la necesidad de imponerte, fortaleces esta dimensión.",
+  ],
+};
+
+const YESOD: SefiraContenido = {
+  key: "yesod",
+  numero: 10,
+  titulo: "Yesod",
+  frase: "¿Cómo convierto esa verdad en una realidad consistente?",
+  intro: [
+    "Yesod es la construcción de la base. Es donde las decisiones repetidas se convierten en identidad.",
+    "No construimos nuestra identidad con grandes decisiones aisladas. La construimos a través de pequeños actos repetidos que, con el tiempo, se convierten en hábitos.",
+    "Cada hábito fortalece una versión de nosotros mismos. Yesod nos invita a observar no lo que decimos que valoramos, sino aquello que practicamos cada día.",
+  ],
+  equilibrado: {
+    intro: "Una persona con un Yesod desarrollado:",
+    items: [
+      "Mantiene hábitos coherentes con sus valores.",
+      "Existe armonía entre lo que piensa, siente y hace.",
+      "Cumple los compromisos que asume consigo misma.",
+      "Organiza su energía de forma sostenible.",
+      "Construye rutinas que favorecen su bienestar.",
+      "Inspira confianza porque sus acciones son consistentes.",
+    ],
+  },
+  desequilibrado: {
+    intro: "Cuando esta dimensión necesita fortalecerse es frecuente:",
+    items: [
+      "Tener muchas buenas intenciones, pero poca constancia.",
+      "Empezar proyectos que rara vez se sostienen.",
+      "Actuar de forma distinta a los propios valores.",
+      "Vivir reaccionando a las circunstancias en lugar de actuar con intención.",
+      "Sentir que la vida está desorganizada o sin una estructura clara.",
+      "Depender de la motivación para mantener hábitos importantes.",
+    ],
+  },
+  preguntas: {
+    items: [
+      "¿Mis hábitos reflejan realmente lo que considero importante?",
+      "¿Qué acción repito cada día que fortalece la persona que quiero ser?",
+      "¿Qué hábito está construyendo una versión de mí que ya no deseo?",
+      "¿Qué compromiso conmigo mismo suelo romper con mayor frecuencia?",
+      "¿Qué pequeña práctica tendría el mayor impacto si la mantuviera durante un año?",
+      "¿Qué dice mi agenda sobre mis verdaderas prioridades?",
+    ],
+  },
+  ejercicio: {
+    titulo: "Auditoría de coherencia",
+    intro: "Durante tres días, registra cómo utilizas tu tiempo.",
+    promptsIntro: "Al finalizar cada jornada, responde:",
+    prompts: [
+      "¿Qué actividades ocuparon la mayor parte de mi energía?",
+      "¿Cuáles estuvieron alineadas con mis valores?",
+      "¿Cuáles fueron simples reacciones a las circunstancias?",
+      "¿Qué hábito fortalecí hoy?",
+      "¿Qué hábito debilitó la persona que quiero llegar a ser?",
+    ],
+    footer: [
+      "Finalmente, elige un único hábito pequeño que represente uno de tus valores principales. Comprométete a mantenerlo durante las próximas dos semanas.",
+      "No busques grandes cambios. Busca demostrarte que puedes confiar en ti.",
+    ],
+  },
+  autoevaluacion: {
+    intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
+    items: [
+      "Mis acciones reflejan mis valores.",
+      "Mantengo hábitos que fortalecen la persona que quiero ser.",
+      "Cumplo los compromisos que asumo conmigo mismo.",
+      "Organizo mi tiempo de acuerdo con mis prioridades.",
+      "Soy consistente incluso cuando disminuye la motivación.",
+      "Mi vida diaria refleja aquello que considero importante.",
+    ],
+  },
+  clave: [
+    "La identidad no se construye con las decisiones excepcionales, sino con las decisiones repetidas. Desarrollar Yesod es aprender que la coherencia no es un estado perfecto, sino una práctica cotidiana. Porque aquello que haces de manera constante termina definiendo quién eres mucho más que aquello que simplemente deseas ser.",
+  ],
+};
+
+const MALKHUT: SefiraContenido = {
+  key: "malkuth",
+  numero: 11,
+  titulo: "Malkhut",
+  frase: "¿Qué realidad estoy creando con la persona que soy ahora mismo?",
+  intro: [
+    "Malkut es la capacidad de convertir tu mundo interior en una realidad visible. Es la coherencia entre quién eres y la vida que construyes.",
+    "Manifestar no significa controlar todo lo que ocurre. Significa asumir la responsabilidad de la parte de realidad que sí depende de ti.",
+    "Muchas personas esperan que el cambio ocurra antes de empezar a vivir de otra manera. Pero la transformación comienza cuando actuamos como la persona que queremos llegar a ser, incluso antes de sentirnos completamente preparados.",
+  ],
+  equilibrado: {
+    intro: "Una persona con un Malkut desarrollado:",
+    items: [
+      "Vive de acuerdo con sus valores de forma natural.",
+      "Asume responsabilidad por sus decisiones y sus consecuencias.",
+      "Genera un impacto positivo en su entorno.",
+      "Mantiene coherencia entre su mundo interior y su vida cotidiana.",
+      "Se adapta a los cambios sin perder su esencia.",
+      "Recibe tanto los desafíos como las oportunidades con presencia y responsabilidad.",
+      "Construye una vida que refleja aquello que considera importante.",
+    ],
+  },
+  desequilibrado: {
+    intro: "Cuando esta dimensión necesita fortalecerse es frecuente:",
+    items: [
+      "Sentir que la vida no refleja el propio potencial.",
+      "Culpar constantemente a factores externos por la situación personal.",
+      "Vivir con una sensación de desconexión entre lo que se piensa y lo que se hace.",
+      "Tener claridad sobre el camino, pero no dar los pasos necesarios.",
+      "Esperar que las circunstancias cambien antes de actuar.",
+      "Sentir que la vida ocurre «por accidente» en lugar de construirla conscientemente.",
+    ],
+  },
+  preguntas: {
+    items: [
+      "Si alguien observara mi vida durante una semana, ¿qué diría que es realmente importante para mí?",
+      "¿Qué aspectos de mi vida reflejan con claridad mis valores?",
+      "¿Qué áreas aún no expresan la persona que quiero ser?",
+      "¿Qué impacto estoy teniendo en las personas que me rodean?",
+      "¿Qué decisión concreta acercaría mi realidad a mi propósito?",
+      "¿Estoy esperando sentirme preparado o estoy construyendo activamente la vida que deseo?",
+    ],
+  },
+  ejercicio: {
+    titulo: "Mi vida como espejo",
+    intro: "Imagina que un desconocido observa tu vida durante los próximos treinta días. No puede escuchar tus pensamientos, solo puede ver tus acciones.",
+    promptsIntro: "Después responde:",
+    prompts: [
+      "¿Qué concluiría sobre mis prioridades?",
+      "¿Qué valores identificaría en mi forma de vivir?",
+      "¿Qué hábitos confirmarían quién soy?",
+      "¿Qué aspectos de mi vida transmitirían un mensaje diferente al que realmente quiero expresar?",
+    ],
+    cierreIntro: "Finalmente escribe: «La realidad que quiero construir durante la próxima semana es…». Y completa la frase con acciones concretas, no con deseos. Si consigues cumplirlo, extiéndelo a mes y luego a año. Por ejemplo:",
+    cierrePreguntas: [
+      "Dedicar tiempo de calidad a mi familia cada semana.",
+      "Mantener una rutina constante de cuidado personal.",
+      "Crear espacios de aprendizaje continuo.",
+      "Participar activamente en un proyecto que contribuya a mi comunidad.",
+    ],
+    footer: ["Elige una acción y comienza hoy."],
+  },
+  autoevaluacion: {
+    intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
+    items: [
+      "Mi vida refleja los valores que considero importantes.",
+      "Asumo la responsabilidad por mis decisiones y sus consecuencias.",
+      "Mis acciones generan el impacto que deseo tener en los demás.",
+      "Vivo con coherencia entre lo que pienso, siento y hago.",
+      "Construyo activamente la realidad que deseo en lugar de esperar que cambie sola.",
+      "Mi forma de vivir expresa la persona que elijo ser.",
+    ],
+  },
+  clave: [
+    "Desarrollar Malkut es comprender que tu vida es la expresión visible de tu mundo interior. No se trata de alcanzar una versión perfecta de ti mismo, sino de reducir, poco a poco, la distancia entre lo que sabes, lo que valoras y la manera en que eliges vivir.",
+    "Al final, el verdadero mapa de autoconocimiento no termina con una comprensión más profunda de uno mismo. Termina cuando esa comprensión se convierte en presencia, en acción y en una vida que refleja, de manera auténtica, aquello que has descubierto sobre quién eres.",
+  ],
+};
+
 export const CABALA_SEFIROT: SefiraContenido[] = [
   KETER,
   CHOKHMAH,
@@ -628,10 +934,10 @@ export const CABALA_SEFIROT: SefiraContenido[] = [
   CHESED,
   GEVURAH,
   TIFERET,
-  stub("netzach", 8, "Nétsaj"),
-  stub("hod", 9, "Hod"),
-  stub("yesod", 10, "Yesod"),
-  stub("malkuth", 11, "Maljut"),
+  NETZACH,
+  HOD,
+  YESOD,
+  MALKHUT,
 ];
 
 export const cabalaSefirotMap = Object.fromEntries(

@@ -161,7 +161,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "esenciales",
         titulo: "Aminoácidos esenciales",
-        foto: "/img/nutri/nutrientes/proteinas/esenciales.png",
+        foto: "/recorrido/nutricion/moleculas/aesencial.png",
         parrafos: [
           "Son los aminoácidos que nuestro cuerpo no puede fabricar o no puede producir en cantidad suficiente pero son necesarios. Por eso debemos obtenerlos a través de la alimentación.",
           "Son imprescindibles para fabricar músculos, enzimas, hormonas, anticuerpos y miles de proteínas diferentes.",
@@ -170,7 +170,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "no-esenciales",
         titulo: "Aminoácidos no esenciales",
-        foto: "/img/nutri/nutrientes/proteinas/no-esenciales.png",
+        foto: "/recorrido/nutricion/moleculas/noaesencial.png",
         parrafos: [
           "Nuestro cuerpo puede fabricar estos aminoácidos a partir de otras moléculas, por lo que no es imprescindible obtenerlos directamente de los alimentos. Aun así, siguen siendo igual de importantes, ya que participan en la construcción y reparación de todos los tejidos.",
         ],
@@ -178,7 +178,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "condicionalmente-esenciales",
         titulo: "Aminoácidos condicionalmente esenciales",
-        foto: "/img/nutri/nutrientes/proteinas/condicionalmente-esenciales.png",
+        foto: "/recorrido/nutricion/moleculas/acondesencial.png",
         parrafos: [
           "Normalmente nuestro cuerpo puede producirlos, pero en determinadas situaciones —como el crecimiento, una enfermedad, una infección o una lesión importante— la demanda aumenta tanto que es necesario obtener una mayor cantidad a través de la alimentación.",
         ],
@@ -205,7 +205,7 @@ export const NUTRIENTES: Nutriente[] = [
     tarjetas: [
       {
         key: "a", sigla: "A", titulo: "Vitamina A (Retinol)", color: "#ef8e3a",
-        foto: "/img/nutri/nutrientes/vitaminas/a.png",
+        foto: "/recorrido/nutricion/moleculas/vitaminaa.png",
         parrafos: [
           "Sin la vitamina A no podríamos ver.",
           "La vitamina A se transforma en retinal, una molécula que forma parte de la rodopsina, el pigmento de la retina que nos permite ver.",
@@ -215,14 +215,14 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "b1", sigla: "B1", titulo: "Vitamina B1 (Tiamina)", color: "#f2c230",
-        foto: "/img/nutri/nutrientes/vitaminas/b1.png",
+        foto: "/recorrido/nutricion/moleculas/vitb1.png",
         parrafos: [
           "Activa las enzimas que transforman los carbohidratos en energía y es imprescindible para el funcionamiento del cerebro, los nervios y los músculos. Sin ella, las células tendrían muchas dificultades para obtener energía de la glucosa.",
         ],
       },
       {
         key: "b2", sigla: "B2", titulo: "Vitamina B2 (Riboflavina)", color: "#ecbb2f",
-        foto: "/img/nutri/nutrientes/vitaminas/b2.png",
+        foto: "/recorrido/nutricion/moleculas/vitb2.png",
         parrafos: [
           "Participa en numerosas reacciones metabólicas relacionadas con la producción de energía, para ser exactos que se convierten en activadores de las enzimas que transportan electrones durante la respiración celular.",
           "También ayuda a mantener la piel, los ojos y las mucosas en buen estado y contribuye a proteger las células frente al estrés oxidativo.",
@@ -230,7 +230,7 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "b3", sigla: "B3", titulo: "Vitamina B3 (Niacina)", color: "#e6b02c",
-        foto: "/img/nutri/nutrientes/vitaminas/b3.png",
+        foto: "/recorrido/nutricion/moleculas/vitb3.png",
         parrafos: [
           "Es necesaria para fabricar las moléculas que permiten obtener energía a partir de los alimentos.",
           "Es decir, se transforma en NAD⁺ y NADP⁺, moléculas que transportan electrones entre enzimas durante cientos de reacciones metabólicas.",
@@ -239,14 +239,14 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "b5", sigla: "B5", titulo: "Vitamina B5 (Ácido pantoténico)", color: "#dda829",
-        foto: "/img/nutri/nutrientes/vitaminas/b5.png",
+        foto: "/recorrido/nutricion/moleculas/vitb5.png",
         parrafos: [
           "Forma parte de la coenzima A (CoA), una molécula imprescindible para que las enzimas puedan fabricar y degradar grasas, producir energía y sintetizar colesterol y hormonas.",
         ],
       },
       {
         key: "b6", sigla: "B6", titulo: "Vitamina B6 (Piridoxina)", color: "#efc94c",
-        foto: "/img/nutri/nutrientes/vitaminas/b6.png",
+        foto: "/recorrido/nutricion/moleculas/vitb6.png",
         parrafos: [
           "Activa a las enzimas que participan en la transformación de los aminoácidos y en la fabricación de neurotransmisores, hemoglobina y anticuerpos.",
           "Debido a esto, es fundamental para el sistema nervioso y el sistema inmunitario.",
@@ -254,14 +254,14 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "b7", sigla: "B7", titulo: "Vitamina B7 (Biotina)", color: "#e4be3c",
-        foto: "/img/nutri/nutrientes/vitaminas/b7.png",
+        foto: "/recorrido/nutricion/moleculas/vitb7.png",
         parrafos: [
           "Actúa como coenzima de las carboxilasas, un grupo de enzimas que permiten fabricar glucosa, sintetizar ácidos grasos y aprovechar algunos aminoácidos para obtener energía. Por ello, participa en el mantenimiento de la piel, el cabello y las uñas.",
         ],
       },
       {
         key: "b9", sigla: "B9", titulo: "Vitamina B9 (Ácido fólico o Folato)", color: "#d6a336",
-        foto: "/img/nutri/nutrientes/vitaminas/b9.png",
+        foto: "/recorrido/nutricion/moleculas/vitb9.png",
         parrafos: [
           "Activa a la enzima que transporta pequeños fragmentos de carbono necesarios para fabricar ADN y ARN. Sin ella, las células no podrían dividirse correctamente.",
           "Durante el embarazo es especialmente importante porque participa en el correcto desarrollo del sistema nervioso del bebé. Sin esta vitamina, el bebé podría fallecer.",
@@ -269,7 +269,7 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "b12", sigla: "B12", titulo: "Vitamina B12 (Cobalamina)", color: "#c99a32",
-        foto: "/img/nutri/nutrientes/vitaminas/b12.png",
+        foto: "/recorrido/nutricion/moleculas/vitb12.png",
         parrafos: [
           "Activa a las enzimas que regeneran el folato activo y participan en la formación de ADN, glóbulos rojos y mielina, la capa que recubre muchas neuronas.",
           "Solo la producen ciertos microorganismos, por lo que se obtiene principalmente de alimentos de origen animal o de alimentos suplementados.",
@@ -277,7 +277,7 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "c", sigla: "C", titulo: "Vitamina C (Ácido ascórbico)", color: "#6fb84c",
-        foto: "/img/nutri/nutrientes/vitaminas/c.png",
+        foto: "/recorrido/nutricion/moleculas/vitc.png",
         parrafos: [
           "Actúa como antioxidante, dona electrones a enzimas que fabrican colágeno, permitiendo estabilizar sus fibras. Mejora la absorción del hierro de origen vegetal, manteniéndolo en una forma más fácil de absorber.",
           "Contribuye al funcionamiento normal del sistema inmunitario, es decir ayuda a estimular la producción y función de las células inmunes, además de actuar como antioxidante que protege a estas células de daños.",
@@ -285,7 +285,7 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "d", sigla: "D", titulo: "Vitamina D (Calciferol)", color: "#4a90d9",
-        foto: "/img/nutri/nutrientes/vitaminas/d.png",
+        foto: "/recorrido/nutricion/moleculas/vitd.png",
         parrafos: [
           "Facilita la absorción del calcio y del fósforo, ayudando a mantener huesos y dientes fuertes.",
           "Además, participa en el funcionamiento del sistema inmunitario y de los músculos. Nuestro cuerpo puede fabricarla gracias a la luz solar, pero es muy complicada de fabricar por lo que se recomienda tomarla como suplemento.",
@@ -293,7 +293,7 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "e", sigla: "E", titulo: "Vitamina E (Tocoferol)", color: "#9b6fc7",
-        foto: "/img/nutri/nutrientes/vitaminas/e.png",
+        foto: "/recorrido/nutricion/moleculas/vite.png",
         parrafos: [
           "Es uno de los principales antioxidantes del organismo.",
           "Protege las membranas celulares porque se incorpora a ellas y dona electrones para calmar a los radicales libres antes de que puedan dañar los lípidos que forman la membrana.",
@@ -301,7 +301,7 @@ export const NUTRIENTES: Nutriente[] = [
       },
       {
         key: "k", sigla: "K", titulo: "Vitamina K (Filoquinona y Menaquinonas)", color: "#d9534f",
-        foto: "/img/nutri/nutrientes/vitaminas/k.png",
+        foto: "/recorrido/nutricion/moleculas/vitk.png",
         parrafos: [
           "Es imprescindible para que la sangre coagule correctamente cuando sufrimos una herida. También participa en el mantenimiento de los huesos regulando el uso del calcio.",
           "Parte de la vitamina K también puede ser producida por algunas bacterias de nuestra microbiota intestinal.",
@@ -329,7 +329,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "sodio",
         titulo: "Sodio (Na⁺)",
-        foto: "/img/nutri/nutrientes/minerales/sodio.png",
+        foto: "/recorrido/nutricion/moleculas/sodio.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
           "Es el principal electrolito fuera de las células.",
@@ -341,7 +341,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "potasio",
         titulo: "Potasio (K⁺)",
-        foto: "/img/nutri/nutrientes/minerales/potasio.png",
+        foto: "/recorrido/nutricion/moleculas/potasio.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
           "Es el principal electrolito dentro de las células.",
@@ -352,7 +352,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "calcio",
         titulo: "Calcio (Ca²⁺)",
-        foto: "/img/nutri/nutrientes/minerales/calcio.png",
+        foto: "/recorrido/nutricion/moleculas/calcio.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
           "Además de formar parte de los huesos y dientes, el calcio actúa como una señal química dentro de las células.",
@@ -362,7 +362,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "magnesio",
         titulo: "Magnesio (Mg²⁺)",
-        foto: "/img/nutri/nutrientes/minerales/magnesio.png",
+        foto: "/recorrido/nutricion/moleculas/magnesio.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
           "El ATP casi nunca existe libre dentro de las células. Normalmente está unido a un ion de magnesio formando Mg-ATP, la forma que necesitan la mayoría de las enzimas.",
@@ -373,7 +373,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "cloruro",
         titulo: "Cloruro (Cl⁻)",
-        foto: "/img/nutri/nutrientes/minerales/cloruro.png",
+        foto: "/recorrido/nutricion/moleculas/cloruro.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
           "Presente en gran parte del líquido que rodea a las células y acompaña al sodio para mantener el equilibrio eléctrico y el movimiento del agua entre los distintos tejidos.",
@@ -383,7 +383,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "fosfato",
         titulo: "Fosfato (PO₄³⁻)",
-        foto: "/img/nutri/nutrientes/minerales/fosfato.png",
+        foto: "/recorrido/nutricion/moleculas/fosfato.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
           "El fosfato es uno de los componentes más importantes de la vida.",
@@ -394,7 +394,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "hierro",
         titulo: "Hierro (Fe)",
-        foto: "/img/nutri/nutrientes/minerales/hierro.png",
+        foto: "/recorrido/nutricion/moleculas/hierro.png",
         grupo: "🧱 Minerales",
         parrafos: [
           "Es un componente esencial de la hemoglobina de los glóbulos rojos y de la mioglobina de los músculos.",
@@ -405,7 +405,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "zinc",
         titulo: "Zinc (Zn)",
-        foto: "/img/nutri/nutrientes/minerales/zinc.png",
+        foto: "/recorrido/nutricion/moleculas/zinc.png",
         grupo: "🧱 Minerales",
         parrafos: [
           "Participa como cofactor en más de 300 enzimas implicadas en la síntesis de ADN y proteínas, la división celular, la cicatrización y el metabolismo de los nutrientes.",
@@ -415,7 +415,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "cobre",
         titulo: "Cobre (Cu)",
-        foto: "/img/nutri/nutrientes/minerales/cobre.png",
+        foto: "/recorrido/nutricion/moleculas/cobre.png",
         grupo: "🧱 Minerales",
         parrafos: [
           "El cobre participa en enzimas que intervienen en la producción de energía, la formación del tejido conectivo y la protección frente al estrés oxidativo.",
@@ -425,7 +425,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "yodo",
         titulo: "Yodo (I)",
-        foto: "/img/nutri/nutrientes/minerales/yodo.png",
+        foto: "/recorrido/nutricion/moleculas/yodo.png",
         grupo: "🧱 Minerales",
         parrafos: [
           "El yodo es imprescindible para fabricar las hormonas tiroideas (T₃ y T₄).",
@@ -435,7 +435,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "selenio",
         titulo: "Selenio (Se)",
-        foto: "/img/nutri/nutrientes/minerales/selenio.png",
+        foto: "/recorrido/nutricion/moleculas/selenio.png",
         grupo: "🧱 Minerales",
         parrafos: [
           "Forma parte de varias enzimas antioxidantes que protegen a las células frente al daño causado por los radicales libres.",
@@ -445,7 +445,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "manganeso",
         titulo: "Manganeso (Mn)",
-        foto: "/img/nutri/nutrientes/minerales/manganeso.png",
+        foto: "/recorrido/nutricion/moleculas/manganeso.png",
         grupo: "🧱 Minerales",
         parrafos: [
           "Actúa como cofactor de diversas enzimas implicadas en el metabolismo de carbohidratos, proteínas y grasas.",
@@ -474,7 +474,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "soluble",
         titulo: "Fibra soluble",
-        foto: "/img/nutri/nutrientes/fibra/soluble.png",
+        foto: "/recorrido/nutricion/moleculas/fibrasoluble.png",
         parrafos: [
           "Se disuelve en agua y forma un gel dentro del intestino. Ese gel ralentiza la digestión, hace que la glucosa llegue más lentamente a la sangre y ayuda a reducir los niveles de colesterol.",
           "Se encuentra en alimentos como la avena, las legumbres, las manzanas o las semillas de chía.",
@@ -483,7 +483,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "insoluble",
         titulo: "Fibra insoluble",
-        foto: "/img/nutri/nutrientes/fibra/insoluble.png",
+        foto: "/recorrido/nutricion/moleculas/fibrainsoluble.png",
         parrafos: [
           "No se disuelve en agua y apenas cambia durante la digestión. Aumenta el volumen del contenido intestinal y facilita su paso, ayudando a mantener un tránsito intestinal saludable.",
           "Se encuentra sobre todo en cereales integrales, verduras, frutos secos y la piel de muchas frutas.",
@@ -492,7 +492,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "fermentable",
         titulo: "Fibra fermentable",
-        foto: "/img/nutri/nutrientes/fibra/fermentable.png",
+        foto: "/recorrido/nutricion/moleculas/fibrafermentable.png",
         parrafos: [
           "Algunas fibras pueden ser fermentadas por las bacterias del intestino grueso. Al hacerlo producen ácidos grasos de cadena corta, como el butirato, el propionato y el acetato, que ayudan a mantener sana la pared intestinal y participan en la regulación del metabolismo y del sistema inmunitario.",
         ],
@@ -503,7 +503,7 @@ export const NUTRIENTES: Nutriente[] = [
     key: "colesterol",
     label: "Colesterol",
     color: "#e6c34d",
-    img: "/img/nutri/nutrientes/colesterol.png",
+    img: "/recorrido/nutricion/portadas/colesterolportada.png",
     resumen: "Ni bueno ni malo: materia prima esencial.",
     tipos: [
       { nombre: "HDL", desc: "El que retira el colesterol sobrante y lo lleva al hígado. El «que limpia»." },
@@ -536,7 +536,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "etanol",
         titulo: "Etanol (CH₃CH₂OH)",
-        foto: "/img/nutri/nutrientes/etanol/etanol.png",
+        foto: "/recorrido/nutricion/moleculas/etanol.png",
         parrafos: [
           "Es la molécula presente en las bebidas alcohólicas.",
           "Aporta energía (7 kcal por gramo, casi las mismas que la grasa, es decir el alcohol es muy calórico), pero no es un nutriente esencial ni participa en la construcción de tejidos.",
@@ -546,7 +546,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "acetaldehido",
         titulo: "Acetaldehído (CH₃CHO)",
-        foto: "/img/nutri/nutrientes/etanol/acetaldehido.png",
+        foto: "/recorrido/nutricion/moleculas/acetaldehido.png",
         parrafos: [
           "Es la primera molécula que se forma cuando el hígado metaboliza el etanol.",
           "Es mucho más reactiva y tóxica que el propio alcohol, pudiendo dañar proteínas, membranas y ADN si permanece demasiado tiempo en las células. Por eso el organismo intenta transformarla rápidamente.",
@@ -555,7 +555,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "acetato",
         titulo: "Acetato (CH₃COO⁻)",
-        foto: "/img/nutri/nutrientes/etanol/acetato.png",
+        foto: "/recorrido/nutricion/moleculas/acetato.png",
         parrafos: [
           "Es el producto final del metabolismo del alcohol. Es una molécula mucho menos tóxica que puede utilizarse para producir energía o eliminarse.",
           "Transformar el acetaldehído en acetato es uno de los principales objetivos del hígado tras consumir alcohol.",
@@ -601,7 +601,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "antocianinas",
         titulo: "Antocianinas",
-        foto: "/img/nutri/nutrientes/fitoquimicos/antocianinas.png",
+        foto: "/recorrido/nutricion/moleculas/antocianinas.png",
         parrafos: [
           "Son los pigmentos que dan el color morado, azul y rojo intenso a alimentos como los arándanos, las moras, las cerezas o la col lombarda.",
           "En las plantas ayudan a proteger frente a la radiación ultravioleta y al estrés ambiental.",
@@ -612,7 +612,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "carotenoides",
         titulo: "Carotenoides",
-        foto: "/img/nutri/nutrientes/fitoquimicos/carotenoides.png",
+        foto: "/recorrido/nutricion/moleculas/carotenoides.png",
         parrafos: [
           "Son pigmentos amarillos, naranjas y rojos presentes en zanahorias, calabazas, tomates, pimientos y muchas frutas.",
           "En las plantas capturan parte de la energía de la luz y las protegen del exceso de radiación solar.",
@@ -622,7 +622,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "flavonoides",
         titulo: "Flavonoides",
-        foto: "/img/nutri/nutrientes/fitoquimicos/flavonoides.png",
+        foto: "/recorrido/nutricion/moleculas/flavonoides.png",
         parrafos: [
           "Constituyen una de las familias más abundantes de fitoquímicos y se encuentran en frutas, verduras, cebolla, cacao, té y cítricos.",
           "Muchas de estas moléculas actúan como antioxidantes, pero también regulan la actividad de enzimas y proteínas implicadas en la inflamación, la coagulación y la función de los vasos sanguíneos.",
@@ -632,7 +632,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "glucosinolatos",
         titulo: "Glucosinolatos",
-        foto: "/img/nutri/nutrientes/fitoquimicos/glucosinolatos.png",
+        foto: "/recorrido/nutricion/moleculas/glucosinolatos.png",
         parrafos: [
           "Son compuestos característicos del brócoli, la col, la coliflor o las coles de Bruselas.",
           "Mientras la planta permanece intacta apenas reaccionan, pero al cortarla o masticarla entran en contacto con una enzima, que los transforma en moléculas como el sulforafano.",
@@ -642,7 +642,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "polifenoles",
         titulo: "Polifenoles",
-        foto: "/img/nutri/nutrientes/fitoquimicos/polifenoles.png",
+        foto: "/recorrido/nutricion/moleculas/polifenoles.png",
         parrafos: [
           "Los polifenoles son una gran familia que engloba miles de fitoquímicos, incluidos muchos flavonoides.",
           "Se encuentran en el aceite de oliva virgen extra, el cacao, el café, las uvas, el té y numerosos frutos.",
@@ -652,7 +652,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "fitoesteroles",
         titulo: "Fitoesteroles",
-        foto: "/img/nutri/nutrientes/fitoquimicos/fitoesteroles.png",
+        foto: "/recorrido/nutricion/moleculas/fitoesteroles.png",
         parrafos: [
           "Son moléculas vegetales con una estructura muy parecida al colesterol.",
           "Durante la digestión compiten con él por los mismos transportadores del intestino, reduciendo así la cantidad de colesterol que conseguimos absorber.",
@@ -662,7 +662,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "terpenos",
         titulo: "Terpenos",
-        foto: "/img/nutri/nutrientes/fitoquimicos/terpenos.png",
+        foto: "/recorrido/nutricion/moleculas/terpenos.png",
         parrafos: [
           "Son una enorme familia de moléculas aromáticas presentes en hierbas, especias, cítricos y muchas plantas medicinales.",
           "En la naturaleza sirven para atraer polinizadores, repeler insectos o defenderse de microorganismos.",
@@ -672,7 +672,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "licopeno",
         titulo: "Licopeno",
-        foto: "/img/nutri/nutrientes/fitoquimicos/licopeno.png",
+        foto: "/recorrido/nutricion/moleculas/licopeno.png",
         parrafos: [
           "El licopeno es un carotenoide responsable del intenso color rojo del tomate, la sandía y el pomelo rosa.",
           "Destaca por su capacidad para neutralizar el oxígeno singlete, una forma muy reactiva del oxígeno que puede dañar las membranas celulares y el ADN.",
@@ -682,7 +682,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "isoflavonas",
         titulo: "Isoflavonas",
-        foto: "/img/nutri/nutrientes/fitoquimicos/isoflavonas.png",
+        foto: "/recorrido/nutricion/moleculas/isoflavonas.png",
         parrafos: [
           "Son flavonoides presentes principalmente en la soja, el tofu, el tempeh y otros derivados.",
           "Su estructura se parece a la de los estrógenos humanos, por lo que pueden unirse a algunos de sus receptores, aunque con una intensidad mucho menor.",

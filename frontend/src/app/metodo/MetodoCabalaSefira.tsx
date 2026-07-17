@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
@@ -18,6 +18,7 @@ import {
   type Ejercicio,
   type CabalaPageKey,
 } from "../../components/metodo/cabalaSefirot";
+import { CABALA_TEST, ESCALA, NUM_PREGUNTAS, type DimensionTest } from "../../components/metodo/cabalaTest";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
 const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
@@ -314,6 +315,75 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
   );
 }
 
+/* ── Test de la sefirá (Escala de Equilibrio, 1-5) ── */
+function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: number[]; onAnswer: (idx: number, valor: number) => void }) {
+  return (
+    <Caja>
+      <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
+        <TituloCaja>Escala de equilibrio</TituloCaja>
+        <Text color={`${cabalaTxt}88`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
+          {dim.etiqueta}
+        </Text>
+      </Flex>
+      <Divisor mt={3} mb={4} />
+
+      <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4} lineHeight="1.6">
+        Responde con qué frecuencia te ocurre cada afirmación. Tus respuestas se recogen para tu Diagnóstico final.
+      </Text>
+
+      {/* Leyenda 1-5 */}
+      <Flex gap={2} mb={5} wrap="wrap">
+        {ESCALA.map((op) => (
+          <Text key={op.valor} color={`${cabalaTxt}99`} fontSize="xs">
+            <Box as="span" fontWeight="800" color={cabalaTxt}>{op.valor}</Box> {op.label}
+          </Text>
+        ))}
+      </Flex>
+
+      <Flex direction="column" gap={5}>
+        {dim.preguntas.map((p, qi) => (
+          <Box key={qi}>
+            <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mb={2.5}>
+              <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{qi + 1}.</Box>
+              {p.texto}
+            </Text>
+            <Flex gap={{ base: 1.5, md: 2 }}>
+              {ESCALA.map((op) => {
+                const sel = answers[qi] === op.valor;
+                return (
+                  <Box
+                    key={op.valor}
+                    as="button"
+                    onClick={() => onAnswer(qi, op.valor)}
+                    flex="1"
+                    minW={{ base: "40px", md: "48px" }}
+                    h={{ base: "38px", md: "42px" }}
+                    borderRadius="lg"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    bg={sel ? cabalaTxt : `${cabalaTxt}12`}
+                    color={sel ? cabalaBg : `${cabalaTxt}aa`}
+                    border={`1px solid ${sel ? cabalaTxt : `${cabalaTxt}33`}`}
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="700"
+                    cursor="pointer"
+                    transition="all 0.14s"
+                    boxShadow={sel ? `0 0 14px ${cabalaTxt}88` : "none"}
+                    _hover={sel ? {} : { bg: `${cabalaTxt}28`, borderColor: `${cabalaTxt}66` }}
+                  >
+                    {op.valor}
+                  </Box>
+                );
+              })}
+            </Flex>
+          </Box>
+        ))}
+      </Flex>
+    </Caja>
+  );
+}
+
 /* ── Flecha del carrusel ── */
 const FlechaCarrusel = ({ dir, onClick }: { dir: "left" | "right"; onClick: () => void }) => (
   <Box
@@ -352,6 +422,9 @@ export default function MetodoCabalaSefira() {
   const [carruselIdx, setCarruselIdx] = useState(0);
   const [autoeval, setAutoeval] = useState<number[]>([]);
   const [notaOpen, setNotaOpen] = useState(false);
+  const [testAnswers, setTestAnswers] = useState<number[]>(() => new Array(NUM_PREGUNTAS).fill(0));
+  // Copia local del `data` de metodo_cabala para poder mergear al guardar el test.
+  const dataRef = useRef<any>({});
 
   // Navegación prev/next dentro del recorrido de sefirot.
   const { prevKey, nextKey } = useMemo(() => {
@@ -365,6 +438,7 @@ export default function MetodoCabalaSefira() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     setCarruselIdx(0);
+    setTestAnswers(new Array(NUM_PREGUNTAS).fill(0));
     if (sefira) setAutoeval(new Array(sefira.autoevaluacion.items.length).fill(0));
 
     const userId = sessionStorage.getItem("userId");
@@ -377,15 +451,23 @@ export default function MetodoCabalaSefira() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
 
-        // Marcamos esta sefirá (dimensión) como vista y lo guardamos en BD.
+        // Cargamos el progreso guardado (sefirot vistas + respuestas del test) y
+        // marcamos esta sefirá como vista.
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const prevData = res.data?.data ?? {};
+          dataRef.current = prevData;
+
+          // Respuestas del test ya guardadas para esta dimensión.
+          const saved = prevData?.test?.[sefira.key];
+          if (Array.isArray(saved) && saved.length === NUM_PREGUNTAS) setTestAnswers(saved.map((n: any) => Number(n) || 0));
+
           const vistas: string[] = Array.isArray(prevData.sefirotVistas) ? prevData.sefirotVistas : [];
           if (vistas.includes(sefira.key)) {
             setVisto(true);
           } else {
             const next = { ...prevData, sefirotVistas: [...vistas, sefira.key] };
+            dataRef.current = next;
             await axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: next }, { headers: { Authorization: `Bearer ${token}` } });
             setVisto(true);
           }
@@ -398,6 +480,22 @@ export default function MetodoCabalaSefira() {
       }
     })();
   }, [key, navigate, sefira]);
+
+  // Guarda una respuesta del test en BD (merge dentro de data.test[key]).
+  const guardarTest = (idx: number, valor: number) => {
+    if (!key) return;
+    const nuevas = [...testAnswers];
+    nuevas[idx] = valor;
+    setTestAnswers(nuevas);
+    const prev = dataRef.current ?? {};
+    const nextData = { ...prev, test: { ...(prev.test ?? {}), [key]: nuevas } };
+    dataRef.current = nextData;
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (userId && token) {
+      axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
+    }
+  };
 
   if (loading || !sefira) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -430,7 +528,7 @@ export default function MetodoCabalaSefira() {
                   : { label: "← El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
                 next={nextKey
                   ? { label: "Siguiente →", onClick: () => navigate(`/metodo/cabala/sefira/${nextKey}`) }
-                  : { label: "El Árbol →", onClick: () => navigate("/metodo/cabala/arbol") }}
+                  : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/diagnostico") }}
               />
               {visto && (
                 <Flex
@@ -694,6 +792,13 @@ export default function MetodoCabalaSefira() {
                   ))}
                 </Flex>
               </Caja>
+            </Reveal>
+          )}
+
+          {/* Test de la dimensión (Escala de Equilibrio) */}
+          {CABALA_TEST[sefira.key] && (
+            <Reveal direction="up" distance={22} delay={0.3} duration={0.65} w="100%">
+              <TestBox dim={CABALA_TEST[sefira.key]} answers={testAnswers} onAnswer={guardarTest} />
             </Reveal>
           )}
         </Flex>
