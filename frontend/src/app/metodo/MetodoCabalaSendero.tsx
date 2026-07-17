@@ -1,0 +1,377 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import SiteHeader from "../../components/global/SiteHeader";
+import SiteFooter from "../../components/global/Footer";
+import SpinnerTurquesa from "../../components/global/Spinner";
+import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
+import { ESCALA } from "../../components/metodo/cabalaTest";
+import {
+  CABALA_SENDEROS,
+  senderoPorNum,
+  NOMBRE_SEFIRA,
+  puntuacionSendero,
+  senderoCompleto,
+  interpretacionSendero,
+  type SenderoContenido,
+} from "../../components/metodo/cabalaSenderos";
+import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+
+const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
+
+const Divisor = ({ mb = 4, mt = 0 }: { mb?: any; mt?: any }) => (
+  <Box h="1px" mb={mb} mt={mt} style={{ background: `linear-gradient(90deg, transparent, ${cabalaTxt}55, transparent)` }} />
+);
+
+const Caja = ({ children }: { children: React.ReactNode }) => (
+  <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
+       px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
+    {children}
+  </Box>
+);
+
+const TituloCaja = ({ children }: { children: React.ReactNode }) => (
+  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.14em"
+        textTransform="uppercase" style={{ textShadow: `0 0 18px ${cabalaTxt}55` }}>
+    {children}
+  </Text>
+);
+
+const Parrafos = ({ items }: { items: string[] }) => (
+  <Flex direction="column" gap={3.5}>
+    {items.map((p, i) => (
+      <Text key={i} color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{p}</Text>
+    ))}
+  </Flex>
+);
+
+export default function MetodoCabalaSendero() {
+  const navigate = useNavigate();
+  const { num } = useParams<{ num: string }>();
+  const sendero: SenderoContenido | undefined = num ? senderoPorNum[Number(num)] : undefined;
+
+  const [loading, setLoading] = useState(true);
+  const [answers, setAnswers] = useState<number[]>([]);
+  const dataRef = useRef<any>({});
+
+  const { prevNum, nextNum } = useMemo(() => {
+    const i = sendero ? CABALA_SENDEROS.findIndex((s) => s.num === sendero.num) : -1;
+    return {
+      prevNum: i > 0 ? CABALA_SENDEROS[i - 1].num : null,
+      nextNum: i >= 0 && i < CABALA_SENDEROS.length - 1 ? CABALA_SENDEROS[i + 1].num : null,
+    };
+  }, [sendero]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    if (sendero) setAnswers(new Array(sendero.test.length).fill(0));
+
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) { navigate("/welcome"); return; }
+    if (!sendero) { navigate("/metodo/cabala/senderos"); return; }
+
+    (async () => {
+      try {
+        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
+        try {
+          const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+          const prevData = res.data?.data ?? {};
+          dataRef.current = prevData;
+          const saved = prevData?.senderos?.[sendero.num];
+          if (Array.isArray(saved) && saved.length === sendero.test.length) setAnswers(saved.map((n: any) => Number(n) || 0));
+        } catch { /* sin progreso */ }
+      } catch {
+        navigate("/metodo/cabala");
+        return;
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [num, navigate, sendero]);
+
+  const guardar = (idx: number, valor: number) => {
+    if (!sendero) return;
+    const nuevas = [...answers];
+    nuevas[idx] = valor;
+    setAnswers(nuevas);
+    const prev = dataRef.current ?? {};
+    const nextData = { ...prev, senderos: { ...(prev.senderos ?? {}), [sendero.num]: nuevas } };
+    dataRef.current = nextData;
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (userId && token) {
+      axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
+    }
+  };
+
+  if (loading || !sendero) {
+    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  }
+
+  const tieneContenido = sendero.une.length > 0 || sendero.test.length > 0;
+  const completo = senderoCompleto(sendero, answers);
+  const total = puntuacionSendero(sendero, answers);
+  const banda = completo ? interpretacionSendero(sendero, total) : null;
+
+  return (
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      <SiteHeader variant="private" />
+
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
+
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
+              title={`${sendero.letra} (${sendero.hebreo})`}
+              pageLabel={`${sendero.orden}/22`}
+              compact
+              bgColor={`${cabalaBg}dd`}
+              color={cabalaTxt}
+              nom={cabalaNom}
+              mb={0}
+              prev={prevNum
+                ? { label: "← Anterior", onClick: () => navigate(`/metodo/cabala/sendero/${prevNum}`) }
+                : { label: "← Los senderos", onClick: () => navigate("/metodo/cabala/senderos") }}
+              next={nextNum
+                ? { label: "Siguiente →", onClick: () => navigate(`/metodo/cabala/sendero/${nextNum}`) }
+                : { label: "El Árbol →", onClick: () => navigate("/metodo/cabala/arbol") }}
+            />
+          </Reveal>
+
+          {/* ── Cabecera del sendero ── */}
+          <Reveal direction="up" distance={18} delay={0.08} duration={0.65} w="100%">
+            <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}66`} borderRadius="3xl" boxShadow={CAJA_GLOW}
+                 px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
+              <Flex align="center" gap={{ base: 5, md: 8 }} direction={{ base: "column", sm: "row" }} textAlign={{ base: "center", sm: "left" }}>
+                <Text fontSize={{ base: "72px", md: "96px" }} lineHeight="1" color={cabalaTxt}
+                      style={{ textShadow: `0 0 26px ${cabalaTxt}88, 0 0 60px ${cabalaTxt}44` }}>
+                  {sendero.hebreo}
+                </Text>
+                <Box>
+                  <Text color={`${cabalaTxt}99`} fontSize="sm" letterSpacing="0.18em" textTransform="uppercase">
+                    Sendero {sendero.letra}
+                  </Text>
+                  <Text color={cabalaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.15" mt={1}
+                        style={{ textShadow: `0 0 20px ${cabalaTxt}55` }}>
+                    {sendero.titulo || `De ${NOMBRE_SEFIRA[sendero.from]} a ${NOMBRE_SEFIRA[sendero.to]}`}
+                  </Text>
+                  <Flex align="center" gap={3} mt={3} justify={{ base: "center", sm: "flex-start" }} wrap="wrap">
+                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} letterSpacing="0.06em">
+                      {NOMBRE_SEFIRA[sendero.from]} → {NOMBRE_SEFIRA[sendero.to]}
+                    </Text>
+                    {sendero.palabraClave && (
+                      <Text color={cabalaTxt} fontSize="xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase"
+                            bg={`${cabalaTxt}18`} border={`1.5px solid ${cabalaTxt}55`} borderRadius="full" px={3} py={1}>
+                        {sendero.palabraClave}
+                      </Text>
+                    )}
+                  </Flex>
+                </Box>
+              </Flex>
+            </Box>
+          </Reveal>
+
+          {!tieneContenido && (
+            <Text color="rgba(255,255,255,0.85)" fontStyle="italic" textAlign="center" style={{ textShadow: INK_SHADOW }}>
+              Contenido próximamente.
+            </Text>
+          )}
+
+          {/* ── Significado tradicional ── */}
+          {sendero.significadoTradicional && (
+            <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
+              <Caja>
+                <TituloCaja>Significado tradicional</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" whiteSpace="pre-line">
+                  {sendero.significadoTradicional}
+                </Text>
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Traducción psicológica ── */}
+          {sendero.traduccionPsicologica && (
+            <Reveal direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
+              <Caja>
+                <TituloCaja>Traducción psicológica</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" whiteSpace="pre-line">
+                  {sendero.traduccionPsicologica}
+                </Text>
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Pregunta de reflexión ── */}
+          {sendero.pregunta && (
+            <Reveal direction="up" distance={16} delay={0.16} duration={0.6} display="flex" justifyContent="center">
+              <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic" fontWeight="600"
+                    textAlign="center" maxW="640px" lineHeight="1.5" style={{ textShadow: INK_SHADOW }}>
+                {sendero.pregunta}
+              </Text>
+            </Reveal>
+          )}
+
+          {/* ── ¿Qué une este sendero? ── */}
+          {sendero.une.length > 0 && (
+            <Reveal direction="up" distance={20} delay={0.18} duration={0.6} w="100%">
+              <Caja>
+                <TituloCaja>¿Qué une este sendero?</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                <Parrafos items={sendero.une} />
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Test ── */}
+          {sendero.test.length > 0 && (
+            <Reveal direction="up" distance={22} delay={0.2} duration={0.65} w="100%">
+              <Caja>
+                <TituloCaja>Test</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                {sendero.testTitulo && (
+                  <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.5" mb={2}>
+                    {sendero.testTitulo}
+                  </Text>
+                )}
+                <Flex gap={2} mb={5} wrap="wrap">
+                  {ESCALA.map((op) => (
+                    <Text key={op.valor} color={`${cabalaTxt}99`} fontSize="xs">
+                      <Box as="span" fontWeight="800" color={cabalaTxt}>{op.valor}</Box> {op.label}
+                    </Text>
+                  ))}
+                </Flex>
+
+                <Flex direction="column" gap={5}>
+                  {sendero.test.map((preg, qi) => (
+                    <Box key={qi}>
+                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mb={2.5}>
+                        <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{qi + 1}.</Box>
+                        {preg.texto}
+                      </Text>
+                      <Flex gap={{ base: 1.5, md: 2 }}>
+                        {ESCALA.map((op) => {
+                          const sel = answers[qi] === op.valor;
+                          return (
+                            <Box key={op.valor} as="button" onClick={() => guardar(qi, op.valor)}
+                                 flex="1" minW={{ base: "40px", md: "48px" }} h={{ base: "38px", md: "42px" }}
+                                 borderRadius="lg" display="flex" alignItems="center" justifyContent="center"
+                                 bg={sel ? cabalaTxt : `${cabalaTxt}12`} color={sel ? cabalaBg : `${cabalaTxt}aa`}
+                                 border={`1px solid ${sel ? cabalaTxt : `${cabalaTxt}33`}`} fontSize={{ base: "sm", md: "md" }}
+                                 fontWeight="700" cursor="pointer" transition="all 0.14s"
+                                 boxShadow={sel ? `0 0 14px ${cabalaTxt}88` : "none"}
+                                 _hover={sel ? {} : { bg: `${cabalaTxt}28`, borderColor: `${cabalaTxt}66` }}>
+                              {op.valor}
+                            </Box>
+                          );
+                        })}
+                      </Flex>
+                    </Box>
+                  ))}
+                </Flex>
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Interpretación ── */}
+          {sendero.interpretaciones.length > 0 && (
+            <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
+              <Caja>
+                <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
+                  <TituloCaja>Interpretación</TituloCaja>
+                  {completo && (
+                    <Text color={cabalaTxt} fontSize="sm" fontWeight="700">Tu puntuación: {total}</Text>
+                  )}
+                </Flex>
+                <Divisor mt={3} mb={4} />
+                {!completo && (
+                  <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}>
+                    Responde las 5 preguntas para ver tu interpretación.
+                  </Text>
+                )}
+                <Flex direction="column" gap={3}>
+                  {sendero.interpretaciones.map((b, i) => {
+                    const activa = !!banda && banda.min === b.min && banda.max === b.max;
+                    return (
+                      <Box key={i} borderRadius="xl" px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
+                           bg={activa ? `${cabalaTxt}1e` : `${cabalaTxt}08`}
+                           border={`1px solid ${activa ? cabalaTxt : `${cabalaTxt}22`}`}
+                           boxShadow={activa ? `0 0 18px ${cabalaTxt}55` : "none"}
+                           opacity={completo && !activa ? 0.55 : 1} transition="all 0.2s">
+                        <Flex align="baseline" gap={2} mb={1} wrap="wrap">
+                          <Text color={`${cabalaTxt}88`} fontSize="xs" fontWeight="700" letterSpacing="0.08em">{b.min}–{b.max}</Text>
+                          <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700">{b.titulo}</Text>
+                        </Flex>
+                        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{b.texto}</Text>
+                      </Box>
+                    );
+                  })}
+                </Flex>
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Señales de práctica ── */}
+          {sendero.senales.length > 0 && (
+            <Reveal direction="up" distance={20} delay={0.28} duration={0.6} w="100%">
+              <Caja>
+                <TituloCaja>Señales de práctica</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={3.5}>
+                  Durante esta semana observa si…
+                </Text>
+                <Flex direction="column" gap={2.5}>
+                  {sendero.senales.map((s, i) => (
+                    <Flex key={i} align="flex-start" gap={3}>
+                      <Box flexShrink={0} mt="10px" w="6px" h="6px" borderRadius="full" bg={cabalaTxt}
+                           boxShadow={`0 0 8px ${cabalaTxt}aa`} />
+                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{s}</Text>
+                    </Flex>
+                  ))}
+                </Flex>
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Has cruzado este umbral cuando… ── */}
+          {sendero.umbral && (
+            <Reveal direction="up" distance={20} delay={0.3} duration={0.6} w="100%">
+              <Caja>
+                <TituloCaja>Has cruzado este umbral cuando…</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                <Text color={`${cabalaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.8">
+                  {sendero.umbral}
+                </Text>
+              </Caja>
+            </Reveal>
+          )}
+
+          {/* ── Frase de integración ── */}
+          {sendero.integracion && (
+            <Reveal direction="up" distance={18} delay={0.32} duration={0.6} w="100%">
+              <Box w="100%" position="relative" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}66`} borderRadius="2xl"
+                   boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 26px ${cabalaTxt}44`} px={{ base: 7, md: 12 }} py={{ base: 8, md: 10 }}>
+                <Box position="absolute" top={3} left={5} fontSize="60px" lineHeight="1" color={`${cabalaTxt}33`} fontFamily="Georgia, serif">“</Box>
+                <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic" fontWeight="600" textAlign="center"
+                      lineHeight="1.6" position="relative" style={{ textShadow: INK_SHADOW }}>
+                  {sendero.integracion}
+                </Text>
+              </Box>
+            </Reveal>
+          )}
+        </Flex>
+      </Flex>
+
+      <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
+      <SiteFooter />
+    </Box>
+  );
+}
