@@ -8,13 +8,14 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { AppleLoader } from "../../components/metodo/AppleLoader";
 import { ComicCaloriasModal } from "../../components/metodo/ComicCaloriasModal";
 import { NUTRICION_INTRO } from "../../components/metodo/comicNutricionIntro";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe } from "../../components/global/Reveal";
 import {
   API_URL,
   nutricionBg,
@@ -153,7 +154,7 @@ export default function MetodoNutricion() {
 
           {/* ── Bienvenida contemplativa ── */}
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+            <Breathe scale={0.008} duration={7.5} position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               {/* La foto de la disciplina se ve tal cual, sin velo oscuro: nutri.png
                   es clara y el texto va en nutricionTxt (verde oscuro). */}
               <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
@@ -165,7 +166,7 @@ export default function MetodoNutricion() {
                     key={`a-${i}`}
                     color={nutricionTxt}
                     fontSize={{ base: "md", md: "lg" }}
-                    fontWeight="600"
+                    fontWeight="400"
                     lineHeight="1.95"
                     maxW="600px"
                     mx="auto"
@@ -173,29 +174,6 @@ export default function MetodoNutricion() {
                     {parrafo}
                   </Text>
                 ))}
-
-                {/* Separador horizontal elegante: línea que se desvanece en los
-                    extremos con un pequeño rombo central. */}
-                <Flex align="center" justify="center" gap={3} my={{ base: 6, md: 8 }} maxW="600px" mx="auto">
-                  <Box
-                    flex="1"
-                    h="1px"
-                    bgGradient={`linear(to-r, ${nutricionTxt}00, ${nutricionTxt}66)`}
-                  />
-                  <Box
-                    w="7px"
-                    h="7px"
-                    transform="rotate(45deg)"
-                    bg={nutricionTxt}
-                    opacity={0.7}
-                    flexShrink={0}
-                  />
-                  <Box
-                    flex="1"
-                    h="1px"
-                    bgGradient={`linear(to-r, ${nutricionTxt}66, ${nutricionTxt}00)`}
-                  />
-                </Flex>
 
                 {[
                   "Aquí no hay juicios: ningún alimento es, por sí mismo, bueno o malo, pero sus moléculas sí pueden ser dañinas o beneficiosas. Comprenderás cómo las moléculas de tu comida se transforman, literalmente, en ti.",
@@ -204,16 +182,52 @@ export default function MetodoNutricion() {
                     key={`b-${i}`}
                     color={nutricionTxt}
                     fontSize={{ base: "md", md: "lg" }}
-                    fontWeight="600"
+                    fontWeight="400"
                     lineHeight="1.95"
                     maxW="600px"
                     mx="auto"
+                    mt={{ base: 5, md: 6 }}
                   >
                     {parrafo}
                   </Text>
                 ))}
               </Box>
-            </Box>
+            </Breathe>
+          </Reveal>
+
+          {/* ── Aviso importante ── */}
+          <Reveal direction="up" distance={20} delay={0.24} duration={0.6} w="100%">
+            <Flex
+              w="100%"
+              align="flex-start"
+              gap={{ base: 3, md: 4 }}
+              px={{ base: 5, md: 7 }}
+              py={{ base: 4, md: 5 }}
+              borderRadius="2xl"
+              bg={`${nutricionBg}e6`}
+              border={`1px solid ${nutricionTxt}44`}
+              borderLeft={`4px solid ${nutricionTxt}`}
+              boxShadow="0 6px 22px rgba(0,0,0,0.22)"
+            >
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                   w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }}
+                   fill={nutricionTxt} flexShrink={0} mt="2px">
+                <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+              </Box>
+              <Box textAlign="left">
+                <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }}
+                      letterSpacing="0.02em" mb={1}>
+                  Aviso importante
+                </Text>
+                <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
+                  Todo lo que encontrarás aquí es contenido educativo para que entiendas mejor tu
+                  cuerpo y tu alimentación. No sustituye el consejo médico. Si de verdad necesitas
+                  una ayuda concreta con tu dieta —por una condición, un objetivo de salud o
+                  cualquier duda personal— acude a un profesional (médico o dietista-nutricionista
+                  colegiado) que pueda acompañarte de forma individual.
+                </Text>
+              </Box>
+            </Flex>
           </Reveal>
         </Flex>
       </Flex>
@@ -227,6 +241,7 @@ export default function MetodoNutricion() {
         disciplinaBgImage="/img/fondos/nutri.png"
         disciplinaBgColor={nutricionBg}
         textShadow="none"
+        loader={<AppleLoader />}
         onFinish={intro.finish}
         onClose={intro.close}
       />

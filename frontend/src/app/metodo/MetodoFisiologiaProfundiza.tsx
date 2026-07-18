@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { FotoBox } from "../../components/metodo/FotoBox";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
@@ -19,75 +19,20 @@ import {
   type TemaProfundiza,
 } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
-// Tarjeta de un tema: imagen arriba + nombre + frase corta. Rejilla de 3.
+// Tarjeta de un tema: box por defecto (FotoBox), imagen arriba + nombre abajo.
 function TemaBox({ tema, onClick, delay, completo = false }: { tema: TemaProfundiza; onClick: () => void; delay: number; completo?: boolean }) {
-  const [imgErr, setImgErr] = useState(false);
-  const enConstruccion = tema.fichas.length === 0;
   return (
     <Reveal direction="up" distance={20} delay={delay} duration={0.55} w="100%" display="flex">
-      <Box
-        as="button"
+      <FotoBox
+        titulo={tema.label}
+        foto={tema.foto}
+        nom={fisiologiaNom}
+        tinta={fisiologiaTxt}
+        bg={fisiologiaBg}
+        visto={completo}
+        colorTint={`${tema.color}22`}
         onClick={onClick}
-        position="relative"
-        overflow="hidden"
-        w="100%"
-        h="100%"
-        borderRadius="2xl"
-        cursor="pointer"
-        fontFamily="'EB Garamond', serif"
-        transition="all 0.2s ease"
-        boxShadow="0 4px 16px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.12)"
-        _hover={{ transform: "translateY(-4px)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
-        _active={{ transform: "translateY(-1px)" }}
-      >
-        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}55`} />
-
-        {/* Sello de "tema completado": aparece cuando se han leído todas sus fichas */}
-        {completo && (
-          <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-                w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
-                boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
-              <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-            </Box>
-          </Flex>
-        )}
-
-        <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
-              p={{ base: 4, md: 5 }} h="100%">
-          <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-               bg={`${tema.color}22`}
-               boxShadow="0 0 12px rgba(255,255,255,0.12)"
-               display="flex" alignItems="center" justifyContent="center">
-            {!imgErr ? (
-              <Image src={encodeURI(tema.foto)} alt={tema.label} w="100%" h="100%" objectFit="cover"
-                     onError={() => setImgErr(true)} />
-            ) : (
-              <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-                {tema.label.charAt(0)}
-              </Text>
-            )}
-          </Box>
-          <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
-                fontSize={{ base: "sm", md: "md" }} letterSpacing="0.02em"
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65)" }}>
-            {tema.label}
-          </Text>
-          <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
-                textAlign="center" lineHeight="1.4"
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-            {tema.resumen}
-          </Text>
-          {enConstruccion && (
-            <Text color={`${fisiologiaTxt}88`} fontSize="3xs" fontWeight={700} letterSpacing="0.14em"
-                  textTransform="uppercase" mt="auto">
-              En construcción
-            </Text>
-          )}
-        </Flex>
-      </Box>
+      />
     </Reveal>
   );
 }

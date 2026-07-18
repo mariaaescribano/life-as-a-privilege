@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, Image, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { FotoBox } from "../../components/metodo/FotoBox";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
@@ -23,61 +23,18 @@ import {
 // con el fondo de Nutrición. Al ver el grupo (abrir su modal), aparece un tick
 // verde de la gama de Nutrición arriba a la derecha.
 function NutrienteBox({ n, visto, onClick, delay }: { n: Nutriente; visto: boolean; onClick: () => void; delay: number }) {
-  const [imgErr, setImgErr] = useState(false);
   return (
     <Reveal direction="up" distance={20} delay={delay} duration={0.55} w="100%" display="flex">
-      <Box
-        as="button"
+      <FotoBox
+        titulo={n.label}
+        foto={n.img}
+        nom={nutricionNom}
+        tinta={nutricionTxt}
+        bg={nutricionBg}
+        visto={visto}
+        colorTint={`${n.color}22`}
         onClick={onClick}
-        position="relative"
-        overflow="hidden"
-        w="100%"
-        h="100%"
-        borderRadius="2xl"
-        cursor="pointer"
-        fontFamily="'EB Garamond', serif"
-        transition="all 0.2s ease"
-        boxShadow="0 4px 16px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.12)"
-        _hover={{ transform: "translateY(-4px)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
-        _active={{ transform: "translateY(-1px)" }}
-      >
-        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
-
-        {/* Tick de "grupo visto": verde de la gama de Nutrición (círculo nutricionTxt
-            + check nutricionBg). Aparece al abrir el detalle del grupo. */}
-        {visto && (
-          <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-                w="24px" h="24px" borderRadius="full" bg={nutricionTxt}
-                boxShadow={`0 0 10px ${nutricionTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill={nutricionBg}>
-              <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-            </Box>
-          </Flex>
-        )}
-
-        <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
-              p={{ base: 4, md: 5 }} h="100%">
-          <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-               bg={`${n.color}22`}
-               boxShadow="0 0 12px rgba(255,255,255,0.12)"
-               display="flex" alignItems="center" justifyContent="center">
-            {!imgErr ? (
-              <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="cover"
-                     onError={() => setImgErr(true)} />
-            ) : (
-              <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-                {n.label.charAt(0)}
-              </Text>
-            )}
-          </Box>
-          <Text color={nutricionTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
-                fontSize={{ base: "sm", md: "md" }} letterSpacing="0.02em">
-            {n.label}
-          </Text>
-        </Flex>
-      </Box>
+      />
     </Reveal>
   );
 }

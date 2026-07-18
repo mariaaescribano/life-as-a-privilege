@@ -2,8 +2,9 @@
 // El plato es un círculo dividido en sectores; cada sector es un macro/grupo.
 // Al pulsar un sector se muestran sus alimentos, que se arrastran sobre el plato.
 //
-// Fotos (pendientes de subir): /recorrido/nutricion/plato/<macro>/<key>.png
-// Mientras no existan, se muestra el emoji como marcador temporal.
+// Fotos: se reutilizan las de la Biblioteca de alimentos, en
+// /recorrido/nutricion/alimentos/<archivo>.png. Los alimentos que aún no tienen
+// foto muestran el emoji como marcador temporal (se irán añadiendo).
 
 export interface PlatoAlimento {
   key: string;
@@ -36,7 +37,7 @@ export const PLATO_MACROS: PlatoMacro[] = [
     descripcion:
       "Llena buena parte del plato de verduras y hortalizas de muchos colores. Cuanta más variedad, mejor.",
     alimentos: [
-      { key: "brocoli", label: "Brócoli", emoji: "🥦" },
+      { key: "brocoli", label: "Brócoli", emoji: "🥦", foto: "/recorrido/nutricion/alimentos/brocoli.png" },
       { key: "espinacas", label: "Espinacas", emoji: "🥬" },
       { key: "zanahoria", label: "Zanahoria", emoji: "🥕" },
       { key: "tomate", label: "Tomate", emoji: "🍅" },
@@ -53,10 +54,10 @@ export const PLATO_MACROS: PlatoMacro[] = [
     descripcion:
       "Fruta entera y de temporada. Aporta fibra, vitaminas y fitoquímicos que te protegen.",
     alimentos: [
-      { key: "manzana", label: "Manzana", emoji: "🍎" },
-      { key: "platano", label: "Plátano", emoji: "🍌" },
+      { key: "manzana", label: "Manzana", emoji: "🍎", foto: "/recorrido/nutricion/alimentos/manzana.png" },
+      { key: "platano", label: "Plátano", emoji: "🍌", foto: "/recorrido/nutricion/alimentos/platano.png" },
       { key: "fresas", label: "Fresas", emoji: "🍓" },
-      { key: "naranja", label: "Naranja", emoji: "🍊" },
+      { key: "naranja", label: "Naranja", emoji: "🍊", foto: "/recorrido/nutricion/alimentos/naranja.png" },
       { key: "uvas", label: "Uvas", emoji: "🍇" },
       { key: "arandanos", label: "Arándanos", emoji: "🫐" },
     ],
@@ -71,9 +72,9 @@ export const PLATO_MACROS: PlatoMacro[] = [
       "Cereales integrales como la avena, el arroz o el pan integral: energía de liberación lenta.",
     alimentos: [
       { key: "avena", label: "Avena", emoji: "🌾" },
-      { key: "arroz-integral", label: "Arroz integral", emoji: "🍚" },
-      { key: "pan-integral", label: "Pan integral", emoji: "🍞" },
-      { key: "pasta-integral", label: "Pasta integral", emoji: "🍝" },
+      { key: "arroz-integral", label: "Arroz integral", emoji: "🍚", foto: "/recorrido/nutricion/alimentos/arroces.png" },
+      { key: "pan-integral", label: "Pan integral", emoji: "🍞", foto: "/recorrido/nutricion/alimentos/pan.png" },
+      { key: "pasta-integral", label: "Pasta integral", emoji: "🍝", foto: "/recorrido/nutricion/alimentos/pasta.png" },
       { key: "maiz", label: "Maíz", emoji: "🌽" },
     ],
   },
@@ -86,11 +87,11 @@ export const PLATO_MACROS: PlatoMacro[] = [
     descripcion:
       "Proteína saludable: legumbres, pescado, huevo o aves. Cuanto menos procesada, mejor.",
     alimentos: [
-      { key: "huevo", label: "Huevo", emoji: "🥚" },
-      { key: "pescado", label: "Pescado", emoji: "🐟" },
-      { key: "pollo", label: "Pollo", emoji: "🍗" },
-      { key: "legumbres", label: "Legumbres", emoji: "🫘" },
-      { key: "frutos-secos", label: "Frutos secos", emoji: "🥜" },
+      { key: "huevo", label: "Huevo", emoji: "🥚", foto: "/recorrido/nutricion/alimentos/huevo.png" },
+      { key: "pescado", label: "Pescado", emoji: "🐟", foto: "/recorrido/nutricion/alimentos/atun.png" },
+      { key: "pollo", label: "Pollo", emoji: "🍗", foto: "/recorrido/nutricion/alimentos/pollo.png" },
+      { key: "legumbres", label: "Legumbres", emoji: "🫘", foto: "/recorrido/nutricion/alimentos/garbanzos.png" },
+      { key: "frutos-secos", label: "Frutos secos", emoji: "🥜", foto: "/recorrido/nutricion/alimentos/frutossecos.png" },
       { key: "marisco", label: "Marisco", emoji: "🦐" },
     ],
   },

@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
-  alimentoByKey, MOLECULAS, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
+  alimentoByKey, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
   MACRO_COLOR, MACRO_LABEL, type Alimento, type Molecula,
 } from "../../hardCoded/espacio/AlimentosNutricion";
 
@@ -183,7 +183,7 @@ export default function MetodoNutricionAlimento() {
   if (!a) return null;
 
   // Moléculas del alimento, agrupadas por tipo y en el orden establecido.
-  const mols = a.moleculas.map((k) => MOLECULAS[k]).filter(Boolean) as Molecula[];
+  const mols = molsDeAlimento(a).map((x) => x.m);
   const gruposConMols = ORDEN_GRUPOS_MOLECULA
     .map((g) => ({ grupo: g, items: mols.filter((m) => m.grupo === g) }))
     .filter((s) => s.items.length > 0);

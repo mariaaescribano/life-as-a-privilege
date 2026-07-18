@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { FotoBox } from "../../components/metodo/FotoBox";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -17,78 +17,28 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 
-// Tarjeta de un sistema: imagen arriba + nombre. Se colocan en rejilla de 3.
+// Tarjeta de un sistema: box por defecto (FotoBox), imagen arriba + nombre abajo.
 function SistemaBox({
   sistema,
-  active,
   visto = false,
   onClick,
 }: {
   sistema: Sistema;
-  active: boolean;
   /** true si el usuario ya ha abierto su viñeta → muestra el check. */
   visto?: boolean;
   onClick: () => void;
 }) {
-  const [imgErr, setImgErr] = useState(false);
   return (
-    <Box
-      as="button"
+    <FotoBox
+      titulo={sistema.label}
+      foto={sistema.foto}
+      nom={fisiologiaNom}
+      tinta={fisiologiaTxt}
+      bg={fisiologiaBg}
+      visto={visto}
+      colorTint={`${sistema.color}22`}
       onClick={onClick}
-      position="relative"
-      overflow="hidden"
-      w="100%"
-      h="100%"
-      borderRadius="2xl"
-      border={`1px solid ${active || visto ? fisiologiaTxt : `${fisiologiaTxt}44`}`}
-      cursor="pointer"
-      fontFamily="'EB Garamond', serif"
-      transition="all 0.2s ease"
-      boxShadow={active
-        ? `0 6px 24px rgba(0,0,0,0.3), 0 0 24px ${sistema.color}, 0 0 14px ${fisiologiaTxt}66`
-        : visto
-        ? `0 4px 18px rgba(0,0,0,0.22), 0 0 22px ${fisiologiaTxt}66`
-        : `0 4px 16px rgba(0,0,0,0.22), 0 0 14px ${fisiologiaTxt}1f`}
-      _hover={{ transform: "translateY(-4px)", borderColor: `${fisiologiaTxt}aa`,
-                boxShadow: `0 10px 30px rgba(0,0,0,0.32), 0 0 22px ${sistema.color}` }}
-      _active={{ transform: "translateY(-1px)" }}
-    >
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-
-      {/* Sello de "viñeta ya leída" */}
-      {visto && (
-        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-              w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
-              boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
-            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-          </Box>
-        </Flex>
-      )}
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
-            p={{ base: 4, md: 6 }} h="100%">
-        {/* Imagen cuadrada del sistema → de momento inicial con color de acento */}
-        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg={`${sistema.color}22`} border={`1px solid ${sistema.color}66`}
-             boxShadow={`0 0 12px ${sistema.color}44`}
-             display="flex" alignItems="center" justifyContent="center">
-          {!imgErr ? (
-            <Image src={encodeURI(sistema.foto)} alt={sistema.label} w="100%" h="100%" objectFit="cover"
-                   onError={() => setImgErr(true)} />
-          ) : (
-            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-              {sistema.label.charAt(0)}
-            </Text>
-          )}
-        </Box>
-        <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.25" textAlign="center"
-              fontSize={{ base: "lg", md: "2xl" }} letterSpacing="0.02em"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.4)" }}>
-          {sistema.label}
-        </Text>
-      </Flex>
-    </Box>
+    />
   );
 }
 
@@ -208,7 +158,7 @@ export default function MetodoFisiologiaSistemas() {
                    transform={gridEnter ? "translateY(0) scale(1)" : "translateY(20px) scale(0.96)"}
                    transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
                    sx={{ transitionDelay: `${i * 0.07}s` }}>
-                <SistemaBox sistema={s} active={sistema?.key === s.key} visto={vistos.has(s.key)} onClick={() => verSistema(s)} />
+                <SistemaBox sistema={s} visto={vistos.has(s.key)} onClick={() => verSistema(s)} />
               </Box>
             ))}
           </SimpleGrid>

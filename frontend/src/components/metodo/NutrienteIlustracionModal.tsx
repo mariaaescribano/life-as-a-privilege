@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer, type Vineta } from "./ComicViewer";
+import { AppleLoader } from "./AppleLoader";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 
@@ -12,8 +13,6 @@ import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 // ─────────────────────────────────────────────────────────────────────────
 
 const NUTRI_IMG = disciplinaBgImg(nutricionNom) ?? "/img/fondos/nutri.png";
-// Sombra clara para que el texto verde oscuro se despegue de la foto de fondo.
-const NUTRI_TEXT_SHADOW = "0 1px 2px rgba(255,255,255,0.75), 0 0 12px rgba(255,255,255,0.5)";
 
 export function NutrienteIlustracionModal({
   isOpen,
@@ -43,9 +42,10 @@ export function NutrienteIlustracionModal({
             vinetas={vinetas}
             themeColor={nutricionTxt}
             textColor={nutricionTxt}
-            textShadow={NUTRI_TEXT_SHADOW}
+            textShadow="none"
             disciplinaBgImage={NUTRI_IMG}
             disciplinaBgColor={nutricionBg}
+            loader={<AppleLoader />}
             onClose={onClose}
             onComplete={onClose}
           />

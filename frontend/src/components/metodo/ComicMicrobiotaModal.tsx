@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
+import { AppleLoader } from "./AppleLoader";
 import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
 import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 
@@ -32,6 +33,7 @@ export function ComicMicrobiotaModal({ isOpen, onClose, onContinue }: ComicMicro
           textShadow="none"
           disciplinaBgImage="/img/fondos/nutri.png"
           disciplinaBgColor={nutricionBg}
+          loader={<AppleLoader />}
         />
 
         {/* Botón «Ir a la microbiota →» fijo, a la IZQUIERDA de la X del ComicViewer. */}

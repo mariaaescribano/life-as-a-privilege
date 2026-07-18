@@ -112,6 +112,10 @@ interface ComicViewerProps {
   fondoNitido?: boolean;
   /** Viñeta por la que empezar (para abrir directamente en una concreta). */
   initialIndex?: number;
+  /** Animación de espera mientras la ilustración de la viñeta carga. Si no se
+   *  pasa, se usa un spinner del color de la disciplina. Nutrición pasa aquí su
+   *  manzana (AppleLoader). */
+  loader?: React.ReactNode;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -133,6 +137,7 @@ export function ComicViewer({
   separarFrases,
   fondoNitido,
   initialIndex = 0,
+  loader,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
@@ -161,6 +166,20 @@ export function ComicViewer({
   const blocked = bloqueado ? bloqueado(index) : false;
   // Página sin foto: solo el texto/box a todo el ancho (p.ej. el paso de test).
   const hideFoto = sinFoto ? sinFoto(index) : false;
+  // El panel entero (foto + texto) espera a que la ilustración de la izquierda
+  // esté cargada: mientras tanto se ve solo un spinner del color de la
+  // disciplina. Si no hay foto (hideFoto) o la foto falló, no hay nada que
+  // esperar y se muestra el contenido directamente.
+  const imgReady = hideFoto || imgFailed[index] || imgLoaded[index];
+  // Color y sombra del título / antetítulo de la viñeta. Por defecto blanco con
+  // sombra oscura (para las fotos oscuras del resto de disciplinas). Si el cómic
+  // define un `textColor` NO blanco (p.ej. Nutrición: verde oscuro sobre foto
+  // clara), el título usa ese color y su misma sombra (`textShadow`), que en
+  // Nutrición es "none". Los cómics con título blanco no cambian.
+  const tituloColor = textColor ?? "white";
+  const tituloBlanco =
+    !textColor || textColor.toLowerCase() === "#ffffff" || textColor.toLowerCase() === "white";
+  const tituloShadow = tituloBlanco ? "0 2px 8px rgba(0,0,0,0.9)" : textShadow;
 
   useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 0;
@@ -515,7 +534,34 @@ export function ComicViewer({
               },
             }}
           >
-            {!hideFoto && (
+            {/* Mientras la ilustración de la izquierda no ha cargado, el panel
+                entero muestra solo un spinner del color de la disciplina. La
+                <Image> preloader (oculta) dispara onLoad/onError sin que se vea
+                nada a medio pintar. */}
+            {!imgReady && (
+              <Flex
+                flex="1"
+                w="100%"
+                minH={{ base: "260px", md: "auto" }}
+                align="center"
+                justify="center"
+              >
+                {loader ?? <SpinnerTurquesa fullScreen={false} color={themeColor} />}
+                <Image
+                  src={encodeURI(current.src)}
+                  alt=""
+                  position="absolute"
+                  w="1px"
+                  h="1px"
+                  opacity={0}
+                  pointerEvents="none"
+                  onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
+                  onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
+                />
+              </Flex>
+            )}
+
+            {imgReady && !hideFoto && (
             <Box
               w={{ base: "90%", md: "380px" }}
               maxW={{ base: "300px", md: "380px" }}
@@ -576,7 +622,7 @@ export function ComicViewer({
 
             {/* Separador elegante: rayita horizontal y corta en móvil,
                 vertical entre foto y texto en escritorio. Se oculta sin foto. */}
-            {!hideFoto && (
+            {imgReady && !hideFoto && (
             <Box
               flexShrink={0}
               alignSelf="center"
@@ -590,6 +636,7 @@ export function ComicViewer({
             />
             )}
 
+            {imgReady && (
             <Box
               ref={textScrollRef}
               flex="1"
@@ -622,16 +669,16 @@ export function ComicViewer({
             >
               {/* Encabezado opcional (antetítulo + título + separador) */}
               {current.eyebrow && (
-                <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.14em"
+                <Text color={tituloColor} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.14em"
                       textTransform="uppercase" mb={2} textAlign={{ base: "center", md: "left" }}
-                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+                      style={{ textShadow: tituloShadow }}>
                   {current.eyebrow}
                 </Text>
               )}
               {current.titulo && (
-                <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
+                <Text color={tituloColor} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
                       mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}
-                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+                      style={{ textShadow: tituloShadow }}>
                   {current.titulo}
                 </Text>
               )}
@@ -667,6 +714,7 @@ export function ComicViewer({
                 return extra ? <Box mt={{ base: 6, md: 7 }}>{extra}</Box> : null;
               })()}
             </Box>
+            )}
           </Flex>
 
           {/* Línea de luz inferior */}

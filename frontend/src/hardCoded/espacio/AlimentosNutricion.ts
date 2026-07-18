@@ -42,8 +42,12 @@ export interface Molecula {
   nombre: string;
   grupo: GrupoMolecula;
   funcion: FuncionMolecula;
-  /** Qué hace en el cuerpo (se muestra al tocar la molécula). */
+  /** Qué hace en el cuerpo (explicación breve, visible en la ficha del alimento). */
   queHace: string;
+  /** Foto de la molécula. Se asigna automáticamente a
+   *  /recorrido/nutricion/moleculas/<key>.png (ver el bucle bajo MOLECULAS).
+   *  Si la imagen no existe todavía, la ficha muestra un icono de marcador. */
+  foto?: string;
 }
 
 // Diccionario de moléculas, reutilizadas por muchos alimentos.
@@ -87,6 +91,13 @@ export const MOLECULAS: Record<string, Molecula> = {
   agua:           { key: "agua", nombre: "Agua", grupo: "otro", funcion: "protectora", queHace: "El medio donde ocurre todo; los alimentos frescos son, sobre todo, agua." },
 };
 
+// Foto de cada molécula: por convención, /recorrido/nutricion/moleculas/<key>.png.
+// Se asigna aquí en un solo sitio; las que aún no tengan imagen mostrarán un
+// icono de marcador en la ficha (la <Image> cae al placeholder con onError).
+Object.values(MOLECULAS).forEach((m) => {
+  if (!m.foto) m.foto = `/recorrido/nutricion/moleculas/${m.key}.png`;
+});
+
 // ── Grupos de alimentos (pestañas del hub) ──────────────────────────────────
 export type GrupoAlimento =
   | "fruta" | "verdura" | "legumbre" | "proteina" | "cereal"
@@ -109,6 +120,15 @@ export const GRUPOS_ALIMENTOS: { key: GrupoAlimento; label: string }[] = [
 export const MACRO_COLOR = { carbohidrato: "#6f9fd8", proteina: "#c0705f", grasa: "#e0b23e" } as const;
 export const MACRO_LABEL = { carbohidrato: "Carbohidrato", proteina: "Proteína", grasa: "Grasa" } as const;
 
+// Una molécula dentro de un alimento: su clave en MOLECULAS y, opcionalmente, el
+// porcentaje (aprox., didáctico) que representa en ese alimento. Se admite pasar
+// solo la clave (string) para no obligar a poner porcentaje en todos.
+export interface AlimentoMolecula {
+  key: string;
+  /** % aproximado de esta molécula en el alimento (didáctico). */
+  pct?: number;
+}
+
 export interface Alimento {
   key: string;
   nombre: string;
@@ -117,20 +137,33 @@ export interface Alimento {
   emoji?: string;
   /** Foto del alimento (opcional). */
   foto?: string;
-  /** Frase corta para la tarjeta y el detalle. */
+  /** Frase corta para la tarjeta y el subtítulo del detalle. */
   resumen: string;
+  /** Descripción algo más larga del alimento, para la ficha del popup. Si no se
+   *  pone, la ficha usa `resumen`. */
+  descripcion?: string;
   /** Reparto aproximado de macros (%). No tiene que ser exacto: es didáctico. */
   macros: { carbohidrato: number; proteina: number; grasa: number };
-  /** Moléculas que lo componen (claves de MOLECULAS). */
-  moleculas: string[];
+  /** Moléculas que lo componen. Cada una puede ser solo la clave (string) o un
+   *  objeto { key, pct } con el porcentaje de esa molécula en el alimento. */
+  moleculas: (string | AlimentoMolecula)[];
 }
 
 // Alimentos elegidos por María. Composición molecular = primera pasada (afinar).
 export const ALIMENTOS: Alimento[] = [
   // ── Fruta ──
   { key: "manzana", nombre: "Manzana", grupo: "fruta", emoji: "🍎", resumen: "Azúcares con fibra y antioxidantes.",
+    descripcion: "La manzana es sobre todo agua y azúcares, pero envueltos en fibra (buena parte en la piel) y en antioxidantes. Esa fibra hace que su azúcar se absorba despacio, sin los picos de un zumo. [BORRADOR: corrige este texto]",
     macros: { carbohidrato: 95, proteina: 2, grasa: 3 },
-    moleculas: ["fructosa", "glucosa", "pectina", "fibra", "vitamina-c", "quercetina", "agua"] },
+    moleculas: [
+      { key: "agua", pct: 85 },
+      { key: "fructosa", pct: 6 },
+      { key: "glucosa", pct: 2 },
+      { key: "fibra", pct: 2 },
+      { key: "pectina", pct: 1 },
+      { key: "vitamina-c", pct: 1 },
+      { key: "quercetina", pct: 1 },
+    ] },
   { key: "platano", nombre: "Plátano", grupo: "fruta", emoji: "🍌", resumen: "Energía y potasio.",
     macros: { carbohidrato: 93, proteina: 4, grasa: 3 },
     moleculas: ["glucosa", "fructosa", "almidon", "fibra", "potasio", "vitamina-c", "agua"] },
@@ -223,4 +256,30 @@ export const ALIMENTOS: Alimento[] = [
     moleculas: ["azucar-anadido", "sacarosa", "almidon", "grasa-saturada"] },
 ];
 
+// Fotos reutilizadas de la Biblioteca de alimentos (/recorrido/nutricion/alimentos).
+// Se asignan aquí en un solo sitio para no repetir la ruta en cada alimento. Los
+// que no tengan foto muestran su emoji como marcador. (Se irán añadiendo más.)
+const FOTO_ALIMENTO: Record<string, string> = {
+  manzana: "manzana", platano: "platano", naranja: "naranja", "zumo-naranja": "zumo",
+  brocoli: "brocoli", soja: "soja", garbanzos: "garbanzos",
+  pollo: "pollo", vaca: "vaca", cerdo: "cerdo", huevo: "huevo", atun: "atun",
+  "arroz-blanco": "arroces", "arroz-integral": "arroces", pan: "pan",
+  aguacate: "aguacate", "aceite-oliva": "aceite",
+  nueces: "frutossecos", cacahuetes: "frutossecos",
+  queso: "queso", "chocolate-negro": "choco", cafe: "cafe",
+  nutella: "procesados", oreo: "procesados",
+};
+ALIMENTOS.forEach((a) => {
+  const f = FOTO_ALIMENTO[a.key];
+  if (f) a.foto = `/recorrido/nutricion/alimentos/${f}.png`;
+});
+
 export const alimentoByKey = (k: string): Alimento | undefined => ALIMENTOS.find((a) => a.key === k);
+
+// Normaliza las moléculas de un alimento (admite string o { key, pct }) a la
+// molécula completa + su porcentaje, descartando claves que no existan.
+export const molsDeAlimento = (a: Alimento): { m: Molecula; pct?: number }[] =>
+  a.moleculas
+    .map((x) => (typeof x === "string" ? { key: x, pct: undefined as number | undefined } : x))
+    .map(({ key, pct }) => ({ m: MOLECULAS[key] as Molecula | undefined, pct }))
+    .filter((x) => !!x.m) as { m: Molecula; pct?: number }[];

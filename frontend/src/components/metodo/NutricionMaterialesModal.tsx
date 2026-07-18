@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text, SimpleGrid, Image } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { FotoBox, glowSuave } from "./FotoBox";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import {
-  ALIMENTOS, MOLECULAS, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
+  ALIMENTOS, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
   MACRO_COLOR, MACRO_LABEL, type Alimento, type Molecula,
 } from "../../hardCoded/espacio/AlimentosNutricion";
 
@@ -58,35 +59,62 @@ function BarraMacros({ macros }: { macros: Alimento["macros"] }) {
   );
 }
 
-// Tarjeta de molécula que despliega su explicación al pulsarla (acordeón).
-function MoleculaFila({ m }: { m: Molecula }) {
-  const [abierta, setAbierta] = useState(false);
+// Badge del porcentaje (aprox.) de una molécula dentro del alimento.
+function PctBadge({ pct }: { pct: number }) {
   return (
-    <Box as="button" onClick={() => setAbierta((v) => !v)} textAlign="left" w="100%" borderRadius="xl"
-         bg={`${nutricionBg}e6`} border={`1px solid ${nutricionTxt}22`}
-         px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}
-         boxShadow="0 2px 10px rgba(0,0,0,0.12)" cursor="pointer" transition="all 0.18s"
-         _hover={{ borderColor: `${nutricionTxt}55` }}>
-      <Flex align="center" justify="space-between" gap={3}>
-        <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "sm", md: "md" }} lineHeight="1.2">
-          {m.nombre}
-        </Text>
-        <FuncionPill funcion={m.funcion} />
-      </Flex>
-      {abierta && (
-        <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" fontWeight={500} mt={2.5}>
-          {m.queHace}
-        </Text>
-      )}
-    </Box>
+    <Flex align="center" flexShrink={0} px={2} py={0.5} borderRadius="full"
+          bg={nutricionTxt} boxShadow={`0 1px 6px ${nutricionTxt}55`}>
+      <Text color={nutricionBg} fontWeight={800} fontSize="2xs" lineHeight="1" whiteSpace="nowrap">
+        {pct}%
+      </Text>
+    </Flex>
   );
 }
 
-// Detalle de UN alimento en formato «box de cómic sin foto a la izquierda».
+// Ficha de una molécula dentro del alimento: foto + nombre + %/función + qué hace.
+function MoleculaCard({ m, pct }: { m: Molecula; pct?: number }) {
+  const [imgErr, setImgErr] = useState(false);
+  return (
+    <Flex w="100%" gap={{ base: 3, md: 4 }} align="flex-start" borderRadius="xl"
+          bg={`${nutricionBg}e6`} border={`1px solid ${nutricionTxt}22`}
+          p={{ base: 3, md: 3.5 }} boxShadow={glowSuave(nutricionTxt)}>
+      {/* Foto de la molécula (o icono de marcador si aún no hay imagen) */}
+      <Flex flexShrink={0} w={{ base: "58px", md: "68px" }} h={{ base: "58px", md: "68px" }}
+            borderRadius="lg" overflow="hidden" bg={`${nutricionTxt}12`}
+            border={`1px solid ${nutricionTxt}22`} align="center" justify="center">
+        {m.foto && !imgErr ? (
+          <Image src={encodeURI(m.foto)} alt={m.nombre} w="100%" h="100%" objectFit="cover"
+                 loading="lazy" onError={() => setImgErr(true)} />
+        ) : (
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill={`${nutricionTxt}66`}>
+            <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+          </Box>
+        )}
+      </Flex>
+
+      {/* Nombre + % + función + qué hace */}
+      <Flex direction="column" gap={1.5} flex="1" minW={0}>
+        <Flex align="center" gap={2} wrap="wrap">
+          <Text color={nutricionTxt} fontWeight={800} fontSize={{ base: "sm", md: "md" }} lineHeight="1.2">
+            {m.nombre}
+          </Text>
+          {pct != null && <PctBadge pct={pct} />}
+          <FuncionPill funcion={m.funcion} />
+        </Flex>
+        <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} lineHeight="1.55" fontWeight={500}>
+          {m.queHace}
+        </Text>
+      </Flex>
+    </Flex>
+  );
+}
+
+// Detalle de UN alimento: foto + nombre + descripción + macros + fichas de sus
+// moléculas (foto, %, función y qué hace).
 function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void }) {
-  const mols = a.moleculas.map((k) => MOLECULAS[k]).filter(Boolean) as Molecula[];
+  const mols = molsDeAlimento(a);
   const grupos = ORDEN_GRUPOS_MOLECULA
-    .map((g) => ({ grupo: g, items: mols.filter((m) => m.grupo === g) }))
+    .map((g) => ({ grupo: g, items: mols.filter((x) => x.m.grupo === g) }))
     .filter((s) => s.items.length > 0);
 
   return (
@@ -105,7 +133,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
       {/* Box tipo cómic SIN foto a la izquierda: solo el contenido, a todo el ancho. */}
       <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
            border={`1px solid ${nutricionTxt}2e`}
-           boxShadow={`0 8px 30px rgba(0,0,0,0.3), 0 0 18px ${nutricionTxt}22`}>
+           boxShadow={glowSuave(nutricionTxt)}>
         <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
 
         {/* Líneas de luz superior/inferior (guiño al box de cómic) */}
@@ -116,9 +144,17 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
 
         <Flex position="relative" zIndex={1} direction="column" gap={4} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
           <Flex align="center" gap={4} wrap="wrap">
-            <Box fontSize={{ base: "44px", md: "56px" }} lineHeight="1">
-              <span role="img" aria-label={a.nombre}>{a.emoji ?? a.nombre.charAt(0)}</span>
-            </Box>
+            {a.foto ? (
+              <Box w={{ base: "64px", md: "80px" }} h={{ base: "64px", md: "80px" }} borderRadius="full"
+                   overflow="hidden" flexShrink={0} border={`2px solid ${nutricionTxt}55`}
+                   boxShadow={`0 4px 14px rgba(0,0,0,0.25)`}>
+                <Image src={encodeURI(a.foto)} alt={a.nombre} w="100%" h="100%" objectFit="cover" />
+              </Box>
+            ) : (
+              <Box fontSize={{ base: "44px", md: "56px" }} lineHeight="1">
+                <span role="img" aria-label={a.nombre}>{a.emoji ?? a.nombre.charAt(0)}</span>
+              </Box>
+            )}
             <Flex direction="column" gap={1}>
               <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={800} lineHeight="1.1">
                 {a.nombre}
@@ -128,6 +164,13 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
               </Text>
             </Flex>
           </Flex>
+
+          {/* Descripción del alimento (algo más larga que el resumen). */}
+          {(a.descripcion || a.resumen) && (
+            <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
+              {a.descripcion ?? a.resumen}
+            </Text>
+          )}
 
           <Box>
             <Text color={`${nutricionTxt}aa`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
@@ -139,8 +182,9 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
 
           <Box h="1px" bgGradient={`linear(to-r, transparent, ${nutricionTxt}44, transparent)`} my={1} />
 
-          <Text color={`${nutricionTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-            Toca cada molécula para ver qué hace dentro de ti.
+          <Text color={`${nutricionTxt}aa`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
+                textTransform="uppercase">
+            Las moléculas que lo forman
           </Text>
 
           {grupos.map((s) => (
@@ -149,7 +193,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
                 {GRUPO_MOLECULA_LABEL[s.grupo]}
               </Text>
               <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
-                {s.items.map((m) => <MoleculaFila key={m.key} m={m} />)}
+                {s.items.map(({ m, pct }) => <MoleculaCard key={m.key} m={m} pct={pct} />)}
               </Flex>
             </Box>
           ))}
@@ -159,28 +203,19 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
   );
 }
 
-// Tarjeta de un alimento en la rejilla de «todos juntos».
+// Tarjeta de un alimento en la rejilla de «todos juntos». Box por defecto
+// (FotoBox): su foto (de la Biblioteca) o el emoji de reserva, y el nombre abajo.
 function AlimentoBox({ a, onClick }: { a: Alimento; onClick: () => void }) {
   return (
-    <Box as="button" onClick={onClick} position="relative" overflow="hidden" w="100%" h="100%"
-         borderRadius="2xl" cursor="pointer" fontFamily="'EB Garamond', serif" transition="all 0.2s ease"
-         boxShadow="0 4px 16px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.12)"
-         _hover={{ transform: "translateY(-4px)", boxShadow: "0 10px 30px rgba(0,0,0,0.32), 0 0 22px rgba(255,255,255,0.35)" }}
-         _active={{ transform: "translateY(-1px)" }}>
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2, md: 2.5 }}
-            p={{ base: 4, md: 5 }} h="100%">
-        <Flex w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-              bg={`${nutricionTxt}12`} align="center" justify="center"
-              fontSize={{ base: "44px", md: "56px" }} lineHeight="1">
-          <span role="img" aria-label={a.nombre}>{a.emoji ?? a.nombre.charAt(0)}</span>
-        </Flex>
-        <Text color={nutricionTxt} fontWeight={700} lineHeight="1.2" textAlign="center"
-              fontSize={{ base: "sm", md: "md" }} letterSpacing="0.02em">
-          {a.nombre}
-        </Text>
-      </Flex>
-    </Box>
+    <FotoBox
+      titulo={a.nombre}
+      foto={a.foto}
+      nom={nutricionNom}
+      tinta={nutricionTxt}
+      bg={nutricionBg}
+      emoji={a.emoji}
+      onClick={onClick}
+    />
   );
 }
 

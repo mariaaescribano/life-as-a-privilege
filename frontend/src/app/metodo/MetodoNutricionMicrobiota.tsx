@@ -11,6 +11,7 @@ import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { MICROBIOTA_TARJETAS } from "../../hardCoded/espacio/MicrobiotaNutricion";
 
@@ -35,6 +36,10 @@ export default function MetodoNutricionMicrobiota() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+
+        // No mostramos la página hasta que TODAS las fotos de las tarjetas estén
+        // descargadas: si no, se queda en el spinner (no aparecen de golpe).
+        await precargarImagenes(MICROBIOTA_TARJETAS.map((t) => encodeURI(t.foto)));
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();
@@ -68,7 +73,8 @@ export default function MetodoNutricionMicrobiota() {
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Tres de las moléculas que fabrican las bacterias de tu intestino. Toca cada una para descubrir qué hacen por ti.
+              Tres de las moléculas más importantes que fabrican las bacterias de tu intestino.
+            
             </Text>
           </Reveal>
 

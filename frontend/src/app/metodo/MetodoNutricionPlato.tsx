@@ -9,7 +9,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { glowSuave } from "../../components/metodo/FotoBox";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { PLATO_MACROS, platoMacroByKey, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
 
@@ -50,7 +51,10 @@ const RADIO_ALIMENTO = 30; // diámetro visual base de los círculos de comida (
 const VB = 200;
 const CX = 100;
 const CY = 100;
-const R = 96;
+const R_PLATE = 97; // borde exterior del ala del plato (casi el borde del cuadro)
+const R_RIM = 84;   // límite interior del ala = borde del hueco central
+const R_FOOD = 82;  // radio de los sectores (el hueco donde va la comida)
+const TOTAL_PROP = PLATO_MACROS.reduce((s, m) => s + m.proporcion, 0);
 
 const polar = (cx: number, cy: number, r: number, deg: number) => {
   const rad = (deg * Math.PI) / 180;
@@ -59,20 +63,20 @@ const polar = (cx: number, cy: number, r: number, deg: number) => {
 
 // Sectores del plato calculados a partir de las proporciones (empezando arriba).
 const SECTORES = (() => {
-  const total = PLATO_MACROS.reduce((s, m) => s + m.proporcion, 0);
   let acc = -90;
   return PLATO_MACROS.map((m) => {
-    const sweep = (m.proporcion / total) * 360;
+    const sweep = (m.proporcion / TOTAL_PROP) * 360;
     const start = acc;
     const end = acc + sweep;
     const mid = acc + sweep / 2;
     acc = end;
-    const p0 = polar(CX, CY, R, start);
-    const p1 = polar(CX, CY, R, end);
+    const p0 = polar(CX, CY, R_FOOD, start);
+    const p1 = polar(CX, CY, R_FOOD, end);
     const largeArc = sweep > 180 ? 1 : 0;
-    const d = `M ${CX} ${CY} L ${p0.x} ${p0.y} A ${R} ${R} 0 ${largeArc} 1 ${p1.x} ${p1.y} Z`;
-    const label = polar(CX, CY, R * 0.62, mid);
-    return { macro: m, d, label };
+    const d = `M ${CX} ${CY} L ${p0.x} ${p0.y} A ${R_FOOD} ${R_FOOD} 0 ${largeArc} 1 ${p1.x} ${p1.y} Z`;
+    const label = polar(CX, CY, R_FOOD * 0.6, mid);
+    const pct = Math.round((m.proporcion / TOTAL_PROP) * 100);
+    return { macro: m, d, label, pct };
   });
 })();
 
@@ -81,7 +85,7 @@ function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" borderRadius="2xl"
          border={`1px solid ${nutricionTxt}2e`}
-         boxShadow="0 6px 24px rgba(0,0,0,0.22), 0 0 16px rgba(255,255,255,0.1)" {...rest}>
+         boxShadow={glowSuave(nutricionTxt)} {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
       <Box position="relative" zIndex={1} h="100%">{children}</Box>
     </Box>
@@ -89,12 +93,18 @@ function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
 }
 
 // Contenido de un círculo de alimento: foto redonda si existe, si no el emoji.
-function AlimentoContenido({ food }: { food: Pick<PlatoAlimento, "emoji" | "foto" | "label"> }) {
+// `big` agranda el emoji para los círculos grandes del panel/fantasma.
+function AlimentoContenido({ food, big }: { food: Pick<PlatoAlimento, "emoji" | "foto" | "label">; big?: boolean }) {
   if (food.foto) {
     return <Box as="img" src={encodeURI(food.foto)} alt={food.label} w="100%" h="100%"
-                borderRadius="full" style={{ objectFit: "cover" }} draggable={false} />;
+                borderRadius="full" style={{ objectFit: "cover" }} draggable={false} pointerEvents="none" />;
   }
-  return <Box as="span" fontSize={{ base: "lg", md: "xl" }} lineHeight="1" userSelect="none">{food.emoji}</Box>;
+  return (
+    <Box as="span" fontSize={big ? { base: "2xl", md: "3xl" } : { base: "lg", md: "xl" }}
+         lineHeight="1" userSelect="none" pointerEvents="none">
+      {food.emoji}
+    </Box>
+  );
 }
 
 let ID_SEQ = 1;
@@ -274,23 +284,71 @@ export default function MetodoNutricionPlato() {
               <Flex direction="column" align="center" gap={4} p={{ base: 5, md: 7 }} h="100%">
                 <Box ref={plateRef} position="relative" w="100%" maxW="380px" aspectRatio={1} mx="auto">
                   <Box as="svg" viewBox={`0 0 ${VB} ${VB}`} w="100%" h="100%"
-                       style={{ filter: "drop-shadow(0 6px 18px rgba(0,0,0,0.35))" }}>
-                    {SECTORES.map(({ macro: m, d, label }) => {
+                       style={{ filter: "drop-shadow(0 12px 24px rgba(0,0,0,0.32))" }}>
+                    <defs>
+                      {/* Ala de porcelana con un ligero degradado radial para dar volumen. */}
+                      <radialGradient id="platoRim" cx="50%" cy="40%" r="62%">
+                        <stop offset="0%" stopColor="#fdfaf1" />
+                        <stop offset="78%" stopColor="#f2ebd8" />
+                        <stop offset="100%" stopColor="#e6dcc4" />
+                      </radialGradient>
+                      {/* Cúpula: brillo arriba-izq. y sombra abajo-der. sobre los sectores. */}
+                      <radialGradient id="platoDome" cx="34%" cy="26%" r="80%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.30" />
+                        <stop offset="46%" stopColor="#ffffff" stopOpacity="0.05" />
+                        <stop offset="100%" stopColor="#000000" stopOpacity="0.14" />
+                      </radialGradient>
+                      {/* Reflejo especular de porcelana. */}
+                      <radialGradient id="platoGloss" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
+                        <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
+
+                    {/* Ala del plato (porcelana) */}
+                    <circle cx={CX} cy={CY} r={R_PLATE} fill="url(#platoRim)" stroke="#ffffff" strokeWidth={1.5} />
+                    <circle cx={CX} cy={CY} r={R_PLATE} fill="none" stroke="rgba(0,0,0,0.10)" strokeWidth={1} />
+
+                    {/* Sectores (el hueco central) */}
+                    {SECTORES.map(({ macro: m, d }) => {
                       const activo = m.key === macroSel;
                       return (
-                        <g key={m.key} style={{ cursor: "pointer" }} onClick={() => setMacroSel(m.key)}>
-                          <path d={d} fill={m.color} fillOpacity={activo ? 1 : 0.72}
-                                stroke="#fffdf7" strokeWidth={activo ? 3 : 1.5} strokeLinejoin="round" />
-                          <text x={label.x} y={label.y} textAnchor="middle" dominantBaseline="middle"
-                                fontSize="9" fontWeight="700" fill="#fffdf7"
-                                style={{ pointerEvents: "none", textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
+                        <path key={m.key} d={d} fill={m.color} fillOpacity={activo ? 1 : 0.6}
+                              stroke="#fffdf7" strokeWidth={activo ? 2.5 : 1.25} strokeLinejoin="round"
+                              style={{ cursor: "pointer", transition: "fill-opacity 0.2s" }}
+                              onClick={() => setMacroSel(m.key)} />
+                      );
+                    })}
+
+                    {/* Cúpula (volumen 3D) sobre los sectores */}
+                    <circle cx={CX} cy={CY} r={R_FOOD} fill="url(#platoDome)" pointerEvents="none" />
+
+                    {/* Aro que separa el ala del hueco central */}
+                    <circle cx={CX} cy={CY} r={R_RIM} fill="none" stroke="#fffdf7" strokeWidth={3} opacity={0.95} pointerEvents="none" />
+                    <circle cx={CX} cy={CY} r={R_RIM} fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth={1} pointerEvents="none" />
+
+                    {/* Etiquetas de cada sector (nombre + %), encima de la cúpula */}
+                    {SECTORES.map(({ macro: m, label, pct }) => {
+                      const activo = m.key === macroSel;
+                      return (
+                        <g key={`lbl-${m.key}`} pointerEvents="none">
+                          <text x={label.x} y={label.y - 3} textAnchor="middle" dominantBaseline="middle"
+                                fontSize={activo ? 9.5 : 8.5} fontWeight="800" fill="#fffdf7"
+                                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.55)" }}>
                             {m.labelCorto}
+                          </text>
+                          <text x={label.x} y={label.y + 7.5} textAnchor="middle" dominantBaseline="middle"
+                                fontSize="6.5" fontWeight="700" fill="#fffdf7" fillOpacity={0.92}
+                                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
+                            {pct}%
                           </text>
                         </g>
                       );
                     })}
-                    {/* Borde exterior del plato */}
-                    <circle cx={CX} cy={CY} r={R} fill="none" stroke="#fffdf7" strokeWidth={3} opacity={0.9} />
+
+                    {/* Reflejo especular arriba-izquierda del ala */}
+                    <ellipse cx="72" cy="58" rx="30" ry="16" fill="url(#platoGloss)" pointerEvents="none"
+                             transform="rotate(-20 72 58)" />
                   </Box>
 
                   {/* Alimentos colocados sobre el plato */}
@@ -304,9 +362,9 @@ export default function MetodoNutricionPlato() {
                             align="center" justify="center"
                             w={{ base: `${RADIO_ALIMENTO}px`, md: `${RADIO_ALIMENTO + 8}px` }}
                             h={{ base: `${RADIO_ALIMENTO}px`, md: `${RADIO_ALIMENTO + 8}px` }}
-                            borderRadius="full" bg="#fffdf7"
+                            borderRadius="full" bg="#fffdf7" overflow="hidden"
                             border={`2px solid ${color}`}
-                            boxShadow={`0 2px 8px rgba(0,0,0,0.3), 0 0 0 3px ${color}33`}
+                            boxShadow={`0 3px 10px rgba(0,0,0,0.32), 0 0 0 3px ${color}33, inset 0 1px 3px rgba(255,255,255,0.6)`}
                             transform="translate(-50%, -50%)"
                             cursor="grab" zIndex={2}
                             sx={{ touchAction: "none" }}
@@ -337,9 +395,11 @@ export default function MetodoNutricionPlato() {
                 </Flex>
 
                 {completo && (
-                  <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }} textAlign="center">
-                    ¡Plato equilibrado! 🎉 Tienes algo de cada grupo.
-                  </Text>
+                  <Float amplitude={4} duration={2.8}>
+                    <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }} textAlign="center">
+                      ¡Plato equilibrado! 🎉 Tienes algo de cada grupo.
+                    </Text>
+                  </Float>
                 )}
 
                 {puestos.length > 0 && (
@@ -379,22 +439,18 @@ export default function MetodoNutricionPlato() {
                 <Flex wrap="wrap" gap={{ base: 4, md: 5 }} justify="center">
                   {macro.alimentos.map((food) => (
                     <Flex key={food.key} direction="column" align="center" gap={1.5} w="72px">
-                      <Flex align="center" justify="center"
+                      <Flex align="center" justify="center" overflow="hidden"
                             w={{ base: "52px", md: "58px" }} h={{ base: "52px", md: "58px" }}
                             borderRadius="full" bg="#fffdf7"
                             border={`2px solid ${macro.color}`}
-                            boxShadow={`0 2px 10px rgba(0,0,0,0.22), 0 0 0 4px ${macro.color}22`}
+                            boxShadow={`0 3px 12px rgba(0,0,0,0.22), 0 0 0 4px ${macro.color}22, inset 0 1px 3px rgba(255,255,255,0.6)`}
                             cursor="grab" sx={{ touchAction: "none" }}
-                            transition="transform 0.15s"
-                            _hover={{ transform: "translateY(-2px)" }}
+                            transition="transform 0.15s, box-shadow 0.15s"
+                            _hover={{ transform: "translateY(-3px)",
+                                      boxShadow: `0 6px 16px rgba(0,0,0,0.28), 0 0 0 5px ${macro.color}33, inset 0 1px 3px rgba(255,255,255,0.6)` }}
+                            _active={{ transform: "translateY(-1px)" }}
                             onPointerDown={(e) => startDrag(e, { food, macroKey: macro.key, color: macro.color })}>
-                        <Box fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1" userSelect="none"
-                             style={{ pointerEvents: "none" }}>
-                          {food.foto
-                            ? <Box as="img" src={encodeURI(food.foto)} alt={food.label} w="100%" h="100%"
-                                   borderRadius="full" style={{ objectFit: "cover" }} draggable={false} />
-                            : food.emoji}
-                        </Box>
+                        <AlimentoContenido food={food} big />
                       </Flex>
                       <Text color={nutricionTxt} fontSize="xs" fontWeight="600" textAlign="center" lineHeight="1.2">
                         {food.label}
@@ -411,18 +467,13 @@ export default function MetodoNutricionPlato() {
       {/* Fantasma que sigue al puntero mientras se arrastra. */}
       {drag && (
         <Flex position="fixed" left={`${drag.x}px`} top={`${drag.y}px`} zIndex={3000}
-              align="center" justify="center"
-              w={{ base: "52px", md: "58px" }} h={{ base: "52px", md: "58px" }}
+              align="center" justify="center" overflow="hidden"
+              w={{ base: "56px", md: "62px" }} h={{ base: "56px", md: "62px" }}
               borderRadius="full" bg="#fffdf7" border={`2px solid ${drag.color}`}
-              boxShadow={`0 6px 18px rgba(0,0,0,0.4), 0 0 0 4px ${drag.color}33`}
-              transform="translate(-50%, -50%)" pointerEvents="none"
-              sx={{ opacity: 0.95 }}>
-          <Box fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1">
-            {drag.foto
-              ? <Box as="img" src={encodeURI(drag.foto)} alt="" w="100%" h="100%" borderRadius="full"
-                     style={{ objectFit: "cover" }} draggable={false} />
-              : drag.emoji}
-          </Box>
+              boxShadow={`0 10px 24px rgba(0,0,0,0.42), 0 0 0 4px ${drag.color}44, inset 0 1px 3px rgba(255,255,255,0.6)`}
+              transform="translate(-50%, -50%) scale(1.08)" pointerEvents="none"
+              sx={{ opacity: 0.97 }}>
+          <AlimentoContenido food={{ emoji: drag.emoji, foto: drag.foto, label: "" }} big />
         </Flex>
       )}
 

@@ -23,6 +23,9 @@ export interface NutrienteTarjeta {
    *  Si varias tarjetas tienen distinto `grupo`, la rejilla los separa con un
    *  encabezado y una línea horizontal entre subgrupos. */
   grupo?: string;
+  /** Número de orden (1, 2, 3…) para secuencias, p.ej. la ruta metabólica del
+   *  etanol. Si se define, la tarjeta muestra un badge con ese número. */
+  numero?: number;
 }
 
 export interface Nutriente {
@@ -33,6 +36,9 @@ export interface Nutriente {
    *  tarjeta de la cuadrícula (con el título debajo). */
   img: string;
   resumen: string;
+  /** Descripción larga (uno o varios párrafos) que se muestra en el box de
+   *  detalle, a la derecha de la foto. Se lee al tamaño de las ilustraciones. */
+  descripcion?: string[];
   tipos: NutrienteTipo[];
   queHacen: string[];
   donde: string[];
@@ -50,6 +56,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#e0a92e",
     img: "/recorrido/nutricion/portadas/carbs.png",
     resumen: "Tu principal fuente de energía.",
+    descripcion: [
+      "Los carbohidratos son la principal fuente de energía del cuerpo. Durante la digestión, las enzimas los descomponen en moléculas simples, principalmente glucosa. Esta permite que las células obtengan energía mediante la respiración celular.",
+      "Cuando se consume más de la necesaria, el exceso se almacena como glucógeno o se transforma en triglicéridos los cuales se almacenan en las células de grasa blanca.",
+    ],
     tipos: [
       { nombre: "Simples (azúcares)", desc: "Glucosa, fructosa, sacarosa. Energía rápida, pico y bajada." },
       { nombre: "Complejos (almidón)", desc: "Cadenas largas de glucosa. Energía lenta y sostenida." },
@@ -98,6 +108,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#e58a3c",
     img: "/recorrido/nutricion/portadas/grasas.png",
     resumen: "Energía densa y ladrillos de tus membranas.",
+    descripcion: [
+      "Las grasas forman parte de la membrana de todas tus células. También transportan las vitaminas A, D, E y K y son la base para fabricar muchas hormonas.",
+      "No todas son iguales: las insaturadas son las más beneficiosas para la salud, las saturadas conviene moderarlas y las grasas trans, evitarlas.",
+    ],
     tipos: [
       { nombre: "Insaturadas", desc: "Mono y poliinsaturadas (omega-3, omega-6). Las más beneficiosas." },
       { nombre: "Saturadas", desc: "En carnes y lácteos. Con moderación." },
@@ -147,6 +161,9 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#d75f5a",
     img: "/recorrido/nutricion/portadas/prote.png",
     resumen: "El material con el que te reconstruyes.",
+    descripcion: [
+      "Las proteínas son el material con el que tu cuerpo construye y repara tejidos. Durante la digestión se descomponen en aminoácidos, los ladrillos con los que el organismo fabrica músculo, piel, enzimas, anticuerpos y muchas hormonas.",
+    ],
     tipos: [
       { nombre: "Completas", desc: "De origen animal: aportan todos los aminoácidos esenciales." },
       { nombre: "Incompletas", desc: "De origen vegetal: se combinan (legumbre + cereal) para completarlas." },
@@ -191,6 +208,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#e8b52e",
     img: "/recorrido/nutricion/portadas/vitaminas.png",
     resumen: "Reguladoras: sin ellas nada funciona.",
+    descripcion: [
+      "Las vitaminas no aportan energía, pero sin ellas nada funciona correctamente. Permiten que se produzcan las reacciones químicas del organismo, desde la visión hasta las defensas o la coagulación de la sangre.",
+      "Las hidrosolubles (grupo B y vitamina C) deben obtenerse regularmente mediante la alimentación, mientras que las liposolubles (A, D, E y K) pueden almacenarse en la grasa corporal.",
+    ],
     tipos: [
       { nombre: "Hidrosolubles", desc: "Vitamina C y grupo B. No se almacenan: hay que reponerlas a diario." },
       { nombre: "Liposolubles", desc: "A, D, E y K. Se guardan en la grasa del cuerpo." },
@@ -315,6 +336,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#6f93b8",
     img: "/recorrido/nutricion/portadas/minerales.png",
     resumen: "Estructura, transporte y equilibrio.",
+    descripcion: [
+      "Los minerales dan estructura, transportan sustancias y mantienen el equilibrio del organismo. Muchos actúan como cofactores, ayudando a que las enzimas funcionen correctamente.",
+      "Forman huesos y dientes, permiten el impulso nervioso y la contracción muscular, y el hierro transporta el oxígeno en la sangre.",
+    ],
     tipos: [
       { nombre: "Macrominerales", desc: "Calcio, fósforo, magnesio, potasio, sodio. En cantidades mayores." },
       { nombre: "Oligoelementos", desc: "Hierro, zinc, yodo, selenio. En cantidades diminutas, pero esenciales." },
@@ -460,6 +485,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#6fa86b",
     img: "/recorrido/nutricion/portadas/fibra.png",
     resumen: "No se absorbe, pero lo ordena todo.",
+    descripcion: [
+      "La fibra apenas se digiere ni se absorbe como el resto de nutrientes, pero desempeña un papel fundamental en la salud global del organismo. Regula la digestión, prolonga la sensación de saciedad y sirve de alimento para las bacterias beneficiosas del intestino.",
+      "La fibra soluble forma un gel que ayuda a regular el azúcar y el colesterol, mientras que la fibra insoluble aporta volumen a las heces y acelera el tránsito intestinal.",
+    ],
     tipos: [
       { nombre: "Soluble", desc: "Forma un gel: regula el azúcar y el colesterol, y alimenta a la microbiota." },
       { nombre: "Insoluble", desc: "Da volumen y acelera el tránsito intestinal." },
@@ -505,6 +534,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#e6c34d",
     img: "/recorrido/nutricion/portadas/colesterolportada.png",
     resumen: "Ni bueno ni malo: materia prima esencial.",
+    descripcion: [
+      "El colesterol es esencial para el organismo. Forma parte de la membrana de todas tus células y es la base para fabricar hormonas, vitamina D y sales biliares.",
+      "El hígado produce la mayor parte del colesterol que necesitas. Lo importante no es solo la cantidad de colesterol, sino también la forma en que se transporta por la sangre, mediante las lipoproteínas HDL y LDL.",
+    ],
     tipos: [
       { nombre: "HDL", desc: "El que retira el colesterol sobrante y lo lleva al hígado. El «que limpia»." },
       { nombre: "LDL", desc: "El que reparte colesterol a las células. En exceso se acumula en las arterias." },
@@ -515,6 +548,39 @@ export const NUTRIENTES: Nutriente[] = [
       "El cuerpo fabrica la mayor parte en el hígado; solo una parte viene de la dieta.",
     ],
     donde: ["Huevo", "Vísceras", "Marisco", "Lácteos enteros", "Carnes grasas"],
+    tarjetas: [
+      {
+        key: "colesterol",
+        titulo: "Colesterol",
+        foto: "/recorrido/nutricion/moleculas/colesterol.png",
+        parrafos: [
+          "El colesterol es una molécula grasa (un lípido) que forma parte de la membrana de todas tus células, dándoles firmeza y a la vez flexibilidad, es como el cemento de la membrana celular.",
+          "Es la materia prima con la que el cuerpo fabrica hormonas (como los estrógenos, la testosterona o el cortisol), también fabrica vitamina D y las sales biliares que ayudan a digerir las grasas.",
+          "La mayor parte del colesterol la fabrica tu propio hígado; solo una pequeña parte procede de los alimentos. Por eso no es ni bueno ni malo: es imprescindible. El problema no es el colesterol en sí, sino cómo viaja por la sangre.",
+          "Como es grasa, no se disuelve en la sangre (que es agua). Para poder moverse, viaja empaquetado dentro de unas partículas llamadas lipoproteínas: las dos principales son la LDL y la HDL.",
+        ],
+      },
+      {
+        key: "hdl",
+        titulo: "HDL",
+        foto: "/recorrido/nutricion/moleculas/hdl.png",
+        parrafos: [
+          "La HDL (lipoproteína de alta densidad) es la partícula que hace el camino de vuelta: recoge el colesterol sobrante de los tejidos y de las paredes de las arterias y lo devuelve al hígado para reciclarlo o eliminarlo.",
+          "Por eso se le llama coloquialmente «colesterol bueno»: ayuda a retirar el exceso y a mantener las arterias limpias.",
+          "Unos niveles altos de HDL se asocian con una mejor salud cardiovascular. El ejercicio físico y las grasas saludables (aceite de oliva, pescado azul, tofu, frutos secos) ayudan a elevarla.",
+        ],
+      },
+      {
+        key: "ldl",
+        titulo: "LDL",
+        foto: "/recorrido/nutricion/moleculas/ldl.png",
+        parrafos: [
+          "La LDL (lipoproteína de baja densidad) es la partícula que reparte el colesterol desde el hígado hacia las células que lo necesitan.",
+          "Se le llama coloquialmente «colesterol malo», pero cumple una función necesaria. El problema aparece cuando hay demasiadas partículas LDL circulando: pueden quedarse pegadas y oxidarse en la pared de las arterias, formando placas que las estrechan (aterosclerosis).",
+          "Por eso interesa mantener la LDL en niveles adecuados, sobre todo evitando el exceso de grasas trans, el tabaco y el sobrepeso.",
+        ],
+      },
+    ],
   },
   {
     key: "etanol",
@@ -522,6 +588,9 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#b56576",
     img: "/recorrido/nutricion/portadas/alcohol.png",
     resumen: "Alcohol: energía vacía que el cuerpo prioriza.",
+    descripcion: [
+      "El etanol es el alcohol presente en las bebidas alcohólicas. Aporta 7 kcal por gramo, pero no contiene vitaminas ni minerales, por lo que se considera una fuente de «calorías vacías». Es más, el organismo lo trata como una sustancia potencialmente tóxica y lo metaboliza en el hígado con prioridad sobre otros nutrientes.",
+    ],
     tipos: [
       { nombre: "Etanol", desc: "El único alcohol que bebemos. Se forma al fermentar azúcares." },
       { nombre: "Metanol y otros", desc: "Tóxicos: no son aptos para el consumo." },
@@ -536,6 +605,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "etanol",
         titulo: "Etanol (CH₃CH₂OH)",
+        numero: 1,
         foto: "/recorrido/nutricion/moleculas/etanol.png",
         parrafos: [
           "Es la molécula presente en las bebidas alcohólicas.",
@@ -546,6 +616,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "acetaldehido",
         titulo: "Acetaldehído (CH₃CHO)",
+        numero: 2,
         foto: "/recorrido/nutricion/moleculas/acetaldehido.png",
         parrafos: [
           "Es la primera molécula que se forma cuando el hígado metaboliza el etanol.",
@@ -555,7 +626,8 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "acetato",
         titulo: "Acetato (CH₃COO⁻)",
-        foto: "/recorrido/nutricion/moleculas/acetato.png",
+        numero: 3,
+        foto: "/recorrido/nutricion/moleculas/acetatoalcohol.png",
         parrafos: [
           "Es el producto final del metabolismo del alcohol. Es una molécula mucho menos tóxica que puede utilizarse para producir energía o eliminarse.",
           "Transformar el acetaldehído en acetato es uno de los principales objetivos del hígado tras consumir alcohol.",
@@ -569,6 +641,10 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#4aa3c7",
     img: "/recorrido/nutricion/portadas/agua.png",
     resumen: "El medio donde ocurre toda la vida.",
+    descripcion: [
+      "El agua es el medio donde ocurre toda la Vida: en ella tienen lugar prácticamente todas las reacciones químicas del organismo.",
+      "Transporta oxígeno, nutrientes y hormonas, elimina desechos, regula la temperatura corporal y lubrica articulaciones y órganos. Aproximadamente dos tercios del agua del cuerpo se encuentran dentro de las células y el resto las rodea.",
+    ],
     tipos: [
       { nombre: "Agua intracelular", desc: "La que está dentro de las células: unos dos tercios del total." },
       { nombre: "Agua extracelular", desc: "La que rodea las células y forma el plasma de la sangre." },
@@ -586,6 +662,9 @@ export const NUTRIENTES: Nutriente[] = [
     color: "#8e5aa8",
     img: "/recorrido/nutricion/portadas/fitoquimico.png",
     resumen: "La defensa de las plantas, a tu favor.",
+    descripcion: [
+      "Los fitoquímicos son compuestos naturales que las plantas producen para protegerse y que también benefician a nuestra salud. Muchos actúan como antioxidantes que neutralizan los radicales libres, mientras que otros activan mecanismos de defensa del propio organismo. Cada color de frutas y verduras esconde una familia distinta de fitoquímicos. Por eso, una alimentación variada y rica en vegetales aporta una mayor diversidad de estos compuestos beneficiosos.",
+    ],
     tipos: [
       { nombre: "Flavonoides", desc: "Pigmentos antioxidantes de frutas, verduras y té." },
       { nombre: "Carotenoides", desc: "Los pigmentos naranjas y rojos (zanahoria, tomate)." },

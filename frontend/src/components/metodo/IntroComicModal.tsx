@@ -36,6 +36,9 @@ interface IntroComicModalProps {
    *  Nutrición: acento claro (nutricionBg) para cajas/líneas y letra oscura
    *  (nutricionTxt) para que se lea sobre el fondo claro. */
   textColor?: string;
+  /** Animación de espera mientras cada viñeta carga (por defecto, spinner).
+   *  Nutrición pasa aquí su manzana (AppleLoader). */
+  loader?: React.ReactNode;
 }
 
 export function IntroComicModal({
@@ -48,6 +51,7 @@ export function IntroComicModal({
   disciplinaBgColor,
   textShadow,
   textColor,
+  loader,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -72,6 +76,7 @@ export function IntroComicModal({
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
           textColor={textColor}
+          loader={loader}
           pageExtra={(_index, { isLast }) =>
             isLast ? (
               <Box display="flex" justifyContent="center">

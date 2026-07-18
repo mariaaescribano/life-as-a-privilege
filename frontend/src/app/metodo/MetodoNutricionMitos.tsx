@@ -11,6 +11,7 @@ import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
 
@@ -36,6 +37,10 @@ export default function MetodoNutricionMitos() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+
+        // No mostramos la página hasta que TODAS las fotos de los mitos estén
+        // descargadas: si no, se queda en el spinner (no aparecen de golpe).
+        await precargarImagenes(MITOS_NUTRICION.map((m) => encodeURI(m.foto)));
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();

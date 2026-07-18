@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
+import { AppleLoader } from "./AppleLoader";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
 import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 
@@ -46,6 +47,7 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
           textShadow="none"
           disciplinaBgImage="/img/fondos/nutri.png"
           disciplinaBgColor={nutricionBg}
+          loader={<AppleLoader />}
         />
 
         {/* Botón «Ir a los nutrientes →» fijo, a la IZQUIERDA de la X del

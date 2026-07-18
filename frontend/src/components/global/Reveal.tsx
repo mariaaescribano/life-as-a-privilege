@@ -104,6 +104,63 @@ export function Reveal({
   );
 }
 
+// ── Float: movimiento continuo y sutil (flotar en vertical) ───────────────
+// Para dar vida PERPETUA a elementos no interactivos (iconos, fotos): un leve
+// vaivén arriba-abajo en bucle. No es una entrada; convive con <Reveal> si se
+// anida (Reveal hace la entrada por fuera, Float el vaivén por dentro).
+export function Float({
+  children,
+  amplitude = 6, // px de recorrido vertical
+  duration = 5,
+  delay = 0,
+  ...rest
+}: {
+  amplitude?: number;
+  duration?: number;
+  delay?: number;
+  children?: React.ReactNode;
+} & BoxProps) {
+  const reduce = useReducedMotion();
+  if (reduce) return <Box {...rest}>{children}</Box>;
+  return (
+    <MotionBox
+      animate={{ y: [0, -amplitude, 0] }}
+      transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
+      {...rest}
+    >
+      {children}
+    </MotionBox>
+  );
+}
+
+// ── Breathe: escala continua muy leve (respirar) ──────────────────────────
+// Igual que Float pero con un latido de escala en vez de vaivén: ideal para
+// fotos/tarjetas grandes que quedarían raras moviéndose de sitio.
+export function Breathe({
+  children,
+  scale = 0.012, // amplitud: 1 → 1 + scale
+  duration = 6,
+  delay = 0,
+  ...rest
+}: {
+  scale?: number;
+  duration?: number;
+  delay?: number;
+  children?: React.ReactNode;
+} & BoxProps) {
+  const reduce = useReducedMotion();
+  if (reduce) return <Box {...rest}>{children}</Box>;
+  return (
+    <MotionBox
+      animate={{ scale: [1, 1 + scale, 1] }}
+      transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
+      {...rest}
+    >
+      {children}
+    </MotionBox>
+  );
+}
+
 // ── RevealStagger: contenedor que lanza a sus <RevealItem> en cascada ─────
 // Se puede usar como Flex/Grid pasándole display/flexDirection/gap, etc.
 export function RevealStagger({

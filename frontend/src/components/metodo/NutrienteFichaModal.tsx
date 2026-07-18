@@ -1,16 +1,18 @@
 import React from "react";
-import { Text } from "@chakra-ui/react";
-import { FichaFisioModal } from "./celulasUi";
+import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
+import { ComicViewer, type Vineta } from "./ComicViewer";
+import { AppleLoader } from "./AppleLoader";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import type { NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // ─────────────────────────────────────────────────────────────────────────
-// Ficha tipo cómic de una tarjeta de nutriente (Glucosa, Fructosa…). Reutiliza
-// EXACTAMENTE la misma caja que las fichas de Fisiología y el visor de
-// «Ilustraciones» (FichaFisioModal): foto a la izquierda, título + texto a la
-// derecha, flechas/teclado y contador. Solo cambia el tema: fondo con la foto
-// de Nutrición (nutri.png) y colores de la disciplina.
+// Ficha de una tarjeta de nutriente (Glucosa, Fructosa…). Usa EXACTAMENTE el
+// popup de «Ilustraciones» (ComicViewer), igual que la ilustración del grupo:
+// foto a la izquierda, título + texto a la derecha, flechas/teclado y contador.
+// Se abre en la tarjeta pulsada y se puede navegar por el resto.
+// Fondo con la foto de Nutrición (nutri.png), colores de la disciplina y el
+// texto SIN sombra.
 // ─────────────────────────────────────────────────────────────────────────
 
 const NUTRI_IMG = disciplinaBgImg(nutricionNom) ?? "/img/fondos/nutri.png";
@@ -19,39 +21,47 @@ export function NutrienteFichaModal({
   tarjetas,
   index,
   onClose,
-  onSelect,
 }: {
   tarjetas: NutrienteTarjeta[];
   index: number;
   onClose: () => void;
-  onSelect: (i: number) => void;
+  /** Ya no se usa: el ComicViewer navega internamente. Se mantiene opcional por
+   *  compatibilidad con las páginas que aún lo pasan. */
+  onSelect?: (i: number) => void;
 }) {
-  const total = tarjetas.length;
-  const t = tarjetas[index];
-  const puedeNavegar = total > 1;
-  const salta = (d: number) => onSelect((index + d + total) % total);
-  const accent = t.color || nutricionTxt;
+  const vinetas: Vineta[] = tarjetas.map((t) => ({
+    src: t.foto || "",
+    paragraphs: t.parrafos,
+    titulo: t.titulo,
+  }));
 
   return (
-    <FichaFisioModal
-      foto={t.foto || ""}
-      alt={t.titulo}
-      titulo={t.titulo}
-      parrafos={t.parrafos}
-      accent={accent}
-      bgImage={NUTRI_IMG}
-      bgColor={nutricionBg}
-      txtColor={nutricionTxt}
-      onClose={onClose}
-      onPrev={puedeNavegar ? () => salta(-1) : undefined}
-      onNext={puedeNavegar ? () => salta(1) : undefined}
-      contador={puedeNavegar ? `${index + 1} / ${total}` : null}
-      fotoFallback={
-        <Text color={accent} fontWeight="800" fontSize={{ base: "4xl", md: "5xl" }}
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-          {t.titulo.charAt(0)}
-        </Text>
-      }
-    />
+    <Modal isOpen onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
+      <ModalOverlay bg={nutricionBg} sx={{ backdropFilter: "blur(20px)" }} />
+      <ModalContent
+        bg="transparent"
+        border="none"
+        borderRadius="0"
+        boxShadow="none"
+        m={0}
+        minH="100vh"
+        position="relative"
+        fontFamily="'EB Garamond', serif"
+        sx={{ transform: "none !important" }}
+      >
+        <ComicViewer
+          vinetas={vinetas}
+          initialIndex={index}
+          themeColor={nutricionTxt}
+          textColor={nutricionTxt}
+          textShadow="none"
+          disciplinaBgImage={NUTRI_IMG}
+          disciplinaBgColor={nutricionBg}
+          loader={<AppleLoader />}
+          onClose={onClose}
+          onComplete={onClose}
+        />
+      </ModalContent>
+    </Modal>
   );
 }

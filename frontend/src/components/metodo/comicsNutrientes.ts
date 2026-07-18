@@ -24,7 +24,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
       src: src("carbohidratos", 2),
       paragraphs: [
         "Necesitamos glucosa, sí. Pero la necesitamos poco a poco. Si llega demasiado rápido a la sangre, el organismo tiene que hacer un gran esfuerzo para mantener el equilibrio.",
-        "Lo ideal es que las células la reciban de forma gradual. Eso es precisamente lo que consiguen muchos alimentos poco procesados: su estructura hace que la digestión sea más lenta y que la glucosa se vaya liberando poco a poco, justo como nuestro cuerpo prefiere.",
+        "Lo ideal es que las células la reciban de forma gradual. Eso es precisamente lo que consiguen las verduras, las frutas y las legumbres: su estructura hace que la digestión sea más lenta y que la glucosa se vaya liberando poco a poco, justo como nuestro cuerpo prefiere.",
       ],
     },
     {

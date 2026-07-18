@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { DisciplinaBgLayer, disciplinaBgImg } from "../global/DisciplinaBgLayer";
+import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
+import { FotoBox } from "./FotoBox";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -20,129 +21,16 @@ const fadeIn = keyframes`
    elegante, el nombre y "Leer más →" abajo a la derecha.
 ───────────────────────────────────────── */
 export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula; onClick: () => void; visto?: boolean }) {
-  const [imgErr, setImgErr] = useState(false);
-
   return (
-    <Box
-      as="button"
+    <FotoBox
+      titulo={celula.nombre}
+      foto={celula.foto}
+      nom={fisiologiaNom}
+      tinta={TXT}
+      bg={BG}
+      visto={visto}
       onClick={onClick}
-      textAlign="left"
-      position="relative"
-      overflow="hidden"
-      w="100%"
-      h="100%"
-      borderRadius="2xl"
-      border={visto ? `1px solid ${TXT}aa` : `1px solid ${TXT}33`}
-      cursor="pointer"
-      fontFamily="'EB Garamond', serif"
-      boxShadow={visto
-        ? `0 4px 18px rgba(0,0,0,0.22), 0 0 22px ${TXT}66`
-        : `0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${TXT}26`}
-      transition="all 0.22s ease"
-      _hover={{
-        transform: "translateY(-4px)",
-        borderColor: `${TXT}88`,
-        boxShadow: `0 10px 30px rgba(0,0,0,0.3), 0 0 26px ${TXT}55`,
-      }}
-      _active={{ transform: "translateY(-1px)" }}
-    >
-      {/* Fondo: misma imagen que el header de Fisiología (sin velo) */}
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-
-      {/* Sello de "descubierta": aparece cuando el usuario ya la ha visitado */}
-      {visto && (
-        <Flex
-          position="absolute"
-          top="10px"
-          right="10px"
-          zIndex={2}
-          align="center"
-          justify="center"
-          w="26px"
-          h="26px"
-          borderRadius="full"
-          bg={TXT}
-          boxShadow={`0 0 10px ${TXT}, 0 1px 4px rgba(0,0,0,0.5)`}
-        >
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="#1a1226">
-            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-          </Box>
-        </Flex>
-      )}
-
-      <Flex direction="column" position="relative" zIndex={1} p={{ base: 4, md: 5 }} gap={3} h="100%">
-        {/* Foto de la célula — cuadrada 1:1 (como es la foto real) */}
-        <Box
-          borderRadius="lg"
-          overflow="hidden"
-          w="100%"
-          aspectRatio={1}
-          bg={`${TXT}14`}
-          boxShadow="0 4px 16px rgba(0,0,0,0.28)"
-          flexShrink={0}
-        >
-          {!imgErr ? (
-            <Image
-              src={encodeURI(celula.foto)}
-              alt={celula.nombre}
-              w="100%"
-              h="100%"
-              objectFit="cover"
-              onError={() => setImgErr(true)}
-            />
-          ) : (
-            <Flex w="100%" h="100%" align="center" justify="center">
-            </Flex>
-          )}
-        </Box>
-
-        {/* Rallita separadora elegante */}
-        <Box
-          alignSelf="center"
-          w="54px"
-          h="1px"
-          borderRadius="full"
-          bgGradient={`linear(to-r, transparent, ${TXT}, transparent)`}
-          my={1}
-        />
-
-        {/* Nombre */}
-        <Text
-          color={TXT}
-          fontWeight="700"
-          fontSize={{ base: "lg", md: "xl" }}
-          textAlign="center"
-          lineHeight="1.25"
-          letterSpacing="0.02em"
-          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.4)" }}
-        >
-          {celula.nombre}
-        </Text>
-
-        {/* Leer más → */}
-        <Flex align="center" justify="flex-end" gap={1.5} mt="auto" pt={2} color={TXT}>
-          <Text
-            as="span"
-            fontSize={{ base: "xs", md: "sm" }}
-            fontStyle="italic"
-            letterSpacing="0.08em"
-            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}
-          >
-            Leer más
-          </Text>
-          <Box
-            as="svg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            w="14px"
-            h="14px"
-            fill="currentColor"
-          >
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-          </Box>
-        </Flex>
-      </Flex>
-    </Box>
+    />
   );
 }
 
