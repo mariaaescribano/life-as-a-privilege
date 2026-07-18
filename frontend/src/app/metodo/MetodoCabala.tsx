@@ -7,6 +7,10 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoCabalaModal } from "../../components/metodo/PagoCabalaModal";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { CABALA_INTRO } from "../../components/metodo/comicCabalaIntro";
+import { useIntroComic } from "../../hooks/useIntroComic";
+import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -25,6 +29,7 @@ export default function MetodoCabala() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  const intro = useIntroComic("metodo-cabala"); // cómic del Origen, 1ª vez
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -53,6 +58,9 @@ export default function MetodoCabala() {
         const cabalaSuscrito = !!me.data?.cabala_suscrito;
         setSuscrito(cabalaSuscrito);
         if (!cabalaSuscrito) { setPagoOpen(true); return; }
+
+        // Ya tiene acceso: si es la 1ª vez, muestra el cómic del Origen.
+        void intro.checkAndOpen();
       } catch {
         navigate("/home");
         return;
@@ -98,6 +106,7 @@ export default function MetodoCabala() {
       );
       setSuscrito(true);
       setPagoOpen(false);
+      void intro.checkAndOpen();
     } catch (err: any) {
       setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
@@ -129,7 +138,10 @@ export default function MetodoCabala() {
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: "← Volver", onClick: () => navigate("/home") }}
+              prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion/cursos") }}
+              // Ilustraciones de Cábala: pendientes de contenido, el botón queda
+              // preparado pero aún no abre nada.
+              extra={{ label: "Ilustraciones", onClick: () => {} }}
               next={{ label: "El Árbol de la Vida →", onClick: comenzar }}
             />
           </Reveal>
@@ -140,7 +152,7 @@ export default function MetodoCabala() {
               <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
                 <Text
-                  color="white"
+                  color={cabalaTxt}
                   fontSize={{ base: "sm", md: "md" }}
                   lineHeight="1.9"
                   opacity={0.92}
@@ -149,12 +161,12 @@ export default function MetodoCabala() {
                   mb={4}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  La Cábala es una de las tradiciones místicas más antiguas: un mapa simbólico de cómo
+                  La Cábala es una de las tradiciones místicas más antiguas; es un mapa simbólico de cómo
                   la luz infinita desciende hasta la materia y de cómo el alma puede recorrer ese mismo
                   camino de vuelta a su origen.
                 </Text>
                 <Text
-                  color="white"
+                  color={cabalaTxt}
                   fontSize={{ base: "sm", md: "md" }}
                   lineHeight="1.9"
                   opacity={0.92}
@@ -164,27 +176,26 @@ export default function MetodoCabala() {
                 >
                   Su corazón es el <Box as="span" fontStyle="italic" color={cabalaTxt}>Árbol de la Vida</Box>:
                   diez esferas —las sefirot— unidas por senderos que representan las fuerzas que nos
-                  habitan. En este recorrido las iremos descubriendo una a una, para reconocerlas en ti.
+                  habitan. En este recorrido las iremos descubriendo una a una, para reconocerlas en ti
+                  y que estén al servicio de tu autoconocimiento.
                 </Text>
               </Box>
             </Box>
           </Reveal>
-
-          {/* ── Guía sutil ── */}
-          <Reveal direction="up" distance={18} delay={0.24} duration={0.6} display="flex" justifyContent="center">
-            <Text
-              color="rgba(255,255,255,0.85)"
-              fontSize={{ base: "sm", md: "md" }}
-              fontStyle="italic"
-              letterSpacing="0.04em"
-              textAlign="center"
-              style={{ textShadow: INK_SHADOW }}
-            >
-              Cuando estés listo, entra en el Árbol de la Vida.
-            </Text>
-          </Reveal>
         </Flex>
       </Flex>
+
+      {/* Intro (1ª vez): cómic del Origen de Cábala. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        vinetas={CABALA_INTRO}
+        themeColor={cabalaTxt}
+        textColor={cabalaTxt}
+        disciplinaBgImage="/img/fondos/cabala.png"
+        disciplinaBgColor={cabalaBg}
+        onFinish={intro.finish}
+        onClose={intro.close}
+      />
 
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
 
@@ -198,6 +209,8 @@ export default function MetodoCabala() {
         error={pagoError}
         onTest={testPagos ? testUnlock : undefined}
       />
+
+      <IndiceCabala />
     </Box>
   );
 }

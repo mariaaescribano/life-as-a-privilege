@@ -8,9 +8,9 @@ export type CabalaPageKey = SefiraKey | "daat";
 // ─────────────────────────────────────────────────────────────────────────
 // Contenido del recorrido de CÁBALA: una página por sefirá (dimensión).
 // El orden de las páginas del recorrido es: 1) Intro, 2) Árbol de la Vida,
-// 3..12) las 10 sefirot por su `numero`. De ahí el pageLabel "3/12" para Kéter.
+// 3..12) las 10 sefirot por su `numero`. De ahí el pageLabel "3/12" para Keter.
 //
-// Solo Kéter está redactada por completo; el resto son stubs con la estructura
+// Solo Keter está redactada por completo; el resto son stubs con la estructura
 // lista para rellenar (los boxes vacíos no se pintan). Este objeto ES el
 // esqueleto común a todas las sefirot.
 // ─────────────────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@ export interface BloqueLista {
   /** Frase introductoria del box (opcional). */
   intro?: string;
   items: string[];
-  /** Sub-bloque opcional con su propio encabezado (p.ej. Guevurá: el desequilibrio
+  /** Sub-bloque opcional con su propio encabezado (p.ej. Gevurah: el desequilibrio
    *  por defecto y, aparte, "En el extremo opuesto, un exceso puede manifestarse…"). */
   extra?: { intro?: string; items: string[] };
 }
@@ -83,14 +83,14 @@ const KETER: SefiraContenido = {
   titulo: "Keter",
   frase: "¿En quién quieres convertirte y desde qué verdad quieres vivir?",
   intro: [
-    "Kéter representa la capacidad de vivir orientado por un propósito que trasciende los deseos inmediatos del ego.",
+    "Keter representa la capacidad de vivir orientado por un propósito que trasciende los deseos inmediatos del ego.",
     "No se trata de elegir una profesión, alcanzar una meta o construir una identidad. Se trata de descubrir el principio desde el cual quieres vivir.",
     "Sin una orientación clara, incluso el talento, la disciplina o el conocimiento pueden ponerse al servicio de objetivos que no generan verdadera plenitud.",
   ],
   equilibrado: {
-    intro: "Una persona con un Kéter fuerte suele:",
+    intro: "Una persona con un Keter fuerte suele:",
     items: [
-      "Tiene claridad sobre los principios que guían su vida.",
+      "Tiene claridad sobre los principios que guían su Vida.",
       "Sus decisiones mantienen coherencia incluso cuando son difíciles.",
       "No necesita demostrar constantemente su valor.",
       "Tolera mejor la incertidumbre porque sabe hacia dónde camina.",
@@ -117,13 +117,13 @@ const KETER: SefiraContenido = {
       "¿Qué haría si dejara de preocuparme por la opinión de los demás?",
       "¿Qué tipo de persona quiero ser más allá de lo que logro?",
       "¿Qué actividades me hacen sentir profundamente alineado conmigo mismo?",
-      "¿Qué parte de mi vida hoy no está al servicio de lo que considero esencial?",
+      "¿Qué parte de mi Vida hoy no está al servicio de lo que considero esencial?",
     ],
   },
   autoevaluacion: {
     intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
     items: [
-      "Tengo claro qué principios orientan mi vida.",
+      "Tengo claro qué principios orientan mi Vida.",
       "Mis decisiones reflejan esos principios.",
       "No necesito demostrar constantemente mi valor.",
       "Encuentro sentido en lo que hago.",
@@ -131,7 +131,7 @@ const KETER: SefiraContenido = {
     ],
   },
   clave: [
-    "Kéter no se fortalece haciendo más, sino recordando constantemente por qué haces lo que haces.",
+    "Keter no se fortalece haciendo más, sino recordando constantemente por qué haces lo que haces.",
     "Cada vez que una decisión nace de la coherencia en lugar de la necesidad de validación, esta dimensión se fortalece. No consiste en alcanzar una versión ideal de uno mismo, sino en volver, una y otra vez, a aquello que reconoces como verdadero y esencial.",
   ],
 };
@@ -142,9 +142,9 @@ const CHOKHMAH: SefiraContenido = {
   titulo: "Chokhmah",
   frase: "¿Soy capaz de ver la realidad tal como es?",
   intro: [
-    "Jojmá es la capacidad de percibir la realidad con claridad, antes de que nuestras creencias, emociones o experiencias pasadas la transformen en una interpretación.",
-    "Cultivar Jojmá implica aprender a detener el impulso de reaccionar automáticamente para observar con apertura, curiosidad y honestidad.",
-    "Es una habilidad que permite responder a la vida desde la comprensión, en lugar de hacerlo desde el miedo, la costumbre o las heridas del pasado.",
+    "Chokhmah es la capacidad de percibir la realidad con claridad, antes de que nuestras creencias, emociones o experiencias pasadas la transformen en una interpretación.",
+    "Cultivar Chokhmah implica aprender a detener el impulso de reaccionar automáticamente para observar con apertura, curiosidad y honestidad.",
+    "Es una habilidad que permite responder a la Vida desde la comprensión, en lugar de hacerlo desde el miedo, la costumbre o las heridas del pasado.",
   ],
   equilibrado: {
     intro: "Una persona con una buena capacidad de percepción suele:",
@@ -212,18 +212,18 @@ const CHOKHMAH: SefiraContenido = {
   },
   clave: [
     "Cada vez que haces una pausa antes de reaccionar, cuestionas tus primeras conclusiones o permites que los hechos hablen antes que tus suposiciones, fortaleces esta dimensión.",
-    "Desarrollar Jojmá es aprender a mirar el mundo con menos filtros y más presencia. Desde esa claridad, las decisiones dejan de estar guiadas por el impulso y comienzan a apoyarse en una comprensión más profunda y consciente de la realidad.",
+    "Desarrollar Chokhmah es aprender a mirar el mundo con menos filtros y más presencia. Desde esa claridad, las decisiones dejan de estar guiadas por el impulso y comienzan a apoyarse en una comprensión más profunda y consciente de la realidad.",
   ],
 };
 
-// Orden del recorrido = por `numero`. Kéter (1) primero.
+// Orden del recorrido = por `numero`. Keter (1) primero.
 const BINAH: SefiraContenido = {
   key: "binah",
   numero: 3,
   titulo: "Binah",
   frase: "¿Cómo incorporo esa verdad para estructurar mi forma de ver el mundo?",
   intro: [
-    "Biná es la capacidad de transformar una experiencia en comprensión profunda.",
+    "Binah es la capacidad de transformar una experiencia en comprensión profunda.",
     "Todos interpretamos la realidad a través de modelos mentales construidos por nuestra historia, nuestra educación y nuestras experiencias. Estos modelos nos ayudan a dar sentido a lo que vivimos, pero también pueden convertirse en límites invisibles cuando dejamos de cuestionarlos.",
     "Desarrollar esta dimensión implica dejar de acumular información y comenzar a convertir la experiencia en sabiduría. Significa aprender de lo que vivimos, en lugar de repetirlo inconscientemente.",
     "Comprender no significa justificar todo lo que ocurre, sino darle un lugar dentro de nuestra historia para que deje de gobernarnos desde el inconsciente.",
@@ -232,7 +232,7 @@ const BINAH: SefiraContenido = {
     intro: "Una persona con una buena capacidad de integración:",
     items: [
       "Aprende de sus experiencias, incluso de las difíciles.",
-      "Reconoce los patrones que se repiten en su vida.",
+      "Reconoce los patrones que se repiten en su Vida.",
       "Está dispuesta a revisar sus creencias cuando descubre nueva información.",
       "Tolera la complejidad sin buscar respuestas simplistas.",
       "Comprende que puede cambiar la forma en que interpreta su historia.",
@@ -252,7 +252,7 @@ const BINAH: SefiraContenido = {
   },
   preguntas: {
     items: [
-      "¿Qué patrón se ha repetido varias veces en mi vida?",
+      "¿Qué patrón se ha repetido varias veces en mi Vida?",
       "¿Qué aprendizaje aún no he integrado de esa experiencia?",
       "¿Qué creencia sobre mí o sobre los demás podría necesitar ser revisada?",
       "¿Qué interpretación sigo manteniendo porque me resulta familiar, aunque ya no me ayude?",
@@ -262,7 +262,7 @@ const BINAH: SefiraContenido = {
   },
   ejercicio: {
     titulo: "Descubriendo el patrón",
-    intro: "Piensa en una situación que se haya repetido en diferentes momentos de tu vida.",
+    intro: "Piensa en una situación que se haya repetido en diferentes momentos de tu Vida.",
     promptsIntro: "Escribe:",
     prompts: [
       "¿Qué ocurrió?",
@@ -278,14 +278,14 @@ const BINAH: SefiraContenido = {
     intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
     items: [
       "Reflexiono sobre mis experiencias para aprender de ellas.",
-      "Identifico patrones que se repiten en mi vida.",
+      "Identifico patrones que se repiten en mi Vida.",
       "Estoy dispuesto a cuestionar mis propias creencias.",
       "Transformo los errores en oportunidades de crecimiento.",
       "Mis experiencias amplían mi manera de comprender el mundo.",
     ],
   },
   clave: [
-    "Desarrollar Biná es construir una mente más flexible, amplia y consciente. Una mente capaz de integrar la verdad sin quedar atrapada en las interpretaciones del pasado, permitiendo que cada experiencia contribuya a una comprensión más profunda de quién eres y de cómo eliges vivir.",
+    "Desarrollar Binah es construir una mente más flexible, amplia y consciente. Una mente capaz de integrar la verdad sin quedar atrapada en las interpretaciones del pasado, permitiendo que cada experiencia contribuya a una comprensión más profunda de quién eres y de cómo eliges vivir.",
   ],
 };
 
@@ -369,12 +369,12 @@ const CHESED: SefiraContenido = {
   titulo: "Chesed",
   frase: "¿Cómo comparto lo que soy con los demás?",
   intro: [
-    "Jesed no es simplemente «dar». Es la capacidad de generar vida en otros desde una sensación de abundancia interior, sin convertir el amor en una estrategia para obtener aceptación.",
-    "Jesed es la capacidad de ofrecer lo mejor de uno mismo desde la libertad, no desde la necesidad. Comprendemos que compartir puede contribuir al bienestar de otros, sin esperar que ese acto defina nuestro valor personal.",
-    "Jesed nos recuerda que ayudar no consiste en hacer más por los demás, sino en ofrecer aquello que realmente puede nutrirlos, respetando sus tiempos, sus decisiones y sus propios límites.",
+    "Chesed no es simplemente «dar». Es la capacidad de generar Vida en otros desde una sensación de abundancia interior, sin convertir el amor en una estrategia para obtener aceptación.",
+    "Chesed es la capacidad de ofrecer lo mejor de uno mismo desde la libertad, no desde la necesidad. Comprendemos que compartir puede contribuir al bienestar de otros, sin esperar que ese acto defina nuestro valor personal.",
+    "Chesed nos recuerda que ayudar no consiste en hacer más por los demás, sino en ofrecer aquello que realmente puede nutrirlos, respetando sus tiempos, sus decisiones y sus propios límites.",
   ],
   equilibrado: {
-    intro: "Una persona con un Jesed desarrollado:",
+    intro: "Una persona con un Chesed desarrollado:",
     items: [
       "Comparte con generosidad sin esperar reconocimiento.",
       "Escucha antes de ofrecer ayuda.",
@@ -433,7 +433,7 @@ const CHESED: SefiraContenido = {
     ],
   },
   clave: [
-    "Desarrollar Jesed es aprender que el amor no se mide por cuánto das, sino por la calidad de la presencia con la que das. Cuando la generosidad nace de la abundancia interior, deja de ser un intercambio y se convierte en una expresión natural de quién eres.",
+    "Desarrollar Chesed es aprender que el amor no se mide por cuánto das, sino por la calidad de la presencia con la que das. Cuando la generosidad nace de la abundancia interior, deja de ser un intercambio y se convierte en una expresión natural de quién eres.",
   ],
 };
 
@@ -443,12 +443,12 @@ const GEVURAH: SefiraContenido = {
   titulo: "Gevurah",
   frase: "¿Qué necesito proteger?",
   intro: [
-    "Guevurá es la capacidad de proteger aquello que da sentido y equilibrio a tu vida.",
+    "Gevurah es la capacidad de proteger aquello que da sentido y equilibrio a tu Vida.",
     "Decir «no» no es rechazar a los demás; es afirmar aquello que consideramos importante. Cada vez que decimos «sí» a algo, también estamos diciendo «no» a otra cosa.",
-    "Guevurá nos ayuda a actuar con discernimiento. Nos permite reconocer cuándo una oportunidad nos acerca a nuestro propósito y cuándo nos aleja de él, cuándo una relación nos nutre y cuándo nos desgasta.",
+    "Gevurah nos ayuda a actuar con discernimiento. Nos permite reconocer cuándo una oportunidad nos acerca a nuestro propósito y cuándo nos aleja de él, cuándo una relación nos nutre y cuándo nos desgasta.",
   ],
   equilibrado: {
-    intro: "Una persona con una Guevurá desarrollada:",
+    intro: "Una persona con una Gevurah desarrollada:",
     items: [
       "Establece límites claros con respeto.",
       "Puede decir «no» sin sentirse culpable.",
@@ -469,7 +469,7 @@ const GEVURAH: SefiraContenido = {
       "Confundir poner límites con ser egoísta.",
     ],
     extra: {
-      intro: "En el extremo opuesto, un exceso de Guevurá puede manifestarse como:",
+      intro: "En el extremo opuesto, un exceso de Gevurah puede manifestarse como:",
       items: [
         "Rigidez.",
         "Perfeccionismo.",
@@ -485,7 +485,7 @@ const GEVURAH: SefiraContenido = {
       "¿Qué «sí» estoy dando que en realidad quisiera transformar en un «no»?",
       "¿Qué me impide establecer ese límite?",
       "¿Confundo el cuidado de los demás con el abandono de mí mismo?",
-      "¿En qué áreas de mi vida necesito más disciplina y en cuáles más flexibilidad?",
+      "¿En qué áreas de mi Vida necesito más disciplina y en cuáles más flexibilidad?",
       "¿Qué personas o situaciones consumen una energía que necesito para aquello que considero esencial?",
     ],
   },
@@ -516,7 +516,7 @@ const GEVURAH: SefiraContenido = {
     ],
   },
   clave: [
-    "Cada vez que dices «no» a aquello que te aleja de tus valores, estás diciendo «sí» a la vida que deseas construir. La verdadera fortaleza no consiste en resistirlo todo, sino en proteger con sabiduría aquello que hace posible vivir con integridad.",
+    "Cada vez que dices «no» a aquello que te aleja de tus valores, estás diciendo «sí» a la Vida que deseas construir. La verdadera fortaleza no consiste en resistirlo todo, sino en proteger con sabiduría aquello que hace posible vivir con integridad.",
   ],
 };
 
@@ -535,7 +535,7 @@ const TIFERET: SefiraContenido = {
   },
   intro: [
     "Tiferet es la capacidad de encontrar equilibrio entre las distintas fuerzas que habitan en nosotros.",
-    "A lo largo de la vida convivimos con impulsos que parecen opuestos: queremos cuidar de los demás, pero también necesitamos cuidarnos. El equilibrio no consiste en eliminar una parte de nosotros, sino en aprender cuándo y cómo darle espacio.",
+    "A lo largo de la Vida convivimos con impulsos que parecen opuestos: queremos cuidar de los demás, pero también necesitamos cuidarnos. El equilibrio no consiste en eliminar una parte de nosotros, sino en aprender cuándo y cómo darle espacio.",
     "Tiferet representa ese lugar interno desde el que dejamos de actuar por impulso y comenzamos a responder con conciencia y de la manera más adecuada para cada situación.",
     "La madurez emocional nace cuando dejamos de preguntarnos «¿quién tiene razón?» y empezamos a preguntarnos «¿qué necesita esta situación de mí?».",
   ],
@@ -565,7 +565,7 @@ const TIFERET: SefiraContenido = {
   },
   preguntas: {
     items: [
-      "¿En qué área de mi vida tiendo a moverme entre extremos?",
+      "¿En qué área de mi Vida tiendo a moverme entre extremos?",
       "¿Qué parte de mí suele dominar cuando enfrento un conflicto?",
       "¿Qué emoción me cuesta más sostener sin reaccionar?",
       "¿Estoy actuando desde el equilibrio o desde una reacción automática?",
@@ -613,12 +613,12 @@ const NETZACH: SefiraContenido = {
   titulo: "Netzach",
   frase: "¿Soy capaz de sostener ese camino en el tiempo?",
   intro: [
-    "Netzaj es la capacidad de mantener el compromiso con aquello que consideramos importante, incluso cuando el camino se vuelve difícil.",
+    "Netzach es la capacidad de mantener el compromiso con aquello que consideramos importante, incluso cuando el camino se vuelve difícil.",
     "Esta dimensión no habla de avanzar sin descanso ni de ignorar las dificultades. Habla de desarrollar la fortaleza necesaria para seguir caminando sin perder de vista aquello que da sentido al esfuerzo.",
     "En lugar de preguntarnos «¿Por qué esto es tan difícil?», empezamos a preguntarnos «¿Qué puedo aprender mientras continúo avanzando?».",
   ],
   equilibrado: {
-    intro: "Una persona con un Netzaj desarrollado:",
+    intro: "Una persona con un Netzach desarrollado:",
     items: [
       "Mantiene el compromiso con sus objetivos a largo plazo.",
       "Tolera la frustración sin abandonar fácilmente.",
@@ -639,7 +639,7 @@ const NETZACH: SefiraContenido = {
       "Perder confianza cuando los resultados tardan en llegar.",
     ],
     extra: {
-      intro: "En el extremo opuesto, un exceso de Netzaj puede manifestarse como:",
+      intro: "En el extremo opuesto, un exceso de Netzach puede manifestarse como:",
       items: [
         "Insistir en un camino que ya no tiene sentido.",
         "No reconocer cuándo es necesario descansar o cambiar de estrategia.",
@@ -687,7 +687,7 @@ const NETZACH: SefiraContenido = {
     ],
   },
   clave: [
-    "Desarrollar Netzaj es comprender que la transformación no depende de la intensidad con la que comienzas, sino de la fidelidad con la que permaneces. La grandeza no suele construirse en momentos extraordinarios, sino en la suma de decisiones cotidianas que, una tras otra, mantienen vivo el camino hacia aquello que realmente importa.",
+    "Desarrollar Netzach es comprender que la transformación no depende de la intensidad con la que comienzas, sino de la fidelidad con la que permaneces. La grandeza no suele construirse en momentos extraordinarios, sino en la suma de decisiones cotidianas que, una tras otra, mantienen vivo el camino hacia aquello que realmente importa.",
   ],
 };
 
@@ -801,7 +801,7 @@ const YESOD: SefiraContenido = {
       "Empezar proyectos que rara vez se sostienen.",
       "Actuar de forma distinta a los propios valores.",
       "Vivir reaccionando a las circunstancias en lugar de actuar con intención.",
-      "Sentir que la vida está desorganizada o sin una estructura clara.",
+      "Sentir que la Vida está desorganizada o sin una estructura clara.",
       "Depender de la motivación para mantener hábitos importantes.",
     ],
   },
@@ -839,7 +839,7 @@ const YESOD: SefiraContenido = {
       "Cumplo los compromisos que asumo conmigo mismo.",
       "Organizo mi tiempo de acuerdo con mis prioridades.",
       "Soy consistente incluso cuando disminuye la motivación.",
-      "Mi vida diaria refleja aquello que considero importante.",
+      "Mi Vida diaria refleja aquello que considero importante.",
     ],
   },
   clave: [
@@ -853,52 +853,52 @@ const MALKHUT: SefiraContenido = {
   titulo: "Malkhut",
   frase: "¿Qué realidad estoy creando con la persona que soy ahora mismo?",
   intro: [
-    "Malkut es la capacidad de convertir tu mundo interior en una realidad visible. Es la coherencia entre quién eres y la vida que construyes.",
+    "Malkhut es la capacidad de convertir tu mundo interior en una realidad visible. Es la coherencia entre quién eres y la Vida que construyes.",
     "Manifestar no significa controlar todo lo que ocurre. Significa asumir la responsabilidad de la parte de realidad que sí depende de ti.",
     "Muchas personas esperan que el cambio ocurra antes de empezar a vivir de otra manera. Pero la transformación comienza cuando actuamos como la persona que queremos llegar a ser, incluso antes de sentirnos completamente preparados.",
   ],
   equilibrado: {
-    intro: "Una persona con un Malkut desarrollado:",
+    intro: "Una persona con un Malkhut desarrollado:",
     items: [
       "Vive de acuerdo con sus valores de forma natural.",
       "Asume responsabilidad por sus decisiones y sus consecuencias.",
       "Genera un impacto positivo en su entorno.",
-      "Mantiene coherencia entre su mundo interior y su vida cotidiana.",
+      "Mantiene coherencia entre su mundo interior y su Vida cotidiana.",
       "Se adapta a los cambios sin perder su esencia.",
       "Recibe tanto los desafíos como las oportunidades con presencia y responsabilidad.",
-      "Construye una vida que refleja aquello que considera importante.",
+      "Construye una Vida que refleja aquello que considera importante.",
     ],
   },
   desequilibrado: {
     intro: "Cuando esta dimensión necesita fortalecerse es frecuente:",
     items: [
-      "Sentir que la vida no refleja el propio potencial.",
+      "Sentir que la Vida no refleja el propio potencial.",
       "Culpar constantemente a factores externos por la situación personal.",
       "Vivir con una sensación de desconexión entre lo que se piensa y lo que se hace.",
       "Tener claridad sobre el camino, pero no dar los pasos necesarios.",
       "Esperar que las circunstancias cambien antes de actuar.",
-      "Sentir que la vida ocurre «por accidente» en lugar de construirla conscientemente.",
+      "Sentir que la Vida ocurre «por accidente» en lugar de construirla conscientemente.",
     ],
   },
   preguntas: {
     items: [
-      "Si alguien observara mi vida durante una semana, ¿qué diría que es realmente importante para mí?",
-      "¿Qué aspectos de mi vida reflejan con claridad mis valores?",
+      "Si alguien observara mi Vida durante una semana, ¿qué diría que es realmente importante para mí?",
+      "¿Qué aspectos de mi Vida reflejan con claridad mis valores?",
       "¿Qué áreas aún no expresan la persona que quiero ser?",
       "¿Qué impacto estoy teniendo en las personas que me rodean?",
       "¿Qué decisión concreta acercaría mi realidad a mi propósito?",
-      "¿Estoy esperando sentirme preparado o estoy construyendo activamente la vida que deseo?",
+      "¿Estoy esperando sentirme preparado o estoy construyendo activamente la Vida que deseo?",
     ],
   },
   ejercicio: {
-    titulo: "Mi vida como espejo",
-    intro: "Imagina que un desconocido observa tu vida durante los próximos treinta días. No puede escuchar tus pensamientos, solo puede ver tus acciones.",
+    titulo: "Mi Vida como espejo",
+    intro: "Imagina que un desconocido observa tu Vida durante los próximos treinta días. No puede escuchar tus pensamientos, solo puede ver tus acciones.",
     promptsIntro: "Después responde:",
     prompts: [
       "¿Qué concluiría sobre mis prioridades?",
       "¿Qué valores identificaría en mi forma de vivir?",
       "¿Qué hábitos confirmarían quién soy?",
-      "¿Qué aspectos de mi vida transmitirían un mensaje diferente al que realmente quiero expresar?",
+      "¿Qué aspectos de mi Vida transmitirían un mensaje diferente al que realmente quiero expresar?",
     ],
     cierreIntro: "Finalmente escribe: «La realidad que quiero construir durante la próxima semana es…». Y completa la frase con acciones concretas, no con deseos. Si consigues cumplirlo, extiéndelo a mes y luego a año. Por ejemplo:",
     cierrePreguntas: [
@@ -912,7 +912,7 @@ const MALKHUT: SefiraContenido = {
   autoevaluacion: {
     intro: "Valora cada afirmación del 1 (nunca) al 10 (siempre):",
     items: [
-      "Mi vida refleja los valores que considero importantes.",
+      "Mi Vida refleja los valores que considero importantes.",
       "Asumo la responsabilidad por mis decisiones y sus consecuencias.",
       "Mis acciones generan el impacto que deseo tener en los demás.",
       "Vivo con coherencia entre lo que pienso, siento y hago.",
@@ -921,8 +921,8 @@ const MALKHUT: SefiraContenido = {
     ],
   },
   clave: [
-    "Desarrollar Malkut es comprender que tu vida es la expresión visible de tu mundo interior. No se trata de alcanzar una versión perfecta de ti mismo, sino de reducir, poco a poco, la distancia entre lo que sabes, lo que valoras y la manera en que eliges vivir.",
-    "Al final, el verdadero mapa de autoconocimiento no termina con una comprensión más profunda de uno mismo. Termina cuando esa comprensión se convierte en presencia, en acción y en una vida que refleja, de manera auténtica, aquello que has descubierto sobre quién eres.",
+    "Desarrollar Malkhut es comprender que tu Vida es la expresión visible de tu mundo interior. No se trata de alcanzar una versión perfecta de ti mismo, sino de reducir, poco a poco, la distancia entre lo que sabes, lo que valoras y la manera en que eliges vivir.",
+    "Al final, el verdadero mapa de autoconocimiento no termina con una comprensión más profunda de uno mismo. Termina cuando esa comprensión se convierte en presencia, en acción y en una Vida que refleja, de manera auténtica, aquello que has descubierto sobre quién eres.",
   ],
 };
 

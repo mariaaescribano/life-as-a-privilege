@@ -25,6 +25,34 @@ export function nivelSefira(r: number[]): number {
   return Math.round(Math.max(0, Math.min(10, val)));
 }
 
+/** ¿Están las 5 frases de la autoevaluación puntuadas (1-10)? */
+export function autoevalCompleta(a?: number[]): boolean {
+  return Array.isArray(a) && a.length > 0 && a.every((v) => v >= 1 && v <= 10);
+}
+
+/** Nivel (0-10) a partir de la autoevaluación: media de las frases (mayor =
+ *  capacidad más desarrollada/integrada, según la propia persona). */
+export function nivelAutoeval(a: number[]): number {
+  const avg = a.reduce((s, v) => s + v, 0) / a.length;
+  return Math.round(Math.max(0, Math.min(10, avg)));
+}
+
+/** Nivel combinado (0-10) de una sefirá para el Diagnóstico: promedia la Escala
+ *  de Equilibrio (test) y la autoevaluación. Usa lo que haya; -1 si no hay nada. */
+export function nivelCombinado(test?: number[], autoeval?: number[]): number {
+  const tOk = testCompleto(test);
+  const aOk = autoevalCompleta(autoeval);
+  if (tOk && aOk) return Math.round((nivelSefira(test!) + nivelAutoeval(autoeval!)) / 2);
+  if (tOk) return nivelSefira(test!);
+  if (aOk) return nivelAutoeval(autoeval!);
+  return -1;
+}
+
+/** ¿Hay datos suficientes de una sefirá (test O autoevaluación) para evaluarla? */
+export function sefiraEvaluable(test?: number[], autoeval?: number[]): boolean {
+  return testCompleto(test) || autoevalCompleta(autoeval);
+}
+
 /** Polaridad dominante de la sefirá: hacia el déficit, el equilibrio o el exceso. */
 export function polaridadSefira(r: number[]): Polaridad {
   const deficit = puntuacionDeficit(r);
@@ -172,19 +200,21 @@ export function esBloqueo(tipo: TransicionTipo): boolean {
 }
 
 /**
- * Calcula todas las transiciones a partir del mapa de respuestas del test.
- * Una transición solo se evalúa si AMBAS sefirot tienen el test completo.
+ * Calcula todas las transiciones a partir de las respuestas del test y de la
+ * autoevaluación. Una transición solo se evalúa si AMBAS sefirot tienen datos
+ * suficientes (test o autoevaluación). El nivel de cada sefirá combina ambos.
  */
-export function calcularTransiciones(test: Record<string, number[]>): TransicionResultado[] {
+export function calcularTransiciones(
+  test: Record<string, number[]>,
+  autoeval: Record<string, number[]> = {},
+): TransicionResultado[] {
   return TRANSICIONES.map((t) => {
-    const rFrom = test[t.from];
-    const rTo = test[t.to];
-    const completa = testCompleto(rFrom) && testCompleto(rTo);
+    const completa = sefiraEvaluable(test[t.from], autoeval[t.from]) && sefiraEvaluable(test[t.to], autoeval[t.to]);
     if (!completa) {
       return { ...t, origen: -1, destino: -1, diff: 0, tipo: "incompleta", gravedad: -1, completa: false };
     }
-    const origen = nivelSefira(rFrom);
-    const destino = nivelSefira(rTo);
+    const origen = nivelCombinado(test[t.from], autoeval[t.from]);
+    const destino = nivelCombinado(test[t.to], autoeval[t.to]);
     const { tipo, gravedad } = clasificarTransicion(origen, destino);
     return { ...t, origen, destino, diff: origen - destino, tipo, gravedad, completa: true };
   });

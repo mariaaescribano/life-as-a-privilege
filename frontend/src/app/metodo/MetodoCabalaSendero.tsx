@@ -6,7 +6,9 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { ESCALA } from "../../components/metodo/cabalaTest";
 import {
@@ -27,10 +29,16 @@ const Divisor = ({ mb = 4, mt = 0 }: { mb?: any; mt?: any }) => (
   <Box h="1px" mb={mb} mt={mt} style={{ background: `linear-gradient(90deg, transparent, ${cabalaTxt}55, transparent)` }} />
 );
 
+// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) con un velo
+// para que la letra dorada se lea. No se cambia el color del texto.
+const CAJA_OVERLAY = `${cabalaBg}cc`;
 const Caja = ({ children }: { children: React.ReactNode }) => (
-  <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
-       px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
-    {children}
+  <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${cabalaTxt}44`}
+       borderRadius="2xl" boxShadow={CAJA_GLOW}>
+    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
+    <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
+      {children}
+    </Box>
   </Box>
 );
 
@@ -141,15 +149,17 @@ export default function MetodoCabalaSendero() {
                 : { label: "← Los senderos", onClick: () => navigate("/metodo/cabala/senderos") }}
               next={nextNum
                 ? { label: "Siguiente →", onClick: () => navigate(`/metodo/cabala/sendero/${nextNum}`) }
-                : { label: "El Árbol →", onClick: () => navigate("/metodo/cabala/arbol") }}
+                : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
             />
           </Reveal>
 
           {/* ── Cabecera del sendero ── */}
           <Reveal direction="up" distance={18} delay={0.08} duration={0.65} w="100%">
-            <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}66`} borderRadius="3xl" boxShadow={CAJA_GLOW}
-                 px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-              <Flex align="center" gap={{ base: 5, md: 8 }} direction={{ base: "column", sm: "row" }} textAlign={{ base: "center", sm: "left" }}>
+            <Box w="100%" position="relative" overflow="hidden" border={`1.5px solid ${cabalaTxt}66`}
+                 borderRadius="3xl" boxShadow={CAJA_GLOW}>
+              <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" overlay={CAJA_OVERLAY} />
+              <Flex position="relative" zIndex={1} align="center" gap={{ base: 5, md: 8 }} direction={{ base: "column", sm: "row" }}
+                    textAlign={{ base: "center", sm: "left" }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
                 <Text fontSize={{ base: "72px", md: "96px" }} lineHeight="1" color={cabalaTxt}
                       style={{ textShadow: `0 0 26px ${cabalaTxt}88, 0 0 60px ${cabalaTxt}44` }}>
                   {sendero.hebreo}
@@ -323,7 +333,7 @@ export default function MetodoCabalaSendero() {
           {sendero.senales.length > 0 && (
             <Reveal direction="up" distance={20} delay={0.28} duration={0.6} w="100%">
               <Caja>
-                <TituloCaja>Señales de práctica</TituloCaja>
+                <TituloCaja>Señales de desequilibrio</TituloCaja>
                 <Divisor mt={3} mb={4} />
                 <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={3.5}>
                   Durante esta semana observa si…
@@ -354,24 +364,41 @@ export default function MetodoCabalaSendero() {
             </Reveal>
           )}
 
-          {/* ── Frase de integración ── */}
+          {/* ── Frase de integración: directamente sobre el fondo (turquesa), sin box ── */}
           {sendero.integracion && (
-            <Reveal direction="up" distance={18} delay={0.32} duration={0.6} w="100%">
-              <Box w="100%" position="relative" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}66`} borderRadius="2xl"
-                   boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 26px ${cabalaTxt}44`} px={{ base: 7, md: 12 }} py={{ base: 8, md: 10 }}>
-                <Box position="absolute" top={3} left={5} fontSize="60px" lineHeight="1" color={`${cabalaTxt}33`} fontFamily="Georgia, serif">“</Box>
-                <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic" fontWeight="600" textAlign="center"
-                      lineHeight="1.6" position="relative" style={{ textShadow: INK_SHADOW }}>
-                  {sendero.integracion}
-                </Text>
-              </Box>
+            <Reveal direction="up" distance={18} delay={0.32} duration={0.7} w="100%" display="flex" justifyContent="center">
+              <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="600" textAlign="center"
+                    maxW="680px" lineHeight="1.7" px={{ base: 2, md: 0 }} mt={{ base: 2, md: 4 }}
+                    style={{ textShadow: INK_SHADOW }}>
+                “{sendero.integracion}”
+              </Text>
             </Reveal>
           )}
+
+          {/* ── Botón «Siguiente» discreto, al final del todo ── */}
+          <Reveal direction="up" distance={14} delay={0.4} duration={0.6} display="flex" justifyContent="center">
+            <Box as="button"
+                 onClick={() => navigate(nextNum ? `/metodo/cabala/sendero/${nextNum}` : "/metodo/cabala/senderos/diagnostico")}
+                 mt={{ base: 2, md: 4 }}
+                 display="inline-flex" alignItems="center" gap={2}
+                 px={{ base: 6, md: 7 }} py={{ base: 2, md: 2.5 }} borderRadius="full"
+                 bg="transparent" border={`1px solid ${cabalaTxt}66`} color={cabalaTxt}
+                 fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
+                 cursor="pointer" transition="all 0.18s" sx={{ backdropFilter: "blur(2px)" }}
+                 _hover={{ bg: `${cabalaTxt}14`, borderColor: cabalaTxt, transform: "translateY(-2px)", boxShadow: `0 0 18px ${cabalaTxt}44` }}>
+              {nextNum ? "Siguiente sendero" : "Ver diagnóstico"}
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
+                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+              </Box>
+            </Box>
+          </Reveal>
         </Flex>
       </Flex>
 
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
       <SiteFooter />
+
+      <IndiceCabala />
     </Box>
   );
 }

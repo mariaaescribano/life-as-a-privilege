@@ -98,6 +98,9 @@ export interface PasoRecorrido {
   titulo: string;
   /** Ruta a la que salta (recibe el id de la experiencia). */
   ruta: (expId: string) => string;
+  /** Si true, la página aún no está desbloqueada: se muestra con un candado y no
+   *  es pulsable. Opcional (por defecto, desbloqueada). */
+  bloqueado?: boolean;
 }
 
 export const RECORRIDO_INDICE: PasoRecorrido[] = [

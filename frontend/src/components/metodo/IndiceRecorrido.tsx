@@ -82,6 +82,7 @@ export function IndiceRecorrido({
     .sort((a, b) => b.ruta(expId).length - a.ruta(expId).length)[0]?.n ?? null;
 
   const ir = (p: PasoRecorrido) => {
+    if (p.bloqueado) return; // página aún bloqueada: no navega
     setOpen(false);
     navigate(p.ruta(expId));
   };
@@ -146,14 +147,17 @@ export function IndiceRecorrido({
               <Box display="grid" gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }} gap={{ base: 2.5, md: 3 }}>
                 {indice.map((p) => {
                   const esActual = p.n === actual;
+                  const bloqueado = !!p.bloqueado;
                   return (
-                    <Flex key={p.n} as="button" onClick={() => ir(p)} align="center" gap={3} textAlign="left" w="100%"
+                    <Flex key={p.n} as="button" onClick={() => ir(p)} disabled={bloqueado}
+                          align="center" gap={3} textAlign="left" w="100%"
                           px={{ base: 3, md: 3.5 }} py={{ base: 2.5, md: 3 }} borderRadius="xl"
                           bg={esActual ? ACENTO : "rgba(255,251,243,0.62)"}
                           border={`1.5px solid ${esActual ? ACENTO : `${TINTA}2e`}`}
                           boxShadow="none"
-                          cursor="pointer" transition="all 0.16s"
-                          _hover={{ transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)" }}>
+                          opacity={bloqueado ? 0.5 : 1}
+                          cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.16s"
+                          _hover={bloqueado ? undefined : { transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)" }}>
                       <Flex flexShrink={0} align="center" justify="center" w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }}
                             borderRadius="full" bg={esActual ? PAPEL : ACENTO}
                             color={contraste(esActual ? PAPEL : ACENTO)} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>
@@ -164,6 +168,12 @@ export function IndiceRecorrido({
                             style={esActual && contraste(ACENTO) === PAPEL ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
                         {p.titulo}
                       </Text>
+                      {bloqueado && (
+                        <Box as="svg" flexShrink={0} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                             w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill={OSCURO} opacity={0.75}>
+                          <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
+                        </Box>
+                      )}
                     </Flex>
                   );
                 })}

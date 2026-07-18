@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
@@ -6,25 +6,36 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import ArbolDeLaVida, { type Sefira } from "../../components/global/ArbolDeLaVida";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
-import { CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
+import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
+import { CABALA_TOTAL_PAGINAS, cabalaSefirotMap, type CabalaPageKey } from "../../components/metodo/cabalaSefirot";
+import { ilustracionSefira, CABALA_ILUSTRACIONES_KEYS } from "../../components/metodo/cabalaIlustraciones";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
 const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
 
-// Nodos del Árbol (las 10 sefirot con círculo). Da'at es una dimensión numerada
-// del recorrido pero NO tiene nodo en el árbol, así que no cuenta para el tick.
-const TREE_KEYS = CABALA_SEFIROT_ORDEN.filter((k) => k !== "daat");
-const TOTAL_SEFIROT = TREE_KEYS.length; // 10
+// Fondo de la página = la imagen de la disciplina (cabala.png) con un velo
+// oscuro para que el texto dorado se lea sobre ella.
+const PAGE_BG = `linear-gradient(rgba(18,10,3,0.72), rgba(18,10,3,0.82)), url('/img/fondos/cabala.png')`;
+
+// Nombre de la sefirá para el antetítulo del visor (p.ej. «1 · Keter»).
+const nombreSefira = (k: CabalaPageKey): string => {
+  const s = cabalaSefirotMap[k];
+  return s ? `${s.numero} · ${s.titulo}` : "Sefirá";
+};
 
 export default function MetodoCabalaArbol() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
-  const [vistas, setVistas] = useState<string[]>([]);
+  // Sefirot con su ilustración ya leída, y la que se está viendo en el modal.
+  const [readKeys, setReadKeys] = useState<Set<string>>(new Set());
+  const [modalKey, setModalKey] = useState<CabalaPageKey | null>(null);
+  const dataRef = useRef<any>({}); // copia de metodo_cabala.data para mergear al guardar
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -37,12 +48,13 @@ export default function MetodoCabalaArbol() {
         // Acceso solo con Cábala pagada; si no, volvemos a la intro (que abre el pago).
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
 
-        // Progreso: qué dimensiones (sefirot) ya ha visto el usuario.
+        // Cargamos qué ilustraciones ha leído ya (para pintar sus sellos).
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
-          const v = res.data?.data?.sefirotVistas;
-          if (Array.isArray(v)) setVistas(v);
-        } catch { /* sin progreso todavía */ }
+          dataRef.current = res.data?.data ?? {};
+          const vistas: string[] = Array.isArray(dataRef.current.ilustracionesVistas) ? dataRef.current.ilustracionesVistas : [];
+          setReadKeys(new Set(vistas));
+        } catch { /* sin fila todavía */ }
       } catch {
         navigate("/metodo/cabala");
         return;
@@ -52,21 +64,39 @@ export default function MetodoCabalaArbol() {
     })();
   }, [navigate]);
 
-  const nVistas = vistas.filter((k) => TREE_KEYS.includes(k as any)).length;
-  const completado = nVistas >= TOTAL_SEFIROT;
+  // Marca una sefirá como leída (sello) y persiste en metodo_cabala.data.
+  const marcarLeida = useCallback((key: CabalaPageKey) => {
+    setReadKeys((prev) => {
+      if (prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.add(key);
+      const data = { ...dataRef.current, ilustracionesVistas: Array.from(next) };
+      dataRef.current = data;
+      const userId = sessionStorage.getItem("userId");
+      const token = sessionStorage.getItem("token");
+      if (userId && token) {
+        axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
+      }
+      return next;
+    });
+  }, []);
+
+  // El recorrido se desbloquea cuando están TODAS leídas.
+  const todasLeidas = CABALA_ILUSTRACIONES_KEYS.every((k) => readKeys.has(k));
 
   if (loading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif"
+         bgImage={PAGE_BG} bgSize="cover" bgPosition="center" bgAttachment="fixed">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
-          {/* Header con botón "Ilustraciones" en medio y tick/progreso arriba a la derecha */}
+          {/* Header con botón "Ilustraciones" en medio */}
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <Box position="relative" w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
@@ -80,32 +110,13 @@ export default function MetodoCabalaArbol() {
                 mb={0}
                 prev={{ label: "← Introducción", onClick: () => navigate("/metodo/cabala") }}
                 extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true) }}
+                next={{
+                  label: "Recorrido →",
+                  onClick: () => navigate("/metodo/cabala/sefira/kether"),
+                  disabled: !todasLeidas,
+                  disabledTooltip: "Descubre la ilustración de todas las sefirot para desbloquear el recorrido",
+                }}
               />
-              {/* Progreso / tick de completado */}
-              <Flex
-                position="absolute"
-                top={{ base: 2, md: 3 }}
-                right={{ base: 2, md: 3 }}
-                zIndex={2}
-                align="center"
-                gap={1.5}
-                px={2.5}
-                py={1}
-                borderRadius="full"
-                bg={`${cabalaBg}cc`}
-                border={`1.5px solid ${completado ? cabalaTxt : `${cabalaTxt}66`}`}
-                boxShadow={completado ? `0 0 16px ${cabalaTxt}88` : "none"}
-                sx={{ backdropFilter: "blur(4px)" }}
-              >
-                {completado && (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill={cabalaTxt}>
-                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                  </Box>
-                )}
-                <Text color={completado ? cabalaTxt : `${cabalaTxt}aa`} fontSize="xs" fontWeight="700" letterSpacing="0.08em" textTransform="uppercase">
-                  {completado ? "Completado" : `${nVistas}/${TOTAL_SEFIROT}`}
-                </Text>
-              </Flex>
             </Box>
           </Reveal>
 
@@ -120,7 +131,7 @@ export default function MetodoCabalaArbol() {
               maxW="560px"
               style={{ textShadow: INK_SHADOW }}
             >
-              Toca cada sefirá para descubrir su dimensión. Cuando las hayas visto todas, el Árbol quedará completo.
+              Toca cada sefirá para ver su ilustración. Cuando las hayas descubierto todas, se desbloqueará el recorrido.
             </Text>
           </Reveal>
 
@@ -128,17 +139,23 @@ export default function MetodoCabalaArbol() {
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.18} duration={0.8} w="100%">
             <Box
               w="100%"
-              boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}55`}
-              bg={cabalaBg}
-              border={`1.5px solid ${cabalaTxt}55`}
+              position="relative"
+              overflow="hidden"
+              boxShadow={`0 10px 40px rgba(0,0,0,0.45), 0 0 40px ${cabalaTxt}44, inset 0 0 60px ${cabalaBg}`}
+              bg={`${cabalaBg}b3`}
+              border={`1.5px solid ${cabalaTxt}66`}
               borderRadius="3xl"
               px={{ base: 6, md: 10 }}
               pt={{ base: 8, md: 10 }}
               pb={{ base: 8, md: 10 }}
+              sx={{ backdropFilter: "blur(3px)" }}
             >
               <ArbolDeLaVida
                 suppressInternalModal
-                onSefiraClick={(s: Sefira) => navigate(`/metodo/cabala/sefira/${s.key}`)}
+                showDaat
+                readKeys={readKeys}
+                onDaatClick={() => setModalKey("daat")}
+                onSefiraClick={(s: Sefira) => setModalKey(s.key as CabalaPageKey)}
               />
             </Box>
           </Reveal>
@@ -147,9 +164,23 @@ export default function MetodoCabalaArbol() {
 
       <CabalaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
+      {/* Ilustración (cómic) de la sefirá pinchada. Al terminarla, se marca leída
+          (aparece su sello en el Árbol). */}
+      {modalKey && (
+        <CabalaSefiraIlustracionModal
+          isOpen={!!modalKey}
+          vinetas={ilustracionSefira(modalKey)}
+          sefiraNombre={nombreSefira(modalKey)}
+          onClose={() => setModalKey(null)}
+          onComplete={() => { marcarLeida(modalKey); setModalKey(null); }}
+        />
+      )}
+
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
 
       <SiteFooter />
+
+      <IndiceCabala />
     </Box>
   );
 }

@@ -35,6 +35,42 @@ interface Props {
   onSenderoClick?: (sendero: Sendero) => void
   /** Camino resaltado (num) en variant 'senderos'. */
   selectedSendero?: number | null
+  /** Muestra la sefirá oculta Da'at (nodo fantasma entre Chokmah y Binah).
+   *  Solo tiene efecto en variant 'sefirot'. */
+  showDaat?: boolean
+  /** Se llama al pulsar el nodo de Da'at. */
+  onDaatClick?: () => void
+  /** Claves de las sefirot ya LEÍDAS (ilustración vista). En esos nodos se pinta
+   *  un sello dorado (anillo + tick) arriba a la derecha. Incluye 'daat'. */
+  readKeys?: Set<string>
+  /** En variant 'senderos': `num` de los senderos ya LEÍDOS (ilustración vista).
+   *  Su insignia se enciende en dorado. */
+  readSenderos?: Set<number>
+}
+
+/* ─── Sello «leída»: anillo dorado alrededor del nodo + tick arriba-derecha ── */
+function ReadSeal({ x, y, nodeR = R }: { x: number; y: number; nodeR?: number }) {
+  const bx = x + nodeR * 0.72 // insignia arriba a la derecha del nodo
+  const by = y - nodeR * 0.72
+  return (
+    <g style={{ pointerEvents: 'none' }}>
+      {/* Anillo dorado que late alrededor del nodo leído */}
+      <circle
+        cx={x} cy={y} r={nodeR + 5}
+        fill="none" stroke={cabalaTxt} strokeWidth={1.4}
+        style={{ transformOrigin: `${x}px ${y}px`, animation: 'readRing 3s ease-in-out infinite' }}
+      />
+      {/* Insignia con el tick */}
+      <g style={{ transformOrigin: `${bx}px ${by}px`, animation: 'sealPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both' }}>
+        <circle cx={bx} cy={by} r={12} fill={cabalaBg} stroke={cabalaTxt} strokeWidth={2}
+                style={{ filter: `drop-shadow(0 0 6px ${cabalaTxt}aa)` }} />
+        <polyline
+          points={`${bx - 5},${by} ${bx - 1.5},${by + 3.5} ${bx + 5.5},${by - 4.5}`}
+          fill="none" stroke={cabalaTxt} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round"
+        />
+      </g>
+    </g>
+  )
 }
 
 const R = 34
@@ -220,10 +256,11 @@ function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void 
 }
 
 /* ─── Componente principal ─────────────────────────────── */
-export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false, variant = 'sefirot', onSenderoClick, selectedSendero = null }: Props) {
+export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false, variant = 'sefirot', onSenderoClick, selectedSendero = null, showDaat = false, onDaatClick, readKeys, readSenderos }: Props) {
   const [hovered, setHovered] = useState<SefiraKey | null>(null)
   const [open, setOpen]       = useState<Sefira | null>(null)
   const [hoveredPath, setHoveredPath] = useState<number | null>(null)
+  const [daatHover, setDaatHover] = useState(false)
 
   const esSenderos = variant === 'senderos'
 
@@ -237,7 +274,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
     <>
       <div style={{ width: '100%', maxWidth, margin: '0 auto' }}>
         <svg
-          viewBox="-10 0 420 710"
+          viewBox="-10 -48 420 758"
           width="100%"
           style={{ display: 'block' }}
           xmlns="http://www.w3.org/2000/svg"
@@ -248,19 +285,66 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 from { stroke-dashoffset: 600; opacity: 0; }
                 to   { stroke-dashoffset: 0;   opacity: 1; }
               }
+              /* Aparición épica: la sefirá irrumpe desde un punto, sobrepasa su
+                 tamaño (destello) y se asienta. */
               @keyframes sefiraAppear {
+                0%   { opacity: 0; transform: scale(0.05); }
+                55%  { opacity: 1; transform: scale(1.22); }
+                78%  { transform: scale(0.94); }
+                100% { opacity: 1; transform: scale(1);    }
+              }
+              /* Respiración del halo de Keter: SIEMPRE visible (opacidad nunca
+                 baja de 0.6), late suavemente. */
+              @keyframes keterBreath {
+                0%,100% { opacity: 0.6;  transform: scale(0.9);  }
+                50%     { opacity: 1;    transform: scale(1.12); }
+              }
+              @keyframes haloBloom {
                 from { opacity: 0; transform: scale(0.2); }
                 to   { opacity: 1; transform: scale(1);   }
               }
-              @keyframes treePulse {
-                0%,100% { opacity: 0.55; }
-                50%      { opacity: 0.85; }
+              /* Haz de luz descendiendo por el pilar central (una sola vez). */
+              @keyframes beamDraw {
+                from { stroke-dashoffset: 720; opacity: 0;   }
+                60%  { opacity: 0.55; }
+                to   { stroke-dashoffset: 0;   opacity: 0.4; }
+              }
+              @keyframes daatAppear {
+                0%   { opacity: 0;   transform: scale(0.2); }
+                60%  { opacity: 0.95; transform: scale(1.15); }
+                100% { opacity: 0.9; transform: scale(1);    }
               }
               @keyframes senderoBadge {
                 from { opacity: 0; }
                 to   { opacity: 1; }
               }
+              /* Sello «leída»: la insignia irrumpe (destello) y se asienta. */
+              @keyframes sealPop {
+                0%   { opacity: 0; transform: scale(0.2); }
+                60%  { opacity: 1; transform: scale(1.25); }
+                100% { opacity: 1; transform: scale(1);    }
+              }
+              /* Anillo dorado del nodo leído: respira suavemente. */
+              @keyframes readRing {
+                0%,100% { opacity: 0.3; }
+                50%     { opacity: 0.7; }
+              }
             `}</style>
+            {/* Imagen de la disciplina (cabala.png) como relleno de los nodos en
+                modo senderos. Se atenúa con una capa negra encima. */}
+            <pattern id="cabala-node-img" width="1" height="1" patternContentUnits="objectBoundingBox">
+              <image href="/img/fondos/cabala.png" width="1" height="1" preserveAspectRatio="xMidYMid slice" />
+            </pattern>
+            {/* Halo radial dorado de Keter (luz permanente). */}
+            <radialGradient id="keter-halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stopColor={cabalaTxt} stopOpacity="0.9" />
+              <stop offset="35%"  stopColor={cabalaTxt} stopOpacity="0.5" />
+              <stop offset="100%" stopColor={cabalaTxt} stopOpacity="0" />
+            </radialGradient>
+            <linearGradient id="pilar-luz" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stopColor={cabalaTxt} stopOpacity="0.9" />
+              <stop offset="100%" stopColor={cabalaTxt} stopOpacity="0.1" />
+            </linearGradient>
             {/* Filtro de brillo dorado — reposo */}
             <filter id="sefira-glow" x="-60%" y="-60%" width="220%" height="220%">
               <feGaussianBlur stdDeviation="6" result="blur" />
@@ -294,6 +378,35 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               </feMerge>
             </filter>
           </defs>
+
+          {/* Haz de luz descendiendo por el pilar central + halo permanente de
+              Keter. Solo en el árbol (variant 'sefirot'), detrás de todo. */}
+          {!esSenderos && (
+            <g style={{ pointerEvents: 'none' }}>
+              <line
+                x1={200} y1={45} x2={200} y2={660}
+                stroke="url(#pilar-luz)"
+                strokeWidth={7}
+                strokeLinecap="round"
+                filter="url(#sefira-glow)"
+                style={{
+                  strokeDasharray: 720,
+                  strokeDashoffset: 720,
+                  animation: 'beamDraw 1.6s ease 0.15s forwards',
+                }}
+              />
+              {/* Halo dorado de Keter — SIEMPRE encendido (respira sin apagarse). */}
+              <circle
+                cx={200} cy={45} r={74}
+                fill="url(#keter-halo)"
+                style={{
+                  transformOrigin: '200px 45px',
+                  opacity: 0,
+                  animation: 'haloBloom 1s ease 0.25s both, keterBreath 3.6s ease-in-out 1.25s infinite',
+                }}
+              />
+            </g>
+          )}
 
           {/* Senderos — animados. En variant 'senderos' son los protagonistas:
               destacados, clicables y con su número (11-32). */}
@@ -350,13 +463,25 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     transition: 'stroke-width 0.15s, opacity 0.15s',
                   }}
                 />
-                {/* Insignia con el número del sendero */}
-                <g style={{ pointerEvents: 'none', opacity: 0, animation: `senderoBadge 0.4s ease ${0.7 + idx * 0.04}s forwards` }}>
-                  <circle cx={mx} cy={my} r={active ? 12 : 10} fill={cabalaBg} stroke={cabalaTxt} strokeWidth={active ? 2.5 : 1.5} />
-                  <text x={mx} y={my + 3} textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fill={cabalaTxt} style={{ fill: cabalaTxt }}>
-                    {num}
-                  </text>
-                </g>
+                {/* Insignia con el número del sendero (1-22 = num − 10). Cuando su
+                    ilustración ya se ha visto, la insignia se enciende en dorado. */}
+                {(() => {
+                  const leido = !!readSenderos?.has(num)
+                  return (
+                    <g style={{ pointerEvents: 'none', opacity: 0, animation: `senderoBadge 0.4s ease ${0.7 + idx * 0.04}s forwards` }}>
+                      <circle
+                        cx={mx} cy={my} r={active ? 12 : 10}
+                        fill={leido ? cabalaTxt : cabalaBg}
+                        stroke={cabalaTxt} strokeWidth={active ? 2.5 : 1.5}
+                        style={leido ? { filter: `drop-shadow(0 0 5px ${cabalaTxt})` } : undefined}
+                      />
+                      <text x={mx} y={my + 3} textAnchor="middle" fontSize="9" fontFamily="Georgia, serif"
+                            fill={leido ? cabalaBg : cabalaTxt} style={{ fill: leido ? cabalaBg : cabalaTxt }}>
+                        {num - 10}
+                      </text>
+                    </g>
+                  )
+                })()}
               </g>
             )
           })}
@@ -379,11 +504,15 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
                   }}
                 >
-                  <circle cx={sefira.x} cy={sefira.y} r={R} fill={cabalaBg} stroke={`${cabalaTxt}55`} strokeWidth={1.5} />
+                  {/* Fondo: imagen de la disciplina + capa negra para que el
+                      nodo no llame tanto la atención (los senderos mandan). */}
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#cabala-node-img)" />
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="rgba(0,0,0,0.6)" />
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="none" stroke={`${cabalaTxt}66`} strokeWidth={1.5} />
                   <text
                     x={sefira.x} y={sefira.y + 4}
                     textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fontStyle="italic"
-                    fill={`${cabalaTxt}66`} style={{ fill: `${cabalaTxt}66` }}
+                    fill={`${cabalaTxt}99`} style={{ fill: `${cabalaTxt}99`, textShadow: `0 1px 3px #000` }}
                   >
                     {sefira.hebrewName}
                   </text>
@@ -432,6 +561,54 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               </g>
             )
           })}
+
+          {/* Da'at — la sefirá oculta. No tiene nodo "oficial" en el árbol; se
+              dibuja como un círculo fantasma (borde discontinuo) en el centro,
+              entre Chokmah y Binah. Clicable → su dimensión del recorrido. */}
+          {!esSenderos && showDaat && (
+            <g
+              onClick={() => onDaatClick?.()}
+              onMouseEnter={() => setDaatHover(true)}
+              onMouseLeave={() => setDaatHover(false)}
+              filter={daatHover ? 'url(#sefira-glow-hover)' : 'url(#sefira-glow)'}
+              style={{
+                cursor: 'pointer',
+                opacity: 0,
+                transformOrigin: '200px 140px',
+                animation: 'daatAppear 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.5s forwards',
+              }}
+            >
+              <circle
+                cx={200} cy={140} r={27}
+                fill={`${cabalaBg}dd`}
+                stroke={daatHover ? cabalaTxt : `${cabalaTxt}aa`}
+                strokeWidth={daatHover ? 2.5 : 1.8}
+                strokeDasharray="4 5"
+              />
+              <text
+                x={200} y={144}
+                textAnchor="middle"
+                fontSize="9"
+                fontFamily="Georgia, serif"
+                fontStyle="italic"
+                fill={cabalaTxt}
+                style={{ fill: cabalaTxt }}
+              >
+                Da'at
+              </text>
+            </g>
+          )}
+
+          {/* Sellos «leída» — capa superior, nítida (sin el filtro de brillo de
+              los nodos). Se pinta un sello por cada sefirá ya vista. */}
+          {!esSenderos && readKeys && (
+            <g>
+              {SEFIROT.filter((s) => readKeys.has(s.key)).map((s) => (
+                <ReadSeal key={`seal-${s.key}`} x={s.x} y={s.y} />
+              ))}
+              {showDaat && readKeys.has('daat') && <ReadSeal x={200} y={140} nodeR={27} />}
+            </g>
+          )}
         </svg>
       </div>
 

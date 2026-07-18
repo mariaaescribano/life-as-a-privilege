@@ -11,18 +11,18 @@ import type { SefiraKey } from "../global/ArbolDeLaVida";
 // Los 22 están redactados (Aleph→Tav) en su versión definitiva.
 // ─────────────────────────────────────────────────────────────────────────
 
-// Nombres de las sefirot en castellano (los usa la cabecera "Kéter → Jojmá").
+// Nombres de las sefirot en castellano (los usa la cabecera "Keter → Chokhmah").
 export const NOMBRE_SEFIRA: Record<SefiraKey, string> = {
-  kether: "Kéter",
-  chokmah: "Jojmá",
-  binah: "Biná",
-  chesed: "Jésed",
-  geburah: "Guevurá",
-  tipharet: "Tiféret",
-  netzach: "Netzaj",
+  kether: "Keter",
+  chokmah: "Chokhmah",
+  binah: "Binah",
+  chesed: "Chesed",
+  geburah: "Gevurah",
+  tipharet: "Tiferet",
+  netzach: "Netzach",
   hod: "Hod",
   yesod: "Yesod",
-  malkuth: "Maljut",
+  malkuth: "Malkhut",
 };
 
 export interface SenderoTestPregunta {
@@ -79,7 +79,7 @@ const ALEPH: SenderoContenido = {
   from: "kether",
   to: "chokmah",
   significadoTradicional:
-    "Aleph (א) es la primera letra del alfabeto hebreo y simboliza el aliento primordial, el Aire y el origen de todo movimiento. En el Sefer Yetzirah representa la energía que precede a toda creación: aquello que aún no tiene forma, pero contiene todas las posibilidades.\n\nEn el Árbol de la Vida une Kéter, la voluntad o propósito más elevado, con Jojmá, el primer destello de sabiduría. Es el momento en que una intención comienza a hacerse consciente.",
+    "Aleph (א) es la primera letra del alfabeto hebreo y simboliza el aliento primordial, el Aire y el origen de todo movimiento. En el Sefer Yetzirah representa la energía que precede a toda creación: aquello que aún no tiene forma, pero contiene todas las posibilidades.\n\nEn el Árbol de la Vida une Keter, la voluntad o propósito más elevado, con Chokhmah, el primer destello de sabiduría. Es el momento en que una intención comienza a hacerse consciente.",
   traduccionPsicologica:
     "Toda transformación comienza con una intención, pero un propósito solo cobra verdadero valor cuando cambia nuestra forma de mirar la realidad.\n\nEste sendero representa la capacidad de dejar que la experiencia refine nuestras ideas. Nos invita a sustituir la necesidad de tener razón por el deseo de comprender. La claridad no nace de defender nuestras creencias, sino de permitir que la realidad dialogue con ellas.",
   pregunta: "¿Soy capaz de dejar que la realidad transforme mis ideales?",
@@ -122,7 +122,7 @@ const BETH: SenderoContenido = {
   from: "kether",
   to: "binah",
   significadoTradicional:
-    "Beth (ב), la segunda letra del alfabeto hebreo, significa «casa». En la tradición cabalística representa el principio de contención, estructura y receptividad. Si Aleph es el impulso inicial, Beth es el espacio donde ese impulso puede desarrollarse y adquirir forma.\n\nAl conectar Kéter con Biná, este sendero simboliza el paso desde la voluntad primordial hacia la comprensión estructurada. Nos recuerda que una intención solo puede crecer cuando encuentra un marco que le permita organizarse, desarrollarse y convertirse en conocimiento.",
+    "Beth (ב), la segunda letra del alfabeto hebreo, significa «casa». En la tradición cabalística representa el principio de contención, estructura y receptividad. Si Aleph es el impulso inicial, Beth es el espacio donde ese impulso puede desarrollarse y adquirir forma.\n\nAl conectar Keter con Binah, este sendero simboliza el paso desde la voluntad primordial hacia la comprensión estructurada. Nos recuerda que una intención solo puede crecer cuando encuentra un marco que le permita organizarse, desarrollarse y convertirse en conocimiento.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de transformar un propósito en una comprensión profunda de uno mismo y de la realidad. Tener un ideal no basta; es necesario detenerse, reflexionar y construir una visión que dé sentido a nuestras experiencias.\n\nNos invita a desarrollar una mente capaz de aprender antes de actuar, comprendiendo que las grandes decisiones necesitan tanto inspiración como reflexión.",
   pregunta: "¿Te das el tiempo necesario para comprender antes de actuar?",
@@ -164,7 +164,7 @@ const GIMEL: SenderoContenido = {
   from: "kether",
   to: "tipharet",
   significadoTradicional:
-    "Gimel significa \"camello\", el animal que atraviesa el desierto llevando provisiones entre dos lugares distantes. En la tradición cabalística simboliza el movimiento, el sustento y la capacidad de transportar aquello que es esencial hasta donde realmente hace falta. Al unir Kéter con Tiféret, este sendero representa el descenso de la voluntad superior hasta el corazón. No basta con tener un propósito elevado; ese propósito debe alimentar la vida interior para convertirse en una fuerza transformadora. Gimel enseña que el verdadero propósito no permanece en el mundo de las ideas: llega al corazón y se convierte en una forma de vivir.",
+    "Gimel significa \"camello\", el animal que atraviesa el desierto llevando provisiones entre dos lugares distantes. En la tradición cabalística simboliza el movimiento, el sustento y la capacidad de transportar aquello que es esencial hasta donde realmente hace falta. Al unir Keter con Tiferet, este sendero representa el descenso de la voluntad superior hasta el corazón. No basta con tener un propósito elevado; ese propósito debe alimentar la vida interior para convertirse en una fuerza transformadora. Gimel enseña que el verdadero propósito no permanece en el mundo de las ideas: llega al corazón y se convierte en una forma de vivir.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de hacer que nuestros valores más profundos dejen de ser ideales abstractos y se conviertan en una parte auténtica de nuestra identidad. Muchas personas saben qué consideran importante, pero viven desconectadas de ello. Este sendero invita a cerrar esa distancia, permitiendo que el propósito no solo guíe nuestras decisiones, sino también nuestra forma de sentir, relacionarnos y estar presentes.",
   pregunta: "¿Tu propósito vive solo en tu mente o también en tu corazón?",
@@ -193,7 +193,7 @@ const GIMEL: SenderoContenido = {
   ],
   integracion: "Mi propósito deja de ser una meta cuando se convierte en la forma en que elijo vivir cada día.",
   ilustracion:
-    "Un camello avanza sereno por un desierto al atardecer, cargando entre dos alforjas una pequeña luz dorada. Parte de una cumbre luminosa en lo alto (Kéter) y desciende hacia un valle donde late un corazón de luz cálida (Tiféret), dejando un sendero de huellas que une la altura con el centro del pecho.",
+    "Un camello avanza sereno por un desierto al atardecer, cargando entre dos alforjas una pequeña luz dorada. Parte de una cumbre luminosa en lo alto (Keter) y desciende hacia un valle donde late un corazón de luz cálida (Tiferet), dejando un sendero de huellas que une la altura con el centro del pecho.",
 };
 
 const DALETH: SenderoContenido = {
@@ -206,7 +206,7 @@ const DALETH: SenderoContenido = {
   from: "chokmah",
   to: "binah",
   significadoTradicional:
-    "Daleth (ד) significa \"puerta\". En la tradición cabalística representa el acceso, la apertura y el paso entre dos estados de conciencia. Toda puerta ofrece una posibilidad, pero cruzarla requiere una decisión consciente.\n\nAl conectar Jojmá con Biná, este sendero simboliza el paso desde el destello de la sabiduría hacia una comprensión estructurada. Enseña que la intuición es solo el comienzo; necesita ser explorada, cuestionada e integrada para convertirse en verdadero conocimiento.",
+    "Daleth (ד) significa \"puerta\". En la tradición cabalística representa el acceso, la apertura y el paso entre dos estados de conciencia. Toda puerta ofrece una posibilidad, pero cruzarla requiere una decisión consciente.\n\nAl conectar Chokhmah con Binah, este sendero simboliza el paso desde el destello de la sabiduría hacia una comprensión estructurada. Enseña que la intuición es solo el comienzo; necesita ser explorada, cuestionada e integrada para convertirse en verdadero conocimiento.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de transformar una percepción en comprensión. Ver algo con claridad no significa comprenderlo en profundidad.\n\nNos recuerda que crecer implica hacer una pausa, cuestionar nuestras primeras impresiones y permitir que la reflexión complete aquello que la intuición apenas ha comenzado a revelar.",
   pregunta: "¿Te detienes a comprender lo que percibes o reaccionas desde la primera impresión?",
@@ -249,7 +249,7 @@ const HE: SenderoContenido = {
   from: "chokmah",
   to: "tipharet",
   significadoTradicional:
-    "He (ה) significa \"ventana\" o \"aliento revelado\". En la tradición cabalística simboliza la apertura a una nueva perspectiva y la capacidad de dejar entrar la luz. Representa la revelación de aquello que antes permanecía oculto.\n\nAl conectar Jojmá con Tiféret, este sendero simboliza el paso desde la percepción clara hacia la integración en el corazón. Enseña que la verdadera sabiduría no consiste únicamente en ver con claridad, sino en permitir que esa claridad transforme nuestra manera de sentir, vivir y relacionarnos.",
+    "He (ה) significa \"ventana\" o \"aliento revelado\". En la tradición cabalística simboliza la apertura a una nueva perspectiva y la capacidad de dejar entrar la luz. Representa la revelación de aquello que antes permanecía oculto.\n\nAl conectar Chokhmah con Tiferet, este sendero simboliza el paso desde la percepción clara hacia la integración en el corazón. Enseña que la verdadera sabiduría no consiste únicamente en ver con claridad, sino en permitir que esa claridad transforme nuestra manera de sentir, vivir y relacionarnos.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de dejar que una nueva comprensión cambie nuestro mundo interior. Muchas veces entendemos una verdad con la mente, pero seguimos viviendo como si nunca la hubiéramos descubierto.\n\nNos recuerda que el crecimiento ocurre cuando la claridad deja de ser una idea y comienza a influir en nuestras emociones, decisiones y relaciones.",
   pregunta: "¿Permites que aquello que descubres transforme realmente tu manera de vivir?",
@@ -292,7 +292,7 @@ const VAV: SenderoContenido = {
   from: "chokmah",
   to: "chesed",
   significadoTradicional:
-    "Vav (ו) significa \"gancho\", \"clavo\" o \"unión\". En la tradición cabalística representa aquello que conecta dos realidades y permite que permanezcan unidas. Es el símbolo del vínculo, la continuidad y la conexión entre el cielo y la tierra.\n\nAl conectar Jojmá con Jésed, este sendero simboliza el paso desde la sabiduría hacia la expresión del amor y la generosidad. Enseña que la verdadera comprensión no permanece encerrada en la mente, sino que se manifiesta en la manera en que tratamos a los demás.",
+    "Vav (ו) significa \"gancho\", \"clavo\" o \"unión\". En la tradición cabalística representa aquello que conecta dos realidades y permite que permanezcan unidas. Es el símbolo del vínculo, la continuidad y la conexión entre el cielo y la tierra.\n\nAl conectar Chokhmah con Chesed, este sendero simboliza el paso desde la sabiduría hacia la expresión del amor y la generosidad. Enseña que la verdadera comprensión no permanece encerrada en la mente, sino que se manifiesta en la manera en que tratamos a los demás.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir la comprensión en generosidad. No basta con entender a las personas; el siguiente paso es actuar desde esa comprensión.\n\nNos recuerda que el conocimiento alcanza su verdadero valor cuando inspira empatía, servicio y una disposición sincera a contribuir al bienestar de los demás.",
   pregunta: "¿Tu comprensión de los demás se convierte en acciones o permanece solo en tus pensamientos?",
@@ -335,7 +335,7 @@ const ZAYIN: SenderoContenido = {
   from: "binah",
   to: "tipharet",
   significadoTradicional:
-    "Zayin (ז) significa \"espada\" o \"arma\". En la tradición cabalística simboliza el discernimiento, la capacidad de separar lo esencial de lo superficial y de actuar con claridad ante la realidad. No representa la violencia, sino la facultad de distinguir con precisión aquello que merece ser conservado de aquello que debe dejarse atrás.\n\nAl conectar Biná con Tiféret, este sendero representa el paso desde la comprensión intelectual hacia la sabiduría del corazón. Enseña que el conocimiento solo alcanza su plenitud cuando transforma nuestra forma de ser.",
+    "Zayin (ז) significa \"espada\" o \"arma\". En la tradición cabalística simboliza el discernimiento, la capacidad de separar lo esencial de lo superficial y de actuar con claridad ante la realidad. No representa la violencia, sino la facultad de distinguir con precisión aquello que merece ser conservado de aquello que debe dejarse atrás.\n\nAl conectar Binah con Tiferet, este sendero representa el paso desde la comprensión intelectual hacia la sabiduría del corazón. Enseña que el conocimiento solo alcanza su plenitud cuando transforma nuestra forma de ser.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el conocimiento en sabiduría. Comprender una idea es importante, pero vivir de acuerdo con ella requiere discernimiento, coherencia y madurez.\n\nNos recuerda que la verdadera sabiduría no consiste en acumular respuestas, sino en saber cuáles merecen formar parte de nuestra vida.",
   pregunta: "¿Lo que comprendes ha transformado realmente tu manera de vivir?",
@@ -378,7 +378,7 @@ const CHET: SenderoContenido = {
   from: "binah",
   to: "geburah",
   significadoTradicional:
-    "Chet (ח) significa \"cerca\" o \"recinto\". En la tradición cabalística simboliza el espacio protegido, los límites que permiten conservar la vida y el orden. No representa una barrera para aislarse, sino una estructura que protege aquello que tiene valor.\n\nAl conectar Biná con Guevurá, este sendero representa el paso desde la comprensión hacia el discernimiento y la disciplina. Enseña que comprender una situación también implica saber hasta dónde llegar, cuándo actuar y cuándo decir \"no\".",
+    "Chet (ח) significa \"cerca\" o \"recinto\". En la tradición cabalística simboliza el espacio protegido, los límites que permiten conservar la vida y el orden. No representa una barrera para aislarse, sino una estructura que protege aquello que tiene valor.\n\nAl conectar Binah con Gevurah, este sendero representa el paso desde la comprensión hacia el discernimiento y la disciplina. Enseña que comprender una situación también implica saber hasta dónde llegar, cuándo actuar y cuándo decir \"no\".",
   traduccionPsicologica:
     "Este sendero representa la capacidad de transformar la comprensión en límites saludables. Comprender a una persona o una situación no significa aceptarlo todo ni renunciar a nuestras necesidades.\n\nNos recuerda que la verdadera madurez consiste en combinar la empatía con la firmeza, estableciendo límites que protejan nuestro bienestar sin dejar de respetar a los demás.",
   pregunta: "¿Eres capaz de poner límites sin dejar de comprender a los demás?",
@@ -421,7 +421,7 @@ const TET: SenderoContenido = {
   from: "chesed",
   to: "geburah",
   significadoTradicional:
-    "Tet (ט) simboliza el bien oculto. En la tradición cabalística representa la capacidad de descubrir el equilibrio que existe detrás de aquello que, a primera vista, parece contradictorio. Enseña que la verdadera bondad no siempre consiste en dar más, sino en actuar con sabiduría.\n\nAl conectar Jésed con Guevurá, este sendero representa la integración entre la generosidad y la disciplina. Nos recuerda que el amor necesita límites para mantenerse sano y que la firmeza también puede ser una forma de compasión.",
+    "Tet (ט) simboliza el bien oculto. En la tradición cabalística representa la capacidad de descubrir el equilibrio que existe detrás de aquello que, a primera vista, parece contradictorio. Enseña que la verdadera bondad no siempre consiste en dar más, sino en actuar con sabiduría.\n\nAl conectar Chesed con Gevurah, este sendero representa la integración entre la generosidad y la disciplina. Nos recuerda que el amor necesita límites para mantenerse sano y que la firmeza también puede ser una forma de compasión.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de equilibrar el deseo de ayudar con la necesidad de proteger nuestra energía y respetar la responsabilidad de los demás.\n\nNos invita a descubrir que cuidar no significa resolver todos los problemas ajenos, sino ofrecer apoyo sin perder el equilibrio personal.",
   pregunta: "¿Sabes cuidar de los demás sin dejar de cuidar de ti mismo?",
@@ -464,7 +464,7 @@ const YOD: SenderoContenido = {
   from: "chesed",
   to: "tipharet",
   significadoTradicional:
-    "Yod (י) significa \"mano\". Es la letra más pequeña del alfabeto hebreo, pero de ella nacen todas las demás. En la tradición cabalística simboliza la acción consciente, el potencial contenido en un gesto y la capacidad de transformar la realidad mediante actos sencillos pero significativos.\n\nAl conectar Jésed con Tiféret, este sendero representa el paso desde la generosidad espontánea hacia una compasión equilibrada. Enseña que el verdadero amor no solo consiste en dar, sino en hacerlo con sabiduría y presencia.",
+    "Yod (י) significa \"mano\". Es la letra más pequeña del alfabeto hebreo, pero de ella nacen todas las demás. En la tradición cabalística simboliza la acción consciente, el potencial contenido en un gesto y la capacidad de transformar la realidad mediante actos sencillos pero significativos.\n\nAl conectar Chesed con Tiferet, este sendero representa el paso desde la generosidad espontánea hacia una compasión equilibrada. Enseña que el verdadero amor no solo consiste en dar, sino en hacerlo con sabiduría y presencia.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de actuar desde un amor consciente. No toda ayuda produce bienestar, ni toda buena intención genera un buen resultado.\n\nNos invita a desarrollar una generosidad guiada por la reflexión, donde cada acción responda a lo que realmente necesita la otra persona y no únicamente a nuestro deseo de ayudar.",
   pregunta: "¿Ayudas desde la conciencia o desde el impulso de sentirte necesario?",
@@ -507,7 +507,7 @@ const KAF: SenderoContenido = {
   from: "chesed",
   to: "netzach",
   significadoTradicional:
-    "Kaf (כ) significa \"palma de la mano\". En la tradición cabalística simboliza la capacidad de sostener, contener y materializar aquello que recibimos. Representa el potencial que solo se desarrolla mediante el compromiso y la acción constante.\n\nAl conectar Jésed con Netzaj, este sendero simboliza el paso desde el impulso generoso hacia la perseverancia. Enseña que las buenas intenciones solo producen un impacto duradero cuando se mantienen en el tiempo.",
+    "Kaf (כ) significa \"palma de la mano\". En la tradición cabalística simboliza la capacidad de sostener, contener y materializar aquello que recibimos. Representa el potencial que solo se desarrolla mediante el compromiso y la acción constante.\n\nAl conectar Chesed con Netzach, este sendero simboliza el paso desde el impulso generoso hacia la perseverancia. Enseña que las buenas intenciones solo producen un impacto duradero cuando se mantienen en el tiempo.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el entusiasmo inicial en compromiso. Ayudar, amar o iniciar un proyecto resulta relativamente sencillo; lo difícil es permanecer cuando aparecen el cansancio, la rutina o las dificultades.\n\nNos recuerda que la verdadera generosidad no se mide por un acto aislado, sino por la capacidad de sostener aquello que consideramos importante incluso cuando deja de ser fácil.",
   pregunta: "¿Eres capaz de mantener tu compromiso cuando desaparece la motivación?",
@@ -550,7 +550,7 @@ const LAMED: SenderoContenido = {
   from: "geburah",
   to: "tipharet",
   significadoTradicional:
-    "Lamed (ל) significa \"aprender\" o \"enseñar\". Es la única letra hebrea que sobresale por encima de las demás, simbolizando la aspiración hacia un nivel más elevado de comprensión. En la tradición cabalística representa el aprendizaje continuo y la capacidad de transformar la disciplina en sabiduría.\n\nAl conectar Guevurá con Tiféret, este sendero simboliza el paso desde la firmeza hacia el equilibrio. Enseña que los límites alcanzan su verdadero propósito cuando dejan de ser una reacción y se convierten en una expresión consciente de nuestros valores.",
+    "Lamed (ל) significa \"aprender\" o \"enseñar\". Es la única letra hebrea que sobresale por encima de las demás, simbolizando la aspiración hacia un nivel más elevado de comprensión. En la tradición cabalística representa el aprendizaje continuo y la capacidad de transformar la disciplina en sabiduría.\n\nAl conectar Gevurah con Tiferet, este sendero simboliza el paso desde la firmeza hacia el equilibrio. Enseña que los límites alcanzan su verdadero propósito cuando dejan de ser una reacción y se convierten en una expresión consciente de nuestros valores.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de equilibrar la firmeza con la compasión. Saber poner límites es importante, pero también lo es hacerlo desde la serenidad y no desde el miedo, la rigidez o el enfado.\n\nNos recuerda que la madurez consiste en encontrar un punto donde la protección de uno mismo y el respeto por los demás puedan convivir sin enfrentarse.",
   pregunta: "¿Tus límites nacen de la calma o de la necesidad de controlar?",
@@ -593,7 +593,7 @@ const MEM: SenderoContenido = {
   from: "geburah",
   to: "hod",
   significadoTradicional:
-    "Mem (מ) significa \"agua\". En la tradición cabalística simboliza la profundidad, la reflexión y la capacidad de adaptarse sin perder la propia esencia. El agua encuentra su camino sin necesidad de imponerse, mostrando que la verdadera fuerza puede expresarse con serenidad.\n\nAl conectar Guevurá con Hod, este sendero representa el paso desde la disciplina y los límites hacia una comunicación consciente. Enseña que la firmeza alcanza su mayor valor cuando puede expresarse con claridad, humildad y respeto.",
+    "Mem (מ) significa \"agua\". En la tradición cabalística simboliza la profundidad, la reflexión y la capacidad de adaptarse sin perder la propia esencia. El agua encuentra su camino sin necesidad de imponerse, mostrando que la verdadera fuerza puede expresarse con serenidad.\n\nAl conectar Gevurah con Hod, este sendero representa el paso desde la disciplina y los límites hacia una comunicación consciente. Enseña que la firmeza alcanza su mayor valor cuando puede expresarse con claridad, humildad y respeto.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de comunicar nuestros límites de forma sana. Poner límites no consiste únicamente en decir \"no\", sino en expresar nuestras necesidades de manera clara, respetuosa y oportuna.\n\nNos recuerda que una comunicación auténtica no busca imponer ni evitar el conflicto, sino generar comprensión mutua.",
   pregunta: "¿Expresas tus límites con claridad o esperas a que el malestar hable por ti?",
@@ -636,7 +636,7 @@ const NUN: SenderoContenido = {
   from: "tipharet",
   to: "netzach",
   significadoTradicional:
-    "Nun (נ) significa \"pez\". En la tradición cabalística simboliza la continuidad de la vida, la capacidad de avanzar incluso en aguas profundas y la resiliencia frente a los cambios. Representa el movimiento constante y la fuerza silenciosa que permite seguir creciendo a pesar de las dificultades.\n\nAl conectar Tiféret con Netzaj, este sendero simboliza el paso desde el equilibrio interior hacia la perseverancia. Enseña que la armonía no se demuestra cuando todo va bien, sino cuando somos capaces de mantener nuestro centro en medio de los desafíos.",
+    "Nun (נ) significa \"pez\". En la tradición cabalística simboliza la continuidad de la vida, la capacidad de avanzar incluso en aguas profundas y la resiliencia frente a los cambios. Representa el movimiento constante y la fuerza silenciosa que permite seguir creciendo a pesar de las dificultades.\n\nAl conectar Tiferet con Netzach, este sendero simboliza el paso desde el equilibrio interior hacia la perseverancia. Enseña que la armonía no se demuestra cuando todo va bien, sino cuando somos capaces de mantener nuestro centro en medio de los desafíos.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de sostener nuestros valores y nuestro equilibrio cuando aparecen los obstáculos. Es fácil actuar con serenidad cuando las circunstancias son favorables; el verdadero crecimiento comienza cuando decidimos mantener el rumbo incluso en los momentos difíciles.\n\nNos recuerda que la perseverancia nace del equilibrio interior, no de la obstinación.",
   pregunta: "¿Mantienes tus valores cuando la vida deja de ser fácil?",
@@ -679,7 +679,7 @@ const SAMEKH: SenderoContenido = {
   from: "tipharet",
   to: "yesod",
   significadoTradicional:
-    "Samekh (ס) significa \"apoyo\" o \"sostén\". En la tradición cabalística simboliza aquello que mantiene firme una estructura y le permite permanecer estable a lo largo del tiempo. Representa el fundamento sobre el que algo puede crecer sin perder su equilibrio.\n\nAl conectar Tiféret con Yesod, este sendero simboliza el paso desde el equilibrio interior hacia la construcción de una base sólida. Enseña que los valores y la armonía solo se consolidan cuando se traducen en hábitos y acciones consistentes.",
+    "Samekh (ס) significa \"apoyo\" o \"sostén\". En la tradición cabalística simboliza aquello que mantiene firme una estructura y le permite permanecer estable a lo largo del tiempo. Representa el fundamento sobre el que algo puede crecer sin perder su equilibrio.\n\nAl conectar Tiferet con Yesod, este sendero simboliza el paso desde el equilibrio interior hacia la construcción de una base sólida. Enseña que los valores y la armonía solo se consolidan cuando se traducen en hábitos y acciones consistentes.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el equilibrio interior en una forma estable de vivir. Sentirse centrado es valioso, pero ese equilibrio necesita reflejarse en nuestras rutinas, decisiones y compromisos cotidianos.\n\nNos recuerda que la coherencia no nace de un momento de inspiración, sino de las pequeñas acciones que repetimos cada día.",
   pregunta: "¿Tus hábitos reflejan el equilibrio que deseas vivir?",
@@ -722,7 +722,7 @@ const AYIN: SenderoContenido = {
   from: "tipharet",
   to: "hod",
   significadoTradicional:
-    "Ayin (ע) significa \"ojo\". En la tradición cabalística simboliza la visión interior, la percepción profunda y la capacidad de ver más allá de las apariencias. No se limita a observar el mundo exterior; representa la mirada consciente que permite descubrir el significado de las experiencias.\n\nAl conectar Tiféret con Hod, este sendero simboliza el paso desde la armonía interior hacia la expresión consciente. Enseña que la verdad que habita en el corazón necesita ser comunicada para poder transformar nuestras relaciones y nuestra realidad.",
+    "Ayin (ע) significa \"ojo\". En la tradición cabalística simboliza la visión interior, la percepción profunda y la capacidad de ver más allá de las apariencias. No se limita a observar el mundo exterior; representa la mirada consciente que permite descubrir el significado de las experiencias.\n\nAl conectar Tiferet con Hod, este sendero simboliza el paso desde la armonía interior hacia la expresión consciente. Enseña que la verdad que habita en el corazón necesita ser comunicada para poder transformar nuestras relaciones y nuestra realidad.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de expresar con autenticidad aquello que sentimos y creemos. No basta con conocernos a nosotros mismos; también necesitamos aprender a comunicar nuestra verdad con claridad, humildad y respeto.\n\nNos recuerda que una vida auténtica no consiste únicamente en sentir coherencia interior, sino en permitir que esa coherencia también se refleje en nuestra forma de hablar, escuchar y relacionarnos.",
   pregunta: "¿Expresas lo que realmente eres o adaptas tu voz para ser aceptado?",
@@ -765,7 +765,7 @@ const PE: SenderoContenido = {
   from: "netzach",
   to: "hod",
   significadoTradicional:
-    "Pe (פ) significa \"boca\". En la tradición cabalística simboliza el poder de la palabra, la comunicación y la capacidad de dar forma a la realidad a través de aquello que expresamos. La palabra no solo transmite pensamientos; también crea, inspira y transforma.\n\nAl conectar Netzaj con Hod, este sendero representa el paso desde la perseverancia hacia la comunicación consciente. Enseña que el esfuerzo sostenido alcanza un nuevo nivel cuando somos capaces de compartir lo aprendido y expresar con claridad aquello que da sentido a nuestro camino.",
+    "Pe (פ) significa \"boca\". En la tradición cabalística simboliza el poder de la palabra, la comunicación y la capacidad de dar forma a la realidad a través de aquello que expresamos. La palabra no solo transmite pensamientos; también crea, inspira y transforma.\n\nAl conectar Netzach con Hod, este sendero representa el paso desde la perseverancia hacia la comunicación consciente. Enseña que el esfuerzo sostenido alcanza un nuevo nivel cuando somos capaces de compartir lo aprendido y expresar con claridad aquello que da sentido a nuestro camino.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de comunicar con autenticidad aquello que hemos construido mediante la experiencia. La perseverancia nos transforma por dentro, pero compartir ese aprendizaje también puede transformar a quienes nos rodean.\n\nNos recuerda que expresar nuestra experiencia con honestidad fortalece tanto nuestro crecimiento como nuestras relaciones.",
   pregunta: "¿Compartes lo que has aprendido o guardas tu experiencia solo para ti?",
@@ -808,7 +808,7 @@ const TSADI: SenderoContenido = {
   from: "netzach",
   to: "yesod",
   significadoTradicional:
-    "Tsadi (צ) significa \"justo\" o \"rectitud\". En la tradición cabalística representa a la persona que vive de acuerdo con sus principios, manteniéndose firme incluso cuando nadie la observa. Simboliza la coherencia entre las convicciones internas y la forma de actuar.\n\nAl conectar Netzaj con Yesod, este sendero representa el paso desde la perseverancia hacia la consolidación de una base estable. Enseña que la constancia solo transforma la vida cuando se convierte en hábitos que sostienen nuestros valores.",
+    "Tsadi (צ) significa \"justo\" o \"rectitud\". En la tradición cabalística representa a la persona que vive de acuerdo con sus principios, manteniéndose firme incluso cuando nadie la observa. Simboliza la coherencia entre las convicciones internas y la forma de actuar.\n\nAl conectar Netzach con Yesod, este sendero representa el paso desde la perseverancia hacia la consolidación de una base estable. Enseña que la constancia solo transforma la vida cuando se convierte en hábitos que sostienen nuestros valores.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el esfuerzo en una forma de vivir. Perseverar no consiste únicamente en resistir las dificultades, sino en crear rutinas que hagan posible avanzar sin depender constantemente de la motivación.\n\nNos recuerda que la verdadera transformación ocurre cuando aquello que antes requería esfuerzo comienza a formar parte de nuestra identidad.",
   pregunta: "¿Tus hábitos sostienen la persona que quieres llegar a ser?",
@@ -851,7 +851,7 @@ const QOF: SenderoContenido = {
   from: "netzach",
   to: "malkuth",
   significadoTradicional:
-    "Qof (ק) significa \"nuca\", \"parte posterior de la cabeza\" o aquello que permanece oculto a la vista. En la tradición cabalística simboliza el paso entre lo interno y lo externo, recordándonos que toda transformación visible nace primero de un proceso interior.\n\nAl conectar Netzaj con Malkut, este sendero representa el paso desde la perseverancia hacia la manifestación. Enseña que la constancia acaba dejando una huella visible y que toda realidad construida comienza mucho antes de poder verse.",
+    "Qof (ק) significa \"nuca\", \"parte posterior de la cabeza\" o aquello que permanece oculto a la vista. En la tradición cabalística simboliza el paso entre lo interno y lo externo, recordándonos que toda transformación visible nace primero de un proceso interior.\n\nAl conectar Netzach con Malkut, este sendero representa el paso desde la perseverancia hacia la manifestación. Enseña que la constancia acaba dejando una huella visible y que toda realidad construida comienza mucho antes de poder verse.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el esfuerzo sostenido en resultados reales. Muchas veces esperamos cambios inmediatos y olvidamos que las transformaciones más profundas son el fruto de pequeñas acciones repetidas durante mucho tiempo.\n\nNos recuerda que la manifestación no ocurre por casualidad; es la consecuencia natural de una perseverancia mantenida con intención.",
   pregunta: "¿Confías en el proceso o solo valoras los resultados cuando ya son visibles?",

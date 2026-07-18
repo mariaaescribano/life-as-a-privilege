@@ -123,6 +123,9 @@ import MetodoCabalaSefira from "./app/metodo/MetodoCabalaSefira";
 import MetodoCabalaDiagnostico from "./app/metodo/MetodoCabalaDiagnostico";
 import MetodoCabalaSenderos from "./app/metodo/MetodoCabalaSenderos";
 import MetodoCabalaSendero from "./app/metodo/MetodoCabalaSendero";
+import MetodoCabalaSenderosDiagnostico from "./app/metodo/MetodoCabalaSenderosDiagnostico";
+import MetodoCabalaFinal from "./app/metodo/MetodoCabalaFinal";
+import MetodoCabalaDiezDias from "./app/metodo/MetodoCabalaDiezDias";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -276,6 +279,9 @@ export default function App()
       <Route path="/metodo/cabala/sefira/:key" element={<PrivateRoute><MetodoCabalaSefira /></PrivateRoute>} />
       <Route path="/metodo/cabala/diagnostico" element={<PrivateRoute><MetodoCabalaDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/cabala/senderos" element={<PrivateRoute><MetodoCabalaSenderos /></PrivateRoute>} />
+      <Route path="/metodo/cabala/senderos/diagnostico" element={<PrivateRoute><MetodoCabalaSenderosDiagnostico /></PrivateRoute>} />
+      <Route path="/metodo/cabala/final" element={<PrivateRoute><MetodoCabalaFinal /></PrivateRoute>} />
+      <Route path="/metodo/cabala/dias" element={<PrivateRoute><MetodoCabalaDiezDias /></PrivateRoute>} />
       <Route path="/metodo/cabala/sendero/:num" element={<PrivateRoute><MetodoCabalaSendero /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

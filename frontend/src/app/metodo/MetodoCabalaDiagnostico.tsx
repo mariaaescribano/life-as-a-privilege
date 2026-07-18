@@ -6,13 +6,15 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
 import { CABALA_TEST, testCompleto } from "../../components/metodo/cabalaTest";
 import {
   calcularTransiciones,
-  nivelSefira,
+  nivelCombinado,
+  sefiraEvaluable,
   polaridadSefira,
   POLARIDAD_LABEL,
   TIPO_LABEL,
@@ -58,6 +60,7 @@ export default function MetodoCabalaDiagnostico() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<Record<string, number[]>>({});
+  const [autoeval, setAutoeval] = useState<Record<string, number[]>>({});
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -72,6 +75,8 @@ export default function MetodoCabalaDiagnostico() {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const t = res.data?.data?.test;
           if (t && typeof t === "object") setTest(t);
+          const a = res.data?.data?.autoeval;
+          if (a && typeof a === "object") setAutoeval(a);
         } catch { /* sin respuestas todavía */ }
       } catch {
         navigate("/metodo/cabala");
@@ -82,27 +87,29 @@ export default function MetodoCabalaDiagnostico() {
     })();
   }, [navigate]);
 
-  // Niveles por sefirá.
+  // Niveles por sefirá. El nivel combina la Escala de Equilibrio (test) y la
+  // autoevaluación (1-10); la polaridad (déficit/exceso) solo la aporta el test.
   const niveles = useMemo(() => {
     return CABALA_SEFIROT_ORDEN.map((key) => {
       const r = test[key] ?? [];
-      const completo = testCompleto(r);
+      const a = autoeval[key] ?? [];
+      const completo = sefiraEvaluable(r, a);
       return {
         key,
         titulo: cabalaSefirotMap[key].titulo,
         numero: cabalaSefirotMap[key].numero,
         etiqueta: CABALA_TEST[key].etiqueta,
         completo,
-        nivel: completo ? nivelSefira(r) : -1,
-        polaridad: (completo ? polaridadSefira(r) : "equilibrio") as Polaridad,
+        nivel: completo ? nivelCombinado(r, a) : -1,
+        polaridad: (testCompleto(r) ? polaridadSefira(r) : "equilibrio") as Polaridad,
       };
     });
-  }, [test]);
+  }, [test, autoeval]);
 
   const respondidas = niveles.filter((n) => n.completo).length;
   const total = niveles.length;
 
-  const transiciones = useMemo(() => calcularTransiciones(test), [test]);
+  const transiciones = useMemo(() => calcularTransiciones(test, autoeval), [test, autoeval]);
   const bloqueos = useMemo(
     () => transiciones.filter((t) => t.completa && esBloqueo(t.tipo)).sort((a, b) => b.gravedad - a.gravedad),
     [transiciones],
@@ -127,7 +134,7 @@ export default function MetodoCabalaDiagnostico() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Tu Mapa Evolutivo"
+              title="Mapa Evolutivo"
               pageLabel={`${CABALA_TOTAL_PAGINAS - 1}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
@@ -317,6 +324,8 @@ export default function MetodoCabalaDiagnostico() {
 
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
       <SiteFooter />
+
+      <IndiceCabala />
     </Box>
   );
 }
