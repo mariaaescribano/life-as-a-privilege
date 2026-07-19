@@ -8,9 +8,11 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoCabalaModal } from "../../components/metodo/PagoCabalaModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { CABALA_INTRO } from "../../components/metodo/comicCabalaIntro";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
+import { CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -29,6 +31,7 @@ export default function MetodoCabala() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   const intro = useIntroComic("metodo-cabala"); // cómic del Origen, 1ª vez
 
   useEffect(() => {
@@ -132,16 +135,16 @@ export default function MetodoCabala() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="Cábala"
-              pageLabel="1/"
+              pageLabel={`1/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
               prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion/cursos") }}
-              // Ilustraciones de Cábala: pendientes de contenido, el botón queda
-              // preparado pero aún no abre nada.
-              extra={{ label: "Ilustraciones", onClick: () => {} }}
+              // Ilustraciones de Cábala: abre el popup con la galería (de momento,
+              // estado vacío con las ilustraciones que llegarán).
+              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true) }}
               next={{ label: "El Árbol de la Vida →", onClick: comenzar }}
             />
           </Reveal>
@@ -196,6 +199,8 @@ export default function MetodoCabala() {
         onFinish={intro.finish}
         onClose={intro.close}
       />
+
+      <CabalaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
 

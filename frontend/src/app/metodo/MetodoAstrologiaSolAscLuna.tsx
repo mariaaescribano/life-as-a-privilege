@@ -9,7 +9,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo } from "../../components/metodo/Glifo";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicAstrologiaModal, VINETAS_PLANETAS } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { SaberMasModal } from "../../components/metodo/Planetas";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -42,6 +43,8 @@ export default function MetodoAstrologiaSolAscLuna() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Data>({});
   const [comicOpen, setComicOpen] = useState(false);
+  // Cómic de los planetas: se intercala antes de pasar a «Arquetipos».
+  const [comicPlanetasOpen, setComicPlanetasOpen] = useState(false);
   const [abierto, setAbierto] = useState<CuerpoKey | null>(null);
 
   useEffect(() => {
@@ -134,7 +137,8 @@ export default function MetodoAstrologiaSolAscLuna() {
 
   const headerNext = {
     label: todosLeidos ? "Arquetipos →" : "Lee los tres para continuar",
-    onClick: () => navigate("/metodo/astrologia/cartaAstral"),
+    // Antes de pasar a «Arquetipos» intercalamos el cómic de los planetas.
+    onClick: () => setComicPlanetasOpen(true),
     disabled: !todosLeidos,
     disabledTooltip: "Lee tu Sol, tu Luna y tu Ascendente antes de seguir",
   };
@@ -232,6 +236,17 @@ export default function MetodoAstrologiaSolAscLuna() {
       />
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+
+      {/* Cómic de los planetas: intercalado antes de «Arquetipos». */}
+      <ComicPasoModal
+        isOpen={comicPlanetasOpen}
+        onClose={() => setComicPlanetasOpen(false)}
+        onContinue={() => navigate("/metodo/astrologia/cartaAstral")}
+        vinetas={VINETAS_PLANETAS}
+        continueLabel="Arquetipos"
+        themeColor={astrologiaTxt}
+        textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
+      />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />
       <SiteFooter />

@@ -7,7 +7,8 @@ import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicAstrologiaModal, VINETAS_SIGNOS } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
 import { useIntroComic } from "../../hooks/useIntroComic";
@@ -107,6 +108,8 @@ export default function MetodoAstrologia() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comicAstroOpen, setComicAstroOpen] = useState(false);
+  // Cómic de los signos: se intercala antes de pasar a «Sol, Luna y Ascendente».
+  const [comicSignosOpen, setComicSignosOpen] = useState(false);
   const intro = useIntroComic("metodo-astrologia"); // cómic del Origen (espiritualidad), 1ª vez
 
   // Popup de confirmación de datos antes de enviar la solicitud
@@ -141,20 +144,28 @@ export default function MetodoAstrologia() {
     if (!userId || !token) { navigate("/welcome"); return; }
 
     (async () => {
+      // El cómic del Origen ahora SIEMPRE sale al entrar (se puede saltar con la
+      // X, pero vuelve a aparecer). Por eso lo abrimos y precargamos siempre.
+      const abrirIntro = true;
       try {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEstado(res.data ?? null);
-        // Primera vez que entra: cómic del Origen (según la espiritualidad).
-        if (!res.data?.intro_visto) intro.openNow();
+        intro.openNow();
       } catch {
         setEstado(null);
       }
-      // No quitamos el spinner hasta que el fondo espacial esté descargado,
-      // para que la página no aparezca con el degradado de respaldo y luego
-      // salte la foto.
-      await precargarImagen(SPACE_IMG);
+      // No quitamos el spinner hasta que el fondo espacial esté descargado
+      // (para que la página no aparezca con el degradado de respaldo y luego
+      // salte la foto) y hasta que TODAS las viñetas del cómic del Origen estén
+      // descargadas también, para que el cómic no aparezca a medio cargar.
+      await Promise.all([
+        precargarImagen(SPACE_IMG),
+        ...(abrirIntro
+          ? ORIGEN_ESPIRITUALIDAD.map((v) => precargarImagen(encodeURI(v.src)))
+          : []),
+      ]);
       setLoading(false);
     })();
   }, []);
@@ -247,7 +258,8 @@ export default function MetodoAstrologia() {
     icon: <EyeIcon />,
   };
   const headerNext = (yaConPdf || yaSolicitado)
-    ? { label: "Sol, Luna y Ascendente →", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }
+    // Antes de pasar a «Sol, Luna y Ascendente» intercalamos el cómic de los signos.
+    ? { label: "Sol, Luna y Ascendente →", onClick: () => setComicSignosOpen(true) }
     : { label: "Leer carta →", onClick: abrirConfirmacion, disabled: !camposCompletos };
 
   return (
@@ -485,6 +497,17 @@ export default function MetodoAstrologia() {
       <ComicAstrologiaModal
         isOpen={comicAstroOpen}
         onClose={() => setComicAstroOpen(false)}
+      />
+
+      {/* Cómic de los signos: intercalado antes de «Sol, Luna y Ascendente». */}
+      <ComicPasoModal
+        isOpen={comicSignosOpen}
+        onClose={() => setComicSignosOpen(false)}
+        onContinue={() => navigate("/metodo/astrologia/solascendenteluna")}
+        vinetas={VINETAS_SIGNOS}
+        continueLabel="Sol, Luna y Ascendente"
+        themeColor={astrologiaTxt}
+        textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
       />
 
       {/* Intro (1ª vez): cómic del Origen según la espiritualidad. */}

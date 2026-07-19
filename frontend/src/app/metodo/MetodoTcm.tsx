@@ -14,7 +14,8 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
-import { VINETAS_ORIGEN as ORIGEN_TAOISMO } from "../../components/metodo/TCMIlustracionesModal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { VINETAS_ORIGEN as ORIGEN_TAOISMO, VINETAS_ELEMENTOS } from "../../components/metodo/TCMIlustracionesModal";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -36,6 +37,8 @@ export default function MetodoTcm() {
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
+  // Cómic de los cinco elementos: se intercala antes de pasar a «Los 5 elementos».
+  const [comicElementosOpen, setComicElementosOpen] = useState(false);
   // Al volver a Ayurveda, aterrizamos en su ÚLTIMA página (la de cursos del
   // dosha del usuario), no en el inicio. Se resuelve con el dosha guardado.
   const [volverAyurvedaUrl, setVolverAyurvedaUrl] = useState("/metodo/ayurveda");
@@ -135,7 +138,8 @@ export default function MetodoTcm() {
 
   const comenzar = () => {
     if (!suscrito) { setPagoOpen(true); return; }
-    navigate("/metodo/tcm/elementos");
+    // Antes de pasar a «Los 5 elementos» intercalamos el cómic de los elementos.
+    setComicElementosOpen(true);
   };
 
   if (loading) {
@@ -237,6 +241,18 @@ export default function MetodoTcm() {
         disciplinaBgColor={tcmBg}
         onFinish={intro.finish}
         onClose={intro.close}
+      />
+
+      {/* Cómic de los cinco elementos: intercalado antes de «Los 5 elementos». */}
+      <ComicPasoModal
+        isOpen={comicElementosOpen}
+        onClose={() => setComicElementosOpen(false)}
+        onContinue={() => navigate("/metodo/tcm/elementos")}
+        vinetas={VINETAS_ELEMENTOS}
+        continueLabel="Los 5 elementos"
+        themeColor={tcmTxt}
+        disciplinaBgImage="/img/fondos/tcm.png"
+        disciplinaBgColor={tcmBg}
       />
 
       <IndiceTcm />

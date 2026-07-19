@@ -30,6 +30,7 @@ export function IndiceCabala() {
   const ilus = asSet(d.ilustracionesVistas);
   const vistas = asSet(d.sefirotVistas);
   const senderoIlus = asSet(d.senderoIlustracionesVistas);
+  const diagnosticoVisto = !!d.diagnosticoVisto;
 
   // Desbloqueos secuenciales del recorrido:
   const arbolIlusAll = CABALA_ILUSTRACIONES_KEYS.every((k) => ilus.has(k)); // vistas todas las ilustraciones del Árbol
@@ -37,8 +38,10 @@ export function IndiceCabala() {
   const senderoIlusAll = CABALA_SENDEROS.every((s) => senderoIlus.has(String(s.num))); // vistas todas las ilustraciones de senderos
 
   const sefirotUnlocked = arbolIlusAll;
+  // Diagnóstico se abre tras recorrer todas las sefirot; Los Senderos, sólo tras
+  // haber pasado por el Diagnóstico. Así el índice avanza paso a paso.
   const diagnosticoUnlocked = sefirotVistasAll;
-  const senderosUnlocked = diagnosticoUnlocked;
+  const senderosUnlocked = diagnosticoUnlocked && diagnosticoVisto;
   const senderosDiagUnlocked = senderoIlusAll;
   const finalUnlocked = sefirotVistasAll && senderoIlusAll;
   const diasUnlocked = finalUnlocked;

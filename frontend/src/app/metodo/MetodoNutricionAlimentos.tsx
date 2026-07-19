@@ -50,7 +50,6 @@ function BibliotecaCard({
         borderRadius="2xl"
         cursor="pointer"
         fontFamily="'EB Garamond', serif"
-        border={`1px solid ${nutricionTxt}33`}
         boxShadow={glowSuave(nutricionTxt)}
         transition="all 0.2s ease"
         _hover={{ transform: "translateY(-4px)", boxShadow: glowSuaveHover(nutricionTxt) }}

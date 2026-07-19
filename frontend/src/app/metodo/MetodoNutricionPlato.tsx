@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { glowSuave } from "../../components/metodo/FotoBox";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal, Float } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { PLATO_MACROS, platoMacroByKey, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
@@ -84,7 +85,6 @@ const SECTORES = (() => {
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" borderRadius="2xl"
-         border={`1px solid ${nutricionTxt}2e`}
          boxShadow={glowSuave(nutricionTxt)} {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
       <Box position="relative" zIndex={1} h="100%">{children}</Box>
@@ -149,6 +149,14 @@ export default function MetodoNutricionPlato() {
             setPuestos(validos);
           }
         } catch { /* sin fila todavía */ }
+
+        // No quitamos el spinner hasta que TODAS las fotos de los alimentos estén
+        // descargadas, para que el plato y el panel no se rellenen de golpe.
+        await precargarImagenes(
+          PLATO_MACROS.flatMap((m) => m.alimentos.map((a) => a.foto))
+            .filter(Boolean)
+            .map((f) => encodeURI(f as string)),
+        );
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();

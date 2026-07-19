@@ -2,16 +2,19 @@
 // El plato es un círculo dividido en sectores; cada sector es un macro/grupo.
 // Al pulsar un sector se muestran sus alimentos, que se arrastran sobre el plato.
 //
-// Fotos: se reutilizan las de la Biblioteca de alimentos, en
-// /recorrido/nutricion/alimentos/<archivo>.png. Los alimentos que aún no tienen
-// foto muestran el emoji como marcador temporal (se irán añadiendo).
+// FUENTE ÚNICA: los alimentos del plato SON los mismos de «Alimentación
+// molecular» (ALIMENTOS de AlimentosNutricion). Cada grupo de la biblioteca cae
+// en un sector del plato según GRUPOS_POR_SECTOR; los grupos sin sitio en el
+// plato (grasas, otros, ultraprocesados) no se dibujan (quedan fuera del plato).
+
+import { ALIMENTOS, type Alimento, type GrupoAlimento } from "./AlimentosNutricion";
 
 export interface PlatoAlimento {
   key: string;
   label: string;
   /** Emoji temporal hasta subir la foto. */
   emoji: string;
-  /** Foto redonda del alimento (pendiente). Si existe, sustituye al emoji. */
+  /** Foto redonda del alimento. Si existe, sustituye al emoji. */
   foto?: string;
 }
 
@@ -27,7 +30,33 @@ export interface PlatoMacro {
   alimentos: PlatoAlimento[];
 }
 
-export const PLATO_MACROS: PlatoMacro[] = [
+// Un alimento de la biblioteca molecular → alimento del plato (misma foto/emoji).
+const toPlato = (a: Alimento): PlatoAlimento => ({
+  key: a.key,
+  label: a.nombre,
+  emoji: a.emoji ?? "🍽️",
+  foto: a.foto,
+});
+
+// Qué grupo(s) de la biblioteca molecular caen en cada sector del plato.
+const GRUPOS_POR_SECTOR: Record<string, GrupoAlimento[]> = {
+  verduras: ["verdura"],
+  fruta: ["fruta"],
+  cereales: ["cereal"],
+  proteina: ["proteina", "legumbre", "frutos-secos", "lacteo"],
+};
+
+// Alimentos que, aun siendo de un grupo saludable, NO van en el plato (trampas
+// que la biblioteca usa como contraste, p.ej. el zumo: fruta sin fibra).
+const FUERA_DEL_PLATO = new Set<string>(["zumo-naranja"]);
+
+const alimentosDeSector = (sectorKey: string): PlatoAlimento[] =>
+  ALIMENTOS
+    .filter((a) => (GRUPOS_POR_SECTOR[sectorKey] ?? []).includes(a.grupo) && !FUERA_DEL_PLATO.has(a.key))
+    .map(toPlato);
+
+// Metadatos de los 4 sectores (los alimentos se rellenan desde ALIMENTOS).
+const SECTORES_META: Omit<PlatoMacro, "alimentos">[] = [
   {
     key: "verduras",
     label: "Verduras y hortalizas",
@@ -36,14 +65,6 @@ export const PLATO_MACROS: PlatoMacro[] = [
     proporcion: 35,
     descripcion:
       "Llena buena parte del plato de verduras y hortalizas de muchos colores. Cuanta más variedad, mejor.",
-    alimentos: [
-      { key: "brocoli", label: "Brócoli", emoji: "🥦", foto: "/recorrido/nutricion/alimentos/brocoli.png" },
-      { key: "espinacas", label: "Espinacas", emoji: "🥬" },
-      { key: "zanahoria", label: "Zanahoria", emoji: "🥕" },
-      { key: "tomate", label: "Tomate", emoji: "🍅" },
-      { key: "pimiento", label: "Pimiento", emoji: "🫑" },
-      { key: "calabacin", label: "Calabacín", emoji: "🥒" },
-    ],
   },
   {
     key: "fruta",
@@ -53,14 +74,6 @@ export const PLATO_MACROS: PlatoMacro[] = [
     proporcion: 15,
     descripcion:
       "Fruta entera y de temporada. Aporta fibra, vitaminas y fitoquímicos que te protegen.",
-    alimentos: [
-      { key: "manzana", label: "Manzana", emoji: "🍎", foto: "/recorrido/nutricion/alimentos/manzana.png" },
-      { key: "platano", label: "Plátano", emoji: "🍌", foto: "/recorrido/nutricion/alimentos/platano.png" },
-      { key: "fresas", label: "Fresas", emoji: "🍓" },
-      { key: "naranja", label: "Naranja", emoji: "🍊", foto: "/recorrido/nutricion/alimentos/naranja.png" },
-      { key: "uvas", label: "Uvas", emoji: "🍇" },
-      { key: "arandanos", label: "Arándanos", emoji: "🫐" },
-    ],
   },
   {
     key: "cereales",
@@ -70,13 +83,6 @@ export const PLATO_MACROS: PlatoMacro[] = [
     proporcion: 25,
     descripcion:
       "Cereales integrales como la avena, el arroz o el pan integral: energía de liberación lenta.",
-    alimentos: [
-      { key: "avena", label: "Avena", emoji: "🌾" },
-      { key: "arroz-integral", label: "Arroz integral", emoji: "🍚", foto: "/recorrido/nutricion/alimentos/arroces.png" },
-      { key: "pan-integral", label: "Pan integral", emoji: "🍞", foto: "/recorrido/nutricion/alimentos/pan.png" },
-      { key: "pasta-integral", label: "Pasta integral", emoji: "🍝", foto: "/recorrido/nutricion/alimentos/pasta.png" },
-      { key: "maiz", label: "Maíz", emoji: "🌽" },
-    ],
   },
   {
     key: "proteina",
@@ -85,26 +91,20 @@ export const PLATO_MACROS: PlatoMacro[] = [
     color: "#d75f5a",
     proporcion: 25,
     descripcion:
-      "Proteína saludable: legumbres, pescado, huevo o aves. Cuanto menos procesada, mejor.",
-    alimentos: [
-      { key: "huevo", label: "Huevo", emoji: "🥚", foto: "/recorrido/nutricion/alimentos/huevo.png" },
-      { key: "pescado", label: "Pescado", emoji: "🐟", foto: "/recorrido/nutricion/alimentos/atun.png" },
-      { key: "pollo", label: "Pollo", emoji: "🍗", foto: "/recorrido/nutricion/alimentos/pollo.png" },
-      { key: "legumbres", label: "Legumbres", emoji: "🫘", foto: "/recorrido/nutricion/alimentos/garbanzos.png" },
-      { key: "frutos-secos", label: "Frutos secos", emoji: "🥜", foto: "/recorrido/nutricion/alimentos/frutossecos.png" },
-      { key: "marisco", label: "Marisco", emoji: "🦐" },
-    ],
+      "Proteína saludable: legumbres, pescado, huevo, aves o frutos secos. Cuanto menos procesada, mejor.",
   },
 ];
 
-// Alimentos «trampa» (ultraprocesados) que NO forman parte del plato de Harvard.
-// Se muestran aparte para que el usuario aprenda a dejarlos fuera del plato.
-export const PLATO_FUERA: PlatoAlimento[] = [
-  { key: "refresco", label: "Refresco", emoji: "🥤" },
-  { key: "bolleria", label: "Bollería", emoji: "🧁" },
-  { key: "patatas-fritas", label: "Patatas fritas", emoji: "🍟" },
-  { key: "pizza", label: "Pizza", emoji: "🍕" },
-];
+export const PLATO_MACROS: PlatoMacro[] = SECTORES_META.map((s) => ({
+  ...s,
+  alimentos: alimentosDeSector(s.key),
+}));
+
+// Alimentos «trampa» que NO forman parte del plato de Harvard (ultraprocesados
+// + el zumo). Mismos alimentos de la biblioteca molecular.
+export const PLATO_FUERA: PlatoAlimento[] = ALIMENTOS
+  .filter((a) => a.grupo === "ultraprocesado" || FUERA_DEL_PLATO.has(a.key))
+  .map(toPlato);
 
 export const platoMacroByKey = (key: string): PlatoMacro | undefined =>
   PLATO_MACROS.find((m) => m.key === key);

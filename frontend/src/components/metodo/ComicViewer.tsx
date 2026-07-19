@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import SpinnerTurquesa from "../global/Spinner";
+import { comicLoaderPorColor } from "./comicLoaders";
 import { astrologiaTxt } from "../../GlobalVariables";
 
 // Frontend único del cómic: misma vista, misma maquetación, mismas animaciones.
@@ -112,6 +113,10 @@ interface ComicViewerProps {
   fondoNitido?: boolean;
   /** Viñeta por la que empezar (para abrir directamente en una concreta). */
   initialIndex?: number;
+  /** Se llama con el índice de la viñeta cada vez que se muestra una (también al
+   *  abrir). Útil, p.ej., para marcar como «leída» cada sefirá de Cábala según se
+   *  navega de una a otra con las flechas. */
+  onPageView?: (index: number) => void;
   /** Animación de espera mientras la ilustración de la viñeta carga. Si no se
    *  pasa, se usa un spinner del color de la disciplina. Nutrición pasa aquí su
    *  manzana (AppleLoader). */
@@ -138,6 +143,7 @@ export function ComicViewer({
   fondoNitido,
   initialIndex = 0,
   loader,
+  onPageView,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
@@ -185,6 +191,37 @@ export function ComicViewer({
     if (contentRef.current) contentRef.current.scrollTop = 0;
     if (textScrollRef.current) textScrollRef.current.scrollTop = 0;
   }, [index]);
+
+  // Avisa de qué viñeta se está viendo (al abrir y en cada cambio). Vía ref para
+  // no reejecutar el efecto si el callback cambia de identidad entre renders.
+  const onPageViewRef = useRef(onPageView);
+  onPageViewRef.current = onPageView;
+  useEffect(() => { onPageViewRef.current?.(index); }, [index]);
+
+  // Prefetch de las viñetas vecinas: al abrir y cada vez que se pasa de página,
+  // calentamos en caché la viñeta actual y las siguientes (y la anterior), y las
+  // marcamos como cargadas en cuanto terminan. Así, al avanzar, la foto ya está
+  // lista y NO vuelve a aparecer el spinner (salvo la primera, si aún descarga).
+  useEffect(() => {
+    const vecinas = [index, index + 1, index + 2, index - 1].filter(
+      (i) => i >= 0 && i < total,
+    );
+    const imgs: HTMLImageElement[] = [];
+    vecinas.forEach((i) => {
+      if (sinFoto?.(i)) return;
+      const src = vinetas[i]?.src;
+      if (!src) return;
+      const img = new window.Image();
+      img.onload = () => setImgLoaded((s) => (s[i] ? s : { ...s, [i]: true }));
+      img.onerror = () => setImgFailed((s) => (s[i] ? s : { ...s, [i]: true }));
+      img.src = encodeURI(src);
+      imgs.push(img);
+    });
+    return () => {
+      imgs.forEach((img) => { img.onload = null; img.onerror = null; });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, total]);
 
   const handleComplete = () => {
     if (onComplete) onComplete();
@@ -546,7 +583,7 @@ export function ComicViewer({
                 align="center"
                 justify="center"
               >
-                {loader ?? <SpinnerTurquesa fullScreen={false} color={themeColor} />}
+                {loader ?? comicLoaderPorColor(themeColor) ?? <SpinnerTurquesa fullScreen={false} color={themeColor} />}
                 <Image
                   src={encodeURI(current.src)}
                   alt=""
@@ -618,22 +655,6 @@ export function ComicViewer({
                 </Flex>
               )}
             </Box>
-            )}
-
-            {/* Separador elegante: rayita horizontal y corta en móvil,
-                vertical entre foto y texto en escritorio. Se oculta sin foto. */}
-            {imgReady && !hideFoto && (
-            <Box
-              flexShrink={0}
-              alignSelf="center"
-              w={{ base: "52px", md: "1px" }}
-              h={{ base: "1px", md: "150px" }}
-              borderRadius="full"
-              bgGradient={{
-                base: `linear(to-r, transparent, ${themeColor}aa, transparent)`,
-                md: `linear(to-b, transparent, ${themeColor}aa, transparent)`,
-              }}
-            />
             )}
 
             {imgReady && (

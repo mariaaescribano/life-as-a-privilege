@@ -8,12 +8,41 @@ import type { Vineta } from "./ComicViewer";
 // TODOS, se desbloquea el botón para recorrerlos uno a uno.
 //
 // Clave = `num` del sendero (11-32, numeración cabalística).
-// Textos definitivos (los 22: Aleph→Tav). Fotos PENDIENTES: mientras tanto se
-// usa la imagen de fondo de la disciplina.
-//   Sustituye `src` por /recorrido/cabala/senderos/<num>/<n>.png cuando estén.
+// Textos definitivos (los 22: Aleph→Tav).
+// Fotos en /recorrido/cabala/senderos/<letra>.png (nombre de la letra hebrea).
+// Los 22 senderos (Aleph→Tav) ya tienen ilustración.
 // ─────────────────────────────────────────────────────────────────────────
 
-const IMG = "/img/fondos/cabala.png"; // placeholder hasta que haya foto propia
+const IMG = "/img/fondos/cabala.png"; // placeholder por si faltara alguna foto
+
+// Foto de cada sendero por su letra hebrea (archivo en /recorrido/cabala/senderos/).
+const FOTOS: Record<number, string> = {
+  11: "aleph",
+  12: "beth",
+  13: "gimel",
+  14: "daleth",
+  15: "he",
+  16: "vav",
+  17: "zayin",
+  18: "chet",
+  19: "tet",
+  20: "yod",
+  21: "kaf",
+  22: "lamed",
+  23: "mem",
+  24: "nun",
+  25: "samekh",
+  26: "ayin",
+  27: "pe",
+  28: "tsadi",
+  29: "qof",
+  30: "resh",
+  31: "shin",
+  32: "tav",
+};
+
+const fotoSendero = (num: number): string =>
+  FOTOS[num] ? `/recorrido/cabala/senderos/${FOTOS[num]}.png` : IMG;
 
 const placeholder = (): Vineta[] => [
   {
@@ -52,9 +81,23 @@ export const CABALA_SENDERO_ILUSTRACIONES: Record<number, Vineta[]> = Object.fro
   Array.from({ length: 22 }, (_, i) => {
     const num = i + 11;
     const texto = TEXTOS[num];
-    return [num, texto ? [{ src: IMG, paragraphs: [texto] }] : placeholder()];
+    return [num, texto ? [{ src: fotoSendero(num), paragraphs: [texto] }] : placeholder()];
   }),
 );
 
 export const ilustracionSendero = (num: number): Vineta[] =>
   CABALA_SENDERO_ILUSTRACIONES[num] ?? [];
+
+// Numeración cabalística en orden (11..32).
+export const CABALA_SENDERO_NUMS: number[] = Array.from({ length: 22 }, (_, i) => i + 11);
+
+// Secuencia completa de viñetas (los 22 senderos en orden) para el visor: al
+// abrir la ilustración de un sendero se puede pasar al siguiente con las flechas,
+// sin salir y entrar. `CABALA_SENDERO_VINETA_NUMS` mantiene, en paralelo, a qué
+// sendero pertenece cada viñeta (para marcarlo como visto al verlo).
+export const CABALA_SENDERO_VINETAS: Vineta[] = CABALA_SENDERO_NUMS.flatMap(
+  (n) => ilustracionSendero(n),
+);
+export const CABALA_SENDERO_VINETA_NUMS: number[] = CABALA_SENDERO_NUMS.flatMap(
+  (n) => ilustracionSendero(n).map(() => n),
+);

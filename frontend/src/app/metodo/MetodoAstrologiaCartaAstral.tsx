@@ -183,11 +183,15 @@ export default function MetodoAstrologiaCartaAstral() {
             />
           </Reveal>
 
-          {/* ── Box estrellado contenedor de la carta ── */}
+          {/* ── Box estrellado contenedor de la carta ──
+              Entrada SOLO de opacidad (sin translate ni scale): el <Canvas> de
+              react-three-fiber mide su contenedor con getBoundingClientRect UNA
+              vez al montar, así que si lo hiciera durante un transform (scale/
+              translate) capturaría una caja escalada/desplazada y la rueda se
+              vería mal colocada durante todo el "dinamismo" hasta un resize.
+              Un fundido puro deja la caja quieta y la rueda siempre bien. */}
           <Reveal
-            direction="up"
-            distance={34}
-            scaleFrom={0.96}
+            direction="none"
             delay={0.12}
             duration={0.8}
             position="relative"

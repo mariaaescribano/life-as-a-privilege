@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text, SimpleGrid, Image } from "@chakra-ui/react";
+import { Box, Flex, Text, SimpleGrid, Image, Portal } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { FotoBox, glowSuave } from "./FotoBox";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
@@ -239,7 +239,11 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
   if (!isOpen) return null;
 
   return (
-    <Box position="fixed" inset={0} zIndex={1300} overflowY="auto" fontFamily="'EB Garamond', serif">
+    <Portal>
+      {/* Portal a <body>: así el popup escapa de cualquier contexto de apilado y
+          cubre SIEMPRE toda la pantalla (por encima del header sticky). */}
+      <Box position="fixed" inset={0} w="100vw" h="100dvh" zIndex={2000} overflowY="auto"
+           bg={nutricionBg} fontFamily="'EB Garamond', serif">
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}e6`} />
 
       <Box position="relative" zIndex={1} minH="100%" px={{ base: 4, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
@@ -276,6 +280,7 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
           </Flex>
         )}
       </Box>
-    </Box>
+      </Box>
+    </Portal>
   );
 }

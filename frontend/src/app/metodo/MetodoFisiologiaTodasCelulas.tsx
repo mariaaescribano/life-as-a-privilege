@@ -87,7 +87,7 @@ const ORGANOS: Organo[] = [
       },
       {
         titular: "Fumar apaga el sistema de limpieza.",
-        claves: ["El humo paraliza los cilios", "Se acumula moco y suciedad", "Daña los alvéolos"],
+        claves: ["El humo paraliza los cilios", "Él sistema inmunitario se vuelve lento", "Daña los alvéolos"],
         texto: <>El humo del tabaco paraliza los cilios y obliga a los pulmones a acumular más moco y suciedad. Además, daña los alvéolos, donde se produce el intercambio de oxígeno. Por eso los fumadores suelen toser más: el cuerpo intenta expulsar mediante la tos lo que ya no puede limpiar de forma eficiente.</>,
       },
       {
@@ -788,6 +788,8 @@ function OrganoCard({
       textAlign="left"
       position="relative"
       overflow="hidden"
+      display="flex"
+      flexDirection="column"
       w="100%"
       h="100%"
       borderRadius="2xl"
@@ -818,28 +820,28 @@ function OrganoCard({
         </Flex>
       )}
 
-      <Flex direction="column" position="relative" zIndex={1} p={{ base: 4, md: 6 }} gap={{ base: 3, md: 4 }} h="100%">
-        {/* Ilustración cuadrada del órgano */}
-        <Box borderRadius="xl" overflow="hidden" w="100%" aspectRatio={1} bg={`${fisiologiaTxt}14`}
-             boxShadow="0 4px 16px rgba(0,0,0,0.28)" flexShrink={0}>
-          {!imgErr ? (
-            <Image src={encodeURI(organo.foto)} alt={organo.label} w="100%" h="100%" objectFit="cover"
-                   onError={() => setImgErr(true)} />
-          ) : (
-            <Flex w="100%" h="100%" align="center" justify="center" />
-          )}
-        </Box>
+      {/* Foto del órgano a sangre en la parte de arriba (como en Sistemas). */}
+      <Box position="relative" zIndex={1} w="100%" aspectRatio={1} overflow="hidden" flexShrink={0}
+           bg={`${fisiologiaTxt}14`}>
+        {!imgErr && (
+          <Image src={encodeURI(organo.foto)} alt={organo.label} w="100%" h="100%" objectFit="cover"
+                 onError={() => setImgErr(true)} />
+        )}
+      </Box>
 
-        {/* Nombre */}
-        <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "lg", md: "2xl" }} textAlign="center"
-              lineHeight="1.25" letterSpacing="0.02em"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.4)" }}>
+      {/* Línea separadora a todo el ancho. */}
+      <Box position="relative" zIndex={1} h="1px" bg={`${fisiologiaTxt}33`} flexShrink={0} />
+
+      {/* Pie: nombre + progreso. */}
+      <Flex direction="column" position="relative" zIndex={1} flex="1" gap={{ base: 2, md: 2.5 }}
+            px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}>
+        <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "md", md: "xl" }} textAlign="center"
+              lineHeight="1.2" letterSpacing="0.02em"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
           {organo.label}
         </Text>
-
-        {/* Progreso: "3/8 células" + barra */}
-        <Flex direction="column" gap={2.5} mt="auto">
-          <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "md" }} fontWeight={700}
+        <Flex direction="column" gap={2} mt="auto">
+          <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "2xs", md: "sm" }} fontWeight={700}
                 textAlign="center" letterSpacing="0.04em"
                 style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
             {total > 0 ? `${hechas}/${total} células` : "próximamente"}

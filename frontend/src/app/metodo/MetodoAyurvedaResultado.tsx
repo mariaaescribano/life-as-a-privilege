@@ -9,6 +9,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { VINETAS_DOSHAS } from "../../components/metodo/HinduismoIlustracionesModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import {
@@ -78,6 +80,8 @@ export default function MetodoAyurvedaResultado() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [resultado, setResultado] = useState<Resultado | null>(null);
+  // Cómic de los doshas: se intercala después del resultado, antes de «Energías».
+  const [comicDoshasOpen, setComicDoshasOpen] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
   const reduce = useReducedMotion();
 
@@ -149,7 +153,8 @@ export default function MetodoAyurvedaResultado() {
             mb={0}
             prev={{ label: "← Test", onClick: () => navigate("/metodo/ayurveda/test") }}
             extra={ilustracionesBtn}
-            next={{ label: "Energías →", onClick: () => navigate("/metodo/ayurveda/tarjetas") }}
+            // Después del resultado, antes de «Energías», intercalamos el cómic de los doshas.
+            next={{ label: "Energías →", onClick: () => setComicDoshasOpen(true) }}
           />
           </Reveal>
 
@@ -253,6 +258,19 @@ export default function MetodoAyurvedaResultado() {
       </Box>
 
       {ilustracionesModal}
+
+      {/* Cómic de los doshas: intercalado después del resultado, antes de «Energías». */}
+      <ComicPasoModal
+        isOpen={comicDoshasOpen}
+        onClose={() => setComicDoshasOpen(false)}
+        onContinue={() => navigate("/metodo/ayurveda/tarjetas")}
+        vinetas={VINETAS_DOSHAS}
+        continueLabel="Energías"
+        themeColor={ayurvedaTxt}
+        disciplinaBgImage="/img/fondos/hinduismo.png"
+        disciplinaBgColor={ayurvedaBg}
+        textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
+      />
 
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
 

@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
-import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
+import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { CABALA_TEST, testCompleto } from "../../components/metodo/cabalaTest";
 import {
   calcularTransiciones,
@@ -73,10 +73,17 @@ export default function MetodoCabalaDiagnostico() {
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
-          const t = res.data?.data?.test;
+          const prev = res.data?.data ?? {};
+          const t = prev.test;
           if (t && typeof t === "object") setTest(t);
-          const a = res.data?.data?.autoeval;
+          const a = prev.autoeval;
           if (a && typeof a === "object") setAutoeval(a);
+          // Marca el Diagnóstico como visitado: Los Senderos se desbloquean en el
+          // índice sólo tras pasar por aquí, para avanzar poco a poco.
+          if (!prev.diagnosticoVisto) {
+            const data = { ...prev, diagnosticoVisto: true };
+            axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
+          }
         } catch { /* sin respuestas todavía */ }
       } catch {
         navigate("/metodo/cabala");
@@ -135,7 +142,7 @@ export default function MetodoCabalaDiagnostico() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="Mapa Evolutivo"
-              pageLabel={`${CABALA_TOTAL_PAGINAS - 1}/${CABALA_TOTAL_PAGINAS}`}
+              pageLabel={`${CABALA_PAG.diagnostico}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}

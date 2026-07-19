@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -91,18 +91,28 @@ export default function MetodoTcmPerfil() {
     return out;
   }, [data]);
 
-  // Las barras suben una a una cuando el box asoma en pantalla.
   const reduce = useReducedMotion();
-  const barrasRef = useRef<HTMLDivElement | null>(null);
-  const barrasInView = useInView(barrasRef, { once: true, amount: 0.4 });
-  const barrasEnter = reduce || barrasInView;
 
-  // No quitamos el spinner hasta que los iconos/fotos de los elementos estén
-  // descargados, para que las estrellas no aparezcan con los círculos vacíos.
+  // No quitamos el spinner hasta que estén descargados los iconos/fotos de los
+  // elementos Y el fondo de disciplina, para que ni la página ni las barras
+  // aparezcan/animen hasta que los fondos ya se vean.
   const iconosListos = usePrecargarImagenes([
+    "/img/fondos/tcm.png",
     ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
     ...ORDEN_ELEMENTOS.map((el) => FOTO_ELEMENTO[el]),
   ]);
+
+  // Las barras suben una a una en cuanto la página está lista (fotos cargadas).
+  // No usamos useInView: su observer se montaba durante el spinner (con el ref
+  // aún a null) y nunca llegaba a observar las barras → no se animaban nunca.
+  const [barrasEnter, setBarrasEnter] = useState(false);
+  useEffect(() => {
+    if (reduce) { setBarrasEnter(true); return; }
+    if (!loading && iconosListos) {
+      const t = setTimeout(() => setBarrasEnter(true), 120);
+      return () => clearTimeout(t);
+    }
+  }, [loading, iconosListos, reduce]);
 
   if (loading || !iconosListos) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -156,7 +166,7 @@ export default function MetodoTcmPerfil() {
 
             <Box>
               {/* Zona de barras */}
-              <Box ref={barrasRef} h={{ base: "180px", md: "240px" }}>
+              <Box h={{ base: "180px", md: "240px" }}>
                 <Flex h="100%" align="flex-end" justify="space-between"
                       gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }}>
                   {ORDEN_ELEMENTOS.map((el, i) => (

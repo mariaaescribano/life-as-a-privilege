@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { Global } from "@emotion/react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { tcmBg, tcmTxt } from "../../GlobalVariables";
 import {
@@ -42,10 +43,18 @@ export type Ciclo = "sheng" | "ke";
 export interface Relacion { ciclo: Ciclo; origen: Elemento; destino: Elemento; }
 
 // Foto de fondo por ciclo (fondo grande de la estrella de cada ciclo).
-const FONDO_CICLO: Record<Ciclo, string> = {
+export const FONDO_CICLO: Record<Ciclo, string> = {
   sheng: "/recorrido/tcm/fondos/generador.png",
   ke: "/recorrido/tcm/fondos/controlador.png",
 };
+
+// Latido de brillo de las flechas: pulsan de un glow suave a uno intenso, para
+// que se note que son clicables. Usa `currentColor`, así cada flecha late en su
+// propio color (basta con fijarle `color` en el estilo).
+const FLECHA_GLOW_CSS = `@keyframes flechaGlowPulse {
+  0%, 100% { filter: drop-shadow(0 0 3px currentColor); }
+  50%      { filter: drop-shadow(0 0 9px currentColor) drop-shadow(0 0 18px currentColor); }
+}`;
 
 // Foto propia de CADA relación (fondo del popup RelacionBox). Cada ciclo tiene
 // una carpeta con las 5 fotos, nombradas <origen><destino>.png (con una excepción
@@ -121,6 +130,7 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
 
   return (
     <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+      <Global styles={FLECHA_GLOW_CSS} />
       {/* Fondo grande: foto del ciclo, atenuada (oscura + leve desenfoque) para
           que no se lleve la atención y la estrella se lea bien encima */}
       <Box position="absolute" inset={0} bgImage={`url('${FONDO_CICLO[ciclo]}')`} bgSize="cover" bgPosition="center"
@@ -171,13 +181,17 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
                   <line x1={inicio.x} y1={inicio.y} x2={fin.x} y2={fin.y}
                         stroke="transparent" strokeWidth={18} strokeLinecap="round" />
                   <line x1={inicio.x} y1={inicio.y} x2={bc.x} y2={bc.y}
-                        stroke={color} strokeWidth={activo ? 4 : 2.5} strokeLinecap="butt"
+                        stroke={color} strokeWidth={activo ? 4.5 : 3} strokeLinecap="butt"
                         strokeDasharray={ciclo === "ke" ? "6 5" : undefined}
-                        opacity={activo ? 1 : 0.85}
-                        style={{ filter: `drop-shadow(0 0 ${activo ? 7 : 3}px ${color})`, transition: "all 0.15s" }} />
+                        opacity={activo ? 1 : 0.95}
+                        style={activo
+                          ? { filter: `drop-shadow(0 0 9px ${color}) drop-shadow(0 0 16px ${color})`, transition: "all 0.15s" }
+                          : { color, transition: "all 0.15s", animation: `flechaGlowPulse 1.9s ease-in-out ${walk.indexOf(origen) * 0.3}s infinite` }} />
                   <polygon points={`${fin.x},${fin.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`}
-                           fill={color} opacity={activo ? 1 : 0.9}
-                           style={{ filter: `drop-shadow(0 0 ${activo ? 6 : 2}px ${color})` }} />
+                           fill={color} opacity={1}
+                           style={activo
+                             ? { filter: `drop-shadow(0 0 9px ${color}) drop-shadow(0 0 15px ${color})` }
+                             : { color, animation: `flechaGlowPulse 1.9s ease-in-out ${walk.indexOf(origen) * 0.3}s infinite` }} />
                 </MotionG>
               );
             })}

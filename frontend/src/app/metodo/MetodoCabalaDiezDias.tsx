@@ -10,7 +10,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN } from "../../components/metodo/cabalaSefirot";
+import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { CABALA_TEST } from "../../components/metodo/cabalaTest";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
@@ -68,6 +68,7 @@ export default function MetodoCabalaDiezDias() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="10 días con tus dimensiones"
+              pageLabel={`${CABALA_PAG.dias}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: "← Diagnóstico final", onClick: () => navigate("/metodo/cabala/final") }}
               extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}

@@ -330,10 +330,10 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 50%     { opacity: 0.7; }
               }
             `}</style>
-            {/* Imagen de la disciplina (cabala.png) como relleno de los nodos en
-                modo senderos. Se atenúa con una capa negra encima. */}
-            <pattern id="cabala-node-img" width="1" height="1" patternContentUnits="objectBoundingBox">
-              <image href="/img/fondos/cabala.png" width="1" height="1" preserveAspectRatio="xMidYMid slice" />
+            {/* Fondo propio de cada sefirá (círculo), tanto en el árbol como en
+                el modo senderos (ahí, muy atenuado). */}
+            <pattern id="sefira-node-img" width="1" height="1" patternContentUnits="objectBoundingBox">
+              <image href="/recorrido/cabala/sefirotfondo.png" width="1" height="1" preserveAspectRatio="xMidYMid slice" />
             </pattern>
             {/* Halo radial dorado de Keter (luz permanente). */}
             <radialGradient id="keter-halo" cx="50%" cy="50%" r="50%">
@@ -446,17 +446,18 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               >
                 {/* Zona de click ancha (invisible) */}
                 <line x1={s.x} y1={s.y} x2={e.x} y2={e.y} stroke="transparent" strokeWidth="22" strokeLinecap="round" />
-                {/* Línea visible */}
+                {/* Línea visible — los senderos son los protagonistas: brillan
+                    siempre a plena opacidad (lo que se atenúa son los nodos). */}
                 <line
                   x1={s.x} y1={s.y}
                   x2={e.x} y2={e.y}
                   stroke={cabalaTxt}
-                  strokeWidth={active ? 5 : 3}
+                  strokeWidth={active ? 6 : 4}
                   strokeLinecap="round"
                   filter={active ? 'url(#sefira-glow-hover)' : 'url(#sefira-glow)'}
                   style={{
                     pointerEvents: 'none',
-                    opacity: active ? 1 : 0.8,
+                    opacity: 1,
                     strokeDasharray: len + 4,
                     strokeDashoffset: len + 4,
                     animation: `pathDraw 0.7s ease ${idx * 0.04}s forwards`,
@@ -467,16 +468,20 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     ilustración ya se ha visto, la insignia se enciende en dorado. */}
                 {(() => {
                   const leido = !!readSenderos?.has(num)
+                  // Por defecto (sin ver): círculo relleno de dorado + número en
+                  // cabalaBg. Cuando ya se ha visto: al revés (hueco + número dorado).
+                  const fillCirculo = leido ? cabalaBg : cabalaTxt
+                  const fillNumero = leido ? cabalaTxt : cabalaBg
                   return (
                     <g style={{ pointerEvents: 'none', opacity: 0, animation: `senderoBadge 0.4s ease ${0.7 + idx * 0.04}s forwards` }}>
                       <circle
                         cx={mx} cy={my} r={active ? 12 : 10}
-                        fill={leido ? cabalaTxt : cabalaBg}
+                        fill={fillCirculo}
                         stroke={cabalaTxt} strokeWidth={active ? 2.5 : 1.5}
-                        style={leido ? { filter: `drop-shadow(0 0 5px ${cabalaTxt})` } : undefined}
+                        style={!leido ? { filter: `drop-shadow(0 0 5px ${cabalaTxt})` } : undefined}
                       />
                       <text x={mx} y={my + 3} textAnchor="middle" fontSize="9" fontFamily="Georgia, serif"
-                            fill={leido ? cabalaBg : cabalaTxt} style={{ fill: leido ? cabalaBg : cabalaTxt }}>
+                            fill={fillNumero} style={{ fill: fillNumero }}>
                         {num - 10}
                       </text>
                     </g>
@@ -504,11 +509,12 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
                   }}
                 >
-                  {/* Fondo: imagen de la disciplina + capa negra para que el
-                      nodo no llame tanto la atención (los senderos mandan). */}
-                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#cabala-node-img)" />
-                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="rgba(0,0,0,0.6)" />
-                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="none" stroke={`${cabalaTxt}66`} strokeWidth={1.5} />
+                  {/* Fondo del nodo: su foto propia (sefirotfondo) MUY atenuada —
+                      los nodos quedan en segundo plano para que los que brillen
+                      sean los senderos (las líneas). */}
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#sefira-node-img)" opacity={0.4} />
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill={`${cabalaBg}99`} />
+                  <circle cx={sefira.x} cy={sefira.y} r={R} fill="none" stroke={`${cabalaTxt}44`} strokeWidth={1.2} />
                   <text
                     x={sefira.x} y={sefira.y + 4}
                     textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fontStyle="italic"
@@ -520,11 +526,8 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               )
             }
 
-            const fillColor   = active ? cabalaTxt : `${cabalaTxt}cc`
             const strokeColor = active ? cabalaTxt : `${cabalaTxt}88`
             const strokeW     = active ? 3 : 2
-            const mainColor   = cabalaBg
-
 
             return (
               <g
@@ -540,9 +543,14 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
                 }}
               >
+                {/* Fondo del nodo = imagen propia de las sefirot. Un velo oscuro
+                    encima da contraste al nombre dorado; al pasar el ratón, se
+                    aclara para resaltar el nodo. */}
+                <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#sefira-node-img)" />
+                <circle cx={sefira.x} cy={sefira.y} r={R} fill={active ? `${cabalaBg}44` : `${cabalaBg}80`} />
                 <circle
                   cx={sefira.x} cy={sefira.y} r={R}
-                  fill={fillColor}
+                  fill="none"
                   stroke={strokeColor}
                   strokeWidth={strokeW}
                 />
@@ -553,8 +561,8 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   fontSize="9"
                   fontFamily="Georgia, serif"
                   fontStyle="italic"
-                  fill={mainColor}
-                  style={{ fill: mainColor }}
+                  fill={cabalaTxt}
+                  style={{ fill: cabalaTxt, textShadow: `0 1px 3px #000, 0 0 6px ${cabalaBg}` }}
                 >
                   {sefira.hebrewName}
                 </text>

@@ -79,7 +79,6 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
-         border={`1px solid ${nutricionTxt}2e`}
          boxShadow={glowSuave(nutricionTxt)} {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
       <Box position="relative" zIndex={1}>{children}</Box>

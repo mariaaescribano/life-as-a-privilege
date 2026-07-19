@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { nutricionNom } from "../../GlobalVariables";
 
 // Glow suave y blanquito del header (nada de sombras oscuras). `c` es el acento
 // de la disciplina (<disc>Txt). Reutilizado por todas las cajas del recorrido.
@@ -65,6 +66,9 @@ export function FotoBox({
 }) {
   const [imgErr, setImgErr] = useState(false);
   const hayFoto = !!foto && !imgErr;
+  // En Nutrición las tarjetas van SIN líneas (ni borde exterior ni raya
+  // separadora): el fondo claro hace que cualquier línea oscura cante mucho.
+  const sinLineas = nom === nutricionNom;
 
   return (
     <Box
@@ -80,10 +84,10 @@ export function FotoBox({
       borderRadius="2xl"
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
-      border={visto ? `1px solid ${tinta}aa` : `1px solid ${tinta}33`}
+      border={sinLineas ? "none" : (visto ? `1px solid ${tinta}aa` : `1px solid ${tinta}33`)}
       boxShadow={visto ? glowSuaveVisto(tinta) : glowSuave(tinta)}
       transition="all 0.22s ease"
-      _hover={{ transform: "translateY(-4px)", borderColor: `${tinta}88`,
+      _hover={{ transform: "translateY(-4px)", ...(sinLineas ? {} : { borderColor: `${tinta}88` }),
                 boxShadow: glowSuaveHover(tinta) }}
       _active={{ transform: "translateY(-1px)" }}
     >
@@ -120,16 +124,13 @@ export function FotoBox({
                  objectFit="cover" onError={() => setImgErr(true)} />
         ) : emoji ? (
           <Box as="span" fontSize={{ base: "44px", md: "60px" }} lineHeight="1">{emoji}</Box>
-        ) : (
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-               w={{ base: "36px", md: "44px" }} h={{ base: "36px", md: "44px" }} fill={`${tinta}55`}>
-            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
-          </Box>
-        )}
+        ) : null}
       </Box>
 
-      {/* Línea separadora a todo el ancho. */}
-      <Box position="relative" zIndex={1} h="1px" bg={`${tinta}33`} flexShrink={0} />
+      {/* Línea separadora a todo el ancho (en Nutrición se omite). */}
+      {!sinLineas && (
+        <Box position="relative" zIndex={1} h="1px" bg={`${tinta}33`} flexShrink={0} />
+      )}
 
       {/* Pie: título alineado a la izquierda. */}
       <Flex position="relative" zIndex={1} flex="1" align="center"

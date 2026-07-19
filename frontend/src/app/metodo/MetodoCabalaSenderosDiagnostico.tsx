@@ -17,6 +17,7 @@ import {
   puntuacionSendero,
   interpretacionSendero,
 } from "../../components/metodo/cabalaSenderos";
+import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
 const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
@@ -100,6 +101,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="Diagnóstico de los Senderos"
+              pageLabel={`${CABALA_PAG.senderosDiag}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}

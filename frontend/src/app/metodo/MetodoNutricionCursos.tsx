@@ -60,7 +60,6 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
       overflow="hidden"
       cursor={bloqueado ? "default" : "pointer"}
       aria-disabled={bloqueado}
-      border={`1px solid ${bloqueado ? `${nutricionTxt}33` : `${nutricionTxt}77`}`}
       opacity={bloqueado ? 0.78 : 1}
       boxShadow={bloqueado
         ? "inset 0 0 24px rgba(0,0,0,0.35)"
@@ -68,7 +67,6 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
       transition="all 0.25s ease"
       _hover={bloqueado ? undefined : {
         transform: "translateY(-6px)",
-        borderColor: nutricionTxt,
         boxShadow: `0 0 26px ${nutricionTxt}66, 0 0 64px ${nutricionTxt}33, inset 0 0 24px rgba(0,0,0,0.2)`,
       }}
       _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}

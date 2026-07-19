@@ -31,6 +31,8 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick }: {
       onClick={onClick}
       position="relative"
       overflow="hidden"
+      display="flex"
+      flexDirection="column"
       w="100%"
       h="100%"
       borderRadius="2xl"
@@ -58,23 +60,21 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick }: {
         </Flex>
       )}
 
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 2.5, md: 3 }}
-            p={{ base: 4, md: 5 }} h="100%">
-        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg={`${accent}22`}
-             border={`1px solid ${accent}66`}
-             boxShadow={`0 0 12px ${accent}55`}
-             display="flex" alignItems="center" justifyContent="center">
-          {ficha.foto && !imgErr ? (
-            <Image src={encodeURI(ficha.foto)} alt={ficha.nombre} w="100%" h="100%" objectFit="cover"
-                   onError={() => setImgErr(true)} />
-          ) : (
-            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-              {ficha.nombre.charAt(0)}
-            </Text>
-          )}
-        </Box>
+      {/* Foto a sangre en la parte de arriba (como en Sistemas). */}
+      <Box position="relative" zIndex={1} w="100%" aspectRatio={1} overflow="hidden" flexShrink={0}
+           bg={`${accent}22`}>
+        {ficha.foto && !imgErr && (
+          <Image src={encodeURI(ficha.foto)} alt={ficha.nombre} w="100%" h="100%" objectFit="cover"
+                 onError={() => setImgErr(true)} />
+        )}
+      </Box>
+
+      {/* Línea separadora a todo el ancho. */}
+      <Box position="relative" zIndex={1} h="1px" bg={`${accent}55`} flexShrink={0} />
+
+      {/* Pie: antetítulo + nombre. */}
+      <Flex position="relative" zIndex={1} direction="column" justify="center" flex="1" gap={1}
+            px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}>
         {ficha.eyebrow && (
           <Text color={accent} fontSize="3xs" fontWeight={700} letterSpacing="0.12em" textTransform="uppercase"
                 textAlign="center" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>

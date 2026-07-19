@@ -70,26 +70,29 @@ export function CursoCardDetalle({
       {/* Fondo propio de la disciplina (con su color real, sin velo) */}
       {hasDisciplinaBg(nom) && <DisciplinaBgLayer nom={nom} borderRadius="2xl" />}
 
-      {/* Contenido */}
-      <Flex direction="column" position="relative" zIndex={1} h="100%" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }} gap={{ base: 3, md: 3 }}>
-        {/* Foto del curso (16:9) — protagonista de la tarjeta */}
-        <Box
-          position="relative"
-          borderRadius="xl"
-          overflow="hidden"
-          w="100%"
-          sx={{ aspectRatio: "16 / 9" }}
-        >
-          <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block"
-                 onLoad={() => setFotoOk(true)}
-                 opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
-          {!fotoOk && (
-            <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-              <SpinnerTurquesa fullScreen={false} color={color} />
-            </Box>
-          )}
-        </Box>
+      {/* Foto del curso a sangre — ocupa toda la parte de arriba de la tarjeta
+          (ancho completo, sin margen ni borde; las esquinas superiores las
+          redondea el overflow:hidden de la tarjeta). */}
+      <Box
+        position="relative"
+        zIndex={1}
+        w="100%"
+        flexShrink={0}
+        overflow="hidden"
+        sx={{ aspectRatio: "16 / 9" }}
+      >
+        <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block"
+               onLoad={() => setFotoOk(true)}
+               opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
+        {!fotoOk && (
+          <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+            <SpinnerTurquesa fullScreen={false} color={color} />
+          </Box>
+        )}
+      </Box>
 
+      {/* Contenido */}
+      <Flex direction="column" position="relative" zIndex={1} flex="1" px={{ base: 4, md: 5 }} pt={{ base: 3, md: 4 }} pb={{ base: 4, md: 5 }} gap={{ base: 3, md: 3 }}>
         {/* Descripción (secundaria) */}
         <Text
           color={color}

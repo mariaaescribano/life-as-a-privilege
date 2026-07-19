@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -13,7 +13,6 @@ import { useTusCelulas } from "./TusCelulasModal";
 import { IndiceFisiologia } from "./IndiceFisiologia";
 import { BotonCompania } from "../global/BotonCompania";
 import { Reveal } from "../global/Reveal";
-import { useReservarAltura } from "../../hooks/useReservarAltura";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -82,8 +81,10 @@ const perlaBg = (c: string): string =>
 function pos(forma: FormaFisio, i: number, n: number): { x: number; y: number } {
   if (forma === "row") return { x: ((i + 0.5) / n) * 100, y: 50 + (i % 2 === 0 ? -7 : 7) };
   if (forma === "membrana") return { x: ((i + 0.5) / n) * 100, y: i % 2 === 0 ? 30 : 70 };
+  // Cluster: círculo REAL (mismo radio en x/y) centrado en el centro del círculo
+  // negro (50%, 50%), para que el anillo de piezas quede concéntrico con él.
   const ang = (i / n) * Math.PI * 2 - Math.PI / 2;
-  return { x: 50 + Math.cos(ang) * 24, y: 50 + Math.sin(ang) * 26 };
+  return { x: 50 + Math.cos(ang) * 25, y: 50 + Math.sin(ang) * 25 };
 }
 
 function Perla({ def, size }: { def: PiezaDef; size: any }) {
@@ -97,6 +98,21 @@ function Perla({ def, size }: { def: PiezaDef; size: any }) {
                        fontSize={{ base: "sm", md: "md" }} style={{ userSelect: "none" }}>{def.glyph}</Text>
                </Box>
              } />
+    </Box>
+  );
+}
+
+// Hueco invisible que ocupa EXACTAMENTE el sitio de una pieza ya colocada, para
+// que las piezas que aún quedan no se recoloquen al arrastrar a sus hermanas.
+// Misma estructura (perla + etiqueta) que <Ficha> → mismo tamaño de celda.
+function GhostPieza({ def }: { def: PiezaDef }) {
+  return (
+    <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0}
+         visibility="hidden" aria-hidden style={{ pointerEvents: "none" }}>
+      <Perla def={def} size={{ base: "80px", md: "104px" }} />
+      <Text fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700" letterSpacing="0.05em" textTransform="uppercase">
+        {def.label}
+      </Text>
     </Box>
   );
 }
@@ -156,11 +172,17 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
   const [completo, setCompleto] = useState(false);
   const [imgOk, setImgOk] = useState(false); // foto del resultado ya cargada
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
-  // Reserva la altura del box de piezas para que no encoja al arrastrarlas fuera.
-  const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
   const zonaRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
   const total = props.piezas.reduce((s, d) => s + d.n, 0);
+  // Lista COMPLETA y estable de piezas (orden fijo). Se renderizan todas siempre:
+  // cada una ocupa su celda fija y, al colocarla, deja un hueco invisible en su
+  // sitio → las demás no se mueven ni el box cambia de tamaño.
+  const todas = useMemo(
+    () => props.piezas.flatMap((d) => Array.from({ length: d.n }, (_, i) => ({ id: `${d.tipo}-${i}`, def: d }))),
+    [props.piezas],
+  );
+  const puestasIds = new Set(puestas.map((p) => p.id));
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -298,13 +320,17 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" align="center" justify="center" gap={5}
                           px={{ base: 5, md: 8 }} py={{ base: 8, md: 9 }} h="100%" minH={{ base: "auto", md: "340px" }}>
-                      <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
+                      <Box display="grid" gridTemplateColumns="repeat(2, auto)"
                            justifyContent="center" justifyItems="center" alignContent="center"
-                           columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }}
-                           minH={piezasMinH ? `${piezasMinH}px` : "70px"}>
-                        <AnimatePresence>
-                          {pendientes.map((p) => (<Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />))}
-                        </AnimatePresence>
+                           columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }}>
+                        {/* Todas las piezas SIEMPRE presentes: la colocada se vuelve
+                            un hueco invisible en su celda, así las que faltan no se
+                            recolocan (donde empiezan, ahí se quedan). */}
+                        {todas.map((p) => (
+                          puestasIds.has(p.id)
+                            ? <GhostPieza key={p.id} def={p.def} />
+                            : <Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />
+                        ))}
                       </Box>
                       {pendientes.length === 0 && (<Text color={`${props.glow}bb`} fontSize="md" fontStyle="italic">…uniéndose…</Text>)}
                       <Flex justify="center" gap={2} wrap="wrap" maxW="320px">

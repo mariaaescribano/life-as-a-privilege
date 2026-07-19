@@ -13,7 +13,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
-import { EstrellaCiclo, RelacionModal, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
+import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
@@ -50,9 +50,15 @@ export default function MetodoTcmCiclos() {
     setSel({ ciclo, origen, destino });
   };
 
-  // No quitamos el spinner hasta que los iconos de los elementos estén
-  // descargados, para que las estrellas no aparezcan con los círculos vacíos.
-  const iconosListos = usePrecargarImagenes(ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]));
+  // No quitamos el spinner hasta que estén descargados los iconos de los
+  // elementos Y las fotos de fondo de las dos estrellas (generador/controlador),
+  // para que la página no aparezca —ni las animaciones empiecen— hasta que los
+  // fondos ya se vean.
+  const iconosListos = usePrecargarImagenes([
+    ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
+    FONDO_CICLO.sheng,
+    FONDO_CICLO.ke,
+  ]);
 
   if (loading || !iconosListos) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;

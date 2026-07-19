@@ -100,9 +100,7 @@ function MarcadorCard({
 }) {
   const [min, max] = rangoDe(m.rango, sexo);
   const n = parse(valor);
-  const estado = n == null ? null : estadoDe(n, min, max);
   const relleno = n != null;
-  const fuera = estado === "bajo" || estado === "alto";
 
   return (
     <Box position="relative" borderRadius="xl" overflow="hidden" transition="all 0.25s"
@@ -169,24 +167,6 @@ function MarcadorCard({
             )}
           </Flex>
         </Flex>
-
-        {/* Fuera de lo normal · box elegante con estrella */}
-        {fuera && (
-          <Flex mt={4} align="center" gap={3} borderRadius="lg" px={{ base: 4, md: 5 }} py={3}
-                bg="rgba(0,0,0,0.32)" border="1px solid rgba(255,255,255,0.3)">
-            <Estrella size={{ base: "xl", md: "2xl" }} />
-            <Box>
-              <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "md" }} lineHeight="1.3"
-                    style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-                Tienes {n} {m.unidad}
-              </Text>
-              <Text color={`${fisiologiaTxt}ee`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-                    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
-                Lo ideal es {min}–{max} {m.unidad}
-              </Text>
-            </Box>
-          </Flex>
-        )}
 
         {!relleno && (
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mt={3}

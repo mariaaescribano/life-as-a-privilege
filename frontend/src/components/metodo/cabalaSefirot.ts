@@ -74,8 +74,28 @@ export interface SefiraContenido {
   clave: string[];
 }
 
-// Nº total de páginas (Intro + Árbol + 11 dimensiones + Diagnóstico + 22 Senderos).
-export const CABALA_TOTAL_PAGINAS = 15;
+// Números de página del recorrido de Cábala (secuencia lineal del índice).
+// El recorrido ya está completo, así que el número es fijo y conocido:
+//    1   Cábala (intro)
+//    2   El Árbol de la Vida
+//   3-13 las 11 dimensiones (sefirot) → cada una es `numero + 2`
+//   14   Diagnóstico (Mapa Evolutivo)
+//   15   Los Senderos
+//   16   Diagnóstico de los Senderos
+//   17   Diagnóstico Final
+//   18   Trabajo de 10 días
+export const CABALA_PAG = {
+  intro: 1,
+  arbol: 2,
+  diagnostico: 14,
+  senderos: 15,
+  senderosDiag: 16,
+  final: 17,
+  dias: 18,
+} as const;
+
+// Nº total de páginas del recorrido.
+export const CABALA_TOTAL_PAGINAS = CABALA_PAG.dias; // 18
 
 const KETER: SefiraContenido = {
   key: "kether",

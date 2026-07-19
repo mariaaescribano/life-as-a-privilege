@@ -12,7 +12,8 @@ import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
-import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicAstrologiaModal, VINETAS_CASAS } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
@@ -138,6 +139,8 @@ export default function MetodoAstrologiaLectura() {
   const [retos, setRetos] = useState<Reto[]>([]);
   const [retoAbierto, setRetoAbierto] = useState<Reto | null>(null);
   const [comicOpen, setComicOpen] = useState(false);
+  // Cómic de las casas: se intercala antes de pasar a «Casas».
+  const [comicCasasOpen, setComicCasasOpen] = useState(false);
   const { leidos: retosLeidos, marcarLeido: marcarReto, cargado } = useAstroLeidos("retos");
 
   // Abre un punto clave y lo marca como leído (persistente en BD).
@@ -195,7 +198,8 @@ export default function MetodoAstrologiaLectura() {
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={{
                 label: "Casas →",
-                onClick: () => navigate("/metodo/astrologia/casas"),
+                // Antes de pasar a «Casas» intercalamos el cómic de las casas.
+                onClick: () => setComicCasasOpen(true),
                 disabled: !todosRetosLeidos,
                 disabledTooltip: "Lee todos tus puntos clave para continuar.",
               }}
@@ -297,6 +301,17 @@ export default function MetodoAstrologiaLectura() {
       </Modal>
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
+
+      {/* Cómic de las casas: intercalado antes de «Casas». */}
+      <ComicPasoModal
+        isOpen={comicCasasOpen}
+        onClose={() => setComicCasasOpen(false)}
+        onContinue={() => navigate("/metodo/astrologia/casas")}
+        vinetas={VINETAS_CASAS}
+        continueLabel="Casas"
+        themeColor={astrologiaTxt}
+        textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
+      />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />
       <SiteFooter />

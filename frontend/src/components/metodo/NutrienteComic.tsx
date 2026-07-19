@@ -127,14 +127,6 @@ export function NutrienteComic({ vinetas }: { vinetas: Vineta[] }) {
           )}
         </Box>
 
-        {/* Separador: rayita horizontal en móvil, vertical en escritorio */}
-        <Box flexShrink={0} alignSelf="center" borderRadius="full"
-             w={{ base: "52px", md: "1px" }} h={{ base: "1px", md: "190px" }}
-             bgGradient={{
-               base: `linear(to-r, transparent, ${nutricionTxt}aa, transparent)`,
-               md: `linear(to-b, transparent, ${nutricionTxt}aa, transparent)`,
-             }} />
-
         {/* Texto — grande y aireado, como en Ilustraciones. Altura limitada a la
             de la foto: si el texto es más largo, hace scroll vertical dentro en
             vez de agrandar el box. */}
@@ -147,7 +139,7 @@ export function NutrienteComic({ vinetas }: { vinetas: Vineta[] }) {
                 scrollbarColor: `${nutricionTxt}44 transparent`,
               }}>
           {v.paragraphs.map((p, k) => (
-            <Text key={`${idx}-${k}`} color={TINTA} fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.95"
+            <Text key={`${idx}-${k}`} color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.9"
                   letterSpacing="0.02em" fontWeight="400" textAlign={{ base: "center", md: "left" }}>
               {p}
             </Text>

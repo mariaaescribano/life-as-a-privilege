@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
+import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { astrologiaTxt } from "../../GlobalVariables";
@@ -18,9 +18,11 @@ import { astrologiaTxt } from "../../GlobalVariables";
 interface IntroComicModalProps {
   isOpen: boolean;
   vinetas: Vineta[];
-  /** Se llama al terminar el cómic (botón final o tick). Persiste + cierra. */
-  onFinish: () => void;
-  /** Se llama al cerrar sin terminar (X / Escape). Solo cierra. */
+  /** Ya no se usa: el cómic de intro ahora SIEMPRE aparece (no se marca como
+   *  visto). Se mantiene opcional por compatibilidad con las llamadas. */
+  onFinish?: () => void;
+  /** Se llama al cerrar (X / Escape / tick de la última viñeta). Solo cierra;
+   *  como no marca «visto», el cómic volverá a salir la próxima vez. */
   onClose: () => void;
   /** Color de acento. Por defecto el dorado de astrología (que usa fondo
    *  estrellado). Ayurveda/TCM pasan el color de su disciplina. */
@@ -44,7 +46,6 @@ interface IntroComicModalProps {
 export function IntroComicModal({
   isOpen,
   vinetas,
-  onFinish,
   onClose,
   themeColor = astrologiaTxt,
   disciplinaBgImage,
@@ -70,46 +71,12 @@ export function IntroComicModal({
           key={String(isOpen)}
           vinetas={vinetas}
           onClose={onClose}
-          onComplete={onFinish}
           themeColor={themeColor}
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
           textColor={textColor}
           loader={loader}
-          pageExtra={(_index, { isLast }) =>
-            isLast ? (
-              <Box display="flex" justifyContent="center">
-                <Box
-                  as="button"
-                  onClick={onFinish}
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={2}
-                  px={{ base: 7, md: 9 }}
-                  py={{ base: 2.5, md: 3 }}
-                  borderRadius="full"
-                  bg={themeColor}
-                  color="#0a0a1a"
-                  border={`1px solid ${themeColor}`}
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "sm", md: "md" }}
-                  letterSpacing="0.05em"
-                  cursor="pointer"
-                  boxShadow={`0 0 18px ${themeColor}66, 0 0 40px ${themeColor}33`}
-                  transition="all 0.2s"
-                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${themeColor}88, 0 0 58px ${themeColor}44` }}
-                >
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                       w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
-                    <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
-                  </Box>
-                  Leído
-                </Box>
-              </Box>
-            ) : null
-          }
         />
       </ModalContent>
     </Modal>

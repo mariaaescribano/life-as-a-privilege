@@ -20,7 +20,6 @@ import {
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
-         border={`1px solid ${nutricionTxt}2e`}
          boxShadow="0 6px 24px rgba(0,0,0,0.22), 0 0 16px rgba(255,255,255,0.1)" {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
       <Box position="relative" zIndex={1}>{children}</Box>
@@ -94,10 +93,10 @@ function BarraMacros({ macros }: { macros: Alimento["macros"] }) {
 function MoleculaCard({ m, onClick }: { m: Molecula; onClick: () => void }) {
   return (
     <Box as="button" onClick={onClick} textAlign="left" w="100%" borderRadius="xl"
-         bg={`${nutricionBg}e6`} border={`1px solid ${nutricionTxt}22`}
+         bg={`${nutricionBg}e6`}
          px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}
          boxShadow="0 2px 10px rgba(0,0,0,0.14)" cursor="pointer" transition="all 0.18s"
-         _hover={{ transform: "translateY(-2px)", borderColor: `${nutricionTxt}55`, boxShadow: "0 6px 18px rgba(0,0,0,0.2)" }}>
+         _hover={{ transform: "translateY(-2px)", boxShadow: "0 6px 18px rgba(0,0,0,0.2)" }}>
       <Flex align="center" justify="space-between" gap={3}>
         <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "sm", md: "md" }} lineHeight="1.2">
           {m.nombre}

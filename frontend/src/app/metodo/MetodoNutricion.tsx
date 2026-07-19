@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import {
+  Box, Flex, Text,
+  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
+} from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -38,6 +41,7 @@ export default function MetodoNutricion() {
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
   const [caloriasOpen, setCaloriasOpen] = useState(false); // cómic de transición a nutrientes
+  const [avisoOpen, setAvisoOpen] = useState(false); // popup del aviso importante
   const intro = useIntroComic("metodo-nutricion"); // cómic de intro, 1ª vez
 
   useEffect(() => {
@@ -195,39 +199,30 @@ export default function MetodoNutricion() {
             </Breathe>
           </Reveal>
 
-          {/* ── Aviso importante ── */}
-          <Reveal direction="up" distance={20} delay={0.24} duration={0.6} w="100%">
-            <Flex
-              w="100%"
-              align="flex-start"
-              gap={{ base: 3, md: 4 }}
-              px={{ base: 5, md: 7 }}
-              py={{ base: 4, md: 5 }}
-              borderRadius="2xl"
-              bg={`${nutricionBg}e6`}
-              border={`1px solid ${nutricionTxt}44`}
-              borderLeft={`4px solid ${nutricionTxt}`}
-              boxShadow="0 6px 22px rgba(0,0,0,0.22)"
+          {/* ── Disparador del aviso (botón discreto, centrado) ── */}
+          <Reveal direction="up" distance={18} delay={0.24} duration={0.6} display="flex" justifyContent="center">
+            <Box
+              as="button"
+              onClick={() => setAvisoOpen(true)}
+              display="inline-flex"
+              alignItems="center"
+              gap={2}
+              px={6}
+              py={2.5}
+              borderRadius="full"
+              bg={`${nutricionTxt}12`}
+              border={`1px solid ${nutricionTxt}55`}
+              color={nutricionTxt}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.04em"
+              cursor="pointer"
+              transition="all 0.2s"
+              _hover={{ bg: `${nutricionTxt}22`, transform: "translateY(-1px)" }}
             >
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                   w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }}
-                   fill={nutricionTxt} flexShrink={0} mt="2px">
-                <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
-              </Box>
-              <Box textAlign="left">
-                <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }}
-                      letterSpacing="0.02em" mb={1}>
-                  Aviso importante
-                </Text>
-                <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-                  Todo lo que encontrarás aquí es contenido educativo para que entiendas mejor tu
-                  cuerpo y tu alimentación. No sustituye el consejo médico. Si de verdad necesitas
-                  una ayuda concreta con tu dieta —por una condición, un objetivo de salud o
-                  cualquier duda personal— acude a un profesional (médico o dietista-nutricionista
-                  colegiado) que pueda acompañarte de forma individual.
-                </Text>
-              </Box>
-            </Flex>
+              <Box as="span" fontSize="md">⚠</Box> Aviso importante
+            </Box>
           </Reveal>
         </Flex>
       </Flex>
@@ -245,6 +240,37 @@ export default function MetodoNutricion() {
         onFinish={intro.finish}
         onClose={intro.close}
       />
+
+      {/* ── Aviso importante (popup centrado, igual que las demás disciplinas) ── */}
+      <Modal isOpen={avisoOpen} onClose={() => setAvisoOpen(false)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "lg" }}>
+        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(6px)" }} />
+        <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
+          <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow="0 26px 70px rgba(0,0,0,0.4)">
+            <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
+            <ModalCloseButton color={nutricionTxt} zIndex={3} />
+            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
+              <Flex direction="column" gap={4}>
+                <Flex align="center" justify="center" gap={2.5}>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="28px" h="28px" fill={nutricionTxt} flexShrink={0}>
+                    <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+                  </Box>
+                  <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em">
+                    Importante
+                  </Text>
+                </Flex>
+                <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${nutricionTxt}66, transparent)`} />
+                <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
+                  Todo lo que encontrarás aquí es contenido educativo para que entiendas mejor tu
+                  cuerpo y tu alimentación. No sustituye el consejo médico. Si de verdad necesitas
+                  una ayuda concreta con tu dieta —por una condición, un objetivo de salud o
+                  cualquier duda personal— acude a un profesional (médico o dietista-nutricionista
+                  colegiado) que pueda acompañarte de forma individual.
+                </Text>
+              </Flex>
+            </ModalBody>
+          </Box>
+        </ModalContent>
+      </Modal>
 
       {/* Transición a Los nutrientes: cómic «Las calorías no existen». */}
       <ComicCaloriasModal

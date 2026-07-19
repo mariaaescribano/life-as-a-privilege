@@ -20,7 +20,8 @@ import {
   ayurvedaNomLink,
 } from "../../GlobalVariables";
 import { welcomeDisciplinas } from "../../data/welcomeDisciplinas";
-import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 type Discipline = {
   name: string;
@@ -118,6 +119,13 @@ const disciplines: Discipline[] = [
   },
 ];
 
+// Todas las fotos de la portada: el mandala de bienvenida no aparece hasta que
+// TODAS estén descargadas, para que la página no se rellene a trozos.
+const WELCOME_IMGS: string[] = [
+  "/img/icono/life.png",
+  ...(disciplines.map((d) => disciplinaBgImg(d.name)).filter(Boolean) as string[]),
+];
+
 // ── Sombras de texto de los popups (mismo criterio que El Recorrido) ──
 // La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
 // TCM lleva sombra granate; Cábala, Fisiología y Cultura sombra negra.
@@ -166,6 +174,7 @@ const Welcome = () => {
   const disciplinasTitleReveal = useReveal(0.2);
   const disciplinasReveal = useReveal(0.05);
   const [mounted, setMounted] = useState(false);
+  const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
 
   useEffect(() => {
@@ -203,8 +212,8 @@ const Welcome = () => {
           h={{ base: "54px", md: "72px" }}
           objectFit="contain"
           style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
+          opacity={mounted && imagenesListas ? 1 : 0}
+          transform={mounted && imagenesListas ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
         />
       </Flex>

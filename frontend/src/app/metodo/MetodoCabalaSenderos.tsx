@@ -9,20 +9,15 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import ArbolDeLaVida from "../../components/global/ArbolDeLaVida";
 import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
-import { CABALA_SENDEROS, senderoPorNum } from "../../components/metodo/cabalaSenderos";
-import { ilustracionSendero } from "../../components/metodo/cabalaSenderoIlustraciones";
-import { CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
+import { CABALA_SENDEROS } from "../../components/metodo/cabalaSenderos";
+import { CABALA_SENDERO_VINETAS, CABALA_SENDERO_VINETA_NUMS } from "../../components/metodo/cabalaSenderoIlustraciones";
+import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
 const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
-
-// Nombre del sendero para el antetítulo del visor (p.ej. «1 · Aleph»).
-const nombreSendero = (num: number): string => {
-  const s = senderoPorNum[num];
-  return s ? `${s.orden} · ${s.letra}` : "Sendero";
-};
 
 export default function MetodoCabalaSenderos() {
   const navigate = useNavigate();
@@ -92,7 +87,7 @@ export default function MetodoCabalaSenderos() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="Los 22 Senderos"
-              pageLabel={`${CABALA_TOTAL_PAGINAS}/${CABALA_TOTAL_PAGINAS}`}
+              pageLabel={`${CABALA_PAG.senderos}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
@@ -121,19 +116,24 @@ export default function MetodoCabalaSenderos() {
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.18} duration={0.8} w="100%">
             <Box
               w="100%"
+              position="relative"
+              overflow="hidden"
               boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}55`}
-              bg={cabalaBg}
               border={`1.5px solid ${cabalaTxt}55`}
               borderRadius="3xl"
               px={{ base: 6, md: 10 }}
               pt={{ base: 8, md: 10 }}
               pb={{ base: 8, md: 10 }}
             >
-              <ArbolDeLaVida
-                variant="senderos"
-                readSenderos={readNums}
-                onSenderoClick={(s) => setModalNum(s.num)}
-              />
+              {/* Fondo del box = imagen de la disciplina (cabala.png). */}
+              <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" overlay="rgba(6,3,1,0.5)" />
+              <Box position="relative" zIndex={1}>
+                <ArbolDeLaVida
+                  variant="senderos"
+                  readSenderos={readNums}
+                  onSenderoClick={(s) => setModalNum(s.num)}
+                />
+              </Box>
             </Box>
           </Reveal>
 
@@ -158,15 +158,17 @@ export default function MetodoCabalaSenderos() {
         </Flex>
       </Flex>
 
-      {/* Ilustración (cómic) del sendero pinchado. Al terminarla, se marca visto
-          (su badge se enciende en el árbol). */}
+      {/* Ilustraciones de los 22 senderos: se abre en el pulsado y se puede ir de
+          uno a otro con las flechas (sin salir y entrar). Cada uno se marca como
+          visto según se navega (su insignia se invierte en el árbol). */}
       {modalNum !== null && (
         <CabalaSefiraIlustracionModal
           isOpen={modalNum !== null}
-          vinetas={ilustracionSendero(modalNum)}
-          sefiraNombre={nombreSendero(modalNum)}
+          vinetas={CABALA_SENDERO_VINETAS}
+          initialIndex={Math.max(0, CABALA_SENDERO_VINETA_NUMS.indexOf(modalNum))}
+          onPageView={(i) => marcarLeido(CABALA_SENDERO_VINETA_NUMS[i])}
           onClose={() => setModalNum(null)}
-          onComplete={() => { marcarLeido(modalNum); setModalNum(null); }}
+          onComplete={() => setModalNum(null)}
         />
       )}
 

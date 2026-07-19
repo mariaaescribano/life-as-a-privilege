@@ -5,13 +5,13 @@ import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
 import { cabalaBg, cabalaNom, cabalaTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
-// Ilustración (cómic) de UNA sefirá del Árbol de la Vida, a pantalla completa.
-// Reutiliza el mismo visor que las ilustraciones del resto de disciplinas
-// (ComicViewer), con la foto y los colores de Cábala.
+// Ilustraciones del Árbol de la Vida, a pantalla completa. Reutiliza el visor
+// del resto de disciplinas (ComicViewer), con la foto y los colores de Cábala.
 //
-// El header muestra SIEMPRE «Ilustraciones» (grande) con el nombre de la sefirá
-// como antetítulo, sea cual sea la viñeta: forzamos titulo/eyebrow aquí para que
-// no dependa del contenido de cada viñeta.
+// Se le pasa la SECUENCIA completa de sefirot (una viñeta por dimensión) y el
+// índice por el que abrir: así, con las flechas del visor, se va de una
+// dimensión a la siguiente. Solo se muestra el texto de la viñeta (sin título ni
+// antetítulo). `onPageView` marca cada sefirá como leída según se navega.
 // ─────────────────────────────────────────────────────────────────────────
 
 const CABALA_IMG = disciplinaBgImg(cabalaNom) ?? "/img/fondos/cabala.png";
@@ -19,24 +19,21 @@ const CABALA_IMG = disciplinaBgImg(cabalaNom) ?? "/img/fondos/cabala.png";
 export function CabalaSefiraIlustracionModal({
   isOpen,
   vinetas,
-  sefiraNombre,
+  initialIndex = 0,
   onClose,
   onComplete,
+  onPageView,
 }: {
   isOpen: boolean;
   vinetas: Vineta[];
-  /** Nombre de la sefirá (antetítulo del header, p.ej. «1 · Keter»). */
-  sefiraNombre: string;
+  /** Índice de la viñeta por la que abrir (la sefirá pulsada). */
+  initialIndex?: number;
   onClose: () => void;
-  /** Se llama al terminar de ver la ilustración (tick de la última viñeta). */
+  /** Se llama al terminar (tick de la última viñeta). */
   onComplete?: () => void;
+  /** Se llama con el índice de la viñeta que se está viendo (para marcarla leída). */
+  onPageView?: (index: number) => void;
 }) {
-  const conCabecera = vinetas.map((v) => ({
-    ...v,
-    titulo: "Ilustraciones",
-    eyebrow: sefiraNombre,
-  }));
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg={cabalaBg} sx={{ backdropFilter: "blur(20px)" }} />
@@ -51,9 +48,11 @@ export function CabalaSefiraIlustracionModal({
         fontFamily="'EB Garamond', serif"
         sx={{ transform: "none !important" }}
       >
-        {isOpen && conCabecera.length > 0 && (
+        {isOpen && vinetas.length > 0 && (
           <ComicViewer
-            vinetas={conCabecera}
+            vinetas={vinetas}
+            initialIndex={initialIndex}
+            onPageView={onPageView}
             themeColor={cabalaTxt}
             textColor={cabalaTxt}
             disciplinaBgImage={CABALA_IMG}

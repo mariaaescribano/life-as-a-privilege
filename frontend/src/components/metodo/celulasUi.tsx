@@ -300,8 +300,8 @@ export function FichaFisioModal({
         >
           {/* Foto */}
           <Box
-            w={{ base: "80%", md: "340px" }}
-            maxW={{ base: "260px", md: "340px" }}
+            w={{ base: "90%", md: "380px" }}
+            maxW={{ base: "300px", md: "380px" }}
             aspectRatio={1}
             flexShrink={0}
             alignSelf="center"
@@ -319,19 +319,6 @@ export function FichaFisioModal({
               </Flex>
             )}
           </Box>
-
-          {/* Separador: rayita corta en móvil, vertical entre foto y texto en escritorio */}
-          <Box
-            flexShrink={0}
-            alignSelf="center"
-            w={{ base: "52px", md: "1px" }}
-            h={{ base: "1px", md: "150px" }}
-            borderRadius="full"
-            bgGradient={{
-              base: `linear(to-r, transparent, ${accent}aa, transparent)`,
-              md: `linear(to-b, transparent, ${accent}aa, transparent)`,
-            }}
-          />
 
           {/* Texto: título (lavanda, un poco más oscurito que el blanco) + línea + párrafos */}
           <Box
@@ -391,14 +378,15 @@ export function FichaFisioModal({
               </Flex>
             )}
 
-            <Flex direction="column" gap={4}>
+            <Flex direction="column" gap={{ base: 5, md: 6 }}>
               {parrafos.map((p, i) => (
                 <Text
                   key={i}
                   color={txtColor}
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight="1.85"
+                  fontSize={{ base: "2xl", md: "3xl" }}
+                  lineHeight="1.9"
                   letterSpacing="0.02em"
+                  fontWeight="400"
                   fontFamily="'EB Garamond', serif"
                   textAlign={{ base: "center", md: "left" }}
                   style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}

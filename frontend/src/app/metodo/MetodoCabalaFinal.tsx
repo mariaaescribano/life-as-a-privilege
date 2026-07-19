@@ -10,7 +10,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN } from "../../components/metodo/cabalaSefirot";
+import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { CABALA_TEST, testCompleto } from "../../components/metodo/cabalaTest";
 import {
   calcularTransiciones, nivelCombinado, sefiraEvaluable, polaridadSefira,
@@ -154,6 +154,7 @@ export default function MetodoCabalaFinal() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="Diagnóstico Final"
+              pageLabel={`${CABALA_PAG.final}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: "← Senderos", onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
               extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
