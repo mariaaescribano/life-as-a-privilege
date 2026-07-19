@@ -2,6 +2,7 @@ import type { Vineta } from "./ComicViewer";
 import {
   astrologiaTxt,
   ayurvedaBg, ayurvedaTxt,
+  cabalaBg, cabalaTxt,
   fisiologiaBg, fisiologiaTxt,
   neuropsicologiaBg, neuropsicologiaTxt,
   nutricionBg, nutricionTxt,
@@ -26,6 +27,7 @@ import {
 import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrologiaModal";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
 import { CELULA_VIVA } from "./comicCelulaViva";
+import { CABALA_INTRO } from "./comicCabalaIntro";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Galería de ILUSTRACIONES (página /ilustraciones). Reúne todas las series de
@@ -103,6 +105,16 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     themeColor: tcmTxt,
     disciplinaBgImage: "/img/fondos/tcm.png",
     disciplinaBgColor: tcmBg,
+  },
+  {
+    id: "origen-cabala",
+    titulo: "El Origen · según la Cábala",
+    disciplina: "Cábala",
+    cover: "/viñetas/cabala/origen/cabalaorigen1.png",
+    vinetas: CABALA_INTRO,
+    themeColor: cabalaTxt,
+    disciplinaBgImage: "/img/fondos/cabala.png",
+    disciplinaBgColor: cabalaBg,
   },
 
   // ── Fisiología ──

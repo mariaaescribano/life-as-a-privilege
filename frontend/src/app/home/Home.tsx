@@ -844,10 +844,25 @@ const Home = () => {
                 //   · Psicología: solo cuando está PAGADA (psicologia_suscrito).
                 // Ambas siguen con candado hasta que se pague / se pruebe el pago,
                 // pero siguen siendo clicables para poder abrir su pago.
-                // ⚠️ TEMPORAL: todas las disciplinas desbloqueadas y clicables.
-                // Revertir a la lógica de suscripción cuando termines lo que ibas a hacer.
-                const abierta = true;
-                const clickable = true;
+                const abierta =
+                  (d.name === astrologiaNom && metodoSuscrito !== false) ||
+                  (d.name === neuropsicologiaNom && psicologiaSuscrito === true) ||
+                  (d.name === ayurvedaNom && ayurvedaSuscrito === true) ||
+                  (d.name === tcmNom && tcmSuscrito === true) ||
+                  (d.name === fisiologiaNom && fisiologiaSuscrito === true) ||
+                  (d.name === nutricionNom && nutricionSuscrito === true) ||
+                  (d.name === cabalaNom && cabalaSuscrito === true);
+                // `clickable` = se puede pulsar aunque siga con candado, para poder
+                //   abrir su pago (real o el de prueba): la disciplina ya pagada, o
+                //   su prerrequisito —la disciplina anterior de la cadena— ya pagado.
+                const clickable =
+                  d.name === astrologiaNom ||
+                  (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true)) ||
+                  (d.name === ayurvedaNom && (ayurvedaSuscrito === true || psicologiaSuscrito === true)) ||
+                  (d.name === tcmNom && (tcmSuscrito === true || ayurvedaSuscrito === true)) ||
+                  (d.name === fisiologiaNom && (fisiologiaSuscrito === true || tcmSuscrito === true)) ||
+                  (d.name === nutricionNom && (nutricionSuscrito === true || fisiologiaSuscrito === true)) ||
+                  (d.name === cabalaNom && (cabalaSuscrito === true || nutricionSuscrito === true));
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
