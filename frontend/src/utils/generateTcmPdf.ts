@@ -422,7 +422,7 @@ export function generateTcmConsejosPdf(
     { key: "infusiones", label: "Infusiones" },
     { key: "hierbas", label: "Hierbas" },
     { key: "nutricion", label: "Nutrición" },
-    { key: "estiloDeVida", label: "Estilo de vida" },
+    { key: "estiloDeVida", label: "Estilo de Vida" },
   ];
 
   for (const cat of categories) {

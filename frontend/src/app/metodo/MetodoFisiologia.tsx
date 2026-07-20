@@ -155,7 +155,7 @@ export default function MetodoFisiologia() {
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
                 <Text
-                  color="white"
+                  color={fisiologiaTxt}
                   fontSize={{ base: "md", md: "lg" }}
                   lineHeight="1.95"
                   opacity={0.92}
@@ -168,7 +168,7 @@ export default function MetodoFisiologia() {
                   partir de las mismas partículas que nacieron en el corazón de las estrellas.
                 </Text>
                 <Text
-                  color="white"
+                  color={fisiologiaTxt}
                   fontSize={{ base: "md", md: "lg" }}
                   lineHeight="1.95"
                   opacity={0.92}
@@ -192,6 +192,8 @@ export default function MetodoFisiologia() {
         themeColor={fisiologiaTxt}
         disciplinaBgImage="/img/fondos/fisio.png"
         disciplinaBgColor={fisiologiaBg}
+        continueLabel="Fisiología"
+        onContinue={intro.close}
         onFinish={intro.finish}
         onClose={intro.close}
       />

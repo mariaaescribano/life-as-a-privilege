@@ -608,7 +608,7 @@ export default function TCMTestPage({
                   { key: "infusiones", label: "Infusiones" },
                   { key: "hierbas", label: "Hierbas" },
                   { key: "nutricion", label: "Nutrici\u00f3n" },
-                  { key: "estiloDeVida", label: "Estilo de vida" },
+                  { key: "estiloDeVida", label: "Estilo de Vida" },
                 ] as const;
 
                 const elTheme = getTheme(resultadoNombre);

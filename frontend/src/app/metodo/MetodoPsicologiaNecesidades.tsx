@@ -20,6 +20,8 @@ import {
   ESTADOS_NECESIDAD,
   opcionNecesidad,
   necesidadesRespondidas,
+  necesidadesCompletas,
+  necesidadDesbloqueada,
   type LineaDeVidaData,
   type Necesidad,
   type EstadoNecesidad,
@@ -102,6 +104,7 @@ export default function MetodoPsicologiaNecesidades() {
 
   const respondidas = necesidadesRespondidas({ necesidades: respuestas });
   const total = NECESIDADES.length;
+  const completas = necesidadesCompletas({ necesidades: respuestas });
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -121,7 +124,12 @@ export default function MetodoPsicologiaNecesidades() {
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
-            next={{ label: "Heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
+            next={{
+              label: "Heridas →",
+              onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`),
+              disabled: !completas,
+              disabledTooltip: "Responde todas las necesidades para continuar a Heridas.",
+            }}
           />
           </Reveal>
 
@@ -156,6 +164,7 @@ export default function MetodoPsicologiaNecesidades() {
               const op = opcionNecesidad(respuestas[n.key]);
               const marcada = !!op;
               const acento = op?.color ?? AZUL;
+              const desbloqueada = necesidadDesbloqueada({ necesidades: respuestas }, idx);
               return (
                 <Reveal key={n.key} inView direction="up" distance={26} duration={0.5} amount={0.25} delay={(idx % 3) * 0.06} display="flex">
                 <Flex
@@ -173,8 +182,9 @@ export default function MetodoPsicologiaNecesidades() {
                   py={{ base: 5, md: 6 }}
                   gap={3}
                   border="none"
+                  opacity={desbloqueada ? 1 : 0.55}
                   boxShadow={marcada ? `inset 0 0 0 9999px ${acento}14` : "none"}
-                  transition="box-shadow 0.3s ease, border-color 0.3s ease, transform 0.2s ease"
+                  transition="box-shadow 0.3s ease, border-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease"
                 >
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
@@ -189,31 +199,60 @@ export default function MetodoPsicologiaNecesidades() {
                     {n.necesidad}
                   </Text>
 
-                  {/* Botón central */}
-                  <Box
-                    as="button"
-                    onClick={() => setAbierta(n)}
-                    position="relative"
-                    zIndex={1}
-                    px={6}
-                    py={2.5}
-                    borderRadius="full"
-                    bg={marcada ? acento : "rgba(255,251,243,0.55)"}
-                    border={`1.5px solid ${marcada ? acento : `${TINTA}55`}`}
-                    color={marcada ? PAPEL : TINTA}
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="700"
-                    fontSize={{ base: "sm", md: "md" }}
-                    letterSpacing="0.03em"
-                    whiteSpace="nowrap"
-                    cursor="pointer"
-                    boxShadow={marcada ? `0 4px 16px ${acento}66` : `0 0 10px ${AZUL}22`}
-                    transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: marcada ? `0 6px 22px ${acento}88` : `0 0 16px ${AZUL}44` }}
-                    style={marcada ? { textShadow: "0 1px 3px rgba(60,28,10,0.45)" } : { textShadow: `0 1px 2px ${PAPEL}` }}
-                  >
-                    {marcada ? `${op!.label} ✓` : "Reflexionar"}
-                  </Box>
+                  {/* Botón central — bloqueado hasta que se responda la anterior */}
+                  {desbloqueada ? (
+                    <Box
+                      as="button"
+                      onClick={() => setAbierta(n)}
+                      position="relative"
+                      zIndex={1}
+                      px={6}
+                      py={2.5}
+                      borderRadius="full"
+                      bg={marcada ? acento : "rgba(255,251,243,0.55)"}
+                      border={`1.5px solid ${marcada ? acento : `${TINTA}55`}`}
+                      color={marcada ? PAPEL : TINTA}
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="700"
+                      fontSize={{ base: "sm", md: "md" }}
+                      letterSpacing="0.03em"
+                      whiteSpace="nowrap"
+                      cursor="pointer"
+                      boxShadow={marcada ? `0 4px 16px ${acento}66` : `0 0 10px ${AZUL}22`}
+                      transition="all 0.2s"
+                      _hover={{ transform: "translateY(-2px)", boxShadow: marcada ? `0 6px 22px ${acento}88` : `0 0 16px ${AZUL}44` }}
+                      style={marcada ? { textShadow: "0 1px 3px rgba(60,28,10,0.45)" } : { textShadow: `0 1px 2px ${PAPEL}` }}
+                    >
+                      {marcada ? `${op!.label} ✓` : "Reflexionar"}
+                    </Box>
+                  ) : (
+                    <Flex
+                      position="relative"
+                      zIndex={1}
+                      align="center"
+                      justify="center"
+                      gap={2}
+                      px={6}
+                      py={2.5}
+                      borderRadius="full"
+                      bg="rgba(255,251,243,0.3)"
+                      border={`1.5px solid ${TINTA}33`}
+                      color={`${TINTA}aa`}
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="700"
+                      fontSize={{ base: "sm", md: "md" }}
+                      letterSpacing="0.03em"
+                      whiteSpace="nowrap"
+                      cursor="not-allowed"
+                      title="Responde la necesidad anterior para desbloquearla."
+                    >
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           w="15px" h="15px" fill="currentColor" flexShrink={0}>
+                        <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
+                      </Box>
+                      Bloqueada
+                    </Flex>
+                  )}
                 </Flex>
                 </Reveal>
               );

@@ -172,8 +172,8 @@ const girar = keyframes`
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 `;
-export function TcmLoader() {
-  const c = tcmTxt;
+export function TcmLoader({ color = tcmTxt }: { color?: string } = {}) {
+  const c = color;
   return (
     <Shell>
       <Box
@@ -260,7 +260,7 @@ export function CabalaLoader() {
   );
 }
 
-// ── Cultura · mandala (flor de la vida) que gira y respira ───────────────────
+// ── Cultura · mandala (flor de la Vida) que gira y respira ───────────────────
 const girarLento = keyframes`
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }

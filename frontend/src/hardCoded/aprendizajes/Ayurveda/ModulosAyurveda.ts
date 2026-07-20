@@ -15,7 +15,7 @@ const detalles: Detalles = { color: ayurvedaTxt, icon: AyurvedaIcon, bgColor: ay
 const basePath = "/aprendizaje/videoLessonPage/" + ayurvedaNomLink;
 
 const conocerMiDosha: FloatingButtonConfig = {
-  label: "Conocer mi dosha",
+  label: "Conocer mi Doṣha",
   action: "espacio-auth",
   route: "/espacio/questions/" + ayurvedaNomLink,
 };
@@ -78,17 +78,17 @@ export const modulosAyurveda: ModuloContenido[] = [
     ],
   },
   {
-    title: "2. Los Doshas",
+    title: "2. Los Doṣhas",
     icon: AyurvedaIcon,
     floatingButton: conocerMiDosha,
     submodules: [
       {
         id: "ayu3",
-        nom: "Los Doshas",
+        nom: "Los Doṣhas",
         link: `${basePath}/ayu3`,
         linkAnterior: `${basePath}/ayu-i2`,
         linkNext: `${basePath}/ayu4`,
-        descripcion: "Entiende qué son los doshas, cómo surgen de los cinco elementos y cuáles son los tres tipos.",
+        descripcion: "Entiende qué son los Doṣhas, cómo surgen de los cinco elementos y cuáles son los tres tipos.",
         video: "Ycd1X3AnBPI",
         letra: letraAyu3,
         cursoId: "ayu-curso-1",
@@ -140,11 +140,11 @@ export const modulosAyurveda: ModuloContenido[] = [
       },
       {
         id: "ayu7",
-        nom: "Recapitulación de los Doshas",
+        nom: "Recapitulación de los Doṣhas",
         link: `${basePath}/ayu7`,
         linkAnterior: `${basePath}/ayu6`,
         linkNext: "",
-        descripcion: "Integra lo aprendido sobre los tres doshas y comprende por qué nos atrae aquello que nos desequilibra.",
+        descripcion: "Integra lo aprendido sobre los tres Doṣhas y comprende por qué nos atrae aquello que nos desequilibra.",
         video: "siZ5Rn0wSZc",
         letra: letraAyu8,
         cursoId: "ayu-curso-1",

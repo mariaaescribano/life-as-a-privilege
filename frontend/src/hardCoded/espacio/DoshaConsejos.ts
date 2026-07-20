@@ -24,7 +24,7 @@ export const DOSHA_CONSEJOS: Record<string, DoshaRecs> = {
       "Yoga suave y restaurativo · evitar ejercicio muy intenso",
       "Meditación diaria para calmar la mente dispersa",
       "Mantener el cuerpo caliente · evitar corrientes de aire y frío",
-      "Descanso suficiente · Vata necesita más horas de sueño que otros doshas",
+      "Descanso suficiente · Vata necesita más horas de sueño que otros Doṣhas",
     ],
     hierbas: [
       "Ashwagandha · adaptógeno que calma el sistema nervioso y nutre Vata",

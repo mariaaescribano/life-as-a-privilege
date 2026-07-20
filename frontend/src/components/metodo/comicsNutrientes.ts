@@ -102,7 +102,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
       src: src("proteinas", 4),
       paragraphs: [
         "Una enzima no aporta energía. Tampoco se consume. Simplemente acerca las moléculas adecuadas y hace posible que la reacción ocurra millones de veces más rápido.",
-        "Gracias a las enzimas podemos digerir alimentos, copiar el ADN, fabricar ATP, reparar tejidos y realizar prácticamente todas las funciones necesarias para vivir. Sin ellas, la vida sería demasiado lenta para existir.",
+        "Gracias a las enzimas podemos digerir alimentos, copiar el ADN, fabricar ATP, reparar tejidos y realizar prácticamente todas las funciones necesarias para vivir. Sin ellas, la Vida sería demasiado lenta para existir.",
         "Cada proteína que comes termina convertida en aminoácidos. Y con esos mismos aminoácidos tu cuerpo fabrica músculo, piel, hormonas, anticuerpos... e incluso las enzimas que hacen funcionar todas tus células. Una vez más, lo que comes acaba literalmente convirtiéndose en ti.",
       ],
     },
@@ -119,7 +119,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       src: src("vitaminas", 2),
       paragraphs: [
-        "Las vitaminas activan a las enzimas. Sin las vitaminas, las enzimas se quedarían apagadas, «sin vida».",
+        "Las vitaminas activan a las enzimas. Sin las vitaminas, las enzimas se quedarían apagadas, «sin Vida».",
         "Aunque solo las necesitamos en cantidades muy pequeñas... participan en miles de procesos distintos. Fabricar energía, reparar tejidos, producir ADN o proteger nuestras células.",
         "Nuestro cuerpo es sabio y las reutiliza una y otra vez mientras pueda.",
       ],
@@ -165,7 +165,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       src: src("minerales", 4),
       paragraphs: [
-        "Los minerales permiten que las células, los órganos y, por extensión, tú, funcionen. Los minerales permiten la vida.",
+        "Los minerales permiten que las células, los órganos y, por extensión, tú, funcionen. Los minerales permiten la Vida.",
       ],
     },
   ],
@@ -272,7 +272,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       src: src("agua", 1),
       paragraphs: [
-        "Nuestro cuerpo está formado por unos 37 billones de células. Y la inmensa mayoría vive rodeada de agua. El agua no es solo una bebida. Es el entorno donde ocurre la vida.",
+        "Nuestro cuerpo está formado por unos 37 billones de células. Y la inmensa mayoría vive rodeada de agua. El agua no es solo una bebida. Es el entorno donde ocurre la Vida.",
         "Aproximadamente el 60% de nuestro cuerpo es agua. Dentro de las células, alrededor de ellas y en la sangre. Sin ese medio acuoso, las moléculas ni siquiera podrían encontrarse para reaccionar.",
       ],
     },

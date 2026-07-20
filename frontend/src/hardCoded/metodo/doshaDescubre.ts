@@ -32,7 +32,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     intro: [
       "Antes de aprender qué comer o qué hábitos te ayudan, hay algo mucho más importante.",
       "Comprender tu naturaleza.",
-      "Una persona Vata no vive la vida igual que una persona Pitta o Kapha. Percibe el mundo de una manera diferente, piensa diferente y responde de forma diferente a las mismas situaciones.",
+      "Una persona Vata no vive la Vida igual que una persona Pitta o Kapha. Percibe el mundo de una manera diferente, piensa diferente y responde de forma diferente a las mismas situaciones.",
       "Eso no significa que una forma sea mejor que otra.",
       "Simplemente significa que **la naturaleza se expresa de maneras distintas en cada persona.**",
     ],
@@ -99,7 +99,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     intro: [
       "Antes de aprender qué comer o qué hábitos te ayudan, hay algo mucho más importante.",
       "Comprender tu naturaleza.",
-      "Una persona Pitta no vive la vida igual que una persona Vata o Kapha. Tiende a buscar dirección, propósito y resultados. Le gusta entender cómo funcionan las cosas y mejorar aquello que toca.",
+      "Una persona Pitta no vive la Vida igual que una persona Vata o Kapha. Tiende a buscar dirección, propósito y resultados. Le gusta entender cómo funcionan las cosas y mejorar aquello que toca.",
       "Eso no significa que una forma de ser sea mejor que otra.",
       "Simplemente significa que **la naturaleza se expresa de maneras distintas en cada persona.**",
     ],
@@ -157,7 +157,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     },
     reflexion: {
       titulo: "Reflexiona",
-      pregunta: "¿En qué aspecto de tu vida sientes que te exiges más de lo que te gustaría?",
+      pregunta: "¿En qué aspecto de tu Vida sientes que te exiges más de lo que te gustaría?",
       nota: "Guardaremos esta respuesta para recuperarla al final del mapa.",
     },
     cierre: [
@@ -169,7 +169,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     intro: [
       "Antes de aprender qué comer o qué hábitos te ayudan, hay algo mucho más importante.",
       "Comprender tu naturaleza.",
-      "Una persona Kapha no vive la vida igual que una persona Vata o Pitta. Tiende a buscar estabilidad, seguridad y armonía. Disfruta construyendo relaciones profundas, cuidando de los demás y creando un entorno donde las personas se sientan bien.",
+      "Una persona Kapha no vive la Vida igual que una persona Vata o Pitta. Tiende a buscar estabilidad, seguridad y armonía. Disfruta construyendo relaciones profundas, cuidando de los demás y creando un entorno donde las personas se sientan bien.",
       "Eso no significa que una forma de ser sea mejor que otra.",
       "Simplemente significa que **la naturaleza se expresa de maneras distintas en cada persona.**",
     ],
@@ -206,7 +206,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
         "Prefiero la estabilidad antes que los cambios constantes.",
         "Suelo cuidar de los demás antes que de mí.",
         "Cuando tomo una decisión, me mantengo firme.",
-        "Me cuesta cerrar etapas de mi vida.",
+        "Me cuesta cerrar etapas de mi Vida.",
         "A veces dejo pasar oportunidades porque espero «el momento perfecto».",
       ],
     },
@@ -226,11 +226,11 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     },
     reflexion: {
       titulo: "Reflexiona",
-      pregunta: "¿Qué hay en tu vida que sientes que ha llegado el momento de soltar o transformar?",
+      pregunta: "¿Qué hay en tu Vida que sientes que ha llegado el momento de soltar o transformar?",
       nota: "Guardaremos esta respuesta para recuperarla al final del mapa.",
     },
     cierre: [
-      "*No necesitas perder tu calma, necesitas recordar que la vida también crece cuando cambia.*",
+      "*No necesitas perder tu calma, necesitas recordar que la Vida también crece cuando cambia.*",
     ],
   },
 };

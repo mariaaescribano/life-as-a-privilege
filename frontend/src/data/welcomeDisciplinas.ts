@@ -30,7 +30,7 @@ export const welcomeDisciplinas: Record<
 
   astrologia: {
 
-    desc: "Los arquetipos que actúan en cada área de tu vida. Entiende cómo funcionan en ti y deja de pelearte contigo.",
+    desc: "Los arquetipos que actúan en cada área de tu Vida. Entiende cómo funcionan en ti y deja de pelearte contigo.",
 
   },
 

@@ -30,7 +30,7 @@ export const preguntasNeuroPsicologia: Bloque[] = [
       },
       { 
         idPregunta:"npmn6",
-        pregunta: "¿Tu madre se vive como alguien insuficiente? ¿Tu madre se ama y se valora todos los días de su vida? Si no es así, ¿cómo se autodestruye?",
+        pregunta: "¿Tu madre se vive como alguien insuficiente? ¿Tu madre se ama y se valora todos los días de su Vida? Si no es así, ¿cómo se autodestruye?",
       },
     ],
   },

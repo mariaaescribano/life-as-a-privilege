@@ -114,15 +114,8 @@ export default function MetodoPsicologiaDones() {
     }
   };
 
-  // Guardado: debounce al escribir; inmediato en las acciones (botones).
-  const programarGuardado = (resp: Record<string, string>, sin: string[]) => {
-    setEstadoGuardado("guardando");
-    pendiente.current = { resp, sin };
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      if (pendiente.current) { void persistir(pendiente.current.resp, pendiente.current.sin); pendiente.current = null; }
-    }, 900);
-  };
+  // Guardado SOLO explícito: no hay autoguardado al escribir. La persona debe
+  // pulsar «Guardar» (o «Sin ideas») en cada box que responda.
   const guardarAhora = (resp: Record<string, string>, sin: string[]) => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     pendiente.current = null;
@@ -146,13 +139,13 @@ export default function MetodoPsicologiaDones() {
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
   const siguiente = () => setPaso((i) => Math.min(total - 1, i + 1));
 
-  // Escribir texto quita la marca «sin ideas» de esa pregunta.
+  // Escribir texto quita la marca «sin ideas» de esa pregunta. NO se guarda solo:
+  // se persiste al pulsar «Guardar».
   const updateRespuesta = (key: string, valor: string) => {
     const resp = { ...respuestas, [key]: valor };
     const sin = valor.trim() ? sinIdeas.filter((k) => k !== key) : sinIdeas;
     setRespuestas(resp);
     if (sin !== sinIdeas) setSinIdeas(sin);
-    programarGuardado(resp, sin);
   };
   // «Sin ideas»: marca la pregunta como resuelta (sin texto) y pasa a la siguiente.
   const marcarSinIdeas = (key: string) => {

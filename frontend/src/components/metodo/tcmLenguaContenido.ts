@@ -64,7 +64,7 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
       { key: "normal", nombre: "Rosada", src: IMG("color-normal"), equilibrio: true,
         lectura: "Un rojo pálido uniforme (rosado): es el color fisiológico. La Sangre nutre bien y el Yin y el Yang están equilibrados." },
       { key: "palida", nombre: "Pálida", src: IMG("color-palida"), patrones: ["def-sangre", "def-yang"],
-        lectura: "Deficiencia de Sangre (no llega suficiente para nutrirla) o de Yang (no hay calor para impulsarla). Si además está muy húmeda, apunta a deficiencia de Yang del Riñón." },
+        lectura: "Deficiencia de Sangre (no llega suficiente para nutrirla) o de Yang (no hay calor para impulsarla). Si además está muy húmeda, apunta a deficiencia de Yang del riñón." },
       { key: "roja", nombre: "Roja", src: IMG("color-roja"), patrones: ["calor"],
         lectura: "Calor. Si conserva saburra, es Calor Pleno (por exceso); si no tiene saburra, es Calor por Vacío, originado por una deficiencia de Yin." },
       { key: "roja-oscura", nombre: "Rojo oscuro", src: IMG("color-rojo-oscuro"), patrones: ["calor"],
@@ -88,11 +88,11 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
       { key: "fina", nombre: "Fina", src: IMG("forma-fina"), patrones: ["def-sangre", "def-yin"],
         lectura: "Falta de sustancia: deficiencia de Sangre (si es pálida) o de Yin (si está pelada). Cuanto más fina, mayor la gravedad." },
       { key: "hinchada", nombre: "Hinchada", src: IMG("forma-hinchada"), patrones: ["humedad"],
-        lectura: "Acumulación de Humedad o Flema. Aunque su origen pueda ser una deficiencia de Qi del Bazo, la hinchazón es un patrón de exceso." },
+        lectura: "Acumulación de Humedad o Flema. Aunque su origen pueda ser una deficiencia de Qi del bazo, la hinchazón es un patrón de exceso." },
       { key: "marcas", nombre: "Con marcas de dientes", src: IMG("forma-marcas"), patrones: ["def-qi"],
-        lectura: "Deficiencia de Qi del Bazo. Suele acompañarse de lengua pálida y saburra blanca y fina." },
+        lectura: "Deficiencia de Qi del bazo. Suele acompañarse de lengua pálida y saburra blanca y fina." },
       { key: "agrietada", nombre: "Agrietada", src: IMG("forma-agrietada"), patrones: ["def-yin"],
-        lectura: "En general, deficiencia de Yin. La localización orienta: una grieta central hacia la punta se asocia al Corazón (predisposición al estrés); las grietas laterales, a los Pulmones." },
+        lectura: "En general, deficiencia de Yin. La localización orienta: una grieta central hacia la punta se asocia al corazón (predisposición al estrés); las grietas laterales, a los pulmones." },
     ],
   },
 
@@ -105,7 +105,7 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
       { key: "normal", nombre: "Estable", src: IMG("mov-normal"), equilibrio: true,
         lectura: "La lengua sale firme y centrada, sin temblor ni desviación." },
       { key: "temblorosa", nombre: "Temblorosa", src: IMG("mov-temblorosa"),
-        lectura: "Temblor rápido y de poca amplitud: deficiencia de Bazo y, en personas mayores, posible Viento Interno." },
+        lectura: "Temblor rápido y de poca amplitud: deficiencia de bazo y, en personas mayores, posible Viento Interno." },
       { key: "desviada", nombre: "Desviada", src: IMG("mov-desviada"),
         lectura: "Se desvía de la línea media: siempre indica Viento Interno. Frecuente tras un ictus; en persona sana, señal de alerta que merece valoración." },
       { key: "rigida", nombre: "Rígida", src: IMG("mov-rigida"),
@@ -122,7 +122,7 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
       { key: "normal", nombre: "Sin puntos ni venas marcadas", src: IMG("puntos-normal"), equilibrio: true,
         lectura: "Superficie uniforme y venas sublinguales apenas visibles, ni dilatadas ni oscuras: lo normal." },
       { key: "puntos-rojos", nombre: "Puntos rojos", src: IMG("puntos-rojos"),
-        lectura: "Papilas enrojecidas que sobresalen: siempre indican Calor. Su localización señala el órgano (p. ej., en el área del pecho, Calor tóxico en el Pulmón o la mama)." },
+        lectura: "Papilas enrojecidas que sobresalen: siempre indican Calor. Su localización señala el órgano (p. ej., en el área del pecho, Calor tóxico en el pulmón o la mama)." },
       { key: "vesiculas", nombre: "Vesículas blancas", src: IMG("puntos-vesiculas"),
         lectura: "Papilas que sobresalen con color blanco: suelen indicar Humedad." },
       { key: "venas", nombre: "Venas sublinguales púrpuras", src: IMG("puntos-venas"),
@@ -134,11 +134,11 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
   {
     dim: "saburra",
     titulo: "La saburra",
-    subtitulo: "La capa que recubre la lengua. Refleja el Qi del Estómago y la presencia de factores patógenos.",
+    subtitulo: "La capa que recubre la lengua. Refleja el Qi del estómago y la presencia de factores patógenos.",
     seleccionable: true,
     opciones: [
       { key: "normal", nombre: "Blanca y fina", src: IMG("saburra-normal"), equilibrio: true,
-        lectura: "Fina, blanca, con raíz y dejando ver el cuerpo por debajo: lo normal. El Qi del Estómago es fuerte." },
+        lectura: "Fina, blanca, con raíz y dejando ver el cuerpo por debajo: lo normal. El Qi del estómago es fuerte." },
       { key: "blanca-gruesa", nombre: "Blanca y gruesa", src: IMG("saburra-blanca-gruesa"), patrones: ["frio"],
         lectura: "Presencia de Frío (o un proceso externo). El grosor indica que hay un factor patógeno acumulado." },
       { key: "amarilla", nombre: "Amarilla", src: IMG("saburra-amarilla"), patrones: ["calor"],
@@ -150,7 +150,7 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
       { key: "gris-negra", nombre: "Gris o negra", src: IMG("saburra-gris-negra"),
         lectura: "Un patrón profundo o severo. Seca, se asocia a Calor extremo; húmeda o pegajosa, a Frío interno." },
       { key: "pelada", nombre: "Pelada o ausente", src: IMG("saburra-pelada"), patrones: ["def-yin"],
-        lectura: "La lengua sin saburra (o la que ha perdido su raíz) indica deficiencia de Qi y/o Yin del Estómago." },
+        lectura: "La lengua sin saburra (o la que ha perdido su raíz) indica deficiencia de Qi y/o Yin del estómago." },
     ],
   },
 
@@ -176,11 +176,11 @@ export const LENGUA_DIMENSIONES: DimensionLengua[] = [
 // ── Mapa de las zonas de la lengua (dónde aparece el cambio importa) ─────────
 export interface ZonaLengua { key: string; zona: string; organos: string; }
 export const LENGUA_ZONAS: ZonaLengua[] = [
-  { key: "punta", zona: "La punta", organos: "Corazón y Pulmón" },
-  { key: "centro", zona: "El centro", organos: "Bazo y Estómago" },
-  { key: "lados", zona: "Los laterales", organos: "Hígado y Vesícula Biliar" },
-  { key: "raiz", zona: "La raíz (parte posterior)", organos: "Riñón, Vejiga e Intestinos" },
-  { key: "pecho", zona: "El área del pecho (entre punta y centro)", organos: "Pulmón, Corazón y mama (en mujeres)" },
+  { key: "punta", zona: "La punta", organos: "corazón y pulmón" },
+  { key: "centro", zona: "El centro", organos: "bazo y estómago" },
+  { key: "lados", zona: "Los laterales", organos: "hígado y vesícula biliar" },
+  { key: "raiz", zona: "La raíz (parte posterior)", organos: "riñón, vejiga e intestinos" },
+  { key: "pecho", zona: "El área del pecho (entre punta y centro)", organos: "pulmón, corazón y mama (en mujeres)" },
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -265,12 +265,12 @@ export const PATRONES: Record<PatronLengua, PatronInfo> = {
     ],
   },
   "def-qi": {
-    nombre: "Deficiencia de Qi del Bazo",
-    senal: "El Bazo está flojo y no transforma bien el alimento en energía.",
+    nombre: "Deficiencia de Qi del bazo",
+    senal: "El bazo está flojo y no transforma bien el alimento en energía.",
     elemento: "tierra",
     comoEquilibrar: [
       "Comidas regulares, calientes y sin prisa; mastica bien.",
-      "Reduce azúcar, crudos y lácteos, que debilitan el Bazo.",
+      "Reduce azúcar, crudos y lácteos, que debilitan el bazo.",
       "Evita rumiar en exceso; da estabilidad a tus rutinas.",
     ],
   },
@@ -280,7 +280,7 @@ export const PATRONES: Record<PatronLengua, PatronInfo> = {
     elemento: "madera",
     comoEquilibrar: [
       "Alimentos que nutren la Sangre: remolacha, hoja verde oscura, legumbres, dátiles.",
-      "Duerme antes de medianoche (la Sangre se regenera en el Hígado de 1 a 3 h).",
+      "Duerme antes de medianoche (la Sangre se regenera en el hígado de 1 a 3 h).",
       "No agotes la vista ni te sobreexijas cuando andas bajo/a de energía.",
     ],
   },

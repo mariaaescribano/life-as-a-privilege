@@ -67,14 +67,14 @@ const TEXTOS: Record<number, string> = {
   22: "Lamed representa el paso de los límites al equilibrio. Enseña que la verdadera fortaleza no nace del control ni de la rigidez, sino de saber combinar firmeza y compasión con serenidad.",
   23: "Mem representa la capacidad de expresar nuestras necesidades con claridad y respeto. Enseña que comunicar nuestros límites fortalece las relaciones y evita que el silencio termine convirtiéndose en resentimiento.",
   24: "Nun simboliza la perseverancia que nace al mantener nuestros valores durante y a pesar de las dificultades.",
-  25: "Samekh representa la construcción de una vida coherente mediante hábitos constantes. Enseña que los valores solo se consolidan cuando se reflejan en las pequeñas decisiones que repetimos cada día.",
+  25: "Samekh representa la construcción de una Vida coherente mediante hábitos constantes. Enseña que los valores solo se consolidan cuando se reflejan en las pequeñas decisiones que repetimos cada día.",
   26: "Ayin representa la capacidad de expresar al mundo lo que realmente somos. Enseña que la autenticidad no consiste solo en conocernos, sino en tener el valor de comunicar nuestra verdad con respeto.",
   27: "Pe representa el poder transformador de la palabra. Enseña que compartir con autenticidad aquello que hemos aprendido puede inspirar, crear y ayudar al crecimiento de otras personas.",
   28: "Tsadi simboliza la transformación de la perseverancia en hábitos. Enseña que el cambio verdadero no depende del esfuerzo extraordinario, sino de pequeñas acciones repetidas hasta formar parte de nuestra identidad.",
   29: "Qof representa el paso de la perseverancia a los resultados visibles. Enseña que toda transformación exterior nace de un largo proceso invisible y que confiar en el camino es tan importante como alcanzar la meta.",
   30: "Resh representa la coherencia y unión entre lo que pensamos, decimos y hacemos. Enseña que expresar nuestros valores solo tiene sentido cuando nuestra rutina cotidiana refleja aquello que comunicamos.",
-  31: "Shin representa el momento en que aquello que expresamos deja de ser una idea y se convierte en una realidad visible. Enseña que las palabras y las decisiones solo alcanzan su verdadero valor cuando se traducen en acciones que transforman nuestra vida y nuestro entorno.",
-  32: "Tav representa el último paso del viaje: convertir los valores, hábitos y aprendizajes en una forma estable de vivir. Simboliza la culminación del proceso interior, donde la persona deja de perseguir una identidad ideal y simplemente la encarna en su vida cotidiana.",
+  31: "Shin representa el momento en que aquello que expresamos deja de ser una idea y se convierte en una realidad visible. Enseña que las palabras y las decisiones solo alcanzan su verdadero valor cuando se traducen en acciones que transforman nuestra Vida y nuestro entorno.",
+  32: "Tav representa el último paso del viaje: convertir los valores, hábitos y aprendizajes en una forma estable de vivir. Simboliza la culminación del proceso interior, donde la persona deja de perseguir una identidad ideal y simplemente la encarna en su Vida cotidiana.",
 };
 
 export const CABALA_SENDERO_ILUSTRACIONES: Record<number, Vineta[]> = Object.fromEntries(

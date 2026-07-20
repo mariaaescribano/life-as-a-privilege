@@ -46,6 +46,22 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   });
 }
 
+// Dibuja `draw` con opacidad (si el visor soporta GState); si no, opaco. Para
+// tintes suaves (paneles de sección, tarjetas) sin romper visores antiguos.
+function withAlpha(doc: jsPDF, opacity: number, draw: () => void): void {
+  const GS = (doc as any).GState;
+  if (GS) {
+    try {
+      doc.saveGraphicsState();
+      doc.setGState(new GS({ opacity }));
+      draw();
+      doc.restoreGraphicsState();
+      return;
+    } catch { /* sin GState: opaco */ }
+  }
+  draw();
+}
+
 export async function generateRecorridoPdf(
   dosha: string,
   doshaLabel: string,
@@ -57,6 +73,7 @@ export async function generateRecorridoPdf(
   const doshaColor = DOSHA_COLORS[dosha] ?? INK;
   const img = await loadImage(BG_IMG);
   let page = 1;
+  const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
 
   const fillBackground = () => { doc.setFillColor(...PAGE_BG); doc.rect(0, 0, PAGE_W, pageH, "F"); };
 
@@ -83,6 +100,8 @@ export async function generateRecorridoPdf(
   };
 
   const drawFooter = (p: number) => {
+    doc.setDrawColor(224, 205, 178); doc.setLineWidth(0.2);
+    doc.line(MARGIN, pageH - 12.5, PAGE_W - MARGIN, pageH - 12.5);
     doc.setFont(GARAMOND, "italic"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
     doc.text("Life as a Privilege  ·  Ayurveda", MARGIN, pageH - 8);
     doc.text(`${p}`, PAGE_W - MARGIN, pageH - 8, { align: "right" });
@@ -106,15 +125,26 @@ export async function generateRecorridoPdf(
   };
 
   // ── Bloques reutilizables ──────────────────────────────────────────────
+  // Cabecera de sección: banda redondeada con un tinte muy suave + barra de
+  // acento (color del dosha) + numeral. Aire de «capítulo».
+  let sectionNum = 0;
   const sectionTitle = (title: string) => {
-    ensureSpace(20);
-    y += 4;
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(17); doc.setTextColor(...INK);
-    doc.text(title, MARGIN, y);
-    y += 3;
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.5);
-    doc.line(MARGIN, y, MARGIN + 40, y);
-    y += 8;
+    ensureSpace(24);
+    y += 6;
+    sectionNum++;
+    const panelH = 12.5;
+    const panelTop = y - 7;
+    withAlpha(doc, 0.09, () => {
+      doc.setFillColor(...doshaColor);
+      doc.roundedRect(MARGIN, panelTop, CONTENT_W, panelH, 2.8, 2.8, "F");
+    });
+    doc.setFillColor(...doshaColor);
+    doc.roundedRect(MARGIN, panelTop, 2.4, panelH, 1.2, 1.2, "F");
+    doc.setFont(GARAMOND, "bold"); doc.setFontSize(9); doc.setTextColor(...MUTED);
+    doc.text(String(sectionNum).padStart(2, "0"), MARGIN + 7, y);
+    doc.setFont(GARAMOND, "bold"); doc.setFontSize(15.5); doc.setTextColor(...INK);
+    doc.text(title, MARGIN + 16, y);
+    y = panelTop + panelH + 7;
   };
 
   const paragraph = (text: string, opts?: { italic?: boolean; size?: number; color?: [number, number, number] }) => {
@@ -137,32 +167,44 @@ export async function generateRecorridoPdf(
     }
   };
 
+  // Pregunta + respuesta como TARJETA (tinte suave + barra de acento).
   const qaBlock = (pregunta: string, respuesta: string) => {
-    const pLines = doc.splitTextToSize(plain(pregunta), CONTENT_W) as string[];
-    const rLines = doc.splitTextToSize(plain(respuesta), CONTENT_W - 8) as string[];
-    ensureSpace(pLines.length * 5.5 + rLines.length * 6 + 8);
-    // Pregunta
+    const innerW = CONTENT_W - 16;
+    const pLines = doc.splitTextToSize(plain(pregunta), innerW) as string[];
+    const rLines = doc.splitTextToSize(plain(respuesta), innerW) as string[];
+    const textH = pLines.length * 5.5 + 1 + rLines.length * 6;
+    const padY = 5.5;
+    const cardH = textH + padY * 2;
+    ensureSpace(cardH + 5);
+    const cardTop = y - 4;
+    withAlpha(doc, 0.055, () => {
+      doc.setFillColor(...doshaColor);
+      doc.roundedRect(MARGIN, cardTop, CONTENT_W, cardH, 3, 3, "F");
+    });
+    doc.setFillColor(...doshaColor);
+    doc.roundedRect(MARGIN, cardTop, 2.2, cardH, 1.1, 1.1, "F");
+    let yy = cardTop + padY + 3.5;
     doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK_SOFT);
-    pLines.forEach((line) => { doc.text(line, MARGIN, y); y += 5.5; });
-    y += 1;
-    // Respuesta (con barra vertical en color del dosha)
-    const barTop = y - 3;
+    pLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 5.5; });
+    yy += 1;
     doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...INK);
-    rLines.forEach((line) => { doc.text(line, MARGIN + 8, y); y += 6; });
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(1.2);
-    doc.line(MARGIN + 2, barTop, MARGIN + 2, y - 5);
-    y += 5;
+    rLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 6; });
+    y = cardTop + cardH + 5;
   };
 
   /* ── PÁGINA 1 · portada ── */
   fillBackground();
   drawWatercolorBand(58);
+  // Marco fino doble de cortesía.
+  doc.setDrawColor(...doshaColor);
+  doc.setLineWidth(0.5); doc.rect(10, 10, PAGE_W - 20, pageH - 20);
+  doc.setLineWidth(0.2); doc.rect(12.4, 12.4, PAGE_W - 24.8, pageH - 24.8);
   doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi mapa", PAGE_W / 2, 76, { align: "center" });
+  doc.text("Mi mapa", PAGE_W / 2, 76, { align: "center", charSpace: 0.5 });
   doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
-  doc.text(`Ayurveda  ·  Dosha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
+  doc.text(`Ayurveda  ·  Doṣha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
   ornament(93);
-  y = 106;
+  y = 104;
 
   doc.setFont(GARAMOND, "italic"); doc.setFontSize(11.5); doc.setTextColor(...MUTED);
   const intro = doc.splitTextToSize(
@@ -170,7 +212,10 @@ export async function generateRecorridoPdf(
     CONTENT_W - 10,
   ) as string[];
   intro.forEach((line) => { doc.text(line, PAGE_W / 2, y, { align: "center" }); y += 6; });
-  y += 4;
+  y += 2;
+  doc.setFont(GARAMOND, "italic"); doc.setFontSize(9.5); doc.setTextColor(...MUTED);
+  doc.text(fecha, PAGE_W / 2, y, { align: "center" });
+  y += 3;
 
   /* ── Tus palabras ── */
   if (data.entradas.length > 0) {

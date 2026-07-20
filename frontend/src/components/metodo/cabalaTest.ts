@@ -50,11 +50,11 @@ export const CABALA_TEST: Record<CabalaPageKey, DimensionTest> = {
     key: "kether",
     etiqueta: "Propósito",
     preguntas: [
-      d("Siento que mi vida carece de una dirección clara."),
+      d("Siento que mi Vida carece de una dirección clara."),
       d("Cambio con frecuencia de objetivos porque pierdo la motivación."),
       e("Las decisiones importantes las tomo teniendo presentes mis valores más profundos."),
       x("Me cuesta disfrutar actividades que no considero útiles para mi propósito."),
-      x("Siento que necesito cumplir una misión extraordinaria para que mi vida tenga sentido."),
+      x("Siento que necesito cumplir una misión extraordinaria para que mi Vida tenga sentido."),
     ],
   },
   chokmah: {
@@ -160,7 +160,7 @@ export const CABALA_TEST: Record<CabalaPageKey, DimensionTest> = {
     key: "malkuth",
     etiqueta: "Manifestación",
     preguntas: [
-      d("Siento que mi vida no refleja realmente quién soy."),
+      d("Siento que mi Vida no refleja realmente quién soy."),
       d("Espero que las circunstancias cambien antes de actuar."),
       e("Mi forma de vivir refleja mis valores más importantes."),
       x("Mido mi valor personal por lo que consigo o produzco."),
@@ -227,5 +227,5 @@ export const INTEGRACION_LABEL: Record<Integracion, string> = {
 export const INTEGRACION_TEXTO: Record<Integracion, string> = {
   fuerte: "Tienes recursos para autorregular esta dimensión, aunque presente cierta tendencia al déficit o al exceso.",
   parcial: "Equilibrio parcial: conviene observar en qué contextos aparecen los extremos.",
-  fragil: "El equilibrio es frágil, por lo que las tendencias detectadas probablemente afectan de forma más clara a tu vida cotidiana.",
+  fragil: "El equilibrio es frágil, por lo que las tendencias detectadas probablemente afectan de forma más clara a tu Vida cotidiana.",
 };

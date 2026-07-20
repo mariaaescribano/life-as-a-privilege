@@ -17,13 +17,13 @@ const explorarMisHeridas: FloatingButtonConfig = {
 
 export const modulosKarma: ModuloContenido[] = [
   {
-    title: "1. El sentido de la vida",
+    title: "1. El sentido de la Vida",
     icon: AyurvedaIcon,
     floatingButton: explorarMisHeridas,
     submodules: [
       {
         id: "ayu-kar1",
-        nom: "1.1 ¿Sabes el sentido de tu vida?",
+        nom: "1.1 ¿Sabes el sentido de tu Vida?",
         link: `${basePath}/ayu-kar1`,
         linkAnterior: "",
         linkNext: `${basePath}/ayu-kar2`,
@@ -104,7 +104,7 @@ export const modulosKarma: ModuloContenido[] = [
         link: `${basePath}/ayu-kar6`,
         linkAnterior: `${basePath}/ayu-kar5`,
         linkNext: `${basePath}/ayu-kar7`,
-        descripcion: "Cuando no vemos nuestras heridas, la vida nos pone espejos que nos señalan dónde están.",
+        descripcion: "Cuando no vemos nuestras heridas, la Vida nos pone espejos que nos señalan dónde están.",
         video: "xE_kd16eWBk",
         letra: letraKarma5,
         cursoId: "ayu-curso-3",

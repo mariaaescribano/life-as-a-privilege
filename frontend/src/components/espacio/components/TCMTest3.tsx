@@ -89,9 +89,9 @@ const ELEMENTOS = [
 const INTERPRETACIONES = [
   {
     nombre: "Madera",
-    subtitulo: "Estancamiento de Hígado",
+    subtitulo: "Estancamiento de hígado",
     descripcion:
-      "El patrón predominante es la desarmonía de Madera. El Qi de Hígado se encuentra estancado o ascendente. Prioriza movimiento físico, expresión emocional y técnicas de gestión del estrés. Evita exceso de trabajo sin descanso y alimentos muy grasos o picantes.",
+      "El patrón predominante es la desarmonía de Madera. El Qi de hígado se encuentra estancado o ascendente. Prioriza movimiento físico, expresión emocional y técnicas de gestión del estrés. Evita exceso de trabajo sin descanso y alimentos muy grasos o picantes.",
   },
   {
     nombre: "Fuego",
@@ -101,21 +101,21 @@ const INTERPRETACIONES = [
   },
   {
     nombre: "Tierra",
-    subtitulo: "Deficiencia de Qi de Bazo",
+    subtitulo: "Deficiencia de Qi de bazo",
     descripcion:
-      "El patrón predominante es la desarmonía de Tierra. El Qi de Bazo está debilitado con tendencia a la humedad interna. Prioriza comidas calientes y regulares, masticación pausada y reducción de la rumiación mental. Evita crudos, lácteos en exceso y el comer deprisa o con ansiedad.",
+      "El patrón predominante es la desarmonía de Tierra. El Qi de bazo está debilitado con tendencia a la humedad interna. Prioriza comidas calientes y regulares, masticación pausada y reducción de la rumiación mental. Evita crudos, lácteos en exceso y el comer deprisa o con ansiedad.",
   },
   {
     nombre: "Metal",
-    subtitulo: "Deficiencia de Qi de Pulmón",
+    subtitulo: "Deficiencia de Qi de pulmón",
     descripcion:
-      "El patrón predominante es la desarmonía de Metal. El Qi de Pulmón muestra signos de debilidad o bloqueo emocional. Prioriza la respiración consciente, la expresión de la tristeza y el contacto con la naturaleza. Evita el exceso de introspección sin acción y los entornos cerrados y secos.",
+      "El patrón predominante es la desarmonía de Metal. El Qi de pulmón muestra signos de debilidad o bloqueo emocional. Prioriza la respiración consciente, la expresión de la tristeza y el contacto con la naturaleza. Evita el exceso de introspección sin acción y los entornos cerrados y secos.",
   },
   {
     nombre: "Agua",
-    subtitulo: "Deficiencia de Riñón",
+    subtitulo: "Deficiencia de riñón",
     descripcion:
-      "El patrón predominante es la desarmonía de Agua. El Jing o el Qi de Riñón muestran signos de agotamiento. Prioriza el descanso profundo, los alimentos tonificantes (semillas, legumbres, algas) y la reducción del estrés crónico. Evita el exceso de actividad nocturna y el frío directo en zona lumbar.",
+      "El patrón predominante es la desarmonía de Agua. El Jing o el Qi de riñón muestran signos de agotamiento. Prioriza el descanso profundo, los alimentos tonificantes (semillas, legumbres, algas) y la reducción del estrés crónico. Evita el exceso de actividad nocturna y el frío directo en zona lumbar.",
   },
 ];
 

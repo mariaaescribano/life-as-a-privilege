@@ -10,7 +10,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -216,7 +216,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           <Flex direction="column" align="center" w="100%" maxW="640px" gap={6}>
             <MetodoStepHeader
               icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-              title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+              title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
@@ -229,7 +229,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
                 Estamos preparando esta sección
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
-                Tu estilo de vida ideal para {meta.label} estará disponible muy pronto.
+                Tu estilo de Vida ideal para {meta.label} estará disponible muy pronto.
               </Text>
             </Panel>
           </Flex>
@@ -250,7 +250,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
             pageLabel="6/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
@@ -262,7 +262,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           />
           </Reveal>
 
-          {/* HERO · Estilo de vida (primer box: entra al montar, siempre visible) */}
+          {/* HERO · Estilo de Vida (primer box: entra al montar, siempre visible) */}
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
@@ -289,9 +289,11 @@ export default function MetodoAyurvedaDoshaEstilo() {
                 ))}
               </Flex>
               {sec.items && (
-                <Flex direction="column" gap={2.5}>
-                  {sec.items.map((it, i) => (<ListItem key={i} texto={it} color={meta.color} />))}
-                </Flex>
+                <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+                  {sec.items.map((it, i) => (
+                    <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
+                  ))}
+                </RevealStagger>
               )}
               {sec.cierre && (
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mt={4}>{parseRich(sec.cierre)}</Text>
@@ -359,17 +361,18 @@ export default function MetodoAyurvedaDoshaEstilo() {
                   <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}>
                     {c.reflexion.compromisoIntro}
                   </Text>
-                  <Flex direction="column" gap={3}>
+                  <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
                     {c.reflexion.compromisos.map((op) => (
+                      <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                       <RadioRow
-                        key={op}
                         label={op}
                         color={meta.color}
                         checked={compromiso === op}
                         onSelect={() => { setCompromiso((prev) => (prev === op ? "" : op)); setGuardado(false); }}
                       />
+                      </RevealItem>
                     ))}
-                  </Flex>
+                  </RevealStagger>
                 </Box>
               )}
 

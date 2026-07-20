@@ -114,7 +114,7 @@ export default function CursosModalidad() {
     }
     if (moduloId === ayurvedaNomLink) {
       return {
-        prev: { label: "Test de los Doshas", onClick: () => navigate("/aprendizaje/test-doshas"),    icon: <DoshasIcon /> },
+        prev: { label: "Test de los Doṣhas", onClick: () => navigate("/aprendizaje/test-doshas"),    icon: <DoshasIcon /> },
         next: { label: "Ilustraciones",      onClick: () => setIlustracionesHinduismoOpen(true),    icon: <EyeIcon /> },
       };
     }

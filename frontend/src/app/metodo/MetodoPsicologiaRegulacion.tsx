@@ -25,6 +25,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
   REGULACION,
@@ -43,6 +44,7 @@ import {
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
+const ORO = "#caa23c";            // dorado suave para los detalles del cierre
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // mm:ss a partir de segundos (para el reproductor).
@@ -61,6 +63,9 @@ export default function MetodoPsicologiaRegulacion() {
   const [loading, setLoading] = useState(true);
   // La persona puede añadir tantos fragmentos como quiera, uno debajo de otro.
   const [fragmentos, setFragmentos] = useState<string[]>([""]);
+  // Cierre de grounding (popup): volver al presente antes de salir.
+  const [cierreAbierto, setCierreAbierto] = useState(false);
+  useLockBodyScroll(cierreAbierto);
   const dataRef = useRef<LineaDeVidaData>({});
 
   // Audio de estimulación bilateral.
@@ -164,6 +169,12 @@ export default function MetodoPsicologiaRegulacion() {
     if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
     pendiente.current = null;
     return persistir(fragmentos);
+  };
+
+  // «Hacer el cierre»: guarda también lo escrito y abre el popup de grounding.
+  const hacerCierre = async () => {
+    await guardarAhora();
+    setCierreAbierto(true);
   };
 
   // Flush + pausa del audio al desmontar.
@@ -391,7 +402,15 @@ export default function MetodoPsicologiaRegulacion() {
                   </Box>
                 </Flex>
 
-                <Flex justify="flex-end" mt={{ base: 5, md: 6 }}>
+                <Flex justify="flex-end" align="center" gap={3} mt={{ base: 5, md: 6 }} wrap="wrap">
+                  {/* «Hacer el cierre» — a la izquierda de Guardar; al pulsarlo guarda también */}
+                  <Box as="button" onClick={() => void hacerCierre()} px={7} py={2.5} borderRadius="full"
+                       bg="rgba(255,251,243,0.72)" color={TINTA} border={`1.5px solid ${TINTA}66`}
+                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                       letterSpacing="0.03em" cursor="pointer" transition="all 0.18s"
+                       _hover={{ bg: "rgba(255,251,243,0.92)", borderColor: TINTA, transform: "translateY(-2px)" }}>
+                    Hacer el cierre
+                  </Box>
                   <BotonGuardar onSave={guardarAhora} bg={TINTA} fg={neuropsicologiaBg}
                                 minW="150px" px={7} py={2.5} fontSize={{ base: "sm", md: "md" }} />
                 </Flex>
@@ -402,6 +421,67 @@ export default function MetodoPsicologiaRegulacion() {
           </Flex>
         </Flex>
       </Box>
+
+      {/* ── Cierre de grounding · popup para volver al presente ── */}
+      {cierreAbierto && (
+        <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
+             sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+             onClick={() => setCierreAbierto(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="520px" my="auto"
+               borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 11 }} py={{ base: 9, md: 12 }} textAlign="center"
+                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 sx={{ "&::-webkit-scrollbar": { width: "6px" }, "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "9999px" } }}>
+              <Box as="button" onClick={() => setCierreAbierto(false)} position="absolute" top={3} right={3} zIndex={2}
+                   w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+                   color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+                   _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+
+              <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" pr={6} mb={2}
+                    style={{ textShadow: INK_SHADOW }}>
+                {REGULACION.cierre.titulo}
+              </Text>
+              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.9} lineHeight="1.7" mb={6}
+                    style={{ textShadow: INK_SHADOW }}>
+                {REGULACION.cierre.intro}
+              </Text>
+
+              <Box borderRadius="xl" bg="rgba(255,251,243,0.66)" border={`1px solid ${TINTA}33`}
+                   px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }} mb={5} textAlign="left"
+                   sx={{ backdropFilter: "blur(4px)" }}>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" fontStyle="italic"
+                      lineHeight="1.6" mb={4} textAlign="center">
+                  {REGULACION.cierre.respiracion}
+                </Text>
+                <Flex direction="column" gap={2.5}>
+                  {REGULACION.cierre.grounding.map((g, i) => (
+                    <Flex key={i} align="center" gap={2.5}>
+                      <Box as="span" color={ORO} fontSize="sm" flexShrink={0}
+                           style={{ textShadow: `0 0 8px ${ORO}66` }}>✦</Box>
+                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.5">{g}</Text>
+                    </Flex>
+                  ))}
+                </Flex>
+              </Box>
+
+              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6" mb={7}
+                    style={{ textShadow: INK_SHADOW }}>
+                {REGULACION.cierre.frase}
+              </Text>
+
+              <Box as="button" onClick={() => setCierreAbierto(false)} px={9} py={3} borderRadius="full"
+                   bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"
+                   fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" cursor="pointer"
+                   boxShadow={`0 6px 20px rgba(94,45,16,0.32)`} transition="all 0.2s"
+                   _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}>
+                Estoy mejor
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       <AyudaRecorrido pagina="regulacion" />
 

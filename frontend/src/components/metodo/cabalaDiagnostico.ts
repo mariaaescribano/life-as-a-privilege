@@ -128,7 +128,7 @@ export const TRANSICIONES: Transicion[] = [
   {
     from: "yesod", to: "malkuth",
     narrativa:
-      "Has construido hábitos saludables, pero todavía no consiguen transformar plenamente tu realidad. Tu paso es que tu vida diaria se convierta en la expresión visible de quien eres.",
+      "Has construido hábitos saludables, pero todavía no consiguen transformar plenamente tu realidad. Tu paso es que tu Vida diaria se convierta en la expresión visible de quien eres.",
   },
 ];
 

@@ -3,7 +3,7 @@ import ConstruirFisio from "../../components/metodo/ConstruirFisio";
 
 const PRE = "/recorrido/fisiologia/pre";
 
-// Nivel 2 · La vida — Órganos: varios tejidos distintos forman un órgano.
+// Nivel 2 · La Vida — Órganos: varios tejidos distintos forman un órgano.
 export default function MetodoFisiologiaOrganos() {
   return (
     <ConstruirFisio

@@ -35,7 +35,7 @@ export const modulosCabala2: ModuloContenido[] = [
     ],
   },
   {
-    title: "1. El árbol de la vida como camino",
+    title: "1. El árbol de la Vida como camino",
     icon: CabalaIcon,
     floatingButton: misDesequilibriosVitales,
     submodules: [
@@ -45,7 +45,7 @@ export const modulosCabala2: ModuloContenido[] = [
         link: `${basePath}/cabala2-1`,
         linkAnterior: "",
         linkNext: `${basePath}/cabala2-2`,
-        descripcion: "Keter nos invita a mirar en nuestro interior para descubrir el propósito de nuestra vida y alinear mente y acciones con nuestra esencia divina.",
+        descripcion: "Keter nos invita a mirar en nuestro interior para descubrir el propósito de nuestra Vida y alinear mente y acciones con nuestra esencia divina.",
         video: "4LLo_Gr-NfY",
         letra: keter2Letra,
         cursoId: "cabala-curso-2",
@@ -87,7 +87,7 @@ export const modulosCabala2: ModuloContenido[] = [
         link: `${basePath}/cabala2-4`,
         linkAnterior: `${basePath}/cabala2-3`,
         linkNext: `${basePath}/cabala2-5`,
-        descripcion: "Da'at es el puente dinámico entre Binah y Chokmah que nos permite integrar nuevos patrones y avanzar en nuestra vida.",
+        descripcion: "Da'at es el puente dinámico entre Binah y Chokmah que nos permite integrar nuevos patrones y avanzar en nuestra Vida.",
         video: "wgeeZgwmwLI",
         letra: daat2Letra,
         cursoId: "cabala-curso-2",

@@ -30,6 +30,7 @@ export function IndiceAyurveda() {
       nom={ayurvedaNom}
       paramKey="dosha"
       acento={acento}
+      progresoKey="ayurveda"
     />
   );
 }

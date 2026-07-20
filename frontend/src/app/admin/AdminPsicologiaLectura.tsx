@@ -78,7 +78,7 @@ export default function AdminPsicologiaLectura() {
     );
   }
 
-  const exp = experienciaById("linea-de-vida")!;
+  const exp = experienciaById("linea-de-Vida")!;
   const problema = (data["problema-actual"] as string) ?? "";
   const edad = typeof data.edad === "number" ? data.edad : 0;
 
@@ -88,7 +88,7 @@ export default function AdminPsicologiaLectura() {
   const gestacion = data.anos?.[String(ANO_GESTACION)];
   const gestacionEscrita = estadoDelAno(data, ANO_GESTACION) === "completado";
 
-  // Años con recuerdo escrito (páginas del libro de vida).
+  // Años con recuerdo escrito (páginas del libro de Vida).
   const aniosCompletados: number[] = [];
   const aniosSinRecuerdos: number[] = [];
   for (let a = 0; a <= edad; a++) {
@@ -160,10 +160,10 @@ export default function AdminPsicologiaLectura() {
                 </LecturaCard>
               )}
 
-              {/* ── Línea de vida ── */}
+              {/* ── Línea de Vida ── */}
               {(gestacionEscrita || aniosCompletados.length > 0 || aniosSinRecuerdos.length > 0) && (
                 <LecturaCard nom={neuropsicologiaNom} txt={TXT} overlay={OVERLAY}
-                             titulo="Línea de vida" meta={edad ? `${edad} años · ${aniosCompletados.length} con recuerdos` : undefined}>
+                             titulo="Línea de Vida" meta={edad ? `${edad} años · ${aniosCompletados.length} con recuerdos` : undefined}>
                   {gestacionEscrita && (
                     <>
                       <Box>

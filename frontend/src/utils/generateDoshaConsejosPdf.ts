@@ -94,7 +94,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
-  doc.text("Tu Dosha:", MARGIN + 4, y + 3);
+  doc.text("Tu Doṣha:", MARGIN + 4, y + 3);
   doc.setFont(GARAMOND, "bold");
   doc.setFontSize(13);
   doc.setTextColor(...doshaColor);
@@ -122,7 +122,7 @@ export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
   const categories: Array<{ key: keyof DoshaRecs; label: string }> = [
     { key: "alimentacion", label: "Alimentación" },
     { key: "hierbas", label: "Hierbas" },
-    { key: "estiloDeVida", label: "Estilo de vida" },
+    { key: "estiloDeVida", label: "Estilo de Vida" },
     { key: "evitar", label: "Evitar" },
   ];
 

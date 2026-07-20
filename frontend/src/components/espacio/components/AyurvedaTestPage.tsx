@@ -135,7 +135,7 @@ export default function AyurvedaTestPage({
           >
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Test de los Doshas"
+              title="Test de los Doṣhas"
               pageLabel={pageLabel}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
@@ -158,7 +158,7 @@ export default function AyurvedaTestPage({
               <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
-                  Tu Dosha principal es
+                  Tu Doṣha principal es
                 </Text>
                 <Flex align="center" justify="center" gap={3} mb={5}>
                   <Box>{DOSHA_CONFIG[guestResult.dosha].icon && React.cloneElement(DOSHA_CONFIG[guestResult.dosha].icon as React.ReactElement<any>, { size: "38px" })}</Box>
@@ -246,7 +246,7 @@ export default function AyurvedaTestPage({
               const categories = [
                 { key: "alimentacion" as const, label: "Alimentación" },
                 { key: "hierbas" as const, label: "Hierbas" },
-                { key: "estiloDeVida" as const, label: "Estilo de vida" },
+                { key: "estiloDeVida" as const, label: "Estilo de Vida" },
                 { key: "evitar" as const, label: "Evitar" },
               ];
               return (
@@ -401,7 +401,7 @@ export default function AyurvedaTestPage({
         >
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Test de los Doshas"
+            title="Test de los Doṣhas"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
@@ -422,7 +422,7 @@ export default function AyurvedaTestPage({
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={3}>
-                Descubre tu Dosha
+                Descubre tu Doṣha
               </Text>
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9">
                 Para cada pregunta, elige la opción que mejor te describa. No hay respuestas correctas ni incorrectas: confía en tu primera impresión.
@@ -493,7 +493,7 @@ export default function AyurvedaTestPage({
           <Box w="100%" maxW="850px" textAlign="center" mt={4}>
             {!allAnswered && (
               <Text color="rgba(255,255,255,0.4)" fontSize="md" letterSpacing="0.06em" fontStyle="italic" mb={4}>
-                Responde todas las preguntas para ver tu dosha ({answered} / {preguntasAyurveda.length})
+                Responde todas las preguntas para ver tu Doṣha ({answered} / {preguntasAyurveda.length})
               </Text>
             )}
             <Box
@@ -520,7 +520,7 @@ export default function AyurvedaTestPage({
               {allAnswered && <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="full" overlay={`${ayurvedaBg}22`} />}
               <Flex as="span" align="center" justify="center" gap={3} position="relative" zIndex={1}>
                 <AyurvedaIcon size={{ base: "22px", md: "26px" }} />
-                {saving ? "Guardando..." : "Descubrir mi Dosha →"}
+                {saving ? "Guardando..." : "Descubrir mi Doṣha →"}
               </Flex>
             </Box>
           </Box>

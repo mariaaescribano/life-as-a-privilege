@@ -124,6 +124,10 @@ interface ComicViewerProps {
   /** Si true, la caja (foto + texto) NO lleva sombra/glow alrededor. Lo usan las
    *  Ilustraciones de Astrología, que se ven más limpias sin el shadow box. */
   sinSombra?: boolean;
+  /** Color de la barra de scroll vertical. Por defecto el acento (themeColor);
+   *  algunos cómics (TCM: elementos, ciclos) la piden blanca para que case con
+   *  su letra blanca. */
+  scrollbarColor?: string;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -148,8 +152,11 @@ export function ComicViewer({
   loader,
   onPageView,
   sinSombra,
+  scrollbarColor,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
+  // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
+  const sbColor = scrollbarColor ?? themeColor;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
   // elementos de TCM) muestra la foto casi nítida y a plena pantalla; el resto
   // del modo disciplina la deja muy blureada + pantalla negra para contrastar
@@ -574,7 +581,7 @@ export function ComicViewer({
             sx={{
               "&::-webkit-scrollbar": { width: "6px" },
               "&::-webkit-scrollbar-thumb": {
-                background: `${themeColor}55`,
+                background: `${sbColor}55`,
                 borderRadius: "3px",
               },
             }}
@@ -692,12 +699,12 @@ export function ComicViewer({
                 "&::-webkit-scrollbar": { width: "6px" },
                 "&::-webkit-scrollbar-track": { background: "transparent" },
                 "&::-webkit-scrollbar-thumb": {
-                  background: `${themeColor}55`,
+                  background: `${sbColor}55`,
                   borderRadius: "3px",
                 },
-                "&::-webkit-scrollbar-thumb:hover": { background: `${themeColor}88` },
+                "&::-webkit-scrollbar-thumb:hover": { background: `${sbColor}88` },
                 scrollbarWidth: "thin",
-                scrollbarColor: `${themeColor}55 transparent`,
+                scrollbarColor: `${sbColor}55 transparent`,
               }}
             >
               {/* Encabezado opcional (antetítulo + título + separador) */}
@@ -729,7 +736,8 @@ export function ComicViewer({
                 <Text
                   key={i}
                   color={textColor ?? themeColor}
-                  // Cómic de elementos TCM (fondoNitido): letra más pequeña.
+                  // Modo `fondoNitido` (visual de ciclos de TCM): letra un poco
+                  // más pequeña que el resto.
                   fontSize={fondoNitido ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" }}
                   lineHeight="1.9"
                   letterSpacing="0.02em"

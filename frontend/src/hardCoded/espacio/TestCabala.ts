@@ -42,7 +42,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
     preguntas: [
       {
         id: "kether_1",
-        pregunta: "¿Sientes que hay un propósito detrás de lo que te ocurre en la vida?",
+        pregunta: "¿Sientes que hay un propósito detrás de lo que te ocurre en la Vida?",
         opciones: [
           { letra: "A", texto: "Sí, vivo con una sensación clara de para qué estoy aquí", puntos: 3 },
           { letra: "B", texto: "A veces lo entreveo, pero se difumina en el día a día", puntos: 2 },
@@ -54,7 +54,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
         id: "kether_2",
         pregunta: "¿Cómo es tu relación con lo sagrado o con algo más grande que tú?",
         opciones: [
-          { letra: "A", texto: "Me conecto con ello con regularidad; es parte de mi vida", puntos: 3 },
+          { letra: "A", texto: "Me conecto con ello con regularidad; es parte de mi Vida", puntos: 3 },
           { letra: "B", texto: "Siento algo, pero no sé muy bien cómo relacionarme con ello", puntos: 2 },
           { letra: "C", texto: "Lo busco, pero me resulta difícil de encontrar o de sentir", puntos: 1 },
           { letra: "D", texto: "No creo en ello o prefiero mantenerlo al margen", puntos: 0 },
@@ -75,7 +75,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Corona activa",
         rango: [7, 9],
-        mensaje: "Kether fluye con fuerza en ti. Tienes una conexión viva con tu propósito y con algo mayor que tú. Esa chispa primordial que eres se expresa de forma consciente en tu vida.",
+        mensaje: "Kether fluye con fuerza en ti. Tienes una conexión viva con tu propósito y con algo mayor que tú. Esa chispa primordial que eres se expresa de forma consciente en tu Vida.",
         consejo: "Sigue nutriendo esa conexión. La práctica contemplativa —silencio, meditación, contemplación de la naturaleza— es el alimento de Kether.",
       },
       {
@@ -125,7 +125,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       },
       {
         id: "chokmah_3",
-        pregunta: "¿De qué manera expresas tu impulso creativo en la vida cotidiana?",
+        pregunta: "¿De qué manera expresas tu impulso creativo en la Vida cotidiana?",
         opciones: [
           { letra: "A", texto: "La expreso regularmente; crear es parte de cómo proceso el mundo", puntos: 3 },
           { letra: "B", texto: "La expreso a veces, pero me cuesta darle el espacio que merece", puntos: 2 },
@@ -188,7 +188,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       },
       {
         id: "binah_3",
-        pregunta: "¿Hay algo que entiendes con la cabeza pero que aún no has integrado en tu vida?",
+        pregunta: "¿Hay algo que entiendes con la cabeza pero que aún no has integrado en tu Vida?",
         opciones: [
           { letra: "A", texto: "No mucho: trato de vivir coherentemente lo que sé", puntos: 3 },
           { letra: "B", texto: "Sí, algunas cosas; trabajo conscientemente en ello", puntos: 2 },
@@ -201,7 +201,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Entendimiento activo",
         rango: [7, 9],
-        mensaje: "Binah opera con fluidez en ti. Integras lo que vives, tienes paciencia con los procesos y tu comprensión no se queda en la cabeza: baja a la vida.",
+        mensaje: "Binah opera con fluidez en ti. Integras lo que vives, tienes paciencia con los procesos y tu comprensión no se queda en la cabeza: baja a la Vida.",
         consejo: "Sigue cultivando la reflexión periódica. Binah florece en el silencio, en el diario, en las conversaciones profundas que permiten ver lo aprendido desde fuera.",
       },
       {
@@ -294,7 +294,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
     preguntas: [
       {
         id: "geburah_1",
-        pregunta: "¿Qué necesitas eliminar de tu vida que sabes que ya no te sirve?",
+        pregunta: "¿Qué necesitas eliminar de tu Vida que sabes que ya no te sirve?",
         opciones: [
           { letra: "A", texto: "Tengo claridad sobre ello y estoy en proceso activo de soltarlo", puntos: 3 },
           { letra: "B", texto: "Lo sé, pero me cuesta actuar; el cambio me genera miedo o apego", puntos: 2 },
@@ -318,7 +318,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
         opciones: [
           { letra: "A", texto: "Tengo una capacidad de discernimiento sana, sin juicio desproporcionado", puntos: 3 },
           { letra: "B", texto: "A veces soy duro conmigo mismo, pero lo reconozco y lo trabajo", puntos: 2 },
-          { letra: "C", texto: "La autoexigencia y la autocrítica son un patrón importante en mi vida", puntos: 1 },
+          { letra: "C", texto: "La autoexigencia y la autocrítica son un patrón importante en mi Vida", puntos: 1 },
           { letra: "D", texto: "Soy muy crítico con los demás; me cuesta la tolerancia ante el error ajeno", puntos: 0 },
         ],
       },
@@ -340,7 +340,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
         etiqueta: "Geburah te llama",
         rango: [0, 3],
         mensaje: "Geburah te invita a explorar tu relación con el poder, el límite y el soltar. Puede que estés cargando con demasiado —relaciones, hábitos, narrativas— que ya no te nutre.",
-        consejo: "¿Qué necesitas eliminar de tu vida que sabes que ya no te sirve? Empieza por nombrarlo. Gevurah dice: 'No tengas miedo de podar. Lo que queda crece con más fuerza.'",
+        consejo: "¿Qué necesitas eliminar de tu Vida que sabes que ya no te sirve? Empieza por nombrarlo. Gevurah dice: 'No tengas miedo de podar. Lo que queda crece con más fuerza.'",
       },
     ],
   },
@@ -357,7 +357,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
     preguntas: [
       {
         id: "tipharet_1",
-        pregunta: "¿Hay armonía entre lo que piensas, lo que sientes y lo que haces en tu vida cotidiana?",
+        pregunta: "¿Hay armonía entre lo que piensas, lo que sientes y lo que haces en tu Vida cotidiana?",
         opciones: [
           { letra: "A", texto: "Sí, generalmente hay coherencia entre los tres planos", puntos: 3 },
           { letra: "B", texto: "A veces; en situaciones de estrés pierdo esa coherencia con facilidad", puntos: 2 },
@@ -402,7 +402,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Tiferet te llama",
         rango: [0, 3],
-        mensaje: "Tiferet te invita a encontrar tu centro. Cuando hay mucha distancia entre lo que piensas, sientes y haces, la vida se vuelve fragmentada. La belleza es el lenguaje de lo integrado.",
+        mensaje: "Tiferet te invita a encontrar tu centro. Cuando hay mucha distancia entre lo que piensas, sientes y haces, la Vida se vuelve fragmentada. La belleza es el lenguaje de lo integrado.",
         consejo: "Empieza por una pregunta simple al final de cada día: '¿He sido coherente hoy?' No para juzgarte, sino para comenzar a escuchar dónde está tu centro.",
       },
     ],
@@ -432,7 +432,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
         id: "netzach_2",
         pregunta: "¿Qué deseas profundamente, más allá de lo que crees que deberías desear?",
         opciones: [
-          { letra: "A", texto: "Lo tengo claro y lo honro en mis elecciones de vida", puntos: 3 },
+          { letra: "A", texto: "Lo tengo claro y lo honro en mis elecciones de Vida", puntos: 3 },
           { letra: "B", texto: "Lo intuyo, pero me da miedo reconocerlo o expresarlo", puntos: 2 },
           { letra: "C", texto: "Lo sé, pero me parece demasiado, imposible o egoísta pedirlo", puntos: 1 },
           { letra: "D", texto: "No estoy seguro de conocer mis deseos reales, separados del deber", puntos: 0 },
@@ -440,7 +440,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       },
       {
         id: "netzach_3",
-        pregunta: "¿Tienes espacio real en tu vida para el placer, el juego y la belleza sensorial?",
+        pregunta: "¿Tienes espacio real en tu Vida para el placer, el juego y la belleza sensorial?",
         opciones: [
           { letra: "A", texto: "Sí, es parte fundamental de cómo nutro mi energía vital", puntos: 3 },
           { letra: "B", texto: "A veces, cuando lo permito; pero tiendo a posponerlo", puntos: 2 },
@@ -483,7 +483,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
     preguntas: [
       {
         id: "hod_1",
-        pregunta: "¿Hay coherencia entre lo que dices y lo que haces en tu vida?",
+        pregunta: "¿Hay coherencia entre lo que dices y lo que haces en tu Vida?",
         opciones: [
           { letra: "A", texto: "Sí: mis palabras y mis acciones se alinean con bastante frecuencia", puntos: 3 },
           { letra: "B", texto: "Generalmente sí, aunque a veces prometo más de lo que cumplo", puntos: 2 },
@@ -542,11 +542,11 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
     nombre: "Yesod",
     subtitulo: "El Fundamento · Patrones, Inconsciente e Imagen de Uno Mismo",
     introduccion:
-      "Yesod es el mundo de los sueños y el inconsciente. Representa los patrones que se repiten en tu vida, la imagen que tienes de ti mismo —heredada o construida— y el puente sutil entre lo que crees que eres y lo que realmente manifiestas.",
+      "Yesod es el mundo de los sueños y el inconsciente. Representa los patrones que se repiten en tu Vida, la imagen que tienes de ti mismo —heredada o construida— y el puente sutil entre lo que crees que eres y lo que realmente manifiestas.",
     preguntas: [
       {
         id: "yesod_1",
-        pregunta: "¿Qué patrones se repiten en tu vida una y otra vez, aunque cambien los escenarios?",
+        pregunta: "¿Qué patrones se repiten en tu Vida una y otra vez, aunque cambien los escenarios?",
         opciones: [
           { letra: "A", texto: "Los reconozco con claridad y trabajo activamente en ellos", puntos: 3 },
           { letra: "B", texto: "Los veo en retrospectiva, aunque en el momento me cuesta notarlos", puntos: 2 },
@@ -566,7 +566,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       },
       {
         id: "yesod_3",
-        pregunta: "¿Cómo es tu relación con tu vida interior —sueños, imaginación, intuición?",
+        pregunta: "¿Cómo es tu relación con tu Vida interior —sueños, imaginación, intuición?",
         opciones: [
           { letra: "A", texto: "Les presto atención: son una fuente valiosa de información sobre mí", puntos: 3 },
           { letra: "B", texto: "A veces, pero no tengo una práctica o atención verdaderamente consciente", puntos: 2 },
@@ -579,7 +579,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Fundamento consciente",
         rango: [7, 9],
-        mensaje: "Yesod opera con lucidez en ti. Reconoces los patrones que configuran tu vida, has examinado la imagen que tienes de ti mismo y cultivas tu mundo interior como fuente de información.",
+        mensaje: "Yesod opera con lucidez en ti. Reconoces los patrones que configuran tu Vida, has examinado la imagen que tienes de ti mismo y cultivas tu mundo interior como fuente de información.",
         consejo: "Lo que se repite no es mala suerte: es un patrón que pide ser visto. Tú ya lo has aprendido. Sigue trabajando con esa mirada hacia las capas más profundas.",
       },
       {
@@ -591,8 +591,8 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Yesod te llama",
         rango: [0, 3],
-        mensaje: "Yesod te invita a mirar lo que opera debajo de la superficie. Lo que se repite en tu vida no es coincidencia: es algo que quiere ser reconocido. El primer paso es la disposición a mirar.",
-        consejo: "¿Qué patrones se repiten en tu vida una y otra vez, aunque cambien los escenarios o las personas? Escríbelo. No busques la causa todavía; solo nómbralo. Yesod trabaja desde ahí.",
+        mensaje: "Yesod te invita a mirar lo que opera debajo de la superficie. Lo que se repite en tu Vida no es coincidencia: es algo que quiere ser reconocido. El primer paso es la disposición a mirar.",
+        consejo: "¿Qué patrones se repiten en tu Vida una y otra vez, aunque cambien los escenarios o las personas? Escríbelo. No busques la causa todavía; solo nómbralo. Yesod trabaja desde ahí.",
       },
     ],
   },
@@ -605,7 +605,7 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
     nombre: "Malkuth",
     subtitulo: "El Reino · Cuerpo, Tierra y Manifestación",
     introduccion:
-      "Malkuth es el mundo material y la experiencia física. Lo espiritual se manifiesta aquí o no se manifiesta en ningún sitio. Habla de tu relación con tu cuerpo, con tu entorno físico y con lo que estás creando concretamente en tu vida.",
+      "Malkuth es el mundo material y la experiencia física. Lo espiritual se manifiesta aquí o no se manifiesta en ningún sitio. Habla de tu relación con tu cuerpo, con tu entorno físico y con lo que estás creando concretamente en tu Vida.",
     preguntas: [
       {
         id: "malkuth_1",
@@ -622,19 +622,19 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
         pregunta: "¿Tu entorno físico —tu casa, tu espacio, tu orden— refleja cómo te sientes por dentro?",
         opciones: [
           { letra: "A", texto: "Sí: mi entorno es un reflejo ordenado y cuidado de mi estado interior", puntos: 3 },
-          { letra: "B", texto: "Más o menos; hay zonas de mi vida que cuido y otras que descuido", puntos: 2 },
+          { letra: "B", texto: "Más o menos; hay zonas de mi Vida que cuido y otras que descuido", puntos: 2 },
           { letra: "C", texto: "Mi espacio refleja el caos o el agotamiento que a veces siento dentro", puntos: 1 },
           { letra: "D", texto: "No me había fijado en esa conexión entre espacio exterior e interior", puntos: 0 },
         ],
       },
       {
         id: "malkuth_3",
-        pregunta: "¿Lo que se manifiesta en tu vida material es lo que realmente quieres crear?",
+        pregunta: "¿Lo que se manifiesta en tu Vida material es lo que realmente quieres crear?",
         opciones: [
           { letra: "A", texto: "Sí, hay coherencia entre lo que quiero y lo que estoy construyendo", puntos: 3 },
           { letra: "B", texto: "Hay partes que sí y partes que no; estoy en transición consciente", puntos: 2 },
           { letra: "C", texto: "Lo que se manifiesta no refleja lo que quiero; hay una brecha importante", puntos: 1 },
-          { letra: "D", texto: "No me siento con agencia real sobre lo que se manifiesta en mi vida", puntos: 0 },
+          { letra: "D", texto: "No me siento con agencia real sobre lo que se manifiesta en mi Vida", puntos: 0 },
         ],
       },
     ],
@@ -654,8 +654,8 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Malkuth te llama",
         rango: [0, 3],
-        mensaje: "Malkuth te invita a volver a lo concreto: al cuerpo, al espacio, a lo que tocas y pisas. La espiritualidad sin tierra no se sostiene. Lo que ocurre en tu vida material es siempre un mensaje.",
-        consejo: "¿Tu cuerpo, tu casa, tu vida cotidiana reflejan quién quieres ser? Empieza por lo más pequeño y más tangible. Un espacio ordenado, una comida preparada con cuidado, diez minutos de movimiento: eso es Malkuth.",
+        mensaje: "Malkuth te invita a volver a lo concreto: al cuerpo, al espacio, a lo que tocas y pisas. La espiritualidad sin tierra no se sostiene. Lo que ocurre en tu Vida material es siempre un mensaje.",
+        consejo: "¿Tu cuerpo, tu casa, tu Vida cotidiana reflejan quién quieres ser? Empieza por lo más pequeño y más tangible. Un espacio ordenado, una comida preparada con cuidado, diez minutos de movimiento: eso es Malkuth.",
       },
     ],
   },

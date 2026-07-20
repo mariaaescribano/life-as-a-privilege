@@ -232,13 +232,13 @@ export default function MetodoAyurvedaDoshaDia() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             step={{ current: 7, total: 7 }}
             mb={0}
-            prev={{ label: "← Estilo de vida", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`) }}
+            prev={{ label: "← Estilo de Vida", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`) }}
             extra={ilustracionesBtn}
             next={{ label: "Tu Mapa →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
           />
@@ -260,7 +260,7 @@ export default function MetodoAyurvedaDoshaDia() {
               </Text>
               <Separador />
               <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
-                Diseña tu propio día, a tu manera. Añade los momentos que quieras —cuándo te levantas, cuándo respiras, tus comidas, tu descanso— con la hora que mejor encaje en tu vida. Cada momento te llega con recomendaciones para tu dosha, pero el día lo escribes tú.
+                Diseña tu propio día, a tu manera. Añade los momentos que quieras —cuándo te levantas, cuándo respiras, tus comidas, tu descanso— con la hora que mejor encaje en tu Vida. Cada momento te llega con recomendaciones para tu Doṣha, pero el día lo escribes tú.
               </Text>
             </Flex>
           </Panel>

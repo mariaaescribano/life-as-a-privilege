@@ -144,7 +144,7 @@ export default function MetodoTcmElemento() {
           <Flex direction="column" gap={5}>
             <GuiaLista titulo="Nutrición" items={c.guia.nutricion} acento={acento} />
             {c.guia.evitar && <GuiaLista titulo="Evita" items={c.guia.evitar} acento={acento} />}
-            <GuiaLista titulo="Estilo de vida" items={c.guia.estiloDeVida} acento={acento} />
+            <GuiaLista titulo="Estilo de Vida" items={c.guia.estiloDeVida} acento={acento} />
             <GuiaLista titulo="Ejercicio" items={c.guia.ejercicio} acento={acento} />
             <GuiaLista titulo="Terapia" items={c.guia.terapia} acento={acento} />
             <Box>

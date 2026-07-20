@@ -30,6 +30,10 @@ interface ComicPasoModalProps {
   disciplinaBgColor?: string;
   /** Sombra del texto de las viñetas. */
   textShadow?: string;
+  /** Fondo del botón «continuar» (arriba, junto a la X). Por defecto el acento. */
+  continueBtnBg?: string;
+  /** Color del texto del botón «continuar». Por defecto oscuro. */
+  continueBtnColor?: string;
 }
 
 export function ComicPasoModal({
@@ -42,7 +46,11 @@ export function ComicPasoModal({
   disciplinaBgImage,
   disciplinaBgColor,
   textShadow,
+  continueBtnBg,
+  continueBtnColor = "#0a0a1a",
 }: ComicPasoModalProps) {
+  // Fondo del botón «continuar»: por defecto el acento de la disciplina.
+  const btnBg = continueBtnBg ?? themeColor;
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -82,8 +90,8 @@ export function ComicPasoModal({
           h={{ base: "42px", md: "48px" }}
           px={{ base: 4, md: 6 }}
           borderRadius="full"
-          bg={themeColor}
-          color="#0a0a1a"
+          bg={btnBg}
+          color={continueBtnColor}
           border={`1px solid ${themeColor}`}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"

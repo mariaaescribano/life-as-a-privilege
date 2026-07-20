@@ -7,7 +7,7 @@ import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
 const PRE = "/recorrido/fisiologia/pre";
 
-// Nivel 2 · La vida — Célula: reúne las estructuras en una célula viva.
+// Nivel 2 · La Vida — Célula: reúne las estructuras en una célula viva.
 export default function MetodoFisiologiaCelula() {
   const navigate = useNavigate();
   // Cómic «De una célula a un órgano»: se intercala al pulsar «Órganos →», antes
@@ -35,7 +35,7 @@ export default function MetodoFisiologiaCelula() {
         resultImg={`${PRE}/celulaentera.png`}
         resultTitulo="¡Has construido una célula!"
         resultParrafos={[
-          <>Una <b>célula</b> es la unidad más pequeña con vida propia: dentro de su membrana, el núcleo guarda el ADN con las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
+          <>Una <b>célula</b> es la unidad más pequeña con Vida propia: dentro de su membrana, el núcleo guarda el ADN con las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
           <>Todo funciona a la vez, como una ciudad diminuta. Tu cuerpo tiene alrededor de <b>37 billones</b> de ellas.</>,
         ]}
         dataKey="celula_hecho"

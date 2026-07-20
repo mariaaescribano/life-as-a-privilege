@@ -218,7 +218,7 @@ export default function MetodoAyurvedaResultado() {
                 transition={{ duration: 0.8, delay: titleDelay, ease: POP }}
               >
                 <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
-                  Tu Dosha principal es
+                  Tu Doṣha principal es
                 </Text>
                 <MotionBox
                   display="flex"
@@ -267,6 +267,8 @@ export default function MetodoAyurvedaResultado() {
         vinetas={VINETAS_DOSHAS}
         continueLabel="Energías"
         themeColor={ayurvedaTxt}
+        continueBtnColor={ayurvedaTxt}
+        continueBtnBg={ayurvedaBg}
         disciplinaBgImage="/img/fondos/hinduismo.png"
         disciplinaBgColor={ayurvedaBg}
         textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}

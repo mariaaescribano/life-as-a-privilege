@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Flex,
-  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -10,6 +9,29 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import {
+  ayurvedaNom, AyurvedaIcon,
+  tcmNom, TCMIcon,
+  cabalaNom, CabalaIcon,
+  fisiologiaNom, FisiologiaIcon,
+  nutricionNom, NutricionIcon,
+  neuropsicologiaNom, NeuropsicologiaIcon,
+  astrologiaNom, AstrologiaIcon,
+  culturaNom, CulturaIcon,
+} from "../../GlobalVariables";
+
+// Icono propio de cada disciplina, por su nombre. Se muestra a la izquierda del
+// ordinal en la cabecera del box de pago (en lugar del logo/mandala genérico).
+const ICONO_POR_NOM: Record<string, (size: string) => React.ReactNode> = {
+  [ayurvedaNom]:        (s) => <AyurvedaIcon size={{ base: s, md: s }} />,
+  [tcmNom]:             (s) => <TCMIcon size={{ base: s, md: s }} />,
+  [cabalaNom]:          (s) => <CabalaIcon size={{ base: s, md: s }} />,
+  [fisiologiaNom]:      (s) => <FisiologiaIcon size={{ base: s, md: s }} />,
+  [nutricionNom]:       (s) => <NutricionIcon size={{ base: s, md: s }} />,
+  [neuropsicologiaNom]: (s) => <NeuropsicologiaIcon size={{ base: s, md: s }} />,
+  [astrologiaNom]:      (s) => <AstrologiaIcon size={{ base: s, md: s }} />,
+  [culturaNom]:         (s) => <CulturaIcon size={{ base: s, md: s }} />,
+};
 
 export interface PagoDisciplinaModalProps {
   isOpen: boolean;
@@ -87,7 +109,7 @@ export function PagoDisciplinaModal({
         <ModalBody px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} position="relative" zIndex={1}>
           <Flex direction="column" gap={5}>
             <Flex align="center" gap={3} justify="center">
-              <Image src="/img/icono/life.png" h="36px" objectFit="contain" />
+              {ICONO_POR_NOM[nom]?.("36px")}
               <Text
                 color={txt}
                 fontSize={{ base: "2xl", md: "3xl" }}

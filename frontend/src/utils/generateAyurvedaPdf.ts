@@ -113,7 +113,7 @@ export async function generateAyurvedaPdf(
     doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(236, 213, 237);
-    doc.text("Descubre tu Dosha", MARGIN, 17);
+    doc.text("Descubre tu Doṣha", MARGIN, 17);
   };
 
   let y = 0;
@@ -137,7 +137,7 @@ export async function generateAyurvedaPdf(
   doc.setFont(GARAMOND, "bold");
   doc.setFontSize(16);
   doc.setTextColor(...TEXT_COLOR);
-  doc.text("Descubre tu Dosha", MARGIN, y);
+  doc.text("Descubre tu Doṣha", MARGIN, y);
   y += 9;
 
   /* Resultado box */
@@ -149,7 +149,7 @@ export async function generateAyurvedaPdf(
   doc.setFont(GARAMOND, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED_COLOR);
-  doc.text("Dosha predominante:", MARGIN + 3, y + 3);
+  doc.text("Doṣha predominante:", MARGIN + 3, y + 3);
 
   const resColor = DOSHA_COLOR[resultado.toLowerCase()] ?? TEXT_COLOR;
   doc.setFont(GARAMOND, "bold");

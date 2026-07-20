@@ -12,6 +12,9 @@ import {
 import { tcmBg, tcmTxt } from "../../GlobalVariables";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { comicLoaderPorColor } from "./comicLoaders";
+import SpinnerTurquesa from "../global/Spinner";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS CAPÍTULOS DE MEDICINA CHINA
@@ -36,7 +39,7 @@ export const VINETAS_ORIGEN: Vineta[] = [
       "El Yang es la energía masculina, el Qi del Cielo.",
       "El Yin es la energía femenina, el Qi de la Tierra.",
       "Ambos son interdependientes y son manifestaciones de lo mismo.",
-      "De su interacción surgen los Cinco Elementos (madera, fuego, tierra, metal y agua), cuyos ciclos de transformación dan origen a 'los diez mil seres', es decir, todo cuanto existe en el universo.",
+      "De su interacción surgen los Cinco Elementos (Madera, Fuego, Tierra, Metal y Agua), cuyos ciclos de transformación dan origen a 'los diez mil seres', es decir, todo cuanto existe en el universo.",
     ],
   },
   {
@@ -79,15 +82,15 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/tierratcm.png",
     paragraphs: [
-      "La tierra es el suelo sobre el que todo se construye.",
+      "La Tierra es el suelo sobre el que todo se construye.",
       "Representa nuestra capacidad para nutrirnos y transformarnos, tanto a nivel físico como emocional",
-      "Cuando la tierra está fuerte, somos capaces de aprovechar aquello que recibimos de la Vida y convertirlo en raíces, aprendizaje y nutrición.",
+      "Cuando la Tierra está fuerte, somos capaces de aprovechar aquello que recibimos de la Vida y convertirlo en raíces, aprendizaje y nutrición.",
     ],
   },
   {
     src: "/viñetas/tcm/elementos/metaltcm.png",
     paragraphs: [
-      "Del proceso de transformación de la tierra surge el metal.",
+      "Del proceso de transformación de la Tierra surge el Metal.",
       "Representa la claridad, el orden y la capacidad de distinguir cuál dolor es nuestro y cuál no.",
       "Nos ayuda a aceptar quiénes somos y a soltar aquello que ya ha cumplido su función para dejar espacio a lo nuevo.",
     ],
@@ -95,21 +98,21 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/aguatcm.png",
     paragraphs: [
-      "Cuando aprendemos a soltar, aparece el agua. Es la profundidad, la introspección y la conexión con nuestros recursos internos.",
+      "Cuando aprendemos a soltar, aparece el Agua. Es la profundidad, la introspección y la conexión con nuestros recursos internos.",
       "Nos invita a mirar hacia dentro, encontrar paz y desarrollar la confianza necesaria para fluir con los cambios de la Vida.",
     ],
   },
   {
     src: "/viñetas/tcm/elementos/madera.png",
     paragraphs: [
-      "La madera representa el crecimiento, la expansión y la capacidad de avanzar. Es la fuerza que transforma nuestro potencial en acción.",
+      "La Madera representa el crecimiento, la expansión y la capacidad de avanzar. Es la fuerza que transforma nuestro potencial en acción.",
       "Cuando está equilibrada nos ayuda a construir, crear y desarrollar aquello que hemos sembrado. Cuando se bloquea, pueden aparecer la frustración, la rigidez o el enfado.",
     ],
   },
   {
     src: "/viñetas/tcm/elementos/fuegotcm.png",
     paragraphs: [
-      "El fuego es la expresión de la Vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
+      "El Fuego es la expresión de la Vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
       "Nos aporta entusiasmo, inspiración y el impulso necesario para compartir aquello que hemos creado.",
     ],
   },
@@ -145,20 +148,20 @@ export const VINETAS_ALMA: Vineta[] = [
     src: "/viñetas/tcm/alma/alma1.png",
     paragraphs: [
       "Para la Medicina Tradicional China, el ser humano es una unidad. Cuerpo, Qi y espíritu forman un todo inseparable.",
-      "El cuerpo (Xing) es la forma. El Qi es la energía vital. El Shen es el principio que da vida, conciencia y presencia.",
+      "El cuerpo (Xing) es la forma. El Qi es la energía vital. El Shen es el principio que da Vida, conciencia y presencia.",
     ],
   },
   {
     src: "/viñetas/tcm/alma/alma2.png",
     paragraphs: [
-      "Shen (Corazón)",
+      "Shen (corazón)",
       "Es la conciencia, la claridad mental y la capacidad de relacionarnos con el mundo.",
     ],
   },
   {
     src: "/viñetas/tcm/alma/alma3.png",
     paragraphs: [
-      "Hun (Hígado)",
+      "Hun (hígado)",
       "Es el alma etérea.",
       "Inspira los sueños, la creatividad, la imaginación y la capacidad de proyectarnos hacia el futuro.",
     ],
@@ -166,15 +169,15 @@ export const VINETAS_ALMA: Vineta[] = [
   {
     src: "/viñetas/tcm/alma/alma4.png",
     paragraphs: [
-      "Po (Pulmones)",
+      "Po (pulmones)",
       "Es el alma corpórea.",
-      "Gobierna los instintos, las sensaciones físicas y la respuesta inmediata a la vida.",
+      "Gobierna los instintos, las sensaciones físicas y la respuesta inmediata a la Vida.",
     ],
   },
   {
     src: "/viñetas/tcm/alma/alma5.png",
     paragraphs: [
-      "Yi (Bazo)",
+      "Yi (bazo)",
       "Es la intención.",
       "Permite pensar, aprender, recordar y concentrarse.",
     ],
@@ -182,7 +185,7 @@ export const VINETAS_ALMA: Vineta[] = [
   {
     src: "/viñetas/tcm/alma/alma6.png",
     paragraphs: [
-      "Zhi (Riñones)",
+      "Zhi (riñones)",
       "Es la voluntad.",
       "Da perseverancia, determinación y la fuerza para seguir adelante.",
     ],
@@ -237,6 +240,13 @@ export function TCMIlustracionesModal({
 
   const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
 
+  // No mostramos nada hasta que la foto de fondo (tcm.png) y las portadas del
+  // selector estén completamente cargadas: mientras tanto se ve solo el loader
+  // de TCM, para que luego aparezca todo a la vez (fondo + tarjetas).
+  const fondosListos = usePrecargarImagenes(
+    isOpen ? ["/img/fondos/tcm.png", ...SELECTOR_OPTIONS.map((o) => o.cover)] : [],
+  );
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
       {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE). Ponerla
@@ -245,12 +255,12 @@ export function TCMIlustracionesModal({
           de referirse al viewport → quedaban huecos. */}
       <ModalOverlay
         bg={tcmBg}
-        sx={{
+        sx={fondosListos ? {
           backgroundImage: `linear-gradient(${tcmBg}33, ${tcmBg}33), url('/img/fondos/tcm.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-        }}
+        } : undefined}
       />
       <ModalContent
         bg="transparent"
@@ -262,6 +272,15 @@ export function TCMIlustracionesModal({
         minH="100vh"
         position="relative"
       >
+        {/* Mientras la foto de fondo y las portadas no están cargadas, no se
+            muestra nada salvo el loader de TCM (aparece todo a la vez). */}
+        {!fondosListos && (
+          <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+            {comicLoaderPorColor(tcmTxt) ?? <SpinnerTurquesa fullScreen={false} color={tcmTxt} />}
+          </Flex>
+        )}
+
+        {fondosListos && (<>
 
         {/* X cerrar */}
         <IconButton
@@ -468,6 +487,7 @@ export function TCMIlustracionesModal({
             }}
           />
         )}
+        </>)}
       </ModalContent>
     </Modal>
   );

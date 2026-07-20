@@ -5,7 +5,7 @@ import { CELULA_VIVA } from "./comicCelulaViva";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
-// Cómic «De las piezas a la vida». Va ENTRE la pantalla de Estructuras celulares
+// Cómic «De las piezas a la Vida». Va ENTRE la pantalla de Estructuras celulares
 // y la de «Crea la célula»: se abre al terminar de montar las cuatro estructuras.
 //
 //   · onContinue → botón «Crea la célula →» de la última viñeta (o el tick

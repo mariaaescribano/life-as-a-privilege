@@ -104,7 +104,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
     src: "/viñetas/hinduismo/elementos/aire.png",
     paragraphs: [
       "El Aire es el movimiento.",
-      "La respiración, los pensamientos y el cambio constante de la vida.",
+      "La respiración, los pensamientos y el cambio constante de la Vida.",
     ],
   },
   {
@@ -134,8 +134,8 @@ export const VINETAS_DOSHAS: Vineta[] = [
   {
     src: "/viñetas/hinduismo/doshas/doshasportada.png",
     paragraphs: [
-      "Según la Ayurveda, los cinco elementos se mezclan para formar los tres doshas.",
-      "En cada persona, un dosha predomina sobre los otros, esto influencia la constitución, la mentalidad y la salud.",
+      "Según la Ayurveda, los cinco elementos se mezclan para formar los tres Doṣhas.",
+      "En cada persona, un Doṣha predomina sobre los otros, esto influencia la constitución, la mentalidad y la salud.",
     ],
   },
   {
@@ -172,7 +172,7 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
 const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
   { key: "el_origen",     title: "1. El Origen",     cover: "/viñetas/hinduismo/origen/portada.png"              },
   { key: "los_elementos", title: "2. Los Elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.png" },
-  { key: "los_doshas",    title: "3. Los Doshas",    cover: "/viñetas/hinduismo/doshas/doshasportada.png"        },
+  { key: "los_doshas",    title: "3. Los Doṣhas",    cover: "/viñetas/hinduismo/doshas/doshasportada.png"        },
 ];
 
 interface HinduismoIlustracionesModalProps {

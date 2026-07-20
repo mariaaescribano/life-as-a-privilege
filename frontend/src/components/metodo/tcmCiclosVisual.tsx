@@ -10,6 +10,7 @@ import {
 } from "./tcmRecorrido";
 import { ICONO_ELEMENTO } from "./tcmElementosContenido";
 import { ComicViewer } from "./ComicViewer";
+import { TcmLoader } from "./comicLoaders";
 
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
@@ -289,6 +290,9 @@ export function RelacionModal({ rel, onClose }: { rel: Relacion | null; onClose:
               disciplinaBgImage={FONDO_CICLO[ciclo]}
               disciplinaBgColor={tcmBg}
               fondoNitido
+              // Animación (yin-yang) y scroll en BLANCO, como la letra del cómic.
+              loader={<TcmLoader color="#ffffff" />}
+              scrollbarColor="#ffffff"
               onClose={onClose}
             />
           );

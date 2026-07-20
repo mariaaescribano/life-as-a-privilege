@@ -61,11 +61,11 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 ### Quirón en Acuario
 - Fuiste diferente, y eso te costó el rechazo del grupo.
 - Te sientes solo, como si no pertenecieras a la humanidad.
-- Tu don es sanar lo colectivo desde tu propia rareza.
+- Tu don es sanar lo colectivo desde tu propia individualidad.
 
 ### Quirón en Piscis
-- Cargas un dolor que viene de antes de nacer, incluso el del linaje.
-- Sientes que no mereces ser feliz ni fundirte con nada.
+- Cargas un dolor que viene de antes de nacer y es compartida con el del linaje.
+- Sientes que no mereces ser feliz.
 - Tu don es servir a la humanidad sanando primero tu propia herida.
 
 ## Nodo Norte
@@ -77,12 +77,12 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 
 ### Nodo Norte en Tauro
 - Construye tu propia estabilidad, sin depender de nadie.
-- Aprende a disfrutar del cuerpo y de la vida simple.
+- Aprende a disfrutar del cuerpo y de lo simple.
 - Suelta el drama; la abundancia empieza en ti.
 
 ### Nodo Norte en Géminis
 - Aprende a hablarle a cada uno en su propio idioma.
-- No sabes más que nadie: escucha antes de enseñar.
+- No sabes más que nadie: escucha.
 - Tu destino es ser puente entre mundos distintos.
 
 ### Nodo Norte en Cáncer
@@ -101,7 +101,7 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 - Ordena tu vida sin dejar de ser generoso.
 
 ### Nodo Norte en Libra
-- Aprende a compartir tu vida sin perder tu esencia en ello.
+- Aprende a compartir tu Vida sin perder tu esencia en ello.
 - Ceder no es perderte: es la puerta a tu expansión.
 - La felicidad crece cuando aprendes a estar en pareja de verdad.
 
@@ -148,7 +148,7 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 - Es hora de dejar de repetir y empezar a pensar por ti mismo.
 
 ### Nodo Sur en Cáncer
-- Viviste atrapado en la familia y nunca saliste a vivir tu propia vida.
+- Viviste atrapado en la familia y nunca saliste a vivir tu propia Vida.
 - Confundiste el refugio con una casa, no contigo mismo.
 - Enfréntate al mundo: ahí está tu **poder personal**.
 
@@ -165,7 +165,7 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 ### Nodo Sur en Libra
 - Aprendiste a entregarte tanto que te perdiste a ti mismo.
 - Ahora te cuesta decidir sin mirar lo que otros quieren.
-- Toca recuperar tu propia voz.
+- Toca recordar tu valía.
 
 ### Nodo Sur en Escorpio
 - Dependiste de otros para sostener tus deseos.
@@ -185,7 +185,7 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 ### Nodo Sur en Acuario
 - Viviste en la mente y en el grupo, casi sin individualidad.
 - Te sientes diferente, pero no siempre eres auténtico.
-- Toca dejar de actuar la rareza y ser tú de verdad.
+- Toca ser tú de verdad.
 
 ### Nodo Sur en Piscis
 - Fuiste experto en lo espiritual, pero extraño a lo terrenal.
@@ -206,12 +206,12 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 
 ### Ascendente en Géminis
 - Por fuera pareces tranquilo, por dentro hay ruido mental sin parar.
-- Tu curiosidad es enorme, pero disperso te vacía: elige y profundiza.
+- Tu curiosidad es enorme, pero la dispersión te vacía: elige y profundiza.
 - Baja de la cabeza al corazón para sentir de verdad.
 
 ### Ascendente en Cáncer
-- Tu timidez es una coraza que congela el dolor en vez de protegerte.
-- Sientes lo ajeno como propio: aprende a diferenciarlo y soltarlo.
+- Tu timidez es una coraza que congela el dolor en vez de sanarlo.
+- Sientes lo ajeno como propio: aprende a diferenciar tus propias emociones y soltar lo que no es tuyo.
 - No puedes nutrir a otros si primero no te **nutres** a ti.
 
 ### Ascendente en Leo
@@ -222,20 +222,20 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 ### Ascendente en Virgo
 - Nunca te sientes del todo suficiente, y eso te condiciona por dentro.
 - Todo lo que juzgas fuera es un espejo de lo que aún no sanas en ti.
-- La vida no se mide ni se ordena a la perfección: suéltalo.
+- La Vida no se mide ni se ordena a la perfección: suéltalo.
 
 ### Ascendente en Libra
 - Los demás son tu espejo, pero tu voz también cuenta: no dejes que decidan por ti.
-- Cuidado con perseguir la vida perfecta en vez de vivir la de hoy.
+- Cuidado con perseguir la Vida perfecta en vez de vivir la de hoy.
 - El ahora es lo único real; empieza por hacer lo que puedas, hoy.
 
 ### Ascendente en Escorpio
 - Ocultas tu intensidad tras una calma que no es del todo real.
 - Buscas poder fuera cuando el verdadero poder ya vive dentro de ti.
-- Estás bendecido para iluminar lo oscuro: no escondas tu propia **sombra**.
+- Estás bendecido para iluminar lo oscuro: no escondas tu propia **sombra**, allí están tus mayores dones.
 
 ### Ascendente en Sagitario
-- Aunque no lo parezca, a veces le temes a la vida y a que pueda ser bonita.
+- Aunque no lo parezca, a veces le temes a la Vida y dudas que pueda ser bonita.
 - Cada meta que alcanzas es solo un trampolín hacia la siguiente.
 - Sé sincero con tu presente: no escapes al futuro con falso optimismo.
 
@@ -262,7 +262,7 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 - Aprendes a perseguir tus deseos midiendo las consecuencias, sin tomar lo que no te pertenece.
 
 ### Sol en Tauro
-- Pones tu seguridad en lo material, y te cuesta soltar cuando la vida pide cambio.
+- Pones tu seguridad en lo material, y te cuesta soltar cuando la Vida pide cambio.
 - Eres tierra firme: estable, fiable, y capaz de construir abundancia para compartirla.
 - Necesitas validarte a ti mismo, más allá de lo que posees.
 
@@ -282,7 +282,7 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 - Aprende a **ser**, simplemente por el placer de ser, sin necesitar que nadie te aplauda.
 
 ### Sol en Virgo
-- Cuando el caos aparece, te refugias en limpiar, ordenar o arreglar la vida de los demás.
+- Cuando el caos aparece, te refugias en limpiar, ordenar o arreglar la Vida de los demás.
 - Maduras al aceptar, de una vez, que no controlas absolutamente nada.
 - Todo tiene su propio orden, aunque no lo entiendas al primer vistazo.
 
@@ -1669,3 +1669,539 @@ _Cada resumen son 3 frases. Los `**...**` marcan palabras en negrita en la app: 
 - Vives en tu mundo interior, lejos de lo ordinario.
 - Lo real, aunque asuste, también es sagrado.
 
+
+---
+
+# PARTE 3 · LILITH (texto completo)
+
+_Texto largo de Lilith convertido a segunda persona del singular («tú»). Los `**...**` marcan negrita en la app; las `«...»` son frases/pensamientos internos._
+
+## Lilith en los Signos
+
+### Lilith en Aries
+Eres **masculino y competitivo**, y así debes dejarte ser.
+
+Posees una energía que **no quiere pedir ni depender de otros**. Te gusta sentir que no tienes deudas, ni deber ni que te deban; que cada quien se las arregle. Todo lo que signifique estar enganchado a otro puede implicar dolor.
+
+En baja frecuencia, puedes tratar de ser **amable, paciente o generoso**, y pensar antes en el otro porque así has sido educado, no porque realmente lo desees.
+
+### Lilith en Tauro
+Sufres **problemas en torno a la comida o vergüenza por las acciones físicas**: que otros te vean comer o descubran lo que deseas. Puedes sentir tanta vergüenza que llegues a tomar un amante, porque temes que la persona que verdaderamente te importa descubra cómo eres y qué quieres.
+
+**Necesitas y deseas seguridad**, pero debes permitirte disfrutar aunque todavía no la tengas.
+
+Tiendes a generar **crisis cíclicas de desconexión con lo que realmente deseas**. Viertes tu energía en algo que sabes que no te gusta y acabas pensando: *«¿Qué hago con esto, si ni siquiera me gusta?»*. Son crisis de conflicto muy potentes, incluso autodestructivas.
+
+El trabajo es **darte permiso para desear lo que realmente deseas**.
+
+### Lilith en Géminis
+**Deseas expresar lo que sientes y piensas**; necesitas ser comprendido y, al expresarte, no ser juzgado ni ignorado.
+
+En lo transgeneracional hay un **fuerte complejo de inferioridad en torno a «ser tonto»**.
+
+Cuidado con **dejar las cosas a medias o quedarte en la superficie**. El trabajo consiste en descender a la experiencia.
+
+Necesitas doble estimulación; la doble estimulación te ayuda a enfocarte.
+
+Puedes buscar lo simbólico y lo intangible para justificar que nadie te entiende: *«Déjenme en paz, no sea que se den cuenta de que soy tonto; déjenme divagar en cosas abstractas para justificar que nadie me entiende.»*
+
+En alta frecuencia, **sí puedes bajar lo abstracto a tierra**.
+
+### Lilith en Cáncer
+Necesitas **trabajar la energía sexual**. Puede haber muchos conflictos con tu madre y con tu propia maternidad; con frecuencia eres hija de una mujer que no quería ser madre.
+
+El trabajo es **el desapego emocional**: comprender *«eres mi madre, pero no tengo que ser como tú, ni como mujer ni como madre»*. Respecto a la familia que creas, puedes llegar a ser madre, pero **no deseas la maternidad**; lo que realmente deseas es hogar, paz y nutrición emocional.
+
+---
+
+El trabajo también consiste en **no contener las emociones**; permitirte sentirlas, junto con la vulnerabilidad y el miedo que traen. Además, hacerte consciente de la sensación de que **nunca es suficiente**, ni lo que das ni lo que recibes.
+
+Puedes **negar lo emocional** y, con ello, negar también tu vulnerabilidad. Puedes mostrarte frío, poco frágil, volcarte en los objetivos, el compromiso, el trabajo y las responsabilidades para ser visto como alguien responsable, y luego decir que no tienes tiempo para nutrirte o crear un hogar.
+
+### Lilith en Leo
+Hay **sufrimiento por querer ser quien eres**: ser visto, admirado y reconocido, pero no atreverte. Hay mucho miedo y la memoria de no haber sido amado.
+
+Puede haber una **profunda sensación de indignidad en la infancia**, junto con una castración de tu belleza interior y de tu capacidad creativa.
+
+Puedes ser **muy activista o protestón**, uniéndote a grupos que intentan cambiar la sociedad. Sin embargo, puedes sentirte desplazado dentro de esos grupos y proyectar hacia ellos conflictos no resueltos.
+
+### Lilith en Virgo
+**Necesitas ser perfecto**.
+
+Puede haber **mucho autojuicio**, al que se suma todo lo que imaginas que los demás piensan o pensarán de ti, generando mucha ansiedad.
+
+Buscas **seguridad laboral**, aunque ese trabajo no financie la vida de tus sueños.
+
+Cuidado con la procrastinación: como el cuadro nunca será perfecto, *«ni siquiera empiezo»*.
+
+Puede haber **problemas sexuales**, obsesión por la salud desde el miedo, temas sexuales en el árbol familiar, TOCs de limpieza o compulsiones relacionadas con el cuidado corporal.
+
+El trabajo consiste en **entregarte al caos y soltar el control**; permitirte la ausencia de miedo y dejar de dar tanta importancia a los detalles.
+
+### Lilith en Libra
+**Quieres estar en relación y entregarte al otro**, pero tienes miedo de que el otro no se entregue o te abandone. Esto activa tu herida y te duele.
+
+Sufres por no encontrar igualdad ni apoyo; hay dolor porque no fuiste escuchado por tus progenitores y temes que tu pareja actúe igual: *«¿Para qué voy a expresar lo que necesito, si no me vas a escuchar, lo vas a negar o me vas a decir que me las arregle solo?»*
+
+Por eso, una parte de ti puede pensar: *«No quiero compromiso, puedo arreglármelas solo, no voy a extrañar no tener pareja.»*
+
+---
+
+**No quieres repetir la relación de tus padres**, pero tenderás a repetirla hasta que te detengas y tomes conciencia.
+
+Es una buena posición para **motivar y acompañar a otros**, ayudándolos a ir más allá de lo que pensaban que eran. No soportas a la gente que te limita.
+
+Es una posición empática, pero nunca dejas de ser racional. El gran trabajo consiste en **expresar lo que necesitas, en concreto a tu pareja, aunque no lo vayan a atender**.
+
+### Lilith en Escorpio
+Puede haber **karmas no resueltos**, heredados o propios: algo que no lograste concluir y que necesitas cerrar en esta vida.
+
+Es una **posición complicada**. Hay tendencia a la ira: cuando no logras o no concluyes algo, aparece la frustración, y la frustración se convierte en ira. Esto puede llevarte a la destrucción o la autodestrucción.
+
+Puedes construir un sistema defensivo basado en el **«no confío en nadie»**. Quien es autodestructivo primero deja de confiar en sí mismo.
+
+---
+
+Hay un **deseo de consumación**: llegar al final para que pueda comenzar un nuevo ciclo. También hay fuertes deseos de conectar con tu poder interior. El trabajo consiste en comprender **desde dónde y para qué actúas**.
+
+En negativo, puedes **buscar el placer egoísta en cada situación**. Puedes activar el miedo a los finales y al no compartir.
+
+### Lilith en Sagitario
+**Necesitas ser auténtico, espontáneo y libre**, siendo coherente con tu verdad interior y moviéndote desde ahí, no desde las normas establecidas.
+
+Puede haber **inhibición, represión y falta de permiso para explorar tu verdad o ser espontáneo**. Por eso, sientes que tienes que salir a buscar.
+
+Hay un deseo profundo, pero también contención e incluso tendencias a la autolesión. Cuidado con volverte dogmático. Puede haber **miedo al compromiso**.
+
+Puedes caer en **la mudez**: no expresarte, no hacerte visible y vivir desde códigos limitantes, como el de *«la niña buena y calladita»*.
+
+### Lilith en Capricornio
+Puedes vivir desde la **autosuficiencia**: *«Puedo con todo; tardo menos en hacerlo que en explicar cómo; nadie me va a ayudar de todos modos.»*
+
+Hay una **gran ambición a nivel laboral y profesional**. Ser ambicioso no significa que no sientas emociones; el trabajo es **ir tras tus propias ambiciones sin perderte en las emociones**.
+
+---
+
+El deseo —y también el dolor— se activa cuanto más te esfuerzas: **cuanto más luchas, más duele**. El trabajo consiste en **ir tras lo que quieres con fluidez**. En el fondo, **quieres ser amado por ser quien eres**.
+
+Puedes buscar **el reconocimiento a través del afecto y no de lo profesional**. Puede haber un enorme miedo a la soledad y al abandono y, desde ahí, **miedo a llegar demasiado alto**, porque en las cumbres hay poca gente.
+
+### Lilith en Acuario
+Puedes vivir un **conflicto entre el lugar que ocupas y el lugar que deseas ocupar** dentro de la sociedad o entre tus amigos.
+
+Puedes sentirte desplazado y vivir en conflicto. Eres muy susceptible a la dinámica de los grupos y las amistades; puede haber **miedo al abandono**, por haber vivido pérdidas de amistades o expulsiones de grupos.
+
+---
+
+Puedes mostrarte **muy seguro de ti mismo**, pero como mecanismo de defensa frente al miedo a no ser aceptado. Esto genera crisis internas que oscilan entre *«no necesito pertenecer»* y *«lo único que necesito son amigos»*.
+
+Puedes **atrincherarte en ti mismo y aislarte**. Buscas atención y afecto, pero vives esa necesidad como algo vergonzoso o lastimero, sintiendo que los demás preferirían que no te acercaras.
+
+La alta frecuencia consiste en **manifestar tu singularidad desde tu esencia**. Así es como el ego desciende.
+
+### Lilith en Piscis
+Es una **posición compleja**. Hay una **enorme sensibilidad** a nivel de intuición, percepción y clarividencia.
+
+Puedes haber sido criticado, juzgado o incluso "quemado" por tu sensibilidad y por la forma en que percibes y vives el amor. **Quieres ser como eres, con el amor por encima de todo, pero sientes que no puedes.**
+
+---
+
+Es común que estés **desconectado de tus dones**. Puedes volverte muy caótico, sufridor y desconectado de ti mismo.
+
+Buscas **no decepcionar ni sentirte decepcionado**, y, sin embargo, atraes la decepción. Puedes esconderte o encogerte para no decepcionar; haces pequeño lo inefable y puedes deslizarte hacia una **patología de la perfección**, obsesionándote con lo minúsculo hasta perderte.
+
+## Lilith en las Casas
+
+### Lilith en Casa 1
+Puedes haber sido **obligado por uno de tus progenitores a ocupar el lugar de su pareja**, robándote el permiso de ser niño y de desear tus propios deseos.
+
+Como consecuencia, puedes **no saber poner límites** o parecer muy egoísta, cuando en realidad solo anhelas tener un poco de espacio para ti mismo.
+
+---
+
+Puede haber **tendencias autodestructivas**. Debido a ello, puedes atraer a personas destructivas que te muestran cómo te estás haciendo daño a ti mismo.
+
+En alta frecuencia, tienes el don de **permitir que otros sean auténticos** y de romper estructuras que ya no sirven.
+
+En baja frecuencia, **no confías ni te dejas ayudar**, porque temes ser dominado.
+
+Tu gran don es **reconocer lo auténtico**. Ves con claridad qué es disfraz, qué es pose y qué es real.
+
+Puedes **avergonzarte de tus propios deseos** y disfrazarte para ser lo que crees que los demás esperan de ti.
+
+Sueles **envidiar o admirar a las personas auténticas**, aquellas que son fieles a sí mismas.
+
+### Lilith en Casa 2
+Te fue **inculcado que no tenías derecho a disfrutar**. Puede haber habido ruinas financieras en el árbol familiar, dejando la idea de que es mejor no tener para no pasar por el dolor de perderlo.
+
+El desarrollo consiste en **aceptar tu don**, un don que te sale de forma natural desde pequeño, pero al que no has dado importancia porque en tu familia no estaba bien visto.
+
+---
+
+**La verdadera abundancia es el permiso de reconocer dones concretos.**
+
+**Deseas tener dinero y vivir una buena y cómoda Vida**. Por eso, puedes juzgar a quienes se permiten cobrar por su tiempo y sus servicios.
+
+Admiras a **las personas abundantes**, o a quienes viven con estabilidad y tranquilidad; a quienes aceptan el disfrute de tener.
+
+Puedes **depender de otros**, postergar el placer para desconectarte del disfrute y tener dificultades para conservar el dinero: ganar mucho y perderlo.
+
+En alta frecuencia, **es la capacidad de conectar la materia y el espíritu**.
+
+### Lilith en Casa 3
+En la infancia sentiste que **eras tonto**, porque se burlaron de tu forma de pensar y de expresarte.
+
+En tu familia, el intelecto era más importante que tú mismo. Con frecuencia, se te impuso qué debías estudiar.
+
+Hay **mucha necesidad de aprender**, pero también mucho dolor, porque te hicieron estudiar mientras te creías tonto.
+
+Tu mayor deseo es **poder expresarte y ser entendido**.
+
+---
+
+Cuanto más te esfuerzas por mantener la **rigidez mental**, más caes en la dispersión y más te pierdes.
+
+En baja frecuencia, puedes ser **cotilla o destruir con la palabra**. Fuiste criticado por tu intuición perceptiva, lo que hace que la reprimas, pero necesitas expresarla o, al menos, no reprimirla en ti mismo.
+
+Admiras o envidias a los sabios, escritores y personas que saben hacerse entender.
+
+Puedes buscar convertirte en maestro, pero quedarte en el aprendizaje mental sin integrar la experiencia. **La sabiduría implica integrar.** Puedes buscar solo lo comprobado para no entrar en el dolor de sentir y de experimentar.
+
+### Lilith en Casa 4
+De pequeño sentiste que **no eras tomado en cuenta**. Tus necesidades no importaban; tus padres se preocupaban más por qué pensarían los demás de ti que por ti en realidad.
+
+Creces en un ambiente donde terminas convencido de que **serás valorado según lo que otros piensen**. Tuviste que renunciar a tus sueños, a la imaginación y a la emocionalidad porque nunca fueron atendidos. Sueles desear ser reconocido, pero ese reconocimiento no llena tu vacío interior.
+
+---
+
+En alta frecuencia, tienes una gran **capacidad de nutrir y cuidar a los demás**, una vez que dejas de esperar que tus esfuerzos sean vistos. También eres capaz de atender tus propias necesidades.
+
+En baja frecuencia, puede haber **dependencia emocional**, apego a lo que la familia aparenta ser o a lo que desearías que fuera, moverte desde la energía de víctima para manipular y problemas alimentarios por falta de coherencia.
+
+Puedes **volcarte en lo profesional** para no tener que gestionar tu mundo emocional.
+
+Puedes sentir **vergüenza por no pertenecer** o por no haberte convertido en lo que tu familia esperaba de ti.
+
+Puedes **destruir los vínculos emocionales**. En los hombres, los problemas sexuales pueden ser muy serios.
+
+Puedes llegar a venderte sexualmente a cambio de tener pareja o amor. Puede haber **mucha inconsciencia emocional**.
+
+Juzgas a **quienes saben gestionarse, ser libres, dar y recibir sin esperar nada a cambio; a quienes se permiten ser**.
+
+Admiras o envidias **a quienes han construido una familia de verdad y viven con autenticidad**.
+
+### Lilith en Casa 5
+**No te sentiste valorado por tu padre** (y, a veces, tampoco por tu madre). Esto te deja una impronta de excelencia inalcanzable, que hace que te pongas metas imposibles para demostrarte que tu padre tenía razón y que eres un incapaz.
+
+Tu mayor deseo es **descubrir qué puedes aportar al grupo con solo ser tú mismo**: *«¿Qué parte de mí suma valor cuando la manifiesto?»*. También hay un deseo profundo de encontrar un amor apasionado, frente a la creencia de no ser digno de ser amado.
+
+El trabajo consiste en **aprender a divertirte y relajarte**; darte permiso para ser sin preguntarte constantemente si estás gustando o no, y dejar de esperar el permiso de otros para ser feliz.
+
+---
+
+Puede haber temas en el árbol familiar relacionados con **abortos, no querer hijos o conflictos en torno a la maternidad y la paternidad**.
+
+En alta frecuencia, eres **muy espontáneo**. El niño interior ocupa el lugar que le corresponde. Creas de forma natural, desde el don y la creatividad, por el simple gozo de crear, sin esperar el reconocimiento de los demás. **Amas y te dejas amar**.
+
+En baja frecuencia, puedes volverte **arrogante**, con un ego muy grande y una búsqueda patológica de reconocimiento. Puedes caer en el dramatismo, el egocentrismo, el victimismo, el ridículo o la búsqueda obsesiva de la perfección.
+
+### Lilith en Casa 6
+Lo que importaba era **el orden**; tus necesidades eran despreciadas.
+
+Creces en una **búsqueda de perfección**: se te exige ser de cierta manera y persigues una perfección inalcanzable. Terminas sintiendo que solo eres útil, pero que **no serás amado ni aceptado por quien eres**.
+
+Puedes **obsesionarte con los resultados** y con el cuerpo, o, por el contrario, no cuidarlo en absoluto. Sueles vivir los extremos.
+
+---
+
+En alta frecuencia, eres **muy eficiente**, poniendo exactamente la cantidad justa de energía para lograr un objetivo: sin desperdiciar, sin desgastarte y sin forzarte. Eres capaz de **unir lo humano y lo divino**.
+
+Tu veracidad consiste en **distinguir lo útil de lo inútil**.
+
+Puedes sentir **vergüenza de no ser perfecto**, de enfermar, de no ser eficaz o de que el orden y la limpieza no sean suficientes.
+
+Admiras o envidias **a las personas virtuosas y a quienes tienen conciencia corporal**.
+
+Puedes olvidarte de ti mismo y entrar en el **autosacrificio**, intentando salvar al otro. Puede haber temas de adicciones, depresiones e inconsciencia corporal.
+
+Puedes encerrarte en **el juicio mental, la exigencia y el ego**, sintiendo que todos te juzgan porque tú no dejas de juzgarte y lo proyectas fuera.
+
+Vives con **la angustia de no tener tiempo**, fruto de la desconexión y la inconsciencia.
+
+### Lilith en Casa 7
+Fuiste **obligado a convertirte en el padre de tus propios padres**.
+
+Tus padres tenían muchos problemas en la relación y tú, a pesar de ser un niño, tuviste que poner orden para evitar conflictos.
+
+---
+
+**Anhelas una relación equilibrada**. Puedes ser muy exigente con lo que esperas de una pareja y volverte destructivo cuando descubres que la perfección no existe.
+
+Puede haber viudez, parejas emocionalmente "muertas", miedo a que la relación fracase, parejas ausentes o amores imposibles.
+
+Habitualmente hay un rechazo al matrimonio: sí deseas una relación, pero sin boda ni papeles.
+
+---
+
+Puedes **negar la necesidad o el deseo de una relación de pareja**. Tiendes a ser excesivamente responsable: *«Tardo menos en hacerlo yo que en pedírtelo; y si te lo pido y te niegas, se me abre la herida, así que lo resuelvo yo.»* Esto puede llevarte a negar tus propias necesidades.
+
+El trabajo consiste en **atreverte a pedir lo que necesitas**. Por tu crianza aprendiste a no pedir, porque nunca fuiste atendido; fuiste relegado. Esto te empuja hacia la autosuficiencia.
+
+En baja frecuencia, puedes quedarte **enganchado al miedo al abandono y a no ser elegido**, oscilando entre la dependencia excesiva y la autosuficiencia extrema. Aunque termines solo, puedes no extrañar a nadie; por eso sueles ser una persona solitaria.
+
+Tu veracidad consiste en **reconocer desde dónde se unen las personas**.
+
+### Lilith en Casa 8
+En la infancia puede haber habido **abuso sexual o una violación profunda de la confianza**.
+
+Puede haber una **pérdida muy fuerte o una ausencia que deja una marca profunda**. Lo sucedido fue ocultado: quien debía protegerte simplemente declaró *«eso nunca pasó»*. Son frecuentes las familias con mucho ocultamiento; secretos o hechos negados que terminan pudriéndose, muchas veces relacionados con la muerte.
+
+---
+
+Creces **intentando controlarlo todo** para no volver a sentirte vulnerable o violentado. El trabajo consiste en aceptar que, pase lo que pase, **no lo controlas todo**. Vivirás cíclicamente muertes, destrucciones o pérdidas, que serán más dolorosas cuanto más operes desde el control.
+
+Puede haber **un fuerte conflicto con el cuerpo físico**, con estar encarnado. Puede manifestarse como rechazo a tu propio cuerpo, cirugías repetidas o el deseo de ser otra persona, como forma de autodestrucción.
+
+Puedes **huir de la sexualidad** para evitar su intensidad, cuando en realidad deseas una sexualidad de fusión más allá de lo físico.
+
+---
+
+En alta frecuencia, tienes una gran capacidad para **acompañar las crisis ajenas**, atravesar infiernos con otros y sostener procesos de duelo, especialmente en personas que han perdido hijos.
+
+En baja frecuencia, puedes caer en la **manipulación, la dominación, la autodestrucción o la necesidad de crearte nuevas crisis** para seguir viviendo en el infierno.
+
+Puedes apegarte a la materia, al trabajo, al esfuerzo y a lo material para no sentir lo emocional y desconectarte del trauma. Cuanto más te desconectas, más crisis de pérdida se generan para que, al perderlo, no te quede más remedio que sentir.
+
+---
+
+Tu veracidad consiste en **reconocer quién está realmente en crisis y quién vive desde el papel de víctima**, así como ver con facilidad la raíz de los traumas y de los shocks congelados.
+
+Puedes sentir **vergüenza por algo que viviste**, y también por sentirte vulnerable.
+
+Juzgas a **quienes no temen depender de otros ni enfrentarse a la muerte**, y a quienes viven las crisis con naturalidad.
+
+Admiras a **las personas estables, serenas y seguras de sí mismas**.
+
+### Lilith en Casa 9
+Fuiste criado en un hogar donde **la mentira era normal**, donde se vivía desde una religión o desde un fuerte dogmatismo.
+
+Te detona **la negación de lo evidente**: cuando las personas niegan lo obvio.
+
+---
+
+Tu mayor deseo es **encontrar sentido, coherencia y comprensión**; encontrar que el sentido sea visible en tu día a día.
+
+Sin embargo, puedes vivir mucha frustración: *«Lo intento y lo intento, pero nunca termino de sentirlo.»*
+
+Puedes buscar en otras culturas lo que tu cultura de origen no te dio, a través de viajes, filosofías o desarrollando un pensamiento auténtico, no basado en cómo fuiste educado. Tienes potencial de **filósofo y gran comunicador**.
+
+En baja frecuencia, puedes volverte **dogmático**, entregar tu poder y no responsabilizarte de tu vida. Puedes quedarte quieto por miedo, sin experimentar realmente.
+
+---
+
+Puedes entretenerte **coleccionando títulos**, pero sin buscar una conexión real con tu entorno, quedándote en la información superficial. Hablas desde la mente, sin fe y sin honestidad respecto a lo que verdaderamente necesitas.
+
+Tu veracidad consiste en **reconocer quién es un charlatán, quién es sabio y quién habla desde la verdad**.
+
+Puedes sentir **vergüenza por tu indecisión**, por no haber experimentado lo suficiente, por no encontrar sentido o coherencia, o por vivir desde la incoherencia.
+
+### Lilith en Casa 10
+Llegaste a una familia donde **los roles no estaban definidos**. La madre no actuaba como madre, la hija actuaba como madre... Como consecuencia, **no pudiste ocupar el lugar que te correspondía**, no sabes qué lugar ocupar y, por ello, te cuesta vincularte de forma natural.
+
+---
+
+Puedes haber crecido en una familia donde **no hubo honestidad sobre el desde dónde y el para qué** de las ambiciones o deseos de los padres respecto a sus hijos.
+
+Se esperaba que lograras ciertas metas, pero sin un propósito claro: *«Saca un título», «tienes que lograr esto»*. Frente a ello, puedes responder: *«Pues entonces me largo; como no me quieren, se acabó.»*
+
+Puede haber **miedo a ser libre, a no pertenecer, a estar solo o a ser abandonado**, así como miedo a no cumplir las ambiciones de tus padres. Puedes buscar construir una familia convencional para no dedicar tiempo a tu profesión.
+
+A pesar de este autosabotaje, tu mayor deseo es **tener una profesión con sentido**, algo vocacional que te haga sentirte realizado.
+
+---
+
+Puede haber un **conflicto con la autoridad**: *«Necesito una figura de autoridad que me dé dirección, porque nunca la tuve.»*
+
+Tienes una gran **capacidad de liderazgo**. En baja frecuencia puede manifestarse como manipulación; en alta frecuencia, como la capacidad de sacar lo mejor de las personas y ayudarles a manifestar su potencial.
+
+Puedes sentir **vergüenza por no encontrar tu lugar**, por no tener reconocimiento social o por no encontrar trabajo. También puede haber una tendencia al control y a la rigidez.
+
+Juzgas **la imperfección**, a las personas que consideras perezosas o a quienes saben delegar. Vives el conflicto entre la acción y la contemplación.
+
+### Lilith en Casa 11
+Creces experimentando que **no puedes confiar en el clan**, que no estás seguro ni protegido por tu familia.
+
+Puede haber exilios u ocultamiento de miembros de la familia (porque estaban "locos"...). Esto te lleva a **desconfiar de las personas y de los grupos**.
+
+Sueles sentirte rechazado en los grupos pero vas buscando tu lugar en el mundo, queriendo aportar tus dones.
+
+---
+
+Puede haber **miedo a la honestidad** y miedo a no lograr lo que deseas, porque aprendiste que no tenías permiso para soñar.
+
+Puedes vivir **enojado con el mundo** y buscar protagonismo o ser mirado. El trabajo consiste en **dejar de estar pendiente de lo que digan los demás**, permitirte tu singularidad y llegar al punto en el que la opinión ajena deje de condicionarte.
+
+---
+
+En alta frecuencia, eres un **visionario**, capaz de aportar tu visión y mostrar el camino.
+
+En baja frecuencia, puedes convertirte en un **rebelde sin causa**.
+
+Tu veracidad consiste en **reconocer desde dónde se construyen las relaciones** y en ver con facilidad qué sueños tienen posibilidades de cumplirse y desde dónde nacen.
+
+Puedes sentir **vergüenza por el lugar que ocupas en la sociedad**, o por no ocupar el lugar que realmente deseas.
+
+### Lilith en Casa 12
+Puedes haber sido **explotado por tu familia**. Es común que hayas nacido en un entorno donde todo se justificaba desde valores dogmáticos, espirituales o religiosos. Puede haber **dificultad para salir de la negación y la deshonestidad**.
+
+Tu mayor deseo es una **profunda conexión con Dios** y aprender **a ser, sin necesidad de hacer**.
+
+Puedes crear **un mundo ilusorio para huir de la soledad**, mientras al mismo tiempo huyes de la compañía: un lugar donde esconderte, donde nadie más cabe.
+
+---
+
+Son comunes los **trastornos alimentarios, las adicciones, el exceso de mundo onírico o las pesadillas**. También conviene prestar atención a la procrastinación y a la irresponsabilidad.
+
+Puedes vivir desde la idea: *«Me arruino la vida persiguiendo la perfección; procrastino porque la perfección es inalcanzable.»* Como compensación, buscas **mantenerte ocupado todo el tiempo**.
+
+## Lilith en los aspectos
+
+### Lilith en conjunción con el Sol
+Tus padres **renunciaron a sí mismos** y dejaron de creer que la Vida tiene sentido. Esto genera una energía que te lleva a **esconder tu esencia y tu brillo desde muy pequeño**.
+
+La unión Lilith–Sol es una esencia muy potente que dice: *«Vengo a ser»*, a manifestarse. De niño irradias esa energía, pero puede incomodar al padre o a la madre que ha renunciado a sí mismo.
+
+---
+
+Puede generar **arrogancia disfrazada de falsa humildad o de feminidad**. Puede haber conflictos con la energía masculina hasta que logras ponerla en su lugar. También puede haber memorias de vidas anteriores marcadas por la falta de amor propio.
+
+Puede existir una **atracción hacia vínculos intensos y poco sanos**: hombres atraídos por mujeres intensas, o mujeres atraídas por hombres desposeídos de sí mismos.
+
+El trabajo consiste en **dejar de vivir desde los mandatos externos y empezar a ser leal a tu propia alma**.
+
+### Lilith en conjunción con la Luna
+Puede haber **represión y un gran vacío emocional**. Pudiste sentirte marcado —por quien eres, por tu esencia, por lo que emanabas— como alguien **sin derecho a ser amado**. Creces con la idea de que *«solo recibes amor cuando haces por el otro o renuncias a ti mismo»*.
+
+Puedes mostrar una **apariencia fría o desapegada**, cuando en realidad cargas un gran vacío emocional y un profundo miedo a volver a ser señalado como alguien que no merece amor.
+
+Vives muchas decepciones contigo mismo porque no eres autosuficiente y, en el fondo, sigues deseando **un abrazo materno, cálido y femenino**, donde poder soltarte y descansar.
+
+---
+
+Puedes convertirte en **la madre de tu pareja** (o buscar una pareja que haga de madre), terminando en vínculos castrantes o saboteando tus propias relaciones.
+
+El trabajo consiste en **dejarte cuidar, nutrir y ser vulnerable**. Paradójicamente, **lo mismo que te nutre es lo que más temes**, porque sientes que también puede destruirte.
+
+### Lilith en conjunción con Mercurio
+Creciste como **un niño castigado con el silencio**, en una familia crítica y juzgadora. Esa vivencia se asienta profundamente en ti.
+
+Puedes mantener una **comunicación banal, superficial, fría o simbólica**, expresándote con la sensación de que, en general, no serás comprendido.
+
+El trabajo consiste en **soltar la culpa** en torno a tu forma de pensar y de comunicarte, dándote permiso para expresarte a tu manera.
+
+Puedes tener **un humor muy negro**, pero conviene cuidar que no lo utilices para herir, cortar el vínculo o crear distancia.
+
+El trabajo también consiste en **dejar de criticar**, costumbre que heredaste de tu familia pero que te resulta nociva.
+
+### Lilith en conjunción con Venus
+Tus padres **no se aman**, o creces sintiendo esa ausencia de amor. Puedes quedar muy marcado por **promesas incumplidas**, una de las heridas que más duele a un niño, y por la falta de amor de tus padres hacia ti.
+
+El trabajo consiste en **darte permiso para desear lo que realmente deseas y necesitas**. Puedes irte a los extremos: o rechazas por completo el placer (*«ni lo registro»*), o te conviertes en un gran seductor que va tras todos.
+
+---
+
+Tiendes a **buscar a tus padres en tus relaciones**, mientras vives horrorizado ante la posibilidad de repetir la relación que ellos tuvieron.
+
+Puedes sabotear la estabilidad: cuando encuentras un vínculo seguro, entras en el terror de perderlo y piensas: *«Antes de que me abandones, te dejo yo; así duele menos.»*
+
+Puedes vivir mucho dolor y buscar amantes para no tener que sanar el miedo al abandono.
+
+Puede haber **problemas de riñón**, relacionados con la dificultad para darte permiso de ser deseado: *«No me doy permiso de ser deseado y, por lo tanto, contengo el deseo; eso me daña.»*
+
+El trabajo también pasa por **integrar la energía masculina y femenina, la sensualidad y la sexualidad**. Bien integrada, esta posición funciona muy bien.
+
+### Lilith en conjunción con Marte
+**Reprimes y contienes la agresión**, o la diriges contra ti mismo. *«Nunca me dieron permiso para sacarla, así que la contengo.»*
+
+Esa energía termina convirtiéndose en ira o en una profunda sensación de impotencia, y puedes explotar con quien menos lo merece. Puede haber **crueldad ejercida o recibida**. La contención de Marte puede generar fatiga crónica.
+
+Te hace muy bien **el deporte o cualquier actividad física** que te permita liberar energía y movilizar el estrés. De lo contrario, puedes terminar empapado en ira y caer en depresiones, estados de sumisión o desconectarte de tu verdadera intención.
+
+En alta frecuencia, **aprendes a relacionarte comprendiendo que la vida no es una guerra**, y que puedes divertirte, poner límites y expresar tu fuerza sin dañarte ni dañar a los demás.
+
+### Lilith en conjunción con Júpiter
+Antes de tu nacimiento, tus padres **ya habían decidido qué querían que hicieras**.
+
+Puede aparecer un profundo rechazo a competir debido a que tus padres te dijeron: **hay que ganar, pero no se gana con justicia**. De ahí nace la necesidad de sentir: *«Si gano algo, es por mi capacidad, no por de dónde vengo. Si gano, es porque verdaderamente lo merezco.»*
+
+---
+
+Puede haber **mucho autoengaño**: *«No necesito logros.»* Al haber estado tan expuesto, puedes no permitirte querer lo que realmente deseas.
+
+El trabajo consiste en **hacer las paces con la necesidad de reconocimiento**, aceptando que necesitas ser reconocido por aquello en lo que eres bueno.
+
+Puedes **renunciar a oportunidades para esconder tus dones**, e incluso desarrollar un rechazo a la prosperidad: *«He ganado mucho; ahora veamos cómo lo pierdo rápido.»*
+
+Puede haber conflictos con la justicia humana, buscando una justicia más elevada o divina que choca con la realidad del mundo.
+
+En alta frecuencia, puedes decir con naturalidad: **«Esto es lo que soy.»** Desde ahí, aparece la abundancia y el equilibrio entre **dar y recibir**.
+
+### Lilith en conjunción con Saturno
+En la infancia puede haber habido **distancia emocional**, justificada con el *«no tengo tiempo»* o *«hay cosas más importantes, lo hago por tu bien porque te quiero»*.
+
+Puedes ser **muy cruel contigo mismo**. Al haber conocido el amor como frialdad, puedes creer que cuanto más quieres a alguien, menos debes demostrarlo.
+
+---
+
+Los **fracasos laborales** suelen empujarte hacia lo emocional, o te muestran que aquello para lo que fuiste educado no es lo que realmente anhelas. En el fondo, deseas **una estructura en la que descansar**, dejar de sufrir y de trabajar constantemente.
+
+El trabajo consiste en **comprender la responsabilidad**. Puedes ser muy irresponsable o evitar el compromiso por miedo a no poder cumplir. También puede haber una confusión entre **lo que quieres aparentar ser y cómo te percibe la sociedad**.
+
+En alta frecuencia, eres un **constructor responsable**, capaz de crear el espacio donde los deseos pueden manifestarse.
+
+### Lilith en conjunción con Urano
+En la familia, **muchos quisieron ser otra cosa**, diferentes de lo que eran, pero eligieron la frustración del convencionalismo, de lo que se suponía que debían ser.
+
+Hay un **desplazamiento a lo largo del árbol familiar**: nadie ocupa su lugar y todos renuncian a lo que realmente deseaban.
+
+El mandato es ser infeliz: si eres feliz, estás siendo desleal al árbol.
+
+---
+
+Cargas una **profunda necesidad de libertad**. Como los permisos te fueron robados, luchas por ser quien eres.
+
+Puede haber **rebeldía frente a las normas sociales y la autoridad**. En baja frecuencia, puedes convertirte en un anarquista sin propósito; en alta frecuencia, sostienes una postura como: *«El límite lo pongo yo; no voy a ser desleal a mí mismo solo porque la sociedad favorezca otra cosa.»*
+
+---
+
+Puede haber temas de **exilio o inmigración** en el árbol o como memoria de otras vidas. Con Urano (o Lilith–Urano), puede haber **locura en el árbol familiar**. También puede existir una fuerte **adicción a la no-rutina**.
+
+En alta frecuencia, tienes la capacidad de **ver hacia dónde se dirige la humanidad**.
+
+### Lilith en conjunción con Neptuno
+Puede haber una **fuerte sensación de abandono** y un profundo miedo a quedarte solo: *«Me hago cargo de la familia o del árbol para no quedarme solo.»*
+
+Puedes irte a los extremos: ser **muy exhibicionista con tus emociones** o no expresar absolutamente nada, mostrando muy poca empatía de cara al exterior.
+
+---
+
+Puede haber **adicciones en la familia**. Puedes hacerte cargo de las personas adictas o repetir esas mismas adicciones, en un intento inconsciente de sanar el sistema.
+
+Puedes sentir **culpa por ser feliz**, como si hacerlo fuera una deslealtad hacia el clan.
+
+En alta frecuencia, tienes un gran potencial como **sanador, chamán o bruja**.
+
+### Lilith en conjunción con Plutón
+Puede haber **abusos, mal uso del poder, violaciones o violencia en el árbol familiar**. Pudiste haber sido abusado o violentado en la infancia, ya fuera sexual o emocionalmente.
+
+Puedes **hacerte cargo de la ira del padre o de la madre**, o tragártela, incluso cuando esa ira nunca se expresa.
+
+Pueden aparecer celos intensos y relaciones que oscilan del amor al odio. Al contener tanto, puedes sentirte profundamente destrozado y vivir una gran intensidad emocional.
+
+---
+
+El trabajo consiste en **reconstruirte y reposicionarte** en medio de tus circunstancias.
+
+Necesitas permitirte sentir el dolor y comprender que **tu parte oscura también forma parte de ti**. De lo contrario, puedes volverte adicto al sufrimiento y ser devorado por él.
+
+Cuando esta energía está integrada, **tienes una gran capacidad para acompañar a otros en sus propias crisis**.

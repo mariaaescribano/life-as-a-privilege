@@ -58,7 +58,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "1gMBVFKMAXY",
     icon: <WoodIcon />,
     description:
-      "La Madera representa el impulso vital, el crecimiento y la visión. El Hígado mueve el Qi; cuando fluye libremente, hay creatiVidad y flexibilidad. La Madera nos enseña a crecer sin rigidez, como el bambú: fuerte y flexible a la vez.",
+      "La Madera representa el impulso vital, el crecimiento y la visión. El hígado mueve el Qi; cuando fluye libremente, hay creatiVidad y flexibilidad. La Madera nos enseña a crecer sin rigidez, como el bambú: fuerte y flexible a la vez.",
     fields: [
       { label: "Emoción", value: "Enfado · Decisión · Dirección" },
 
@@ -84,7 +84,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "oqmoovl3Yio",
     icon: <FireIcon />,
     description:
-      "El Fuego es el elemento de la conexión, la alegría y la consciencia. El Corazón alberga el Shen —la mente y el espíritu—. Cuando el Fuego arde en equilibrio, hay calidez, presencia y comunicación genuina. La gran medicina del Fuego es el Amor sin condiciones.",
+      "El Fuego es el elemento de la conexión, la alegría y la consciencia. El corazón alberga el Shen —la mente y el espíritu—. Cuando el Fuego arde en equilibrio, hay calidez, presencia y comunicación genuina. La gran medicina del Fuego es el Amor sin condiciones.",
     fields: [
       { label: "Emoción", value: "Pasión · Alegría · Expresión" },
 
@@ -110,7 +110,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "tXqEjnQPgwc",
     icon: <EarthIcon />,
     description:
-      "La Tierra representa la estabilidad, la transformación y la nutrición. En TCM, el Bazo y el Estómago transforman y transportan los alimentos en Qi y Sangre. Un Bazo equilibrado piensa con claridad; desequilibrado, nos atrapa en la preocupación crónica y el pensamiento repetitivo.",
+      "La Tierra representa la estabilidad, la transformación y la nutrición. En TCM, el bazo y el estómago transforman y transportan los alimentos en Qi y Sangre. Un bazo equilibrado piensa con claridad; desequilibrado, nos atrapa en la preocupación crónica y el pensamiento repetitivo.",
       fields: [
       { label: "Emoción", value: "Preocupación · Estabilidad · Enraizamiento" },
 
@@ -137,7 +137,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "BzgxPMYOqrA",
     icon: <MetalIcon />,
     description:
-      "El Metal encarna la pureza, los límites y la capacidad de soltar. Los Pulmones reciben el Qi del cielo en cada respiración. Respirar profundo, aceptar las pérdidas y reconocer el valor de cada experiencia es su medicina.",
+      "El Metal encarna la pureza, los límites y la capacidad de soltar. Los pulmones reciben el Qi del cielo en cada respiración. Respirar profundo, aceptar las pérdidas y reconocer el valor de cada experiencia es su medicina.",
     fields: [
     { label: "Emoción", value: "Tristeza · Paz interior · Soltar" },
 
@@ -163,7 +163,7 @@ export const ELEMENTS: TCMElementData[] = [
     video: "o2ot4bFWMoQ",
     icon: <WaterIcon />,
     description:
-      "El Agua es la fuente primordial. Los Riñones guardan el Jing —la esencia vital— y gobiernan el envejecimiento y la voluntad. El invierno es su estación: tiempo de recogerse y conectar con la profundidad de quiénes somos.",
+      "El Agua es la fuente primordial. Los riñones guardan el Jing —la esencia vital— y gobiernan el envejecimiento y la voluntad. El invierno es su estación: tiempo de recogerse y conectar con la profundidad de quiénes somos.",
     fields: [
     { label: "Emoción", value: "Miedo · Voluntad · Sabiduría · Intuición" },
 
@@ -376,17 +376,17 @@ const TABLES: TCMTableData[] = [
       {
         label: "Hinchada",
         description:
-          "Indica deficiencia de Qi del Bazo o acumulación de humedad.",
+          "Indica deficiencia de Qi del bazo o acumulación de humedad.",
       },
       {
         label: "Con marcas de dientes",
         description:
-          "Indica deficiencia de Qi del Bazo y posible acumulación de humedad o flema.",
+          "Indica deficiencia de Qi del bazo y posible acumulación de humedad o flema.",
       },
       {
         label: "Grietas o fisuras",
         description:
-          "Puede indicar deficiencia de Yin, especialmente Yin de Estómago o de Riñón.",
+          "Puede indicar deficiencia de Yin, especialmente Yin de estómago o de riñón.",
       },
       {
         label: "Temblor",

@@ -46,6 +46,14 @@ const IMG: Record<Tipo, string> = {
   gluon: "/recorrido/fisiologia/pre/gluon.png",
 };
 const PROTON_IMG = "/recorrido/fisiologia/pre/protonpordentro.png";
+// Todas las fotos que usa el dinamismo. La página no se muestra hasta que estén
+// cargadas, para que al arrastrar/animar las piezas ya tengan su ilustración.
+const TODAS_IMAGENES = [
+  "/recorrido/fisiologia/pre/upquark.png",
+  "/recorrido/fisiologia/pre/downquark.png",
+  "/recorrido/fisiologia/pre/gluon.png",
+  PROTON_IMG,
+];
 const GLOW: Record<Tipo, string> = { up: "#8ab6e6", down: "#e08a8a", gluon: "#f2c86b" };
 const LABEL: Record<Tipo, string> = { up: "up quark", down: "down quark", gluon: "gluón" };
 
@@ -78,7 +86,7 @@ const shimmer = keyframes`
 // Ficha arrastrable (columna derecha)
 // ─────────────────────────────────────────────────────────────────────────
 function FichaArrastrable({
-  pieza, onSoltar, disabled, enterDelay = 0,
+  pieza, onSoltar, disabled, enterDelay = 0, colocada = false,
 }: {
   pieza: Pieza;
   /** Devuelve true si la ficha ha caído dentro del núcleo (acierto). */
@@ -86,6 +94,9 @@ function FichaArrastrable({
   disabled: boolean;
   /** Retraso de entrada, para que las fichas salgan una a una. */
   enterDelay?: number;
+  /** Ya colocada en el núcleo: se deja un HUECO invisible del mismo tamaño en su
+   *  sitio, para que las fichas hermanas NO se recoloquen (no se mueven). */
+  colocada?: boolean;
 }) {
   const [arrastrando, setArrastrando] = useState(false);
   const [imgOk, setImgOk] = useState(false); // foto de la ficha ya cargada
@@ -100,6 +111,19 @@ function FichaArrastrable({
       transition: { type: "spring", stiffness: 320, damping: 26, delay: enterDelay },
     });
   }, [controls, enterDelay]);
+
+  // Hueco invisible: mantiene el sitio de la pieza ya colocada (las demás no se mueven).
+  if (colocada) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0}
+           visibility="hidden" aria-hidden>
+        <Box w={{ base: "58px", md: "72px" }} h={{ base: "58px", md: "72px" }} borderRadius="full" />
+        <Text fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase">
+          {LABEL[pieza.tipo]}
+        </Text>
+      </Box>
+    );
+  }
 
   return (
     <MBox
@@ -214,6 +238,8 @@ function PiezaInterna({ tipo, x, y }: { tipo: Tipo; x: number; y: number }) {
 export default function MetodoFisiologiaParticulas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // La página no se muestra hasta que las fotos del dinamismo estén cargadas.
+  const [imagenesListas, setImagenesListas] = useState(false);
   const [pendientes, setPendientes] = useState<Pieza[]>(PIEZAS_INICIALES);
   const [colocadas, setColocadas] = useState<Pieza[]>([]);
   const [completo, setCompleto] = useState(false);
@@ -224,6 +250,21 @@ export default function MetodoFisiologiaParticulas() {
 
   const nucleoRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef<Record<string, any>>({});
+
+  // Precarga de las fotos del dinamismo. Si alguna falla, no bloqueamos la página
+  // para siempre: se da por lista igualmente.
+  useEffect(() => {
+    let cancel = false;
+    const cargar = (src: string) => new Promise<void>((resolve) => {
+      const img = new window.Image();
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+      img.src = src;
+      if (img.complete) resolve();
+    });
+    Promise.all(TODAS_IMAGENES.map(cargar)).then(() => { if (!cancel) setImagenesListas(true); });
+    return () => { cancel = true; };
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -312,7 +353,7 @@ export default function MetodoFisiologiaParticulas() {
     setCompleto(false);
   };
 
-  if (loading) {
+  if (loading || !imagenesListas) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
 
@@ -410,9 +451,10 @@ export default function MetodoFisiologiaParticulas() {
                            minH={piezasMinH ? `${piezasMinH}px` : undefined}
                            columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
                         <AnimatePresence>
-                          {pendientes.map((p, i) => (
+                          {PIEZAS_INICIALES.map((p, i) => (
                             <FichaArrastrable key={p.id} pieza={p} onSoltar={soltarEnNucleo} disabled={false}
-                                              enterDelay={0.45 + i * 0.1} />
+                                              enterDelay={0.45 + i * 0.1}
+                                              colocada={colocadas.some((c) => c.id === p.id)} />
                           ))}
                         </AnimatePresence>
                       </Box>

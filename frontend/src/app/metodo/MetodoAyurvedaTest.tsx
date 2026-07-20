@@ -86,7 +86,7 @@ export default function MetodoAyurvedaTest() {
           <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 6, md: 7 }}>
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Test de los Doshas"
+              title="Test de los Doṣhas"
               pageLabel="2/4"
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
@@ -126,7 +126,7 @@ export default function MetodoAyurvedaTest() {
                   Ya hiciste el test
                 </Text>
                 <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" maxW="520px">
-                  Tu dosha ya está calculada:{" "}
+                  Tu Doṣha ya está calculada:{" "}
                   <Box as="span" fontWeight="700" color={cfg.color}>{cfg.label}</Box>.
                   Puedes ver tu resultado o repetir el test si quieres volver a calcularla.
                 </Text>

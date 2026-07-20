@@ -26,7 +26,7 @@ export function IndiceRecorrido({
   tinta = neuropsicologiaTxt,
   bg = neuropsicologiaBg,
   nom = neuropsicologiaNom,
-  defaultExpId = "linea-de-vida",
+  defaultExpId = "linea-de-Vida",
   paramKey = "experienciaId",
   acento,
   luz = true,
@@ -82,7 +82,7 @@ export function IndiceRecorrido({
   const expId = params[paramKey] || defaultExpId;
 
   // Página actual: la del índice cuya ruta coincide con la URL (la más larga
-  // que casa, para que «/…/linea-de-vida» no la robe la página base).
+  // que casa, para que «/…/linea-de-Vida» no la robe la página base).
   const pathname = location.pathname.replace(/\/+$/, "");
   const actual = indice
     .filter((p) => p.ruta(expId).replace(/\/+$/, "") === pathname)
@@ -103,8 +103,14 @@ export function IndiceRecorrido({
 
   // ¿Está bloqueado el paso n? Con `progresoKey`: todo lo posterior al máximo
   // desbloqueado. Sin él: el flag `bloqueado` de la propia entrada (astrología).
-  const estaBloqueado = (p: PasoRecorrido): boolean =>
-    progresoKey ? (progresoCargado && p.n > pasoMax) : !!p.bloqueado;
+  // IMPORTANTE: mientras el progreso aún NO ha cargado, tratamos como bloqueados
+  // todos los pasos salvo la página actual, para no permitir saltar por el índice
+  // (y romper el recorrido) en ese instante previo a conocer `pasoMax`.
+  const estaBloqueado = (p: PasoRecorrido): boolean => {
+    if (!progresoKey) return !!p.bloqueado;
+    if (!progresoCargado) return p.n !== actual; // aún cargando: solo la actual abierta
+    return p.n > pasoMax;
+  };
 
   const ir = (p: PasoRecorrido) => {
     if (estaBloqueado(p)) return; // página aún bloqueada: no navega

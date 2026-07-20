@@ -15,7 +15,7 @@ export function PagoAyurvedaModal(props: PagoDisciplinaModalProps) {
       errorColor="#b00020"
       descripcion={
         <>
-          Continúa el Mapa con el Hinduismo: descubre tu Dosha —tu constitución— y la naturaleza que te
+          Continúa el Mapa con el Hinduismo: descubre tu Doṣha —tu constitución— y la naturaleza que te
           define, y aprende a comer, moverte y descansar en equilibrio con lo que de verdad eres.
         </>
       }

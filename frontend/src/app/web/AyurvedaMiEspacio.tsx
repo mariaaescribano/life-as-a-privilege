@@ -81,7 +81,7 @@ const DOSHA_INFO: Record<Dosha, DoshaInfo> = {
     icon: (size = "28px") => <KaphaIcon size={size} color={KAPHA_COLOR} />,
     consejos: [
       { titulo: "Alimentación", texto: "Prioriza alimentos ligeros, poco calóricos y con especias estimulantes: jengibre, pimienta negra, cúrcuma, mostaza. Reduce los lácteos, los dulces, los fritos y los alimentos pesados o muy oleosos." },
-      { titulo: "Movimiento", texto: "El movimiento vigoroso y constante es esencial para ti: correr, bailar, deportes de equipo. Muévete cada día aunque no tengas ganas — tu cuerpo lo necesita más que ningún otro dosha." },
+      { titulo: "Movimiento", texto: "El movimiento vigoroso y constante es esencial para ti: correr, bailar, deportes de equipo. Muévete cada día aunque no tengas ganas — tu cuerpo lo necesita más que ningún otro Doṣha." },
       { titulo: "Estimulación mental", texto: "Busca nuevas experiencias, viajes, cursos o proyectos que saquen a Kapha de su zona de confort. El aburrimiento y la monotonía son tus mayores enemigos." },
       { titulo: "Mente y emociones", texto: "Trabaja el desapego gradual de objetos, hábitos y relaciones que ya no te nutren. La generosidad activa y el voluntariado canalizan muy bien tu energía amorosa y transformadora, pero no olvides de sostenerte a ti mismo primero." },
     ],

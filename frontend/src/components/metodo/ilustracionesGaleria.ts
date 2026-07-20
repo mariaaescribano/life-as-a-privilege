@@ -182,7 +182,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "hindu-doshas",
-    titulo: "Los Doshas",
+    titulo: "Los Doṣhas",
     disciplina: "Ayurveda",
     cover: "/viñetas/hinduismo/doshas/doshasportada.png",
     vinetas: HINDU_DOSHAS,

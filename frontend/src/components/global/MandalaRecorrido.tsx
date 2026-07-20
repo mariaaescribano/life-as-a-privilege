@@ -53,7 +53,7 @@ const disciplinas: Disciplina[] = [
       { src: "/capturasRecorrido/astro/5.png",  titulo: "Tus nudos, conflictos y dones" },
       { src: "/capturasRecorrido/astro/6.png",  titulo: "Ejemplo" },
       { src: "/capturasRecorrido/astro/7.png",  titulo: "Léelos todos" },
-      { src: "/capturasRecorrido/astro/8.png",  titulo: "Las áreas de tu vida y cómo te mueves por ellas" },
+      { src: "/capturasRecorrido/astro/8.png",  titulo: "Las áreas de tu Vida y cómo te mueves por ellas" },
       { src: "/capturasRecorrido/astro/9.png",  titulo: "Ejemplo" },
       { src: "/capturasRecorrido/astro/10.png", titulo: "¿Cómo te llevas contigo?" },
       { src: "/capturasRecorrido/astro/11.png", titulo: "Tus patrones y su para qué" },

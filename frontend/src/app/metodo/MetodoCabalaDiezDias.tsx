@@ -100,7 +100,7 @@ export default function MetodoCabalaDiezDias() {
                     concreto del alma: la <Box as="span" fontStyle="italic">Cuenta del Omer</Box> (Sefirat HaOmer).
                     Dura 49 días (siete semanas por siete sefirot) y cada jornada trabaja una combinación —por ejemplo,
                     «Guevurá dentro de Jesed»—. Este trabajo de 10 días es una adaptación más breve: una sefirá por día,
-                    para que empieces a reconocer cada energía en tu vida cotidiana.
+                    para que empieces a reconocer cada energía en tu Vida cotidiana.
                   </Text>
                 </Box>
               </Flex>

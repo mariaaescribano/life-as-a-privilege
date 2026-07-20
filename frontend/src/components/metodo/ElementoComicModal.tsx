@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
 import axios from "axios";
 import { ComicViewer } from "./ComicViewer";
+import { TcmLoader } from "./comicLoaders";
 import { API_URL } from "../../GlobalVariables";
 import {
   ELEMENTOS, testsDeElemento, testCompleto, puntosElemento,
@@ -105,9 +106,19 @@ export function ElementoComicModal({
               vinetas={vinetas}
               themeColor={ELEMENTOS[elemento].color}
               textColor="#ffffff"
+              // Sombra oscura, nítida y sin halo blanco: máximo contraste entre
+              // la letra (blanca) y su sombra, para que el texto destaque más.
+              textShadow="0 2px 5px rgba(0,0,0,1), 0 0 3px rgba(0,0,0,0.98), 0 6px 20px rgba(0,0,0,0.85)"
               disciplinaBgImage={FOTO_ELEMENTO[elemento]}
               disciplinaBgColor={ELEMENTOS[elemento].color}
-              fondoNitido
+              // Animación de carga (yin-yang) y barra de scroll en BLANCO, para
+              // que casen con la letra blanca del cómic y quede limpio.
+              loader={<TcmLoader color="#ffffff" />}
+              scrollbarColor="#ffffff"
+              // Sin `fondoNitido`: usamos EXACTAMENTE el mismo box, estructura y
+              // fondo que las Ilustraciones de TCM (mismo glow de color, mismo
+              // velo y desenfoque), por coherencia. Solo cambian la foto y el
+              // color de acento de cada elemento.
               bloqueado={(i) => {
                 if (pasos[i]?.tipo !== "test") return false;
                 const t = testDePaso(i);
@@ -284,11 +295,11 @@ function TestBalanceComic({
           onClick={() => { if (guardado) { onContinuar(); } else if (completo) { setGuardado(true); } }}
           opacity={!guardado && !completo ? 0.45 : 1}
           cursor={!guardado && !completo ? "not-allowed" : "pointer"}
-          px={8} py={3} borderRadius="full" bg={`${color}33`} border={`1px solid ${color}`}
-          color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-          letterSpacing="0.08em" transition="all 0.18s ease" boxShadow={`0 0 16px ${color}55`}
-          _hover={!guardado && !completo ? {} : { bg: `${color}55`, boxShadow: `0 0 26px ${color}88` }}
-          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
+          px={{ base: 9, md: 10 }} py={3.5} borderRadius="full" bg={color} border="2px solid rgba(255,255,255,0.85)"
+          color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }} fontWeight="800"
+          letterSpacing="0.1em" transition="all 0.18s ease" boxShadow={`0 0 22px ${color}, 0 4px 18px rgba(0,0,0,0.5)`}
+          _hover={!guardado && !completo ? {} : { bg: color, transform: "translateY(-2px)", boxShadow: `0 0 34px ${color}, 0 6px 24px rgba(0,0,0,0.55)` }}
+          style={{ textShadow: "0 1px 5px rgba(0,0,0,0.95), 0 0 3px rgba(0,0,0,0.9)" }}>
           {guardado ? "Continuar →" : "Guardar"}
         </Box>
       </Flex>

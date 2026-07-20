@@ -108,7 +108,7 @@ export default function MetodoTcmLengua() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Tu lengua"
-            pageLabel="6/8"
+            pageLabel="5/7"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -190,6 +190,34 @@ export default function MetodoTcmLengua() {
             Tradicional China; no constituye un diagnóstico médico ni sustituye la valoración de un
             profesional sanitario cualificado.
           </Text>
+          </Reveal>
+
+          {/* Acceso discreto a «Lee tu lengua» abajo a la derecha, para no tener
+              que volver a subir al header. */}
+          <Reveal inView direction="up" distance={12} duration={0.5} amount={0.5} w="100%" display="flex" justifyContent="flex-end">
+          <Box
+            as="button"
+            onClick={() => navigate("/metodo/tcm/lengua/leer")}
+            display="inline-flex"
+            alignItems="center"
+            gap={2}
+            px={5}
+            py={2.5}
+            borderRadius="full"
+            bg="rgba(255,255,255,0.06)"
+            color={tcmTxt}
+            border={`1px solid ${tcmTxt}55`}
+            fontFamily="'EB Garamond', serif"
+            fontWeight={600}
+            fontSize={{ base: "sm", md: "md" }}
+            letterSpacing="0.04em"
+            cursor="pointer"
+            transition="all 0.2s"
+            _hover={{ bg: `${tcmTxt}22`, borderColor: tcmTxt, transform: "translateY(-1px)" }}
+            style={{ textShadow: INK_SHADOW }}
+          >
+            Lee tu lengua →
+          </Box>
           </Reveal>
         </Flex>
       </Flex>

@@ -117,6 +117,9 @@ export default function MetodoPsicologiaBrujula() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
+  // No se puede avanzar hasta escribir el mensaje de la carta.
+  const brujulaCompleta = (brujula.mensaje || "").trim() !== "";
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -137,7 +140,12 @@ export default function MetodoPsicologiaBrujula() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Compromiso", onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
-                next={{ label: "Síntesis →", onClick: () => void irA(`/metodo/psicologia/${exp.id}/sintesis`) }}
+                next={{
+                  label: "Síntesis →",
+                  onClick: () => void irA(`/metodo/psicologia/${exp.id}/sintesis`),
+                  disabled: !brujulaCompleta,
+                  disabledTooltip: "Escribe tu carta para continuar.",
+                }}
               />
             </Reveal>
 

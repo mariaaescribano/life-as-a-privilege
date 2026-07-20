@@ -4,7 +4,7 @@
 // El resultado del test ACE, separado del test (página 3). Muestra la
 // puntuación + su interpretación (banda), qué se sabe de estas experiencias
 // (dosis-respuesta) y —con honestidad y esperanza— cómo pueden influir en la
-// vida actual. NO es un diagnóstico (ver ACE_ESPERANZA.caveat).
+// Vida actual. NO es un diagnóstico (ver ACE_ESPERANZA.caveat).
 //
 // Si el test no está completo, se vuelve a la página del test.
 // ─────────────────────────────────────────────────────────────────────────

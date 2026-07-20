@@ -102,7 +102,7 @@ export const librosPago: LibroPago[] = [
   {
     id: "the-kabbalah",
     titulo: "The Kabbalah",
-    descripcion: "Una introducción a los misterios de la Cábala: el árbol de la vida y las sefirot.",
+    descripcion: "Una introducción a los misterios de la Cábala: el árbol de la Vida y las sefirot.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1hFXw_92WF82V0kS6C1nlkW6ZR0zpixKX"),
     img: "/libros/img/cabala.png",

@@ -2,7 +2,7 @@ export const ejer1 = "¿Sabías que practicar equilibrio hace más grande tu cer
 
 export const ejer2 = "El sistema ventricular del oído también colabora con esta función.";
 
-export const ejer3 = "El músculo es nuestro seguro de vida. Para desarrollar músculo, no tienes que levantar 100 kilos, tienes que retar a tu cuerpo. Cuando contraes tus músculos levantando peso le estás mandando señales a tus huesos de que se hagan más fuertes, a tus cartílagos de que se hagan más resistentes y a tus músculos que se hagan más grandes.";
+export const ejer3 = "El músculo es nuestro seguro de Vida. Para desarrollar músculo, no tienes que levantar 100 kilos, tienes que retar a tu cuerpo. Cuando contraes tus músculos levantando peso le estás mandando señales a tus huesos de que se hagan más fuertes, a tus cartílagos de que se hagan más resistentes y a tus músculos que se hagan más grandes.";
 
 export const ejer4 = "Tener músculo incrementa tu metabolismo. La razón por la que los músculos queman tanta grasa es porque son capaces de coger la glucosa y almacenarla, para así crecer más y poder levantar más peso. Tener músculo permite a tu cuerpo una regulación correcta y eficiente de glucosa. Evitando derrames cerebrales, paros cardiacos y diabetes.";
 

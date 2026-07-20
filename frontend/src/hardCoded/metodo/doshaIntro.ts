@@ -27,7 +27,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
     intro: [
       "Antes de continuar, quiero decirte algo importante.",
       "**Esto no es una etiqueta.**",
-      "No significa que siempre vayas a comportarte igual, ni que todo lo que te ocurre pueda explicarse únicamente por tu dosha.",
+      "No significa que siempre vayas a comportarte igual, ni que todo lo que te ocurre pueda explicarse únicamente por tu Doṣha.",
       "El Ayurveda entiende que **todos tenemos Vata, Pitta y Kapha**, pero cada persona nace con una combinación única. Esa combinación recibe el nombre de **Prakṛti**, y es la forma en que la naturaleza se expresa en ti.",
     ],
     principio: [
@@ -127,7 +127,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
     },
     preguntaFinal: {
       titulo: "Una última pregunta antes de empezar…",
-      pregunta: "Si pudieras bajar un poco la intensidad de una parte de tu vida, ¿cuál sería?",
+      pregunta: "Si pudieras bajar un poco la intensidad de una parte de tu Vida, ¿cuál sería?",
       nota: "Guardaremos esta respuesta. Cuando termines el mapa volveremos a ella.",
     },
     cierre: [
@@ -144,12 +144,12 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
     ],
     principio: [
       "Kapha rige la estabilidad.",
-      "Es la tierra que sostiene un árbol, el agua que nutre una semilla y la fuerza que mantiene unido todo aquello que la vida ha construido.",
+      "Es la tierra que sostiene un árbol, el agua que nutre una semilla y la fuerza que mantiene unido todo aquello que la Vida ha construido.",
       "*Donde hay estabilidad, nutrición y cuidado, está actuando Kapha.*",
       "Si Kapha predomina en ti, es probable que siempre hayas sido una persona tranquila, paciente y de confianza. Quizá los demás acudan a ti cuando necesitan apoyo o alguien que les escuche. También es posible que te cueste cerrar etapas, salir de tu zona de confort o dejar atrás aquello a lo que te has acostumbrado.",
       "Nada de eso significa que haya algo mal en ti.",
       "Significa que tu naturaleza está hecha para sostener.",
-      "Y como ocurre con la tierra, cuando está equilibrada hace crecer la vida; cuando permanece inmóvil demasiado tiempo, puede volverse pesada.",
+      "Y como ocurre con la tierra, cuando está equilibrada hace crecer la Vida; cuando permanece inmóvil demasiado tiempo, puede volverse pesada.",
     ],
     reconoces: {
       titulo: "¿Te reconoces?",
@@ -187,7 +187,7 @@ export const DOSHA_INTRO: Record<DoshaKey, DoshaIntro | null> = {
       nota: "Guardaremos esta respuesta. Cuando termines el mapa volveremos a ella.",
     },
     cierre: [
-      "*No necesitas perder tu calma, necesitas recordar que la vida también crece cuando cambia.*",
+      "*No necesitas perder tu calma, necesitas recordar que la Vida también crece cuando cambia.*",
       "Comencemos.",
     ],
   },

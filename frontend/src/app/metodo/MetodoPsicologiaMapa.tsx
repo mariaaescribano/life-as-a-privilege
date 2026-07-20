@@ -67,14 +67,24 @@ const BLOQUES: {
     key: "proteger",
     pregunta: "¿Qué intentaba proteger este patrón?",
     apoyo: "Reconoce la intención positiva que había detrás del mecanismo.",
-    ejemplos: ["Evitar críticas", "Sentirme suficiente", "No decepcionar", "Sentirme seguro"],
+    ejemplos: [
+      "Evitar el rechazo", "Evitar críticas", "Sentirme suficiente", "No decepcionar a nadie",
+      "Sentirme seguro/a", "Evitar el conflicto", "Protegerme del abandono", "Sentir que tengo el control",
+      "Evitar el dolor", "Ser aceptado/a", "No mostrarme vulnerable", "Mantener la paz",
+      "Que no me hicieran daño", "Sentirme querido/a", "Evitar la humillación", "No volver a sufrir lo mismo",
+    ],
     placeholder: "Lo que en el fondo intentaba cuidar de mí…",
   },
   {
     key: "coste",
     pregunta: "¿Qué coste tiene mantener este patrón?",
-    apoyo: "Toma conciencia de las consecuencias que tiene hoy en tu vida.",
-    ejemplos: ["Ansiedad", "Agotamiento", "Relaciones superficiales", "Falta de autenticidad"],
+    apoyo: "Toma conciencia de las consecuencias que tiene hoy en tu Vida.",
+    ejemplos: [
+      "Ansiedad", "Agotamiento", "Relaciones superficiales", "Falta de autenticidad",
+      "Miedo constante", "Soledad", "Perder oportunidades", "No disfrutar el presente",
+      "Reprimir lo que siento", "Tensión física", "Insatisfacción", "Alejar a quien quiero",
+      "Vivir siempre en guardia", "Perderme a mí mismo/a",
+    ],
     placeholder: "Lo que me cuesta seguir sosteniéndolo…",
   },
   {
@@ -84,6 +94,11 @@ const BLOQUES: {
     ejemplos: [
       "«Mi valor depende de hacerlo perfecto» → «Mi valor no depende de hacerlo perfecto»",
       "«Necesito agradar para ser querido» → «Puedo ser querido siendo yo mismo»",
+      "«Si pongo límites me abandonarán» → «Poner límites me acerca a quien me respeta»",
+      "«Tengo que poder con todo sola» → «Pedir ayuda también es de valientes»",
+      "«Equivocarme me hace menos» → «Equivocarme es parte de aprender»",
+      "«Debo controlarlo todo» → «Puedo confiar y soltar»",
+      "«No soy suficiente» → «Soy suficiente tal como soy»",
     ],
     placeholder: "La nueva verdad que quiero empezar a creer…",
   },
@@ -91,7 +106,12 @@ const BLOQUES: {
     key: "recordatorio",
     pregunta: "¿Qué te gustaría recordar cuando vuelvas a caer en este patrón?",
     apoyo: "Una frase breve de apoyo personal.",
-    ejemplos: ["Está bien equivocarme", "Mi voz también importa", "Puedo poner límites con amor"],
+    ejemplos: [
+      "Está bien equivocarme", "Mi voz también importa", "Puedo poner límites con amor",
+      "No tengo que poder con todo", "Merezco descansar", "Soy suficiente",
+      "Puedo pedir ayuda", "Está bien decir que no", "Mis emociones son válidas",
+      "No necesito agradar a todos", "Puedo confiar en mí", "Me trato con amabilidad",
+    ],
     placeholder: "Una frase que quiero recordar…",
   },
 ];
@@ -427,6 +447,15 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   const b = BLOQUES[paso];
   const respuesta = (c[b.key] as string) || "";
 
+  // Pulsar un ejemplo lo AÑADE al texto (nunca borra lo ya escrito). Si ya hay
+  // contenido, lo añade en una línea nueva; si no, lo escribe directamente.
+  const añadirEjemplo = (ej: string) => {
+    const prev = respuesta;
+    const next = prev.trim() ? `${prev.replace(/\s+$/, "")}\n${ej}` : ej;
+    onUpdate(b.key, next);
+    setTimeout(() => actualRef.current?.focus(), 0);
+  };
+
   return (
     <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
          px={{ base: 3, md: 10 }} py={{ base: 4, md: 10 }} bg="rgba(0,0,0,0.82)"
@@ -479,18 +508,32 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
                 {b.apoyo}
               </Text>
 
-              {/* Ejemplos: 2 boxes blancos, ligeros y pequeños, en horizontal */}
-              <Flex gap={2} mt={2.5} wrap="wrap">
-                {b.ejemplos.slice(0, 2).map((ej, i) => (
-                  <Box key={i} px={2.5} py={1} borderRadius="md"
-                       bg="rgba(255,251,243,0.5)" border={`1px solid ${TINTA}22`}>
-                    <Text color={`${TINTA}cc`} fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
-                          lineHeight="1.3" noOfLines={1}>
-                      {ej}
-                    </Text>
-                  </Box>
-                ))}
-              </Flex>
+              {/* Ejemplos: boxes blancos, grandes y PULSABLES. Al pulsar se añaden
+                  al texto (sin borrar lo ya escrito). El usuario puede pulsar,
+                  borrar y escribir con total libertad. */}
+              {b.ejemplos.length > 0 && (
+                <>
+                  <Text color={`${TINTA}`} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
+                        letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} mt={3.5} mb={2}
+                        style={{ textShadow: INK_SHADOW }}>
+                    Toca un ejemplo para añadirlo
+                  </Text>
+                  <Flex gap={2.5} wrap="wrap">
+                    {b.ejemplos.map((ej, i) => (
+                      <Box as="button" key={i} onClick={() => añadirEjemplo(ej)} textAlign="left"
+                           px={{ base: 3, md: 3.5 }} py={{ base: 2, md: 2.5 }} borderRadius="lg"
+                           bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
+                           cursor="pointer" transition="all 0.15s"
+                           _hover={{ bg: "rgba(255,251,243,0.96)", borderColor: TINTA,
+                                     transform: "translateY(-1px)", boxShadow: `0 3px 12px ${TINTA}26` }}>
+                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.4">
+                          {ej}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Flex>
+                </>
+              )}
             </Box>
 
             {/* La respuesta */}

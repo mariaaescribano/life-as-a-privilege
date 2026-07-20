@@ -84,7 +84,6 @@ import MetodoAyurvedaDoshaRecorrido from "./app/metodo/MetodoAyurvedaDoshaRecorr
 import MetodoTcm from "./app/metodo/MetodoTcm";
 import MetodoTcmElementos from "./app/metodo/MetodoTcmElementos";
 import MetodoTcmElemento from "./app/metodo/MetodoTcmElemento";
-import MetodoTcmPerfil from "./app/metodo/MetodoTcmPerfil";
 import MetodoTcmCiclos from "./app/metodo/MetodoTcmCiclos";
 import MetodoTcmDiagnostico from "./app/metodo/MetodoTcmDiagnostico";
 import MetodoTcmLengua from "./app/metodo/MetodoTcmLengua";
@@ -240,7 +239,8 @@ export default function App()
       <Route path="/metodo/tcm" element={<PrivateRoute><MetodoTcm /></PrivateRoute>} />
       <Route path="/metodo/tcm/elementos" element={<PrivateRoute><MetodoTcmElementos /></PrivateRoute>} />
       <Route path="/metodo/tcm/elemento/:elemento" element={<PrivateRoute><MetodoTcmElemento /></PrivateRoute>} />
-      <Route path="/metodo/tcm/perfil" element={<PrivateRoute><MetodoTcmPerfil /></PrivateRoute>} />
+      {/* "Tu equilibrio" se fusionó en el Diagnóstico: redirigimos los enlaces antiguos. */}
+      <Route path="/metodo/tcm/perfil" element={<Navigate to="/metodo/tcm/diagnostico" replace />} />
       <Route path="/metodo/tcm/ciclos" element={<PrivateRoute><MetodoTcmCiclos /></PrivateRoute>} />
       <Route path="/metodo/tcm/diagnostico" element={<PrivateRoute><MetodoTcmDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua" element={<PrivateRoute><MetodoTcmLengua /></PrivateRoute>} />

@@ -164,7 +164,7 @@ const GIMEL: SenderoContenido = {
   from: "kether",
   to: "tipharet",
   significadoTradicional:
-    "Gimel significa \"camello\", el animal que atraviesa el desierto llevando provisiones entre dos lugares distantes. En la tradición cabalística simboliza el movimiento, el sustento y la capacidad de transportar aquello que es esencial hasta donde realmente hace falta. Al unir Keter con Tiferet, este sendero representa el descenso de la voluntad superior hasta el corazón. No basta con tener un propósito elevado; ese propósito debe alimentar la vida interior para convertirse en una fuerza transformadora. Gimel enseña que el verdadero propósito no permanece en el mundo de las ideas: llega al corazón y se convierte en una forma de vivir.",
+    "Gimel significa \"camello\", el animal que atraviesa el desierto llevando provisiones entre dos lugares distantes. En la tradición cabalística simboliza el movimiento, el sustento y la capacidad de transportar aquello que es esencial hasta donde realmente hace falta. Al unir Keter con Tiferet, este sendero representa el descenso de la voluntad superior hasta el corazón. No basta con tener un propósito elevado; ese propósito debe alimentar la Vida interior para convertirse en una fuerza transformadora. Gimel enseña que el verdadero propósito no permanece en el mundo de las ideas: llega al corazón y se convierte en una forma de vivir.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de hacer que nuestros valores más profundos dejen de ser ideales abstractos y se conviertan en una parte auténtica de nuestra identidad. Muchas personas saben qué consideran importante, pero viven desconectadas de ello. Este sendero invita a cerrar esa distancia, permitiendo que el propósito no solo guíe nuestras decisiones, sino también nuestra forma de sentir, relacionarnos y estar presentes.",
   pregunta: "¿Tu propósito vive solo en tu mente o también en tu corazón?",
@@ -177,11 +177,11 @@ const GIMEL: SenderoContenido = {
     { texto: "Con frecuencia siento que mis acciones no reflejan lo que considero importante." },
     { texto: "Me resulta difícil conectar emocionalmente con el propósito que quiero vivir." },
     { texto: "Mis decisiones suelen estar alineadas con los valores que considero esenciales.", invertida: true },
-    { texto: "Cuando aparecen dificultades, olvido fácilmente aquello que da sentido a mi vida." },
+    { texto: "Cuando aparecen dificultades, olvido fácilmente aquello que da sentido a mi Vida." },
     { texto: "Siento que mi propósito forma parte de mi identidad y guía mi manera de vivir.", invertida: true },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Tu propósito no solo orienta tus decisiones; también forma parte de la persona que eres. Existe una conexión saludable entre tus valores y tu vida emocional." },
+    { min: 0, max: 7, titulo: "Transición fluida", texto: "Tu propósito no solo orienta tus decisiones; también forma parte de la persona que eres. Existe una conexión saludable entre tus valores y tu Vida emocional." },
     { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Sabes qué es importante para ti, pero no siempre consigues mantener esa conexión cuando aparecen las dificultades o las emociones intensas." },
     { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre tus ideales y la forma en que vives. Tu crecimiento consiste en acercar cada vez más tu propósito a tu identidad cotidiana." },
     { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales desafíos es dejar de vivir el propósito como una meta futura y comenzar a experimentarlo como una forma presente de ser." },
@@ -254,21 +254,21 @@ const HE: SenderoContenido = {
     "Este sendero representa la capacidad de dejar que una nueva comprensión cambie nuestro mundo interior. Muchas veces entendemos una verdad con la mente, pero seguimos viviendo como si nunca la hubiéramos descubierto.\n\nNos recuerda que el crecimiento ocurre cuando la claridad deja de ser una idea y comienza a influir en nuestras emociones, decisiones y relaciones.",
   pregunta: "¿Permites que aquello que descubres transforme realmente tu manera de vivir?",
   une: [
-    "Comprender algo no garantiza que esa comprensión cambie nuestra vida. Podemos descubrir una verdad importante y, aun así, continuar reaccionando desde los mismos hábitos de siempre.",
+    "Comprender algo no garantiza que esa comprensión cambie nuestra Vida. Podemos descubrir una verdad importante y, aun así, continuar reaccionando desde los mismos hábitos de siempre.",
     "Este sendero representa el momento en que una nueva visión deja de ser únicamente conocimiento y empieza a convertirse en una experiencia interior. Solo cuando una verdad llega al corazón puede producir una transformación auténtica.",
   ],
-  testTitulo: "¿Hasta qué punto permites que una nueva comprensión transforme tu vida?",
+  testTitulo: "¿Hasta qué punto permites que una nueva comprensión transforme tu Vida?",
   test: [
     { texto: "Comprendo mis errores, pero sigo reaccionando de la misma manera." },
     { texto: "Me resulta difícil cambiar hábitos, incluso cuando sé que ya no me benefician." },
-    { texto: "Cuando aprendo algo importante, procuro aplicarlo en mi vida.", invertida: true },
+    { texto: "Cuando aprendo algo importante, procuro aplicarlo en mi Vida.", invertida: true },
     { texto: "A menudo separo lo que pienso de lo que siento." },
-    { texto: "Las experiencias importantes suelen transformar mi forma de ver y vivir la vida.", invertida: true },
+    { texto: "Las experiencias importantes suelen transformar mi forma de ver y vivir la Vida.", invertida: true },
   ],
   interpretaciones: [
     { min: 0, max: 7, titulo: "Transición fluida", texto: "Permites que aquello que comprendes transforme tu mundo interior. Existe una buena conexión entre tus aprendizajes y tu manera de vivir." },
     { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones comprendes una situación, pero necesitas más tiempo para integrarla emocionalmente." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y lo que realmente cambia en tu vida. Tu crecimiento consiste en permitir que tus aprendizajes lleguen también al corazón." },
+    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y lo que realmente cambia en tu Vida. Tu crecimiento consiste en permitir que tus aprendizajes lleguen también al corazón." },
     { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar el conocimiento en una experiencia interior. Comprender es el primer paso; integrar esa comprensión es lo que produce el cambio." },
   ],
   senales: [
@@ -277,7 +277,7 @@ const HE: SenderoContenido = {
     "Das tiempo a que una experiencia te transforme antes de buscar la siguiente.",
   ],
   umbral: "Aquello que comprendes comienza a reflejarse de forma natural en tu manera de sentir, decidir y relacionarte.",
-  integracion: "La verdadera comprensión transforma primero el corazón y después la vida.",
+  integracion: "La verdadera comprensión transforma primero el corazón y después la Vida.",
   ilustracion:
     "Una ventana abierta en un muro deja entrar un haz de luz cálida que ilumina una habitación antes en penumbra. Junto a la ventana, una figura respira con los ojos cerrados mientras la luz le alcanza el pecho, sugiriendo que lo que se comprende con la mente desciende hasta el corazón.",
 };
@@ -312,7 +312,7 @@ const VAV: SenderoContenido = {
     { min: 0, max: 7, titulo: "Transición fluida", texto: "Eres capaz de transformar tu comprensión en acciones concretas. Tu conocimiento se expresa de forma natural a través de la empatía y la generosidad." },
     { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes las necesidades de los demás, pero no siempre das el paso hacia la acción. Existe margen para expresar con mayor frecuencia aquello que ya sabes." },
     { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tiendes a mantener la comprensión en el plano intelectual. Tu crecimiento consiste en permitir que ese conocimiento se traduzca en pequeños gestos y acciones cotidianas." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la verdadera sabiduría no termina en comprender; comienza cuando esa comprensión mejora la vida de otras personas." },
+    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la verdadera sabiduría no termina en comprender; comienza cuando esa comprensión mejora la Vida de otras personas." },
   ],
   senales: [
     "Comprendes una necesidad, pero decides no actuar por comodidad o indiferencia.",
@@ -337,7 +337,7 @@ const ZAYIN: SenderoContenido = {
   significadoTradicional:
     "Zayin (ז) significa \"espada\" o \"arma\". En la tradición cabalística simboliza el discernimiento, la capacidad de separar lo esencial de lo superficial y de actuar con claridad ante la realidad. No representa la violencia, sino la facultad de distinguir con precisión aquello que merece ser conservado de aquello que debe dejarse atrás.\n\nAl conectar Binah con Tiferet, este sendero representa el paso desde la comprensión intelectual hacia la sabiduría del corazón. Enseña que el conocimiento solo alcanza su plenitud cuando transforma nuestra forma de ser.",
   traduccionPsicologica:
-    "Este sendero representa la capacidad de convertir el conocimiento en sabiduría. Comprender una idea es importante, pero vivir de acuerdo con ella requiere discernimiento, coherencia y madurez.\n\nNos recuerda que la verdadera sabiduría no consiste en acumular respuestas, sino en saber cuáles merecen formar parte de nuestra vida.",
+    "Este sendero representa la capacidad de convertir el conocimiento en sabiduría. Comprender una idea es importante, pero vivir de acuerdo con ella requiere discernimiento, coherencia y madurez.\n\nNos recuerda que la verdadera sabiduría no consiste en acumular respuestas, sino en saber cuáles merecen formar parte de nuestra Vida.",
   pregunta: "¿Lo que comprendes ha transformado realmente tu manera de vivir?",
   une: [
     "Comprender algo no garantiza que forme parte de nosotros. Muchas veces acumulamos conocimientos, consejos o experiencias que nunca llegan a cambiar nuestra forma de actuar.",
@@ -353,7 +353,7 @@ const ZAYIN: SenderoContenido = {
   ],
   interpretaciones: [
     { min: 0, max: 7, titulo: "Transición fluida", texto: "Eres capaz de transformar el conocimiento en sabiduría. Tus aprendizajes se reflejan de forma natural en tus decisiones y en tu manera de vivir." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes muchas cosas, pero no siempre consigues integrarlas plenamente en tu vida cotidiana." },
+    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes muchas cosas, pero no siempre consigues integrarlas plenamente en tu Vida cotidiana." },
     { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una diferencia significativa entre lo que sabes y lo que practicas. Tu crecimiento consiste en convertir el conocimiento en experiencia vivida." },
     { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la sabiduría no se mide por lo que sabes, sino por la manera en que eliges vivir cada día." },
   ],
@@ -365,7 +365,7 @@ const ZAYIN: SenderoContenido = {
   umbral: "El conocimiento deja de ser una idea y se convierte en una guía natural para tus decisiones y acciones.",
   integracion: "La sabiduría comienza cuando aquello que comprendo se convierte en la forma en que elijo vivir.",
   ilustracion:
-    "Una figura sostiene con serenidad una espada luminosa que separa, sobre una mesa, un montón de objetos: a un lado deja lo superfluo en sombra, al otro conserva unas pocas piezas que brillan. La escena transmite discernimiento sereno, no combate: elegir qué merece formar parte de la propia vida.",
+    "Una figura sostiene con serenidad una espada luminosa que separa, sobre una mesa, un montón de objetos: a un lado deja lo superfluo en sombra, al otro conserva unas pocas piezas que brillan. La escena transmite discernimiento sereno, no combate: elegir qué merece formar parte de la propia Vida.",
 };
 
 const CHET: SenderoContenido = {
@@ -378,7 +378,7 @@ const CHET: SenderoContenido = {
   from: "binah",
   to: "geburah",
   significadoTradicional:
-    "Chet (ח) significa \"cerca\" o \"recinto\". En la tradición cabalística simboliza el espacio protegido, los límites que permiten conservar la vida y el orden. No representa una barrera para aislarse, sino una estructura que protege aquello que tiene valor.\n\nAl conectar Binah con Gevurah, este sendero representa el paso desde la comprensión hacia el discernimiento y la disciplina. Enseña que comprender una situación también implica saber hasta dónde llegar, cuándo actuar y cuándo decir \"no\".",
+    "Chet (ח) significa \"cerca\" o \"recinto\". En la tradición cabalística simboliza el espacio protegido, los límites que permiten conservar la Vida y el orden. No representa una barrera para aislarse, sino una estructura que protege aquello que tiene valor.\n\nAl conectar Binah con Gevurah, este sendero representa el paso desde la comprensión hacia el discernimiento y la disciplina. Enseña que comprender una situación también implica saber hasta dónde llegar, cuándo actuar y cuándo decir \"no\".",
   traduccionPsicologica:
     "Este sendero representa la capacidad de transformar la comprensión en límites saludables. Comprender a una persona o una situación no significa aceptarlo todo ni renunciar a nuestras necesidades.\n\nNos recuerda que la verdadera madurez consiste en combinar la empatía con la firmeza, estableciendo límites que protejan nuestro bienestar sin dejar de respetar a los demás.",
   pregunta: "¿Eres capaz de poner límites sin dejar de comprender a los demás?",
@@ -408,7 +408,7 @@ const CHET: SenderoContenido = {
   umbral: "Comprendes que poner límites no rompe las relaciones; las hace más sanas y auténticas.",
   integracion: "La comprensión me acerca a los demás; los límites también me permiten respetarme a mí mismo.",
   ilustracion:
-    "Un jardín cuidado y lleno de vida crece dentro de un cercado de piedra baja. La puerta del recinto está abierta, pero es la persona que está dentro quien decide serena quién pasa y quién no. La cerca no aísla: protege lo que florece.",
+    "Un jardín cuidado y lleno de Vida crece dentro de un cercado de piedra baja. La puerta del recinto está abierta, pero es la persona que está dentro quien decide serena quién pasa y quién no. La cerca no aísla: protege lo que florece.",
 };
 
 const TET: SenderoContenido = {
@@ -636,10 +636,10 @@ const NUN: SenderoContenido = {
   from: "tipharet",
   to: "netzach",
   significadoTradicional:
-    "Nun (נ) significa \"pez\". En la tradición cabalística simboliza la continuidad de la vida, la capacidad de avanzar incluso en aguas profundas y la resiliencia frente a los cambios. Representa el movimiento constante y la fuerza silenciosa que permite seguir creciendo a pesar de las dificultades.\n\nAl conectar Tiferet con Netzach, este sendero simboliza el paso desde el equilibrio interior hacia la perseverancia. Enseña que la armonía no se demuestra cuando todo va bien, sino cuando somos capaces de mantener nuestro centro en medio de los desafíos.",
+    "Nun (נ) significa \"pez\". En la tradición cabalística simboliza la continuidad de la Vida, la capacidad de avanzar incluso en aguas profundas y la resiliencia frente a los cambios. Representa el movimiento constante y la fuerza silenciosa que permite seguir creciendo a pesar de las dificultades.\n\nAl conectar Tiferet con Netzach, este sendero simboliza el paso desde el equilibrio interior hacia la perseverancia. Enseña que la armonía no se demuestra cuando todo va bien, sino cuando somos capaces de mantener nuestro centro en medio de los desafíos.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de sostener nuestros valores y nuestro equilibrio cuando aparecen los obstáculos. Es fácil actuar con serenidad cuando las circunstancias son favorables; el verdadero crecimiento comienza cuando decidimos mantener el rumbo incluso en los momentos difíciles.\n\nNos recuerda que la perseverancia nace del equilibrio interior, no de la obstinación.",
-  pregunta: "¿Mantienes tus valores cuando la vida deja de ser fácil?",
+  pregunta: "¿Mantienes tus valores cuando la Vida deja de ser fácil?",
   une: [
     "Encontrar el equilibrio es un logro importante, pero conservarlo cuando aparecen la presión, el cansancio o la frustración es un desafío mucho mayor. Muchas personas pierden rápidamente su centro cuando las circunstancias cambian.",
     "Este sendero nos enseña que la verdadera perseverancia no consiste en resistir por orgullo, sino en continuar avanzando sin perder aquello que nos define. Permanecer fieles a nuestros valores es la forma más profunda de constancia.",
@@ -687,7 +687,7 @@ const SAMEKH: SenderoContenido = {
     "Encontrar el equilibrio interior es un paso importante, pero mantenerlo requiere una base sólida. Sin hábitos coherentes, incluso las mejores intenciones terminan debilitándose con el tiempo.",
     "Este sendero nos enseña que la estabilidad no depende de cómo nos sentimos en un momento concreto, sino de las decisiones que repetimos de forma constante. La coherencia convierte los valores en una manera de vivir.",
   ],
-  testTitulo: "¿Cómo transformas tu equilibrio en una vida coherente?",
+  testTitulo: "¿Cómo transformas tu equilibrio en una Vida coherente?",
   test: [
     { texto: "Me cuesta mantener hábitos alineados con los valores que considero importantes." },
     { texto: "Mis decisiones cambian con facilidad según mi estado de ánimo." },
@@ -699,7 +699,7 @@ const SAMEKH: SenderoContenido = {
     { min: 0, max: 7, titulo: "Transición fluida", texto: "Has conseguido transformar tus valores en una forma estable de vivir. Tus hábitos fortalecen el equilibrio que has construido." },
     { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones existe una diferencia entre lo que consideras importante y lo que haces cada día. Pequeños cambios sostenidos pueden fortalecer tu coherencia." },
     { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tu equilibrio interior todavía no se refleja de forma constante en tus hábitos y decisiones. Tu crecimiento consiste en construir una base más sólida para sostener aquello que valoras." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que una vida coherente no se construye con grandes decisiones aisladas, sino con pequeñas acciones repetidas cada día." },
+    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que una Vida coherente no se construye con grandes decisiones aisladas, sino con pequeñas acciones repetidas cada día." },
   ],
   senales: [
     "Tus hábitos reflejan realmente tus valores.",
@@ -724,7 +724,7 @@ const AYIN: SenderoContenido = {
   significadoTradicional:
     "Ayin (ע) significa \"ojo\". En la tradición cabalística simboliza la visión interior, la percepción profunda y la capacidad de ver más allá de las apariencias. No se limita a observar el mundo exterior; representa la mirada consciente que permite descubrir el significado de las experiencias.\n\nAl conectar Tiferet con Hod, este sendero simboliza el paso desde la armonía interior hacia la expresión consciente. Enseña que la verdad que habita en el corazón necesita ser comunicada para poder transformar nuestras relaciones y nuestra realidad.",
   traduccionPsicologica:
-    "Este sendero representa la capacidad de expresar con autenticidad aquello que sentimos y creemos. No basta con conocernos a nosotros mismos; también necesitamos aprender a comunicar nuestra verdad con claridad, humildad y respeto.\n\nNos recuerda que una vida auténtica no consiste únicamente en sentir coherencia interior, sino en permitir que esa coherencia también se refleje en nuestra forma de hablar, escuchar y relacionarnos.",
+    "Este sendero representa la capacidad de expresar con autenticidad aquello que sentimos y creemos. No basta con conocernos a nosotros mismos; también necesitamos aprender a comunicar nuestra verdad con claridad, humildad y respeto.\n\nNos recuerda que una Vida auténtica no consiste únicamente en sentir coherencia interior, sino en permitir que esa coherencia también se refleje en nuestra forma de hablar, escuchar y relacionarnos.",
   pregunta: "¿Expresas lo que realmente eres o adaptas tu voz para ser aceptado?",
   une: [
     "Encontrar el equilibrio interior es solo una parte del camino. Muchas personas saben quiénes son, pero les cuesta mostrarlo por miedo al rechazo, al conflicto o a no sentirse comprendidas.",
@@ -793,7 +793,7 @@ const PE: SenderoContenido = {
     "Compartes tus aprendizajes desde la autenticidad y no desde la necesidad de impresionar.",
   ],
   umbral: "Tu experiencia deja de ser únicamente un crecimiento personal y comienza a convertirse en una fuente de valor para los demás.",
-  integracion: "Cuando comparto con autenticidad lo que la vida me ha enseñado, mi aprendizaje también comienza a crecer en los demás.",
+  integracion: "Cuando comparto con autenticidad lo que la Vida me ha enseñado, mi aprendizaje también comienza a crecer en los demás.",
   ilustracion:
     "Una boca entreabierta deja salir un hilo de luz que se despliega en semillas brillantes; algunas caen en las manos de otras personas cercanas y germinan al instante. La imagen transmite que la palabra compartida siembra: lo aprendido con esfuerzo se convierte en fruto que crece también en los demás.",
 };
@@ -808,7 +808,7 @@ const TSADI: SenderoContenido = {
   from: "netzach",
   to: "yesod",
   significadoTradicional:
-    "Tsadi (צ) significa \"justo\" o \"rectitud\". En la tradición cabalística representa a la persona que vive de acuerdo con sus principios, manteniéndose firme incluso cuando nadie la observa. Simboliza la coherencia entre las convicciones internas y la forma de actuar.\n\nAl conectar Netzach con Yesod, este sendero representa el paso desde la perseverancia hacia la consolidación de una base estable. Enseña que la constancia solo transforma la vida cuando se convierte en hábitos que sostienen nuestros valores.",
+    "Tsadi (צ) significa \"justo\" o \"rectitud\". En la tradición cabalística representa a la persona que vive de acuerdo con sus principios, manteniéndose firme incluso cuando nadie la observa. Simboliza la coherencia entre las convicciones internas y la forma de actuar.\n\nAl conectar Netzach con Yesod, este sendero representa el paso desde la perseverancia hacia la consolidación de una base estable. Enseña que la constancia solo transforma la Vida cuando se convierte en hábitos que sostienen nuestros valores.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el esfuerzo en una forma de vivir. Perseverar no consiste únicamente en resistir las dificultades, sino en crear rutinas que hagan posible avanzar sin depender constantemente de la motivación.\n\nNos recuerda que la verdadera transformación ocurre cuando aquello que antes requería esfuerzo comienza a formar parte de nuestra identidad.",
   pregunta: "¿Tus hábitos sostienen la persona que quieres llegar a ser?",
@@ -857,7 +857,7 @@ const QOF: SenderoContenido = {
   pregunta: "¿Confías en el proceso o solo valoras los resultados cuando ya son visibles?",
   une: [
     "La perseverancia puede parecer invisible durante mucho tiempo. Sin embargo, cada pequeño esfuerzo construye una realidad que terminará manifestándose, aunque no podamos verla de inmediato.",
-    "Este sendero nos enseña a valorar el proceso tanto como el resultado. Lo que hoy parece un avance pequeño puede convertirse, con el tiempo, en el cambio que transforme por completo nuestra vida.",
+    "Este sendero nos enseña a valorar el proceso tanto como el resultado. Lo que hoy parece un avance pequeño puede convertirse, con el tiempo, en el cambio que transforme por completo nuestra Vida.",
   ],
   testTitulo: "¿Cómo transformas la perseverancia en resultados?",
   test: [
@@ -894,12 +894,12 @@ const RESH: SenderoContenido = {
   from: "hod",
   to: "yesod",
   significadoTradicional:
-    "Resh (ר) significa \"cabeza\". En la tradición cabalística simboliza la conciencia, la dirección y la capacidad de orientar la propia vida. Representa el momento en que las ideas dejan de ser pensamientos aislados para organizarse en una estructura con sentido.\n\nAl conectar Hod con Yesod, este sendero representa el paso desde la expresión hacia la consolidación de una base firme. Enseña que comunicar nuestras ideas no es suficiente; es necesario convertirlas en una forma consistente de vivir.",
+    "Resh (ר) significa \"cabeza\". En la tradición cabalística simboliza la conciencia, la dirección y la capacidad de orientar la propia Vida. Representa el momento en que las ideas dejan de ser pensamientos aislados para organizarse en una estructura con sentido.\n\nAl conectar Hod con Yesod, este sendero representa el paso desde la expresión hacia la consolidación de una base firme. Enseña que comunicar nuestras ideas no es suficiente; es necesario convertirlas en una forma consistente de vivir.",
   traduccionPsicologica:
-    "Este sendero representa la capacidad de transformar aquello que expresamos en hábitos y comportamientos coherentes. Hablar de nuestros valores, proyectos o aprendizajes tiene poco impacto si nuestra vida cotidiana no los refleja.\n\nNos recuerda que la credibilidad nace cuando existe coherencia entre nuestras palabras y nuestras acciones.",
+    "Este sendero representa la capacidad de transformar aquello que expresamos en hábitos y comportamientos coherentes. Hablar de nuestros valores, proyectos o aprendizajes tiene poco impacto si nuestra Vida cotidiana no los refleja.\n\nNos recuerda que la credibilidad nace cuando existe coherencia entre nuestras palabras y nuestras acciones.",
   pregunta: "¿Tu forma de vivir confirma aquello que dices creer?",
   une: [
-    "Expresar una idea puede inspirar, pero solo las acciones la convierten en una realidad. Muchas veces hablamos de los cambios que queremos hacer sin llegar a incorporarlos en nuestra vida diaria.",
+    "Expresar una idea puede inspirar, pero solo las acciones la convierten en una realidad. Muchas veces hablamos de los cambios que queremos hacer sin llegar a incorporarlos en nuestra Vida diaria.",
     "Este sendero nos enseña que la coherencia comienza cuando dejamos de definirnos por lo que decimos y empezamos a hacerlo por aquello que practicamos de forma constante.",
   ],
   testTitulo: "¿Cómo transformas tus palabras en una forma de vivir?",
@@ -922,7 +922,7 @@ const RESH: SenderoContenido = {
     "Tomas pequeñas decisiones diarias alineadas con los valores que expresas.",
   ],
   umbral: "Tus acciones hablan con la misma claridad que tus palabras, y ambas reflejan la persona que has elegido ser.",
-  integracion: "La coherencia comienza cuando mi vida expresa con naturalidad aquello que mis palabras anuncian.",
+  integracion: "La coherencia comienza cuando mi Vida expresa con naturalidad aquello que mis palabras anuncian.",
   ilustracion:
     "Una figura camina y su sombra proyectada en el suelo repite fielmente cada uno de sus gestos, sin desajuste alguno. Sobre su cabeza, una luz clara la orienta como un norte. La imagen transmite que palabra y acción avanzan al unísono: lo que se dice y lo que se hace proyectan la misma forma.",
 };
@@ -939,18 +939,18 @@ const SHIN: SenderoContenido = {
   significadoTradicional:
     "Shin (ש) significa \"diente\" y está asociada al fuego transformador. En la tradición cabalística simboliza la energía que purifica, transforma e impulsa el cambio. No destruye por destruir; transforma lo potencial en una realidad nueva.\n\nAl conectar Hod con Malkut, este sendero representa el paso desde la expresión consciente hacia la manifestación en el mundo. Enseña que aquello que cultivamos en nuestro interior termina reflejándose en nuestra realidad exterior.",
   traduccionPsicologica:
-    "Este sendero representa la capacidad de convertir una vida coherente en resultados visibles. Cuando nuestros pensamientos, emociones, hábitos y acciones están alineados, la realidad comienza a reflejar esa transformación.\n\nNos recuerda que el cambio auténtico no consiste en aparentar ser alguien diferente, sino en permitir que nuestra vida exprese de forma natural quiénes ya somos.",
-  pregunta: "¿La vida que has construido refleja realmente la persona en la que te estás convirtiendo?",
+    "Este sendero representa la capacidad de convertir una Vida coherente en resultados visibles. Cuando nuestros pensamientos, emociones, hábitos y acciones están alineados, la realidad comienza a reflejar esa transformación.\n\nNos recuerda que el cambio auténtico no consiste en aparentar ser alguien diferente, sino en permitir que nuestra Vida exprese de forma natural quiénes ya somos.",
+  pregunta: "¿La Vida que has construido refleja realmente la persona en la que te estás convirtiendo?",
   une: [
     "Toda transformación comienza en el interior, pero alcanza su plenitud cuando se hace visible en nuestras decisiones, relaciones y forma de vivir. No basta con tener buenos hábitos si estos no terminan creando una realidad coherente.",
     "Este sendero nos enseña que la manifestación no es cuestión de suerte, sino la consecuencia de una identidad construida con constancia. Nuestra realidad exterior acaba siendo el reflejo de aquello que repetimos cada día.",
   ],
   testTitulo: "¿Cómo conviertes tu coherencia en una realidad visible?",
   test: [
-    { texto: "Siento que la vida que llevo no refleja la persona que quiero ser." },
+    { texto: "Siento que la Vida que llevo no refleja la persona que quiero ser." },
     { texto: "Mis hábitos y decisiones no siempre producen los resultados que deseo." },
     { texto: "Percibo una relación clara entre mis acciones diarias y los resultados que obtengo.", invertida: true },
-    { texto: "Espero que mi vida cambie sin modificar de forma constante mis comportamientos." },
+    { texto: "Espero que mi Vida cambie sin modificar de forma constante mis comportamientos." },
     { texto: "Siento que mi realidad refleja cada vez más mis valores y mis decisiones.", invertida: true },
   ],
   interpretaciones: [
@@ -960,11 +960,11 @@ const SHIN: SenderoContenido = {
     { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la realidad cambia cuando cambia la forma en que vivimos cada día. La manifestación comienza mucho antes de que aparezcan los resultados." },
   ],
   senales: [
-    "Tus decisiones diarias construyen la vida que realmente deseas.",
+    "Tus decisiones diarias construyen la Vida que realmente deseas.",
     "Esperas resultados distintos sin cambiar tus hábitos.",
     "Reconoces cómo tus pequeñas acciones están dando forma a tu realidad.",
   ],
-  umbral: "La vida que has construido se convierte en un reflejo natural de tus valores, tus hábitos y la persona que has elegido ser.",
+  umbral: "La Vida que has construido se convierte en un reflejo natural de tus valores, tus hábitos y la persona que has elegido ser.",
   integracion: "La realidad que vivo hoy es el reflejo de las decisiones que elegí sostener cada día.",
   ilustracion:
     "Una llama serena asciende y, al hacerlo, va dando forma a un paisaje que se vuelve nítido y real a su alrededor: lo que antes era contorno de humo se transforma en tierra firme, casas y caminos. El fuego no arrasa; revela y consolida, mostrando cómo lo interior toma cuerpo en el mundo.",
@@ -982,10 +982,10 @@ const TAV: SenderoContenido = {
   significadoTradicional:
     "Tav (ת) es la última letra del alfabeto hebreo y significa \"marca\", \"sello\" o \"firma\". En la tradición cabalística simboliza la culminación de un proceso, la materialización de lo aprendido y la huella que dejamos en el mundo. Representa el momento en que una verdad deja de ser una posibilidad para convertirse en una realidad.\n\nAl conectar Yesod con Malkut, este sendero simboliza el paso desde los fundamentos interiores hacia la manifestación concreta. Enseña que el conocimiento solo alcanza su propósito cuando se traduce en acciones que transforman la realidad.",
   traduccionPsicologica:
-    "Este sendero representa la capacidad de convertir nuestras ideas, aprendizajes y valores en una forma visible de vivir. No basta con comprender quién queremos ser; el verdadero crecimiento ocurre cuando nuestras decisiones dejan una huella coherente en nuestra vida y en nuestro entorno.\n\nNos recuerda que cada acción es una firma que revela nuestros valores, mucho más que nuestras palabras o nuestras intenciones.",
+    "Este sendero representa la capacidad de convertir nuestras ideas, aprendizajes y valores en una forma visible de vivir. No basta con comprender quién queremos ser; el verdadero crecimiento ocurre cuando nuestras decisiones dejan una huella coherente en nuestra Vida y en nuestro entorno.\n\nNos recuerda que cada acción es una firma que revela nuestros valores, mucho más que nuestras palabras o nuestras intenciones.",
   pregunta: "¿La huella que dejas refleja realmente lo que dices valorar?",
   une: [
-    "Comprender una verdad tiene poco impacto si nunca llega a expresarse en nuestras decisiones. Muchas personas acumulan conocimiento durante años, pero su vida apenas cambia porque ese conocimiento nunca se convierte en acción.",
+    "Comprender una verdad tiene poco impacto si nunca llega a expresarse en nuestras decisiones. Muchas personas acumulan conocimiento durante años, pero su Vida apenas cambia porque ese conocimiento nunca se convierte en acción.",
     "Este sendero representa la culminación del recorrido. Nos invita a dejar de medir nuestro crecimiento por lo que sabemos y empezar a medirlo por la huella que dejamos en el mundo a través de nuestras acciones.",
   ],
   testTitulo: "¿Cómo transformas tus aprendizajes en una realidad?",
@@ -997,7 +997,7 @@ const TAV: SenderoContenido = {
     { texto: "Siento que la forma en que vivo refleja cada vez mejor quién soy.", invertida: true },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has conseguido integrar tus aprendizajes en tu vida cotidiana. Tus acciones reflejan con naturalidad tus valores y dejan una huella coherente." },
+    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has conseguido integrar tus aprendizajes en tu Vida cotidiana. Tus acciones reflejan con naturalidad tus valores y dejan una huella coherente." },
     { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes el camino que quieres seguir, aunque todavía existen áreas donde tus acciones no reflejan plenamente esa comprensión." },
     { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y la forma en que vives. Tu crecimiento consiste en convertir el conocimiento en decisiones concretas y sostenidas." },
     { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que el verdadero aprendizaje no termina cuando comprendes una idea, sino cuando esa idea transforma la manera en que vives y la huella que dejas en el mundo." },
@@ -1007,7 +1007,7 @@ const TAV: SenderoContenido = {
     "Actúas de acuerdo con tus valores incluso cuando nadie te observa.",
     "La huella que dejas en tus relaciones y proyectos coincide con la persona que quieres ser.",
   ],
-  umbral: "Tu vida se convierte en la expresión natural de todo lo que has aprendido durante el camino.",
+  umbral: "Tu Vida se convierte en la expresión natural de todo lo que has aprendido durante el camino.",
   integracion: "Mi mayor aprendizaje no es lo que sé, sino la huella que dejo con la forma en que elijo vivir.",
   ilustracion:
     "Una mano presiona un sello sobre lacre cálido y deja una marca nítida y luminosa. Alrededor, el largo camino recorrido se ve al fondo como una senda que desemboca justo en esa huella. La imagen transmite culminación: todo lo aprendido queda por fin grabado, firme y visible, en el mundo.",

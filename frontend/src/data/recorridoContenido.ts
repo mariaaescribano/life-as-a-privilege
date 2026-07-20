@@ -89,16 +89,16 @@ export const recorridoContenido: Record<
   ayurveda: {
     desc: "No todos necesitamos lo mismo. Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
     modalDesc:
-      "El ayurveda es la medicina tradicional india. No mira síntomas aislados: lee a la persona entera. Tu constitución (dosha) determina cómo piensas, cómo enfermas y qué te sienta bien comer. Entender tu dosha es entender por qué dos personas con la misma vida tienen problemas distintos.",
+      "El ayurveda es la medicina tradicional india. No mira síntomas aislados: lee a la persona entera. Tu constitución (Doṣha) determina cómo piensas, cómo enfermas y qué te sienta bien comer. Entender tu Doṣha es entender por qué dos personas con la misma Vida tienen problemas distintos.",
     contenido: [
       {
-        titulo: "Los doshas",
+        titulo: "Los Doṣhas",
         items: [
           "Vata, Pitta y Kapha son las tres energías que describe el Ayurveda. Todos tenemos las tres, pero en proporciones diferentes. Comprender ese equilibrio es el primer paso para entender tus necesidades.",
         ],
       },
       {
-        titulo: "Tu dosha",
+        titulo: "Tu Doṣha",
         items: [
           "Descubre cuál es tu constitución predominante, cuáles son tus fortalezas naturales y qué desequilibrios tienden a aparecer cuando te alejas de tu equilibrio.",
         ],
@@ -194,7 +194,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Sesiones individuales",
         items: [
-          "Adaptaremos el conocimiento a tu realidad: tu constitución, tus horarios, tus necesidades y tu estilo de vida.",
+          "Adaptaremos el conocimiento a tu realidad: tu constitución, tus horarios, tus necesidades y tu estilo de Vida.",
         ],
         aviso: "Opcional. Se cobra aparte",
       },
@@ -224,7 +224,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Sesiones individuales",
         items: [
-          "Un espacio para aterrizar estos principios en situaciones reales de tu vida y convertirlos en algo práctico.",
+          "Un espacio para aterrizar estos principios en situaciones reales de tu Vida y convertirlos en algo práctico.",
         ],
          aviso: "Opcional. Se cobra aparte",
       },
@@ -248,7 +248,7 @@ export const recorridoContenido: Record<
       {
         titulo: "Autores importantes",
         items: [
-          "Conocerás ideas y autores que han dedicado su vida a responder las mismas preguntas que el ser humano lleva siglos haciéndose.",
+          "Conocerás ideas y autores que han dedicado su Vida a responder las mismas preguntas que el ser humano lleva siglos haciéndose.",
         ],
       },
       {

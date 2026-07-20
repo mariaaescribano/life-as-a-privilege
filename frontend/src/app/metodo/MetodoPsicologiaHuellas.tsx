@@ -163,7 +163,7 @@ export default function MetodoPsicologiaHuellas() {
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={8} py={12}>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  Todavía no has escrito recuerdos en tu línea de vida. Vuelve atrás y visita los años que quieras recordar.
+                  Todavía no has escrito recuerdos en tu línea de Vida. Vuelve atrás y visita los años que quieras recordar.
                 </Text>
               </Box>
             </Box>

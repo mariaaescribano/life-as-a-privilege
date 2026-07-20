@@ -166,7 +166,7 @@ export default function MetodoPsicologia() {
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
                 color={TINTA}
-                fontSize={{ base: "sm", md: "md" }}
+                fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.8"
                 maxW="560px"
                 mx="auto"

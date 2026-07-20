@@ -222,7 +222,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           <Flex direction="column" align="center" w="100%" maxW="640px" gap={6}>
             <MetodoStepHeader
               icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-              title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+              title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
@@ -256,7 +256,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Dosha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
             pageLabel="3/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}

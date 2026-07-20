@@ -242,7 +242,7 @@ export const celulas: Celula[] = [
     nombre: "Cardiomiocitos",
     foto: "/viñetas/fisiologia/celulas/cardiomiocitos.png",
     descripcion:
-      "Son las células musculares del corazón, responsables de sus contracciones rítmicas y continuas que mantienen la circulación sanguínea. Funcionan de forma coordinada y automática, generando el latido que sostiene la vida.",
+      "Son las células musculares del corazón, responsables de sus contracciones rítmicas y continuas que mantienen la circulación sanguínea. Funcionan de forma coordinada y automática, generando el latido que sostiene la Vida.",
     cuidados:
       "Se fortalecen con ejercicio cardiovascular y una buena regulación del estrés (medita).",
   },
@@ -414,7 +414,7 @@ export const celulas: Celula[] = [
     descripcion:
       "Son células encargadas de producir y organizar la matriz extracelular, especialmente el colágeno, que aporta estructura, resistencia y elasticidad a tejidos como piel, tendones, ligamentos, vasos sanguíneos, cartílago y otros órganos conectivos. También participan en la reparación de tejidos cuando hay daño.",
     cuidados:
-      "Se favorecen con vitamina C, suficiente proteína, péptidos de colágeno (les influencian para que generen más colágeno ellas mismas) y un estilo de vida que reduzca la inflamación crónica.",
+      "Se favorecen con vitamina C, suficiente proteína, péptidos de colágeno (les influencian para que generen más colágeno ellas mismas) y un estilo de Vida que reduzca la inflamación crónica.",
   },
   {
     id: "adipocitos-blancos",
@@ -470,11 +470,11 @@ export const celulas: Celula[] = [
   },
   {
     id: "celula-madre-neural",
-    claves: ["Generan nuevas neuronas", "Neurogénesis de por vida", "Apoyan aprendizaje y memoria"],
+    claves: ["Generan nuevas neuronas", "Neurogénesis de por Vida", "Apoyan aprendizaje y memoria"],
     nombre: "Célula madre neural",
     foto: "/viñetas/fisiologia/celulas/madreneural.png",
     descripcion:
-      "Son las células capaces de generar nuevas neuronas y células gliales. Aunque gran parte del cerebro se forma antes de nacer, en algunas zonas siguen produciendo neuronas durante toda la vida (neurogénesis), participando en el aprendizaje y la memoria.",
+      "Son las células capaces de generar nuevas neuronas y células gliales. Aunque gran parte del cerebro se forma antes de nacer, en algunas zonas siguen produciendo neuronas durante toda la Vida (neurogénesis), participando en el aprendizaje y la memoria.",
     cuidados:
       "Favorece la neurogénesis con ejercicio, aprendizaje continuo, buen sueño y manejo del estrés.",
   },
@@ -508,7 +508,7 @@ export const celulas: Celula[] = [
     nombre: "Célula marcapasos (nodo sinusal)",
     foto: "/viñetas/fisiologia/celulas/marcapasos.png",
     descripcion:
-      "Son las células que marcan el ritmo del corazón. Generan de forma espontánea el impulso eléctrico que inicia cada latido y lo hacen sin necesidad de una orden externa. Ese impulso se propaga por todo el corazón y coordina la contracción, sosteniendo el pulso de la vida.",
+      "Son las células que marcan el ritmo del corazón. Generan de forma espontánea el impulso eléctrico que inicia cada latido y lo hacen sin necesidad de una orden externa. Ese impulso se propaga por todo el corazón y coordina la contracción, sosteniendo el pulso de la Vida.",
     cuidados:
       "Se equilibran con buena forma cardiovascular, descanso y regulación del sistema nervioso (respira, medita).",
   },

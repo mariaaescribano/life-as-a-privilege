@@ -38,6 +38,9 @@ import {
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
+// Foto de arquetipos (fondo de la columna, su cabecera y cada tarjeta). La página
+// no se muestra hasta que esta imagen esté cargada, para que no aparezca a medias.
+const ARQUETIPOS_IMG = "/img/astrologia/space.jpg";
 // Altura máxima común de las tres columnas; el resto se ve con scroll interno.
 const COL_H = { base: "440px", md: "520px", lg: "640px" } as const;
 const SCROLL_SX = {
@@ -140,6 +143,8 @@ export default function MetodoPsicologiaIntegracion() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
+  // Hasta que la foto de arquetipos no esté cargada, no se muestra la página.
+  const [fotoLista, setFotoLista] = useState(false);
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
   const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
@@ -157,6 +162,16 @@ export default function MetodoPsicologiaIntegracion() {
   useEffect(() => () => {
     montado.current = false;
     if (okTimer.current) clearTimeout(okTimer.current);
+  }, []);
+
+  // Precarga de la foto de arquetipos. Si falla, no bloqueamos la página para
+  // siempre: la damos por lista igualmente.
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => { if (montado.current) setFotoLista(true); };
+    img.onerror = () => { if (montado.current) setFotoLista(true); };
+    img.src = ARQUETIPOS_IMG;
+    if (img.complete) setFotoLista(true);
   }, []);
 
   useEffect(() => {
@@ -307,12 +322,17 @@ export default function MetodoPsicologiaIntegracion() {
     else if (a?.tipo === "arquetipo") addArq(a.arq);
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !fotoLista) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
   // Tras Relación viene «Recuérdate» (ruta interna /dones). La Integración (/mapa)
   // llega más adelante, después del bloque de dones.
   const irARecuerdate = () => navigate(`/metodo/psicologia/${exp.id}/dones`);
+  // Hay relación (real) si algún box tiene contenido: una herida/arquetipo
+  // reunidos, o un título/texto escrito. Un box recién añadido y vacío no cuenta.
+  const hayRelacion = relaciones.some(
+    (c) => c.nudos.length > 0 || c.arquetipos.length > 0 || (c.titulo || "").trim() !== "" || (c.texto || "").trim() !== "",
+  );
   const activa = relaciones.find((c) => c.id === activaId) || null;
   const nudoEnActiva = (n: string) => !!activa?.nudos.includes(n);
   const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
@@ -336,7 +356,12 @@ export default function MetodoPsicologiaIntegracion() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Narra", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
-              next={{ label: "Recuérdate →", onClick: irARecuerdate }}
+              next={{
+                label: "Recuérdate →",
+                onClick: irARecuerdate,
+                disabled: !hayRelacion,
+                disabledTooltip: "Crea al menos una relación para continuar.",
+              }}
             />
             </Reveal>
 

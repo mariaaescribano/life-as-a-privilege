@@ -29,6 +29,22 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   });
 }
 
+// Dibuja `draw` con opacidad (si el visor soporta GState); si no, opaco. Para
+// tintes suaves (tarjetas de momento) sin romper nada en visores antiguos.
+function withAlpha(doc: jsPDF, opacity: number, draw: () => void): void {
+  const GS = (doc as any).GState;
+  if (GS) {
+    try {
+      doc.saveGraphicsState();
+      doc.setGState(new GS({ opacity }));
+      draw();
+      doc.restoreGraphicsState();
+      return;
+    } catch { /* sin GState: opaco */ }
+  }
+  draw();
+}
+
 export async function generateDiaPdf(dosha: string, doshaLabel: string, bloques: DiaBloque[]): Promise<void> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   registerEbGaramond(doc);
@@ -36,6 +52,7 @@ export async function generateDiaPdf(dosha: string, doshaLabel: string, bloques:
   const doshaColor = DOSHA_COLORS[dosha] ?? INK;
   const img = await loadImage(BG_IMG);
   let page = 1;
+  const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
 
   const fillBackground = () => { doc.setFillColor(...PAGE_BG); doc.rect(0, 0, PAGE_W, pageH, "F"); };
 
@@ -66,6 +83,8 @@ export async function generateDiaPdf(dosha: string, doshaLabel: string, bloques:
   };
 
   const drawFooter = (p: number) => {
+    doc.setDrawColor(224, 205, 178); doc.setLineWidth(0.2);
+    doc.line(MARGIN, pageH - 12.5, PAGE_W - MARGIN, pageH - 12.5);
     doc.setFont(GARAMOND, "italic"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
     doc.text("Life as a Privilege  ·  Ayurveda", MARGIN, pageH - 8);
     doc.text(`${p}`, PAGE_W - MARGIN, pageH - 8, { align: "right" });
@@ -92,14 +111,20 @@ export async function generateDiaPdf(dosha: string, doshaLabel: string, bloques:
   /* ── PÁGINA 1 ── */
   fillBackground();
   drawWatercolorBand(58);
+  // Marco fino doble de cortesía (aire de documento cuidado).
+  doc.setDrawColor(...doshaColor);
+  doc.setLineWidth(0.5); doc.rect(10, 10, PAGE_W - 20, pageH - 20);
+  doc.setLineWidth(0.2); doc.rect(12.4, 12.4, PAGE_W - 24.8, pageH - 24.8);
 
   // Título
   doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi día equilibrado", PAGE_W / 2, 76, { align: "center" });
+  doc.text("Mi día equilibrado", PAGE_W / 2, 76, { align: "center", charSpace: 0.4 });
   doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
-  doc.text(`Ayurveda  ·  Dosha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
+  doc.text(`Ayurveda  ·  Doṣha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
   ornament(93);
-  y = 106;
+  doc.setFont(GARAMOND, "italic"); doc.setFontSize(9.5); doc.setTextColor(...MUTED);
+  doc.text(fecha, PAGE_W / 2, 100, { align: "center" });
+  y = 110;
 
   const orden = [...bloques]
     .filter((b) => (b.actividad && b.actividad.trim()) || (b.alimentos && b.alimentos.length > 0) || b.hora)
@@ -113,51 +138,45 @@ export async function generateDiaPdf(dosha: string, doshaLabel: string, bloques:
     return;
   }
 
-  const HORA_X = MARGIN;
-  const TEXT_X = MARGIN + 24;
-  const TEXT_W = CONTENT_W - 24;
+  const HORA_X = MARGIN + 6;
+  const TEXT_X = MARGIN + 28;
+  const TEXT_W = CONTENT_W - 32;
 
+  // Cada momento del día en una tarjeta suave con barra de acento a la izquierda.
   for (const b of orden) {
     const actividad = (b.actividad || (b.comida ? "Comida" : "Momento")).trim();
     const actLines = doc.splitTextToSize(actividad, TEXT_W) as string[];
     const foodsStr = b.comida && b.alimentos.length > 0 ? b.alimentos.join("   ·   ") : "";
     const foodLines = foodsStr ? (doc.splitTextToSize(foodsStr, TEXT_W) as string[]) : [];
-    const blockH = actLines.length * 6 + foodLines.length * 5 + 9;
-    ensureSpace(blockH);
+    const innerH = actLines.length * 6 + (foodLines.length ? foodLines.length * 5 + 1 : 0);
+    const cardH = innerH + 9;
+    ensureSpace(cardH + 4);
 
-    const topY = y;
+    const cardTop = y;
+    withAlpha(doc, 0.06, () => {
+      doc.setFillColor(...INK);
+      doc.roundedRect(MARGIN, cardTop, CONTENT_W, cardH, 3, 3, "F");
+    });
+    doc.setFillColor(...doshaColor);
+    doc.roundedRect(MARGIN, cardTop, 2.4, cardH, 1.2, 1.2, "F");
 
+    const baseY = cardTop + 6.5;
     // Hora
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
-    doc.text(b.hora || "—", HORA_X, y + 1.5);
-
+    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...doshaColor);
+    doc.text(b.hora || "—", HORA_X, baseY + 1.5);
     // Punto guía
     doc.setFillColor(...doshaColor);
-    doc.circle(TEXT_X - 6, y, 1.2, "F");
-
+    doc.circle(TEXT_X - 6, baseY, 1.2, "F");
     // Actividad
     doc.setFont(GARAMOND, b.comida ? "bold" : "normal"); doc.setFontSize(12); doc.setTextColor(...INK);
-    actLines.forEach((line, i) => doc.text(line, TEXT_X, y + i * 6));
-    let yy = y + actLines.length * 6;
-
+    actLines.forEach((line, i) => doc.text(line, TEXT_X, baseY + i * 6));
+    let yy = baseY + actLines.length * 6;
     // Alimentos
     if (foodLines.length) {
       doc.setFont(GARAMOND, "italic"); doc.setFontSize(10); doc.setTextColor(...INK_SOFT);
       foodLines.forEach((line, i) => doc.text(line, TEXT_X, yy + 0.5 + i * 5));
-      yy += foodLines.length * 5 + 0.5;
     }
-
-    y = yy + 6;
-
-    // Línea vertical suave que une la hora con el bloque (toque elegante).
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.2);
-    doc.line(TEXT_X - 6, topY + 3, TEXT_X - 6, y - 4);
-
-    // Separador horizontal tenue entre momentos.
-    doc.setDrawColor(...MUTED);
-    doc.setLineWidth(0.1);
-    doc.line(TEXT_X, y - 2.5, PAGE_W - MARGIN, y - 2.5);
-    y += 3;
+    y = cardTop + cardH + 4;
   }
 
   /* Cierre */

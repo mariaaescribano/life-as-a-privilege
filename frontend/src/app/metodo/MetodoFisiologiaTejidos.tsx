@@ -3,7 +3,7 @@ import ConstruirFisio from "../../components/metodo/ConstruirFisio";
 
 const PRE = "/recorrido/fisiologia/pre";
 
-// Nivel 2 · La vida — Tejidos: muchas células iguales forman un tejido.
+// Nivel 2 · La Vida — Tejidos: muchas células iguales forman un tejido.
 export default function MetodoFisiologiaTejidos() {
   return (
     <ConstruirFisio

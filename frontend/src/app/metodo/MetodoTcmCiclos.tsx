@@ -4,7 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { TcmLoader } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -22,6 +22,10 @@ export default function MetodoTcmCiclos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [sel, setSel] = useState<Relacion | null>(null);
+  // Flechitas ya vistas (clave `${ciclo}-${origen}`). No se puede avanzar hasta
+  // haberlas tocado todas (5 del Sheng + 5 del Ke = 10).
+  const [vistas, setVistas] = useState<Set<string>>(new Set());
+  const TOTAL_FLECHAS = ORDEN_ELEMENTOS.length * 2;
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -48,6 +52,13 @@ export default function MetodoTcmCiclos() {
   const abrir = (ciclo: Ciclo, origen: Elemento) => {
     const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
     setSel({ ciclo, origen, destino });
+    setVistas((prev) => {
+      const key = `${ciclo}-${origen}`;
+      if (prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.add(key);
+      return next;
+    });
   };
 
   // No quitamos el spinner hasta que estén descargados los iconos de los
@@ -61,7 +72,11 @@ export default function MetodoTcmCiclos() {
   ]);
 
   if (loading || !iconosListos) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return (
+      <Box minH="100vh" bg="#008080" display="flex" alignItems="center" justifyContent="center">
+        <TcmLoader color="#ffffff" />
+      </Box>
+    );
   }
 
   return (
@@ -75,15 +90,20 @@ export default function MetodoTcmCiclos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Ciclos"
-            pageLabel="4/8"
+            pageLabel="3/7"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Tu equilibrio", onClick: () => navigate("/metodo/tcm/perfil") }}
+            prev={{ label: "← Los 5 elementos", onClick: () => navigate("/metodo/tcm/elementos") }}
             extra={ilustracionesBtn}
-            next={{ label: "Diagnóstico final →", onClick: () => navigate("/metodo/tcm/diagnostico") }}
+            next={{
+              label: "Diagnóstico final →",
+              onClick: () => navigate("/metodo/tcm/diagnostico"),
+              disabled: vistas.size < TOTAL_FLECHAS,
+              disabledTooltip: "Toca todas las flechitas para descubrir cada relación",
+            }}
           />
           </Reveal>
 
@@ -92,7 +112,7 @@ export default function MetodoTcmCiclos() {
                 textAlign="center" maxW="640px" style={{ textShadow: INK_SHADOW }}>
             Los Cinco Elementos no viven aislados: se relacionan en dos ciclos. Cuando
             fluyen, hay equilibrio; cuando se alteran, aparece el desequilibrio. Toca
-            cada rayita para descubrir la relación.
+            cada flechita para descubrir la relación.
           </Text>
           </Reveal>
 

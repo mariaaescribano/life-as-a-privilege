@@ -143,6 +143,9 @@ export default function MetodoPsicologiaMiedosPreguntas() {
 
   const total = MIEDOS_PREGUNTAS.length;
   const abierto = miedos.find((m) => m.id === abiertoId) || null;
+  // No se puede avanzar hasta que TODOS los miedos tengan TODAS sus preguntas
+  // respondidas (y haya al menos un miedo nombrado).
+  const todoRespondido = miedos.length > 0 && miedos.every((m) => miedoRespondidas(m) >= total);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -163,7 +166,12 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Miedos", onClick: irAMiedos }}
-                next={{ label: "Integración →", onClick: irAIntegracion }}
+                next={{
+                  label: "Integración →",
+                  onClick: irAIntegracion,
+                  disabled: !todoRespondido,
+                  disabledTooltip: "Responde todas las preguntas de cada miedo para continuar.",
+                }}
               />
             </Reveal>
 

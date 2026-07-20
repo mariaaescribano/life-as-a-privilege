@@ -54,7 +54,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Dormir te hace más inteligente.",
         claves: ["El cerebro se limpia al dormir", "Consolida los recuerdos", "Refuerza lo aprendido"],
-        texto: <>Mientras duermes, el cerebro no descansa: aprovecha para limpiar. Los astrocitos facilitan una limpieza más profunda del tejido cerebral y la microglía patrulla eliminando restos celulares, vigilando posibles amenazas y ayudando a mantener las conexiones en buen estado. Además, durante el sueño se consolidan los recuerdos y se refuerzan los aprendizajes del día gracias a la neuroplasticidad, que ocurre en mayor o menor escala en cada momento de nuestra vida.</>,
+        texto: <>Mientras duermes, el cerebro no descansa: aprovecha para limpiar. Los astrocitos facilitan una limpieza más profunda del tejido cerebral y la microglía patrulla eliminando restos celulares, vigilando posibles amenazas y ayudando a mantener las conexiones en buen estado. Además, durante el sueño se consolidan los recuerdos y se refuerzan los aprendizajes del día gracias a la neuroplasticidad, que ocurre en mayor o menor escala en cada momento de nuestra Vida.</>,
       },
       {
         titular: "El estrés hace que tu cerebro vea amenazas donde no las hay.",
@@ -103,7 +103,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Cada alvéolo cuenta.",
         claves: ["500 millones de alvéolos", "Superficie de una pista de tenis", "Cuidarlos es cuidar tu respirar"],
-        texto: <>Tus pulmones contienen alrededor de 500 millones de alvéolos. Son tan pequeños que apenas los vemos, pero juntos forman una superficie de intercambio de gases similar a una pista de tenis. Cuidarlos significa cuidar cada respiración que tomarás durante el resto de tu vida.</>,
+        texto: <>Tus pulmones contienen alrededor de 500 millones de alvéolos. Son tan pequeños que apenas los vemos, pero juntos forman una superficie de intercambio de gases similar a una pista de tenis. Cuidarlos significa cuidar cada respiración que tomarás durante el resto de tu Vida.</>,
       },
     ] },
   { key: "corazon",   label: "Corazón",   foto: "/recorrido/fisiologia/organos/corazon.png",   hotspot: { top: 29, left: 50 }, celulas: pick("cardiomiocitos", "marcapasos", "purkinje"),
@@ -132,7 +132,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "El corazón solo pide una cosa: que te muevas.",
         claves: ["Evolucionó para el movimiento", "El sedentarismo lo perjudica", "Cada paso es una inversión"],
-        texto: <>Nuestro corazón evolucionó para un cuerpo que caminaba, corría y cargaba peso cada día. Pasar muchas horas sentado reduce la circulación, favorece la hipertensión y obliga al corazón a adaptarse a un estilo de vida para el que nunca fue diseñado. Cada paseo, cada escalera y cada minuto de actividad física son una inversión directa en su salud.</>,
+        texto: <>Nuestro corazón evolucionó para un cuerpo que caminaba, corría y cargaba peso cada día. Pasar muchas horas sentado reduce la circulación, favorece la hipertensión y obliga al corazón a adaptarse a un estilo de Vida para el que nunca fue diseñado. Cada paseo, cada escalera y cada minuto de actividad física son una inversión directa en su salud.</>,
       },
     ] },
   { key: "estomago",  label: "Estómago",  foto: "/recorrido/fisiologia/organos/estomago.png",  hotspot: { top: 37, left: 54 }, celulas: pick("parietal", "principal", "mucosa-gastrica", "enteroendocrinas-gastricas"),
@@ -288,7 +288,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Mucha sal obliga a tus riñones a trabajar más.",
         claves: ["El sodio retiene agua", "Sube el volumen de sangre", "Favorece la hipertensión"],
-        texto: <>El sodio es imprescindible para la vida, pero en exceso hace que el cuerpo retenga más agua. Esto aumenta el volumen de sangre y obliga a los riñones y al corazón a trabajar durante años con una carga mayor, favoreciendo la hipertensión.</>,
+        texto: <>El sodio es imprescindible para la Vida, pero en exceso hace que el cuerpo retenga más agua. Esto aumenta el volumen de sangre y obliga a los riñones y al corazón a trabajar durante años con una carga mayor, favoreciendo la hipertensión.</>,
       },
       {
         titular: "Tus riñones también fabrican hormonas.",
@@ -337,7 +337,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Tu intestino se renueva constantemente.",
         claves: ["Sus células viven pocos días", "Se renuevan sin cesar", "Barrera siempre joven"],
-        texto: <>Las células que recubren el intestino viven solo unos pocos días. Después son sustituidas por otras nuevas para mantener una barrera sana capaz de absorber nutrientes sin dejar pasar microorganismos peligrosos. Por eso se dice que el ayuno es tan saludable, pero depende de tu estilo de vida. Si eres alguien muy sedentario sí te beneficiarás.</>,
+        texto: <>Las células que recubren el intestino viven solo unos pocos días. Después son sustituidas por otras nuevas para mantener una barrera sana capaz de absorber nutrientes sin dejar pasar microorganismos peligrosos. Por eso se dice que el ayuno es tan saludable, pero depende de tu estilo de Vida. Si eres alguien muy sedentario sí te beneficiarás.</>,
       },
       {
         titular: "Tu sistema inmunitario vigila cada bocado.",
@@ -507,8 +507,8 @@ const ORGANOS: Organo[] = [
       },
       {
         titular: "Nunca es tarde para fortalecer tus huesos.",
-        claves: ["Máxima masa a los 30", "Responden toda la vida", "Moverte hoy es invertir"],
-        texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la vida. Moverte hoy sigue siendo una inversión para el esqueleto de mañana.</>,
+        claves: ["Máxima masa a los 30", "Responden toda la Vida", "Moverte hoy es invertir"],
+        texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la Vida. Moverte hoy sigue siendo una inversión para el esqueleto de mañana.</>,
       },
     ] },
   { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 76 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
@@ -526,8 +526,8 @@ const ORGANOS: Organo[] = [
       },
       {
         titular: "Tus huesos esconden una fábrica de sangre.",
-        claves: ["La médula ósea fabrica sangre", "Rojos, blancos y plaquetas", "Trabaja toda la vida"],
-        texto: <>En la infancia, casi todos los huesos contienen médula ósea roja, el tejido que fabrica las células sanguíneas. Con la edad, parte de esa médula se transforma en médula amarilla, rica en grasa. Aun así, la médula roja que permanece en la pelvis, las vértebras, las costillas o el esternón sigue produciendo glóbulos rojos, glóbulos blancos y plaquetas durante toda la vida.</>,
+        claves: ["La médula ósea fabrica sangre", "Rojos, blancos y plaquetas", "Trabaja toda la Vida"],
+        texto: <>En la infancia, casi todos los huesos contienen médula ósea roja, el tejido que fabrica las células sanguíneas. Con la edad, parte de esa médula se transforma en médula amarilla, rica en grasa. Aun así, la médula roja que permanece en la pelvis, las vértebras, las costillas o el esternón sigue produciendo glóbulos rojos, glóbulos blancos y plaquetas durante toda la Vida.</>,
       },
       {
         titular: "El hierro no da energía… permite fabricarla.",
@@ -562,11 +562,11 @@ const ORGANOS: Organo[] = [
       {
         titular: "Donar sangre activa la fábrica.",
         claves: ["Donar avisa a los riñones", "La médula fabrica más", "Se recupera en semanas"],
-        texto: <>Después de una donación, el organismo detecta que ha perdido parte de su sangre y los riñones producen más eritropoyetina, una hormona que estimula la médula ósea para fabricar nuevos glóbulos rojos. En pocas semanas, el volumen de sangre y las células perdidas vuelven a recuperarse. Una sola donación puede ayudar a salvar varias vidas.</>,
+        texto: <>Después de una donación, el organismo detecta que ha perdido parte de su sangre y los riñones producen más eritropoyetina, una hormona que estimula la médula ósea para fabricar nuevos glóbulos rojos. En pocas semanas, el volumen de sangre y las células perdidas vuelven a recuperarse. Una sola donación puede ayudar a salvar varias Vidas.</>,
       },
     ] },
   { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.png", hotspot: { top: 70, left: 57 }, celulas: pick("fibroblastos", "mastocito"),
-    descripcion: <>Es el pegamento y la estructura de tu cuerpo. El colágeno da forma y resistencia a la piel, los tendones, los huesos y los vasos, mientras sus células fabrican y reparan ese andamiaje durante toda la vida.</>,
+    descripcion: <>Es el pegamento y la estructura de tu cuerpo. El colágeno da forma y resistencia a la piel, los tendones, los huesos y los vasos, mientras sus células fabrican y reparan ese andamiaje durante toda la Vida.</>,
     consejos: [
       {
         titular: "El colágeno es el pegamento de tu cuerpo.",
@@ -589,7 +589,7 @@ const ORGANOS: Organo[] = [
         texto: <>Cuando la glucosa permanece elevada durante mucho tiempo, puede unirse al colágeno formando enlaces que vuelven las fibras más rígidas y menos elásticas. Este proceso, llamado glicación, contribuye al envejecimiento de la piel, las arterias y muchos otros tejidos.</>,
       },
       {
-        titular: "Tus fibroblastos trabajan toda la vida.",
+        titular: "Tus fibroblastos trabajan toda la Vida.",
         claves: ["El colágeno se renueva", "Fabrican fibras nuevas", "Un trabajo lento y constante"],
         texto: <>El colágeno no dura para siempre. Los fibroblastos fabrican continuamente nuevas fibras mientras otras células eliminan las viejas o dañadas. Es un proceso lento, pero constante, que permite mantener resistentes los tejidos.</>,
       },
@@ -732,7 +732,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Se puede vivir sin vesícula biliar.",
         claves: ["No es indispensable", "El hígado sigue dando bilis", "A veces se adapta la dieta"],
-        texto: <>Aunque la vesícula facilita la digestión, no es un órgano indispensable para vivir. Si debe extirparse por cálculos o inflamación, el hígado sigue produciendo bilis, que pasa directamente al intestino. La mayoría de las personas pueden llevar una vida normal después de la cirugía, aunque algunas necesitan adaptar su alimentación durante un tiempo.</>,
+        texto: <>Aunque la vesícula facilita la digestión, no es un órgano indispensable para vivir. Si debe extirparse por cálculos o inflamación, el hígado sigue produciendo bilis, que pasa directamente al intestino. La mayoría de las personas pueden llevar una Vida normal después de la cirugía, aunque algunas necesitan adaptar su alimentación durante un tiempo.</>,
       },
       {
         titular: "Los cálculos biliares son muy frecuentes.",

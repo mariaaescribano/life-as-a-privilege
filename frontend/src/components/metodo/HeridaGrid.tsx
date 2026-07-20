@@ -33,7 +33,7 @@ export const NecesidadGlyph = ({ size = 15 }: { size?: number }) => (
   <Box as="span" lineHeight="1" flexShrink={0} style={{ fontSize: `${size}px`, color: TINTA }}>◇</Box>
 );
 
-/** Separador elegante con el mandala de la vida en el centro. */
+/** Separador elegante con el mandala de la Vida en el centro. */
 export function MandalaDivider() {
   return (
     <Flex align="center" w="100%" maxW="720px" mx="auto" gap={{ base: 4, md: 6 }} py={{ base: 1, md: 2 }}>

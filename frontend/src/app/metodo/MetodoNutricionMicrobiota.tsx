@@ -102,7 +102,7 @@ export default function MetodoNutricionMicrobiota() {
                 Cada bacteria es <b>una única célula</b>: sin órganos, sin cerebro. Y aun así es
                 sorprendentemente <b style={{ color: nutricionTxt }}>inteligente</b> — percibe su entorno,
                 se comunica con sus vecinas, decide cuándo dividirse o defenderse y coopera contigo.
-                Toda una vida resuelta en una sola célula.
+                Toda una Vida resuelta en una sola célula.
               </Text>
             </Box>
           </Reveal>

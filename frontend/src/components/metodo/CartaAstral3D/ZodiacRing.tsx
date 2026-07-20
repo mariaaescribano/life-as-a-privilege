@@ -11,7 +11,7 @@ void React;
 // concéntrico con un pequeño rebote (easeOutBack): la rueda "cristaliza" en su
 // sitio. Antes se hacía con un giro de 270° tenue, pero el desajuste se percibía.
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-// easeOutBack: llega a 1 con un leve sobreimpulso → da vida al scale sin rotar.
+// easeOutBack: llega a 1 con un leve sobreimpulso → da Vida al scale sin rotar.
 const easeOutBack = (t: number) => {
   const c1 = 1.70158;
   const c3 = c1 + 1;

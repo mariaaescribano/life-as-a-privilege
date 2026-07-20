@@ -31,6 +31,18 @@ import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
+// Estado de balance (traído de la antigua «Tu equilibrio»): etiqueta y color.
+const ESTADO_LABEL: Record<Balance, string> = {
+  equilibrio: "En equilibrio",
+  exceso: "En exceso",
+  deficiencia: "En deficiencia",
+};
+const ESTADO_COLOR: Record<Balance, string> = {
+  equilibrio: "#6f9463",
+  exceso: "#d1495b",
+  deficiencia: "#c8963e",
+};
+
 const R = 104, FOTO_R = 25; // mismos que la geometría compartida del pentágono
 
 // ── Coreografía de la estrella-perfil (al asomar en pantalla) ────────────────
@@ -117,7 +129,7 @@ export default function MetodoTcmDiagnostico() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Diagnóstico final"
-            pageLabel="5/8"
+            pageLabel="4/7"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -150,6 +162,15 @@ export default function MetodoTcmDiagnostico() {
                   mt={2} lineHeight="1.6">
               Los elementos iluminados son los que más necesitan de tu atención.
             </Text>
+          </Panel>
+          </Reveal>
+
+          {/* ── BOX MÉTRICAS · columnas por estado (traído de «Tu equilibrio») ──
+              Va justo debajo de la estrella grande. Barra vacía = en equilibrio;
+              cuanta más altura, más desequilibrio. */}
+          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
+          <Panel titulo="" color={tcmTxt}>
+            <MetricasBalance estados={estados} />
           </Panel>
           </Reveal>
 
@@ -226,6 +247,48 @@ export default function MetodoTcmDiagnostico() {
 // Ke entrecortada marrón). Solo se ILUMINAN las que hoy afectan al usuario (las
 // que salen de un elemento en desequilibrio); el resto quedan tenues pero
 // visibles. Los elementos en desequilibrio brillan más, con aro blanco.
+// Una arista de un ciclo (origen → destino), con su punta de flecha. Es un
+// componente de MÓDULO (no anidado) y memoizado: así NO se vuelve a montar en
+// cada render de la estrella (hover, abrir un cómic…) y su animación de entrada
+// ocurre UNA SOLA VEZ, quedándose fija después.
+const AristaPerfil = React.memo(function AristaPerfil({ ciclo, origen, delay, estados, enter, reduce }: {
+  ciclo: Ciclo; origen: Elemento; delay: number;
+  estados: Partial<Record<Elemento, EstadoElemento>>; enter: boolean; reduce: boolean | null;
+}) {
+  const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
+  const { inicio, fin, ux, uy } = segmentoPentagono(idxElemento(origen), idxElemento(destino));
+  const b = estados[origen]?.balance;
+  const activa = b === "exceso" || b === "deficiencia";
+  const nivel = estados[origen]?.nivel ?? 0;
+  // Cada flecha lleva el color de su elemento de origen. El ciclo se distingue
+  // por el trazo: Sheng (generador) continuo, Ke (control) entrecortado.
+  const color = ELEMENTOS[origen].color;
+  const glowColor = color;
+  const ancho = activa ? 2.5 + nivel * 2.5 : 2;
+  const opacidad = activa ? 1 : 0.6;
+  const halo = activa ? `drop-shadow(0 0 ${4 + nivel * 7}px ${glowColor})` : "none";
+  const ah = activa ? 16 : 13;          // largo del triángulo
+  const aw = activa ? 10 : 8;           // media anchura de la base
+  const bc = { x: fin.x - ux * ah, y: fin.y - uy * ah };
+  const px = -uy, py = ux;
+  const p2 = { x: bc.x + px * aw, y: bc.y + py * aw };
+  const p3 = { x: bc.x - px * aw, y: bc.y - py * aw };
+  return (
+    <MotionG
+      initial={reduce ? false : { opacity: 0, scale: 0.5 }}
+      animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 })}
+      transition={{ delay, duration: DP_ARROW_DUR, ease: EASE_POP }}
+      style={{ transformBox: "view-box", transformOrigin: `${inicio.x}px ${inicio.y}px` }}>
+      <line x1={inicio.x} y1={inicio.y} x2={bc.x} y2={bc.y}
+            stroke={color} strokeWidth={ancho} strokeLinecap="butt"
+            strokeDasharray={ciclo === "ke" ? "5 6" : undefined}
+            opacity={opacidad} style={{ filter: halo, transition: "all 0.25s ease" }} />
+      <polygon points={`${fin.x},${fin.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`}
+               fill={color} opacity={opacidad} style={{ filter: halo }} />
+    </MotionG>
+  );
+});
+
 function EstrellaPerfil({ estados, onElemento }: {
   estados: Partial<Record<Elemento, EstadoElemento>>;
   onElemento: (el: Elemento) => void;
@@ -241,56 +304,18 @@ function EstrellaPerfil({ estados, onElemento }: {
     return b === "exceso" || b === "deficiencia";
   };
 
-  // Una arista de un ciclo (origen → destino), con su punta de flecha. Brota de
-  // su elemento de origen (escala desde `inicio`) con el retraso `delay`.
-  const Arista = ({ ciclo, origen, delay }: { ciclo: Ciclo; origen: Elemento; delay: number }) => {
-    const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
-    const { inicio, fin, ux, uy } = segmentoPentagono(idxElemento(origen), idxElemento(destino));
-    const activa = afecta(origen);
-    const nivel = estados[origen]?.nivel ?? 0;
-    // Cada flecha lleva el color de su elemento de origen. El ciclo se distingue
-    // por el trazo: Sheng (generador) continuo, Ke (control) entrecortado.
-    const color = ELEMENTOS[origen].color;
-    const glowColor = color;
-    // TODAS las flechas se ven con claridad; las de un elemento en desequilibrio
-    // se iluminan un poco más (más gruesas, opacas y con halo, según el nivel).
-    const ancho = activa ? 2.5 + nivel * 2.5 : 2;
-    const opacidad = activa ? 1 : 0.6;
-    const halo = activa ? `drop-shadow(0 0 ${4 + nivel * 7}px ${glowColor})` : "none";
-    // Punta de flecha: triángulo limpio. La línea termina en la BASE del
-    // triángulo (no en la punta) para que la flecha se lea nítida.
-    const ah = activa ? 16 : 13;          // largo del triángulo
-    const aw = activa ? 10 : 8;           // media anchura de la base
-    const bc = { x: fin.x - ux * ah, y: fin.y - uy * ah };
-    const px = -uy, py = ux;
-    const p2 = { x: bc.x + px * aw, y: bc.y + py * aw };
-    const p3 = { x: bc.x - px * aw, y: bc.y - py * aw };
-    return (
-      <MotionG
-        initial={reduce ? false : { opacity: 0, scale: 0.5 }}
-        animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 })}
-        transition={{ delay, duration: DP_ARROW_DUR, ease: EASE_POP }}
-        style={{ transformBox: "view-box", transformOrigin: `${inicio.x}px ${inicio.y}px` }}>
-        <line x1={inicio.x} y1={inicio.y} x2={bc.x} y2={bc.y}
-              stroke={color} strokeWidth={ancho} strokeLinecap="butt"
-              strokeDasharray={ciclo === "ke" ? "5 6" : undefined}
-              opacity={opacidad} style={{ filter: halo, transition: "all 0.25s ease" }} />
-        <polygon points={`${fin.x},${fin.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`}
-                 fill={color} opacity={opacidad} style={{ filter: halo }} />
-      </MotionG>
-    );
-  };
-
   return (
     <Flex ref={ref} justify="center" py={{ base: 2, md: 3 }}>
       <Box as="svg" viewBox="0 0 300 320" w="100%" maxW={{ base: "360px", md: "500px" }} h="auto" overflow="visible">
         {/* Aristas: primero las de FUERA (Sheng, perímetro) una a una, luego las
             de DENTRO (Ke, las que cruzan la estrella), tras florecer los iconos. */}
         {ORDEN_ELEMENTOS.map((el, i) => (
-          <Arista key={`sheng-${el}`} ciclo="sheng" origen={el} delay={DP_SHENG_BASE + i * DP_ARROW_STEP} />
+          <AristaPerfil key={`sheng-${el}`} ciclo="sheng" origen={el} delay={DP_SHENG_BASE + i * DP_ARROW_STEP}
+                        estados={estados} enter={enter} reduce={reduce} />
         ))}
         {ORDEN_ELEMENTOS.map((el, i) => (
-          <Arista key={`ke-${el}`} ciclo="ke" origen={el} delay={DP_KE_BASE + i * DP_ARROW_STEP} />
+          <AristaPerfil key={`ke-${el}`} ciclo="ke" origen={el} delay={DP_KE_BASE + i * DP_ARROW_STEP}
+                        estados={estados} enter={enter} reduce={reduce} />
         ))}
 
         <defs>
@@ -362,5 +387,134 @@ function Panel({ titulo, color, children }: {
         {children}
       </Box>
     </Box>
+  );
+}
+
+// ── Box de métricas (barras por estado) · traído de «Tu equilibrio» ──────────
+// Barra vacía = en equilibrio; cuanta más altura, más desequilibrio. Las barras
+// suben (y su número cuenta) cuando la sección asoma en pantalla, una sola vez.
+function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, EstadoElemento>> }) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
+  const enter = reduce || inView;
+  return (
+    <>
+      <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            textAlign="center" lineHeight="1.7" mb={5} style={{ textShadow: INK_SHADOW }}>
+        Cuanta más altura, más desequilibrio hay en ese Elemento. Los vacíos están en equilibrio.
+      </Text>
+
+      {/* Leyenda de estados */}
+      <Flex justify="center" gap={{ base: 3, md: 6 }} wrap="wrap" mb={5}>
+        {(["equilibrio", "exceso", "deficiencia"] as Balance[]).map((b) => (
+          <Flex key={b} align="center" gap={2}>
+            <Box w="12px" h="12px" borderRadius="sm" bg={ESTADO_COLOR[b]}
+                 style={{ boxShadow: `0 0 8px ${ESTADO_COLOR[b]}` }} />
+            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "2xs", md: "xs" }} fontWeight={600}>
+              {ESTADO_LABEL[b]}
+            </Text>
+          </Flex>
+        ))}
+      </Flex>
+
+      <Box ref={ref}>
+        {/* Zona de barras */}
+        <Box h={{ base: "180px", md: "240px" }}>
+          <Flex h="100%" align="flex-end" justify="space-between" gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }}>
+            {ORDEN_ELEMENTOS.map((el, i) => (
+              <ColumnaBalance key={el} index={i} enter={enter} reduce={reduce}
+                              balance={estados[el]?.balance ?? null} nivel={estados[el]?.nivel ?? null} />
+            ))}
+          </Flex>
+        </Box>
+
+        {/* Elementos (icono + nombre + estado) */}
+        <Flex justify="space-between" gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }} mt={2.5}>
+          {ORDEN_ELEMENTOS.map((el) => {
+            const E = ELEMENTOS[el];
+            const balance = estados[el]?.balance ?? null;
+            return (
+              <Flex key={el} flex="1" direction="column" align="center" gap={1} minW={0}>
+                <Box w={{ base: "38px", md: "50px" }} h={{ base: "38px", md: "50px" }}
+                     borderRadius="full" overflow="hidden" border={`2px solid ${E.color}`}
+                     style={{ boxShadow: `0 0 8px ${E.color}88` }}>
+                  <img src={ICONO_ELEMENTO[el]} alt={E.nombre}
+                       style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </Box>
+                <Text color="white" fontSize={{ base: "2xs", md: "sm" }} fontWeight={700}
+                      textAlign="center" noOfLines={1}>
+                  {E.nombre}
+                </Text>
+                <Text color={balance ? ESTADO_COLOR[balance] : "rgba(255,255,255,0.45)"}
+                      fontSize={{ base: "3xs", md: "2xs" }} fontWeight={700} textAlign="center"
+                      fontStyle={balance ? "normal" : "italic"} noOfLines={1} lineHeight="1.2">
+                  {balance ? ESTADO_LABEL[balance] : "sin datos"}
+                </Text>
+              </Flex>
+            );
+          })}
+        </Flex>
+      </Box>
+    </>
+  );
+}
+
+// ── Columna vertical de un elemento, por estado ──────────────────────────────
+function ColumnaBalance({ balance, nivel, index, enter, reduce }: {
+  balance: Balance | null; nivel: number | null; index: number; enter: boolean; reduce: boolean | null;
+}) {
+  const enDesequilibrio = balance === "exceso" || balance === "deficiencia";
+  const color = enDesequilibrio ? ESTADO_COLOR[balance] : ESTADO_COLOR.equilibrio;
+  const objetivo = enDesequilibrio ? Math.round((nivel ?? 0) * 100) : 0;
+  const alturaFinal = enDesequilibrio ? Math.max(objetivo, 12) : 0;
+
+  // Tween en JS de un progreso 0→1 (con retraso por índice) para animar la
+  // ALTURA real y que el número suba montado en lo alto de la barra.
+  const [prog, setProg] = useState(reduce ? 1 : 0);
+  useEffect(() => {
+    if (!enter) return;
+    if (reduce) { setProg(1); return; }
+    setProg(0);
+    let raf = 0;
+    let start: number | null = null;
+    const dur = 1000;
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+    const timer = setTimeout(() => {
+      const step = (ts: number) => {
+        if (start === null) start = ts;
+        const t = Math.min((ts - start) / dur, 1);
+        setProg(easeOutCubic(t));
+        if (t < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }, index * 170);
+    return () => { clearTimeout(timer); if (raf) cancelAnimationFrame(raf); };
+  }, [enter, reduce, index]);
+
+  const alturaPct = alturaFinal * prog;
+  const numero = Math.round(objetivo * prog);
+
+  return (
+    <Flex flex="1" direction="column" align="center" justify="flex-end" h="100%" minW={0} gap={1}>
+      {enDesequilibrio ? (
+        <>
+          <Text color={color} fontSize={{ base: "2xs", md: "sm" }} fontWeight={800} lineHeight="1"
+                opacity={enter ? 1 : 0} transition="opacity 0.4s ease"
+                style={{ textShadow: `0 0 8px ${color}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
+            {numero}%
+          </Text>
+          <Box w={{ base: "70%", md: "62%" }} maxW="64px" h={`${alturaPct}%`}
+               borderTopRadius="md" bgGradient={`linear(to-t, ${color}cc, ${color})`}
+               style={{ boxShadow: `0 0 12px ${color}88, inset 0 1px 0 rgba(255,255,255,0.4)` }} />
+        </>
+      ) : (
+        <Box w={{ base: "70%", md: "62%" }} maxW="64px" h="4px" borderRadius="full"
+             bg={`${ESTADO_COLOR.equilibrio}aa`} opacity={enter ? 1 : 0}
+             transform={enter ? "translateY(0)" : "translateY(6px)"}
+             transition="opacity 0.5s ease, transform 0.5s ease"
+             style={{ transitionDelay: `${index * 0.17}s`, boxShadow: `0 0 10px ${ESTADO_COLOR.equilibrio}66` }} />
+      )}
+    </Flex>
   );
 }

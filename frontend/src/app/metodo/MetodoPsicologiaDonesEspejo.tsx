@@ -291,6 +291,8 @@ export default function MetodoPsicologiaDonesEspejo() {
   const irAMiedos = () => navigate(`/metodo/psicologia/${exp.id}/miedos`);
 
   const activa = dones.find((d) => d.id === activaId) || null;
+  // Hay que escribir al menos un don (con nombre) para poder continuar a Miedos.
+  const hayDon = dones.some((d) => (d.texto || "").trim() !== "");
   const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
   const recuerdoEnActiva = (texto: string) => !!activa?.recuerdos?.includes(texto);
 
@@ -318,7 +320,12 @@ export default function MetodoPsicologiaDonesEspejo() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Recuérdate", onClick: irARecuerdate }}
-              next={{ label: "Miedos →", onClick: irAMiedos }}
+              next={{
+                label: "Miedos →",
+                onClick: irAMiedos,
+                disabled: !hayDon,
+                disabledTooltip: "Escribe al menos un don para continuar.",
+              }}
             />
             </Reveal>
 

@@ -62,7 +62,7 @@ const ESTRUCTURAS: EstDef[] = [
     ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Barrera nuclear", img: `${PRE}/barreranuclear.png` }],
     resultado: [
       "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
-      "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la vida.",
+      "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la Vida.",
     ],
     resultadoImg: `${PRE}/nucleo.png`, cuadradoImg: `${PRE}/nucleo.png`,
   },

@@ -1,6 +1,6 @@
 // Botón «Índice» del recorrido de FISIOLOGÍA. A diferencia de las otras
 // disciplinas, el índice NO muestra todo el recorrido: solo los pasos del NIVEL
-// en el que está el usuario (La materia / La vida / El cuerpo). Se coloca encima
+// en el que está el usuario (La materia / La Vida / El cuerpo). Se coloca encima
 // de «Mis notas», igual que el índice del resto de disciplinas.
 import React from "react";
 import { useLocation } from "react-router-dom";

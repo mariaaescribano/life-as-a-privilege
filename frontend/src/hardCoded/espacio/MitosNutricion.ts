@@ -277,7 +277,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "Circula la moda de añadir una pizca de sal al agua para «hidratarse mejor». Tiene algo de lógica en contextos muy concretos: ejercicio intenso y prolongado, mucho calor y sudoración abundante.",
       "En esos casos, reponer sodio junto con el agua ayuda a mantener el equilibrio de líquidos. Es la base de las bebidas isotónicas de los deportistas.",
-      "Pero para la vida normal, con una dieta que ya suele tener sal de sobra, echar sal al agua no aporta beneficio y puede sumar sodio innecesario. Para el día a día, agua sin más es perfecto.",
+      "Pero para la Vida normal, con una dieta que ya suele tener sal de sobra, echar sal al agua no aporta beneficio y puede sumar sodio innecesario. Para el día a día, agua sin más es perfecto.",
     ],
   },
   {
@@ -377,7 +377,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "El famoso «efecto rebote» tiene explicación biológica. Cuando adelgazas mucho, el cuerpo se defiende: baja el gasto de energía y aumentan las hormonas del hambre, como intentando volver a su peso anterior.",
       "Si además la dieta fue muy restrictiva y temporal, al terminarla se recuperan los viejos hábitos, y con ese cuerpo «ahorrador» el peso vuelve, a veces con creces.",
-      "Por eso funcionan mejor los cambios sostenibles y graduales que las dietas extremas: en lugar de una guerra corta, se trata de construir hábitos que puedas mantener toda la vida.",
+      "Por eso funcionan mejor los cambios sostenibles y graduales que las dietas extremas: en lugar de una guerra corta, se trata de construir hábitos que puedas mantener toda la Vida.",
     ],
   },
   {

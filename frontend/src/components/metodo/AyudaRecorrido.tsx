@@ -25,7 +25,7 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicol
 const ORIENTACION_CURSO: Partial<Record<string, string>> = {
   inicio: "cf53523f-9a27-4866-95e3-71e08cef4886",          // Psicología · «Los primeros vínculos»
   problema: "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",        // Psicología · «El Trauma»
-  "linea-de-vida": "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4", // Psicología · «El Trauma»
+  "linea-de-Vida": "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4", // Psicología · «El Trauma»
   huellas: "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",         // Psicología · «El Trauma»
   nudos: "cd03ced9-f239-4236-93d4-31eb2e995ef6",           // Psicología · «La Autoestima»
 };
@@ -141,7 +141,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       titulo: "Un ejemplo",
       cuerpo: [
         "El Mapa te lleva de tu historia a tus patrones y a su raíz.",
-        "Por ejemplo: recordarás un año de tu vida, marcarás lo que dejó huella, nombrarás un nudo como «miedo al rechazo» y descubrirás de dónde nace.",
+        "Por ejemplo: recordarás un año de tu Vida, marcarás lo que dejó huella, nombrarás un nudo como «miedo al rechazo» y descubrirás de dónde nace.",
       ],
     },
     ayuda: {
@@ -235,11 +235,11 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
-  "linea-de-vida": {
+  "linea-de-Vida": {
     ejemplo: {
       titulo: "Un ejemplo",
       cuerpo: [
-        "Reconstruye tu vida año a año, como las páginas de un libro.",
+        "Reconstruye tu Vida año a año, como las páginas de un libro.",
         "Por ejemplo, en «Año 8»: «Nos mudamos de ciudad. Me costó hacer amigos. Me sentía solo.»",
       ],
     },
@@ -248,7 +248,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       cuerpo: [
         "Toca un año para abrir su página y responder lo que recuerdes.",
         "Si no recuerdas nada de un año, márcalo como «sin recuerdos».",
-        "Recorre toda tu vida, desde que naciste hasta hoy.",
+        "Recorre toda tu Vida, desde que naciste hasta hoy.",
       ],
     },
     orientacion: {
@@ -303,7 +303,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       titulo: "Orientación",
       cuerpo: [
         "No busques explicaciones perfectas.",
-        "Observa simplemente lo que sientes presente en tu vida ahora.",
+        "Observa simplemente lo que sientes presente en tu Vida ahora.",
       ],
     },
   },

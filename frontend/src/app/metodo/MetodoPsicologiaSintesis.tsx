@@ -61,7 +61,7 @@ const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recor
   { key: "recordatorio", label: "Lo que quiero recordar" },
 ];
 
-/** Todas las huellas marcadas a lo largo de la línea de vida (sin duplicar). */
+/** Todas las huellas marcadas a lo largo de la línea de Vida (sin duplicar). */
 function todasLasHuellas(d: LineaDeVidaData): string[] {
   const set = new Set<string>();
   for (const ano of Object.values(d.anos || {})) {
@@ -86,6 +86,8 @@ export default function MetodoPsicologiaSintesis() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [testPagos, setTestPagos] = useState(false);
+  // «Volver arriba»: aparece al bajar un poco; sube hasta la cabecera.
+  const [mostrarArriba, setMostrarArriba] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -116,6 +118,16 @@ export default function MetodoPsicologiaSintesis() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
+
+  // Muestra el botón «Volver arriba» solo cuando se ha bajado un poco.
+  useEffect(() => {
+    const onScroll = () => setMostrarArriba(window.scrollY > 400);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const volverArriba = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   // Enlace con Ayurveda: abre el pago si aún no está desbloqueado.
   const onAyurveda = () => {
@@ -500,6 +512,24 @@ export default function MetodoPsicologiaSintesis() {
       />
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
+
+      {/* «Volver arriba» · discreto, abajo a la derecha (sobre «¿Quieres compañía?»).
+          Sube hasta la cabecera para que el usuario pueda seguir el recorrido. */}
+      {mostrarArriba && (
+        <Box as="button" onClick={volverArriba} aria-label="Volver arriba" title="Volver arriba"
+             position="fixed" right={{ base: 4, md: 6 }} bottom={{ base: "66px", md: "84px" }} zIndex={20}
+             w={{ base: "42px", md: "46px" }} h={{ base: "42px", md: "46px" }} borderRadius="full"
+             display="flex" alignItems="center" justifyContent="center"
+             bg="rgba(251,244,232,0.82)" color={TINTA} border={`1.5px solid ${TINTA}55`}
+             boxShadow={`0 4px 16px rgba(0,0,0,0.22), 0 0 12px ${neuropsicologiaBg}55`}
+             sx={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }} transition="all 0.18s"
+             _hover={{ transform: "translateY(-2px)", borderColor: TINTA, bg: "rgba(251,244,232,0.96)" }}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+               w={{ base: "21px", md: "23px" }} h={{ base: "21px", md: "23px" }} fill="currentColor">
+            <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
+          </Box>
+        </Box>
+      )}
 
       <IndiceRecorrido progresoKey="psicologia" />
       <SiteFooter />

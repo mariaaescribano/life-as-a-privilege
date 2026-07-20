@@ -92,7 +92,7 @@ export const SISTEMAS: Sistema[] = [
 export const FRASE_ORGANISMO: Record<string, string> = {
   nervioso:       "Que una red lo conecte todo: por ella viajarán el pensamiento y cada orden.",
   cardiovascular: "El corazón nutrirá cada una de las células.",
-  respiratorio:   "Con cada aliento entrará la vida y saldrá lo que ya no sirve.",
+  respiratorio:   "Con cada aliento entrará la Vida y saldrá lo que ya no sirve.",
   digestivo:      "Transformará el alimento en la energía que lo sostiene todo.",
   urinario:       "Purificará la sangre y guardará el equilibrio del agua.",
   endocrino:      "Mensajeros invisibles llevarán la orden justa a cada rincón.",
@@ -100,6 +100,6 @@ export const FRASE_ORGANISMO: Record<string, string> = {
   muscular:       "Le daré la fuerza para moverse por el mundo.",
   oseo:           "Sobre estos pilares se sostendrá en pie.",
   tegumentario:   "Una frontera viva lo separará del mundo y, a la vez, lo abrazará.",
-  reproductor:    "En él guardaré la promesa de la vida que vendrá.",
+  reproductor:    "En él guardaré la promesa de la Vida que vendrá.",
   sensorial:      "Y así podrá ver, oír y sentir toda la creación.",
 };

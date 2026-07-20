@@ -134,7 +134,7 @@ export default function TCMTest1() {
       tcmField="constitucion"
       pageTitle="Conoce tu constitución"
       instruccionesTitle="Instrucciones"
-      instruccionesText="Responde cada afirmación eligiendo la opción que mejor te describa en este momento de tu vida. Suma los puntos de cada patrón: el que mayor puntaje obtenga indica tu constitución predominante."
+      instruccionesText="Responde cada afirmación eligiendo la opción que mejor te describa en este momento de tu Vida. Suma los puntos de cada patrón: el que mayor puntaje obtenga indica tu constitución predominante."
       instruccionesNota="Los resultados son orientativos, no diagnósticos. Si hay empates, puede indicar constituciones mixtas, lo cual es muy común."
       scaleValues={[0, 1, 2]}
       scaleLabels={SCALE_LABELS}

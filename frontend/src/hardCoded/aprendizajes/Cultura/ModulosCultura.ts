@@ -86,11 +86,11 @@ export const modulosCultura: ModuloContenido[] = [
       },
       {
         id: "cul-s6",
-        nom: "2.5 El objetivo de la vida",
+        nom: "2.5 El objetivo de la Vida",
         link: `${basePath}/cul-s6`,
         linkAnterior: `${basePath}/cul-s5`,
         linkNext: "",
-        descripcion: "Descubre cuál era, según Spinoza, el objetivo de la vida: vivir en armonía con la naturaleza y alcanzar la paz interior a través del amor intelectual.",
+        descripcion: "Descubre cuál era, según Spinoza, el objetivo de la Vida: vivir en armonía con la naturaleza y alcanzar la paz interior a través del amor intelectual.",
         video: "wr493uwxLhA",
         letra: letraCul6,
         cursoId: "cul-curso-1",

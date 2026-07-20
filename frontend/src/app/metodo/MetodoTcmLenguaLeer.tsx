@@ -87,7 +87,7 @@ export default function MetodoTcmLenguaLeer() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Lee tu lengua"
-            pageLabel="7/8"
+            pageLabel="6/7"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -127,8 +127,9 @@ export default function MetodoTcmLenguaLeer() {
             </Banda>
             <Separador />
 
-            {DIMENSIONES_SELECCIONABLES.map((d) => {
+            {DIMENSIONES_SELECCIONABLES.map((d, i) => {
               const elegida = opcionElegida(d.dim, data.observarte);
+              const last = i === DIMENSIONES_SELECCIONABLES.length - 1;
               return (
                 <React.Fragment key={d.dim}>
                   <Banda>
@@ -143,7 +144,8 @@ export default function MetodoTcmLenguaLeer() {
                       onElegir={(k) => elegir(d.dim, k)}
                     />
                   </Banda>
-                  <Separador />
+                  {/* Sin separador tras el último apartado (no hace falta). */}
+                  {!last && <Separador />}
                 </React.Fragment>
               );
             })}

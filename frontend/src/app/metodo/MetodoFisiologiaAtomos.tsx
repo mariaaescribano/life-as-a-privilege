@@ -113,7 +113,7 @@ function Esfera({ tipo, size, glow = true }: { tipo: Tipo; size: any; glow?: boo
 }
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
-function FichaArrastrable({ pieza, onSoltar, enterDelay = 0 }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => boolean; enterDelay?: number }) {
+function FichaArrastrable({ pieza, onSoltar, enterDelay = 0, colocada = false }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => boolean; enterDelay?: number; colocada?: boolean }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
@@ -122,6 +122,16 @@ function FichaArrastrable({ pieza, onSoltar, enterDelay = 0 }: { pieza: Pieza; o
   useEffect(() => {
     controls.start({ opacity: 1, x: 0, transition: { type: "spring", stiffness: 320, damping: 26, delay: enterDelay } });
   }, [controls, enterDelay]);
+  // Hueco invisible: mantiene el sitio de la pieza ya colocada (las hermanas no se mueven).
+  if (colocada) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0} visibility="hidden" aria-hidden>
+        <Esfera tipo={pieza.tipo} size={{ base: "48px", md: "58px" }} />
+        <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+              letterSpacing="0.06em" textTransform="uppercase">{LABEL[pieza.tipo]}</Text>
+      </Box>
+    );
+  }
   return (
     <MBox
       ref={ref}
@@ -406,8 +416,9 @@ export default function MetodoFisiologiaAtomos() {
                            minH={piezasMinH ? `${piezasMinH}px` : undefined}
                            columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
                         <AnimatePresence>
-                          {pendientes.map((p, i) => (<FichaArrastrable key={p.id} pieza={p} onSoltar={soltar}
-                                                                       enterDelay={0.45 + i * 0.1} />))}
+                          {piezasDe(idx).map((p, i) => (<FichaArrastrable key={p.id} pieza={p} onSoltar={soltar}
+                                                                       enterDelay={0.45 + i * 0.1}
+                                                                       colocada={colocadas.some((c) => c.id === p.id)} />))}
                         </AnimatePresence>
                       </Box>
                       {pendientes.length === 0 && (<Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…formándose…</Text>)}

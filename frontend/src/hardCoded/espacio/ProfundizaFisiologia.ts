@@ -379,7 +379,7 @@ const EPIGENETICA: Ficha[] = [
   },
   {
     key: "ambiente", nombre: "El ambiente enciende genes", color: "#f2c86b", foto: SUB("epigenetica", "epigenetica4"),
-    eyebrow: "Tu vida deja huella",
+    eyebrow: "Tu Vida deja huella",
     claves: ["Tus hábitos marcan los genes", "No cambian el ADN", "Cambian cómo se usa"],
     explicacion: [
       "La alimentación, el ejercicio, el estrés, el sueño o el tabaco pueden cambiar estas marcas epigenéticas y, con ellas, qué genes se expresan.",
@@ -389,10 +389,10 @@ const EPIGENETICA: Ficha[] = [
   {
     key: "herencia", nombre: "Herencia epigenética", color: "#e6a7d9", foto: SUB("epigenetica", "epigenetica5"),
     eyebrow: "A veces se hereda",
-    claves: ["Algunas marcas se heredan", "La vida de los padres influye", "Un campo joven y apasionante"],
+    claves: ["Algunas marcas se heredan", "La Vida de los padres influye", "Un campo joven y apasionante"],
     explicacion: [
       "Algunas marcas epigenéticas pueden pasar de una generación a otra, de modo que las experiencias de los padres podrían influir un poco en los hijos.",
-      "Es un campo joven y apasionante: sugiere que el entorno deja una huella que va más allá de una sola vida.",
+      "Es un campo joven y apasionante: sugiere que el entorno deja una huella que va más allá de una sola Vida.",
     ],
   },
 ];
@@ -669,7 +669,7 @@ const APOPTOSIS: Ficha[] = [
   },
   {
     key: "util", nombre: "Por qué es necesaria", color: "#a7d9f2", foto: SUB("apoptosis", "apoptosis3"),
-    eyebrow: "Una muerte que da vida",
+    eyebrow: "Una muerte que da Vida",
     claves: ["Esculpe el cuerpo", "Elimina células peligrosas", "Miles de millones al día"],
     explicacion: [
       "La apoptosis esculpe el cuerpo (por ejemplo, separa los dedos en el embrión) y elimina células viejas, dañadas o peligrosas.",

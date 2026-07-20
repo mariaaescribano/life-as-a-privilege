@@ -262,7 +262,7 @@ export const DOSHA_CUERPO: Record<DoshaKey, DoshaCuerpo | null> = {
         "La estabilidad es uno de tus mayores dones.",
         "Pero cuando deja de existir movimiento, incluso la tierra más fértil termina endureciéndose.",
         "Moverte no significa perder la calma.",
-        "Significa permitir que la vida siga fluyendo.",
+        "Significa permitir que la Vida siga fluyendo.",
       ],
     },
     reflexion: {

@@ -105,7 +105,7 @@ export function Reveal({
 }
 
 // ── Float: movimiento continuo y sutil (flotar en vertical) ───────────────
-// Para dar vida PERPETUA a elementos no interactivos (iconos, fotos): un leve
+// Para dar Vida PERPETUA a elementos no interactivos (iconos, fotos): un leve
 // vaivén arriba-abajo en bucle. No es una entrada; convive con <Reveal> si se
 // anida (Reveal hace la entrada por fuera, Float el vaivén por dentro).
 export function Float({

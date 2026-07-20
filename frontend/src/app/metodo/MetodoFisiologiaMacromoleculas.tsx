@@ -150,11 +150,23 @@ function Perla({ pieza, glow, size }: { pieza: PiezaMacro; glow: string; size: a
 }
 
 // ── Ficha arrastrable (una pieza) ────────────────────────────────────────────
-function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0 }: {
-  pieza: PiezaMacro; glow: string; mostrarLabel?: boolean; onSoltar: (rect: DOMRect) => void; enterDelay?: number;
+function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, colocada = false }: {
+  pieza: PiezaMacro; glow: string; mostrarLabel?: boolean; onSoltar: (rect: DOMRect) => void; enterDelay?: number; colocada?: boolean;
 }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  // Hueco invisible: mantiene el sitio de la pieza ya colocada (las hermanas no se mueven).
+  if (colocada) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0} visibility="hidden" aria-hidden>
+        <Perla pieza={pieza} glow={glow} size={{ base: "80px", md: "100px" }} />
+        {mostrarLabel && (
+          <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+                letterSpacing="0.05em" textTransform="uppercase">{pieza.label}</Text>
+        )}
+      </Box>
+    );
+  }
   return (
     <MBox
       ref={ref}
@@ -335,9 +347,10 @@ function Estacion({
                          columnGap={{ base: 4, md: 6 }} rowGap={{ base: 4, md: 5 }}
                          minH={piezasMinH ? `${piezasMinH}px` : "60px"}>
                       <AnimatePresence>
-                        {pendientes.map((pi, order) => (
-                          <MonomeroFicha key={pi} pieza={piezas[pi]} glow={def.glow} mostrarLabel={conLabel}
-                                         onSoltar={(rect) => soltar(pi, rect)} enterDelay={0.45 + order * 0.1} />
+                        {piezas.map((pz, pi) => (
+                          <MonomeroFicha key={pi} pieza={pz} glow={def.glow} mostrarLabel={conLabel}
+                                         onSoltar={(rect) => soltar(pi, rect)} enterDelay={0.45 + pi * 0.1}
+                                         colocada={puestas.includes(pi)} />
                         ))}
                       </AnimatePresence>
                     </Box>

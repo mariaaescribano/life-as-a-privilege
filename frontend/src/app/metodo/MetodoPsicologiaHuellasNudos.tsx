@@ -31,6 +31,7 @@ import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import {
   experienciaById,
   necesidadesNoCubiertas,
+  necesidadesCompletas,
   type LineaDeVidaData,
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
@@ -121,17 +122,14 @@ export default function MetodoPsicologiaHuellasNudos() {
 
   const [nombreOpen, setNombreOpen] = useState(false);
   const [nombre, setNombre] = useState("");
-  const [guardadaFlash, setGuardadaFlash] = useState<string | null>(null);
 
   const dataRef = useRef<LineaDeVidaData>({});
-  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const heridasRef = useRef<HTMLDivElement>(null);
   const montado = useRef(true);
   useLockBodyScroll(nombreOpen);
 
   useEffect(() => () => {
     montado.current = false;
-    if (flashTimer.current) clearTimeout(flashTimer.current);
   }, []);
 
   useEffect(() => {
@@ -148,6 +146,8 @@ export default function MetodoPsicologiaHuellasNudos() {
 
         const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: LineaDeVidaData = psi.data?.data || {};
+        // Heridas está bloqueada hasta responder TODAS las necesidades.
+        if (!necesidadesCompletas(d)) { navigate(`/metodo/psicologia/${exp.id}/necesidades`, { replace: true }); return; }
         dataRef.current = d;
         setHuellas(todasLasHuellas(d));
         setNudos(Array.isArray(d.nudos) ? d.nudos : []);
@@ -197,12 +197,10 @@ export default function MetodoPsicologiaHuellasNudos() {
     setHeridas(next);
     setSelHuellas([]); setSelNudos([]); setSelNec([]);
     setNombre(""); setNombreOpen(false);
-    setGuardadaFlash(titulo);
-    if (flashTimer.current) clearTimeout(flashTimer.current);
-    flashTimer.current = setTimeout(() => { if (montado.current) setGuardadaFlash(null); }, 2800);
-    // La rejilla está abajo del todo: baja hasta ella para que la nueva herida
-    // se vea aparecer, sin tener que recargar ni buscarla a mano. Esperamos a que
-    // la Reveal (delay 0.42s) haya montado la rejilla antes de hacer scroll.
+    // Al terminar, la página se actualiza sola: la rejilla de heridas está abajo
+    // del todo, así que bajamos hasta ella para que la nueva herida se vea
+    // aparecer (sin recargar ni buscarla a mano). Esperamos a que la Reveal
+    // (delay 0.42s) haya montado la rejilla antes de hacer scroll.
     setTimeout(() => { if (montado.current) heridasRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, 500);
     await persistir(next);
   };
@@ -227,7 +225,7 @@ export default function MetodoPsicologiaHuellasNudos() {
       key: "huella", titulo: "Tus huellas", apoyo: "Las experiencias que marcaste.",
       icono: <HuellaIcon size={20} color={TINTA} />, piezaIcono: <HuellaIcon size={18} color={TINTA} />,
       items: huellas, sel: selHuellas, set: setSelHuellas,
-      vacio: { texto: "Aún no has marcado huellas en tu línea de vida.", accion: "Ir a Huellas →", ruta: `/metodo/psicologia/${exp.id}/huellas` },
+      vacio: { texto: "Aún no has marcado huellas en tu línea de Vida.", accion: "Ir a Huellas →", ruta: `/metodo/psicologia/${exp.id}/huellas` },
     },
     {
       key: "nec", titulo: "Necesidades no cubiertas", apoyo: "Lo que necesitabas y no recibiste.",
@@ -263,7 +261,12 @@ export default function MetodoPsicologiaHuellasNudos() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Necesidades", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
-              next={{ label: "Tus heridas →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/heridas-lista`) }}
+              next={{
+                label: "Tus heridas →",
+                onClick: () => navigate(`/metodo/psicologia/${exp.id}/heridas-lista`),
+                disabled: heridas.length === 0,
+                disabledTooltip: "Crea al menos una herida para continuar.",
+              }}
             />
             </Reveal>
 
@@ -300,56 +303,59 @@ export default function MetodoPsicologiaHuellasNudos() {
               ))}
             </RevealStagger>
 
-            {/* ════════ HERIDA EN CURSO + botón terminar ════════ */}
+            {/* ════════ HERIDA EN CURSO · box elegante (con el botón dentro) ════════ */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={3} w="100%" maxW="920px">
-              {totalSel === 0 ? (
-                <Text color={PAPEL} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85} textAlign="center"
-                      style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
-                  Toca huellas, nudos y necesidades para reunir una herida.
-                </Text>
-              ) : (
-                <Flex wrap="wrap" gap={2} justify="center">
-                  {selHuellas.map((t) => (
-                    <Chip key={`sh-${t}`} tint={colorEnCurso} icon={<HuellaIcon size={13} color={TINTA} />} label={t}
-                          onRemove={() => toggle(selHuellas, setSelHuellas, t)} />
-                  ))}
-                  {selNec.map((t) => (
-                    <Chip key={`sq-${t}`} tint={colorEnCurso} icon={<NecesidadIcon size={13} color={TINTA} />} label={t}
-                          onRemove={() => toggle(selNec, setSelNec, t)} />
-                  ))}
-                  {selNudos.map((t) => (
-                    <Chip key={`sn-${t}`} tint={colorEnCurso} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t}
-                          onRemove={() => toggle(selNudos, setSelNudos, t)} />
-                  ))}
-                </Flex>
-              )}
-
-              <Flex align="center" justify="center" gap={3} wrap="wrap">
-                <Box as="button" onClick={totalSel > 0 ? () => setNombreOpen(true) : undefined}
-                     aria-disabled={totalSel === 0}
-                     px={{ base: 6, md: 8 }} py={2.5} borderRadius="full"
-                     bg={totalSel > 0 ? TINTA : `${TINTA}55`} border={`1.5px solid ${TINTA}`}
-                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                     letterSpacing="0.04em" cursor={totalSel > 0 ? "pointer" : "not-allowed"} opacity={totalSel > 0 ? 1 : 0.7}
-                     boxShadow={totalSel > 0 ? `0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a` : "none"} transition="all 0.18s"
-                     _hover={totalSel > 0 ? { transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` } : {}}>
-                  <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>He terminado esta herida</Box>
-                </Box>
-                <AutoguardadoIndicador estado={estadoGuardado} color={PAPEL} />
-              </Flex>
-
-              {guardadaFlash && (
-                <Flex align="center" justify="center" gap={2} px={4} py={2.5} borderRadius="full"
-                      bg="rgba(63,157,107,0.16)" border="1px solid rgba(63,157,107,0.5)">
-                  <Box as="span" color="#2f7d54" fontWeight="700">✓</Box>
-                  <Text color={PAPEL} fontSize={{ base: "sm", md: "md" }} fontWeight="600"
-                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
-                    Herida «{guardadaFlash}» guardada
+            <Box position="relative" w="100%" maxW="920px" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
+              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+              <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
+                    px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
+                {/* Título del box */}
+                <Flex align="center" gap={2.5}>
+                  <HeridaIcon size={20} color={TINTA} />
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.03em"
+                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+                    Tu herida en curso
                   </Text>
                 </Flex>
-              )}
-            </Flex>
+                <Box h="1px" w="60%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+                {totalSel === 0 ? (
+                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85} textAlign="center"
+                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
+                    Toca huellas, nudos y necesidades para reunir una herida.
+                  </Text>
+                ) : (
+                  <Flex wrap="wrap" gap={2} justify="center">
+                    {selHuellas.map((t) => (
+                      <Chip key={`sh-${t}`} tint={colorEnCurso} icon={<HuellaIcon size={13} color={TINTA} />} label={t}
+                            onRemove={() => toggle(selHuellas, setSelHuellas, t)} />
+                    ))}
+                    {selNec.map((t) => (
+                      <Chip key={`sq-${t}`} tint={colorEnCurso} icon={<NecesidadIcon size={13} color={TINTA} />} label={t}
+                            onRemove={() => toggle(selNec, setSelNec, t)} />
+                    ))}
+                    {selNudos.map((t) => (
+                      <Chip key={`sn-${t}`} tint={colorEnCurso} icon={<NudoEspiralIcon size={13} color={TINTA} strokeWidth={2} />} label={t}
+                            onRemove={() => toggle(selNudos, setSelNudos, t)} />
+                    ))}
+                  </Flex>
+                )}
+
+                <Flex align="center" justify="center" gap={3} wrap="wrap">
+                  <Box as="button" onClick={totalSel > 0 ? () => setNombreOpen(true) : undefined}
+                       aria-disabled={totalSel === 0}
+                       px={{ base: 6, md: 8 }} py={2.5} borderRadius="full"
+                       bg={totalSel > 0 ? TINTA : `${TINTA}55`} border={`1.5px solid ${TINTA}`}
+                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                       letterSpacing="0.04em" cursor={totalSel > 0 ? "pointer" : "not-allowed"} opacity={totalSel > 0 ? 1 : 0.7}
+                       boxShadow={totalSel > 0 ? `0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a` : "none"} transition="all 0.18s"
+                       _hover={totalSel > 0 ? { transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` } : {}}>
+                    <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>He terminado esta herida</Box>
+                  </Box>
+                  <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                </Flex>
+              </Flex>
+            </Box>
             </Reveal>
 
             {/* ════════ SEPARADOR MANDALA + REJILLA DE HERIDAS ════════ */}

@@ -142,6 +142,10 @@ export default function MetodoPsicologiaCompromiso() {
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   if (!exp) return null;
 
+  // No se puede avanzar hasta responder las dos preguntas del compromiso.
+  const compromisoCompleto =
+    (compromiso.necesitaste || "").trim() !== "" && (compromiso.dartelo || "").trim() !== "";
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -162,7 +166,12 @@ export default function MetodoPsicologiaCompromiso() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
-                next={{ label: "Carta →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
+                next={{
+                  label: "Carta →",
+                  onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`),
+                  disabled: !compromisoCompleto,
+                  disabledTooltip: "Responde las dos preguntas del compromiso para continuar.",
+                }}
               />
             </Reveal>
 

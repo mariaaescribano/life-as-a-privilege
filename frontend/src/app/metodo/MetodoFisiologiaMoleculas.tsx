@@ -117,7 +117,7 @@ const MOLS: Mol[] = [
     titulo: "¡Has formado una molécula de oxígeno!",
     parrafos: [
       <>Dos átomos de oxígeno se unen y forman el <b>O₂</b>: el oxígeno que respiras.</>,
-      <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la vida tal como la conoces no existiría.</>,
+      <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la Vida tal como la conoces no existiría.</>,
     ],
     resultadoImg: "/recorrido/fisiologia/pre/o2.png",
   },
@@ -161,10 +161,21 @@ function Atomo({ tipo, size }: { tipo: Tipo; size: any }) {
 }
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
-function FichaArrastrable({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (p: Pieza, r: DOMRect) => void; }) {
+function FichaArrastrable({ pieza, onSoltar, colocada = false }: { pieza: Pieza; onSoltar: (p: Pieza, r: DOMRect) => void; colocada?: boolean }) {
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const glow = GLOW[pieza.tipo];
+
+  // Hueco invisible: mantiene el sitio de la pieza ya colocada (las hermanas no se mueven).
+  if (colocada) {
+    return (
+      <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0} visibility="hidden" aria-hidden>
+        <Atomo tipo={pieza.tipo} size={S_DRAG[pieza.tipo]} />
+        <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+              letterSpacing="0.06em" textTransform="uppercase">{LABEL[pieza.tipo]}</Text>
+      </Box>
+    );
+  }
 
   return (
     <MBox
@@ -467,8 +478,9 @@ export default function MetodoFisiologiaMoleculas() {
                                minH={piezasMinH ? `${piezasMinH}px` : undefined}
                                columnGap={{ base: 5, md: 7 }} rowGap={{ base: 5, md: 6 }}>
                             <AnimatePresence>
-                              {pendientes.map((p) => (
-                                <FichaArrastrable key={p.id} pieza={p} onSoltar={soltar} />
+                              {piezasDe(indice).map((p) => (
+                                <FichaArrastrable key={p.id} pieza={p} onSoltar={soltar}
+                                                  colocada={colocadas.some((c) => c.id === p.id)} />
                               ))}
                             </AnimatePresence>
                           </Box>
@@ -546,7 +558,7 @@ export default function MetodoFisiologiaMoleculas() {
                   </MBox>
                 )}
 
-                {/* ───────── FASE C · las 3 moléculas de la vida ───────── */}
+                {/* ───────── FASE C · las 3 moléculas de la Vida ───────── */}
                 {terminado && (
                   <MBox key="final" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}>

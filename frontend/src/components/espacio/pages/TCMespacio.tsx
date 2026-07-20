@@ -48,28 +48,28 @@ const DESC_CONSTITUCION: Record<string, string> = {
 
 const DESC_ELEMENTO: Record<string, string> = {
   "Madera":
-    "Tu terreno constitucional es el Movimiento Madera. Tu naturaleza tiende al impulso, la dirección y la iniciativa. El Hígado rige tu capacidad de planificar y avanzar. Cuida el exceso de tensión y frustración como señales de desequilibrio.",
+    "Tu terreno constitucional es el Movimiento Madera. Tu naturaleza tiende al impulso, la dirección y la iniciativa. El hígado rige tu capacidad de planificar y avanzar. Cuida el exceso de tensión y frustración como señales de desequilibrio.",
   "Fuego":
-    "Tu terreno constitucional es el Movimiento Fuego. Tu naturaleza es expresiva, relacional y cálida. El Corazón rige tu vitalidad emocional y la conexión. Cuida la intensidad afectiva y la sobre-estimulación como señales de desequilibrio.",
+    "Tu terreno constitucional es el Movimiento Fuego. Tu naturaleza es expresiva, relacional y cálida. El corazón rige tu vitalidad emocional y la conexión. Cuida la intensidad afectiva y la sobre-estimulación como señales de desequilibrio.",
   "Tierra":
-    "Tu terreno constitucional es el Movimiento Tierra. Tu naturaleza tiende al sostén, la estabilidad y el cuidado. El Bazo rige tu capacidad nutritiva y de contención. Cuida la rumiación y el agotamiento por cuidar a otros como señales de desequilibrio.",
+    "Tu terreno constitucional es el Movimiento Tierra. Tu naturaleza tiende al sostén, la estabilidad y el cuidado. El bazo rige tu capacidad nutritiva y de contención. Cuida la rumiación y el agotamiento por cuidar a otros como señales de desequilibrio.",
   "Metal":
-    "Tu terreno constitucional es el Movimiento Metal. Tu naturaleza es introspectiva, precisa y ética. El Pulmón rige tu sentido del orden y los límites. Cuida la rigidez y la dificultad para soltar como señales de desequilibrio.",
+    "Tu terreno constitucional es el Movimiento Metal. Tu naturaleza es introspectiva, precisa y ética. El pulmón rige tu sentido del orden y los límites. Cuida la rigidez y la dificultad para soltar como señales de desequilibrio.",
   "Agua":
-    "Tu terreno constitucional es el Movimiento Agua. Tu naturaleza es profunda, intuitiva y reservada. El Riñón rige tu voluntad y la energía vital de base. Cuida el agotamiento y el miedo como señales de desequilibrio.",
+    "Tu terreno constitucional es el Movimiento Agua. Tu naturaleza es profunda, intuitiva y reservada. El riñón rige tu voluntad y la energía vital de base. Cuida el agotamiento y el miedo como señales de desequilibrio.",
 };
 
 const DESC_DESEQUILIBRIO: Record<string, string> = {
   "Madera":
-    "El patrón predominante es la desarmonía de Madera. El Qi de Hígado se encuentra estancado o ascendente. Prioriza movimiento físico, expresión emocional y técnicas de gestión del estrés. Evita exceso de trabajo sin descanso y alimentos muy grasos o picantes.",
+    "El patrón predominante es la desarmonía de Madera. El Qi de hígado se encuentra estancado o ascendente. Prioriza movimiento físico, expresión emocional y técnicas de gestión del estrés. Evita exceso de trabajo sin descanso y alimentos muy grasos o picantes.",
   "Fuego":
     "El patrón predominante es la desarmonía de Fuego. El Shen (mente-espíritu) muestra signos de agitación o calor. Prioriza la calidad del descanso nocturno, la meditación y alimentos refrescantes. Evita el exceso de estimulación y las emociones intensas sin espacio de integración.",
   "Tierra":
-    "El patrón predominante es la desarmonía de Tierra. El Qi de Bazo está debilitado con tendencia a la humedad interna. Prioriza comidas calientes y regulares, masticación pausada y reducción de la rumiación mental. Evita crudos, lácteos en exceso y el comer deprisa o con ansiedad.",
+    "El patrón predominante es la desarmonía de Tierra. El Qi de bazo está debilitado con tendencia a la humedad interna. Prioriza comidas calientes y regulares, masticación pausada y reducción de la rumiación mental. Evita crudos, lácteos en exceso y el comer deprisa o con ansiedad.",
   "Metal":
-    "El patrón predominante es la desarmonía de Metal. El Qi de Pulmón muestra signos de debilidad o bloqueo emocional. Prioriza la respiración consciente, la expresión de la tristeza y el contacto con la naturaleza. Evita el exceso de introspección sin acción y los entornos cerrados y secos.",
+    "El patrón predominante es la desarmonía de Metal. El Qi de pulmón muestra signos de debilidad o bloqueo emocional. Prioriza la respiración consciente, la expresión de la tristeza y el contacto con la naturaleza. Evita el exceso de introspección sin acción y los entornos cerrados y secos.",
   "Agua":
-    "El patrón predominante es la desarmonía de Agua. El Jing o el Qi de Riñón muestran signos de agotamiento. Prioriza el descanso profundo, los alimentos tonificantes y la reducción del estrés crónico. Evita el exceso de actividad nocturna y el frío directo en zona lumbar.",
+    "El patrón predominante es la desarmonía de Agua. El Jing o el Qi de riñón muestran signos de agotamiento. Prioriza el descanso profundo, los alimentos tonificantes y la reducción del estrés crónico. Evita el exceso de actividad nocturna y el frío directo en zona lumbar.",
 };
 
 /* ══════════════════════════════════════════════

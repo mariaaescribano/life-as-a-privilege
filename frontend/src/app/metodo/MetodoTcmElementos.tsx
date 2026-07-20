@@ -11,8 +11,10 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { TcmLoader } from "../../components/metodo/comicLoaders";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido, viajeCompleto,
@@ -47,6 +49,15 @@ export default function MetodoTcmElementos() {
   const [vinOk, setVinOk] = useState(false); // foto de la viñeta actual ya cargada
   const reduce = useReducedMotion();
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+
+  // No pintamos la página hasta que las fotos de fondo (el fondo de TCM, los
+  // iconos de los elementos y las viñetas de la intro) estén completamente
+  // cargadas: mientras tanto, solo el loader. Así aparece todo a la vez.
+  const fondosListos = usePrecargarImagenes([
+    disciplinaBgImg(tcmNom),
+    ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
+    ...COMIC_INTRO_ELEMENTOS.map((v) => v.src),
+  ]);
 
   // Al cambiar de viñeta, ocultamos la nueva foto hasta que cargue (spinner).
   useEffect(() => { setVinOk(false); }, [introIdx]);
@@ -87,8 +98,12 @@ export default function MetodoTcmElementos() {
     setComicEl(el);
   };
 
-  if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !fondosListos) {
+    return (
+      <Box minH="100vh" bg="#008080" display="flex" alignItems="center" justifyContent="center">
+        <TcmLoader color="#ffffff" />
+      </Box>
+    );
   }
 
   return (
@@ -102,7 +117,7 @@ export default function MetodoTcmElementos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Cinco Elementos"
-            pageLabel="2/8"
+            pageLabel="2/7"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -111,10 +126,10 @@ export default function MetodoTcmElementos() {
             prev={{ label: "← Medicina China", onClick: () => navigate("/metodo/tcm") }}
             extra={ilustracionesBtn}
             next={{
-              label: "Tu equilibrio →",
-              onClick: () => navigate("/metodo/tcm/perfil"),
+              label: "Los ciclos →",
+              onClick: () => navigate("/metodo/tcm/ciclos"),
               disabled: !viajeCompleto(data),
-              disabledTooltip: "Recorre los cinco elementos para ver tu perfil completo",
+              disabledTooltip: "Recorre los cinco elementos para continuar",
             }}
           />
           </Reveal>

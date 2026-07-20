@@ -7,9 +7,9 @@
 // Flujo de «Línea de Vida» (3 pantallas):
 //   Pantalla 1 · El problema actual  → una pregunta + texto amplio
 //   Pantalla 2 · La edad             → el usuario dice cuántos años tiene
-//   Pantalla 3 · La línea de vida    → timeline interactiva año a año; cada año
+//   Pantalla 3 · La línea de Vida    → timeline interactiva año a año; cada año
 //                                       abre una "página de libro" con preguntas
-//                                       evocadoras. Hay que recorrer toda la vida
+//                                       evocadoras. Hay que recorrer toda la Vida
 //                                       (cada año: Completado o Sin recuerdos).
 //
 // Persistencia (tabla `metodo_psicologia`, columna `data` JSONB):
@@ -44,11 +44,11 @@ export interface ExperienciaPsicologia {
 }
 
 const lineaDeVida: ExperienciaPsicologia = {
-  id: "linea-de-vida",
+  id: "linea-de-Vida",
   titulo: "Línea de Vida",
   subtitulo: "Tu historia, contada por ti",
   intro:
-    "Antes de comprender la mente, hay que recordar la vida que la formó. Esta primera experiencia es para reconstruir tu historia: no como un cuestionario, sino como quien escribe las primeras páginas de su propio libro. Nadie más leerá esto. Es para ti.",
+    "Antes de comprender la mente, hay que recordar la Vida que la formó. Esta primera experiencia es para reconstruir tu historia: no como un cuestionario, sino como quien escribe las primeras páginas de su propio libro. Nadie más leerá esto. Es para ti.",
 
   problemaInicial: {
     key: "problema-actual",
@@ -60,7 +60,7 @@ const lineaDeVida: ExperienciaPsicologia = {
   preguntaEdad: {
     key: "edad",
     pregunta: "¿Cuántos años tienes?",
-    apoyo: "Con tu edad dibujaremos tu línea de vida, desde que naciste hasta hoy.",
+    apoyo: "Con tu edad dibujaremos tu línea de Vida, desde que naciste hasta hoy.",
     placeholder: "Tu edad",
   },
 
@@ -132,7 +132,7 @@ export const RECORRIDO_TOTAL = RECORRIDO_INDICE.length;
 // ─────────────────────────────────────────────────────────────────────────
 // La gestación · un nodo ANTES del año 0.
 //
-// La vida no empieza al nacer: empieza en el deseo (o no) de quien nos esperaba.
+// La Vida no empieza al nacer: empieza en el deseo (o no) de quien nos esperaba.
 // Añadimos un nodo −1 al principio de la línea para que la persona cuente lo que
 // sabe o le han contado del embarazo de su madre y de su llegada al mundo.
 // Es OPCIONAL: no cuenta para el progreso ni bloquea el avance (por eso
@@ -391,7 +391,7 @@ export const NUDOS = {
   titulo: "Nudos",
   intro: [] as string[],
   apoyo:
-    "Un nudo puede ser un miedo, una herida, una creencia, un conflicto repetido o una dificultad que parece acompañarte desde hace años. No busques explicaciones perfectas. Simplemente observa aquello que sientes presente en tu vida hoy.",
+    "Un nudo puede ser un miedo, una herida, una creencia, un conflicto repetido o una dificultad que parece acompañarte desde hace años. No busques explicaciones perfectas. Simplemente observa aquello que sientes presente en tu Vida hoy.",
   pregunta: "¿Qué nudos dirigen tu Vida y te impiden avanzar?",
   ejemplos: [
     "Miedo al abandono",
@@ -413,7 +413,7 @@ export const INTEGRACION = {
   principal: [
     "Has recorrido tu historia.",
     "Has identificado las experiencias que dejaron huella.",
-    "Has comenzado a reconocer los nudos que siguen presentes en tu vida.",
+    "Has comenzado a reconocer los nudos que siguen presentes en tu Vida.",
     "Ahora llega el momento de unir las piezas.",
   ],
   secundario: [
@@ -421,7 +421,7 @@ export const INTEGRACION = {
     "En esta sesión exploraremos juntos la relación entre tu historia personal, tus patrones psicológicos y los arquetipos presentes en tu carta astral.",
   ],
   exploraremos: [
-    "Los nudos que aparecen en tu vida actual.",
+    "Los nudos que aparecen en tu Vida actual.",
     "Las experiencias que contribuyeron a formarlos.",
     "La forma en que esos patrones siguen repitiéndose hoy.",
     "Los mecanismos psicológicos que los mantienen activos.",
@@ -515,6 +515,21 @@ export const opcionNecesidad = (value?: EstadoNecesidad): OpcionNecesidad | unde
 export const necesidadesRespondidas = (data: LineaDeVidaData): number =>
   NECESIDADES.filter((n) => !!data?.necesidades?.[n.key]).length;
 
+/** ¿Se han respondido TODAS las necesidades? Desbloquea la página de Heridas. */
+export const necesidadesCompletas = (data: LineaDeVidaData): boolean =>
+  necesidadesRespondidas(data) === NECESIDADES.length;
+
+/** Desbloqueo secuencial: una necesidad (por índice) está desbloqueada si es la
+ *  primera o si la anterior ya ha sido respondida. Así se rellenan de una en una. */
+export const necesidadDesbloqueada = (
+  data: LineaDeVidaData,
+  idx: number,
+): boolean => {
+  if (idx <= 0) return true;
+  const prev = NECESIDADES[idx - 1];
+  return !!(prev && data?.necesidades?.[prev.key]);
+};
+
 export type EstadoAno = "vacio" | "completado" | "sin-recuerdos";
 
 /** Lee el estado de un año (uno de los tres estados visuales). */
@@ -533,7 +548,7 @@ export function estadoDelAno(data: LineaDeVidaData, edadAno: number): EstadoAno 
 export const anoRecorrido = (data: LineaDeVidaData, edadAno: number): boolean =>
   estadoDelAno(data, edadAno) !== "vacio";
 
-/** ¿Se ha recorrido la vida entera (todos los años 0..edad)? */
+/** ¿Se ha recorrido la Vida entera (todos los años 0..edad)? */
 export function lineaCompleta(data: LineaDeVidaData, edad: number): boolean {
   if (!edad || edad < 0) return false;
   for (let a = 0; a <= edad; a++) {
@@ -555,7 +570,7 @@ export function anoNatural(edad: number, edadAno: number, anioActual: number): n
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// «Las Huellas» — relectura del libro tras completar la línea de vida.
+// «Las Huellas» — relectura del libro tras completar la línea de Vida.
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface EtapaVital {
@@ -698,7 +713,7 @@ export const DONES_PREGUNTAS: PreguntaDon[] = [
   { key: "don-habilidades-dificil", pregunta: "¿Qué habilidades has desarrollado gracias a experiencias difíciles?" },
   { key: "don-compania",           pregunta: "¿Qué tipo de personas disfrutan más de tu compañía y por qué?" },
   { key: "don-facil-para-ti",      pregunta: "¿Qué haces que parece fácil para ti, pero otros encuentran complicado?" },
-  { key: "don-mas-orgulloso",      pregunta: "¿Cuál ha sido el momento de tu vida en el que te has sentido más orgulloso de ti mismo?" },
+  { key: "don-mas-orgulloso",      pregunta: "¿Cuál ha sido el momento de tu Vida en el que te has sentido más orgulloso de ti mismo?" },
   { key: "don-huella-mundo",       pregunta: "Si pudieras dejar una huella en el mundo, ¿qué te gustaría que la gente recordara de ti?" },
 ];
 
@@ -811,7 +826,7 @@ export const MIEDOS_PREGUNTAS: PreguntaMiedo[] = [
   {
     key: "cambio",
     pregunta: "Si ocurriera, ¿cómo cambiaría de verdad tu Vida?",
-    placeholder: "Mi vida cambiaría en que…",
+    placeholder: "Mi Vida cambiaría en que…",
   },
   {
     key: "afrontar",
@@ -836,7 +851,7 @@ export const miedoRespondidas = (m: MiedoItem): number =>
 // ACE = Adverse Childhood Experiences. Es el cuestionario de 10 preguntas del
 // gran estudio CDC-Kaiser (Felitti & Anda, 1998; +17.000 personas), que mostró
 // una relación de DOSIS-RESPUESTA entre la adversidad vivida antes de los 18
-// años y la salud física/emocional en la vida adulta.
+// años y la salud física/emocional en la Vida adulta.
 //
 // Aquí NO es un instrumento clínico ni un diagnóstico: es un espejo de
 // autoconocimiento. Por eso el tono es cálido, honesto y esperanzador — una
@@ -877,7 +892,7 @@ export const ACE_INTRO = {
   subtitulo: "El test ACE",
   // Texto del popup «¿Qué es esto?».
   que: [
-    "«ACE» son las siglas en inglés de Adverse Childhood Experiences: experiencias adversas en la infancia. Nace de uno de los mayores estudios de salud jamás realizados (CDC-Kaiser, más de 17.000 personas), que descubrió algo tan sencillo como revelador: lo que vivimos de niños deja una huella real en la salud y en la vida adulta.",
+    "«ACE» son las siglas en inglés de Adverse Childhood Experiences: experiencias adversas en la infancia. Nace de uno de los mayores estudios de salud jamás realizados (CDC-Kaiser, más de 17.000 personas), que descubrió algo tan sencillo como revelador: lo que vivimos de niños deja una huella real en la salud y en la Vida adulta.",
     "El test son 10 preguntas de sí o no sobre lo que ocurrió en tu hogar antes de los 18 años: maltrato, abandono y disfunción familiar. Cada «sí» suma un punto, del 0 al 10. No mide quién eres ni cuánto vales: solo pone nombre a lo que cargaste.",
     "Responde con calma y con honestidad. Nadie más lo verá. Y recuerda algo antes de empezar: una puntuación alta no es una condena — es, precisamente, el punto de partida de este mapa.",
   ],
@@ -932,7 +947,7 @@ export const ACE_PREGUNTAS: PreguntaAce[] = [
   {
     key: "ace-9-enfermedad-mental",
     categoria: "Salud mental en el hogar",
-    pregunta: "¿Viviste con alguien que sufriera depresión u otra enfermedad mental, o que intentara quitarse la vida?",
+    pregunta: "¿Viviste con alguien que sufriera depresión u otra enfermedad mental, o que intentara quitarse la Vida?",
   },
   {
     key: "ace-10-carcel",
@@ -971,7 +986,7 @@ export const ACE_BANDAS: AceBanda[] = [
     titulo: "Sin experiencias adversas registradas",
     color: "#3f9d6b",
     texto:
-      "Según el test, tu infancia estuvo relativamente libre de estas adversidades concretas. Es una base valiosa. Aun así, ninguna vida está libre de heridas: este mapa sigue siendo para ti, porque el dolor no siempre cabe en diez preguntas.",
+      "Según el test, tu infancia estuvo relativamente libre de estas adversidades concretas. Es una base valiosa. Aun así, ninguna Vida está libre de heridas: este mapa sigue siendo para ti, porque el dolor no siempre cabe en diez preguntas.",
   },
   {
     min: 1, max: 3,

@@ -1,4 +1,4 @@
-// Contenido de la página «Tu alimentación y tu estilo de vida» del recorrido de
+// Contenido de la página «Tu alimentación y tu estilo de Vida» del recorrido de
 // Ayurveda (paso posterior a «¿Qué te desequilibra?»). Una entrada por dosha.
 // Texto con **negrita** y *cursiva*. Vata completo; Pitta y Kapha se rellenarán.
 
@@ -21,7 +21,7 @@ export interface DoshaCuidarte {
   /** Pautas por momento del día (recomendaciones del constructor «Crea tu día»),
    *  por dosha y sin hora fija. `comida: true` → al elegirla se activan los alimentos. */
   rutina?: { momento: string; actividad: string; comida?: boolean }[];
-  // ── Parte 2 · Estilo de vida ──
+  // ── Parte 2 · Estilo de Vida ──
   estiloTitulo: string;
   estiloIntro: string[];
   secciones: { titulo: string; parrafos: string[]; items?: string[]; cierre?: string }[];
@@ -167,7 +167,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
       { momento: "Antes de dormir", actividad: "Aceite, infusión y silencio." },
     ],
 
-    estiloTitulo: "Tu estilo de vida ideal",
+    estiloTitulo: "Tu estilo de Vida ideal",
     estiloIntro: [
       "La alimentación ayuda.",
       "Pero para una persona Vata, **la rutina es medicina**.",
@@ -220,8 +220,8 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
     recuerda: {
       titulo: "Lo que el Ayurveda quiere que recuerdes",
       parrafos: [
-        "Vata no necesita una vida perfecta.",
-        "Necesita una vida predecible.",
+        "Vata no necesita una Vida perfecta.",
+        "Necesita una Vida predecible.",
         "Cuanto más estable sea tu rutina, más espacio tendrá tu creatividad para expresarse sin convertirse en ansiedad.",
       ],
     },
@@ -370,7 +370,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
       { momento: "Antes de dormir", actividad: "Leer o meditar." },
     ],
 
-    estiloTitulo: "Tu estilo de vida ideal",
+    estiloTitulo: "Tu estilo de Vida ideal",
     estiloIntro: [
       "La alimentación ayuda.",
       "Pero para una persona Pitta, **el descanso también es medicina**.",
@@ -568,7 +568,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
       { momento: "Antes de dormir", actividad: "Evita el sofá y acuéstate temprano." },
     ],
 
-    estiloTitulo: "Tu estilo de vida ideal",
+    estiloTitulo: "Tu estilo de Vida ideal",
     estiloIntro: [
       "La alimentación ayuda.",
       "Pero para una persona Kapha, **el movimiento es medicina**.",
@@ -624,7 +624,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
     },
     reflexion: {
       titulo: "Reflexiona",
-      pregunta: "¿Qué pequeño hábito podrías empezar esta semana para llenar tu vida de un poco más de movimiento?",
+      pregunta: "¿Qué pequeño hábito podrías empezar esta semana para llenar tu Vida de un poco más de movimiento?",
       nota: "Lo recuperaremos al final del mapa.",
       compromisoTitulo: "Mi compromiso",
       compromisoIntro: "Elige solo uno para esta semana.",
@@ -638,7 +638,7 @@ export const DOSHA_CUIDARTE: Record<DoshaKey, DoshaCuidarte | null> = {
       ],
     },
     cierre: [
-      "*No hace falta cambiar toda tu vida, solo hace falta dar el primer paso.*",
+      "*No hace falta cambiar toda tu Vida, solo hace falta dar el primer paso.*",
     ],
   },
 };

@@ -85,7 +85,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
         "Permítete ir un poco más despacio.",
       ],
       cierre: [
-        "No hace falta cambiar toda tu vida.",
+        "No hace falta cambiar toda tu Vida.",
         "A veces, repetir un pequeño hábito cada día tiene más impacto que hacer un gran cambio durante una semana.",
       ],
     },
@@ -190,7 +190,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
       titulo: "Lo que aumenta Kapha",
       opciones: [
         "Dormir demasiadas horas.",
-        "Llevar una vida sedentaria.",
+        "Llevar una Vida sedentaria.",
         "Comer por aburrimiento o ansiedad.",
         "Comer en exceso.",
         "Consumir muchos alimentos dulces o muy pesados.",
@@ -205,7 +205,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
       rangos: [
         { label: "0-2", min: 0, max: 2, texto: "Probablemente estés cuidando bastante bien tu naturaleza." },
         { label: "3-5", min: 3, max: 5, texto: "Tu Kapha puede estar empezando a desequilibrarse." },
-        { label: "6 o más", min: 6, max: 999, texto: "Quizá haya llegado el momento de volver a poner tu vida en movimiento." },
+        { label: "6 o más", min: 6, max: 999, texto: "Quizá haya llegado el momento de volver a poner tu Vida en movimiento." },
       ],
     },
     senales: {
@@ -241,7 +241,7 @@ export const DOSHA_DESEQUILIBRIO: Record<DoshaKey, DoshaDesequilibrio | null> = 
         "Recuerda que cambiar no significa perder lo que eres.",
       ],
       cierre: [
-        "No necesitas transformar toda tu vida de un día para otro.",
+        "No necesitas transformar toda tu Vida de un día para otro.",
         "Solo necesitas dar el primer paso.",
       ],
     },

@@ -157,7 +157,7 @@ export default function MetodoTcm() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Medicina China"
-            pageLabel="1/8"
+            pageLabel="1/7"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -175,8 +175,8 @@ export default function MetodoTcm() {
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
-                color="white"
-                fontSize={{ base: "sm", md: "md" }}
+                color={tcmTxt}
+                fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.9"
                 opacity={0.9}
                 maxW="600px"
@@ -188,8 +188,8 @@ export default function MetodoTcm() {
                 Según esta visión, la salud es el equilibrio dinámico entre tu cuerpo, tus emociones y el entorno que te forma.
               </Text>
               <Text
-                color="white"
-                fontSize={{ base: "sm", md: "md" }}
+                color={tcmTxt}
+                fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.9"
                 opacity={0.9}
                 maxW="600px"
@@ -241,6 +241,8 @@ export default function MetodoTcm() {
         disciplinaBgColor={tcmBg}
         onFinish={intro.finish}
         onClose={intro.close}
+        continueLabel="Medicina China"
+        onContinue={intro.close}
       />
 
       {/* Cómic de los cinco elementos: intercalado antes de «Los 5 elementos». */}

@@ -412,7 +412,7 @@ export const NUTRIENTES: Nutriente[] = [
         foto: "/recorrido/nutricion/moleculas/fosfato.png",
         grupo: "⚡ Electrolitos",
         parrafos: [
-          "El fosfato es uno de los componentes más importantes de la vida.",
+          "El fosfato es uno de los componentes más importantes de la Vida.",
           "Forma parte del ATP, donde almacena la energía química; del ADN y el ARN, donde une los nucleótidos formando su estructura; y de los fosfolípidos, que construyen las membranas celulares.",
           "Además, muchas enzimas regulan la actividad de otras proteínas añadiéndoles o retirándoles un grupo fosfato, un proceso llamado fosforilación, que actúa como un auténtico interruptor molecular.",
         ],
@@ -641,7 +641,7 @@ export const NUTRIENTES: Nutriente[] = [
     label: "Agua",
     color: "#4aa3c7",
     img: "/recorrido/nutricion/portadas/agua.png",
-    resumen: "El medio donde ocurre toda la vida.",
+    resumen: "El medio donde ocurre toda la Vida.",
     descripcion: [
       "El agua es el medio donde ocurre toda la Vida: en ella tienen lugar prácticamente todas las reacciones químicas del organismo.",
       "Transporta oxígeno, nutrientes y hormonas, elimina desechos, regula la temperatura corporal y lubrica articulaciones y órganos. Aproximadamente dos tercios del agua del cuerpo se encuentran dentro de las células y el resto las rodea.",

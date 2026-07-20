@@ -115,7 +115,7 @@ export const modulosNutricion: ModuloContenido[] = [
         link: `${basePath}/nut-mi1`,
         linkAnterior: `${basePath}/nut-m3`,
         linkNext: `${basePath}/nut-mi2`,
-        descripcion: "Las vitaminas activan a las células. Sin vitaminas no puede haber vida.",
+        descripcion: "Las vitaminas activan a las células. Sin vitaminas no puede haber Vida.",
         video: "djMQ-EIifZc",
         letra: "Siempre nos han dicho que las vitaminas son necesarias, pero nadie nos ha explicado por qué. Aquí por fin lo entenderás. Recordemos que las células crean enzimas usando las proteínas de nuestra dieta, pero estas enzimas no están activadas, necesitan vitaminas para activarse, sin vitaminas esas enzimas no pueden hacer su función y por lo tanto, no podemos reconstruirnos ni mejorarnos. Sin vitaminas nos deterioramos, envejecemos y perdemos funciones que creíamos estables.",
         cursoId: "nut-curso-1",

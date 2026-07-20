@@ -162,7 +162,7 @@ export default function AdminAyurvedaLectura() {
                   )}
 
                   {((cuid.reflexion || "").trim() || (cuid.compromiso || "").trim() || desequilibranSel.length > 0 || equilibranSel.length > 0) && (
-                    <LecturaCard nom={ayurvedaNom} txt={TXT} overlay={OVERLAY} accent={meta.color} titulo="Cuidarte: alimentación y estilo de vida">
+                    <LecturaCard nom={ayurvedaNom} txt={TXT} overlay={OVERLAY} accent={meta.color} titulo="Cuidarte: alimentación y estilo de Vida">
                       {desequilibranSel.length > 0 && (
                         <Box mb={4}>
                           <SubTitulo txt={TXT}>{cCui?.desequilibran?.titulo ?? "Le desequilibra"}</SubTitulo>

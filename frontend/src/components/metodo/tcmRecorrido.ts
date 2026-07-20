@@ -49,12 +49,11 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 export const TCM_INDICE: PasoRecorrido[] = [
   { n: 1, titulo: "Medicina China",     ruta: () => "/metodo/tcm" },
   { n: 2, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
-  { n: 3, titulo: "Equilibrio", ruta: () => "/metodo/tcm/perfil" },
-  { n: 4, titulo: "Los ciclos", ruta: () => "/metodo/tcm/ciclos" },
-  { n: 5, titulo: "Diagnóstico final", ruta: () => "/metodo/tcm/diagnostico" },
-  { n: 6, titulo: "Tu lengua", ruta: () => "/metodo/tcm/lengua" },
-  { n: 7, titulo: "Lee tu lengua", ruta: () => "/metodo/tcm/lengua/leer" },
-  { n: 8, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
+  { n: 3, titulo: "Los ciclos", ruta: () => "/metodo/tcm/ciclos" },
+  { n: 4, titulo: "Diagnóstico final", ruta: () => "/metodo/tcm/diagnostico" },
+  { n: 5, titulo: "Tu lengua", ruta: () => "/metodo/tcm/lengua" },
+  { n: 6, titulo: "Lee tu lengua", ruta: () => "/metodo/tcm/lengua/leer" },
+  { n: 7, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
 ];
 
 export const TCM_TOTAL = TCM_INDICE.length;
@@ -115,7 +114,7 @@ export interface ContenidoElemento {
   sentido: string;
   fortalezas: string[];
   desequilibrios: string[];      // señales de exceso / deficiencia
-  diaADia: string;               // cómo aparece en la vida cotidiana
+  diaADia: string;               // cómo aparece en la Vida cotidiana
   ejercicio: string;             // práctica corporal / respiración
   habitos: string[];             // hábitos de sostén (dieta, ritmo, estación)
   reflexion: string;             // pregunta de cierre para "Mis notas"
@@ -133,7 +132,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
     color: "#6f9463",
     significado:
       "La Madera es el impulso que empuja hacia arriba, como el brote que rompe la tierra en primavera. Es la energía de crecer, decidir, planificar y avanzar. Cuando fluye, hay claridad y capacidad de emprender; cuando se estanca, aparece la frustración.",
-    organos: "Hígado (yin) y Vesícula Biliar (yang)",
+    organos: "hígado (yin) y vesícula biliar (yang)",
     tejido: "Tendones, ligamentos y músculos; se refleja en las uñas",
     emocion: "En equilibrio: determinación y flexibilidad. En desequilibrio: ira, frustración, irritabilidad.",
     estacion: "Primavera",
@@ -148,7 +147,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
       "Aparece en cómo empiezas los proyectos, cómo reaccionas cuando algo bloquea tu camino y en tu capacidad de fluir con los cambios en lugar de luchar contra ellos.",
     ejercicio: "Estiramientos suaves de costados y respiración diafragmática lenta para liberar la tensión del hígado.",
     habitos: ["Dormir antes de medianoche (el hígado se regenera de 1 a 3 h)", "Movimiento diario que libere tensión", "Reducir alcohol y fritos", "Expresar la frustración en vez de tragarla"],
-    reflexion: "¿Dónde en tu vida sientes que quieres avanzar y algo te lo impide?",
+    reflexion: "¿Dónde en tu Vida sientes que quieres avanzar y algo te lo impide?",
     miniTest: [
       {
         key: "madera-tension",
@@ -172,7 +171,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
       {
         key: "madera-flujo",
         pregunta:
-          "Cuando el Qi del Hígado no fluye, el estancamiento puede afectar a la digestión, la secreción de bilis, la circulación de la Sangre o el ciclo menstrual. ¿Notas alteraciones en alguno de estos?",
+          "Cuando el Qi del hígado no fluye, el estancamiento puede afectar a la digestión, la secreción de bilis, la circulación de la Sangre o el ciclo menstrual. ¿Notas alteraciones en alguno de estos?",
         opciones: [
           { key: "no", texto: "No, todo funciona con normalidad", puntos: { madera: 0 } },
           { key: "a-veces", texto: "A veces, sobre todo en épocas de estrés", puntos: { madera: 2 } },
@@ -236,8 +235,8 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
     nombre: "Fuego",
     color: "#d1495b",
     significado:
-      "El Fuego es la plenitud del verano: calor, alegría, conexión. Es la energía del corazón, la que nos permite disfrutar, relacionarnos y dar sentido a la vida. En equilibrio hay entusiasmo sereno; en exceso, agitación; en defecto, apatía.",
-    organos: "Corazón (yin) e Intestino Delgado (yang)",
+      "El Fuego es la plenitud del verano: calor, alegría, conexión. Es la energía del corazón, la que nos permite disfrutar, relacionarnos y dar sentido a la Vida. En equilibrio hay entusiasmo sereno; en exceso, agitación; en defecto, apatía.",
+    organos: "corazón (yin) e intestino delgado (yang)",
     tejido: "Los vasos sanguíneos; se refleja en la tez",
     emocion: "En equilibrio: alegría y calidez. En desequilibrio: ansiedad, euforia inestable o apatía.",
     estacion: "Verano",
@@ -249,7 +248,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
       "Deficiencia: apatía, tristeza, falta de chispa, dificultad para conectar",
     ],
     diaADia:
-      "Se nota en tu capacidad de disfrutar del presente, en cómo duermes, en tu vida social y en si tu entusiasmo es sostenible o te quema.",
+      "Se nota en tu capacidad de disfrutar del presente, en cómo duermes, en tu Vida social y en si tu entusiasmo es sostenible o te quema.",
     ejercicio: "Coherencia cardíaca: inspirar 5 segundos, espirar 5 segundos, durante 5 minutos.",
     habitos: ["Proteger el sueño", "Momentos reales de alegría y risa", "Evitar la sobreexcitación (pantallas de noche)", "Descanso al mediodía"],
     reflexion: "¿Cuándo fue la última vez que sentiste alegría verdadera, sin prisa?",
@@ -281,7 +280,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
     color: "#c8963e",
     significado:
       "La Tierra es el centro, la nutrición y el sostén. Es la energía que transforma el alimento y las experiencias en algo que nos nutre. Da estabilidad, arraigo y capacidad de cuidar. En desequilibrio aparece la preocupación que da vueltas sin fin.",
-    organos: "Bazo/Páncreas (yin) y Estómago (yang)",
+    organos: "bazo/páncreas (yin) y estómago (yang)",
     tejido: "La carne y los músculos; se refleja en los labios",
     emocion: "En equilibrio: empatía y arraigo. En desequilibrio: preocupación, rumiación, sobreprotección.",
     estacion: "Final del verano (y las transiciones entre estaciones)",
@@ -325,7 +324,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
     color: "#9aa0a6",
     significado:
       "El Metal es el otoño: recoger, soltar, quedarse con lo esencial. Es la energía de los límites, la estructura y el valor de las cosas. Rige la respiración y la piel, nuestra frontera con el mundo. En desequilibrio aparecen la tristeza y la dificultad de soltar.",
-    organos: "Pulmón (yin) e Intestino Grueso (yang)",
+    organos: "pulmón (yin) e intestino grueso (yang)",
     tejido: "La piel y el vello; se refleja en el cutis",
     emocion: "En equilibrio: capacidad de soltar y valorar. En desequilibrio: tristeza, duelo, apego a lo perdido.",
     estacion: "Otoño",
@@ -369,7 +368,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
     color: "#3f6fa3",
     significado:
       "El Agua es el invierno: quietud, reserva y profundidad. Es la energía más ancestral, la que guarda nuestra vitalidad de base (la esencia) y rige el descanso, la voluntad y la reproducción. En desequilibrio aparece el miedo; en equilibrio, la sabiduría serena.",
-    organos: "Riñón (yin) y Vejiga (yang)",
+    organos: "riñón (yin) y vejiga (yang)",
     tejido: "Los huesos, la médula y el cerebro; se refleja en el cabello",
     emocion: "En equilibrio: calma y voluntad. En desequilibrio: miedo, inseguridad, agotamiento profundo.",
     estacion: "Invierno",
@@ -411,7 +410,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
 // ─────────────────────────────────────────────────────────────────────────
 // CONTENIDO DEL CURSO reutilizado por elemento: guion de la video-lección
 // (la voz de la plataforma, con las explicaciones fisiológicas) + el vídeo de
-// YouTube + las recomendaciones clásicas (infusiones, hierbas, estilo de vida,
+// YouTube + las recomendaciones clásicas (infusiones, hierbas, estilo de Vida,
 // nutrición). Se muestran en la página de cada elemento (pasos 4-8).
 // ─────────────────────────────────────────────────────────────────────────
 export const GUION_ELEMENTO: Record<Elemento, string> = {
@@ -645,7 +644,7 @@ export const SHENG_EXPLICACION: Record<Elemento, string[]> = {
   fuego: [
     "El Fuego genera la Tierra, esto en nuestros órganos quiere decir que el estado del corazón afecta al bazo y emocionalmente que la pasión y el amor generan estabilidad.",
     "El corazón se dedica a bombear sangre a todo el cuerpo, el bazo, en cambio, se dedica a filtrar las células de sangre, asegurándose de que solo las células flexibles y saludables vuelven a la circulación.",
-    "Según la medicina tradicional china, el bazo convierte los nutrientes en qi. Esto tiene sentido, porque se ha demostrado que el bazo es capaz de usar los nutrientes para crear más sangre.",
+    "Según la medicina tradicional china, el bazo convierte los nutrientes en Qi. Esto tiene sentido, porque se ha demostrado que el bazo es capaz de usar los nutrientes para crear más sangre.",
     "También tradicionalmente se dice que el bazo mantiene la sangre en las arterias y venas. Recordemos que el bazo se considera parte del sistema inmunitario, por lo que si filtra correctamente las toxinas de la sangre reducirá la inflamación, el proceso en el cual la sangre sale de las arterias para entrar en los órganos.",
     "En conclusión, el corazón y la sangre que bombea influyen directamente en la función que nuestro bazo hará para mantener nuestro equilibrio.",
   ],
@@ -801,7 +800,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
           "Busco otro camino.",
           "Me desespero porque siento que todo va demasiado lento.",
           "Me paralizo y no sé cómo continuar.") },
-        { key: "madera-t1-q12", pregunta: "¿Eres capaz de visualizar con facilidad nuevos caminos para tu vida?", opciones: abc(
+        { key: "madera-t1-q12", pregunta: "¿Eres capaz de visualizar con facilidad nuevos caminos para tu Vida?", opciones: abc(
           "Sí, suelo tener una visión clara de hacia dónde quiero ir.",
           "Tengo muchos planes e ideas y quiero hacerlos todos cuanto antes.",
           "Me cuesta imaginar el futuro y me da miedo salir de mi zona de confort.") },
@@ -891,7 +890,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
           "Sí, normalmente consigo expresarme con claridad.",
           "A veces siento que mis emociones desbordan a los demás.",
           "Muchas veces siento que no consigo transmitir lo que llevo dentro.") },
-        { key: "fuego-t1-q11", pregunta: "¿Cómo describirías tu entusiasmo por la vida?", opciones: abc(
+        { key: "fuego-t1-q11", pregunta: "¿Cómo describirías tu entusiasmo por la Vida?", opciones: abc(
           "Tengo ilusión por nuevos proyectos sin perder la calma.",
           "Me entusiasmo muchísimo al principio, pero me acelero con facilidad.",
           "Me cuesta ilusionarme o encontrar aquello que me inspire.") },
@@ -903,7 +902,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
     },
     {
       key: "fuego-t2",
-      titulo: "Tu Corazón: cuerpo y energía",
+      titulo: "Tu corazón: cuerpo y energía",
       preguntas: [
         { key: "fuego-t2-q1", pregunta: "Cuando atraviesas una época de mucho estrés o intensidad emocional…", opciones: abc(
           "Mi cuerpo apenas cambia y consigo mantener la calma.",
@@ -939,7 +938,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
       preguntas: [
         { key: "tierra-t1-q1", pregunta: "Cuando alguien cercano necesita ayuda…", opciones: abc(
           "Le apoyo sin olvidarme de mis propias necesidades.",
-          "Me implico tanto que termino intentando resolverle la vida.",
+          "Me implico tanto que termino intentando resolverle la Vida.",
           "Me cuesta ponerme en primer lugar y suelo decir que sí aunque no pueda.") },
         { key: "tierra-t1-q2", pregunta: "¿Cómo es tu relación con la comida?", opciones: abc(
           "Como con tranquilidad y suelo quedar satisfecho.",
@@ -973,7 +972,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
           "Escucho, acompaño y confío en que encontrará su camino.",
           "Siento la necesidad de intervenir y hacerme cargo de la situación.",
           "Absorbo sus emociones y termino agotado.") },
-        { key: "tierra-t1-q10", pregunta: "¿Qué papel tiene el dulce en tu vida?", opciones: abc(
+        { key: "tierra-t1-q10", pregunta: "¿Qué papel tiene el dulce en tu Vida?", opciones: abc(
           "Lo disfruto de vez en cuando, sin depender de él.",
           "Lo busco cuando estoy preocupado o necesito consuelo.",
           "Tengo antojos frecuentes de dulce, especialmente cuando estoy cansado o decaído.") },
@@ -989,7 +988,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
     },
     {
       key: "tierra-t2",
-      titulo: "Tu Bazo: transformación y sostén",
+      titulo: "Tu bazo: transformación y sostén",
       preguntas: [
         { key: "tierra-t2-q1", pregunta: "Después de comer…", opciones: abc(
           "Me siento saciado y con energía para continuar el día.",
@@ -1027,11 +1026,11 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
       key: "metal-t1",
       titulo: "¿Cómo está tu elemento Metal?",
       preguntas: [
-        { key: "metal-t1-q1", pregunta: "Cuando una etapa de tu vida termina…", opciones: abc(
+        { key: "metal-t1-q1", pregunta: "Cuando una etapa de tu Vida termina…", opciones: abc(
           "Agradezco lo vivido y sigo adelante.",
           "Me cuesta aceptar el cambio y necesito que todo permanezca como estaba.",
           "Me aferro al pasado y me cuesta cerrar ciclos.") },
-        { key: "metal-t1-q2", pregunta: "¿Cómo describirías tu forma de organizar tu vida?", opciones: abc(
+        { key: "metal-t1-q2", pregunta: "¿Cómo describirías tu forma de organizar tu Vida?", opciones: abc(
           "Mantengo un orden que me aporta tranquilidad sin volverme rígido.",
           "Necesito que todo esté bajo control y me incomoda mucho el desorden.",
           "Me cuesta organizarme y siento que el caos me supera.") },
@@ -1087,7 +1086,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
     },
     {
       key: "metal-t2",
-      titulo: "Tu Pulmón: aire y defensa",
+      titulo: "Tu pulmón: aire y defensa",
       preguntas: [
         { key: "metal-t2-q1", pregunta: "¿Cómo describirías tu respiración en el día a día?", opciones: abc(
           "Profunda, tranquila y siento que el aire entra con facilidad.",
@@ -1113,7 +1112,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
           "No especialmente.",
           "Un sabor picante en la boca o una mayor sensibilidad en la nariz y la piel.",
           "Piel seca, nariz sensible o tendencia a enfermar con facilidad.") },
-        { key: "metal-t2-q7", pregunta: "Cuando la vida te obliga a cerrar una etapa…", opciones: abc(
+        { key: "metal-t2-q7", pregunta: "Cuando la Vida te obliga a cerrar una etapa…", opciones: abc(
           "Me doy tiempo para sentirla y, poco a poco, consigo seguir adelante.",
           "Intento mantener el control y me cuesta aceptar que las cosas cambien.",
           "Siento que una parte de mí sigue aferrada al pasado y me cuesta volver a respirar con ligereza.") },
@@ -1162,7 +1161,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
           "Intento conservar energía porque temo quedarme sin recursos.",
           "Siento que llevo demasiado tiempo funcionando con las reservas.") },
         { key: "agua-t1-q10", pregunta: "¿Cómo reaccionas ante la incertidumbre?", opciones: abc(
-          "La acepto como parte de la vida.",
+          "La acepto como parte de la Vida.",
           "Necesito controlar lo que va a pasar para sentirme tranquilo.",
           "Me genera ansiedad y una sensación constante de inseguridad.") },
         { key: "agua-t1-q11", pregunta: "¿Has notado alguno de estos signos con frecuencia?", opciones: abc(
@@ -1170,7 +1169,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
           "Retención de líquidos, sensación de frío o hinchazón.",
           "Molestias en la zona lumbar o las rodillas, caída del cabello o disminución de la libido.") },
         { key: "agua-t1-q12", pregunta: "¿Qué frase describe mejor tu momento actual?", opciones: abc(
-          "Me siento conectado con mi energía y confío en la vida.",
+          "Me siento conectado con mi energía y confío en la Vida.",
           "Vivo intentando protegerme y controlar lo que pueda ocurrir.",
           "Necesito recuperar mis fuerzas y volver a sentir que tengo reservas.") },
         { key: "agua-t1-q13", pregunta: "¿Cómo responde tu cuerpo después de una época de mucho esfuerzo?", opciones: abc(
@@ -1197,7 +1196,7 @@ export const TESTS_ELEMENTO: Partial<Record<Elemento, TestElemento[]>> = {
     },
     {
       key: "agua-t2",
-      titulo: "Tu Riñón: reservas y esencia",
+      titulo: "Tu riñón: reservas y esencia",
       preguntas: [
         { key: "agua-t2-q1", pregunta: "¿Cómo describirías tu respiración la mayor parte del tiempo?", opciones: abc(
           "Profunda, tranquila y estable.",

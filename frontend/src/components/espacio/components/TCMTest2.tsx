@@ -95,27 +95,27 @@ const INTERPRETACIONES = [
   {
     nombre: "Madera",
     descripcion:
-      "Tu terreno constitucional es el Movimiento Madera. Tu naturaleza tiende al impulso, la dirección y la iniciativa. El Hígado rige tu capacidad de planificar y avanzar. Cuida el exceso de tensión y frustración como señales de desequilibrio.",
+      "Tu terreno constitucional es el Movimiento Madera. Tu naturaleza tiende al impulso, la dirección y la iniciativa. El hígado rige tu capacidad de planificar y avanzar. Cuida el exceso de tensión y frustración como señales de desequilibrio.",
   },
   {
     nombre: "Fuego",
     descripcion:
-      "Tu terreno constitucional es el Movimiento Fuego. Tu naturaleza es expresiva, relacional y cálida. El Corazón rige tu vitalidad emocional y la conexión. Cuida la intensidad afectiva y la sobre-estimulación como señales de desequilibrio.",
+      "Tu terreno constitucional es el Movimiento Fuego. Tu naturaleza es expresiva, relacional y cálida. El corazón rige tu vitalidad emocional y la conexión. Cuida la intensidad afectiva y la sobre-estimulación como señales de desequilibrio.",
   },
   {
     nombre: "Tierra",
     descripcion:
-      "Tu terreno constitucional es el Movimiento Tierra. Tu naturaleza tiende al sostén, la estabilidad y el cuidado. El Bazo rige tu capacidad nutritiva y de contención. Cuida la rumiación y el agotamiento por cuidar a otros como señales de desequilibrio.",
+      "Tu terreno constitucional es el Movimiento Tierra. Tu naturaleza tiende al sostén, la estabilidad y el cuidado. El bazo rige tu capacidad nutritiva y de contención. Cuida la rumiación y el agotamiento por cuidar a otros como señales de desequilibrio.",
   },
   {
     nombre: "Metal",
     descripcion:
-      "Tu terreno constitucional es el Movimiento Metal. Tu naturaleza es introspectiva, precisa y ética. El Pulmón rige tu sentido del orden y los límites. Cuida la rigidez y la dificultad para soltar como señales de desequilibrio.",
+      "Tu terreno constitucional es el Movimiento Metal. Tu naturaleza es introspectiva, precisa y ética. El pulmón rige tu sentido del orden y los límites. Cuida la rigidez y la dificultad para soltar como señales de desequilibrio.",
   },
   {
     nombre: "Agua",
     descripcion:
-      "Tu terreno constitucional es el Movimiento Agua. Tu naturaleza es profunda, intuitiva y reservada. El Riñón rige tu voluntad y la energía vital de base. Cuida el agotamiento y el miedo como señales de desequilibrio.",
+      "Tu terreno constitucional es el Movimiento Agua. Tu naturaleza es profunda, intuitiva y reservada. El riñón rige tu voluntad y la energía vital de base. Cuida el agotamiento y el miedo como señales de desequilibrio.",
   },
 ];
 

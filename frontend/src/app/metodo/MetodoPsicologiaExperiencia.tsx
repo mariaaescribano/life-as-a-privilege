@@ -59,14 +59,14 @@ export default function MetodoPsicologiaExperiencia() {
   // Tramo visible de la timeline + año abierto (página de libro).
   const [tramoIdx, setTramoIdx] = useState(0);
   const [anoAbierto, setAnoAbierto] = useState<number | null>(null);
-  // Popup de recomendación antes de avanzar sin haber rellenado toda la vida, y
+  // Popup de recomendación antes de avanzar sin haber rellenado toda la Vida, y
   // popup de reserva de llamada por si le resulta muy difícil.
   const [avisoOpen, setAvisoOpen] = useState(false);
   const [llamadaOpen, setLlamadaOpen] = useState(false);
 
   const anioActual = new Date().getFullYear();
 
-  // La edad se pide en un popup bloqueante al entrar en la línea de vida.
+  // La edad se pide en un popup bloqueante al entrar en la línea de Vida.
   const necesitaEdad = typeof data.edad !== "number";
 
   useLockBodyScroll(anoAbierto !== null || necesitaEdad || avisoOpen || llamadaOpen);
@@ -126,7 +126,7 @@ export default function MetodoPsicologiaExperiencia() {
   const completa = edad > 0 && lineaCompleta(data, edad);
   const recorridos = edad > 0 ? aniosRecorridos(data, edad) : 0;
   // Basta con AL MENOS un año relleno (o marcado sin recuerdos) para poder
-  // avanzar. Si no ha rellenado toda la vida, antes de avanzar le recomendamos
+  // avanzar. Si no ha rellenado toda la Vida, antes de avanzar le recomendamos
   // hacerlo (popup) y le ofrecemos pedir una llamada.
   const puedeAvanzar = recorridos >= 1;
 
@@ -167,7 +167,7 @@ export default function MetodoPsicologiaExperiencia() {
     await persistir(next);
   };
 
-  // Pasar a «Las Huellas». Si ha rellenado toda su vida, va directo. Si solo ha
+  // Pasar a «Las Huellas». Si ha rellenado toda su Vida, va directo. Si solo ha
   // rellenado algunos años, le mostramos primero un aviso que le recomienda
   // rellenar todo lo que pueda (o pedir una llamada si le resulta difícil).
   const irAHuellas = async () => {
@@ -245,7 +245,7 @@ export default function MetodoPsicologiaExperiencia() {
                         const est = colorNodo(estado);
                         const prevRecorrido = i > 0 ? estadoDelAno(data, arr[i - 1]) !== "vacio" : false;
                         const conectorOn = prevRecorrido && estado !== "vacio";
-                        // La gestación no es un hito aparte: es el inicio de la vida.
+                        // La gestación no es un hito aparte: es el inicio de la Vida.
                         // Su conector con el año 0 va siempre encendido para que se
                         // lea como parte de él.
                         const esGestacionAAno0 = arr[i - 1] === ANO_GESTACION;
@@ -341,7 +341,7 @@ export default function MetodoPsicologiaExperiencia() {
                   </Box>
                 </Box>
 
-                {/* Progreso global de la vida recorrida */}
+                {/* Progreso global de la Vida recorrida */}
                 <Flex align="center" gap={3} w="100%" maxW="420px">
                   <Box flex="1" h="8px" borderRadius="full" bg="rgba(255,255,255,0.22)" overflow="hidden">
                     <Box h="100%" w={`${(recorridos / (edad + 1)) * 100}%`} bg={PAPEL} borderRadius="full" boxShadow="0 0 12px rgba(255,255,255,0.5)" transition="width 0.5s ease" />
@@ -351,7 +351,7 @@ export default function MetodoPsicologiaExperiencia() {
 
                 {completa && (
                   <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" maxW="560px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.3)" }}>
-                    Has reconstruido tu vida entera. Enhorabuena por no abandonarte.
+                    Has reconstruido tu Vida entera. Enhorabuena por no abandonarte.
                   </Text>
                 )}
 
@@ -459,7 +459,7 @@ export default function MetodoPsicologiaExperiencia() {
         />
       )}
 
-      {/* ── AVISO antes de avanzar sin haber rellenado toda la vida ── */}
+      {/* ── AVISO antes de avanzar sin haber rellenado toda la Vida ── */}
       {avisoOpen && (
         <Box
           position="fixed" inset={0} zIndex={2200}
@@ -483,7 +483,7 @@ export default function MetodoPsicologiaExperiencia() {
                 Antes de continuar
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92} mb={3} style={{ textShadow: INK_SHADOW }}>
-                Cuanto más completes tu línea de vida, más claro verás después tus huellas, tus nudos y tus heridas. Rellénala entera, o todo lo que puedas.
+                Cuanto más completes tu línea de Vida, más claro verás después tus huellas, tus nudos y tus heridas. Rellénala entera, o todo lo que puedas.
               </Text>
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" fontStyle="italic" opacity={0.85} mb={7} style={{ textShadow: INK_SHADOW }}>
                 Y si te resulta muy difícil recordar o remueve demasiado, no tienes que hacerlo solo: puedes pedir una llamada y lo hacemos juntos.
@@ -551,7 +551,7 @@ export default function MetodoPsicologiaExperiencia() {
               disciplinaNom={neuropsicologiaNom}
               precio={60}
               titulo="¿Prefieres compañía?"
-              subtitulo="Recorre tu línea de vida conmigo. Agenda una llamada · horario peninsular España"
+              subtitulo="Recorre tu línea de Vida conmigo. Agenda una llamada · horario peninsular España"
             />
           </Box>
         </Box>
@@ -559,7 +559,7 @@ export default function MetodoPsicologiaExperiencia() {
 
       {/* El botón flotante de ayuda y la reserva acompañada los aporta ahora
           AyudaRecorrido (común a todo el recorrido). */}
-      <AyudaRecorrido pagina="linea-de-vida" />
+      <AyudaRecorrido pagina="linea-de-Vida" />
 
       <SiteFooter />
     </Box>
