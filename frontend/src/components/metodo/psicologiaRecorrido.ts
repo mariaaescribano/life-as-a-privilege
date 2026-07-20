@@ -383,7 +383,7 @@ export function necesidadesNoCubiertas(data: LineaDeVidaData): string[] {
 export const HERIDAS_LISTA = {
   titulo: "Tus heridas",
   frase:
-    "Estas son las heridas que han marcado tu historia. Ahora puedes empezar a sanar esas heridas hasta que se conviertan en cicatrices.",
+    "Estas son las heridas que han marcado tu historia. Ahora puedes empezar a sanar hasta que se conviertan en cicatrices.",
 };
 
 // ── «Los Nudos» — textos editables ──
@@ -810,7 +810,7 @@ export const MIEDOS_PREGUNTAS: PreguntaMiedo[] = [
   },
   {
     key: "cambio",
-    pregunta: "Si ocurriera, ¿cómo cambiaría de verdad tu vida?",
+    pregunta: "Si ocurriera, ¿cómo cambiaría de verdad tu Vida?",
     placeholder: "Mi vida cambiaría en que…",
   },
   {
@@ -987,7 +987,7 @@ export const ACE_BANDAS: AceBanda[] = [
     titulo: "Adversidad elevada",
     color: "#c5613e",
     texto:
-      "Cargaste con varias experiencias adversas, seguramente con más peso del que merecías. Los estudios asocian una puntuación de 4 o más con un mayor riesgo para la salud física y emocional. Pero escúchalo bien: es un riesgo, no un destino. Reconocerlo, como estás haciendo ahora, es el primer paso para que deje de gobernarte.",
+      "Cargaste con varias experiencias adversas, seguramente con más peso del que merecías. Los estudios asocian una puntuación de 4 o más con un mayor riesgo para la salud física y emocional. Pero escúchalo bien: es un riesgo, no un destino. Reconocerlo, como estás haciendo ahora, es el primer paso para poder integrar la experiencia en tu historia y que deje de afectar tu salud.",
   },
 ];
 

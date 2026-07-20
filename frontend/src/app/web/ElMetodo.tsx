@@ -475,7 +475,23 @@ export default function ElMetodo() {
         >
           No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes para formar una comprensión profunda y coherente de quién eres.
         </Text>
-      
+
+        <Text
+          color="rgba(255,255,255,0.82)"
+          fontSize={{ base: "xs", md: "sm" }}
+          fontStyle="italic"
+          lineHeight="1.8"
+          letterSpacing="0.02em"
+          textShadow="0 0 9px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.16)"
+          maxW={{ base: "100%", md: "70%" }}
+          mt={{ base: 5, md: 7 }}
+          opacity={headerReveal.visible ? 1 : 0}
+          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          transition="opacity 0.8s ease 0.7s, transform 0.8s ease 0.7s"
+        >
+          Doy mi palabra de honor de que todos los contenidos son obra mía, escritos y diseñados por mí.
+        </Text>
+
       </Flex>
 
       {/* ── SEPARADOR + TÍTULO DISCIPLINAS ── */}

@@ -39,7 +39,7 @@ export const DOSHA_DESCUBRE: Record<DoshaKey, DoshaDescubre | null> = {
     mente: {
       titulo: "Tu mente",
       parrafos: [
-        "Tu mente es muy rápida.",
+        "Tu mente es rápida. Muy rápida.",
         "Las ideas aparecen con facilidad y suelen conectar unas con otras de forma casi automática. Tienes facilidad para aprender, imaginar, crear y encontrar soluciones originales.",
         "Tu creatividad es uno de tus mayores dones.",
         "Pero esa misma rapidez también puede hacer que te resulte difícil desconectar, mantener el foco durante mucho tiempo o terminar todo lo que empiezas.",

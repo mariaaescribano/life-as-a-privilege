@@ -21,5 +21,5 @@ export function arquetipoLabel(a: {
   casa: number | null;
 }): string {
   const n = nombreCuerpo(a.cuerpoKey);
-  return a.faceta === "casa" ? `${n} en casa ${a.casa}` : `${n} en ${a.signo}`;
+  return a.faceta === "casa" ? `${n} en Casa ${a.casa}` : `${n} en ${a.signo}`;
 }

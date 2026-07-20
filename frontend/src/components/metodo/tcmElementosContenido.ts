@@ -79,7 +79,8 @@ const madera: ContenidoElementoRico = {
   intro: [
     "La Madera representa el crecimiento, el ascenso, la dispersión y la fluidez.",
     "Es la energía de la primavera: todo lo que brota, se expande y busca moverse con libertad pertenece a la Madera.",
-    "Sus palabras clave son crecimiento, dirección y renovación. Cuando la Madera está en equilibrio, todo circula sin obstáculos, permitiendo que el Qi fluya de forma armoniosa y que la vida siga su curso natural.",
+    "Sus palabras clave son crecimiento, dirección y renovación.",
+    "Cuando la Madera está en equilibrio, todo circula sin obstáculos, permitiendo que el Qi fluya de forma armoniosa y que la Vida siga su curso natural.",
   ],
   rige: [
     { clave: "Órgano Zang (Yin)", valor: "el Hígado" },

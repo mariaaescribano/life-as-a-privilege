@@ -26,7 +26,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Astrología · constelación que se dibuja y estrellas que titilan ──────────
+// ── Astrología · estrella de 5 puntas que se dibuja y titila ─────────────────
 const dibujarConst = keyframes`
   0%   { stroke-dashoffset: 1; }
   50%  { stroke-dashoffset: 0; }
@@ -36,16 +36,20 @@ const titilar = keyframes`
   0%, 100% { opacity: 0.35; transform: scale(0.8); }
   50%      { opacity: 1;    transform: scale(1.2); }
 `;
+// Los 5 vértices de la estrella (centro 60,60 · radio 46, punta arriba).
 const ESTRELLAS = [
-  { x: 16, y: 82 }, { x: 44, y: 50 }, { x: 66, y: 74 }, { x: 90, y: 40 }, { x: 106, y: 64 },
+  { x: 60, y: 14 }, { x: 104, y: 46 }, { x: 87, y: 97 }, { x: 33, y: 97 }, { x: 16, y: 46 },
 ];
+// Orden de trazo del pentagrama: una sola línea continua y cerrada (la estrella
+// se dibuja "de un tirón", como se dibuja una estrella a mano).
+const TRAZO = [0, 2, 4, 1, 3, 0];
 export function AstrologiaLoader() {
   const c = astrologiaTxt;
   return (
     <Shell>
       <Box
         as="polyline"
-        points={ESTRELLAS.map((s) => `${s.x},${s.y}`).join(" ")}
+        points={TRAZO.map((i) => `${ESTRELLAS[i].x},${ESTRELLAS[i].y}`).join(" ")}
         fill="none"
         stroke={c}
         strokeWidth={1.6}
@@ -62,7 +66,7 @@ export function AstrologiaLoader() {
           key={i}
           cx={s.x}
           cy={s.y}
-          r={i === 0 || i === ESTRELLAS.length - 1 ? 2.7 : 2.1}
+          r={i === 0 ? 2.7 : 2.1}
           fill={c}
           animation={`${titilar} 1.8s ease-in-out ${i * 0.28}s infinite`}
           sx={{ transformBox: "fill-box", transformOrigin: "center" }}

@@ -378,7 +378,7 @@ export default function MetodoFisiologiaOrganismo() {
                       </Text>
                       <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.7"
                             style={{ textShadow: INK }}>
-                        Y ese organismo entero, vivo y en marcha en este mismo instante, <b>eres tú</b>.
+                        Ese organismo entero, vivo y en marcha en este mismo instante, <b>eres tú</b>.
                       </Text>
                     </Flex>
                   </PanelBox>

@@ -84,7 +84,7 @@ export const VINETAS_PLANETAS: Vineta[] = [
     src: "/viñetas/astrologia/planetas/neptuno.png",
     paragraphs: [
       "Neptuno es la confusión, el anhelo del Amor real y lo intangible.",
-      "Dónde buscamos la fusión con Dios, cómo engañamos a otros y a nosotros. Puede no importarnos la realidad.",
+      "Dónde buscamos la fusión con Dios, cómo engañamos a otros y a nosotros. Puede no importarnos la realidad racional.",
     ],
   },
   {
@@ -111,15 +111,16 @@ export const VINETAS_PLANETAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/planetas/quiron.png",
     paragraphs: [
-      "Quirón es la herida más profunda del alma.",
-      "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir con él, y al hacerlo, nos da nuestro mayor don.",
+      "Quirón es la herida más profunda del alma; la herida de la separación.",
+      "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir y a aceptar el dolor, y al hacerlo, nos da nuestro mayor don.",
     ],
   },
   {
     src: "/viñetas/astrologia/planetas/lilith.png",
     paragraphs: [
-      "Lilith es nuestro deseo más profundo, el que juzgamos inconfesable — porque nos enseñaron que no teníamos derecho a él. Tememos que se sepa, no lograrlo, o lograrlo y perderlo.",
-      "Pero hay que aceptar nuestro deseo: cuanto más lo neguemos, más crecerá la frustración; reconocerlo nos acerca a nuestra esencia.",
+      "Lilith es nuestro deseo más profundo, el que juzgamos inconfesable — porque nos enseñaron que no teníamos derecho a él.",
+      "Tememos que se sepa, no lograrlo, o lograrlo y perderlo.",
+      "Hay que aceptar nuestro deseo: cuanto más lo neguemos, más crecerá la frustración; reconocerlo aunque no lleguemos a cumplirlo, nos acerca a nuestra esencia.",
     ],
   },
 ];
@@ -153,8 +154,8 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/cancer.png",
     paragraphs: [
-      "Necesita sentir para saber quién es.",
-      "Necesita pertenecer. Su identidad viene de dónde viene. Hace familia a aquellos que ama.",
+      "Necesita sentir para saber quién es. Necesita pertenecer.",
+      "Su identidad viene de sus raíces. Hace familia a aquellos que ama.",
       "Es vulnerable por dentro. Por eso construye un escudo por fuera. Le cuesta soltar el pasado, incluso cuando duele.",
     ],
   },
@@ -171,7 +172,8 @@ export const VINETAS_SIGNOS: Vineta[] = [
     paragraphs: [
       "Analiza, ordena, cuida, sirve.",
       "Vive sin querer ver su propio caos. Somatiza lo que niega.",
-      "Es el crítico y juzgador más duro consigo mismo y con los demás. Debe poner sus dones al servicio de algo mayor.",
+      "Es el crítico y juzgador más duro consigo mismo y con los demás.",
+      "Debe poner sus dones al servicio de algo mayor.",
     ],
   },
   {
@@ -179,15 +181,15 @@ export const VINETAS_SIGNOS: Vineta[] = [
     paragraphs: [
       "La diplomacia. Necesita al otro para descubrirse a sí mismo.",
       "Quiere encajar y ser aceptado en la sociedad. Indeciso. Quiere que otros decidan por él.",
-      "No le gustan las peleas. Recopila datos de todos para evitar enfados.",
+      "No le gustan las peleas. Recopila datos de todos para evitar desencuentros.",
     ],
   },
   {
     src: "/viñetas/astrologia/signos/escorpio.png",
     paragraphs: [
       "Intensidad, profundidad, transformación. Todo o nada.",
-      "Paseos por los infiernos para descubrir su sombra.",
-      "Desea fundirse con el otro. La separación después de la fusión es lo que más le duele.",
+      "Paseos por los infiernos para descubrirse a sí mismo y a su sombra.",
+      "Desea fundirse con el otro. La separación después de la fusión le duele mucho, pero debe de aprender a que sin uno no existe el otro.",
     ],
   },
   {
@@ -203,14 +205,14 @@ export const VINETAS_SIGNOS: Vineta[] = [
     paragraphs: [
       "La responsabilidad. Desea que lo que construye repercuta positivamente en las siguientes generaciones.",
       "Espera. Renuncia. Aguanta. Pone el deber antes que el deseo. Planificador meticuloso.",
-      "Por dentro es frágil. No lo va a contar ni quiere que se note. Solo descansa cuando todo lo demás está hecho.",
+      "Por dentro es frágil. No lo va a contar ni quiere que se note. Solo descansa cuando todo lo que supuestamente era su obligación está cumplido.",
     ],
   },
   {
     src: "/viñetas/astrologia/signos/acuario.png",
     paragraphs: [
       "Ama a la humanidad, odia a los humanos.",
-      "Desea pertenecer. No quiere perder su individualidad. Original. Innovador.",
+      "Desea pertenecer, pero no quiere perder su individualidad. Original. Innovador.",
       "Analiza a todos antes de fiarse. No le gustan los vínculos ni compromisos emocionales.",
     ],
   },
@@ -237,7 +239,7 @@ export const VINETAS_CASAS: Vineta[] = [
     src: "/viñetas/astrologia/casas/casa2.png",
     paragraphs: [
       "El contacto con el mundo tangible.",
-      "Nuestra valía y la que aportamos. Habla de la relación con los recursos y el dinero.",
+      "Nuestra valía y la valía que aportamos al mundo. Habla de la relación con los recursos y el dinero.",
       "Revela las capacidades que queremos desarrollar en esta Vida y que nos darán seguridad.",
     ],
   },
@@ -261,8 +263,9 @@ export const VINETAS_CASAS: Vineta[] = [
     src: "/viñetas/astrologia/casas/casa5.png",
     paragraphs: [
       "El niño que fuimos. El romance, la creatividad, el placer.",
-      "La casa de los amantes sin compromiso, de las ideas sin garantía. Los hijos y las creaciones.",
-      "Revela la intensidad con la que necesitamos sentirnos únicos. El signo en el que está es la energía con la que se disfraza el ego.",
+      "La Casa de los amantes sin compromiso, de las ideas sin garantía. Los hijos y las creaciones.",
+      "Revela la intensidad con la que necesitamos sentirnos únicos.",
+      "El Signo en el que está es la energía con la que se disfraza el ego.",
     ],
   },
   {
@@ -310,7 +313,8 @@ export const VINETAS_CASAS: Vineta[] = [
     paragraphs: [
       "Los amigos, los grupos, las asociaciones.",
       "Los anhelos del alma. Salir de la individualidad y conectar con algo mayor.",
-      "En baja frecuencia: necesidad de pertenencia. En alta: consciencia de la red que nos une a todos.",
+      "En baja frecuencia: necesidad de pertenencia.",
+      "En alta: consciencia de la red que nos une a todos."
     ],
   },
   {
@@ -318,7 +322,7 @@ export const VINETAS_CASAS: Vineta[] = [
     paragraphs: [
       "Lo trascendental.",
       "El inconsciente colectivo y lo no digerido por nuestros ancestros. Heridas que se heredan hasta que se sanan.",
-      "Aquí el ego teme su disolución, porque es la vuelta al origen.",
+      "Aquí el ego teme su disolución, porque es la vuelta al origen, al Uno y al todo.",
     ],
   },
 ];
@@ -394,11 +398,11 @@ function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
       sx={{
         backdropFilter: "blur(8px)",
         transition: "all 0.25s ease",
-        boxShadow: `0 0 18px ${astrologiaTxt}33, 0 0 42px ${astrologiaTxt}1f, inset 0 0 24px rgba(255,255,255,0.04)`,
+        boxShadow: "0 4px 18px rgba(0,0,0,0.35)",
         _hover: {
           transform: "translateY(-4px)",
           borderColor: astrologiaTxt,
-          boxShadow: `0 0 28px ${astrologiaTxt}99, 0 0 70px ${astrologiaTxt}55, inset 0 0 24px rgba(255,255,255,0.08)`,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
         },
         _active: { transform: "translateY(-1px)" },
       }}

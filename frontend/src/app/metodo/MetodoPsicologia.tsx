@@ -281,11 +281,11 @@ export default function MetodoPsicologia() {
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Su propósito es ayudarte a ordenar tu historia, comprender mejor tus patrones y construir una narrativa más consciente sobre tu vida.
+                  Su propósito es ayudarte a ordenar tu historia, comprender mejor tus patrones y construir una narrativa más consciente sobre tu Vida.
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Si estás atravesando un momento de sufrimiento importante o necesitas apoyo especializado, te recomendamos buscar ayuda profesional.
+                  Si estás atravesando un momento de sufrimiento importante o necesitas apoyo especializado, te recomiendo buscar ayuda profesional.
                 </Text>
               </Flex>
             </ModalBody>

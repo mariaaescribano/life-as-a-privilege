@@ -11,7 +11,8 @@ export const NUTRICION_MICROBIOTA: Vineta[] = [
   {
     src: "/viñetas/nutricion/microbiota/microbiota1.png",
     paragraphs: [
-      "En tu intestino viven billones de microorganismos: bacterias, hongos, virus y otros microbios que forman tu microbiota. No son intrusos: conviven contigo y cumplen funciones esenciales.",
+      "En tu intestino viven billones de microorganismos: bacterias, hongos, virus y otros microbios que forman tu microbiota.",
+      "No son intrusos: conviven contigo y cumplen funciones esenciales.",
       "A cambio de un lugar donde vivir y de los restos de alimento que no puedes digerir, realizan tareas que tu cuerpo no podría hacer por sí solo.",
     ],
   },
@@ -27,13 +28,13 @@ export const NUTRICION_MICROBIOTA: Vineta[] = [
     src: "/viñetas/nutricion/microbiota/microbiota3.png",
     paragraphs: [
       "Algunas moléculas fabricadas por la microbiota pueden viajar por la sangre o enviar señales a través del nervio vago.",
-      "Gracias a esta comunicación, la microbiota puede influir en el funcionamiento del cerebro, el estado de ánimo y el aprendizaje.",
+      "Gracias a esta comunicación, la microbiota puede influir en el funcionamiento del cerebro, el estado de ánimo y el aprendizaje a través de la creación de serotonina.",
     ],
   },
   {
     src: "/viñetas/nutricion/microbiota/microbiota4.png",
     paragraphs: [
-      "Cuidar tu microbiota es cuidar de ti.",
+      "Cuidar tu microbiota es cuidar de ti - de tu cuerpo, de tu cerebro y de tu salud mental.",
       "Cuanta mayor variedad de alimentos vegetales consumes, más diversa suele ser tu microbiota, y esa diversidad se asocia con una mejor salud.",
     ],
   },

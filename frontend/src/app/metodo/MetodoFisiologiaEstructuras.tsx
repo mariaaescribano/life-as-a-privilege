@@ -81,7 +81,7 @@ const ESTRUCTURAS: EstDef[] = [
     desc: "La central de energía de la célula.",
     ingredientes: [{ macro: "lipido", n: 2, label: "Membrana mitocondrial", img: `${PRE}/membranamitocondria.png` }, { macro: "proteina", n: 3, label: "Receptores", img: `${PRE}/receptoresmitocondria.png` }],
     resultado: [
-      "Con sus membranas plegadas y muchísimas proteínas, la mitocondria transforma los nutrientes y el oxígeno en energía.",
+      "Con sus membranas plegadas y muchísimas proteínas y enzimas, la mitocondria transforma los nutrientes y el oxígeno en energía.",
       "Es la central eléctrica que fabrica el ATP, el combustible que mantiene en marcha cada proceso de tu cuerpo.",
     ],
     resultadoImg: `${PRE}/circularmitocondria.png`, cuadradoImg: `${PRE}/mitocondria.png`,

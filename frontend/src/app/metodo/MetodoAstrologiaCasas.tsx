@@ -197,7 +197,7 @@ export default function MetodoAstrologiaCasas() {
     label: "Aspectos →",
     onClick: () => navigate("/metodo/astrologia/aspectos"),
     disabled: !todasCasasLeidas,
-    disabledTooltip: "Lee todas tus casas para continuar.",
+    disabledTooltip: "Lee todas tus Casas para continuar.",
   };
 
   return (
@@ -350,14 +350,14 @@ export default function MetodoAstrologiaCasas() {
                     )}
                   </Box>
                   <Text color={`${astrologiaTxt}99`} fontSize="xs" textAlign="center" mt={2} fontStyle="italic" letterSpacing="0.04em">
-                    Gira la rueda o toca una casa
+                    Gira la rueda o toca una Casa
                   </Text>
                   {casasEscritas.length > 0 && (
                     <Text color={todasCasasLeidas ? astrologiaTxt : `${astrologiaTxt}aa`} fontSize="sm" fontWeight="600"
                           textAlign="center" mt={1} letterSpacing="0.04em" style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
                       {todasCasasLeidas
-                        ? "Has leído todas tus casas. Ya puedes continuar a Aspectos."
-                        : `Has leído ${casasEscritas.filter((n) => leidos.has(n)).length} de ${casasEscritas.length} casas.`}
+                        ? "Has leído todas tus Casas. Ya puedes continuar a Aspectos."
+                        : `Has leído ${casasEscritas.filter((n) => leidos.has(n)).length} de ${casasEscritas.length} Casas.`}
                     </Text>
                   )}
                 </Box>
@@ -473,7 +473,7 @@ function CasaBox({
           ) : (
             <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" fontStyle="italic"
                   noOfLines={2}>
-              Aún no he escrito la lectura de esta casa. Estará disponible pronto.
+              Aún no he escrito la lectura de esta Casa. Estará disponible pronto.
             </Text>
           )}
         </Box>

@@ -263,7 +263,7 @@ export default function AdminAstrologiaTextos() {
               </Flex>
 
               <Text color="rgba(255,255,255,0.6)" fontSize="xs" mt={-2}>
-                {escritas}/{valores.length} {faceta === "signo" ? "signos" : "casas"} con texto · haz clic en una celda para editarla
+                {escritas}/{valores.length} {faceta === "signo" ? "Signos" : "Casas"} con texto · haz clic en una celda para editarla
               </Text>
 
               {/* Rejilla de celdas */}

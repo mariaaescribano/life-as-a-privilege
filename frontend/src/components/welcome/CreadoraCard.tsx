@@ -50,11 +50,11 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         direction={{ base: "column-reverse", md: "row" }}
         align="center"
         justify="center"
-        gap={{ base: 7, md: 12 }}
+        gap={{ base: 7, md: 14, lg: 20 }}
         w="100%"
-        maxW="900px"
+        maxW={{ base: "900px", lg: "1180px" }}
         mx="auto"
-        p={{ base: 7, md: 10 }}
+        p={{ base: 7, md: 12, lg: 16 }}
         borderRadius="3xl"
         bg="rgba(255,255,255,0.05)"
         border="1px solid rgba(255,255,255,0.14)"
@@ -69,12 +69,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           direction="column"
           align={{ base: "center", md: "flex-start" }}
           textAlign={{ base: "center", md: "left" }}
-          gap={{ base: 4, md: 5 }}
+          gap={{ base: 4, md: 5, lg: 6 }}
         >
           <Text
             color="white"
             fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+            fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
             lineHeight="1.15"
@@ -86,7 +86,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           {/* Línea acento */}
           <Box
             h="2px"
-            w={{ base: "70px", md: "90px" }}
+            w={{ base: "70px", md: "90px", lg: "120px" }}
             bgGradient={{
               base: "linear(to-r, transparent, rgba(255,255,255,0.6), transparent)",
               md: "linear(to-r, rgba(255,255,255,0.6), transparent)",
@@ -97,7 +97,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           <Text
             color="rgba(255,255,255,0.92)"
             fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "sm", md: "lg" }}
+            fontSize={{ base: "sm", md: "lg", lg: "xl" }}
             lineHeight="1.85"
             letterSpacing="0.02em"
             textShadow="0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)"
@@ -128,12 +128,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             color="rgba(255,255,255,0.85)"
             fontFamily="'EB Garamond', serif"
             fontWeight="500"
-            fontSize={{ base: "xs", md: "sm" }}
+            fontSize={{ base: "xs", md: "sm", lg: "md" }}
             letterSpacing={{ base: "0.08em", md: "0.14em" }}
             textTransform="uppercase"
             whiteSpace="nowrap"
-            px={{ base: 5, md: 6 }}
-            py={{ base: "8px", md: "10px" }}
+            px={{ base: 5, md: 6, lg: 8 }}
+            py={{ base: "8px", md: "10px", lg: "13px" }}
             borderRadius="full"
             border="1px solid rgba(255,255,255,0.35)"
             bg="rgba(255,255,255,0.05)"
@@ -148,14 +148,14 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             transition="all 0.25s ease"
           >
             {actionLabel}
-            <Box as="span" fontSize={{ base: "sm", md: "md" }}>→</Box>
+            <Box as="span" fontSize={{ base: "sm", md: "md", lg: "lg" }}>→</Box>
           </Flex>
         </Flex>
 
         {/* ── Foto (derecha) — recortada apaisada (más ancha que alta) ── */}
         <Box
           flexShrink={0}
-          w={{ base: "240px", md: "300px", lg: "340px" }}
+          w={{ base: "240px", md: "340px", lg: "430px" }}
           borderRadius="2xl"
           overflow="hidden"
           boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"

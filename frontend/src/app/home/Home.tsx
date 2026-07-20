@@ -25,7 +25,7 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
-import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 
 const popIn = keyframes`
   from { opacity: 0; transform: scale(0.2); }
@@ -102,6 +102,9 @@ const Home = () => {
   const [pagoCabalaError, setPagoCabalaError] = useState<string | null>(null);
   const [pagoCabalaExitoOpen, setPagoCabalaExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
+  // No mostramos NADA del mandala hasta que TODAS las fotos (fondos de las
+  // disciplinas + foto central del usuario) estén cargadas.
+  const [imagesReady, setImagesReady] = useState(false);
 
   const continuarAstrologia = async () => {
     navigate("/metodo/astrologia");
@@ -676,6 +679,30 @@ const Home = () => {
     }
   }, []);
 
+  // Precarga de TODAS las fotos del mandala. Hasta que no estén todas cargadas
+  // (o fallen) no se muestra nada — evita que aparezcan círculos sin su fondo.
+  useEffect(() => {
+    if (img == null) return;
+    const srcs = disciplines
+      .map((d) => disciplinaBgImg(d.name))
+      .filter((s): s is string => !!s);
+    srcs.push(img);
+    let cancelled = false;
+    let pending = srcs.length;
+    const done = () => {
+      if (cancelled) return;
+      pending -= 1;
+      if (pending <= 0) setImagesReady(true);
+    };
+    srcs.forEach((src) => {
+      const im = new window.Image();
+      im.onload = done;
+      im.onerror = done;
+      im.src = src;
+    });
+    return () => { cancelled = true; };
+  }, [img]);
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const userId = sessionStorage.getItem("userId");
@@ -726,7 +753,7 @@ const Home = () => {
       <SiteHeader variant="private" userImg={img ?? undefined} />
 
       <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform={mandalaScale} transformOrigin="top center">
-        {img != null ? (
+        {img != null && imagesReady ? (
           <Flex
             direction="column"
             alignItems="center"
@@ -838,14 +865,13 @@ const Home = () => {
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
                 const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
                 // `abierta` = estado visual desbloqueado (iluminado, sin candado).
-                //   · Astrología: cuando está PAGADA (metodo_suscrito). Mientras
-                //     se carga el estado (null) la mostramos abierta para no
-                //     parpadear el candado a quien ya pagó.
+                //   · Astrología: solo cuando está PAGADA (metodo_suscrito === true).
+                //     Por defecto (aún sin pagar o mientras carga) sale bloqueada.
                 //   · Psicología: solo cuando está PAGADA (psicologia_suscrito).
                 // Ambas siguen con candado hasta que se pague / se pruebe el pago,
                 // pero siguen siendo clicables para poder abrir su pago.
                 const abierta =
-                  (d.name === astrologiaNom && metodoSuscrito !== false) ||
+                  (d.name === astrologiaNom && metodoSuscrito === true) ||
                   (d.name === neuropsicologiaNom && psicologiaSuscrito === true) ||
                   (d.name === ayurvedaNom && ayurvedaSuscrito === true) ||
                   (d.name === tcmNom && tcmSuscrito === true) ||
@@ -920,7 +946,7 @@ const Home = () => {
                       h="100%"
                       borderRadius="full"
                       overflow="hidden"
-                      border={`4px solid ${d.txt}`}
+                      border={`4px solid ${abierta ? d.txt : "#ffffff"}`}
                       boxShadow={abierta
                         ? `0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.3), 0 0 90px rgba(180,255,245,0.28), 0 0 60px ${d.txt}88, 0 2px 30px ${d.txt}55`
                         : `0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 0 40px ${d.txt}55, 0 2px 24px ${d.txt}33`}
@@ -953,7 +979,7 @@ const Home = () => {
                             viewBox="0 -960 960 960"
                             w={{ base: "30px", md: "42px", lg: "50px" }}
                             h={{ base: "30px", md: "42px", lg: "50px" }}
-                            fill={d.txt}
+                            fill="#ffffff"
                             style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.6)) drop-shadow(0 0 16px rgba(0,0,0,0.4))" }}
                           >
                             <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />

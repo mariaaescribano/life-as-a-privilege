@@ -15,6 +15,8 @@ import axios from "axios";
 import { API_URL } from "../GlobalVariables";
 import { getTextoSigno, getTextoCasa } from "../components/metodo/astrologiaTextos";
 import { ARQUETIPOS_OVERRIDES } from "../components/metodo/astrologiaTextos.overrides";
+import { RESUMENES_SIGNO, RESUMENES_CASA } from "../components/metodo/astrologiaResumenes";
+import type { CuerpoKey } from "../components/metodo/astrologiaData";
 import { adminHeaders } from "../app/admin/useAdminGuard";
 
 export type FacetaAstro = "signo" | "casa";
@@ -24,9 +26,26 @@ export interface ArquetiposOverrides {
   casa: Record<string, Record<string, string>>;
 }
 
-/** El texto efectivo (override si existe, si no el original hardcodeado). */
+/** El resumen (2-3 frases memorables) de un arquetipo, si existe. */
+function resumenDe(cuerpo: string, faceta: FacetaAstro, valor: string): string | null {
+  const k = cuerpo as CuerpoKey;
+  return faceta === "signo"
+    ? RESUMENES_SIGNO[k]?.[valor] ?? null
+    : RESUMENES_CASA[k]?.[Number(valor)] ?? null;
+}
+
+/**
+ * El texto efectivo (override si existe, si no el original hardcodeado), con el
+ * resumen antepuesto: `resumen` + `---` + `texto`. El popup usa el «---» para
+ * mostrar el resumen arriba y el texto detrás de «Seguir leyendo».
+ * Si el texto ya trae su propio «---», se respeta tal cual.
+ */
 export function textoEstatico(cuerpo: string, faceta: FacetaAstro, valor: string): string | null {
-  return faceta === "signo" ? getTextoSigno(cuerpo, valor) : getTextoCasa(cuerpo, Number(valor));
+  const texto = faceta === "signo" ? getTextoSigno(cuerpo, valor) : getTextoCasa(cuerpo, Number(valor));
+  if (texto == null) return null;
+  if (/^[ \t]*---[ \t]*$/m.test(texto)) return texto; // ya trae resumen propio
+  const resumen = resumenDe(cuerpo, faceta, valor);
+  return resumen ? `${resumen}\n\n---\n\n${texto}` : texto;
 }
 
 /**

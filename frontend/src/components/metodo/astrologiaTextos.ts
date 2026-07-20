@@ -497,7 +497,7 @@ Eres capaz de hacer crítica constructiva, ordenado, práctico, atento al detall
 
 Debes entender que todo tiene su propio orden, aunque no se comprenda al primer vistazo, y dejar de juzgar cuando las cosas no encajan con tus expectativas.`,
 
-    Libra: `**En sombra:** Te falta objetividad para sostener el equilibrio en tus relaciones y te enredas en tus propias emociones. Te aferras a cómo crees que deberían funcionar la sociedad y los vínculos, y acabas atrapado en tus propios juicios. Como todos los signos de aire, toleras mal el dolor emocional.
+    Libra: `**En sombra:** Te falta objetividad para sostener el equilibrio en tus relaciones y te enredas en tus propias emociones. Te aferras a cómo crees que deberían funcionar la sociedad y los vínculos, y acabas atrapado en tus propios juicios. Como todos los Signos de aire, toleras mal el dolor emocional.
 
 Puedes necesitar rodearte de gente constantemente y depender de las relaciones externas para validarte. Te vuelves inconstante, apático, quejica, indeciso, indolente, autocrítico en exceso, fácil de persuadir y muy aficionado al camino que ofrece menos resistencia.
 
@@ -543,7 +543,7 @@ Maduras al encontrar tu fuego interno y desarrollar humildad y compasión. Debes
 
 **En luz:** Extrovertido, adaptable, vital, entusiasta, optimista, ético, sabio, profético, franco, filosófico, valiente, apasionado, amante de la libertad, comprensivo, generoso, justo, independiente y expansivo.
 
-Eres viajero por naturaleza. Disfrutas de la Vida en amplio espectro: alegre, extrovertido, idealista, explorador, inquieto y siempre en movimiento. Los signos de fuego son signos de misión, y la tuya la vives como algo casi divino.
+Eres viajero por naturaleza. Disfrutas de la Vida en amplio espectro: alegre, extrovertido, idealista, explorador, inquieto y siempre en movimiento. Los Signos de fuego son signos de misión, y la tuya la vives como algo casi divino.
 
 Debes saber que hay un sentido profundo en todas las cosas, aunque no pueda percibirse del todo, y dejar que tus acciones fluyan desde esa conciencia.`,
 
@@ -1665,7 +1665,7 @@ Necesitas que tu vida tenga sentido y propósito, y no te conformas con "lo que 
 
 Te identificas fuertemente con tu cuerpo físico y con tu apariencia; puedes tener dificultades para aceptar la enfermedad, la debilidad o el envejecimiento, y obsesionarte con ello.
 
-Eres un líder natural, con una presencia que irradia energía e inspira a otros. Energético, pionero, valiente, voluntarioso, seguro, extrovertido, espontáneo, optimista (según el signo), ambicioso, digno e individualista. Sueles mostrarte tal como eres. Tienes talento para resolver problemas y no funcionas bien bajo la autoridad de otros. Buscas reconocimiento para tener libertad de actuar a tu manera, y puedes tender a no escuchar demasiado a los demás.
+Eres un líder natural, con una presencia que irradia energía e inspira a otros. Energético, pionero, valiente, voluntarioso, seguro, extrovertido, espontáneo, optimista (según el Signo), ambicioso, digno e individualista. Sueles mostrarte tal como eres. Tienes talento para resolver problemas y no funcionas bien bajo la autoridad de otros. Buscas reconocimiento para tener libertad de actuar a tu manera, y puedes tender a no escuchar demasiado a los demás.
 
 Tu energía es casi magnética: atrae a la gente y la influye. De algún modo, ejerces tu autoridad natural casi por instinto, para satisfacer tu deseo de reconocimiento.
 
@@ -1755,7 +1755,7 @@ Puedes haber nacido en el extranjero, casarte con alguien extranjero (posiblemen
 
 Puedes adquirir posesiones, puestos o relaciones que, a primera vista, parecerían imposibles dado tu origen, y a menudo creas negocios o iniciativas que resultan inusuales en relación con tu trasfondo.
 
-Necesitas visibilidad, porque tu identidad se expresa a través de tu vida pública y tu estatus social. Sueles crear tu propia escuela, sistema o forma de hacer las cosas, dejando una huella duradera y despertando admiración. El signo concreto te dirá en qué área buscas ese reconocimiento.
+Necesitas visibilidad, porque tu identidad se expresa a través de tu vida pública y tu estatus social. Sueles crear tu propia escuela, sistema o forma de hacer las cosas, dejando una huella duradera y despertando admiración. El Signo concreto te dirá en qué área buscas ese reconocimiento.
 
 Normalmente te reconocen por tu reputación profesional y te van bien la política, el liderazgo o los roles que requieran autoridad. Necesitas cumplir tu propósito vocacional y que se te reconozca por ello. Los problemas aparecen si persigues todos tus logros solo para ganarte la aprobación parental. En mujeres, esta energía puede proyectarse a veces como ser "la esposa de" en lugar de ser reconocida individualmente.`,
 
@@ -1773,7 +1773,7 @@ A veces te auto-saboteas para no sentir, y puedes necesitar periodos de aislamie
 
 Aunque seas sociable, sueles sentirte muy solo. Tiendes a brillar de forma silenciosa o en círculos pequeños, y puedes quedarte a la sombra de otros o trabajar de forma anónima, sobre todo antes de los 30. Tu vida a menudo transcurre entre bambalinas o en soledad.
 
-Esta es la casa del sacrificio, así que estás llamado a poner tu Sol al servicio de algo más grande que tu identidad personal, frecuentemente trabajando por el bien de la humanidad. Hay un vínculo psíquico o kármico con el padre, y un compromiso de alma con sanar la línea paterna y el principio masculino.
+Esta es la Casa del sacrificio, así que estás llamado a poner tu Sol al servicio de algo más grande que tu identidad personal, frecuentemente trabajando por el bien de la humanidad. Hay un vínculo psíquico o kármico con el padre, y un compromiso de alma con sanar la línea paterna y el principio masculino.
 
 Buscas tranquilidad y prefieres no complicarte la vida, pero las dificultades suelen aparecer a la hora de alcanzar tus metas. Eres tolerante y humilde, pero puede faltarte autoconocimiento y sentido de tu propio valor. Necesitas explorar y entenderte, y te beneficia conectar con grupos espirituales o esotéricos.
 
@@ -1847,7 +1847,7 @@ Funcionas mejor cuidando a otros, y eres protector y orientado al servicio por n
 
 La rutina te da seguridad, y prestarle atención a tu dieta y a tu cuerpo es esencial. Tu entorno laboral suele ser el área que te trae más cambio, incertidumbre y desafío emocional, y puede reflejar dinámicas heredadas o kármicas con tu madre. También puedes heredar sensibilidades de salud, tendencias psicosomáticas o replicar la forma que tenía tu madre de afrontar la vida cotidiana.
 
-Puedes vivir "infecciones" emocionales a través de amigos, clientes, amantes u otros a quienes sirves, así que mantener los límites es importante. Los nervios fuertes o la tensión emocional pueden manifestarse como enfermedad, sobre todo si descuidas el autocuidado. Te sientes más seguro atendiendo a la rutina y cuidando del cuerpo, aunque los signos variables pueden hacer que tus hábitos sean inconsistentes.
+Puedes vivir "infecciones" emocionales a través de amigos, clientes, amantes u otros a quienes sirves, así que mantener los límites es importante. Los nervios fuertes o la tensión emocional pueden manifestarse como enfermedad, sobre todo si descuidas el autocuidado. Te sientes más seguro atendiendo a la rutina y cuidando del cuerpo, aunque los Signos variables pueden hacer que tus hábitos sean inconsistentes.
 
 **Afligida:** somatización emocional, hipocondría, exceso de trabajo, implicación excesiva en la vida de los demás y vulnerabilidades de salud heredadas.
 
@@ -2313,7 +2313,7 @@ Puede que te falte el coraje o la franqueza para expresarte abiertamente y apare
 
 La sexualidad puede estar reprimida o ser secreta, y las tendencias agresivas inconscientes pueden proyectarse sobre otros o ser absorbidas de ellos. En el mejor de los casos, esta posición puede convertirte en defensora o protectora de los demás, canalizando positivamente la energía reprimida.
 
-Cuidado porque puedes tener enemigos secretos, peligro de encarcelamiento u hospitalización, y enfermedades o cirugías inusuales relacionadas con el signo de la casa.`,
+Cuidado porque puedes tener enemigos secretos, peligro de encarcelamiento u hospitalización, y enfermedades o cirugías inusuales relacionadas con el Signo de la Casa.`,
   },
 
   jupiter: {
@@ -2357,7 +2357,7 @@ Eres muy romántico, pero la fidelidad y las parejas tradicionales no son para t
 
 Si decides tener hijos, las relaciones suelen ser buenas, pero debes evitar proyectar en ellos tu deseo de libertad o presionarlos para que sean siempre «los mejores». Sueles enseñarles buenos principios y valores.`,
 
-    6: `Puedes sentirte restringido, ya que esta casa se centra en las rutinas diarias, el trabajo, el servicio y la salud, más que en un deseo natural de expansión. Sin embargo, esta posición ofrece la oportunidad de encontrar sentido y crecimiento personal a través del trabajo, el servicio a los demás y las responsabilidades cotidianas. A menudo hay una fuerte vocación relacionada con ayudar, sanar o ser útil, y muchas personas con esta posición se ven atraídas por las profesiones del cuidado o por actividades que benefician a otros.
+    6: `Puedes sentirte restringido, ya que esta Casa se centra en las rutinas diarias, el trabajo, el servicio y la salud, más que en un deseo natural de expansión. Sin embargo, esta posición ofrece la oportunidad de encontrar sentido y crecimiento personal a través del trabajo, el servicio a los demás y las responsabilidades cotidianas. A menudo hay una fuerte vocación relacionada con ayudar, sanar o ser útil, y muchas personas con esta posición se ven atraídas por las profesiones del cuidado o por actividades que benefician a otros.
 
 Puedes buscar el propósito a través de tu trabajo, de la estabilidad financiera o del cuidado de tu cuerpo. Puedes abordar las tareas de dos formas extremas: o haciendo las cosas rápido y de manera algo descuidada porque te aburren las rutinas, o volviéndote extremadamente meticuloso y enfocado en los detalles. Sueles enorgullecerte mucho de tu trabajo, inviertes mucha energía en él y tiendes a creer que haces las cosas mejor que los demás, pero generalmente mantienes buenas relaciones con compañeros y subordinados.
 
@@ -2771,7 +2771,7 @@ Sin embargo, si está mal integrado, puede haber una tendencia a buscar estados 
 
 Aunque posees fuertes tendencias independientes, puedes luchar por equilibrar esta necesidad con sentimientos de soledad o abandono. Paradójicamente, puedes sentirte al mismo tiempo altamente autosuficiente y profundamente aislado. A menudo hay una necesidad de retiro periódico: tiempo a solas para la recalibración interna. Si no te permites conscientemente la soledad, la vida puede crear situaciones que fuercen el aislamiento a través de enfermedades, accidentes o eventos inesperados.
 
-La educación de la mente y la integración del ego son esenciales. En esta casa, el ego no es el conductor central; en cambio, dominan los patrones inconscientes. Por lo tanto, la conciencia es clave para evitar la proyección y la atracción inconsciente de situaciones desestabilizadoras.
+La educación de la mente y la integración del ego son esenciales. En esta Casa, el ego no es el conductor central; en cambio, dominan los patrones inconscientes. Por lo tanto, la conciencia es clave para evitar la proyección y la atracción inconsciente de situaciones desestabilizadoras.
 
 Durante el embarazo o los primeros períodos gestacionales, pueden ocurrir circunstancias inusuales o inesperadas, particularmente en conexión con cambios repentinos, separaciones o anomalías que afecten a la madre o al niño.
 
@@ -2921,7 +2921,7 @@ Normalmente tu grupo de amigos está compuesto por excéntricos, gente extraña,
 
 Quizás la característica más importante de esta posición es la imprecisión y la dificultad para definir el camino a seguir en la vida y sus objetivos, grandes o pequeños.`,
 
-    12: `Recuerda que los planetas en la casa doce pueden "no mostrarse", a veces porque representan energías que están "prohibidas" en el clan.
+    12: `Recuerda que los planetas en la Casa doce pueden "no mostrarse", a veces porque representan energías que están "prohibidas" en el clan.
 
 Tienes una fuerte hipersensibilidad que te convierte en una esponja y absorbes lo que ocurre en planos invisibles; de hecho tienes más conciencia de lo que ocurre en lo intangible que en el mundo mundano y material.
 
@@ -3017,7 +3017,7 @@ El mayor regalo de esta posición es la capacidad absoluta de regeneración. En 
 
 Normalmente la figura del padre se experimentó como una fuerte autoridad que ocultaba aspectos oscuros o indeseables. El padre puede haber muerto o desaparecido.
 
-Debido a que la cuarta casa también describe cómo terminamos las cosas, estos nativos tienden a poner finales drásticos a situaciones o relaciones.
+Debido a que la cuarta Casa también describe cómo terminamos las cosas, estos nativos tienden a poner finales drásticos a situaciones o relaciones.
 
 A menudo son amantes apasionados de la naturaleza y de todo lo que puede descubrirse dentro de ella (buceo, espeleología, etc.).
 
@@ -3091,7 +3091,7 @@ También puede haber casos de obsesión con el autocuidado, las rutinas de salud
 
 Aun así, eres físicamente fuerte y normalmente tienes una notable capacidad de recuperación y regeneración.
 
-A medida que maduras, puedes volverte increíblemente poderosa en esta casa. Eres capaz de desarrollar la habilidad de cortar lo que está podrido, eliminar lo tóxico y ayudar a otros a ver lo que se está deteriorando o lo que es insano en sus propias vidas. Puedes convertirte en alguien que verdaderamente entiende cómo la mente afecta al cuerpo, y puedes convertirte en sanador profundo, guía o servidor en el sentido más profundo de la palabra, no a través del control, sino a través de la conciencia, el discernimiento y el servicio genuino.`,
+A medida que maduras, puedes volverte increíblemente poderosa en esta Casa. Eres capaz de desarrollar la habilidad de cortar lo que está podrido, eliminar lo tóxico y ayudar a otros a ver lo que se está deteriorando o lo que es insano en sus propias vidas. Puedes convertirte en alguien que verdaderamente entiende cómo la mente afecta al cuerpo, y puedes convertirte en sanador profundo, guía o servidor en el sentido más profundo de la palabra, no a través del control, sino a través de la conciencia, el discernimiento y el servicio genuino.`,
 
     7: `Tienes experiencias profundas de **abandono, traición, herida emocional, abuso, violación o rechazo**, especialmente por parte de quienes se suponía que debían amarte, protegerte o cuidarte en la infancia.
 
@@ -3133,7 +3133,7 @@ Puedes tener una poderosa influencia en la sociedad, porque eres capaz de confro
 
 A medida que maduras, comienzas a buscar **relaciones trascendentes**: vínculos profundos y significativos, pero ya no construidos sobre el drama, las luchas de poder, la codependencia o la guerra emocional. Con el crecimiento, dejas de necesitar la intensidad por sí misma y comienzas a valorar la verdad, la profundidad, la evolución mutua y la intimidad consciente.
 
-Plutón en la séptima casa da un fuerte magnetismo, atracción, intensidad sexual, presencia y temperamento. Estas personas suelen tener un aura cautivadora que atrae a los demás, incluso cuando no lo intentan. Sin embargo, si Plutón está mal aspectado, también puede haber problemas legales, contratos difíciles, enemigos abiertos o adversarios poderosos.
+Plutón en la séptima Casa da un fuerte magnetismo, atracción, intensidad sexual, presencia y temperamento. Estas personas suelen tener un aura cautivadora que atrae a los demás, incluso cuando no lo intentan. Sin embargo, si Plutón está mal aspectado, también puede haber problemas legales, contratos difíciles, enemigos abiertos o adversarios poderosos.
 
 En última instancia, estos nativos deben aprender a **conocerse profundamente y a funcionar de forma independiente**. Necesitan liberarse de la necesidad de que la otra persona los necesite. Deben dejar de dar, sacrificarse o fusionarse simplemente para evitar el abandono. De lo contrario, se llenan lentamente de resentimiento, rabia reprimida y toxicidad emocional.`,
 
@@ -3153,11 +3153,11 @@ Puedes luchar con crisis internas y encontrar difícil disfrutar de lo que tiene
 
 La lección clave es que tu poder de transformación es la más poderosa. La transformación requiere soltar los apegos, especialmente al drama, al control y al miedo. Cuando maduras, puedes liberarte del miedo, alcanzar una profunda comprensión y reconocer tu propio poder de forma sana y consciente. Esto te permite formar relaciones fructíferas, enriquecer a otros y convertirte en psicólogo, sanador o guía natural.
 
-Plutón en la octava casa no se trata de una simple insatisfacción: produce una **profunda conciencia existencial**. Estos individuos son más conscientes de la muerte que de la vida, plenamente conscientes de que todo es impermanente.
+Plutón en la octava Casa no se trata de una simple insatisfacción: produce una **profunda conciencia existencial**. Estos individuos son más conscientes de la muerte que de la vida, plenamente conscientes de que todo es impermanente.
 
 Hay una profunda comprensión de la naturaleza efímera de la existencia, que te obliga a un trabajo interno honesto e intenso: reconocer tu sombra, miedos, demonios y compulsiones inconscientes. Cuanto más se nieguen o repriman, más toman el control de la persona, lo que lleva a reacciones explosivas si se ignoran.
 
-Sueles ser compulsivo, repitiendo inconscientemente acciones que te atrapan en ciclos. Sin embargo, en momentos de crisis o catástrofe, te elevas con una fuerza extraordinaria, a veces realizando hazañas aparentemente sobrehumanas. Después de la crisis, debes permitirte llorar y liberar la tensión acumulada. En estos momentos, también te conviertes en inspiración para otros, guiándoles fuera de su propia oscuridad o "cuevas internas". Cualquiera que esté en contacto con alguien con Plutón en la octava casa experimenta un profundo efecto de antes y después: el encuentro es transformador, para bien o para mal.
+Sueles ser compulsivo, repitiendo inconscientemente acciones que te atrapan en ciclos. Sin embargo, en momentos de crisis o catástrofe, te elevas con una fuerza extraordinaria, a veces realizando hazañas aparentemente sobrehumanas. Después de la crisis, debes permitirte llorar y liberar la tensión acumulada. En estos momentos, también te conviertes en inspiración para otros, guiándoles fuera de su propia oscuridad o "cuevas internas". Cualquiera que esté en contacto con alguien con Plutón en la octava Casa experimenta un profundo efecto de antes y después: el encuentro es transformador, para bien o para mal.
 
 Esta posición puede manifestarse como destructividad, autodestructividad, comportamiento enjuiciador y percepción crítica extrema, tanto hacia ellos mismos como hacia los demás. Sin embargo, cuando se integra y madura, te conviertes en **maestro de la transformación, la comprensión profunda y la sanación**, capaz de guiarte y guiar a otros a través de las crisis más profundas.`,
 

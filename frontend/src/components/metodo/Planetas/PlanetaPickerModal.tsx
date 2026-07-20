@@ -109,7 +109,7 @@ export function PlanetaPickerModal({ picker, carta, onClose, onSelect }: Planeta
               letterSpacing="0.05em"
               style={{ textShadow: `0 0 10px ${color}88` }}
             >
-              {cuerpo.label} — {esSigno ? "elige signo" : "elige casa"}
+              {cuerpo.label} — {esSigno ? "elige Signo" : "elige Casa"}
             </Text>
           </Flex>
 

@@ -268,7 +268,7 @@ export default function AdminAstrologiaEditor() {
             ) : (
               <>
                 {/* ── CASAS (desplegable) ── */}
-                <Desplegable titulo="Las 12 casas" count={12} open={casasOpen} onToggle={() => setCasasOpen((o) => !o)}>
+                <Desplegable titulo="Las 12 Casas" count={12} open={casasOpen} onToggle={() => setCasasOpen((o) => !o)}>
                   <Flex direction="column" gap={4}>
                     {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => {
                       const info = cusps.length ? infoCasa(cusps, n) : null;
@@ -293,7 +293,7 @@ export default function AdminAstrologiaEditor() {
                           <Textarea
                             value={casas[String(n)] ?? ""}
                             onChange={(e) => setCasas((p) => ({ ...p, [String(n)]: e.target.value }))}
-                            placeholder={`Lectura de la casa ${NUMEROS_ROMANOS[n - 1]}…`}
+                            placeholder={`Lectura de la Casa ${NUMEROS_ROMANOS[n - 1]}…`}
                             rows={3}
                             bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.22)" color="white" borderRadius="lg"
                             fontFamily="'EB Garamond', serif" _placeholder={{ color: "rgba(255,255,255,0.35)" }}

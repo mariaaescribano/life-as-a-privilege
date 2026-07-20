@@ -225,14 +225,14 @@ export function PlanetaBox({
       {/* Botones profundizar */}
       <Flex mt={5} gap={3} justify={c.conCasa ? "space-between" : "center"} direction={{ base: "column", sm: "row" }}>
         <ProfundizarBtn
-          label={valor.profundizadoSigno ? "Ver signo ✓" : "Ver signo"}
+          label={valor.profundizadoSigno ? "Ver Signo ✓" : "Ver Signo"}
           color={c.color}
           enabled={!!valor.signo}
           onClick={onProfundizarSigno}
         />
         {c.conCasa && (
           <ProfundizarBtn
-            label={valor.profundizadoCasa ? "Ver casa ✓" : "Ver casa"}
+            label={valor.profundizadoCasa ? "Ver Casa ✓" : "Ver Casa"}
             color={c.color}
             enabled={valor.casa != null}
             onClick={onProfundizarCasa}

@@ -25,14 +25,18 @@ export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/tcm/origen/origentcm1.png",
     paragraphs: [
-      "Del Dao, el principio originario del universo, surgió el Qi, la energía primordial de la que nace toda existencia.",
+      "El Dao (Tao) es el principio supremo e indescriptible del que surge toda la realidad.",
+      "Del Dao emana el Qi, la energía primordial que, en un primer momento, existe como un estado indiferenciado conocido como Hundun, el caos primordial donde aún no hay distinción individual.",
+      "A medida que esta energía comienza a ordenarse, se manifiesta el Taiji (el Gran Último), del que nacen las dos fuerzas complementarias.",
     ],
   },
   {
     src: "/viñetas/tcm/origen/origentcm2.png",
     paragraphs: [
-      "El Qi se diferenció en Yang, energía masculina, Qi del Cielo, y Yin, energía femenina, Qi de la Tierra.",
-      "De su interacción nació el universo.",
+      "El Yang es la energía masculina, el Qi del Cielo.",
+      "El Yin es la energía femenina, el Qi de la Tierra.",
+      "Ambos son interdependientes y son manifestaciones de lo mismo.",
+      "De su interacción surgen los Cinco Elementos (madera, fuego, tierra, metal y agua), cuyos ciclos de transformación dan origen a 'los diez mil seres', es decir, todo cuanto existe en el universo.",
     ],
   },
   {
@@ -46,7 +50,7 @@ export const VINETAS_ORIGEN: Vineta[] = [
     src: "/viñetas/tcm/origen/origentcm4.png",
     paragraphs: [
       "La esencia (Jing) es la manifestación individualizada de la energía primordial, del Qi.",
-      "Es la porción de la Esencia infinita que se condensa para dar origen al cuerpo, sostener la Vida y expresar la singularidad de cada ser.",
+      "Es la porción del Dao, la esencia infinita, que se condensa para dar origen al cuerpo, sostener la Vida y expresar la singularidad de cada ser.",
     ],
   },
   {
@@ -75,14 +79,16 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/tierratcm.png",
     paragraphs: [
-      "La tierra es el suelo sobre el que todo se construye. Representa nuestra capacidad para nutrirnos y transformarnos, tanto a nivel físico como emocional.",
-      "Cuando la tierra está fuerte, somos capaces de aprovechar aquello que recibimos de la vida y convertirlo en raíces, aprendizaje y nutrición.",
+      "La tierra es el suelo sobre el que todo se construye.",
+      "Representa nuestra capacidad para nutrirnos y transformarnos, tanto a nivel físico como emocional",
+      "Cuando la tierra está fuerte, somos capaces de aprovechar aquello que recibimos de la Vida y convertirlo en raíces, aprendizaje y nutrición.",
     ],
   },
   {
     src: "/viñetas/tcm/elementos/metaltcm.png",
     paragraphs: [
-      "Del proceso de transformación de la tierra surge el metal. Representa la claridad, el orden y la capacidad de distinguir cuál dolor es nuestro y cuál no.",
+      "Del proceso de transformación de la tierra surge el metal.",
+      "Representa la claridad, el orden y la capacidad de distinguir cuál dolor es nuestro y cuál no.",
       "Nos ayuda a aceptar quiénes somos y a soltar aquello que ya ha cumplido su función para dejar espacio a lo nuevo.",
     ],
   },
@@ -90,7 +96,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
     src: "/viñetas/tcm/elementos/aguatcm.png",
     paragraphs: [
       "Cuando aprendemos a soltar, aparece el agua. Es la profundidad, la introspección y la conexión con nuestros recursos internos.",
-      "Nos invita a mirar hacia dentro, encontrar paz y desarrollar la confianza necesaria para fluir con los cambios de la vida.",
+      "Nos invita a mirar hacia dentro, encontrar paz y desarrollar la confianza necesaria para fluir con los cambios de la Vida.",
     ],
   },
   {
@@ -103,7 +109,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/fuegotcm.png",
     paragraphs: [
-      "El fuego es la expresión de la vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
+      "El fuego es la expresión de la Vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
       "Nos aporta entusiasmo, inspiración y el impulso necesario para compartir aquello que hemos creado.",
     ],
   },

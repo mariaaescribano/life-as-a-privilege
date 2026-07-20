@@ -180,7 +180,7 @@ export default function MetodoCabala() {
                   Su corazón es el <Box as="span" fontStyle="italic" color={cabalaTxt}>Árbol de la Vida</Box>:
                   diez esferas —las sefirot— unidas por senderos que representan las fuerzas que nos
                   habitan. En este recorrido las iremos descubriendo una a una, para reconocerlas en ti
-                  y que estén al servicio de tu autoconocimiento.
+                  y que estén al servicio de tu crecimiento personal.
                 </Text>
               </Box>
             </Box>

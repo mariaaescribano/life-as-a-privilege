@@ -39,7 +39,8 @@ export const NUTRICION_INTRO: Vineta[] = [
     src: "/viñetas/nutricion/intro/nutricomic5.png",
     paragraphs: [
       "Pero no todos los alimentos aportan las mismas moléculas.",
-      "Durante millones de años, la naturaleza fue nuestra única fuente de alimento. Sin embargo, hoy podemos consumir productos cuya composición molecular es ajena a nuestro organismo.",
+      "Durante millones de años, la naturaleza fue nuestra única fuente de alimento.",
+      "Sin embargo, hoy podemos consumir productos cuya composición molecular es ajena a nuestro organismo.",
       "Ahora hay que tener cuidado, pues lo que debería de reconstruirte puede destruirte.",
     ],
   },
@@ -47,7 +48,7 @@ export const NUTRICION_INTRO: Vineta[] = [
     src: "/viñetas/nutricion/intro/nutricomic6.png",
     paragraphs: [
       "Esta disciplina te invita a dejar de pensar en lo que te gusta y en lo que no.",
-      "Te invita a mirar los alimentos desde un punto de vista científico y comprender qué moléculas contienen, cómo actúan en tu organismo y por qué influyen en tu salud.",
+      "Te invita a mirar los alimentos desde un punto de vista racional y comprender qué moléculas contienen, cómo actúan en tu organismo y por qué influyen en tu salud.",
       "¿Si supieras realmente lo que ocurre dentro de tu cuerpo cada vez que comes, elegirías lo mismo?",
       "Descubre por qué te gusta lo que te gusta. Y descubre cómo, literalmente, te reconstruyes con cada bocado.",
     ],

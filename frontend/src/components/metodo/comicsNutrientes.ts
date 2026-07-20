@@ -16,8 +16,10 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       src: src("carbohidratos", 1),
       paragraphs: [
-        "Sabemos que las verduras y las frutas son saludables. Pero ¿por qué? Casi nadie nos lo ha explicado. En realidad, la respuesta está en cómo nuestro cuerpo obtiene la energía.",
-        "Nuestras células necesitan glucosa para fabricar ATP, la molécula que utilizan para realizar su trabajo. Si no hay suficiente glucosa, nuestro sabio cuerpo puede recurrir a las grasas como combustible. Pero esa es otra historia llamada cetosis...",
+        "Sabemos que las verduras y las frutas son saludables. Pero ¿por qué? Casi nadie nos lo ha explicado.",
+        "En realidad, la respuesta está en cómo nuestro cuerpo obtiene la energía.",
+        "Nuestras células necesitan glucosa para fabricar ATP, la molécula que utilizan para realizar su trabajo.",
+        "Si no hay suficiente glucosa, nuestro sabio cuerpo puede recurrir a las grasas como combustible. Pero esa es otra historia llamada cetosis...",
       ],
     },
     {

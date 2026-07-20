@@ -92,7 +92,8 @@ export const CABALA_ILUSTRACIONES: Record<CabalaPageKey, Vineta[]> = {
     {
       src: "/recorrido/cabala/sefirot/hod.png",
       paragraphs: [
-        "Hod representa la comunicación, la humildad y la claridad mental. Complementa a Netzach ayudándonos a expresar nuestras ideas con autenticidad, escuchar con apertura y reconocer que nuestra visión es valiosa, pero no la única posible.",
+        "Hod representa la comunicación, la humildad y la claridad mental.",
+        "Complementa a Netzach ayudándonos a expresar nuestras ideas con autenticidad, escuchar con apertura y reconocer que nuestra visión es valiosa, pero no la única posible.",
       ],
     },
   ],

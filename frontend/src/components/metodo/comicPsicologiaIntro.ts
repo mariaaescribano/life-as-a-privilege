@@ -11,7 +11,8 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
   {
     src: `${P}/sufrimiento1.png`,
     paragraphs: [
-      "Mucho antes de nacer, ya existía una historia. Las heridas, el Amor, los miedos y la forma en que tus padres se trataban a sí mismos y entre ellos, ya empezaban a influir en tu percepción del mundo.",
+      "Mucho antes de nacer, ya existía una historia.",
+      "Las heridas, el Amor, los miedos y la forma en que tus padres se trataban a sí mismos y entre ellos, ya empezaban a influir en tu percepción del mundo.",
     ],
   },
   {
@@ -24,13 +25,15 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
   {
     src: `${P}/sufrimiento3.png`,
     paragraphs: [
-      "Nuestro cerebro se desarrolla adaptándose a quienes nos cuidan. Muchas de las conexiones que hoy dirigen nuestra forma de sentir, pensar y relacionarnos nacieron cuando aún no podíamos comprender ni recordar con palabras lo que vivíamos.",
+      "Nuestro cerebro se desarrolla adaptándose a quienes nos cuidan.",
+      "Muchas de las conexiones que hoy dirigen nuestra forma de sentir, pensar y relacionarnos nacieron cuando aún no podíamos comprender ni recordar con palabras lo que vivíamos.",
     ],
   },
   {
     src: `${P}/sufrimiento4.png`,
     paragraphs: [
-      "De niños haríamos cualquier cosa por conservar el amor de quienes nos cuidaban. Deseábamos que nuestros padres fuesen felices.",
+      "De niños haríamos cualquier cosa por conservar el amor de quienes nos cuidaban.",
+      "Deseábamos que nuestros padres fuesen felices, pero nunca estuvo ni estará en nuestra mano. No podemos hacer nada. Cada uno es responsable de su propia felicidad.",
       "Si nos hicieron daño, era más seguro pensar que el problema estaba en nosotros que aceptar que quienes debían protegernos también podían herirnos.",
     ],
   },
@@ -53,13 +56,14 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
     src: `${P}/sufrimiento7.png`,
     paragraphs: [
       "Así viven muchas personas: creyendo que no son suficientes, culpándose y repitiendo estrategias que un día les ayudaron a sobrevivir, pero que hoy las mantienen atrapadas.",
-      "Si quienes debían quererme no pudieron hacerlo, significa que no soy merecedor de Amor. ¿Quién podría quererme?",
+      "«Si quienes debían quererme no pudieron hacerlo, significa que no soy merecedor de Amor. ¿Quién podría quererme?»",
     ],
   },
   {
     src: `${P}/sufrimiento8.png`,
     paragraphs: [
-      "Pero hoy puedes empezar otro camino. Tus padres también fueron hijos no queridos en su propia historia. Te dieron lo que te pudieron dar.",
+      "Pero hoy puedes empezar otro camino.",
+      "Tus padres, tus abuelos y tus ancestros también fueron hijos no queridos en su propia historia. Te dieron lo que te pudieron dar.",
       "Comprender no significa justificar. Significa dejar de seguir cargando con un peso que nunca fue solo tuyo. Míralos con compasión.",
       "Mírate y trátate con el mismo Amor que siempre necesitaste. Te lo mereces.",
     ],

@@ -37,7 +37,7 @@ export const ORIGEN_CIENCIA: Vineta[] = [
     src: "/viñetas/comicInicioSegunCiencia/inicio4.png",
     paragraphs: [
       "Los planetas nacen de los átomos formados por estrellas. Uno de aquellos planetas era la Tierra.",
-      "Durante millones de años, fue transformándose hasta convertirse en un lugar capaz de albergar vida.",
+      "Durante millones de años, fue transformándose hasta convertirse en un lugar capaz de albergar Vida.",
     ],
   },
   {
@@ -52,14 +52,15 @@ export const ORIGEN_CIENCIA: Vineta[] = [
     paragraphs: [
       "En la naturaleza, nada se desperdicia.",
       "Los átomos pasan continuamente de unos seres a otros mediante ciclos como los del agua, el carbono, el nitrógeno o el oxígeno.",
-      "No existe la muerte, todo se transforma.",
+      "No existe lo que llamamos muerte, todo se transforma.",
     ],
   },
   {
     src: "/viñetas/comicInicioSegunCiencia/inicio7.png",
     paragraphs: [
       "Los átomos que forman tu cuerpo nacieron en el interior de estrellas.",
-      "Antes de estar en ti, pudieron formar parte de una montaña, un océano, un animal o una flor. Hoy te forman a ti, mañana puede ser que no.",
+      "Antes de estar en ti, pudieron formar parte de una montaña, un océano, un animal o una flor.",
+      "Hoy te forman a ti, mañana puede ser que no.",
     ],
   },
   {

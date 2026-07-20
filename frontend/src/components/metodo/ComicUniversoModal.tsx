@@ -32,7 +32,8 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta3.png",
     paragraphs: [
       "Así nacieron la vasija que sostiene y la luz que se entrega.",
-      "Yang, Purusha, Or: el portador y dador de luz. Yin, Prakriti, Kli: la energía que recibe, contiene y transforma para crear.",
+      "Yang, Purusha, Or: el portador y dador de luz.",
+      "Yin, Prakriti, Kli: la energía que recibe, contiene y transforma para crear.",
     ],
   },
   {
@@ -52,8 +53,12 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
   {
     src: "/viñetas/comicInicio/viñeta6.png",
     paragraphs: [
-      "En los primeros minutos, esa energía se hizo materia.",
-      "Miles de millones de partículas distintas. Había un plan. Había un propósito. No había prisa.",
+      "En los primeros minutos, esa energía se convirtió en materia. Esa materia dio origen a miles de millones de partículas.",
+      "Desde una perspectiva espiritual, esa separación fue el primer gran dolor.",
+      "Todas nuestras heridas son recordatorios de esta separación.",
+      "El rechazo: 'Debe haber algo malo en mí; por eso fui expulsado.'",
+      "El abandono: 'No soy suficiente, por eso todos se van.'",
+      "Pero, a pesar del dolor, el Uno quiso experimentar el Amor y encontrarse a sí mismo.",
     ],
   },
   {
@@ -74,14 +79,16 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta9.png",
     paragraphs: [
       "Ese polvo estelar se unió para formar planetas. El nuestro halló el lugar perfecto.",
-      "A lo largo de la historia, las culturas han hablado de elementos distintos. Sin embargo, todas están de acuerdo en una cosa: tierra, agua, fuego, aire y energía se unen para crear la Vida.",
+      "A lo largo de la historia, las culturas han hablado de elementos distintos.",
+      "Sin embargo, todas están de acuerdo en una cosa: tierra, agua, fuego, aire y energía se unen para crear la Vida.",
     ],
   },
   {
     src: "/viñetas/comicInicio/viñeta10.png",
     paragraphs: [
-      "Y la materia, en algún momento, empezó a copiarse, duplicarse y expandirse.",
-      "Eso somos: un préstamo de polvo de estrellas. Una inversión del Universo. Las moléculas de cada célula que permiten que te llames «yo» existen desde hace más de 13.800 millones de años.",
+      "La materia, en algún momento, empezó a copiarse, duplicarse y expandirse.",
+      "Eso somos: un préstamo de polvo de estrellas. Una inversión del Universo.",
+      "Las moléculas de cada célula que permiten que te llames «yo» existen desde hace más de 13.800 millones de años.",
     ],
   },
   {
@@ -96,7 +103,8 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     paragraphs: [
       "No estás aquí por casualidad ni por castigo. No has sido abandonado ni expulsado.",
       "Estás aquí para recordar que eres una manifestación de Dios y estás formado por Amor.",
-      "Para recordarlo, atravesarás cosas difíciles y dolorosas. Forma parte del camino. El propósito es no convertir el dolor en sufrimiento, sino aprender a aceptarlo."
+      "Para recordarlo, atravesarás cosas difíciles y dolorosas. Forma parte del camino.",
+      "El propósito es no convertir el dolor en sufrimiento, sino aprender a aceptarlo.",
     ],
   },
   {
@@ -110,7 +118,8 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta14.png",
     paragraphs: [
       "El Mapa te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y recordar el sentido de tu Vida.",
-      "Obtendrás herramientas que te ayudarán en tu camino, el cual tienes que caminar con tu valentía y fortaleza. Nadie hará por ti lo que tú puedes hacer por ti.",
+      "Obtendrás herramientas que te ayudarán en tu camino, el cual tienes que caminar con tu valentía y fortaleza.",
+      "Nadie hará por ti lo que tú puedes hacer por ti.",
     ],
   },
 ];

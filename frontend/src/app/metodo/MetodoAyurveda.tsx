@@ -166,7 +166,17 @@ export default function MetodoAyurveda() {
                 maxW="600px"
                 mx="auto"
               >
-                El Ayurveda enseña que cada persona nace con una constitución única —su dosha— y que la salud es el equilibrio de esa naturaleza. Esta tercera etapa de El Mapa es para reconocer tu constitución, entender tus desequilibrios y aprender a vivir en armonía contigo mismo.
+                El Ayurveda enseña que cada persona nace con una constitución única —su dosha— y que la salud es el equilibrio de esa naturaleza. 
+              </Text>
+              <Text
+                color={TINTA}
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="1.85"
+                opacity={1}
+                maxW="600px"
+                mx="auto"
+              >
+                Esta tercera etapa de El Mapa es para reconocer tu constitución, entender tus desequilibrios y aprender a vivir en armonía contigo mismo.
               </Text>
             </Box>
           </Box>

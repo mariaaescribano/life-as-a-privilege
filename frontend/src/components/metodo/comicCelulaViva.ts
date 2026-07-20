@@ -41,7 +41,7 @@ export const CELULA_VIVA: Vineta[] = [
     src: "/viñetas/fisiologia/celulacomic/celula5.png",
     titulo: "Las enzimas",
     paragraphs: [
-      "Las enzimas son las trabajadoras de la célula. Aceleran miles de reacciones químicas y hacen posible que la vida ocurra.",
+      "Las enzimas son las trabajadoras de la célula. Aceleran miles de reacciones químicas y hacen posible que la Vida ocurra.",
       "Sin ellas, muchas reacciones tardarían años o incluso siglos en producirse.",
     ],
   },
@@ -49,7 +49,9 @@ export const CELULA_VIVA: Vineta[] = [
     src: "/viñetas/fisiologia/celulacomic/celula6.png",
     titulo: "La mitocondria",
     paragraphs: [
-      "Toda esa actividad necesita energía. Las mitocondrias transforman los nutrientes y el oxígeno en el combustible, científicamente llamado ATP, que alimenta todas las partes de la célula.",
+      "Toda esa actividad necesita energía.",
+      "Las enzimas de las mitocondrias transforman los nutrientes y el oxígeno en el combustible, científicamente llamado ATP.",
+      "Esta energía permite que las enzimas hagan su misión y gracias a eso, nuestras células pueden reconstruirse cada día."
     ],
   },
   {

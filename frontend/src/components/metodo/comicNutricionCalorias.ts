@@ -25,8 +25,10 @@ export const NUTRICION_CALORIAS: Vineta[] = [
   {
     src: "/viñetas/nutricion/calorias/calorias3.png",
     paragraphs: [
-      "A partir de ahí, cada molécula puede seguir un camino distinto. Por ejemplo, la glucosa suele utilizarse para obtener energía mediante la respiración celular.",
-      "Los ácidos grasos pueden servir para construir membranas celulares, fabricar hormonas, almacenarse como reserva o producir energía. Los aminoácidos se utilizan para fabricar proteínas, como el músculo, las enzimas o los anticuerpos.",
+      "A partir de ahí, cada molécula puede seguir un camino distinto.",
+      "Por ejemplo, la glucosa suele utilizarse para obtener energía mediante la respiración celular.",
+      "Los ácidos grasos pueden servir para construir membranas celulares, fabricar hormonas, almacenarse como reserva o producir energía.",
+      "Los aminoácidos se utilizan para fabricar proteínas, como el músculo, las enzimas o los anticuerpos.",
     ],
   },
   {
@@ -38,14 +40,15 @@ export const NUTRICION_CALORIAS: Vineta[] = [
   {
     src: "/viñetas/nutricion/calorias/calorias5.png",
     paragraphs: [
-      "La energía no es una molécula, pero el ATP es la molécula que almacena la energía. Se guardar hasta que hace falta, entonces se transporta hasta dónde se necesita.",
+      "La energía no es una molécula, pero el ATP es la molécula que almacena la energía.",
+      "Se guarda hasta que hace falta, entonces se transporta hasta dónde se necesita.",
     ],
   },
   {
     src: "/viñetas/nutricion/calorias/calorias6.png",
     paragraphs: [
-      "Cuando una enzima o cualquier otra maquinaria celular necesita realizar un trabajo, utiliza el ATP.",
-      "Al liberar la energía almacenada en él, la célula puede mover un músculo, fabricar una proteína, enviar una señal nerviosa o llevar a cabo miles de procesos diferentes.",
+      "Cuando una enzima o cualquier otra maquinaria celular necesita realizar una misión, utiliza el ATP.",
+      "Al liberar la energía almacenada en él, la célula puede mover un músculo, fabricar una proteína, enviar una señal nerviosa o llevar a cabo miles de procesos diferentes -gracias a las enzimas.",
     ],
   },
   {

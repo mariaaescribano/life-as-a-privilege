@@ -25,19 +25,24 @@ export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen1.png",
     paragraphs: [
-      "El Uno se manifiesta en dos principios fundamentales: Puruṣa, la energía masculina y la consciencia pura, y Prakṛti, la energía femenina, la naturaleza primordial o energía creadora.",
+      "El Uno se manifiesta en dos principios fundamentales.",
+      "Puruṣa, la energía masculina y la consciencia pura.",
+      "Prakṛti, la energía femenina, la naturaleza primordial o energía creadora.",
     ],
   },
   {
     src: "/viñetas/hinduismo/origen/origen2.png",
     paragraphs: [
-      "Prakṛti está formada por tres cualidades o energías llamadas guṇas: Sattva (armonía y claridad), Rajas (acción y movimiento) y Tamas (estabilidad e inercia).",
+      "Prakṛti está formada por tres cualidades o energías llamadas guṇas: ",
+      "Sattva (armonía y claridad), Rajas (acción y movimiento) y Tamas (estabilidad e inercia).",
     ],
   },
   {
     src: "/viñetas/hinduismo/origen/origen3.png",
     paragraphs: [
-      "Cuando Puruṣa se encuentra con Prakṛti, comienza la manifestación del universo. La primera manifestación es Mahat o Buddhi, la inteligencia cósmica. De Mahat surge Ahaṃkāra, el ego. Gracias a él aparece la noción de «yo», permitiendo que la unidad se experimente y manifieste como múltiples seres y objetos.",
+      "Cuando Puruṣa se encuentra con Prakṛti, comienza la manifestación del universo.",
+      "La primera manifestación es Mahat o Buddhi, la inteligencia cósmica.",
+      "De Mahat surge Ahaṃkāra, el ego. Gracias a él aparece la noción de «yo», permitiendo que la unidad se experimente y manifieste como múltiples seres y objetos.",
     ],
   },
   {
@@ -49,7 +54,8 @@ export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen5.png",
     paragraphs: [
-      "Desde Ahaṃkāra, cuando predomina Tamas, surgen los cinco Tanmātras o cualidades sutiles: sonido, tacto, forma, sabor y olor. De ellos emergerán posteriormente los cinco grandes elementos.",
+      "Desde Ahaṃkāra, cuando predomina Tamas, surgen los cinco Tanmātras o cualidades sutiles: sonido, tacto, forma, sabor y olor.",
+      "De ellos emergerán posteriormente los cinco grandes elementos.",
     ],
   },
   {
@@ -73,7 +79,8 @@ export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen9.png",
     paragraphs: [
-      "Por ello, el ser humano es considerado un microcosmos: un universo en miniatura que contiene los mismos principios presentes en el macrocosmos. Entendernos es entender el universo y entender el universo es entendernos a nosotros.",
+      "Por ello, el ser humano es considerado un microcosmos: un universo en miniatura que contiene los mismos principios presentes en el macrocosmos.",
+      "Entendernos es entender el universo y entender el universo es entendernos a nosotros.",
     ],
   },
 ];
@@ -128,7 +135,7 @@ export const VINETAS_DOSHAS: Vineta[] = [
     src: "/viñetas/hinduismo/doshas/doshasportada.png",
     paragraphs: [
       "Según la Ayurveda, los cinco elementos se mezclan para formar los tres doshas.",
-      "En cada persona, un dosha predomina sobre los otros. Lo que influencia la constitución, la mentalidad y la salud.",
+      "En cada persona, un dosha predomina sobre los otros, esto influencia la constitución, la mentalidad y la salud.",
     ],
   },
   {

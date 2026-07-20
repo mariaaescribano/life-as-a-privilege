@@ -469,7 +469,11 @@ export class PaymentService {
   // flags directamente para poder probar el recorrido sin cobro real.
   // ─────────────────────────────────────────────────────────────────────────
   static testPagosHabilitado(): boolean {
-    return process.env.ALLOW_TEST_PAGOS === 'true';
+    // ⚠️ TEMPORAL (prueba real): modo test FORZADO a ON porque no se puede tocar
+    // la env var ALLOW_TEST_PAGOS en Render. Esto permite el pago falso en la web
+    // desplegada. REVERTIR antes de abrir al público — dejar solo la línea de abajo:
+    //   return process.env.ALLOW_TEST_PAGOS === 'true';
+    return true;
   }
 
   async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'all') {

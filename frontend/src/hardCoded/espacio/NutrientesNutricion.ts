@@ -86,7 +86,8 @@ export const NUTRIENTES: Nutriente[] = [
         foto: "/recorrido/nutricion/moleculas/fructosa.png",
         parrafos: [
           "Es la molécula característica de las frutas y la miel. A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
-          "Cuando se consume dentro de una fruta, la fibra hace que se absorba lentamente. Sin embargo, cuando se consume en grandes cantidades y sin fibra (como en refrescos o zumos), el hígado recibe una carga muy rápida que favorece la producción de grasa, gasta las reservas y altera el metabolismo.",
+          "Cuando se consume dentro de una fruta, la fibra hace que se absorba lentamente.",
+          " Sin embargo, cuando se consume en grandes cantidades y sin fibra (como en refrescos o zumos), el hígado recibe una carga muy rápida que favorece la producción de grasa, gasta las reservas y altera el metabolismo.",
         ],
       },
       {

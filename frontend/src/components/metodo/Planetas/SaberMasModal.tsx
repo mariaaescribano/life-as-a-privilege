@@ -72,6 +72,97 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
   ));
 }
 
+/**
+ * Separa el «resumen» (2-3 frases memorables) del cuerpo del texto. La frontera
+ * es una línea que contenga solo `---`. Todo lo anterior es el resumen, todo lo
+ * posterior el texto completo. Si no hay marcador, no hay resumen y el texto se
+ * muestra entero como siempre (retrocompatible).
+ */
+function splitResumen(texto: string): { resumen: string | null; cuerpo: string } {
+  const m = texto.match(/^[ \t]*---[ \t]*$/m);
+  if (!m || m.index == null) return { resumen: null, cuerpo: texto };
+  const resumen = texto.slice(0, m.index).trim();
+  const cuerpo = texto.slice(m.index + m[0].length).trim();
+  return { resumen: resumen || null, cuerpo };
+}
+
+/** Renderiza el resumen como frases destacadas (una por línea), memorables. */
+function renderResumen(resumen: string, color: string): React.ReactNode {
+  const lineas = resumen.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  return lineas.map((linea, i) => (
+    <Text
+      key={i}
+      color={color}
+      fontSize={{ base: "lg", md: "xl" }}
+      lineHeight="1.55"
+      fontStyle="italic"
+      fontWeight="600"
+      textAlign="center"
+      mt={i === 0 ? 0 : { base: 2, md: 2.5 }}
+      style={{ textShadow: `0 0 12px ${color}66, 0 0 4px rgba(255,255,255,0.35)` }}
+    >
+      {renderInline(linea, color)}
+    </Text>
+  ));
+}
+
+/**
+ * Contenido de un arquetipo: si el texto trae resumen (marcador `---`), muestra
+ * primero las frases memorables y deja el texto completo detrás de un botón
+ * «Seguir leyendo» para que el usuario decida. Sin marcador, texto completo.
+ */
+function ContenidoArquetipo({ texto, color }: { texto: string; color: string }) {
+  const { resumen, cuerpo } = splitResumen(texto);
+  const [abierto, setAbierto] = useState(false);
+  // Al cambiar de arquetipo (o de faceta signo/casa) se vuelve a plegar.
+  useEffect(() => { setAbierto(false); }, [texto]);
+
+  if (!resumen) return <Box>{renderTextoLargo(texto, color)}</Box>;
+
+  return (
+    <Flex direction="column" align="center">
+      <Box w="100%">{renderResumen(resumen, color)}</Box>
+
+      {cuerpo && !abierto && (
+        <Box
+          as="button"
+          onClick={() => setAbierto(true)}
+          mt={{ base: 6, md: 7 }}
+          px={5}
+          py={2}
+          borderRadius="full"
+          bg="rgba(0,0,0,0.35)"
+          border={`1px solid ${color}66`}
+          color={color}
+          fontSize={{ base: "sm", md: "md" }}
+          fontWeight="600"
+          letterSpacing="0.04em"
+          cursor="pointer"
+          transition="all 0.18s"
+          boxShadow={`0 0 12px ${color}33`}
+          _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: color, boxShadow: `0 0 22px ${color}66` }}
+        >
+          Seguir leyendo ↓
+        </Box>
+      )}
+
+      {cuerpo && abierto && (
+        <>
+          <Box
+            h="1px"
+            w="60%"
+            mx="auto"
+            my={{ base: 5, md: 6 }}
+            bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}
+            boxShadow={`0 0 6px ${color}33`}
+          />
+          <Box w="100%">{renderTextoLargo(cuerpo, color)}</Box>
+        </>
+      )}
+    </Flex>
+  );
+}
+
 export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: SaberMasModalProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -170,7 +261,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
       {cargando ? (
         <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
       ) : textoSigno ? (
-        <Box>{renderTextoLargo(textoSigno, color)}</Box>
+        <ContenidoArquetipo texto={textoSigno} color={color} />
       ) : (
         <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
           Texto de {cuerpo.label} en {signoData.name} aún no disponible.
@@ -181,7 +272,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
     <Flex align="center" justify="center" gap={3}>
       <Glifo symbol={cuerpo.symbol} color={color} size={36} />
       <Text color={`${color}aa`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic">
-        {cuerpo.label} — signo aún no elegido
+        {cuerpo.label} — Signo aún no elegido
       </Text>
     </Flex>
   );
@@ -197,7 +288,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           letterSpacing="0.04em"
           style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
         >
-          {cuerpo.label} en casa {casa}
+          {cuerpo.label} en Casa {casa}
         </Text>
       </Flex>
 
@@ -208,10 +299,10 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
       {cargando ? (
         <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
       ) : textoCasa ? (
-        <Box>{renderTextoLargo(textoCasa, color)}</Box>
+        <ContenidoArquetipo texto={textoCasa} color={color} />
       ) : (
         <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
-          Texto de {cuerpo.label} en casa {casa} aún no disponible.
+          Texto de {cuerpo.label} en Casa {casa} aún no disponible.
         </Text>
       )}
     </Flex>
@@ -219,7 +310,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
     <Flex align="center" justify="center" gap={3}>
       <Glifo symbol={cuerpo.symbol} color={color} size={36} />
       <Text color={`${color}aa`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic">
-        {cuerpo.label} — casa aún no elegida
+        {cuerpo.label} — Casa aún no elegida
       </Text>
     </Flex>
   );

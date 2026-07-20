@@ -36,7 +36,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
     const g = parseFloat(gradoSigno);
     const m = parseFloat(minutos);
     if (!Number.isFinite(g) || g < 0 || g >= 30) {
-      setError("El grado dentro del signo debe estar entre 0 y 29");
+      setError("El grado dentro del Signo debe estar entre 0 y 29");
       return;
     }
     if (!Number.isFinite(m) || m < 0 || m >= 60) {
