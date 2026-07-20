@@ -145,6 +145,11 @@ export default function LogIn() {
     }
   }, [message]);
 
+  // Bloquea el botón "Entrar" mientras carga Y también cuando ya se ha iniciado
+  // sesión (mensaje de éxito visible): así no se puede volver a pulsar durante
+  // los 3s que tarda en redirigir.
+  const bloqueado = loading || message?.soy === 1;
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       {loading && <SpinnerTurquesa />}
@@ -252,7 +257,7 @@ export default function LogIn() {
           <Flex justify="center" pt={{ base: 8, md: 10 }}>
             <Flex
               as="button"
-              onClick={loading ? undefined : validarInicioSesion}
+              onClick={bloqueado ? undefined : validarInicioSesion}
               align="center"
               justify="center"
               gap={{ base: 3, md: 4 }}
@@ -261,10 +266,10 @@ export default function LogIn() {
               borderRadius="full"
               border="1.5px solid rgba(255,255,255,0.6)"
               bg="rgba(255,255,255,0.10)"
-              cursor={loading ? "not-allowed" : "pointer"}
-              opacity={loading ? 0.55 : 1}
+              cursor={bloqueado ? "not-allowed" : "pointer"}
+              opacity={bloqueado ? 0.55 : 1}
               boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-              _hover={loading ? {} : {
+              _hover={bloqueado ? {} : {
                 bg: "rgba(255,255,255,0.2)",
                 borderColor: "white",
                 boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",

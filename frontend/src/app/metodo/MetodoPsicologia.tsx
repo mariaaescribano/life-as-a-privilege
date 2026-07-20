@@ -240,6 +240,8 @@ export default function MetodoPsicologia() {
         textShadow={`0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`}
         onFinish={intro.finish}
         onClose={intro.close}
+        continueLabel="Psicología"
+        onContinue={intro.close}
       />
 
       <AyudaRecorrido pagina="inicio" />

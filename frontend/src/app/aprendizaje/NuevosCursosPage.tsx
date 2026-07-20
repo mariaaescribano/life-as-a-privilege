@@ -81,7 +81,7 @@ export function CourseCard({ entry, discBg = false, onOpen }: { entry: CourseEnt
   const navigate = useNavigate();
   const label =
     curso.precio === null
-      ? "Gratis"
+      ? "Acceso Libre"
       : `${curso.precio.toFixed(2).replace(".", ",")} €`;
 
   const handleAcceder = () => {

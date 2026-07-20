@@ -6,11 +6,12 @@
 // Se renderiza desde AyudaRecorrido (presente en todas las páginas), así que
 // aparece en todo el recorrido sin tocar cada página.
 // ─────────────────────────────────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
 import { RECORRIDO_INDICE, RECORRIDO_TOTAL, type PasoRecorrido } from "./psicologiaRecorrido";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
@@ -29,6 +30,7 @@ export function IndiceRecorrido({
   paramKey = "experienciaId",
   acento,
   luz = true,
+  progresoKey,
 }: {
   indice?: PasoRecorrido[];
   total?: number;
@@ -45,6 +47,11 @@ export function IndiceRecorrido({
   /** Si es false, el texto del botón «Índice» no lleva halo claro: usa una
    *  sombra tenue con el color de fondo (como «Mis notas»). Astrología lo pide. */
   luz?: boolean;
+  /** Clave de disciplina para el bloqueo SECUENCIAL persistido en BD (p.ej.
+   *  «psicologia»). Si se pasa, el Índice bloquea los pasos posteriores al máximo
+   *  desbloqueado y va desbloqueando cada paso al llegar al siguiente. Si NO se
+   *  pasa, se usa el flag `bloqueado` de cada entrada del índice (astrología). */
+  progresoKey?: string;
 } = {}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -81,8 +88,26 @@ export function IndiceRecorrido({
     .filter((p) => p.ruta(expId).replace(/\/+$/, "") === pathname)
     .sort((a, b) => b.ruta(expId).length - a.ruta(expId).length)[0]?.n ?? null;
 
+  // Bloqueo secuencial persistido en BD (solo si se pasa `progresoKey`).
+  const { pasoMax, cargado: progresoCargado, avanzar } = useRecorridoProgreso(progresoKey);
+
+  // Al LLEGAR a una página (vía la navegación de la app), desbloquea ese paso y
+  // todos los anteriores. Así la página actual nunca queda bloqueada, y el Índice
+  // sigue bloqueando los pasos a los que aún no se ha llegado. La navegación
+  // adelante de la app es la que va abriendo pasos; el Índice nunca deja saltar a
+  // uno bloqueado (ir() lo impide).
+  useEffect(() => {
+    if (!progresoKey || !progresoCargado || actual == null) return;
+    if (actual > pasoMax) avanzar(actual);
+  }, [progresoKey, progresoCargado, actual, pasoMax, avanzar]);
+
+  // ¿Está bloqueado el paso n? Con `progresoKey`: todo lo posterior al máximo
+  // desbloqueado. Sin él: el flag `bloqueado` de la propia entrada (astrología).
+  const estaBloqueado = (p: PasoRecorrido): boolean =>
+    progresoKey ? (progresoCargado && p.n > pasoMax) : !!p.bloqueado;
+
   const ir = (p: PasoRecorrido) => {
-    if (p.bloqueado) return; // página aún bloqueada: no navega
+    if (estaBloqueado(p)) return; // página aún bloqueada: no navega
     setOpen(false);
     navigate(p.ruta(expId));
   };
@@ -147,7 +172,7 @@ export function IndiceRecorrido({
               <Box display="grid" gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }} gap={{ base: 2.5, md: 3 }}>
                 {indice.map((p) => {
                   const esActual = p.n === actual;
-                  const bloqueado = !!p.bloqueado;
+                  const bloqueado = estaBloqueado(p);
                   return (
                     <Flex key={p.n} as="button" onClick={() => ir(p)} disabled={bloqueado}
                           align="center" gap={3} textAlign="left" w="100%"

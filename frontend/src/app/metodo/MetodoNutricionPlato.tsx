@@ -271,9 +271,9 @@ export default function MetodoNutricionPlato() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Microbiota", onClick: () => navigate("/metodo/nutricion/microbiota") }}
+              prev={{ label: "← El hambre", onClick: () => navigate("/metodo/nutricion/hambre") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Preguntas y mitos →", onClick: () => navigate("/metodo/nutricion/mitos") }}
+              next={{ label: "Tus calorías →", onClick: () => navigate("/metodo/nutricion/calorias") }}
             />
           </Reveal>
 

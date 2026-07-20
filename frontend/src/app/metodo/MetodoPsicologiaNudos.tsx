@@ -133,7 +133,15 @@ export default function MetodoPsicologiaNudos() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
-              next={{ label: "Necesidades →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
+              next={{
+                label: "Necesidades →",
+                onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`),
+                // Hasta que no haya al menos un nudo (elegido o escrito), la
+                // siguiente página queda bloqueada. Si los borra todos, se vuelve
+                // a bloquear (nudos.length se recalcula).
+                disabled: nudos.length === 0,
+                disabledTooltip: "Elige o escribe al menos un nudo para continuar.",
+              }}
             />
             </Reveal>
 
@@ -207,40 +215,61 @@ export default function MetodoPsicologiaNudos() {
                   </Box>
                 </Flex>
 
-                {/* Ejemplos sugeridos (opcionales) — punteados */}
-                {ejemplosDisponibles.length > 0 && (
-                  <>
-                    {/* Separador horizontal completo (ancho del box) */}
-                    <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
-                    <Flex direction="column" align="center" gap={3} w="100%" maxW="620px" pt={{ base: 1, md: 2 }}>
-                      <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
-                        Si te sirven de inspiración
-                      </Text>
-                    <Flex wrap="wrap" justify="center" gap={2}>
-                      {ejemplosDisponibles.map((e) => (
-                        <Box
-                          key={e}
-                          as="button"
-                          onClick={() => añadirNudo(e)}
-                          px={4}
-                          py={2}
-                          borderRadius="full"
-                          bg="rgba(255,251,243,0.35)"
-                          color={TINTA}
-                          border={`1px dashed ${TINTA}55`}
-                          fontFamily="'EB Garamond', serif"
-                          fontSize={{ base: "sm", md: "md" }}
-                          cursor="pointer"
-                          transition="all 0.18s"
-                          _hover={{ bg: "rgba(255,251,243,0.6)", borderColor: TINTA }}
-                        >
-                          + {e}
-                        </Box>
-                      ))}
-                    </Flex>
-                    </Flex>
-                  </>
-                )}
+                {/* Ejemplos sugeridos (opcionales) — punteados. La zona de chips
+                    tiene ALTURA FIJA con scroll: al ir añadiendo ejemplos el box no
+                    se encoge de golpe (evita el mareo). */}
+                <>
+                  {/* Separador horizontal completo (ancho del box) */}
+                  <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
+                  <Flex direction="column" align="center" gap={3} w="100%" maxW="620px" pt={{ base: 1, md: 2 }}>
+                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
+                      Si te sirven de inspiración
+                    </Text>
+                    <Box
+                      w="100%"
+                      h={{ base: "120px", md: "132px" }}
+                      overflowY="auto"
+                      overflowX="hidden"
+                      sx={{
+                        "&::-webkit-scrollbar": { width: "6px" },
+                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}44`, borderRadius: "9999px" },
+                        scrollbarWidth: "thin",
+                        scrollbarColor: `${TINTA}44 transparent`,
+                      }}
+                    >
+                      {ejemplosDisponibles.length > 0 ? (
+                        <Flex wrap="wrap" justify="center" gap={2} py={1}>
+                          {ejemplosDisponibles.map((e) => (
+                            <Box
+                              key={e}
+                              as="button"
+                              onClick={() => añadirNudo(e)}
+                              px={4}
+                              py={2}
+                              borderRadius="full"
+                              bg="rgba(255,251,243,0.35)"
+                              color={TINTA}
+                              border={`1px dashed ${TINTA}55`}
+                              fontFamily="'EB Garamond', serif"
+                              fontSize={{ base: "sm", md: "md" }}
+                              cursor="pointer"
+                              transition="all 0.18s"
+                              _hover={{ bg: "rgba(255,251,243,0.6)", borderColor: TINTA }}
+                            >
+                              + {e}
+                            </Box>
+                          ))}
+                        </Flex>
+                      ) : (
+                        <Flex h="100%" align="center" justify="center">
+                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">
+                            Ya has añadido todos los ejemplos ✓
+                          </Text>
+                        </Flex>
+                      )}
+                    </Box>
+                  </Flex>
+                </>
 
               </Flex>
             </Box>
@@ -269,53 +298,72 @@ export default function MetodoPsicologiaNudos() {
                 </Flex>
                 <Box h="1px" w="70%" maxW="340px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
-                {nudos.length > 0 ? (
-                  <Flex wrap="wrap" justify="center" gap={2.5} w="100%" maxW="620px">
-                    {nudos.map((n, i) => (
-                      <Flex
-                        key={`${n}-${i}`}
-                        align="center"
-                        gap={2}
-                        pl={4}
-                        pr={2}
-                        py={2}
-                        borderRadius="full"
-                        bg="rgba(255,251,243,0.6)"
-                        border={`1px solid ${TINTA}66`}
-                        boxShadow={`0 0 10px ${AZUL}26`}
-                      >
-                        <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.9} />
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                          {n}
-                        </Text>
-                        <Box
-                          as="button"
-                          onClick={() => quitarNudo(i)}
-                          w="22px"
-                          h="22px"
+                {/* Zona de chips con ALTURA FIJA + scroll vertical: al añadir o
+                    borrar nudos el box NO cambia de alto (evita el mareo). */}
+                <Box
+                  w="100%"
+                  maxW="620px"
+                  h={{ base: "180px", md: "220px" }}
+                  overflowY="auto"
+                  overflowX="hidden"
+                  sx={{
+                    "&::-webkit-scrollbar": { width: "6px" },
+                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}44`, borderRadius: "9999px" },
+                    scrollbarWidth: "thin",
+                    scrollbarColor: `${TINTA}44 transparent`,
+                  }}
+                >
+                  {nudos.length > 0 ? (
+                    <Flex wrap="wrap" justify="center" gap={2.5} py={1}>
+                      {nudos.map((n, i) => (
+                        <Flex
+                          key={`${n}-${i}`}
+                          align="center"
+                          gap={2}
+                          pl={4}
+                          pr={2}
+                          py={2}
+                          h="fit-content"
                           borderRadius="full"
-                          bg="rgba(94,45,16,0.1)"
-                          color={TINTA}
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          fontSize="xs"
-                          cursor="pointer"
-                          flexShrink={0}
-                          transition="all 0.18s"
-                          _hover={{ bg: "rgba(94,45,16,0.22)" }}
-                          title="Quitar"
+                          bg="rgba(255,251,243,0.6)"
+                          border={`1px solid ${TINTA}66`}
+                          boxShadow={`0 0 10px ${AZUL}26`}
                         >
-                          ✕
-                        </Box>
-                      </Flex>
-                    ))}
-                  </Flex>
-                ) : (
-                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                    Aquí aparecerán los nudos que vayas seleccionando.
-                  </Text>
-                )}
+                          <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.9} />
+                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                            {n}
+                          </Text>
+                          <Box
+                            as="button"
+                            onClick={() => quitarNudo(i)}
+                            w="22px"
+                            h="22px"
+                            borderRadius="full"
+                            bg="rgba(94,45,16,0.1)"
+                            color={TINTA}
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            fontSize="xs"
+                            cursor="pointer"
+                            flexShrink={0}
+                            transition="all 0.18s"
+                            _hover={{ bg: "rgba(94,45,16,0.22)" }}
+                            title="Quitar"
+                          >
+                            ✕
+                          </Box>
+                        </Flex>
+                      ))}
+                    </Flex>
+                  ) : (
+                    <Flex h="100%" align="center" justify="center">
+                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                        Aquí aparecerán los nudos que vayas seleccionando.
+                      </Text>
+                    </Flex>
+                  )}
+                </Box>
 
                 <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
                   {guardando ? "Guardando…" : nudos.length > 0 ? "Cada nudo se guarda según lo seleccionas." : ""}

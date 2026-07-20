@@ -1054,7 +1054,9 @@ const Home = () => {
             </Box>
           </Flex>
         ) : (
-          <SpinnerTurquesa />
+          <Flex flex="1" w="100%" minH="60vh" align="center" justify="center">
+            <SpinnerTurquesa fullScreen={false} />
+          </Flex>
         )}
       </Box>
 

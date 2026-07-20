@@ -501,7 +501,7 @@ export default function MetodoPsicologiaSintesis() {
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 
-      <IndiceRecorrido />
+      <IndiceRecorrido progresoKey="psicologia" />
       <SiteFooter />
     </Box>
   );

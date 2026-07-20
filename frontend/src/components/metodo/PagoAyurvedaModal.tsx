@@ -1,7 +1,7 @@
 import React from "react";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
-import { ayurvedaBg, ayurvedaTxt } from "../../GlobalVariables";
+import { ayurvedaBg, ayurvedaNom, ayurvedaTxt } from "../../GlobalVariables";
 
 /** Pago de la 3ª disciplina (Hinduismo/Ayurveda). Estilo con los colores de Hinduismo. */
 export function PagoAyurvedaModal(props: PagoDisciplinaModalProps) {
@@ -10,6 +10,7 @@ export function PagoAyurvedaModal(props: PagoDisciplinaModalProps) {
       {...props}
       bg={ayurvedaBg}
       txt={ayurvedaTxt}
+      nom={ayurvedaNom}
       ordinal="Tercera disciplina"
       errorColor="#b00020"
       descripcion={

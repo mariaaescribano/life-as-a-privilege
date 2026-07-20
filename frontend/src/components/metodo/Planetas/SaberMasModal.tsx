@@ -95,8 +95,7 @@ function renderResumen(resumen: string, color: string): React.ReactNode {
       color={color}
       fontSize={{ base: "lg", md: "xl" }}
       lineHeight="1.55"
-      fontStyle="italic"
-      fontWeight="600"
+      fontWeight="700"
       textAlign="center"
       mt={i === 0 ? 0 : { base: 2, md: 2.5 }}
       style={{ textShadow: `0 0 12px ${color}66, 0 0 4px rgba(255,255,255,0.35)` }}
@@ -113,40 +112,16 @@ function renderResumen(resumen: string, color: string): React.ReactNode {
  */
 function ContenidoArquetipo({ texto, color }: { texto: string; color: string }) {
   const { resumen, cuerpo } = splitResumen(texto);
-  const [abierto, setAbierto] = useState(false);
-  // Al cambiar de arquetipo (o de faceta signo/casa) se vuelve a plegar.
-  useEffect(() => { setAbierto(false); }, [texto]);
 
   if (!resumen) return <Box>{renderTextoLargo(texto, color)}</Box>;
 
+  // Se muestra TODO desplegado desde el principio (resumen + texto completo);
+  // ya no hay botón «Seguir leyendo».
   return (
     <Flex direction="column" align="center">
       <Box w="100%">{renderResumen(resumen, color)}</Box>
 
-      {cuerpo && !abierto && (
-        <Box
-          as="button"
-          onClick={() => setAbierto(true)}
-          mt={{ base: 6, md: 7 }}
-          px={5}
-          py={2}
-          borderRadius="full"
-          bg="rgba(0,0,0,0.35)"
-          border={`1px solid ${color}66`}
-          color={color}
-          fontSize={{ base: "sm", md: "md" }}
-          fontWeight="600"
-          letterSpacing="0.04em"
-          cursor="pointer"
-          transition="all 0.18s"
-          boxShadow={`0 0 12px ${color}33`}
-          _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: color, boxShadow: `0 0 22px ${color}66` }}
-        >
-          Seguir leyendo ↓
-        </Box>
-      )}
-
-      {cuerpo && abierto && (
+      {cuerpo && (
         <>
           <Box
             h="1px"

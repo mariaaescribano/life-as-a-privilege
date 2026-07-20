@@ -77,6 +77,14 @@ function formatDayFullEs(d: Date) {
   return d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 }
 
+// Parsea "YYYY-MM-DD" a Date local (sin desfase de zona horaria) — para
+// reconstruir la fecha de la reserva al volver del pago de Stripe.
+function parseIsoDate(s: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  if (!m) return null;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+}
+
 function slotIsPast(day: Date, slot: string) {
   const [h, m] = slot.split(":").map(Number);
   const slotDate = new Date(day);
@@ -109,9 +117,52 @@ export function AgendarLlamada({
   const [sent, setSent] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [taken, setTaken] = useState<Set<string>>(new Set());
+  // Datos de la reserva confirmada tras volver del pago de Stripe (la selección
+  // en memoria se pierde con la redirección, así que la reconstruimos del verify).
+  const [confirmado, setConfirmado] = useState<{ fecha: string; slot: string } | null>(null);
+  // Verificando el pago al volver de Stripe (muestra un panel "confirmando…").
+  const [verificando, setVerificando] = useState(false);
 
   const hasBg = hasDisciplinaBg(disciplinaNom);
   const sub = subtitulo ?? `Sesión de ${duracionMin} min · ${precio} € · horario peninsular España`;
+
+  // Al volver del pago de Stripe: verifica el pago y confirma la reserva. Si el
+  // pago fue OK, guarda la reserva en el back (idempotente) y muestra el éxito.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pagadaId = params.get("llamada_pagada");
+    const cancelada = params.get("llamada_cancelada");
+
+    const limpiarUrl = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("llamada_pagada");
+      url.searchParams.delete("llamada_cancelada");
+      window.history.replaceState({}, "", url.pathname + url.search);
+    };
+
+    if (pagadaId) {
+      setVerificando(true);
+      axios
+        .get(`${API_URL}/payment/llamada/verify`, { params: { session_id: pagadaId } })
+        .then((res) => {
+          if (res.data?.ok) {
+            setConfirmado({ fecha: res.data.fecha, slot: res.data.slot });
+            setSent(true);
+          } else if (res.data?.reason === "slot-taken") {
+            setErrorMsg("Ese horario se reservó mientras se procesaba el pago. Escríbeme y te reubico la llamada o te devuelvo el importe.");
+          } else if (res.data?.reason === "unpaid") {
+            setErrorMsg("El pago no llegó a completarse. Puedes intentarlo de nuevo.");
+          } else {
+            setErrorMsg("No se pudo confirmar la reserva. Escríbeme y lo resolvemos.");
+          }
+        })
+        .catch(() => setErrorMsg("No se pudo confirmar la reserva. Escríbeme y lo resolvemos."))
+        .finally(() => { setVerificando(false); limpiarUrl(); });
+    } else if (cancelada) {
+      setErrorMsg("Has cancelado el pago. Tu llamada no se ha reservado.");
+      limpiarUrl();
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -147,28 +198,37 @@ export function AgendarLlamada({
     setSelectedSlot(null);
     setNombre(""); setEmail(""); setTema("");
     setSent(false); setErrorMsg(null); setPagando(false);
+    setConfirmado(null); setVerificando(false);
   };
 
-  const handlePickDay = (d: Date) => { setSelectedDay(d); setSelectedSlot(null); setStep(2); };
+  const handlePickDay = (d: Date) => { setSelectedDay(d); setSelectedSlot(null); setErrorMsg(null); setStep(2); };
   const handlePickSlot = (s: string) => { setSelectedSlot(s); setStep(3); };
 
-  // Paga (SIMULADO) y, si el pago "se aprueba", guarda la reserva en el backend.
+  // Inicia el pago REAL de Stripe: pide el checkout al backend y redirige a la
+  // pasarela. La reserva NO se guarda aquí — se confirma al volver (verify), solo
+  // si el pago se completó.
   const handlePagar = async () => {
     if (!nombre.trim() || !email.trim() || !selectedDay || !selectedSlot) return;
     setPagando(true); setErrorMsg(null);
 
-    // ── Simulación de pago: pequeña espera, siempre aprobado ──
-    await new Promise((r) => setTimeout(r, 1300));
-
     try {
-      await axios.post(`${API_URL}/booking`, {
+      const res = await axios.post(`${API_URL}/payment/llamada/checkout`, {
         nombre: nombre.trim(),
         email: email.trim(),
         fecha: toIsoDate(selectedDay),
         slot: selectedSlot,
         tema: tema.trim() || undefined,
+        precio,
+        disciplinaNom,
+        // Volver a ESTA misma página tras el pago (donde se reservó).
+        returnPath: window.location.pathname,
       });
-      setSent(true);
+      if (res.data?.url) {
+        window.location.href = res.data.url; // → pasarela de Stripe
+        return;
+      }
+      setErrorMsg("No se pudo iniciar el pago. Inténtalo de nuevo.");
+      setPagando(false);
     } catch (err) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 409) {
@@ -177,9 +237,8 @@ export function AgendarLlamada({
         setSelectedSlot(null);
         setStep(2);
       } else {
-        setErrorMsg("Ha ocurrido un error al confirmar la reserva. Inténtalo de nuevo.");
+        setErrorMsg("No se pudo iniciar el pago. Inténtalo de nuevo.");
       }
-    } finally {
       setPagando(false);
     }
   };
@@ -197,6 +256,11 @@ export function AgendarLlamada({
   };
 
   const tsh = `0 0 10px ${bgColor}, 0 0 22px ${bgColor}`;
+
+  // Datos a mostrar en la pantalla de éxito: los confirmados por el verify de
+  // Stripe (si venimos de la pasarela) o, si no, la selección en memoria.
+  const successDate = confirmado ? parseIsoDate(confirmado.fecha) : selectedDay;
+  const successSlot = confirmado?.slot ?? selectedSlot;
 
   const BackBtn = ({ onClick, label }: { onClick: () => void; label: string }) => (
     <Box as="button" onClick={onClick} px={3} py={1.5} borderRadius="full"
@@ -229,7 +293,7 @@ export function AgendarLlamada({
                   style={{ textShadow: tsh }}>
               Te he reservado el{" "}
               <Box as="span" color={color} fontWeight="700">
-                {selectedDay && formatDayFullEs(selectedDay)} a las {selectedSlot}
+                {successDate && formatDayFullEs(successDate)} a las {successSlot}
               </Box>
               . Me llegará tu solicitud y te escribiré para confirmar los detalles. ¡Gracias por tu confianza!
             </Text>
@@ -239,6 +303,16 @@ export function AgendarLlamada({
               _hover={{ bg: `${color}18` }} transition="all 0.2s">
               Reservar otra
             </Box>
+          </Flex>
+        ) : verificando ? (
+          <Flex direction="column" align="center" gap={4} py={10} textAlign="center">
+            <Text color={color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
+                  style={{ textShadow: `0 0 16px ${color}66` }}>
+              Confirmando tu pago…
+            </Text>
+            <Text color={`${color}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" style={{ textShadow: tsh }}>
+              Un momento, estamos confirmando tu reserva.
+            </Text>
           </Flex>
         ) : (
           <Flex direction="column" gap={5}>
@@ -282,6 +356,11 @@ export function AgendarLlamada({
             {/* PASO 1: Día */}
             {step === 1 && (
               <Flex direction="column" gap={4}>
+                {errorMsg && (
+                  <Box bg="rgba(255,90,90,0.18)" border="1px solid rgba(255,120,120,0.7)" borderRadius="lg" px={4} py={3}>
+                    <Text color="#ffd4d4" fontSize={{ base: "sm", md: "md" }} textAlign="center" fontWeight="500">{errorMsg}</Text>
+                  </Box>
+                )}
                 <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>Elige un día</Text>
                 <Grid templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(4, 1fr)" }} gap={{ base: 2, md: 3 }}>
                   {days.map((d, i) => {
@@ -394,7 +473,7 @@ export function AgendarLlamada({
                 </Box>
 
                 <Text color={`${color}99`} fontSize="xs" fontStyle="italic" textAlign="center">
-                  Pago de prueba — no se realizará ningún cobro real.
+                  Pago seguro con tarjeta a través de Stripe.
                 </Text>
 
                 {errorMsg && (
@@ -408,7 +487,7 @@ export function AgendarLlamada({
                   fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.07em"
                   cursor={pagando ? "wait" : "pointer"} opacity={pagando ? 0.6 : 1} transition="all 0.22s"
                   boxShadow={`0 4px 20px ${color}44`} _hover={pagando ? {} : { opacity: 0.88, transform: "translateY(-1px)" }}>
-                  {pagando ? "Procesando pago…" : `Pagar ${precio} € y reservar`}
+                  {pagando ? "Redirigiendo al pago…" : `Pagar ${precio} € con tarjeta`}
                 </Box>
               </Flex>
             )}

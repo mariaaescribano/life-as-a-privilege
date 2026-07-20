@@ -2,6 +2,10 @@ import React from "react";
 import { Box } from "@chakra-ui/react";
 void React;
 
+/** Ruta del fondo espacial, para poder precargarla (useImagesReady) desde las
+ *  páginas y no mostrarlas hasta que la foto esté lista. */
+export const SPACE_IMG = "/img/astrologia/space.jpg";
+
 interface SpaceBgProps {
   overlay?: string;
 }
@@ -21,7 +25,7 @@ export const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: SpaceBgProps) => (
   >
     <Box
       as="img"
-      src="/img/astrologia/space.jpg"
+      src={SPACE_IMG}
       alt=""
       loading="eager"
       position="absolute"

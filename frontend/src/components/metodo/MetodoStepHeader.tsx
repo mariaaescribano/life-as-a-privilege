@@ -13,7 +13,26 @@ interface StepButton {
   disabledTooltip?: string;
   /** Botón más compacto (menos padding y letra), p.ej. «Volver al curso». */
   small?: boolean;
+  /** Pinta una flecha SVG de verdad (no el carácter «→/←»): a la derecha del
+   *  texto si es «next», a la izquierda si es «prev». Usa la etiqueta sin flecha. */
+  arrow?: "prev" | "next";
 }
+
+/** Flecha SVG (chevron) para los botones prev/next del header. */
+const ArrowIcon = ({ dir }: { dir: "prev" | "next" }) => (
+  <Box
+    as="svg"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    w={{ base: "15px", md: "17px" }}
+    h={{ base: "15px", md: "17px" }}
+    fill="currentColor"
+    flexShrink={0}
+    style={{ transform: dir === "prev" ? "scaleX(-1)" : undefined }}
+  >
+    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+  </Box>
+);
 
 interface MetodoStepHeaderProps {
   icon: React.ReactNode;
@@ -49,7 +68,7 @@ interface MetodoStepHeaderProps {
   boxShadow?: string;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, arrow }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
   const btn = (
     <Box
       as="button"
@@ -104,8 +123,10 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       minW={0}
       flex="0 1 auto"
     >
+      {arrow === "prev" && <ArrowIcon dir="prev" />}
       {icon}
       {label}
+      {arrow === "next" && <ArrowIcon dir="next" />}
     </Box>
   );
 

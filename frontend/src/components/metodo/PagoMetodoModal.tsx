@@ -1,7 +1,7 @@
 import React from "react";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
-import { astrologiaBg, astrologiaTxt } from "../../GlobalVariables";
+import { astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 
 /** Pago de la 1ª disciplina (Astrología). Estilo con los colores de Astrología. */
 export function PagoMetodoModal(props: PagoDisciplinaModalProps) {
@@ -10,6 +10,7 @@ export function PagoMetodoModal(props: PagoDisciplinaModalProps) {
       {...props}
       bg={astrologiaBg}
       txt={astrologiaTxt}
+      nom={astrologiaNom}
       ordinal="Primera disciplina"
       descripcion={
         <>

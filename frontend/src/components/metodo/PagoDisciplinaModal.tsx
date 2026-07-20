@@ -9,6 +9,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 
 export interface PagoDisciplinaModalProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ interface BaseProps extends PagoDisciplinaModalProps {
   bg: string;
   /** Color de texto/acento de la disciplina (disciplinaTxt). */
   txt: string;
+  /** Nombre de la disciplina, para pintar SIEMPRE su imagen de fondo. */
+  nom: string;
   /** Ordinal de la disciplina, p.ej. "Séptima disciplina". */
   ordinal: string;
   /** Resumen de 2 líneas de lo que hace el recorrido. */
@@ -51,13 +54,20 @@ export function PagoDisciplinaModal({
   onTest,
   bg,
   txt,
+  nom,
   ordinal,
   descripcion,
   precio = "20 €",
   errorColor = "#ffb4b4",
 }: BaseProps) {
+  // Overlay del color de la disciplina sobre su imagen, para que la foto se vea
+  // (SIEMPRE presente) pero el texto siga legible.
+  const bgHex = bg.length >= 7 ? bg.slice(0, 7) : bg;
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
+    // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
+    // box no crece sin límite — se limita a la altura del viewport y el cuerpo
+    // hace scroll vertical dentro.
+    <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered scrollBehavior="inside">
       <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
       <ModalContent
         bg={bg}
@@ -65,10 +75,16 @@ export function PagoDisciplinaModal({
         borderRadius="2xl"
         boxShadow={`0 16px 60px rgba(0,0,0,0.5), 0 0 40px ${txt}1f`}
         mx={{ base: 4, md: 0 }}
+        my={{ base: 4, md: 6 }}
+        maxH={{ base: "calc(100dvh - 2rem)", md: "calc(100dvh - 3rem)" }}
         fontFamily="'EB Garamond', serif"
         overflow="hidden"
+        position="relative"
       >
-        <ModalBody px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }}>
+        {/* Imagen de la disciplina SIEMPRE de fondo (con velo de su color). */}
+        <DisciplinaBgLayer nom={nom} borderRadius="2xl" overlay={`${bgHex}cc`} blur />
+
+        <ModalBody px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} position="relative" zIndex={1}>
           <Flex direction="column" gap={5}>
             <Flex align="center" gap={3} justify="center">
               <Image src="/img/icono/life.png" h="36px" objectFit="contain" />

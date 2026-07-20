@@ -77,7 +77,7 @@ export function CursoDetalleModal({
     else window.open(STRIPE_PAYMENT_LINK, "_blank");
   };
   const formatPrecio = (precio: number | null) =>
-    precio === null ? "Gratis" : `${precio.toFixed(2).replace(".", ",")} €`;
+    precio === null ? "Acceso Libre" : `${precio.toFixed(2).replace(".", ",")} €`;
 
   return (
     <Modal isOpen={curso !== null} onClose={onClose} size="xl" isCentered scrollBehavior="inside">

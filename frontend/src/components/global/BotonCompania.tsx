@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { AgendarLlamada } from "./AgendarLlamada";
@@ -56,6 +56,17 @@ export function BotonCompania({
   const tsh = `0 0 10px ${bgColor}, 0 0 22px ${bgColor}`;
 
   useLockBodyScroll(preguntaOpen || companiaOpen);
+
+  // Al volver del pago de Stripe (o de cancelarlo), abrimos el popup de reserva
+  // para que AgendarLlamada monte y confirme el pago (verify) / muestre el aviso.
+  // Sin esto, al reservar desde este botón flotante el popup estaría cerrado y la
+  // reserva no llegaría a confirmarse tras el pago.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("llamada_pagada") || params.get("llamada_cancelada")) {
+      setCompaniaOpen(true);
+    }
+  }, []);
 
   return (
     <>

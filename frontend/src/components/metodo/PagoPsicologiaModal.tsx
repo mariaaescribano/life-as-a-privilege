@@ -1,7 +1,7 @@
 import React from "react";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
-import { neuropsicologiaBg, neuropsicologiaTxt } from "../../GlobalVariables";
+import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 /** Pago de la 2ª disciplina (Psicología). Estilo con los colores de Psicología. */
 export function PagoPsicologiaModal(props: PagoDisciplinaModalProps) {
@@ -10,6 +10,7 @@ export function PagoPsicologiaModal(props: PagoDisciplinaModalProps) {
       {...props}
       bg={neuropsicologiaBg}
       txt={neuropsicologiaTxt}
+      nom={neuropsicologiaNom}
       ordinal="Segunda disciplina"
       errorColor="#a02020"
       descripcion={

@@ -5,14 +5,14 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal, VINETAS_SIGNOS } from "../../components/metodo/ComicAstrologiaModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
 import { useIntroComic } from "../../hooks/useIntroComic";
-import { TextoCartaExplicativo } from "../../components/metodo/TextoCartaExplicativo";
+import { TextoCartaExplicativo, CARTA_MAPA_IMGS } from "../../components/metodo/TextoCartaExplicativo";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -147,23 +147,29 @@ export default function MetodoAstrologia() {
       // El cómic del Origen ahora SIEMPRE sale al entrar (se puede saltar con la
       // X, pero vuelve a aparecer). Por eso lo abrimos y precargamos siempre.
       const abrirIntro = true;
+      let solicitado = false;
       try {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEstado(res.data ?? null);
+        solicitado = !!res.data?.solicitud_enviada_at;
         intro.openNow();
       } catch {
         setEstado(null);
       }
       // No quitamos el spinner hasta que el fondo espacial esté descargado
       // (para que la página no aparezca con el degradado de respaldo y luego
-      // salte la foto) y hasta que TODAS las viñetas del cómic del Origen estén
-      // descargadas también, para que el cómic no aparezca a medio cargar.
+      // salte la foto), hasta que TODAS las viñetas del cómic del Origen estén
+      // descargadas (para que el cómic no aparezca a medio cargar) y, si ya hay
+      // solicitud, hasta que las fotos del cómic de la carta también estén listas.
       await Promise.all([
         precargarImagen(SPACE_IMG),
         ...(abrirIntro
           ? ORIGEN_ESPIRITUALIDAD.map((v) => precargarImagen(encodeURI(v.src)))
+          : []),
+        ...(solicitado
+          ? CARTA_MAPA_IMGS.map((src) => precargarImagen(encodeURI(src)))
           : []),
       ]);
       setLoading(false);
@@ -239,11 +245,7 @@ export default function MetodoAstrologia() {
   const lugarLegible = [lugar.trim(), region.trim(), pais.trim()].filter(Boolean).join(", ");
 
   if (loading) {
-    return (
-      <Box minH="100vh" bg="#008080">
-        <SpinnerTurquesa />
-      </Box>
-    );
+    return <RecorridoLoading />;
   }
 
   const yaSolicitado = !!estado?.solicitud_enviada_at;
@@ -285,36 +287,40 @@ export default function MetodoAstrologia() {
             />
           </Reveal>
 
-          {/* ── Caja principal con SpaceBg ── */}
-          <Reveal
-            direction="up"
-            distance={34}
-            scaleFrom={0.97}
-            delay={0.12}
-            duration={0.75}
-            position="relative"
-            w="100%"
-            borderRadius="2xl"
-            overflow="hidden"
-            boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
-          >
-            <SpaceBg overlay="rgba(8,13,30,0.65)" />
+          {/* ── Tras enviar la solicitud: cómic "¿Qué es una carta astral?" con la
+                MISMA caja que las Ilustraciones (la trae el propio componente, por
+                eso aquí NO se envuelve en la caja espacial, para no anidar dos). ── */}
+          {yaSolicitado && (
+            <Reveal
+              direction="up"
+              distance={34}
+              scaleFrom={0.97}
+              delay={0.12}
+              duration={0.75}
+              position="relative"
+              w="100%"
+            >
+              <TextoCartaExplicativo color={astrologiaTxt} />
+            </Reveal>
+          )}
 
-            <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+          {/* ── ESTADO A — formulario dentro de la caja principal con SpaceBg ── */}
+          {!yaSolicitado && (
+            <Reveal
+              direction="up"
+              distance={34}
+              scaleFrom={0.97}
+              delay={0.12}
+              duration={0.75}
+              position="relative"
+              w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+            >
+              <SpaceBg overlay="rgba(8,13,30,0.65)" />
 
-              {/* ── Tras enviar la solicitud: box informativo "¿Qué es una carta astral?" ── */}
-              {yaSolicitado && (
-                <Flex direction="column" gap={5} mt="5px">
-                  {/* <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                        style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
-                    ¿Qué es una carta astral?
-                  </Text> */}
-                  <TextoCartaExplicativo color={astrologiaTxt} />
-                </Flex>
-              )}
-
-              {/* ── ESTADO A — formulario (entra en cascada) ── */}
-              {!yaSolicitado && (
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
                 <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
                   <RevealItem>
                     <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
@@ -487,10 +493,9 @@ export default function MetodoAstrologia() {
                     </Box>
                   </RevealItem>
                 </RevealStagger>
-              )}
-
-            </Box>
-          </Reveal>
+              </Box>
+            </Reveal>
+          )}
         </Flex>
       </Flex>
 
@@ -516,6 +521,8 @@ export default function MetodoAstrologia() {
         vinetas={ORIGEN_ESPIRITUALIDAD}
         onFinish={intro.finish}
         onClose={intro.close}
+        continueLabel="Astrología"
+        onContinue={intro.close}
       />
 
       {/* ── POPUP: confirmar datos antes de enviar ── */}

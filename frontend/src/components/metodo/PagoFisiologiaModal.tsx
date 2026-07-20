@@ -1,7 +1,7 @@
 import React from "react";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
-import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
+import { fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
 
 /** Pago de la 5ª disciplina (Fisiología). Estilo con los colores de Fisiología. */
 export function PagoFisiologiaModal(props: PagoDisciplinaModalProps) {
@@ -10,6 +10,7 @@ export function PagoFisiologiaModal(props: PagoDisciplinaModalProps) {
       {...props}
       bg={fisiologiaBg}
       txt={fisiologiaTxt}
+      nom={fisiologiaNom}
       ordinal="Quinta disciplina"
       descripcion={
         <>

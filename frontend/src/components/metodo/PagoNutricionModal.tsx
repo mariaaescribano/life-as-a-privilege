@@ -1,7 +1,7 @@
 import React from "react";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
-import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 
 /** Pago de la 6ª disciplina (Nutrición). Estilo con los colores de Nutrición. */
 export function PagoNutricionModal(props: PagoDisciplinaModalProps) {
@@ -10,6 +10,7 @@ export function PagoNutricionModal(props: PagoDisciplinaModalProps) {
       {...props}
       bg={nutricionBg}
       txt={nutricionTxt}
+      nom={nutricionNom}
       ordinal="Sexta disciplina"
       errorColor="#b00020"
       descripcion={

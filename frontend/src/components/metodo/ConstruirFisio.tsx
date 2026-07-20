@@ -50,11 +50,14 @@ export interface ConstruirFisioProps {
   glow: string;
   dataKey: string;
   /** Botón «Continuar» dentro del box de resultado. Opcional: si no se pasa, no
-   *  se pinta (p.ej. Célula, que avanza solo desde el header). */
-  next?: { label: string; ruta: string };
+   *  se pinta (p.ej. Célula, que avanza solo desde el header). Si se pasa
+   *  `onClick`, se usa en lugar de navegar a `ruta` (p.ej. para intercalar un
+   *  cómic antes de avanzar). */
+  next?: { label: string; ruta?: string; onClick?: () => void };
   /** Botón derecho del header (opcional). Independiente del «Continuar» del box
-   *  de resultado. P.ej. Célula → «Todas tus células →». */
-  headerNext?: { label: string; ruta: string };
+   *  de resultado. P.ej. Célula → «Todas tus células →». Con `onClick` se puede
+   *  interceptar la navegación (p.ej. para abrir un cómic de paso antes). */
+  headerNext?: { label: string; ruta?: string; onClick?: () => void };
   /** Si true, el botón «next» del header queda BLOQUEADO hasta completar el
    *  ensamblaje (p.ej. Célula: no se avanza sin haber creado la célula). */
   lockNextUntilComplete?: boolean;
@@ -256,7 +259,10 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             extra={celulasBtn}
             next={props.headerNext ? {
               label: props.headerNext.label,
-              onClick: () => navigate(props.headerNext!.ruta),
+              onClick: () => {
+                if (props.headerNext!.onClick) props.headerNext!.onClick();
+                else navigate(props.headerNext!.ruta!);
+              },
               disabled: props.lockNextUntilComplete ? !completo : false,
               disabledTooltip: props.lockNextTooltip ?? "Termina de construirlo primero",
             } : undefined}
@@ -393,7 +399,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                       ))}
                       {props.next && (
                       <Flex gap={4} mt={3} wrap="wrap" justify={{ base: "center", md: "flex-start" }}>
-                        <Box as="button" onClick={() => navigate(props.next!.ruta)}
+                        <Box as="button" onClick={() => { if (props.next!.onClick) props.next!.onClick(); else navigate(props.next!.ruta!); }}
                              px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
                              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                              letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"

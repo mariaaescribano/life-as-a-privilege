@@ -52,9 +52,9 @@ const lineaDeVida: ExperienciaPsicologia = {
 
   problemaInicial: {
     key: "problema-actual",
-    pregunta: "¿Cuál es tu problema actual? ¿Por qué estás aquí?",
+    pregunta: "¿Cuál es tu problema actual?",
     apoyo: "",
-    placeholder: "Empieza por aquí…",
+    placeholder: "Estoy aquí porque…",
   },
 
   preguntaEdad: {

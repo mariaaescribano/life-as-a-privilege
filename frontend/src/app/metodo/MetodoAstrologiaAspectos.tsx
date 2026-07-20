@@ -5,9 +5,10 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
+import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
@@ -87,6 +88,7 @@ export default function MetodoAstrologiaAspectos() {
   const [abierto, setAbierto] = useState<Aspecto | null>(null);
   const [casasTexto, setCasasTexto] = useState<Record<string, string>>({});
   const { leidos, marcarLeido, cargado } = useAstroLeidos("aspectos");
+  const fotosListas = useImagesReady([SPACE_IMG]);
   // En móvil el viewport es corto: si escalonamos los items con un `delay` fijo,
   // los de más abajo terminan su animación estando aún fuera de pantalla y, al
   // bajar, ya aparecen puestos (sin dinamismo). Por eso en móvil cada item se
@@ -153,8 +155,8 @@ export default function MetodoAstrologiaAspectos() {
   const casasEscritasGate = Array.from({ length: 12 }, (_, i) => String(i + 1))
     .filter((n) => (casasTexto[n] ?? "").trim().length > 0);
   const casasCompletas = casasEscritasGate.length === 0 || casasEscritasGate.every((n) => casasLeidos.has(n));
-  if (loading || !cargado || !cargadoCasas || !casasCompletas) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !cargado || !cargadoCasas || !casasCompletas || !fotosListas) {
+    return <RecorridoLoading />;
   }
 
   const headerNext = {

@@ -65,7 +65,7 @@ export default function MetodoNutricionMitos() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Tu plato", onClick: () => navigate("/metodo/nutricion/plato") }}
+              prev={{ label: "← Tus calorías", onClick: () => navigate("/metodo/nutricion/calorias") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{ label: "Cursos →", onClick: () => navigate("/metodo/nutricion/cursos") }}
             />

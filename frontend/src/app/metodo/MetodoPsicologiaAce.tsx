@@ -250,7 +250,7 @@ export default function MetodoPsicologiaAce() {
                    border={azulBorde} boxShadow={glowPanel}>
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                 <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
-                      gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 9, md: 11 }}>
+                      gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 14, md: 20 }}>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
                         style={{ textShadow: INK_SHADOW }}>
                     Has terminado el test.

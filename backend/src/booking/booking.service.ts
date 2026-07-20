@@ -21,6 +21,25 @@ export class BookingService {
     return data ?? [];
   }
 
+  /**
+   * ¿Ese hueco (fecha+slot) ya está reservado? Devuelve:
+   *   · 'mine'  → ya reservado por ESTE email (reserva idempotente; no duplicar)
+   *   · 'other' → reservado por otra persona (hueco ocupado)
+   *   · 'no'    → libre
+   * Se usa al verificar el pago de Stripe para no crear la reserva dos veces
+   * (p.ej. si el verify se llama de nuevo al recargar la página de éxito).
+   */
+  async yaReservado(fecha: string, slot: string, email: string): Promise<'mine' | 'other' | 'no'> {
+    const { data, error } = await this.databaseService.getClient()
+      .from('bookings')
+      .select('email')
+      .eq('fecha', fecha)
+      .eq('slot', slot)
+      .maybeSingle();
+    if (error || !data) return 'no';
+    return (data.email ?? '').trim().toLowerCase() === email.trim().toLowerCase() ? 'mine' : 'other';
+  }
+
   async create(dto: BookingDto): Promise<'ok' | 'duplicate' | 'error'> {
     const db = this.databaseService.getClient();
 

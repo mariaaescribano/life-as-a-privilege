@@ -102,6 +102,29 @@ export class PaymentController {
     return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
   }
 
+  // ── Llamada de acompañamiento (pago REAL de Stripe, sin login) ──
+  @Post('llamada/checkout')
+  async createLlamadaCheckout(
+    @Body()
+    body: {
+      nombre?: string;
+      email?: string;
+      fecha?: string;
+      slot?: string;
+      tema?: string;
+      precio?: number;
+      disciplinaNom?: string;
+      returnPath?: string;
+    },
+  ) {
+    return await this.paymentService.createLlamadaCheckout(body ?? {});
+  }
+
+  @Get('llamada/verify')
+  async verifyLlamadaCheckout(@Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyLlamadaCheckout(sessionId);
+  }
+
   @Post('libros/checkout')
   async createLibroCheckout(@Body() body: { libroId?: string }) {
     if (!body?.libroId) throw new BadRequestException('libroId requerido');

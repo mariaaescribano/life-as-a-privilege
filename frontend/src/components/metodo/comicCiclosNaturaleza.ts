@@ -1,0 +1,59 @@
+import type { Vineta } from "./ComicViewer";
+
+// Cómic de Fisiología: «Los grandes ciclos de la naturaleza». Cierre del ascenso
+// (partícula → organismo → «eres tú»): se intercala al terminar de construir el
+// ser humano (Organismo), como último zoom-OUT antes de volver a Niveles. El
+// mensaje: tus átomos están prestados de los ciclos de la naturaleza y volverán
+// a ellos; eres parte de algo más grande.
+//
+// Imágenes: /viñetas/fisiologia/ciclos/agua.png, carbono.png, oxigeno.png,
+// nitrogeno.png, fosforo.png (una por viñeta). Mientras no existan, el
+// ComicViewer muestra su loader/fallback.
+export const CICLOS_NATURALEZA: Vineta[] = [
+  {
+    src: "/viñetas/fisiologia/ciclos/agua.png",
+    titulo: "Ciclo del agua",
+    paragraphs: [
+      "El ciclo del agua es el proceso continuo mediante el cual el agua circula entre la superficie terrestre, la atmósfera y los océanos.",
+      "La energía del Sol provoca la evaporación del agua, que asciende y forma nubes por condensación.",
+      "Posteriormente, el agua regresa a la superficie en forma de lluvia o nieve, infiltrándose en el suelo, alimentando acuíferos y ríos, hasta volver finalmente al mar, donde el ciclo comienza de nuevo.",
+      "Este proceso regula el clima y garantiza la disponibilidad de agua para todos los seres vivos.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/ciclos/carbono.png",
+    titulo: "Ciclo del carbono",
+    paragraphs: [
+      "El ciclo del carbono describe el movimiento continuo del carbono entre la atmósfera, los seres vivos, los océanos y la corteza terrestre.",
+      "Las plantas capturan dióxido de carbono mediante la fotosíntesis y lo incorporan a la materia orgánica, que posteriormente pasa a animales y microorganismos a través de la alimentación.",
+      "La respiración, la descomposición y la combustión devuelven el carbono a la atmósfera, mientras que una parte queda almacenada durante millones de años en rocas y combustibles fósiles.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/ciclos/oxigeno.png",
+    titulo: "Ciclo del oxígeno",
+    paragraphs: [
+      "El ciclo del oxígeno consiste en el intercambio continuo de este elemento entre la atmósfera, los seres vivos y los ecosistemas.",
+      "Durante la fotosíntesis, las plantas, algas y cianobacterias liberan oxígeno al ambiente.",
+      "Los organismos aerobios utilizan este oxígeno en la respiración celular para obtener energía, produciendo dióxido de carbono y agua, que vuelven a ser utilizados por los organismos fotosintéticos, manteniendo el equilibrio atmosférico.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/ciclos/nitrogeno.png",
+    titulo: "Ciclo del nitrógeno",
+    paragraphs: [
+      "El ciclo del nitrógeno permite transformar el nitrógeno atmosférico en formas que pueden ser utilizadas por los seres vivos.",
+      "Las bacterias fijadoras convierten el nitrógeno del aire en compuestos aprovechables por las plantas, que posteriormente son consumidas por los animales.",
+      "Tras la muerte o la eliminación de desechos, otros microorganismos reciclan el nitrógeno y finalmente lo devuelven a la atmósfera mediante la desnitrificación, cerrando el ciclo.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/ciclos/fosforo.png",
+    titulo: "Ciclo del fósforo",
+    paragraphs: [
+      "El ciclo del fósforo describe el movimiento de este elemento entre las rocas, el suelo, el agua y los organismos vivos.",
+      "La erosión libera fosfatos de las rocas, que son absorbidos por las plantas e incorporados posteriormente a los animales mediante la alimentación.",
+      "Tras la descomposición de los organismos, el fósforo regresa al suelo o a los sedimentos acuáticos, donde puede permanecer durante millones de años antes de volver a incorporarse al ciclo mediante procesos geológicos.",
+    ],
+  },
+];

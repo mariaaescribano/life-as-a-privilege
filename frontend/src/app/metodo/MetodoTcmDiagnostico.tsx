@@ -130,10 +130,16 @@ export default function MetodoTcmDiagnostico() {
           </Reveal>
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
-          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                textAlign="center" maxW="660px" style={{ textShadow: INK_SHADOW }}>
-            Esto es lo que está ocurriendo hoy dentro de ti. En los Cinco Elementos, cuerpo, mente y emociones forman un mismo sistema. Cuando uno cambia, todos pueden cambiar.
-          </Text>
+          <Flex direction="column" align="center" gap={2} maxW="660px">
+            <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                  textAlign="center" style={{ textShadow: INK_SHADOW }}>
+              «Antes de sanar a alguien, pregúntale si está dispuesto a renunciar a las cosas que lo enferman.»
+            </Text>
+            <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
+                  textAlign="center" style={{ textShadow: INK_SHADOW }}>
+              — Hipócrates
+            </Text>
+          </Flex>
           </Reveal>
 
           {/* ── BOX 1 · Estrella-perfil (lo que ocurre en ti ahora mismo) ── */}

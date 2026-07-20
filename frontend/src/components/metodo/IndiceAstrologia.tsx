@@ -4,12 +4,18 @@
 import React from "react";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 import { ASTROLOGIA_INDICE, ASTROLOGIA_TOTAL } from "./astrologiaRecorrido";
+import { useAstrologiaProgreso } from "../../hooks/useAstrologiaProgreso";
 import { astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 
 export function IndiceAstrologia() {
+  // Marca con candado (y bloquea el acceso) las páginas que aún no están
+  // desbloqueadas según el progreso del recorrido.
+  const { bloqueada } = useAstrologiaProgreso();
+  const indice = ASTROLOGIA_INDICE.map((p) => ({ ...p, bloqueado: bloqueada(p.n) }));
+
   return (
     <IndiceRecorrido
-      indice={ASTROLOGIA_INDICE}
+      indice={indice}
       total={ASTROLOGIA_TOTAL}
       tinta={astrologiaTxt}
       bg={astrologiaBg}

@@ -272,7 +272,7 @@ export const VINETAS_CASAS: Vineta[] = [
     src: "/viñetas/astrologia/casas/casa6.png",
     paragraphs: [
       "Qué hacemos a diario con nuestra energía y nuestro tiempo.",
-      "Rutina, cuidado propio y de otros. Necesidad de orden y limpieza.",
+      "Rutina, el cómo cuidamos a otros y a nosotros mismos. Necesidad de orden y limpieza.",
       "Debes encontrar tu orden interno y aplicarlo, si no, somatizas.",
     ],
   },
@@ -703,6 +703,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             onClose={onClose}
             onComplete={handleComplete}
             onBack={volverAlSelector}
+            sinSombra
           />
         )}
       </ModalContent>

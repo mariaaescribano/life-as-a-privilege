@@ -1,7 +1,7 @@
 import React from "react";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
-import { tcmBg, tcmTxt } from "../../GlobalVariables";
+import { tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
 
 /** Pago de la 4ª disciplina (Medicina China). Estilo con los colores de Medicina China. */
 export function PagoTcmModal(props: PagoDisciplinaModalProps) {
@@ -10,6 +10,7 @@ export function PagoTcmModal(props: PagoDisciplinaModalProps) {
       {...props}
       bg={tcmBg}
       txt={tcmTxt}
+      nom={tcmNom}
       ordinal="Cuarta disciplina"
       descripcion={
         <>

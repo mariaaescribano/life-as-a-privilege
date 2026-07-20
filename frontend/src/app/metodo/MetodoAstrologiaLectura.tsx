@@ -9,9 +9,10 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
+import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import { ComicAstrologiaModal, VINETAS_CASAS } from "../../components/metodo/ComicAstrologiaModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
@@ -142,6 +143,7 @@ export default function MetodoAstrologiaLectura() {
   // Cómic de las casas: se intercala antes de pasar a «Casas».
   const [comicCasasOpen, setComicCasasOpen] = useState(false);
   const { leidos: retosLeidos, marcarLeido: marcarReto, cargado } = useAstroLeidos("retos");
+  const fotosListas = useImagesReady([SPACE_IMG]);
 
   // Abre un punto clave y lo marca como leído (persistente en BD).
   const abrirReto = (r: Reto) => { setRetoAbierto(r); marcarReto(r.id); };
@@ -175,8 +177,8 @@ export default function MetodoAstrologiaLectura() {
     })();
   }, [navigate]);
 
-  if (loading || !cargado) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !cargado || !fotosListas) {
+    return <RecorridoLoading />;
   }
 
   return (
@@ -197,7 +199,8 @@ export default function MetodoAstrologiaLectura() {
               prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={{
-                label: "Casas →",
+                label: "Casas",
+                arrow: "next",
                 // Antes de pasar a «Casas» intercalamos el cómic de las casas.
                 onClick: () => setComicCasasOpen(true),
                 disabled: !todosRetosLeidos,

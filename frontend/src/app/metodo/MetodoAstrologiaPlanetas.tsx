@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import {
@@ -44,11 +44,7 @@ export default function MetodoAstrologiaPlanetas() {
   const [comicOpen, setComicOpen] = useState(false);
 
   if (loading) {
-    return (
-      <Box minH="100vh" bg="#008080">
-        <SpinnerTurquesa />
-      </Box>
-    );
+    return <RecorridoLoading />;
   }
 
   const sigIdx = siguienteCuerpoIndex(carta);

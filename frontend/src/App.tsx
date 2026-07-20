@@ -111,9 +111,11 @@ import MetodoNutricion from "./app/metodo/MetodoNutricion";
 import MetodoNutricionNutrientes from "./app/metodo/MetodoNutricionNutrientes";
 import MetodoNutricionNutrientesSecundarios from "./app/metodo/MetodoNutricionNutrientesSecundarios";
 import MetodoNutricionPlato from "./app/metodo/MetodoNutricionPlato";
+import MetodoNutricionCalorias from "./app/metodo/MetodoNutricionCalorias";
 import MetodoNutricionMitos from "./app/metodo/MetodoNutricionMitos";
 import MetodoNutricionNutriente from "./app/metodo/MetodoNutricionNutriente";
 import MetodoNutricionMicrobiota from "./app/metodo/MetodoNutricionMicrobiota";
+import MetodoNutricionHambre from "./app/metodo/MetodoNutricionHambre";
 import MetodoNutricionAlimentos from "./app/metodo/MetodoNutricionAlimentos";
 import MetodoNutricionAlimento from "./app/metodo/MetodoNutricionAlimento";
 import MetodoNutricionCursos from "./app/metodo/MetodoNutricionCursos";
@@ -268,7 +270,9 @@ export default function App()
       <Route path="/metodo/nutricion/nutrientes-secundarios" element={<PrivateRoute><MetodoNutricionNutrientesSecundarios /></PrivateRoute>} />
       <Route path="/metodo/nutricion/nutrientes/:key" element={<PrivateRoute><MetodoNutricionNutriente /></PrivateRoute>} />
       <Route path="/metodo/nutricion/microbiota" element={<PrivateRoute><MetodoNutricionMicrobiota /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/hambre" element={<PrivateRoute><MetodoNutricionHambre /></PrivateRoute>} />
       <Route path="/metodo/nutricion/plato" element={<PrivateRoute><MetodoNutricionPlato /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/calorias" element={<PrivateRoute><MetodoNutricionCalorias /></PrivateRoute>} />
       <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />

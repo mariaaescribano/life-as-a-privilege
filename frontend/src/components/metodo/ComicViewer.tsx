@@ -121,6 +121,9 @@ interface ComicViewerProps {
    *  pasa, se usa un spinner del color de la disciplina. Nutrición pasa aquí su
    *  manzana (AppleLoader). */
   loader?: React.ReactNode;
+  /** Si true, la caja (foto + texto) NO lleva sombra/glow alrededor. Lo usan las
+   *  Ilustraciones de Astrología, que se ven más limpias sin el shadow box. */
+  sinSombra?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -144,6 +147,7 @@ export function ComicViewer({
   initialIndex = 0,
   loader,
   onPageView,
+  sinSombra,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
@@ -466,8 +470,8 @@ export function ComicViewer({
         <Box
           key={`box-${index}`}
           w="100%"
-          maxW={{ base: "360px", md: "900px" }}
-          h={{ base: "auto", md: "500px" }}
+          maxW={{ base: "360px", md: "940px" }}
+          h={{ base: "auto", md: "540px" }}
           maxH={{ base: "calc(100dvh - 96px)" }}
           display="flex"
           flexDirection="column"
@@ -476,7 +480,9 @@ export function ComicViewer({
           overflow="hidden"
           animation={`${fadeIn} 0.55s ease both`}
           boxShadow={
-            fondoNitido
+            sinSombra
+              ? "none"
+              : fondoNitido
               // Cómic de elementos TCM: SIN glow de color, solo una sombra suave
               // de profundidad para separar el box del fondo blureado.
               ? "0 24px 70px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.22)"
@@ -561,8 +567,10 @@ export function ComicViewer({
             minH={0}
             overflowY={{ base: "auto", md: "hidden" }}
             overflowX="hidden"
-            px={{ base: 5, md: 10 }}
-            py={{ base: 9, md: 10 }}
+            // En móvil SIN padding para que la foto sea hero (full-bleed) arriba;
+            // el texto añade su propio padding. En desktop, padding normal.
+            px={{ base: 0, md: 10 }}
+            py={{ base: 0, md: 10 }}
             sx={{
               "&::-webkit-scrollbar": { width: "6px" },
               "&::-webkit-scrollbar-thumb": {
@@ -579,7 +587,7 @@ export function ComicViewer({
               <Flex
                 flex="1"
                 w="100%"
-                minH={{ base: "260px", md: "auto" }}
+                minH={{ base: "40vh", md: "auto" }}
                 align="center"
                 justify="center"
               >
@@ -600,17 +608,18 @@ export function ComicViewer({
 
             {imgReady && !hideFoto && (
             <Box
-              w={{ base: "90%", md: "380px" }}
-              maxW={{ base: "300px", md: "380px" }}
-              aspectRatio={1}
+              // Desktop: foto cuadrada MÁS GRANDE a la izquierda.
+              // Móvil: hero image a todo el ancho que cubre la parte de arriba.
+              w={{ base: "100%", md: "440px" }}
+              maxW={{ base: "100%", md: "440px" }}
+              h={{ base: "42vh", md: "auto" }}
+              aspectRatio={{ base: "auto", md: 1 }}
               flexShrink={0}
-              alignSelf="center"
+              alignSelf={{ base: "stretch", md: "center" }}
               position="relative"
-              sx={{
-                filter: `
-                  drop-shadow(0 0 12px rgba(255,255,255,0.14))
-                  drop-shadow(0 0 30px ${themeColor}33)
-                `,
+              filter={{
+                base: "none",
+                md: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${themeColor}33)`,
               }}
             >
               {!imgFailed[index] ? (
@@ -620,8 +629,10 @@ export function ComicViewer({
                     alt={`Viñeta ${index + 1}`}
                     w="100%"
                     h="100%"
-                    objectFit="contain"
-                    borderRadius="lg"
+                    // Móvil: cover (hero que cubre todo). Desktop: contain (se ve
+                    // la ilustración entera, más grande).
+                    objectFit={{ base: "cover", md: "contain" }}
+                    borderRadius={{ base: 0, md: "lg" }}
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
@@ -674,8 +685,9 @@ export function ComicViewer({
               flexDirection="column"
               justifyContent="flex-start"
               pt={{ base: 0, md: 6 }}
-              pb={{ base: 0, md: 6 }}
-              pr={{ base: 0, md: 4 }}
+              pb={{ base: 9, md: 6 }}
+              pl={{ base: 5, md: 0 }}
+              pr={{ base: 5, md: 4 }}
               sx={{
                 "&::-webkit-scrollbar": { width: "6px" },
                 "&::-webkit-scrollbar-track": { background: "transparent" },

@@ -5,9 +5,10 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
+import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
 import { EditarCuerpoModal } from "../../components/metodo/CartaAstral3D/EditarCuerpoModal";
@@ -50,6 +51,7 @@ export default function MetodoAstrologiaCartaAstral() {
 
   // Saber más
   const [saberMasKey, setSaberMasKey] = useState<CuerpoKey | null>(null);
+  const fotosListas = useImagesReady([SPACE_IMG]);
 
   // Al abrir el modal "Saber más" de un cuerpo, lo marcamos como leído (profundizado)
   const abrirSaberMas = (k: CuerpoKey) => {
@@ -133,12 +135,8 @@ export default function MetodoAstrologiaCartaAstral() {
 
   const cuerpoSaberMas = saberMasKey ? cuerpoByKey(saberMasKey) : null;
 
-  if (loading) {
-    return (
-      <Box minH="100vh" bg="#008080">
-        <SpinnerTurquesa />
-      </Box>
-    );
+  if (loading || !fotosListas) {
+    return <RecorridoLoading />;
   }
 
   const headerNext = {

@@ -142,6 +142,10 @@ export default function SignIn() {
     }
   }, [message]);
 
+  // Bloquea el botón mientras carga Y también cuando ya se ha creado la cuenta
+  // (mensaje de éxito visible): así no se puede volver a pulsar antes de redirigir.
+  const bloqueado = loading || message?.soy === 1;
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       {loading && <SpinnerTurquesa />}
@@ -261,7 +265,7 @@ export default function SignIn() {
           <Flex justify="center" pt={{ base: 8, md: 10 }}>
             <Flex
               as="button"
-              onClick={loading ? undefined : validarRegistro}
+              onClick={bloqueado ? undefined : validarRegistro}
               align="center"
               justify="center"
               gap={{ base: 3, md: 4 }}
@@ -270,10 +274,10 @@ export default function SignIn() {
               borderRadius="full"
               border="1.5px solid rgba(255,255,255,0.6)"
               bg="rgba(255,255,255,0.10)"
-              cursor={loading ? "not-allowed" : "pointer"}
-              opacity={loading ? 0.55 : 1}
+              cursor={bloqueado ? "not-allowed" : "pointer"}
+              opacity={bloqueado ? 0.55 : 1}
               boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
-              _hover={loading ? {} : {
+              _hover={bloqueado ? {} : {
                 bg: "rgba(255,255,255,0.2)",
                 borderColor: "white",
                 boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",

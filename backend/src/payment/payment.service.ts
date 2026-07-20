@@ -1,13 +1,17 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import Stripe from 'stripe';
 import { UserService } from '../user/user.service';
+import { BookingService } from '../booking/booking.service';
 import { findLibroPago } from './libros-pago.data';
 
 @Injectable()
 export class PaymentService {
   private readonly stripe: Stripe;
 
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly bookingService: BookingService,
+  ) {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) {
       throw new Error('STRIPE_SECRET_KEY no está configurado en el entorno');
@@ -506,6 +510,133 @@ export class PaymentService {
       await this.userService.marcarSuscritoCabala(userId);
     }
     return { ok: true as const };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Llamada de acompañamiento — pago REAL de Stripe. A diferencia del recorrido,
+  // aquí NO hay modo test: al reservar se abre un checkout de Stripe de verdad y,
+  // solo cuando el pago está confirmado (verify), se guarda la reserva en
+  // `bookings` (y se envía el email a María). Así el hueco no se ocupa si el pago
+  // no llega a completarse.
+  // ─────────────────────────────────────────────────────────────────────────
+  async createLlamadaCheckout(body: {
+    nombre?: string;
+    email?: string;
+    fecha?: string;
+    slot?: string;
+    tema?: string;
+    precio?: number;
+    disciplinaNom?: string;
+    returnPath?: string;
+  }) {
+    const nombre = (body.nombre ?? '').trim();
+    const email = (body.email ?? '').trim();
+    const fecha = (body.fecha ?? '').trim();
+    const slot = (body.slot ?? '').trim();
+    const tema = (body.tema ?? '').trim();
+    if (!nombre || !email || !fecha || !slot) {
+      throw new BadRequestException('Faltan datos de la reserva');
+    }
+
+    const precioEur = Number(body.precio);
+    const unitAmount = Number.isFinite(precioEur) && precioEur > 0 ? Math.round(precioEur * 100) : 2000;
+
+    // Si el hueco ya está cogido, no dejamos ni empezar el pago.
+    const taken = await this.bookingService.getTaken();
+    if (taken.some((t) => t.fecha === fecha && t.slot === slot)) {
+      throw new ConflictException('Ese horario ya está reservado');
+    }
+
+    // Solo permitimos rutas internas para volver a la página donde se reservó.
+    const rp = body.returnPath ?? '';
+    const returnPath = rp.startsWith('/') && !rp.includes('://') ? rp : '/';
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const disciplina = (body.disciplinaNom ?? '').trim();
+    const productName = disciplina ? `Llamada de acompañamiento — ${disciplina}` : 'Llamada de acompañamiento';
+    const sep = returnPath.includes('?') ? '&' : '?';
+
+    const session = await this.stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      customer_email: email || undefined,
+      line_items: [
+        {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: productName },
+            unit_amount: unitAmount,
+          },
+          quantity: 1,
+        },
+      ],
+      // Stripe limita cada valor de metadata a 500 caracteres; recortamos el tema.
+      metadata: {
+        scope: 'llamada',
+        nombre: nombre.slice(0, 200),
+        email: email.slice(0, 200),
+        fecha,
+        slot,
+        tema: tema.slice(0, 480),
+      },
+      success_url: `${frontendUrl}${returnPath}${sep}llamada_pagada={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}${returnPath}${sep}llamada_cancelada=1`,
+    });
+
+    if (!session.url) {
+      throw new BadRequestException('Stripe no devolvió URL de checkout');
+    }
+    return { url: session.url };
+  }
+
+  async verifyLlamadaCheckout(sessionId: string) {
+    if (!sessionId) throw new BadRequestException('session_id requerido');
+
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
+
+    if (session.payment_status !== 'paid') {
+      return { ok: false as const, reason: 'unpaid' };
+    }
+    if (session.metadata?.scope !== 'llamada') {
+      return { ok: false as const, reason: 'wrong-scope' };
+    }
+
+    const m = session.metadata;
+    const dto = {
+      nombre: m.nombre ?? '',
+      email: m.email ?? '',
+      fecha: m.fecha ?? '',
+      slot: m.slot ?? '',
+      tema: m.tema || undefined,
+    };
+    if (!dto.nombre || !dto.email || !dto.fecha || !dto.slot) {
+      return { ok: false as const, reason: 'no-metadata' };
+    }
+
+    // Idempotencia: si el verify se repite (recarga de la página de éxito), no
+    // volvemos a crear la reserva ni a mandar el email.
+    const estado = await this.bookingService.yaReservado(dto.fecha, dto.slot, dto.email);
+    if (estado === 'mine') {
+      return { ok: true as const, fecha: dto.fecha, slot: dto.slot, nombre: dto.nombre };
+    }
+    if (estado === 'other') {
+      // El hueco lo cogió otra persona entre el checkout y el pago (raro).
+      return { ok: false as const, reason: 'slot-taken', fecha: dto.fecha, slot: dto.slot };
+    }
+
+    const result = await this.bookingService.create(dto);
+    if (result === 'duplicate') {
+      return { ok: false as const, reason: 'slot-taken', fecha: dto.fecha, slot: dto.slot };
+    }
+    if (result === 'error') {
+      return { ok: false as const, reason: 'error' };
+    }
+    return { ok: true as const, fecha: dto.fecha, slot: dto.slot, nombre: dto.nombre };
   }
 
   async createLibroCheckout(libroId: string) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
+import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { astrologiaTxt } from "../../GlobalVariables";
@@ -41,6 +41,12 @@ interface IntroComicModalProps {
   /** Animación de espera mientras cada viñeta carga (por defecto, spinner).
    *  Nutrición pasa aquí su manzana (AppleLoader). */
   loader?: React.ReactNode;
+  /** Si se define (junto a `onContinue`), muestra un botón a la IZQUIERDA de la
+   *  X con esta etiqueta (p.ej. "Astrología"). Sirve para pasar directamente al
+   *  contenido de la disciplina sin recorrer todo el cómic. */
+  continueLabel?: string;
+  /** Acción del botón de continuar (arriba, junto a la X). */
+  onContinue?: () => void;
 }
 
 export function IntroComicModal({
@@ -53,6 +59,8 @@ export function IntroComicModal({
   textShadow,
   textColor,
   loader,
+  continueLabel,
+  onContinue,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -78,6 +86,45 @@ export function IntroComicModal({
           textColor={textColor}
           loader={loader}
         />
+
+        {/* Botón de continuar (p.ej. "Astrología →"), fijo a la IZQUIERDA de la X
+            del ComicViewer. Visible durante todo el cómic para saltar al contenido
+            de la disciplina en cualquier momento. */}
+        {continueLabel && onContinue && (
+          <Box
+            as="button"
+            onClick={onContinue}
+            position="fixed"
+            top={{ base: 3, md: 5 }}
+            right={{ base: "60px", md: "72px" }}
+            zIndex={11}
+            display="inline-flex"
+            alignItems="center"
+            gap={2}
+            h={{ base: "42px", md: "48px" }}
+            px={{ base: 4, md: 6 }}
+            borderRadius="full"
+            bg={themeColor}
+            color="#0a0a1a"
+            border={`1px solid ${themeColor}`}
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "xs", md: "sm" }}
+            letterSpacing="0.04em"
+            whiteSpace="nowrap"
+            cursor="pointer"
+            boxShadow={`0 0 18px ${themeColor}66, 0 0 40px ${themeColor}33, 0 2px 12px rgba(0,0,0,0.45)`}
+            sx={{ backdropFilter: "blur(4px)" }}
+            transition="all 0.2s"
+            _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${themeColor}88, 0 0 58px ${themeColor}44` }}
+          >
+            {continueLabel}
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                 w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
+              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+            </Box>
+          </Box>
+        )}
       </ModalContent>
     </Modal>
   );

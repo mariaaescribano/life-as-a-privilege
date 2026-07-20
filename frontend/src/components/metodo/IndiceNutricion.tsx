@@ -12,7 +12,9 @@ const PASOS: { titulo: string; path: string }[] = [
   { titulo: "Los nutrientes",         path: "/metodo/nutricion/nutrientes" },
   { titulo: "Nutrientes secundarios", path: "/metodo/nutricion/nutrientes-secundarios" },
   { titulo: "La microbiota",          path: "/metodo/nutricion/microbiota" },
+  { titulo: "El hambre",              path: "/metodo/nutricion/hambre" },
   { titulo: "Tu plato",               path: "/metodo/nutricion/plato" },
+  { titulo: "Tus calorías y macros",  path: "/metodo/nutricion/calorias" },
   { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
   { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },
 ];

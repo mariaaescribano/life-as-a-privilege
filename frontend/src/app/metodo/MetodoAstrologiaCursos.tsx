@@ -125,7 +125,8 @@ export default function MetodoAstrologiaCursos() {
               prev={{ label: "← Llamada", onClick: () => navigate("/metodo/astrologia/llamada") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={{
-                label: psicologiaSuscrito ? "Psicología →" : "Desbloquear Psicología",
+                label: "Psicología",
+                arrow: "next",
                 onClick: onPsicologia,
                 icon: psicologiaSuscrito ? undefined : (
                   <Box

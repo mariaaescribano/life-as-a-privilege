@@ -5,9 +5,10 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
+import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal, VINETAS_PLANETAS } from "../../components/metodo/ComicAstrologiaModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
@@ -46,6 +47,7 @@ export default function MetodoAstrologiaSolAscLuna() {
   // Cómic de los planetas: se intercala antes de pasar a «Arquetipos».
   const [comicPlanetasOpen, setComicPlanetasOpen] = useState(false);
   const [abierto, setAbierto] = useState<CuerpoKey | null>(null);
+  const fotosListas = useImagesReady([SPACE_IMG]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -127,8 +129,8 @@ export default function MetodoAstrologiaSolAscLuna() {
     return !!v.profundizadoSigno && (!cuerpo.conCasa || !!v.profundizadoCasa);
   };
 
-  if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !fotosListas) {
+    return <RecorridoLoading />;
   }
 
   const todosLeidos = TRIO.every(esLeido);

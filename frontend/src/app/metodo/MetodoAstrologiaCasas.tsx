@@ -6,9 +6,10 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { SpaceBg } from "../../components/metodo/SpaceBg";
+import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import { Glifo } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
@@ -93,6 +94,7 @@ export default function MetodoAstrologiaCasas() {
   const [comicOpen, setComicOpen] = useState(false);
 
   const { leidos, marcarLeido, cargado } = useAstroLeidos("casas");
+  const fotosListas = useImagesReady([SPACE_IMG]);
   // Para bloquear la ENTRADA a Casas: hay que haber leído todos los puntos clave.
   const { leidos: retosLeidos, cargado: cargadoRetos } = useAstroLeidos("retos");
   const [retos, setRetos] = useState<{ id: string }[]>([]);
@@ -180,8 +182,8 @@ export default function MetodoAstrologiaCasas() {
   // Mientras no esté permitida la entrada (faltan puntos clave por leer),
   // mostramos el spinner: el efecto de arriba redirige a "Puntos clave".
   const retosCompletos = retos.length === 0 || retos.every((r) => retosLeidos.has(r.id));
-  if (loading || !cargado || !cargadoRetos || !retosCompletos) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !cargado || !cargadoRetos || !retosCompletos || !fotosListas) {
+    return <RecorridoLoading />;
   }
 
   const cusps = carta?.cusps ?? [];
@@ -391,6 +393,11 @@ function CasaBox({
 }) {
   const [open, setOpen] = useState(false);
 
+  // Color del planeta REGENTE de esta casa: se usa para el glow/sombra del popup,
+  // para darle un toque de color propio a cada casa (más "divertido"). Si no hay
+  // regente, cae en el dorado de astrología.
+  const regenteColor = info?.regente?.color ?? astrologiaTxt;
+
   // Abre el texto completo y marca la casa como leída.
   const abrir = () => { setOpen(true); onLeer(); };
 
@@ -517,8 +524,8 @@ function CasaBox({
              onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="620px"
                maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }} borderRadius="2xl" overflow="hidden"
-               border={`1px solid ${astrologiaTxt}66`}
-               boxShadow={`0 0 32px ${astrologiaTxt}55, 0 0 80px ${astrologiaTxt}28, 0 12px 60px rgba(0,0,0,0.6)`}
+               border={`1px solid ${regenteColor}66`}
+               boxShadow={`0 0 32px ${regenteColor}55, 0 0 80px ${regenteColor}28, 0 12px 60px rgba(0,0,0,0.6)`}
                display="flex" flexDirection="column">
             <SpaceBg overlay="rgba(8,13,30,0.78)" />
             <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={3}

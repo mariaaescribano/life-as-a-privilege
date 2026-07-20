@@ -639,8 +639,10 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
 
   return (
     <>
-      {/* Índice del recorrido (botón flotante abajo a la izquierda) */}
-      <IndiceRecorrido />
+      {/* Índice del recorrido (botón flotante abajo a la izquierda). Con bloqueo
+          secuencial persistido en BD: bloquea los pasos posteriores al máximo
+          desbloqueado y los va abriendo al llegar al siguiente. */}
+      <IndiceRecorrido progresoKey="psicologia" />
 
       <Flex position="fixed" bottom={{ base: 4, md: 6 }} right={{ base: 4, md: 6 }} zIndex={20}
             direction="column" align="flex-end" gap={2}>

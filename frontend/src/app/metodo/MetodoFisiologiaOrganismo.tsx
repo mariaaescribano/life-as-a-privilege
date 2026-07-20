@@ -11,6 +11,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { CICLOS_NATURALEZA } from "../../components/metodo/comicCiclosNaturaleza";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -140,6 +142,9 @@ export default function MetodoFisiologiaOrganismo() {
   const [completo, setCompleto] = useState(false);
   const [frase, setFrase] = useState<string | null>(null);
   const [cuerpoOk, setCuerpoOk] = useState(false);
+  // Cómic de cierre: los grandes ciclos de la naturaleza. Se intercala al pulsar
+  // «Niveles →», como último zoom-out antes de salir del ascenso.
+  const [comicCiclosOpen, setComicCiclosOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   // Reserva la altura del box de sistemas para que no encoja al arrastrarlos fuera.
   const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
@@ -231,7 +236,7 @@ export default function MetodoFisiologiaOrganismo() {
             mb={0}
             prev={{ label: "← Sistemas", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
             extra={celulasBtn}
-            next={{ label: "Niveles →", onClick: () => navigate("/metodo/fisiologia/niveles"),
+            next={{ label: "Niveles →", onClick: () => setComicCiclosOpen(true),
                     disabled: !completo, disabledTooltip: "Primero crea al ser humano" }}
           />
 
@@ -403,6 +408,20 @@ export default function MetodoFisiologiaOrganismo() {
       </Flex>
 
       {celulasModal}
+
+      {/* Cómic de cierre: los grandes ciclos de la naturaleza (agua, carbono,
+          oxígeno, nitrógeno, fósforo). Se intercala antes de volver a Niveles. */}
+      <ComicPasoModal
+        isOpen={comicCiclosOpen}
+        onClose={() => setComicCiclosOpen(false)}
+        onContinue={() => navigate("/metodo/fisiologia/niveles")}
+        vinetas={CICLOS_NATURALEZA}
+        continueLabel="Niveles"
+        themeColor={fisiologiaTxt}
+        disciplinaBgImage="/img/fondos/fisio.png"
+        disciplinaBgColor={fisiologiaBg}
+      />
+
       <IndiceFisiologia />
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />

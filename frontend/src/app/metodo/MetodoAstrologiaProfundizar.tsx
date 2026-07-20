@@ -4,11 +4,13 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Glifo } from "../../components/metodo/Glifo";
 import { cuerpoByKey, soloClavesPlaneta, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { getTextoSigno, getTextoCasa } from "../../components/metodo/astrologiaTextos";
+import { SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 
@@ -73,6 +75,7 @@ export default function MetodoAstrologiaProfundizar() {
   const profundizadoPromise = useRef<Promise<void> | null>(null);
   const [loading, setLoading] = useState(true);
   const [valor, setValor] = useState<{ signo?: string; casa?: number }>({});
+  const fotosListas = useImagesReady([SPACE_IMG]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -121,12 +124,8 @@ export default function MetodoAstrologiaProfundizar() {
     navigate("/metodo/astrologia/planetas");
   };
 
-  if (loading) {
-    return (
-      <Box minH="100vh" bg="#008080">
-        <SpinnerTurquesa />
-      </Box>
-    );
+  if (loading || !fotosListas) {
+    return <RecorridoLoading />;
   }
   if (!cuerpo) return null;
 

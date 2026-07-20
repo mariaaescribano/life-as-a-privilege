@@ -825,6 +825,177 @@ const NERVIO_VAGO: Ficha[] = [
   },
 ];
 
+// ── Sistema nervioso entérico (el «segundo cerebro») ─────────────────────────
+const SISTEMA_ENTERICO: Ficha[] = [
+  {
+    key: "que-es", nombre: "El «segundo cerebro»", color: "#9fe6b8", foto: SUB("nerviosoenterico","enterico1"),
+    eyebrow: "Qué es",
+    claves: ["Millones de neuronas en el intestino", "Puede funcionar sin el cerebro", "Coordina toda la digestión"],
+    explicacion: [
+      "El Sistema Nervioso Entérico (SNE) es una red de millones de neuronas situada en las paredes del tubo digestivo.",
+      "Se le conoce como el «segundo cerebro» porque puede controlar muchas funciones digestivas sin orden directa del cerebro ni de la médula espinal.",
+      "Su principal función es coordinar la digestión, el movimiento de los alimentos, la secreción de sustancias digestivas y el flujo sanguíneo intestinal.",
+    ],
+  },
+  {
+    key: "plexo-mienterico", nombre: "Plexo mientérico (Auerbach)", color: "#f2b48f", foto: SUB("nerviosoenterico","enterico2"),
+    eyebrow: "El que mueve",
+    claves: ["Controla el músculo del tubo", "Regula las contracciones", "Genera el peristaltismo"],
+    explicacion: [
+      "Es la principal red nerviosa encargada de controlar el movimiento de los músculos del tubo digestivo.",
+      "Regula las contracciones que permiten que los alimentos avancen mediante el proceso conocido como peristaltismo.",
+    ],
+  },
+  {
+    key: "plexo-submucoso", nombre: "Plexo submucoso (Meissner)", color: "#a7d9f2", foto: SUB("nerviosoenterico","enterico3"),
+    eyebrow: "El que secreta y absorbe",
+    claves: ["Más cerca de la mucosa", "Controla secreción y absorción", "Regula el flujo sanguíneo local"],
+    explicacion: [
+      "Este plexo se encuentra más cerca de la mucosa intestinal.",
+      "Controla la secreción de enzimas, agua y moco, además de regular la absorción de nutrientes y el flujo sanguíneo local.",
+    ],
+  },
+  {
+    key: "neuronas-sensitivas", nombre: "Neuronas sensitivas", color: "#f2c86b", foto: SUB("nerviosoenterico","enterico4"),
+    eyebrow: "Las que detectan",
+    claves: ["Detectan lo que pasa dentro", "Presión, distensión, química", "Avisan al sistema entérico"],
+    explicacion: [
+      "Detectan los cambios dentro del intestino, como la presencia de alimentos, la presión, la distensión o la composición química del contenido digestivo.",
+      "Envían esta información para que el sistema nervioso entérico responda adecuadamente.",
+    ],
+  },
+  {
+    key: "interneuronas", nombre: "Interneuronas", color: "#c9a7ff", foto: SUB("nerviosoenterico","enterico5"),
+    eyebrow: "Las que conectan",
+    claves: ["Conectan las neuronas del SNE", "Integran la información sensorial", "Coordinan la respuesta"],
+    explicacion: [
+      "Las interneuronas conectan las distintas neuronas del sistema nervioso entérico.",
+      "Integran la información sensorial y coordinan la respuesta adecuada entre las neuronas sensitivas y las motoras.",
+    ],
+  },
+  {
+    key: "neuronas-motoras", nombre: "Neuronas motoras", color: "#f28b8b", foto: SUB("nerviosoenterico","enterico6"),
+    eyebrow: "Las que ordenan",
+    claves: ["Dan la orden final", "A músculos y glándulas", "Provocan contracción y secreción"],
+    explicacion: [
+      "Transmiten las órdenes finales hacia los músculos y las glándulas del aparato digestivo.",
+      "Gracias a ellas se producen las contracciones intestinales y la liberación de secreciones necesarias para la digestión.",
+    ],
+  },
+];
+
+// ── La menstruación (el ciclo, fase a fase) ──────────────────────────────────
+const MENSTRUACION: Ficha[] = [
+  {
+    key: "leptina", nombre: "1. Leptina: se activa el eje", color: "#6fd6db", foto: SUB("regla", "regla1"),
+    eyebrow: "El punto de partida",
+    claves: ["Hay reservas de energía suficientes", "La leptina avisa al hipotálamo", "Se libera GnRH"],
+    explicacion: [
+      "Cuando las reservas energéticas del organismo son suficientes, el tejido adiposo produce niveles adecuados de leptina. Esta hormona informa al hipotálamo de que el organismo dispone de energía suficiente para iniciar la función reproductiva.",
+      "Como consecuencia, se activa la liberación pulsátil de GnRH.",
+    ],
+  },
+  {
+    key: "hipofisis", nombre: "2. Hipófisis: FSH y LH", color: "#f2d24b", foto: SUB("regla", "regla2"),
+    eyebrow: "Las gonadotropinas",
+    claves: ["La GnRH estimula la hipófisis", "Libera FSH y LH", "Viajan por la sangre al ovario"],
+    explicacion: [
+      "La GnRH estimula la hipófisis anterior para liberar las gonadotropinas FSH y LH, hormonas que viajarán por la sangre hasta el ovario para iniciar el desarrollo folicular.",
+    ],
+  },
+  {
+    key: "foliculo", nombre: "3. Madura el folículo", color: "#6bd39a", foto: SUB("regla", "regla3"),
+    eyebrow: "En el ovario",
+    claves: ["La FSH hace crecer los folículos", "Uno se vuelve dominante", "Produce cada vez más estrógenos"],
+    explicacion: [
+      "La FSH estimula el crecimiento de los folículos ováricos. Uno de ellos se convierte en el folículo dominante y comienza a producir cantidades crecientes de estrógenos.",
+    ],
+  },
+  {
+    key: "ovulacion", nombre: "4. Ovulación", color: "#f2994a", foto: SUB("regla", "regla4"),
+    eyebrow: "El pico de LH",
+    claves: ["Un aumento brusco de LH", "Rompe el folículo dominante", "Libera el ovocito a la trompa"],
+    explicacion: [
+      "El aumento brusco de LH provoca la rotura del folículo dominante y la liberación del ovocito hacia la trompa uterina, proceso conocido como ovulación.",
+    ],
+  },
+  {
+    key: "cuerpo-luteo", nombre: "5. Cuerpo lúteo y endometrio", color: "#e0a869", foto: SUB("regla", "regla5"),
+    eyebrow: "Preparar el terreno",
+    claves: ["El folículo roto se vuelve cuerpo lúteo", "Secreta progesterona", "Engrosa el endometrio"],
+    explicacion: [
+      "Tras la ovulación, el folículo roto se transforma en el cuerpo lúteo, que secreta principalmente progesterona.",
+      "Esta hormona prepara el endometrio para una posible implantación, aumentando su grosor, vascularización y actividad secretora.",
+    ],
+  },
+  {
+    key: "menstruacion", nombre: "6. La menstruación", color: "#d64550", foto: SUB("regla", "regla6"),
+    eyebrow: "Si no hay fecundación",
+    claves: ["El cuerpo lúteo degenera", "Caen progesterona y estrógenos", "El endometrio se desprende"],
+    explicacion: [
+      "Si no se produce la fecundación, el cuerpo lúteo degenera y disminuye la producción de progesterona y estrógenos.",
+      "Como consecuencia, el endometrio pierde su soporte hormonal y se desprende, iniciándose la menstruación.",
+    ],
+  },
+];
+
+// ── Cetosis (la dieta cetogénica, paso a paso) ───────────────────────────────
+const CETOSIS: Ficha[] = [
+  {
+    key: "baja-glucosa", nombre: "1. Baja la glucosa y la insulina", color: "#6fd6db", foto: SUB("cetosis", "cetosis1"),
+    eyebrow: "El punto de partida",
+    claves: ["Ayuno, ejercicio o pocos carbohidratos", "Baja la insulina, sube el glucagón", "Empieza a tirar de reservas"],
+    explicacion: [
+      "La cetosis comienza cuando disminuye la disponibilidad de glucosa, generalmente por ayuno prolongado, ejercicio intenso o una dieta muy baja en carbohidratos.",
+      "Como consecuencia, descienden los niveles de insulina y aumentan los de glucagón, favoreciendo el uso de las reservas energéticas.",
+    ],
+  },
+  {
+    key: "lipolisis", nombre: "2. Lipólisis en la grasa", color: "#f2d24b", foto: SUB("cetosis", "cetosis2"),
+    eyebrow: "En el tejido adiposo",
+    claves: ["La poca insulina rompe las grasas", "Los adipocitos sueltan ácidos grasos", "Salen a la sangre con glicerol"],
+    explicacion: [
+      "La disminución de insulina activa la degradación de los triglicéridos almacenados en el tejido adiposo.",
+      "Los adipocitos liberan ácidos grasos libres y glicerol hacia la circulación sanguínea.",
+    ],
+  },
+  {
+    key: "beta-oxidacion", nombre: "3. β-oxidación en el hígado", color: "#6bd39a", foto: SUB("cetosis", "cetosis3"),
+    eyebrow: "En las mitocondrias",
+    claves: ["Los ácidos grasos llegan al hígado", "Se degradan por β-oxidación", "Generan mucho acetil-CoA"],
+    explicacion: [
+      "Los ácidos grasos llegan al hígado, donde son degradados mediante β-oxidación en las mitocondrias.",
+      "Este proceso genera grandes cantidades de acetil-CoA, una molécula necesaria para la respiración celular.",
+    ],
+  },
+  {
+    key: "cetogenesis", nombre: "4. Cuerpos cetónicos", color: "#f2994a", foto: SUB("cetosis", "cetosis4"),
+    eyebrow: "La cetogénesis",
+    claves: ["El acetil-CoA se acumula", "El hígado lo vuelve cuerpos cetónicos", "Acetoacetato, β-hidroxibutirato y acetona"],
+    explicacion: [
+      "Cuando el acetil-CoA se acumula, el hígado lo transforma en cuerpos cetónicos: acetoacetato, β-hidroxibutirato y acetona.",
+      "Este proceso recibe el nombre de cetogénesis.",
+    ],
+  },
+  {
+    key: "transporte", nombre: "5. Viajan por la sangre", color: "#5ec8db", foto: SUB("cetosis", "cetosis5"),
+    eyebrow: "El transporte",
+    claves: ["Los cuerpos cetónicos salen del hígado", "Circulan por la sangre", "Llegan a todos los órganos"],
+    explicacion: [
+      "Los cuerpos cetónicos salen del hígado y circulan por la sangre hasta diferentes órganos, donde pueden utilizarse como fuente alternativa de energía.",
+    ],
+  },
+  {
+    key: "utilizacion", nombre: "6. Se convierten en energía", color: "#d64550", foto: SUB("cetosis", "cetosis6"),
+    eyebrow: "El destino final",
+    claves: ["Cerebro, corazón y músculo los captan", "Vuelven a acetil-CoA", "Producen ATP en el ciclo de Krebs"],
+    explicacion: [
+      "Los tejidos, especialmente el cerebro, el corazón y el músculo esquelético, captan los cuerpos cetónicos y los convierten nuevamente en acetil-CoA para producir ATP mediante el ciclo de Krebs.",
+      "Así proporcionan energía cuando la glucosa es escasa.",
+    ],
+  },
+];
+
 // ═════════════════════════════════════════════════════════════════════════
 // Los temas de PROFUNDIZA, agrupados en 3 bloques para el hub.
 // Neurotransmisores lleva cómic de intro; el resto ya tienen sus fichas con un
@@ -864,6 +1035,17 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     fichas: HORMONAS,
   },
   {
+    key: "menstruacion",
+    label: "La menstruación",
+    resumen: "El ciclo, fase a fase.",
+    color: "#e86fb0",
+    foto: PORTADA("menstruacion"),
+    grupo: "Química interna",
+    intro: "Desde que hay energía suficiente hasta que el endometrio se desprende: el recorrido hormonal del ciclo menstrual, paso a paso.",
+    pista: "",
+    fichas: MENSTRUACION,
+  },
+  {
     key: "metabolismo",
     label: "Metabolismo",
     resumen: "De lo que comes a la energía.",
@@ -873,6 +1055,17 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     intro: "La respiración celular: cómo tus células convierten la comida (sobre todo la glucosa) en ATP, la energía que te mantiene en marcha.",
     pista: "",
     fichas: METABOLISMO,
+  },
+  {
+    key: "cetosis",
+    label: "Cetosis",
+    resumen: "Cuando el cuerpo tira de la grasa.",
+    color: "#f2994a",
+    foto: PORTADA("cetosis"),
+    grupo: "Química interna",
+    intro: "La dieta cetogénica: cuando falta la glucosa, el cuerpo fabrica cuerpos cetónicos a partir de la grasa y los usa como combustible.",
+    pista: "",
+    fichas: CETOSIS,
   },
 
   // ── Bloque 2 · El código y la limpieza ──
@@ -976,6 +1169,17 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     intro: "El nervio más largo del sistema nervioso autónomo: conecta el cerebro con el corazón, los pulmones y el intestino, y es la llave de la calma.",
     pista: "",
     fichas: NERVIO_VAGO,
+  },
+  {
+    key: "sistema-enterico",
+    label: "Sistema nervioso entérico",
+    resumen: "El «segundo cerebro» del intestino.",
+    color: "#9fe6b8",
+    foto: PORTADA("sistemaenterico"),
+    grupo: "Vida y muerte celular",
+    intro: "Una red de millones de neuronas en las paredes del tubo digestivo que dirige la digestión casi por su cuenta.",
+    pista: "",
+    fichas: SISTEMA_ENTERICO,
   },
 ];
 
