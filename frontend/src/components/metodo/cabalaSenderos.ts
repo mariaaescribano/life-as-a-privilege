@@ -1056,6 +1056,13 @@ export function senderoCompleto(s: SenderoContenido, respuestas?: number[]): boo
   return Array.isArray(respuestas) && respuestas.length === s.test.length && respuestas.every((v) => v >= 1 && v <= 5);
 }
 
+/** ¿Están los 22 senderos completos? Es la puerta para el Diagnóstico de los
+ *  Senderos: no se puede ir hasta haber rellenado el test de todos los senderos. */
+export function senderosContenidoCompleto(senderos?: Record<string, number[]>): boolean {
+  const s = senderos ?? {};
+  return CABALA_SENDEROS.every((sen) => senderoCompleto(sen, s[String(sen.num)] ?? (s as any)[sen.num]));
+}
+
 export function interpretacionSendero(s: SenderoContenido, total: number): SenderoInterpretacion | null {
   return s.interpretaciones.find((b) => total >= b.min && total <= b.max) ?? null;
 }

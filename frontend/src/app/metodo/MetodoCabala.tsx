@@ -164,7 +164,7 @@ export default function MetodoCabala() {
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
                 <Text
                   color={cabalaTxt}
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "lg", md: "xl" }}
                   lineHeight="1.9"
                   opacity={0.92}
                   maxW="620px"
@@ -178,7 +178,7 @@ export default function MetodoCabala() {
                 </Text>
                 <Text
                   color={cabalaTxt}
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "lg", md: "xl" }}
                   lineHeight="1.9"
                   opacity={0.92}
                   maxW="620px"

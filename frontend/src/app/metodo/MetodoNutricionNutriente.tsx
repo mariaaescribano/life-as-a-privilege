@@ -57,7 +57,6 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
       fontSize={{ base: "sm", md: "md" }}
       letterSpacing="0.03em"
       cursor="pointer"
-      boxShadow="0 2px 12px rgba(0,0,0,0.2)"
       transition="all 0.18s"
       _hover={{ borderColor: nutricionTxt, transform: "translateY(-1px)" }}
     >
@@ -208,10 +207,11 @@ export default function MetodoNutricionNutriente() {
               arriba/abajo y la sombra de la disciplina, para que case 1:1 con el
               visor de ilustraciones. */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
+            {/* Ancho = el del header (maxW 1000). Sin override de sombra: usa el
+                glow suave por defecto de SeccionBox (el mismo discreto del header). */}
             <SeccionBox
-              maxW="940px"
+              maxW="1000px"
               mx="auto"
-              boxShadow={`0 0 22px ${nutricionBg}88, 0 0 50px ${nutricionBg}55, 0 0 18px ${nutricionTxt}44, 0 0 40px ${nutricionTxt}22, inset 0 0 20px rgba(0,0,0,0.35)`}
             >
               {/* Líneas de luz (idénticas a las del visor de ilustraciones) */}
               <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}

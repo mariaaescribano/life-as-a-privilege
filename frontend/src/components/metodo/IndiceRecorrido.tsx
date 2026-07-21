@@ -12,8 +12,9 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
-import { RECORRIDO_INDICE, RECORRIDO_TOTAL, type PasoRecorrido } from "./psicologiaRecorrido";
-import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
+import { useRecorridoAlcanzable } from "../../hooks/useRecorridoAlcanzable";
+import { RECORRIDO_INDICE, RECORRIDO_TOTAL, pasoAlcanzablePsicologia, type PasoRecorrido } from "./psicologiaRecorrido";
+import { API_URL, neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const PAPEL = "#fbf4e8";
 
@@ -31,6 +32,8 @@ export function IndiceRecorrido({
   acento,
   luz = true,
   progresoKey,
+  alcanzableUrl = (userId: string) => `${API_URL}/metodo-psicologia/${userId}`,
+  alcanzableDe = pasoAlcanzablePsicologia,
 }: {
   indice?: PasoRecorrido[];
   total?: number;
@@ -52,6 +55,12 @@ export function IndiceRecorrido({
    *  desbloqueado y va desbloqueando cada paso al llegar al siguiente. Si NO se
    *  pasa, se usa el flag `bloqueado` de cada entrada del índice (astrología). */
   progresoKey?: string;
+  /** Endpoint (por userId) del que leer los datos del recorrido para calcular la
+   *  alcanzabilidad. Por defecto, el de psicología. */
+  alcanzableUrl?: (userId: string) => string;
+  /** Dado el `data` del recorrido y el id de recorrido, devuelve el paso máximo
+   *  ALCANZABLE (respetando los requisitos de cada paso). Por defecto, psicología. */
+  alcanzableDe?: (data: any, expId: string) => number;
 } = {}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -91,6 +100,17 @@ export function IndiceRecorrido({
   // Bloqueo secuencial persistido en BD (solo si se pasa `progresoKey`).
   const { pasoMax, cargado: progresoCargado, avanzar } = useRecorridoProgreso(progresoKey);
 
+  // «Hasta dónde puede llegar»: al abrir el Índice, leemos los datos del recorrido
+  // y calculamos el paso máximo ALCANZABLE respetando los requisitos de cada paso.
+  // Así el Índice abre las páginas a las que el usuario YA PUEDE llegar (no solo
+  // las que ya ha visitado). Se carga perezosamente (solo con el popup abierto).
+  const { maxAlcanzable } = useRecorridoAlcanzable(
+    open && !!progresoKey,
+    alcanzableUrl,
+    alcanzableDe,
+    expId,
+  );
+
   // Al LLEGAR a una página (vía la navegación de la app), desbloquea ese paso y
   // todos los anteriores. Así la página actual nunca queda bloqueada, y el Índice
   // sigue bloqueando los pasos a los que aún no se ha llegado. La navegación
@@ -108,8 +128,12 @@ export function IndiceRecorrido({
   // (y romper el recorrido) en ese instante previo a conocer `pasoMax`.
   const estaBloqueado = (p: PasoRecorrido): boolean => {
     if (!progresoKey) return !!p.bloqueado;
-    if (!progresoCargado) return p.n !== actual; // aún cargando: solo la actual abierta
-    return p.n > pasoMax;
+    // Aún sin datos de progreso NI de alcanzabilidad: solo la actual abierta.
+    if (!progresoCargado && maxAlcanzable == null) return p.n !== actual;
+    // Techo abierto = lo más lejos entre: lo que YA PUEDE alcanzar por requisitos
+    // (maxAlcanzable), lo ya visitado (pasoMax, para no re-bloquear) y la actual.
+    const techo = Math.max(pasoMax, maxAlcanzable ?? 0, actual ?? 0);
+    return p.n > techo;
   };
 
   const ir = (p: PasoRecorrido) => {

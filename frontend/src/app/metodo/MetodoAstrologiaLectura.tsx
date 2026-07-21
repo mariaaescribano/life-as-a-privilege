@@ -199,8 +199,7 @@ export default function MetodoAstrologiaLectura() {
               prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={{
-                label: "Casas",
-                arrow: "next",
+                label: "Casas →",
                 // Antes de pasar a «Casas» intercalamos el cómic de las casas.
                 onClick: () => setComicCasasOpen(true),
                 disabled: !todosRetosLeidos,

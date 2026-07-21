@@ -81,12 +81,26 @@ const SECTORES = (() => {
   });
 })();
 
-// Marco de sección con el fondo de Nutrición (nutri.png) + velo claro.
-function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
+// Portadas del recorrido usadas como fondo de cada apartado del plato.
+const PORTADA_BASE = "/recorrido/nutricion/portadas";
+// Foto de portada por macro/grupo (el apartado que muestra el panel).
+const PLATO_PORTADA: Record<string, string> = {
+  verduras: `${PORTADA_BASE}/platoverduras.png`,
+  fruta: `${PORTADA_BASE}/platofruta.png`,
+  cereales: `${PORTADA_BASE}/platocarbs.png`,
+  proteina: `${PORTADA_BASE}/platoproteina.png`,
+};
+// Fondo del apartado del plato (izquierda).
+const PLATO_PORTADA_GENERAL = `${PORTADA_BASE}/nutri.png`;
+// Todas las portadas que hay que precargar para que no aparezcan de golpe.
+const PORTADAS_PLATO = [PLATO_PORTADA_GENERAL, ...Object.values(PLATO_PORTADA)];
+
+// Marco de sección con una foto de portada del recorrido de fondo + velo claro.
+function SeccionBox({ children, imageSrc, ...rest }: React.ComponentProps<typeof Box> & { imageSrc?: string }) {
   return (
     <Box position="relative" overflow="hidden" borderRadius="2xl"
          boxShadow={glowSuave(nutricionTxt)} {...rest}>
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
+      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}88`} imageSrc={imageSrc} />
       <Box position="relative" zIndex={1} h="100%">{children}</Box>
     </Box>
   );
@@ -119,6 +133,9 @@ export default function MetodoNutricionPlato() {
   const plateRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState | null>(null);
   const dataRef = useRef<Record<string, any>>({});
+  // Última petición de guardado en curso. Se espera antes de navegar para que la
+  // página siguiente (Calorías) no lea el plato como "no hecho" por una carrera.
+  const savingRef = useRef<Promise<void> | null>(null);
 
   const macro = platoMacroByKey(macroSel)!;
 
@@ -152,11 +169,12 @@ export default function MetodoNutricionPlato() {
 
         // No quitamos el spinner hasta que TODAS las fotos de los alimentos estén
         // descargadas, para que el plato y el panel no se rellenen de golpe.
-        await precargarImagenes(
-          PLATO_MACROS.flatMap((m) => m.alimentos.map((a) => a.foto))
+        await precargarImagenes([
+          ...PLATO_MACROS.flatMap((m) => m.alimentos.map((a) => a.foto))
             .filter(Boolean)
             .map((f) => encodeURI(f as string)),
-        );
+          ...PORTADAS_PLATO.map((f) => encodeURI(f)),
+        ]);
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();
@@ -174,8 +192,26 @@ export default function MetodoNutricionPlato() {
       plato_hecho: PLATO_MACROS.every((m) => macrosConAlimento.has(m.key)),
     };
     dataRef.current = data;
-    axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
-      { headers: { Authorization: `Bearer ${token}` } }).catch(() => { /* reintenta al próximo toque */ });
+    // Guardamos la promesa para poder esperarla antes de navegar (flush).
+    savingRef.current = axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
+      { headers: { Authorization: `Bearer ${token}` } })
+      .then(() => { /* ok */ })
+      .catch(() => { /* reintenta al próximo toque */ });
+  }, []);
+
+  // Guardado GARANTIZADO antes de navegar: espera al guardado en curso y, además,
+  // hace un PATCH final del estado actual y lo espera. Así la página siguiente
+  // (Calorías) nunca lee el plato como "no hecho" por una carrera o por un
+  // guardado anterior fallido.
+  const flushGuardado = useCallback(async () => {
+    try { await savingRef.current; } catch { /* lo reintentamos ahora */ }
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    try {
+      await axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data: dataRef.current },
+        { headers: { Authorization: `Bearer ${token}` } });
+    } catch { /* navegamos igualmente; el gate lo detectará */ }
   }, []);
 
   const actualizar = useCallback((updater: (prev: AlimentoPuesto[]) => AlimentoPuesto[]) => {
@@ -275,7 +311,10 @@ export default function MetodoNutricionPlato() {
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{
                 label: "Tus calorías →",
-                onClick: () => navigate("/metodo/nutricion/calorias"),
+                // Esperamos a que el guardado del plato llegue al servidor antes
+                // de ir a Calorías; si no, esa página no vería el plato como hecho
+                // y rebotaría de vuelta aquí ("una y otra vez").
+                onClick: async () => { await flushGuardado(); navigate("/metodo/nutricion/calorias"); },
                 disabled: !completo,
                 disabledTooltip: "Crea tu plato (un alimento de cada grupo) para continuar",
               }}
@@ -293,7 +332,7 @@ export default function MetodoNutricionPlato() {
           <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
             {/* ── Plato (círculo con sectores) ── */}
-            <SeccionBox flex={{ base: "none", md: "1" }} w="100%">
+            <SeccionBox flex={{ base: "none", md: "1" }} w="100%" imageSrc={PLATO_PORTADA_GENERAL}>
               <Flex direction="column" align="center" gap={4} p={{ base: 5, md: 7 }} h="100%">
                 <Box ref={plateRef} position="relative" w="100%" maxW="380px" aspectRatio={1} mx="auto">
                   <Box as="svg" viewBox={`0 0 ${VB} ${VB}`} w="100%" h="100%"
@@ -415,20 +454,28 @@ export default function MetodoNutricionPlato() {
                   </Float>
                 )}
 
-                {puestos.length > 0 && (
-                  <Box as="button" onClick={() => actualizar(() => [])}
-                       alignSelf="center" px={4} py={1.5} borderRadius="full"
-                       bg={`${nutricionTxt}14`} border={`1px solid ${nutricionTxt}44`}
-                       color={nutricionTxt} fontSize="sm" fontWeight="600" cursor="pointer"
-                       _hover={{ bg: `${nutricionTxt}22` }}>
-                    Vaciar plato
-                  </Box>
-                )}
+                {/* Siempre visible (aunque el plato esté vacío) para que la caja
+                    no cambie de tamaño al colocar el primer alimento. Deshabilitado
+                    y atenuado mientras no hay nada que vaciar. */}
+                <Box as="button"
+                     onClick={puestos.length > 0 ? () => actualizar(() => []) : undefined}
+                     disabled={puestos.length === 0}
+                     alignSelf="center" px={4} py={1.5} borderRadius="full"
+                     bg={puestos.length > 0 ? `${nutricionTxt}14` : `${nutricionTxt}08`}
+                     border={`1px solid ${puestos.length > 0 ? `${nutricionTxt}44` : `${nutricionTxt}22`}`}
+                     color={puestos.length > 0 ? nutricionTxt : `${nutricionTxt}55`}
+                     fontSize="sm" fontWeight="600"
+                     cursor={puestos.length > 0 ? "pointer" : "not-allowed"}
+                     transition="background 0.15s, color 0.15s, border-color 0.15s"
+                     _hover={puestos.length > 0 ? { bg: `${nutricionTxt}22` } : undefined}>
+                  Vaciar plato
+                </Box>
               </Flex>
             </SeccionBox>
 
-            {/* ── Panel de alimentos del macro seleccionado ── */}
-            <SeccionBox flex={{ base: "none", md: "1" }} w="100%">
+            {/* ── Panel de alimentos del macro seleccionado. El fondo del apartado
+                es la portada de ese grupo (verduras/fruta/cereales/proteína). ── */}
+            <SeccionBox flex={{ base: "none", md: "1" }} w="100%" imageSrc={PLATO_PORTADA[macroSel]}>
               <Flex direction="column" gap={4} p={{ base: 5, md: 7 }} h="100%">
                 <Box>
                   <Flex align="center" gap={2.5} mb={1}>

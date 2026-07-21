@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -88,7 +88,6 @@ function SistemaFicha({ sistema, onSoltar }: {
   return (
     <MBox
       ref={ref}
-      layout
       drag
       dragElastic={0.12}
       dragMomentum={false}
@@ -214,9 +213,29 @@ export default function MetodoFisiologiaOrganismo() {
 
   const reiniciar = () => { setColocados([]); setCompleto(false); setFrase(null); };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  // Bandeja de 6 HUECOS FIJOS. Cada hueco guarda un sistema; al colocar uno, su
+  // hueco se rellena con el SIGUIENTE de la cola (sustitución EN EL MISMO SITIO),
+  // sin que las demás piezas se recoloquen. Los huecos vacíos del final se pintan
+  // como placeholders invisibles → la caja mantiene su alto y nunca cae una fila.
+  const slots = useMemo<(string | null)[]>(() => {
+    const inSlot: (string | null)[] = SISTEMAS.slice(0, 6).map((x) => x.key);
+    let queuePtr = 6;
+    const yaColocados = new Set<string>();
+    for (const key of colocados) {
+      yaColocados.add(key);
+      const idx = inSlot.indexOf(key);
+      if (idx < 0) continue; // (por seguridad; no debería pasar)
+      let repl: string | null = null;
+      while (queuePtr < SISTEMAS.length) {
+        const cand = SISTEMAS[queuePtr++].key;
+        if (!yaColocados.has(cand) && !inSlot.includes(cand)) { repl = cand; break; }
+      }
+      inSlot[idx] = repl;
+    }
+    return inSlot;
+  }, [colocados]);
 
-  const colocadosSet = new Set(colocados);
+  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -295,13 +314,17 @@ export default function MetodoFisiologiaOrganismo() {
                         {colocados.map((key, i) => {
                           const s = SISTEMAS.find((x) => x.key === key)!;
                           const p = posEnAnillo(i, total, 33);
+                          // El translate(-50%,-50%) va en un Box normal (CSS): si lo
+                          // pusiéramos en el MBox, la animación de `scale` de framer
+                          // pisaría ese transform y el anillo saldría descentrado.
                           return (
-                            <MBox key={key} position="absolute" left={`${p.x}%`} top={`${p.y}%`}
-                                  transform="translate(-50%,-50%)"
-                                  initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                                  transition={{ type: "spring", stiffness: 300, damping: 18 }}>
-                              <SistemaFoto sistema={s} size={{ base: "38px", md: "48px" }} />
-                            </MBox>
+                            <Box key={key} position="absolute" left={`${p.x}%`} top={`${p.y}%`}
+                                 transform="translate(-50%,-50%)">
+                              <MBox initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 18 }}>
+                                <SistemaFoto sistema={s} size={{ base: "38px", md: "48px" }} />
+                              </MBox>
+                            </Box>
                           );
                         })}
 
@@ -326,22 +349,28 @@ export default function MetodoFisiologiaOrganismo() {
                             style={{ textShadow: INK }}>
                         Los sistemas · {colocados.length}/{total}
                       </Text>
-                      {/* Solo 6 a la vez, en un GRID FIJO de 3 columnas (2 filas
-                          estables): al soltar una en el círculo, las que quedan se
-                          deslizan (layout) para rellenar su hueco de forma discreta
-                          y la siguiente entra con un fundido en la última celda.
-                          Nunca cambia el nº de filas, así que jamás aparece una
-                          pieza «suelta» debajo del box. */}
+                      {/* 6 HUECOS FIJOS en un grid de 3 columnas (2 filas). Cada
+                          pieza tiene su celda: al soltar una en el círculo, en SU
+                          MISMA celda entra la siguiente de la cola (las demás NO se
+                          mueven). Los huecos vacíos del final son placeholders
+                          invisibles → el nº de filas y el alto de la caja no cambian
+                          nunca, y jamás cae una pieza «suelta» debajo. */}
                       <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(3, auto)"
                            justifyContent="center" justifyItems="center" alignContent="center"
                            columnGap={{ base: 3, md: 5 }} rowGap={{ base: 4, md: 5 }}
                            minH={piezasMinH ? `${piezasMinH}px` : { base: "200px", md: "240px" }}>
-                        <AnimatePresence mode="popLayout">
-                          {SISTEMAS.filter((s) => !colocadosSet.has(s.key)).slice(0, 6).map((s) => (
-                            <SistemaFicha key={s.key} sistema={s}
+                        {slots.map((key, i) => {
+                          if (!key) {
+                            // Hueco vacío (final): reserva la celda, invisible.
+                            return <Box key={`hueco-${i}`} w={{ base: "92px", md: "116px" }}
+                                        h={{ base: "104px", md: "128px" }} aria-hidden pointerEvents="none" />;
+                          }
+                          const s = SISTEMAS.find((x) => x.key === key)!;
+                          return (
+                            <SistemaFicha key={key} sistema={s}
                                           onSoltar={(rect) => soltarEnCirculo(s, rect)} />
-                          ))}
-                        </AnimatePresence>
+                          );
+                        })}
                       </Box>
                     </Box>
                   </PanelBox>

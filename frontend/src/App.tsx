@@ -129,6 +129,8 @@ import MetodoCabalaSenderosDiagnostico from "./app/metodo/MetodoCabalaSenderosDi
 import MetodoCabalaFinal from "./app/metodo/MetodoCabalaFinal";
 import MetodoCabalaDiezDias from "./app/metodo/MetodoCabalaDiezDias";
 import MetodoCabalaCursos from "./app/metodo/MetodoCabalaCursos";
+import MetodoCultura from "./app/metodo/MetodoCultura";
+import MetodoCulturaHistorias from "./app/metodo/MetodoCulturaHistorias";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -291,6 +293,9 @@ export default function App()
       <Route path="/metodo/cabala/dias" element={<PrivateRoute><MetodoCabalaDiezDias /></PrivateRoute>} />
       <Route path="/metodo/cabala/cursos" element={<PrivateRoute><MetodoCabalaCursos /></PrivateRoute>} />
       <Route path="/metodo/cabala/sendero/:num" element={<PrivateRoute><MetodoCabalaSendero /></PrivateRoute>} />
+
+      <Route path="/metodo/cultura" element={<PrivateRoute><MetodoCultura /></PrivateRoute>} />
+      <Route path="/metodo/cultura/historias" element={<PrivateRoute><MetodoCulturaHistorias /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />

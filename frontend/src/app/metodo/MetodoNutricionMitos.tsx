@@ -93,7 +93,7 @@ export default function MetodoNutricionMitos() {
 
       {/* Respuesta en el visor de ilustración (foto + texto + fondo cambiado). */}
       {fichaIdx !== null && (
-        <NutrienteFichaModal tarjetas={MITOS_NUTRICION} index={fichaIdx}
+        <NutrienteFichaModal tarjetas={MITOS_NUTRICION} index={fichaIdx} sinSaltar
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
       )}
 

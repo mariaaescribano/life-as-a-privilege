@@ -115,7 +115,8 @@ export default function MetodoFisiologiaProfundiza() {
             ))}
           </SimpleGrid>
 
-          <VolverFisio onClick={() => navigate("/metodo/fisiologia/niveles")} />
+          <VolverFisio label="Volver a arriba" direction="up"
+                       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
 
         </Flex>
       </Flex>

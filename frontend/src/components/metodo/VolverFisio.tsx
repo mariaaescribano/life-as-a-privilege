@@ -8,7 +8,16 @@ import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 // último hijo de la columna de contenido (que va centrada), por eso
 // alignSelf="flex-end" lo empuja al borde derecho del ancho de la página.
 // ─────────────────────────────────────────────────────────────────────────
-export function VolverFisio({ onClick, label = "Volver" }: { onClick: () => void; label?: string }) {
+export function VolverFisio({ onClick, label = "Volver", direction = "left" }: {
+  onClick: () => void;
+  label?: string;
+  /** Sentido de la flecha: «left» (volver atrás) o «up» (volver arriba). */
+  direction?: "left" | "up";
+}) {
+  // Flecha SVG (Material): izquierda (arrow_back) o arriba (arrow_upward).
+  const arrowPath = direction === "up"
+    ? "M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"
+    : "M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z";
   return (
     <Box
       as="button"
@@ -22,7 +31,7 @@ export function VolverFisio({ onClick, label = "Volver" }: { onClick: () => void
       py={{ base: 2, md: 2.5 }}
       borderRadius="full"
       bg="rgba(255,255,255,0.08)"
-      border={`1px solid ${fisiologiaTxt}66`}
+      border="none"
       color={fisiologiaTxt}
       fontFamily="'EB Garamond', serif"
       fontStyle="italic"
@@ -30,12 +39,12 @@ export function VolverFisio({ onClick, label = "Volver" }: { onClick: () => void
       letterSpacing="0.04em"
       cursor="pointer"
       transition="all 0.18s"
-      _hover={{ bg: "rgba(255,255,255,0.14)", borderColor: fisiologiaTxt, transform: "translateY(-1px)" }}
+      _hover={{ bg: "rgba(255,255,255,0.14)", transform: "translateY(-1px)" }}
       style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}
     >
       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
            w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
-        <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
+        <path d={arrowPath} />
       </Box>
       {label}
     </Box>

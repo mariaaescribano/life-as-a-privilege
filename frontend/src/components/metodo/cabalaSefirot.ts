@@ -89,13 +89,19 @@ export const CABALA_PAG = {
   arbol: 2,
   diagnostico: 14,
   senderos: 15,
-  senderosDiag: 16,
-  final: 17,
-  dias: 18,
+  // Los 22 senderos individuales ocupan las páginas 16..37 (senderos + orden):
+  // Aleph = 16, Beth = 17, … Tav = 37.
+  senderosDiag: 38,
+  final: 39,
+  dias: 40,
 } as const;
 
 // Nº total de páginas del recorrido.
-export const CABALA_TOTAL_PAGINAS = CABALA_PAG.dias; // 18
+export const CABALA_TOTAL_PAGINAS = CABALA_PAG.dias; // 40
+
+// Página real de un sendero individual dentro del recorrido completo (Aleph=16,
+// Beth=17, … Tav=37). `orden` es la posición del sendero (1..22).
+export const paginaSendero = (orden: number) => CABALA_PAG.senderos + orden;
 
 const KETER: SefiraContenido = {
   key: "kether",

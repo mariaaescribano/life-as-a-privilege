@@ -85,28 +85,6 @@ export default function MetodoNutricionMicrobiota() {
             </Text>
           </Reveal>
 
-          {/* Nota: qué es una bacteria (una sola célula… y sorprendentemente lista). */}
-          <Reveal direction="up" distance={14} delay={0.13} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Box
-              w="100%"
-              maxW="680px"
-              borderRadius="xl"
-              px={{ base: 5, md: 7 }}
-              py={{ base: 4, md: 5 }}
-              bg={`${nutricionBg}55`}
-              border={`1px solid ${nutricionTxt}44`}
-              style={{ boxShadow: `inset 0 0 24px rgba(0,0,0,0.18), 0 0 18px ${nutricionTxt}18` }}
-            >
-              <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
-                    textAlign="center" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.4)" }}>
-                Cada bacteria es <b>una única célula</b>: sin órganos, sin cerebro. Y aun así es
-                sorprendentemente <b style={{ color: nutricionTxt }}>inteligente</b> — percibe su entorno,
-                se comunica con sus vecinas, decide cuándo dividirse o defenderse y coopera contigo.
-                Toda una Vida resuelta en una sola célula.
-              </Text>
-            </Box>
-          </Reveal>
-
           <Reveal direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {MICROBIOTA_BACTERIAS.map((bac, i) => (
@@ -119,7 +97,7 @@ export default function MetodoNutricionMicrobiota() {
           {/* ── Separador horizontal con el mandala en medio ── */}
           <Reveal direction="up" distance={12} delay={0.1} duration={0.6} w="100%">
             <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 2, md: 3 }}>
-              <Box flex="1" h="1px" bg={`linear-gradient(to right, transparent, ${nutricionTxt}bb)`} />
+              <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.75))" />
               <Image
                 src="/img/icono/life.png"
                 alt=""
@@ -128,7 +106,7 @@ export default function MetodoNutricionMicrobiota() {
                 flexShrink={0}
                 style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 0 24px rgba(180,255,245,0.28))" }}
               />
-              <Box flex="1" h="1px" bg={`linear-gradient(to left, transparent, ${nutricionTxt}bb)`} />
+              <Box flex="1" h="1px" bg="linear-gradient(to left, transparent, rgba(255,255,255,0.75))" />
             </Flex>
           </Reveal>
 

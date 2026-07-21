@@ -801,7 +801,7 @@ const Home = () => {
       {/* Continuar por dónde lo dejé — escritorio: fijo arriba a la derecha,
           bajo el header. En móvil se pinta debajo del mandala (más abajo). */}
       {continuarBtn && (
-        <Box position="fixed" top={{ md: "86px" }} right={{ md: "22px" }} zIndex={30}
+        <Box position="fixed" top={{ md: "120px" }} right={{ md: "22px" }} zIndex={30}
              display={{ base: "none", md: "block" }}>
           {continuarBtn}
         </Box>

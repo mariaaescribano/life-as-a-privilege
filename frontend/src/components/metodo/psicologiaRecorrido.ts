@@ -1069,3 +1069,55 @@ export const REGULACION = {
     frase: "Ya está. Lo que ha venido, ha venido. Estás a salvo y estás aquí.",
   },
 };
+
+// ─────────────────────────────────────────────────────────────────────────
+// ALCANZABILIDAD · «hasta dónde puede llegar» el usuario en el recorrido.
+//
+// El Índice abre cada página EN CUANTO el usuario cumple el requisito para
+// pasar a ella (los mismos «gates» que deshabilitan el botón «siguiente» de
+// cada página). `puedeAvanzarPsicologia(data, n)` replica ese `disabled` del
+// paso n (true = puedes pasar al siguiente); `pasoAlcanzablePsicologia` recorre
+// esa cadena y devuelve el paso máximo alcanzable (un prefijo contiguo).
+//
+// ⚠️ Si cambias el gate del botón «siguiente» de una página, cámbialo también
+//    aquí para que el Índice siga coincidiendo con lo que el usuario puede hacer.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** ¿Cuántos de los 4 bloques de integración tiene rellenos una relación? */
+export const constelacionIntegrada = (c: Constelacion): number =>
+  (["proteger", "coste", "verdadSana", "recordatorio"] as const)
+    .filter((k) => String(c[k] ?? "").trim().length > 0).length;
+
+/** Gate para avanzar MÁS ALLÁ del paso `n` (1-based): true = puedes pasar al
+ *  siguiente. Los pasos sin requisito devuelven true. */
+export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolean {
+  const t = (s: unknown): string => (typeof s === "string" ? s.trim() : "");
+  switch (n) {
+    case 3:  return aceCompleto(data);                                         // ACE: 10 respondidas
+    case 5:  return aniosRecorridos(data, Number(data.edad) || 0) >= 1;        // Línea de Vida: ≥1 año
+    case 6:  return Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0); // Huellas: ≥1 marcada
+    case 7:  return (data.nudos || []).length > 0;                             // Nudos: ≥1
+    case 8:  return necesidadesCompletas(data);                                // Necesidades: las 18
+    case 9:  return (data.heridas || []).length > 0;                           // Heridas: ≥1
+    case 12: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
+               (c) => c.nudos.length > 0 || c.arquetipos.length > 0 || t(c.titulo) !== "" || t(c.texto) !== "");
+    case 13: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
+               (q) => t(data.dones?.respuestas?.[q.key]) !== "" || (data.dones?.sinIdeas || []).includes(q.key));
+    case 14: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
+    case 15: return (data.miedos || []).length > 0;                            // Miedos: ≥1
+    case 16: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
+                    (data.miedos || []).every((m) => miedoRespondidas(m) >= MIEDOS_PREGUNTAS.length);
+    case 17: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
+    case 18: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
+    case 19: return t(data.brujula?.mensaje) !== "";                           // Carta
+    default: return true;  // 1, 2, 4, 10, 11, 20 y cualquier otro: sin requisito
+  }
+}
+
+/** Paso máximo ALCANZABLE (1-based): el prefijo contiguo de páginas a las que el
+ *  usuario ya puede llegar respetando el requisito de cada paso. */
+export function pasoAlcanzablePsicologia(data: LineaDeVidaData, _expId?: string): number {
+  let n = 1;
+  while (n < RECORRIDO_TOTAL && puedeAvanzarPsicologia(data, n)) n++;
+  return n;
+}

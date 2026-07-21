@@ -20,6 +20,8 @@ import {
   noSelectSx,
 } from "../../GlobalVariables";
 
+const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+
 // ── Cursos para profundizar (Cábala) ────────────────────────────────────────
 // Página-hub que va DESPUÉS de «10 días con tus dimensiones» (última página del
 // recorrido). Aquí se listarán los cursos avanzados de Cábala. De momento no hay
@@ -162,8 +164,8 @@ export default function MetodoCabalaCursos() {
 
           {/* Texto introductorio bajo el header */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="680px">
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
+                  textAlign="center" lineHeight="1.8" maxW="680px" style={{ textShadow: INK_SHADOW }}>
               Si quieres profundizar en la Cábala, estos cursos te acompañan paso a paso.
             </Text>
           </Reveal>
@@ -188,7 +190,7 @@ export default function MetodoCabalaCursos() {
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
                   Estamos preparando los cursos
                 </Text>
-                <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }}
+                <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
                   Pronto podrás profundizar aquí con cursos avanzados de Cábala. Mientras tanto, continúa el
                   Mapa con la siguiente disciplina.

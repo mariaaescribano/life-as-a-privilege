@@ -115,6 +115,7 @@ export function ElementoComicModal({
               // que casen con la letra blanca del cómic y quede limpio.
               loader={<TcmLoader color="#ffffff" />}
               scrollbarColor="#ffffff"
+              sinSaltar
               // Sin `fondoNitido`: usamos EXACTAMENTE el mismo box, estructura y
               // fondo que las Ilustraciones de TCM (mismo glow de color, mismo
               // velo y desenfoque), por coherencia. Solo cambian la foto y el

@@ -15,11 +15,22 @@ const FAST_UP_SCROLL_PX = 220;
 const FAST_UP_SCROLL_MS = 350;
 const NEAR_TOP_PX = 80;
 
+// El popup de suscripción es SOLO para visitantes NO registrados y NUNCA debe
+// salir dentro del mapa/recorrido (rutas /metodo/...). Este guard se comprueba
+// tanto al montar como en el momento de disparar (el usuario puede haberse
+// registrado o navegado al recorrido después de armar los listeners).
+function bloqueado(): boolean {
+  if (typeof window === "undefined") return true;
+  if (sessionStorage.getItem("userId")) return true; // usuario registrado
+  if (window.location.pathname.startsWith("/metodo")) return true; // dentro del mapa/recorrido
+  return false;
+}
+
 function shouldSkip(): boolean {
   if (typeof window === "undefined") return true;
   if (localStorage.getItem(DISMISSED_KEY)) return true;
   if (sessionStorage.getItem(SHOWN_KEY)) return true;
-  if (sessionStorage.getItem("userId")) return true;
+  if (bloqueado()) return true;
   return false;
 }
 
@@ -39,6 +50,9 @@ export function ExitIntentSubscribeModal() {
 
     const trigger = () => {
       if (triggered) return;
+      // Revalida en el instante de disparar: si el usuario se registró o entró
+      // al mapa/recorrido tras armar los listeners, no se muestra.
+      if (bloqueado()) return;
       triggered = true;
       sessionStorage.setItem(SHOWN_KEY, String(Date.now()));
       setIsOpen(true);

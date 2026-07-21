@@ -8,7 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import {
@@ -49,22 +49,8 @@ function Separador() {
   );
 }
 
-function Panel({ children, color }: { children: React.ReactNode; color: string }) {
-  return (
-    <Box
-      position="relative"
-      w="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`}
-    >
-      <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}26`} />
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-        {children}
-      </Box>
-    </Box>
-  );
-}
+// El panel común (ahora animado y «vivo») vive en components/metodo/AyurvedaPanel.tsx
+// y se importa arriba como `Panel`.
 
 // Título de sección con marcador-rombo en el color del dosha y un subrayado fino.
 function SeccionTitulo({ children, color }: { children: React.ReactNode; color: string }) {

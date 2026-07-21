@@ -21,6 +21,7 @@ export function NutrienteFichaModal({
   tarjetas,
   index,
   onClose,
+  sinSaltar,
 }: {
   tarjetas: NutrienteTarjeta[];
   index: number;
@@ -28,6 +29,9 @@ export function NutrienteFichaModal({
   /** Ya no se usa: el ComicViewer navega internamente. Se mantiene opcional por
    *  compatibilidad con las páginas que aún lo pasan. */
   onSelect?: (i: number) => void;
+  /** Oculta el botón «Saltar»: en galerías de tarjetas independientes (mitos,
+   *  preguntas…) saltar no tiene sentido, no son un cómic secuencial. */
+  sinSaltar?: boolean;
 }) {
   const vinetas: Vineta[] = tarjetas.map((t) => ({
     src: t.foto || "",
@@ -58,6 +62,7 @@ export function NutrienteFichaModal({
           disciplinaBgImage={NUTRI_IMG}
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
+          sinSaltar={sinSaltar}
           onClose={onClose}
           onComplete={onClose}
         />

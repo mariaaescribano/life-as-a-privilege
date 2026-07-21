@@ -14,6 +14,7 @@ import {
   CABALA_SENDEROS,
   NOMBRE_SEFIRA,
   senderoCompleto,
+  senderosContenidoCompleto,
   puntuacionSendero,
   interpretacionSendero,
 } from "../../components/metodo/cabalaSenderos";
@@ -52,6 +53,13 @@ export default function MetodoCabalaSenderosDiagnostico() {
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const s = res.data?.data?.senderos;
+          // Puerta: no se puede entrar al Diagnóstico de senderos sin haber
+          // rellenado el test de LOS 22 senderos. Si falta alguno, se vuelve a
+          // «Los Senderos» para completarlos.
+          if (!senderosContenidoCompleto(s)) {
+            navigate("/metodo/cabala/senderos");
+            return;
+          }
           if (s && typeof s === "object") setSenderos(s);
         } catch { /* sin respuestas todavía */ }
       } catch {
@@ -114,7 +122,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
               Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests
               para mostrar qué caminos fluyen y cuáles piden más trabajo.
@@ -131,10 +139,10 @@ export default function MetodoCabalaSenderosDiagnostico() {
           {!todoCompleto ? (
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%">
               <Caja>
-                <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} textAlign="center">
+                <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} textAlign="center" style={{ textShadow: INK_SHADOW }}>
                   Aún faltan senderos por recorrer
                 </Text>
-                <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7" textAlign="center">
+                <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" textAlign="center" style={{ textShadow: INK_SHADOW }}>
                   Completa el test de los 22 senderos para recibir tu diagnóstico final. Cada respuesta se guarda
                   automáticamente; puedes continuar cuando quieras.
                 </Text>
@@ -146,21 +154,21 @@ export default function MetodoCabalaSenderosDiagnostico() {
               <Reveal direction="up" distance={20} delay={0.18} duration={0.7} w="100%">
                 {prioritarios.length > 0 ? (
                   <Caja destacado>
-                    <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={3}>
+                    <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
                       Tus senderos prioritarios
                     </Text>
                     <Flex direction="column" gap={4}>
                       {prioritarios.map(({ s, band, total }) => (
                         <Box key={s.num}>
                           <Flex align="baseline" justify="space-between" gap={3} wrap="wrap" mb={1}>
-                            <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700">
+                            <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {s.orden} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
                             </Text>
                             <Text color={`${cabalaTxt}88`} fontSize="xs" letterSpacing="0.08em" textTransform="uppercase">
                               {band?.titulo} · {total}
                             </Text>
                           </Flex>
-                          <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
+                          <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                             {band?.texto}
                           </Text>
                         </Box>
@@ -169,10 +177,10 @@ export default function MetodoCabalaSenderosDiagnostico() {
                   </Caja>
                 ) : (
                   <Caja>
-                    <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} textAlign="center">
+                    <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} textAlign="center" style={{ textShadow: INK_SHADOW }}>
                       Tus transiciones fluyen
                     </Text>
-                    <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7" textAlign="center">
+                    <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" textAlign="center" style={{ textShadow: INK_SHADOW }}>
                       No aparece ningún sendero con una resistencia marcada. Sigue observándote: el equilibrio se
                       sostiene practicándolo.
                     </Text>
@@ -183,14 +191,14 @@ export default function MetodoCabalaSenderosDiagnostico() {
               {/* ── Todos los senderos ── */}
               <Reveal direction="up" distance={18} delay={0.24} duration={0.6} w="100%">
                 <Caja>
-                  <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.08em" mb={4}>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
                     Los 22 senderos
                   </Text>
                   <Flex direction="column" gap={3}>
                     {resultados.map(({ s, band, total }) => (
                       <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
                             borderBottom={`1px solid ${cabalaTxt}1c`} pb={2.5}>
-                        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }}>
+                        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
                           <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
                           {s.letra} <Box as="span" color={`${cabalaTxt}77`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
                         </Text>

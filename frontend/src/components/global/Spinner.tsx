@@ -16,7 +16,8 @@ interface SpinnerProps {
  * Spinner unificado de la plataforma:
  * - anillo sutil con un arco superior animado (rotación lineal continua)
  * - drop-shadow del color para el característico glow turquesa
- * - en fullScreen, overlay oscuro con backdrop-blur (no blanco, no agresivo)
+ * - en fullScreen, overlay TRANSPARENTE (solo centra el anillo; sin velo oscuro,
+ *   para no pintar un "box turquesa oscuro" sobre el fondo teal al cargar)
  */
 const SpinnerTurquesa: React.FC<SpinnerProps> = ({
   size = 42,
@@ -60,9 +61,7 @@ const SpinnerTurquesa: React.FC<SpinnerProps> = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            background: "rgba(0, 32, 32, 0.28)",
-            backdropFilter: "blur(4px)",
-            WebkitBackdropFilter: "blur(4px)",
+            background: "transparent",
             zIndex: 9999,
           }}
         >

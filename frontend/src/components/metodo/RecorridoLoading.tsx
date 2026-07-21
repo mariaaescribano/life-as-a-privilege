@@ -22,7 +22,8 @@ export function RecorridoLoading() {
           sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
         />
         <Box position="relative" zIndex={1}>
-          <SpinnerTurquesa fullScreen={false} />
+          {/* Fondo turquesa → spinner blanco (siempre). */}
+          <SpinnerTurquesa fullScreen={false} color="#ffffff" />
         </Box>
       </Flex>
     </Box>

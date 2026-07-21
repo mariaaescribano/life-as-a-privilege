@@ -21,3 +21,37 @@ export const AYURVEDA_INDICE: PasoRecorrido[] = [
 ];
 
 export const AYURVEDA_TOTAL = AYURVEDA_INDICE.length;
+
+// ─────────────────────────────────────────────────────────────────────────
+// ALCANZABILIDAD · «hasta dónde puede llegar» el usuario en el recorrido de un
+// dosha. Replica el gate `!guardado` de cada página (el dato ya persistido de
+// su sección, keyed por dosha). Los pasos sin requisito devuelven true.
+//
+// ⚠️ Si cambias el gate del botón «siguiente» de una página, cámbialo aquí.
+// ─────────────────────────────────────────────────────────────────────────
+type AyurvedaData = Record<string, any>;
+
+const tieneContenido = (v: unknown): boolean =>
+  typeof v === "string" ? v.trim().length > 0 : Array.isArray(v) ? v.length > 0 : false;
+
+/** Gate para avanzar MÁS ALLÁ del paso `n` (1-based) del recorrido del dosha. */
+export function puedeAvanzarAyurveda(data: AyurvedaData, dosha: string, n: number): boolean {
+  const sec = (k: string): AyurvedaData => (data?.[k]?.[dosha] || {});
+  switch (n) {
+    case 1: return tieneContenido(sec("doshaIntro").cambio);            // Naturaleza
+    case 2: return tieneContenido(sec("doshaDescubre").reflexion);      // Descúbrete
+    case 3: return tieneContenido(sec("doshaCuerpo").reflexion);        // Cuerpo
+    case 4: return tieneContenido(sec("doshaDesequilibrio").reflexion); // Equilibrio
+    // Estilo de Vida guarda su reflexión/compromiso bajo la sección doshaCuidarte.
+    case 6: return tieneContenido(sec("doshaCuidarte").reflexion) || tieneContenido(sec("doshaCuidarte").compromiso);
+    case 7: return tieneContenido(sec("doshaDia").bloques);             // Tu día
+    default: return true; // 5 (Alimentación), 8 (Tu mapa), 9 (Cursos): sin requisito
+  }
+}
+
+/** Paso máximo ALCANZABLE (1-based) del recorrido de un dosha. */
+export function pasoAlcanzableAyurveda(data: AyurvedaData, dosha: string): number {
+  let n = 1;
+  while (n < AYURVEDA_TOTAL && puedeAvanzarAyurveda(data, dosha, n)) n++;
+  return n;
+}

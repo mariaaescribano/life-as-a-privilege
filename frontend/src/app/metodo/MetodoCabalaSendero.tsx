@@ -11,12 +11,14 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ESCALA } from "../../components/metodo/cabalaTest";
+import { CABALA_TOTAL_PAGINAS, paginaSendero } from "../../components/metodo/cabalaSefirot";
 import {
   CABALA_SENDEROS,
   senderoPorNum,
   NOMBRE_SEFIRA,
   puntuacionSendero,
   senderoCompleto,
+  senderosContenidoCompleto,
   interpretacionSendero,
   type SenderoContenido,
 } from "../../components/metodo/cabalaSenderos";
@@ -52,7 +54,8 @@ const Parrafos = ({ items }: { items: string[] }) => (
   <RevealStagger inView display="flex" flexDirection="column" gap={3.5}>
     {items.map((p, i) => (
       <RevealItem key={i}>
-        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{p}</Text>
+        <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85"
+              style={{ textShadow: INK_SHADOW }}>{p}</Text>
       </RevealItem>
     ))}
   </RevealStagger>
@@ -128,6 +131,14 @@ export default function MetodoCabalaSendero() {
   const total = puntuacionSendero(sendero, answers);
   const banda = completo ? interpretacionSendero(sendero, total) : null;
 
+  // El botón «Diagnóstico →» del último sendero sólo se habilita cuando LOS 22
+  // senderos están rellenos. Se combina lo ya guardado con lo respondido en vivo
+  // en este sendero.
+  const contenidoSenderos = senderosContenidoCompleto({
+    ...(dataRef.current?.senderos ?? {}),
+    [sendero.num]: answers,
+  });
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -139,7 +150,7 @@ export default function MetodoCabalaSendero() {
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title={`${sendero.letra} (${sendero.hebreo})`}
-              pageLabel={`${sendero.orden}/22`}
+              pageLabel={`${paginaSendero(sendero.orden)}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
@@ -149,8 +160,8 @@ export default function MetodoCabalaSendero() {
                 ? { label: `← ${senderoPorNum[prevNum]?.letra ?? "Anterior"}`, onClick: () => navigate(`/metodo/cabala/sendero/${prevNum}`) }
                 : { label: "← Los senderos", onClick: () => navigate("/metodo/cabala/senderos") }}
               next={nextNum
-                ? { label: `${senderoPorNum[nextNum]?.letra ?? "Siguiente"} →`, onClick: () => navigate(`/metodo/cabala/sendero/${nextNum}`) }
-                : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
+                ? { label: `${senderoPorNum[nextNum]?.letra ?? "Siguiente"} →`, onClick: () => navigate(`/metodo/cabala/sendero/${nextNum}`), disabled: !completo, disabledTooltip: "Completa el test de este sendero para pasar a la siguiente letra" }
+                : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/senderos/diagnostico"), disabled: !contenidoSenderos, disabledTooltip: "Completa el test de los 22 senderos para ver tu Diagnóstico" }}
             />
           </Reveal>
 
@@ -166,7 +177,8 @@ export default function MetodoCabalaSendero() {
                   {sendero.hebreo}
                 </Text>
                 <Box>
-                  <Text color={`${cabalaTxt}99`} fontSize="sm" letterSpacing="0.18em" textTransform="uppercase">
+                  <Text color={`${cabalaTxt}cc`} fontSize="sm" letterSpacing="0.18em" textTransform="uppercase"
+                        style={{ textShadow: INK_SHADOW }}>
                     Sendero {sendero.letra}
                   </Text>
                   <Text color={cabalaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.15" mt={1}
@@ -174,7 +186,8 @@ export default function MetodoCabalaSendero() {
                     {sendero.titulo || `De ${NOMBRE_SEFIRA[sendero.from]} a ${NOMBRE_SEFIRA[sendero.to]}`}
                   </Text>
                   <Flex align="center" gap={3} mt={3} justify={{ base: "center", sm: "flex-start" }} wrap="wrap">
-                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} letterSpacing="0.06em">
+                    <Text color={`${cabalaTxt}ee`} fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                          style={{ textShadow: INK_SHADOW }}>
                       {NOMBRE_SEFIRA[sendero.from]} → {NOMBRE_SEFIRA[sendero.to]}
                     </Text>
                     {sendero.palabraClave && (
@@ -201,7 +214,8 @@ export default function MetodoCabalaSendero() {
               <Caja>
                 <TituloCaja>Significado tradicional</TituloCaja>
                 <Divisor mt={3} mb={4} />
-                <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" whiteSpace="pre-line">
+                <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" whiteSpace="pre-line"
+                      style={{ textShadow: INK_SHADOW }}>
                   {sendero.significadoTradicional}
                 </Text>
               </Caja>
@@ -214,7 +228,8 @@ export default function MetodoCabalaSendero() {
               <Caja>
                 <TituloCaja>Traducción psicológica</TituloCaja>
                 <Divisor mt={3} mb={4} />
-                <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" whiteSpace="pre-line">
+                <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" whiteSpace="pre-line"
+                      style={{ textShadow: INK_SHADOW }}>
                   {sendero.traduccionPsicologica}
                 </Text>
               </Caja>
@@ -249,44 +264,75 @@ export default function MetodoCabalaSendero() {
                 <TituloCaja>Test</TituloCaja>
                 <Divisor mt={3} mb={4} />
                 {sendero.testTitulo && (
-                  <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.5" mb={2}>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.5" mb={2} style={{ textShadow: INK_SHADOW }}>
                     {sendero.testTitulo}
                   </Text>
                 )}
-                <Flex gap={2} mb={5} wrap="wrap">
+                {/* Leyenda de la escala (qué significa cada número 1–5) */}
+                <Flex gap={{ base: 2, md: 4 }} mb={5} wrap="wrap">
                   {ESCALA.map((op) => (
-                    <Text key={op.valor} color={`${cabalaTxt}99`} fontSize="xs">
+                    <Text key={op.valor} color={`${cabalaTxt}cc`} fontSize="xs" style={{ textShadow: INK_SHADOW }}>
                       <Box as="span" fontWeight="800" color={cabalaTxt}>{op.valor}</Box> {op.label}
                     </Text>
                   ))}
                 </Flex>
 
-                <RevealStagger inView display="flex" flexDirection="column" gap={5}>
-                  {sendero.test.map((preg, qi) => (
-                    <RevealItem key={qi}>
-                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mb={2.5}>
-                        <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{qi + 1}.</Box>
-                        {preg.texto}
-                      </Text>
-                      <Flex gap={{ base: 1.5, md: 2 }}>
-                        {ESCALA.map((op) => {
-                          const sel = answers[qi] === op.valor;
-                          return (
-                            <Box key={op.valor} as="button" onClick={() => guardar(qi, op.valor)}
-                                 flex="1" minW={{ base: "40px", md: "48px" }} h={{ base: "38px", md: "42px" }}
-                                 borderRadius="lg" display="flex" alignItems="center" justifyContent="center"
-                                 bg={sel ? cabalaTxt : `${cabalaTxt}12`} color={sel ? cabalaBg : `${cabalaTxt}aa`}
-                                 border={`1px solid ${sel ? cabalaTxt : `${cabalaTxt}33`}`} fontSize={{ base: "sm", md: "md" }}
-                                 fontWeight="700" cursor="pointer" transition="all 0.14s"
-                                 boxShadow={sel ? `0 0 14px ${cabalaTxt}88` : "none"}
-                                 _hover={sel ? {} : { bg: `${cabalaTxt}28`, borderColor: `${cabalaTxt}66` }}>
-                              {op.valor}
-                            </Box>
-                          );
-                        })}
-                      </Flex>
-                    </RevealItem>
-                  ))}
+                {/* Cada pregunta a la izquierda y, a la derecha, un box para poner
+                    el número (1–5). */}
+                <RevealStagger inView display="flex" flexDirection="column" gap={{ base: 3.5, md: 4 }}>
+                  {sendero.test.map((preg, qi) => {
+                    const val = answers[qi];
+                    const relleno = val >= 1 && val <= 5;
+                    return (
+                      <RevealItem key={qi}>
+                        <Flex align="center" gap={{ base: 3, md: 5 }}>
+                          <Text flex="1" color={`${cabalaTxt}f0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.55"
+                                style={{ textShadow: INK_SHADOW }}>
+                            <Box as="span" color={cabalaTxt} fontWeight="700" mr={1.5}>{qi + 1}.</Box>
+                            {preg.texto}
+                          </Text>
+                          <Box
+                            as="input"
+                            type="number"
+                            inputMode="numeric"
+                            min={1}
+                            max={5}
+                            aria-label={`Respuesta pregunta ${qi + 1} (1 a 5)`}
+                            placeholder="—"
+                            value={relleno ? String(val) : ""}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              const raw = e.target.value;
+                              if (raw === "") { guardar(qi, 0); return; }
+                              const n = parseInt(raw, 10);
+                              if (Number.isNaN(n)) return;
+                              guardar(qi, Math.max(1, Math.min(5, n)));
+                            }}
+                            flexShrink={0}
+                            w={{ base: "56px", md: "64px" }}
+                            h={{ base: "48px", md: "52px" }}
+                            textAlign="center"
+                            borderRadius="xl"
+                            bg={relleno ? `${cabalaTxt}22` : `${cabalaTxt}10`}
+                            color={cabalaTxt}
+                            border={`1.5px solid ${relleno ? cabalaTxt : `${cabalaTxt}44`}`}
+                            fontSize={{ base: "lg", md: "xl" }}
+                            fontWeight="800"
+                            boxShadow={relleno ? `0 0 14px ${cabalaTxt}66` : "none"}
+                            transition="all 0.14s"
+                            sx={{
+                              caretColor: cabalaTxt,
+                              "::placeholder": { color: `${cabalaTxt}55`, fontWeight: 400 },
+                              "::-webkit-outer-spin-button": { WebkitAppearance: "none", margin: 0 },
+                              "::-webkit-inner-spin-button": { WebkitAppearance: "none", margin: 0 },
+                              MozAppearance: "textfield",
+                            }}
+                            _hover={{ borderColor: `${cabalaTxt}88` }}
+                            _focus={{ outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 16px ${cabalaTxt}88` }}
+                          />
+                        </Flex>
+                      </RevealItem>
+                    );
+                  })}
                 </RevealStagger>
               </Caja>
             </Reveal>
@@ -304,7 +350,8 @@ export default function MetodoCabalaSendero() {
                 </Flex>
                 <Divisor mt={3} mb={4} />
                 {!completo && (
-                  <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}>
+                  <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={4}
+                        style={{ textShadow: INK_SHADOW }}>
                     Responde las 5 preguntas para ver tu interpretación.
                   </Text>
                 )}
@@ -320,9 +367,10 @@ export default function MetodoCabalaSendero() {
                            opacity={completo && !activa ? 0.55 : 1} transition="all 0.2s">
                         <Flex align="baseline" gap={2} mb={1} wrap="wrap">
                           <Text color={`${cabalaTxt}88`} fontSize="xs" fontWeight="700" letterSpacing="0.08em">{b.min}–{b.max}</Text>
-                          <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700">{b.titulo}</Text>
+                          <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>{b.titulo}</Text>
                         </Flex>
-                        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{b.texto}</Text>
+                        <Text color={`${cabalaTxt}e8`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                              style={{ textShadow: INK_SHADOW }}>{b.texto}</Text>
                       </Box>
                       </RevealItem>
                     );
@@ -338,7 +386,8 @@ export default function MetodoCabalaSendero() {
               <Caja>
                 <TituloCaja>Señales de desequilibrio</TituloCaja>
                 <Divisor mt={3} mb={4} />
-                <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={3.5}>
+                <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5}
+                      style={{ textShadow: INK_SHADOW }}>
                   Durante esta semana observa si…
                 </Text>
                 <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
@@ -347,7 +396,8 @@ export default function MetodoCabalaSendero() {
                     <Flex align="flex-start" gap={3}>
                       <Box flexShrink={0} mt="10px" w="6px" h="6px" borderRadius="full" bg={cabalaTxt}
                            boxShadow={`0 0 8px ${cabalaTxt}aa`} />
-                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{s}</Text>
+                      <Text color={`${cabalaTxt}f2`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                            style={{ textShadow: INK_SHADOW }}>{s}</Text>
                     </Flex>
                     </RevealItem>
                   ))}
@@ -362,7 +412,8 @@ export default function MetodoCabalaSendero() {
               <Caja>
                 <TituloCaja>Has cruzado este umbral cuando…</TituloCaja>
                 <Divisor mt={3} mb={4} />
-                <Text color={`${cabalaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.8">
+                <Text color={`${cabalaTxt}ff`} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.8"
+                      style={{ textShadow: INK_SHADOW }}>
                   {sendero.umbral}
                 </Text>
               </Caja>
@@ -381,22 +432,37 @@ export default function MetodoCabalaSendero() {
           )}
 
           {/* ── Botón «Siguiente» discreto, al final del todo ── */}
-          <Reveal direction="up" distance={14} delay={0.4} duration={0.6} display="flex" justifyContent="center">
-            <Box as="button"
-                 onClick={() => navigate(nextNum ? `/metodo/cabala/sendero/${nextNum}` : "/metodo/cabala/senderos/diagnostico")}
-                 mt={{ base: 2, md: 4 }}
-                 display="inline-flex" alignItems="center" gap={2}
-                 px={{ base: 6, md: 7 }} py={{ base: 2, md: 2.5 }} borderRadius="full"
-                 bg="transparent" border={`1px solid ${cabalaTxt}66`} color={cabalaTxt}
-                 fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
-                 cursor="pointer" transition="all 0.18s" sx={{ backdropFilter: "blur(2px)" }}
-                 _hover={{ bg: `${cabalaTxt}14`, borderColor: cabalaTxt, transform: "translateY(-2px)", boxShadow: `0 0 18px ${cabalaTxt}44` }}>
-              {nextNum ? "Siguiente sendero" : "Ver diagnóstico"}
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
-                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-              </Box>
-            </Box>
-          </Reveal>
+          {/* En el último sendero, «Ver diagnóstico» sólo se habilita cuando los
+              22 senderos están rellenos (misma puerta que el botón del header). */}
+          {(() => {
+            // No se puede pasar a la siguiente letra sin completar el test de
+            // este sendero; en el último, se exige tener los 22 completos.
+            const bloqueado = nextNum ? !completo : !contenidoSenderos;
+            const tooltip = nextNum
+              ? "Completa el test de este sendero para pasar a la siguiente letra"
+              : "Completa el test de los 22 senderos para ver tu Diagnóstico";
+            return (
+              <Reveal direction="up" distance={14} delay={0.4} duration={0.6} display="flex" justifyContent="center">
+                <Box as="button"
+                     onClick={bloqueado ? undefined : () => navigate(nextNum ? `/metodo/cabala/sendero/${nextNum}` : "/metodo/cabala/senderos/diagnostico")}
+                     disabled={bloqueado}
+                     title={bloqueado ? tooltip : undefined}
+                     mt={{ base: 2, md: 4 }}
+                     display="inline-flex" alignItems="center" gap={2}
+                     px={{ base: 6, md: 7 }} py={{ base: 2, md: 2.5 }} borderRadius="full"
+                     bg="transparent" border={`1px solid ${bloqueado ? `${cabalaTxt}33` : `${cabalaTxt}66`}`}
+                     color={bloqueado ? `${cabalaTxt}55` : cabalaTxt}
+                     fontSize={{ base: "sm", md: "md" }} fontWeight="600" letterSpacing="0.06em"
+                     cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.18s" sx={{ backdropFilter: "blur(2px)" }}
+                     _hover={bloqueado ? undefined : { bg: `${cabalaTxt}14`, borderColor: cabalaTxt, transform: "translateY(-2px)", boxShadow: `0 0 18px ${cabalaTxt}44` }}>
+                  {nextNum ? "Siguiente sendero" : "Ver diagnóstico"}
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                  </Box>
+                </Box>
+              </Reveal>
+            );
+          })()}
         </Flex>
       </Flex>
 

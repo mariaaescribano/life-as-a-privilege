@@ -9,10 +9,20 @@ import { astrologiaTxt } from "../../GlobalVariables";
 // Arquetipos, casas → Casas; ayurveda: doshas → Energías…). Reutiliza el
 // ComicViewer con el tema (color + fondo) de la disciplina.
 //
-//   · onContinue → botón (arriba, al lado de la X) o el tick de la última
-//                  viñeta. El padre navega al siguiente paso.
-//   · onClose    → la X / Escape. El padre cierra y se queda donde estaba.
+//   · Botón «Saltar →» (arriba a la IZQUIERDA, en el color txt de la disciplina)
+//     y botón del siguiente título (arriba, a la IZQUIERDA de la X, con la
+//     imagen de la disciplina de fondo): ambos saltan al siguiente paso.
+//   · onClose → la X / Escape. El padre cierra y se queda donde estaba.
 // ─────────────────────────────────────────────────────────────────────────
+
+// Flecha → (material «arrow_forward»), para los dos botones.
+const FlechaDerecha = () => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
+    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+  </Box>
+);
+
 interface ComicPasoModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,18 +31,20 @@ interface ComicPasoModalProps {
   vinetas: Vineta[];
   /** Texto del botón de continuar (p.ej. "Arquetipos", "Energías"). */
   continueLabel: string;
-  /** Color de acento de la disciplina (flechas, líneas, botón). */
+  /** Color de acento de la disciplina (flechas, líneas, botones). */
   themeColor?: string;
   /** Foto de fondo de la disciplina. Si se omite, el ComicViewer usa el fondo
-   *  estrellado por defecto (astrología). */
+   *  estrellado por defecto (astrología). También es la imagen que se usa de
+   *  fondo del botón del siguiente título. */
   disciplinaBgImage?: string;
-  /** Color hex del fondo de la disciplina (velo/glow del box). */
+  /** Color hex del fondo de la disciplina (velo/glow del box y del botón). */
   disciplinaBgColor?: string;
   /** Sombra del texto de las viñetas. */
   textShadow?: string;
-  /** Fondo del botón «continuar» (arriba, junto a la X). Por defecto el acento. */
+  /** (En desuso) El botón del siguiente título ahora lleva SIEMPRE la imagen de
+   *  la disciplina de fondo; estos props se ignoran. Se mantienen para no
+   *  romper los llamadores que aún los pasan. */
   continueBtnBg?: string;
-  /** Color del texto del botón «continuar». Por defecto oscuro. */
   continueBtnColor?: string;
 }
 
@@ -46,11 +58,14 @@ export function ComicPasoModal({
   disciplinaBgImage,
   disciplinaBgColor,
   textShadow,
-  continueBtnBg,
-  continueBtnColor = "#0a0a1a",
 }: ComicPasoModalProps) {
-  // Fondo del botón «continuar»: por defecto el acento de la disciplina.
-  const btnBg = continueBtnBg ?? themeColor;
+  // Imagen de la disciplina para el fondo del botón del siguiente título.
+  // Astrología no pasa disciplinaBgImage → usa el fondo estrellado, igual que
+  // hace el propio ComicViewer.
+  const imgFondo = disciplinaBgImage ?? "/img/astrologia/space.jpg";
+  // Velo sobre la imagen para que el texto del botón se lea bien.
+  const veloBtn = disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)";
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -63,7 +78,9 @@ export function ComicPasoModal({
         fontFamily="'EB Garamond', serif"
         minH="100vh"
       >
-        {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
+        {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta.
+            sinSaltar: ocultamos el «Saltar» propio del ComicViewer; aquí abajo
+            pintamos el nuestro («Saltar →», en el color de la disciplina). */}
         <ComicViewer
           key={String(isOpen)}
           vinetas={vinetas}
@@ -73,10 +90,46 @@ export function ComicPasoModal({
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
+          sinSaltar
         />
 
-        {/* Botón de continuar fijo, a la IZQUIERDA de la X del ComicViewer.
-            Visible durante todo el cómic para poder pasar en cualquier momento. */}
+        {/* «Saltar →» — arriba a la IZQUIERDA, en el color (txt) de la disciplina.
+            Chip oscuro para que el texto de color resalte sobre el cómic. */}
+        <Box
+          as="button"
+          onClick={onContinue}
+          position="fixed"
+          top={{ base: 3, md: 5 }}
+          left={{ base: 3, md: 5 }}
+          zIndex={11}
+          display="inline-flex"
+          alignItems="center"
+          gap={1.5}
+          h={{ base: "42px", md: "48px" }}
+          px={{ base: 4, md: 5 }}
+          borderRadius="full"
+          bg="rgba(0,0,0,0.5)"
+          color={themeColor}
+          border={`1px solid ${themeColor}aa`}
+          fontFamily="'EB Garamond', serif"
+          fontWeight="700"
+          fontStyle="italic"
+          fontSize={{ base: "sm", md: "md" }}
+          letterSpacing="0.04em"
+          whiteSpace="nowrap"
+          cursor="pointer"
+          boxShadow="0 2px 12px rgba(0,0,0,0.45)"
+          sx={{ backdropFilter: "blur(4px)" }}
+          transition="all 0.2s"
+          _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
+          style={{ textShadow: `0 1px 3px rgba(0,0,0,0.85), 0 0 6px ${themeColor}` }}
+        >
+          Saltar
+          <FlechaDerecha />
+        </Box>
+
+        {/* Botón del siguiente título — arriba, a la IZQUIERDA de la X, con la
+            imagen de la disciplina de fondo (+ velo para leer el texto). */}
         <Box
           as="button"
           onClick={onContinue}
@@ -84,15 +137,15 @@ export function ComicPasoModal({
           top={{ base: 3, md: 5 }}
           right={{ base: "60px", md: "72px" }}
           zIndex={11}
+          overflow="hidden"
           display="inline-flex"
           alignItems="center"
-          gap={2}
+          justifyContent="center"
           h={{ base: "42px", md: "48px" }}
           px={{ base: 4, md: 6 }}
           borderRadius="full"
-          bg={btnBg}
-          color={continueBtnColor}
           border={`1px solid ${themeColor}`}
+          color="#ffffff"
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "xs", md: "sm" }}
@@ -104,10 +157,14 @@ export function ComicPasoModal({
           transition="all 0.2s"
           _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${themeColor}88, 0 0 58px ${themeColor}44` }}
         >
-          {continueLabel}
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-               w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+          {/* Fondo: imagen de la disciplina + velo */}
+          <Box as="img" src={imgFondo} alt="" loading="eager" position="absolute" inset="0"
+               w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+          <Box position="absolute" inset="0" bg={veloBtn} />
+          <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}
+               style={{ textShadow: `0 1px 3px rgba(0,0,0,0.9), 0 0 6px ${themeColor}` }}>
+            {continueLabel}
+            <FlechaDerecha />
           </Box>
         </Box>
       </ModalContent>

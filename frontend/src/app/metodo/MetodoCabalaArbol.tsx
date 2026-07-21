@@ -122,7 +122,9 @@ export default function MetodoCabalaArbol() {
           </Reveal>
 
           {/* ── Árbol de la Vida (dinámico) ── */}
-          <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.18} duration={0.8} w="100%">
+          {/* El box aparece rápido (sin gran retardo) para que se VEA el trazado
+              épico del Árbol y la aparición de las sefirot dentro del SVG. */}
+          <Reveal direction="up" distance={20} delay={0.15} duration={0.55} w="100%">
             <Box
               w="100%"
               position="relative"

@@ -49,9 +49,10 @@ export default function MetodoTcmCiclos() {
     })();
   }, [navigate]);
 
-  const abrir = (ciclo: Ciclo, origen: Elemento) => {
-    const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
-    setSel({ ciclo, origen, destino });
+  // Marca una relación como vista. Se llama tanto al pulsar su flechita como al
+  // pasar por ella dentro del cómic (onView), porque el usuario puede recorrer
+  // TODAS las relaciones de un ciclo navegando el cómic sin tocar cada flechita.
+  const verRelacion = (ciclo: Ciclo, origen: Elemento) => {
     setVistas((prev) => {
       const key = `${ciclo}-${origen}`;
       if (prev.has(key)) return prev;
@@ -59,6 +60,12 @@ export default function MetodoTcmCiclos() {
       next.add(key);
       return next;
     });
+  };
+
+  const abrir = (ciclo: Ciclo, origen: Elemento) => {
+    const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
+    setSel({ ciclo, origen, destino });
+    verRelacion(ciclo, origen);
   };
 
   // No quitamos el spinner hasta que estén descargados los iconos de los
@@ -158,7 +165,7 @@ export default function MetodoTcmCiclos() {
       {ilustracionesModal}
 
       {/* Popup de la relación (reutiliza el ComicViewer inmersivo) */}
-      <RelacionModal rel={sel} onClose={() => setSel(null)} />
+      <RelacionModal rel={sel} onClose={() => setSel(null)} onView={verRelacion} />
 
       <IndiceTcm />
 

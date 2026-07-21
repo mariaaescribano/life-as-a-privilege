@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { Mail } from "lucide-react";
+import { Mail, Heart } from "lucide-react";
 import axios from "axios";
 import {
   API_URL,
@@ -77,7 +77,11 @@ export function CartaBox() {
       <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
       <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }}>
         <Flex direction="column" align="center" gap={2} mb={5}>
-          <Mail size={26} color={TINTA} />
+          {/* Corazón (color psicología) a la izquierda del sobre */}
+          <Flex align="center" gap={2}>
+            <Heart size={22} color={TINTA} fill={TINTA} />
+            <Mail size={26} color={TINTA} />
+          </Flex>
           <Text
             color={TINTA}
             fontSize={{ base: "xl", md: "2xl" }}

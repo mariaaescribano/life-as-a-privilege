@@ -1,5 +1,5 @@
-import type { CabalaPageKey } from "./cabalaSefirot";
-import { puntuacionDeficit, puntuacionExceso, puntuacionEquilibrio, testCompleto } from "./cabalaTest";
+import { CABALA_SEFIROT_ORDEN, cabalaSefirotMap, type CabalaPageKey } from "./cabalaSefirot";
+import { CABALA_TEST, puntuacionDeficit, puntuacionExceso, puntuacionEquilibrio, testCompleto } from "./cabalaTest";
 
 // ─────────────────────────────────────────────────────────────────────────
 // DIAGNÓSTICO basado en el ÁRBOL DE LA VIDA
@@ -51,6 +51,41 @@ export function nivelCombinado(test?: number[], autoeval?: number[]): number {
 /** ¿Hay datos suficientes de una sefirá (test O autoevaluación) para evaluarla? */
 export function sefiraEvaluable(test?: number[], autoeval?: number[]): boolean {
   return testCompleto(test) || autoevalCompleta(autoeval);
+}
+
+/** ¿Está TODO lo que se pide en una sefirá relleno (preguntas de reflexión +
+ *  autoevaluación + test)? Versión a partir de los datos GUARDADOS, usada por los
+ *  gates del índice para el bloqueo secuencial. Mismo criterio que el botón
+ *  «siguiente» de la página de la sefirá (dimensionCompleta). */
+export function sefiraDimensionCompleta(
+  key: CabalaPageKey,
+  data?: { preguntas?: Record<string, string[]>; autoeval?: Record<string, number[]>; test?: Record<string, number[]> },
+): boolean {
+  const def = (cabalaSefirotMap as any)[key];
+  if (!def) return false;
+  const d = data ?? {};
+  const preg = d.preguntas?.[key] ?? [];
+  const preguntasOk = def.preguntas.items.length === 0
+    || (preg.length === def.preguntas.items.length && preg.every((r: string) => (r ?? "").trim().length > 0));
+  const av = d.autoeval?.[key] ?? [];
+  const autoevalOk = def.autoevaluacion.items.length === 0
+    || (av.length === def.autoevaluacion.items.length && av.every((v) => v >= 1));
+  const testDim = CABALA_TEST[key];
+  const testOk = !testDim || testCompleto(d.test?.[key]);
+  return preguntasOk && autoevalOk && testOk;
+}
+
+/** ¿Está TODO el contenido de las sefirot relleno? Es decir, ¿todas las
+ *  dimensiones son evaluables (tienen su test o su autoevaluación completos)?
+ *  Es la puerta para entrar al Diagnóstico (Mapa Evolutivo): no se puede ir al
+ *  diagnóstico hasta haber rellenado el contenido de todas las sefirot. */
+export function sefirotContenidoCompleto(
+  test?: Record<string, number[]>,
+  autoeval?: Record<string, number[]>,
+): boolean {
+  const t = test ?? {};
+  const a = autoeval ?? {};
+  return CABALA_SEFIROT_ORDEN.every((k) => sefiraEvaluable(t[k], a[k]));
 }
 
 /** Polaridad dominante de la sefirá: hacia el déficit, el equilibrio o el exceso. */

@@ -6,8 +6,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { IndiceRecorrido } from "./IndiceRecorrido";
-import { AYURVEDA_INDICE, AYURVEDA_TOTAL } from "./ayurvedaRecorrido";
+import { AYURVEDA_INDICE, AYURVEDA_TOTAL, pasoAlcanzableAyurveda } from "./ayurvedaRecorrido";
 import {
+  API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
@@ -31,6 +32,8 @@ export function IndiceAyurveda() {
       paramKey="dosha"
       acento={acento}
       progresoKey="ayurveda"
+      alcanzableUrl={(userId) => `${API_URL}/metodo-ayurveda/${userId}`}
+      alcanzableDe={(data, dosha) => pasoAlcanzableAyurveda(data, dosha)}
     />
   );
 }

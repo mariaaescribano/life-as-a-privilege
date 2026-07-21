@@ -435,7 +435,9 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     pointerEvents: 'none',
                     strokeDasharray: len + 4,
                     strokeDashoffset: len + 4,
-                    animation: `pathDraw 1.15s ease ${0.15 + idx * 0.085}s forwards`,
+                    // Base 0.5s: los senderos empiezan a dibujarse cuando el box ya
+                    // es visible, para que se vea el trazado completo.
+                    animation: `pathDraw 1.15s ease ${0.5 + idx * 0.085}s forwards`,
                   }}
                 />
               )
@@ -468,7 +470,9 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     opacity: 1,
                     strokeDasharray: len + 4,
                     strokeDashoffset: len + 4,
-                    animation: `pathDraw 0.7s ease ${idx * 0.04}s forwards`,
+                    // Trazado épico: cada sendero se dibuja, con más recorrido y
+                    // más separación entre uno y otro, ya con el box visible.
+                    animation: `pathDraw 0.95s ease ${0.75 + idx * 0.06}s forwards`,
                     transition: 'stroke-width 0.15s, opacity 0.15s',
                   }}
                 />
@@ -481,7 +485,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   const fillCirculo = leido ? cabalaBg : cabalaTxt
                   const fillNumero = leido ? cabalaTxt : cabalaBg
                   return (
-                    <g style={{ pointerEvents: 'none', opacity: 0, animation: `senderoBadge 0.4s ease ${0.7 + idx * 0.04}s forwards` }}>
+                    <g style={{ pointerEvents: 'none', opacity: 0, transformOrigin: `${mx}px ${my}px`, animation: `sealPop 0.5s cubic-bezier(0.34,1.56,0.64,1) ${1.45 + idx * 0.045}s forwards` }}>
                       <circle
                         cx={mx} cy={my} r={active ? 12 : 10}
                         fill={fillCirculo}
@@ -514,7 +518,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     pointerEvents: 'none',
                     opacity: 0,
                     transformOrigin: `${sefira.x}px ${sefira.y}px`,
-                    animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
+                    animation: `sefiraAppearEpic 0.85s cubic-bezier(0.34,1.56,0.64,1) ${0.9 + sefira.number * 0.06}s forwards`,
                   }}
                 >
                   {/* Fondo del nodo: su foto propia (sefirotfondo) MUY atenuada —

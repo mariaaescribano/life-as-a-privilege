@@ -17,7 +17,6 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
@@ -43,7 +42,6 @@ import {
 
 const TINTA = neuropsicologiaTxt; // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const CREMA = "rgba(255,255,255,0.92)";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // Corazón — se usa en el popup de felicitación.
@@ -129,20 +127,10 @@ export default function MetodoPsicologiaMapa() {
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
   const [felicitarOpen, setFelicitarOpen] = useState(false);
-  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<Constelacion[] | null>(null);
-  const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const montado = useRef(true);
-  useEffect(() => {
-    montado.current = true;
-    return () => {
-      montado.current = false;
-      if (okTimer.current) clearTimeout(okTimer.current);
-    };
-  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -174,24 +162,21 @@ export default function MetodoPsicologiaMapa() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
+  // Guardado SILENCIOSO: persistimos en segundo plano sin mostrar ningún
+  // indicador («Guardando…» todo el rato resultaba agobiante). Los datos se
+  // guardan igual; el usuario solo lo percibe al pulsar «Hecho» (que cierra el
+  // popup y fuerza el guardado con flushGuardado).
   const persistir = async (next: Constelacion[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
-    if (montado.current) setEstadoGuardado("guardando");
     try {
       const nuevo = { ...dataRef.current, constelaciones: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data: nuevo },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = nuevo;
-      if (montado.current) {
-        setEstadoGuardado("ok");
-        if (okTimer.current) clearTimeout(okTimer.current);
-        okTimer.current = setTimeout(() => { if (montado.current) setEstadoGuardado("idle"); }, 2200);
-      }
       return true;
     } catch {
-      if (montado.current) setEstadoGuardado("idle");
       return false;
     }
   };
@@ -199,12 +184,17 @@ export default function MetodoPsicologiaMapa() {
   // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
   const commit = (next: Constelacion[]) => {
     setRelaciones(next);
-    setEstadoGuardado("guardando");
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
     }, 900);
+  };
+
+  // Fuerza el guardado pendiente de inmediato (al cerrar el popup / «Hecho»).
+  const flushGuardado = () => {
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
   };
 
   // Flush al desmontar.
@@ -223,6 +213,9 @@ export default function MetodoPsicologiaMapa() {
   const ir = (ruta: string) => navigate(`/metodo/psicologia/${exp.id}/${ruta}`);
   const total = BLOQUES.length;
   const abierta = relaciones.find((c) => c.id === abiertoId) || null;
+  // No se puede avanzar a Compromiso hasta haber rellenado al menos una
+  // relación (al menos una de sus preguntas respondida).
+  const algunoRelleno = relaciones.some((c) => relRespondidas(c) > 0);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -243,7 +236,12 @@ export default function MetodoPsicologiaMapa() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Atrévete", onClick: () => ir("miedos-preguntas") }}
-                next={{ label: "Compromiso →", onClick: () => setFelicitarOpen(true) }}
+                next={{
+                  label: "Compromiso →",
+                  onClick: () => setFelicitarOpen(true),
+                  disabled: !algunoRelleno,
+                  disabledTooltip: "Rellena al menos una relación para continuar.",
+                }}
               />
             </Reveal>
 
@@ -322,11 +320,6 @@ export default function MetodoPsicologiaMapa() {
                     );
                   })}
                 </RevealStagger>
-
-                {/* Autoguardado global */}
-                <Flex justify="center" mt={{ base: 5, md: 6 }}>
-                  <AutoguardadoIndicador estado={estadoGuardado} color={CREMA} />
-                </Flex>
               </>
             )}
             </Reveal>
@@ -340,9 +333,8 @@ export default function MetodoPsicologiaMapa() {
         <PopupIntegracion
           key={abierta.id}
           c={abierta}
-          estadoGuardado={estadoGuardado}
           onUpdate={(campo, v) => updateCampo(abierta.id, campo, v)}
-          onClose={() => setAbiertoId(null)}
+          onClose={() => { flushGuardado(); setAbiertoId(null); }}
         />
       )}
 
@@ -420,9 +412,8 @@ function MiniChip({ label }: { label: string }) {
 // «Enfrentarse» a la relación e integrarla. Su resultado (verdadSana / coste)
 // es lo que lee la página de Compromiso.
 // ─────────────────────────────────────────────────────────────────────────
-function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
+function PopupIntegracion({ c, onUpdate, onClose }: {
   c: Constelacion;
-  estadoGuardado: EstadoGuardado;
   onUpdate: (campo: keyof Constelacion, valor: string) => void;
   onClose: () => void;
 }) {
@@ -436,8 +427,11 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
   const cuerpoRef = useRef<HTMLDivElement | null>(null);
   const actualRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
+    // Al cambiar de pregunta, subimos la vista arriba del todo (se ve desde la
+    // pregunta, no desde el recuadro) y damos el foco SIN volver a bajar la
+    // vista al textarea (preventScroll).
     cuerpoRef.current?.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => actualRef.current?.focus(), 220);
+    const t = setTimeout(() => actualRef.current?.focus({ preventScroll: true }), 220);
     return () => clearTimeout(t);
   }, [paso]);
 
@@ -573,7 +567,6 @@ function PopupIntegracion({ c, estadoGuardado, onUpdate, onClose }: {
 
             <Flex align="center" gap={2.5} flexShrink={0}>
               <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>
-              <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
             </Flex>
 
             <Box as="button" onClick={siguiente}

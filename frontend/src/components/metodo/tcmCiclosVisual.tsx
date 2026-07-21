@@ -257,7 +257,13 @@ function ordenCiclo(ciclo: Ciclo): Elemento[] {
 // (izq/der) navegan por ellas. Arranca en la relación que pulsó el usuario.
 // Fondo (pantalla completa + box) = foto del CICLO (generador / controlador).
 // Foto de la izquierda = la de la pareja de cada relación.
-export function RelacionModal({ rel, onClose }: { rel: Relacion | null; onClose: () => void }) {
+export function RelacionModal({ rel, onClose, onView }: {
+  rel: Relacion | null;
+  onClose: () => void;
+  /** Se llama con cada relación que el usuario VE al pasar viñetas (no solo la
+   *  flechita que abrió el popup), para marcarla como vista en la página. */
+  onView?: (ciclo: Ciclo, origen: Elemento) => void;
+}) {
   return (
     <Modal isOpen={!!rel} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.6)" />
@@ -293,7 +299,9 @@ export function RelacionModal({ rel, onClose }: { rel: Relacion | null; onClose:
               // Animación (yin-yang) y scroll en BLANCO, como la letra del cómic.
               loader={<TcmLoader color="#ffffff" />}
               scrollbarColor="#ffffff"
+              sinSaltar
               onClose={onClose}
+              onPageView={(idx) => onView?.(ciclo, orden[idx])}
             />
           );
         })()}

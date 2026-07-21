@@ -210,16 +210,16 @@ export default function MetodoNutricion() {
               px={6}
               py={2.5}
               borderRadius="full"
-              bg={`${nutricionTxt}12`}
-              border={`1px solid ${nutricionTxt}55`}
-              color={nutricionTxt}
+              bg="rgba(255,255,255,0.12)"
+              border="1px solid rgba(255,255,255,0.55)"
+              color="white"
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "sm", md: "md" }}
               letterSpacing="0.04em"
               cursor="pointer"
               transition="all 0.2s"
-              _hover={{ bg: `${nutricionTxt}22`, transform: "translateY(-1px)" }}
+              _hover={{ bg: "rgba(255,255,255,0.22)", transform: "translateY(-1px)" }}
             >
               <Box as="span" fontSize="md">⚠</Box> Aviso importante
             </Box>

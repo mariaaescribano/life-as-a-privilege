@@ -14,7 +14,6 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
@@ -40,7 +39,6 @@ import {
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
-const CREMA = "rgba(255,255,255,0.92)";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaMiedosPreguntas() {
@@ -50,21 +48,11 @@ export default function MetodoPsicologiaMiedosPreguntas() {
 
   const [loading, setLoading] = useState(true);
   const [miedos, setMiedos] = useState<MiedoItem[]>([]);
-  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<MiedoItem[] | null>(null);
-  const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const montado = useRef(true);
-  useEffect(() => {
-    montado.current = true;
-    return () => {
-      montado.current = false;
-      if (okTimer.current) clearTimeout(okTimer.current);
-    };
-  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -93,36 +81,38 @@ export default function MetodoPsicologiaMiedosPreguntas() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
 
+  // Guardado SILENCIOSO: persistimos en segundo plano sin mostrar ningún
+  // indicador («Guardando…» todo el rato resultaba agobiante). Los datos se
+  // guardan igual; el usuario solo lo percibe al pulsar «Hecho» (que cierra el
+  // popup y fuerza el guardado con flushGuardado).
   const persistir = async (next: MiedoItem[]): Promise<boolean> => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return false;
-    if (montado.current) setEstadoGuardado("guardando");
     try {
       const data = { ...dataRef.current, miedos: next };
       await axios.patch(`${API_URL}/metodo-psicologia/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = data;
-      if (montado.current) {
-        setEstadoGuardado("ok");
-        if (okTimer.current) clearTimeout(okTimer.current);
-        okTimer.current = setTimeout(() => { if (montado.current) setEstadoGuardado("idle"); }, 2200);
-      }
       return true;
     } catch {
-      if (montado.current) setEstadoGuardado("idle");
       return false;
     }
   };
 
   const commit = (next: MiedoItem[]) => {
     setMiedos(next);
-    setEstadoGuardado("guardando");
     pendiente.current = next;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
     }, 800);
+  };
+
+  // Fuerza el guardado pendiente de inmediato (al cerrar el popup / «Hecho»).
+  const flushGuardado = () => {
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
   };
 
   // Flush al desmontar.
@@ -239,11 +229,6 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                     );
                   })}
                 </RevealStagger>
-
-                {/* Autoguardado global */}
-                <Flex justify="center">
-                  <AutoguardadoIndicador estado={estadoGuardado} color={CREMA} />
-                </Flex>
               </>
             )}
             </Reveal>
@@ -257,9 +242,8 @@ export default function MetodoPsicologiaMiedosPreguntas() {
         <PopupEnfrentar
           key={abierto.id}
           miedo={abierto}
-          estadoGuardado={estadoGuardado}
           onUpdate={(key, v) => updateRespuesta(abierto.id, key, v)}
-          onClose={() => setAbiertoId(null)}
+          onClose={() => { flushGuardado(); setAbiertoId(null); }}
         />
       )}
 
@@ -273,9 +257,8 @@ export default function MetodoPsicologiaMiedosPreguntas() {
 // ─────────────────────────────────────────────────────────────────────────
 // Popup guiado: una pregunta por página, se avanza con flechas.
 // ─────────────────────────────────────────────────────────────────────────
-function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
+function PopupEnfrentar({ miedo, onUpdate, onClose }: {
   miedo: MiedoItem;
-  estadoGuardado: EstadoGuardado;
   onUpdate: (key: string, valor: string) => void;
   onClose: () => void;
 }) {
@@ -291,8 +274,11 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
   const cuerpoRef = useRef<HTMLDivElement | null>(null);
   const actualRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
+    // Al cambiar de pregunta, subimos la vista arriba del todo (se ve desde la
+    // pregunta, no desde el recuadro) y damos el foco SIN volver a bajar la
+    // vista al textarea (preventScroll).
     cuerpoRef.current?.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => actualRef.current?.focus(), 220);
+    const t = setTimeout(() => actualRef.current?.focus({ preventScroll: true }), 220);
     return () => clearTimeout(t);
   }, [paso]);
 
@@ -393,7 +379,6 @@ function PopupEnfrentar({ miedo, estadoGuardado, onUpdate, onClose }: {
 
             <Flex align="center" gap={2.5} flexShrink={0}>
               <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>
-              <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
             </Flex>
 
             <Box as="button" onClick={siguiente}

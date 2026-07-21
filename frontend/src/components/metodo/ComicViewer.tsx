@@ -534,8 +534,11 @@ export function ComicViewer({
         alignItems="center"
         justifyContent="center"
         minH="100vh"
-        px={{ base: 4, md: 24 }}
-        py={{ base: 12, md: 14 }}
+        // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
+        // la disciplina (la página usa px base 5). py más corto para que el box +
+        // las flechas quepan juntos en el viewport sin scroll.
+        px={{ base: 5, md: 24 }}
+        py={{ base: 8, md: 14 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{
@@ -548,9 +551,10 @@ export function ComicViewer({
         <Box
           key={`box-${index}`}
           w="100%"
-          maxW={{ base: "360px", md: "940px" }}
+          // Móvil: ancho completo (= ancho del header, con el px del ModalBody).
+          maxW={{ base: "100%", md: "940px" }}
           h={{ base: "auto", md: "540px" }}
-          maxH={{ base: "calc(100dvh - 96px)" }}
+          maxH={{ base: "calc(100dvh - 72px)" }}
           display="flex"
           flexDirection="column"
           position="relative"
@@ -616,7 +620,9 @@ export function ComicViewer({
 
           {!isDisciplinaMode && <Stars />}
 
-          {/* Línea de luz superior */}
+          {/* Línea de luz superior (se oculta con `sinSombra`, p.ej. las
+              Ilustraciones de Astrología, que van sin luz de box). */}
+          {!sinSombra && (
           <Box
             position="absolute"
             top="-1px"
@@ -626,6 +632,7 @@ export function ComicViewer({
             bgGradient={`linear(to-r, transparent, ${themeColor}aa, transparent)`}
             zIndex={3}
           />
+          )}
 
           {/* Área de contenido: foto + texto.
               Escritorio: foto FIJA a la izquierda (centrada) y texto a la
@@ -690,7 +697,7 @@ export function ComicViewer({
               // Móvil: hero image a todo el ancho que cubre la parte de arriba.
               w={{ base: "100%", md: "440px" }}
               maxW={{ base: "100%", md: "440px" }}
-              h={{ base: "42vh", md: "auto" }}
+              h={{ base: "36vh", md: "auto" }}
               aspectRatio={{ base: "auto", md: 1 }}
               flexShrink={0}
               alignSelf={{ base: "stretch", md: "center" }}
@@ -829,7 +836,8 @@ export function ComicViewer({
             )}
           </Flex>
 
-          {/* Línea de luz inferior */}
+          {/* Línea de luz inferior (se oculta con `sinSombra`). */}
+          {!sinSombra && (
           <Box
             position="absolute"
             bottom="-1px"
@@ -839,6 +847,7 @@ export function ComicViewer({
             bgGradient={`linear(to-r, transparent, ${themeColor}aa, transparent)`}
             zIndex={3}
           />
+          )}
 
           {/* Contador de página. Usa el color del texto (si se pasó, p.ej. el
               verde oscuro de Nutrición) para que sea legible sobre fotos claras;

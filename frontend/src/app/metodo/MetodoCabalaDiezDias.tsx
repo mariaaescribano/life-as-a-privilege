@@ -15,8 +15,12 @@ import { CABALA_TEST } from "../../components/metodo/cabalaTest";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
 const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
-const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
-const CAJA_OVERLAY = `${cabalaBg}cc`;
+// Sombra del box = la MISMA que la del header (glow claro sobre el fondo de la
+// disciplina), no la sombra oscura anterior.
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${cabalaTxt}1a, 0 0 48px ${cabalaTxt}10`;
+// Fondo del box = imagen de Cábala (cabala.png) a plena intensidad, sin velo ni
+// border line (igual que los boxes del resto del recorrido de Cábala).
+const CAJA_OVERLAY = "transparent";
 
 // Un día por SEFIRÁ (las 10 clásicas, sin Da'at). Cada día toma el ejercicio de
 // esa dimensión; si no tiene, se usan sus preguntas de reflexión.
@@ -33,7 +37,7 @@ const Caja = ({ children, ...rest }: React.ComponentProps<typeof Box>) => (
 const ItemLista = ({ children }: { children: React.ReactNode }) => (
   <Flex align="flex-start" gap={3}>
     <Box flexShrink={0} mt="10px" w="6px" h="6px" borderRadius="full" bg={cabalaTxt} boxShadow={`0 0 8px ${cabalaTxt}aa`} />
-    <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{children}</Text>
+    <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{children}</Text>
   </Flex>
 );
 
@@ -77,7 +81,7 @@ export default function MetodoCabalaDiezDias() {
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
               Diez días, una dimensión cada día. Dedica la jornada a observar y practicar la sefirá que toca,
               apoyándote en su ejercicio. No se trata de hacerlo perfecto, sino de habitar cada energía un día entero.
@@ -93,10 +97,10 @@ export default function MetodoCabalaDiezDias() {
                   <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
                 </Box>
                 <Box>
-                  <Text color={cabalaTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }} mb={1}>
+                  <Text color={cabalaTxt} fontWeight="800" fontSize={{ base: "lg", md: "xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>
                     Una tradición: la Cuenta del Omer (Sefirat HaOmer)
                   </Text>
-                  <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
+                  <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                     En la Cábala existe una práctica milenaria en la que, día a día, uno se centra en un atributo
                     concreto del alma: la <Box as="span" fontStyle="italic">Cuenta del Omer</Box> (Sefirat HaOmer).
                     Dura 49 días (siete semanas por siete sefirot) y cada jornada trabaja una combinación —por ejemplo,
@@ -123,7 +127,7 @@ export default function MetodoCabalaDiezDias() {
                       {i + 1}
                     </Flex>
                     <Box>
-                      <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase">
+                      <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" style={{ textShadow: INK_SHADOW }}>
                         Día {i + 1}{etiqueta ? ` · ${etiqueta}` : ""}
                       </Text>
                       <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.1"
@@ -134,7 +138,7 @@ export default function MetodoCabalaDiezDias() {
                   </Flex>
 
                   {s.frase && (
-                    <Text color={`${cabalaTxt}cc`} fontStyle="italic" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mb={4}>
+                    <Text color={`${cabalaTxt}cc`} fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" mb={4} style={{ textShadow: INK_SHADOW }}>
                       {s.frase}
                     </Text>
                   )}
@@ -142,12 +146,12 @@ export default function MetodoCabalaDiezDias() {
                   {/* Práctica del día: el ejercicio de la dimensión (o sus preguntas). */}
                   {ej ? (
                     <>
-                      <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "md", md: "lg" }} mb={1}>{ej.titulo}</Text>
-                      <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mb={3}>{ej.intro}</Text>
+                      <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>{ej.titulo}</Text>
+                      <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mb={3} style={{ textShadow: INK_SHADOW }}>{ej.intro}</Text>
                       {ej.columnas && ej.columnas.length > 0 && (
                         <Flex direction="column" gap={2} mb={ej.prompts?.length ? 3 : 0}>
                           {ej.columnas.map((c, ci) => (
-                            <Text key={ci} color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
+                            <Text key={ci} color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                               <Box as="span" fontWeight="700" textTransform="uppercase" letterSpacing="0.06em">{c.titulo}:</Box>{" "}
                               {c.descripcion}
                             </Text>
@@ -155,7 +159,7 @@ export default function MetodoCabalaDiezDias() {
                         </Flex>
                       )}
                       {ej.promptsIntro && (
-                        <Text color={`${cabalaTxt}aa`} fontStyle="italic" fontSize={{ base: "sm", md: "md" }} mb={2}>{ej.promptsIntro}</Text>
+                        <Text color={`${cabalaTxt}aa`} fontStyle="italic" fontSize={{ base: "md", md: "lg" }} mb={2} style={{ textShadow: INK_SHADOW }}>{ej.promptsIntro}</Text>
                       )}
                       {ej.prompts && ej.prompts.length > 0 && (
                         <Flex direction="column" gap={2.5}>
@@ -163,14 +167,14 @@ export default function MetodoCabalaDiezDias() {
                         </Flex>
                       )}
                       {ej.footer && (
-                        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" mt={3}>
+                        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" mt={3} style={{ textShadow: INK_SHADOW }}>
                           {Array.isArray(ej.footer) ? ej.footer.join(" ") : ej.footer}
                         </Text>
                       )}
                     </>
                   ) : (
                     <>
-                      <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "md", md: "lg" }} mb={3}>
+                      <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={3} style={{ textShadow: INK_SHADOW }}>
                         Reflexiona a lo largo del día
                       </Text>
                       <Flex direction="column" gap={2.5}>

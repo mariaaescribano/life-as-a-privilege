@@ -13,6 +13,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { AyurvedaPanel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { Reveal } from "../../components/global/Reveal";
@@ -63,36 +64,13 @@ function Separador() {
   );
 }
 
+// Panel común (compartido y animado). Aquí solo fijamos el padding un poco más
+// ajustado que usa «Tu día» y pasamos la variante `tile` (fondo en bandas).
 function Panel({ children, color, tile }: { children: React.ReactNode; color: string; tile?: boolean }) {
   return (
-    <Box
-      position="relative"
-      w="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`}
-    >
-      {tile ? (
-        // Fondo en bandas: la acuarela se repite a lo ancho (100%) y se apila
-        // verticalmente a su proporción natural, sin estirarse ni distorsionarse.
-        <Box
-          position="absolute" inset="0" zIndex={0} pointerEvents="none"
-          borderRadius="2xl" overflow="hidden"
-          bgColor={ayurvedaBg}
-          bgImage="url('/img/fondos/hinduismo.png')"
-          bgSize="100% auto"
-          bgRepeat="repeat-y"
-          bgPosition="top center"
-        >
-          <Box position="absolute" inset="0" bg={`${ayurvedaBg}26`} />
-        </Box>
-      ) : (
-        <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}26`} />
-      )}
-      <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
-        {children}
-      </Box>
-    </Box>
+    <AyurvedaPanel color={color} tile={tile} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
+      {children}
+    </AyurvedaPanel>
   );
 }
 

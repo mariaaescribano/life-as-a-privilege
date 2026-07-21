@@ -105,15 +105,17 @@ export default function MetodoCabalaSenderos() {
           </Reveal>
 
           <Reveal direction="up" distance={22} delay={0.55} duration={1.3} display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.8" maxW="600px" style={{ textShadow: INK_SHADOW }}>
               Si las sefirot son estados, los senderos son el movimiento entre ellos. Toca cualquiera de los
               22 caminos para ver su ilustración. Cuando los hayas descubierto todos, se desbloqueará el recorrido.
             </Text>
           </Reveal>
 
-          {/* Árbol en modo senderos: al pulsar un camino, se entra en su página */}
-          <Reveal direction="up" distance={40} scaleFrom={0.9} blur delay={1.05} duration={1.9} w="100%">
+          {/* Árbol en modo senderos: al pulsar un camino, se entra en su página.
+              El box aparece rápido (sin blur ni gran retardo) para que se VEA el
+              trazado épico de los 22 senderos dibujándose dentro del SVG. */}
+          <Reveal direction="up" distance={20} delay={0.3} duration={0.55} w="100%">
             <Box
               w="100%"
               position="relative"

@@ -5,7 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
@@ -15,7 +15,8 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon, neuropsicologiaBg, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
@@ -106,6 +107,16 @@ export default function MetodoAstrologiaCursos() {
   const cursos = [...(cursosData[astrologiaNom]?.cursos ?? [])].sort(
     (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
   );
+  // No mostramos la página hasta que las portadas de los cursos estén
+  // descargadas, para que las tarjetas no se rellenen de golpe después.
+  const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));
+
+  // Mientras cargan los datos o las fotos: pantalla de carga completa (header +
+  // fondo difuminado + spinner blanco), en vez de un spinner suelto que chocaba
+  // con el header. La página no se muestra hasta estar todo listo.
+  if (loading || !fotosListas) {
+    return <RecorridoLoading />;
+  }
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -125,9 +136,11 @@ export default function MetodoAstrologiaCursos() {
               prev={{ label: "← Llamada", onClick: () => navigate("/metodo/astrologia/llamada") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={{
-                label: "Psicología",
-                arrow: "next",
+                label: "Psicología →",
                 onClick: onPsicologia,
+                // Botón con los colores de la disciplina de destino (Psicología).
+                btnBg: neuropsicologiaBg,
+                btnColor: neuropsicologiaTxt,
                 icon: psicologiaSuscrito ? undefined : (
                   <Box
                     as="svg"
@@ -135,7 +148,7 @@ export default function MetodoAstrologiaCursos() {
                     viewBox="0 -960 960 960"
                     w={{ base: "16px", md: "20px" }}
                     h={{ base: "16px", md: "20px" }}
-                    fill={astrologiaTxt}
+                    fill={neuropsicologiaTxt}
                     flexShrink={0}
                   >
                     <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
@@ -160,9 +173,7 @@ export default function MetodoAstrologiaCursos() {
           </Reveal>
 
           {/* Grid de cursos de Astrología */}
-          {loading ? (
-            <SpinnerTurquesa />
-          ) : cursos.length > 0 ? (
+          {cursos.length > 0 ? (
             cursos.length === 1 ? (
               <Flex
                 w="100%"

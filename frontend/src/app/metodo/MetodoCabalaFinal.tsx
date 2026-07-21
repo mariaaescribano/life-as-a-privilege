@@ -13,11 +13,11 @@ import { Reveal } from "../../components/global/Reveal";
 import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { CABALA_TEST, testCompleto } from "../../components/metodo/cabalaTest";
 import {
-  calcularTransiciones, nivelCombinado, sefiraEvaluable, polaridadSefira,
+  calcularTransiciones, nivelCombinado, sefiraEvaluable, sefirotContenidoCompleto, polaridadSefira,
   POLARIDAD_LABEL, TIPO_LABEL, esBloqueo,
 } from "../../components/metodo/cabalaDiagnostico";
 import {
-  CABALA_SENDEROS, NOMBRE_SEFIRA, senderoCompleto, puntuacionSendero, interpretacionSendero,
+  CABALA_SENDEROS, NOMBRE_SEFIRA, senderoCompleto, senderosContenidoCompleto, puntuacionSendero, interpretacionSendero,
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
@@ -34,7 +34,7 @@ const Caja = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Titulo = ({ children }: { children: React.ReactNode }) => (
-  <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.08em" mb={4}>
+  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
     {children}
   </Text>
 );
@@ -67,6 +67,17 @@ export default function MetodoCabalaFinal() {
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const dt = res.data?.data ?? {};
+          // Puerta: el Diagnóstico final necesita TODO el contenido relleno —
+          // el de las sefirot y el de los 22 senderos—. Si falta algo, se manda
+          // a completarlo (sefirot → Árbol; senderos → Los Senderos).
+          if (!sefirotContenidoCompleto(dt.test, dt.autoeval)) {
+            navigate("/metodo/cabala/arbol");
+            return;
+          }
+          if (!senderosContenidoCompleto(dt.senderos)) {
+            navigate("/metodo/cabala/senderos");
+            return;
+          }
           if (dt.test && typeof dt.test === "object") setTest(dt.test);
           if (dt.autoeval && typeof dt.autoeval === "object") setAutoeval(dt.autoeval);
           if (dt.senderos && typeof dt.senderos === "object") setSenderos(dt.senderos);
@@ -163,7 +174,7 @@ export default function MetodoCabalaFinal() {
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
               Aquí se reúne todo tu recorrido: tus dimensiones (las sefirot) y tus transiciones (los senderos).
               Puedes descargarlo para guardarlo y volver a él cuando quieras.
@@ -191,21 +202,21 @@ export default function MetodoCabalaFinal() {
               <Titulo>Tus dimensiones · {dimsCompletas}/{niveles.length}</Titulo>
               {bloqueoPrincipal && (
                 <Box mb={5} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 4, md: 5 }}>
-                  <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mb={1}>
+                  <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mb={1} style={{ textShadow: INK_SHADOW }}>
                     Paso evolutivo prioritario
                   </Text>
-                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2}>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                     {cabalaSefirotMap[bloqueoPrincipal.from].titulo} → {cabalaSefirotMap[bloqueoPrincipal.to].titulo}
                     <Box as="span" color={`${cabalaTxt}88`} fontSize="sm" fontWeight="400"> · {TIPO_LABEL[bloqueoPrincipal.tipo]}</Box>
                   </Text>
-                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.8">{bloqueoPrincipal.narrativa}</Text>
+                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{bloqueoPrincipal.narrativa}</Text>
                 </Box>
               )}
               <Flex direction="column" gap={3}>
                 {niveles.map((n) => (
                   <Box key={n.key}>
                     <Flex justify="space-between" align="baseline" mb={1} gap={2} wrap="wrap">
-                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }}>
+                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
                         <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{n.numero}.</Box>
                         {n.titulo} <Box as="span" color={`${cabalaTxt}77`}>· {n.etiqueta}</Box>
                       </Text>
@@ -226,17 +237,17 @@ export default function MetodoCabalaFinal() {
               <Titulo>Tus senderos · {sendCompletos}/{senderoRes.length}</Titulo>
               {senderosPrioritarios.length > 0 && (
                 <Box mb={5}>
-                  <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mb={2}>
+                  <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mb={2} style={{ textShadow: INK_SHADOW }}>
                     Senderos prioritarios
                   </Text>
                   <Flex direction="column" gap={3}>
                     {senderosPrioritarios.map(({ s, band }) => (
                       <Box key={s.num} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 3.5, md: 4 }}>
-                        <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "md", md: "lg" }} mb={1}>
+                        <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>
                           {s.letra} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
                           <Box as="span" color={`${cabalaTxt}88`} fontSize="sm" fontWeight="400"> · {band?.titulo}</Box>
                         </Text>
-                        <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{band?.texto}</Text>
+                        <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{band?.texto}</Text>
                       </Box>
                     ))}
                   </Flex>
@@ -246,7 +257,7 @@ export default function MetodoCabalaFinal() {
                 {senderoRes.map(({ s, band, total }) => (
                   <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
                         borderBottom={`1px solid ${cabalaTxt}1c`} pb={2}>
-                    <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }}>
+                    <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
                       <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
                       {s.letra} <Box as="span" color={`${cabalaTxt}77`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
                     </Text>

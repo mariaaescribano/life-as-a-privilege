@@ -15,6 +15,7 @@ import {
   calcularTransiciones,
   nivelCombinado,
   sefiraEvaluable,
+  sefirotContenidoCompleto,
   polaridadSefira,
   POLARIDAD_LABEL,
   TIPO_LABEL,
@@ -74,6 +75,13 @@ export default function MetodoCabalaDiagnostico() {
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const prev = res.data?.data ?? {};
+          // Puerta: no se puede entrar al Diagnóstico sin haber rellenado el
+          // contenido (test/autoevaluación) de TODAS las sefirot. Si falta algo,
+          // se vuelve al Árbol para completarlo.
+          if (!sefirotContenidoCompleto(prev.test, prev.autoeval)) {
+            navigate("/metodo/cabala/arbol");
+            return;
+          }
           const t = prev.test;
           if (t && typeof t === "object") setTest(t);
           const a = prev.autoeval;
@@ -156,7 +164,7 @@ export default function MetodoCabalaDiagnostico() {
 
           {/* Filosofía */}
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
               Las sefirot son estados; los senderos, transiciones. El crecimiento no ocurre en una capacidad aislada,
               sino en el paso de una a la siguiente. Este mapa busca qué transición evolutiva está bloqueada.
@@ -174,10 +182,10 @@ export default function MetodoCabalaDiagnostico() {
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%">
               <Box w="100%" bg={cabalaBg} border={`1px dashed ${cabalaTxt}55`} borderRadius="2xl"
                    px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }} textAlign="center">
-                <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2}>
+                <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                   Aún faltan respuestas
                 </Text>
-                <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7">
+                <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
                   Completa la «Escala de equilibrio» de al menos dos dimensiones consecutivas para empezar a ver tus
                   transiciones. Cuantas más completes, más preciso será tu mapa.
                 </Text>
@@ -221,8 +229,8 @@ export default function MetodoCabalaDiagnostico() {
                       </Box>
                     </Flex>
 
-                    <Text color="rgba(255,255,255,0.95)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
-                          bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}22`} borderRadius="xl" p={{ base: 4, md: 5 }}>
+                    <Text color="rgba(255,255,255,0.95)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
+                          bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}22`} borderRadius="xl" p={{ base: 4, md: 5 }} style={{ textShadow: INK_SHADOW }}>
                       {narrativaTransicion(principal)}
                     </Text>
 
@@ -240,10 +248,10 @@ export default function MetodoCabalaDiagnostico() {
                 <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%">
                   <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}55`} borderRadius="2xl"
                        px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }} textAlign="center">
-                    <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2}>
+                    <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                       Tus transiciones fluyen
                     </Text>
-                    <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7">
+                    <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
                       En las dimensiones que has respondido no aparece un bloqueo claro entre una capacidad y la
                       siguiente. Sigue completando el resto para afinar el mapa.
                     </Text>
@@ -255,8 +263,8 @@ export default function MetodoCabalaDiagnostico() {
               {secundarios.length > 0 && (
                 <Reveal direction="up" distance={18} delay={0.22} duration={0.6} w="100%">
                   <Box w="100%">
-                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-                          letterSpacing="0.08em" mb={3}>
+                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                          letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
                       Otras transiciones a observar
                     </Text>
                     <Flex direction="column" gap={3}>
@@ -264,14 +272,14 @@ export default function MetodoCabalaDiagnostico() {
                         <Box key={`${t.from}-${t.to}`} bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="xl"
                              px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
                           <Flex align="baseline" justify="space-between" gap={3} wrap="wrap" mb={2}>
-                            <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700">
+                            <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {nombre(t.from)} → {nombre(t.to)}
                             </Text>
                             <Text color={`${cabalaTxt}88`} fontSize="xs" letterSpacing="0.1em" textTransform="uppercase">
                               {TIPO_LABEL[t.tipo]} · {t.origen}/10 → {t.destino}/10
                             </Text>
                           </Flex>
-                          <Text color={`${cabalaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
+                          <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                             {narrativaTransicion(t)}
                           </Text>
                         </Box>
@@ -297,14 +305,14 @@ export default function MetodoCabalaDiagnostico() {
               <Reveal direction="up" distance={18} delay={0.3} duration={0.6} w="100%">
                 <Box w="100%" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl"
                      px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
-                  <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.08em" mb={4}>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
                     Tus capacidades
                   </Text>
                   <Flex direction="column" gap={3.5}>
                     {niveles.map((n) => (
                       <Box key={n.key}>
                         <Flex justify="space-between" align="baseline" mb={1} gap={2} wrap="wrap">
-                          <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }}>
+                          <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
                             <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{n.numero}.</Box>
                             {n.titulo} <Box as="span" color={`${cabalaTxt}77`}>· {n.etiqueta}</Box>
                           </Text>
@@ -350,11 +358,11 @@ function BotonSefira({ label, onClick }: { label: string; onClick: () => void })
 function ListaChips({ titulo, items, vacio }: { titulo: string; items: string[]; vacio: string }) {
   return (
     <Box flex="1" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}>
-      <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.06em" mb={3}>
+      <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={3} style={{ textShadow: INK_SHADOW }}>
         {titulo}
       </Text>
       {items.length === 0 ? (
-        <Text color={`${cabalaTxt}88`} fontSize="sm" fontStyle="italic">{vacio}</Text>
+        <Text color={`${cabalaTxt}88`} fontSize="sm" fontStyle="italic" style={{ textShadow: INK_SHADOW }}>{vacio}</Text>
       ) : (
         <Flex wrap="wrap" gap={2}>
           {items.map((it, i) => (

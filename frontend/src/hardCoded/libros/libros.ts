@@ -37,6 +37,7 @@ export const apuntes: Apunte[] = [
 ];
 
 export const libros: Libro[] = [
+  { id: "historia-astrologia",        titulo: "The History of Astrology",                 link: drivePdf("1fVuqyAtUm3E1I2BcAOLHRK3zleLC3DCm"), img: "/libros/img/historyastrology.png" },
   { id: "psicologia-general",         titulo: "Psicología general",                       link: drivePdf("1--MYyxlZvYCEQ0wab1GzHJTn6_lyrvOg"), img: "/libros/img/psicologia.jpg" },
   { id: "historia-matematicas",       titulo: "Historia de las matemáticas",              link: drivePdf("1KOMOGBOr_CiIPRVPQrBs43kFIgGyIcq3"), img: "/libros/img/maths.jpg" },
   { id: "tcm-coursera",               titulo: "Medicina China (Coursera)",                link: drivePdf("1lBu9ACzSrZ-4WTav8ELpjfkz0spFZePc"), img: "/libros/img/medicina-tradicional-china.jpg" },

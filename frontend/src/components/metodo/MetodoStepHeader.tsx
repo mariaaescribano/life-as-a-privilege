@@ -16,6 +16,11 @@ interface StepButton {
   /** Pinta una flecha SVG de verdad (no el carácter «→/←»): a la derecha del
    *  texto si es «next», a la izquierda si es «prev». Usa la etiqueta sin flecha. */
   arrow?: "prev" | "next";
+  /** Color propio de texto/borde del botón (sobreescribe el color del header).
+   *  Útil para un botón que lleva a otra disciplina y quiere lucir su color. */
+  btnColor?: string;
+  /** Fondo sólido propio del botón (p.ej. el bg de la disciplina de destino). */
+  btnBg?: string;
 }
 
 /** Flecha SVG (chevron) para los botones prev/next del header. */
@@ -68,7 +73,13 @@ interface MetodoStepHeaderProps {
   boxShadow?: string;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, arrow }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, arrow, btnColor, btnBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
+  // Colores efectivos: si el botón trae los suyos (p.ej. lleva a otra disciplina),
+  // mandan sobre los del header. `c` = texto/borde; `fillBg` = fondo.
+  const c = btnColor ?? color;
+  const baseBg = btnBg ?? (whiteBg ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.1)");
+  const hoverBg = btnBg ?? "rgba(255,255,255,0.12)";
+  const activeBg = btnBg ?? "rgba(255,255,255,0.18)";
   const btn = (
     <Box
       as="button"
@@ -77,9 +88,9 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       px={small ? { base: 2, md: 3.5 } : { base: 3, sm: 5, md: 8 }}
       py={small ? { base: 1, md: 1.5 } : { base: 2, md: 3 }}
       borderRadius="full"
-      bg={whiteBg ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.1)"}
-      border={`1.5px solid ${disabled ? color + "22" : `${color}aa`}`}
-      color={disabled ? `${color}44` : color}
+      bg={disabled ? (whiteBg ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.1)") : baseBg}
+      border={`1.5px solid ${disabled ? c + "22" : `${c}aa`}`}
+      color={disabled ? `${c}44` : c}
       fontFamily="'EB Garamond', serif"
       fontSize={small ? { base: "2xs", md: "xs" } : { base: "sm", sm: "md", md: "md" }}
       letterSpacing={{ base: "0.02em", md: "0.05em" }}
@@ -89,7 +100,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       // casi instantáneo al pulsar. background/border/box-shadow son las
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
-      boxShadow={disabled ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px rgba(255,255,255,0.05)`}
+      boxShadow={disabled ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${c}44, inset 0 0 12px rgba(255,255,255,0.05)`}
       // En el header de TCM (whiteBg) el texto lleva una sombra granate oscura
       // para contrastar con el fondo de la disciplina.
       textShadow={whiteBg && !disabled ? "0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85), 0 0 5px rgba(58,10,10,0.8)" : undefined}
@@ -103,16 +114,16 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
         userSelect: "none",
       }}
       _hover={disabled ? undefined : {
-        bg: "rgba(255,255,255,0.12)",
-        borderColor: `${color}cc`,
-        boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${color}33, 0 0 30px ${color}44`,
+        bg: hoverBg,
+        borderColor: `${c}cc`,
+        boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 30px ${c}33, 0 0 30px ${c}44`,
       }}
       // _active: feedback inmediato al pulsar (móvil y desktop).
       _active={disabled ? undefined : {
-        bg: "rgba(255,255,255,0.18)",
-        borderColor: color,
+        bg: activeBg,
+        borderColor: c,
         transform: "scale(0.96)",
-        boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 0 42px ${color}66`,
+        boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 0 42px ${c}66`,
       }}
       whiteSpace="nowrap"
       overflow="hidden"
