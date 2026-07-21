@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
+import { VolverAlMapa } from "../../components/global/VolverAlMapa";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -110,6 +111,7 @@ export default function TextLessonPage() {
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" position="relative" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
+      <VolverAlMapa />
 
       <Box flex="1" position="relative" zIndex={1}>
         <Flex direction="column" alignItems="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }} pb={{ base: 14, md: 20 }}>

@@ -53,6 +53,20 @@ const disciplines = [
 // (metodo_suscrito) — clickable igual: navega si ya está pagada, o abre el pago
 // si todavía no. El resto queda con candado.
 
+// Colores de la disciplina según la ruta del Mapa guardada (para el botón
+// «Continuar por dónde lo dejé», que se pinta con el color de esa disciplina).
+function disciplinaDeRuta(path: string): { bg: string; txt: string } | null {
+  const p = path.toLowerCase();
+  if (p.startsWith("/metodo/astrologia")) return { bg: astrologiaBg, txt: astrologiaTxt };
+  if (p.startsWith("/metodo/psicologia")) return { bg: neuropsicologiaBg, txt: neuropsicologiaTxt };
+  if (p.startsWith("/metodo/ayurveda"))   return { bg: ayurvedaBg, txt: ayurvedaTxt };
+  if (p.startsWith("/metodo/tcm"))        return { bg: tcmBg, txt: tcmTxt };
+  if (p.startsWith("/metodo/fisiologia")) return { bg: fisiologiaBg, txt: fisiologiaTxt };
+  if (p.startsWith("/metodo/nutricion"))  return { bg: nutricionBg, txt: nutricionTxt };
+  if (p.startsWith("/metodo/cabala"))     return { bg: cabalaBg, txt: cabalaTxt };
+  return null;
+}
+
 const Home = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -742,6 +756,38 @@ const Home = () => {
 
   const angleStep = (2 * Math.PI) / disciplines.length;
 
+  // Botón «Continuar por dónde lo dejé»: lleva a la última página del Mapa que
+  // el usuario visitó (guardada en localStorage por SiteHeader) y se pinta con
+  // el color de esa disciplina. Solo aparece si hay un recorrido guardado.
+  const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
+  const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
+  const continuarBtn = ultimoRecorrido && contDisc ? (
+    <Box
+      as="button"
+      onClick={() => navigate(ultimoRecorrido)}
+      display="inline-flex"
+      alignItems="center"
+      gap={2}
+      px={{ base: 5, md: 5 }}
+      py={2.5}
+      borderRadius="full"
+      bg={contDisc.bg}
+      color={contDisc.txt}
+      border={`1px solid ${contDisc.txt}66`}
+      fontFamily="'EB Garamond', serif"
+      fontWeight={700}
+      fontSize={{ base: "sm", md: "md" }}
+      letterSpacing="0.03em"
+      whiteSpace="nowrap"
+      cursor="pointer"
+      boxShadow={`0 4px 18px rgba(0,0,0,0.28), 0 0 16px ${contDisc.txt}3a`}
+      transition="all 0.2s"
+      _hover={{ transform: "translateY(-1px)", boxShadow: `0 6px 22px rgba(0,0,0,0.34), 0 0 24px ${contDisc.txt}5a` }}
+    >
+      Continuar por dónde lo dejé →
+    </Box>
+  ) : null;
+
   return (
     <Box
       minH="100vh"
@@ -751,6 +797,15 @@ const Home = () => {
       fontFamily="'EB Garamond', serif"
     >
       <SiteHeader variant="private" userImg={img ?? undefined} />
+
+      {/* Continuar por dónde lo dejé — escritorio: fijo arriba a la derecha,
+          bajo el header. En móvil se pinta debajo del mandala (más abajo). */}
+      {continuarBtn && (
+        <Box position="fixed" top={{ md: "86px" }} right={{ md: "22px" }} zIndex={30}
+             display={{ base: "none", md: "block" }}>
+          {continuarBtn}
+        </Box>
+      )}
 
       <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform={mandalaScale} transformOrigin="top center">
         {img != null && imagesReady ? (
@@ -1052,9 +1107,20 @@ const Home = () => {
                 );
               })}
             </Box>
+
+            {/* Continuar por dónde lo dejé — móvil: debajo del mandala */}
+            {continuarBtn && (
+              <Box display={{ base: "flex", md: "none" }} justifyContent="center" mt={8} w="100%">
+                {continuarBtn}
+              </Box>
+            )}
           </Flex>
         ) : (
-          <Flex flex="1" w="100%" minH="60vh" align="center" justify="center">
+          // Carga: en vez del box turquesa plano, el mandala de LIFE + el spinner
+          // (branded y limpio).
+          <Flex flex="1" w="100%" minH="80vh" align="center" justify="center" direction="column" gap={6}>
+            <Image src="/img/icono/life.png" alt="" w={{ base: "116px", md: "150px" }}
+                   opacity={0.9} style={{ filter: "drop-shadow(0 0 22px rgba(255,255,255,0.35))" }} />
             <SpinnerTurquesa fullScreen={false} />
           </Flex>
         )}
@@ -1068,6 +1134,9 @@ const Home = () => {
         onAceptar={() => setPagoPsicoExitoOpen(false)}
         titulo="Pago de Psicología realizado"
         mensaje="Ya puedes empezar tu Línea de Vida."
+        nom={neuropsicologiaNom}
+        txtColor={neuropsicologiaTxt}
+        bgColor={neuropsicologiaBg}
       />
       <PagoMetodoModal
         isOpen={pagoOpen}
@@ -1090,6 +1159,9 @@ const Home = () => {
         onAceptar={() => setPagoAyurExitoOpen(false)}
         titulo="Pago de Ayurveda realizado"
         mensaje="Ya puedes empezar la 3ª disciplina del Mapa."
+        nom={ayurvedaNom}
+        txtColor={ayurvedaTxt}
+        bgColor={ayurvedaBg}
       />
       <PagoAyurvedaModal
         isOpen={pagoAyurOpen}
@@ -1104,6 +1176,9 @@ const Home = () => {
         onAceptar={() => setPagoTcmExitoOpen(false)}
         titulo="Pago de Medicina China realizado"
         mensaje="Ya puedes empezar la 4ª disciplina del Mapa."
+        nom={tcmNom}
+        txtColor={tcmTxt}
+        bgColor={tcmBg}
       />
       <PagoTcmModal
         isOpen={pagoTcmOpen}
@@ -1118,6 +1193,9 @@ const Home = () => {
         onAceptar={() => setPagoFisioExitoOpen(false)}
         titulo="Pago de Fisiología realizado"
         mensaje="Ya puedes empezar la 5ª disciplina del Mapa."
+        nom={fisiologiaNom}
+        txtColor={fisiologiaTxt}
+        bgColor={fisiologiaBg}
       />
       <PagoFisiologiaModal
         isOpen={pagoFisioOpen}
@@ -1132,6 +1210,9 @@ const Home = () => {
         onAceptar={() => setPagoNutriExitoOpen(false)}
         titulo="Pago de Nutrición realizado"
         mensaje="Ya puedes empezar la 6ª disciplina del Mapa."
+        nom={nutricionNom}
+        txtColor={nutricionTxt}
+        bgColor={nutricionBg}
       />
       <PagoNutricionModal
         isOpen={pagoNutriOpen}
@@ -1146,6 +1227,9 @@ const Home = () => {
         onAceptar={() => setPagoCabalaExitoOpen(false)}
         titulo="Pago de Cábala realizado"
         mensaje="Ya puedes empezar la 7ª disciplina del Mapa."
+        nom={cabalaNom}
+        txtColor={cabalaTxt}
+        bgColor={cabalaBg}
       />
       <PagoCabalaModal
         isOpen={pagoCabalaOpen}

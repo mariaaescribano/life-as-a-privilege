@@ -42,6 +42,9 @@ export function IndiceCabala() {
   // haber pasado por el Diagnóstico. Así el índice avanza paso a paso.
   const diagnosticoUnlocked = sefirotVistasAll;
   const senderosUnlocked = diagnosticoUnlocked && diagnosticoVisto;
+  // El recorrido sendero a sendero (los 22, uno a uno) y su diagnóstico se abren
+  // cuando el usuario ha descubierto TODAS las ilustraciones de los senderos.
+  const senderosRecorridoUnlocked = senderoIlusAll;
   const senderosDiagUnlocked = senderoIlusAll;
   const finalUnlocked = sefirotVistasAll && senderoIlusAll;
   const diasUnlocked = finalUnlocked;
@@ -59,6 +62,13 @@ export function IndiceCabala() {
     })),
     { titulo: "Diagnóstico", path: "/metodo/cabala/diagnostico", bloqueado: lock(diagnosticoUnlocked) },
     { titulo: "Los Senderos", path: "/metodo/cabala/senderos", bloqueado: lock(senderosUnlocked) },
+    // Los 22 senderos, uno a uno: forman parte de la misma cuenta del índice
+    // (no reinician la numeración), justo detrás de «Los Senderos».
+    ...CABALA_SENDEROS.map((s) => ({
+      titulo: `${s.letra} (${s.hebreo})`,
+      path: `/metodo/cabala/sendero/${s.num}`,
+      bloqueado: lock(senderosRecorridoUnlocked),
+    })),
     { titulo: "Diagnóstico de senderos", path: "/metodo/cabala/senderos/diagnostico", bloqueado: lock(senderosDiagUnlocked) },
     { titulo: "Diagnóstico final", path: "/metodo/cabala/final", bloqueado: lock(finalUnlocked) },
     { titulo: "Trabajo de 10 días", path: "/metodo/cabala/dias", bloqueado: lock(diasUnlocked) },

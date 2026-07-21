@@ -104,11 +104,11 @@ export const modulosCabala: ModuloContenido[] = [
       },
       {
         id: "cabala5",
-        nom: "2.2 Chokmah, Binah & Da'at",
+        nom: "2.2 Chokhmah, Binah & Da'at",
         link: `${basePath}/cabala5`,
         linkAnterior: `${basePath}/cabala4`,
         linkNext: `${basePath}/cabala6`,
-        descripcion: "Chokmah es la sabiduría infinita y Binah la estructura que nos permite vivir coherentemente.",
+        descripcion: "Chokhmah es la sabiduría infinita y Binah la estructura que nos permite vivir coherentemente.",
         video: "IrZ5eZ7QdwA",
         letra: chokmahLetra,
         cursoId: "cabala-curso-1",

@@ -111,6 +111,7 @@ import MetodoNutricionNutrientes from "./app/metodo/MetodoNutricionNutrientes";
 import MetodoNutricionNutrientesSecundarios from "./app/metodo/MetodoNutricionNutrientesSecundarios";
 import MetodoNutricionPlato from "./app/metodo/MetodoNutricionPlato";
 import MetodoNutricionCalorias from "./app/metodo/MetodoNutricionCalorias";
+import MetodoNutricionDia from "./app/metodo/MetodoNutricionDia";
 import MetodoNutricionMitos from "./app/metodo/MetodoNutricionMitos";
 import MetodoNutricionNutriente from "./app/metodo/MetodoNutricionNutriente";
 import MetodoNutricionMicrobiota from "./app/metodo/MetodoNutricionMicrobiota";
@@ -127,6 +128,7 @@ import MetodoCabalaSendero from "./app/metodo/MetodoCabalaSendero";
 import MetodoCabalaSenderosDiagnostico from "./app/metodo/MetodoCabalaSenderosDiagnostico";
 import MetodoCabalaFinal from "./app/metodo/MetodoCabalaFinal";
 import MetodoCabalaDiezDias from "./app/metodo/MetodoCabalaDiezDias";
+import MetodoCabalaCursos from "./app/metodo/MetodoCabalaCursos";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -273,6 +275,7 @@ export default function App()
       <Route path="/metodo/nutricion/hambre" element={<PrivateRoute><MetodoNutricionHambre /></PrivateRoute>} />
       <Route path="/metodo/nutricion/plato" element={<PrivateRoute><MetodoNutricionPlato /></PrivateRoute>} />
       <Route path="/metodo/nutricion/calorias" element={<PrivateRoute><MetodoNutricionCalorias /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/dia" element={<PrivateRoute><MetodoNutricionDia /></PrivateRoute>} />
       <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />
@@ -286,6 +289,7 @@ export default function App()
       <Route path="/metodo/cabala/senderos/diagnostico" element={<PrivateRoute><MetodoCabalaSenderosDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/cabala/final" element={<PrivateRoute><MetodoCabalaFinal /></PrivateRoute>} />
       <Route path="/metodo/cabala/dias" element={<PrivateRoute><MetodoCabalaDiezDias /></PrivateRoute>} />
+      <Route path="/metodo/cabala/cursos" element={<PrivateRoute><MetodoCabalaCursos /></PrivateRoute>} />
       <Route path="/metodo/cabala/sendero/:num" element={<PrivateRoute><MetodoCabalaSendero /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />

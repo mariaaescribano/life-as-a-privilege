@@ -15,7 +15,7 @@ import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import {
-  NUTRIENTES, NUTRIENTES_PRINCIPALES, type Nutriente,
+  NUTRIENTES_PRINCIPALES, type Nutriente,
 } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // Tarjeta de un grupo de nutrientes. Mismo aspecto que las de Fisiología ·
@@ -46,11 +46,6 @@ export default function MetodoNutricionNutrientes() {
   const [explorados, setExplorados] = useState<string[]>([]);
   const dataRef = useRef<Record<string, any>>({});
 
-  // Esta página muestra solo los nutrientes principales (hasta Fibra); el resto
-  // va en «Nutrientes secundarios». El flag «hecho» se calcula sobre el TOTAL de
-  // ambas páginas para no marcar el recorrido como completo antes de tiempo.
-  const total = NUTRIENTES.length;
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -77,36 +72,19 @@ export default function MetodoNutricionNutrientes() {
     })();
   }, [navigate]);
 
-  const guardar = async (nuevos: string[]) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
-    const data = {
-      ...dataRef.current,
-      nutrientes_explorados: nuevos,
-      nutrientes_hecho: nuevos.length >= total,
-    };
-    dataRef.current = data;
-    try {
-      await axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
-        { headers: { Authorization: `Bearer ${token}` } });
-    } catch { /* se reintenta al próximo toque */ }
-  };
-
-  // Al pinchar un grupo: persiste que se ha explorado y navega a su página.
-  // NO actualizamos el estado visible aquí: el tick no debe aparecer mientras se
-  // pulsa, sino solo cuando el usuario vuelve a la rejilla (que se remonta y
-  // vuelve a leer del backend lo explorado).
+  // El nutriente se marca como REVISADO en su página de detalle (cuando el
+  // usuario ve sus subtipos), no aquí. Al volver, la rejilla se remonta y lee del
+  // backend lo revisado → aparece el tick y se desbloquea «Secundarios».
   const abrir = (n: Nutriente) => {
-    if (!explorados.includes(n.key)) {
-      void guardar([...explorados, n.key]);
-    }
     navigate(`/metodo/nutricion/nutrientes/${n.key}`);
   };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   const exploradosSet = new Set(explorados);
+  // «Secundarios» se desbloquea solo cuando TODOS los nutrientes principales
+  // tienen su tick (el usuario ha visto los subtipos de cada uno).
+  const faltanPrincipales = !NUTRIENTES_PRINCIPALES.every((x) => exploradosSet.has(x.key));
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -127,7 +105,12 @@ export default function MetodoNutricionNutrientes() {
             mb={0}
             prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion") }}
             extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-            next={{ label: "Secundarios →", onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
+            next={{
+              label: "Secundarios →",
+              onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios"),
+              disabled: faltanPrincipales,
+              disabledTooltip: "Revisa todos los nutrientes para desbloquear",
+            }}
           />
           </Reveal>
 

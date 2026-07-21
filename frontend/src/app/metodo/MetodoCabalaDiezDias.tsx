@@ -23,7 +23,7 @@ const CAJA_OVERLAY = `${cabalaBg}cc`;
 const DIAS = CABALA_SEFIROT_ORDEN.filter((k) => k !== "daat").map((k) => cabalaSefirotMap[k]);
 
 const Caja = ({ children, ...rest }: React.ComponentProps<typeof Box>) => (
-  <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${cabalaTxt}44`}
+  <Box position="relative" overflow="hidden" w="100%"
        borderRadius="2xl" boxShadow={CAJA_GLOW} {...rest}>
     <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>{children}</Box>
@@ -72,6 +72,7 @@ export default function MetodoCabalaDiezDias() {
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: "← Diagnóstico final", onClick: () => navigate("/metodo/cabala/final") }}
               extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
+              next={{ label: "Cursos →", onClick: () => navigate("/metodo/cabala/cursos") }}
             />
           </Reveal>
 
@@ -99,7 +100,7 @@ export default function MetodoCabalaDiezDias() {
                     En la Cábala existe una práctica milenaria en la que, día a día, uno se centra en un atributo
                     concreto del alma: la <Box as="span" fontStyle="italic">Cuenta del Omer</Box> (Sefirat HaOmer).
                     Dura 49 días (siete semanas por siete sefirot) y cada jornada trabaja una combinación —por ejemplo,
-                    «Guevurá dentro de Jesed»—. Este trabajo de 10 días es una adaptación más breve: una sefirá por día,
+                    «Gevurah dentro de Chesed»—. Este trabajo de 10 días es una adaptación más breve: una sefirá por día,
                     para que empieces a reconocer cada energía en tu Vida cotidiana.
                   </Text>
                 </Box>

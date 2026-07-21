@@ -479,7 +479,7 @@ export default function MetodoFisiologiaAtomos() {
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
                       {def.parrafos.map((p, i) => (
                         <Text key={i} color={i === def.parrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
-                              fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
+                              fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                               fontWeight={i === def.parrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
                           {p}
                         </Text>

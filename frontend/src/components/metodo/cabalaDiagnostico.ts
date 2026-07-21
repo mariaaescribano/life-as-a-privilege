@@ -69,8 +69,8 @@ export const POLARIDAD_LABEL: Record<Polaridad, string> = {
 };
 
 // ── Senderos evolutivos (secuencia de desarrollo del Árbol) ───────────────
-// Kéter → Jojmá → Biná → Da'at → Jesed → Guevurá → Tiferet → Netzaj → Hod →
-// Yesod → Malkut. La narrativa describe el aprendizaje de esa transición
+// Keter → Chokhmah → Binah → Da'at → Chesed → Gevurah → Tiferet → Netzach → Hod →
+// Yesod → Malkhut. La narrativa describe el aprendizaje de esa transición
 // (redactada en 2ª persona; en bloqueo se muestra tal cual).
 export interface Transicion {
   from: CabalaPageKey;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,6 +21,15 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [sessionImg] = useState<string | null>(() => sessionStorage.getItem("img"));
+
+  // Recordamos la última página del Mapa (recorrido) visitada, para que /home
+  // pueda ofrecer «Continuar por dónde lo dejé». Persiste en localStorage, así
+  // sigue ahí por mucho tiempo que pase entre sesiones.
+  useEffect(() => {
+    if (location.pathname.toLowerCase().startsWith("/metodo/")) {
+      try { localStorage.setItem("ultimoRecorrido", location.pathname + location.search); } catch { /* noop */ }
+    }
+  }, [location.pathname, location.search]);
 
   const hasSession = !!sessionStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);

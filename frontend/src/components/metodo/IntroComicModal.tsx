@@ -85,6 +85,9 @@ export function IntroComicModal({
           textShadow={textShadow}
           textColor={textColor}
           loader={loader}
+          // Si este intro ya pinta su propio botón (p.ej. «Nutrición →») a la
+          // izquierda de la X, ocultamos el «Saltar» genérico para no duplicar.
+          sinSaltar={!!(continueLabel && onContinue)}
         />
 
         {/* Botón de continuar (p.ej. "Astrología →"), fijo a la IZQUIERDA de la X

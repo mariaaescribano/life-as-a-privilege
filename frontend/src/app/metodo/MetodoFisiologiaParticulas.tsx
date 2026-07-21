@@ -63,14 +63,14 @@ const LABEL: Record<Tipo, string> = { up: "up quark", down: "down quark", gluon:
 // ellos). Se indexa por id de la pieza (no por orden de colocación) para que
 // cada quark/gluón caiga siempre en su sitio.
 const CLUSTER: Record<string, { x: number; y: number }> = {
-  // Quarks → vértices del triángulo
-  u1: { x: 50, y: 32 }, // arriba
-  u2: { x: 34, y: 63 }, // abajo-izquierda
-  d1: { x: 66, y: 63 }, // abajo-derecha
+  // Quarks → vértices del triángulo (centroide en el centro del círculo, 50/50)
+  u1: { x: 50, y: 30 }, // arriba
+  u2: { x: 34, y: 60 }, // abajo-izquierda
+  d1: { x: 66, y: 60 }, // abajo-derecha
   // Gluones → en medio de cada arista (entre dos quarks)
-  g1: { x: 42, y: 47 }, // entre u1 y u2
-  g2: { x: 58, y: 47 }, // entre u1 y d1
-  g3: { x: 50, y: 63 }, // entre u2 y d1
+  g1: { x: 42, y: 45 }, // entre u1 y u2
+  g2: { x: 58, y: 45 }, // entre u1 y d1
+  g3: { x: 50, y: 60 }, // entre u2 y d1
 };
 
 const pulse = keyframes`
@@ -515,18 +515,19 @@ export default function MetodoFisiologiaParticulas() {
                        boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
-                          px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
-                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                          px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" minH={0} overflowY="auto"
+                          textAlign={{ base: "center", md: "left" }}>
+                      <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                             letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
                         ¡Enhorabuena! Has construido una partícula.
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" style={{ textShadow: INK }}>
+                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" style={{ textShadow: INK }}>
                         Las partículas están formadas por <b>quarks</b>, unas partículas fundamentales que aparecen y desaparecen constantemente, y por
                         <b> gluones</b>, que los mantienen unidos.
                       </Text>
-                      <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
+                      <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
                         Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.
                       </Text>
                     </Flex>

@@ -8,7 +8,7 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal, Breathe } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
@@ -127,6 +127,22 @@ export default function MetodoNutricionNutriente() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
 
+        // Marcar este nutriente como REVISADO: el usuario está viendo sus subtipos.
+        // Es el único sitio donde se marca (fuente única para principales y
+        // secundarios), para que el tick de la rejilla signifique de verdad
+        // «he visto sus subtipos» y no solo «he pulsado la tarjeta».
+        try {
+          const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+          const data = r.data?.data ?? {};
+          const explorados: string[] = Array.isArray(data.nutrientes_explorados) ? data.nutrientes_explorados : [];
+          if (n && !explorados.includes(n.key)) {
+            const nuevos = [...explorados, n.key];
+            void axios.patch(`${API_URL}/metodo-nutricion/${userId}`,
+              { data: { ...data, nutrientes_explorados: nuevos, nutrientes_hecho: nuevos.length >= NUTRIENTES.length } },
+              { headers: { Authorization: `Bearer ${token}` } }).catch(() => { /* se reintenta al volver a entrar */ });
+          }
+        } catch { /* sin fila todavía: se creará al guardar */ }
+
         // No mostramos la página hasta que sus fotos estén descargadas: la foto
         // del grupo, las viñetas del cómic y las fotos de las tarjetas, para que
         // ninguna aparezca de golpe cuando el resto ya está en pantalla.
@@ -185,23 +201,36 @@ export default function MetodoNutricionNutriente() {
             <VolverNutri onClick={() => navigate(rutaListaNutriente(n.key))} />
           </Reveal>
 
-          {/* 2 · Box grande: a la IZQUIERDA la foto del grupo con el botón del
-              cómic justo debajo; a la DERECHA el título y la descripción, que se
-              lee al tamaño de las ilustraciones y con scroll vertical propio. */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
-            <SeccionBox>
-              <Flex direction={{ base: "column", md: "row" }} align={{ base: "stretch", md: "flex-start" }}
-                    gap={{ base: 5, md: 8 }} p={{ base: 5, md: 8 }}>
+          {/* 2 · Box de lectura con la MISMA estética que las ilustraciones
+              (ComicViewer en modo disciplina): foto grande `contain` con glow a la
+              izquierda + botón «Ver ilustración» debajo; a la derecha el título y
+              la descripción con su propio scroll. Sin rayita, líneas de luz
+              arriba/abajo y la sombra de la disciplina, para que case 1:1 con el
+              visor de ilustraciones. */}
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <SeccionBox
+              maxW="940px"
+              mx="auto"
+              boxShadow={`0 0 22px ${nutricionBg}88, 0 0 50px ${nutricionBg}55, 0 0 18px ${nutricionTxt}44, 0 0 40px ${nutricionTxt}22, inset 0 0 20px rgba(0,0,0,0.35)`}
+            >
+              {/* Líneas de luz (idénticas a las del visor de ilustraciones) */}
+              <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}
+                   bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
+              <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
+                   bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
 
-                {/* Izquierda: foto + botón «Ver ilustración» debajo */}
-                <Flex direction="column" gap={{ base: 4, md: 5 }} flexShrink={0}
-                      w={{ base: "100%", md: "300px" }} align="center">
-                  <Breathe scale={0.02} duration={6.5} w="100%" aspectRatio={1}
-                       borderRadius="xl" overflow="hidden" bg={`${n.color}22`}
-                       boxShadow="0 4px 18px rgba(0,0,0,0.25)">
-                    <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="cover"
+              <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "stretch" }}
+                    justify="center" gap={{ base: 5, md: 10 }} px={{ base: 5, md: 10 }} py={{ base: 6, md: 10 }}
+                    h={{ base: "auto", md: "540px" }}>
+
+                {/* Izquierda: foto (contain + glow) + botón «Ver ilustración» debajo */}
+                <Flex direction="column" gap={{ base: 4, md: 5 }} flexShrink={0} align="center" justify="center"
+                      w={{ base: "100%", md: "440px" }} maxW={{ base: "340px", md: "440px" }}>
+                  <Box w="100%" aspectRatio={1} position="relative"
+                       filter={`drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${nutricionTxt}33)`}>
+                    <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="contain" borderRadius="lg"
                            fallback={<FotoPlaceholder label={n.label} color={n.color} />} />
-                  </Breathe>
+                  </Box>
 
                   {comic && (
                     <Box as="button" onClick={() => setComicOpen(true)}
@@ -225,28 +254,31 @@ export default function MetodoNutricionNutriente() {
                   )}
                 </Flex>
 
-                {/* Derecha: título + descripción con scroll (tamaño ilustraciones) */}
-                <Flex direction="column" gap={3} flex="1" minW={0} align="flex-start">
-                  <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="800" lineHeight="1.1">
+                {/* Derecha: título (sin rayita) + descripción con scroll propio,
+                    al mismo tamaño de letra que las ilustraciones. */}
+                <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }} alignSelf={{ base: "auto", md: "stretch" }}
+                     display="flex" flexDirection="column" justifyContent="flex-start"
+                     maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "auto" }} overflowX="hidden"
+                     pr={{ base: 0, md: 3 }}
+                     sx={{
+                       "&::-webkit-scrollbar": { width: "6px" },
+                       "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}55`, borderRadius: "3px" },
+                       "&::-webkit-scrollbar-track": { background: "transparent" },
+                       scrollbarWidth: "thin",
+                       scrollbarColor: `${nutricionTxt}55 transparent`,
+                     }}>
+                  <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
+                        mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}>
                     {n.label}
                   </Text>
-                  <Box h="2px" w="64px" bgGradient={`linear(to-r, ${n.color}, transparent)`} />
-
-                  <Box w="100%" overflowY="auto" maxH={{ base: "280px", md: "340px" }} pr={{ base: 1, md: 3 }}
-                       sx={{
-                         "&::-webkit-scrollbar": { width: "6px" },
-                         "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}44`, borderRadius: "3px" },
-                         "&::-webkit-scrollbar-track": { background: "transparent" },
-                       }}>
-                    {(n.descripcion ?? [n.resumen]).map((parrafo, i) => (
-                      <Text key={i} color={nutricionTxt} textAlign="left"
-                            fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.9" letterSpacing="0.02em"
-                            fontWeight="400" mt={i === 0 ? 0 : { base: 4, md: 5 }}>
-                        {parrafo}
-                      </Text>
-                    ))}
-                  </Box>
-                </Flex>
+                  {(n.descripcion ?? [n.resumen]).map((parrafo, i) => (
+                    <Text key={i} color={nutricionTxt} textAlign={{ base: "center", md: "left" }}
+                          fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.9" letterSpacing="0.02em"
+                          fontWeight="400" mt={i === 0 ? 0 : { base: 5, md: 6 }}>
+                      {parrafo}
+                    </Text>
+                  ))}
+                </Box>
               </Flex>
             </SeccionBox>
           </Reveal>

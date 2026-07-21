@@ -88,6 +88,7 @@ function SistemaFicha({ sistema, onSoltar }: {
   return (
     <MBox
       ref={ref}
+      layout
       drag
       dragElastic={0.12}
       dragMomentum={false}
@@ -284,20 +285,22 @@ export default function MetodoFisiologiaOrganismo() {
                         <Box position="absolute" inset="0" borderRadius="full" pointerEvents="none"
                              border={`1.5px dashed ${fisiologiaTxt}55`}
                              animation={`${pulse} 3.4s ease-in-out infinite`} />
-                        <Box position="absolute" inset="12%" borderRadius="full" pointerEvents="none"
+                        <Box position="absolute" inset="6%" borderRadius="full" pointerEvents="none"
                              sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 48%, #05040a 100%)",
                                    boxShadow: `inset 0 0 40px rgba(0,0,0,0.85), 0 0 26px ${fisiologiaTxt}22` }} />
 
-                        {/* sistemas colocados, en anillo */}
+                        {/* sistemas colocados, en anillo limpio y separado (como el
+                            AnilloFinal): disco grande (radio 44%), anillo a 33% y
+                            fotos algo menores → círculo perfecto, sin solaparse. */}
                         {colocados.map((key, i) => {
                           const s = SISTEMAS.find((x) => x.key === key)!;
-                          const p = posEnAnillo(i, total, 26); // dentro del disco negro (radio 38%)
+                          const p = posEnAnillo(i, total, 33);
                           return (
                             <MBox key={key} position="absolute" left={`${p.x}%`} top={`${p.y}%`}
                                   transform="translate(-50%,-50%)"
                                   initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                                   transition={{ type: "spring", stiffness: 300, damping: 18 }}>
-                              <SistemaFoto sistema={s} size={{ base: "40px", md: "52px" }} />
+                              <SistemaFoto sistema={s} size={{ base: "38px", md: "48px" }} />
                             </MBox>
                           );
                         })}
@@ -323,18 +326,23 @@ export default function MetodoFisiologiaOrganismo() {
                             style={{ textShadow: INK }}>
                         Los sistemas · {colocados.length}/{total}
                       </Text>
-                      {/* Solo 6 a la vez: al soltar uno en el círculo desaparece de aquí
-                          y entra el siguiente que quede por colocar. */}
-                      <Flex ref={piezasRef} wrap="wrap" justify="center" align="center" alignContent="center"
-                            gap={{ base: 3, md: 4 }}
-                            minH={piezasMinH ? `${piezasMinH}px` : { base: "200px", md: "240px" }}>
+                      {/* Solo 6 a la vez, en un GRID FIJO de 3 columnas (2 filas
+                          estables): al soltar una en el círculo, las que quedan se
+                          deslizan (layout) para rellenar su hueco de forma discreta
+                          y la siguiente entra con un fundido en la última celda.
+                          Nunca cambia el nº de filas, así que jamás aparece una
+                          pieza «suelta» debajo del box. */}
+                      <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(3, auto)"
+                           justifyContent="center" justifyItems="center" alignContent="center"
+                           columnGap={{ base: 3, md: 5 }} rowGap={{ base: 4, md: 5 }}
+                           minH={piezasMinH ? `${piezasMinH}px` : { base: "200px", md: "240px" }}>
                         <AnimatePresence mode="popLayout">
                           {SISTEMAS.filter((s) => !colocadosSet.has(s.key)).slice(0, 6).map((s) => (
                             <SistemaFicha key={s.key} sistema={s}
                                           onSoltar={(rect) => soltarEnCirculo(s, rect)} />
                           ))}
                         </AnimatePresence>
-                      </Flex>
+                      </Box>
                     </Box>
                   </PanelBox>
                 </Flex>
@@ -373,15 +381,15 @@ export default function MetodoFisiologiaOrganismo() {
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}aa, transparent)`} />
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.85"
+                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                             style={{ textShadow: INK }}>
                         Todos los <b>sistemas</b>, funcionando en armonía, forman un <b>organismo</b> completo.
                       </Text>
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.85"
+                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                             style={{ textShadow: INK }}>
                         Has subido desde una sola partícula: átomos, moléculas, células, tejidos, órganos y sistemas.
                       </Text>
-                      <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.7"
+                      <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7"
                             style={{ textShadow: INK }}>
                         Ese organismo entero, vivo y en marcha en este mismo instante, <b>eres tú</b>.
                       </Text>

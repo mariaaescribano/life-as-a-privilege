@@ -64,7 +64,7 @@ const ESTRUCTURAS: EstDef[] = [
       "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
       "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la Vida.",
     ],
-    resultadoImg: `${PRE}/nucleo.png`, cuadradoImg: `${PRE}/nucleo.png`,
+    resultadoImg: `${PRE}/nucleocircular.png`, cuadradoImg: `${PRE}/nucleo.png`,
   },
   {
     id: "membrana", nombre: "Membrana celular", glow: "#f2c86b", forma: "membrana",
@@ -354,7 +354,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
                   {def.resultado.map((p, i) => (
-                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }}
+                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
                 </Flex>

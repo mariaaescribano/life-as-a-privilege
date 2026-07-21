@@ -8,6 +8,7 @@ import { FloatingActionButton } from "../../components/aprendizaje/FloatingActio
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia, modulosDepresion, modulosPadresHeridos } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
+import { VolverAlMapa } from "../../components/global/VolverAlMapa";
 import SiteFooter from "../../components/global/Footer";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -234,6 +235,7 @@ export default function VideoLessonPage() {
 
       {/* ── HEADER ── */}
       <SiteHeader variant="auto" />
+      <VolverAlMapa />
 
       {/* ── MAIN ── */}
       {datos && (

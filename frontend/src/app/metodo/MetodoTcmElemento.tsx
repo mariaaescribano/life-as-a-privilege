@@ -28,7 +28,7 @@ const esElemento = (v: string | undefined): v is Elemento =>
 const Parrafos = ({ textos }: { textos: string[] }) => (
   <Flex direction="column" gap={3.5}>
     {textos.map((t, i) => (
-      <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
+      <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
             style={{ textShadow: TXT_SHADOW }}>
         {t}
       </Text>

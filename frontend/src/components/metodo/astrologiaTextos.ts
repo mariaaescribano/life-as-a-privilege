@@ -543,7 +543,7 @@ Maduras al encontrar tu fuego interno y desarrollar humildad y compasión. Debes
 
 **En luz:** Extrovertido, adaptable, vital, entusiasta, optimista, ético, sabio, profético, franco, filosófico, valiente, apasionado, amante de la libertad, comprensivo, generoso, justo, independiente y expansivo.
 
-Eres viajero por naturaleza. Disfrutas de la Vida en amplio espectro: alegre, extrovertido, idealista, explorador, inquieto y siempre en movimiento. Los Signos de fuego son signos de misión, y la tuya la vives como algo casi divino.
+Eres viajero por naturaleza. Disfrutas de la Vida en amplio espectro: alegre, extrovertido, idealista, explorador, inquieto y siempre en movimiento. Los Signos de fuego son Signos de misión, y la tuya la vives como algo casi divino.
 
 Debes saber que hay un sentido profundo en todas las cosas, aunque no pueda percibirse del todo, y dejar que tus acciones fluyan desde esa conciencia.`,
 

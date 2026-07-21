@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
@@ -28,6 +28,9 @@ export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula;
       nom={fisiologiaNom}
       tinta={TXT}
       bg={BG}
+      // Fondo del área de la foto en oscuro (el Bg de Fisiología) en vez del
+      // tinte claro por defecto: así la tarjeta no tiene ese "color claro".
+      colorTint={BG}
       visto={visto}
       onClick={onClick}
     />
@@ -92,10 +95,19 @@ export function FichaFisioModal({
 }) {
   const [imgErr, setImgErr] = useState(false);
   const puedeNavegar = !!onPrev && !!onNext;
+  // Contenedores con scroll (móvil: el Flex; escritorio: el Box del texto).
+  const contentRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
 
   // Al cambiar de ficha (con las flechas) el modal NO se desmonta, así que
-  // reiniciamos el estado de error de imagen manualmente.
-  useEffect(() => { setImgErr(false); }, [foto]);
+  // reiniciamos el estado de error de imagen manualmente y, además, subimos el
+  // scroll arriba del todo para que cada célula se vea desde el principio (el
+  // título), no a media lectura de la anterior.
+  useEffect(() => {
+    setImgErr(false);
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+    if (textRef.current) textRef.current.scrollTop = 0;
+  }, [foto, titulo]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -284,6 +296,7 @@ export function FichaFisioModal({
 
         {/* Área de contenido: foto (izq) + texto (der), como en Ilustraciones. */}
         <Flex
+          ref={contentRef}
           direction={{ base: "column", md: "row" }}
           align={{ base: "center", md: "stretch" }}
           justify="center"
@@ -322,6 +335,7 @@ export function FichaFisioModal({
 
           {/* Texto: título (lavanda, un poco más oscurito que el blanco) + línea + párrafos */}
           <Box
+            ref={textRef}
             flex="1"
             minW={0}
             w={{ base: "100%", md: "auto" }}

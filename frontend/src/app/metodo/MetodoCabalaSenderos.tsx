@@ -83,7 +83,7 @@ export default function MetodoCabalaSenderos() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
-          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="down" distance={22} duration={1.2} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
               title="Los 22 Senderos"
@@ -104,7 +104,7 @@ export default function MetodoCabalaSenderos() {
             />
           </Reveal>
 
-          <Reveal direction="up" distance={16} delay={0.1} duration={0.6} display="flex" justifyContent="center">
+          <Reveal direction="up" distance={22} delay={0.55} duration={1.3} display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.8" maxW="600px" style={{ textShadow: INK_SHADOW }}>
               Si las sefirot son estados, los senderos son el movimiento entre ellos. Toca cualquiera de los
@@ -113,7 +113,7 @@ export default function MetodoCabalaSenderos() {
           </Reveal>
 
           {/* Árbol en modo senderos: al pulsar un camino, se entra en su página */}
-          <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.18} duration={0.8} w="100%">
+          <Reveal direction="up" distance={40} scaleFrom={0.9} blur delay={1.05} duration={1.9} w="100%">
             <Box
               w="100%"
               position="relative"
@@ -138,7 +138,7 @@ export default function MetodoCabalaSenderos() {
           </Reveal>
 
           {/* Comenzar por el principio — se desbloquea al ver TODAS las ilustraciones */}
-          <Reveal direction="up" distance={16} delay={0.26} duration={0.6} display="flex" justifyContent="center">
+          <Reveal direction="up" distance={22} delay={1.7} duration={1.3} display="flex" justifyContent="center">
             <Box as="button"
                  onClick={todosVistos ? () => navigate(`/metodo/cabala/sendero/${primero.num}`) : undefined}
                  disabled={!todosVistos}

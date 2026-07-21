@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Box,
   Flex,
@@ -128,6 +128,10 @@ interface ComicViewerProps {
    *  algunos cómics (TCM: elementos, ciclos) la piden blanca para que case con
    *  su letra blanca. */
   scrollbarColor?: string;
+  /** Oculta el botón «Saltar» (arriba a la izquierda). Se usa cuando el wrapper
+   *  ya pinta su propio botón para saltar/continuar (p.ej. el «Nutrición →» del
+   *  IntroComicModal), para no duplicar. */
+  sinSaltar?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -153,6 +157,7 @@ export function ComicViewer({
   onPageView,
   sinSombra,
   scrollbarColor,
+  sinSaltar,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
@@ -198,9 +203,25 @@ export function ComicViewer({
     !textColor || textColor.toLowerCase() === "#ffffff" || textColor.toLowerCase() === "white";
   const tituloShadow = tituloBlanco ? "0 2px 8px rgba(0,0,0,0.9)" : textShadow;
 
-  useEffect(() => {
+  // Al cambiar de viñeta, la nueva SIEMPRE empieza desde arriba, aunque en la
+  // anterior se hubiera bajado hasta el final. Reseteamos el scroll interno
+  // (texto en desktop, panel en móvil) y TAMBIÉN el de cualquier contenedor
+  // scrollable por encima (los Modal con scrollBehavior="outside" scrollean en
+  // su propio contenedor, no en los boxes internos) y el de la ventana. Va en
+  // useLayoutEffect para que ocurra ANTES de pintar (sin salto visible).
+  useLayoutEffect(() => {
+    const resetArriba = (start: HTMLElement | null) => {
+      let el: HTMLElement | null = start;
+      while (el) {
+        if (el.scrollTop) el.scrollTop = 0;
+        el = el.parentElement;
+      }
+    };
     if (contentRef.current) contentRef.current.scrollTop = 0;
     if (textScrollRef.current) textScrollRef.current.scrollTop = 0;
+    resetArriba(contentRef.current);
+    resetArriba(textScrollRef.current);
+    if (typeof window !== "undefined") window.scrollTo(0, 0);
   }, [index]);
 
   // Avisa de qué viñeta se está viendo (al abrir y en cada cambio). Vía ref para
@@ -351,6 +372,56 @@ export function ComicViewer({
           </Box>
         }
       />
+
+      {/* Botón "Saltar" — arriba a la IZQUIERDA, frente a la X. Salta el cómic
+          entero yendo a su acción de fin (onComplete o, si no hay, cerrar). En
+          los cómics de intro de disciplina eso revela/lleva a la disciplina. El
+          fondo lleva la imagen de la disciplina (si la hay) con un velo para que
+          se lea. Si hay botón "volver" (onBack), se coloca a su derecha. */}
+      {!sinSaltar && (
+      <Flex
+        as="button"
+        aria-label="Saltar el cómic"
+        onClick={handleComplete}
+        position="fixed"
+        top={{ base: 3, md: 5 }}
+        left={onBack ? { base: "58px", md: "74px" } : { base: 3, md: 5 }}
+        zIndex={10}
+        align="center"
+        gap={1.5}
+        pl={{ base: 3, md: 4 }}
+        pr={{ base: 3, md: 3.5 }}
+        h={{ base: "42px", md: "48px" }}
+        borderRadius="full"
+        overflow="hidden"
+        border={`1px solid ${themeColor}aa`}
+        boxShadow="0 2px 12px rgba(0,0,0,0.45)"
+        cursor="pointer"
+        sx={{ backdropFilter: "blur(4px)" }}
+        _hover={{ borderColor: themeColor }}
+      >
+        {/* Fondo: imagen de la disciplina (si la hay) + velo; si no, chip oscuro */}
+        {isDisciplinaMode ? (
+          <>
+            <Box as="img" src={disciplinaBgImage} alt="" loading="eager" position="absolute" inset="0"
+                 w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+            <Box position="absolute" inset="0" bg={disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)"} />
+          </>
+        ) : (
+          <Box position="absolute" inset="0" bg="rgba(0,0,0,0.5)" />
+        )}
+        <Text position="relative" zIndex={1} color="#ffffff" fontFamily="'EB Garamond', serif"
+              fontWeight={700} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" letterSpacing="0.04em"
+              style={{ textShadow: `0 1px 3px rgba(0,0,0,0.85), 0 0 6px ${themeColor}` }}>
+          Saltar
+        </Text>
+        <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+             w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="#ffffff"
+             style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+          <path d="M383-480 200-664l56-56 240 240-240 240-56-56 183-184Zm264 0L464-664l56-56 240 240-240 240-56-56 183-184Z" />
+        </Box>
+      </Flex>
+      )}
 
       {/* Botón "volver" (solo si onBack está definido) */}
       {onBack && (
@@ -736,9 +807,9 @@ export function ComicViewer({
                 <Text
                   key={i}
                   color={textColor ?? themeColor}
-                  // Modo `fondoNitido` (visual de ciclos de TCM): letra un poco
-                  // más pequeña que el resto.
-                  fontSize={fondoNitido ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" }}
+                  // Tamaño ÚNICO del texto de lectura en TODA la app (cómics,
+                  // ilustraciones y boxes de lectura): siempre igual y bien visible.
+                  fontSize={{ base: "2xl", md: "3xl" }}
                   lineHeight="1.9"
                   letterSpacing="0.02em"
                   textAlign={{ base: "center", md: "left" }}

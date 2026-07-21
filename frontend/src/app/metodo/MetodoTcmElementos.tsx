@@ -260,7 +260,7 @@ export default function MetodoTcmElementos() {
                   {/* Texto — misma tipografía que el cómic de Astrología
                       (ComicViewer): grande, ligero, con aire entre líneas. */}
                   <Flex direction="column" gap={3} flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
-                    <Text key={`txt-${introIdx}`} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="2.15"
+                    <Text key={`txt-${introIdx}`} color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.9"
                           letterSpacing="0.03em" fontWeight="400" textAlign={{ base: "center", md: "left" }}
                           style={{ textShadow: INK_SHADOW }}>
                       {vin.texto}

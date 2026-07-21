@@ -15,6 +15,7 @@ import { keyframes } from "@emotion/react";
 import { useCursosData } from "../../data/cursosApi";
 import type { Curso } from "../../hardCoded/cursos";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
+import { recordarOrigenCurso } from "../global/VolverAlMapa";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 const PSICOLOGIA_BG = "/img/fondos/psciologia.png";
@@ -138,7 +139,9 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
   const acceder = (curso: Curso) => {
     if (curso.precio === null) {
       // Pasamos la ruta de origen para que el curso muestre un botón
-      // "Volver a El Recorrido" SOLO cuando se accede desde aquí.
+      // "Volver a El Recorrido" SOLO cuando se accede desde aquí. Además
+      // guardamos el origen del Mapa para el botón flotante «Volver al Mapa».
+      recordarOrigenCurso();
       navigate(`${curso.cursoLink}?volver=${encodeURIComponent(location.pathname)}`);
     } else {
       window.open(STRIPE_PAYMENT_LINK, "_blank");

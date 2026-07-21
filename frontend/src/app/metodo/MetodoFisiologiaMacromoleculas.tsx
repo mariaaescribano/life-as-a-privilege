@@ -204,10 +204,13 @@ function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, co
 }
 
 // ── Posición (en %) de cada monómero dentro de la bandeja, según la forma ────
+// Se dejan márgenes (lateral y vertical) para que cada pieza —con su radio— quede
+// SIEMPRE dentro de la parte oscura de la bandeja, sin tocar los bordes ni recortarse.
 function posEnBandeja(forma: Forma, i: number, n: number): { x: number; y: number } {
-  const x = ((i + 0.5) / n) * 100;
-  if (forma === "helice") return { x, y: i % 2 === 0 ? 34 : 66 };      // zig-zag (hélice)
-  if (forma === "membrana") return { x, y: i % 2 === 0 ? 30 : 70 };    // dos capas
+  const mx = 16;                                       // margen lateral (%)
+  const x = mx + ((i + 0.5) / n) * (100 - 2 * mx);
+  if (forma === "helice") return { x, y: i % 2 === 0 ? 36 : 64 };      // zig-zag (hélice)
+  if (forma === "membrana") return { x, y: i % 2 === 0 ? 36 : 64 };    // dos capas
   return { x, y: 50 + (i % 2 === 0 ? -6 : 6) };                        // cadena suave
 }
 
@@ -401,7 +404,7 @@ function Estacion({
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
                   {def.resultado.map((p, i) => (
-                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }}
+                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
                 </Flex>

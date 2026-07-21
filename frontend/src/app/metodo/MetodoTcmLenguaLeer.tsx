@@ -271,14 +271,14 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
               {resumen}
             </Text>
             {sano ? (
-              <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" mt={5}
+              <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" mt={5}
                     style={{ textShadow: INK_SHADOW }}>
                 Tu lengua refleja un buen equilibrio: la Sangre nutre, el Qi circula y el Yin y el Yang se
                 sostienen. Cuídalo con lo que ya sabes de tu recorrido y vuelve a observarte de vez en cuando:
                 la lengua cambia contigo.
               </Text>
             ) : (
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                     lineHeight="1.7" mt={4} style={{ textShadow: INK_SHADOW }}>
                 Esto es lo que tu lengua sugiere hoy y cómo puedes acompañar tu equilibrio. Cuantas más
                 señales apuntan a un mismo patrón, más presente está.

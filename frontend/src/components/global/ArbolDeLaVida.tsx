@@ -35,7 +35,7 @@ interface Props {
   onSenderoClick?: (sendero: Sendero) => void
   /** Camino resaltado (num) en variant 'senderos'. */
   selectedSendero?: number | null
-  /** Muestra la sefirá oculta Da'at (nodo fantasma entre Chokmah y Binah).
+  /** Muestra la sefirá oculta Da'at (nodo fantasma entre Chokhmah y Binah).
    *  Solo tiene efecto en variant 'sefirot'. */
   showDaat?: boolean
   /** Se llama al pulsar el nodo de Da'at. */
@@ -77,11 +77,11 @@ const R = 34
 
 const SEFIROT: Sefira[] = [
   {
-    key: 'kether', number: 1, spanishName: 'CORONA', hebrewName: 'Kether', x: 200, y: 45,
+    key: 'kether', number: 1, spanishName: 'CORONA', hebrewName: 'Keter', x: 200, y: 45,
     description: 'El primer destello de la existencia. Representa la voluntad divina pura, la chispa primordial de consciencia que precede a toda forma y a todo pensamiento.',
   },
   {
-    key: 'chokmah', number: 2, spanishName: 'SABIDURÍA', hebrewName: 'Chokmah', x: 340, y: 140,
+    key: 'chokmah', number: 2, spanishName: 'SABIDURÍA', hebrewName: 'Chokhmah', x: 340, y: 140,
     description: 'El primer movimiento de la conciencia, la chispa de la inspiración. Representa la intuición pura, la fuerza creativa masculina y el impulso primordial hacia la existencia.',
   },
   {
@@ -93,7 +93,7 @@ const SEFIROT: Sefira[] = [
     description: 'La fuerza expansiva del amor y la generosidad. Representa la compasión, la gracia divina y la abundancia que fluye sin condiciones ni restricciones.',
   },
   {
-    key: 'geburah', number: 5, spanishName: 'SEVERIDAD', hebrewName: 'Geburah', x: 60, y: 300,
+    key: 'geburah', number: 5, spanishName: 'SEVERIDAD', hebrewName: 'Gevurah', x: 60, y: 300,
     description: 'La fuerza disciplinada del poder y el juicio. Representa la voluntad de eliminar lo innecesario, la valentía y la capacidad de transformar a través de la claridad.',
   },
   {
@@ -113,7 +113,7 @@ const SEFIROT: Sefira[] = [
     description: 'El mundo de los sueños y el inconsciente. Representa los patrones ocultos, la memoria colectiva y el puente sutil entre lo espiritual y lo material.',
   },
   {
-    key: 'malkuth', number: 10, spanishName: 'REINO', hebrewName: 'Malkuth', x: 200, y: 660,
+    key: 'malkuth', number: 10, spanishName: 'REINO', hebrewName: 'Malkhut', x: 200, y: 660,
     description: 'El mundo material y la experiencia física. Representa la manifestación concreta de todo lo espiritual, el cuerpo, la tierra y la Vidacotidiana.',
   },
 ]
@@ -293,6 +293,14 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 78%  { transform: scale(0.94); }
                 100% { opacity: 1; transform: scale(1);    }
               }
+              /* Variante MÁS ÉPICA (solo el Árbol /arbol): irrumpe desde un punto,
+                 sobrepasa más su tamaño (destello mayor) y se asienta más lento. */
+              @keyframes sefiraAppearEpic {
+                0%   { opacity: 0; transform: scale(0.03); }
+                52%  { opacity: 1; transform: scale(1.42); }
+                74%  { transform: scale(0.88); }
+                100% { opacity: 1; transform: scale(1);    }
+              }
               /* Respiración del halo de Keter: SIEMPRE visible (opacidad nunca
                  baja de 0.6), late suavemente. */
               @keyframes keterBreath {
@@ -392,7 +400,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 style={{
                   strokeDasharray: 720,
                   strokeDashoffset: 720,
-                  animation: 'beamDraw 1.6s ease 0.15s forwards',
+                  animation: 'beamDraw 2.4s ease 0.15s forwards',
                 }}
               />
               {/* Halo dorado de Keter — SIEMPRE encendido (respira sin apagarse). */}
@@ -427,7 +435,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     pointerEvents: 'none',
                     strokeDasharray: len + 4,
                     strokeDashoffset: len + 4,
-                    animation: `pathDraw 0.7s ease ${idx * 0.045}s forwards`,
+                    animation: `pathDraw 1.15s ease ${0.15 + idx * 0.085}s forwards`,
                   }}
                 />
               )
@@ -540,7 +548,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   cursor: 'pointer',
                   opacity: 0,
                   transformOrigin: `${sefira.x}px ${sefira.y}px`,
-                  animation: `sefiraAppear 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.4 + sefira.number * 0.07}s forwards`,
+                  animation: `sefiraAppearEpic 0.95s cubic-bezier(0.34,1.56,0.64,1) ${0.55 + sefira.number * 0.13}s forwards`,
                 }}
               >
                 {/* Fondo del nodo = imagen propia de las sefirot. Un velo oscuro
@@ -572,7 +580,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
 
           {/* Da'at — la sefirá oculta. No tiene nodo "oficial" en el árbol; se
               dibuja como un círculo fantasma (borde discontinuo) en el centro,
-              entre Chokmah y Binah. Clicable → su dimensión del recorrido. */}
+              entre Chokhmah y Binah. Clicable → su dimensión del recorrido. */}
           {!esSenderos && showDaat && (
             <g
               onClick={() => onDaatClick?.()}
@@ -583,7 +591,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 cursor: 'pointer',
                 opacity: 0,
                 transformOrigin: '200px 140px',
-                animation: 'daatAppear 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.5s forwards',
+                animation: 'daatAppear 0.9s cubic-bezier(0.34,1.56,0.64,1) 2.1s forwards',
               }}
             >
               <circle

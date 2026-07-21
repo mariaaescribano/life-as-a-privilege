@@ -155,7 +155,7 @@ export default function MetodoAstrologiaCursos() {
               lineHeight="1.8"
               style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
             >
-              Si quieres profundizar, no te olvides de los cursos.
+              Si quieres profundizar en la Astrología, estos cursos te acompañan paso a paso.
             </Text>
           </Reveal>
 

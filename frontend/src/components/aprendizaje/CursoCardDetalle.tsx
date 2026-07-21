@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import type { Curso } from "../../hardCoded/cursos";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
+import { recordarOrigenCurso } from "../global/VolverAlMapa";
 import SpinnerTurquesa from "../global/Spinner";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
@@ -41,8 +42,12 @@ export function CursoCardDetalle({
   const [fotoOk, setFotoOk] = useState(false); // portada del curso ya cargada
 
   const handleAcceder = () => {
-    if (curso.precio === null) navigate(curso.cursoLink);
-    else window.open(STRIPE_PAYMENT_LINK, "_blank");
+    if (curso.precio === null) {
+      // Si entramos desde el Mapa (/metodo/...), recordamos el origen para el
+      // botón flotante «Volver al Mapa».
+      recordarOrigenCurso();
+      navigate(curso.cursoLink);
+    } else window.open(STRIPE_PAYMENT_LINK, "_blank");
   };
   const formatPrecio = (precio: number | null) =>
     precio === null ? "Acceso Libre" : `${precio.toFixed(2).replace(".", ",")} €`;

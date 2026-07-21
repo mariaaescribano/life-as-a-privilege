@@ -5,6 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -161,7 +162,7 @@ export default function MetodoFisiologiaCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cursos para profundizar"
+              title="Cursos de Fisiología"
               compact
               bgColor={`${fisiologiaBg}dd`}
               color={fisiologiaTxt}
@@ -171,15 +172,23 @@ export default function MetodoFisiologiaCursos() {
               extra={celulasBtn}
               next={nutriSuscrito
                 ? { label: "Nutrición →", onClick: () => navigate("/metodo/nutricion") }
-                : { label: "Nutrición", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/nutricion") }}
+                : { label: "Nutrición", icon: <Candado size="15px" />, arrow: "next", onClick: () => navigate("/metodo/nutricion") }}
             />
+          </Reveal>
+
+          {/* Texto introductorio bajo el header */}
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                  textAlign="center" lineHeight="1.8" maxW="680px">
+              Si quieres profundizar en la Fisiología, estos cursos te acompañan paso a paso.
+            </Text>
           </Reveal>
 
           {CURSOS.length > 0 ? (
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {CURSOS.map((c, i) => (
                 <Reveal key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
-                  <CursoBox curso={c} onEnter={() => { if (c.ruta) navigate(c.ruta); }} />
+                  <CursoBox curso={c} onEnter={() => { if (c.ruta) { recordarOrigenCurso(); navigate(c.ruta); } }} />
                 </Reveal>
               ))}
             </SimpleGrid>

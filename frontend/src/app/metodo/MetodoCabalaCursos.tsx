@@ -9,22 +9,23 @@ import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
+import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
-  nutricionBg,
-  nutricionNom,
-  nutricionTxt,
-  NutricionIcon,
+  cabalaBg,
+  cabalaNom,
+  cabalaTxt,
+  CabalaIcon,
   noSelectSx,
 } from "../../GlobalVariables";
 
-// ── Cursos para profundizar (Nutrición) ─────────────────────────────────────
-// Página-hub que va DESPUÉS de «Preguntas y mitos». Aquí se listarán los cursos
-// avanzados de Nutrición. De momento no hay ninguno: se deja el enrutado y el
-// diseño listos; basta con ir añadiendo objetos a CURSOS y el resto funciona solo.
-// Su «siguiente» arranca la 7ª disciplina: Cábala.
+// ── Cursos para profundizar (Cábala) ────────────────────────────────────────
+// Página-hub que va DESPUÉS de «10 días con tus dimensiones» (última página del
+// recorrido). Aquí se listarán los cursos avanzados de Cábala. De momento no hay
+// ninguno: se deja el enrutado y el diseño listos; basta con ir añadiendo objetos
+// a CURSOS y el resto funciona solo. Su «siguiente» arranca la 8ª disciplina:
+// Cultura (aún bloqueada → candado blanco).
 interface Curso {
   key: string;
   titulo: string;
@@ -34,7 +35,7 @@ interface Curso {
   proximamente?: boolean;
 }
 
-// Aún no hay cursos de Nutrición. Al añadir objetos aquí, aparecerán solos.
+// Aún no hay cursos de Cábala. Al añadir objetos aquí, aparecerán solos.
 const CURSOS: Curso[] = [];
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
@@ -64,15 +65,15 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
       opacity={bloqueado ? 0.78 : 1}
       boxShadow={bloqueado
         ? "inset 0 0 24px rgba(0,0,0,0.35)"
-        : `0 0 16px ${nutricionTxt}22, 0 0 40px ${nutricionTxt}14, inset 0 0 24px rgba(0,0,0,0.22)`}
+        : `0 0 16px ${cabalaTxt}22, 0 0 40px ${cabalaTxt}14, inset 0 0 24px rgba(0,0,0,0.22)`}
       transition="all 0.25s ease"
       _hover={bloqueado ? undefined : {
         transform: "translateY(-6px)",
-        boxShadow: `0 0 26px ${nutricionTxt}66, 0 0 64px ${nutricionTxt}33, inset 0 0 24px rgba(0,0,0,0.2)`,
+        boxShadow: `0 0 26px ${cabalaTxt}66, 0 0 64px ${cabalaTxt}33, inset 0 0 24px rgba(0,0,0,0.2)`,
       }}
       _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}
     >
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl"
+      <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl"
                          overlay={bloqueado ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.45)"} />
 
       <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
@@ -109,11 +110,9 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
 }
 
 // ═════════════════════════════════════════════════════════════════════════
-export default function MetodoNutricionCursos() {
+export default function MetodoCabalaCursos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  // ¿Ha pagado ya la Cábala? (7ª disciplina, el siguiente paso tras Nutrición).
-  const [cabalaSuscrito, setCabalaSuscrito] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -122,19 +121,12 @@ export default function MetodoNutricionCursos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
-        setCabalaSuscrito(!!me.data?.cabala_suscrito);
+        if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
       } catch {
-        navigate("/metodo/nutricion");
+        navigate("/metodo/cabala");
         return;
       } finally {
         setLoading(false);
@@ -155,18 +147,16 @@ export default function MetodoNutricionCursos() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cursos de Nutrición"
+              icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
+              title="Cursos de Cábala"
               compact
-              bgColor={`${nutricionBg}dd`}
-              color={nutricionTxt}
-              nom={nutricionNom}
+              bgColor={`${cabalaBg}dd`}
+              color={cabalaTxt}
+              nom={cabalaNom}
               mb={0}
-              prev={{ label: "← Preguntas y mitos", onClick: () => navigate("/metodo/nutricion/mitos") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={cabalaSuscrito
-                ? { label: "Cábala →", onClick: () => navigate("/metodo/cabala") }
-                : { label: "Cábala →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cabala") }}
+              prev={{ label: "← 10 días", onClick: () => navigate("/metodo/cabala/dias") }}
+              extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
+              next={{ label: "Cultura →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cultura") }}
             />
           </Reveal>
 
@@ -174,7 +164,7 @@ export default function MetodoNutricionCursos() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
-              Si quieres profundizar en la Nutrición, estos cursos te acompañan paso a paso.
+              Si quieres profundizar en la Cábala, estos cursos te acompañan paso a paso.
             </Text>
           </Reveal>
 
@@ -191,8 +181,8 @@ export default function MetodoNutricionCursos() {
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
               <Flex direction="column" align="center" gap={3} maxW="560px" textAlign="center"
                     position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                    border={`1px dashed ${nutricionTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>
-                <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
+                    border={`1px dashed ${cabalaTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>
+                <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
                 <Text position="relative" zIndex={1} fontSize="4xl">🎓</Text>
                 <Text position="relative" zIndex={1} color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
@@ -200,7 +190,7 @@ export default function MetodoNutricionCursos() {
                 </Text>
                 <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-                  Pronto podrás profundizar aquí con cursos avanzados de Nutrición. Mientras tanto, continúa el
+                  Pronto podrás profundizar aquí con cursos avanzados de Cábala. Mientras tanto, continúa el
                   Mapa con la siguiente disciplina.
                 </Text>
               </Flex>
@@ -210,8 +200,8 @@ export default function MetodoNutricionCursos() {
         </Flex>
       </Flex>
 
-      <IndiceNutricion />
-      <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
+      <IndiceCabala />
+      <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
       <SiteFooter />
     </Box>
   );

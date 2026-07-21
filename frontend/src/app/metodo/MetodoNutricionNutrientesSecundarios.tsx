@@ -16,7 +16,7 @@ import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import {
-  NUTRIENTES, NUTRIENTES_SECUNDARIOS, type Nutriente,
+  NUTRIENTES_PRINCIPALES, NUTRIENTES_SECUNDARIOS, type Nutriente,
 } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // Tarjeta de un grupo de nutrientes. Mismo aspecto que las de Fisiología ·
@@ -49,10 +49,8 @@ export default function MetodoNutricionNutrientesSecundarios() {
   const dataRef = useRef<Record<string, any>>({});
 
   // Segunda página del recorrido de nutrientes: los secundarios (colesterol,
-  // etanol, agua, fitoquímicos). El flag «hecho» se calcula sobre el TOTAL de
-  // ambas páginas, así que solo se marca completo cuando se han visto todos.
-  const total = NUTRIENTES.length;
-
+  // etanol, agua, fitoquímicos). Solo se puede entrar cuando se han REVISADO
+  // todos los principales (si no, se redirige a «Los nutrientes»).
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -64,12 +62,20 @@ export default function MetodoNutricionNutrientesSecundarios() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        let revisados: string[] = [];
         try {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           dataRef.current = r.data?.data ?? {};
           const guardados = dataRef.current?.nutrientes_explorados;
-          if (Array.isArray(guardados)) setExplorados(guardados);
-        } catch { /* sin fila todavía */ }
+          if (Array.isArray(guardados)) revisados = guardados;
+        } catch { /* sin fila todavía → nada revisado */ }
+        // Bloqueo secuencial: no se accede a Secundarios hasta revisar TODOS los
+        // principales (evita saltar por URL directa o por el índice).
+        if (!NUTRIENTES_PRINCIPALES.every((x) => revisados.includes(x.key))) {
+          navigate("/metodo/nutricion/nutrientes", { replace: true });
+          return;
+        }
+        setExplorados(revisados);
 
         // No mostramos la página hasta que TODAS las portadas de los grupos
         // estén descargadas, para que ninguna aparezca de golpe.
@@ -79,36 +85,18 @@ export default function MetodoNutricionNutrientesSecundarios() {
     })();
   }, [navigate]);
 
-  const guardar = async (nuevos: string[]) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
-    const data = {
-      ...dataRef.current,
-      nutrientes_explorados: nuevos,
-      nutrientes_hecho: nuevos.length >= total,
-    };
-    dataRef.current = data;
-    try {
-      await axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
-        { headers: { Authorization: `Bearer ${token}` } });
-    } catch { /* se reintenta al próximo toque */ }
-  };
-
-  // Al pinchar un grupo: persiste que se ha explorado y navega a su página.
-  // NO actualizamos el estado visible aquí: el tick no debe aparecer mientras se
-  // pulsa, sino solo cuando el usuario vuelve a la rejilla (que se remonta y
-  // vuelve a leer del backend lo explorado).
+  // El nutriente se marca como REVISADO en su página de detalle (al ver sus
+  // subtipos), no aquí. Al volver, la rejilla se remonta y lee lo revisado.
   const abrir = (n: Nutriente) => {
-    if (!explorados.includes(n.key)) {
-      void guardar([...explorados, n.key]);
-    }
     navigate(`/metodo/nutricion/nutrientes/${n.key}`);
   };
 
   if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   const exploradosSet = new Set(explorados);
+  // No se puede avanzar a la Microbiota hasta haber abierto TODOS los nutrientes
+  // secundarios de esta página.
+  const todosSecVistos = NUTRIENTES_SECUNDARIOS.every((n) => exploradosSet.has(n.key));
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -129,7 +117,9 @@ export default function MetodoNutricionNutrientesSecundarios() {
             mb={0}
             prev={{ label: "← Los nutrientes", onClick: () => navigate("/metodo/nutricion/nutrientes") }}
             extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-            next={{ label: "Microbiota →", onClick: () => setMicroOpen(true) }}
+            next={{ label: "Microbiota →", onClick: () => setMicroOpen(true),
+                    disabled: !todosSecVistos,
+                    disabledTooltip: "Descubre todos los nutrientes secundarios primero" }}
           />
           </Reveal>
 

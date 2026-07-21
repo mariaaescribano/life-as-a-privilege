@@ -172,7 +172,7 @@ export default function MetodoAstrologiaProfundizar() {
               {textoMostrado ? (
                 <Text
                   color={`${cuerpo.color}e6`}
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "lg", md: "xl" }}
                   lineHeight="1.9"
                   letterSpacing="0.015em"
                   textAlign="left"

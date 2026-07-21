@@ -35,10 +35,10 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
   // ══════════════════════════════════════════════
   kether: {
     sefiraKey: "kether",
-    nombre: "Kether",
+    nombre: "Keter",
     subtitulo: "La Corona · Propósito y Voluntad Divina",
     introduccion:
-      "Kether es el primer destello de la existencia, la chispa primordial que precede a todo pensamiento y a toda forma. En el plano personal, habla de tu sentido de propósito, de tu conexión con algo mayor que tú y de la autenticidad que existe más allá de los roles que cumples.",
+      "Keter es el primer destello de la existencia, la chispa primordial que precede a todo pensamiento y a toda forma. En el plano personal, habla de tu sentido de propósito, de tu conexión con algo mayor que tú y de la autenticidad que existe más allá de los roles que cumples.",
     preguntas: [
       {
         id: "kether_1",
@@ -75,20 +75,20 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Corona activa",
         rango: [7, 9],
-        mensaje: "Kether fluye con fuerza en ti. Tienes una conexión viva con tu propósito y con algo mayor que tú. Esa chispa primordial que eres se expresa de forma consciente en tu Vida.",
-        consejo: "Sigue nutriendo esa conexión. La práctica contemplativa —silencio, meditación, contemplación de la naturaleza— es el alimento de Kether.",
+        mensaje: "Keter fluye con fuerza en ti. Tienes una conexión viva con tu propósito y con algo mayor que tú. Esa chispa primordial que eres se expresa de forma consciente en tu Vida.",
+        consejo: "Sigue nutriendo esa conexión. La práctica contemplativa —silencio, meditación, contemplación de la naturaleza— es el alimento de Keter.",
       },
       {
         etiqueta: "Buscando la corona",
         rango: [4, 6],
-        mensaje: "Tienes destellos de conexión con Kether, pero hay momentos en que la cotidianidad los apaga. Tu propósito existe; a veces el ruido del mundo lo silencia.",
+        mensaje: "Tienes destellos de conexión con Keter, pero hay momentos en que la cotidianidad los apaga. Tu propósito existe; a veces el ruido del mundo lo silencia.",
         consejo: "Dedica momentos de quietud a la pregunta: '¿Qué quiero realmente traer al mundo?' No busques la respuesta; deja que emerja.",
       },
       {
-        etiqueta: "Kether te llama",
+        etiqueta: "Keter te llama",
         rango: [0, 3],
-        mensaje: "Kether te está invitando a conectar con algo más profundo que los roles y las obligaciones. No se trata de encontrar respuestas, sino de atreverse a hacer las preguntas.",
-        consejo: "Keter nos recuerda que existe una voluntad mayor detrás de cada experiencia. Empieza preguntándote: '¿Qué haría si no tuviera miedo?' Esa respuesta es Kether.",
+        mensaje: "Keter te está invitando a conectar con algo más profundo que los roles y las obligaciones. No se trata de encontrar respuestas, sino de atreverse a hacer las preguntas.",
+        consejo: "Keter nos recuerda que existe una voluntad mayor detrás de cada experiencia. Empieza preguntándote: '¿Qué haría si no tuviera miedo?' Esa respuesta es Keter.",
       },
     ],
   },
@@ -98,10 +98,10 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
   // ══════════════════════════════════════════════
   chokmah: {
     sefiraKey: "chokmah",
-    nombre: "Chokmah",
+    nombre: "Chokhmah",
     subtitulo: "La Sabiduría · Intuición e Impulso Creativo",
     introduccion:
-      "Chokmah es el primer movimiento de la conciencia: el destello de la inspiración pura que precede al análisis. Habla de tu capacidad de confiar en tu intuición, de tu relación con la creatividad y de cómo das espacio a los proyectos que en ti quieren nacer.",
+      "Chokhmah es el primer movimiento de la conciencia: el destello de la inspiración pura que precede al análisis. Habla de tu capacidad de confiar en tu intuición, de tu relación con la creatividad y de cómo das espacio a los proyectos que en ti quieren nacer.",
     preguntas: [
       {
         id: "chokmah_1",
@@ -138,8 +138,8 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Sabiduría activa",
         rango: [7, 9],
-        mensaje: "Chokmah fluye con claridad en ti. Confías en tu intuición, das espacio a tus impulsos creativos y actúas desde la sabiduría instantánea que precede al análisis.",
-        consejo: "Chokmah es el destello de sabiduría que precede al pensamiento. Tu primer impulso suele saber más de lo que crees. Sigue confiando en él.",
+        mensaje: "Chokhmah fluye con claridad en ti. Confías en tu intuición, das espacio a tus impulsos creativos y actúas desde la sabiduría instantánea que precede al análisis.",
+        consejo: "Chokhmah es el destello de sabiduría que precede al pensamiento. Tu primer impulso suele saber más de lo que crees. Sigue confiando en él.",
       },
       {
         etiqueta: "Sabiduría en proceso",
@@ -148,9 +148,9 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
         consejo: "Practica escuchar el primer impulso antes de analizarlo. Escríbelo. Actúa antes de pensar demasiado. La intuición se fortalece con el ejercicio.",
       },
       {
-        etiqueta: "Chokmah te llama",
+        etiqueta: "Chokhmah te llama",
         rango: [0, 3],
-        mensaje: "Chokmah te invita a reconectar con la dimensión espontánea de tu ser. La sabiduría no siempre llega con argumentos; a veces llega como un destello que hay que aprender a reconocer.",
+        mensaje: "Chokhmah te invita a reconectar con la dimensión espontánea de tu ser. La sabiduría no siempre llega con argumentos; a veces llega como un destello que hay que aprender a reconocer.",
         consejo: "Empieza por pequeñas decisiones: ¿qué pide mi primer impulso? No se trata de eliminar la razón, sino de escuchar también lo que sabe más profundo.",
       },
     ],
@@ -287,10 +287,10 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
   // ══════════════════════════════════════════════
   geburah: {
     sefiraKey: "geburah",
-    nombre: "Geburah",
+    nombre: "Gevurah",
     subtitulo: "La Severidad · Límites, Poder y Discernimiento",
     introduccion:
-      "Geburah es la fuerza disciplinada del poder y el juicio. No destruye por destruir: poda lo que agota para que pueda crecer lo que nutre. En el plano personal, habla de tu capacidad de poner límites, de soltar lo que ya no sirve y de ejercer el discernimiento sin exceso.",
+      "Gevurah es la fuerza disciplinada del poder y el juicio. No destruye por destruir: poda lo que agota para que pueda crecer lo que nutre. En el plano personal, habla de tu capacidad de poner límites, de soltar lo que ya no sirve y de ejercer el discernimiento sin exceso.",
     preguntas: [
       {
         id: "geburah_1",
@@ -327,19 +327,19 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Severidad equilibrada",
         rango: [7, 9],
-        mensaje: "Geburah opera con claridad en ti. Sabes soltar lo que ya no sirve, pones límites con valentía y tu juicio está al servicio del crecimiento, no de la destrucción.",
+        mensaje: "Gevurah opera con claridad en ti. Sabes soltar lo que ya no sirve, pones límites con valentía y tu juicio está al servicio del crecimiento, no de la destrucción.",
         consejo: "Gevurah no destruye por destruir. Poda lo que agota para que pueda crecer lo que nutre. Sigue ejerciendo ese discernimiento con conciencia.",
       },
       {
-        etiqueta: "Geburah en proceso",
+        etiqueta: "Gevurah en proceso",
         rango: [4, 6],
         mensaje: "Tienes capacidad de juicio y de poner límites, pero a veces el miedo al conflicto o al abandono te detiene. Hay una valentía más completa esperando en ti.",
         consejo: "Un límite no es un muro; es una puerta con llave. Esta semana, identifica un lugar donde necesites poner uno y da el primer paso, aunque sea pequeño.",
       },
       {
-        etiqueta: "Geburah te llama",
+        etiqueta: "Gevurah te llama",
         rango: [0, 3],
-        mensaje: "Geburah te invita a explorar tu relación con el poder, el límite y el soltar. Puede que estés cargando con demasiado —relaciones, hábitos, narrativas— que ya no te nutre.",
+        mensaje: "Gevurah te invita a explorar tu relación con el poder, el límite y el soltar. Puede que estés cargando con demasiado —relaciones, hábitos, narrativas— que ya no te nutre.",
         consejo: "¿Qué necesitas eliminar de tu Vida que sabes que ya no te sirve? Empieza por nombrarlo. Gevurah dice: 'No tengas miedo de podar. Lo que queda crece con más fuerza.'",
       },
     ],
@@ -602,10 +602,10 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
   // ══════════════════════════════════════════════
   malkuth: {
     sefiraKey: "malkuth",
-    nombre: "Malkuth",
+    nombre: "Malkhut",
     subtitulo: "El Reino · Cuerpo, Tierra y Manifestación",
     introduccion:
-      "Malkuth es el mundo material y la experiencia física. Lo espiritual se manifiesta aquí o no se manifiesta en ningún sitio. Habla de tu relación con tu cuerpo, con tu entorno físico y con lo que estás creando concretamente en tu Vida.",
+      "Malkhut es el mundo material y la experiencia física. Lo espiritual se manifiesta aquí o no se manifiesta en ningún sitio. Habla de tu relación con tu cuerpo, con tu entorno físico y con lo que estás creando concretamente en tu Vida.",
     preguntas: [
       {
         id: "malkuth_1",
@@ -642,20 +642,20 @@ export const testCabala: Record<SefiraKey, TestSefirot> = {
       {
         etiqueta: "Reino habitado",
         rango: [7, 9],
-        mensaje: "Malkuth vive con plenitud en ti. Cuidas tu cuerpo, tu entorno refleja tu estado interior y hay coherencia entre lo que quieres y lo que manifiestas. Lo espiritual se hace visible en lo concreto.",
+        mensaje: "Malkhut vive con plenitud en ti. Cuidas tu cuerpo, tu entorno refleja tu estado interior y hay coherencia entre lo que quieres y lo que manifiestas. Lo espiritual se hace visible en lo concreto.",
         consejo: "Malkhut es el cuerpo, la tierra, lo concreto. Lo espiritual se manifiesta aquí o no se manifiesta en ningún sitio. Sigue honrando ese puente entre lo invisible y lo tangible.",
       },
       {
-        etiqueta: "Malkuth en proceso",
+        etiqueta: "Malkhut en proceso",
         rango: [4, 6],
         mensaje: "Tienes conciencia de tu dimensión material, pero hay áreas —el cuerpo, el espacio o la manifestación— donde la coherencia podría ser mayor. Lo que creas en el exterior refleja lo que vive en el interior.",
-        consejo: "Esta semana, elige un pequeño acto de cuidado hacia tu cuerpo o tu espacio. No esperes a tener tiempo: Malkuth se nutre de gestos concretos, no de grandes planes.",
+        consejo: "Esta semana, elige un pequeño acto de cuidado hacia tu cuerpo o tu espacio. No esperes a tener tiempo: Malkhut se nutre de gestos concretos, no de grandes planes.",
       },
       {
-        etiqueta: "Malkuth te llama",
+        etiqueta: "Malkhut te llama",
         rango: [0, 3],
-        mensaje: "Malkuth te invita a volver a lo concreto: al cuerpo, al espacio, a lo que tocas y pisas. La espiritualidad sin tierra no se sostiene. Lo que ocurre en tu Vida material es siempre un mensaje.",
-        consejo: "¿Tu cuerpo, tu casa, tu Vida cotidiana reflejan quién quieres ser? Empieza por lo más pequeño y más tangible. Un espacio ordenado, una comida preparada con cuidado, diez minutos de movimiento: eso es Malkuth.",
+        mensaje: "Malkhut te invita a volver a lo concreto: al cuerpo, al espacio, a lo que tocas y pisas. La espiritualidad sin tierra no se sostiene. Lo que ocurre en tu Vida material es siempre un mensaje.",
+        consejo: "¿Tu cuerpo, tu casa, tu Vida cotidiana reflejan quién quieres ser? Empieza por lo más pequeño y más tangible. Un espacio ordenado, una comida preparada con cuidado, diez minutos de movimiento: eso es Malkhut.",
       },
     ],
   },

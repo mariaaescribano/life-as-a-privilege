@@ -1,10 +1,19 @@
 // Botón «Índice» del recorrido de NUTRICIÓN. Muestra TODAS las páginas del
 // recorrido, numeradas y pulsables, resaltando la actual. Se coloca encima de
 // «Mis notas», igual que el índice del resto de disciplinas.
-import React from "react";
+//
+// Además refleja los BLOQUEOS naturales del recorrido: un paso sale con candado
+// (y no es pulsable) hasta que se cumple su condición de progreso, leída del
+// backend (metodo_nutricion.data):
+//   · Nutrientes secundarios → hasta revisar todos los principales.
+//   · Tus calorías y macros   → hasta crear el plato de Harvard.
+//   · Diseña tu día           → hasta tener el cálculo de calorías.
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
-import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
+import { API_URL, nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
+import { NUTRIENTES_PRINCIPALES } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // Todas las páginas del recorrido de Nutrición, en orden.
 const PASOS: { titulo: string; path: string }[] = [
@@ -15,15 +24,49 @@ const PASOS: { titulo: string; path: string }[] = [
   { titulo: "El hambre",              path: "/metodo/nutricion/hambre" },
   { titulo: "Tu plato",               path: "/metodo/nutricion/plato" },
   { titulo: "Tus calorías y macros",  path: "/metodo/nutricion/calorias" },
+  { titulo: "Diseña tu día",          path: "/metodo/nutricion/dia" },
   { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
   { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },
 ];
 
 export function IndiceNutricion() {
+  // Empezamos pesimistas (todo lo condicionado, bloqueado) hasta leer el
+  // progreso: así no se puede saltar por el índice en el instante de carga.
+  const [flags, setFlags] = useState({ principales: false, plato: false, calorias: false });
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    let cancelado = false;
+    (async () => {
+      try {
+        const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+        const data = r.data?.data ?? {};
+        const explorados: string[] = Array.isArray(data.nutrientes_explorados) ? data.nutrientes_explorados : [];
+        if (cancelado) return;
+        setFlags({
+          principales: NUTRIENTES_PRINCIPALES.every((x) => explorados.includes(x.key)),
+          plato: !!data.plato_hecho,
+          calorias: !!data.calorias?.hecho,
+        });
+      } catch { /* sin datos aún → lo condicionado queda bloqueado */ }
+    })();
+    return () => { cancelado = true; };
+  }, []);
+
+  // Condición de bloqueo por ruta (las páginas no listadas van siempre abiertas).
+  const bloqueoPorPath: Record<string, boolean> = {
+    "/metodo/nutricion/nutrientes-secundarios": !flags.principales,
+    "/metodo/nutricion/calorias": !flags.plato,
+    "/metodo/nutricion/dia": !flags.calorias,
+  };
+
   const indice: PasoRecorrido[] = PASOS.map((p, i) => ({
     n: i + 1,
     titulo: p.titulo,
     ruta: () => p.path,
+    bloqueado: bloqueoPorPath[p.path] ?? false,
   }));
 
   return (

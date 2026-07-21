@@ -130,7 +130,7 @@ export default function MetodoAyurvedaDoshaCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Cursos para profundizar"
+            title="Cursos de Ayurveda"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}

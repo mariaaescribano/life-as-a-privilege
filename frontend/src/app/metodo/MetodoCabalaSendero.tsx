@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ESCALA } from "../../components/metodo/cabalaTest";
 import {
   CABALA_SENDEROS,
@@ -25,15 +25,14 @@ import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../Globa
 const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
 const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
 
-const Divisor = ({ mb = 4, mt = 0 }: { mb?: any; mt?: any }) => (
-  <Box h="1px" mb={mb} mt={mt} style={{ background: `linear-gradient(90deg, transparent, ${cabalaTxt}55, transparent)` }} />
-);
+// Sin líneas divisorias: se muestran los boxes sin ningún "border line".
+const Divisor = (_props?: { mb?: any; mt?: any }) => null;
 
-// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) con un velo
-// para que la letra dorada se lea. No se cambia el color del texto.
-const CAJA_OVERLAY = `${cabalaBg}cc`;
+// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) a plena
+// intensidad, sin velo que reduzca su opacidad. No se cambia el color del texto.
+const CAJA_OVERLAY = "transparent";
 const Caja = ({ children }: { children: React.ReactNode }) => (
-  <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${cabalaTxt}44`}
+  <Box position="relative" overflow="hidden" w="100%"
        borderRadius="2xl" boxShadow={CAJA_GLOW}>
     <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
@@ -50,11 +49,13 @@ const TituloCaja = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Parrafos = ({ items }: { items: string[] }) => (
-  <Flex direction="column" gap={3.5}>
+  <RevealStagger inView display="flex" flexDirection="column" gap={3.5}>
     {items.map((p, i) => (
-      <Text key={i} color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{p}</Text>
+      <RevealItem key={i}>
+        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{p}</Text>
+      </RevealItem>
     ))}
-  </Flex>
+  </RevealStagger>
 );
 
 export default function MetodoCabalaSendero() {
@@ -145,17 +146,17 @@ export default function MetodoCabalaSendero() {
               nom={cabalaNom}
               mb={0}
               prev={prevNum
-                ? { label: "← Anterior", onClick: () => navigate(`/metodo/cabala/sendero/${prevNum}`) }
+                ? { label: `← ${senderoPorNum[prevNum]?.letra ?? "Anterior"}`, onClick: () => navigate(`/metodo/cabala/sendero/${prevNum}`) }
                 : { label: "← Los senderos", onClick: () => navigate("/metodo/cabala/senderos") }}
               next={nextNum
-                ? { label: "Siguiente →", onClick: () => navigate(`/metodo/cabala/sendero/${nextNum}`) }
+                ? { label: `${senderoPorNum[nextNum]?.letra ?? "Siguiente"} →`, onClick: () => navigate(`/metodo/cabala/sendero/${nextNum}`) }
                 : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
             />
           </Reveal>
 
           {/* ── Cabecera del sendero ── */}
           <Reveal direction="up" distance={18} delay={0.08} duration={0.65} w="100%">
-            <Box w="100%" position="relative" overflow="hidden" border={`1.5px solid ${cabalaTxt}66`}
+            <Box w="100%" position="relative" overflow="hidden"
                  borderRadius="3xl" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" overlay={CAJA_OVERLAY} />
               <Flex position="relative" zIndex={1} align="center" gap={{ base: 5, md: 8 }} direction={{ base: "column", sm: "row" }}
@@ -260,9 +261,9 @@ export default function MetodoCabalaSendero() {
                   ))}
                 </Flex>
 
-                <Flex direction="column" gap={5}>
+                <RevealStagger inView display="flex" flexDirection="column" gap={5}>
                   {sendero.test.map((preg, qi) => (
-                    <Box key={qi}>
+                    <RevealItem key={qi}>
                       <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mb={2.5}>
                         <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{qi + 1}.</Box>
                         {preg.texto}
@@ -284,9 +285,9 @@ export default function MetodoCabalaSendero() {
                           );
                         })}
                       </Flex>
-                    </Box>
+                    </RevealItem>
                   ))}
-                </Flex>
+                </RevealStagger>
               </Caja>
             </Reveal>
           )}
@@ -307,11 +308,12 @@ export default function MetodoCabalaSendero() {
                     Responde las 5 preguntas para ver tu interpretación.
                   </Text>
                 )}
-                <Flex direction="column" gap={3}>
+                <RevealStagger inView display="flex" flexDirection="column" gap={3}>
                   {sendero.interpretaciones.map((b, i) => {
                     const activa = !!banda && banda.min === b.min && banda.max === b.max;
                     return (
-                      <Box key={i} borderRadius="xl" px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
+                      <RevealItem key={i}>
+                      <Box borderRadius="xl" px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
                            bg={activa ? `${cabalaTxt}1e` : `${cabalaTxt}08`}
                            border={`1px solid ${activa ? cabalaTxt : `${cabalaTxt}22`}`}
                            boxShadow={activa ? `0 0 18px ${cabalaTxt}55` : "none"}
@@ -322,9 +324,10 @@ export default function MetodoCabalaSendero() {
                         </Flex>
                         <Text color={`${cabalaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{b.texto}</Text>
                       </Box>
+                      </RevealItem>
                     );
                   })}
-                </Flex>
+                </RevealStagger>
               </Caja>
             </Reveal>
           )}
@@ -338,15 +341,17 @@ export default function MetodoCabalaSendero() {
                 <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={3.5}>
                   Durante esta semana observa si…
                 </Text>
-                <Flex direction="column" gap={2.5}>
+                <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                   {sendero.senales.map((s, i) => (
-                    <Flex key={i} align="flex-start" gap={3}>
+                    <RevealItem key={i}>
+                    <Flex align="flex-start" gap={3}>
                       <Box flexShrink={0} mt="10px" w="6px" h="6px" borderRadius="full" bg={cabalaTxt}
                            boxShadow={`0 0 8px ${cabalaTxt}aa`} />
                       <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">{s}</Text>
                     </Flex>
+                    </RevealItem>
                   ))}
-                </Flex>
+                </RevealStagger>
               </Caja>
             </Reveal>
           )}

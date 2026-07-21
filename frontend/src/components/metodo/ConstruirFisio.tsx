@@ -13,6 +13,7 @@ import { useTusCelulas } from "./TusCelulasModal";
 import { IndiceFisiologia } from "./IndiceFisiologia";
 import { BotonCompania } from "../global/BotonCompania";
 import { Reveal } from "../global/Reveal";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -86,8 +87,10 @@ function pos(forma: FormaFisio, i: number, n: number): { x: number; y: number } 
   if (forma === "membrana") return { x: ((i + 0.5) / n) * 100, y: i % 2 === 0 ? 30 : 70 };
   // Cluster: círculo REAL (mismo radio en x/y) centrado en el centro del círculo
   // negro (50%, 50%), para que el anillo de piezas quede concéntrico con él.
+  // Radio contenido (20%) para que el grupo quede bien AL CENTRO del círculo
+  // negro y no pegado al borde.
   const ang = (i / n) * Math.PI * 2 - Math.PI / 2;
-  return { x: 50 + Math.cos(ang) * 25, y: 50 + Math.sin(ang) * 25 };
+  return { x: 50 + Math.cos(ang) * 20, y: 50 + Math.sin(ang) * 20 };
 }
 
 function Perla({ def, size }: { def: PiezaDef; size: any }) {
@@ -187,6 +190,14 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
   );
   const puestasIds = new Set(puestas.map((p) => p.id));
 
+  // No mostramos las piezas ni los boxes hasta que TODAS las fotos (las de las
+  // piezas + la del resultado) estén cargadas: mientras tanto, solo el spinner.
+  // Así nada aparece a medio cargar.
+  const fotosListas = usePrecargarImagenes([
+    ...props.piezas.map((p) => p.img),
+    props.resultImg,
+  ]);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = sessionStorage.getItem("userId");
@@ -236,7 +247,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
 
   const reiniciar = () => { setPuestas([]); setPendientes(flat()); setCompleto(false); };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !fotosListas) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -392,7 +403,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                            bgGradient={`linear(to-r, ${props.glow}aa, transparent)`} />
                       {props.resultParrafos.map((p, i) => (
                         <Text key={i} color={i === props.resultParrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
-                              fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
+                              fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                               fontWeight={i === props.resultParrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
                           {p}
                         </Text>

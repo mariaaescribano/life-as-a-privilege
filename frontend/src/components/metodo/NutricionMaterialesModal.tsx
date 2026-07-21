@@ -167,7 +167,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
 
           {/* Descripción del alimento (algo más larga que el resumen). */}
           {(a.descripcion || a.resumen) && (
-            <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
+            <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
               {a.descripcion ?? a.resumen}
             </Text>
           )}

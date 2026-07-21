@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { glowSuave } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { Reveal, Float } from "../../components/global/Reveal";
+import { Reveal, Float, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { PLATO_MACROS, platoMacroByKey, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
 
@@ -273,7 +273,12 @@ export default function MetodoNutricionPlato() {
               mb={0}
               prev={{ label: "← El hambre", onClick: () => navigate("/metodo/nutricion/hambre") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Tus calorías →", onClick: () => navigate("/metodo/nutricion/calorias") }}
+              next={{
+                label: "Tus calorías →",
+                onClick: () => navigate("/metodo/nutricion/calorias"),
+                disabled: !completo,
+                disabledTooltip: "Crea tu plato (un alimento de cada grupo) para continuar",
+              }}
             />
           </Reveal>
 
@@ -444,9 +449,14 @@ export default function MetodoNutricionPlato() {
                   Arrastra estos alimentos al plato
                 </Text>
 
-                <Flex wrap="wrap" gap={{ base: 4, md: 5 }} justify="center">
+                {/* Los alimentos del macro entran UNO A UNO (cascada). La `key`
+                    con el macro reinicia la animación al cambiar de sector, así
+                    cada grupo se va cargando pieza a pieza (da más emoción). */}
+                <RevealStagger key={macroSel} stagger={0.09} delayChildren={0.05}
+                               display="flex" flexWrap="wrap" gap={{ base: 4, md: 5 }} justifyContent="center">
                   {macro.alimentos.map((food) => (
-                    <Flex key={food.key} direction="column" align="center" gap={1.5} w="72px">
+                    <RevealItem key={food.key} direction="up" distance={14} scaleFrom={0.5} duration={0.5}
+                                display="flex" flexDirection="column" alignItems="center" gap={1.5} w="72px">
                       <Flex align="center" justify="center" overflow="hidden"
                             w={{ base: "52px", md: "58px" }} h={{ base: "52px", md: "58px" }}
                             borderRadius="full" bg="#fffdf7"
@@ -463,9 +473,9 @@ export default function MetodoNutricionPlato() {
                       <Text color={nutricionTxt} fontSize="xs" fontWeight="600" textAlign="center" lineHeight="1.2">
                         {food.label}
                       </Text>
-                    </Flex>
+                    </RevealItem>
                   ))}
-                </Flex>
+                </RevealStagger>
               </Flex>
             </SeccionBox>
           </Flex>

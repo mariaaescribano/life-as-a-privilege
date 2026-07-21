@@ -143,7 +143,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
             <Box h="1px" w="100%" mb={5} bgGradient={`linear(to-r, ${E.color}, ${E.color}22, transparent)`} />
             <Flex direction="column" gap={4}>
               {parrafos.map((t, i) => (
-                <Text key={i} color="rgba(255,255,255,0.96)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
+                <Text key={i} color="rgba(255,255,255,0.96)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
                   {t}
                 </Text>

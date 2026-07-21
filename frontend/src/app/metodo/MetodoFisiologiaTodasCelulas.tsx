@@ -1043,19 +1043,22 @@ function OrganoDetalle({
     /* Los tres boxes de la ficha se limitan al mismo ancho que la cabecera
        (850px), a diferencia de la cuadrícula de tarjetas, que llega a 1100px. */
     <Flex direction="column" gap={{ base: 5, md: 6 }} w="100%" maxW="850px" mx="auto">
-      {/* 0 · Volver a la galería */}
+      {/* 0 · Volver a la galería — fondo con la foto de Fisiología */}
       <Box as="button" onClick={onBack} alignSelf="flex-start"
+           position="relative" overflow="hidden"
            display="inline-flex" alignItems="center" gap={2}
            px={{ base: 4, md: 5 }} py={2} borderRadius="full"
-           bg={`${fisiologiaBg}cc`} border={`1px solid ${fisiologiaTxt}55`}
+           border={`1px solid ${fisiologiaTxt}55`}
            cursor="pointer" transition="all 0.2s"
-           _hover={{ borderColor: fisiologiaTxt, bg: `${fisiologiaBg}ee` }}>
-        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+           boxShadow={`0 2px 12px rgba(0,0,0,0.35)`}
+           _hover={{ borderColor: fisiologiaTxt, transform: "translateY(-1px)" }}>
+        <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}66`} />
+        <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
              w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill={fisiologiaTxt}>
           <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
         </Box>
-        <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.04em"
-              style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
+        <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.04em"
+              style={{ textShadow: `0 1px 4px ${fisiologiaBg}, 0 0 8px ${fisiologiaBg}` }}>
           Volver
         </Text>
       </Box>

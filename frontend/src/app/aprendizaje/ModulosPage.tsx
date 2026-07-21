@@ -6,6 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
+import { VolverAlMapa } from "../../components/global/VolverAlMapa";
 import { useCursosData } from "../../data/cursosApi";
 
 export default function ModulosPage() {
@@ -28,6 +29,7 @@ export default function ModulosPage() {
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
+      <VolverAlMapa />
 
       <Box flex="1">
         {modalidad && curso ? (

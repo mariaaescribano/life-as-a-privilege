@@ -851,7 +851,7 @@ const QOF: SenderoContenido = {
   from: "netzach",
   to: "malkuth",
   significadoTradicional:
-    "Qof (ק) significa \"nuca\", \"parte posterior de la cabeza\" o aquello que permanece oculto a la vista. En la tradición cabalística simboliza el paso entre lo interno y lo externo, recordándonos que toda transformación visible nace primero de un proceso interior.\n\nAl conectar Netzach con Malkut, este sendero representa el paso desde la perseverancia hacia la manifestación. Enseña que la constancia acaba dejando una huella visible y que toda realidad construida comienza mucho antes de poder verse.",
+    "Qof (ק) significa \"nuca\", \"parte posterior de la cabeza\" o aquello que permanece oculto a la vista. En la tradición cabalística simboliza el paso entre lo interno y lo externo, recordándonos que toda transformación visible nace primero de un proceso interior.\n\nAl conectar Netzach con Malkhut, este sendero representa el paso desde la perseverancia hacia la manifestación. Enseña que la constancia acaba dejando una huella visible y que toda realidad construida comienza mucho antes de poder verse.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir el esfuerzo sostenido en resultados reales. Muchas veces esperamos cambios inmediatos y olvidamos que las transformaciones más profundas son el fruto de pequeñas acciones repetidas durante mucho tiempo.\n\nNos recuerda que la manifestación no ocurre por casualidad; es la consecuencia natural de una perseverancia mantenida con intención.",
   pregunta: "¿Confías en el proceso o solo valoras los resultados cuando ya son visibles?",
@@ -937,7 +937,7 @@ const SHIN: SenderoContenido = {
   from: "hod",
   to: "malkuth",
   significadoTradicional:
-    "Shin (ש) significa \"diente\" y está asociada al fuego transformador. En la tradición cabalística simboliza la energía que purifica, transforma e impulsa el cambio. No destruye por destruir; transforma lo potencial en una realidad nueva.\n\nAl conectar Hod con Malkut, este sendero representa el paso desde la expresión consciente hacia la manifestación en el mundo. Enseña que aquello que cultivamos en nuestro interior termina reflejándose en nuestra realidad exterior.",
+    "Shin (ש) significa \"diente\" y está asociada al fuego transformador. En la tradición cabalística simboliza la energía que purifica, transforma e impulsa el cambio. No destruye por destruir; transforma lo potencial en una realidad nueva.\n\nAl conectar Hod con Malkhut, este sendero representa el paso desde la expresión consciente hacia la manifestación en el mundo. Enseña que aquello que cultivamos en nuestro interior termina reflejándose en nuestra realidad exterior.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir una Vida coherente en resultados visibles. Cuando nuestros pensamientos, emociones, hábitos y acciones están alineados, la realidad comienza a reflejar esa transformación.\n\nNos recuerda que el cambio auténtico no consiste en aparentar ser alguien diferente, sino en permitir que nuestra Vida exprese de forma natural quiénes ya somos.",
   pregunta: "¿La Vida que has construido refleja realmente la persona en la que te estás convirtiendo?",
@@ -980,7 +980,7 @@ const TAV: SenderoContenido = {
   from: "yesod",
   to: "malkuth",
   significadoTradicional:
-    "Tav (ת) es la última letra del alfabeto hebreo y significa \"marca\", \"sello\" o \"firma\". En la tradición cabalística simboliza la culminación de un proceso, la materialización de lo aprendido y la huella que dejamos en el mundo. Representa el momento en que una verdad deja de ser una posibilidad para convertirse en una realidad.\n\nAl conectar Yesod con Malkut, este sendero simboliza el paso desde los fundamentos interiores hacia la manifestación concreta. Enseña que el conocimiento solo alcanza su propósito cuando se traduce en acciones que transforman la realidad.",
+    "Tav (ת) es la última letra del alfabeto hebreo y significa \"marca\", \"sello\" o \"firma\". En la tradición cabalística simboliza la culminación de un proceso, la materialización de lo aprendido y la huella que dejamos en el mundo. Representa el momento en que una verdad deja de ser una posibilidad para convertirse en una realidad.\n\nAl conectar Yesod con Malkhut, este sendero simboliza el paso desde los fundamentos interiores hacia la manifestación concreta. Enseña que el conocimiento solo alcanza su propósito cuando se traduce en acciones que transforman la realidad.",
   traduccionPsicologica:
     "Este sendero representa la capacidad de convertir nuestras ideas, aprendizajes y valores en una forma visible de vivir. No basta con comprender quién queremos ser; el verdadero crecimiento ocurre cuando nuestras decisiones dejan una huella coherente en nuestra Vida y en nuestro entorno.\n\nNos recuerda que cada acción es una firma que revela nuestros valores, mucho más que nuestras palabras o nuestras intenciones.",
   pregunta: "¿La huella que dejas refleja realmente lo que dices valorar?",

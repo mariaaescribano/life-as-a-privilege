@@ -9,13 +9,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { CabalaNotaModal } from "../../components/metodo/CabalaNotaModal";
-import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
-import {
-  CABALA_ILUSTRACIONES_VINETAS,
-  CABALA_ILUSTRACIONES_VINETA_KEYS,
-} from "../../components/metodo/cabalaIlustraciones";
+import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import {
   cabalaSefirotMap,
   CABALA_SEFIROT_ORDEN,
@@ -42,16 +38,15 @@ const Divisor = ({ mb = 4, mt = 0 }: { mb?: any; mt?: any }) => (
   <Box h="1px" w="100%" mb={mb} mt={mt} bg={`${cabalaTxt}55`} />
 );
 
-/* ── Box base: el fondo es la imagen de Cábala (cabala.png) con un velo para que
-   la letra dorada (cabalaTxt) se lea. TODOS los boxes del recorrido comparten
-   esta caja. Acepta props extra (p.ej. h="100%" para igualar alturas). ── */
-const CAJA_OVERLAY = `${cabalaBg}cc`; // velo del color de la disciplina (~80%)
+/* ── Box base: el fondo es la imagen de Cábala (cabala.png) a plena intensidad
+   (sin velo que reduzca su opacidad) y SIN border line. TODOS los boxes del
+   recorrido comparten esta caja. Acepta props extra (p.ej. h="100%"). ── */
+const CAJA_OVERLAY = "transparent";
 const Caja = ({ children, ...rest }: React.ComponentProps<typeof Box>) => (
   <Box
     position="relative"
     overflow="hidden"
     w="100%"
-    border={`1.5px solid ${cabalaTxt}44`}
     borderRadius="2xl"
     boxShadow={CAJA_GLOW}
     {...rest}
@@ -76,26 +71,29 @@ const TituloCaja = ({ children }: { children: React.ReactNode }) => (
   </Text>
 );
 
-/* ── Item de lista con marcador dorado ── */
+/* ── Item de lista con marcador dorado. Es un RevealItem: dentro de un
+   RevealStagger entra en cascada (uno a uno); suelto, se muestra sin animar. ── */
 const ItemLista = ({ children }: { children: React.ReactNode }) => (
-  <Flex align="flex-start" gap={3}>
-    <Box
-      flexShrink={0}
-      mt="10px"
-      w="6px"
-      h="6px"
-      borderRadius="full"
-      bg={cabalaTxt}
-      boxShadow={`0 0 8px ${cabalaTxt}aa`}
-    />
-    <Text
-      color={`${cabalaTxt}dd`}
-      fontSize={{ base: "sm", md: "md" }}
-      lineHeight="1.7"
-    >
-      {children}
-    </Text>
-  </Flex>
+  <RevealItem>
+    <Flex align="flex-start" gap={3}>
+      <Box
+        flexShrink={0}
+        mt="10px"
+        w="6px"
+        h="6px"
+        borderRadius="full"
+        bg={cabalaTxt}
+        boxShadow={`0 0 8px ${cabalaTxt}aa`}
+      />
+      <Text
+        color={`${cabalaTxt}dd`}
+        fontSize={{ base: "sm", md: "md" }}
+        lineHeight="1.7"
+      >
+        {children}
+      </Text>
+    </Flex>
+  </RevealItem>
 );
 
 /* ── Autoevaluación (local, no se persiste): la frase y un único box lateral
@@ -172,9 +170,10 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
       </Text>
 
       {columnas.length > 0 && (
-      <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }}>
+      <RevealStagger inView display="flex" flexDirection={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }}>
         {columnas.map((col, ci) => (
-          <Box key={ci} flex="1" minW={0}
+          <RevealItem key={ci} flex="1" minW={0}>
+          <Box flex="1" minW={0}
                bg={`${cabalaTxt}0a`} border={`1px solid ${cabalaTxt}2a`} borderRadius="xl"
                p={{ base: 4, md: 5 }}>
             <Text color={cabalaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="700"
@@ -259,8 +258,9 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
               Añadir
             </Box>
           </Box>
+          </RevealItem>
         ))}
-      </Flex>
+      </RevealStagger>
       )}
 
       {/* Modo B — prompts con campo de respuesta */}
@@ -271,9 +271,9 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
               {ejercicio.promptsIntro}
             </Text>
           )}
-          <Flex direction="column" gap={4}>
+          <RevealStagger inView display="flex" flexDirection="column" gap={4}>
             {prompts.map((p, i) => (
-              <Box key={i}>
+              <RevealItem key={i}>
                 <Text color={`${cabalaTxt}dd`} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.55" mb={2}>
                   {p}
                 </Text>
@@ -300,9 +300,9 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
                     ":focus": { outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 0 1px ${cabalaTxt}66` },
                   }}
                 />
-              </Box>
+              </RevealItem>
             ))}
-          </Flex>
+          </RevealStagger>
         </>
       )}
 
@@ -314,9 +314,9 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
         </Text>
       )}
       {cierre.length > 0 && (
-        <Flex direction="column" gap={2.5} mb={ejercicio.footer ? 5 : 0}>
+        <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={ejercicio.footer ? 5 : 0}>
           {cierre.map((q, i) => <ItemLista key={i}>{q}</ItemLista>)}
-        </Flex>
+        </RevealStagger>
       )}
       {ejercicio.footer && (
         <Flex direction="column" gap={2.5}>
@@ -352,17 +352,18 @@ function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: numb
         ))}
       </Flex>
 
-      <Flex direction="column" gap={5}>
+      <RevealStagger inView display="flex" flexDirection="column" gap={5}>
         {dim.preguntas.map((p, qi) => (
-          <EscalaAutoeval
-            key={qi}
-            statement={p.texto}
-            value={answers[qi] ?? 0}
-            max={5}
-            onChange={(v) => onAnswer(qi, v)}
-          />
+          <RevealItem key={qi}>
+            <EscalaAutoeval
+              statement={p.texto}
+              value={answers[qi] ?? 0}
+              max={5}
+              onChange={(v) => onAnswer(qi, v)}
+            />
+          </RevealItem>
         ))}
-      </Flex>
+      </RevealStagger>
     </Caja>
   );
 }
@@ -393,6 +394,14 @@ const FlechaCarrusel = ({ dir, onClick }: { dir: "left" | "right"; onClick: () =
       <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
     </Box>
   </Box>
+);
+
+// Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
+       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </svg>
 );
 
 export default function MetodoCabalaSefira() {
@@ -524,21 +533,6 @@ export default function MetodoCabalaSefira() {
     }
   };
 
-  // Marca la ilustración de una sefirá como leída (merge en data.ilustracionesVistas).
-  // Se llama según se navega de dimensión en dimensión dentro del visor.
-  const marcarIlustracionLeida = (k: CabalaPageKey) => {
-    const prevData = dataRef.current ?? {};
-    const vistas: string[] = Array.isArray(prevData.ilustracionesVistas) ? prevData.ilustracionesVistas : [];
-    if (vistas.includes(k)) return;
-    const nextData = { ...prevData, ilustracionesVistas: [...vistas, k] };
-    dataRef.current = nextData;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
-    if (userId && token) {
-      axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
-    }
-  };
-
   if (loading || !sefira) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
   }
@@ -581,7 +575,7 @@ export default function MetodoCabalaSefira() {
                 prev={prevKey
                   ? { label: `← ${cabalaSefirotMap[prevKey].titulo}`, onClick: () => navigate(`/metodo/cabala/sefira/${prevKey}`) }
                   : { label: "← El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
-                extra={{ label: "Ilustraciones", onClick: () => setIlusOpen(true) }}
+                extra={{ label: "Ilustraciones", onClick: () => setIlusOpen(true), icon: <EyeIcon /> }}
                 next={nextKey
                   ? { label: `${cabalaSefirotMap[nextKey].titulo} →`, onClick: () => navigate(`/metodo/cabala/sefira/${nextKey}`), disabled: bloquearSiguiente, disabledTooltip: "Completa todo lo que se pide en esta dimensión para continuar" }
                   : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/diagnostico"), disabled: bloquearSiguiente, disabledTooltip: "Completa todo lo que se pide en esta dimensión para continuar" }}
@@ -654,7 +648,7 @@ export default function MetodoCabalaSefira() {
                     <Text
                       key={carruselIdx}
                       color={cabalaTxt}
-                      fontSize={{ base: "md", md: "xl" }}
+                      fontSize={{ base: "lg", md: "2xl" }}
                       lineHeight="1.9"
                       textAlign="center"
                       maxW="620px"
@@ -704,9 +698,9 @@ export default function MetodoCabalaSefira() {
                           {sefira.equilibrado.intro}
                         </Text>
                       )}
-                      <Flex direction="column" gap={2.5}>
+                      <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                         {sefira.equilibrado.items.map((it, i) => <ItemLista key={i}>{it}</ItemLista>)}
-                      </Flex>
+                      </RevealStagger>
                       {sefira.equilibrado.extra && (
                         <>
                           <Divisor mt={5} mb={4} />
@@ -715,9 +709,9 @@ export default function MetodoCabalaSefira() {
                               {sefira.equilibrado.extra.intro}
                             </Text>
                           )}
-                          <Flex direction="column" gap={2.5}>
+                          <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                             {sefira.equilibrado.extra.items.map((it, i) => <ItemLista key={i}>{it}</ItemLista>)}
-                          </Flex>
+                          </RevealStagger>
                         </>
                       )}
                     </Caja>
@@ -733,9 +727,9 @@ export default function MetodoCabalaSefira() {
                           {sefira.desequilibrado.intro}
                         </Text>
                       )}
-                      <Flex direction="column" gap={2.5}>
+                      <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                         {sefira.desequilibrado.items.map((it, i) => <ItemLista key={i}>{it}</ItemLista>)}
-                      </Flex>
+                      </RevealStagger>
                       {sefira.desequilibrado.extra && (
                         <>
                           <Divisor mt={5} mb={4} />
@@ -744,9 +738,9 @@ export default function MetodoCabalaSefira() {
                               {sefira.desequilibrado.extra.intro}
                             </Text>
                           )}
-                          <Flex direction="column" gap={2.5}>
+                          <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                             {sefira.desequilibrado.extra.items.map((it, i) => <ItemLista key={i}>{it}</ItemLista>)}
-                          </Flex>
+                          </RevealStagger>
                         </>
                       )}
                     </Caja>
@@ -781,9 +775,9 @@ export default function MetodoCabalaSefira() {
                     scrollbarColor: `${cabalaTxt}55 transparent`,
                   }}
                 >
-                  <Flex direction="column" gap={5}>
+                  <RevealStagger inView display="flex" flexDirection="column" gap={5}>
                     {sefira.preguntas.items.map((q, i) => (
-                      <Box key={i}>
+                      <RevealItem key={i}>
                         <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontStyle="italic" mb={2.5}>
                           {q}
                         </Text>
@@ -811,9 +805,9 @@ export default function MetodoCabalaSefira() {
                             ":focus": { outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 0 1px ${cabalaTxt}66` },
                           }}
                         />
-                      </Box>
+                      </RevealItem>
                     ))}
-                  </Flex>
+                  </RevealStagger>
                 </Box>
               </Caja>
             </Reveal>
@@ -837,33 +831,17 @@ export default function MetodoCabalaSefira() {
                     {sefira.autoevaluacion.intro}
                   </Text>
                 )}
-                <Flex direction="column" gap={5}>
+                <RevealStagger inView display="flex" flexDirection="column" gap={5}>
                   {sefira.autoevaluacion.items.map((st, i) => (
-                    <EscalaAutoeval
-                      key={i}
-                      statement={st}
-                      value={autoeval[i] ?? 0}
-                      onChange={(v) => guardarAutoeval(i, v)}
-                    />
+                    <RevealItem key={i}>
+                      <EscalaAutoeval
+                        statement={st}
+                        value={autoeval[i] ?? 0}
+                        onChange={(v) => guardarAutoeval(i, v)}
+                      />
+                    </RevealItem>
                   ))}
-                </Flex>
-              </Caja>
-            </Reveal>
-          )}
-
-          {/* Clave de desarrollo */}
-          {sefira.clave.length > 0 && (
-            <Reveal direction="up" distance={22} delay={0.28} duration={0.65} w="100%">
-              <Caja>
-                <TituloCaja>Clave de desarrollo</TituloCaja>
-                <Divisor mt={3} mb={4} />
-                <Flex direction="column" gap={3.5}>
-                  {sefira.clave.map((p, i) => (
-                    <Text key={i} color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">
-                      {p}
-                    </Text>
-                  ))}
-                </Flex>
+                </RevealStagger>
               </Caja>
             </Reveal>
           )}
@@ -874,19 +852,29 @@ export default function MetodoCabalaSefira() {
               <TestBox dim={CABALA_TEST[sefira.key]} answers={testAnswers} onAnswer={guardarTest} />
             </Reveal>
           )}
+
+          {/* Clave de desarrollo — SIEMPRE lo último del recorrido de la sefirá */}
+          {sefira.clave.length > 0 && (
+            <Reveal direction="up" distance={22} delay={0.34} duration={0.65} w="100%">
+              <Caja>
+                <TituloCaja>Clave de desarrollo</TituloCaja>
+                <Divisor mt={3} mb={4} />
+                <RevealStagger inView display="flex" flexDirection="column" gap={3.5}>
+                  {sefira.clave.map((p, i) => (
+                    <RevealItem key={i}>
+                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">
+                        {p}
+                      </Text>
+                    </RevealItem>
+                  ))}
+                </RevealStagger>
+              </Caja>
+            </Reveal>
+          )}
         </Flex>
       </Flex>
 
-      {ilusOpen && (
-        <CabalaSefiraIlustracionModal
-          isOpen={ilusOpen}
-          vinetas={CABALA_ILUSTRACIONES_VINETAS}
-          initialIndex={Math.max(0, CABALA_ILUSTRACIONES_VINETA_KEYS.indexOf(sefira.key))}
-          onPageView={(i) => marcarIlustracionLeida(CABALA_ILUSTRACIONES_VINETA_KEYS[i])}
-          onClose={() => setIlusOpen(false)}
-          onComplete={() => setIlusOpen(false)}
-        />
-      )}
+      <CabalaIlustracionesModal isOpen={ilusOpen} onClose={() => setIlusOpen(false)} />
 
       {sefira.nota && (
         <CabalaNotaModal nota={sefira.nota} isOpen={notaOpen} onClose={() => setNotaOpen(false)} />

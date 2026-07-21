@@ -18,7 +18,7 @@ import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, Breathe } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   nutricionBg,
@@ -158,7 +158,7 @@ export default function MetodoNutricion() {
 
           {/* ── Bienvenida contemplativa ── */}
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-            <Breathe scale={0.008} duration={7.5} position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               {/* La foto de la disciplina se ve tal cual, sin velo oscuro: nutri.png
                   es clara y el texto va en nutricionTxt (verde oscuro). */}
               <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
@@ -196,7 +196,7 @@ export default function MetodoNutricion() {
                   </Text>
                 ))}
               </Box>
-            </Breathe>
+            </Box>
           </Reveal>
 
           {/* ── Disparador del aviso (botón discreto, centrado) ── */}
@@ -237,6 +237,8 @@ export default function MetodoNutricion() {
         disciplinaBgColor={nutricionBg}
         textShadow="none"
         loader={<AppleLoader />}
+        continueLabel="Nutrición"
+        onContinue={intro.close}
         onFinish={intro.finish}
         onClose={intro.close}
       />
@@ -247,7 +249,7 @@ export default function MetodoNutricion() {
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow="0 26px 70px rgba(0,0,0,0.4)">
             <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
-            <ModalCloseButton color={nutricionTxt} zIndex={3} />
+            <ModalCloseButton color="#ffffff" zIndex={3} />
             <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
               <Flex direction="column" gap={4}>
                 <Flex align="center" justify="center" gap={2.5}>
