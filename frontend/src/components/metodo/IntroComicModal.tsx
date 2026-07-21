@@ -47,6 +47,10 @@ interface IntroComicModalProps {
   continueLabel?: string;
   /** Acción del botón de continuar (arriba, junto a la X). */
   onContinue?: () => void;
+  /** Se llama al TERMINAR el cómic (avanzar más allá de la última viñeta). Si no
+   *  se pasa, al terminar se cierra (onClose). Útil para encadenar cómics: el
+   *  primero, al acabar, abre el siguiente. */
+  onComplete?: () => void;
 }
 
 export function IntroComicModal({
@@ -61,6 +65,7 @@ export function IntroComicModal({
   loader,
   continueLabel,
   onContinue,
+  onComplete,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -79,6 +84,7 @@ export function IntroComicModal({
           key={String(isOpen)}
           vinetas={vinetas}
           onClose={onClose}
+          onComplete={onComplete}
           themeColor={themeColor}
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}

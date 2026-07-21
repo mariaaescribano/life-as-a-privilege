@@ -11,6 +11,7 @@ import { ComicAstrologiaModal, VINETAS_SIGNOS } from "../../components/metodo/Co
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
+import { HISTORIA_ASTROLOGIA } from "../../components/metodo/comicHistoriaAstrologia";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { TextoCartaExplicativo, CARTA_MAPA_IMGS } from "../../components/metodo/TextoCartaExplicativo";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -111,6 +112,10 @@ export default function MetodoAstrologia() {
   // Cómic de los signos: se intercala antes de pasar a «Sol, Luna y Ascendente».
   const [comicSignosOpen, setComicSignosOpen] = useState(false);
   const intro = useIntroComic("metodo-astrologia"); // cómic del Origen (espiritualidad), 1ª vez
+  // Segundo cómic de intro: «La Historia de la Astrología». Va SEGUIDO del cómic
+  // del Origen (son distintos). Solo se encadena si tiene viñetas cargadas.
+  const [historiaOpen, setHistoriaOpen] = useState(false);
+  const hayHistoria = HISTORIA_ASTROLOGIA.length > 0;
 
   // Popup de confirmación de datos antes de enviar la solicitud
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -167,6 +172,11 @@ export default function MetodoAstrologia() {
         precargarImagen(SPACE_IMG),
         ...(abrirIntro
           ? ORIGEN_ESPIRITUALIDAD.map((v) => precargarImagen(encodeURI(v.src)))
+          : []),
+        // Segundo cómic (Historia): lo precargamos también para que aparezca sin
+        // saltos justo después del primero.
+        ...(abrirIntro
+          ? HISTORIA_ASTROLOGIA.map((v) => precargarImagen(encodeURI(v.src)))
           : []),
         ...(solicitado
           ? CARTA_MAPA_IMGS.map((src) => precargarImagen(encodeURI(src)))
@@ -515,14 +525,28 @@ export default function MetodoAstrologia() {
         textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
       />
 
-      {/* Intro (1ª vez): cómic del Origen según la espiritualidad. */}
+      {/* Intro: cómic del Origen según la espiritualidad. Al terminar (o pulsar
+          el botón de continuar) encadena el segundo cómic, «La Historia de la
+          Astrología». La X salta toda la intro y entra a la disciplina. */}
       <IntroComicModal
         isOpen={intro.open}
         vinetas={ORIGEN_ESPIRITUALIDAD}
         onFinish={intro.finish}
         onClose={intro.close}
+        continueLabel={hayHistoria ? "Historia" : "Astrología"}
+        onContinue={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
+        onComplete={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
+      />
+
+      {/* Segundo cómic de intro: «La Historia de la Astrología» (va seguido del
+          Origen). Al terminar / continuar, entra a la disciplina. */}
+      <IntroComicModal
+        isOpen={historiaOpen}
+        vinetas={HISTORIA_ASTROLOGIA}
+        onClose={() => setHistoriaOpen(false)}
         continueLabel="Astrología"
-        onContinue={intro.close}
+        onContinue={() => setHistoriaOpen(false)}
+        onComplete={() => setHistoriaOpen(false)}
       />
 
       {/* ── POPUP: confirmar datos antes de enviar ── */}
