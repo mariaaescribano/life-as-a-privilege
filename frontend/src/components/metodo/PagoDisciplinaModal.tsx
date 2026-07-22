@@ -103,8 +103,10 @@ export function PagoDisciplinaModal({
         overflow="hidden"
         position="relative"
       >
-        {/* Imagen de la disciplina SIEMPRE de fondo (con velo de su color). */}
-        <DisciplinaBgLayer nom={nom} borderRadius="2xl" overlay={`${bgHex}cc`} blur />
+        {/* Imagen de la disciplina SIEMPRE de fondo, NÍTIDA (sin blur, para que no
+            se vea distorsionada) y con un velo de su color algo más ligero para
+            que la foto se aprecie detrás sin perder legibilidad del texto. */}
+        <DisciplinaBgLayer nom={nom} borderRadius="2xl" overlay={`${bgHex}b8`} />
 
         <ModalBody px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} position="relative" zIndex={1}>
           <Flex direction="column" gap={5}>

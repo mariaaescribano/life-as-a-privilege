@@ -14,13 +14,16 @@ import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PA
 import { CABALA_TEST } from "../../components/metodo/cabalaTest";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
-const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
+// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
+const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 // Sombra del box = la MISMA que la del header (glow claro sobre el fondo de la
 // disciplina), no la sombra oscura anterior.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${cabalaTxt}1a, 0 0 48px ${cabalaTxt}10`;
-// Fondo del box = imagen de Cábala (cabala.png) a plena intensidad, sin velo ni
-// border line (igual que los boxes del resto del recorrido de Cábala).
-const CAJA_OVERLAY = "transparent";
+// Fondo del box = imagen de Cábala (cabala.png) con un velo marrón oscuro
+// (cabalaBg) que sube el contraste del texto ámbar sobre la acuarela (igual que
+// los boxes del resto del recorrido de Cábala).
+const CAJA_OVERLAY = `${cabalaBg}cc`;
 
 // Un día por SEFIRÁ (las 10 clásicas, sin Da'at). Cada día toma el ejercicio de
 // esa dimensión; si no tiene, se usan sus preguntas de reflexión.

@@ -74,8 +74,13 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
   return (
     <>
       <Box position="fixed" inset={0} zIndex={1300} overflowY="auto" fontFamily="'EB Garamond', serif">
-        {/* Fondo de la disciplina a pantalla completa */}
-        <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}e6`} />
+        {/* Fondo de la disciplina — en su propia capa FIJA para que cubra SIEMPRE
+            el viewport. Si fuera hijo absoluto del contenedor scrolleable, solo
+            mediría el alto del viewport y, al hacer scroll, se vería la página de
+            detrás (el bug del footer turquesa asomando bajo las tarjetas). */}
+        <Box position="fixed" inset={0} zIndex={0} pointerEvents="none">
+          <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}e6`} />
+        </Box>
 
         <Box position="relative" zIndex={1} minH="100%" px={{ base: 4, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
           {/* Cerrar */}

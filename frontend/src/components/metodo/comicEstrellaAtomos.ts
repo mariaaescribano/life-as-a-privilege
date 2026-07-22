@@ -9,16 +9,6 @@ import type { Vineta } from "./ComicViewer";
 // (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).
 export const ESTRELLA_ATOMOS: Vineta[] = [
   {
-    // Viñeta de apertura: el marco («eres parte de la naturaleza») antes de
-    // contar CÓMO se forjan los átomos. (Ilustración pendiente: hasta que exista
-    // este archivo, el ComicViewer pinta un placeholder «próximamente».)
-    src: "/viñetas/fisiologia/estrellas/star0.png",
-    paragraphs: [
-      "Eres parte de la naturaleza.",
-      "Los átomos que te construyen, la naturaleza los va formando y reciclando.",
-    ],
-  },
-  {
     src: "/viñetas/fisiologia/estrellas/star1.png",
     paragraphs: [
       "Para crear una estrella, las creadoras de los átomos...",

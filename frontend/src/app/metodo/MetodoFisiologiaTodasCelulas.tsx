@@ -16,7 +16,9 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
-const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(200,181,209,0.12), 0 0 20px ${fisiologiaTxt}1a, 0 0 48px ${fisiologiaTxt}10`;
+// Glow de las cajas SOLO con el acento de Fisiología (sin halos blancos/menta,
+// que sobre el turquesa se veían como un "box clarito" alrededor de la caja).
+const CAJA_GLOW = `0 0 16px ${fisiologiaTxt}26, 0 0 40px ${fisiologiaTxt}16`;
 
 // Helper para coger células por id de la lista plana de Fisiología.
 const pick = (...ids: string[]): Celula[] =>

@@ -8,6 +8,7 @@
 -- fisiologia_*  → quinta disciplina (Fisiología).
 -- nutricion_*   → sexta disciplina (Nutrición).
 -- cabala_*      → séptima disciplina (Cábala).
+-- cultura_*     → octava disciplina (Cultura).
 -- Cada una se marca true tras el pago (Stripe checkout → /payment/<disc>/verify).
 
 alter table public."user" add column if not exists metodo_suscrito         boolean     not null default false;
@@ -24,3 +25,5 @@ alter table public."user" add column if not exists nutricion_suscrito       bool
 alter table public."user" add column if not exists nutricion_fecha_compra   timestamptz;
 alter table public."user" add column if not exists cabala_suscrito          boolean     not null default false;
 alter table public."user" add column if not exists cabala_fecha_compra      timestamptz;
+alter table public."user" add column if not exists cultura_suscrito         boolean     not null default false;
+alter table public."user" add column if not exists cultura_fecha_compra     timestamptz;

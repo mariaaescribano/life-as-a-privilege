@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -8,87 +8,98 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { glowSuave } from "../../components/metodo/FotoBox";
+import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
+import { HAMBRE_HOLISTICA, HAMBRE_CIERRE } from "../../components/metodo/hambreHolistica";
+import type { Vineta } from "../../components/metodo/ComicViewer";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Apartado «El hambre» del recorrido de Nutrición. Va ENTRE la Microbiota y el
-// plato de Harvard (se llega desde Microbiota → cómic de transición → aquí).
-// Contendrá varios TESTS y EXPLICACIONES sobre el hambre (grelina/leptina,
-// hambre física vs. emocional, saciedad…). Aún sin diseñar: de momento se dejan
-// boxes MEDIO PREPARADOS (placeholders con su título y un breve texto) para ir
-// rellenándolos. Cuando cada uno tenga contenido, se le añade su `onClick`
-// (abrir su test/ficha) y se le quita el estado «en preparación».
+// plato de Harvard. Contenido: «El hambre, una mirada holística» — 4 boxes tipo
+// ilustración (foto a la izquierda + texto a la derecha con scroll vertical) y,
+// al final, una frase directamente sobre el fondo turquesa (sin box).
+// Los mismos 4 bloques (HAMBRE_HOLISTICA) se muestran también como un cómic en
+// «Ilustraciones» de Nutrición.
 // ═════════════════════════════════════════════════════════════════════════
 
-// Un bloque de contenido (explicación o test) del apartado. Mientras `listo`
-// sea false, se pinta como «en preparación» (sobrio, no pulsable).
-type Bloque = {
-  key: string;
-  eyebrow: string;      // «Explicación» / «Test»
-  titulo: string;
-  resumen: string;
-  listo?: boolean;      // cuando esté hecho: true + onClick
+const SCROLL_SX = {
+  "&::-webkit-scrollbar": { width: "6px" },
+  "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}55`, borderRadius: "3px" },
+  "&::-webkit-scrollbar-track": { background: "transparent" },
+  scrollbarWidth: "thin" as const,
+  scrollbarColor: `${nutricionTxt}55 transparent`,
 };
 
-// ── EXPLICACIONES (placeholders; la usuaria dará el texto/ilustraciones) ──
-const EXPLICACIONES: Bloque[] = [
-  { key: "que-es",   eyebrow: "Explicación", titulo: "¿Qué es el hambre?",              resumen: "La señal que nace en el cerebro para pedirte energía." },
-  { key: "hormonas", eyebrow: "Explicación", titulo: "Grelina y leptina",              resumen: "Las hormonas que encienden y apagan el hambre." },
-  { key: "fisica-emocional", eyebrow: "Explicación", titulo: "Hambre física vs. emocional", resumen: "Aprende a distinguir de dónde viene lo que sientes." },
-  { key: "saciedad", eyebrow: "Explicación", titulo: "La saciedad",                    resumen: "Por qué a veces cuesta notar que ya has comido suficiente." },
-];
+// Pinta un párrafo con soporte de **negrita** (misma emphasis que pidió la usuaria).
+function renderNegrita(texto: string): React.ReactNode {
+  return texto.split(/(\*\*[^*]+\*\*)/g).map((p, i) =>
+    p.startsWith("**") && p.endsWith("**") ? (
+      <Box as="span" key={i} fontWeight={700}>{p.slice(2, -2)}</Box>
+    ) : (
+      <React.Fragment key={i}>{p}</React.Fragment>
+    ),
+  );
+}
 
-// ── TESTS (placeholders interactivos; se diseñarán más adelante) ──
-const TESTS: Bloque[] = [
-  { key: "tipo-hambre", eyebrow: "Test", titulo: "¿Qué tipo de hambre tienes?", resumen: "Un test breve para reconocer tu patrón." },
-  { key: "senales",     eyebrow: "Test", titulo: "Escucha tus señales",         resumen: "Identifica cuándo tu cuerpo pide comida de verdad." },
-];
-
-// Caja medio preparada (placeholder). Sobria mientras no esté lista.
-function BloqueBox({ bloque }: { bloque: Bloque }) {
-  const listo = !!bloque.listo;
+// Placeholder mientras la foto no está subida (icono suave sobre fondo tenue).
+function FotoPlaceholder() {
   return (
-    <Box
-      position="relative"
-      borderRadius="2xl"
-      overflow="hidden"
-      px={{ base: 5, md: 6 }}
-      py={{ base: 5, md: 6 }}
-      minH={{ base: "140px", md: "160px" }}
-      display="flex"
-      flexDirection="column"
-      gap={2}
-      bg={`${nutricionBg}${listo ? "66" : "40"}`}
-      border={`1px solid ${nutricionTxt}${listo ? "77" : "33"}`}
-      opacity={listo ? 1 : 0.85}
-      cursor={listo ? "pointer" : "default"}
-      style={{ boxShadow: `inset 0 0 24px rgba(0,0,0,0.18), 0 0 16px ${nutricionTxt}14` }}
-      transition="all 0.2s ease"
-      _hover={listo ? { transform: "translateY(-4px)", borderColor: nutricionTxt } : undefined}
-    >
-      <Text color={nutricionTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase"
-            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-        {bloque.eyebrow}
-      </Text>
-      <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700} lineHeight="1.25"
-            style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-        {bloque.titulo}
-      </Text>
-      <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-        {bloque.resumen}
-      </Text>
+    <Flex direction="column" align="center" justify="center" gap={2} w="100%" h="100%"
+          bg={`${nutricionTxt}12`} border={`1px dashed ${nutricionTxt}55`} borderRadius="lg">
+      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+           w={{ base: "34px", md: "40px" }} h={{ base: "34px", md: "40px" }} fill={`${nutricionTxt}88`}>
+        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
+      </Box>
+    </Flex>
+  );
+}
 
-      <Box flex="1" />
+// Box tipo ilustración: foto a la izquierda + texto a la derecha con su propio
+// scroll vertical (idéntico al box de las ilustraciones / cómics de Nutrición).
+function HambreBox({ v }: { v: Vineta }) {
+  return (
+    <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl" boxShadow={glowSuave(nutricionTxt)}>
+      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
 
-      {/* Estado: «en preparación» mientras no esté listo. */}
-      {!listo && (
-        <Text color={`${nutricionTxt}aa`} fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
-              textTransform="uppercase">
-          En preparación
-        </Text>
-      )}
+      {/* Líneas de luz arriba/abajo (como el visor de ilustraciones) */}
+      <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}
+           bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
+      <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
+           bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
+
+      <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
+            align={{ base: "center", md: "stretch" }} justify="center" gap={{ base: 5, md: 10 }}
+            px={{ base: 5, md: 10 }} py={{ base: 6, md: 9 }} h={{ base: "auto", md: "440px" }}>
+
+        {/* Foto (izquierda) */}
+        <Box flexShrink={0} w={{ base: "100%", md: "400px" }} maxW={{ base: "320px", md: "400px" }}
+             aspectRatio={1} alignSelf={{ base: "auto", md: "center" }} position="relative"
+             filter={`drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${nutricionTxt}33)`}>
+          <Image src={encodeURI(v.src)} alt={v.titulo ?? ""} w="100%" h="100%" objectFit="cover"
+                 borderRadius="lg" fallback={<FotoPlaceholder />} />
+        </Box>
+
+        {/* Texto (derecha) con scroll propio */}
+        <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }} alignSelf={{ base: "auto", md: "stretch" }}
+             display="flex" flexDirection="column" justifyContent="flex-start"
+             maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "auto" }} overflowX="hidden"
+             pr={{ base: 0, md: 3 }} sx={SCROLL_SX}>
+          <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25"
+                mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}>
+            {v.titulo}
+          </Text>
+          {v.paragraphs.map((p, i) => (
+            <Text key={i} color={nutricionTxt} textAlign={{ base: "center", md: "left" }}
+                  fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" letterSpacing="0.01em"
+                  fontWeight="400" mt={i === 0 ? 0 : { base: 4, md: 5 }}>
+              {renderNegrita(p)}
+            </Text>
+          ))}
+        </Box>
+      </Flex>
     </Box>
   );
 }
@@ -96,6 +107,8 @@ function BloqueBox({ bloque }: { bloque: Bloque }) {
 export default function MetodoNutricionHambre() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // Cómic de transición «Lo integral» (se abre al pulsar «Crea tu plato →»).
+  const [comicIntegralOpen, setComicIntegralOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -134,48 +147,43 @@ export default function MetodoNutricionHambre() {
               mb={0}
               prev={{ label: "← Microbiota", onClick: () => navigate("/metodo/nutricion/microbiota") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Crea tu plato →", onClick: () => navigate("/metodo/nutricion/plato") }}
+              next={{ label: "Crea tu plato →", onClick: () => setComicIntegralOpen(true) }}
             />
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Antes de aprender a llenar el plato, entiende de dónde viene el hambre: qué la enciende,
-              qué la calma y cómo escucharla.
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontWeight={600}
+                  textAlign="center" lineHeight="1.7" maxW="720px">
+              El hambre: una mirada holística
             </Text>
           </Reveal>
 
-          {/* ── ENTIENDE TU HAMBRE (explicaciones) ── */}
-          <Reveal direction="up" distance={16} delay={0.14} duration={0.6} w="100%">
-            <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
-                  letterSpacing="0.14em" textTransform="uppercase" textAlign="center" mb={4}
-                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
-              Entiende tu hambre
-            </Text>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {EXPLICACIONES.map((b) => (
-                <BloqueBox key={b.key} bloque={b} />
-              ))}
-            </SimpleGrid>
-          </Reveal>
+          {/* 4 boxes tipo ilustración, uno debajo del otro */}
+          {HAMBRE_HOLISTICA.map((v, i) => (
+            <Reveal key={v.src} direction="up" distance={22} scaleFrom={0.98} delay={0.12 + i * 0.06}
+                    duration={0.65} w="100%">
+              <HambreBox v={v} />
+            </Reveal>
+          ))}
 
-          {/* ── PONTE A PRUEBA (tests) ── */}
-          <Reveal direction="up" distance={16} delay={0.18} duration={0.6} w="100%">
-            <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
-                  letterSpacing="0.14em" textTransform="uppercase" textAlign="center" mb={4} mt={{ base: 2, md: 4 }}
-                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
-              Ponte a prueba
+          {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
+          <Reveal direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">
+            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="600"
+                  textAlign="center" maxW="740px" lineHeight="1.7" mt={{ base: 2, md: 4 }}
+                  style={{ textShadow: "0 1px 12px rgba(0,0,0,0.4)" }}>
+              {HAMBRE_CIERRE}
             </Text>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {TESTS.map((b) => (
-                <BloqueBox key={b.key} bloque={b} />
-              ))}
-            </SimpleGrid>
           </Reveal>
 
         </Flex>
       </Flex>
+
+      {/* Cómic de transición «Lo integral» hacia el plato de Harvard. */}
+      <ComicIntegralModal
+        isOpen={comicIntegralOpen}
+        onClose={() => setComicIntegralOpen(false)}
+        onContinue={() => navigate("/metodo/nutricion/plato")}
+      />
 
       <IndiceNutricion />
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />

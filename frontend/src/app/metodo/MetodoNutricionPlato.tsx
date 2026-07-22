@@ -323,7 +323,7 @@ export default function MetodoNutricionPlato() {
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  textAlign="center" lineHeight="1.8" maxW="640px">
               Pulsa cada parte del plato para ver sus alimentos y arrástralos encima. Construye un plato equilibrado
               con algo de cada grupo.
             </Text>
@@ -331,8 +331,10 @@ export default function MetodoNutricionPlato() {
 
           <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
-            {/* ── Plato (círculo con sectores) ── */}
-            <SeccionBox flex={{ base: "none", md: "1" }} w="100%" imageSrc={PLATO_PORTADA_GENERAL}>
+            {/* ── Plato (círculo con sectores) ── El fondo del box del plato usa la
+                portada (plato*) del grupo seleccionado, igual que el panel de la
+                derecha; así ambos boxes van a juego con el sector activo. */}
+            <SeccionBox flex={{ base: "none", md: "1" }} w="100%" imageSrc={PLATO_PORTADA[macroSel] ?? PLATO_PORTADA_GENERAL}>
               <Flex direction="column" align="center" gap={4} p={{ base: 5, md: 7 }} h="100%">
                 <Box ref={plateRef} position="relative" w="100%" maxW="380px" aspectRatio={1} mx="auto">
                   <Box as="svg" viewBox={`0 0 ${VB} ${VB}`} w="100%" h="100%"

@@ -175,26 +175,22 @@ export default function MetodoTcm() {
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
               <Text
-                color={tcmTxt}
+                color="white"
                 fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.9"
-                opacity={0.9}
                 maxW="600px"
                 mx="auto"
                 mb={4}
-                style={{ textShadow: INK_SHADOW }}
               >
                 La Medicina Tradicional China lleva miles de años observando la naturaleza y al ser humano.
                 Según esta visión, la salud es el equilibrio dinámico entre tu cuerpo, tus emociones y el entorno que te forma.
               </Text>
               <Text
-                color={tcmTxt}
+                color="white"
                 fontSize={{ base: "md", md: "lg" }}
                 lineHeight="1.9"
-                opacity={0.9}
                 maxW="600px"
                 mx="auto"
-                style={{ textShadow: INK_SHADOW }}
               >
                 En este mapa descubrirás tu equilibrio actual entre los cinco elementos, aprenderás a
                 reconocer tus desequilibrios y sabrás cómo cuidarte desde esta sabiduría milenaria.
@@ -241,8 +237,14 @@ export default function MetodoTcm() {
         disciplinaBgColor={tcmBg}
         onFinish={intro.finish}
         onClose={intro.close}
+        // Botón «Medicina China →» con la imagen de la disciplina + velo (como
+        // «Saltar») y letra en tcmTxt. Se conserva también el «Saltar» a la
+        // izquierda, en tcmTxt.
         continueLabel="Medicina China"
         onContinue={intro.close}
+        continueConImagen
+        mantenerSaltar
+        saltarTextColor={tcmTxt}
       />
 
       {/* Cómic de los cinco elementos: intercalado antes de «Los 5 elementos». */}

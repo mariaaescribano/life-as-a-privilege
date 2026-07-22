@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
+import { IntroComicModal } from "../../components/metodo/IntroComicModal";
+import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -22,10 +23,15 @@ import {
 } from "../../components/metodo/tcmRecorrido";
 import { tieneContenido, COMIC_INTRO_ELEMENTOS, ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 
-const TINTA = tcmTxt;
-const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 // Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
+
+// Viñetas del cómic de intro (Módulo 1) en el formato del ComicViewer: cada
+// viñeta lleva su foto y un único párrafo de texto.
+const INTRO_VINETAS = COMIC_INTRO_ELEMENTOS.map((v) => ({ src: v.src, paragraphs: [v.texto] }));
+// Sombra oscura y nítida (sin halo blanco) para la letra blanca del cómic:
+// máximo contraste sobre la pintura. La misma que usa el cómic de cada elemento.
+const INTRO_TEXT_SHADOW = "0 2px 5px rgba(0,0,0,1), 0 0 3px rgba(0,0,0,0.98), 0 6px 20px rgba(0,0,0,0.85)";
 
 // Entrada épica de la estrella: los 5 elementos «florecen» uno a uno desde su
 // sitio, con un leve rebote (mismo espíritu que las 12 casas de Astrología).
@@ -45,10 +51,11 @@ export default function MetodoTcmElementos() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
   const [comicEl, setComicEl] = useState<Elemento | null>(null);
-  const [introIdx, setIntroIdx] = useState(0);
-  const [vinOk, setVinOk] = useState(false); // foto de la viñeta actual ya cargada
   const reduce = useReducedMotion();
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+  // Cómic de intro (Módulo 1): se abre al entrar, a pantalla completa, con el
+  // mismo ComicViewer que los cómics de astrología y de cada elemento.
+  const intro = useIntroComic("metodo-tcm-elementos");
 
   // No pintamos la página hasta que las fotos de fondo (el fondo de TCM, los
   // iconos de los elementos y las viñetas de la intro) estén completamente
@@ -58,9 +65,6 @@ export default function MetodoTcmElementos() {
     ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
     ...COMIC_INTRO_ELEMENTOS.map((v) => v.src),
   ]);
-
-  // Al cambiar de viñeta, ocultamos la nueva foto hasta que cargue (spinner).
-  useEffect(() => { setVinOk(false); }, [introIdx]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -75,6 +79,9 @@ export default function MetodoTcmElementos() {
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
         setData(d);
+        // Abrimos el cómic de intro (Módulo 1) al entrar, una vez confirmado el
+        // acceso. Es saltable con la X / el tick.
+        intro.openNow();
       } catch {
         navigate("/metodo/tcm");
         return;
@@ -212,126 +219,23 @@ export default function MetodoTcmElementos() {
             Los elementos se abren en orden (Madera → Fuego → Tierra → Metal → Agua). Al leer cada uno, se marca con ✓.
           </Text>
           </Reveal>
-
-          {/* Intro (Módulo 1) · cómic de 4 viñetas: foto a la izquierda, texto
-              a la derecha, navegable con flechas. Mismo estilo que las
-              Ilustraciones pero inline (sin popup y sobre el fondo actual). */}
-          {(() => {
-            const total = COMIC_INTRO_ELEMENTOS.length;
-            const vin = COMIC_INTRO_ELEMENTOS[introIdx];
-            const isFirst = introIdx === 0;
-            const isLast = introIdx === total - 1;
-            return (
-              <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
-              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-
-                {/* Línea de luz superior */}
-                <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}
-                     bgGradient={`linear(to-r, transparent, ${tcmTxt}aa, transparent)`} />
-
-                <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
-                      align="center" justify="center" gap={{ base: 5, md: 10 }}
-                      px={{ base: 6, md: 12 }} py={{ base: 7, md: 9 }}>
-
-                  {/* Foto (viñeta) */}
-                  <Box key={`foto-${introIdx}`} w={{ base: "80%", md: "300px" }} maxW={{ base: "260px", md: "300px" }}
-                       aspectRatio={1} flexShrink={0} position="relative"
-                       sx={{ filter: `drop-shadow(0 0 20px rgba(255,255,255,0.25)) drop-shadow(0 0 60px ${tcmTxt}44)` }}>
-                    <Box as="img" src={encodeURI(vin.src)} alt={`Los Cinco Elementos (${introIdx + 1}/${total})`}
-                         w="100%" h="100%" borderRadius="lg"
-                         onLoad={() => setVinOk(true)}
-                         style={{ objectFit: "contain", opacity: vinOk ? 1 : 0, transition: "opacity 0.5s ease" }} />
-                    {!vinOk && (
-                      <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-                        <SpinnerTurquesa fullScreen={false} color={tcmTxt} />
-                      </Box>
-                    )}
-                  </Box>
-
-                  {/* Separador elegante: rayita horizontal en móvil, vertical en escritorio */}
-                  <Box flexShrink={0} alignSelf="center" borderRadius="full"
-                       w={{ base: "52px", md: "1px" }} h={{ base: "1px", md: "150px" }}
-                       bgGradient={{
-                         base: `linear(to-r, transparent, ${tcmTxt}aa, transparent)`,
-                         md: `linear(to-b, transparent, ${tcmTxt}aa, transparent)`,
-                       }} />
-
-                  {/* Texto — misma tipografía que el cómic de Astrología
-                      (ComicViewer): grande, ligero, con aire entre líneas. */}
-                  <Flex direction="column" gap={3} flex="1" minW={0} w={{ base: "100%", md: "auto" }}>
-                    <Text key={`txt-${introIdx}`} color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.9"
-                          letterSpacing="0.03em" fontWeight="400" textAlign={{ base: "center", md: "left" }}
-                          style={{ textShadow: INK_SHADOW }}>
-                      {vin.texto}
-                    </Text>
-                  </Flex>
-                </Flex>
-
-                {/* Controles de navegación — flechas redondas con glow, como
-                    las del ComicViewer de Astrología. */}
-                <Flex position="relative" zIndex={1} align="center" justify="center" gap={6}
-                      pb={{ base: 5, md: 6 }} mt={{ base: -1, md: -2 }}>
-                  <IconButton aria-label="Anterior" onClick={() => setIntroIdx((i) => Math.max(i - 1, 0))}
-                    isDisabled={isFirst} variant="ghost" color={tcmTxt} opacity={isFirst ? 0.25 : 1}
-                    borderRadius="full" w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
-                    minW={{ base: "42px", md: "48px" }}
-                    bg={`${tcmTxt}10`} border={`1px solid ${tcmTxt}33`}
-                    boxShadow={isFirst ? "none" : `0 0 14px ${tcmTxt}44, 0 0 32px ${tcmTxt}22`}
-                    _hover={isFirst ? {} : { bg: `${tcmTxt}22`, borderColor: `${tcmTxt}88`, boxShadow: `0 0 22px ${tcmTxt}66, 0 0 50px ${tcmTxt}33` }}
-                    icon={
-                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill={tcmTxt}
-                        style={{ filter: isFirst ? "none" : `drop-shadow(0 0 6px ${tcmTxt}cc) drop-shadow(0 0 14px ${tcmTxt}77)` }}>
-                        <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-                      </Box>
-                    } />
-                  {/* Puntitos de paso — el activo se alarga en píldora, como el
-                      carrusel del inicio; clicables para saltar de viñeta. */}
-                  <Flex align="center" justify="center" gap={2}>
-                    {COMIC_INTRO_ELEMENTOS.map((_, i) => {
-                      const activo = i === introIdx;
-                      return (
-                        <Box
-                          key={i}
-                          as="button"
-                          aria-label={`Viñeta ${i + 1}`}
-                          onClick={() => setIntroIdx(i)}
-                          w={activo ? "22px" : "8px"}
-                          h="8px"
-                          borderRadius="full"
-                          bg={activo ? tcmTxt : `${tcmTxt}44`}
-                          cursor="pointer"
-                          transition="all 0.25s ease"
-                          boxShadow={activo ? `0 0 8px ${tcmTxt}aa, 0 0 16px ${tcmTxt}66` : "none"}
-                          _hover={{ bg: activo ? tcmTxt : `${tcmTxt}88` }}
-                        />
-                      );
-                    })}
-                  </Flex>
-                  <IconButton aria-label="Siguiente" onClick={() => setIntroIdx((i) => Math.min(i + 1, total - 1))}
-                    isDisabled={isLast} variant="ghost" color={tcmTxt} opacity={isLast ? 0.25 : 1}
-                    borderRadius="full" w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
-                    minW={{ base: "42px", md: "48px" }}
-                    bg={`${tcmTxt}10`} border={`1px solid ${tcmTxt}33`}
-                    boxShadow={isLast ? "none" : `0 0 14px ${tcmTxt}44, 0 0 32px ${tcmTxt}22`}
-                    _hover={isLast ? {} : { bg: `${tcmTxt}22`, borderColor: `${tcmTxt}88`, boxShadow: `0 0 22px ${tcmTxt}66, 0 0 50px ${tcmTxt}33` }}
-                    icon={
-                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill={tcmTxt}
-                        style={{ filter: isLast ? "none" : `drop-shadow(0 0 6px ${tcmTxt}cc) drop-shadow(0 0 14px ${tcmTxt}77)` }}>
-                        <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-                      </Box>
-                    } />
-                </Flex>
-
-                {/* Línea de luz inferior */}
-                <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
-                     bgGradient={`linear(to-r, transparent, ${tcmTxt}aa, transparent)`} />
-              </Box>
-              </Reveal>
-            );
-          })()}
         </Flex>
       </Flex>
+
+      {/* Cómic de intro (Módulo 1) · a pantalla completa, con el mismo ComicViewer
+          que astrología y que el cómic de cada elemento. Se abre al entrar y es
+          saltable con la X / el tick. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        onClose={intro.finish}
+        vinetas={INTRO_VINETAS}
+        themeColor={tcmTxt}
+        textColor="#ffffff"
+        textShadow={INTRO_TEXT_SHADOW}
+        disciplinaBgImage={disciplinaBgImg(tcmNom)}
+        disciplinaBgColor={tcmBg}
+        loader={<TcmLoader color="#ffffff" />}
+      />
 
       {ilustracionesModal}
 

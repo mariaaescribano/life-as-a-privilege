@@ -101,7 +101,7 @@ export default function MetodoTcmLenguaLeer() {
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                textAlign="center" maxW="680px" style={{ textShadow: INK_SHADOW }}>
+                textAlign="center" maxW="680px">
             Ahora que sabes leer una lengua, mira la tuya. Colócate frente a un espejo con buena luz
             natural, por la mañana y antes de comer o beber, y saca la lengua sin forzar.
           </Text>

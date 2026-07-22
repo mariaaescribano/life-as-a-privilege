@@ -24,7 +24,9 @@ import { CABALA_TEST, ESCALA, NUM_PREGUNTAS, type DimensionTest } from "../../co
 import { sefirotContenidoCompleto } from "../../components/metodo/cabalaDiagnostico";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
-const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
+// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
+const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
 
 // Puerta de progreso: si es true, no se puede pasar a la siguiente sefirá hasta
@@ -39,10 +41,11 @@ const Divisor = ({ mb = 4, mt = 0 }: { mb?: any; mt?: any }) => (
   <Box h="1px" w="100%" mb={mb} mt={mt} bg={`${cabalaTxt}55`} />
 );
 
-/* ── Box base: el fondo es la imagen de Cábala (cabala.png) a plena intensidad
-   (sin velo que reduzca su opacidad) y SIN border line. TODOS los boxes del
-   recorrido comparten esta caja. Acepta props extra (p.ej. h="100%"). ── */
-const CAJA_OVERLAY = "transparent";
+/* ── Box base: el fondo es la imagen de Cábala (cabala.png) con un velo marrón
+   oscuro (cabalaBg) que sube el contraste del texto ámbar sobre la acuarela, y
+   SIN border line. TODOS los boxes del recorrido comparten esta caja. Acepta
+   props extra (p.ej. h="100%"). ── */
+const CAJA_OVERLAY = `${cabalaBg}cc`;
 const Caja = ({ children, ...rest }: React.ComponentProps<typeof Box>) => (
   <Box
     position="relative"
@@ -88,7 +91,7 @@ const ItemLista = ({ children }: { children: React.ReactNode }) => (
       />
       <Text
         color={`${cabalaTxt}dd`}
-        fontSize={{ base: "md", md: "lg" }}
+        fontSize={{ base: "lg", md: "xl" }}
         lineHeight="1.7"
         style={{ textShadow: INK_SHADOW }}
       >
@@ -103,7 +106,7 @@ const ItemLista = ({ children }: { children: React.ReactNode }) => (
 function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: string; value: number; onChange: (v: number) => void; max?: number }) {
   return (
     <Flex align="center" gap={{ base: 3, md: 5 }}>
-      <Text flex="1" color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+      <Text flex="1" color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
         {statement}
       </Text>
       <Box
@@ -269,7 +272,7 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
       {prompts.length > 0 && (
         <>
           {ejercicio.promptsIntro && (
-            <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+            <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
               {ejercicio.promptsIntro}
             </Text>
           )}
@@ -311,7 +314,7 @@ function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
       {(cierre.length > 0 || ejercicio.footer) && <Divisor mt={6} mb={4} />}
 
       {ejercicio.cierreIntro && (
-        <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
           {ejercicio.cierreIntro}
         </Text>
       )}
@@ -348,7 +351,7 @@ function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: numb
       {/* Leyenda 1-5 */}
       <Flex gap={2} mb={5} wrap="wrap">
         {ESCALA.map((op) => (
-          <Text key={op.valor} color={`${cabalaTxt}99`} fontSize="xs" style={{ textShadow: INK_SHADOW }}>
+          <Text key={op.valor} color={`${cabalaTxt}bb`} fontSize="sm" style={{ textShadow: INK_SHADOW }}>
             <Box as="span" fontWeight="800" color={cabalaTxt}>{op.valor}</Box> {op.label}
           </Text>
         ))}
@@ -705,7 +708,7 @@ export default function MetodoCabalaSefira() {
                       <TituloCaja>Equilibrado</TituloCaja>
                       <Divisor mt={3} mb={4} />
                       {sefira.equilibrado.intro && (
-                        <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                           {sefira.equilibrado.intro}
                         </Text>
                       )}
@@ -716,7 +719,7 @@ export default function MetodoCabalaSefira() {
                         <>
                           <Divisor mt={5} mb={4} />
                           {sefira.equilibrado.extra.intro && (
-                            <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                            <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                               {sefira.equilibrado.extra.intro}
                             </Text>
                           )}
@@ -734,7 +737,7 @@ export default function MetodoCabalaSefira() {
                       <TituloCaja>Desequilibrado</TituloCaja>
                       <Divisor mt={3} mb={4} />
                       {sefira.desequilibrado.intro && (
-                        <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                           {sefira.desequilibrado.intro}
                         </Text>
                       )}
@@ -745,7 +748,7 @@ export default function MetodoCabalaSefira() {
                         <>
                           <Divisor mt={5} mb={4} />
                           {sefira.desequilibrado.extra.intro && (
-                            <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                            <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                               {sefira.desequilibrado.extra.intro}
                             </Text>
                           )}
@@ -768,7 +771,7 @@ export default function MetodoCabalaSefira() {
                 <TituloCaja>Preguntas para la reflexión</TituloCaja>
                 <Divisor mt={3} mb={4} />
                 {sefira.preguntas.intro && (
-                  <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                  <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                     {sefira.preguntas.intro}
                   </Text>
                 )}
@@ -838,7 +841,7 @@ export default function MetodoCabalaSefira() {
                 <TituloCaja>Autoevaluación (1–10)</TituloCaja>
                 <Divisor mt={3} mb={4} />
                 {sefira.autoevaluacion.intro && (
-                  <Text color={`${cabalaTxt}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+                  <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                     {sefira.autoevaluacion.intro}
                   </Text>
                 )}

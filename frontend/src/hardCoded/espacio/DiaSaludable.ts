@@ -65,6 +65,14 @@ export interface AlimentoDia {
 export const ALIMENTOS_DIA: AlimentoDia[] = [
   // ── Verduras (base del plato: sin miedo, llena) ──
   { key: "brocoli",       grupo: "verdura",  kcal100: 34,  porcionG: 150, aOjo: "dos puños de ramilletes" },
+  { key: "espinaca",      grupo: "verdura",  kcal100: 23,  porcionG: 100, aOjo: "las dos manos llenas de hojas (se reducen al cocinar)" },
+  { key: "zanahoria",     grupo: "verdura",  kcal100: 41,  porcionG: 100, aOjo: "una zanahoria grande o dos pequeñas" },
+  { key: "tomate",        grupo: "verdura",  kcal100: 18,  porcionG: 150, aOjo: "un tomate grande o dos medianos" },
+  { key: "pimiento",      grupo: "verdura",  kcal100: 31,  porcionG: 150, aOjo: "un pimiento entero" },
+  { key: "calabacin",     grupo: "verdura",  kcal100: 17,  porcionG: 150, aOjo: "medio calabacín" },
+  { key: "cebolla",       grupo: "verdura",  kcal100: 40,  porcionG: 80,  aOjo: "media cebolla" },
+  { key: "berenjena",     grupo: "verdura",  kcal100: 25,  porcionG: 150, aOjo: "media berenjena" },
+  { key: "esparragos",    grupo: "verdura",  kcal100: 20,  porcionG: 125, aOjo: "un manojo de cinco o seis" },
 
   // ── Fruta (una pieza = una ración) ──
   { key: "manzana",       grupo: "fruta",    kcal100: 52,  porcionG: 150, aOjo: "una pieza, del tamaño de tu puño" },

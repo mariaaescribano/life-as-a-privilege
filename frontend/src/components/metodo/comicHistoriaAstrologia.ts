@@ -17,7 +17,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   {
     src: "/viñetas/astrologia/historia/historiaastrologia1.png",
     eyebrow: "Mesopotamia · 2000 a.C.",
-    titulo: "El nacimiento",
+    titulo: "",
     paragraphs: [
       "La Astrología empezó gracias a la observación constante del cielo.",
       "Los sacerdotes registraban eclipses, planetas y estrellas para intentar comprender los presagios que afectaban al reino.",
@@ -28,7 +28,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   // 2 — Los astrólogos del rey
   {
     src: "/viñetas/astrologia/historia/historiaastrologia2.png",
-    titulo: "Los astrólogos del rey",
+    titulo: "",
     paragraphs: [
       "La Astrología se convirtió en una herramienta para los reyes.",
       "Antes de tomar decisiones importantes, consultaban a los astrólogos de su corte.",
@@ -39,10 +39,10 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   {
     src: "/viñetas/astrologia/historia/historiaastrologia3.png",
     eyebrow: "Babilonia · 500 a.C.",
-    titulo: "El Zodiaco",
+    titulo: "",
     paragraphs: [
       "Para medir el movimiento de los planetas de forma más rápida y precisa, los babilonios dividieron el cielo en un círculo de 360° y lo separaron en 12 partes iguales.",
-      "Así nació el zodiaco.",
+      "Así nació el Zodiaco.",
     ],
   },
   // 4 — Grecia

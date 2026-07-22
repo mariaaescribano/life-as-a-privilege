@@ -27,14 +27,16 @@ interface AyurvedaPanelProps {
 
 /**
  * Caja (panel) común de las páginas del recorrido de Ayurveda —las que ve el
- * usuario cuando YA conoce su dosha—. Antes era una función `Panel` duplicada en
- * cada página, y totalmente estática. Ahora es un componente compartido y VIVO,
- * para darle el punto divertido que pega con esta parte:
+ * usuario cuando YA conoce su dosha—. Es un componente compartido y VIVO:
  *   · balanceo de reposo muy suave e infinito (desincronizado por panel), para
- *     que las cajas «respiren» y se sientan vivas;
- *   · «pop» elástico y exagerado al pasar el ratón / tocar (escala + inclinación
- *     + glow del dosha), con rebote (spring);
- *   · squish al pulsar.
+ *     que las cajas «respiren» y se sientan vivas.
+ *
+ * NO lleva hover ni reacción al toque a propósito: estos paneles contienen
+ * botones, checks y textareas, y en táctil el estado hover se quedaba «pegado»
+ * tras tocar (se veía feo). La ENTRADA (revelar la caja y rellenar su interior
+ * de forma dinámica) la aporta el `Reveal` / `RevealStagger` que envuelve a cada
+ * Panel en las páginas —no se duplica aquí para no solapar dos entradas—.
+ *
  * Al vivir en un solo archivo, el cambio se ve en TODAS las páginas y en los tres
  * doshas (vata / pitta / kapha). Respeta `prefers-reduced-motion`.
  */
@@ -49,8 +51,6 @@ export function AyurvedaPanel({
   const fase = faseDeId(React.useId());
 
   const baseShadow = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`;
-  // Glow MUY marcado al interactuar: sube el box, brilla el color del dosha.
-  const hoverShadow = `0 22px 48px rgba(0,0,0,0.30), 0 0 42px rgba(255,255,255,0.24), 0 0 90px rgba(180,255,245,0.20), 0 0 44px ${color}66, 0 0 110px ${color}33`;
 
   const fondo = tile ? (
     // Fondo en bandas (la acuarela se repite a lo ancho y se apila).
@@ -88,33 +88,19 @@ export function AyurvedaPanel({
   }
 
   return (
-    // Envoltorio EXTERIOR: balanceo de reposo infinito (su propio transform), así
-    // no compite con el «pop» del hover, que va en el elemento interior.
+    // Balanceo de reposo infinito, desincronizado por panel (useId → fase). SIN
+    // hover y SIN reacción al toque (ver comentario del componente).
     <MotionBox
+      position="relative"
       w="100%"
+      borderRadius="2xl"
+      overflow="hidden"
+      boxShadow={baseShadow}
       animate={{ rotate: [0, -0.6, 0.6, 0], y: [0, -4, 0, -2, 0], scale: [1, 1.01, 1, 1.006, 1] }}
       transition={{ duration: 6.5 + fase, repeat: Infinity, ease: "easeInOut", delay: fase * 1.5 }}
       style={{ transformOrigin: "center" }}
     >
-      {/* Tarjeta: «pop» elástico + glow al pasar el ratón (rebote marcado con un
-          spring poco amortiguado). Sin whileTap: estos paneles contienen botones,
-          checks y textareas; un squish del panel entero al tocarlos molestaría. */}
-      <MotionBox
-        position="relative"
-        w="100%"
-        borderRadius="2xl"
-        overflow="hidden"
-        boxShadow={baseShadow}
-        whileHover={{
-          scale: 1.04,
-          y: -10,
-          rotate: 1,
-          boxShadow: hoverShadow,
-          transition: { type: "spring", stiffness: 240, damping: 10 },
-        }}
-      >
-        {contenido}
-      </MotionBox>
+      {contenido}
     </MotionBox>
   );
 }

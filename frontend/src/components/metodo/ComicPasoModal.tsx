@@ -15,10 +15,18 @@ import { astrologiaTxt } from "../../GlobalVariables";
 //   · onClose → la X / Escape. El padre cierra y se queda donde estaba.
 // ─────────────────────────────────────────────────────────────────────────
 
-// Flecha → (material «arrow_forward»), para los dos botones.
+// Flecha larga → (material «arrow_forward»), para el botón del siguiente título.
 const FlechaDerecha = () => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-       w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
+  <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
+    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+  </Box>
+);
+
+// Flecha → del botón «Saltar» (igual que el «Saltar» del ComicViewer).
+const SaltarChevron = () => (
+  <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
     <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
   </Box>
 );
@@ -93,8 +101,9 @@ export function ComicPasoModal({
           sinSaltar
         />
 
-        {/* «Saltar →» — arriba a la IZQUIERDA, en el color (txt) de la disciplina.
-            Chip oscuro para que el texto de color resalte sobre el cómic. */}
+        {/* «Saltar »» — arriba a la IZQUIERDA. Mismo lenguaje que el «Saltar» del
+            ComicViewer: imagen de la disciplina de fondo + velo y letra en el
+            color de texto de la disciplina, con el doble chevron ». */}
         <Box
           as="button"
           onClick={onContinue}
@@ -102,13 +111,13 @@ export function ComicPasoModal({
           top={{ base: 3, md: 5 }}
           left={{ base: 3, md: 5 }}
           zIndex={11}
+          overflow="hidden"
           display="inline-flex"
           alignItems="center"
           gap={1.5}
           h={{ base: "42px", md: "48px" }}
           px={{ base: 4, md: 5 }}
           borderRadius="full"
-          bg="rgba(0,0,0,0.5)"
           color={themeColor}
           border={`1px solid ${themeColor}aa`}
           fontFamily="'EB Garamond', serif"
@@ -121,11 +130,16 @@ export function ComicPasoModal({
           boxShadow="0 2px 12px rgba(0,0,0,0.45)"
           sx={{ backdropFilter: "blur(4px)" }}
           transition="all 0.2s"
-          _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
-          style={{ textShadow: `0 1px 3px rgba(0,0,0,0.85), 0 0 6px ${themeColor}` }}
+          _hover={{ borderColor: themeColor }}
         >
-          Saltar
-          <FlechaDerecha />
+          {/* Fondo: imagen de la disciplina + velo */}
+          <Box as="img" src={imgFondo} alt="" loading="eager" position="absolute" inset="0"
+               w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+          <Box position="absolute" inset="0" bg={veloBtn} />
+          <Box as="span" position="relative" zIndex={1}>
+            Saltar
+          </Box>
+          <SaltarChevron />
         </Box>
 
         {/* Botón del siguiente título — arriba, a la IZQUIERDA de la X, con la
@@ -145,7 +159,7 @@ export function ComicPasoModal({
           px={{ base: 4, md: 6 }}
           borderRadius="full"
           border={`1px solid ${themeColor}`}
-          color="#ffffff"
+          color={themeColor}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "xs", md: "sm" }}

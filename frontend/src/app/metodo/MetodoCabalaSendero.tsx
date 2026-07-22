@@ -24,15 +24,18 @@ import {
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
-const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
+// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
+const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
 
 // Sin líneas divisorias: se muestran los boxes sin ningún "border line".
 const Divisor = (_props?: { mb?: any; mt?: any }) => null;
 
-// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) a plena
-// intensidad, sin velo que reduzca su opacidad. No se cambia el color del texto.
-const CAJA_OVERLAY = "transparent";
+// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) con un velo
+// marrón oscuro (cabalaBg) que sube el contraste del texto ámbar sobre la
+// acuarela para que se lea bien.
+const CAJA_OVERLAY = `${cabalaBg}cc`;
 const Caja = ({ children }: { children: React.ReactNode }) => (
   <Box position="relative" overflow="hidden" w="100%"
        borderRadius="2xl" boxShadow={CAJA_GLOW}>

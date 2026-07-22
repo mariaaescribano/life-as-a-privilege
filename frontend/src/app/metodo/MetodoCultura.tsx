@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
@@ -8,8 +9,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { CulturaIlustracionesModal } from "../../components/metodo/CulturaIlustracionesModal";
+import { PagoCulturaModal } from "../../components/metodo/PagoCulturaModal";
 import { Reveal } from "../../components/global/Reveal";
-import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Halo oscuro (verde profundo) para que el texto se lea sobre el fondo de
 // Cultura.
@@ -27,6 +29,11 @@ const EyeIcon = () => (
 export default function MetodoCultura() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [suscrito, setSuscrito] = useState(false);
+  const [pagoOpen, setPagoOpen] = useState(false);
+  const [pagoLoading, setPagoLoading] = useState(false);
+  const [pagoError, setPagoError] = useState<string | null>(null);
+  const [testPagos, setTestPagos] = useState(false);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
   useEffect(() => {
@@ -34,8 +41,77 @@ export default function MetodoCultura() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
-    setLoading(false);
+
+    (async () => {
+      try {
+        // ¿Modo test de pagos habilitado? (nos deja fake-pay sin la cadena previa).
+        let testEnabled = false;
+        try {
+          const t = await axios.get(`${API_URL}/payment/test/enabled`);
+          testEnabled = !!t.data?.enabled;
+        } catch { /* sin modo test */ }
+        setTestPagos(testEnabled);
+
+        const me = await axios.get(`${API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Prerrequisito: hay que haber pagado Cábala (7ª disciplina). En modo
+        // test dejamos ver el pago igualmente (el fake-pay desbloquea la cadena).
+        if (!me.data?.cabala_suscrito && !testEnabled) { navigate("/home"); return; }
+
+        const culturaSuscrito = !!me.data?.cultura_suscrito;
+        setSuscrito(culturaSuscrito);
+        if (!culturaSuscrito) { setPagoOpen(true); return; }
+      } catch {
+        navigate("/home");
+        return;
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [navigate]);
+
+  const pagarCultura = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoLoading(true);
+    setPagoError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/cultura/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoError(
+        status === 403
+          ? "Necesitas completar el pago de Cábala antes de adquirir Cultura."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoLoading(false);
+    }
+  };
+
+  const testUnlock = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    try {
+      await axios.post(
+        `${API_URL}/payment/test/unlock`,
+        { scope: "cultura" },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setSuscrito(true);
+      setPagoOpen(false);
+    } catch (err: any) {
+      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
+    }
+  };
 
   if (loading) {
     return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
@@ -60,7 +136,10 @@ export default function MetodoCultura() {
               mb={0}
               prev={{ label: "← Cábala", onClick: () => navigate("/metodo/cabala/cursos") }}
               extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
-              next={{ label: "Las Historias →", onClick: () => navigate("/metodo/cultura/historias") }}
+              next={{ label: "Las Historias →", onClick: () => {
+                if (!suscrito) { setPagoError(null); setPagoOpen(true); return; }
+                navigate("/metodo/cultura/historias");
+              } }}
             />
           </Reveal>
 
@@ -107,6 +186,15 @@ export default function MetodoCultura() {
       <BotonCompania color={culturaTxt} bgColor={culturaBg} disciplinaNom={culturaNom} />
 
       <SiteFooter />
+
+      <PagoCulturaModal
+        isOpen={pagoOpen && !suscrito}
+        onClose={() => { setPagoOpen(false); navigate("/home"); }}
+        onPagar={pagarCultura}
+        loading={pagoLoading}
+        error={pagoError}
+        onTest={testPagos ? testUnlock : undefined}
+      />
     </Box>
   );
 }

@@ -240,7 +240,7 @@ export default function MetodoNutricionAlimento() {
           {/* Moléculas que lo componen, por grupos */}
           <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  textAlign="center">
               Toca cada molécula para ver qué hace dentro de ti.
             </Text>
           </Reveal>

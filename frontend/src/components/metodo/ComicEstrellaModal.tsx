@@ -61,8 +61,11 @@ export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrell
           h={{ base: "42px", md: "48px" }}
           px={{ base: 4, md: 6 }}
           borderRadius="full"
-          bg={fisiologiaTxt}
-          color={fisiologiaBg}
+          overflow="hidden"
+          // Fondo con la imagen de la disciplina (fisio) + velo, como el botón
+          // «Saltar»; la letra en fisiologiaTxt (color de texto de la disciplina).
+          bg="transparent"
+          color={fisiologiaTxt}
           border={`1px solid ${fisiologiaTxt}`}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
@@ -75,10 +78,14 @@ export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrell
           transition="all 0.2s"
           _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}
         >
-          Ir a Moléculas
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-               w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+          {/* Fondo imagen + velo, como el botón «Saltar». */}
+          <Box as="img" src="/img/fondos/fisio.png" alt="" loading="eager" position="absolute" inset="0"
+               w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+          <Box position="absolute" inset="0" bg={`${fisiologiaBg}b3`} />
+          <Box as="span" position="relative" zIndex={1}>Ir a Moléculas</Box>
+          <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+               w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
+            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
           </Box>
         </Box>
       </ModalContent>

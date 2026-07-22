@@ -20,7 +20,9 @@ import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../Globa
 
 // Halo oscuro (marrón profundo) para leer el texto sobre el fondo de Cábala
 // (nebulosa con destellos).
-const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
+// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
+const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.14), 0 0 34px rgba(255,255,255,0.07), 0 0 20px ${cabalaTxt}22, 0 0 48px ${cabalaTxt}14`;
 
 // Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
@@ -204,6 +206,8 @@ export default function MetodoCabala() {
         textColor={cabalaTxt}
         disciplinaBgImage="/img/fondos/cabala.png"
         disciplinaBgColor={cabalaBg}
+        continueLabel="Cábala"
+        onContinue={intro.close}
         onFinish={intro.finish}
         onClose={intro.close}
       />

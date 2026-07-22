@@ -236,6 +236,15 @@ export default function MetodoAyurveda() {
         textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
         onFinish={intro.finish}
         onClose={intro.close}
+        // Botón «Ayurveda →» a la izquierda de la X: entra a la portada (cerrar el
+        // cómic la revela). Fondo con la imagen de la disciplina + velo (como
+        // «Saltar») y letra en ayurvedaTxt. Se conserva también el «Saltar»,
+        // ahora en ayurvedaTxt para que se lea sobre el velo claro.
+        continueLabel="Ayurveda"
+        onContinue={intro.close}
+        continueConImagen
+        mantenerSaltar
+        saltarTextColor={ayurvedaTxt}
       />
 
       {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}

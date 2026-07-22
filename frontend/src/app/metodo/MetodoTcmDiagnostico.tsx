@@ -144,11 +144,11 @@ export default function MetodoTcmDiagnostico() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={2} maxW="660px">
             <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                  textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                  textAlign="center">
               «Antes de sanar a alguien, pregúntale si está dispuesto a renunciar a las cosas que lo enferman.»
             </Text>
             <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
-                  textAlign="center" style={{ textShadow: INK_SHADOW }}>
+                  textAlign="center">
               — Hipócrates
             </Text>
           </Flex>
@@ -183,8 +183,7 @@ export default function MetodoTcmDiagnostico() {
           <Reveal inView direction="up" distance={16} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                 textAlign="center" maxW="660px" mt={1} style={{ textShadow: INK_SHADOW }}>
-            Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti. Toca cualquier flecha para leer.
-            hace un elemento a otro, órgano a órgano.
+            Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti.
           </Text>
           </Reveal>
           <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">

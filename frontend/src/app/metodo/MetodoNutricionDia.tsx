@@ -318,7 +318,7 @@ export default function MetodoNutricionDia() {
               <Reveal direction="up" distance={18} delay={0.08} duration={0.6} w="100%" display="flex" justifyContent="center">
                 <Flex direction="column" align="center" gap={2} maxW="720px">
                   <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                        textAlign="center" lineHeight="1.8" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                        textAlign="center" lineHeight="1.8">
                     Aprender a comer no es contar: es saber <b>cuánto</b> y <b>cómo</b>. Reparte tus{" "}
                     <Text as="span" color={nutricionTxt} fontWeight={700}>{kcalObjetivo} kcal</Text>{" "}
                     del día entre tus comidas y arrastra alimentos a cada una. Fíjate en la ración y en cómo medirla a ojo.

@@ -16,8 +16,6 @@ import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
-const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
-
 export default function MetodoTcmCiclos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -116,7 +114,7 @@ export default function MetodoTcmCiclos() {
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                textAlign="center" maxW="640px" style={{ textShadow: INK_SHADOW }}>
+                textAlign="center" maxW="640px">
             Los Cinco Elementos no viven aislados: se relacionan en dos ciclos. Cuando
             fluyen, hay equilibrio; cuando se alteran, aparece el desequilibrio. Toca
             cada flechita para descubrir la relación.

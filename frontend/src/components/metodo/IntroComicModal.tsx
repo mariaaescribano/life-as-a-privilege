@@ -51,6 +51,17 @@ interface IntroComicModalProps {
    *  se pasa, al terminar se cierra (onClose). Útil para encadenar cómics: el
    *  primero, al acabar, abre el siguiente. */
   onComplete?: () => void;
+  /** Si true, se conserva el botón «Saltar» (arriba a la izquierda) AUNQUE haya
+   *  botón de continuar. Por defecto, tener `continueLabel` oculta el «Saltar»
+   *  para no duplicar; Ayurveda quiere los dos (Saltar entra a la portada, el
+   *  botón de continuar también, pero se muestran a juego a ambos lados). */
+  mantenerSaltar?: boolean;
+  /** Color de la letra/flecha del botón «Saltar» (por defecto blanco). */
+  saltarTextColor?: string;
+  /** Si true, el botón de continuar («Ayurveda →») usa la imagen de la disciplina
+   *  como fondo (con un velo), igual que el botón «Saltar», en vez de un relleno
+   *  de color sólido. Requiere `disciplinaBgImage`. */
+  continueConImagen?: boolean;
 }
 
 export function IntroComicModal({
@@ -66,6 +77,8 @@ export function IntroComicModal({
   continueLabel,
   onContinue,
   onComplete,
+  mantenerSaltar,
+  saltarTextColor,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -93,13 +106,22 @@ export function IntroComicModal({
           loader={loader}
           // Si este intro ya pinta su propio botón (p.ej. «Nutrición →») a la
           // izquierda de la X, ocultamos el «Saltar» genérico para no duplicar.
-          sinSaltar={!!(continueLabel && onContinue)}
+          // Con `mantenerSaltar` (Ayurveda) se conservan los dos, a juego.
+          sinSaltar={!!(continueLabel && onContinue) && !mantenerSaltar}
+          saltarTextColor={saltarTextColor}
         />
 
         {/* Botón de continuar (p.ej. "Astrología →"), fijo a la IZQUIERDA de la X
             del ComicViewer. Visible durante todo el cómic para saltar al contenido
             de la disciplina en cualquier momento. */}
-        {continueLabel && onContinue && (
+        {continueLabel && onContinue && (() => {
+          // Mismo lenguaje que el botón «Saltar»: SIEMPRE que haya imagen de
+          // disciplina, el botón la usa de fondo + velo y la letra en el color de
+          // TEXTO de la disciplina. Solo astrología (sin imagen, fondo estrellado)
+          // cae en el relleno dorado sólido de antes.
+          const conImagen = !!disciplinaBgImage;
+          const txtColor = textColor ?? themeColor;
+          return (
           <Box
             as="button"
             onClick={onContinue}
@@ -113,9 +135,15 @@ export function IntroComicModal({
             h={{ base: "42px", md: "48px" }}
             px={{ base: 4, md: 6 }}
             borderRadius="full"
-            bg={themeColor}
-            color="#0a0a1a"
-            border={`1px solid ${themeColor}`}
+            overflow="hidden"
+            // Botón de disciplina: relleno con su color de fondo (Bg) y letra con
+            // su color de texto (Txt), siguiendo la regla de colores de la app. En
+            // astrología (sin disciplinaBgColor) se mantiene el dorado + letra
+            // oscura de antes. En modo imagen, el fondo lo pinta la imagen+velo de
+            // abajo, así que aquí solo fijamos el color de la letra (acento).
+            bg={conImagen ? "transparent" : (disciplinaBgColor ?? themeColor)}
+            color={conImagen ? txtColor : (disciplinaBgColor ? themeColor : "#0a0a1a")}
+            border={`1px solid ${disciplinaBgColor ?? themeColor}`}
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
             fontSize={{ base: "xs", md: "sm" }}
@@ -127,13 +155,24 @@ export function IntroComicModal({
             transition="all 0.2s"
             _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${themeColor}88, 0 0 58px ${themeColor}44` }}
           >
-            {continueLabel}
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                 w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
-              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+            {/* Fondo imagen + velo (solo en modo imagen), como el botón «Saltar». */}
+            {conImagen && (
+              <>
+                <Box as="img" src={disciplinaBgImage} alt="" loading="eager" position="absolute" inset="0"
+                     w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+                <Box position="absolute" inset="0"
+                     bg={disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)"} />
+              </>
+            )}
+            <Box as="span" position="relative" zIndex={1}>{continueLabel}</Box>
+            {/* Flecha larga (→) en vez del chevron. */}
+            <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                 w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
+              <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
             </Box>
           </Box>
-        )}
+          );
+        })()}
       </ModalContent>
     </Modal>
   );

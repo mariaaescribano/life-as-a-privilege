@@ -260,9 +260,8 @@ export default function MetodoFisiologiaNiveles() {
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="620px"
-                  style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                  textAlign="center" lineHeight="1.8" maxW="620px">
               Descubre poco a poco, de las partículas que te forman hasta el ecosistema mágico que eres.
             </Text>
           </Reveal>

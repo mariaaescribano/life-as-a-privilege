@@ -3,18 +3,21 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { nutricionNom } from "../../GlobalVariables";
 
-// Glow suave y blanquito del header (nada de sombras oscuras). `c` es el acento
-// de la disciplina (<disc>Txt). Reutilizado por todas las cajas del recorrido.
+// Glow suave de la tarjeta, SOLO con el color de la disciplina (`c` = <disc>Txt).
+// Antes llevaba capas blancas + menta claro, pero sobre el turquesa del recorrido
+// esos halos claros se fundían entre tarjetas y pintaban un "box clarito"; sobre
+// los fondos claros (Nutrición) eran invisibles de todos modos. Así que se
+// quitan: queda un glow tintado del acento y el turquesa se mantiene limpio.
 export const glowSuave = (c: string): string =>
-  `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${c}1a, 0 0 48px ${c}10`;
+  `0 0 14px ${c}26, 0 0 32px ${c}14`;
 
 // Variante más intensa para el hover.
 export const glowSuaveHover = (c: string): string =>
-  `0 0 22px rgba(255,255,255,0.3), 0 0 44px rgba(255,255,255,0.15), 0 0 66px rgba(180,255,245,0.13), 0 0 28px ${c}33, 0 0 60px ${c}1c`;
+  `0 0 20px ${c}3a, 0 0 42px ${c}1e`;
 
-// Variante para «visto» (algo más de color, sigue siendo blanquito).
+// Variante para «visto» (algo más de color).
 export const glowSuaveVisto = (c: string): string =>
-  `0 0 16px rgba(255,255,255,0.18), 0 0 34px rgba(255,255,255,0.09), 0 0 60px rgba(180,255,245,0.10), 0 0 24px ${c}40, 0 0 52px ${c}20`;
+  `0 0 16px ${c}40, 0 0 36px ${c}20`;
 
 // ─────────────────────────────────────────────────────────────────────────
 // FotoBox — el box POR DEFECTO de las tarjetas con foto (Nutrición y Fisiología:

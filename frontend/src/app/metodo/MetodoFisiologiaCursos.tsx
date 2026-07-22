@@ -178,7 +178,7 @@ export default function MetodoFisiologiaCursos() {
 
           {/* Texto introductorio bajo el header */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
               Si quieres profundizar en la Fisiología, estos cursos te acompañan paso a paso.
             </Text>

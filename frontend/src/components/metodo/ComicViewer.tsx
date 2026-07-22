@@ -132,6 +132,10 @@ interface ComicViewerProps {
    *  ya pinta su propio botón para saltar/continuar (p.ej. el «Nutrición →» del
    *  IntroComicModal), para no duplicar. */
   sinSaltar?: boolean;
+  /** Color de la LETRA (y la flecha) del botón «Saltar». Por defecto blanco.
+   *  Ayurveda lo pide en `ayurvedaTxt` para que se lea sobre su velo claro (el
+   *  blanco quedaba invisible sobre el velo blanco de la imagen de fondo). */
+  saltarTextColor?: string;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -158,8 +162,14 @@ export function ComicViewer({
   sinSombra,
   scrollbarColor,
   sinSaltar,
+  saltarTextColor,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
+  // Color de la letra/flecha del botón «Saltar»: el color de TEXTO de la
+  // disciplina (textColor si se pasa —p.ej. Nutrición—, o el acento themeColor,
+  // que en el resto de disciplinas ES su color de texto). Se puede forzar con
+  // `saltarTextColor`.
+  const saltarColor = saltarTextColor ?? textColor ?? themeColor;
   // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
   const sbColor = scrollbarColor ?? themeColor;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
@@ -410,15 +420,14 @@ export function ComicViewer({
         ) : (
           <Box position="absolute" inset="0" bg="rgba(0,0,0,0.5)" />
         )}
-        <Text position="relative" zIndex={1} color="#ffffff" fontFamily="'EB Garamond', serif"
-              fontWeight={700} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" letterSpacing="0.04em"
-              style={{ textShadow: `0 1px 3px rgba(0,0,0,0.85), 0 0 6px ${themeColor}` }}>
+        <Text position="relative" zIndex={1} color={saltarColor} fontFamily="'EB Garamond', serif"
+              fontWeight={700} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" letterSpacing="0.04em">
           Saltar
         </Text>
         <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-             w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="#ffffff"
+             w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill={saltarColor}
              style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-          <path d="M383-480 200-664l56-56 240 240-240 240-56-56 183-184Zm264 0L464-664l56-56 240 240-240 240-56-56 183-184Z" />
+          <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
         </Box>
       </Flex>
       )}
@@ -694,16 +703,19 @@ export function ComicViewer({
             {imgReady && !hideFoto && (
             <Box
               // Desktop: foto cuadrada MÁS GRANDE a la izquierda.
+              // Tablet / pantalla mediana (sm): foto CUADRADA centrada arriba
+              //   (no el banner hero) para que no se deforme.
               // Móvil: hero image a todo el ancho que cubre la parte de arriba.
-              w={{ base: "100%", md: "440px" }}
-              maxW={{ base: "100%", md: "440px" }}
-              h={{ base: "36vh", md: "auto" }}
-              aspectRatio={{ base: "auto", md: 1 }}
+              w={{ base: "100%", sm: "70%", md: "440px" }}
+              maxW={{ base: "100%", sm: "400px", md: "440px" }}
+              h={{ base: "36vh", sm: "auto", md: "auto" }}
+              aspectRatio={{ base: "auto", sm: 1, md: 1 }}
               flexShrink={0}
-              alignSelf={{ base: "stretch", md: "center" }}
+              alignSelf={{ base: "stretch", sm: "center", md: "center" }}
               position="relative"
               filter={{
                 base: "none",
+                sm: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${themeColor}33)`,
                 md: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${themeColor}33)`,
               }}
             >
@@ -714,10 +726,10 @@ export function ComicViewer({
                     alt={`Viñeta ${index + 1}`}
                     w="100%"
                     h="100%"
-                    // Móvil: cover (hero que cubre todo). Desktop: contain (se ve
-                    // la ilustración entera, más grande).
-                    objectFit={{ base: "cover", md: "contain" }}
-                    borderRadius={{ base: 0, md: "lg" }}
+                    // Móvil: cover (hero que cubre todo). Tablet/desktop: contain
+                    // (se ve la ilustración entera dentro del cuadrado).
+                    objectFit={{ base: "cover", sm: "contain", md: "contain" }}
+                    borderRadius={{ base: 0, sm: "lg", md: "lg" }}
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}

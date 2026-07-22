@@ -194,6 +194,9 @@ export default function MetodoFisiologia() {
         disciplinaBgColor={fisiologiaBg}
         continueLabel="Fisiología"
         onContinue={intro.close}
+        // El botón «Fisiología →» usa la imagen de la disciplina de fondo + velo
+        // (como el botón «Saltar»), en vez de un relleno de color sólido.
+        continueConImagen
         onFinish={intro.finish}
         onClose={intro.close}
       />

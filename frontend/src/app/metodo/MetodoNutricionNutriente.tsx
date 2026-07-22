@@ -237,13 +237,13 @@ export default function MetodoNutricionNutriente() {
                          w="100%" position="relative" overflow="hidden"
                          display="inline-flex" alignItems="center" justifyContent="center" gap={2.5}
                          px={5} py={{ base: 2.5, md: 3 }} borderRadius="xl"
-                         color={nutricionBg}
-                         bgGradient={`linear(135deg, ${nutricionTxt}, ${n.color})`}
+                         color="#ffffff"
+                         bgGradient="linear(135deg, #6fa86b, #457a49)"
                          fontWeight="800" fontSize={{ base: "sm", md: "md" }}
                          letterSpacing="0.08em" textTransform="uppercase" cursor="pointer"
-                         boxShadow={`0 6px 20px ${nutricionTxt}55, inset 0 1px 0 rgba(255,255,255,0.28)`}
+                         boxShadow="0 6px 20px rgba(69,122,73,0.45), inset 0 1px 0 rgba(255,255,255,0.28)"
                          transition="all 0.2s"
-                         _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px ${nutricionTxt}88, inset 0 1px 0 rgba(255,255,255,0.35)` }}
+                         _hover={{ transform: "translateY(-2px)", boxShadow: "0 10px 28px rgba(69,122,73,0.6), inset 0 1px 0 rgba(255,255,255,0.35)" }}
                          _active={{ transform: "translateY(0)" }}>
                       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                            w={{ base: "20px", md: "22px" }} h={{ base: "20px", md: "22px" }} fill="currentColor" flexShrink={0}>

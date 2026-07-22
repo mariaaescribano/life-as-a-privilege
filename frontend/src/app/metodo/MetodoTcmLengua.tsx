@@ -122,7 +122,7 @@ export default function MetodoTcmLengua() {
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                textAlign="center" maxW="680px" style={{ textShadow: INK_SHADOW }}>
+                textAlign="center" maxW="680px">
             La lengua es el espejo de las vísceras. Se lee por capas: el color, la forma, el movimiento,
             la saburra, la humedad y los pequeños detalles. Aprende a reconocer cada una y luego mira la tuya.
           </Text>

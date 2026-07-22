@@ -228,7 +228,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
       <Box
         key={`box-${i}`}
         w="100%"
-        maxW={{ base: "360px", md: "940px" }}
+        // Móvil: ancho completo (= ancho del header de la disciplina). Desktop: 940px.
+        maxW={{ base: "100%", md: "940px" }}
         h={{ base: "auto", md: "540px" }}
         maxH={{ base: "calc(100dvh - 96px)" }}
         display="flex"

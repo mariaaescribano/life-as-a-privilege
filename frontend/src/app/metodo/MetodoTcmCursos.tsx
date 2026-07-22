@@ -92,7 +92,7 @@ export default function MetodoTcmCursos() {
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
           <Text
-            color="rgba(255,255,255,0.88)"
+            color="white"
             fontSize={{ base: "md", md: "lg" }}
             fontStyle="italic"
             textAlign="center"
@@ -107,7 +107,7 @@ export default function MetodoTcmCursos() {
           {cursosLoading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
               <SpinnerTurquesa fullScreen={false} />
-              <Text color={`${tcmTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
                 Cargando cursos…
               </Text>
             </Flex>

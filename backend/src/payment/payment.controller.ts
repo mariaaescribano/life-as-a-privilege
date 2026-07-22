@@ -90,6 +90,18 @@ export class PaymentController {
     return await this.paymentService.verifyCabalaCheckout(sessionId, req.user.userId);
   }
 
+  @Post('cultura/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createCulturaCheckout(@Req() req: any) {
+    return await this.paymentService.createCulturaCheckout(req.user.userId);
+  }
+
+  @Get('cultura/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyCulturaCheckout(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyCulturaCheckout(sessionId, req.user.userId);
+  }
+
   // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
   @Get('test/enabled')
   testEnabled() {
@@ -98,7 +110,7 @@ export class PaymentController {
 
   @Post('test/unlock')
   @UseGuards(JwtAuthGuard)
-  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'all' }) {
+  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura' | 'all' }) {
     return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
   }
 

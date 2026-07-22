@@ -4,6 +4,8 @@ import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 import { NUTRICION_INTRO } from "./comicNutricionIntro";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
 import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
+import { NUTRICION_INTEGRAL } from "./comicNutricionIntegral";
+import { HAMBRE_HOLISTICA } from "./hambreHolistica";
 import { COMICS_NUTRIENTES } from "./comicsNutrientes";
 import { NUTRIENTES } from "../../hardCoded/espacio/NutrientesNutricion";
 
@@ -15,6 +17,11 @@ import { NUTRIENTES } from "../../hardCoded/espacio/NutrientesNutricion";
 // ─────────────────────────────────────────────────────────────────────────
 
 const NUTRI_BG_IMG = "/img/fondos/nutri.png";
+
+// El visor de cómic (ComicViewer) pinta los párrafos en plano, sin markdown.
+// Quitamos los **…** de las negritas para que no salgan los asteriscos literales.
+const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
+  vinetas.map((v) => ({ ...v, paragraphs: v.paragraphs.map((p) => p.replace(/\*\*/g, "")) }));
 
 // Construye una entrada de galería con el tema de Nutrición (acento claro +
 // letra oscura, sin sombra) y la portada = última viñeta del cómic.
@@ -40,4 +47,6 @@ export const NUTRICION_ILUSTRACIONES: IlustracionEntry[] = [
     .filter((n) => COMICS_NUTRIENTES[n.key]?.length)
     .map((n) => entry(`nutriente-${n.key}`, n.label, COMICS_NUTRIENTES[n.key])),
   entry("nutricion-microbiota", "La microbiota", NUTRICION_MICROBIOTA),
+  entry("nutricion-hambre", "El hambre: una mirada holística", sinNegrita(HAMBRE_HOLISTICA)),
+  entry("nutricion-integral", "Lo integral", NUTRICION_INTEGRAL),
 ];

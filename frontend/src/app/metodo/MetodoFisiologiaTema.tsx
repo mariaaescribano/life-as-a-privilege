@@ -184,9 +184,8 @@ export default function MetodoFisiologiaTema() {
 
           {tema.intro && (
             <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                    textAlign="center" lineHeight="1.8" maxW="660px"
-                    style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                    textAlign="center" lineHeight="1.8" maxW="660px">
                 {tema.intro}
               </Text>
             </Reveal>

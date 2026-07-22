@@ -25,7 +25,9 @@ import {
 } from "../../components/metodo/cabalaDiagnostico";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 
-const INK_SHADOW = `0 1px 3px ${cabalaBg}f5, 0 0 8px ${cabalaBg}cc, 0 2px 16px ${cabalaBg}88`;
+// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
+// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
+const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 
 const nombre = (k: string) => cabalaSefirotMap[k as keyof typeof cabalaSefirotMap]?.titulo ?? k;
 const etiquetaDe = (k: string) => CABALA_TEST[k as keyof typeof CABALA_TEST]?.etiqueta ?? "";

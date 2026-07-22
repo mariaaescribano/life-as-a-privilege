@@ -131,7 +131,12 @@ export function HeridaGrid({ heridas, onBorrar }: {
 }) {
   return (
     // Las heridas entran de izquierda a derecha, una tras otra (en cascada).
-    <RevealStagger display="grid" w="100%"
+    // `key` ligado al nº de heridas: al añadir (o borrar) una, el contenedor se
+    // remonta y RELANZA la cascada. Si no, framer-motion no vuelve a animar a los
+    // hijos añadidos DESPUÉS de que la orquestación ya terminó y la herida recién
+    // creada se quedaría en su estado inicial (opacity 0) — en el DOM pero
+    // invisible, como si no se hubiera añadido a la lista.
+    <RevealStagger key={`heridas-${heridas.length}`} display="grid" w="100%"
          gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
          gap={{ base: 4, md: 5 }} stagger={0.06} delayChildren={0.12}>
       {heridas.map((h, i) => (

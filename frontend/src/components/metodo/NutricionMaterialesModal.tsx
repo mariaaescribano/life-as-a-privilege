@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Text, SimpleGrid, Image, Portal } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { FotoBox, glowSuave } from "./FotoBox";
+import { AppleLoader } from "./AppleLoader";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import {
   ALIMENTOS, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
@@ -222,6 +224,11 @@ function AlimentoBox({ a, onClick }: { a: Alimento; onClick: () => void }) {
 export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [sel, setSel] = useState<Alimento | null>(null);
 
+  // No mostramos la rejilla hasta que TODAS las fotos de los alimentos estén
+  // cargadas; mientras tanto, la manzanita de Nutrición (AppleLoader). Así la
+  // cuadrícula aparece completa y no se va rellenando de fotos a trompicones.
+  const fotosListas = usePrecargarImagenes(isOpen ? ALIMENTOS.map((a) => a.foto) : []);
+
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = "hidden";
@@ -260,6 +267,11 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
 
         {sel ? (
           <AlimentoDetalle a={sel} onVolver={() => setSel(null)} />
+        ) : !fotosListas ? (
+          // Página aún cargando las fotos de los alimentos: solo la manzanita.
+          <Flex minH="70vh" align="center" justify="center" w="100%">
+            <AppleLoader />
+          </Flex>
         ) : (
           <Flex direction="column" align="center" w="100%" maxW="1100px" mx="auto" gap={{ base: 6, md: 8 }}>
             <Flex direction="column" align="center" gap={2} textAlign="center">

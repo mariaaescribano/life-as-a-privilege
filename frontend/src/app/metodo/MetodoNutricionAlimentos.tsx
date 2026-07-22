@@ -55,7 +55,7 @@ function BibliotecaCard({
         _hover={{ transform: "translateY(-4px)", boxShadow: glowSuaveHover(nutricionTxt) }}
         _active={{ transform: "translateY(-1px)" }}
       >
-        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}c4`} />
+        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}99`} />
 
         <Flex position="relative" zIndex={1} direction="column" align="center" justify="center"
               gap={{ base: 3, md: 3.5 }} px={{ base: 6, md: 7 }} py={{ base: 8, md: 10 }} h="100%" textAlign="center">
@@ -154,7 +154,7 @@ export default function MetodoNutricionAlimentos() {
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  textAlign="center" lineHeight="1.8" maxW="620px">
               Todo lo que has descubierto en Nutrición, reunido en un mismo sitio. Elige por dónde entrar.
             </Text>
           </Reveal>

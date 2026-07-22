@@ -299,7 +299,7 @@ export default function MetodoNutricionCalorias() {
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  textAlign="center" lineHeight="1.8" maxW="640px">
               Cada cuerpo necesita una cantidad distinta de energía. Calcula tu propia medición: tus calorías
               diarias y cómo repartir los macronutrientes según tu objetivo.
             </Text>

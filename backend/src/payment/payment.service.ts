@@ -468,6 +468,72 @@ export class PaymentService {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
+  // Cultura — octava (y última) disciplina de «El Recorrido». Requiere haber
+  // pagado antes la séptima disciplina (Cábala → cabala_suscrito). Mismo importe
+  // y mismo flujo: checkout → Stripe → verify → flag en BD.
+  // ─────────────────────────────────────────────────────────────────────────
+  async createCulturaCheckout(userId: string) {
+    // Prerrequisito: el recorrido se hace en orden, así que Cultura solo se
+    // puede adquirir si ya se pagó la séptima disciplina (Cábala).
+    const user = (await this.userService.getUserById(userId)) as any;
+    if (!user?.cabala_suscrito) {
+      throw new ForbiddenException(
+        'Necesitas completar el pago de Cábala antes de adquirir Cultura.',
+      );
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+    const session = await this.stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: 'Cultura — octava disciplina de El Recorrido' },
+            unit_amount: 2000,
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: { userId, scope: 'cultura' },
+      success_url: `${frontendUrl}/home?cultura_pagado={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}/home`,
+    });
+
+    if (!session.url) {
+      throw new BadRequestException('Stripe no devolvió URL de checkout');
+    }
+
+    return { url: session.url };
+  }
+
+  async verifyCulturaCheckout(sessionId: string, userId: string) {
+    if (!sessionId) throw new BadRequestException('session_id requerido');
+
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
+
+    if (session.payment_status !== 'paid') {
+      return { ok: false as const, reason: 'unpaid' };
+    }
+    if (session.metadata?.scope !== 'cultura') {
+      return { ok: false as const, reason: 'wrong-scope' };
+    }
+    if (session.metadata?.userId !== userId) {
+      return { ok: false as const, reason: 'wrong-user' };
+    }
+
+    await this.userService.marcarSuscritoCultura(userId);
+    return { ok: true as const };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
   // MODO TEST — desbloqueo sin pasar por Stripe. SOLO se activa si la variable
   // de entorno ALLOW_TEST_PAGOS === 'true' (nunca en producción). Marca los
   // flags directamente para poder probar el recorrido sin cobro real.
@@ -480,34 +546,38 @@ export class PaymentService {
     return true;
   }
 
-  async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'all') {
+  async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura' | 'all') {
     if (!PaymentService.testPagosHabilitado()) {
       throw new ForbiddenException('El modo test de pagos no está habilitado.');
     }
-    // Cadena de prerrequisitos: Cábala requiere Nutrición, que requiere
-    // Fisiología, que requiere Medicina China, que requiere Ayurveda, que
-    // requiere Psicología, que a su vez requiere Astrología. Al desbloquear una
-    // disciplina, desbloqueamos también las anteriores para respetar el orden.
-    if (scope === 'metodo' || scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'all') {
+    // Cadena de prerrequisitos: Cultura requiere Cábala, que requiere Nutrición,
+    // que requiere Fisiología, que requiere Medicina China, que requiere
+    // Ayurveda, que requiere Psicología, que a su vez requiere Astrología. Al
+    // desbloquear una disciplina, desbloqueamos también las anteriores para
+    // respetar el orden.
+    if (scope === 'metodo' || scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoMetodo(userId);
     }
-    if (scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'all') {
+    if (scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoPsicologia(userId);
     }
-    if (scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'all') {
+    if (scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoAyurveda(userId);
     }
-    if (scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'all') {
+    if (scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoTcm(userId);
     }
-    if (scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'all') {
+    if (scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoFisiologia(userId);
     }
-    if (scope === 'nutricion' || scope === 'cabala' || scope === 'all') {
+    if (scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoNutricion(userId);
     }
-    if (scope === 'cabala' || scope === 'all') {
+    if (scope === 'cabala' || scope === 'cultura' || scope === 'all') {
       await this.userService.marcarSuscritoCabala(userId);
+    }
+    if (scope === 'cultura' || scope === 'all') {
+      await this.userService.marcarSuscritoCultura(userId);
     }
     return { ok: true as const };
   }

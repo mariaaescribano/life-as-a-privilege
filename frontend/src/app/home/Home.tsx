@@ -12,6 +12,7 @@ import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { PagoFisiologiaModal } from "../../components/metodo/PagoFisiologiaModal";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
 import { PagoCabalaModal } from "../../components/metodo/PagoCabalaModal";
+import { PagoCulturaModal } from "../../components/metodo/PagoCulturaModal";
 import { PagoExitoModal } from "../../components/metodo/PagoExitoModal";
 import axios from "axios";
 import {
@@ -33,7 +34,7 @@ const popIn = keyframes`
 `;
 
 // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
-// Fisiología → Nutrición → Cultura → Cábala
+// Fisiología → Nutrición → Cábala → Cultura
 // Astrología tiene flujo propio (/metodo/astrologia con aviso_visto). El resto
 // salta directamente a la página del curso correspondiente en aprendizaje.
 const disciplines = [
@@ -53,17 +54,19 @@ const disciplines = [
 // (metodo_suscrito) — clickable igual: navega si ya está pagada, o abre el pago
 // si todavía no. El resto queda con candado.
 
-// Colores de la disciplina según la ruta del Mapa guardada (para el botón
-// «Continuar por dónde lo dejé», que se pinta con el color de esa disciplina).
-function disciplinaDeRuta(path: string): { bg: string; txt: string } | null {
+// Disciplina según la ruta del Mapa guardada (para el botón «Continuar por dónde
+// lo dejé», que se pinta con el fondo, el icono y el color de esa disciplina).
+type DiscInfo = { nom: string; bg: string; txt: string; Icon: (typeof disciplines)[number]["Icon"] };
+function disciplinaDeRuta(path: string): DiscInfo | null {
   const p = path.toLowerCase();
-  if (p.startsWith("/metodo/astrologia")) return { bg: astrologiaBg, txt: astrologiaTxt };
-  if (p.startsWith("/metodo/psicologia")) return { bg: neuropsicologiaBg, txt: neuropsicologiaTxt };
-  if (p.startsWith("/metodo/ayurveda"))   return { bg: ayurvedaBg, txt: ayurvedaTxt };
-  if (p.startsWith("/metodo/tcm"))        return { bg: tcmBg, txt: tcmTxt };
-  if (p.startsWith("/metodo/fisiologia")) return { bg: fisiologiaBg, txt: fisiologiaTxt };
-  if (p.startsWith("/metodo/nutricion"))  return { bg: nutricionBg, txt: nutricionTxt };
-  if (p.startsWith("/metodo/cabala"))     return { bg: cabalaBg, txt: cabalaTxt };
+  if (p.startsWith("/metodo/astrologia")) return { nom: astrologiaNom, bg: astrologiaBg, txt: astrologiaTxt, Icon: AstrologiaIcon };
+  if (p.startsWith("/metodo/psicologia")) return { nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon };
+  if (p.startsWith("/metodo/ayurveda"))   return { nom: ayurvedaNom, bg: ayurvedaBg, txt: ayurvedaTxt, Icon: AyurvedaIcon };
+  if (p.startsWith("/metodo/tcm"))        return { nom: tcmNom, bg: tcmBg, txt: tcmTxt, Icon: TCMIcon };
+  if (p.startsWith("/metodo/fisiologia")) return { nom: fisiologiaNom, bg: fisiologiaBg, txt: fisiologiaTxt, Icon: FisiologiaIcon };
+  if (p.startsWith("/metodo/nutricion"))  return { nom: nutricionNom, bg: nutricionBg, txt: nutricionTxt, Icon: NutricionIcon };
+  if (p.startsWith("/metodo/cabala"))     return { nom: cabalaNom, bg: cabalaBg, txt: cabalaTxt, Icon: CabalaIcon };
+  if (p.startsWith("/metodo/cultura"))    return { nom: culturaNom, bg: culturaBg, txt: culturaTxt, Icon: CulturaIcon };
   return null;
 }
 
@@ -81,6 +84,7 @@ const Home = () => {
   const [fisiologiaSuscrito, setFisiologiaSuscrito] = useState<boolean | null>(null);
   const [nutricionSuscrito, setNutricionSuscrito] = useState<boolean | null>(null);
   const [cabalaSuscrito, setCabalaSuscrito] = useState<boolean | null>(null);
+  const [culturaSuscrito, setCulturaSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
@@ -115,6 +119,11 @@ const Home = () => {
   const [pagoCabalaLoading, setPagoCabalaLoading] = useState(false);
   const [pagoCabalaError, setPagoCabalaError] = useState<string | null>(null);
   const [pagoCabalaExitoOpen, setPagoCabalaExitoOpen] = useState(false);
+  // Pago de Cultura (8ª disciplina)
+  const [pagoCulturaOpen, setPagoCulturaOpen] = useState(false);
+  const [pagoCulturaLoading, setPagoCulturaLoading] = useState(false);
+  const [pagoCulturaError, setPagoCulturaError] = useState<string | null>(null);
+  const [pagoCulturaExitoOpen, setPagoCulturaExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
   // No mostramos NADA del mandala hasta que TODAS las fotos (fondos de las
   // disciplinas + foto central del usuario) estén cargadas.
@@ -191,7 +200,7 @@ const Home = () => {
   };
 
   // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
-  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm" | "fisiologia" | "nutricion" | "cabala") => {
+  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm" | "fisiologia" | "nutricion" | "cabala" | "cultura") => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     try {
@@ -243,7 +252,7 @@ const Home = () => {
         setNutricionSuscrito(true);
         setPagoNutriOpen(false);
         setPagoNutriExitoOpen(true);
-      } else {
+      } else if (scope === "cabala") {
         // Cábala desbloquea también toda la cadena anterior.
         setMetodoSuscrito(true);
         setPsicologiaSuscrito(true);
@@ -254,6 +263,18 @@ const Home = () => {
         setCabalaSuscrito(true);
         setPagoCabalaOpen(false);
         setPagoCabalaExitoOpen(true);
+      } else {
+        // Cultura desbloquea también toda la cadena anterior.
+        setMetodoSuscrito(true);
+        setPsicologiaSuscrito(true);
+        setAyurvedaSuscrito(true);
+        setTcmSuscrito(true);
+        setFisiologiaSuscrito(true);
+        setNutricionSuscrito(true);
+        setCabalaSuscrito(true);
+        setCulturaSuscrito(true);
+        setPagoCulturaOpen(false);
+        setPagoCulturaExitoOpen(true);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
@@ -263,7 +284,8 @@ const Home = () => {
       else if (scope === "tcm") setPagoTcmError(msg);
       else if (scope === "fisiologia") setPagoFisioError(msg);
       else if (scope === "nutricion") setPagoNutriError(msg);
-      else setPagoCabalaError(msg);
+      else if (scope === "cabala") setPagoCabalaError(msg);
+      else setPagoCulturaError(msg);
     }
   };
 
@@ -477,6 +499,41 @@ const Home = () => {
     }
   };
 
+  // Cultura (8ª disciplina): clic en su círculo del mandala.
+  const irCultura = () => {
+    if (culturaSuscrito) {
+      navigate("/metodo/cultura");
+    } else {
+      setPagoCulturaError(null);
+      setPagoCulturaOpen(true);
+    }
+  };
+
+  const pagarCultura = async () => {
+    const token = sessionStorage.getItem("token");
+    if (!token) { navigate("/welcome"); return; }
+    setPagoCulturaLoading(true);
+    setPagoCulturaError(null);
+    try {
+      const res = await axios.post(
+        `${API_URL}/payment/cultura/checkout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.data?.url) { window.location.href = res.data.url; return; }
+      setPagoCulturaError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+      setPagoCulturaLoading(false);
+    } catch (err: any) {
+      const status = err?.response?.status;
+      setPagoCulturaError(
+        status === 403
+          ? "Necesitas completar el pago de Cábala antes de adquirir Cultura."
+          : err?.response?.data?.message || err?.message || "Error desconocido",
+      );
+      setPagoCulturaLoading(false);
+    }
+  };
+
   const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
   const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
   const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
@@ -512,6 +569,7 @@ const Home = () => {
     const fisiologiaPagado = url.searchParams.get("fisiologia_pagado");
     const nutricionPagado = url.searchParams.get("nutricion_pagado");
     const cabalaPagado = url.searchParams.get("cabala_pagado");
+    const culturaPagado = url.searchParams.get("cultura_pagado");
 
     const cargarSuscripcion = async () => {
       try {
@@ -526,6 +584,7 @@ const Home = () => {
         setFisiologiaSuscrito(!!me.data?.fisiologia_suscrito);
         setNutricionSuscrito(!!me.data?.nutricion_suscrito);
         setCabalaSuscrito(!!me.data?.cabala_suscrito);
+        setCulturaSuscrito(!!me.data?.cultura_suscrito);
         return suscrito;
       } catch {
         setMetodoSuscrito(false);
@@ -535,6 +594,7 @@ const Home = () => {
         setFisiologiaSuscrito(false);
         setNutricionSuscrito(false);
         setCabalaSuscrito(false);
+        setCulturaSuscrito(false);
         return false;
       }
     };
@@ -688,6 +748,27 @@ const Home = () => {
           await cargarSuscripcion();
         })
         .finally(() => setVerificandoPago(false));
+    } else if (culturaPagado) {
+      setVerificandoPago(true);
+      url.searchParams.delete("cultura_pagado");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      axios
+        .get(`${API_URL}/payment/cultura/verify`, {
+          params: { session_id: culturaPagado },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            setCulturaSuscrito(true);
+            setPagoCulturaExitoOpen(true);
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
     } else {
       cargarSuscripcion();
     }
@@ -756,18 +837,30 @@ const Home = () => {
 
   const angleStep = (2 * Math.PI) / disciplines.length;
 
+  // El mandala se pinta UNA sola vez y ya en su estado correcto (candados donde
+  // toca). Para eso hace falta esperar a TRES cosas: la foto del usuario, la
+  // precarga de los fondos, y —clave— el estado de suscripciones. Como
+  // cargarSuscripcion() fija los 8 estados a la vez, con que metodoSuscrito deje
+  // de ser null ya están todos resueltos. Sin esto, los círculos aparecerían
+  // bloqueados y luego «saltarían» a desbloqueados (el doble render).
+  const suscripcionesCargadas = metodoSuscrito !== null;
+  const mandalaListo = img != null && imagesReady && suscripcionesCargadas;
+
   // Botón «Continuar por dónde lo dejé»: lleva a la última página del Mapa que
   // el usuario visitó (guardada en localStorage por SiteHeader) y se pinta con
   // el color de esa disciplina. Solo aparece si hay un recorrido guardado.
   const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
   const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
+  const ContIcon = contDisc?.Icon;
   const continuarBtn = ultimoRecorrido && contDisc ? (
     <Box
       as="button"
       onClick={() => navigate(ultimoRecorrido)}
+      position="relative"
+      overflow="hidden"
       display="inline-flex"
       alignItems="center"
-      gap={2}
+      gap={2.5}
       px={{ base: 5, md: 5 }}
       py={2.5}
       borderRadius="full"
@@ -784,7 +877,17 @@ const Home = () => {
       transition="all 0.2s"
       _hover={{ transform: "translateY(-1px)", boxShadow: `0 6px 22px rgba(0,0,0,0.34), 0 0 24px ${contDisc.txt}5a` }}
     >
-      Continuar por dónde lo dejé →
+      {/* Fondo de la disciplina + velo para que el texto se lea. */}
+      <DisciplinaBgLayer nom={contDisc.nom} borderRadius="full" overlay={`${contDisc.bg}c2`} />
+      {/* Icono de la disciplina, a la izquierda. */}
+      {ContIcon && (
+        <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" flexShrink={0}>
+          <ContIcon size={{ base: "20px", md: "22px" }} />
+        </Box>
+      )}
+      <Box as="span" position="relative" zIndex={1}>
+        Continuar por dónde lo dejé →
+      </Box>
     </Box>
   ) : null;
 
@@ -808,7 +911,7 @@ const Home = () => {
       )}
 
       <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform={mandalaScale} transformOrigin="top center">
-        {img != null && imagesReady ? (
+        {mandalaListo ? (
           <Flex
             direction="column"
             alignItems="center"
@@ -932,7 +1035,8 @@ const Home = () => {
                   (d.name === tcmNom && tcmSuscrito === true) ||
                   (d.name === fisiologiaNom && fisiologiaSuscrito === true) ||
                   (d.name === nutricionNom && nutricionSuscrito === true) ||
-                  (d.name === cabalaNom && cabalaSuscrito === true);
+                  (d.name === cabalaNom && cabalaSuscrito === true) ||
+                  (d.name === culturaNom && culturaSuscrito === true);
                 // `clickable` = se puede pulsar aunque siga con candado, para poder
                 //   abrir su pago (real o el de prueba): la disciplina ya pagada, o
                 //   su prerrequisito —la disciplina anterior de la cadena— ya pagado.
@@ -943,7 +1047,8 @@ const Home = () => {
                   (d.name === tcmNom && (tcmSuscrito === true || ayurvedaSuscrito === true)) ||
                   (d.name === fisiologiaNom && (fisiologiaSuscrito === true || tcmSuscrito === true)) ||
                   (d.name === nutricionNom && (nutricionSuscrito === true || fisiologiaSuscrito === true)) ||
-                  (d.name === cabalaNom && (cabalaSuscrito === true || nutricionSuscrito === true));
+                  (d.name === cabalaNom && (cabalaSuscrito === true || nutricionSuscrito === true)) ||
+                  (d.name === culturaNom && (culturaSuscrito === true || cabalaSuscrito === true));
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
@@ -961,6 +1066,8 @@ const Home = () => {
                   ? irNutricion
                   : d.name === cabalaNom
                   ? irCabala
+                  : d.name === culturaNom
+                  ? irCultura
                   : () => navigate(d.link);
                 // Tooltip al pasar el ratón sobre un círculo bloqueado.
                 const tooltipLabel =
@@ -978,6 +1085,8 @@ const Home = () => {
                     ? "Desbloquea Nutrición para empezar la 6ª disciplina."
                     : d.name === cabalaNom && clickable
                     ? "Desbloquea Cábala para empezar la 7ª disciplina."
+                    : d.name === culturaNom && clickable
+                    ? "Desbloquea Cultura para empezar la 8ª disciplina."
                     : "El Mapa se hace en orden — por favor, completa la disciplina anterior.";
 
                 const disciplinaCircle = (
@@ -1238,6 +1347,23 @@ const Home = () => {
         loading={pagoCabalaLoading}
         error={pagoCabalaError}
         onTest={testPagos ? () => testUnlock("cabala") : undefined}
+      />
+      <PagoExitoModal
+        isOpen={pagoCulturaExitoOpen}
+        onAceptar={() => setPagoCulturaExitoOpen(false)}
+        titulo="Pago de Cultura realizado"
+        mensaje="Ya puedes empezar la 8ª disciplina del Mapa."
+        nom={culturaNom}
+        txtColor={culturaTxt}
+        bgColor={culturaBg}
+      />
+      <PagoCulturaModal
+        isOpen={pagoCulturaOpen}
+        onClose={() => { setPagoCulturaOpen(false); setPagoCulturaError(null); }}
+        onPagar={pagarCultura}
+        loading={pagoCulturaLoading}
+        error={pagoCulturaError}
+        onTest={testPagos ? () => testUnlock("cultura") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
     </Box>

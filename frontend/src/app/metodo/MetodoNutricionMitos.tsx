@@ -73,7 +73,7 @@ export default function MetodoNutricionMitos() {
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
+                  textAlign="center" lineHeight="1.8" maxW="640px">
               Estas son algunas de las preguntas y mitos que más se repiten. Toca cada uno para descubrir qué dice
               de verdad la ciencia.
             </Text>

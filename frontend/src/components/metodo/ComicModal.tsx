@@ -57,6 +57,9 @@ export function ComicModal({
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
           textColor={textColor}
+          // En la galería de Ilustraciones no hay «Saltar»: es un visor, la X ya
+          // cierra. Saltar solo tiene sentido en el cómic de intro de disciplina.
+          sinSaltar
         />
       </ModalContent>
     </Modal>

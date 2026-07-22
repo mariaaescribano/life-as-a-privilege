@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { CelulaCard, CelulaModal } from "./celulasUi";
+import { FisiologiaLoader } from "./comicLoaders";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
   CelulasOrganosIcon,
@@ -36,6 +38,13 @@ export function TusCelulasModal({
   const [selected, setSelected] = useState<Celula | null>(null);
   // Células que el usuario ya ha visto (para pintar el tick arriba a la derecha).
   const [vistas, setVistas] = useState<Set<string>>(new Set());
+
+  // No mostramos la rejilla hasta que TODAS las fotos (fondo + las de cada
+  // célula) estén cargadas; mientras, se ve la animación de espera de Fisiología.
+  // Se precargan solo cuando el popup está abierto.
+  const fotosListas = usePrecargarImagenes(
+    isOpen ? [FISIO_IMG, ...celulas.map((c) => c.foto)] : [],
+  );
 
   // Al abrir el popup, traemos del backend las células ya descubiertas.
   useEffect(() => {
@@ -123,7 +132,13 @@ export function TusCelulasModal({
         }
       />
 
-      {/* ── Contenido scrollable: título + rejilla de células ── */}
+      {/* ── Contenido: hasta que TODAS las fotos estén cargadas, la animación de
+          espera de Fisiología (el corazón latiendo). Luego, título + rejilla. ── */}
+      {!fotosListas ? (
+        <Flex position="absolute" inset={0} zIndex={2} align="center" justify="center">
+          <FisiologiaLoader />
+        </Flex>
+      ) : (
       <Box position="absolute" inset={0} zIndex={2} overflowY="auto"
            px={{ base: 5, md: 10, lg: 16 }} py={{ base: 14, md: 16 }}>
         <Flex direction="column" align="center" gap={{ base: 8, md: 10 }} w="100%">
@@ -163,6 +178,7 @@ export function TusCelulasModal({
           )}
         </Flex>
       </Box>
+      )}
 
       {/* Ficha de la célula seleccionada (por encima del popup). Con flechas
           para pasar por todas las células sin cerrar la ficha. */}

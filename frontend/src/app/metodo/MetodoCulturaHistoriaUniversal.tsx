@@ -74,7 +74,12 @@ export default function MetodoCulturaHistoriaUniversal() {
               hitos={HISTORIA_UNIVERSAL_HITOS}
               tinta={culturaTxt}
               bg={culturaBg}
-              onSelect={setActiveKey}
+              // Solo abrimos el cómic si el hito tiene viñetas (ahora las eras
+              // no tienen cómic todavía; así no se abre un modal vacío).
+              onSelect={(key) => {
+                const hito = HISTORIA_UNIVERSAL_HITOS.find((h) => h.key === key);
+                if (hito && hito.vinetas.length > 0) setActiveKey(key);
+              }}
             />
           </Reveal>
         </Flex>
