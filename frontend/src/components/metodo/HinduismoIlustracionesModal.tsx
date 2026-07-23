@@ -61,7 +61,8 @@ export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen6.png",
     paragraphs: [
-      "Los cinco grandes elementos son: Éter, Aire, Fuego, Agua y Tierra. Constituyen toda la materia del universo.",
+      "Los cinco grandes elementos son: Éter, Aire, Fuego, Agua y Tierra.",
+      "Constituyen toda la materia del universo.",
     ],
   },
   {
@@ -89,7 +90,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/hinduismo/elementos/elementosayurveda.png",
     paragraphs: [
-      "Según la Ayurveda, todo lo que existe en el universo está formado por cinco elementos.",
+      "Según la Ayurveda, todo lo que existe en el universo está formado por Cinco Elementos.",
       "Y nosotros no somos la excepción.",
     ],
   },
@@ -134,7 +135,7 @@ export const VINETAS_DOSHAS: Vineta[] = [
   {
     src: "/viñetas/hinduismo/doshas/doshasportada.png",
     paragraphs: [
-      "Según la Ayurveda, los cinco elementos se mezclan para formar los tres Doṣhas.",
+      "Según la Ayurveda, los Cinco Elementos se mezclan para formar los tres Doṣhas.",
       "En cada persona, un Doṣha predomina sobre los otros, esto influencia la constitución, la mentalidad y la salud.",
     ],
   },

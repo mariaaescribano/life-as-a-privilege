@@ -247,7 +247,7 @@ export default function MetodoAstrologiaSolAscLuna() {
         vinetas={VINETAS_PLANETAS}
         continueLabel="Arquetipos"
         themeColor={astrologiaTxt}
-        textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
+        sinBotonSaltar
       />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />

@@ -52,6 +52,10 @@ interface IntroComicModalProps {
   continueBgImage?: string;
   /** Acción del botón de continuar (arriba, junto a la X). */
   onContinue?: () => void;
+  /** Si se define, muestra el botón «volver» (flecha atrás, arriba a la
+   *  izquierda) que lo llama. Sirve para regresar al cómic anterior de una
+   *  cadena (p.ej. desde «Historia de la Astrología» al «Origen»). */
+  onBack?: () => void;
   /** Se llama al TERMINAR el cómic (avanzar más allá de la última viñeta). Si no
    *  se pasa, al terminar se cierra (onClose). Útil para encadenar cómics: el
    *  primero, al acabar, abre el siguiente. */
@@ -70,6 +74,15 @@ interface IntroComicModalProps {
   /** Si true, cada frase (tras un punto) se pinta como un bloque aparte con doble
    *  separación (salto de línea después de cada punto). Lo usa Cultura. */
   separarFrases?: boolean;
+  /** Tamaño de la letra de lectura (se pasa tal cual a ComicViewer). Astrología
+   *  lo baja un punto en su cómic de intro. */
+  textSize?: React.ComponentProps<typeof ComicViewer>["textSize"];
+  /** Si true, las flechas de navegación se pegan a los bordes del box en vez de
+   *  a los del viewport (se pasa tal cual a ComicViewer). */
+  flechasEnBox?: boolean;
+  /** Si true, no se muestra el cómic hasta que la foto de fondo cargue del todo
+   *  (loader a pantalla completa mientras). Se pasa tal cual a ComicViewer. */
+  esperarFondo?: boolean;
 }
 
 export function IntroComicModal({
@@ -86,9 +99,13 @@ export function IntroComicModal({
   continueBgImage,
   onContinue,
   onComplete,
+  onBack,
   mantenerSaltar,
   saltarTextColor,
   separarFrases,
+  textSize,
+  flechasEnBox,
+  esperarFondo,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -108,6 +125,7 @@ export function IntroComicModal({
           vinetas={vinetas}
           onClose={onClose}
           onComplete={onComplete}
+          onBack={onBack}
           themeColor={themeColor}
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
@@ -120,64 +138,57 @@ export function IntroComicModal({
           sinSaltar={!!(continueLabel && onContinue) && !mantenerSaltar}
           saltarTextColor={saltarTextColor}
           separarFrases={separarFrases}
+          textSize={textSize}
+          flechasEnBox={flechasEnBox}
+          esperarFondo={esperarFondo}
         />
 
         {/* Botón de continuar (p.ej. "Astrología →"), fijo a la IZQUIERDA de la X
             del ComicViewer. Visible durante todo el cómic para saltar al contenido
             de la disciplina en cualquier momento. */}
         {continueLabel && onContinue && (() => {
-          // Mismo lenguaje que el botón «Saltar»: SIEMPRE que haya imagen de
-          // disciplina, el botón la usa de fondo + velo y la letra en el color de
-          // TEXTO de la disciplina. Solo astrología (sin imagen, fondo estrellado)
-          // cae en el relleno dorado sólido de antes.
-          const bgImgSrc = continueBgImage ?? disciplinaBgImage;
-          const conImagen = !!bgImgSrc;
+          // Estilo ÚNICO del botón «continuar» (a la izquierda de la X), idéntico
+          // en TODAS las disciplinas: borde + letra en el color de TEXTO de la
+          // disciplina (Txt) y la imagen de la disciplina de fondo con velo para
+          // que se lea. Sin rellenos sólidos ni glow de color.
+          const bgImgSrc = continueBgImage ?? disciplinaBgImage ?? "/img/astrologia/space.jpg";
           const txtColor = textColor ?? themeColor;
+          const velo = disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)";
           return (
           <Box
             as="button"
             onClick={onContinue}
             position="fixed"
             top={{ base: 3, md: 5 }}
-            right={{ base: "60px", md: "72px" }}
+            right={{ base: "74px", md: "90px" }}
             zIndex={11}
+            overflow="hidden"
             display="inline-flex"
             alignItems="center"
             gap={2}
             h={{ base: "42px", md: "48px" }}
             px={{ base: 4, md: 6 }}
             borderRadius="full"
-            overflow="hidden"
-            // Botón de disciplina: relleno con su color de fondo (Bg) y letra con
-            // su color de texto (Txt), siguiendo la regla de colores de la app. En
-            // astrología (sin disciplinaBgColor) se mantiene el dorado + letra
-            // oscura de antes. En modo imagen, el fondo lo pinta la imagen+velo de
-            // abajo, así que aquí solo fijamos el color de la letra (acento).
-            bg={conImagen ? "transparent" : (disciplinaBgColor ?? themeColor)}
-            color={conImagen ? txtColor : (disciplinaBgColor ? themeColor : "#0a0a1a")}
-            border={`1px solid ${disciplinaBgColor ?? themeColor}`}
+            bg="transparent"
+            color={txtColor}
+            border={`1px solid ${txtColor}`}
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
             fontSize={{ base: "xs", md: "sm" }}
             letterSpacing="0.04em"
             whiteSpace="nowrap"
             cursor="pointer"
-            boxShadow={`0 0 18px ${themeColor}66, 0 0 40px ${themeColor}33, 0 2px 12px rgba(0,0,0,0.45)`}
+            boxShadow="0 2px 12px rgba(0,0,0,0.45)"
             sx={{ backdropFilter: "blur(4px)" }}
             transition="all 0.2s"
-            _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${themeColor}88, 0 0 58px ${themeColor}44` }}
+            _hover={{ transform: "translateY(-1px)" }}
           >
-            {/* Fondo imagen + velo (solo en modo imagen), como el botón «Saltar». */}
-            {conImagen && (
-              <>
-                <Box as="img" src={bgImgSrc} alt="" loading="eager" position="absolute" inset="0"
-                     w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
-                <Box position="absolute" inset="0"
-                     bg={disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)"} />
-              </>
-            )}
+            {/* Fondo: imagen de la disciplina + velo */}
+            <Box as="img" src={bgImgSrc} alt="" loading="eager" position="absolute" inset="0"
+                 w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+            <Box position="absolute" inset="0" bg={velo} />
             <Box as="span" position="relative" zIndex={1}>{continueLabel}</Box>
-            {/* Flecha larga (→) en vez del chevron. */}
+            {/* Flecha larga (→) */}
             <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                  w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
               <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />

@@ -19,8 +19,9 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
   {
     src: "/viñetas/fisiologia/estrellas/star2.png",
     paragraphs: [
-      "En su interior, la temperatura es tan extrema que los átomos de hidrógeno se separan de sus electrones, dejando solo sus núcleos (protones).",
+      "En su interior, la temperatura es tan extrema que los átomos de hidrógeno se separan de sus electrones, dejando solo protones, sus núcleos.",
       "Estos protones chocan y comienzan a unirse. Ha empezado la fusión nuclear.",
+      "Dato técnico: El hidrógeno está formado por un protón y un electrón. En el núcleo de una estrella, las temperaturas y presiones son tan extremas que los protones pueden fusionarse. En ese proceso, uno de ellos se transforma en un neutrón y se forma un núcleo de deuterio. Tras varias reacciones más, el resultado es un núcleo de helio, compuesto por 2 protones y 2 neutrones. En estrellas más masivas, la fusión continúa produciendo elementos cada vez más pesados.",
     ],
   },
   {

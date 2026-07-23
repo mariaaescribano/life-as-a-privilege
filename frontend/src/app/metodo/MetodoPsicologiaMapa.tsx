@@ -149,8 +149,17 @@ export default function MetodoPsicologiaMapa() {
         });
         const d: LineaDeVidaData = psi.data?.data || {};
         dataRef.current = d;
+        // Blindamos cada constelación con las formas que el render da por hechas
+        // (nudos/arquetipos array, textos string): datos antiguos sin esos campos
+        // reventaban el render (pantalla en blanco).
         const rels = Array.isArray(d.constelaciones)
-          ? d.constelaciones.map((c) => ({ ...c, titulo: c.titulo ?? "" }))
+          ? d.constelaciones.map((c) => ({
+              ...c,
+              titulo: c.titulo ?? "",
+              texto: c.texto ?? "",
+              nudos: Array.isArray(c.nudos) ? c.nudos : [],
+              arquetipos: Array.isArray(c.arquetipos) ? c.arquetipos : [],
+            }))
           : [];
         setRelaciones(rels);
       } catch {

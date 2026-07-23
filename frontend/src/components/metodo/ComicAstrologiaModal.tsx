@@ -35,7 +35,7 @@ export const VINETAS_PLANETAS: Vineta[] = [
     src: "/viñetas/astrologia/planetas/luna.png",
     paragraphs: [
       "La Luna fue lo que nos cobijó los primeros años de Vida.",
-      "Nuestra más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y donde descansamos.",
+      "Nuestra más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y dónde descansamos.",
     ],
   },
   {
@@ -91,14 +91,14 @@ export const VINETAS_PLANETAS: Vineta[] = [
     src: "/viñetas/astrologia/planetas/pluton.png",
     paragraphs: [
       "Plutón es la bomba nuclear que nos destruye cíclicamente.",
-      "No le vemos venir. Es nuestro miedo más profundo. Es la destrucción total que nos invita a una dolorosa pero necesaria transformación.",
+      "No le vemos venir. Es nuestro miedo más profundo. Es la destrucción total que nos invita a una dolorosa pero necesaria transformación y reconstrucción.",
     ],
   },
   {
     src: "/viñetas/astrologia/planetas/nodoSur.png",
     paragraphs: [
       "El Nodo Sur es lo que debemos dejar atrás en nuestra Vida porque ya no tiene más para nosotros.",
-      "Es lo que nos resulta fácil y cómodo, dónde queremos permanecer por miedo a lo desconocido y a la incomodidad.",
+      "Pero es lo que nos resulta fácil y cómodo, dónde queremos permanecer por miedo a lo desconocido y a la incomodidad.",
     ],
   },
   {
@@ -112,7 +112,7 @@ export const VINETAS_PLANETAS: Vineta[] = [
     src: "/viñetas/astrologia/planetas/quiron.png",
     paragraphs: [
       "Quirón es la herida más profunda del alma; la herida de la separación.",
-      "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir y a aceptar el dolor, y al hacerlo, nos da nuestro mayor don.",
+      "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir y a aceptar el dolor, y al hacerlo, también aceptamos nuestro mayor don.",
     ],
   },
   {
@@ -120,7 +120,8 @@ export const VINETAS_PLANETAS: Vineta[] = [
     paragraphs: [
       "Lilith es nuestro deseo más profundo, el que juzgamos inconfesable — porque nos enseñaron que no teníamos derecho a él.",
       "Tememos que se sepa, no lograrlo, o lograrlo y perderlo.",
-      "Hay que aceptar nuestro deseo: cuanto más lo neguemos, más crecerá la frustración; reconocerlo aunque no lleguemos a cumplirlo, nos acerca a nuestra esencia.",
+      "Hay que aceptar nuestro deseo: cuanto más lo neguemos, más crecerá la frustración.",
+      "Reconocerlo aunque no lleguemos a cumplirlo, nos acerca a nuestra esencia.",
     ],
   },
 ];
@@ -205,7 +206,8 @@ export const VINETAS_SIGNOS: Vineta[] = [
     paragraphs: [
       "La responsabilidad. Desea que lo que construye repercuta positivamente en las siguientes generaciones.",
       "Espera. Renuncia. Aguanta. Pone el deber antes que el deseo. Planificador meticuloso.",
-      "Por dentro es frágil. No lo va a contar ni quiere que se note. Solo descansa cuando todo lo que supuestamente era su obligación está cumplido.",
+      "Por dentro es frágil. No lo va a contar ni quiere que se note.",
+      "Solo descansa cuando todo lo que supuestamente era su obligación está cumplido.",
     ],
   },
   {
@@ -255,15 +257,18 @@ export const VINETAS_CASAS: Vineta[] = [
     src: "/viñetas/astrologia/casas/casa4.png",
     paragraphs: [
       "La familia de origen y sus raíces.",
-      "El niño interior que sigue viviendo dentro. La seguridad interna. Cómo damos sentido a lo que nos pasa.",
-      "También el hogar que construimos de adultos. Cómo nos nutrimos.",
+      "La seguridad interna.",
+      "El niño interior que sigue viviendo dentro.",
+      "Cómo damos sentido a lo que nos pasa.",
+      "El hogar que construimos de adultos.",
+      "Cómo nos nutrimos.",
     ],
   },
   {
     src: "/viñetas/astrologia/casas/casa5.png",
     paragraphs: [
       "El niño que fuimos. El romance, la creatividad, el placer.",
-      "La Casa de los amantes sin compromiso, de las ideas sin garantía. Los hijos y las creaciones.",
+      "La Casa de las ideas sin garantía. Los hijos y las creaciones.",
       "Revela la intensidad con la que necesitamos sentirnos únicos.",
       "El Signo en el que está es la energía con la que se disfraza el ego.",
     ],
@@ -288,8 +293,9 @@ export const VINETAS_CASAS: Vineta[] = [
     src: "/viñetas/astrologia/casas/casa8.png",
     paragraphs: [
       "El territorio de la sombra.",
+      "La Muerte del ego, la Muerte del 'yo',",
       "Lo que tiene poder sobre nosotros sin que lo sepamos. Muerte, intensidad, destrucción, transformación, dolor.",
-      "La fusión con el otro a través del sexo. La muerte del ego.",
+      "La fusión con el otro a través del sexo.",
     ],
   },
   {

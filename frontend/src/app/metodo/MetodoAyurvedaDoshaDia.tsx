@@ -225,7 +225,7 @@ export default function MetodoAyurvedaDoshaDia() {
           {/* Recordatorio de los compromisos + carta escritos en Psicología.
               Va ENCIMA del hero «Crea tu día» para que el usuario relea su
               compromiso consigo mismo antes de diseñar su día. */}
-          <Reveal direction="up" distance={22} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} w="100%">
           <CompromisosBox />
           </Reveal>
 
@@ -251,7 +251,7 @@ export default function MetodoAyurvedaDoshaDia() {
           <CartaBox />
 
           {/* TU DÍA (lista editable) */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.12} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.12} w="100%">
           <Panel color={meta.color} tile>
             <Flex align="center" justify="space-between" gap={3} mb={{ base: 4, md: 5 }} wrap="wrap">
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
@@ -354,7 +354,7 @@ export default function MetodoAyurvedaDoshaDia() {
           </Reveal>
 
           {/* Guardar */}
-          <Reveal direction="up" distance={18} duration={0.55} amount={0.3} w="100%" display="flex" justifyContent="flex-end">
+          <Reveal inView direction="up" distance={18} duration={0.55} amount={0.3} w="100%" display="flex" justifyContent="flex-end">
             <Box
               as="button" onClick={guardando ? undefined : guardar}
               minW="180px" px={9} py={3} borderRadius="full" bg={meta.color} color="#fff"
@@ -368,7 +368,7 @@ export default function MetodoAyurvedaDoshaDia() {
           </Reveal>
 
           {/* Continuar → Tu Recorrido */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">

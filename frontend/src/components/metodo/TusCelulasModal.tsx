@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { CelulaCard, CelulaModal } from "./celulasUi";
@@ -15,6 +15,24 @@ import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/Celulas
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
 const FISIO_IMG = "/img/fondos/fisio.png";
+
+// ── Señal global «¿hay algún popup de Tus células abierto?» ──────────────────
+// El popup ocupa toda la pantalla, así que el botón flotante «Índice» no pinta
+// nada ahí. En vez de tocar cada página, el popup avisa por aquí y el Índice de
+// Fisiología se oculta solo mientras esté abierto (ver useTusCelulasAbierto).
+let tusCelulasAbiertas = 0;
+const tusCelulasListeners = new Set<() => void>();
+function emitirTusCelulas() { tusCelulasListeners.forEach((l) => l()); }
+
+/** true mientras haya un popup «Tus células» abierto. Lo usa IndiceFisiologia
+ *  para ocultar el botón flotante «Índice» durante ese rato. */
+export function useTusCelulasAbierto(): boolean {
+  return useSyncExternalStore(
+    (cb) => { tusCelulasListeners.add(cb); return () => tusCelulasListeners.delete(cb); },
+    () => tusCelulasAbiertas > 0,
+    () => false,
+  );
+}
 // Clave en metodo_fisiologia.data donde se guardan las células ya descubiertas
 // (misma que usa la página «Todas tus células»).
 const VISTAS_KEY = "celulas_vistas";
@@ -81,6 +99,15 @@ export function TusCelulasModal({
 
   // Al cerrar el popup grande, olvida la ficha abierta para la próxima vez.
   useEffect(() => { if (!isOpen) setSelected(null); }, [isOpen]);
+
+  // Mientras el popup está abierto, avisa a la señal global para que el botón
+  // «Índice» de Fisiología se oculte (no tiene papel sobre este popup a pantalla
+  // completa). Al cerrarse, se vuelve a mostrar.
+  useEffect(() => {
+    if (!isOpen) return;
+    tusCelulasAbiertas += 1; emitirTusCelulas();
+    return () => { tusCelulasAbiertas -= 1; emitirTusCelulas(); };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

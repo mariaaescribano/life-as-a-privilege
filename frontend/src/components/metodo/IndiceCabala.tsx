@@ -105,6 +105,7 @@ export function IndiceCabala() {
       bg={cabalaBg}
       nom={cabalaNom}
       luz={false}
+      cargando={!cargado}
     />
   );
 }

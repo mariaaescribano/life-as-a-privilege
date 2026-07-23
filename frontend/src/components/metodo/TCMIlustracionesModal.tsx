@@ -91,7 +91,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
     src: "/viñetas/tcm/elementos/metaltcm.png",
     paragraphs: [
       "Del proceso de transformación de la Tierra surge el Metal.",
-      "Representa la claridad, el orden y la capacidad de distinguir cuál dolor es nuestro y cuál no.",
+      "Representa la claridad, el orden y la capacidad de discernir el dolor que es nuestro y el que no.",
       "Nos ayuda a aceptar quiénes somos y a soltar aquello que ya ha cumplido su función para dejar espacio a lo nuevo.",
     ],
   },

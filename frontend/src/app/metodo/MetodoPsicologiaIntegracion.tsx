@@ -195,8 +195,18 @@ export default function MetodoPsicologiaIntegracion() {
           const d: LineaDeVidaData = psiRes.value.data?.data || {};
           dataRef.current = d;
           setHeridas(Array.isArray(d.heridas) ? d.heridas : []);
+          // Normalizamos cada constelación para que SIEMPRE tenga las formas que
+          // el render da por hechas (nudos/arquetipos como array, textos como
+          // string). Datos guardados con una forma antigua podían venir sin
+          // `nudos`/`arquetipos` y hacían reventar el render (pantalla en blanco).
           const rels = Array.isArray(d.constelaciones)
-            ? d.constelaciones.map((c) => ({ ...c, titulo: c.titulo ?? "" }))
+            ? d.constelaciones.map((c) => ({
+                ...c,
+                titulo: c.titulo ?? "",
+                texto: c.texto ?? "",
+                nudos: Array.isArray(c.nudos) ? c.nudos : [],
+                arquetipos: Array.isArray(c.arquetipos) ? c.arquetipos : [],
+              }))
             : [];
           setRelaciones(rels);
           if (rels.length > 0) setActivaId(rels[rels.length - 1].id);

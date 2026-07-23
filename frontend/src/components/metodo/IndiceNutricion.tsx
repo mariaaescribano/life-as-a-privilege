@@ -33,11 +33,14 @@ export function IndiceNutricion() {
   // Empezamos pesimistas (todo lo condicionado, bloqueado) hasta leer el
   // progreso: así no se puede saltar por el índice en el instante de carga.
   const [flags, setFlags] = useState({ principales: false, plato: false, calorias: false });
+  // true cuando ya se ha leído el progreso: hasta entonces el Índice muestra la
+  // animación de espera de Nutrición en vez de la lista con los candados sin calcular.
+  const [cargado, setCargado] = useState(false);
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
-    if (!userId || !token) return;
+    if (!userId || !token) { setCargado(true); return; }
     let cancelado = false;
     (async () => {
       try {
@@ -51,6 +54,7 @@ export function IndiceNutricion() {
           calorias: !!data.calorias?.hecho,
         });
       } catch { /* sin datos aún → lo condicionado queda bloqueado */ }
+      finally { if (!cancelado) setCargado(true); }
     })();
     return () => { cancelado = true; };
   }, []);
@@ -77,6 +81,7 @@ export function IndiceNutricion() {
       bg={nutricionBg}
       nom={nutricionNom}
       luz={false}
+      cargando={!cargado}
     />
   );
 }

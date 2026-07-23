@@ -522,7 +522,7 @@ export default function MetodoAstrologia() {
         vinetas={VINETAS_SIGNOS}
         continueLabel="Sol, Luna y Ascendente"
         themeColor={astrologiaTxt}
-        textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
+        sinBotonSaltar
       />
 
       {/* Intro: cómic del Origen según la espiritualidad. Al terminar (o pulsar
@@ -537,6 +537,8 @@ export default function MetodoAstrologia() {
         continueBgImage={SPACE_IMG}
         onContinue={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
         onComplete={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
+        textSize={{ base: "xl", md: "2xl" }}
+        flechasEnBox
       />
 
       {/* Segundo cómic de intro: «La Historia de la Astrología» (va seguido del
@@ -549,6 +551,10 @@ export default function MetodoAstrologia() {
         continueBgImage={SPACE_IMG}
         onContinue={() => setHistoriaOpen(false)}
         onComplete={() => setHistoriaOpen(false)}
+        // Volver al cómic anterior de la cadena: el Origen según la espiritualidad.
+        onBack={() => { setHistoriaOpen(false); intro.openNow(); }}
+        textSize={{ base: "xl", md: "2xl" }}
+        flechasEnBox
       />
 
       {/* ── POPUP: confirmar datos antes de enviar ── */}

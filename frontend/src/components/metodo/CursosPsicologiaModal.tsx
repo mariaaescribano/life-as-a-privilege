@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -8,7 +8,6 @@ import {
   ModalContent,
   ModalOverlay,
   SimpleGrid,
-  Spinner,
   Text,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -16,6 +15,7 @@ import { useCursosData } from "../../data/cursosApi";
 import type { Curso } from "../../hardCoded/cursos";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 import { recordarOrigenCurso } from "../global/VolverAlMapa";
+import { PsicologiaLoader } from "./comicLoaders";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 const PSICOLOGIA_BG = "/img/fondos/psciologia.png";
@@ -136,6 +136,38 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
     (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
   );
 
+  // No mostramos la rejilla hasta que TODAS las fotos de los cursos estén
+  // descargadas: mientras tanto se ve la animación de espera de Psicología (la
+  // neurona). Así el popup no aparece con las tarjetas a medio pintar.
+  const fotos = cursos.map((c) => c.foto).filter(Boolean) as string[];
+  const fotosKey = fotos.join("|");
+  const [fotosListas, setFotosListas] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen || loading) { setFotosListas(false); return; }
+    if (fotos.length === 0) { setFotosListas(true); return; }
+    setFotosListas(false);
+    let cancelado = false;
+    let pendientes = fotos.length;
+    const marcar = () => {
+      if (cancelado) return;
+      pendientes -= 1;
+      if (pendientes <= 0) setFotosListas(true);
+    };
+    const imgs = fotos.map((src) => {
+      const img = new window.Image();
+      img.onload = marcar;
+      img.onerror = marcar; // una foto que falla no debe colgar la espera
+      img.src = src;
+      return img;
+    });
+    return () => {
+      cancelado = true;
+      imgs.forEach((img) => { img.onload = null; img.onerror = null; });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, loading, fotosKey]);
+
   const acceder = (curso: Curso) => {
     if (curso.precio === null) {
       // Pasamos la ruta de origen para que el curso muestre un botón
@@ -218,9 +250,12 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
               </Text>
             </Flex>
 
-            {/* Rejilla de cursos */}
-            {loading ? (
-              <Spinner color={C} size="lg" thickness="3px" speed="0.7s" />
+            {/* Rejilla de cursos — solo cuando los datos y TODAS las fotos están
+                listos; mientras tanto, la animación de espera de Psicología. */}
+            {loading || !fotosListas ? (
+              <Flex minH="42vh" w="100%" align="center" justify="center">
+                <PsicologiaLoader />
+              </Flex>
             ) : cursos.length > 0 ? (
               <SimpleGrid w="100%" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 6, md: 7 }} alignItems="start">
                 {cursos.map((curso, i) => (

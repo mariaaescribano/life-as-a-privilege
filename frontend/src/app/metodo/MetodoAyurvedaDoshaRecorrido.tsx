@@ -181,7 +181,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           </Reveal>
 
           {/* ── Tus respuestas ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {entradas.length > 0 ? (
             <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
               {entradas.map((e, i) => (
@@ -210,7 +210,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
 
           {/* ── Tu compromiso ── */}
           {compromiso && (
-            <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel color={meta.color}>
               <Flex direction="column" align="center" textAlign="center" gap={3}>
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.16em" textTransform="uppercase">
@@ -226,7 +226,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           )}
 
           {/* ── Tu día ideal ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" lineHeight="1.3" mb={2} style={{ textShadow: INK_SHADOW }}>
               Este es el día ideal que te has propuesto

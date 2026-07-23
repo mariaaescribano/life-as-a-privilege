@@ -12,7 +12,7 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
     src: `${P}/sufrimiento1.png`,
     paragraphs: [
       "Mucho antes de nacer, ya existía una historia.",
-      "Las heridas, el Amor, los miedos y la forma en que tus padres se trataban a sí mismos y entre ellos, ya empezaban a influir en tu percepción del mundo.",
+      "Las heridas, las historias, el Amor, el rencor, los miedos y la forma en que tus padres se trataban a sí mismos y entre ellos, ya empezaban a influir en tu percepción de la realidad.",
     ],
   },
   {
@@ -64,7 +64,8 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
     paragraphs: [
       "Pero hoy puedes empezar otro camino.",
       "Tus padres, tus abuelos y tus ancestros también fueron hijos no queridos en su propia historia. Te dieron lo que te pudieron dar.",
-      "Comprender no significa justificar. Significa dejar de seguir cargando con un peso que nunca fue solo tuyo. Míralos con compasión.",
+      "Comprender no significa justificar; significa dejar de seguir cargando con un peso que nunca fue culpa tuya.",
+      "Míralos con compasión.",
       "Mírate y trátate con el mismo Amor que siempre necesitaste. Te lo mereces.",
     ],
   },

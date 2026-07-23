@@ -265,7 +265,7 @@ export default function MetodoAyurvedaResultado() {
         onClose={() => setComicDoshasOpen(false)}
         onContinue={() => navigate("/metodo/ayurveda/tarjetas")}
         vinetas={VINETAS_DOSHAS}
-        continueLabel="Energías"
+        continueLabel="Doṣhas"
         themeColor={ayurvedaTxt}
         continueBtnColor={ayurvedaTxt}
         continueBtnBg={ayurvedaBg}

@@ -37,13 +37,15 @@ Por extensión, también fueron elegidas las experiencias, las heridas y las per
   },
   {
     img: MAPA2,
-    texto: `En Astrología, las **Casas** muestran dónde ocurre, ocurrió o puede ocurrir una experiencia, y los **planetas** indican qué energía, función o aprendizaje está implicado.`,
+    texto: `En Astrología, las **Casas** muestran dónde ocurre, ocurrió o puede ocurrir una experiencia.
+    
+    Los **Planetas** indican qué energía, función o aprendizaje está implicado.`,
   },
   {
     img: MAPA3,
     texto: `Los **Signos** revelan cómo se expresa esa energía y cuál es su cualidad.
 
-Los **aspectos** muestran las relaciones entre las distintas energías de la carta: los impulsos, los bloqueos, los patrones repetitivos y los puntos donde conviene poner atención para desarrollar tu potencial y no perder de vista tus dones.`,
+    Los **Aspectos** muestran las relaciones entre las distintas energías de la carta: los impulsos, los bloqueos, los patrones repetitivos y los puntos donde conviene poner atención para desarrollar tu potencial y no perder de vista tus dones.`,
   },
   {
     img: MAPA4,

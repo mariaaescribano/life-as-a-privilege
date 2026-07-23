@@ -115,6 +115,9 @@ export function ElementoComicModal({
               // que casen con la letra blanca del cómic y quede limpio.
               loader={<TcmLoader color="#ffffff" />}
               scrollbarColor="#ffffff"
+              // No mostramos el cómic hasta que la foto del elemento (fondo) esté
+              // totalmente cargada: mientras, el loader de TCM a pantalla completa.
+              esperarFondo
               sinSaltar
               // Sin `fondoNitido`: usamos EXACTAMENTE el mismo box, estructura y
               // fondo que las Ilustraciones de TCM (mismo glow de color, mismo
@@ -190,8 +193,8 @@ function MiniTestComic({
 
       {preguntas.map((q, i) => (
         <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={2.5}
-                style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
+          <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={2.5}
+                style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
             {i + 1}. {q.pregunta}
           </Text>
           <Flex direction="column" gap={2}>
@@ -243,12 +246,12 @@ function TestBalanceComic({
     <Flex direction="column" gap={5} textAlign="left">
       <Box>
         <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="800" letterSpacing="0.14em"
-              textAlign="center" textTransform="uppercase" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
+              textAlign="center" textTransform="uppercase" style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
           {cabecera}{testTotal > 1 ? ` · ${testNum} de ${testTotal}` : ""}
         </Text>
         {test.titulo && (
           <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                textAlign="center" mt={1.5} style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
+                textAlign="center" mt={1.5} style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
             {test.titulo}
           </Text>
         )}
@@ -257,8 +260,8 @@ function TestBalanceComic({
 
       {test.preguntas.map((q, i) => (
         <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={3}
-                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.95)" }}>
+          <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={3}
+                style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
             {i + 1}. {q.pregunta}{q.opcional ? " (opcional)" : ""}
           </Text>
           <Flex direction="column" gap={2}>

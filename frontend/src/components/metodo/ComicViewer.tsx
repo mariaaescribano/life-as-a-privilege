@@ -6,6 +6,7 @@ import {
   Image,
   ModalBody,
   Text,
+  type TextProps,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import SpinnerTurquesa from "../global/Spinner";
@@ -128,14 +129,24 @@ interface ComicViewerProps {
    *  algunos cómics (TCM: elementos, ciclos) la piden blanca para que case con
    *  su letra blanca. */
   scrollbarColor?: string;
-  /** Oculta el botón «Saltar» (arriba a la izquierda). Se usa cuando el wrapper
-   *  ya pinta su propio botón para saltar/continuar (p.ej. el «Nutrición →» del
-   *  IntroComicModal), para no duplicar. */
+  /** @deprecated El botón «Saltar» se eliminó de todos los cómics. Se mantiene el
+   *  prop (no-op) solo para no romper los llamadores que aún lo pasan. */
   sinSaltar?: boolean;
-  /** Color de la LETRA (y la flecha) del botón «Saltar». Por defecto blanco.
-   *  Ayurveda lo pide en `ayurvedaTxt` para que se lea sobre su velo claro (el
-   *  blanco quedaba invisible sobre el velo blanco de la imagen de fondo). */
+  /** @deprecated Sin efecto: ya no hay botón «Saltar». Se conserva por compat. */
   saltarTextColor?: string;
+  /** Tamaño de la letra de lectura de las viñetas. Por defecto el tamaño único de
+   *  la app (`{ base: "2xl", md: "3xl" }`). Astrología lo baja un punto para su
+   *  cómic de intro. */
+  textSize?: TextProps["fontSize"];
+  /** Si true, las flechas de navegación se pegan a los bordes IZQ/DER del box
+   *  (centradas en su altura) en vez de ir fijas a los bordes del viewport. Lo
+   *  usa el cómic de intro de astrología. */
+  flechasEnBox?: boolean;
+  /** Si true (y hay `disciplinaBgImage`), NO se muestra el cómic hasta que la
+   *  foto de fondo de la disciplina esté completamente cargada: mientras tanto se
+   *  ve el loader a pantalla completa. Evita ver el box con el fondo a medio
+   *  cargar. Lo usan los cómics de TCM (elementos). */
+  esperarFondo?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -161,15 +172,11 @@ export function ComicViewer({
   onPageView,
   sinSombra,
   scrollbarColor,
-  sinSaltar,
-  saltarTextColor,
+  textSize,
+  flechasEnBox,
+  esperarFondo,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
-  // Color de la letra/flecha del botón «Saltar»: el color de TEXTO de la
-  // disciplina (textColor si se pasa —p.ej. Nutrición—, o el acento themeColor,
-  // que en el resto de disciplinas ES su color de texto). Se puede forzar con
-  // `saltarTextColor`.
-  const saltarColor = saltarTextColor ?? textColor ?? themeColor;
   // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
   const sbColor = scrollbarColor ?? themeColor;
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
@@ -185,6 +192,22 @@ export function ComicViewer({
     Math.min(Math.max(initialIndex, 0), Math.max(vinetas.length - 1, 0)));
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const [imgLoaded, setImgLoaded] = useState<Record<number, boolean>>({}); // viñeta ya cargada
+  // Espera de la foto de FONDO de la disciplina (solo con `esperarFondo`): hasta
+  // que cargue del todo se muestra el loader a pantalla completa y no el box.
+  const esperaFondo = !!(esperarFondo && disciplinaBgImage);
+  const [bgReady, setBgReady] = useState(false);
+  const fondoListo = !esperaFondo || bgReady;
+  useEffect(() => {
+    if (!esperaFondo || !disciplinaBgImage) return;
+    let cancel = false;
+    const img = new window.Image();
+    const listo = () => { if (!cancel) setBgReady(true); };
+    img.onload = listo;
+    img.onerror = listo;
+    img.src = encodeURI(disciplinaBgImage);
+    if (img.complete) listo();
+    return () => { cancel = true; };
+  }, [esperaFondo, disciplinaBgImage]);
   const contentRef = useRef<HTMLDivElement>(null);
   const textScrollRef = useRef<HTMLDivElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -315,6 +338,82 @@ export function ComicViewer({
 
   const glowTextSoft = `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)`;
 
+  // Flechas de navegación. Por defecto fijas a los bordes del viewport; con
+  // `flechasEnBox` (astrología) se pegan a los bordes del box, centradas en su
+  // altura (position absolute dentro del box, zIndex sobre el contenido).
+  const arrowPos = flechasEnBox
+    ? ({ position: "absolute", zIndex: 4 } as const)
+    : ({ position: "fixed", zIndex: 10 } as const);
+  const prevArrow = (
+    <IconButton
+      aria-label="Anterior"
+      onClick={goPrev}
+      isDisabled={isFirst}
+      {...arrowPos}
+      left={flechasEnBox ? { base: 2, md: 3 } : { base: 1, md: 6 }}
+      top="50%"
+      transform="translateY(-50%)"
+      variant="ghost"
+      color={themeColor}
+      opacity={isFirst ? 0.3 : 1}
+      bg="rgba(0,0,0,0.5)"
+      border={`1px solid ${themeColor}aa`}
+      borderRadius="full"
+      w={{ base: "40px", md: "60px" }}
+      h={{ base: "40px", md: "60px" }}
+      minW={{ base: "40px", md: "60px" }}
+      boxShadow={isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
+      sx={{ backdropFilter: "blur(4px)" }}
+      _hover={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+      _focus={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+      _focusVisible={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+      icon={
+        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+          style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+          <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
+        </Box>
+      }
+    />
+  );
+  const nextArrow = (
+    <IconButton
+      aria-label={isLast ? "Terminar" : "Siguiente"}
+      onClick={blocked ? undefined : (isLast ? handleComplete : goNext)}
+      isDisabled={blocked}
+      {...arrowPos}
+      right={flechasEnBox ? { base: 2, md: 3 } : { base: 1, md: 6 }}
+      top="50%"
+      transform="translateY(-50%)"
+      variant="ghost"
+      color={themeColor}
+      opacity={blocked ? 0.3 : 1}
+      bg="rgba(0,0,0,0.5)"
+      border={`1px solid ${themeColor}aa`}
+      borderRadius="full"
+      w={{ base: "40px", md: "60px" }}
+      h={{ base: "40px", md: "60px" }}
+      minW={{ base: "40px", md: "60px" }}
+      boxShadow={blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
+      sx={{ backdropFilter: "blur(4px)" }}
+      _hover={blocked ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+      _focus={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+      _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+      icon={
+        isLast ? (
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+            style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+            <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
+          </Box>
+        ) : (
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
+            style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
+            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+          </Box>
+        )
+      }
+    />
+  );
+
   return (
     <>
       {/* Fondo a pantalla completa. La foto cubre TODO el viewport sin dejar
@@ -355,14 +454,16 @@ export function ComicViewer({
         <Box position="absolute" inset="0" bg={bgOverlay} />
       </Box>
 
-      {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo */}
+      {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo.
+          zIndex 12: por encima del loader de espera de fondo (11) para poder
+          cerrar aunque la foto aún no haya cargado. */}
       <IconButton
         aria-label="Cerrar"
         onClick={onClose}
         position="fixed"
         top={{ base: 3, md: 5 }}
         right={{ base: 3, md: 5 }}
-        zIndex={10}
+        zIndex={12}
         variant="ghost"
         borderRadius="full"
         w={{ base: "42px", md: "48px" }}
@@ -383,53 +484,20 @@ export function ComicViewer({
         }
       />
 
-      {/* Botón "Saltar" — arriba a la IZQUIERDA, frente a la X. Salta el cómic
-          entero yendo a su acción de fin (onComplete o, si no hay, cerrar). En
-          los cómics de intro de disciplina eso revela/lleva a la disciplina. El
-          fondo lleva la imagen de la disciplina (si la hay) con un velo para que
-          se lea. Si hay botón "volver" (onBack), se coloca a su derecha. */}
-      {!sinSaltar && (
-      <Flex
-        as="button"
-        aria-label="Saltar el cómic"
-        onClick={handleComplete}
-        position="fixed"
-        top={{ base: 3, md: 5 }}
-        left={onBack ? { base: "58px", md: "74px" } : { base: 3, md: 5 }}
-        zIndex={10}
-        align="center"
-        gap={1.5}
-        pl={{ base: 3, md: 4 }}
-        pr={{ base: 3, md: 3.5 }}
-        h={{ base: "42px", md: "48px" }}
-        borderRadius="full"
-        overflow="hidden"
-        border={`1px solid ${themeColor}aa`}
-        boxShadow="0 2px 12px rgba(0,0,0,0.45)"
-        cursor="pointer"
-        sx={{ backdropFilter: "blur(4px)" }}
-        _hover={{ borderColor: themeColor }}
-      >
-        {/* Fondo: imagen de la disciplina (si la hay) + velo; si no, chip oscuro */}
-        {isDisciplinaMode ? (
-          <>
-            <Box as="img" src={disciplinaBgImage} alt="" loading="eager" position="absolute" inset="0"
-                 w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
-            <Box position="absolute" inset="0" bg={disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)"} />
-          </>
-        ) : (
-          <Box position="absolute" inset="0" bg="rgba(0,0,0,0.5)" />
-        )}
-        <Text position="relative" zIndex={1} color={saltarColor} fontFamily="'EB Garamond', serif"
-              fontWeight={700} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" letterSpacing="0.04em">
-          Saltar
-        </Text>
-        <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-             w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill={saltarColor}
-             style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-          <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-        </Box>
-      </Flex>
+      {/* Espera de la foto de fondo (`esperarFondo`): loader a pantalla completa
+          sobre un fondo del color de la disciplina, hasta que la foto cargue del
+          todo. Tapa el box a medio cargar; la X (zIndex 12) queda por encima. */}
+      {!fondoListo && (
+        <Flex
+          position="fixed"
+          inset="0"
+          zIndex={11}
+          align="center"
+          justify="center"
+          bg={disciplinaBgColor ?? "rgba(0,0,0,0.92)"}
+        >
+          {loader ?? comicLoaderPorColor(themeColor) ?? <SpinnerTurquesa fullScreen={false} color={themeColor} />}
+        </Flex>
       )}
 
       {/* Botón "volver" (solo si onBack está definido) */}
@@ -454,76 +522,10 @@ export function ComicViewer({
         />
       )}
 
-      {/* Flecha izquierda */}
-      <IconButton
-        aria-label="Anterior"
-        onClick={goPrev}
-        isDisabled={isFirst}
-        position="fixed"
-        left={{ base: 1, md: 6 }}
-        top="50%"
-        transform="translateY(-50%)"
-        zIndex={10}
-        variant="ghost"
-        color={themeColor}
-        opacity={isFirst ? 0.3 : 1}
-        bg="rgba(0,0,0,0.5)"
-        border={`1px solid ${themeColor}aa`}
-        borderRadius="full"
-        w={{ base: "40px", md: "60px" }}
-        h={{ base: "40px", md: "60px" }}
-        minW={{ base: "40px", md: "60px" }}
-        boxShadow={isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
-        sx={{ backdropFilter: "blur(4px)" }}
-        _hover={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
-        _focus={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
-        _focusVisible={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
-        icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
-            style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-            <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-          </Box>
-        }
-      />
-
-      {/* Flecha derecha (tick si es la última) */}
-      <IconButton
-        aria-label={isLast ? "Terminar" : "Siguiente"}
-        onClick={blocked ? undefined : (isLast ? handleComplete : goNext)}
-        isDisabled={blocked}
-        position="fixed"
-        right={{ base: 1, md: 6 }}
-        top="50%"
-        transform="translateY(-50%)"
-        zIndex={10}
-        variant="ghost"
-        color={themeColor}
-        opacity={blocked ? 0.3 : 1}
-        bg="rgba(0,0,0,0.5)"
-        border={`1px solid ${themeColor}aa`}
-        borderRadius="full"
-        w={{ base: "40px", md: "60px" }}
-        h={{ base: "40px", md: "60px" }}
-        minW={{ base: "40px", md: "60px" }}
-        boxShadow={blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
-        sx={{ backdropFilter: "blur(4px)" }}
-        _hover={blocked ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
-        _focus={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
-        _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
-        icon={
-          isLast ? (
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
-              style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-              <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
-            </Box>
-          ) : (
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
-              style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
-              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-            </Box>
-          )
-        }
-      />
+      {/* Flechas de navegación fijas a los bordes del viewport (modo por defecto).
+          Con `flechasEnBox` se pintan dentro del box (más abajo) y aquí no. */}
+      {!flechasEnBox && prevArrow}
+      {!flechasEnBox && nextArrow}
 
       {/* Contenido scrollable — el scroll vertical ocurre DENTRO del popup
           (h fija a 100vh + overflowY:auto), nunca a nivel de página. El py
@@ -606,7 +608,11 @@ export function ComicViewer({
                 objectFit: "cover",
                 objectPosition: "center",
                 opacity: isDisciplinaMode ? 1 : 0.75,
-                filter: isDisciplinaMode ? "saturate(1.05)" : undefined,
+                // TCM ciclos (fondoNitido): un pelín de blur para que la letra se
+                // lea mejor, pero la foto se sigue viendo bonita. El scale evita
+                // que el desenfoque deje ver los bordes del box.
+                filter: fondoNitido ? "saturate(1.05) blur(3px)" : isDisciplinaMode ? "saturate(1.05)" : undefined,
+                transform: fondoNitido ? "scale(1.05)" : undefined,
               }}
             />
             <Box
@@ -642,6 +648,11 @@ export function ComicViewer({
             zIndex={3}
           />
           )}
+
+          {/* Flechas pegadas a los bordes del box (centradas en su altura). Solo
+              con `flechasEnBox`; en el modo normal van fijas al viewport. */}
+          {flechasEnBox && prevArrow}
+          {flechasEnBox && nextArrow}
 
           {/* Área de contenido: foto + texto.
               Escritorio: foto FIJA a la izquierda (centrada) y texto a la
@@ -702,16 +713,16 @@ export function ComicViewer({
 
             {imgReady && !hideFoto && (
             <Box
-              // Desktop: foto cuadrada MÁS GRANDE a la izquierda.
-              // Tablet / pantalla mediana (sm): foto CUADRADA centrada arriba
-              //   (no el banner hero) para que no se deforme.
-              // Móvil: hero image a todo el ancho que cubre la parte de arriba.
-              w={{ base: "100%", sm: "70%", md: "440px" }}
-              maxW={{ base: "100%", sm: "400px", md: "440px" }}
-              h={{ base: "36vh", sm: "auto", md: "auto" }}
-              aspectRatio={{ base: "auto", sm: 1, md: 1 }}
+              // Desktop (md): foto cuadrada a la izquierda, vista lado a lado.
+              // Móvil / tablet (base): hero a TODO el ancho que marca el ancho
+              //   del box y cubre la parte de arriba (nada de cuadrado centrado
+              //   con márgenes: quedaba amorfo).
+              w={{ base: "100%", md: "440px" }}
+              maxW={{ base: "100%", md: "440px" }}
+              h={{ base: "36vh", md: "auto" }}
+              aspectRatio={{ base: "auto", md: 1 }}
               flexShrink={0}
-              alignSelf={{ base: "stretch", sm: "center", md: "center" }}
+              alignSelf={{ base: "stretch", md: "center" }}
               position="relative"
               filter={{
                 base: "none",
@@ -726,10 +737,10 @@ export function ComicViewer({
                     alt={`Viñeta ${index + 1}`}
                     w="100%"
                     h="100%"
-                    // Móvil: cover (hero que cubre todo). Tablet/desktop: contain
-                    // (se ve la ilustración entera dentro del cuadrado).
-                    objectFit={{ base: "cover", sm: "contain", md: "contain" }}
-                    borderRadius={{ base: 0, sm: "lg", md: "lg" }}
+                    // Móvil/tablet: cover (hero a todo el ancho que cubre todo).
+                    // Desktop (md): contain (se ve la ilustración entera en el cuadrado).
+                    objectFit={{ base: "cover", md: "contain" }}
+                    borderRadius={{ base: 0, md: "lg" }}
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
@@ -783,7 +794,12 @@ export function ComicViewer({
               justifyContent="flex-start"
               pt={{ base: 0, md: 6 }}
               pb={{ base: 9, md: 6 }}
-              pl={{ base: 5, md: 0 }}
+              // pl > 0 SIEMPRE: el texto arranca alineado a la izquierda y su
+              // glow (textShadow) se extiende hacia la izquierda; con pl:0 +
+              // overflowX:hidden ese halo se recortaba en seco contra el borde
+              // del contenedor (una raya vertical de luz cortada, poco pro).
+              // El padding le da aire para que la luz respire sin recortarse.
+              pl={{ base: 5, md: 4 }}
               pr={{ base: 5, md: 4 }}
               sx={{
                 "&::-webkit-scrollbar": { width: "6px" },
@@ -828,7 +844,8 @@ export function ComicViewer({
                   color={textColor ?? themeColor}
                   // Tamaño ÚNICO del texto de lectura en TODA la app (cómics,
                   // ilustraciones y boxes de lectura): siempre igual y bien visible.
-                  fontSize={{ base: "2xl", md: "3xl" }}
+                  // `textSize` lo puede bajar puntualmente (astrología en su intro).
+                  fontSize={textSize ?? { base: "2xl", md: "3xl" }}
                   lineHeight="1.9"
                   letterSpacing="0.02em"
                   textAlign={{ base: "center", md: "left" }}

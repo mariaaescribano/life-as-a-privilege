@@ -184,7 +184,7 @@ export default function MetodoAyurveda() {
           </Reveal>
 
           {/* ── Disparador del aviso ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
           <Box
             as="button"
             onClick={() => setAvisoOpen(true)}
@@ -237,14 +237,11 @@ export default function MetodoAyurveda() {
         onFinish={intro.finish}
         onClose={intro.close}
         // Botón «Ayurveda →» a la izquierda de la X: entra a la portada (cerrar el
-        // cómic la revela). Fondo con la imagen de la disciplina + velo (como
-        // «Saltar») y letra en ayurvedaTxt. Se conserva también el «Saltar»,
-        // ahora en ayurvedaTxt para que se lea sobre el velo claro.
+        // cómic la revela). Fondo con la imagen de la disciplina + velo y letra en
+        // ayurvedaTxt. Sin «Saltar» (el botón de continuar ya cumple esa función).
         continueLabel="Ayurveda"
         onContinue={intro.close}
         continueConImagen
-        mantenerSaltar
-        saltarTextColor={ayurvedaTxt}
       />
 
       {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}

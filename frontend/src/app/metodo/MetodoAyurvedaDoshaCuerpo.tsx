@@ -273,7 +273,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
 
           {/* ── SECCIONES (Tu energía, Tu digestión, Tu descanso…) ── */}
           {c.secciones.map((sec, si) => (
-            <Reveal key={si} direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+            <Reveal inView key={si} direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel key={si} color={meta.color}>
               <SeccionTitulo color={meta.color}>{sec.titulo}</SeccionTitulo>
               <Flex direction="column" gap={3}>
@@ -286,11 +286,11 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           ))}
 
           {/* ── TU CUERPO (lista) ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.cuerpo.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={4}>{c.cuerpo.intro}</Text>
-            <RevealStagger display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.cuerpo.items.map((it, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
@@ -300,11 +300,11 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           </Reveal>
 
           {/* ── ¿TE RECONOCES? (local) ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.reconoces.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>{c.reconoces.intro}</Text>
-            <RevealStagger display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.reconoces.opciones.map((op) => (
                 <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                   <CheckRow label={op} color={meta.color} checked={reconoces.includes(op)} onToggle={() => toggleReconoce(op)} />
@@ -315,7 +315,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           </Reveal>
 
           {/* ── LO QUE EL AYURVEDA QUIERE QUE RECUERDES ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.recuerda.titulo}</SeccionTitulo>
             <Flex direction="column" gap={3}>
@@ -327,7 +327,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           </Reveal>
 
           {/* ── REFLEXIÓN (texto libre · SE GUARDA) ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={reflexionRef} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
@@ -373,7 +373,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           </Reveal>
 
           {/* ── CIERRE + Continuar ── */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (

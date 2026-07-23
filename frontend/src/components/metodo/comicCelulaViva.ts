@@ -58,7 +58,8 @@ export const CELULA_VIVA: Vineta[] = [
     src: "/viñetas/fisiologia/celulacomic/celula7.png",
     titulo: "Todo funciona junto",
     paragraphs: [
-      "Ninguna estructura podría mantener viva la célula por sí sola. Solo cuando todas trabajan juntas aparece aquello que llamamos Vida.",
+      "Ninguna estructura podría mantener viva la célula por sí sola.",
+      "Solo cuando todas trabajan juntas aparece aquello que llamamos Vida.",
     ],
   },
   {

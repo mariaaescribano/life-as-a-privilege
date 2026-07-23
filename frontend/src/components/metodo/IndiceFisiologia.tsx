@@ -5,6 +5,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { IndiceRecorrido } from "./IndiceRecorrido";
+import { useTusCelulasAbierto } from "./TusCelulasModal";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 import { fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
 
@@ -34,11 +35,14 @@ const NIVELES: { label: string; pasos: { titulo: string; path: string }[] }[] = 
 export function IndiceFisiologia() {
   const { pathname } = useLocation();
   const clean = pathname.replace(/\/+$/, "");
+  // Con el popup «Tus células» abierto (pantalla completa) el Índice no pinta
+  // nada: lo ocultamos mientras esté abierto.
+  const tusCelulasAbierto = useTusCelulasAbierto();
 
   // Nivel actual = el que contiene el paso de la ruta actual. Si estamos fuera
   // de un paso (intro, niveles…), no mostramos índice.
   const nivel = NIVELES.find((g) => g.pasos.some((p) => p.path === clean));
-  if (!nivel) return null;
+  if (!nivel || tusCelulasAbierto) return null;
 
   const indice: PasoRecorrido[] = nivel.pasos.map((p, i) => ({
     n: i + 1,

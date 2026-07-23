@@ -51,8 +51,8 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
     titulo: "Grecia",
     paragraphs: [
       "Las conquistas de Alejandro Magno llevaron el conocimiento de Babilonia hasta Grecia.",
-      "Los griegos transformaron aquella astrología de presagios en una astrología centrada en las personas.",
-      "Nacieron las cartas natales, las casas y la astrología helenística.",
+      "Los griegos transformaron aquella Astrología de presagios en una Astrología centrada en las personas.",
+      "Nacieron las cartas natales, las casas y la Astrología helenística.",
       "Siglos después, Ptolomeo reunió todo ese conocimiento en el Tetrabiblos, el libro que dominaría la astrología durante más de 1.400 años.",
     ],
   },
@@ -61,7 +61,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
     src: "/viñetas/astrologia/historia/historiaastrologia5.png",
     titulo: "Roma",
     paragraphs: [
-      "Los emperadores romanos confiaban en la astrología.",
+      "Los emperadores romanos confiaban en la Astrología.",
       "Pero también la temían.",
       "Buscar en las estrellas cuándo moriría un emperador podía considerarse una conspiración.",
       "Por eso, en algunos momentos, las consultas astrológicas llegaron a prohibirse.",
@@ -74,7 +74,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
     paragraphs: [
       "Durante la Edad de Oro del Islam, Bagdad se convirtió en el nuevo centro del conocimiento.",
       "Los sabios musulmanes conservaron los textos griegos, los tradujeron, los mejoraron y los llevaron de nuevo a Europa.",
-      "Gracias a ello, la astrología volvió a enseñarse en las universidades y fue consultada por reyes, papas y monarcas como los Reyes Católicos.",
+      "Gracias a ello, la Astrología volvió a enseñarse en las universidades y fue consultada por reyes, papas y monarcas como los Reyes Católicos.",
     ],
   },
   // 7 — La Revolución Científica
@@ -84,29 +84,29 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
     paragraphs: [
       "Durante el Renacimiento, incluso reyes como los Reyes Católicos y muchos papas seguían consultando astrólogos.",
       "Pero con Copérnico, Galileo, Kepler y Newton nació una nueva forma de entender el universo.",
-      "La astronomía empezó a explicar cómo funciona el cielo.",
-      "La astrología siguió intentando interpretar qué significado tiene.",
-      "Fue el comienzo de su separación.",
+      "La Astronomía empezó a explicar cómo funciona el cielo.",
+      "La Astrología siguió intentando interpretar qué significado tiene.",
+      "Fue el comienzo de su separación y de la decadencia de la Astrología.",
     ],
   },
   // 8 — La primera carta astral en un periódico
   {
-    src: "/viñetas/astrologia/historia/historiaastrologiamargarita.png",
-    eyebrow: "Inglaterra · 1930",
+    src: "/viñetas/astrologia/historia/historiaastrologia8.png",
+    eyebrow: "",
     titulo: "",
     paragraphs: [
-      "La primera carta astral publicada en un periódico apareció en 1930 con motivo del nacimiento de la princesa Margarita de Inglaterra, hermana menor de la futura reina Isabel II.",
+      "La Astrología resurgió cuando la primera carta astral publicada en un periódico apareció en 1930 con motivo del nacimiento de la princesa Margarita de Inglaterra, hermana menor de la futura reina Isabel II.",
       "El gran interés que despertó entre los lectores llevó al periódico a publicar una sección astrológica de forma regular.",
       "Su éxito hizo que otros diarios copiaran la idea y, desde entonces, los horóscopos y las cartas astrales se popularizaron en la prensa de todo el mundo.",
     ],
   },
   // 9 — Jung y el lenguaje simbólico
   {
-    src: "/viñetas/astrologia/historia/historiaastrologiajung.png",
-    eyebrow: "Siglo XX",
-    titulo: "Carl Gustav Jung",
+    src: "/viñetas/astrologia/historia/historiaastrologia9.png",
+    eyebrow: "",
+    titulo: "",
     paragraphs: [
-      "Carl Gustav Jung consideraba la astrología un lenguaje simbólico más que un método para predecir el futuro.",
+      "Carl Gustav Jung consideraba la Astrología un lenguaje simbólico más que un método para predecir el futuro.",
       "Su teoría del inconsciente colectivo sostiene que todos compartimos arquetipos universales —como el Héroe, el Sabio o la Sombra— que aparecen en mitos, sueños y religiones.",
       "Jung observó que la Astrología también organiza la experiencia humana mediante símbolos, donde los planetas, signos y casas representan distintos aspectos de la psique y del desarrollo personal.",
       "La carta natal no determina el destino, sino que actúa como un mapa simbólico del mundo interior y del proceso de individuación, el camino hacia el conocimiento e integración de uno mismo.",
@@ -114,24 +114,13 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   },
   // 9 — Hoy
   {
-    src: "/viñetas/astrologia/historia/historiaastrologia8.png",
+    src: "/viñetas/astrologia/historia/historiaastrologia10.png",
     titulo: "Hoy",
     paragraphs: [
       "En 1930 nacieron los horóscopos por signos solares que conocemos hoy.",
       "La astronomía explora el universo.",
       "La astrología sigue buscando significado en él.",
       "Las dos nacieron mirando el mismo cielo.",
-    ],
-  },
-  // Panel de cierre — la «frase final» (iba fuera de las viñetas). No hay imagen
-  // propia, así que reutiliza la última (la de «Hoy», que une todas las épocas).
-  // Si quieres una imagen dedicada, deja cierre.png y cambia este src; y si
-  // prefieres mostrar la frase en otro sitio, quita esta última entrada.
-  {
-    src: "/viñetas/astrologia/historia/historiaastrologia8.png",
-    paragraphs: [
-      "Durante más de 4.000 años, cada civilización reinventó la Astrología.",
-      "Por eso su historia es también la historia de la humanidad mirando al cielo.",
     ],
   },
 ];

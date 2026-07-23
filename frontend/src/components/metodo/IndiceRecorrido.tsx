@@ -10,6 +10,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import SpinnerTurquesa from "../global/Spinner";
+import { comicLoaderPorColor } from "./comicLoaders";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
 import { useRecorridoAlcanzable } from "../../hooks/useRecorridoAlcanzable";
@@ -34,6 +36,7 @@ export function IndiceRecorrido({
   progresoKey,
   alcanzableUrl = (userId: string) => `${API_URL}/metodo-psicologia/${userId}`,
   alcanzableDe = pasoAlcanzablePsicologia,
+  cargando = false,
 }: {
   indice?: PasoRecorrido[];
   total?: number;
@@ -61,6 +64,11 @@ export function IndiceRecorrido({
   /** Dado el `data` del recorrido y el id de recorrido, devuelve el paso máximo
    *  ALCANZABLE (respetando los requisitos de cada paso). Por defecto, psicología. */
   alcanzableDe?: (data: any, expId: string) => number;
+  /** SOLO modo por flags (sin `progresoKey`): true mientras el padre aún está
+   *  averiguando qué páginas están bloqueadas. Mientras es true (y el índice está
+   *  abierto), se muestra la animación de espera de la disciplina en vez de la
+   *  lista, para no enseñar los candados a medio calcular. */
+  cargando?: boolean;
 } = {}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -104,12 +112,20 @@ export function IndiceRecorrido({
   // y calculamos el paso máximo ALCANZABLE respetando los requisitos de cada paso.
   // Así el Índice abre las páginas a las que el usuario YA PUEDE llegar (no solo
   // las que ya ha visitado). Se carga perezosamente (solo con el popup abierto).
-  const { maxAlcanzable } = useRecorridoAlcanzable(
+  const { maxAlcanzable, cargado: alcanzableCargado } = useRecorridoAlcanzable(
     open && !!progresoKey,
     alcanzableUrl,
     alcanzableDe,
     expId,
   );
+
+  // ¿Seguimos AVERIGUANDO a qué páginas se puede llegar? Mientras sea así (y el
+  // índice esté abierto), no enseñamos la lista con los candados a medio calcular:
+  // mostramos la animación de espera de la disciplina.
+  //   · Con `progresoKey` (psicología, ayurveda): hay que esperar al progreso
+  //     secuencial (pasoMax) Y a la consulta de alcanzabilidad (perezosa, al abrir).
+  //   · Sin él (astrología, cábala, nutrición…): lo dice el padre con `cargando`.
+  const revisando = progresoKey ? (!progresoCargado || !alcanzableCargado) : cargando;
 
   // Al LLEGAR a una página (vía la navegación de la app), desbloquea ese paso y
   // todos los anteriores. Así la página actual nunca queda bloqueada, y el Índice
@@ -194,6 +210,14 @@ export function IndiceRecorrido({
                    cursor="pointer" opacity={0.8} transition="all 0.15s"
                    _hover={{ opacity: 1, transform: "scale(1.12)" }}>✕</Box>
 
+              {/* Mientras se averigua qué páginas están abiertas, solo la animación
+                  de espera de la disciplina (nada de lista a medio calcular). */}
+              {revisando ? (
+                <Flex minH={{ base: "180px", md: "220px" }} align="center" justify="center">
+                  {comicLoaderPorColor(TINTA) ?? <SpinnerTurquesa fullScreen={false} color={TINTA} />}
+                </Flex>
+              ) : (
+              <>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}>
                 Índice del mapa
               </Text>
@@ -237,6 +261,8 @@ export function IndiceRecorrido({
               <Text color={TINTA} fontSize="xs" textAlign="center" opacity={0.6} mt={5}>
                 {total} páginas · pulsa una para ir
               </Text>
+              </>
+              )}
             </Box>
           </Box>
         </Box>

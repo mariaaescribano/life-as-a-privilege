@@ -65,8 +65,12 @@ export function HeridaCard({ herida, color, onBorrar }: {
   color: string;
   onBorrar?: () => void;
 }) {
+  // Blindamos las tres listas: datos guardados con una forma antigua podían venir
+  // sin `huellas`/`nudos` y hacían reventar el render (pantalla en blanco).
+  const huellas = herida.huellas || [];
+  const nudos = herida.nudos || [];
   const necesidades = herida.necesidades || [];
-  const vacia = herida.huellas.length === 0 && herida.nudos.length === 0 && necesidades.length === 0;
+  const vacia = huellas.length === 0 && nudos.length === 0 && necesidades.length === 0;
   return (
     <Box position="relative" borderRadius="2xl" overflow="hidden" h="100%"
          minH={{ base: "180px", md: "210px" }} maxH={{ base: "300px", md: "340px" }}
@@ -112,8 +116,8 @@ export function HeridaCard({ herida, color, onBorrar }: {
             </Flex>
           ) : (
             <Flex wrap="wrap" gap={2}>
-              {herida.huellas.map((t) => <Pieza key={`h-${t}`} icon={<HuellaGlyph />} label={t} />)}
-              {herida.nudos.map((t) => <Pieza key={`n-${t}`} icon={<NudoEspiralIcon size={15} color={TINTA} strokeWidth={2} />} label={t} />)}
+              {huellas.map((t) => <Pieza key={`h-${t}`} icon={<HuellaGlyph />} label={t} />)}
+              {nudos.map((t) => <Pieza key={`n-${t}`} icon={<NudoEspiralIcon size={15} color={TINTA} strokeWidth={2} />} label={t} />)}
               {necesidades.map((t) => <Pieza key={`q-${t}`} icon={<NecesidadGlyph />} label={t} />)}
             </Flex>
           )}

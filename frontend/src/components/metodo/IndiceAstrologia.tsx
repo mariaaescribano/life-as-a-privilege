@@ -10,7 +10,7 @@ import { astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariable
 export function IndiceAstrologia() {
   // Marca con candado (y bloquea el acceso) las páginas que aún no están
   // desbloqueadas según el progreso del recorrido.
-  const { bloqueada } = useAstrologiaProgreso();
+  const { bloqueada, cargado } = useAstrologiaProgreso();
   const indice = ASTROLOGIA_INDICE.map((p) => ({ ...p, bloqueado: bloqueada(p.n) }));
 
   return (
@@ -21,6 +21,7 @@ export function IndiceAstrologia() {
       bg={astrologiaBg}
       nom={astrologiaNom}
       luz={false}
+      cargando={!cargado}
     />
   );
 }

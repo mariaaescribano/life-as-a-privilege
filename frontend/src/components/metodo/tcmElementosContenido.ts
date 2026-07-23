@@ -48,12 +48,14 @@ export interface ContenidoElementoRico {
 // Módulo 1 · introducción a los Cinco Elementos (Wu Xing). Es la intro de la
 // estrella (paso 4), presentada como un cómic de 4 viñetas (foto + texto).
 // Fuente: material del curso de Medicina China.
-export interface VinetaIntro { src: string; texto: string; }
+export interface VinetaIntro { src: string; texto: string | string[]; }
 export const COMIC_INTRO_ELEMENTOS: VinetaIntro[] = [
   {
     src: "/recorrido/tcm/elementos/elementos1.png",
-    texto:
-      "Los Cinco Elementos (Wu Xing) —Madera, Fuego, Tierra, Metal y Agua— constituyen una de las bases teóricas fundamentales de la Medicina Tradicional China. No son «cosas» literales ni meros símbolos: describen procesos dinámicos de la Vida y la manera en que el Qi se transforma y se expresa en la naturaleza y en el ser humano.",
+    texto: [
+      "Los Cinco Elementos (Wu Xing) —Madera, Fuego, Tierra, Metal y Agua— constituyen una de las bases teóricas fundamentales de la Medicina Tradicional China.",
+      "No son «cosas» literales ni meros símbolos: describen procesos dinámicos de la Vida y la manera en que el Qi se transforma y se expresa en la naturaleza y en el ser humano.",
+    ],
   },
   {
     src: "/recorrido/tcm/elementos/elementos2.png",
@@ -62,8 +64,10 @@ export const COMIC_INTRO_ELEMENTOS: VinetaIntro[] = [
   },
   {
     src: "/recorrido/tcm/elementos/elementos3.png",
-    texto:
-      "Un desequilibrio aparece cuando un elemento se vuelve excesivo (sobreactúa) o deficiente (rinde por debajo de lo normal). Los médicos de la antigua China los observaban mediante una atención profunda a la persona: su postura, su expresión, su voz, su pulso, sus hábitos, sus emociones y todos aquellos detalles sutiles que revelan el estado del Qi.",
+    texto: [
+      "Un desequilibrio aparece cuando un elemento se vuelve excesivo (sobreactúa) o deficiente (rinde por debajo de lo normal).",
+      "Los médicos de la antigua China los observaban mediante una atención profunda a la persona: su postura, su expresión, su voz, su pulso, sus hábitos, sus emociones y todos aquellos detalles sutiles que revelan el estado del Qi.",
+    ],
   },
   {
     src: "/recorrido/tcm/elementos/elementos4.png",
@@ -632,7 +636,7 @@ const comicMadera: PasoComic[] = [
     src: FOTOS_MADERA.reequilibrar,
     paragraphs: [
       "La Madera necesita movimiento, dirección y expresión: muévete por la mañana (estiramientos, Qi Gong o artes marciales), da forma a tu creatividad planificando o escribiendo nuevos proyectos y practica límites sanos para no acumular frustración.",
-      "Descansa alrededor de las 22:30, cuando su energía empieza a relajarse, y elige un ejercicio dinámico pero no agresivo, de movimiento continuo y flexible, como el crecer de la primavera.",
+      "Descansa alrededor de las 22:30, cuando su energía empieza a relajarse, y elige un ejercicio dinámico pero no agresivo, de movimiento continuo y flexible.",
     ],
   },
 ];

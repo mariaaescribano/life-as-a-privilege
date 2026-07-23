@@ -416,7 +416,7 @@ export default function MetodoFisiologiaMoleculas() {
                     textAlign="center" maxW="640px">
                 <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" lineHeight="1.35" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Las moléculas más importantes para la Vida, son parte de ti.
+                  Las moléculas son la unión de varios átomos. Son el fundamento de la Vida y también forman parte de ti.
                 </Text>
               </MBox>
             )}

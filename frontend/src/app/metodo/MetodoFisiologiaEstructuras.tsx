@@ -416,12 +416,12 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
       >
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
 
-        <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 6 }} p={{ base: 4, md: 5 }}>
+        <Flex position="relative" zIndex={1} align="center" gap={{ base: 5, md: 8 }} p={{ base: 5, md: 7 }}>
           {/* Foto (o «?» si aún no está hecha) */}
           <Box
             flexShrink={0}
-            w={{ base: "96px", md: "128px" }}
-            h={{ base: "96px", md: "128px" }}
+            w={{ base: "112px", md: "160px" }}
+            h={{ base: "112px", md: "160px" }}
             borderRadius="xl"
             overflow="hidden"
             position="relative"
@@ -560,7 +560,7 @@ export default function MetodoFisiologiaEstructuras() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
+        <Flex direction="column" align="center" w="100%" maxW="1160px" gap={6}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -588,19 +588,23 @@ export default function MetodoFisiologiaEstructuras() {
           )}
 
           {defActiva ? (
-            /* ── Estación (cada fase trae sus propias cajas) ── */
-            <Estacion
-              key={defActiva.id}
-              def={defActiva}
-              yaFormada={formadas.includes(defActiva.id)}
-              onFormar={() => formar(defActiva.id)}
-              onVolver={() => setActiva(null)}
-              onSiguiente={irSiguienteEstacion}
-            />
+            /* ── Estación (cada fase trae sus propias cajas) · se mantiene a 850
+                 para no descuadrar el juego de arrastrar ── */
+            <Box w="100%" maxW="850px">
+              <Estacion
+                key={defActiva.id}
+                def={defActiva}
+                yaFormada={formadas.includes(defActiva.id)}
+                onFormar={() => formar(defActiva.id)}
+                onVolver={() => setActiva(null)}
+                onSiguiente={irSiguienteEstacion}
+              />
+            </Box>
           ) : (
-            /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro ── */
+            /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro. maxW mayor
+                 que el header a propósito: las tarjetas se ven más grandes ── */
             <RevealStagger stagger={0.12} delayChildren={0.1}
-                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="850px" gap={{ base: 4, md: 5 }}>
+                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="1160px" gap={{ base: 4, md: 5 }}>
               {ESTRUCTURAS.map((e) => (
                 <RevealItem key={e.id} direction="up" distance={24} scaleFrom={0.97}
                             flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">

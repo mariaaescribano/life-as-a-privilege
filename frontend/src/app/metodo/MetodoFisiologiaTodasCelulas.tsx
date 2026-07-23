@@ -1105,7 +1105,7 @@ function OrganoDetalle({
                   : `${vistasOrgano} de ${organo.celulas.length} células descubiertas`}
               </Text>
             )}
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                   mt={{ base: 1, md: 2 }} fontStyle={organo.descripcion ? "normal" : "italic"}
                   style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
               {organo.descripcion ?? `Descripción del ${organo.label.toLowerCase()} (próximamente).`}
@@ -1156,7 +1156,7 @@ function OrganoDetalle({
 
               <Flex flex="1" minW={0} direction="column" align="center" gap={{ base: 4, md: 5 }} textAlign="center">
                 <Flex align="center" justify="center" minH={{ base: "64px", md: "76px" }}>
-                  <Text color="rgba(255,255,255,0.97)" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                  <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                         lineHeight="1.35" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.55)" }}>
                     {consejoActual.titular}
                   </Text>

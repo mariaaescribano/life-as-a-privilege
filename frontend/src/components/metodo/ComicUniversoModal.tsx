@@ -47,7 +47,7 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta5.png",
     paragraphs: [
       "Estalló. La primera expansión.",
-      "La ciencia la llama Big Bang y la fecha hace 13.800 millones de años.",
+      "La ciencia la llama Big Bang y la fecha es de hace 13.800 millones de años.",
     ],
   },
   {
@@ -56,7 +56,7 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
       "En los primeros minutos, esa energía se convirtió en materia. Esa materia dio origen a miles de millones de partículas.",
       "Desde una perspectiva espiritual, esa separación fue el primer gran dolor.",
       "Todas nuestras heridas son recordatorios de esta separación.",
-      "El rechazo: 'Debe haber algo malo en mí; por eso fui expulsado.'",
+      "El rechazo: 'Debe haber algo malo en mí, por eso fui expulsado.'",
       "El abandono: 'No soy suficiente, por eso todos se van.'",
       "Pero, a pesar del dolor, el Uno quiso experimentar el Amor y encontrarse a sí mismo.",
     ],
@@ -65,7 +65,7 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     src: "/viñetas/comicInicio/viñeta7.png",
     paragraphs: [
       "La materia se buscó a sí misma. Se agrupó en estrellas.",
-      "Dentro de ellas, por gravedad, nacieron los elementos pesados: el carbono, el oxígeno, el hierro. Todo lo que hoy existe.",
+      "Dentro de ellas, por gravedad, nacieron los elementos pesados: el carbono, el oxígeno, el hierro... Todo lo que hoy existe.",
     ],
   },
   {
@@ -101,17 +101,17 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
   {
     src: "/viñetas/comicInicio/viñeta12.png",
     paragraphs: [
-      "No estás aquí por casualidad ni por castigo. No has sido abandonado ni expulsado.",
+      "No estás aquí por casualidad, ni por castigo. No has sido abandonado ni expulsado.",
       "Estás aquí para recordar que eres una manifestación de Dios y estás formado por Amor.",
-      "Para recordarlo, atravesarás cosas difíciles y dolorosas. Forma parte del camino.",
-      "El propósito es no convertir el dolor en sufrimiento, sino aprender a aceptarlo.",
+      "Para recordarlo, atravesarás circunstancias difíciles y dolorosas. Forma parte del camino.",
+      "El propósito es comprender que el dolor te revela dónde están tus heridas; y así poder empezar a sanarlas. ",
     ],
   },
   {
     src: "/viñetas/comicInicio/viñeta13.png",
     paragraphs: [
       "En el instante exacto en que naciste, el cielo tenía una configuración que no se repetirá.",
-      "Esa es tu carta natal. Te dice desde dónde y para qué actúas. Es tu camino para volver a casa.",
+      "Esa es tu carta natal. Te dice desde dónde y para qué actúas. Es tu camino para volver al Hogar.",
     ],
   },
   {

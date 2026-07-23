@@ -28,7 +28,10 @@ const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 
 // Viñetas del cómic de intro (Módulo 1) en el formato del ComicViewer: cada
 // viñeta lleva su foto y un único párrafo de texto.
-const INTRO_VINETAS = COMIC_INTRO_ELEMENTOS.map((v) => ({ src: v.src, paragraphs: [v.texto] }));
+const INTRO_VINETAS = COMIC_INTRO_ELEMENTOS.map((v) => ({
+  src: v.src,
+  paragraphs: Array.isArray(v.texto) ? v.texto : [v.texto],
+}));
 // Sombra oscura y nítida (sin halo blanco) para la letra blanca del cómic:
 // máximo contraste sobre la pintura. La misma que usa el cómic de cada elemento.
 const INTRO_TEXT_SHADOW = "0 2px 5px rgba(0,0,0,1), 0 0 3px rgba(0,0,0,0.98), 0 6px 20px rgba(0,0,0,0.85)";
@@ -230,11 +233,12 @@ export default function MetodoTcmElementos() {
         onClose={intro.finish}
         vinetas={INTRO_VINETAS}
         themeColor={tcmTxt}
-        textColor="#ffffff"
+        textColor={tcmTxt}
         textShadow={INTRO_TEXT_SHADOW}
         disciplinaBgImage={disciplinaBgImg(tcmNom)}
         disciplinaBgColor={tcmBg}
         loader={<TcmLoader color="#ffffff" />}
+        esperarFondo
       />
 
       {ilustracionesModal}
