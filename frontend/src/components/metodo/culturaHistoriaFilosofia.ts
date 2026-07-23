@@ -7,17 +7,19 @@ import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
 // Mismo modelo que las demás Historias: ETAPAS (con intro) → SUB-HITOS (cada uno
 // con su cómic: pregunta-gancho + cuerpo + dato curioso, foto + texto a la
 // derecha). Las 13 etapas están COMPLETAS (de «Antes de la filosofía» hasta
-// «Pensar el futuro»). Fotos en /img/cultura/historia/filosofia/<eraKey>/<subKey>.png
-// (pendientes de subir). El texto se pinta con `separarFrases` (salto de línea
-// tras cada punto).
+// «Pensar el futuro»). Fotos planas en /recorrido/cultura/historiafilosofia/<subKey>.png
+// (el nombre del archivo = key del sub-hito). El texto se pinta con `separarFrases`
+// (salto de línea tras cada punto).
 //
 // Momentos sin fecha (eyebrow "") = pasajes de síntesis/transición (p. ej. «Un
 // puente entre dos mundos», «La búsqueda no termina»): el ComicViewer oculta el
 // antetítulo cuando va vacío.
 // ─────────────────────────────────────────────────────────────────────────
 
-const foto = (era: string, sub: string) =>
-  `/img/cultura/historia/filosofia/${era}/${sub}.png`;
+// Todas las fotos (círculo + viñeta) van planas en una sola carpeta, con el
+// nombre del sub-hito (misma convención que Historia Universal / historiageneral).
+const foto = (_era: string, sub: string) =>
+  `/recorrido/cultura/historiafilosofia/${sub}.png`;
 
 // Sub-hito con su cómic (una viñeta). `pregunta` opcional (gancho, va primero) y
 // `dato` opcional (curiosidad, va al final). El `cuerpo` son los párrafos.

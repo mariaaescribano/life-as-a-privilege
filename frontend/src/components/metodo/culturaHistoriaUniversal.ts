@@ -14,7 +14,9 @@ import type { Vineta } from "./ComicViewer";
 //              La fecha de cada sub-hito se muestra como antetítulo del cómic.
 //
 // Fotos de los círculos de sub-hito y de las viñetas del cómic (mismo archivo):
-//   /img/cultura/historia/universal/<eraKey>/<subKey>.png   (pendientes de subir)
+//   /recorrido/cultura/historiageneral/<subKey>.png   (todas en la misma carpeta)
+// Las PORTADAS de cada era van en la subcarpeta /eras:
+//   /recorrido/cultura/historiageneral/eras/<eraKey>.png
 // Mientras no exista la foto, el círculo pinta un marcador y el cómic un
 // placeholder «próximamente» (el ComicViewer ya lo maneja).
 //
@@ -49,9 +51,15 @@ export interface HitoHistoria {
   subhitos: SubHito[];
 }
 
-// Ruta de la foto (círculo + viñeta) de un sub-hito.
-const foto = (era: string, sub: string) =>
-  `/img/cultura/historia/universal/${era}/${sub}.png`;
+// Ruta de la foto (círculo + viñeta) de un sub-hito. Todas viven juntas en la
+// misma carpeta, así que la era no interviene en la ruta (se conserva en la
+// firma para que cada llamada siga documentando a qué era pertenece el hito).
+const foto = (_era: string, sub: string) =>
+  `/recorrido/cultura/historiageneral/${sub}.png`;
+
+// Ruta de la portada (círculo) de una era.
+const fotoEra = (eraKey: string) =>
+  `/recorrido/cultura/historiageneral/eras/${eraKey}.png`;
 
 // Construye un sub-hito con su cómic de una sola viñeta (foto + fecha + texto).
 const hito = (era: string, key: string, titulo: string, fecha: string, texto: string): SubHito => ({
@@ -66,6 +74,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
     key: "prehistoria",
     titulo: "Prehistoria",
     anio: "hasta ~3500 a. C.",
+    foto: fotoEra("prehistoria"),
     subhitos: [
       hito("prehistoria", "primeros-hominidos", "Primeros homínidos", "Hace 7 millones de años",
         "Hace unos siete millones de años, algunos primates que vivían en África comenzaron a evolucionar por un camino diferente al de los chimpancés. Aquellos seres aún no eran humanos, pero fueron los primeros homínidos, los antepasados de nuestra especie. Con ellos empezó un proceso evolutivo que duraría millones de años y acabaría dando lugar al Homo sapiens."),
@@ -85,6 +94,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
     key: "edad-antigua",
     titulo: "Edad Antigua",
     anio: "3500 a. C. – 476 d. C.",
+    foto: fotoEra("edad-antigua"),
     subhitos: [
       hito("edad-antigua", "invencion-escritura", "Invención de la escritura", "≈3500 a. C.",
         "Con el crecimiento de las primeras ciudades, ya no bastaba con recordar de memoria impuestos, cosechas o acuerdos comerciales. En Mesopotamia surgió la escritura como una forma de registrar toda esa información en tablillas de arcilla. Con el tiempo también sirvió para escribir leyes, relatos y conocimientos. Por eso, este invento marca el comienzo de la Historia: desde entonces los seres humanos pudieron dejar un testimonio escrito de su pasado."),
@@ -136,6 +146,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
     key: "edad-media",
     titulo: "Edad Media",
     anio: "476 – 1453/1492",
+    foto: fotoEra("edad-media"),
     subhitos: [
       hito("edad-media", "imperio-bizantino", "Imperio Bizantino", "330-1453",
         "Cuando el Imperio romano se dividió, la parte oriental logró sobrevivir mientras Occidente acabó desapareciendo. Con capital en Constantinopla, el Imperio Bizantino conservó las leyes, la cultura y muchas tradiciones romanas durante casi mil años. Gracias a su posición entre Europa y Asia, se convirtió en un importante centro de comercio y conocimiento. Mientras gran parte de Europa atravesaba siglos de inestabilidad, Bizancio siguió siendo una de las ciudades más ricas y avanzadas del mundo."),
@@ -173,6 +184,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
     key: "edad-moderna",
     titulo: "Edad Moderna",
     anio: "1450/1492 – 1789",
+    foto: fotoEra("edad-moderna"),
     subhitos: [
       hito("edad-moderna", "imprenta-gutenberg", "La imprenta de Gutenberg", "≈1450",
         "Antes de la imprenta, copiar un libro podía llevar meses o incluso años, ya que se hacía completamente a mano. Johannes Gutenberg perfeccionó un sistema de tipos móviles metálicos que permitió imprimir cientos de copias en mucho menos tiempo y a un coste mucho menor. Los libros dejaron de ser un lujo reservado a monasterios y nobles, y el conocimiento empezó a difundirse por toda Europa. Muchos historiadores consideran este invento tan revolucionario como Internet en nuestra época."),
@@ -212,6 +224,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
     key: "era-industrial",
     titulo: "Era Industrial",
     anio: "1789 – 1945",
+    foto: fotoEra("era-industrial"),
     subhitos: [
       hito("era-industrial", "guerras-napoleonicas", "Guerras Napoleónicas", "1803-1815",
         "Tras la Revolución Francesa, muchos reyes europeos temían que las ideas de libertad e igualdad se extendieran a sus propios países. En ese contexto, Napoleón Bonaparte tomó el poder en Francia y lanzó una serie de campañas militares que le permitieron dominar gran parte de Europa. Allí donde llegaban sus ejércitos también se difundían muchas de las reformas nacidas de la Revolución. Aunque Napoleón fue derrotado en Waterloo, el nacionalismo y las ideas liberales que había extendido siguieron transformando Europa."),
@@ -259,6 +272,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
     key: "era-digital",
     titulo: "Era Global y Digital",
     anio: "1945 – presente",
+    foto: fotoEra("era-digital"),
     subhitos: [
       hito("era-digital", "fundacion-onu", "Fundación de la ONU", "1945",
         "Tras la devastación de la Segunda Guerra Mundial, muchos países llegaron a la conclusión de que era necesario crear un organismo internacional que ayudara a evitar nuevos conflictos. Así nació la Organización de las Naciones Unidas (ONU), un lugar donde los Estados pudieran dialogar antes de recurrir a la guerra. Además de trabajar por la paz, la ONU promueve la cooperación en ámbitos como los derechos humanos, la salud o la ayuda humanitaria. Aunque no ha conseguido impedir todas las guerras, sigue siendo la principal organización internacional del mundo."),

@@ -4,15 +4,67 @@ import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
 // HISTORIA DE LAS RELIGIONES (Cultura). Mismo modelo de dos niveles que la
 // Historia Universal: ETAPAS (con texto de intro) → SUB-HITOS (cada uno con su
 // cómic: pregunta-gancho + cuerpo + dato curioso, foto + texto a la derecha).
-// Fotos en /img/cultura/historia/religiones/<eraKey>/<subKey>.png (pendientes).
+// Fotos en /recorrido/cultura/historiareligion/<archivo>.png (carpeta plana).
+// El nombre de archivo NO coincide con la clave del sub-hito: se traduce con
+// el mapa FOTOS de abajo (clave del sub-hito → nombre corto del .png). Si una
+// clave no está en el mapa, se usa la propia clave como nombre de archivo.
 // El texto se pinta con `separarFrases` (salto de línea tras cada punto).
 //
 // NOTA: falta la etapa IV (la usuaria la irá pasando). El orden es el de los
 // números romanos: I, II, III, [IV], V, VI…
 // ─────────────────────────────────────────────────────────────────────────
 
-const foto = (era: string, sub: string) =>
-  `/img/cultura/historia/religiones/${era}/${sub}.png`;
+// clave del sub-hito → nombre del archivo .png en la carpeta plana.
+const FOTOS: Record<string, string> = {
+  // I · Cuando la naturaleza era sagrada
+  neolitica: "neolitica",
+  gea: "gea",
+  animismo: "animismo",
+  chamanes: "chamanes",
+  // II · Cuando nacieron las civilizaciones… y sus dioses
+  ur: "ur",
+  mesopotamia: "mesopotamia",
+  egipto: "egipto",
+  akhenaton: "akhenaton",
+  // III · Los dioses cuentan historias
+  "mitologia-griega": "griega",
+  "religion-romana": "romana",
+  "grecia-conquista-roma": "conquista",
+  "mitologia-hindu": "hindu",
+  "mitologia-china": "china",
+  "religiones-africanas": "africa",
+  "america-precolombina": "america",
+  // IV · La gran revolución espiritual
+  abraham: "abraham",
+  moises: "moises",
+  zoroastro: "zoroastro",
+  judaismo: "judaismo",
+  hinduismo: "hinduismo",
+  krishna: "krishna",
+  buda: "buda",
+  budismo: "budismo",
+  // V · La búsqueda de la sabiduría
+  confucio: "confucio",
+  confucianismo: "confucianismo",
+  laotse: "laotse",
+  taoismo: "taoismo",
+  // VI · Un Dios para toda la humanidad
+  "jesus-nazaret": "jesus",
+  "pablo-tarso": "pablo",
+  cristianismo: "cristianismo",
+  "mahoma-islam": "mahoma",
+  // VII · Cuando una fe se divide
+  "sunies-chiies": "sunies",
+  "gran-cisma": "cisma",
+  "reforma-protestante": "reforma",
+  // VIII · Un mundo, muchas creencias
+  "expansion-religiones": "expansion",
+  "mundo-conectado": "conectado",
+  viaje: "viaje",
+};
+
+const foto = (_era: string, sub: string) =>
+  `/recorrido/cultura/historiareligion/${FOTOS[sub] ?? sub}.png`;
 
 // Sub-hito con su cómic (una viñeta). `pregunta` opcional (gancho, va primero) y
 // `dato` opcional (curiosidad, va al final). El `cuerpo` son los párrafos.
