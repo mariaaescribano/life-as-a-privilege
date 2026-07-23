@@ -33,6 +33,14 @@ export class CursosController {
     return await this.service.crear(body);
   }
 
+  // ── Admin: marcar/desmarcar un curso como "revisado" (check personal) ──
+  // (antes de :id para dejar clara la ruta específica)
+  @Patch(':id/revisado')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async setRevisado(@Param('id') id: string, @Body() body: { revisado?: boolean }) {
+    return await this.service.setRevisado(id, !!body?.revisado);
+  }
+
   @Patch(':id')
   @UseGuards(JwtAuthGuard, AdminGuard)
   async actualizar(@Param('id') id: string, @Body() body: CursoInput) {

@@ -26,6 +26,9 @@ export interface CursoDB {
   contenido: ModuloDB[];
   created_at?: string;
   updated_at?: string;
+  /** Check PERSONAL del admin: si ya lo ha revisado. No es una columna de
+   *  `curso`, se calcula desde la tabla `curso_revisado` en listarTodos. */
+  revisado?: boolean;
 }
 
 // Campos aceptados al crear/actualizar (todos opcionales en el PATCH).

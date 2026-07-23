@@ -18,6 +18,8 @@ interface CursoRow {
   id: string; modalidad: string; titulo: string; foto: string; descripcion: string;
   de_pago: boolean; publicado: boolean; completado: boolean; orden: number;
   contenido: { title: string; submodules: any[] }[];
+  /** Check personal del admin: si ya lo has revisado. */
+  revisado?: boolean;
 }
 
 const nLecciones = (c: CursoRow) => (c.contenido ?? []).reduce((a, m) => a + (m.submodules?.length ?? 0), 0);
@@ -167,6 +169,19 @@ export default function AdminCursos() {
     }
   };
 
+  // Check personal del admin: marcar/desmarcar un curso como revisado.
+  // Optimista: pinta el cambio al instante y lo revierte si el guardado falla.
+  const toggleRevisado = async (c: CursoRow) => {
+    const nuevo = !c.revisado;
+    setCursos((prev) => prev.map((x) => (x.id === c.id ? { ...x, revisado: nuevo } : x)));
+    try {
+      await axios.patch(`${API_URL}/cursos/${c.id}/revisado`, { revisado: nuevo }, { headers: adminHeaders() });
+    } catch {
+      setCursos((prev) => prev.map((x) => (x.id === c.id ? { ...x, revisado: !nuevo } : x)));
+      toast({ title: "No se pudo guardar la revisión", status: "error", duration: 3000 });
+    }
+  };
+
   // Una fila de curso, con el fondo y el icono de su disciplina.
   const renderFila = (c: CursoRow) => {
     const disc = disciplinaCursoBySlug(c.modalidad);
@@ -197,6 +212,24 @@ export default function AdminCursos() {
               <Text color={color} fontSize="sm" opacity={0.85} style={{ textShadow: tShadow }}>{nLecciones(c)} lecciones</Text>
             </Flex>
           </Box>
+          {/* Check personal del admin: marcar si ya lo has revisado. */}
+          <Checkbox
+            isChecked={!!c.revisado}
+            onChange={() => toggleRevisado(c)}
+            colorScheme="teal"
+            size="lg"
+            title="Marca los cursos que ya has revisado (solo lo ves tú)"
+            sx={{
+              "& .chakra-checkbox__label": {
+                color: "white", fontWeight: 700, fontSize: "sm", textShadow: tShadow,
+              },
+              "& .chakra-checkbox__control": {
+                borderColor: "rgba(255,255,255,0.7)", bg: "rgba(0,0,0,0.28)",
+              },
+            }}
+          >
+            Revisado
+          </Checkbox>
           <Box as="button" onClick={() => copiarCurso(c)} {...btnStyle}
                color="white" bg="rgba(0,0,0,0.28)" border="1px solid rgba(255,255,255,0.4)" px={4} py="7px" fontSize="sm"
                _hover={{ borderColor: "white" }} title="Copiar todo el texto del curso al portapapeles">
