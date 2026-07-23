@@ -45,6 +45,11 @@ interface IntroComicModalProps {
    *  X con esta etiqueta (p.ej. "Astrología"). Sirve para pasar directamente al
    *  contenido de la disciplina sin recorrer todo el cómic. */
   continueLabel?: string;
+  /** Imagen de fondo SOLO para el botón de continuar (con velo + letra en el
+   *  color de acento), sin cambiar el fondo del cómic. Astrología la usa para que
+   *  el botón «Historia»/«Astrología» lleve el fondo estrellado con letra crema
+   *  en vez del relleno dorado sólido. */
+  continueBgImage?: string;
   /** Acción del botón de continuar (arriba, junto a la X). */
   onContinue?: () => void;
   /** Se llama al TERMINAR el cómic (avanzar más allá de la última viñeta). Si no
@@ -62,6 +67,9 @@ interface IntroComicModalProps {
    *  como fondo (con un velo), igual que el botón «Saltar», en vez de un relleno
    *  de color sólido. Requiere `disciplinaBgImage`. */
   continueConImagen?: boolean;
+  /** Si true, cada frase (tras un punto) se pinta como un bloque aparte con doble
+   *  separación (salto de línea después de cada punto). Lo usa Cultura. */
+  separarFrases?: boolean;
 }
 
 export function IntroComicModal({
@@ -75,10 +83,12 @@ export function IntroComicModal({
   textColor,
   loader,
   continueLabel,
+  continueBgImage,
   onContinue,
   onComplete,
   mantenerSaltar,
   saltarTextColor,
+  separarFrases,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -109,6 +119,7 @@ export function IntroComicModal({
           // Con `mantenerSaltar` (Ayurveda) se conservan los dos, a juego.
           sinSaltar={!!(continueLabel && onContinue) && !mantenerSaltar}
           saltarTextColor={saltarTextColor}
+          separarFrases={separarFrases}
         />
 
         {/* Botón de continuar (p.ej. "Astrología →"), fijo a la IZQUIERDA de la X
@@ -119,7 +130,8 @@ export function IntroComicModal({
           // disciplina, el botón la usa de fondo + velo y la letra en el color de
           // TEXTO de la disciplina. Solo astrología (sin imagen, fondo estrellado)
           // cae en el relleno dorado sólido de antes.
-          const conImagen = !!disciplinaBgImage;
+          const bgImgSrc = continueBgImage ?? disciplinaBgImage;
+          const conImagen = !!bgImgSrc;
           const txtColor = textColor ?? themeColor;
           return (
           <Box
@@ -158,7 +170,7 @@ export function IntroComicModal({
             {/* Fondo imagen + velo (solo en modo imagen), como el botón «Saltar». */}
             {conImagen && (
               <>
-                <Box as="img" src={disciplinaBgImage} alt="" loading="eager" position="absolute" inset="0"
+                <Box as="img" src={bgImgSrc} alt="" loading="eager" position="absolute" inset="0"
                      w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
                 <Box position="absolute" inset="0"
                      bg={disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)"} />

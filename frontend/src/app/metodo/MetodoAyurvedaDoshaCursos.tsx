@@ -156,7 +156,7 @@ export default function MetodoAyurvedaDoshaCursos() {
           </Text>
           </Reveal>
 
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {loading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
               <SpinnerTurquesa fullScreen={false} />

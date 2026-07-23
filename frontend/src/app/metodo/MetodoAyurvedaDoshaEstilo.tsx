@@ -266,7 +266,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           </Reveal>
 
           {c.secciones.map((sec, si) => (
-            <Reveal key={si} inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+            <Reveal key={si} direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{sec.titulo}</SeccionTitulo>
               <Flex direction="column" gap={2.5} mb={sec.items ? 4 : 0}>
@@ -275,7 +275,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
                 ))}
               </Flex>
               {sec.items && (
-                <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+                <RevealStagger display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
                   {sec.items.map((it, i) => (
                     <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
                   ))}
@@ -289,7 +289,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           ))}
 
           {/* Abhyanga */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.abhyanga.titulo}</SeccionTitulo>
             <Flex direction="column" gap={3}>
@@ -301,7 +301,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           </Reveal>
 
           {/* Lo que el Ayurveda quiere que recuerdes */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.recuerda.titulo}</SeccionTitulo>
             <Flex direction="column" gap={3}>
@@ -313,7 +313,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           </Reveal>
 
           {/* Reflexión + compromiso (SE GUARDAN) */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={reflexionRef} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
@@ -347,7 +347,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
                   <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}>
                     {c.reflexion.compromisoIntro}
                   </Text>
-                  <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
+                  <RevealStagger display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
                     {c.reflexion.compromisos.map((op) => (
                       <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                       <RadioRow
@@ -384,7 +384,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
           </Reveal>
 
           {/* Cierre + Continuar */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (

@@ -148,7 +148,7 @@ export default function MetodoAyurveda() {
           </Reveal>
 
           {/* ── Intro contemplativa ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box
             position="relative"
             w="100%"
@@ -184,7 +184,7 @@ export default function MetodoAyurveda() {
           </Reveal>
 
           {/* ── Disparador del aviso ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
           <Box
             as="button"
             onClick={() => setAvisoOpen(true)}

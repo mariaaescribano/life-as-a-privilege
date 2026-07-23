@@ -70,21 +70,41 @@ function disciplinaDeRuta(path: string): DiscInfo | null {
   return null;
 }
 
+// ── Caché de sesión (a nivel de módulo, persiste entre navegaciones dentro de
+// la SPA). El objetivo: /home solo hace su carga completa (spinner + GET
+// /user/me + precarga de fondos) UNA vez. Al volver a /home más tarde, el
+// mandala se pinta ya en su estado final —con los candados donde toca— sin
+// spinner ni parpadeo. Se resetea solo con recarga completa del navegador
+// (p.ej. tras un pago, que redirige con window.location.href → estado fresco).
+type SuscCache = {
+  metodo: boolean; psicologia: boolean; ayurveda: boolean; tcm: boolean;
+  fisiologia: boolean; nutricion: boolean; cabala: boolean; cultura: boolean;
+};
+let suscCache: SuscCache | null = null;
+let imagesReadyCache = false;
+
 const Home = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const [img, setImg] = useState<string | null>(null);
+  // Iniciamos la foto ya desde sessionStorage: así, al volver a /home con la
+  // caché caliente, el mandala se pinta en el primer render (sin un frame con
+  // img=null que mostraría el spinner).
+  const [img, setImg] = useState<string | null>(() => {
+    try { return sessionStorage.getItem("img"); } catch { return null; }
+  });
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState<string>("");
-  const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(null);
-  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
-  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(null);
-  const [tcmSuscrito, setTcmSuscrito] = useState<boolean | null>(null);
-  const [fisiologiaSuscrito, setFisiologiaSuscrito] = useState<boolean | null>(null);
-  const [nutricionSuscrito, setNutricionSuscrito] = useState<boolean | null>(null);
-  const [cabalaSuscrito, setCabalaSuscrito] = useState<boolean | null>(null);
-  const [culturaSuscrito, setCulturaSuscrito] = useState<boolean | null>(null);
+  // Estado inicial desde la caché de sesión (si ya se cargó antes → sin null,
+  // el mandala se pinta directo sin pasar por el spinner).
+  const [metodoSuscrito, setMetodoSuscrito] = useState<boolean | null>(suscCache ? suscCache.metodo : null);
+  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(suscCache ? suscCache.psicologia : null);
+  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(suscCache ? suscCache.ayurveda : null);
+  const [tcmSuscrito, setTcmSuscrito] = useState<boolean | null>(suscCache ? suscCache.tcm : null);
+  const [fisiologiaSuscrito, setFisiologiaSuscrito] = useState<boolean | null>(suscCache ? suscCache.fisiologia : null);
+  const [nutricionSuscrito, setNutricionSuscrito] = useState<boolean | null>(suscCache ? suscCache.nutricion : null);
+  const [cabalaSuscrito, setCabalaSuscrito] = useState<boolean | null>(suscCache ? suscCache.cabala : null);
+  const [culturaSuscrito, setCulturaSuscrito] = useState<boolean | null>(suscCache ? suscCache.cultura : null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [verificandoPago, setVerificandoPago] = useState(false);
@@ -126,8 +146,9 @@ const Home = () => {
   const [pagoCulturaExitoOpen, setPagoCulturaExitoOpen] = useState(false);
   const [testPagos, setTestPagos] = useState(false);
   // No mostramos NADA del mandala hasta que TODAS las fotos (fondos de las
-  // disciplinas + foto central del usuario) estén cargadas.
-  const [imagesReady, setImagesReady] = useState(false);
+  // disciplinas + foto central del usuario) estén cargadas. Si ya se precargaron
+  // en una visita anterior de esta sesión, arrancamos en true (sin re-precargar).
+  const [imagesReady, setImagesReady] = useState(imagesReadyCache);
 
   const continuarAstrologia = async () => {
     navigate("/metodo/astrologia");
@@ -571,6 +592,16 @@ const Home = () => {
     const cabalaPagado = url.searchParams.get("cabala_pagado");
     const culturaPagado = url.searchParams.get("cultura_pagado");
 
+    // Si ya cargamos las suscripciones antes en esta sesión y NO venimos de un
+    // pago (que obliga a re-verificar), no volvemos a pedir /user/me: el estado
+    // ya se inicializó desde la caché y el mandala se pinta directo.
+    const hayPagoQuery =
+      metodoPagado || psicologiaPagado || ayurvedaPagado || tcmPagado ||
+      fisiologiaPagado || nutricionPagado || cabalaPagado || culturaPagado;
+    if (suscCache && !hayPagoQuery) {
+      return;
+    }
+
     const cargarSuscripcion = async () => {
       try {
         const me = await axios.get(`${API_URL}/user/me`, {
@@ -778,6 +809,8 @@ const Home = () => {
   // (o fallen) no se muestra nada — evita que aparezcan círculos sin su fondo.
   useEffect(() => {
     if (img == null) return;
+    // Ya precargadas en una visita anterior de la sesión → nada que hacer.
+    if (imagesReadyCache) return;
     const srcs = disciplines
       .map((d) => disciplinaBgImg(d.name))
       .filter((s): s is string => !!s);
@@ -797,6 +830,30 @@ const Home = () => {
     });
     return () => { cancelled = true; };
   }, [img]);
+
+  // Mantiene la caché de suscripciones al día. En cuanto se resuelven (deja de
+  // ser null), la guardamos para que la próxima visita a /home no vuelva a
+  // pedir /user/me. Cubre las tres vías que las fijan: la carga inicial, la
+  // verificación tras pago y el desbloqueo en modo test.
+  useEffect(() => {
+    if (metodoSuscrito === null) return;
+    suscCache = {
+      metodo: !!metodoSuscrito,
+      psicologia: !!psicologiaSuscrito,
+      ayurveda: !!ayurvedaSuscrito,
+      tcm: !!tcmSuscrito,
+      fisiologia: !!fisiologiaSuscrito,
+      nutricion: !!nutricionSuscrito,
+      cabala: !!cabalaSuscrito,
+      cultura: !!culturaSuscrito,
+    };
+  }, [metodoSuscrito, psicologiaSuscrito, ayurvedaSuscrito, tcmSuscrito,
+      fisiologiaSuscrito, nutricionSuscrito, cabalaSuscrito, culturaSuscrito]);
+
+  // Una vez precargadas las fotos, lo recordamos para no re-precargar al volver.
+  useEffect(() => {
+    if (imagesReady) imagesReadyCache = true;
+  }, [imagesReady]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;

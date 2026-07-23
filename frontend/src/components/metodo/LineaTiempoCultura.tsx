@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import type { HitoHistoria } from "./culturaHistoriaUniversal";
+
+// Item genérico de la línea de tiempo. Sirve tanto para las ERAS (con época)
+// como para los SUB-HITOS de una era (solo título, sin fecha). Por eso `anio`
+// es opcional: si no viene, no se pinta la línea de la fecha.
+export interface TimelineHito {
+  key: string;
+  titulo: string;
+  anio?: string;
+  foto?: string;
+}
 
 // ─────────────────────────────────────────────────────────────────────────
 // Línea de tiempo de Cultura: una línea horizontal con círculos (foto de cada
@@ -17,7 +26,7 @@ function CirculoFoto({
   bg,
   onClick,
 }: {
-  hito: HitoHistoria;
+  hito: TimelineHito;
   tinta: string;
   bg: string;
   onClick: () => void;
@@ -67,7 +76,7 @@ function CirculoFoto({
   );
 }
 
-function Etiqueta({ hito, tinta, arriba }: { hito: HitoHistoria; tinta: string; arriba: boolean }) {
+function Etiqueta({ hito, tinta, arriba }: { hito: TimelineHito; tinta: string; arriba: boolean }) {
   return (
     <Box
       position="absolute"
@@ -90,16 +99,18 @@ function Etiqueta({ hito, tinta, arriba }: { hito: HitoHistoria; tinta: string; 
       >
         {hito.titulo}
       </Text>
-      <Text
-        color={`${tinta}bb`}
-        fontSize={{ base: "xs", md: "sm" }}
-        fontStyle="italic"
-        letterSpacing="0.04em"
-        mt={0.5}
-        style={{ textShadow: `0 1px 3px #0c3c3cf5` }}
-      >
-        {hito.anio}
-      </Text>
+      {hito.anio && (
+        <Text
+          color={`${tinta}bb`}
+          fontSize={{ base: "xs", md: "sm" }}
+          fontStyle="italic"
+          letterSpacing="0.04em"
+          mt={0.5}
+          style={{ textShadow: `0 1px 3px #0c3c3cf5` }}
+        >
+          {hito.anio}
+        </Text>
+      )}
     </Box>
   );
 }
@@ -110,7 +121,7 @@ export function LineaTiempoCultura({
   bg,
   onSelect,
 }: {
-  hitos: HitoHistoria[];
+  hitos: TimelineHito[];
   tinta: string;
   bg: string;
   onSelect: (key: string) => void;

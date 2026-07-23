@@ -534,6 +534,7 @@ export default function MetodoAstrologia() {
         onFinish={intro.finish}
         onClose={intro.close}
         continueLabel={hayHistoria ? "Historia" : "Astrología"}
+        continueBgImage={SPACE_IMG}
         onContinue={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
         onComplete={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
       />
@@ -545,6 +546,7 @@ export default function MetodoAstrologia() {
         vinetas={HISTORIA_ASTROLOGIA}
         onClose={() => setHistoriaOpen(false)}
         continueLabel="Astrología"
+        continueBgImage={SPACE_IMG}
         onContinue={() => setHistoriaOpen(false)}
         onComplete={() => setHistoriaOpen(false)}
       />

@@ -274,10 +274,10 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           </Reveal>
 
           {/* ── LO QUE AUMENTA (casillas, local) ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.aumenta.titulo}</SeccionTitulo>
-            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.aumenta.opciones.map((op) => (
                 <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                   <CheckRow label={op} color={meta.color} checked={aumenta.includes(op)} onToggle={() => toggleAumenta(op)} />
@@ -288,13 +288,13 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           </Reveal>
 
           {/* ── ¿CUÁNTAS HAS MARCADO? (dinámico) ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.marcado.titulo}</SeccionTitulo>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>
               Has marcado <Box as="span" fontWeight="700" color={meta.color}>{count}</Box> de {c.aumenta.opciones.length}.
             </Text>
-            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.marcado.rangos.map((r) => {
                 const activo = rangoActivo?.label === r.label;
                 return (
@@ -334,7 +334,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           </Reveal>
 
           {/* ── LAS PRIMERAS SEÑALES ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.senales.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
@@ -342,7 +342,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.senales.items.map((it, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
@@ -352,7 +352,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           </Reveal>
 
           {/* ── ¿CÓMO VOLVER AL EQUILIBRIO? ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.equilibrio.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
@@ -360,7 +360,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.equilibrio.items.map((it, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
@@ -374,7 +374,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           </Reveal>
 
           {/* ── REFLEXIÓN (texto libre · SE GUARDA) ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={reflexionRef} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
@@ -420,7 +420,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           </Reveal>
 
           {/* ── CIERRE + Continuar ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (

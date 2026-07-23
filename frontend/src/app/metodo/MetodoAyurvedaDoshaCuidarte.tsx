@@ -281,7 +281,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           </Reveal>
 
           {/* Sabores */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.sabores.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={5}>
@@ -289,13 +289,13 @@ export default function MetodoAyurvedaDoshaCuidarte() {
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} mb={5} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.sabores.favorables.map((s, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><SaborRow texto={s} tipo="favorable" color={meta.color} /></RevealItem>
               ))}
             </RevealStagger>
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={3}>{c.sabores.moderarIntro}</Text>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.sabores.moderar.map((s, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><SaborRow texto={s} tipo="moderar" color={meta.color} /></RevealItem>
               ))}
@@ -305,13 +305,13 @@ export default function MetodoAyurvedaDoshaCuidarte() {
 
           {/* Caja interactiva · comidas de hoy que te desequilibran */}
           {c.desequilibran && (
-            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+            <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.desequilibran.titulo}</SeccionTitulo>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}>
                 {c.desequilibran.intro}
               </Text>
-              <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+              <RevealStagger display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
                 {c.desequilibran.opciones.map((op) => (
                   <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                     <CheckRow label={op} tono="#b9770e" checked={desequilibranSel.includes(op)} onToggle={() => toggleDeseq(op)} />
@@ -326,10 +326,10 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           )}
 
           {/* Lo que aumenta */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.alimentosAumentan.titulo}</SeccionTitulo>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.alimentosAumentan.items.map((it, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
@@ -338,7 +338,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           </Reveal>
 
           {/* Cómo comes */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.comoComes.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
@@ -346,7 +346,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
                 <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.comoComes.items.map((it, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
@@ -356,10 +356,10 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           </Reveal>
 
           {/* Alimentos que sientan mejor */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.alimentosBuenos.titulo}</SeccionTitulo>
-            <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.alimentosBuenos.items.map((it, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
@@ -368,10 +368,10 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           </Reveal>
 
           {/* Día de ejemplo */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.diaEjemplo.titulo}</SeccionTitulo>
-            <RevealStagger inView display="flex" flexDirection="column" gap={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.diaEjemplo.comidas.map((m, i) => (
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%">
                 <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }} borderRadius="xl"
@@ -391,13 +391,13 @@ export default function MetodoAyurvedaDoshaCuidarte() {
 
           {/* Caja interactiva · alimentos que te equilibran y puedes tomar hoy */}
           {c.equilibran && (
-            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+            <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.equilibran.titulo}</SeccionTitulo>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}>
                 {c.equilibran.intro}
               </Text>
-              <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
+              <RevealStagger display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
                 {c.equilibran.opciones.map((op) => (
                   <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                     <CheckRow label={op} tono={meta.color} checked={equilibranSel.includes(op)} onToggle={() => toggleEquil(op)} />
@@ -412,7 +412,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           )}
 
           {/* Cierre alimentación */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={2}>
               {c.alimCierre.map((p, i) => (
@@ -423,7 +423,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           </Reveal>
 
           {/* Continuar → Estilo de Vida */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
           <Box
             as="button"
             onClick={irEstilo}

@@ -89,12 +89,35 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
       "Fue el comienzo de su separación.",
     ],
   },
-  // 8 — Hoy
+  // 8 — La primera carta astral en un periódico
+  {
+    src: "/viñetas/astrologia/historia/historiaastrologiamargarita.png",
+    eyebrow: "Inglaterra · 1930",
+    titulo: "",
+    paragraphs: [
+      "La primera carta astral publicada en un periódico apareció en 1930 con motivo del nacimiento de la princesa Margarita de Inglaterra, hermana menor de la futura reina Isabel II.",
+      "El gran interés que despertó entre los lectores llevó al periódico a publicar una sección astrológica de forma regular.",
+      "Su éxito hizo que otros diarios copiaran la idea y, desde entonces, los horóscopos y las cartas astrales se popularizaron en la prensa de todo el mundo.",
+    ],
+  },
+  // 9 — Jung y el lenguaje simbólico
+  {
+    src: "/viñetas/astrologia/historia/historiaastrologiajung.png",
+    eyebrow: "Siglo XX",
+    titulo: "Carl Gustav Jung",
+    paragraphs: [
+      "Carl Gustav Jung consideraba la astrología un lenguaje simbólico más que un método para predecir el futuro.",
+      "Su teoría del inconsciente colectivo sostiene que todos compartimos arquetipos universales —como el Héroe, el Sabio o la Sombra— que aparecen en mitos, sueños y religiones.",
+      "Jung observó que la Astrología también organiza la experiencia humana mediante símbolos, donde los planetas, signos y casas representan distintos aspectos de la psique y del desarrollo personal.",
+      "La carta natal no determina el destino, sino que actúa como un mapa simbólico del mundo interior y del proceso de individuación, el camino hacia el conocimiento e integración de uno mismo.",
+    ],
+  },
+  // 9 — Hoy
   {
     src: "/viñetas/astrologia/historia/historiaastrologia8.png",
     titulo: "Hoy",
     paragraphs: [
-      "En 1930 nacieron los horóscopos por signos que conocemos hoy.",
+      "En 1930 nacieron los horóscopos por signos solares que conocemos hoy.",
       "La astronomía explora el universo.",
       "La astrología sigue buscando significado en él.",
       "Las dos nacieron mirando el mismo cielo.",
@@ -107,7 +130,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   {
     src: "/viñetas/astrologia/historia/historiaastrologia8.png",
     paragraphs: [
-      "Durante más de 4.000 años, cada civilización reinventó la astrología.",
+      "Durante más de 4.000 años, cada civilización reinventó la Astrología.",
       "Por eso su historia es también la historia de la humanidad mirando al cielo.",
     ],
   },

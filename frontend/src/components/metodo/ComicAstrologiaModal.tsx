@@ -704,6 +704,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             onComplete={handleComplete}
             onBack={volverAlSelector}
             sinSombra
+            sinSaltar
           />
         )}
       </ModalContent>

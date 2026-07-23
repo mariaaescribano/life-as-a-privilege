@@ -166,10 +166,10 @@ export function ComicPasoModal({
           letterSpacing="0.04em"
           whiteSpace="nowrap"
           cursor="pointer"
-          boxShadow={`0 0 18px ${themeColor}66, 0 0 40px ${themeColor}33, 0 2px 12px rgba(0,0,0,0.45)`}
+          boxShadow="none"
           sx={{ backdropFilter: "blur(4px)" }}
           transition="all 0.2s"
-          _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${themeColor}88, 0 0 58px ${themeColor}44` }}
+          _hover={{ transform: "translateY(-1px)" }}
         >
           {/* Fondo: imagen de la disciplina + velo */}
           <Box as="img" src={imgFondo} alt="" loading="eager" position="absolute" inset="0"

@@ -291,7 +291,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           </Reveal>
 
           {/* ── PRINCIPIO DEL DOSHA ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" gap={3.5}>
               <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" textAlign="center"
@@ -309,7 +309,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           </Reveal>
 
           {/* ── ¿TE RECONOCES? (casillas — NO se guardan) ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
               {c.reconoces.titulo}
@@ -317,7 +317,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>
               {c.reconoces.intro}
             </Text>
-            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
               {c.reconoces.opciones.map((op) => (
                 <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
                   <CheckRow
@@ -340,7 +340,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           </Reveal>
 
           {/* ── LO QUE DESCUBRIRÁS ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" mb={2} style={{ textShadow: INK_SHADOW }}>
               {c.descubriras.titulo}
@@ -348,7 +348,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" mb={6}>
               {c.descubriras.intro}
             </Text>
-            <RevealStagger inView display="flex" flexDirection="column" gap={3.5} stagger={0.08} delayChildren={0.05} amount={0.1}>
+            <RevealStagger display="flex" flexDirection="column" gap={3.5} stagger={0.08} delayChildren={0.05} amount={0.1}>
               {c.descubriras.items.map((it, i) => {
                 const ItemIcon = DESCUBRE_ICON[it.icon];
                 return (
@@ -382,7 +382,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           </Reveal>
 
           {/* ── PREGUNTA FINAL (texto libre · SE GUARDA) ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Box ref={finalRef} w="100%">
             <Panel color={meta.color}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
@@ -443,7 +443,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           </Reveal>
 
           {/* ── CIERRE ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.slice(0, -1).map((p, i) => (

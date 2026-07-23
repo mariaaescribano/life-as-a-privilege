@@ -241,7 +241,7 @@ export default function MetodoAyurvedaResultado() {
           </Reveal>
 
           {/* Nota breve, sin consejos todavía */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
           <Text
             color="rgba(255,255,255,0.75)"
             fontSize={{ base: "sm", md: "md" }}

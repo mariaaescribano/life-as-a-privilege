@@ -1,18 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { motion, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { ayurvedaBg, ayurvedaNom } from "../../GlobalVariables";
-
-const MotionBox = motion(Box);
-
-// Hash estable (hidratación-safe) de un id → 0..1. Sirve para desincronizar el
-// balanceo de reposo de cada panel, para que no se muevan todos a la vez.
-function faseDeId(id: string): number {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  return (h % 1000) / 1000;
-}
 
 interface AyurvedaPanelProps {
   children: React.ReactNode;
@@ -27,18 +16,20 @@ interface AyurvedaPanelProps {
 
 /**
  * Caja (panel) común de las páginas del recorrido de Ayurveda —las que ve el
- * usuario cuando YA conoce su dosha—. Es un componente compartido y VIVO:
- *   · balanceo de reposo muy suave e infinito (desincronizado por panel), para
- *     que las cajas «respiren» y se sientan vivas.
+ * usuario cuando YA conoce su dosha—. Es un componente ESTÁTICO: NO se mueve por
+ * sí solo. Antes tenía un balanceo de reposo infinito que distraía y dificultaba
+ * la lectura; se quitó a propósito.
+ *
+ * El DINAMISMO es solo de ENTRADA: la caja se coloca en escena (fundido + subida
+ * + leve zoom) al cargar la página, mediante el `Reveal` / `RevealStagger` que la
+ * envuelve en cada página —y luego se queda quieta para poder leerla—. No se
+ * duplica aquí para no solapar dos entradas ni volver a introducir movimiento.
  *
  * NO lleva hover ni reacción al toque a propósito: estos paneles contienen
- * botones, checks y textareas, y en táctil el estado hover se quedaba «pegado»
- * tras tocar (se veía feo). La ENTRADA (revelar la caja y rellenar su interior
- * de forma dinámica) la aporta el `Reveal` / `RevealStagger` que envuelve a cada
- * Panel en las páginas —no se duplica aquí para no solapar dos entradas—.
+ * botones, checks y textareas, y en táctil el estado hover se quedaba «pegado».
  *
  * Al vivir en un solo archivo, el cambio se ve en TODAS las páginas y en los tres
- * doshas (vata / pitta / kapha). Respeta `prefers-reduced-motion`.
+ * doshas (vata / pitta / kapha).
  */
 export function AyurvedaPanel({
   children,
@@ -47,9 +38,6 @@ export function AyurvedaPanel({
   px = { base: 6, md: 10 },
   py = { base: 7, md: 9 },
 }: AyurvedaPanelProps) {
-  const reduce = useReducedMotion();
-  const fase = faseDeId(React.useId());
-
   const baseShadow = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`;
 
   const fondo = tile ? (
@@ -78,29 +66,11 @@ export function AyurvedaPanel({
     </>
   );
 
-  // Accesibilidad: si el usuario pidió menos movimiento, caja estática.
-  if (reduce) {
-    return (
-      <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={baseShadow}>
-        {contenido}
-      </Box>
-    );
-  }
-
+  // Caja estática: sin balanceo, sin hover. La entrada la aporta el Reveal que la
+  // envuelve; una vez colocada, se queda quieta para poder leerla.
   return (
-    // Balanceo de reposo infinito, desincronizado por panel (useId → fase). SIN
-    // hover y SIN reacción al toque (ver comentario del componente).
-    <MotionBox
-      position="relative"
-      w="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      boxShadow={baseShadow}
-      animate={{ rotate: [0, -0.6, 0.6, 0], y: [0, -4, 0, -2, 0], scale: [1, 1.01, 1, 1.006, 1] }}
-      transition={{ duration: 6.5 + fase, repeat: Infinity, ease: "easeInOut", delay: fase * 1.5 }}
-      style={{ transformOrigin: "center" }}
-    >
+    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={baseShadow}>
       {contenido}
-    </MotionBox>
+    </Box>
   );
 }

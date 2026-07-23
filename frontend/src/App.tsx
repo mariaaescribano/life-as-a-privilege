@@ -131,7 +131,8 @@ import MetodoCabalaDiezDias from "./app/metodo/MetodoCabalaDiezDias";
 import MetodoCabalaCursos from "./app/metodo/MetodoCabalaCursos";
 import MetodoCultura from "./app/metodo/MetodoCultura";
 import MetodoCulturaHistorias from "./app/metodo/MetodoCulturaHistorias";
-import MetodoCulturaHistoriaUniversal from "./app/metodo/MetodoCulturaHistoriaUniversal";
+import MetodoCulturaHistoria from "./app/metodo/MetodoCulturaHistoria";
+import MetodoCulturaHistoriaEra from "./app/metodo/MetodoCulturaHistoriaEra";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
 import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
@@ -297,7 +298,8 @@ export default function App()
 
       <Route path="/metodo/cultura" element={<PrivateRoute><MetodoCultura /></PrivateRoute>} />
       <Route path="/metodo/cultura/historias" element={<PrivateRoute><MetodoCulturaHistorias /></PrivateRoute>} />
-      <Route path="/metodo/cultura/historia/universal" element={<PrivateRoute><MetodoCulturaHistoriaUniversal /></PrivateRoute>} />
+      <Route path="/metodo/cultura/historia/:historiaKey" element={<PrivateRoute><MetodoCulturaHistoria /></PrivateRoute>} />
+      <Route path="/metodo/cultura/historia/:historiaKey/:eraKey" element={<PrivateRoute><MetodoCulturaHistoriaEra /></PrivateRoute>} />
 
       <Route path="/tcm/test/1" element={<TCMTest1 />} />
       <Route path="/tcm/test/2" element={<TCMTest2 />} />
