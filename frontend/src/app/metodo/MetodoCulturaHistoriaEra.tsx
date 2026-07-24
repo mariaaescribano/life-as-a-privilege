@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -10,7 +11,7 @@ import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { getHistoria } from "../../components/metodo/culturaHistorias";
 import { Reveal } from "../../components/global/Reveal";
-import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Página de UNA era de una Historia de Cultura (cualquiera; la clave de la
@@ -55,7 +56,18 @@ export default function MetodoCulturaHistoriaEra() {
     // Historia inexistente → al listado; era inexistente → a la Historia.
     if (!historia) { navigate("/metodo/cultura/historias", { replace: true }); return; }
     if (!era) { navigate(volverHistoria, { replace: true }); return; }
-    setLoading(false);
+    (async () => {
+      try {
+        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        // Gate de pago: sin suscripción a Cultura, a la portada (con el popup de pago).
+        if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
+      } catch {
+        navigate("/metodo/cultura", { replace: true });
+        return;
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [navigate, historia, era, volverHistoria]);
 
   const activo = useMemo(

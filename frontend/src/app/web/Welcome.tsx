@@ -446,6 +446,7 @@ const Welcome = () => {
                     textTransform="uppercase"
                     whiteSpace="nowrap"
                     cursor="pointer"
+                    userSelect="none"
                     opacity={0.75}
                     transition="opacity 0.28s ease"
                     _groupHover={{ opacity: 1 }}

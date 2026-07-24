@@ -12,6 +12,11 @@ import { keyframes } from "@emotion/react";
 import { astrologiaTxt } from "../../GlobalVariables";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { comicLoaderPorColor } from "./comicLoaders";
+import SpinnerTurquesa from "../global/Spinner";
+
+const SPACE_IMG = "/img/astrologia/space.jpg";
 
 const fadeInScale = keyframes`
   from { opacity: 0; transform: scale(0.95); }
@@ -538,6 +543,16 @@ interface ComicAstrologiaModalProps {
 export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstrologiaModalProps) {
   const [seccion, setSeccion] = useState<Seccion | null>(null);
 
+  // Hasta que las fotos carguen se muestra la animación de la estrella (que no
+  // aparezcan de golpe): en el selector, sus portadas + el fondo espacial; en la
+  // vista cómic, todas las viñetas del capítulo elegido.
+  const selectorListo = usePrecargarImagenes(
+    isOpen && !seccion ? [SPACE_IMG, ...SELECTOR_OPTIONS.map((o) => encodeURI(o.cover))] : [],
+  );
+  const comicListo = usePrecargarImagenes(
+    seccion ? VINETAS_BY_SECCION[seccion].map((v) => encodeURI(v.src)) : [],
+  );
+
   // Reinicia al selector cada vez que se abre el modal.
   useEffect(() => {
     if (isOpen) setSeccion(null);
@@ -621,6 +636,13 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
             </Box>
 
+            {/* Hasta que el fondo y las portadas carguen: solo la estrella. */}
+            {!selectorListo && (
+              <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+                {comicLoaderPorColor(astrologiaTxt) ?? <SpinnerTurquesa fullScreen={false} color={astrologiaTxt} />}
+              </Flex>
+            )}
+            {selectorListo && (
             <ModalBody
               position="relative"
               zIndex={2}
@@ -697,12 +719,21 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                 </Flex>
               </Flex>
             </ModalBody>
+            )}
           </>
         )}
 
         {/* ── VISTA CÓMIC ── usa el mismo ComicViewer que el cómic del Inicio. */}
         {seccion && (
           <>
+            {/* Hasta que TODAS las viñetas del capítulo carguen: solo la estrella
+                (el botón «Saltar» de abajo sigue disponible para salir). */}
+            {!comicListo && (
+              <Flex position="fixed" inset="0" zIndex={11} align="center" justify="center" bg="rgba(0,0,0,0.6)">
+                {comicLoaderPorColor(astrologiaTxt) ?? <SpinnerTurquesa fullScreen={false} color={astrologiaTxt} />}
+              </Flex>
+            )}
+            {comicListo && (
             <ComicViewer
               key={seccion}
               vinetas={VINETAS_BY_SECCION[seccion]}
@@ -712,6 +743,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               onBack={volverAlSelector}
               sinSombra
             />
+            )}
 
             {/* Botón «Saltar» — a la IZQUIERDA de la X del ComicViewer. Sale de las
                 Ilustraciones y vuelve a la página de Astrología (mismo destino que
