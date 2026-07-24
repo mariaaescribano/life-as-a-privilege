@@ -6,7 +6,7 @@ import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { type CourseEntry } from "./NuevosCursosPage";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
-import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -19,10 +19,15 @@ import {
   nutricionNomLink,
 } from "../../GlobalVariables";
 
-const useReveal = (threshold = 0.05) => {
+// `enabled` re-dispara el efecto cuando el contenido observado se monta de
+// verdad. Sin él, el observer se creaba mientras la página aún mostraba el
+// loader (ref = null → early return) y NUNCA se re-adjuntaba al montar el grid,
+// dejando las cajitas atascadas en opacity 0.
+const useReveal = (threshold = 0.05, enabled = true) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
+    if (!enabled) return;
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
@@ -31,7 +36,7 @@ const useReveal = (threshold = 0.05) => {
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [threshold, enabled]);
   return { ref, visible };
 };
 
@@ -41,8 +46,10 @@ export const AprendizajeHome = () => {
   // descargadas: entra ya completa (nada de portadas cargando a trozos), que
   // transmite que el material está cuidado.
   const [imagesReady, setImagesReady] = useState(false);
-  const cardsReveal = useReveal(0.04);
   const { cursosData, loading } = useCursosData();
+  // El reveal solo se arma cuando la página real ya está en pantalla (datos +
+  // portadas listas); antes el nodo observado no existe.
+  const cardsReveal = useReveal(0.04, !loading && imagesReady);
 
   // Todos los cursos de todas las disciplinas, en una sola lista mezclada,
   // ordenada por fecha de creación descendente (los más nuevos, primero).
@@ -109,15 +116,15 @@ export const AprendizajeHome = () => {
   ];
 
   // Mientras se descargan las portadas (o llegan los datos): fondo teal con la
-  // animación de la ESTRELLA de astrología en blanco, centrada (la misma que el
-  // recorrido, en lugar del spinner). El header se pinta ya para que cargue
-  // antes de desbloquear la página.
+  // animación del MANDALA del logo de la web en blanco, centrada (el loader "de
+  // la casa", no la estrella de astrología). El header se pinta ya para que
+  // cargue antes de desbloquear la página.
   if (loading || !imagesReady) {
     return (
       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Flex flex="1" align="center" justify="center" overflow="hidden">
-          <AstrologiaLoader color="#ffffff" />
+          <LifeLoader color="#ffffff" />
         </Flex>
       </Box>
     );

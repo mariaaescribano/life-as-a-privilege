@@ -536,7 +536,6 @@ export default function MetodoAstrologia() {
         continueBgImage={SPACE_IMG}
         onContinue={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
         onComplete={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
-        flechasEnBox
       />
 
       {/* Segundo cómic de intro: «La Historia de la Astrología» (va seguido del
@@ -551,7 +550,6 @@ export default function MetodoAstrologia() {
         onComplete={() => setHistoriaOpen(false)}
         // Volver al cómic anterior de la cadena: el Origen según la espiritualidad.
         onBack={() => { setHistoriaOpen(false); intro.openNow(); }}
-        flechasEnBox
       />
 
       {/* ── POPUP: confirmar datos antes de enviar ── */}

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { StarsLayer } from "../../components/global/StarsLayer";
@@ -213,7 +213,7 @@ export default function Ilustraciones() {
       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Flex flex="1" align="center" justify="center" overflow="hidden">
-          <AstrologiaLoader color="#ffffff" />
+          <LifeLoader color="#ffffff" />
         </Flex>
       </Box>
     );

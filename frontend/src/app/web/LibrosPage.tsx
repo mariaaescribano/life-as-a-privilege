@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
 import { API_URL } from "../../GlobalVariables";
 
@@ -378,7 +378,7 @@ export default function LibrosPage() {
       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Flex flex="1" align="center" justify="center" overflow="hidden">
-          <AstrologiaLoader color="#ffffff" />
+          <LifeLoader color="#ffffff" />
         </Flex>
       </Box>
     );

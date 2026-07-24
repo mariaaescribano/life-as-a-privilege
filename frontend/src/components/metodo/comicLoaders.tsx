@@ -26,6 +26,65 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
+// ── Life · el mandala/loto del logo de la web (8 pétalos que brotan y giran) ──
+// Loader "de la casa": se usa FUERA del mapa (catálogos: Cursos, Libros,
+// Ilustraciones…), donde no tiene sentido la estrella de astrología. Reproduce
+// el logo (/img/icono/life.png): flor de 8 pétalos de loto radiales, en SVG +
+// CSS, monocromo (blanco por defecto sobre el fondo turquesa).
+const brotarPetalo = keyframes`
+  0%, 100% { transform: scale(0.5);  opacity: 0.35; }
+  50%      { transform: scale(1);    opacity: 1; }
+`;
+const girarMandala = keyframes`
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+`;
+// Pétalo de loto con la punta arriba, naciendo del centro (60,60).
+const PETALO_VIDA = "M60,60 C 47,43 47,27 60,15 C 73,27 73,43 60,60 Z";
+export function LifeLoader({ color }: { color?: string } = {}) {
+  const c = color ?? "#ffffff";
+  return (
+    <Shell>
+      <Box
+        as="g"
+        animation={`${girarMandala} 16s linear infinite`}
+        sx={{ transformBox: "view-box", transformOrigin: "60px 60px" }}
+      >
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((k) => (
+          <Box
+            as="g"
+            key={k}
+            style={{ transform: `rotate(${k * 45}deg)` }}
+            sx={{ transformBox: "view-box", transformOrigin: "60px 60px" }}
+          >
+            <Box
+              as="path"
+              d={PETALO_VIDA}
+              fill="none"
+              stroke={c}
+              strokeWidth={1.8}
+              strokeLinejoin="round"
+              animation={`${brotarPetalo} 2.8s ease-in-out ${k * 0.16}s infinite`}
+              sx={{ transformBox: "view-box", transformOrigin: "60px 60px" }}
+              style={{ filter: `drop-shadow(0 0 4px ${c}55)` }}
+            />
+          </Box>
+        ))}
+      </Box>
+      <Box
+        as="circle"
+        cx={60}
+        cy={60}
+        r={4.5}
+        fill={c}
+        animation={`${brotarPetalo} 2.8s ease-in-out infinite`}
+        sx={{ transformBox: "fill-box", transformOrigin: "center" }}
+        style={{ filter: `drop-shadow(0 0 5px ${c})` }}
+      />
+    </Shell>
+  );
+}
+
 // ── Astrología · estrella de 5 puntas que se dibuja y titila ─────────────────
 const dibujarConst = keyframes`
   0%   { stroke-dashoffset: 1; }
