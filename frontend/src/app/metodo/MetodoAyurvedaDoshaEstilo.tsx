@@ -175,7 +175,8 @@ export default function MetodoAyurvedaDoshaEstilo() {
 
   const guardarReflexion = async () => {
     await persist(reflexion, compromiso);
-    setGuardado(true);
+    // Guardar vacío no desbloquea (el Índice exige reflexión o compromiso).
+    setGuardado(reflexion.trim().length > 0 || compromiso.trim().length > 0);
   };
 
   const irSiguiente = () => {

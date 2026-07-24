@@ -133,7 +133,7 @@ export default function MetodoPsicologiaHuellas() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Huellas"
-            pageLabel="6/18"
+            pageLabel="6/20"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}

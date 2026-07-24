@@ -95,7 +95,7 @@ export default function MetodoAstrologiaCartaAstral() {
         // disparará un recálculo automático una sola vez por usuario.
         const CARTA_CALC_VERSION = "v3-chiron-m0-28";
         const versionKey = `cartaCalcVersion:${userId}`;
-        const tieneQuiron = !!cartaCargada?.planetas.some((p) => p.planeta === "quiron");
+        const tieneQuiron = !!cartaCargada?.planetas?.some((p) => p.planeta === "quiron");
         const needsRefresh =
           !!cartaCargada &&
           (!tieneQuiron || localStorage.getItem(versionKey) !== CARTA_CALC_VERSION);

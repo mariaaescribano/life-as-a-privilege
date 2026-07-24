@@ -25,6 +25,8 @@ import { Reveal, RevealStagger, RevealItem } from "../../components/global/Revea
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_COMPROMISO } from "../../components/metodo/comicCompromiso";
 import {
   experienciaById,
   arquetipoKey,
@@ -127,6 +129,9 @@ export default function MetodoPsicologiaMapa() {
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
   const [felicitarOpen, setFelicitarOpen] = useState(false);
+  // Cómic «Cómo te construiste»: se intercala tras la felicitación, antes de
+  // entrar a Compromiso. Se puede saltar.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -351,9 +356,24 @@ export default function MetodoPsicologiaMapa() {
       {felicitarOpen && (
         <PopupFelicitacion
           onClose={() => setFelicitarOpen(false)}
-          onContinuar={() => ir("compromiso")}
+          onContinuar={() => { setFelicitarOpen(false); setComicOpen(true); }}
         />
       )}
+
+      {/* ── Cómic «Cómo te construiste» — tras la felicitación, antes de
+          Compromiso. Se puede saltar (Saltar →). ── */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => ir("compromiso")}
+        vinetas={COMIC_COMPROMISO}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <AyudaRecorrido pagina="mapa" />
 

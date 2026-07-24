@@ -515,7 +515,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Galileo defendía una idea revolucionaria: la naturaleza debe leerse observándola, no únicamente consultando libros antiguos.",
         ],
         "Dato curioso: la famosa frase «Eppur si muove» («Y, sin embargo, se mueve») probablemente nunca fue pronunciada por Galileo, aunque se convirtió en el símbolo de la libertad científica."),
-      hito("revolucion-pensamiento", "rene-descartes", "René Descartes", "1596-1650",
+      hito("revolucion-pensamiento", "descartes", "René Descartes", "1596-1650",
         "¿Existe alguna verdad de la que no podamos dudar?",
         [
           "Descartes decidió hacer algo que ningún filósofo había intentado de forma tan radical: dudar de absolutamente todo.",
@@ -525,7 +525,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "A partir de esa certeza intentó reconstruir todo el conocimiento mediante la razón. Por ello se le considera el padre del racionalismo moderno.",
         ],
         "Dato curioso: Descartes también fue un brillante matemático y creó el sistema de coordenadas cartesianas que seguimos utilizando hoy."),
-      hito("revolucion-pensamiento", "baruch-spinoza", "Baruch Spinoza", "1632-1677",
+      hito("revolucion-pensamiento", "spinoza", "Baruch Spinoza", "1632-1677",
         "¿Y si Dios no estuviera fuera del universo... sino que fuera el propio universo?",
         [
           "Spinoza fue uno de los filósofos más valientes de su tiempo. Nacido en una comunidad judía de Ámsterdam, sus ideas resultaron tan revolucionarias que fue expulsado de ella mediante una excomunión extremadamente severa.",
@@ -536,7 +536,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Además defendió la libertad de pensamiento y la tolerancia religiosa en una época en la que estas ideas podían costar la vida. Albert Einstein confesó siglos después que el Dios en el que creía era precisamente el Dios de Spinoza.",
         ],
         "Dato curioso: Spinoza rechazó un prestigioso puesto como profesor universitario para conservar su independencia intelectual. Prefería vivir modestamente puliendo lentes antes que renunciar a su libertad para pensar."),
-      hito("revolucion-pensamiento", "thomas-hobbes", "Thomas Hobbes", "1588-1679",
+      hito("revolucion-pensamiento", "hobbes", "Thomas Hobbes", "1588-1679",
         "¿Qué ocurriría si no existieran leyes?",
         [
           "Hobbes imaginó una situación extrema: un mundo sin gobiernos, sin jueces, sin policía, sin normas.",
@@ -544,7 +544,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Para evitar ese caos, los seres humanos aceptan entregar parte de su libertad a un Estado fuerte que garantice el orden. Esta idea dio origen a la teoría moderna del contrato social.",
         ],
         "Dato curioso: Hobbes llamó Leviatán al Estado, tomando el nombre de un gigantesco monstruo marino mencionado en la Biblia."),
-      hito("revolucion-pensamiento", "john-locke", "John Locke", "1632-1704",
+      hito("revolucion-pensamiento", "locke", "John Locke", "1632-1704",
         "¿Y si todos naciéramos iguales?",
         [
           "Locke no estaba de acuerdo con Hobbes. Creía que las personas poseen unos derechos que ningún gobernante puede quitarles. Entre ellos destacaban la vida, la libertad y la propiedad.",
@@ -552,7 +552,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Además, defendía que la mente humana al nacer es una tabla rasa. No venimos al mundo con conocimientos innatos: aprendemos gracias a la experiencia.",
         ],
         "Dato curioso: muchas de las ideas presentes en las democracias actuales proceden directamente de Locke."),
-      hito("revolucion-pensamiento", "gottfried-leibniz", "Gottfried Leibniz", "1646-1716",
+      hito("revolucion-pensamiento", "leibniz", "Gottfried Leibniz", "1646-1716",
         "¿Vivimos en el mejor de los mundos posibles?",
         [
           "Leibniz fue matemático, científico, diplomático y filósofo.",
@@ -570,15 +570,6 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Hume también cuestionó muchas ideas tradicionales sobre la religión, el alma y la causalidad. Su escepticismo sacudiría profundamente a un joven filósofo alemán llamado Immanuel Kant.",
         ],
         "Dato curioso: Kant confesó que fue precisamente la lectura de Hume la que lo despertó de su «sueño dogmático»."),
-      hito("revolucion-pensamiento", "dos-caminos-conocimiento", "Dos caminos hacia el conocimiento", "",
-        "",
-        [
-          "Al finalizar el siglo XVIII, la filosofía parecía dividida en dos grandes escuelas.",
-          "Los racionalistas, como Descartes, Spinoza y Leibniz, confiaban principalmente en la razón.",
-          "Los empiristas, como Bacon, Locke y Hume, defendían que todo conocimiento comienza con la experiencia.",
-          "¿Quién tenía razón? Durante décadas nadie consiguió resolver completamente ese debate.",
-          "Hasta que apareció un profesor de Königsberg llamado Immanuel Kant.",
-        ]),
     ],
   },
   {
@@ -630,16 +621,11 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Cada ser humano posee una dignidad propia.",
           "Esto significa que nadie debería ser utilizado, manipulado o sacrificado simplemente porque resulte útil para otros.",
           "Esta idea ha influido enormemente en los derechos humanos, en la filosofía política y en muchas constituciones modernas.",
-        ],
-        "Dato curioso: buena parte de la Declaración Universal de los Derechos Humanos refleja principios que recuerdan directamente a la ética de Kant."),
-      hito("que-conocer", "kant-reglas-del-juego", "El filósofo que cambió las reglas del juego", "",
-        "",
-        [
-          "Con Kant terminó una etapa de la filosofía.",
-          "A partir de él, la pregunta ya no sería únicamente: ¿qué podemos conocer?",
+          "Con Kant terminó una etapa de la filosofía. A partir de él, la pregunta ya no sería únicamente: ¿qué podemos conocer?",
           "También aparecerían otras nuevas: ¿cómo construye la mente la realidad? ¿Somos realmente libres? ¿Tiene la historia un sentido? ¿Qué hace al ser humano diferente?",
           "Prácticamente todos los grandes filósofos de los siglos XIX y XX dialogarán con Kant, ya sea para continuar su pensamiento... o para discutirlo.",
-        ]),
+        ],
+        "Dato curioso: buena parte de la Declaración Universal de los Derechos Humanos refleja principios que recuerdan directamente a la ética de Kant."),
     ],
   },
   {
@@ -725,7 +711,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     intro:
       "Quizá no somos tan racionales como creemos. Durante siglos, la filosofía había confiado en la razón como la mejor herramienta del ser humano. Pero el siglo XX lo puso todo en duda. Dos guerras mundiales, los campos de exterminio y las bombas atómicas demostraron que la civilización más avanzada también podía cometer las mayores atrocidades. Al mismo tiempo, el psicoanálisis revelaba que buena parte de nuestra conducta nace de impulsos inconscientes que ni siquiera comprendemos. La filosofía dejó entonces de preguntarse solo qué podemos conocer y empezó a preguntarse quiénes somos, por qué existimos y cómo debemos vivir en un mundo que parecía haber perdido el sentido.",
     subhitos: [
-      hito("mente-humana", "sigmund-freud", "Sigmund Freud", "1856-1939",
+      hito("mente-humana", "freud", "Sigmund Freud", "1856-1939",
         "¿Y si no fuéramos dueños de nuestra propia mente?",
         [
           "Freud no era filósofo, sino médico, pero su influencia en la forma de entender al ser humano fue enorme.",
@@ -735,7 +721,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Aunque hoy muchas de sus teorías han sido revisadas o superadas, Freud cambió para siempre la manera de mirar la mente humana.",
         ],
         "Dato curioso: Freud llamó psicoanálisis a su método, basado en hablar y en interpretar los sueños, y de él proceden palabras tan habituales hoy como «represión» o «subconsciente»."),
-      hito("mente-humana", "edmund-husserl", "Edmund Husserl", "1859-1938",
+      hito("mente-humana", "husserl", "Edmund Husserl", "1859-1938",
         "¿Podemos describir la experiencia tal y como realmente la vivimos?",
         [
           "Husserl quería devolver a la filosofía el rigor de una ciencia, pero partiendo de algo muy concreto: la experiencia vivida.",
@@ -744,7 +730,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Su método influyó en casi todos los grandes filósofos del siglo XX, empezando por su propio discípulo, Martin Heidegger.",
         ],
         "Dato curioso: la fenomenología no solo transformó la filosofía; también dejó huella en la psicología, la sociología y hasta en el diseño de tecnología pensada «desde la experiencia del usuario»."),
-      hito("mente-humana", "martin-heidegger", "Martin Heidegger", "1889-1976",
+      hito("mente-humana", "heidegger", "Martin Heidegger", "1889-1976",
         "¿Qué significa realmente existir?",
         [
           "Heidegger pensaba que la filosofía había olvidado su pregunta más importante: ¿qué significa ser?",
@@ -753,7 +739,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Su obra, difícil y profunda, influyó enormemente en el existencialismo posterior.",
         ],
         "Dato curioso: Heidegger inventó numerosas palabras nuevas porque creía que el lenguaje habitual no bastaba para expresar sus ideas sobre la existencia."),
-      hito("mente-humana", "jean-paul-sartre", "Jean-Paul Sartre", "1905-1980",
+      hito("mente-humana", "sartre", "Jean-Paul Sartre", "1905-1980",
         "¿Y si estuviéramos condenados a ser libres?",
         [
           "Sartre fue la gran figura del existencialismo. Su idea central puede resumirse en una frase: «la existencia precede a la esencia».",
@@ -807,7 +793,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     intro:
       "La filosofía sigue viva porque las preguntas nunca terminan. El siglo XX y el comienzo del XXI trajeron un mundo nuevo: la ciencia se volvió capaz de transformar la vida y el planeta, la tecnología conectó a toda la humanidad y aparecieron problemas que ningún filósofo anterior había imaginado. ¿Cómo sabemos que una teoría científica es fiable? ¿Quién decide lo que está bien y lo que está mal en una sociedad diversa? ¿Puede una máquina llegar a pensar? Lejos de haber terminado su trabajo, la filosofía se enfrenta hoy a algunas de las preguntas más importantes de toda su historia.",
     subhitos: [
-      hito("pensar-futuro", "karl-popper", "Karl Popper", "1902-1994",
+      hito("pensar-futuro", "popper", "Karl Popper", "1902-1994",
         "¿Cómo distinguir la ciencia de lo que solo parece ciencia?",
         [
           "Popper se hizo una pregunta clave: ¿qué diferencia una teoría científica de una que no lo es?",
@@ -816,7 +802,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Por eso, en ciencia, ninguna teoría es una verdad absoluta y definitiva: siempre está abierta a ser corregida.",
         ],
         "Dato curioso: Popper también fue un firme defensor de la democracia; en La sociedad abierta y sus enemigos criticó a los regímenes totalitarios y a las filosofías que creían poseer la verdad absoluta."),
-      hito("pensar-futuro", "thomas-kuhn", "Thomas Kuhn", "1922-1996",
+      hito("pensar-futuro", "kuhn", "Thomas Kuhn", "1922-1996",
         "¿La ciencia avanza poco a poco o a saltos?",
         [
           "Hasta Kuhn, muchos pensaban que la ciencia progresaba acumulando descubrimientos de manera lenta y constante.",
@@ -825,7 +811,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Con Kuhn entendimos que la ciencia también tiene su propia historia, con crisis, rupturas y grandes cambios de mentalidad.",
         ],
         "Dato curioso: gracias a Kuhn, la palabra «paradigma» pasó de la filosofía a usarse hoy en casi todos los ámbitos para hablar de un gran cambio de perspectiva."),
-      hito("pensar-futuro", "michel-foucault", "Michel Foucault", "1926-1984",
+      hito("pensar-futuro", "foucault", "Michel Foucault", "1926-1984",
         "¿Quién decide lo que es normal?",
         [
           "Foucault estudió algo que casi nadie se había planteado: cómo el poder no solo prohíbe, sino que también moldea nuestra forma de pensar y de vivir.",

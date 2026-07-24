@@ -18,6 +18,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_SINTESIS } from "../../components/metodo/comicSintesis";
 import { Reveal } from "../../components/global/Reveal";
 import { type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -48,6 +50,9 @@ export default function MetodoPsicologiaBrujula() {
   const [loading, setLoading] = useState(true);
   const [brujula, setBrujula] = useState<BrujulaData>({});
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
+  // Cómic «El problema nunca es el problema»: se intercala antes de la Síntesis.
+  // Se puede saltar.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -142,7 +147,7 @@ export default function MetodoPsicologiaBrujula() {
                 prev={{ label: "← Compromiso", onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
                 next={{
                   label: "Síntesis →",
-                  onClick: () => void irA(`/metodo/psicologia/${exp.id}/sintesis`),
+                  onClick: () => { void persistir(brujula); setComicOpen(true); },
                   disabled: !brujulaCompleta,
                   disabledTooltip: "Escribe tu carta para continuar.",
                 }}
@@ -226,6 +231,21 @@ export default function MetodoPsicologiaBrujula() {
           </Flex>
         </Flex>
       </Box>
+
+      {/* Cómic «El problema nunca es el problema» — sale antes de la Síntesis.
+          Se puede saltar (Saltar →). */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => navigate(`/metodo/psicologia/${exp.id}/sintesis`)}
+        vinetas={COMIC_SINTESIS}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 

@@ -83,7 +83,6 @@ import MetodoAyurvedaDoshaCursos from "./app/metodo/MetodoAyurvedaDoshaCursos";
 import MetodoAyurvedaDoshaRecorrido from "./app/metodo/MetodoAyurvedaDoshaRecorrido";
 import MetodoTcm from "./app/metodo/MetodoTcm";
 import MetodoTcmElementos from "./app/metodo/MetodoTcmElementos";
-import MetodoTcmElemento from "./app/metodo/MetodoTcmElemento";
 import MetodoTcmCiclos from "./app/metodo/MetodoTcmCiclos";
 import MetodoTcmDiagnostico from "./app/metodo/MetodoTcmDiagnostico";
 import MetodoTcmLengua from "./app/metodo/MetodoTcmLengua";
@@ -99,8 +98,6 @@ import MetodoFisiologiaMacromoleculas from "./app/metodo/MetodoFisiologiaMacromo
 import MetodoFisiologiaEstructuras from "./app/metodo/MetodoFisiologiaEstructuras";
 import MetodoFisiologiaCelula from "./app/metodo/MetodoFisiologiaCelula";
 import MetodoFisiologiaTodasCelulas from "./app/metodo/MetodoFisiologiaTodasCelulas";
-import MetodoFisiologiaTejidos from "./app/metodo/MetodoFisiologiaTejidos";
-import MetodoFisiologiaOrganos from "./app/metodo/MetodoFisiologiaOrganos";
 import MetodoFisiologiaSistemas from "./app/metodo/MetodoFisiologiaSistemas";
 import MetodoFisiologiaOrganismo from "./app/metodo/MetodoFisiologiaOrganismo";
 import MetodoFisiologiaAnalitica from "./app/metodo/MetodoFisiologiaAnalitica";
@@ -244,7 +241,6 @@ export default function App()
       {/* El Recorrido · Medicina China (4ª disciplina) */}
       <Route path="/metodo/tcm" element={<PrivateRoute><MetodoTcm /></PrivateRoute>} />
       <Route path="/metodo/tcm/elementos" element={<PrivateRoute><MetodoTcmElementos /></PrivateRoute>} />
-      <Route path="/metodo/tcm/elemento/:elemento" element={<PrivateRoute><MetodoTcmElemento /></PrivateRoute>} />
       {/* "Tu equilibrio" se fusionó en el Diagnóstico: redirigimos los enlaces antiguos. */}
       <Route path="/metodo/tcm/perfil" element={<Navigate to="/metodo/tcm/diagnostico" replace />} />
       <Route path="/metodo/tcm/ciclos" element={<PrivateRoute><MetodoTcmCiclos /></PrivateRoute>} />
@@ -262,8 +258,6 @@ export default function App()
       <Route path="/metodo/fisiologia/estructuras" element={<PrivateRoute><MetodoFisiologiaEstructuras /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/celula" element={<PrivateRoute><MetodoFisiologiaCelula /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/todas-tus-celulas" element={<PrivateRoute><MetodoFisiologiaTodasCelulas /></PrivateRoute>} />
-      <Route path="/metodo/fisiologia/tejidos" element={<PrivateRoute><MetodoFisiologiaTejidos /></PrivateRoute>} />
-      <Route path="/metodo/fisiologia/organos" element={<PrivateRoute><MetodoFisiologiaOrganos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/organismo" element={<PrivateRoute><MetodoFisiologiaOrganismo /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/analitica" element={<PrivateRoute><MetodoFisiologiaAnalitica /></PrivateRoute>} />

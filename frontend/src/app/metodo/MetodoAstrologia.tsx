@@ -537,7 +537,6 @@ export default function MetodoAstrologia() {
         continueBgImage={SPACE_IMG}
         onContinue={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
         onComplete={() => { intro.close(); if (hayHistoria) setHistoriaOpen(true); }}
-        textSize={{ base: "xl", md: "2xl" }}
         flechasEnBox
       />
 
@@ -553,7 +552,6 @@ export default function MetodoAstrologia() {
         onComplete={() => setHistoriaOpen(false)}
         // Volver al cómic anterior de la cadena: el Origen según la espiritualidad.
         onBack={() => { setHistoriaOpen(false); intro.openNow(); }}
-        textSize={{ base: "xl", md: "2xl" }}
         flechasEnBox
       />
 

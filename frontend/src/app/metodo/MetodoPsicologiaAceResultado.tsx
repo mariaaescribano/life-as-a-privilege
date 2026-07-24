@@ -19,6 +19,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_LINEA_TIEMPO } from "../../components/metodo/comicLineaTiempo";
 import {
   experienciaById,
   ACE_ESPERANZA,
@@ -47,6 +49,9 @@ export default function MetodoPsicologiaAceResultado() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
+  // Cómic «antesala de la Línea de Vida»: se intercala al ir a la timeline (desde
+  // el header o el botón), antes de que cargue y de su popup de edad. Se salta.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
   const [data, setData] = useState<LineaDeVidaData>({});
 
@@ -107,7 +112,7 @@ export default function MetodoPsicologiaAceResultado() {
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← ACE", onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
-              next={{ label: "Línea de Vida →", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
+              next={{ label: "Línea de Vida →", onClick: () => setComicOpen(true) }}
             />
           </Reveal>
 
@@ -186,7 +191,7 @@ export default function MetodoPsicologiaAceResultado() {
 
                 {/* Seguir el recorrido */}
                 <Flex justify="center" pt={2}>
-                  <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}`)}
+                  <Box as="button" onClick={() => setComicOpen(true)}
                        position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
                        bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
                        fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
@@ -206,6 +211,21 @@ export default function MetodoPsicologiaAceResultado() {
       </Flex>
 
       <AyudaRecorrido pagina="ace" />
+
+      {/* Cómic antesala de la Línea de Vida — sale al pasar de botón, antes de
+          cargar la timeline y su popup de edad. Se puede saltar (Saltar →). */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => navigate(`/metodo/psicologia/${exp.id}`)}
+        vinetas={COMIC_LINEA_TIEMPO}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={`0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`}
+      />
 
       <SiteFooter />
     </Box>

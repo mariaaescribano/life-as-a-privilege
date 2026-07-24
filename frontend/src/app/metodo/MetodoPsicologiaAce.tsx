@@ -23,6 +23,8 @@ import SpinnerTurquesa from "../../components/global/Spinner";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_ACE } from "../../components/metodo/comicAce";
 import {
   experienciaById,
   ACE_INTRO,
@@ -54,8 +56,14 @@ export default function MetodoPsicologiaAce() {
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, AceRespuesta>>({});
   const [guardando, setGuardando] = useState(false);
+  // Cómic «Los ACE»: se intercala al ir al resultado (desde el header o el
+  // botón). Solo aquí — no forma parte de las Ilustraciones del material.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
   const resultadoRef = useRef<HTMLDivElement | null>(null);
+  // Último guardado en vuelo: se espera (flush) antes de navegar al resultado,
+  // que rebota si lee del backend un ACE aún incompleto (red lenta).
+  const savePromiseRef = useRef<Promise<unknown>>(Promise.resolve());
   const yaCompleto = useRef(false);
 
   useEffect(() => {
@@ -99,7 +107,7 @@ export default function MetodoPsicologiaAce() {
     setGuardando(true);
     const payload = { ...dataRef.current, ace: { respuestas: next } };
     dataRef.current = payload;
-    axios.patch(
+    savePromiseRef.current = axios.patch(
       `${API_URL}/metodo-psicologia/${userId}`,
       { data: payload },
       { headers: { Authorization: `Bearer ${token}` } },
@@ -144,7 +152,7 @@ export default function MetodoPsicologiaAce() {
               prev={{ label: "← Problemas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
               next={{
                 label: "Resultado →",
-                onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`),
+                onClick: () => setComicOpen(true),
                 disabled: !completo,
                 disabledTooltip: "Responde las 10 preguntas para ver tu resultado.",
               }}
@@ -259,7 +267,7 @@ export default function MetodoPsicologiaAce() {
                         maxW="520px" style={{ textShadow: INK_SHADOW }}>
                     Vamos a ver qué significa tu resultado y cómo estas experiencias influyen en ti hoy.
                   </Text>
-                  <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`)}
+                  <Box as="button" onClick={() => setComicOpen(true)}
                        position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
                        bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
                        fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
@@ -279,6 +287,21 @@ export default function MetodoPsicologiaAce() {
       </Flex>
 
       <AyudaRecorrido pagina="ace" />
+
+      {/* Cómic «Los ACE» — se muestra entre el test y el resultado. Al terminarlo
+          (o pulsar «Resultado →») avanza a ace-resultado. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={async () => { await savePromiseRef.current; navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); }}
+        vinetas={COMIC_ACE}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={`0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`}
+      />
 
       <SiteFooter />
     </Box>

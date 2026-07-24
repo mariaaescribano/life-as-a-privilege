@@ -702,16 +702,60 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
 
         {/* ── VISTA CÓMIC ── usa el mismo ComicViewer que el cómic del Inicio. */}
         {seccion && (
-          <ComicViewer
-            key={seccion}
-            vinetas={VINETAS_BY_SECCION[seccion]}
-            textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
-            onClose={onClose}
-            onComplete={handleComplete}
-            onBack={volverAlSelector}
-            sinSombra
-            sinSaltar
-          />
+          <>
+            <ComicViewer
+              key={seccion}
+              vinetas={VINETAS_BY_SECCION[seccion]}
+              textShadow={`0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`}
+              onClose={onClose}
+              onComplete={handleComplete}
+              onBack={volverAlSelector}
+              sinSombra
+            />
+
+            {/* Botón «Saltar» — a la IZQUIERDA de la X del ComicViewer. Sale de las
+                Ilustraciones y vuelve a la página de Astrología (mismo destino que
+                la X). Estilo estándar de «Saltar»: imagen de la disciplina + velo +
+                letra en el color de astrología + doble chevron ». */}
+            <Box
+              as="button"
+              onClick={onClose}
+              aria-label="Salir de las ilustraciones"
+              position="fixed"
+              top={{ base: 3, md: 5 }}
+              right={{ base: "74px", md: "90px" }}
+              zIndex={12}
+              overflow="hidden"
+              display="inline-flex"
+              alignItems="center"
+              gap={2}
+              h={{ base: "42px", md: "48px" }}
+              px={{ base: 4, md: 6 }}
+              borderRadius="full"
+              bg="transparent"
+              color={astrologiaTxt}
+              border={`1px solid ${astrologiaTxt}`}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "xs", md: "sm" }}
+              letterSpacing="0.04em"
+              whiteSpace="nowrap"
+              cursor="pointer"
+              boxShadow="0 2px 12px rgba(0,0,0,0.45)"
+              sx={{ backdropFilter: "blur(4px)" }}
+              transition="all 0.2s"
+              _hover={{ transform: "translateY(-1px)" }}
+            >
+              <Box as="img" src="/img/astrologia/space.jpg" alt="" loading="eager" position="absolute" inset="0"
+                   w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+              <Box position="absolute" inset="0" bg="rgba(0,0,0,0.5)" />
+              <Box as="span" position="relative" zIndex={1}>Saltar</Box>
+              <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                   w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
+                <path d="M383-480 208-655l56-56 231 231-231 231-56-56 175-175Zm264 0L472-655l56-56 231 231-231 231-56-56 175-175Z" />
+              </Box>
+            </Box>
+          </>
         )}
       </ModalContent>
     </Modal>

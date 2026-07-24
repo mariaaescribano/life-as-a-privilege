@@ -13,6 +13,7 @@ import { ORIGEN_CIENCIA } from "./ComicCienciaModal";
 import { NUTRICION_INTRO } from "./comicNutricionIntro";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
 import { INTRO_PSICOLOGIA } from "./comicPsicologiaIntro";
+import { COMIC_COMPROMISO } from "./comicCompromiso";
 import {
   VINETAS_ORIGEN as HINDU_ORIGEN,
   VINETAS_ELEMENTOS as HINDU_ELEMENTOS,
@@ -197,8 +198,19 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     id: "psicologia-intro",
     titulo: "El origen del sufrimiento",
     disciplina: "Psicología",
-    cover: "/viñetas/sufrimiento/sufrimiento1.png",
+    cover: "/viñetas/psicologia/sufrimiento/sufrimiento1.png",
     vinetas: INTRO_PSICOLOGIA,
+    themeColor: neuropsicologiaTxt,
+    disciplinaBgImage: "/img/fondos/psciologia.png",
+    disciplinaBgColor: neuropsicologiaBg,
+    textShadow: psicoTextShadow,
+  },
+  {
+    id: "psicologia-etapas",
+    titulo: "Cómo te construiste",
+    disciplina: "Psicología",
+    cover: "/viñetas/psicologia/compromiso/compromiso1.png",
+    vinetas: COMIC_COMPROMISO,
     themeColor: neuropsicologiaTxt,
     disciplinaBgImage: "/img/fondos/psciologia.png",
     disciplinaBgColor: neuropsicologiaBg,

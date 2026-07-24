@@ -12,6 +12,9 @@ import {
 import { ayurvedaBg, ayurvedaTxt } from "../../GlobalVariables";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { comicLoaderPorColor } from "./comicLoaders";
+import SpinnerTurquesa from "../global/Spinner";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS 2 SUB-CÓMICS DE HINDUISMO
@@ -199,6 +202,10 @@ export function HinduismoIlustracionesModal({
   const elegirCapitulo = (key: Capitulo) => setCapitulo(key);
 
   const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
+
+  // Al elegir un capítulo, precargamos TODAS sus viñetas y no montamos el cómic
+  // hasta que estén listas: mientras tanto se ve la animación de Ayurveda.
+  const comicListo = usePrecargarImagenes(vinetas.map((v) => encodeURI(v.src)));
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
@@ -427,7 +434,14 @@ export function HinduismoIlustracionesModal({
         )}
 
         {/* ── VISTA CÓMIC ── */}
-        {capitulo && (
+        {/* Hasta que TODAS las viñetas del capítulo estén cargadas, solo se ve la
+            animación de Ayurveda (loto) sobre el fondo de hinduismo. */}
+        {capitulo && !comicListo && (
+          <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+            {comicLoaderPorColor(ayurvedaTxt) ?? <SpinnerTurquesa fullScreen={false} color={ayurvedaTxt} />}
+          </Flex>
+        )}
+        {capitulo && comicListo && (
           <ComicViewer
             key={capitulo}
             vinetas={vinetas}

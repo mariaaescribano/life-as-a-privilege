@@ -180,7 +180,8 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
 
   const guardarReflexion = async () => {
     await persist(reflexion);
-    setGuardado(true);
+    // Guardar vacío no desbloquea (el Índice exige contenido).
+    setGuardado(reflexion.trim().length > 0);
   };
 
   const irSiguiente = () => {

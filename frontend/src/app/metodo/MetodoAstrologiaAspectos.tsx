@@ -97,6 +97,10 @@ export default function MetodoAstrologiaAspectos() {
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? false;
   // Para bloquear la ENTRADA a Aspectos: hay que haber leído todas las casas.
   const { leidos: casasLeidos, cargado: cargadoCasas } = useAstroLeidos("casas");
+  // …y también todos los Puntos clave (retos): es la precondición del paso
+  // anterior (Casas), así que por URL directa tampoco se puede saltar.
+  const { leidos: retosLeidos, cargado: cargadoRetos } = useAstroLeidos("retos");
+  const [retos, setRetos] = useState<{ id: string }[]>([]);
 
   // Abre el aspecto (si su planeta está desbloqueado) y lo marca como leído
   // EN ESTE BOX (la clave lleva el planeta del box como prefijo).
@@ -123,6 +127,7 @@ export default function MetodoAstrologiaAspectos() {
         // resto del recorrido. Es el GET quien decide: si hay info, se entra.
         const lista = Array.isArray(rowRes.data?.retos) ? rowRes.data!.retos! : [];
         if (!rowRes.data?.link_carta && lista.length === 0) { navigate("/metodo/astrologia"); return; }
+        setRetos(lista);
         setTextos((rowRes.data?.aspectos_texto ?? {}) as Record<string, string>);
         setCasasTexto((rowRes.data?.casas_texto ?? {}) as Record<string, string>);
 
@@ -142,20 +147,26 @@ export default function MetodoAstrologiaAspectos() {
   // no puede estar en Aspectos (vale también para acceso directo por URL). Se le
   // devuelve a Casas. Esperamos a tener cargados los datos y los leídos.
   useEffect(() => {
-    if (loading || !cargadoCasas) return;
+    if (loading || !cargadoCasas || !cargadoRetos) return;
+    // Si aún no ha leído todos sus Puntos clave, se le devuelve a Puntos clave.
+    if (retos.length > 0 && !retos.every((r) => retosLeidos.has(r.id))) {
+      navigate("/metodo/astrologia/lectura", { replace: true });
+      return;
+    }
     const casasEscritas = Array.from({ length: 12 }, (_, i) => String(i + 1))
       .filter((n) => (casasTexto[n] ?? "").trim().length > 0);
     if (casasEscritas.length > 0 && !casasEscritas.every((n) => casasLeidos.has(n))) {
       navigate("/metodo/astrologia/casas", { replace: true });
     }
-  }, [loading, cargadoCasas, casasTexto, casasLeidos, navigate]);
+  }, [loading, cargadoCasas, cargadoRetos, retos, retosLeidos, casasTexto, casasLeidos, navigate]);
 
   // Esperamos a que carguen los "leídos" de la BD (aspectos y casas) y, si aún
   // no ha leído todas sus casas, mostramos spinner mientras el efecto redirige.
+  const retosCompletos = retos.length === 0 || retos.every((r) => retosLeidos.has(r.id));
   const casasEscritasGate = Array.from({ length: 12 }, (_, i) => String(i + 1))
     .filter((n) => (casasTexto[n] ?? "").trim().length > 0);
   const casasCompletas = casasEscritasGate.length === 0 || casasEscritasGate.every((n) => casasLeidos.has(n));
-  if (loading || !cargado || !cargadoCasas || !casasCompletas || !fotosListas) {
+  if (loading || !cargado || !cargadoCasas || !cargadoRetos || !retosCompletos || !casasCompletas || !fotosListas) {
     return <RecorridoLoading />;
   }
 

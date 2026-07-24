@@ -275,7 +275,7 @@ export default function MetodoAstrologiaLectura() {
           <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
             {retoAbierto && (
               <Flex direction="column" gap={4}>
-                {retoAbierto.titulo.trim() && (
+                {retoAbierto.titulo?.trim() && (
                   <>
                     <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em" textAlign="center"
                           style={{ textShadow: `0 0 14px rgba(255,255,255,0.5), 0 0 30px ${astrologiaTxt}55` }}>

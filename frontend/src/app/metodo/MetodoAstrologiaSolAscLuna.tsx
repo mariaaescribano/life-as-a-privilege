@@ -72,7 +72,7 @@ export default function MetodoAstrologiaSolAscLuna() {
             headers: { Authorization: `Bearer ${token}` },
           });
           const carta = cartaRes.data;
-          if (carta) {
+          if (carta && Array.isArray(carta.planetas)) {
             const next: Data = { ...d };
             for (const k of TRIO) {
               const p = carta.planetas.find((x) => x.planeta === k);

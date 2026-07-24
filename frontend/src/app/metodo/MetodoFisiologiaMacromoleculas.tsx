@@ -649,7 +649,7 @@ export default function MetodoFisiologiaMacromoleculas() {
             mb={0}
             prev={{ label: "← Moléculas", onClick: () => navigate("/metodo/fisiologia/moleculas") }}
             extra={celulasBtn}
-            next={{ label: "Estructuras →", onClick: () => navigate("/metodo/fisiologia/estructuras") }}
+            next={{ label: "Estructuras →", onClick: () => navigate("/metodo/fisiologia/estructuras"), disabled: formadas.length < MACROS.length, disabledTooltip: "Primero forma las cuatro macromoléculas" }}
           />
           </Reveal>
 

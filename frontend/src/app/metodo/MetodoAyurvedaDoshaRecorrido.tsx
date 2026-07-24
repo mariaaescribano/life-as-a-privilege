@@ -13,7 +13,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -95,7 +95,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
     { pregunta: DOSHA_CUERPO[doshaKey]?.reflexion.pregunta || "", respuesta: d?.doshaCuerpo?.[doshaKey]?.reflexion || "" },
     { pregunta: DOSHA_DESEQUILIBRIO[doshaKey]?.reflexion.pregunta || "", respuesta: d?.doshaDesequilibrio?.[doshaKey]?.reflexion || "" },
     { pregunta: DOSHA_CUIDARTE[doshaKey]?.reflexion.pregunta || "", respuesta: d?.doshaCuidarte?.[doshaKey]?.reflexion || "" },
-  ].filter((e) => e.respuesta.trim().length > 0);
+  ].filter((e) => typeof e.respuesta === "string" && e.respuesta.trim().length > 0);
 
   const compromiso: string = d?.doshaCuidarte?.[doshaKey]?.compromiso || "";
 
@@ -180,12 +180,21 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           </Panel>
           </Reveal>
 
-          {/* ── Tus respuestas ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          {/* ── Tus respuestas (cada una entra por separado, una tras otra) ── */}
           {entradas.length > 0 ? (
-            <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
+            <RevealStagger
+              inView
+              display="flex"
+              flexDirection="column"
+              w="100%"
+              gap={{ base: 5, md: 6 }}
+              stagger={0.12}
+              delayChildren={0.05}
+              amount={0.1}
+            >
               {entradas.map((e, i) => (
-                <Panel key={i} color={meta.color}>
+                <RevealItem key={i} direction="up" distance={22} duration={0.6} scaleFrom={0.98} w="100%">
+                <Panel color={meta.color}>
                   <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.04em" mb={3}>
                     {e.pregunta}
                   </Text>
@@ -197,16 +206,18 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                     </Text>
                   </Flex>
                 </Panel>
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
           ) : (
+            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
             <Panel color={meta.color}>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" lineHeight="1.8">
                 Aún no has dejado respuestas en el mapa. Cuando vuelvas atrás y las escribas, aparecerán aquí.
               </Text>
             </Panel>
+            </Reveal>
           )}
-          </Reveal>
 
           {/* ── Tu compromiso ── */}
           {compromiso && (
@@ -234,9 +245,10 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             <Box h="1px" w="60%" mx="auto" mb={6} bgGradient={`linear(to-r, transparent, ${ayurvedaTxt}66, transparent)`} />
             {diaBloques.length > 0 ? (
               <>
-                <Flex direction="column" gap={3.5}>
+                <RevealStagger inView display="flex" flexDirection="column" gap={3.5} stagger={0.08} delayChildren={0.05} amount={0.1}>
                   {diaBloques.map((b, i) => (
-                    <Flex key={i} align="flex-start" gap={4}
+                    <RevealItem key={i} direction="up" distance={16} duration={0.5} w="100%">
+                    <Flex align="flex-start" gap={4}
                           borderRadius="xl"
                           bg="rgba(255,251,243,0.42)"
                           border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}
@@ -256,8 +268,9 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                         )}
                       </Box>
                     </Flex>
+                    </RevealItem>
                   ))}
-                </Flex>
+                </RevealStagger>
                 <Flex justify="center" mt={7}>
                   <Flex as="button" onClick={descargarDia} align="center" gap={2} px={5} py={2.5} borderRadius="full"
                         bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}

@@ -190,7 +190,9 @@ export default function MetodoAyurvedaDoshaIntro() {
 
   const guardarFinal = async () => {
     await persist(cambio);
-    setGuardado(true);
+    // Solo desbloquea si hay contenido: el Índice (pasoAlcanzableAyurveda) exige
+    // texto, así que guardar vacío no debe habilitar el "siguiente".
+    setGuardado(cambio.trim().length > 0);
   };
 
   // Botón "Comenzar →": bloqueado hasta guardar. Si lo pulsan sin guardar, la

@@ -1,6 +1,6 @@
 // LogIn.tsx
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
@@ -9,7 +9,6 @@ import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
-import SpinnerTurquesa from "../../components/global/Spinner";
 import SiteFooter from "../../components/global/Footer";
 
 const useReveal = (threshold = 0.15) => {
@@ -152,8 +151,6 @@ export default function LogIn() {
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
-      {loading && <SpinnerTurquesa />}
-
       <SiteHeader variant="public" />
 
       <Box flex="1" display="flex" flexDirection="column" transform="scale(0.8)" transformOrigin="top center">
@@ -296,6 +293,17 @@ export default function LogIn() {
               >
                 Entrar
               </Text>
+              {loading && (
+                <Spinner
+                  size="sm"
+                  thickness="2px"
+                  speed="0.7s"
+                  color="white"
+                  emptyColor="rgba(255,255,255,0.25)"
+                  flexShrink={0}
+                  style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55))" }}
+                />
+              )}
             </Flex>
           </Flex>
 

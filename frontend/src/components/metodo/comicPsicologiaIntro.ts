@@ -2,10 +2,10 @@ import type { Vineta } from "./ComicViewer";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Cómic de intro de PSICOLOGÍA (se muestra la 1ª vez que se entra al recorrido).
-// Imágenes en public/viñetas/sufrimiento (sufrimiento1.png … sufrimiento8.png).
+// Imágenes en public/viñetas/psicologia/sufrimiento (sufrimiento1.png … sufrimiento8.png).
 // ─────────────────────────────────────────────────────────────────────────
 
-const P = "/viñetas/sufrimiento";
+const P = "/viñetas/psicologia/sufrimiento";
 
 export const INTRO_PSICOLOGIA: Vineta[] = [
   {

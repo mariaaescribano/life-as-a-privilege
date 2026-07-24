@@ -49,6 +49,9 @@ export default function MetodoPsicologiaNecesidades() {
   const [abierta, setAbierta] = useState<Necesidad | null>(null);
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
+  // Último guardado en vuelo: se espera (flush) antes de ir a Heridas, cuya
+  // página rebota si lee del backend unas necesidades aún incompletas.
+  const savePromiseRef = useRef<Promise<unknown>>(Promise.resolve());
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -90,7 +93,7 @@ export default function MetodoPsicologiaNecesidades() {
     setGuardando(true);
     const payload = { ...dataRef.current, necesidades: next };
     dataRef.current = payload;
-    axios.patch(
+    savePromiseRef.current = axios.patch(
       `${API_URL}/metodo-psicologia/${userId}`,
       { data: payload },
       { headers: { Authorization: `Bearer ${token}` } },
@@ -126,7 +129,7 @@ export default function MetodoPsicologiaNecesidades() {
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
             next={{
               label: "Heridas →",
-              onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`),
+              onClick: async () => { await savePromiseRef.current; navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); },
               disabled: !completas,
               disabledTooltip: "Responde todas las necesidades para continuar a Heridas.",
             }}

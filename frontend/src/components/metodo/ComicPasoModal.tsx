@@ -49,6 +49,10 @@ interface ComicPasoModalProps {
    *  izquierda de la X). El único modo de avanzar es recorrer el cómic hasta el
    *  tick final. Lo usa Astrología para que sus ilustraciones no se salten. */
   sinBotonSaltar?: boolean;
+  /** Si true, el botón de avanzar muestra la imagen de la disciplina NÍTIDA: sin
+   *  velo y sin blur, a plena opacidad (la legibilidad se apoya en `textShadow`).
+   *  Lo usan los cómics de Psicología para su botón «Continuar →». */
+  botonNitido?: boolean;
 }
 
 export function ComicPasoModal({
@@ -62,6 +66,7 @@ export function ComicPasoModal({
   disciplinaBgColor,
   textShadow,
   sinBotonSaltar,
+  botonNitido,
 }: ComicPasoModalProps) {
   // Imagen de la disciplina para el fondo del botón del siguiente título.
   // Astrología no pasa disciplinaBgImage → usa el fondo estrellado, igual que
@@ -124,15 +129,17 @@ export function ComicPasoModal({
           whiteSpace="nowrap"
           cursor="pointer"
           boxShadow="0 2px 12px rgba(0,0,0,0.45)"
-          sx={{ backdropFilter: "blur(4px)" }}
+          sx={botonNitido ? undefined : { backdropFilter: "blur(4px)" }}
           transition="all 0.2s"
           _hover={{ transform: "translateY(-1px)" }}
         >
-          {/* Fondo: imagen de la disciplina + velo */}
+          {/* Fondo: imagen de la disciplina. Con `botonNitido` se ve nítida y a
+              plena opacidad (sin velo ni blur); si no, lleva velo para leer el texto. */}
           <Box as="img" src={imgFondo} alt="" loading="eager" position="absolute" inset="0"
                w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
-          <Box position="absolute" inset="0" bg={veloBtn} />
-          <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}>
+          {!botonNitido && <Box position="absolute" inset="0" bg={veloBtn} />}
+          <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}
+               style={botonNitido ? { textShadow } : undefined}>
             {continueLabel}
             <FlechaDerecha />
           </Box>

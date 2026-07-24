@@ -202,7 +202,7 @@ export default function MetodoPsicologiaExperiencia() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title="Línea de Vida"
-                pageLabel="5/18"
+                pageLabel="5/20"
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}

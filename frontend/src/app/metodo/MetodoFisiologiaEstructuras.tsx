@@ -574,7 +574,7 @@ export default function MetodoFisiologiaEstructuras() {
             mb={0}
             prev={{ label: "← Macromoléculas", onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
             extra={celulasBtn}
-            next={{ label: "Crea la célula →", onClick: irSiguiente }}
+            next={{ label: "Crea la célula →", onClick: irSiguiente, disabled: formadas.length < ESTRUCTURAS.length, disabledTooltip: "Primero construye las cuatro estructuras" }}
           />
           </Reveal>
 

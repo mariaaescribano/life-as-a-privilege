@@ -16,7 +16,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { AyurvedaPanel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { CompromisosBox } from "../../components/metodo/CompromisosBox";
 import { CartaBox } from "../../components/metodo/CartaBox";
 import {
@@ -178,7 +178,8 @@ export default function MetodoAyurvedaDoshaDia() {
       const next = { ...dataRef.current, doshaDia: { ...(dataRef.current.doshaDia || {}), [doshaKey]: { bloques } } };
       await axios.patch(`${API_URL}/metodo-ayurveda/${userId}`, { data: next }, { headers: { Authorization: `Bearer ${token}` } });
       dataRef.current = next;
-      setGuardado(true);
+      // Guardar un día vacío no desbloquea (el Índice exige al menos un bloque).
+      setGuardado(bloques.length > 0);
     } catch {
       // silencioso
     } finally {
@@ -299,9 +300,14 @@ export default function MetodoAyurvedaDoshaDia() {
                 </Flex>
               </Flex>
             ) : (
-              <Flex
-                direction="column"
+              <RevealStagger
+                inView
+                display="flex"
+                flexDirection="column"
                 gap={3.5}
+                stagger={0.08}
+                delayChildren={0.05}
+                amount={0.1}
                 // Si el usuario añade muchos momentos, la lista no crece sin
                 // límite: se vuelve scrollable dentro del box.
                 maxH={{ base: "460px", md: "560px" }}
@@ -315,7 +321,8 @@ export default function MetodoAyurvedaDoshaDia() {
                 }}
               >
                 {ordenados.map((b) => (
-                  <Flex key={b.id} align="flex-start" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
+                  <RevealItem key={b.id} direction="up" distance={16} duration={0.5} w="100%">
+                  <Flex align="flex-start" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
                         borderRadius="xl" bg="rgba(255,251,243,0.42)" border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}
                         sx={{ backdropFilter: "blur(4px)" }}>
                     <Flex align="center" gap={1.5} flexShrink={0} minW={{ base: "58px", md: "68px" }} mt="2px">
@@ -347,8 +354,9 @@ export default function MetodoAyurvedaDoshaDia() {
                       </Box>
                     </Flex>
                   </Flex>
+                  </RevealItem>
                 ))}
-              </Flex>
+              </RevealStagger>
             )}
           </Panel>
           </Reveal>
@@ -543,9 +551,10 @@ export default function MetodoAyurvedaDoshaDia() {
 
               <Box h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
-              <Flex direction="column" gap={3}>
+              <RevealStagger display="flex" flexDirection="column" gap={3} stagger={0.06} delayChildren={0.08}>
                 {DIA_EJEMPLO.map((b, i) => (
-                  <Flex key={i} align="center" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}
+                  <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%">
+                  <Flex align="center" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3, md: 3.5 }}
                         borderRadius="xl" bg="rgba(255,251,243,0.5)" border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}>
                     <Flex align="center" gap={1.5} flexShrink={0} minW={{ base: "58px", md: "68px" }}>
                       <Clock size={14} color={meta.color} />
@@ -555,8 +564,9 @@ export default function MetodoAyurvedaDoshaDia() {
                       {b.actividad}
                     </Text>
                   </Flex>
+                  </RevealItem>
                 ))}
-              </Flex>
+              </RevealStagger>
 
               <Flex justify="center" mt={1}>
                 <Box

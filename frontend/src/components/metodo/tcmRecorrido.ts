@@ -1335,8 +1335,10 @@ export function balanceElemento(
     }
   }
   if (!alguna) return null;
+  // Prioridad de desempate: exceso > deficiencia > equilibrio (empate → gana el que más desequilibra).
+  // El reduce arranca en orden[0] ("exceso"), así que un empate nunca cae en "equilibrio".
   const orden: Balance[] = ["exceso", "deficiencia", "equilibrio"];
-  return orden.reduce((max, b) => (conteo[b] > conteo[max] ? b : max), "equilibrio" as Balance);
+  return orden.reduce((max, b) => (conteo[b] > conteo[max] ? b : max));
 }
 
 /** Conteo de respuestas por estado (A/B/C) de los tests de balance del elemento. */
