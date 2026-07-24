@@ -5,7 +5,7 @@ import axios from "axios";
 import { MetodoStepHeader } from "../../metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../global/DisciplinaBgLayer";
 import { HinduismoIlustracionesModal } from "../../metodo/HinduismoIlustracionesModal";
-import { Reveal } from "../../global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../global/Reveal";
 import SiteHeader from "../../global/SiteHeader";
 import SiteFooter from "../../global/Footer";
 import {
@@ -442,48 +442,57 @@ export default function AyurvedaTestPage({
             >
               <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
-                <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7" mb={4}>
-                  {qi + 1}. {p.pregunta}
-                </Text>
+                {/* Cascada interna: primero la pregunta, luego las 3 opciones de
+                    una en una (más dinámico y profesional). Arranca al asomar el
+                    box en pantalla. */}
+                <RevealStagger inView stagger={0.09} delayChildren={0.05} amount={0.15}>
+                  <RevealItem distance={16} duration={0.5}>
+                    <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7" mb={4}>
+                      {qi + 1}. {p.pregunta}
+                    </Text>
+                  </RevealItem>
 
-                <Flex direction="column" gap={3}>
-                  {DOSHAS.map((dosha) => {
-                    const cfg = DOSHA_CONFIG[dosha];
-                    const selected = answers[qi] === dosha;
-                    return (
-                      <Box
-                        key={dosha}
-                        as="button"
-                        onClick={() => setAnswers((prev) => { const next = [...prev]; next[qi] = dosha; return next; })}
-                        display="flex"
-                        alignItems="center"
-                        gap={3}
-                        px={{ base: 4, md: 5 }}
-                        py={{ base: 3, md: 4 }}
-                        borderRadius="xl"
-                        border={selected ? `2px solid ${cfg.color}` : "1px solid rgba(255,255,255,0.18)"}
-                        bg={selected ? `${cfg.color}33` : "rgba(255,255,255,0.10)"}
-                        cursor="pointer"
-                        transition="all 0.18s"
-                        textAlign="left"
-                        boxShadow={selected ? `0 0 12px ${cfg.color}55` : "none"}
-                        sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-                        _hover={{ bg: selected ? `${cfg.color}44` : "rgba(255,255,255,0.18)", borderColor: `${cfg.color}88` }}
-                      >
-                        <Box flexShrink={0}>{cfg.icon}</Box>
-                        <Text
-                          color={selected ? cfg.color : ayurvedaTxt}
-                          fontSize={{ base: "md", md: "lg" }}
-                          fontWeight={selected ? "600" : "400"}
-                          lineHeight="1.6"
-                          transition="color 0.18s"
+                  <Flex direction="column" gap={3}>
+                    {DOSHAS.map((dosha) => {
+                      const cfg = DOSHA_CONFIG[dosha];
+                      const selected = answers[qi] === dosha;
+                      return (
+                        <RevealItem key={dosha} distance={16} duration={0.5} w="100%">
+                        <Box
+                          as="button"
+                          w="100%"
+                          onClick={() => setAnswers((prev) => { const next = [...prev]; next[qi] = dosha; return next; })}
+                          display="flex"
+                          alignItems="center"
+                          gap={3}
+                          px={{ base: 4, md: 5 }}
+                          py={{ base: 3, md: 4 }}
+                          borderRadius="xl"
+                          border={selected ? `2px solid ${cfg.color}` : "1px solid rgba(255,255,255,0.18)"}
+                          bg={selected ? `${cfg.color}33` : "rgba(255,255,255,0.10)"}
+                          cursor="pointer"
+                          transition="all 0.18s"
+                          textAlign="left"
+                          boxShadow={selected ? `0 0 12px ${cfg.color}55` : "none"}
+                          sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+                          _hover={{ bg: selected ? `${cfg.color}44` : "rgba(255,255,255,0.18)", borderColor: `${cfg.color}88` }}
                         >
-                          {p[dosha]}
-                        </Text>
-                      </Box>
-                    );
-                  })}
-                </Flex>
+                          <Box flexShrink={0}>{cfg.icon}</Box>
+                          <Text
+                            color={selected ? cfg.color : ayurvedaTxt}
+                            fontSize={{ base: "md", md: "lg" }}
+                            fontWeight={selected ? "600" : "400"}
+                            lineHeight="1.6"
+                            transition="color 0.18s"
+                          >
+                            {p[dosha]}
+                          </Text>
+                        </Box>
+                        </RevealItem>
+                      );
+                    })}
+                  </Flex>
+                </RevealStagger>
               </Box>
             </Box>
             </Reveal>

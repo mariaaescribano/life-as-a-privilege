@@ -4,7 +4,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -1050,10 +1050,10 @@ function OrganoDetalle({
            position="relative" overflow="hidden"
            display="inline-flex" alignItems="center" gap={2}
            px={{ base: 4, md: 5 }} py={2} borderRadius="full"
-           border={`1px solid ${fisiologiaTxt}55`}
+           border="none"
            cursor="pointer" transition="all 0.2s"
            boxShadow={`0 2px 12px rgba(0,0,0,0.35)`}
-           _hover={{ borderColor: fisiologiaTxt, transform: "translateY(-1px)" }}>
+           _hover={{ transform: "translateY(-1px)" }}>
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}66`} />
         <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
              w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill={fisiologiaTxt}>
@@ -1310,7 +1310,7 @@ export default function MetodoFisiologiaTodasCelulas() {
   const pct = TOTAL_CELULAS ? Math.round((vistasTotal / TOTAL_CELULAS) * 100) : 0;
 
   if (loading || organoLoading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   return (

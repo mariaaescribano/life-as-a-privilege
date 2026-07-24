@@ -5,7 +5,7 @@ import { Check, AlertTriangle } from "lucide-react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
@@ -200,7 +200,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
   };
 
   if (loading || !doshaKey) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AyurvedaLoading />;
   }
 
   const meta = DOSHA_META[doshaKey];
@@ -411,33 +411,30 @@ export default function MetodoAyurvedaDoshaCuidarte() {
             </Reveal>
           )}
 
-          {/* Cierre alimentación */}
+          {/* Cierre alimentación + Continuar → Estilo de Vida (botón DENTRO del box) */}
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
-            <Flex direction="column" align="center" textAlign="center" gap={2}>
+            <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.alimCierre.map((p, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6">{parseRich(p)}</Text>
               ))}
+              <Box
+                as="button"
+                onClick={irEstilo}
+                mt={1}
+                px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
+                bg={meta.color} color="#fff"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                cursor="pointer"
+                boxShadow={`0 0 26px ${meta.color}88`} transition="all 0.2s"
+                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                display="inline-flex" alignItems="center" gap={2.5}
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
+              >
+                Estilo de Vida →
+              </Box>
             </Flex>
           </Panel>
-          </Reveal>
-
-          {/* Continuar → Estilo de Vida */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
-          <Box
-            as="button"
-            onClick={irEstilo}
-            mt={1}
-            px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
-            bg={meta.color} color="#fff"
-            fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
-            cursor="pointer"
-            boxShadow={`0 0 26px ${meta.color}88`} transition="all 0.2s"
-            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
-            _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
-          >
-            Estilo de Vida →
-          </Box>
           </Reveal>
         </Flex>
       </Flex>

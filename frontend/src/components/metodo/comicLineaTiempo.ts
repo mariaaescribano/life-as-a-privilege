@@ -15,7 +15,8 @@ export const COMIC_LINEA_TIEMPO: Vineta[] = [
     paragraphs: [
       "La realidad que vivimos es fruto de nuestro autoconcepto.",
       "Nuestro autoconcepto es fruto de cómo somos capaces de narrar nuestra propia biografía.",
-      "Las experiencias pasadas moldean nuestro presente y nuestro futuro. Vemos el mundo y actuamos en él desde aquello que creemos sobre nosotros mismos.",
+      "Las experiencias pasadas moldean nuestro presente y nuestro futuro.",
+      "Vemos el mundo y actuamos en él desde aquello que creemos sobre nosotros mismos.",
     ],
   },
   {

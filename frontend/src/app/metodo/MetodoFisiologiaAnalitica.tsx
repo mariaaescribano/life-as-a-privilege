@@ -5,7 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -117,7 +117,7 @@ function MarcadorCard({
           <Box flex="1" minW="150px">
             <Flex align="center" gap={2}>
               {relleno && <Tick />}
-              <Text color="white" fontWeight="700" fontSize={{ base: "md", md: "lg" }} lineHeight="1.25"
+              <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "md", md: "lg" }} lineHeight="1.25"
                     style={{ textShadow: "0 1px 4px rgba(0,0,0,0.75)" }}>
                 {m.nombre}
               </Text>
@@ -140,7 +140,7 @@ function MarcadorCard({
                 w={{ base: "104px", md: "120px" }}
                 h={{ base: "48px", md: "54px" }}
                 textAlign="center"
-                color="white"
+                color={fisiologiaTxt}
                 fontWeight="800"
                 fontSize={{ base: "xl", md: "2xl" }}
                 bg="rgba(0,0,0,0.4)"
@@ -157,7 +157,7 @@ function MarcadorCard({
             {relleno && (
               <Box as="button" onClick={onLeer}
                    px={4} py={1.5} borderRadius="full"
-                   bg="rgba(255,255,255,0.1)" color="white"
+                   bg="rgba(255,255,255,0.1)" color={fisiologiaTxt}
                    border="1.5px solid rgba(255,255,255,0.55)"
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "2xs", md: "xs" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s" whiteSpace="nowrap"
@@ -169,7 +169,7 @@ function MarcadorCard({
         </Flex>
 
         {!relleno && (
-          <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mt={3}
+          <Text color={fisiologiaTxt} fontSize="xs" fontStyle="italic" mt={3}
                 style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
             Escribe tu valor para leer qué significa en ti.
           </Text>
@@ -245,7 +245,7 @@ function MarcadorModal({
           {/* ── Título ── */}
           <Flex align="center" justify="center" gap={2.5}>
             {fuera && <Estrella size={{ base: "2xl", md: "3xl" }} />}
-            <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
+            <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
                   fontFamily="'EB Garamond', serif"
                   style={{ textShadow: "0 0 16px rgba(255,255,255,0.35), 0 1px 4px rgba(0,0,0,0.6)" }}>
               {m.nombre}
@@ -263,17 +263,17 @@ function MarcadorModal({
           </Text>
           <Flex justify="center" align="flex-start" gap={{ base: 8, md: 12 }} mb={5} wrap="wrap">
             <Box textAlign="center">
-              <Text color="rgba(255,255,255,0.7)" fontSize="2xs" textTransform="uppercase" letterSpacing="0.1em" mb={1}>
+              <Text color={fisiologiaTxt} fontSize="2xs" textTransform="uppercase" letterSpacing="0.1em" mb={1}>
                 Tu valor
               </Text>
-              <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="800" lineHeight="1"
+              <Text color={fisiologiaTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="800" lineHeight="1"
                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
                 {valor}
-                <Text as="span" fontSize="md" fontWeight="600" color="rgba(255,255,255,0.7)"> {m.unidad}</Text>
+                <Text as="span" fontSize="md" fontWeight="600" color={fisiologiaTxt}> {m.unidad}</Text>
               </Text>
             </Box>
             <Box textAlign="center">
-              <Text color="rgba(255,255,255,0.7)" fontSize="2xs" textTransform="uppercase" letterSpacing="0.1em" mb={1}>
+              <Text color={fisiologiaTxt} fontSize="2xs" textTransform="uppercase" letterSpacing="0.1em" mb={1}>
                 Lo ideal
               </Text>
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1"
@@ -294,18 +294,18 @@ function MarcadorModal({
                 style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
             Qué significa en ti
           </Text>
-          <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" textAlign="center" mb={3}
+          <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" textAlign="center" mb={3}
                 style={{ textShadow: INK }}>
             {intro} {m.explica}
           </Text>
-          <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" textAlign="center"
+          <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" textAlign="center"
                 style={{ textShadow: INK }}>
             {cierre}
           </Text>
 
           <Box mt={6} mx="auto" maxW="440px" borderRadius="xl" px={4} py={3}
                bg="rgba(0,0,0,0.3)" border="1px solid rgba(255,255,255,0.28)">
-            <Text color="rgba(255,255,255,0.85)" fontSize="xs" lineHeight="1.7" textAlign="center"
+            <Text color={fisiologiaTxt} fontSize="xs" lineHeight="1.7" textAlign="center"
                   style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
               Esto es educativo, no un diagnóstico. Los rangos son orientativos; coméntalo siempre con tu médico.
             </Text>
@@ -395,7 +395,7 @@ export default function MetodoFisiologiaAnalitica() {
   const guardarValores = () => { void guardar(sexo, valores); };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   // Mini-resumen: cuántos has anotado y cuántos caen dentro de rango.
@@ -431,7 +431,7 @@ export default function MetodoFisiologiaAnalitica() {
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={GLOW_BOX}>
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }} textAlign="center">
-                <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" maxW="620px" mx="auto"
+                <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" maxW="620px" mx="auto"
                       style={{ textShadow: INK }}>
                   Ya sabes cómo funciona un cuerpo por dentro. Ahora vamos a leer el tuyo: escribe los valores de tu
                   último análisis de sangre y te iré explicando qué significa cada uno.
@@ -449,7 +449,7 @@ export default function MetodoFisiologiaAnalitica() {
 
                 {/* Selector de sexo (ajusta los rangos) */}
                 <Flex mt={5} justify="center" align="center" gap={3} wrap="wrap">
-                  <Text color="rgba(255,255,255,0.85)" fontSize="sm" fontStyle="italic">Ajustar rangos para:</Text>
+                  <Text color={fisiologiaTxt} fontSize="sm" fontStyle="italic">Ajustar rangos para:</Text>
                   <Flex gap={2}>
                     {(["mujer", "hombre"] as Sexo[]).map((s) => {
                       const activo = sexo === s;
@@ -459,7 +459,7 @@ export default function MetodoFisiologiaAnalitica() {
                              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="sm"
                              textTransform="capitalize" transition="all 0.2s"
                              bg={activo ? fisiologiaTxt : "transparent"}
-                             color={activo ? fisiologiaBg : "rgba(255,255,255,0.85)"}
+                             color={activo ? fisiologiaBg : fisiologiaTxt}
                              border={`1.5px solid ${activo ? fisiologiaTxt : "rgba(255,255,255,0.4)"}`}
                              _hover={{ borderColor: fisiologiaTxt }}>
                           {s}
@@ -497,7 +497,7 @@ export default function MetodoFisiologiaAnalitica() {
                     Has anotado {rellenados.length} {rellenados.length === 1 ? "valor" : "valores"} · {dentro} dentro de rango.
                   </Text>
                 )}
-                <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" maxW="620px" mx="auto"
+                <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" maxW="620px" mx="auto"
                       style={{ textShadow: INK }}>
                   La mayor parte de ti está, casi siempre, en equilibrio: millones de procesos ajustándose solos para
                   mantenerte. Lo que quede fuera de rango no es un veredicto, es una conversación pendiente con tu médico.

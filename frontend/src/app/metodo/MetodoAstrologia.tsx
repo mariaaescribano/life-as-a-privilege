@@ -522,7 +522,6 @@ export default function MetodoAstrologia() {
         vinetas={VINETAS_SIGNOS}
         continueLabel="Sol, Luna y Ascendente"
         themeColor={astrologiaTxt}
-        sinBotonSaltar
       />
 
       {/* Intro: cómic del Origen según la espiritualidad. Al terminar (o pulsar

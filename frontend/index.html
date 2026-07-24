@@ -14,7 +14,10 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-LSEBM0PB9V');
+      // cookie_domain: 'none' → la cookie se pone en el host exacto (sin intentar
+      // el dominio raíz). Evita el error "rejected for invalid domain" en dominios
+      // públicos compartidos como *.onrender.com y en localhost.
+      gtag('config', 'G-LSEBM0PB9V', { cookie_domain: 'none' });
     </script>
   </head>
   <body spellcheck="false">

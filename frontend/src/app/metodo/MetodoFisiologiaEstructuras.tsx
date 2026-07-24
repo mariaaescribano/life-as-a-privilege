@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -31,7 +31,7 @@ const PRE = "/recorrido/fisiologia/pre";
 type Macro = "proteina" | "adn" | "lipido";
 const MACRO: Record<Macro, { color: string; glyph: string; img: string }> = {
   proteina: { color: "#7fd6c2", glyph: "P", img: `${PRE}/proteina.png` },
-  adn:      { color: "#9ab6f0", glyph: "N", img: `${PRE}/ADN.png` },
+  adn:      { color: "#9ab6f0", glyph: "N", img: `${PRE}/adn.png` },
   lipido:   { color: "#f2c86b", glyph: "L", img: `${PRE}/fosfolipido.png` },
 };
 
@@ -171,14 +171,24 @@ function LadrilloFicha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRec
       flexShrink={0}
       style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
-      <Box sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${st.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
+      {/* El nombre de la pieza va DENTRO del círculo (sobre la imagen), con un
+          velo oscuro abajo para que se lea sobre cualquier foto. */}
+      <Box position="relative" borderRadius="full"
+           sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${st.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
         <Perla macro={pieza.macro} img={pieza.img} size={{ base: "62px", md: "80px" }} />
+        <Flex position="absolute" inset="0" align="flex-end" justify="center"
+              borderRadius="full" overflow="hidden" pointerEvents="none">
+          <Box w="100%" px="5px" pb={{ base: "5px", md: "7px" }} pt={{ base: "14px", md: "18px" }}
+               sx={{ background: "linear-gradient(to top, rgba(4,2,10,0.85) 32%, rgba(4,2,10,0.35) 68%, transparent)" }}>
+            <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+                  letterSpacing="0.02em" textTransform="uppercase" textAlign="center"
+                  lineHeight="1.05" noOfLines={2}
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}>
+              {pieza.label}
+            </Text>
+          </Box>
+        </Flex>
       </Box>
-      <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
-            letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-        {pieza.label}
-      </Text>
     </MBox>
   );
 }
@@ -257,7 +267,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
       <Flex mb={4}>
         <Box as="button" onClick={onVolver}
              display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-             bg="rgba(255,255,255,0.1)" color="rgba(255,255,255,0.9)"
+             bg="rgba(255,255,255,0.1)" color={fisiologiaTxt}
              fontFamily="'EB Garamond', serif" fontWeight="600" fontSize="sm" cursor="pointer"
              transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)" }}>
           ← Las 4 estructuras
@@ -268,10 +278,10 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
         {!completo ? (
           <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Título y frase FUERA del box, arriba (no dentro del panel) */}
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK }}>
+            <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK }}>
               {def.nombre}
             </Text>
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
               Arrastra las macromoléculas a la zona para ensamblarla.
             </Text>
@@ -348,13 +358,13 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
               {/* Caja 2 · texto */}
               <PanelBox flex="1">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
-                  <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
+                  <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
                     ¡Has construido {def.id === "nucleo" ? "el núcleo" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
                   </Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
                   {def.resultado.map((p, i) => (
-                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }}
+                    <Text key={i} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
                 </Flex>
@@ -367,7 +377,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
             <Flex justify="flex-end" align="center" gap={3} w="100%" mt={{ base: 5, md: 6 }} wrap="wrap">
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
@@ -420,7 +430,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
           {/* Foto (o «?» si aún no está hecha) */}
           <Box
             flexShrink={0}
-            w={{ base: "112px", md: "160px" }}
+            w={{ base: "101px", md: "144px" }}
             h={{ base: "112px", md: "160px" }}
             borderRadius="xl"
             overflow="hidden"
@@ -436,7 +446,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
               <Image src={e.cuadradoImg} alt={e.nombre} w="100%" h="100%" objectFit="cover"
                      fallback={<EstDibujada def={e} />} />
             ) : (
-              <Text color="rgba(255,255,255,0.5)" fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
+              <Text color={fisiologiaTxt} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
                     style={{ textShadow: INK }}>?</Text>
             )}
           </Box>
@@ -444,7 +454,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
           {/* Texto */}
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+              <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                     style={{ textShadow: INK }}>{e.nombre}</Text>
               {hecha && (
                 <Flex as="span" align="center" justify="center" flexShrink={0}
@@ -453,7 +463,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
                       boxShadow={`0 0 10px ${e.glow}aa`}>✓</Flex>
               )}
             </Flex>
-            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
                   style={{ textShadow: INK }}>{e.desc}</Text>
             <Text color={hecha ? e.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="700"
                   letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
@@ -550,7 +560,7 @@ export default function MetodoFisiologiaEstructuras() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   const defActiva = ESTRUCTURAS.find((e) => e.id === activa) || null;
@@ -580,7 +590,7 @@ export default function MetodoFisiologiaEstructuras() {
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+              <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                     maxW="640px">
                 Proteínas, ADN y lípidos se ensamblan para formar las partes de la célula. Construye las cuatro.
               </Text>

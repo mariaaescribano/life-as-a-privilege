@@ -17,7 +17,7 @@ import { Box, Flex, Text, Input } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -36,6 +36,7 @@ import {
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -141,10 +142,15 @@ export default function MetodoPsicologiaHuellasNudos() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        // Las dos peticiones no dependen una de otra (ambas usan userId/token de
+        // sessionStorage), así que van EN PARALELO: una sola ida y vuelta en vez
+        // de dos encadenadas.
+        const [me, psi] = await Promise.all([
+          axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/metodo-psicologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
 
-        const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: LineaDeVidaData = psi.data?.data || {};
         // Heridas está bloqueada hasta responder TODAS las necesidades.
         if (!necesidadesCompletas(d)) { navigate(`/metodo/psicologia/${exp.id}/necesidades`, { replace: true }); return; }
@@ -211,7 +217,7 @@ export default function MetodoPsicologiaHuellasNudos() {
     await persistir(next);
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
   const columnas: {
@@ -260,10 +266,10 @@ export default function MetodoPsicologiaHuellasNudos() {
               step={{ current: 9, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Necesidades", onClick: () => navigate(`/metodo/psicologia/${exp.id}/necesidades`) }}
+              prev={{ label: "← Necesidades", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); } }}
               next={{
                 label: "Tus heridas →",
-                onClick: () => navigate(`/metodo/psicologia/${exp.id}/heridas-lista`),
+                onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/heridas-lista`); },
                 disabled: heridas.length === 0,
                 disabledTooltip: "Crea al menos una herida para continuar.",
               }}

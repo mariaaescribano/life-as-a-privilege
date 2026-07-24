@@ -49,7 +49,9 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
   const E = ELEMENTOS[elActivo];
   const C = CONTENIDO_ELEMENTOS[elActivo];
   const balance = estados[elActivo]?.balance ?? null;
-  const parrafos = balance ? C[balance] : C.intro;
+  // Defensivo: si `balance` no fuese un enum válido o faltase el contenido, se
+  // cae a intro / a un array vacío en vez de reventar el .map (pantalla en blanco).
+  const parrafos = (balance ? C?.[balance] : C?.intro) ?? C?.intro ?? [];
 
   return (
     <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">

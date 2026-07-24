@@ -439,45 +439,17 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           bgGradient={`linear(to-r, transparent, ${color}aa, transparent)`}
           zIndex={3}
         />
+
+        {/* Flechas pegadas a los bordes del box (centradas en su altura), como
+            en el ComicViewer. Sustituyen a la barra inferior de navegación. */}
+        <Box position="absolute" left={{ base: 1, md: 2 }} top="50%" transform="translateY(-50%)" zIndex={5}>
+          <NavBtn dir="izq" color={color} disabled={isFirst} onClick={goPrev} />
+        </Box>
+        <Box position="absolute" right={{ base: 1, md: 2 }} top="50%" transform="translateY(-50%)" zIndex={5}>
+          <NavBtn dir="der" color={color} disabled={isLast} onClick={goNext} />
+        </Box>
       </Box>
 
-      {/* ── Barra inferior de navegación: flecha · puntos · (contador) · flecha ── */}
-      <Flex align="center" justify="center" gap={{ base: 3, md: 4 }}>
-        <NavBtn dir="izq" color={color} disabled={isFirst} onClick={goPrev} />
-
-        <Flex align="center" justify="center" gap="6px">
-          {VINETAS.map((_, n) => (
-            <Box
-              key={n}
-              as="button"
-              onClick={() => setI(n)}
-              aria-label={`Viñeta ${n + 1}`}
-              w={n === i ? "22px" : "9px"}
-              h="9px"
-              flexShrink={0}
-              borderRadius="full"
-              bg={n === i ? color : `${color}44`}
-              transition="all 0.25s"
-              style={n === i ? { boxShadow: `0 0 8px ${color}aa` } : undefined}
-              cursor="pointer"
-            />
-          ))}
-        </Flex>
-
-        <Text
-          display={{ base: "none", md: "block" }}
-          color={`${color}cc`}
-          fontSize="sm"
-          fontStyle="italic"
-          letterSpacing="0.14em"
-          minW="48px"
-          textAlign="center"
-        >
-          {i + 1} / {total}
-        </Text>
-
-        <NavBtn dir="der" color={color} disabled={isLast} onClick={goNext} />
-      </Flex>
     </Flex>
   );
 }

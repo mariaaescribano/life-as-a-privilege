@@ -5,7 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -18,6 +18,7 @@ import {
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -118,7 +119,7 @@ export default function MetodoPsicologiaHuellas() {
   const derecha = anios[spreadActual * 2 + 1];
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <PsicologiaLoading />;
   }
   if (!exp) return null;
 
@@ -142,7 +143,7 @@ export default function MetodoPsicologiaHuellas() {
             prev={{ label: "← Línea de Vida", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
             next={{
               label: "Nudos →",
-              onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`),
+              onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/nudos`); },
               disabled: !algunaHuella,
               disabledTooltip: "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
             }}

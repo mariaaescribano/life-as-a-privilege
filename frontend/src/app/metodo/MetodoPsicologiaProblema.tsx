@@ -6,7 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { BotonGuardar } from "../../components/global/BotonGuardar";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
@@ -14,6 +14,7 @@ import {
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -92,12 +93,14 @@ export default function MetodoPsicologiaProblema() {
   };
 
   const irAAce = async () => {
+    if (problema.trim().length === 0) return; // no se avanza a ACE sin escribir nada
     await guardarSiCambio();
+    await flushSaves();
     navigate(`/metodo/psicologia/${exp!.id}/ace`);
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <PsicologiaLoading />;
   }
   if (!exp) return null;
 
@@ -118,8 +121,14 @@ export default function MetodoPsicologiaProblema() {
               nom={neuropsicologiaNom}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Vuelve", onClick: () => { void guardarSiCambio(); navigate("/metodo/psicologia"); } }}
-              next={{ label: "ACE →", onClick: irAAce }}
+              prev={{ label: "← Vuelve", onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate("/metodo/psicologia"); } }}
+              next={{
+                label: "ACE →",
+                onClick: irAAce,
+                // No se puede avanzar a ACE sin haber escrito algo en el box.
+                disabled: problema.trim().length === 0,
+                disabledTooltip: "Escribe primero tu problema para continuar",
+              }}
             />
           </Reveal>
 

@@ -8,7 +8,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -124,7 +124,7 @@ export default function MetodoPsicologia() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <PsicologiaLoading />;
   }
 
   return (

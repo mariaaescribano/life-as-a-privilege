@@ -18,7 +18,7 @@ import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { TcmLoader } from "../../components/metodo/comicLoaders";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
-  ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido, viajeCompleto,
+  ELEMENTOS, ORDEN_ELEMENTOS, elementoDesbloqueado, elementoLeido, elementosTestsCompletos,
   type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { tieneContenido, COMIC_INTRO_ELEMENTOS, ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
@@ -118,6 +118,12 @@ export default function MetodoTcmElementos() {
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+      {/* La página NO se monta hasta que el usuario termina el cómic de los
+          elementos (el de intro). Mientras el cómic está abierto solo se ve él,
+          a pantalla completa, sobre el fondo turquesa; al cerrarlo (X o tick) se
+          revela la página con sus animaciones (estrella, boxes) frescas. */}
+      {!intro.open && (
+      <>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -138,8 +144,8 @@ export default function MetodoTcmElementos() {
             next={{
               label: "Los ciclos →",
               onClick: () => navigate("/metodo/tcm/ciclos"),
-              disabled: !viajeCompleto(data),
-              disabledTooltip: "Recorre los cinco elementos para continuar",
+              disabled: !elementosTestsCompletos(data),
+              disabledTooltip: "Rellena los tests de los cinco elementos para continuar",
             }}
           />
           </Reveal>
@@ -225,22 +231,6 @@ export default function MetodoTcmElementos() {
         </Flex>
       </Flex>
 
-      {/* Cómic de intro (Módulo 1) · a pantalla completa, con el mismo ComicViewer
-          que astrología y que el cómic de cada elemento. Se abre al entrar y es
-          saltable con la X / el tick. */}
-      <IntroComicModal
-        isOpen={intro.open}
-        onClose={intro.finish}
-        vinetas={INTRO_VINETAS}
-        themeColor={tcmTxt}
-        textColor={tcmTxt}
-        textShadow={INTRO_TEXT_SHADOW}
-        disciplinaBgImage={disciplinaBgImg(tcmNom)}
-        disciplinaBgColor={tcmBg}
-        loader={<TcmLoader color="#ffffff" />}
-        esperarFondo
-      />
-
       {ilustracionesModal}
 
       {/* Cómic del elemento: fondo y box con la foto del elemento; cerrable en cualquier momento. */}
@@ -256,6 +246,25 @@ export default function MetodoTcmElementos() {
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 
       <SiteFooter />
+      </>
+      )}
+
+      {/* Cómic de intro (Módulo 1) · a pantalla completa, con el mismo ComicViewer
+          que astrología y que el cómic de cada elemento. Se abre al entrar y es
+          lo ÚNICO visible hasta que se termina; al cerrarlo (X o tick) se revela
+          la página. Sigue siendo saltable con la X / el tick. */}
+      <IntroComicModal
+        isOpen={intro.open}
+        onClose={intro.finish}
+        vinetas={INTRO_VINETAS}
+        themeColor={tcmTxt}
+        textColor={tcmTxt}
+        textShadow={INTRO_TEXT_SHADOW}
+        disciplinaBgImage={disciplinaBgImg(tcmNom)}
+        disciplinaBgColor={tcmBg}
+        loader={<TcmLoader color="#ffffff" />}
+        esperarFondo
+      />
     </Box>
   );
 }

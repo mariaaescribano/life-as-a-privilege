@@ -4,7 +4,7 @@ import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -135,7 +135,7 @@ export default function MetodoFisiologiaTema() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, temaKey]);
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <FisiologiaLoading />;
   if (!tema) return null;
 
   const tieneComic = (tema.comicIntro?.length ?? 0) > 0;
@@ -184,7 +184,7 @@ export default function MetodoFisiologiaTema() {
 
           {tema.intro && (
             <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+              <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                     textAlign="center" lineHeight="1.8" maxW="660px">
                 {tema.intro}
               </Text>
@@ -254,7 +254,7 @@ export default function MetodoFisiologiaTema() {
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
                   Estamos construyendo este apartado
                 </Text>
-                <Text position="relative" zIndex={1} color="rgba(255,255,255,0.82)" fontSize={{ base: "sm", md: "md" }}
+                <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
                   Muy pronto podrás explorarlo aquí. Sigue avanzando por el resto del recorrido.
                 </Text>

@@ -1443,3 +1443,35 @@ export function elementoDesbloqueado(data: DatosTcm | null | undefined, el: Elem
 export function viajeCompleto(data: DatosTcm | null | undefined): boolean {
   return ORDEN_ELEMENTOS.every((el) => elementoLeido(data, el));
 }
+
+/**
+ * ¿Están completos TODOS los tests de un elemento? (todas las preguntas no
+ * opcionales respondidas). Los elementos con tests de balance migrados usan
+ * `testCompleto`; los que aún no, el mini-test base respondido.
+ */
+export function elementoTestsCompletos(data: DatosTcm | null | undefined, el: Elemento): boolean {
+  const respuestas = data?.elementos?.[el]?.miniTest?.respuestas;
+  const tests = testsDeElemento(el);
+  if (tests.length > 0) return tests.every((t) => testCompleto(t, respuestas));
+  // Legacy (elemento aún sin tests de balance): todas las preguntas del mini-test.
+  const base = ELEMENTOS[el].miniTest;
+  if (!respuestas || !Array.isArray(base)) return false;
+  return base.every((q) => !!respuestas[q.key]);
+}
+
+/**
+ * ¿Ha rellenado el usuario los tests de los CINCO elementos? Requisito para
+ * salir de «Los Cinco Elementos» y para que el Índice abra el resto de pasos.
+ */
+export function elementosTestsCompletos(data: DatosTcm | null | undefined): boolean {
+  return ORDEN_ELEMENTOS.every((el) => elementoTestsCompletos(data, el));
+}
+
+/**
+ * Paso máximo ALCANZABLE del Índice de TCM. Hasta que no estén hechos los cinco
+ * tests, solo se puede llegar a «Los Cinco Elementos» (paso 2): ninguna otra
+ * página del recorrido queda desbloqueada.
+ */
+export function pasoAlcanzableTcm(data: DatosTcm | null | undefined): number {
+  return elementosTestsCompletos(data) ? TCM_TOTAL : 2;
+}

@@ -43,8 +43,8 @@ const ESTRELLAS = [
 // Orden de trazo del pentagrama: una sola línea continua y cerrada (la estrella
 // se dibuja "de un tirón", como se dibuja una estrella a mano).
 const TRAZO = [0, 2, 4, 1, 3, 0];
-export function AstrologiaLoader() {
-  const c = astrologiaTxt;
+export function AstrologiaLoader({ color }: { color?: string } = {}) {
+  const c = color ?? astrologiaTxt;
   return (
     <Shell>
       <Box
@@ -88,8 +88,8 @@ const latirSoma = keyframes`
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.12); }
 `;
-export function PsicologiaLoader() {
-  const c = neuropsicologiaTxt;
+export function PsicologiaLoader({ color }: { color?: string } = {}) {
+  const c = color ?? neuropsicologiaTxt;
   const axon = "M50,60 C 72,60 78,44 104,50";
   return (
     <Shell>
@@ -127,14 +127,25 @@ export function PsicologiaLoader() {
   );
 }
 
+// Pantalla de carga de PSICOLOGÍA: la neurona (misma animación) en BLANCO,
+// centrada sobre el fondo turquesa, a pantalla completa. Sustituye al spinner
+// en todo el recorrido de psicología.
+export function PsicologiaLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <PsicologiaLoader color="#ffffff" />
+    </Flex>
+  );
+}
+
 // ── Ayurveda · flor de loto que abre y cierra los pétalos ────────────────────
 const florecer = keyframes`
   0%, 100%   { transform: scale(0.4); opacity: 0.45; }
   45%, 70%   { transform: scale(1);   opacity: 1; }
 `;
 const PETALO = "M60,66 C 51,50 51,33 60,25 C 69,33 69,50 60,66 Z";
-export function AyurvedaLoader() {
-  const c = ayurvedaTxt;
+export function AyurvedaLoader({ color }: { color?: string } = {}) {
+  const c = color ?? ayurvedaTxt;
   return (
     <Shell>
       {[0, 1, 2, 3, 4, 5].map((k) => (
@@ -167,6 +178,17 @@ export function AyurvedaLoader() {
   );
 }
 
+// Pantalla de carga de AYURVEDA: la flor de loto (misma animación) en BLANCO,
+// centrada sobre el fondo turquesa, a pantalla completa. Sustituye al spinner
+// en todo el recorrido de ayurveda.
+export function AyurvedaLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <AyurvedaLoader color="#ffffff" />
+    </Flex>
+  );
+}
+
 // ── Medicina China · yin-yang girando ────────────────────────────────────────
 const girar = keyframes`
   from { transform: rotate(0deg); }
@@ -191,6 +213,17 @@ export function TcmLoader({ color = tcmTxt }: { color?: string } = {}) {
   );
 }
 
+// Pantalla de carga de MEDICINA CHINA: el yin-yang (misma animación) en BLANCO,
+// centrado sobre el fondo turquesa, a pantalla completa. Sustituye al spinner
+// en todo el recorrido de TCM.
+export function TcmLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <TcmLoader color="#ffffff" />
+    </Flex>
+  );
+}
+
 // ── Fisiología · corazón latiendo ────────────────────────────────────────────
 const latido = keyframes`
   0%, 45%, 100% { transform: scale(1); }
@@ -202,8 +235,8 @@ const brilloCorazon = keyframes`
   15%           { filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 18px currentColor); }
 `;
 const CORAZON = "M60,98 C 18,66 22,28 46,28 C 57,28 60,40 60,45 C 60,40 63,28 74,28 C 98,28 102,66 60,98 Z";
-export function FisiologiaLoader() {
-  const c = fisiologiaTxt;
+export function FisiologiaLoader({ color }: { color?: string } = {}) {
+  const c = color ?? fisiologiaTxt;
   return (
     <Shell>
       <Box
@@ -215,6 +248,17 @@ export function FisiologiaLoader() {
         sx={{ transformBox: "view-box", transformOrigin: "60px 60px" }}
       />
     </Shell>
+  );
+}
+
+// Pantalla de carga de FISIOLOGÍA: el corazón (misma animación) en BLANCO,
+// centrado sobre el fondo turquesa, a pantalla completa. Sustituye al spinner
+// en todo el recorrido de fisiología.
+export function FisiologiaLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <FisiologiaLoader color="#ffffff" />
+    </Flex>
   );
 }
 
@@ -295,7 +339,9 @@ export function CulturaLoader() {
 // Nutrición conserva su manzana (AppleLoader). Si el color no coincide con
 // ninguna disciplina, se devuelve null y el ComicViewer cae en el spinner.
 const LOADER_POR_TXT: Record<string, () => React.ReactNode> = {
-  [astrologiaTxt.toLowerCase()]: () => <AstrologiaLoader />,
+  // Astrología: estrella en BLANCO (más nítida sobre el fondo estrellado oscuro
+  // de las ilustraciones y los cómics del recorrido).
+  [astrologiaTxt.toLowerCase()]: () => <AstrologiaLoader color="#ffffff" />,
   [neuropsicologiaTxt.toLowerCase()]: () => <PsicologiaLoader />,
   [ayurvedaTxt.toLowerCase()]: () => <AyurvedaLoader />,
   [tcmTxt.toLowerCase()]: () => <TcmLoader />,

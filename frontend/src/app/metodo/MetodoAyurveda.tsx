@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal } from "../../components/global/Reveal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
@@ -119,7 +119,7 @@ export default function MetodoAyurveda() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AyurvedaLoading />;
   }
 
   return (

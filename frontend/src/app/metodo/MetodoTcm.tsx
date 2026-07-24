@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { TcmLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoTcmModal } from "../../components/metodo/PagoTcmModal";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
@@ -143,7 +143,7 @@ export default function MetodoTcm() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <TcmLoading />;
   }
 
   return (

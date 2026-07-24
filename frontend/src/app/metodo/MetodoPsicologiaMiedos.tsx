@@ -14,7 +14,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -25,6 +25,7 @@ import {
   type MiedoItem,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -119,7 +120,7 @@ export default function MetodoPsicologiaMiedos() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <PsicologiaLoading />;
   }
   if (!exp) return null;
 
@@ -148,7 +149,7 @@ export default function MetodoPsicologiaMiedos() {
               prev={{ label: "← Dones", onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`) }}
               next={{
                 label: "Atrévete →",
-                onClick: () => navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`),
+                onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`); },
                 // Hasta que no haya al menos un miedo (escrito o elegido), la
                 // siguiente página queda bloqueada. Si los borra todos, se vuelve
                 // a bloquear (miedos.length se recalcula).

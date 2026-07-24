@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -84,7 +84,7 @@ const MACROS: MacroDef[] = [
       "El ADN es una cadena de nucleótidos —las letras A, T, C y G— enrollada en una doble hélice.",
       "El orden de esas letras es el manual de instrucciones para fabricar todas tus proteínas: es tu información genética.",
     ],
-    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/ADN.png`,
+    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/adn.png`,
     monomerosVariados: [
       { label: "A", img: `${PRE}/nucleotidoa.png`, glyph: "A" },
       { label: "T", img: `${PRE}/nucleotidot.png`, glyph: "T" },
@@ -285,7 +285,7 @@ function Estacion({
       <Flex mb={4}>
         <Box as="button" onClick={onVolver}
              display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-             bg="rgba(255,255,255,0.1)" color="rgba(255,255,255,0.9)"
+             bg="rgba(255,255,255,0.1)" color={fisiologiaTxt}
              fontFamily="'EB Garamond', serif" fontWeight="600" fontSize="sm" cursor="pointer"
              transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)" }}>
           ← Las 4 macromoléculas
@@ -296,9 +296,9 @@ function Estacion({
         {!completo ? (
           // ── FASE A · encadenar (dos boxes: bandeja | piezas) ──
           <MBox key="a" w="100%" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
+            <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
                   style={{ textShadow: INK }}>{def.nombre}</Text>
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
               {heterogenea
                 ? `Arrastra las ${total} piezas a la bandeja para formar el ${def.monomero}.`
@@ -399,12 +399,12 @@ function Estacion({
               {/* Caja 2 · texto */}
               <PanelBox flex="1">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
-                  <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+                  <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
                         style={{ textShadow: INK }}>¡Has formado {def.nombre.toLowerCase()}!</Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
                   {def.resultado.map((p, i) => (
-                    <Text key={i} color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }}
+                    <Text key={i} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
                 </Flex>
@@ -417,7 +417,7 @@ function Estacion({
             <Flex justify="flex-end" align="center" gap={3} w="100%" mt={{ base: 5, md: 6 }} wrap="wrap">
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
@@ -489,7 +489,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
           {/* Foto (o «?» si aún no está hecha) */}
           <Box
             flexShrink={0}
-            w={{ base: "112px", md: "160px" }}
+            w={{ base: "101px", md: "144px" }}
             h={{ base: "112px", md: "160px" }}
             borderRadius="xl"
             overflow="hidden"
@@ -506,7 +506,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
                      fallbackStrategy="onError"
                      fallback={<MacroDibujada def={m} />} />
             ) : (
-              <Text color="rgba(255,255,255,0.5)" fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
+              <Text color={fisiologiaTxt} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
                     style={{ textShadow: INK }}>?</Text>
             )}
           </Box>
@@ -514,7 +514,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
           {/* Texto */}
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+              <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                     style={{ textShadow: INK }}>{m.nombre}</Text>
               {hecha && (
                 <Flex as="span" align="center" justify="center" flexShrink={0}
@@ -523,7 +523,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
                       boxShadow={`0 0 10px ${m.glow}aa`}>✓</Flex>
               )}
             </Flex>
-            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
                   style={{ textShadow: INK }}>{m.desc}</Text>
             <Text color={hecha ? m.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="700"
                   letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
@@ -625,7 +625,7 @@ export default function MetodoFisiologiaMacromoleculas() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   const defActiva = MACROS.find((m) => m.id === activa) || null;
@@ -655,8 +655,8 @@ export default function MetodoFisiologiaMacromoleculas() {
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                    maxW="620px">
+              <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic" mt={1}
+                    letterSpacing="0.02em" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                 Las grandes moléculas de la Vida.
               </Text>
             </MBox>

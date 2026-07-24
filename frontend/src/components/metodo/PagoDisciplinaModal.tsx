@@ -90,7 +90,7 @@ export function PagoDisciplinaModal({
     // box no crece sin límite — se limita a la altura del viewport y el cuerpo
     // hace scroll vertical dentro.
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered scrollBehavior="inside">
-      <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
+      <ModalOverlay bg="transparent" />
       <ModalContent
         bg={bg}
         border={`1px solid ${txt}52`}

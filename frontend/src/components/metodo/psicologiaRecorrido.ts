@@ -464,7 +464,7 @@ export interface Necesidad {
 
 export const NECESIDADES_INTRO = {
   titulo: "Necesidades no cubiertas",
-  subtitulo: "¿Qué necesitabas y no recibiste?",
+  subtitulo: "¿Qué necesitabas y no recibiste? Cada celda representa una necesidad. Cuando una queda insatisfecha, puede ser tan doloroso que parezca borrar el impacto de aquellas que sí fueron satisfechas.",
   texto:
     "Ya has recordado tu historia y nombrado tus nudos. Detente ahora en lo que un niño necesita para crecer sano: abre cada necesidad y, sin juzgar a nadie, marca cómo lo viviste tú. No hay respuestas correctas: solo tu verdad.",
 };
@@ -1093,6 +1093,7 @@ export const constelacionIntegrada = (c: Constelacion): number =>
 export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolean {
   const t = (s: unknown): string => (typeof s === "string" ? s.trim() : "");
   switch (n) {
+    case 2:  return t(data["problema-actual"]) !== "";                         // Problemas: escrito
     case 3:  return aceCompleto(data);                                         // ACE: 10 respondidas
     case 5:  return aniosRecorridos(data, Number(data.edad) || 0) >= 1;        // Línea de Vida: ≥1 año
     case 6:  return Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0); // Huellas: ≥1 marcada
@@ -1100,7 +1101,7 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
     case 8:  return necesidadesCompletas(data);                                // Necesidades: las 18
     case 9:  return (data.heridas || []).length > 0;                           // Heridas: ≥1
     case 12: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
-               (c) => c.nudos.length > 0 || c.arquetipos.length > 0 || t(c.titulo) !== "" || t(c.texto) !== "");
+               (c) => (c?.nudos?.length ?? 0) > 0 || (c?.arquetipos?.length ?? 0) > 0 || t(c?.titulo) !== "" || t(c?.texto) !== "");
     case 13: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
                (q) => t(data.dones?.respuestas?.[q.key]) !== "" || (data.dones?.sinIdeas || []).includes(q.key));
     case 14: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
@@ -1110,7 +1111,7 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
     case 17: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
     case 18: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
     case 19: return t(data.brujula?.mensaje) !== "";                           // Carta
-    default: return true;  // 1, 2, 4, 10, 11, 20 y cualquier otro: sin requisito
+    default: return true;  // 1, 4, 10, 11, 20 y cualquier otro: sin requisito
   }
 }
 

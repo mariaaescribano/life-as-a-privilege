@@ -6,7 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -43,7 +43,7 @@ const CURSOS: Curso[] = [];
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
 const Candado = ({ size }: { size: any }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-       w={size} h={size} fill="#ffffff"
+       w={size} h={size} fill={fisiologiaTxt}
        style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}>
     <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
   </Box>
@@ -95,11 +95,11 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
             </Text>
           )}
         </Box>
-        <Text color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }} textAlign="center"
+        <Text color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }} textAlign="center"
               lineHeight="1.25" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
           {curso.titulo}
         </Text>
-        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+        <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
               textAlign="center" lineHeight="1.5" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
           {curso.resumen}
         </Text>
@@ -149,7 +149,7 @@ export default function MetodoFisiologiaCursos() {
   }, [navigate]);
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   return (
@@ -178,7 +178,7 @@ export default function MetodoFisiologiaCursos() {
 
           {/* Texto introductorio bajo el header */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
               Si quieres profundizar en la Fisiología, estos cursos te acompañan paso a paso.
             </Text>
@@ -204,7 +204,7 @@ export default function MetodoFisiologiaCursos() {
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
                   Estamos preparando los cursos
                 </Text>
-                <Text position="relative" zIndex={1} color="rgba(255,255,255,0.82)" fontSize={{ base: "sm", md: "md" }}
+                <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
                   Pronto podrás profundizar aquí con cursos avanzados de Fisiología. Mientras tanto, sigue explorando el recorrido.
                 </Text>

@@ -59,8 +59,11 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
 function todasLasHuellas(d: LineaDeVidaData): string[] {
   const set = new Set<string>();
   for (const ano of Object.values(d.anos || {})) {
-    for (const t of ano?.huellas || []) {
-      const s = (t || "").trim();
+    // Blindaje: `huellas` heredado podría no ser array (string suelto) → un
+    // for..of lo rompería en caracteres. Solo iteramos arrays reales.
+    const huellas = Array.isArray(ano?.huellas) ? ano!.huellas : [];
+    for (const t of huellas) {
+      const s = (typeof t === "string" ? t : "").trim();
       if (s) set.add(s);
     }
   }
@@ -304,7 +307,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   /* ── 4 · Los nudos ── */
-  const nudos = (data.nudos || []).map((n) => (n || "").trim()).filter(Boolean);
+  const nudos = (Array.isArray(data.nudos) ? data.nudos : []).map((n) => (typeof n === "string" ? n : "").trim()).filter(Boolean);
   if (nudos.length > 0) {
     sectionTitle("Los nudos");
     bulletList(nudos);
@@ -318,7 +321,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   /* ── 6 · Mis heridas ── */
-  const heridas = (data.heridas || []).filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
+  const heridas = (Array.isArray(data.heridas) ? data.heridas : []).filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
   if (heridas.length > 0) {
     sectionTitle("Mis heridas");
     heridas.forEach((h) => {
@@ -334,7 +337,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     { key: "verdadSana", label: "La verdad más sana que quiero practicar" },
     { key: "recordatorio", label: "Lo que quiero recordar" },
   ];
-  const relaciones = (data.constelaciones || []).filter(
+  const relaciones = (Array.isArray(data.constelaciones) ? data.constelaciones : []).filter(
     (c) => (c.titulo || "").trim() || (c.texto || "").trim() ||
       INTEGRACION_PREGUNTAS.some((p) => ((c[p.key] as string) || "").trim()),
   );
@@ -355,7 +358,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   /* ── 8 · Mis miedos ── */
-  const miedos = (data.miedos || []).filter((m) => (m.texto || "").trim());
+  const miedos = (Array.isArray(data.miedos) ? data.miedos : []).filter((m) => (m.texto || "").trim());
   if (miedos.length > 0) {
     sectionTitle("Mis miedos");
     miedos.forEach((m) => {
@@ -373,7 +376,10 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   /* ── 9 · Mis dones ── */
-  const dones = (data.dones?.lista || []).map((x) => (x.texto || "").trim()).filter(Boolean);
+  // Acepta la forma nueva (objetos {texto}) y la antigua (string[]).
+  const dones = (Array.isArray(data.dones?.lista) ? data.dones!.lista! : [])
+    .map((x) => (typeof x === "string" ? x : (x?.texto || "")).trim())
+    .filter(Boolean);
   if (dones.length > 0) {
     sectionTitle("Mis dones");
     bulletList(dones);

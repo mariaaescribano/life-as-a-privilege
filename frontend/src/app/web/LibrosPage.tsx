@@ -2,12 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
 import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
 import { API_URL } from "../../GlobalVariables";
 
 const PRECIO_LIBRO_PAGO = "5 €";
 
-const useReveal = (threshold = 0.05) => {
+// Reveal por scroll: cada tarjeta se enciende al entrar en el viewport.
+// rootMargin negativo abajo → aparece un pelín antes de estar del todo dentro,
+// que es lo que da la sensación de que los libros van "brotando" al bajar.
+const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -15,7 +19,7 @@ const useReveal = (threshold = 0.05) => {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
+      { threshold, rootMargin: "0px 0px -8% 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -92,9 +96,10 @@ type PaidItem = Item & { descripcion: string };
 
 const LINE = "1px solid rgba(255,255,255,0.22)";
 
-function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; total: number; visible: boolean }) {
+function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: number }) {
   const lastRowStart2 = total - ((total % 2) || 2);
   const [loading, setLoading] = useState(false);
+  const { ref, visible } = useReveal();
   const toast = useToast();
 
   const handleComprar = async () => {
@@ -126,14 +131,15 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
 
   return (
     <Flex
+      ref={ref}
       direction="row"
       align="center"
       gap={{ base: 5, md: 7 }}
       px={{ base: 5, md: 8 }}
       py={{ base: 7, md: 10 }}
       opacity={visible ? 1 : 0}
-      transform={visible ? "translateY(0)" : "translateY(20px)"}
-      transition={`opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`}
+      transform={visible ? "translateY(0)" : "translateY(24px)"}
+      transition={`opacity 0.7s ease ${(i % 2) * 0.12}s, transform 0.7s ease ${(i % 2) * 0.12}s`}
       sx={{
         "@media (max-width: 767px)": {
           borderBottom: i < total - 1 ? LINE : "none",
@@ -160,7 +166,7 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
             h="100%"
             objectFit="cover"
             objectPosition="center"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
         </Box>
@@ -211,20 +217,22 @@ function PaidBookCell({ item, i, total, visible }: { item: PaidItem; i: number; 
   );
 }
 
-function BookCell({ item, i, total, visible }: { item: Item; i: number; total: number; visible: boolean }) {
+function BookCell({ item, i, total }: { item: Item; i: number; total: number }) {
   const lastRowStart3 = total - ((total % 3) || 3);
   const lastRowStart2 = total - ((total % 2) || 2);
+  const { ref, visible } = useReveal();
 
   return (
     <Flex
+      ref={ref}
       direction={{ base: "column", md: "row" }}
       align="center"
       gap={{ base: 3, md: 5 }}
       px={{ base: 3, md: 7 }}
       py={{ base: 5, md: 8 }}
       opacity={visible ? 1 : 0}
-      transform={visible ? "translateY(0)" : "translateY(20px)"}
-      transition={`opacity 0.6s ease ${(i % 9) * 0.07}s, transform 0.6s ease ${(i % 9) * 0.07}s`}
+      transform={visible ? "translateY(0)" : "translateY(24px)"}
+      transition={`opacity 0.7s ease ${(i % 3) * 0.1}s, transform 0.7s ease ${(i % 3) * 0.1}s`}
       sx={{
         "@media (max-width: 1023.98px)": {
           borderRight: i % 2 === 0 ? LINE : "none",
@@ -253,7 +261,7 @@ function BookCell({ item, i, total, visible }: { item: Item; i: number; total: n
             h="100%"
             objectFit="cover"
             objectPosition="center"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
         </Box>
@@ -288,13 +296,56 @@ function BookCell({ item, i, total, visible }: { item: Item; i: number; total: n
 
 export default function LibrosPage() {
   const [mounted, setMounted] = useState(false);
-  const gridReveal = useReveal(0.04);
+  // La página no se muestra hasta que TODAS las portadas están descargadas:
+  // así entra ya completa (nada de imágenes cargando a trozos) y transmite
+  // que el material está cuidado.
+  const [imagesReady, setImagesReady] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => setMounted(true), 60);
-    return () => clearTimeout(t);
   }, []);
+
+  // Precarga de todas las portadas (pago + gratis + apuntes).
+  useEffect(() => {
+    const urls = [
+      ...(librosPago as LibroPago[]),
+      ...(libros as Libro[]),
+      ...(apuntes as Apunte[]),
+    ]
+      .map((x) => x.img)
+      .filter((src): src is string => Boolean(src));
+
+    if (urls.length === 0) {
+      setImagesReady(true);
+      return;
+    }
+
+    let cancelled = false;
+    let done = 0;
+    const marcarUna = () => {
+      done += 1;
+      if (!cancelled && done >= urls.length) setImagesReady(true);
+    };
+
+    urls.forEach((src) => {
+      const img = new window.Image();
+      img.onload = marcarUna;
+      img.onerror = marcarUna; // una portada rota no debe colgar la página
+      img.src = src;
+    });
+
+    // Red de seguridad: si alguna imagen nunca resuelve, mostramos igualmente.
+    const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 10000);
+
+    return () => { cancelled = true; clearTimeout(failSafe); };
+  }, []);
+
+  // Una vez cargadas las imágenes, disparamos la animación de entrada.
+  useEffect(() => {
+    if (!imagesReady) return;
+    const t = setTimeout(() => setMounted(true), 40);
+    return () => clearTimeout(t);
+  }, [imagesReady]);
 
   const apuntesItems: Item[] = (apuntes as Apunte[]).map(a => ({
     id: a.id,
@@ -318,6 +369,20 @@ export default function LibrosPage() {
 
   // Todo en una sola lista
   const allItems: Item[] = [...librosItems, ...apuntesItems];
+
+  // Mientras se descargan las portadas: fondo teal con la animación de la
+  // ESTRELLA de astrología en blanco, centrada (la misma que el recorrido, en
+  // lugar del spinner). El header se pinta ya para que cargue antes.
+  if (!imagesReady) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="auto" />
+        <Flex flex="1" align="center" justify="center" overflow="hidden">
+          <AstrologiaLoader color="#ffffff" />
+        </Flex>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -407,7 +472,6 @@ export default function LibrosPage() {
                     item={item}
                     i={i}
                     total={paidItems.length}
-                    visible={mounted}
                   />
                 ))}
               </Grid>
@@ -436,7 +500,7 @@ export default function LibrosPage() {
         pt={{ base: 11, md: 16 }}
         pb={{ base: 24, md: 32 }}
       >
-        <Box ref={gridReveal.ref} w="100%" maxW="880px" mx="auto">
+        <Box w="100%" maxW="880px" mx="auto">
           <Grid templateColumns={{ base: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }} justifyContent="center">
             {allItems.map((item, i) => (
               <BookCell
@@ -444,7 +508,6 @@ export default function LibrosPage() {
                 item={item}
                 i={i}
                 total={allItems.length}
-                visible={gridReveal.visible}
               />
             ))}
           </Grid>

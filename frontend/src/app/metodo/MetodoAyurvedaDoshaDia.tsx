@@ -9,7 +9,7 @@ import axios from "axios";
 import { generateDiaPdf } from "../../utils/generateDiaPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -17,7 +17,6 @@ import { AyurvedaPanel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
-import { CompromisosBox } from "../../components/metodo/CompromisosBox";
 import { CartaBox } from "../../components/metodo/CartaBox";
 import {
   API_URL,
@@ -190,7 +189,7 @@ export default function MetodoAyurvedaDoshaDia() {
   const irRecorrido = () => { if (guardado) navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`); };
 
   if (loading || !doshaKey) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AyurvedaLoading />;
   }
 
   const meta = DOSHA_META[doshaKey];
@@ -221,13 +220,6 @@ export default function MetodoAyurvedaDoshaDia() {
             extra={ilustracionesBtn}
             next={{ label: "Tu Mapa →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
           />
-          </Reveal>
-
-          {/* Recordatorio de los compromisos + carta escritos en Psicología.
-              Va ENCIMA del hero «Crea tu día» para que el usuario relea su
-              compromiso consigo mismo antes de diseñar su día. */}
-          <Reveal inView direction="up" distance={22} duration={0.6} w="100%">
-          <CompromisosBox />
           </Reveal>
 
           {/* HERO (primer box: entra al montar, siempre visible) */}

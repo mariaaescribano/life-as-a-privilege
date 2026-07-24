@@ -240,10 +240,6 @@ export function TCMIlustracionesModal({
 
   const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
 
-  // Al elegir un capítulo, precargamos TODAS sus viñetas y no montamos el cómic
-  // hasta que estén listas: mientras tanto se ve la animación de Medicina China.
-  const comicListo = usePrecargarImagenes(vinetas.map((v) => encodeURI(v.src)));
-
   // No mostramos nada hasta que la foto de fondo (tcm.png) y las portadas del
   // selector estén completamente cargadas: mientras tanto se ve solo el loader
   // de TCM, para que luego aparezca todo a la vez (fondo + tarjetas).
@@ -475,15 +471,9 @@ export function TCMIlustracionesModal({
           </ModalBody>
         )}
 
-        {/* ── VISTA CÓMIC ── */}
-        {/* Hasta que TODAS las viñetas del capítulo estén cargadas, solo se ve la
-            animación de Medicina China (yin-yang) sobre el fondo de TCM. */}
-        {capitulo && !comicListo && (
-          <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
-            {comicLoaderPorColor(tcmTxt) ?? <SpinnerTurquesa fullScreen={false} color={tcmTxt} />}
-          </Flex>
-        )}
-        {capitulo && comicListo && (
+        {/* ── VISTA CÓMIC ── va viñeta a viñeta (el ComicViewer muestra el
+            yin-yang por cada foto mientras carga y precarga la siguiente). */}
+        {capitulo && (
           <ComicViewer
             key={capitulo}
             vinetas={vinetas}

@@ -17,7 +17,7 @@ import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -31,6 +31,7 @@ import {
   type CompromisoData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -53,8 +54,6 @@ export default function MetodoPsicologiaCompromiso() {
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const dataRef = useRef<LineaDeVidaData>({});
 
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendiente = useRef<CompromisoData | null>(null);
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
   useEffect(() => {
@@ -114,32 +113,17 @@ export default function MetodoPsicologiaCompromiso() {
     }
   };
 
-  // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
+  // Escribir SOLO actualiza el estado local: no se guarda nada al teclear ni al
+  // salir de la página. La persistencia ocurre únicamente al pulsar «Guardar».
   const commit = (next: CompromisoData) => {
     setCompromiso(next);
-    setEstadoGuardado("guardando");
-    pendiente.current = next;
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
-    }, 900);
+    if (estadoGuardado !== "idle") setEstadoGuardado("idle");
   };
 
-  // Flush al desmontar.
-  useEffect(() => () => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    if (pendiente.current) void persistir(pendiente.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Guardado MANUAL (botón «Guardar»): la ÚNICA forma de persistir.
+  const guardarAhora = () => { void persistir(compromiso); };
 
-  // Guardado inmediato (botón «Guardar»): cancela el debounce pendiente y persiste ya.
-  const guardarAhora = () => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    pendiente.current = null;
-    void persistir(compromiso);
-  };
-
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
   // No se puede avanzar hasta responder las dos preguntas del compromiso.
@@ -165,10 +149,10 @@ export default function MetodoPsicologiaCompromiso() {
                 step={{ current: 18, total: 20 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Integración", onClick: () => navigate(`/metodo/psicologia/${exp.id}/mapa`) }}
+                prev={{ label: "← Integración", onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); } }}
                 next={{
                   label: "Carta →",
-                  onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`),
+                  onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/brujula`); },
                   disabled: !compromisoCompleto,
                   disabledTooltip: "Responde las dos preguntas del compromiso para continuar.",
                 }}

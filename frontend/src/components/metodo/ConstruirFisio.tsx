@@ -7,6 +7,7 @@ import axios from "axios";
 import SiteHeader from "../global/SiteHeader";
 import SiteFooter from "../global/Footer";
 import SpinnerTurquesa from "../global/Spinner";
+import { FisiologiaLoading } from "./comicLoaders";
 import { MetodoStepHeader } from "./MetodoStepHeader";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { useTusCelulas } from "./TusCelulasModal";
@@ -85,12 +86,13 @@ const perlaBg = (c: string): string =>
 function pos(forma: FormaFisio, i: number, n: number): { x: number; y: number } {
   if (forma === "row") return { x: ((i + 0.5) / n) * 100, y: 50 + (i % 2 === 0 ? -7 : 7) };
   if (forma === "membrana") return { x: ((i + 0.5) / n) * 100, y: i % 2 === 0 ? 30 : 70 };
-  // Cluster: círculo REAL (mismo radio en x/y) centrado en el centro del círculo
-  // negro (50%, 50%), para que el anillo de piezas quede concéntrico con él.
-  // Radio contenido (20%) para que el grupo quede bien AL CENTRO del círculo
-  // negro y no pegado al borde.
+  // Cluster: grupo compacto CENTRADO en el centro del círculo negro (50%, 50%).
+  // Una sola pieza va justo al centro; con varias, un anillo pequeño (radio
+  // reducido) para que queden agrupadas en el medio y NO pegadas al borde.
+  if (n <= 1) return { x: 50, y: 50 };
+  const r = n === 2 ? 13 : 16;
   const ang = (i / n) * Math.PI * 2 - Math.PI / 2;
-  return { x: 50 + Math.cos(ang) * 20, y: 50 + Math.sin(ang) * 20 };
+  return { x: 50 + Math.cos(ang) * r, y: 50 + Math.sin(ang) * r };
 }
 
 function Perla({ def, size }: { def: PiezaDef; size: any }) {
@@ -247,7 +249,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
 
   const reiniciar = () => { setPuestas([]); setPendientes(flat()); setCompleto(false); };
 
-  if (loading || !fotosListas) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !fotosListas) return <FisiologiaLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -283,9 +285,9 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
           <AnimatePresence>
             {!completo && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
+                <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.introTitulo}</Text>
-                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                       maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.instruccion}</Text>
               </MBox>
             )}
@@ -396,13 +398,13 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
-                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
+                      <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
                         {props.resultTitulo}
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${props.glow}aa, transparent)`} />
                       {props.resultParrafos.map((p, i) => (
-                        <Text key={i} color={i === props.resultParrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
+                        <Text key={i} color={i === props.resultParrafos.length - 1 ? fisiologiaTxt : fisiologiaTxt}
                               fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                               fontWeight={i === props.resultParrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
                           {p}
@@ -432,7 +434,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             <Flex justify="flex-end" w="100%">
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
@@ -443,7 +445,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
 
           {/* Nota discreta al pie (aclaración didáctica) */}
           {props.notaPie && (
-            <Text color="white" fontStyle="italic" textAlign="center" opacity={0.72}
+            <Text color={fisiologiaTxt} fontStyle="italic" textAlign="center" opacity={0.72}
                   fontSize={{ base: "2xs", md: "xs" }} maxW="600px" lineHeight="1.6" mt={2}
                   style={{ textShadow: "0 1px 6px rgba(0,0,0,0.45)" }}>
               {props.notaPie}

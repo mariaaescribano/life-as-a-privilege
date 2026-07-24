@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -371,7 +371,7 @@ export default function MetodoFisiologiaMoleculas() {
   ]);
 
   if (loading || !imgsListas) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   const total = mol.slots.length;
@@ -405,18 +405,18 @@ export default function MetodoFisiologiaMoleculas() {
           <AnimatePresence>
             {!completo && !terminado && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
+                <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Forma una molécula de {mol.nombre}.
+                  Una molécula es la unión de átomos. Forma una molécula de {mol.nombre}.
                 </Text>
               </MBox>
             )}
             {terminado && (
               <MBox key="cierre" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                     textAlign="center" maxW="640px">
-                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
+                <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" lineHeight="1.35" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Las moléculas son la unión de varios átomos. Son el fundamento de la Vida y también forman parte de ti.
+                  Las moléculas son la unión de varios átomos. Son el fundamento de la Vida y forman parte de ti.
                 </Text>
               </MBox>
             )}
@@ -527,14 +527,14 @@ export default function MetodoFisiologiaMoleculas() {
                       {/* Caja 2 · comentario */}
                       <PanelBox flex="1">
                         <Flex direction="column" gap={4} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
-                          <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                          <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                                 letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
                             {mol.titulo}
                           </Text>
                           <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                                bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
                           {mol.parrafos.map((p, i) => (
-                            <Text key={i} color={i === mol.parrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
+                            <Text key={i} color={i === mol.parrafos.length - 1 ? fisiologiaTxt : fisiologiaTxt}
                                   fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                                   fontWeight={i === mol.parrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
                               {p}
@@ -577,7 +577,7 @@ export default function MetodoFisiologiaMoleculas() {
                                 <MoleculaVisual mol={m} tam={S_MINI} />
                               </Box>
                             </Box>
-                            <Text color="white" fontWeight="700" fontSize={{ base: "sm", md: "xl" }}
+                            <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "sm", md: "xl" }}
                                   style={{ textShadow: INK }}>{m.formula}</Text>
                             <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "2xs", md: "md" }} fontStyle="italic"
                                   textAlign="center" lineHeight="1.2">{m.nombre}</Text>
@@ -596,10 +596,10 @@ export default function MetodoFisiologiaMoleculas() {
             <Flex justify="flex-end" w="100%">
               <Box as="button" onClick={terminado ? empezarDeCero : reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                   bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                   bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                   _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                   _hover={{ bg: "rgba(255,255,255,0.16)", color: fisiologiaTxt, borderColor: `${fisiologiaTxt}aa` }}>
                 ↺ Volver a hacer
               </Box>
             </Flex>

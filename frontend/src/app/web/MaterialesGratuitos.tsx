@@ -39,11 +39,32 @@ export default function MaterialesGratuitos() {
     return () => clearTimeout(t);
   }, []);
 
+  // Orden: Ilustraciones (izquierda) · Cursos (medio) · Libros (derecha).
   const cajitas: Cajita[] = [
+    // ── «Vídeos» comentado a petición: se oculta el box y su página (la ruta
+    // /aprendizaje/todosVideos queda comentada en App.tsx). Se conserva por si
+    // se quiere restaurar en el futuro.
+    // {
+    //   titulo: "Vídeos",
+    //   delay: 0.15,
+    //   link: "/aprendizaje/todosVideos",
+    //   renderIcon: () => (
+    //     <Box
+    //       as="svg"
+    //       xmlns="http://www.w3.org/2000/svg"
+    //       viewBox="0 -960 960 960"
+    //       width="52px"
+    //       height="52px"
+    //       fill="white"
+    //     >
+    //       <path d="M320-200v-560l440 280-440 280Z" />
+    //     </Box>
+    //   ),
+    // },
     {
-      titulo: "Vídeos",
+      titulo: "Ilustraciones",
       delay: 0.15,
-      link: "/aprendizaje/todosVideos",
+      link: "/ilustraciones",
       renderIcon: () => (
         <Box
           as="svg"
@@ -53,7 +74,7 @@ export default function MaterialesGratuitos() {
           height="52px"
           fill="white"
         >
-          <path d="M320-200v-560l440 280-440 280Z" />
+          <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
         </Box>
       ),
     },
@@ -76,23 +97,6 @@ export default function MaterialesGratuitos() {
       delay: 0.45,
       link: "/libros",
       renderIcon: () => <LibrosIcon color="white" size="52px" shadow={false} />,
-    },
-    {
-      titulo: "Ilustraciones",
-      delay: 0.6,
-      link: "/ilustraciones",
-      renderIcon: () => (
-        <Box
-          as="svg"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 -960 960 960"
-          width="52px"
-          height="52px"
-          fill="white"
-        >
-          <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
-        </Box>
-      ),
     },
   ];
 
@@ -165,8 +169,8 @@ export default function MaterialesGratuitos() {
         <Grid
           ref={cardsReveal.ref}
           w="100%"
-          maxW="1180px"
-          templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
+          maxW="900px"
+          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
           gap={{ base: 6, md: 6 }}
         >
           {cajitas.map((c) => (

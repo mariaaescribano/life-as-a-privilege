@@ -7,6 +7,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -58,7 +59,7 @@ const ATOMOS: AtomoDef[] = [
     nombre: "Hidrógeno",
     piezas: ["proton", "electron"],
     nucleoCluster: [{ x: 50, y: 50 }],
-    orbitaPos: [{ x: 4, y: 50 }],
+    orbitaPos: [{ x: 14, y: 50 }],
     img: "/recorrido/fisiologia/pre/hidrogeno.png",
     instruccion: "Lleva el protón al núcleo y el electrón a su órbita.",
     titulo: "¡Has construido un átomo de Hidrógeno!",
@@ -71,7 +72,7 @@ const ATOMOS: AtomoDef[] = [
     nombre: "Helio",
     piezas: ["proton", "proton", "neutron", "neutron", "electron", "electron"],
     nucleoCluster: [{ x: 39, y: 41 }, { x: 61, y: 41 }, { x: 39, y: 61 }, { x: 61, y: 61 }],
-    orbitaPos: [{ x: 4, y: 50 }, { x: 96, y: 50 }],
+    orbitaPos: [{ x: 14, y: 50 }, { x: 86, y: 50 }],
     img: "/recorrido/fisiologia/pre/helio.png",
     instruccion: "Lleva los 2 protones y 2 neutrones al núcleo, y los 2 electrones a su órbita.",
     titulo: "¡Has construido un átomo de Helio!",
@@ -181,7 +182,7 @@ function AtomoDibujado({ def }: { def: AtomoDef }) {
   return (
     <Box position="relative" w="100%" h="100%" borderRadius="full"
          display="flex" alignItems="center" justifyContent="center">
-      <Box position="absolute" inset="3%" borderRadius="full" border={`1.5px solid ${GLOW.electron}55`} pointerEvents="none" />
+      <Box position="absolute" inset="14%" borderRadius="full" border={`1.5px solid ${GLOW.electron}55`} pointerEvents="none" />
       {electrones.map((t, i) => (
         <Box key={`e${i}`} position="absolute" left={`${def.orbitaPos[i].x}%`} top={`${def.orbitaPos[i].y}%`} transform="translate(-50%,-50%)">
           <Esfera tipo={t} size={{ base: "26px", md: "32px" }} />
@@ -312,7 +313,7 @@ export default function MetodoFisiologiaAtomos() {
     setIdx(ni); setPendientes(piezasDe(ni)); setColocadas([]); setCompleto(false); setImgOk(false);
   };
 
-  if (loading || !particulasOk) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !particulasOk) return <FisiologiaLoading />;
 
   const total = def.piezas.length;
   const hechas = colocadas.length;
@@ -346,7 +347,7 @@ export default function MetodoFisiologiaAtomos() {
           <AnimatePresence>
             {!completo && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                  <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                     Construye un átomo de {def.nombre}.
                 </Text>
@@ -372,7 +373,7 @@ export default function MetodoFisiologiaAtomos() {
                       <Box ref={orbitaRef} position="relative"
                            w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
                            borderRadius="full" display="flex" alignItems="center" justifyContent="center">
-                        <Box position="absolute" inset="0" borderRadius="full"
+                        <Box position="absolute" inset="14%" borderRadius="full"
                              border={`1.5px dashed ${GLOW.electron}66`}
                              animation={`${pulse} 3.4s ease-in-out infinite`} pointerEvents="none" />
                         {electrones.map((p, i) => (
@@ -471,14 +472,14 @@ export default function MetodoFisiologiaAtomos() {
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
-                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                      <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                             letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
                         {def.titulo}
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
                       {def.parrafos.map((p, i) => (
-                        <Text key={i} color={i === def.parrafos.length - 1 ? "white" : "rgba(255,255,255,0.94)"}
+                        <Text key={i} color={i === def.parrafos.length - 1 ? fisiologiaTxt : fisiologiaTxt}
                               fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                               fontWeight={i === def.parrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
                           {p}
@@ -505,7 +506,7 @@ export default function MetodoFisiologiaAtomos() {
                 <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
                   <Box as="button" onClick={reiniciar}
                        display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                       bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                       bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                        _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>

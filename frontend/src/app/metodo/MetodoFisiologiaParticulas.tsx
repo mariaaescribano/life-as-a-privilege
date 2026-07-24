@@ -7,6 +7,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -354,7 +355,7 @@ export default function MetodoFisiologiaParticulas() {
   };
 
   if (loading || !imagenesListas) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   const total = PIEZAS_INICIALES.length;
@@ -387,7 +388,7 @@ export default function MetodoFisiologiaParticulas() {
           <AnimatePresence>
             {!completo && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                   Construye una partícula.
                 </Text>
@@ -517,17 +518,17 @@ export default function MetodoFisiologiaParticulas() {
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" minH={0} overflowY="auto"
                           textAlign={{ base: "center", md: "left" }}>
-                      <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
+                      <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                             letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
                         ¡Enhorabuena! Has construido una partícula.
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" style={{ textShadow: INK }}>
+                      <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" style={{ textShadow: INK }}>
                         Las partículas están formadas por <b>quarks</b>, unas partículas fundamentales que aparecen y desaparecen constantemente, y por
                         <b> gluones</b>, que los mantienen unidos.
                       </Text>
-                      <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
+                      <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
                         Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.
                       </Text>
                     </Flex>
@@ -538,10 +539,10 @@ export default function MetodoFisiologiaParticulas() {
                 <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
                   <Box as="button" onClick={reiniciar}
                        display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                       bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                       bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                       _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                       _hover={{ bg: "rgba(255,255,255,0.16)", color: fisiologiaTxt, borderColor: `${fisiologiaTxt}aa` }}>
                     ↺ Volver a hacer
                   </Box>
                 </Flex>

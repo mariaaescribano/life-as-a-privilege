@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { StarsLayer } from "../../components/global/StarsLayer";
@@ -10,13 +11,40 @@ import { StarsLayer } from "../../components/global/StarsLayer";
 // disciplinas. Al pulsar una, se abre el popup inmersivo con el estilo de su
 // disciplina (ComicModal). Grid: 4 por fila en escritorio, 1 en móvil.
 
-function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () => void }) {
+// Reveal por scroll: cada tarjeta se enciende al entrar en el viewport, así la
+// galería va "brotando" según el usuario baja. rootMargin negativo abajo → se
+// dispara un pelín antes de estar del todo dentro.
+const useReveal = (threshold = 0.15) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold, rootMargin: "0px 0px -8% 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+};
+
+function GaleriaCard({ entry, i, onOpen }: { entry: IlustracionEntry; i: number; onOpen: () => void }) {
   const [coverFailed, setCoverFailed] = useState(false);
+  const { ref, visible } = useReveal();
   // Color del texto/borde de la tarjeta: `cardColor` si la entrada lo define
   // (p.ej. Nutrición, cuyo acento de cómic es claro e ilegible aquí), si no el
   // acento del cómic (themeColor).
   const c = entry.cardColor ?? entry.themeColor;
   return (
+    <Box
+      ref={ref}
+      h="100%"
+      opacity={visible ? 1 : 0}
+      transform={visible ? "translateY(0)" : "translateY(24px)"}
+      transition={`opacity 0.7s ease ${(i % 4) * 0.08}s, transform 0.7s ease ${(i % 4) * 0.08}s`}
+    >
     <Box
       as="button"
       onClick={onOpen}
@@ -51,7 +79,7 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
             as="img"
             src={encodeURI(entry.cover)}
             alt={entry.titulo}
-            loading="lazy"
+            loading="eager"
             position="absolute"
             inset="0"
             w="100%"
@@ -123,18 +151,73 @@ function GaleriaCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () =>
         </Flex>
       </Flex>
     </Box>
+    </Box>
   );
 }
 
 export default function Ilustraciones() {
   const [mounted, setMounted] = useState(false);
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
+  // La galería no se muestra hasta que TODAS las portadas están descargadas:
+  // entra ya completa (nada de imágenes cargando a trozos).
+  const [imagesReady, setImagesReady] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => setMounted(true), 60);
-    return () => clearTimeout(t);
   }, []);
+
+  // Precarga de todas las portadas de la galería.
+  useEffect(() => {
+    const urls = ILUSTRACIONES
+      .map((e) => e.cover)
+      .filter((src): src is string => Boolean(src))
+      .map((src) => encodeURI(src));
+
+    if (urls.length === 0) {
+      setImagesReady(true);
+      return;
+    }
+
+    let cancelled = false;
+    let done = 0;
+    const marcarUna = () => {
+      done += 1;
+      if (!cancelled && done >= urls.length) setImagesReady(true);
+    };
+
+    urls.forEach((src) => {
+      const img = new window.Image();
+      img.onload = marcarUna;
+      img.onerror = marcarUna; // una portada rota no debe colgar la página
+      img.src = src;
+    });
+
+    // Red de seguridad: si alguna imagen nunca resuelve, mostramos igualmente.
+    const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 10000);
+
+    return () => { cancelled = true; clearTimeout(failSafe); };
+  }, []);
+
+  // Una vez cargadas las imágenes, disparamos la animación de entrada.
+  useEffect(() => {
+    if (!imagesReady) return;
+    const t = setTimeout(() => setMounted(true), 40);
+    return () => clearTimeout(t);
+  }, [imagesReady]);
+
+  // Mientras se descargan las portadas: fondo teal con la animación de la
+  // ESTRELLA de astrología en blanco, centrada (la misma que el recorrido, en
+  // lugar del spinner). El header se pinta ya para que cargue antes.
+  if (!imagesReady) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="auto" />
+        <Flex flex="1" align="center" justify="center" overflow="hidden">
+          <AstrologiaLoader color="#ffffff" />
+        </Flex>
+      </Box>
+    );
+  }
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -194,8 +277,8 @@ export default function Ilustraciones() {
           templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
           gap={{ base: 6, md: 6 }}
         >
-          {ILUSTRACIONES.map((entry) => (
-            <GaleriaCard key={entry.id} entry={entry} onOpen={() => setAbierta(entry)} />
+          {ILUSTRACIONES.map((entry, i) => (
+            <GaleriaCard key={entry.id} entry={entry} i={i} onOpen={() => setAbierta(entry)} />
           ))}
         </Grid>
       </Flex>

@@ -18,7 +18,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -39,6 +39,7 @@ import {
   type ArquetipoRef,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   AstrologiaIcon,
@@ -284,11 +285,17 @@ export default function MetodoPsicologiaDonesEspejo() {
     else setSaberMas({ cuerpo: c, casa: a.casa ?? undefined, facet: "casa" });
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  const irARecuerdate = () => navigate(`/metodo/psicologia/${exp.id}/dones`);
-  const irAMiedos = () => navigate(`/metodo/psicologia/${exp.id}/miedos`);
+  // Antes de navegar: dispara el guardado pendiente (debounce) y espera a que no
+  // quede ninguno en vuelo, para que la página destino lea datos ya escritos.
+  const flushPendiente = () => {
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
+  };
+  const irARecuerdate = async () => { flushPendiente(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/dones`); };
+  const irAMiedos = async () => { flushPendiente(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos`); };
 
   const activa = dones.find((d) => d.id === activaId) || null;
   // Hay que escribir al menos un don (con nombre) para poder continuar a Miedos.

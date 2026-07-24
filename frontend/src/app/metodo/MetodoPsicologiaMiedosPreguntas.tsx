@@ -14,7 +14,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -29,6 +29,7 @@ import {
   type MiedoItem,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -125,11 +126,12 @@ export default function MetodoPsicologiaMiedosPreguntas() {
   const updateRespuesta = (id: string, key: string, valor: string) =>
     commit(miedos.map((m) => (m.id === id ? { ...m, respuestas: { ...(m.respuestas || {}), [key]: valor } } : m)));
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  const irAMiedos = () => navigate(`/metodo/psicologia/${exp.id}/miedos`);
-  const irAIntegracion = () => navigate(`/metodo/psicologia/${exp.id}/mapa`);
+  // Antes de navegar: fuerza el guardado pendiente y espera al flush.
+  const irAMiedos = async () => { flushGuardado(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos`); };
+  const irAIntegracion = async () => { flushGuardado(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); };
 
   const total = MIEDOS_PREGUNTAS.length;
   const abierto = miedos.find((m) => m.id === abiertoId) || null;
@@ -292,6 +294,9 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
            position="relative" w="100%" maxW={{ base: "440px", md: "500px" }}
+           // Altura FIJA: el popup mide siempre lo mismo, no cambia según lo larga
+           // que sea la pregunta (el cuerpo hace scroll interno si hace falta).
+           h={{ base: "calc(100vh - 48px)", md: "600px" }}
            maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
            borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>

@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
@@ -114,7 +114,7 @@ export default function MetodoAyurvedaResultado() {
   }, [navigate]);
 
   if (loading || !resultado) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AyurvedaLoading />;
   }
 
   const total = preguntasAyurveda.length;

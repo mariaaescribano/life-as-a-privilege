@@ -905,11 +905,13 @@ const Home = () => {
 
   // Botón «Continuar por dónde lo dejé»: lleva a la última página del Mapa que
   // el usuario visitó (guardada en localStorage por SiteHeader) y se pinta con
-  // el color de esa disciplina. Solo aparece si hay un recorrido guardado.
+  // el color de esa disciplina. Solo aparece si hay un recorrido guardado Y la
+  // usuaria ha comprado al menos una disciplina (metodoSuscrito) — si acaba de
+  // llegar y no ha comprado nada, no tiene sentido ofrecerle «Continuar».
   const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
   const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
   const ContIcon = contDisc?.Icon;
-  const continuarBtn = ultimoRecorrido && contDisc ? (
+  const continuarBtn = metodoSuscrito && ultimoRecorrido && contDisc ? (
     <Box
       as="button"
       onClick={() => navigate(ultimoRecorrido)}
@@ -934,15 +936,17 @@ const Home = () => {
       transition="all 0.2s"
       _hover={{ transform: "translateY(-1px)", boxShadow: `0 6px 22px rgba(0,0,0,0.34), 0 0 24px ${contDisc.txt}5a` }}
     >
-      {/* Fondo de la disciplina + velo para que el texto se lea. */}
-      <DisciplinaBgLayer nom={contDisc.nom} borderRadius="full" overlay={`${contDisc.bg}c2`} />
+      {/* Fondo de la disciplina NÍTIDO: velo muy suave para que la IMAGEN se vea
+          de verdad; la legibilidad del texto se apoya en el text-shadow. */}
+      <DisciplinaBgLayer nom={contDisc.nom} borderRadius="full" overlay={`${contDisc.bg}59`} />
       {/* Icono de la disciplina, a la izquierda. */}
       {ContIcon && (
-        <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" flexShrink={0}>
+        <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" flexShrink={0}
+             style={{ filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.85))" }}>
           <ContIcon size={{ base: "20px", md: "22px" }} />
         </Box>
       )}
-      <Box as="span" position="relative" zIndex={1}>
+      <Box as="span" position="relative" zIndex={1} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.7)" }}>
         Continuar por dónde lo dejé →
       </Box>
     </Box>

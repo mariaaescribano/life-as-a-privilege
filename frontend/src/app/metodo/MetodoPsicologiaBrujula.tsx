@@ -14,7 +14,7 @@ import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -30,6 +30,7 @@ import {
   type BrujulaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -117,9 +118,9 @@ export default function MetodoPsicologiaBrujula() {
   // Guardado MANUAL: no se guarda mientras se escribe; el usuario pulsa «Guardar»
   // cuando termina. Al navegar también se guarda para no perder el mensaje.
   const guardarManual = () => { if (estadoGuardado !== "guardando") void persistir(brujula); };
-  const irA = async (ruta: string) => { await persistir(brujula); navigate(ruta); };
+  const irA = async (ruta: string) => { await persistir(brujula); await flushSaves(); navigate(ruta); };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
   // No se puede avanzar hasta escribir el mensaje de la carta.
@@ -237,7 +238,7 @@ export default function MetodoPsicologiaBrujula() {
       <ComicPasoModal
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
-        onContinue={() => navigate(`/metodo/psicologia/${exp.id}/sintesis`)}
+        onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/sintesis`); }}
         vinetas={COMIC_SINTESIS}
         continueLabel="Continuar"
         botonNitido

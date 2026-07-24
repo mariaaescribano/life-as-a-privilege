@@ -12,7 +12,7 @@ export const CELULAS_ORGANOS: Vineta[] = [
   {
     src: "/viñetas/fisiologia/cigoto/cigoto1.png",
     paragraphs: [
-      "Todo comienza con una única célula llamada cigoto, formada tras la unión del óvulo y el espermatozoide.",
+      "Tu Vida comienza con una única célula llamada cigoto, formada tras la unión del óvulo y el espermatozoide.",
       "Esta célula contiene toda la información genética necesaria para construir un organismo completo y será el punto de partida de millones de futuras células.",
     ],
   },

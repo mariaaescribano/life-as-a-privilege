@@ -350,7 +350,7 @@ export function ComicViewer({
       onClick={goPrev}
       isDisabled={isFirst}
       {...arrowPos}
-      left={flechasEnBox ? { base: 2, md: 3 } : { base: 1, md: 6 }}
+      left={flechasEnBox ? { base: 1, md: 1 } : { base: 1, md: 6 }}
       top="50%"
       transform="translateY(-50%)"
       variant="ghost"
@@ -381,7 +381,7 @@ export function ComicViewer({
       onClick={blocked ? undefined : (isLast ? handleComplete : goNext)}
       isDisabled={blocked}
       {...arrowPos}
-      right={flechasEnBox ? { base: 2, md: 3 } : { base: 1, md: 6 }}
+      right={flechasEnBox ? { base: 1, md: 1 } : { base: 1, md: 6 }}
       top="50%"
       transform="translateY(-50%)"
       variant="ghost"

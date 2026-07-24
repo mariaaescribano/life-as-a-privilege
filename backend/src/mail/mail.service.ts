@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
 // Destinatario de las solicitudes de carta astral (lecturas de /metodo/astrologia).
-const CARTA_ASTRAL_EMAIL = 'darkcake141@gmail.com';
+// Usa NOTIFY_EMAIL (igual que contacto/reservas/suscripción); el hardcode solo
+// como último recurso si la variable no estuviera configurada.
+const CARTA_ASTRAL_FALLBACK = 'darkcake141@gmail.com';
 
 @Injectable()
 export class MailService {
@@ -51,10 +53,11 @@ export class MailService {
       </div>
     `;
 
+    const to = process.env.NOTIFY_EMAIL || CARTA_ASTRAL_FALLBACK;
     try {
       await this.getTransporter().sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
-        to: CARTA_ASTRAL_EMAIL,
+        to,
         replyTo: userEmail,
         subject: `Carta Astral de ${userEmail}`,
         html,

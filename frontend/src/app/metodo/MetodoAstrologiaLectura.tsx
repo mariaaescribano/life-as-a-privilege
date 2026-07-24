@@ -312,7 +312,6 @@ export default function MetodoAstrologiaLectura() {
         vinetas={VINETAS_CASAS}
         continueLabel="Casas"
         themeColor={astrologiaTxt}
-        sinBotonSaltar
       />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />

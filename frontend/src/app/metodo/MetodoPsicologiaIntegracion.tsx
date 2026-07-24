@@ -6,7 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -27,6 +27,7 @@ import {
 } from "../../components/metodo/psicologiaRecorrido";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   AstrologiaIcon,
@@ -332,12 +333,19 @@ export default function MetodoPsicologiaIntegracion() {
     else if (a?.tipo === "arquetipo") addArq(a.arq);
   };
 
-  if (loading || !fotoLista) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading || !fotoLista) return <PsicologiaLoading />;
   if (!exp) return null;
 
+  // Antes de navegar: dispara el guardado pendiente (debounce) y espera al flush,
+  // para que la página destino lea datos ya escritos.
+  const flushPendiente = () => {
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
+  };
   // Tras Relación viene «Recuérdate» (ruta interna /dones). La Integración (/mapa)
   // llega más adelante, después del bloque de dones.
-  const irARecuerdate = () => navigate(`/metodo/psicologia/${exp.id}/dones`);
+  const irARecuerdate = async () => { flushPendiente(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/dones`); };
+  const irANarra = async () => { flushPendiente(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/regulacion`); };
   // Hay relación (real) si algún box tiene contenido: una herida/arquetipo
   // reunidos, o un título/texto escrito. Un box recién añadido y vacío no cuenta.
   const hayRelacion = relaciones.some(
@@ -365,7 +373,7 @@ export default function MetodoPsicologiaIntegracion() {
               step={{ current: 12, total: 20 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Narra", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
+              prev={{ label: "← Narra", onClick: irANarra }}
               next={{
                 label: "Recuérdate →",
                 onClick: irARecuerdate,
@@ -549,7 +557,7 @@ function HeridaRect({ texto, activo, onTap, onDragStart, onDragEnd }: {
           bg={TINTA} color={PAPEL}
           border={`1.5px solid ${activo ? PAPEL : `${PAPEL}33`}`}
           boxShadow={activo ? "0 8px 22px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.4)" : "none"}
-          cursor="grab" transition="all 0.16s"
+          cursor="pointer" transition="all 0.16s"
           _hover={{ boxShadow: activo ? "0 10px 26px rgba(0,0,0,0.55), 0 3px 10px rgba(0,0,0,0.45)" : "0 4px 14px rgba(0,0,0,0.3)" }}
           _active={{ cursor: "grabbing" }}>
       <HeridaIcon size={20} color={PAPEL} />
@@ -588,7 +596,7 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer, onDragStart, onD
       <Flex as="button" draggable onDragStart={onDragStart} onDragEnd={onDragEnd} onClick={onTap}
             position="relative" zIndex={1} direction="column" align="center" justify="center" gap={1.5}
             w="100%" px={2} py={4} minH={{ base: "108px", md: "118px" }}
-            bg={activo ? `${color}26` : "transparent"} cursor="grab"
+            bg={activo ? `${color}26` : "transparent"} cursor="pointer"
             transition="background 0.16s" _hover={{ bg: activo ? `${color}33` : "rgba(255,255,255,0.06)" }}
             _active={{ cursor: "grabbing" }}>
         <Box sx={{ filter: `drop-shadow(0 0 9px ${color}cc)` }}>

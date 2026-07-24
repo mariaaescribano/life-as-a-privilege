@@ -4,7 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { TcmLoading, TcmLoader } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -22,7 +22,7 @@ import {
 // Candado blanco con brillo (mismo que el resto de botones de disciplina bloqueada).
 const Candado = ({ size }: { size: any }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-       w={size} h={size} fill="#ffffff"
+       w={size} h={size} fill={tcmTxt}
        style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}>
     <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
   </Box>
@@ -63,7 +63,7 @@ export default function MetodoTcmCursos() {
   const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <TcmLoading />;
   }
 
   return (
@@ -106,7 +106,7 @@ export default function MetodoTcmCursos() {
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           {cursosLoading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
-              <SpinnerTurquesa fullScreen={false} />
+              <TcmLoader color="#ffffff" />
               <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
                 Cargando cursos…
               </Text>

@@ -16,6 +16,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
 import { useRecorridoAlcanzable } from "../../hooks/useRecorridoAlcanzable";
 import { RECORRIDO_INDICE, RECORRIDO_TOTAL, pasoAlcanzablePsicologia, type PasoRecorrido } from "./psicologiaRecorrido";
+import { flushSaves } from "../../utils/flushSaves";
 import { API_URL, neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const PAPEL = "#fbf4e8";
@@ -152,9 +153,12 @@ export function IndiceRecorrido({
     return p.n > techo;
   };
 
-  const ir = (p: PasoRecorrido) => {
+  const ir = async (p: PasoRecorrido) => {
     if (estaBloqueado(p)) return; // página aún bloqueada: no navega
     setOpen(false);
+    // Espera a que termine cualquier guardado en vuelo de la página actual antes
+    // de saltar: si no, la página destino leería datos viejos y los pisaría.
+    await flushSaves();
     navigate(p.ruta(expId));
   };
 

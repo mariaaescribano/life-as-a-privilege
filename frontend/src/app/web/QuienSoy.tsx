@@ -529,6 +529,35 @@ const QuienSoy = () => {
         <Flex direction="column" gap={{ base: 12, md: 16 }} maxW="1100px" mx="auto">
           {secciones.filter((s) => s.items.length > 0).map((seccion) => (
             <Box key={seccion.titulo || "sin-titulo"}>
+              {/* Separador horizontal con el mandala en medio, encima del título.
+                  El contenedor de secciones ya deja `gap` por arriba; con este mb
+                  igual, el espacio por arriba y por abajo del mandala es el mismo. */}
+              {seccion.titulo && (
+                <Flex
+                  align="center"
+                  justify="center"
+                  gap={{ base: 3, md: 4 }}
+                  w="100%"
+                  maxW="520px"
+                  mx="auto"
+                  mb={{ base: 12, md: 16 }}
+                  opacity={certifReveal.visible ? 1 : 0}
+                  transform={certifReveal.visible ? "translateY(0)" : "translateY(16px)"}
+                  transition="opacity 0.6s ease, transform 0.6s ease"
+                >
+                  <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" boxShadow="0 0 6px rgba(255,255,255,0.35)" />
+                  <Image
+                    src="/img/icono/life.png"
+                    alt=""
+                    h={{ base: "34px", md: "44px" }}
+                    objectFit="contain"
+                    flexShrink={0}
+                    style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.6)) drop-shadow(0 0 22px rgba(255,255,255,0.35))" }}
+                  />
+                  <Box flex="1" h="1px" bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" boxShadow="0 0 6px rgba(255,255,255,0.35)" />
+                </Flex>
+              )}
+
               {/* Subtítulo de la sección */}
               {seccion.titulo && (
                 <Flex

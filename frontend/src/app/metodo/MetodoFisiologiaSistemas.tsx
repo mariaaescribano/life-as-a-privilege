@@ -5,7 +5,7 @@ import { useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -114,7 +114,7 @@ export default function MetodoFisiologiaSistemas() {
     return () => cancelAnimationFrame(id);
   }, [loading, reduce]);
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <FisiologiaLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -142,7 +142,7 @@ export default function MetodoFisiologiaSistemas() {
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
               Varios órganos que colaboran forman un sistema. Pulsa cada sistema para conocerlo.
             </Text>

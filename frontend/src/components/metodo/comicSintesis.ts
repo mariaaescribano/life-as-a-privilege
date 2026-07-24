@@ -12,7 +12,7 @@ import type { Vineta } from "./ComicViewer";
 export const COMIC_SINTESIS: Vineta[] = [
   {
     src: "/viñetas/psicologia/sintesis/sintesis1.png",
-    titulo: "El problema nunca es el problema",
+    titulo: "",
     paragraphs: [
       "Todos creemos que el problema es el problema.",
       "Si fumas, el problema es el tabaco.",
@@ -24,7 +24,7 @@ export const COMIC_SINTESIS: Vineta[] = [
   },
   {
     src: "/viñetas/psicologia/sintesis/sintesis2.png",
-    titulo: "Todo síntoma tiene una historia",
+    titulo: "",
     paragraphs: [
       "Lo que llamas «problema» suele ser un síntoma de que sigues sobreviviendo desde patrones que aprendiste en la infancia.",
       "Tu ansiedad, tu rabia, tu necesidad de controlar, de agradar o de aislarte... son intentos de gestionar un dolor que, durante mucho tiempo, no pudo sentirse.",
@@ -35,7 +35,7 @@ export const COMIC_SINTESIS: Vineta[] = [
   },
   {
     src: "/viñetas/psicologia/sintesis/sintesis3.png",
-    titulo: "Dejar de sobrevivir",
+    titulo: "",
     paragraphs: [
       "Ya entiendes de dónde nace esa reivindicación.",
       "Ya viste tus heridas, tus nudos y tus miedos.",

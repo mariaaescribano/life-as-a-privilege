@@ -16,7 +16,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -27,6 +27,7 @@ import {
   type DonesData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -129,7 +130,7 @@ export default function MetodoPsicologiaDones() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
   const total = DONES_PREGUNTAS.length;
@@ -139,13 +140,21 @@ export default function MetodoPsicologiaDones() {
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
   const siguiente = () => setPaso((i) => Math.min(total - 1, i + 1));
 
-  // Escribir texto quita la marca «sin ideas» de esa pregunta. NO se guarda solo:
-  // se persiste al pulsar «Guardar».
+  // Escribir texto quita la marca «sin ideas» de esa pregunta. Se AUTOGUARDA con
+  // un pequeño retardo (además del botón «Guardar»), para que nada de lo escrito
+  // se pierda al cambiar de pregunta o salir de la página.
   const updateRespuesta = (key: string, valor: string) => {
     const resp = { ...respuestas, [key]: valor };
     const sin = valor.trim() ? sinIdeas.filter((k) => k !== key) : sinIdeas;
     setRespuestas(resp);
     if (sin !== sinIdeas) setSinIdeas(sin);
+    // Autoguardado (debounce): deja pendiente el último estado y lo persiste
+    // tras una pausa. El flush al desmontar/navegar recoge lo que quede.
+    pendiente.current = { resp, sin };
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      if (pendiente.current) { const { resp: r, sin: s } = pendiente.current; pendiente.current = null; void persistir(r, s); }
+    }, 800);
   };
   // «Sin ideas»: marca la pregunta como resuelta (sin texto) y pasa a la siguiente.
   const marcarSinIdeas = (key: string) => {
@@ -168,8 +177,10 @@ export default function MetodoPsicologiaDones() {
   const resueltas = DONES_PREGUNTAS.filter((q) => estaResuelta(q.key)).length;
   const todoResuelto = resueltas === total;
 
-  const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
-  const irAEspejo = () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`);
+  // Antes de navegar (atrás o adelante) forzamos el guardado del estado actual y
+  // esperamos a que termine, para que la página destino lea datos ya escritos.
+  const irARelacion = async () => { guardarAhora(respuestas, sinIdeas); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/integracion`); };
+  const irAEspejo = async () => { guardarAhora(respuestas, sinIdeas); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/dones-espejo`); };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">

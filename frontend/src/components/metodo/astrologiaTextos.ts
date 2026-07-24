@@ -1623,6 +1623,116 @@ La última vez que Plutón estuvo ahí, comenzó la pesca industrial; empezamos 
     Piscis: QUIRON_TEXTS[12],
   },
 
+  lilith: {
+    Aries: `Eres **masculino y competitivo**, y así debes dejarte ser.
+
+Posees una energía que **no quiere pedir ni depender de otros**. Te gusta sentir que no tienes deudas, ni deber ni que te deban; que cada quien se las arregle. Todo lo que signifique estar enganchado a otro puede implicar dolor.
+
+En baja frecuencia, puedes tratar de ser **amable, paciente o generoso**, y pensar antes en el otro porque así has sido educado, no porque realmente lo desees.`,
+
+    Tauro: `Sufres **problemas en torno a la comida o vergüenza por las acciones físicas**: que otros te vean comer o descubran lo que deseas. Puedes sentir tanta vergüenza que llegues a tomar un amante, porque temes que la persona que verdaderamente te importa descubra cómo eres y qué quieres.
+
+**Necesitas y deseas seguridad**, pero debes permitirte disfrutar aunque todavía no la tengas.
+
+Tiendes a generar **crisis cíclicas de desconexión con lo que realmente deseas**. Viertes tu energía en algo que sabes que no te gusta y acabas pensando: «¿Qué hago con esto, si ni siquiera me gusta?». Son crisis de conflicto muy potentes, incluso autodestructivas.
+
+El trabajo es **darte permiso para desear lo que realmente deseas**.`,
+
+    Géminis: `**Deseas expresar lo que sientes y piensas**; necesitas ser comprendido y, al expresarte, no ser juzgado ni ignorado.
+
+En lo transgeneracional hay un **fuerte complejo de inferioridad en torno a «ser tonto»**.
+
+Cuidado con **dejar las cosas a medias o quedarte en la superficie**. El trabajo consiste en descender a la experiencia.
+
+Necesitas doble estimulación; la doble estimulación te ayuda a enfocarte.
+
+Puedes buscar lo simbólico y lo intangible para justificar que nadie te entiende: «Déjenme en paz, no sea que se den cuenta de que soy tonto; déjenme divagar en cosas abstractas para justificar que nadie me entiende.»
+
+En alta frecuencia, **sí puedes bajar lo abstracto a tierra**.`,
+
+    Cáncer: `Necesitas **trabajar la energía sexual**. Puede haber muchos conflictos con tu madre y con tu propia maternidad; con frecuencia eres hija de una mujer que no quería ser madre.
+
+El trabajo es **el desapego emocional**: comprender «eres mi madre, pero no tengo que ser como tú, ni como mujer ni como madre». Respecto a la familia que creas, puedes llegar a ser madre, pero **no deseas la maternidad**; lo que realmente deseas es hogar, paz y nutrición emocional.
+
+El trabajo también consiste en **no contener las emociones**; permitirte sentirlas, junto con la vulnerabilidad y el miedo que traen. Además, hacerte consciente de la sensación de que **nunca es suficiente**, ni lo que das ni lo que recibes.
+
+Puedes **negar lo emocional** y, con ello, negar también tu vulnerabilidad. Puedes mostrarte frío, poco frágil, volcarte en los objetivos, el compromiso, el trabajo y las responsabilidades para ser visto como alguien responsable, y luego decir que no tienes tiempo para nutrirte o crear un hogar.`,
+
+    Leo: `Hay **sufrimiento por querer ser quien eres**: ser visto, admirado y reconocido, pero no atreverte. Hay mucho miedo y la memoria de no haber sido amado.
+
+Puede haber una **profunda sensación de indignidad en la infancia**, junto con una castración de tu belleza interior y de tu capacidad creativa.
+
+Puedes ser **muy activista o protestón**, uniéndote a grupos que intentan cambiar la sociedad. Sin embargo, puedes sentirte desplazado dentro de esos grupos y proyectar hacia ellos conflictos no resueltos.`,
+
+    Virgo: `**Necesitas ser perfecto**.
+
+Puede haber **mucho autojuicio**, al que se suma todo lo que imaginas que los demás piensan o pensarán de ti, generando mucha ansiedad.
+
+Buscas **seguridad laboral**, aunque ese trabajo no financie la vida de tus sueños.
+
+Cuidado con la procrastinación: como el cuadro nunca será perfecto, «ni siquiera empiezo».
+
+Puede haber **problemas sexuales**, obsesión por la salud desde el miedo, temas sexuales en el árbol familiar, TOCs de limpieza o compulsiones relacionadas con el cuidado corporal.
+
+El trabajo consiste en **entregarte al caos y soltar el control**; permitirte la ausencia de miedo y dejar de dar tanta importancia a los detalles.`,
+
+    Libra: `**Quieres estar en relación y entregarte al otro**, pero tienes miedo de que el otro no se entregue o te abandone. Esto activa tu herida y te duele.
+
+Sufres por no encontrar igualdad ni apoyo; hay dolor porque no fuiste escuchado por tus progenitores y temes que tu pareja actúe igual: «¿Para qué voy a expresar lo que necesito, si no me vas a escuchar, lo vas a negar o me vas a decir que me las arregle solo?»
+
+Por eso, una parte de ti puede pensar: «No quiero compromiso, puedo arreglármelas solo, no voy a extrañar no tener pareja.»
+
+**No quieres repetir la relación de tus padres**, pero tenderás a repetirla hasta que te detengas y tomes conciencia.
+
+Es una buena posición para **motivar y acompañar a otros**, ayudándolos a ir más allá de lo que pensaban que eran. No soportas a la gente que te limita.
+
+Es una posición empática, pero nunca dejas de ser racional. El gran trabajo consiste en **expresar lo que necesitas, en concreto a tu pareja, aunque no lo vayan a atender**.`,
+
+    Escorpio: `Puede haber **karmas no resueltos**, heredados o propios: algo que no lograste concluir y que necesitas cerrar en esta vida.
+
+Es una **posición complicada**. Hay tendencia a la ira: cuando no logras o no concluyes algo, aparece la frustración, y la frustración se convierte en ira. Esto puede llevarte a la destrucción o la autodestrucción.
+
+Puedes construir un sistema defensivo basado en el **«no confío en nadie»**. Quien es autodestructivo primero deja de confiar en sí mismo.
+
+Hay un **deseo de consumación**: llegar al final para que pueda comenzar un nuevo ciclo. También hay fuertes deseos de conectar con tu poder interior. El trabajo consiste en comprender **desde dónde y para qué actúas**.
+
+En negativo, puedes **buscar el placer egoísta en cada situación**. Puedes activar el miedo a los finales y al no compartir.`,
+
+    Sagitario: `**Necesitas ser auténtico, espontáneo y libre**, siendo coherente con tu verdad interior y moviéndote desde ahí, no desde las normas establecidas.
+
+Puede haber **inhibición, represión y falta de permiso para explorar tu verdad o ser espontáneo**. Por eso, sientes que tienes que salir a buscar.
+
+Hay un deseo profundo, pero también contención e incluso tendencias a la autolesión. Cuidado con volverte dogmático. Puede haber **miedo al compromiso**.
+
+Puedes caer en **la mudez**: no expresarte, no hacerte visible y vivir desde códigos limitantes, como el de «la niña buena y calladita».`,
+
+    Capricornio: `Puedes vivir desde la **autosuficiencia**: «Puedo con todo; tardo menos en hacerlo que en explicar cómo; nadie me va a ayudar de todos modos.»
+
+Hay una **gran ambición a nivel laboral y profesional**. Ser ambicioso no significa que no sientas emociones; el trabajo es **ir tras tus propias ambiciones sin perderte en las emociones**.
+
+El deseo —y también el dolor— se activa cuanto más te esfuerzas: **cuanto más luchas, más duele**. El trabajo consiste en **ir tras lo que quieres con fluidez**. En el fondo, **quieres ser amado por ser quien eres**.
+
+Puedes buscar **el reconocimiento a través del afecto y no de lo profesional**. Puede haber un enorme miedo a la soledad y al abandono y, desde ahí, **miedo a llegar demasiado alto**, porque en las cumbres hay poca gente.`,
+
+    Acuario: `Puedes vivir un **conflicto entre el lugar que ocupas y el lugar que deseas ocupar** dentro de la sociedad o entre tus amigos.
+
+Puedes sentirte desplazado y vivir en conflicto. Eres muy susceptible a la dinámica de los grupos y las amistades; puede haber **miedo al abandono**, por haber vivido pérdidas de amistades o expulsiones de grupos.
+
+Puedes mostrarte **muy seguro de ti mismo**, pero como mecanismo de defensa frente al miedo a no ser aceptado. Esto genera crisis internas que oscilan entre «no necesito pertenecer» y «lo único que necesito son amigos».
+
+Puedes **atrincherarte en ti mismo y aislarte**. Buscas atención y afecto, pero vives esa necesidad como algo vergonzoso o lastimero, sintiendo que los demás preferirían que no te acercaras.
+
+La alta frecuencia consiste en **manifestar tu singularidad desde tu esencia**. Así es como el ego desciende.`,
+
+    Piscis: `Es una **posición compleja**. Hay una **enorme sensibilidad** a nivel de intuición, percepción y clarividencia.
+
+Puedes haber sido criticado, juzgado o incluso "quemado" por tu sensibilidad y por la forma en que percibes y vives el amor. **Quieres ser como eres, con el amor por encima de todo, pero sientes que no puedes.**
+
+Es común que estés **desconectado de tus dones**. Puedes volverte muy caótico, sufridor y desconectado de ti mismo.
+
+Buscas **no decepcionar ni sentirte decepcionado**, y, sin embargo, atraes la decepción. Puedes esconderte o encogerte para no decepcionar; haces pequeño lo inefable y puedes deslizarte hacia una **patología de la perfección**, obsesionándote con lo minúsculo hasta perderte.`,
+  },
+
   nodoNorte: {
     Aries: NODO_NORTE_TEXTS[1],
     Tauro: NODO_NORTE_TEXTS[2],
@@ -3287,6 +3397,212 @@ Las lecciones clave incluyen:
     10: QUIRON_TEXTS[10],
     11: QUIRON_TEXTS[11],
     12: QUIRON_TEXTS[12],
+  },
+
+  lilith: {
+    1: `Puedes haber sido **obligado por uno de tus progenitores a ocupar el lugar de su pareja**, robándote el permiso de ser niño y de desear tus propios deseos.
+
+Como consecuencia, puedes **no saber poner límites** o parecer muy egoísta, cuando en realidad solo anhelas tener un poco de espacio para ti mismo.
+
+Puede haber **tendencias autodestructivas**. Debido a ello, puedes atraer a personas destructivas que te muestran cómo te estás haciendo daño a ti mismo.
+
+En alta frecuencia, tienes el don de **permitir que otros sean auténticos** y de romper estructuras que ya no sirven.
+
+En baja frecuencia, **no confías ni te dejas ayudar**, porque temes ser dominado.
+
+Tu gran don es **reconocer lo auténtico**. Ves con claridad qué es disfraz, qué es pose y qué es real.
+
+Puedes **avergonzarte de tus propios deseos** y disfrazarte para ser lo que crees que los demás esperan de ti.
+
+Sueles **envidiar o admirar a las personas auténticas**, aquellas que son fieles a sí mismas.`,
+
+    2: `Te fue **inculcado que no tenías derecho a disfrutar**. Puede haber habido ruinas financieras en el árbol familiar, dejando la idea de que es mejor no tener para no pasar por el dolor de perderlo.
+
+El desarrollo consiste en **aceptar tu don**, un don que te sale de forma natural desde pequeño, pero al que no has dado importancia porque en tu familia no estaba bien visto.
+
+**La verdadera abundancia es el permiso de reconocer dones concretos.**
+
+**Deseas tener dinero y vivir una buena y cómoda Vida**. Por eso, puedes juzgar a quienes se permiten cobrar por su tiempo y sus servicios.
+
+Admiras a **las personas abundantes**, o a quienes viven con estabilidad y tranquilidad; a quienes aceptan el disfrute de tener.
+
+Puedes **depender de otros**, postergar el placer para desconectarte del disfrute y tener dificultades para conservar el dinero: ganar mucho y perderlo.
+
+En alta frecuencia, **es la capacidad de conectar la materia y el espíritu**.`,
+
+    3: `En la infancia sentiste que **eras tonto**, porque se burlaron de tu forma de pensar y de expresarte.
+
+En tu familia, el intelecto era más importante que tú mismo. Con frecuencia, se te impuso qué debías estudiar.
+
+Hay **mucha necesidad de aprender**, pero también mucho dolor, porque te hicieron estudiar mientras te creías tonto.
+
+Tu mayor deseo es **poder expresarte y ser entendido**.
+
+Cuanto más te esfuerzas por mantener la **rigidez mental**, más caes en la dispersión y más te pierdes.
+
+En baja frecuencia, puedes ser **cotilla o destruir con la palabra**. Fuiste criticado por tu intuición perceptiva, lo que hace que la reprimas, pero necesitas expresarla o, al menos, no reprimirla en ti mismo.
+
+Admiras o envidias a los sabios, escritores y personas que saben hacerse entender.
+
+Puedes buscar convertirte en maestro, pero quedarte en el aprendizaje mental sin integrar la experiencia. **La sabiduría implica integrar.** Puedes buscar solo lo comprobado para no entrar en el dolor de sentir y de experimentar.`,
+
+    4: `De pequeño sentiste que **no eras tomado en cuenta**. Tus necesidades no importaban; tus padres se preocupaban más por qué pensarían los demás de ti que por ti en realidad.
+
+Creces en un ambiente donde terminas convencido de que **serás valorado según lo que otros piensen**. Tuviste que renunciar a tus sueños, a la imaginación y a la emocionalidad porque nunca fueron atendidos. Sueles desear ser reconocido, pero ese reconocimiento no llena tu vacío interior.
+
+En alta frecuencia, tienes una gran **capacidad de nutrir y cuidar a los demás**, una vez que dejas de esperar que tus esfuerzos sean vistos. También eres capaz de atender tus propias necesidades.
+
+En baja frecuencia, puede haber **dependencia emocional**, apego a lo que la familia aparenta ser o a lo que desearías que fuera, moverte desde la energía de víctima para manipular y problemas alimentarios por falta de coherencia.
+
+Puedes **volcarte en lo profesional** para no tener que gestionar tu mundo emocional.
+
+Puedes sentir **vergüenza por no pertenecer** o por no haberte convertido en lo que tu familia esperaba de ti.
+
+Puedes **destruir los vínculos emocionales**. En los hombres, los problemas sexuales pueden ser muy serios.
+
+Puedes llegar a venderte sexualmente a cambio de tener pareja o amor. Puede haber **mucha inconsciencia emocional**.
+
+Juzgas a **quienes saben gestionarse, ser libres, dar y recibir sin esperar nada a cambio; a quienes se permiten ser**.
+
+Admiras o envidias **a quienes han construido una familia de verdad y viven con autenticidad**.`,
+
+    5: `**No te sentiste valorado por tu padre** (y, a veces, tampoco por tu madre). Esto te deja una impronta de excelencia inalcanzable, que hace que te pongas metas imposibles para demostrarte que tu padre tenía razón y que eres un incapaz.
+
+Tu mayor deseo es **descubrir qué puedes aportar al grupo con solo ser tú mismo**: «¿Qué parte de mí suma valor cuando la manifiesto?». También hay un deseo profundo de encontrar un amor apasionado, frente a la creencia de no ser digno de ser amado.
+
+El trabajo consiste en **aprender a divertirte y relajarte**; darte permiso para ser sin preguntarte constantemente si estás gustando o no, y dejar de esperar el permiso de otros para ser feliz.
+
+Puede haber temas en el árbol familiar relacionados con **abortos, no querer hijos o conflictos en torno a la maternidad y la paternidad**.
+
+En alta frecuencia, eres **muy espontáneo**. El niño interior ocupa el lugar que le corresponde. Creas de forma natural, desde el don y la creatividad, por el simple gozo de crear, sin esperar el reconocimiento de los demás. **Amas y te dejas amar**.
+
+En baja frecuencia, puedes volverte **arrogante**, con un ego muy grande y una búsqueda patológica de reconocimiento. Puedes caer en el dramatismo, el egocentrismo, el victimismo, el ridículo o la búsqueda obsesiva de la perfección.`,
+
+    6: `Lo que importaba era **el orden**; tus necesidades eran despreciadas.
+
+Creces en una **búsqueda de perfección**: se te exige ser de cierta manera y persigues una perfección inalcanzable. Terminas sintiendo que solo eres útil, pero que **no serás amado ni aceptado por quien eres**.
+
+Puedes **obsesionarte con los resultados** y con el cuerpo, o, por el contrario, no cuidarlo en absoluto. Sueles vivir los extremos.
+
+En alta frecuencia, eres **muy eficiente**, poniendo exactamente la cantidad justa de energía para lograr un objetivo: sin desperdiciar, sin desgastarte y sin forzarte. Eres capaz de **unir lo humano y lo divino**.
+
+Tu veracidad consiste en **distinguir lo útil de lo inútil**.
+
+Puedes sentir **vergüenza de no ser perfecto**, de enfermar, de no ser eficaz o de que el orden y la limpieza no sean suficientes.
+
+Admiras o envidias **a las personas virtuosas y a quienes tienen conciencia corporal**.
+
+Puedes olvidarte de ti mismo y entrar en el **autosacrificio**, intentando salvar al otro. Puede haber temas de adicciones, depresiones e inconsciencia corporal.
+
+Puedes encerrarte en **el juicio mental, la exigencia y el ego**, sintiendo que todos te juzgan porque tú no dejas de juzgarte y lo proyectas fuera.
+
+Vives con **la angustia de no tener tiempo**, fruto de la desconexión y la inconsciencia.`,
+
+    7: `Fuiste **obligado a convertirte en el padre de tus propios padres**.
+
+Tus padres tenían muchos problemas en la relación y tú, a pesar de ser un niño, tuviste que poner orden para evitar conflictos.
+
+**Anhelas una relación equilibrada**. Puedes ser muy exigente con lo que esperas de una pareja y volverte destructivo cuando descubres que la perfección no existe.
+
+Puede haber viudez, parejas emocionalmente "muertas", miedo a que la relación fracase, parejas ausentes o amores imposibles.
+
+Habitualmente hay un rechazo al matrimonio: sí deseas una relación, pero sin boda ni papeles.
+
+Puedes **negar la necesidad o el deseo de una relación de pareja**. Tiendes a ser excesivamente responsable: «Tardo menos en hacerlo yo que en pedírtelo; y si te lo pido y te niegas, se me abre la herida, así que lo resuelvo yo.» Esto puede llevarte a negar tus propias necesidades.
+
+El trabajo consiste en **atreverte a pedir lo que necesitas**. Por tu crianza aprendiste a no pedir, porque nunca fuiste atendido; fuiste relegado. Esto te empuja hacia la autosuficiencia.
+
+En baja frecuencia, puedes quedarte **enganchado al miedo al abandono y a no ser elegido**, oscilando entre la dependencia excesiva y la autosuficiencia extrema. Aunque termines solo, puedes no extrañar a nadie; por eso sueles ser una persona solitaria.
+
+Tu veracidad consiste en **reconocer desde dónde se unen las personas**.`,
+
+    8: `En la infancia puede haber habido **abuso sexual o una violación profunda de la confianza**.
+
+Puede haber una **pérdida muy fuerte o una ausencia que deja una marca profunda**. Lo sucedido fue ocultado: quien debía protegerte simplemente declaró «eso nunca pasó». Son frecuentes las familias con mucho ocultamiento; secretos o hechos negados que terminan pudriéndose, muchas veces relacionados con la muerte.
+
+Creces **intentando controlarlo todo** para no volver a sentirte vulnerable o violentado. El trabajo consiste en aceptar que, pase lo que pase, **no lo controlas todo**. Vivirás cíclicamente muertes, destrucciones o pérdidas, que serán más dolorosas cuanto más operes desde el control.
+
+Puede haber **un fuerte conflicto con el cuerpo físico**, con estar encarnado. Puede manifestarse como rechazo a tu propio cuerpo, cirugías repetidas o el deseo de ser otra persona, como forma de autodestrucción.
+
+Puedes **huir de la sexualidad** para evitar su intensidad, cuando en realidad deseas una sexualidad de fusión más allá de lo físico.
+
+En alta frecuencia, tienes una gran capacidad para **acompañar las crisis ajenas**, atravesar infiernos con otros y sostener procesos de duelo, especialmente en personas que han perdido hijos.
+
+En baja frecuencia, puedes caer en la **manipulación, la dominación, la autodestrucción o la necesidad de crearte nuevas crisis** para seguir viviendo en el infierno.
+
+Puedes apegarte a la materia, al trabajo, al esfuerzo y a lo material para no sentir lo emocional y desconectarte del trauma. Cuanto más te desconectas, más crisis de pérdida se generan para que, al perderlo, no te quede más remedio que sentir.
+
+Tu veracidad consiste en **reconocer quién está realmente en crisis y quién vive desde el papel de víctima**, así como ver con facilidad la raíz de los traumas y de los shocks congelados.
+
+Puedes sentir **vergüenza por algo que viviste**, y también por sentirte vulnerable.
+
+Juzgas a **quienes no temen depender de otros ni enfrentarse a la muerte**, y a quienes viven las crisis con naturalidad.
+
+Admiras a **las personas estables, serenas y seguras de sí mismas**.`,
+
+    9: `Fuiste criado en un hogar donde **la mentira era normal**, donde se vivía desde una religión o desde un fuerte dogmatismo.
+
+Te detona **la negación de lo evidente**: cuando las personas niegan lo obvio.
+
+Tu mayor deseo es **encontrar sentido, coherencia y comprensión**; encontrar que el sentido sea visible en tu día a día.
+
+Sin embargo, puedes vivir mucha frustración: «Lo intento y lo intento, pero nunca termino de sentirlo.»
+
+Puedes buscar en otras culturas lo que tu cultura de origen no te dio, a través de viajes, filosofías o desarrollando un pensamiento auténtico, no basado en cómo fuiste educado. Tienes potencial de **filósofo y gran comunicador**.
+
+En baja frecuencia, puedes volverte **dogmático**, entregar tu poder y no responsabilizarte de tu vida. Puedes quedarte quieto por miedo, sin experimentar realmente.
+
+Puedes entretenerte **coleccionando títulos**, pero sin buscar una conexión real con tu entorno, quedándote en la información superficial. Hablas desde la mente, sin fe y sin honestidad respecto a lo que verdaderamente necesitas.
+
+Tu veracidad consiste en **reconocer quién es un charlatán, quién es sabio y quién habla desde la verdad**.
+
+Puedes sentir **vergüenza por tu indecisión**, por no haber experimentado lo suficiente, por no encontrar sentido o coherencia, o por vivir desde la incoherencia.`,
+
+    10: `Llegaste a una familia donde **los roles no estaban definidos**. La madre no actuaba como madre, la hija actuaba como madre... Como consecuencia, **no pudiste ocupar el lugar que te correspondía**, no sabes qué lugar ocupar y, por ello, te cuesta vincularte de forma natural.
+
+Puedes haber crecido en una familia donde **no hubo honestidad sobre el desde dónde y el para qué** de las ambiciones o deseos de los padres respecto a sus hijos.
+
+Se esperaba que lograras ciertas metas, pero sin un propósito claro: «Saca un título», «tienes que lograr esto». Frente a ello, puedes responder: «Pues entonces me largo; como no me quieren, se acabó.»
+
+Puede haber **miedo a ser libre, a no pertenecer, a estar solo o a ser abandonado**, así como miedo a no cumplir las ambiciones de tus padres. Puedes buscar construir una familia convencional para no dedicar tiempo a tu profesión.
+
+A pesar de este autosabotaje, tu mayor deseo es **tener una profesión con sentido**, algo vocacional que te haga sentirte realizado.
+
+Puede haber un **conflicto con la autoridad**: «Necesito una figura de autoridad que me dé dirección, porque nunca la tuve.»
+
+Tienes una gran **capacidad de liderazgo**. En baja frecuencia puede manifestarse como manipulación; en alta frecuencia, como la capacidad de sacar lo mejor de las personas y ayudarles a manifestar su potencial.
+
+Puedes sentir **vergüenza por no encontrar tu lugar**, por no tener reconocimiento social o por no encontrar trabajo. También puede haber una tendencia al control y a la rigidez.
+
+Juzgas **la imperfección**, a las personas que consideras perezosas o a quienes saben delegar. Vives el conflicto entre la acción y la contemplación.`,
+
+    11: `Creces experimentando que **no puedes confiar en el clan**, que no estás seguro ni protegido por tu familia.
+
+Puede haber exilios u ocultamiento de miembros de la familia (porque estaban "locos"...). Esto te lleva a **desconfiar de las personas y de los grupos**.
+
+Sueles sentirte rechazado en los grupos pero vas buscando tu lugar en el mundo, queriendo aportar tus dones.
+
+Puede haber **miedo a la honestidad** y miedo a no lograr lo que deseas, porque aprendiste que no tenías permiso para soñar.
+
+Puedes vivir **enojado con el mundo** y buscar protagonismo o ser mirado. El trabajo consiste en **dejar de estar pendiente de lo que digan los demás**, permitirte tu singularidad y llegar al punto en el que la opinión ajena deje de condicionarte.
+
+En alta frecuencia, eres un **visionario**, capaz de aportar tu visión y mostrar el camino.
+
+En baja frecuencia, puedes convertirte en un **rebelde sin causa**.
+
+Tu veracidad consiste en **reconocer desde dónde se construyen las relaciones** y en ver con facilidad qué sueños tienen posibilidades de cumplirse y desde dónde nacen.
+
+Puedes sentir **vergüenza por el lugar que ocupas en la sociedad**, o por no ocupar el lugar que realmente deseas.`,
+
+    12: `Puedes haber sido **explotado por tu familia**. Es común que hayas nacido en un entorno donde todo se justificaba desde valores dogmáticos, espirituales o religiosos. Puede haber **dificultad para salir de la negación y la deshonestidad**.
+
+Tu mayor deseo es una **profunda conexión con Dios** y aprender **a ser, sin necesidad de hacer**.
+
+Puedes crear **un mundo ilusorio para huir de la soledad**, mientras al mismo tiempo huyes de la compañía: un lugar donde esconderte, donde nadie más cabe.
+
+Son comunes los **trastornos alimentarios, las adicciones, el exceso de mundo onírico o las pesadillas**. También conviene prestar atención a la procrastinación y a la irresponsabilidad.
+
+Puedes vivir desde la idea: «Me arruino la vida persiguiendo la perfección; procrastino porque la perfección es inalcanzable.» Como compensación, buscas **mantenerte ocupado todo el tiempo**.`,
   },
 
   nodoNorte: {

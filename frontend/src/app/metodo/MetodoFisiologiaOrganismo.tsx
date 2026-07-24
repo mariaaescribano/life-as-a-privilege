@@ -6,13 +6,13 @@ import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
-import { CICLOS_NATURALEZA } from "../../components/metodo/comicCiclosNaturaleza";
+import { RECONSTRUCCION } from "../../components/metodo/comicReconstruccion";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -115,7 +115,7 @@ function SistemaFicha({ sistema, onSoltar }: {
       <Box position="relative" pointerEvents="none">
         <SistemaFoto sistema={sistema} size={{ base: "76px", md: "96px" }} />
       </Box>
-      <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight="700" lineHeight="1.15"
+      <Text color={fisiologiaTxt} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700" lineHeight="1.15"
             textAlign="center" letterSpacing="0.02em" pointerEvents="none"
             style={{ textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
         {sistema.label}
@@ -142,9 +142,9 @@ export default function MetodoFisiologiaOrganismo() {
   const [completo, setCompleto] = useState(false);
   const [frase, setFrase] = useState<string | null>(null);
   const [cuerpoOk, setCuerpoOk] = useState(false);
-  // Cómic de cierre: los grandes ciclos de la naturaleza. Se intercala al pulsar
-  // «Niveles →», como último zoom-out antes de salir del ascenso.
-  const [comicCiclosOpen, setComicCiclosOpen] = useState(false);
+  // Cómic de cierre: «te reconstruyes cada día». Se intercala al pulsar
+  // «Niveles →», como puente hacia lo que viene (hábitos, nutrición…).
+  const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   // Reserva la altura del box de sistemas para que no encoja al arrastrarlos fuera.
   const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
@@ -235,7 +235,7 @@ export default function MetodoFisiologiaOrganismo() {
     return inSlot;
   }, [colocados]);
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <FisiologiaLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -256,7 +256,7 @@ export default function MetodoFisiologiaOrganismo() {
             mb={0}
             prev={{ label: "← Sistemas", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
             extra={celulasBtn}
-            next={{ label: "Niveles →", onClick: () => setComicCiclosOpen(true),
+            next={{ label: "Niveles →", onClick: () => setComicOpen(true),
                     disabled: !completo, disabledTooltip: "Primero crea al ser humano" }}
           />
 
@@ -268,7 +268,7 @@ export default function MetodoFisiologiaOrganismo() {
                 {frase ? (
                   <MBox key={frase} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5 }} textAlign="center">
-                    <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" fontStyle="italic"
+                    <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" fontStyle="italic"
                           lineHeight="1.4" maxW="760px"
                           style={{ textShadow: `0 1px 10px rgba(0,0,0,0.6), 0 0 22px ${fisiologiaTxt}66` }}>
                       «{frase}»
@@ -277,7 +277,7 @@ export default function MetodoFisiologiaOrganismo() {
                 ) : (
                   <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                         textAlign="center">
-                    <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                    <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                           maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                       Construye un ser humano.
                     </Text>
@@ -308,12 +308,12 @@ export default function MetodoFisiologiaOrganismo() {
                              sx={{ background: "radial-gradient(circle at 42% 34%, #2a2440 0%, #171226 48%, #05040a 100%)",
                                    boxShadow: `inset 0 0 40px rgba(0,0,0,0.85), 0 0 26px ${fisiologiaTxt}22` }} />
 
-                        {/* sistemas colocados, en anillo limpio y separado (como el
-                            AnilloFinal): disco grande (radio 44%), anillo a 33% y
-                            fotos algo menores → círculo perfecto, sin solaparse. */}
+                        {/* sistemas colocados: anillo compacto CENTRADO en el disco
+                            (radio 26% → agrupados en el medio, con buen margen negro
+                            alrededor, sin pegarse al borde ni solaparse). */}
                         {colocados.map((key, i) => {
                           const s = SISTEMAS.find((x) => x.key === key)!;
-                          const p = posEnAnillo(i, total, 33);
+                          const p = posEnAnillo(i, total, 26);
                           // El translate(-50%,-50%) va en un Box normal (CSS): si lo
                           // pusiéramos en el MBox, la animación de `scale` de framer
                           // pisaría ese transform y el anillo saldría descentrado.
@@ -404,21 +404,21 @@ export default function MetodoFisiologiaOrganismo() {
                   <PanelBox flex="1">
                     <Flex direction="column" justify="center" gap={4} h="100%"
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} textAlign={{ base: "center", md: "left" }}>
-                      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+                      <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
                             style={{ textShadow: INK }}>
                         Has construido un ser humano.
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}aa, transparent)`} />
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
+                      <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                             style={{ textShadow: INK }}>
                         Todos los <b>sistemas</b>, funcionando en armonía, forman un <b>organismo</b> completo.
                       </Text>
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
+                      <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                             style={{ textShadow: INK }}>
                         Has subido desde una sola partícula: átomos, moléculas, células, tejidos, órganos y sistemas.
                       </Text>
-                      <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7"
+                      <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7"
                             style={{ textShadow: INK }}>
                         Ese organismo entero, vivo y en marcha en este mismo instante, <b>eres tú</b>.
                       </Text>
@@ -431,10 +431,10 @@ export default function MetodoFisiologiaOrganismo() {
                 <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
                   <Box as="button" onClick={reiniciar}
                        display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                       bg="rgba(255,255,255,0.08)" color="rgba(255,255,255,0.8)" border="1px solid rgba(255,255,255,0.28)"
+                       bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                       _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+                       _hover={{ bg: "rgba(255,255,255,0.16)", color: fisiologiaTxt, borderColor: `${fisiologiaTxt}aa` }}>
                     ↺ Volver a hacer
                   </Box>
                 </Flex>
@@ -446,15 +446,16 @@ export default function MetodoFisiologiaOrganismo() {
 
       {celulasModal}
 
-      {/* Cómic de cierre: los grandes ciclos de la naturaleza (agua, carbono,
-          oxígeno, nitrógeno, fósforo). Se intercala antes de volver a Niveles. */}
+      {/* Cómic de cierre: «te reconstruyes cada día». Se intercala antes de
+          volver a Niveles, como puente hacia lo que viene. */}
       <ComicPasoModal
-        isOpen={comicCiclosOpen}
-        onClose={() => setComicCiclosOpen(false)}
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
         onContinue={() => navigate("/metodo/fisiologia/niveles")}
-        vinetas={CICLOS_NATURALEZA}
+        vinetas={RECONSTRUCCION}
         continueLabel="Niveles"
         themeColor={fisiologiaTxt}
+        textColor={fisiologiaTxt}
         disciplinaBgImage="/img/fondos/fisio.png"
         disciplinaBgColor={fisiologiaBg}
       />

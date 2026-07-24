@@ -40,6 +40,10 @@ interface ComicPasoModalProps {
   disciplinaBgColor?: string;
   /** Sombra del texto de las viñetas. */
   textShadow?: string;
+  /** Color del texto de las viñetas (título + párrafos). Por defecto el título
+   *  es blanco; pásalo (p.ej. el color de la disciplina) para teñir también el
+   *  título como el cuerpo. */
+  textColor?: string;
   /** (En desuso) El botón del siguiente título ahora lleva SIEMPRE la imagen de
    *  la disciplina de fondo; estos props se ignoran. Se mantienen para no
    *  romper los llamadores que aún los pasan. */
@@ -65,6 +69,7 @@ export function ComicPasoModal({
   disciplinaBgImage,
   disciplinaBgColor,
   textShadow,
+  textColor,
   sinBotonSaltar,
   botonNitido,
 }: ComicPasoModalProps) {
@@ -99,6 +104,7 @@ export function ComicPasoModal({
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
+          textColor={textColor}
           sinSaltar
         />
 

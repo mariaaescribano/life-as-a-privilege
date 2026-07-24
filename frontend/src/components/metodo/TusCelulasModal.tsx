@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import axios from "axios";
 import { CelulaCard, CelulaModal } from "./celulasUi";
 import { FisiologiaLoader } from "./comicLoaders";
@@ -15,6 +16,8 @@ import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/Celulas
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
 const FISIO_IMG = "/img/fondos/fisio.png";
+
+const MBox = motion(Box);
 
 // ── Señal global «¿hay algún popup de Tus células abierto?» ──────────────────
 // El popup ocupa toda la pantalla, así que el botón flotante «Índice» no pinta
@@ -178,7 +181,6 @@ export function TusCelulasModal({
               fontWeight="700"
               letterSpacing="0.08em"
               lineHeight="1.1"
-              style={{ textShadow: `0 0 14px ${BG}cc, 0 0 34px ${BG}88, 0 2px 6px rgba(0,0,0,0.6)` }}
             >
               {titulo}
             </Text>
@@ -192,9 +194,18 @@ export function TusCelulasModal({
               columns={{ base: 1, sm: 2, md: 4 }}
               spacing={{ base: 5, md: 6 }}
             >
-              {celulas.map((celula) => (
-                <CelulaCard key={celula.id} celula={celula} visto={vistas.has(celula.id)}
-                            onClick={() => setSelected(celula)} />
+              {celulas.map((celula, i) => (
+                // Cada célula entra una tras otra con un pop (escala + rebote):
+                // el stagger por índice crea el «van apareciendo de una en una».
+                <MBox
+                  key={celula.id}
+                  initial={{ opacity: 0, scale: 0.55, y: 28 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: i * 0.07, type: "spring", stiffness: 320, damping: 17 }}
+                >
+                  <CelulaCard celula={celula} visto={vistas.has(celula.id)}
+                              onClick={() => setSelected(celula)} />
+                </MBox>
               ))}
             </SimpleGrid>
           ) : (

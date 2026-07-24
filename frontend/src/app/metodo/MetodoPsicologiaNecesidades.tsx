@@ -8,7 +8,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -27,6 +27,7 @@ import {
   type EstadoNecesidad,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowHeader } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -47,7 +48,6 @@ export default function MetodoPsicologiaNecesidades() {
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, EstadoNecesidad>>({});
   const [abierta, setAbierta] = useState<Necesidad | null>(null);
-  const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
   // Último guardado en vuelo: se espera (flush) antes de ir a Heridas, cuya
   // página rebota si lee del backend unas necesidades aún incompletas.
@@ -90,18 +90,17 @@ export default function MetodoPsicologiaNecesidades() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return;
-    setGuardando(true);
     const payload = { ...dataRef.current, necesidades: next };
     dataRef.current = payload;
     savePromiseRef.current = axios.patch(
       `${API_URL}/metodo-psicologia/${userId}`,
       { data: payload },
       { headers: { Authorization: `Bearer ${token}` } },
-    ).catch(() => { /* silencioso */ }).finally(() => setGuardando(false));
+    ).catch(() => { /* silencioso */ });
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <PsicologiaLoading />;
   }
   if (!exp) return null;
 
@@ -129,7 +128,7 @@ export default function MetodoPsicologiaNecesidades() {
             prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
             next={{
               label: "Heridas →",
-              onClick: async () => { await savePromiseRef.current; navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); },
+              onClick: async () => { await savePromiseRef.current; await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); },
               disabled: !completas,
               disabledTooltip: "Responde todas las necesidades para continuar a Heridas.",
             }}
@@ -261,10 +260,6 @@ export default function MetodoPsicologiaNecesidades() {
               );
             })}
           </Box>
-
-          {guardando && (
-            <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">Guardando…</Text>
-          )}
         </Flex>
       </Flex>
 

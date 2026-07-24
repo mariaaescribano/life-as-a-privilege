@@ -20,7 +20,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { BotonGuardar } from "../../components/global/BotonGuardar";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -34,6 +34,7 @@ import {
   type RegulacionData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -210,11 +211,11 @@ export default function MetodoPsicologiaRegulacion() {
     if (audioRef.current) audioRef.current.volume = v;
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  const irAHeridas = () => navigate(`/metodo/psicologia/${exp.id}/heridas-lista`);
-  const irARelacion = () => navigate(`/metodo/psicologia/${exp.id}/integracion`);
+  const irAHeridas = async () => { await guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/heridas-lista`); };
+  const irARelacion = async () => { await guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/integracion`); };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">

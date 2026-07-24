@@ -7,7 +7,7 @@ import { generateDiaPdf } from "../../utils/generateDiaPdf";
 import { generateRecorridoPdf } from "../../utils/generateRecorridoPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
@@ -81,7 +81,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
   }, [doshaKey]);
 
   if (loading || !doshaKey) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AyurvedaLoading />;
   }
 
   const meta = DOSHA_META[doshaKey];

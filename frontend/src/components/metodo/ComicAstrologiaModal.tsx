@@ -543,14 +543,12 @@ interface ComicAstrologiaModalProps {
 export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstrologiaModalProps) {
   const [seccion, setSeccion] = useState<Seccion | null>(null);
 
-  // Hasta que las fotos carguen se muestra la animación de la estrella (que no
-  // aparezcan de golpe): en el selector, sus portadas + el fondo espacial; en la
-  // vista cómic, todas las viñetas del capítulo elegido.
+  // El selector muestra las portadas TODAS a la vez: hasta que carguen (con el
+  // fondo espacial) se ve la animación de la estrella, para que no aparezcan de
+  // golpe. La vista de cómic NO se precarga entera: va viñeta a viñeta (el
+  // ComicViewer muestra la estrella por foto y precarga la siguiente por detrás).
   const selectorListo = usePrecargarImagenes(
     isOpen && !seccion ? [SPACE_IMG, ...SELECTOR_OPTIONS.map((o) => encodeURI(o.cover))] : [],
-  );
-  const comicListo = usePrecargarImagenes(
-    seccion ? VINETAS_BY_SECCION[seccion].map((v) => encodeURI(v.src)) : [],
   );
 
   // Reinicia al selector cada vez que se abre el modal.
@@ -726,14 +724,8 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         {/* ── VISTA CÓMIC ── usa el mismo ComicViewer que el cómic del Inicio. */}
         {seccion && (
           <>
-            {/* Hasta que TODAS las viñetas del capítulo carguen: solo la estrella
-                (el botón «Saltar» de abajo sigue disponible para salir). */}
-            {!comicListo && (
-              <Flex position="fixed" inset="0" zIndex={11} align="center" justify="center" bg="rgba(0,0,0,0.6)">
-                {comicLoaderPorColor(astrologiaTxt) ?? <SpinnerTurquesa fullScreen={false} color={astrologiaTxt} />}
-              </Flex>
-            )}
-            {comicListo && (
+            {/* Va viñeta a viñeta: el ComicViewer muestra la estrella por cada
+                foto mientras carga y precarga la siguiente. */}
             <ComicViewer
               key={seccion}
               vinetas={VINETAS_BY_SECCION[seccion]}
@@ -743,7 +735,6 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               onBack={volverAlSelector}
               sinSombra
             />
-            )}
 
             {/* Botón «Saltar» — a la IZQUIERDA de la X del ComicViewer. Sale de las
                 Ilustraciones y vuelve a la página de Astrología (mismo destino que

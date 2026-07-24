@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { DISCIPLINAS_CURSO } from "../../data/disciplinasCurso";
 import { astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 
 interface PagoExitoModalProps {
@@ -39,9 +40,12 @@ export function PagoExitoModal({
   // Halo del color base de la disciplina para que el texto claro se lea sobre
   // la imagen de fondo (inmersivo).
   const ink = `0 1px 3px ${bgColor}f2, 0 0 10px ${bgColor}cc, 0 2px 18px ${bgColor}99`;
+  // Icono de la disciplina (su fill ya es el color Txt de la disciplina), en vez
+  // del mandala blanco, que desentonaba sobre el fondo de color.
+  const Icon = DISCIPLINAS_CURSO.find((d) => d.nom === nom)?.Icon;
   return (
     <Modal isOpen={isOpen} onClose={onAceptar} size="lg" isCentered closeOnOverlayClick={false} closeOnEsc={false}>
-      <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
+      <ModalOverlay bg="transparent" />
       <ModalContent
         position="relative"
         bg={bgColor}
@@ -58,7 +62,9 @@ export function PagoExitoModal({
         <ModalBody position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }}>
           <Flex direction="column" gap={5}>
             <Flex direction="column" align="center" gap={2}>
-              <Image src="/img/icono/life.png" h="36px" objectFit="contain" />
+              {Icon
+                ? <Icon size={{ base: "42px", md: "52px" }} />
+                : <Image src="/img/icono/life.png" h="36px" objectFit="contain" />}
               <Text
                 color={txtColor}
                 fontSize={{ base: "lg", md: "3xl" }}

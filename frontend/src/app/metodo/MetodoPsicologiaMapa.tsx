@@ -17,7 +17,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -34,6 +34,7 @@ import {
   type Constelacion,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -221,10 +222,12 @@ export default function MetodoPsicologiaMapa() {
   const updateCampo = (id: string, campo: keyof Constelacion, valor: string) =>
     commit(relaciones.map((c) => (c.id === id ? { ...c, [campo]: valor } : c)));
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  const ir = (ruta: string) => navigate(`/metodo/psicologia/${exp.id}/${ruta}`);
+  // Antes de navegar: fuerza el guardado pendiente y espera al flush, para que
+  // la página destino no lea datos viejos.
+  const ir = async (ruta: string) => { flushGuardado(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/${ruta}`); };
   const total = BLOQUES.length;
   const abierta = relaciones.find((c) => c.id === abiertoId) || null;
   // No se puede avanzar a Compromiso hasta haber rellenado al menos una

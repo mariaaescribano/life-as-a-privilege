@@ -6,7 +6,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { AgendarLlamada } from "../../components/global/AgendarLlamada";
@@ -25,6 +25,7 @@ import {
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -131,7 +132,7 @@ export default function MetodoPsicologiaExperiencia() {
   const puedeAvanzar = recorridos >= 1;
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <PsicologiaLoading />;
   }
   if (!exp) return null;
 
@@ -172,6 +173,7 @@ export default function MetodoPsicologiaExperiencia() {
   // rellenar todo lo que pueda (o pedir una llamada si le resulta difícil).
   const irAHuellas = async () => {
     await guardarSiCambio();
+    await flushSaves();
     if (completa) { navigate(`/metodo/psicologia/${exp.id}/huellas`); return; }
     setAvisoOpen(true);
   };
@@ -180,6 +182,7 @@ export default function MetodoPsicologiaExperiencia() {
   const continuarIgual = async () => {
     setAvisoOpen(false);
     await guardarSiCambio();
+    await flushSaves();
     navigate(`/metodo/psicologia/${exp.id}/huellas`);
   };
 
@@ -208,7 +211,7 @@ export default function MetodoPsicologiaExperiencia() {
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Resultado ACE", onClick: () => { void guardarSiCambio(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
+                prev={{ label: "← Resultado ACE", onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
                 next={{ label: puedeAvanzar ? "Huellas →" : "Rellena al menos un año", onClick: irAHuellas, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
               />
             </Reveal>
@@ -483,7 +486,10 @@ export default function MetodoPsicologiaExperiencia() {
                 Antes de continuar
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92} mb={3} style={{ textShadow: INK_SHADOW }}>
-                Cuanto más completes tu línea de Vida, más claro verás después tus huellas, tus nudos y tus heridas. Rellénala entera, o todo lo que puedas.
+                Cuanto más completes tu línea de Vida, más claro verás después tus huellas, tus nudos y tus heridas.
+              </Text>
+              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92} mb={3} style={{ textShadow: INK_SHADOW }}>
+                Rellénala entera, o todo lo que puedas.
               </Text>
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" fontStyle="italic" opacity={0.85} mb={7} style={{ textShadow: INK_SHADOW }}>
                 Y si te resulta muy difícil recordar o remueve demasiado, no tienes que hacerlo solo: puedes pedir una llamada y lo hacemos juntos.

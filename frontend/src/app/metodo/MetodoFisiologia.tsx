@@ -4,7 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoFisiologiaModal } from "../../components/metodo/PagoFisiologiaModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
@@ -124,7 +124,7 @@ export default function MetodoFisiologia() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <FisiologiaLoading />;
   }
 
   return (

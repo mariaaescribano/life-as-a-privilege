@@ -19,7 +19,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -65,8 +65,11 @@ const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recor
 function todasLasHuellas(d: LineaDeVidaData): string[] {
   const set = new Set<string>();
   for (const ano of Object.values(d.anos || {})) {
-    for (const t of ano?.huellas || []) {
-      const s = (t || "").trim();
+    // Blindaje: `huellas` heredado podría no ser array (string suelto) → un
+    // for..of iteraría sus caracteres. Solo iteramos si es array de verdad.
+    const huellas = Array.isArray(ano?.huellas) ? ano!.huellas : [];
+    for (const t of huellas) {
+      const s = (typeof t === "string" ? t : "").trim();
       if (s) set.add(s);
     }
   }
@@ -186,7 +189,7 @@ export default function MetodoPsicologiaSintesis() {
     }
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
   // ── Recogida de TODO lo escrito (mismo orden y criterios que el PDF) ──
@@ -197,19 +200,30 @@ export default function MetodoPsicologiaSintesis() {
   const score = aceListo ? aceScore(data) : 0;
   const banda = aceListo ? aceBanda(score) : null;
 
+  // Blindaje: cualquier sección heredada podría no ser array (`X || []` no
+  // protege contra un string/objeto truthy → `.map`/`.filter` reventaría el
+  // render y, sin ErrorBoundary, dejaría pantalla en blanco). Guardamos con
+  // Array.isArray conservando el tipo original de cada colección.
+  const txt = (v: unknown): string => (typeof v === "string" ? v.trim() : "");
+
   const huellas = todasLasHuellas(data);
-  const nudos = (data.nudos || []).map((n) => (n || "").trim()).filter(Boolean);
+  const nudos = (Array.isArray(data.nudos) ? data.nudos : []).map((n) => txt(n)).filter(Boolean);
   const necesidades = necesidadesNoCubiertas(data);
 
-  const heridas = (data.heridas || []).filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
+  const heridas = (Array.isArray(data.heridas) ? data.heridas : [])
+    .filter((h) => txt(h.titulo) || txt(h.texto));
 
-  const relaciones = (data.constelaciones || []).filter(
-    (c) => (c.titulo || "").trim() || (c.texto || "").trim() ||
-      INTEGRACION_PREGUNTAS.some((p) => ((c[p.key] as string) || "").trim()),
+  const relaciones = (Array.isArray(data.constelaciones) ? data.constelaciones : []).filter(
+    (c) => txt(c.titulo) || txt(c.texto) ||
+      INTEGRACION_PREGUNTAS.some((p) => txt(c[p.key])),
   );
 
-  const miedos = (data.miedos || []).filter((m) => (m.texto || "").trim());
-  const dones = (data.dones?.lista || []).map((x) => (x.texto || "").trim()).filter(Boolean);
+  const miedos = (Array.isArray(data.miedos) ? data.miedos : []).filter((m) => txt(m.texto));
+  // Dones: acepta tanto la forma nueva (objetos {texto}) como la antigua
+  // (string[]), para que no desaparezcan del entregable con datos heredados.
+  const dones = (Array.isArray(data.dones?.lista) ? data.dones!.lista! : [])
+    .map((x) => (typeof x === "string" ? txt(x) : txt((x as { texto?: unknown })?.texto)))
+    .filter(Boolean);
 
   const comp = data.compromiso || {};
   const hayCompromiso = (comp.necesitaste || "").trim() || (comp.dartelo || "").trim();

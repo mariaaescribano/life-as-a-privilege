@@ -132,7 +132,7 @@ import MetodoCulturaHistoria from "./app/metodo/MetodoCulturaHistoria";
 import MetodoCulturaHistoriaEra from "./app/metodo/MetodoCulturaHistoriaEra";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
-import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage";
+// import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage"; // ruta «Vídeos» de Materiales comentada
 import UserAccount from "./app/user/UserAccount";
 import TCMTest1 from "./components/espacio/components/TCMTest1";
 import TCMTest2 from "./components/espacio/components/TCMTest2";
@@ -308,7 +308,8 @@ export default function App()
       <Route path="/espacio/questions/:themeId" element={<PrivateRoute><ExpandablePage /></PrivateRoute>} />
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
-      <Route path="/aprendizaje/todosVideos" element={<NuevosCursosPage />} />
+      {/* Página de «Vídeos» de Materiales comentada a petición (el box también). */}
+      {/* <Route path="/aprendizaje/todosVideos" element={<NuevosCursosPage />} /> */}
       <Route path="/aprendizaje/cursos/:moduloId" element={<CursosModalidad />} />
       <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
       <Route path="/aprendizaje/herbario/favoritos" element={<PrivateRoute><HerbarioPage favoritesOnly /></PrivateRoute>} />

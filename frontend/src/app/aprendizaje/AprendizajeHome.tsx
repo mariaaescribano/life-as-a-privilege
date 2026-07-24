@@ -6,7 +6,7 @@ import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { type CourseEntry } from "./NuevosCursosPage";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AstrologiaLoader } from "../../components/metodo/comicLoaders";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -37,6 +37,10 @@ const useReveal = (threshold = 0.05) => {
 
 export const AprendizajeHome = () => {
   const [mounted, setMounted] = useState(false);
+  // La página no se muestra hasta que TODAS las portadas de los cursos están
+  // descargadas: entra ya completa (nada de portadas cargando a trozos), que
+  // transmite que el material está cuidado.
+  const [imagesReady, setImagesReady] = useState(false);
   const cardsReveal = useReveal(0.04);
   const { cursosData, loading } = useCursosData();
 
@@ -48,9 +52,46 @@ export const AprendizajeHome = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => setMounted(true), 60);
-    return () => clearTimeout(t);
   }, []);
+
+  // Precarga de todas las portadas de curso — solo cuando ya llegaron los datos.
+  useEffect(() => {
+    if (loading) return; // esperamos a que useCursosData termine
+    const urls = Object.values(cursosData)
+      .flatMap((m) => m.cursos.map((c) => c.foto))
+      .filter((src): src is string => Boolean(src));
+
+    if (urls.length === 0) {
+      setImagesReady(true);
+      return;
+    }
+
+    let cancelled = false;
+    let done = 0;
+    const marcarUna = () => {
+      done += 1;
+      if (!cancelled && done >= urls.length) setImagesReady(true);
+    };
+
+    urls.forEach((src) => {
+      const img = new window.Image();
+      img.onload = marcarUna;
+      img.onerror = marcarUna; // una portada rota no debe colgar la página
+      img.src = src;
+    });
+
+    // Red de seguridad: si alguna imagen nunca resuelve, mostramos igualmente.
+    const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 10000);
+
+    return () => { cancelled = true; clearTimeout(failSafe); };
+  }, [loading, cursosData]);
+
+  // Una vez listas las imágenes, disparamos la animación de entrada.
+  useEffect(() => {
+    if (loading || !imagesReady) return;
+    const t = setTimeout(() => setMounted(true), 40);
+    return () => clearTimeout(t);
+  }, [loading, imagesReady]);
 
   // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
   // Fisiología → Nutrición → Cábala → Cultura
@@ -66,6 +107,21 @@ export const AprendizajeHome = () => {
     { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         slug: cabalaNom },
     { title: culturaNom,          bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,        slug: culturaNom },
   ];
+
+  // Mientras se descargan las portadas (o llegan los datos): fondo teal con la
+  // animación de la ESTRELLA de astrología en blanco, centrada (la misma que el
+  // recorrido, en lugar del spinner). El header se pinta ya para que cargue
+  // antes de desbloquear la página.
+  if (loading || !imagesReady) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+        <SiteHeader variant="auto" />
+        <Flex flex="1" align="center" justify="center" overflow="hidden">
+          <AstrologiaLoader color="#ffffff" />
+        </Flex>
+      </Box>
+    );
+  }
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -160,7 +216,7 @@ export const AprendizajeHome = () => {
         </Box>
 
         {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS (ancho completo) ── */}
-        {(loading || allCourses.length > 0) && (
+        {allCourses.length > 0 && (
           <Box w="100%">
             <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
               <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
@@ -174,20 +230,14 @@ export const AprendizajeHome = () => {
               <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
             </Flex>
 
-            {loading ? (
-              <Box py={{ base: 8, md: 10 }}>
-                <SpinnerTurquesa fullScreen={false} />
-              </Box>
-            ) : (
-              <CursosGrid
-                items={allCourses.map((entry) => ({
-                  curso: entry.curso,
-                  color: entry.modalidad.color,
-                  bgColor: entry.modalidad.bgColor,
-                  nom: entry.modalidad.nom,
-                }))}
-              />
-            )}
+            <CursosGrid
+              items={allCourses.map((entry) => ({
+                curso: entry.curso,
+                color: entry.modalidad.color,
+                bgColor: entry.modalidad.bgColor,
+                nom: entry.modalidad.nom,
+              }))}
+            />
           </Box>
         )}
       </Flex>

@@ -28,6 +28,7 @@ import {
 import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrologiaModal";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
 import { CELULA_VIVA } from "./comicCelulaViva";
+import { CICLOS_NATURALEZA } from "./comicCiclosNaturaleza";
 import { CABALA_INTRO } from "./comicCabalaIntro";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -136,6 +137,17 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/fisiologia/celulacomic/celula1.png",
     vinetas: CELULA_VIVA,
     themeColor: fisiologiaTxt,
+    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgColor: fisiologiaBg,
+  },
+  {
+    id: "fisio-ciclos",
+    titulo: "Los grandes ciclos de la naturaleza",
+    disciplina: "Fisiología",
+    cover: "/viñetas/fisiologia/ciclos/agua.png",
+    vinetas: CICLOS_NATURALEZA,
+    themeColor: fisiologiaTxt,
+    textColor: fisiologiaTxt,
     disciplinaBgImage: "/img/fondos/fisio.png",
     disciplinaBgColor: fisiologiaBg,
   },

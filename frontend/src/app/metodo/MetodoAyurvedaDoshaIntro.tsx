@@ -5,7 +5,7 @@ import { Brain, HeartPulse, Repeat, Salad, Scale, Sparkles } from "lucide-react"
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
@@ -206,7 +206,7 @@ export default function MetodoAyurvedaDoshaIntro() {
   };
 
   if (loading || !doshaKey) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AyurvedaLoading />;
   }
 
   const meta = DOSHA_META[doshaKey];

@@ -13,7 +13,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -28,6 +28,7 @@ import {
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -89,7 +90,7 @@ export default function MetodoPsicologiaHeridasLista() {
     }
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
   return (
@@ -109,8 +110,8 @@ export default function MetodoPsicologiaHeridasLista() {
             step={{ current: 10, total: 20 }}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Heridas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`) }}
-            next={{ label: "Narra →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/regulacion`) }}
+            prev={{ label: "← Heridas", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); } }}
+            next={{ label: "Narra →", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/regulacion`); } }}
           />
           </Reveal>
 

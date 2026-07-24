@@ -5,7 +5,7 @@ import { useInView, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { TcmLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -26,28 +26,35 @@ const MAPA_LENGUA = "/recorrido/tcm/lengua/mapalengua.png";
 // box) para que la página se vea uniforme. Es solo presentación: la herramienta
 // «Lee tu lengua» sigue usando las dimensiones (color/forma/saburra/humedad) tal
 // cual, sin verse afectada.
-const dimOf = (d: LenguaDim) => LENGUA_DIMENSIONES.find((x) => x.dim === d)!;
-const opOf = (d: LenguaDim, key: string) => dimOf(d).opciones.find((o) => o.key === key)!;
-const sin = (d: LenguaDim, keys: string[]) => dimOf(d).opciones.filter((o) => !keys.includes(o.key));
+// Helpers DEFENSIVOS: si una dimensión/opción no existiera (p.ej. si el contenido
+// de tcmLenguaContenido cambiara en el futuro), NO revientan el import — devuelven
+// undefined/[] y las opciones que falten se filtran al montar los grupos. Así la
+// página nunca queda en blanco por un desajuste del contenido.
+const dimOf = (d: LenguaDim) => LENGUA_DIMENSIONES.find((x) => x.dim === d);
+const opOf = (d: LenguaDim, key: string): OpcionLengua | undefined => dimOf(d)?.opciones.find((o) => o.key === key);
+const sin = (d: LenguaDim, keys: string[]) => (dimOf(d)?.opciones ?? []).filter((o) => !keys.includes(o.key));
+// Junta opciones (algunas pueden venir undefined si una key ya no existe) y
+// descarta las que falten.
+const juntar = (...ops: (OpcionLengua | undefined)[]): OpcionLengua[] => ops.filter(Boolean) as OpcionLengua[];
 
 interface GrupoLengua { titulo: string; subtitulo: string; opciones: OpcionLengua[]; }
 const GRUPOS_LENGUA: GrupoLengua[] = [
   // El color (6)
-  { titulo: dimOf("color").titulo, subtitulo: dimOf("color").subtitulo, opciones: dimOf("color").opciones },
+  { titulo: dimOf("color")?.titulo ?? "", subtitulo: dimOf("color")?.subtitulo ?? "", opciones: dimOf("color")?.opciones ?? [] },
   // El cuerpo · la forma (6): forma ×5 + la lengua estable (referencia de movimiento)
-  { titulo: "El cuerpo · la forma", subtitulo: dimOf("forma").subtitulo,
-    opciones: [...dimOf("forma").opciones, opOf("movimiento", "normal")] },
+  { titulo: "El cuerpo · la forma", subtitulo: dimOf("forma")?.subtitulo ?? "",
+    opciones: juntar(...(dimOf("forma")?.opciones ?? []), opOf("movimiento", "normal")) },
   // El cuerpo · el movimiento (3)
-  { titulo: "El movimiento", subtitulo: dimOf("movimiento").subtitulo,
+  { titulo: "El movimiento", subtitulo: dimOf("movimiento")?.subtitulo ?? "",
     opciones: sin("movimiento", ["normal"]) },
   // La superficie · la saburra (6)
-  { titulo: dimOf("saburra").titulo, subtitulo: dimOf("saburra").subtitulo,
+  { titulo: dimOf("saburra")?.titulo ?? "", subtitulo: dimOf("saburra")?.subtitulo ?? "",
     opciones: sin("saburra", ["pelada"]) },
   // La superficie · humedad y detalles (6): saburra pelada + humedad ×4 + lengua sin puntos
-  { titulo: "La superficie · humedad y detalles", subtitulo: dimOf("humedad").subtitulo,
-    opciones: [opOf("saburra", "pelada"), ...dimOf("humedad").opciones, opOf("puntos", "normal")] },
+  { titulo: "La superficie · humedad y detalles", subtitulo: dimOf("humedad")?.subtitulo ?? "",
+    opciones: juntar(opOf("saburra", "pelada"), ...(dimOf("humedad")?.opciones ?? []), opOf("puntos", "normal")) },
   // Puntos y venas (3)
-  { titulo: dimOf("puntos").titulo, subtitulo: dimOf("puntos").subtitulo,
+  { titulo: dimOf("puntos")?.titulo ?? "", subtitulo: dimOf("puntos")?.subtitulo ?? "",
     opciones: sin("puntos", ["normal"]) },
 ];
 
@@ -94,7 +101,7 @@ export default function MetodoTcmLengua() {
   ]);
 
   if (loading || !fotosListas) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <TcmLoading />;
   }
 
   return (
@@ -198,13 +205,14 @@ export default function MetodoTcmLengua() {
           <Box
             as="button"
             onClick={() => navigate("/metodo/tcm/lengua/leer")}
+            position="relative"
+            overflow="hidden"
             display="inline-flex"
             alignItems="center"
             gap={2}
             px={5}
             py={2.5}
             borderRadius="full"
-            bg="rgba(255,255,255,0.06)"
             color={tcmTxt}
             border={`1px solid ${tcmTxt}55`}
             fontFamily="'EB Garamond', serif"
@@ -213,10 +221,12 @@ export default function MetodoTcmLengua() {
             letterSpacing="0.04em"
             cursor="pointer"
             transition="all 0.2s"
-            _hover={{ bg: `${tcmTxt}22`, borderColor: tcmTxt, transform: "translateY(-1px)" }}
+            _hover={{ borderColor: tcmTxt, transform: "translateY(-1px)" }}
             style={{ textShadow: INK_SHADOW }}
           >
-            Lee tu lengua →
+            {/* Fondo de la disciplina (imagen TCM) + velo para que se lea el texto. */}
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}a6`} />
+            <Box as="span" position="relative" zIndex={1}>Lee tu lengua →</Box>
           </Box>
           </Reveal>
         </Flex>
