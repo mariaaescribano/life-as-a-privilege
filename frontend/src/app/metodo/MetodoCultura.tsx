@@ -156,9 +156,9 @@ export default function MetodoCultura() {
                   style={{ textShadow: INK_SHADOW }}
                 >
                   El último paso de <Box as="span" fontStyle="italic" color={culturaTxt}>El Mapa</Box>.
-                  Recorre la Historia de la Filosofía, la de la Medicina, la de la Religión y la del
-                  mundo entero. Recordar de dónde venimos es lo que nos permite comprender dónde estamos
-                  —y sembrar, entre todas, un futuro más hermoso.
+                  Recorre la historia de la filosofía, la medicina, la religión y del mundo entero.
+                  Recordar de dónde venimos es lo que nos permite comprender dónde estamos y sembrar,
+                  entre todos, un futuro más hermoso.
                 </Text>
                 <Text
                   color={culturaTxt}
@@ -170,7 +170,8 @@ export default function MetodoCultura() {
                   fontStyle="italic"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Todo fue ya pensado y dicho alguna vez; a nosotras solo nos queda recordarlo y traerlo de vuelta.
+                  Quizá casi todo ya fue pensado y dicho alguna vez. A nosotros nos corresponde
+                  recordarlo, comprenderlo y traer esa sabiduría de vuelta al presente.
                 </Text>
               </Box>
             </Box>

@@ -405,7 +405,7 @@ export default function MetodoFisiologiaMoleculas() {
           <AnimatePresence>
             {!completo && !terminado && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
-                <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                   Una molécula es la unión de átomos. Forma una molécula de {mol.nombre}.
                 </Text>
@@ -414,7 +414,7 @@ export default function MetodoFisiologiaMoleculas() {
             {terminado && (
               <MBox key="cierre" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                     textAlign="center" maxW="640px">
-                <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" lineHeight="1.35" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                   Las moléculas son la unión de varios átomos. Son el fundamento de la Vida y forman parte de ti.
                 </Text>

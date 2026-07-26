@@ -56,12 +56,12 @@ export function PagoExitoModal({
         fontFamily="'EB Garamond', serif"
         overflow="hidden"
       >
-        {/* Fondo inmersivo de la disciplina */}
-        <DisciplinaBgLayer nom={nom} borderRadius="2xl" blur />
+        {/* Fondo inmersivo de la disciplina: su imagen tal cual, SIN difuminar. */}
+        <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
 
         <ModalBody position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }}>
           <Flex direction="column" gap={5}>
-            <Flex direction="column" align="center" gap={2}>
+            <Flex align="center" justify="center" gap={3}>
               {Icon
                 ? <Icon size={{ base: "42px", md: "52px" }} />
                 : <Image src="/img/icono/life.png" h="36px" objectFit="contain" />}
@@ -70,8 +70,7 @@ export function PagoExitoModal({
                 fontSize={{ base: "lg", md: "3xl" }}
                 fontWeight="800"
                 letterSpacing="0.03em"
-                textAlign="center"
-                whiteSpace="nowrap"
+                textAlign="left"
                 style={{ textShadow: ink }}
               >
                 {titulo}

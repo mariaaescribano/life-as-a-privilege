@@ -126,7 +126,7 @@ export function ComicPasoModal({
           h={{ base: "42px", md: "48px" }}
           px={{ base: 4, md: 6 }}
           borderRadius="full"
-          border={`1px solid ${themeColor}`}
+          border={`2px solid ${themeColor}`}
           color={themeColor}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"

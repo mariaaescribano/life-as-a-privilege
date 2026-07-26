@@ -268,7 +268,7 @@ export default function MetodoFisiologiaOrganismo() {
                 {frase ? (
                   <MBox key={frase} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5 }} textAlign="center">
-                    <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" fontStyle="italic"
+                    <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" fontStyle="italic"
                           lineHeight="1.4" maxW="760px"
                           style={{ textShadow: `0 1px 10px rgba(0,0,0,0.6), 0 0 22px ${fisiologiaTxt}66` }}>
                       «{frase}»
@@ -277,7 +277,7 @@ export default function MetodoFisiologiaOrganismo() {
                 ) : (
                   <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                         textAlign="center">
-                    <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                    <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                           maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                       Construye un ser humano.
                     </Text>

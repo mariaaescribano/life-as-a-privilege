@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
-import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento } from "../../components/metodo/tcmRecorrido";
+import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -24,6 +24,11 @@ export default function MetodoTcmCiclos() {
   // haberlas tocado todas (5 del Sheng + 5 del Ke = 10).
   const [vistas, setVistas] = useState<Set<string>>(new Set());
   const TOTAL_FLECHAS = ORDEN_ELEMENTOS.length * 2;
+  // Blob completo de metodo_tcm.data (para no pisar otros campos al guardar) y
+  // el flag persistido: si el usuario YA leyó todas las relaciones una vez, el
+  // botón «Diagnóstico final» queda desbloqueado desde el principio, para siempre.
+  const datosRef = useRef<DatosTcm>({});
+  const [yaLeido, setYaLeido] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -38,6 +43,12 @@ export default function MetodoTcmCiclos() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
+        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const d: DatosTcm = res.data?.data ?? {};
+        datosRef.current = d;
+        if (d.ciclosLeidos) setYaLeido(true);
       } catch {
         navigate("/metodo/tcm");
         return;
@@ -46,6 +57,21 @@ export default function MetodoTcmCiclos() {
       }
     })();
   }, [navigate]);
+
+  // En cuanto el usuario descubre TODAS las relaciones por primera vez, lo
+  // marcamos en la BD (merge sobre el blob) para que no tenga que repetirlo.
+  useEffect(() => {
+    if (yaLeido || vistas.size < TOTAL_FLECHAS) return;
+    setYaLeido(true);
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) return;
+    const next: DatosTcm = { ...datosRef.current, ciclosLeidos: true };
+    datosRef.current = next;
+    axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
+      { headers: { Authorization: `Bearer ${token}` } })
+      .catch(() => { /* el estado local ya lo refleja; se reintenta al volver a completar */ });
+  }, [vistas, yaLeido, TOTAL_FLECHAS]);
 
   // Marca una relación como vista. Se llama tanto al pulsar su flechita como al
   // pasar por ella dentro del cómic (onView), porque el usuario puede recorrer
@@ -106,7 +132,7 @@ export default function MetodoTcmCiclos() {
             next={{
               label: "Diagnóstico final →",
               onClick: () => navigate("/metodo/tcm/diagnostico"),
-              disabled: vistas.size < TOTAL_FLECHAS,
+              disabled: !yaLeido && vistas.size < TOTAL_FLECHAS,
               disabledTooltip: "Toca todas las flechitas para descubrir cada relación",
             }}
           />

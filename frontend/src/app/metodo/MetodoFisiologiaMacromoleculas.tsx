@@ -655,7 +655,7 @@ export default function MetodoFisiologiaMacromoleculas() {
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic" mt={1}
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic" mt={1}
                     letterSpacing="0.02em" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                 Las grandes moléculas de la Vida.
               </Text>

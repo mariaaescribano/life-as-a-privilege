@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
@@ -925,7 +926,7 @@ const Home = () => {
       borderRadius="full"
       bg={contDisc.bg}
       color={contDisc.txt}
-      border={`1px solid ${contDisc.txt}66`}
+      border={`2px solid ${contDisc.txt}66`}
       fontFamily="'EB Garamond', serif"
       fontWeight={700}
       fontSize={{ base: "sm", md: "md" }}
@@ -1285,12 +1286,12 @@ const Home = () => {
             )}
           </Flex>
         ) : (
-          // Carga: en vez del box turquesa plano, el mandala de LIFE + el spinner
-          // (branded y limpio).
-          <Flex flex="1" w="100%" minH="80vh" align="center" justify="center" direction="column" gap={6}>
-            <Image src="/img/icono/life.png" alt="" w={{ base: "116px", md: "150px" }}
-                   opacity={0.9} style={{ filter: "drop-shadow(0 0 22px rgba(255,255,255,0.35))" }} />
-            <SpinnerTurquesa fullScreen={false} />
+          // Carga: mientras espera, la animación del mandala de LIFE (misma que
+          // en Inicio y El Mapa), centrada sobre el turquesa.
+          <Flex flex="1" w="100%" minH="80vh" align="center" justify="center">
+            <Box transform={{ base: "scale(1.4)", md: "scale(1.9)" }}>
+              <LifeLoader color="#ffffff" />
+            </Box>
           </Flex>
         )}
       </Box>

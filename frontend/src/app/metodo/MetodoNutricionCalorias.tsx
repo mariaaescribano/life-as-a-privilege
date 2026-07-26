@@ -148,7 +148,7 @@ function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
          boxShadow={glowSuave(nutricionTxt)} {...rest}>
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}d0`} />
+      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}4d`} />
       <Box position="relative" zIndex={1}>{children}</Box>
     </Box>
   );

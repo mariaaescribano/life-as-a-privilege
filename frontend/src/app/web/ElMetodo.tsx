@@ -1281,7 +1281,9 @@ export default function ElMetodo() {
               overflowY="auto"
               sx={{
                 scrollbarWidth: "thin",
-                "&::-webkit-scrollbar": { width: "6px" },
+                scrollbarColor: `${selectedCard.txt}55 transparent`,
+                "&::-webkit-scrollbar": { width: "6px", background: "transparent" },
+                "&::-webkit-scrollbar-track": { background: "transparent" },
                 "&::-webkit-scrollbar-thumb": { background: `${selectedCard.txt}55`, borderRadius: "3px" },
               }}
             >

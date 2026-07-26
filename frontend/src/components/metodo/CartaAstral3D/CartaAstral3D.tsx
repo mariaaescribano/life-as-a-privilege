@@ -289,7 +289,14 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
         {/* Capa absoluta que rellena el cuadrado (el ::before ocupa el flujo). */}
         <Box position="absolute" inset={0}>
         <Canvas
-          camera={{ position: [0, 0, 7], fov: 50 }}
+          // Cámara ATRÁS lo justo para que TODA la rueda quepa en el círculo:
+          // a fov 50, la media-altura visible = z·tan(25°). El anillo zodiacal
+          // llega a R_ZODIAC_OUTER (3.4), así que con z=7 (media-altura ≈ 3.26)
+          // el anillo se salía del encuadre y se recortaba con 4 lados planos
+          // (la "luz cuadrada") y los aspectos parecían irse fuera. Con z=8.6
+          // (media-altura ≈ 4.0) el anillo queda al ~85% del radio: dentro del
+          // recorte circular, sin recortes y sin que el bloom toque los bordes.
+          camera={{ position: [0, 0, 8.6], fov: 50 }}
           dpr={[1, 2]}
           gl={{ antialias: true, alpha: true }}
         >

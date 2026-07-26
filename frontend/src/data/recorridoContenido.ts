@@ -167,10 +167,10 @@ export const recorridoContenido: Record<
     videoIntro: {
       titulo: "Aprende el lenguaje de tu cuerpo",
       puntos: [
-        "Descubre los cinco elementos y cómo se conectan en ti.",
-        "Identifica qué órgano o elemento necesita atención ahora.",
-        "Comprende de dónde vienen tus desequilibrios.",
-        "Recupera estabilidad con acciones concretas.",
+        "Descubre los cinco elementos y cómo tus órganos siguen sus ciclos naturales.",
+        "Identifica qué elemento u órgano puede necesitar más atención en este momento.",
+        "Comprende el origen de muchos de tus desequilibrios.",
+        "Recupera mayor equilibrio con acciones concretas y fáciles de aplicar.",
       ],
     },
     modalDesc:
@@ -205,10 +205,10 @@ export const recorridoContenido: Record<
     videoIntro: {
       titulo: "Entiende de qué estás hecho",
       puntos: [
-        "Comprende qué ocurre dentro de ti a nivel celular.",
-        "Reconoce los mecanismos tras la fatiga, la inflamación o la enfermedad.",
-        "Deja de decidir sobre tu cuerpo solo por intuición.",
-        "Traduce la ciencia a tu situación concreta.",
+        "Comprende las moléculas que forman tu cuerpo.",
+        "Descubre qué ocurre dentro de ti a nivel celular.",
+        "Entiende cómo funcionan tus órganos y las células que los componen.",
+        "Deja de creer lo que te dicen. Entiende cómo funciona tu cuerpo y decide por ti mismo.",
       ],
     },
     modalDesc:
@@ -240,37 +240,37 @@ export const recorridoContenido: Record<
   // 6. NUTRICIÓN
   // ───────────────────────────────────────────────────────────
   nutricion: {
-    desc: "Entiende cómo los alimentos que eliges cada día te construyen.",
+    desc: "Entiende cómo los alimentos que eliges cada día te reconstruyen.",
     videoIntro: {
-      titulo: "Descubre cómo te construyen los alimentos",
+      titulo: "Descubre cómo los alimentos que eliges cada día reconstruyen tu cuerpo.",
       puntos: [
-        "Comprende por qué tu microbiota influye en todo tu cuerpo.",
-        "Aprende qué necesita realmente tu organismo.",
-        "Identifica carencias y excesos antes de que sean un problema.",
-        "Diseña tu alimentación según tu constitución y tu vida.",
+        "Comprende por qué tu microbiota influye mucho más allá de la digestión.",
+        "Entiende qué moléculas contienen los alimentos y por qué algunos benefician más a tu organismo que otros.",
+        "Compréndete más allá de tus gustos y antojos.",
+        "Diseña tu alimentación con criterio, desmonta los mitos y elige por ti mismo desde el conocimiento.",
       ],
     },
     modalDesc:
       "La nutrición es el primer hábito que se ajusta cuando ya entiendes tu cuerpo. No es una dieta, no es una lista de prohibiciones: es saber qué pasa en tu organismo con cada alimento y decidir desde ahí.",
     contenido: [
       {
-        titulo: "Microbiota",
+        titulo: "Macronutrientes y micronutrientes",
         items: [
-          "Comprenderás por qué tu intestino influye en mucho más que la digestión: energía, estado de ánimo, claridad mental y salud.",
+          "Déjate de pensar en «esto es sano y esto no». Comprenderás, de forma sencilla, qué moléculas componen los alimentos y qué función cumplen en tu organismo.",
         ],
       },
       {
-        titulo: "Macro y micro nutrientes",
+        titulo: "Microbiota",
         items: [
-          "Aprenderás qué necesita realmente tu cuerpo y cómo identificar carencias o excesos antes de que generen problemas.",
+          "Entenderás por qué la microbiota va mucho más allá de la digestión y cómo se relaciona con tu salud, energía y bienestar general.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "Adaptaremos el conocimiento a tu realidad: tu constitución, tus horarios, tus necesidades y tu estilo de Vida.",
+          "Adaptaremos el conocimiento a tu realidad. No te diré qué comer; resolveremos tus dudas sobre los alimentos, cómo funcionan y cómo aplicarlo a tu día a día. Si lo deseas, también podremos explorar la relación entre ciertos hábitos alimentarios y factores emocionales o experiencias personales.",
         ],
-        aviso: "Opcional. Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte.",
       },
     ],
   },
@@ -279,29 +279,29 @@ export const recorridoContenido: Record<
   // 7. CÁBALA
   // ───────────────────────────────────────────────────────────
   cabala: {
-    desc: "Descubre las dimensiones que viven en ti solo por tener un alma. Entiende tus equilibrios y desequilibrios.",
+    desc: "Descubre las dimensiones que viven en tu alma y por extensión en ti. Entiende tus equilibrios y desequilibrios.",
     videoIntro: {
       titulo: "Descubre las dimensiones de tu alma",
       puntos: [
         "Recorre el Árbol de la Vida y sus diez Sefirot.",
         "Comprende tus conflictos internos y tu potencial.",
         "Trabaja cualidades concretas que te transforman.",
-        "Aterriza estos principios en tu vida real.",
+        "Aterriza estos principios en tu cotidianidad.",
       ],
     },
     modalDesc:
-      "Llegamos aquí después de un largo trabajo: ya conoces tu carta, tu historia, tu constitución, tu cuerpo, lo que comes. Ya estás preparado para descubrir el alma humana según El Árbol de la Vida y sus diez Sefirot.",
+      "Llegamos aquí después de un largo trabajo: ya conoces tu carta, tu historia, tu constitución y tu cuerpo. Ya estás preparado para descubrir el alma humana según el misticismo judío -que no tiene nada que ver a la religiñon judía de hoy..",
     contenido: [
       {
-        titulo: "Filosofía de la cábala",
+        titulo: "Filosofía de la Cábala",
         items: [
-          "Descubrirás una forma distinta de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
+          "Descubrirás una forma de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
         ],
       },
       {
         titulo: "Las Sefirot como herramientas",
         items: [
-          "Aprenderás a trabajar cualidades concretas que transforman la manera en que te relacionas contigo mismo y con los demás.",
+          "Aprenderás a desarrollar cualidades concretas que transforman la manera en que te relacionas contigo mismo y con los demás.",
         ],
       },
       {
@@ -322,10 +322,10 @@ export const recorridoContenido: Record<
     videoIntro: {
       titulo: "Construye tu propia visión del mundo",
       puntos: [
-        "Integra las siete disciplinas en una visión propia.",
-        "Conoce a los autores que se hicieron tus mismas preguntas.",
-        "Ordena todo lo que has aprendido sobre ti.",
-        "Reflexiona sobre quién eras y en quién te estás convirtiendo.",
+        "Conoce el pasado para comprender el presente: las grandes ideas y las grandes historias de la humanidad.",
+        "Descubre a los pensadores que se hicieron las mismas preguntas que tú.",
+        "Reflexiona por ti mismo. Tu punto de vista importa. ¿Qué piensas realmente?",
+        "Mira quién fuiste, comprende quién eres y decide en quién quieres convertirte.",
       ],
     },
     modalDesc:

@@ -143,7 +143,24 @@ export default function MetodoCabalaSendero() {
   });
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
+    <Box minH="100vh" position="relative" display="flex" flexDirection="column" bg={cabalaBg} fontFamily="'EB Garamond', serif">
+      {/* Fondo de página: imagen de Cábala (cabala.png) OSCURECIDA, en lugar del
+          turquesa. Capa fija (cubre todo el viewport al hacer scroll) con velo
+          negro fuerte para que el texto ámbar siga legible por encima. */}
+      <Box
+        position="fixed"
+        inset="0"
+        zIndex={-1}
+        pointerEvents="none"
+        bgColor={cabalaBg}
+        bgImage="url('/img/fondos/cabala.png')"
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
+      >
+        <Box position="absolute" inset="0" bg="rgba(0,0,0,0.62)" />
+      </Box>
+
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>

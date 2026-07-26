@@ -1052,8 +1052,8 @@ function OrganoDetalle({
            px={{ base: 4, md: 5 }} py={2} borderRadius="full"
            border="none"
            cursor="pointer" transition="all 0.2s"
-           boxShadow={`0 2px 12px rgba(0,0,0,0.35)`}
-           _hover={{ transform: "translateY(-1px)" }}>
+           boxShadow={CAJA_GLOW}
+           _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${fisiologiaTxt}3a, 0 0 52px ${fisiologiaTxt}20` }}>
         <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}66`} />
         <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
              w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill={fisiologiaTxt}>

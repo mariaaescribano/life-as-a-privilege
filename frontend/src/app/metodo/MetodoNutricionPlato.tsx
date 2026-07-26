@@ -81,6 +81,9 @@ const SECTORES = (() => {
   });
 })();
 
+// Slice de Proteína: se usa para NO pintarle brillo/reflejo encima (queda mate).
+const PROTEINA_D = SECTORES.find((s) => s.macro.key === "proteina")?.d ?? "";
+
 // Portadas del recorrido usadas como fondo de cada apartado del plato.
 const PORTADA_BASE = "/recorrido/nutricion/portadas";
 // Foto de portada por macro/grupo (el apartado que muestra el panel).
@@ -357,6 +360,12 @@ export default function MetodoNutricionPlato() {
                         <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
                         <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
                       </radialGradient>
+                      {/* Máscara para dejar el sector de Proteína SIN brillo ni
+                          reflejo (blanco = se ve, negro = se oculta). */}
+                      <mask id="sinBrilloProteina">
+                        <rect x="0" y="0" width={VB} height={VB} fill="#fff" />
+                        <path d={PROTEINA_D} fill="#000" />
+                      </mask>
                       {/* Un recorte por sector, para meter la foto del grupo dentro. */}
                       {SECTORES.map(({ macro: m, d }) => (
                         <clipPath key={`clip-${m.key}`} id={`clip-${m.key}`}>
@@ -391,8 +400,8 @@ export default function MetodoNutricionPlato() {
                       );
                     })}
 
-                    {/* Cúpula (volumen 3D) sobre los sectores */}
-                    <circle cx={CX} cy={CY} r={R_FOOD} fill="url(#platoDome)" pointerEvents="none" />
+                    {/* Cúpula (volumen 3D) sobre los sectores — sin brillo en Proteína */}
+                    <circle cx={CX} cy={CY} r={R_FOOD} fill="url(#platoDome)" mask="url(#sinBrilloProteina)" pointerEvents="none" />
 
                     {/* Aro que separa el ala del hueco central */}
                     <circle cx={CX} cy={CY} r={R_RIM} fill="none" stroke="#fffdf7" strokeWidth={3} opacity={0.95} pointerEvents="none" />
@@ -417,9 +426,12 @@ export default function MetodoNutricionPlato() {
                       );
                     })}
 
-                    {/* Reflejo especular arriba-izquierda del ala */}
-                    <ellipse cx="72" cy="58" rx="30" ry="16" fill="url(#platoGloss)" pointerEvents="none"
-                             transform="rotate(-20 72 58)" />
+                    {/* Reflejo especular arriba-izquierda — enmascarado para que
+                        NO caiga sobre el sector de Proteína (queda mate). */}
+                    <g mask="url(#sinBrilloProteina)" pointerEvents="none">
+                      <ellipse cx="72" cy="58" rx="30" ry="16" fill="url(#platoGloss)"
+                               transform="rotate(-20 72 58)" />
+                    </g>
                   </Box>
 
                   {/* Alimentos colocados sobre el plato */}

@@ -179,7 +179,7 @@ export function IndiceRecorrido({
         py={{ base: "9px", md: "12px" }}
         borderRadius="full"
         overflow="hidden"
-        border={`1.5px solid ${TINTA}`}
+        border={`2px solid ${TINTA}`}
         boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${bg}66`}
         cursor="pointer"
         transition="all 0.22s ease"

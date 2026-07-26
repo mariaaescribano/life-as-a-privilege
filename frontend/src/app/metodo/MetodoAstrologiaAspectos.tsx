@@ -414,7 +414,11 @@ export default function MetodoAstrologiaAspectos() {
           >
             <Box
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
-              position="relative" w="100%" maxW="600px"
+              position="relative" w="100%" maxW="620px"
+              // Mismo tamaño fijo que el resto de popups del recorrido (620×560
+              // en escritorio); el contenido que sobra hace scroll dentro. Móvil
+              // (sin h en base) igual que antes: crece con el contenido hasta maxH.
+              h={{ md: "560px" }}
               maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }}
               borderRadius="2xl" overflow="hidden"
               border={`1px solid ${colorAsp}66`}
@@ -433,6 +437,7 @@ export default function MetodoAstrologiaAspectos() {
               </Box>
 
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}
+                   flex="1 1 auto" minH={0}
                    overflowY="auto" overscrollBehavior="contain"
                    sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${colorAsp}55`, borderRadius: "8px" } }}>
                 <Flex align="center" justify="center" gap={3} mb={5} flexWrap="wrap">

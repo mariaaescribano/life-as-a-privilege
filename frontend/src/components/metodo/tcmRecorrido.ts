@@ -1251,6 +1251,10 @@ export interface DatosTcm {
   elementos?: Partial<Record<Elemento, EstadoElemento>>;
   observarte?: Partial<Record<string, string>>;
   compromiso?: string;
+  /** Los Ciclos: true en cuanto el usuario ha descubierto TODAS las relaciones
+   *  (Sheng + Ke) una vez. Se guarda para que el botón «Diagnóstico final» quede
+   *  desbloqueado para siempre en visitas posteriores, sin repetir las flechitas. */
+  ciclosLeidos?: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────────────────

@@ -227,6 +227,11 @@ export function MiniDiario() {
           mx={{ base: 4, md: 0 }}
           fontFamily="'EB Garamond', serif"
           overflow="hidden"
+          // Altura MÁXIMA (no fija): el box se ajusta a su contenido (termina
+          // justo debajo de "Guardar nota", sin hueco vacío) y solo llega a este
+          // tope cuando hay muchas notas — entonces la lista hace scroll vertical
+          // dentro sin crecer más el box.
+          maxH={{ base: "min(86dvh, 600px)", md: "min(88dvh, 640px)" }}
         >
           {/* Botón X para cerrar (arriba a la derecha) */}
           <Box
@@ -255,7 +260,15 @@ export function MiniDiario() {
             ✕
           </Box>
 
-          <ModalBody px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
+          <ModalBody
+            px={{ base: 5, md: 8 }}
+            py={{ base: 6, md: 8 }}
+            flex="1"
+            minH={0}
+            display="flex"
+            flexDirection="column"
+            overflow="hidden"
+          >
             {vista === "escribir" ? (
               <VistaEscribir
                 texto={texto}
@@ -318,7 +331,22 @@ function VistaEscribir({
   const conFondo = !!nom && hasDisciplinaBg(nom);
 
   return (
-    <Flex direction="column" gap={4}>
+    <Flex
+      direction="column"
+      gap={4}
+      flex="1"
+      minH={0}
+      overflowY="auto"
+      pr={1}
+      sx={{
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(255,255,255,0.4) transparent",
+        "&::-webkit-scrollbar": { width: "8px" },
+        "&::-webkit-scrollbar-track": { background: "transparent" },
+        "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "8px" },
+        "&::-webkit-scrollbar-thumb:hover": { background: "rgba(255,255,255,0.55)" },
+      }}
+    >
       <Flex align="center" justify="center" gap={2.5}>
         <Box w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} flexShrink={0}>
           <DiarioIcon fill="white" size="100%" />
@@ -492,8 +520,8 @@ function VistaNotas({
   onBorrar: (id: string) => void;
 }) {
   return (
-    <Flex direction="column" gap={4}>
-      <Flex align="center" gap={3}>
+    <Flex direction="column" gap={4} flex="1" minH={0}>
+      <Flex align="center" gap={3} flexShrink={0}>
         <Box
           as="button"
           onClick={onVolver}
@@ -509,18 +537,21 @@ function VistaNotas({
       </Flex>
 
       {cargando ? (
-        <Flex justify="center" py={10}>
+        <Flex justify="center" align="center" flex="1" minH={0}>
           <Spinner color={turquesa} />
         </Flex>
       ) : notas.length === 0 ? (
-        <Text color="rgba(255,255,255,0.6)" textAlign="center" py={10} fontStyle="italic">
-          Todavía no has escrito ninguna nota.
-        </Text>
+        <Flex justify="center" align="center" flex="1" minH={0}>
+          <Text color="rgba(255,255,255,0.6)" textAlign="center" fontStyle="italic">
+            Todavía no has escrito ninguna nota.
+          </Text>
+        </Flex>
       ) : (
         <Flex
           direction="column"
           gap={3}
-          maxH={{ base: "58vh", md: "62vh" }}
+          flex="1"
+          minH={0}
           overflowY="auto"
           pr={2}
           sx={{

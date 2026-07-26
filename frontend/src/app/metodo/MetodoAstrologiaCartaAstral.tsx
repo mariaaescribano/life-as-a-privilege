@@ -194,6 +194,11 @@ export default function MetodoAstrologiaCartaAstral() {
             duration={0.8}
             position="relative"
             w="100%"
+            // 20% más pequeño que antes (el ancho lo daba el contenedor de 850px).
+            // maxW ESTÁTICO: la entrada es solo opacidad (direction="none"), así el
+            // <Canvas> mide su caja ya a este tamaño al montar y la rueda queda bien.
+            maxW="680px"
+            mx="auto"
             borderRadius="2xl"
             overflow="hidden"
             boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}

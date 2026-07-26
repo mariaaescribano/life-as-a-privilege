@@ -313,8 +313,13 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
         w="100%"
-        maxW="640px"
-        maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }}
+        maxW="620px"
+        // Tamaño FIJO e igual para TODOS los popups del recorrido (arquetipos,
+        // sol/luna/ascendente, planetas, casas, aspectos): misma anchura (620) y
+        // misma altura (560) en escritorio, pase lo que pase con el contenido;
+        // el texto que sobra hace scroll vertical dentro. Móvil (base) sin tocar.
+        h={{ base: "calc(100dvh - 48px)", md: "560px" }}
+        maxH={{ base: "calc(100dvh - 48px)", md: "calc(100vh - 80px)" }}
         borderRadius="2xl"
         overflow="hidden"
         border={`1px solid ${color}66`}

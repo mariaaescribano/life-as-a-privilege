@@ -523,6 +523,9 @@ function CasaBox({
              sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
              onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="620px"
+               // Mismo tamaño fijo que el resto de popups del recorrido (620×560
+               // en escritorio); scroll vertical dentro. Móvil (sin h base) igual.
+               h={{ md: "560px" }}
                maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 80px)" }} borderRadius="2xl" overflow="hidden"
                border={`1px solid ${regenteColor}66`}
                boxShadow={`0 0 32px ${regenteColor}55, 0 0 80px ${regenteColor}28, 0 12px 60px rgba(0,0,0,0.6)`}
@@ -536,7 +539,8 @@ function CasaBox({
                 <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
               </svg>
             </Box>
-            <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }} overflowY="auto"
+            <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}
+                 flex="1 1 auto" minH={0} overflowY="auto"
                  overscrollBehavior="contain"
                  sx={{ "&::-webkit-scrollbar": { width: "8px" }, "&::-webkit-scrollbar-thumb": { background: `${astrologiaTxt}55`, borderRadius: "8px" } }}>
               {cabecera(true)}

@@ -82,17 +82,15 @@ export function PagoDisciplinaModal({
   precio = "20 €",
   errorColor = "#ffb4b4",
 }: BaseProps) {
-  // Overlay del color de la disciplina sobre su imagen, para que la foto se vea
-  // (SIEMPRE presente) pero el texto siga legible.
-  const bgHex = bg.length >= 7 ? bg.slice(0, 7) : bg;
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
     // box no crece sin límite — se limita a la altura del viewport y el cuerpo
     // hace scroll vertical dentro.
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered scrollBehavior="inside">
-      <ModalOverlay bg="transparent" />
+      {/* Detrás del popup: la página se oscurece un poco y se desenfoca. */}
+      <ModalOverlay bg="rgba(0,0,0,0.55)" sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} />
       <ModalContent
-        bg={bg}
+        bg="transparent"
         border={`1px solid ${txt}52`}
         borderRadius="2xl"
         boxShadow={`0 16px 60px rgba(0,0,0,0.5), 0 0 40px ${txt}1f`}
@@ -103,10 +101,9 @@ export function PagoDisciplinaModal({
         overflow="hidden"
         position="relative"
       >
-        {/* Imagen de la disciplina SIEMPRE de fondo, NÍTIDA (sin blur, para que no
-            se vea distorsionada) y con un velo de su color algo más ligero para
-            que la foto se aprecie detrás sin perder legibilidad del texto. */}
-        <DisciplinaBgLayer nom={nom} borderRadius="2xl" overlay={`${bgHex}b8`} />
+        {/* Fondo del popup = SOLO la imagen de la disciplina, tal cual (sin velo
+            de color encima). La legibilidad la dan las sombras del texto. */}
+        <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
 
         <ModalBody px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} position="relative" zIndex={1}>
           <Flex direction="column" gap={5}>

@@ -142,7 +142,7 @@ export default function MetodoFisiologiaSistemas() {
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
               Varios órganos que colaboran forman un sistema. Pulsa cada sistema para conocerlo.
             </Text>

@@ -313,9 +313,6 @@ export function HinduismoIlustracionesModal({
                   textTransform="uppercase"
                   textAlign="center"
                   lineHeight="1.1"
-                  style={{
-                    textShadow: `0 0 14px ${ayurvedaTxt}cc, 0 0 32px ${ayurvedaTxt}77, 0 0 70px ${ayurvedaTxt}44`,
-                  }}
                 >
                   Ilustraciones de Hinduismo
                 </Text>
@@ -405,9 +402,6 @@ export function HinduismoIlustracionesModal({
                         textTransform="uppercase"
                         textAlign="center"
                         lineHeight="1.1"
-                        style={{
-                          textShadow: `0 0 12px ${ayurvedaTxt}cc, 0 0 28px ${ayurvedaTxt}77`,
-                        }}
                       >
                         {opt.title}
                       </Text>

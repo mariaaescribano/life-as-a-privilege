@@ -181,7 +181,7 @@ export function IntroComicModal({
             borderRadius="full"
             bg="transparent"
             color={txtColor}
-            border={`1.5px solid ${txtColor}`}
+            border={`2px solid ${txtColor}`}
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
             fontSize={{ base: "xs", md: "sm" }}

@@ -82,9 +82,12 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
   // Colores efectivos: si el botón trae los suyos (p.ej. lleva a otra disciplina),
   // mandan sobre los del header. `c` = texto/borde; `fillBg` = fondo.
   const c = btnColor ?? color;
-  const baseBg = btnBg ?? (whiteBg ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.1)");
-  const hoverBg = btnBg ?? "rgba(255,255,255,0.12)";
-  const activeBg = btnBg ?? "rgba(255,255,255,0.18)";
+  // Interior del botón teñido con el color de la disciplina (no blanco neutro):
+  // sobre fondos cálidos (Cábala, TCM…) un velo blanco se percibe azulado por
+  // contraste. TCM mantiene su blanco a propósito (whiteBg).
+  const baseBg = btnBg ?? (whiteBg ? "rgba(255,255,255,0.14)" : `${c}1a`);
+  const hoverBg = btnBg ?? (whiteBg ? "rgba(255,255,255,0.12)" : `${c}2b`);
+  const activeBg = btnBg ?? (whiteBg ? "rgba(255,255,255,0.18)" : `${c}38`);
   const btn = (
     <Box
       as="button"
@@ -93,7 +96,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       px={small ? { base: 2, md: 3.5 } : { base: 3, sm: 5, md: 8 }}
       py={small ? { base: 1, md: 1.5 } : { base: 2, md: 3 }}
       borderRadius="full"
-      bg={disabled ? (whiteBg ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.1)") : baseBg}
+      bg={disabled ? (whiteBg ? "rgba(255,255,255,0.14)" : `${c}12`) : baseBg}
       border={`1.5px solid ${disabled ? c + "22" : `${c}aa`}`}
       color={disabled ? `${c}44` : c}
       fontFamily="'EB Garamond', serif"
@@ -105,7 +108,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       // casi instantáneo al pulsar. background/border/box-shadow son las
       // propiedades que pintan el "pressed".
       transition="background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, color 0.08s ease, transform 0.08s ease"
-      boxShadow={disabled ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${c}44, inset 0 0 12px rgba(255,255,255,0.05)`}
+      boxShadow={disabled ? "none" : `0 0 10px rgba(255,255,255,0.16), 0 0 22px ${c}44, inset 0 0 12px ${c}22`}
       // En el header de TCM (whiteBg) el texto lleva una sombra granate oscura
       // para contrastar con el fondo de la disciplina.
       textShadow={whiteBg && !disabled ? "0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85), 0 0 5px rgba(58,10,10,0.8)" : undefined}

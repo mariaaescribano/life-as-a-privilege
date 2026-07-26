@@ -82,7 +82,7 @@ export function BotonCompania({
         px={{ base: 4, md: 5 }}
         py={2}
         borderRadius="full"
-        border={`1.5px solid ${color}`}
+        border={`2px solid ${color}`}
         fontFamily="'EB Garamond', serif"
         fontWeight="700"
         fontSize={{ base: "xs", md: "sm" }}

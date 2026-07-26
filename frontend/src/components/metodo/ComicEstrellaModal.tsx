@@ -66,7 +66,7 @@ export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrell
           // «Saltar»; la letra en fisiologiaTxt (color de texto de la disciplina).
           bg="transparent"
           color={fisiologiaTxt}
-          border={`1px solid ${fisiologiaTxt}`}
+          border={`2px solid ${fisiologiaTxt}`}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "xs", md: "sm" }}

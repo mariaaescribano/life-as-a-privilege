@@ -85,7 +85,7 @@ export function LifeLoader({ color }: { color?: string } = {}) {
   );
 }
 
-// ── Astrología · estrella de 5 puntas que se dibuja y titila ─────────────────
+// ── Astrología · octagrama de 8 puntas que se dibuja, gira y titila ──────────
 const dibujarConst = keyframes`
   0%   { stroke-dashoffset: 1; }
   50%  { stroke-dashoffset: 0; }
@@ -95,43 +95,57 @@ const titilar = keyframes`
   0%, 100% { opacity: 0.35; transform: scale(0.8); }
   50%      { opacity: 1;    transform: scale(1.2); }
 `;
-// Los 5 vértices de la estrella (centro 60,60 · radio 46, punta arriba).
+// Giro lento de todo el astro: le da un aire místico/celeste (rueda del cielo)
+// sin distraer. En 30s da una vuelta; en el rato de carga apenas se completa.
+const girarAstro = keyframes`
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+`;
+// Los 8 vértices, repartidos cada 45° (centro 60,60 · radio 46, punta arriba).
 const ESTRELLAS = [
-  { x: 60, y: 14 }, { x: 104, y: 46 }, { x: 87, y: 97 }, { x: 33, y: 97 }, { x: 16, y: 46 },
+  { x: 60, y: 14 },   { x: 92.5, y: 27.5 }, { x: 106, y: 60 },  { x: 92.5, y: 92.5 },
+  { x: 60, y: 106 },  { x: 27.5, y: 92.5 }, { x: 14, y: 60 },   { x: 27.5, y: 27.5 },
 ];
-// Orden de trazo del pentagrama: una sola línea continua y cerrada (la estrella
-// se dibuja "de un tirón", como se dibuja una estrella a mano).
-const TRAZO = [0, 2, 4, 1, 3, 0];
+// Trazo del octagrama {8/3}: uniendo cada 3er vértice sale UNA sola línea
+// continua con 8 puntas afiladas (estrella de Ishtar/brújula), mucho más mística
+// que el pentagrama y sin recordar a la estrella de David (que son 6 puntas).
+const TRAZO = [0, 3, 6, 1, 4, 7, 2, 5, 0];
 export function AstrologiaLoader({ color }: { color?: string } = {}) {
   const c = color ?? astrologiaTxt;
   return (
     <Shell>
       <Box
-        as="polyline"
-        points={TRAZO.map((i) => `${ESTRELLAS[i].x},${ESTRELLAS[i].y}`).join(" ")}
-        fill="none"
-        stroke={c}
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        pathLength={1}
-        opacity={0.9}
-        animation={`${dibujarConst} 2.4s ease-in-out infinite`}
-        style={{ strokeDasharray: 1 }}
-      />
-      {ESTRELLAS.map((s, i) => (
+        as="g"
+        animation={`${girarAstro} 30s linear infinite`}
+        sx={{ transformBox: "view-box", transformOrigin: "60px 60px" }}
+      >
         <Box
-          as="circle"
-          key={i}
-          cx={s.x}
-          cy={s.y}
-          r={i === 0 ? 2.7 : 2.1}
-          fill={c}
-          animation={`${titilar} 1.8s ease-in-out ${i * 0.28}s infinite`}
-          sx={{ transformBox: "fill-box", transformOrigin: "center" }}
-          style={{ filter: `drop-shadow(0 0 4px ${c})` }}
+          as="polyline"
+          points={TRAZO.map((i) => `${ESTRELLAS[i].x},${ESTRELLAS[i].y}`).join(" ")}
+          fill="none"
+          stroke={c}
+          strokeWidth={1.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          pathLength={1}
+          opacity={0.9}
+          animation={`${dibujarConst} 2.4s ease-in-out infinite`}
+          style={{ strokeDasharray: 1 }}
         />
-      ))}
+        {ESTRELLAS.map((s, i) => (
+          <Box
+            as="circle"
+            key={i}
+            cx={s.x}
+            cy={s.y}
+            r={i === 0 ? 2.7 : 2.1}
+            fill={c}
+            animation={`${titilar} 1.8s ease-in-out ${i * 0.28}s infinite`}
+            sx={{ transformBox: "fill-box", transformOrigin: "center" }}
+            style={{ filter: `drop-shadow(0 0 4px ${c})` }}
+          />
+        ))}
+      </Box>
     </Shell>
   );
 }

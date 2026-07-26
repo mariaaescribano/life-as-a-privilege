@@ -71,7 +71,7 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
           // «Saltar»; la letra en nutricionTxt (color de texto de la disciplina).
           bg="transparent"
           color={nutricionTxt}
-          border={`1px solid ${nutricionTxt}`}
+          border={`2px solid ${nutricionTxt}`}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
           fontSize={{ base: "xs", md: "sm" }}

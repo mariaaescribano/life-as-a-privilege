@@ -230,9 +230,9 @@ export const ALIMENTOS: Alimento[] = [
     moleculas: ["proteina", "aminoacidos-esenciales", "omega3", "vitamina-d", "vitamina-b12"] },
 
   // ── Cereales ──
-  { key: "arroz-blanco", nombre: "Arroz blanco", grupo: "cereal", emoji: "🍚", resumen: "Energía rápida: se le quitó el salvado.",
-    macros: { carbohidrato: 89, proteina: 8, grasa: 3 },
-    moleculas: ["almidon", "glucosa", "proteina"] },
+  { key: "pasta-integral", nombre: "Pasta integral", grupo: "cereal", emoji: "🍝", resumen: "Trigo integral: fibra y energía de liberación lenta.",
+    macros: { carbohidrato: 78, proteina: 15, grasa: 7 },
+    moleculas: ["almidon", "fibrainsoluble", "proteina", "magnesio"] },
   { key: "arroz-integral", nombre: "Arroz integral", grupo: "cereal", emoji: "🍚", resumen: "Conserva el salvado: más fibra y minerales.",
     macros: { carbohidrato: 82, proteina: 9, grasa: 9 },
     moleculas: ["almidon", "fibrainsoluble", "proteina", "magnesio"] },
@@ -291,7 +291,7 @@ const FOTO_ALIMENTO: Record<string, string> = {
   esparragos: "esparragos",
   soja: "soja", garbanzos: "garbanzos",
   pollo: "pollo", vaca: "vaca", cerdo: "cerdo", huevo: "huevo", atun: "atun",
-  "arroz-blanco": "arroces", "arroz-integral": "arroces", pan: "pan",
+  "pasta-integral": "pasta", "arroz-integral": "arroces", pan: "pan",
   aguacate: "aguacate", "aceite-oliva": "aceite",
   nueces: "frutossecos", cacahuetes: "frutossecos",
   queso: "queso", "chocolate-negro": "choco", cafe: "cafe",

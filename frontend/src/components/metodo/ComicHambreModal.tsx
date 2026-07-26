@@ -40,7 +40,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
         <Box as="button" onClick={onContinue} position="fixed" top={{ base: 3, md: 5 }}
              right={{ base: "74px", md: "90px" }} zIndex={11} display="inline-flex" alignItems="center" gap={2}
              h={{ base: "42px", md: "48px" }} px={{ base: 4, md: 6 }} borderRadius="full" overflow="hidden"
-             bg="transparent" color={nutricionTxt} border={`1px solid ${nutricionTxt}`}
+             bg="transparent" color={nutricionTxt} border={`2px solid ${nutricionTxt}`}
              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xs", md: "sm" }}
              letterSpacing="0.04em" whiteSpace="nowrap" cursor="pointer"
              boxShadow="0 2px 12px rgba(0,0,0,0.45)"

@@ -12,6 +12,10 @@ import { ORIGEN_ESPIRITUALIDAD } from "./ComicUniversoModal";
 import { ORIGEN_CIENCIA } from "./ComicCienciaModal";
 import { NUTRICION_INTRO } from "./comicNutricionIntro";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
+import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
+import { NUTRICION_INTEGRAL } from "./comicNutricionIntegral";
+import { HAMBRE_HOLISTICA } from "./hambreHolistica";
+import { COMICS_NUTRIENTES } from "./comicsNutrientes";
 import { INTRO_PSICOLOGIA } from "./comicPsicologiaIntro";
 import { COMIC_COMPROMISO } from "./comicCompromiso";
 import {
@@ -66,6 +70,18 @@ export interface IlustracionEntry {
 const hinduTextShadow = `0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`;
 const astroTextShadow = `0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`;
 const psicoTextShadow = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
+
+// Nutrición: acento claro (nutricionBg) + letra oscura (nutricionTxt), sin
+// sombra. El visor pinta en plano, así que quitamos las negritas **…** para que
+// no salgan los asteriscos literales.
+const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
+  vinetas.map((v) => ({ ...v, paragraphs: v.paragraphs.map((p) => p.replace(/\*\*/g, "")) }));
+
+const nutriEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]): IlustracionEntry => ({
+  id, titulo, disciplina: "Nutrición", cover, vinetas,
+  themeColor: nutricionBg, textColor: nutricionTxt, cardColor: nutricionTxt,
+  disciplinaBgImage: "/img/fondos/nutri.png", disciplinaBgColor: nutricionBg, textShadow: "none",
+});
 
 export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── EL ORIGEN (primero) ──
@@ -256,6 +272,13 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgColor: nutricionBg,
     textShadow: "none",
   },
+  nutriEntry("nutricion-carbohidratos", "Carbohidratos", "/viñetas/nutricion/carbohidratos/carbohidratos1.png", COMICS_NUTRIENTES.carbohidratos),
+  nutriEntry("nutricion-vitaminas", "Vitaminas", "/viñetas/nutricion/vitaminas/vitaminas1.png", COMICS_NUTRIENTES.vitaminas),
+  nutriEntry("nutricion-minerales", "Minerales", "/viñetas/nutricion/minerales/minerales1.png", COMICS_NUTRIENTES.minerales),
+  nutriEntry("nutricion-agua", "Agua", "/viñetas/nutricion/agua/agua1.png", COMICS_NUTRIENTES.agua),
+  nutriEntry("nutricion-microbiota", "La microbiota", "/viñetas/nutricion/microbiota/microbiota1.png", NUTRICION_MICROBIOTA),
+  nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.png", sinNegrita(HAMBRE_HOLISTICA)),
+  nutriEntry("nutricion-integral", "Lo integral", "/viñetas/nutricion/integral/integral1.png", NUTRICION_INTEGRAL),
 
   // ── Medicina China ──
   {

@@ -158,7 +158,7 @@ export default function MetodoNutricionHambre() {
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontWeight={600}
+            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "lg", md: "2xl" }} fontWeight={600} fontStyle="italic"
                   textAlign="center" lineHeight="1.7" maxW="720px">
               El hambre: una mirada holística
             </Text>
@@ -174,7 +174,7 @@ export default function MetodoNutricionHambre() {
 
           {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
           <Reveal direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">
-            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="600"
+            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
                   textAlign="center" maxW="740px" lineHeight="1.7" mt={{ base: 2, md: 4 }}
                   style={{ textShadow: "0 1px 12px rgba(0,0,0,0.4)" }}>
               {HAMBRE_CIERRE}

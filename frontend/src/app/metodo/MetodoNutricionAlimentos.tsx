@@ -55,7 +55,7 @@ function BibliotecaCard({
         _hover={{ transform: "translateY(-4px)", boxShadow: glowSuaveHover(nutricionTxt) }}
         _active={{ transform: "translateY(-1px)" }}
       >
-        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}99`} />
+        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}4d`} />
 
         <Flex position="relative" zIndex={1} direction="column" align="center" justify="center"
               gap={{ base: 3, md: 3.5 }} px={{ base: 6, md: 7 }} py={{ base: 8, md: 10 }} h="100%" textAlign="center">

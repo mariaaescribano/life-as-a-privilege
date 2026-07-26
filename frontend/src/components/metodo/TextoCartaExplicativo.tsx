@@ -235,8 +235,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         minW={0}
         w="100%"
         // Caja más pequeña; en móvil ocupa el hueco entre las dos flechas.
-        maxW={{ base: "100%", md: "820px" }}
-        h={{ base: "auto", md: "470px" }}
+        maxW={{ base: "100%", md: "860px" }}
+        h={{ base: "auto", md: "380px" }}
         maxH={{ base: "calc(100dvh - 96px)" }}
         display="flex"
         flexDirection="column"
@@ -342,8 +342,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           <Box
             // Desktop: foto cuadrada MÁS GRANDE a la izquierda.
             // Móvil: hero image a todo el ancho que cubre la parte de arriba.
-            w={{ base: "100%", md: "360px" }}
-            maxW={{ base: "100%", md: "360px" }}
+            w={{ base: "100%", md: "290px" }}
+            maxW={{ base: "100%", md: "290px" }}
             h={{ base: "38vh", md: "auto" }}
             aspectRatio={{ base: "auto", md: 1 }}
             flexShrink={0}

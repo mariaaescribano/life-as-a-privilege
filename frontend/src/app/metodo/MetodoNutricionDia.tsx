@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
+import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
@@ -406,11 +407,19 @@ export default function MetodoNutricionDia() {
   };
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif"
+    <Box minH="100vh" position="relative" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif"
          sx={{ touchAction: drag ? "none" : undefined }}>
+      {/* Fondo: acuarela propia de Nutrición, fija al viewport, con un velo
+          turquesa para que se VEA la foto pero el contenido siga legible. */}
+      <Box aria-hidden position="fixed" inset={0} zIndex={0} pointerEvents="none"
+           bgImage={`url('${disciplinaBgImg(nutricionNom) ?? ""}')`}
+           bgSize="cover" bgPosition="center" bgRepeat="no-repeat">
+        <Box position="absolute" inset={0} bg="rgba(0,128,128,0.62)" />
+      </Box>
+
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="1200px" gap={6}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
@@ -456,11 +465,11 @@ export default function MetodoNutricionDia() {
             <>
               {/* Intro compacta */}
               <Reveal direction="up" distance={18} delay={0.08} duration={0.6} w="100%" display="flex" justifyContent="center">
-                <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                      textAlign="center" lineHeight="1.8" maxW="760px">
+                <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic"
+                      textAlign="center" lineHeight="1.7" maxW="820px">
                   Aprender a comer no es contar: es saber <b>cuánto</b> y <b>cómo</b>. Reparte tus{" "}
                   <Text as="span" color={nutricionTxt} fontWeight={700}>{kcalObjetivo} kcal</Text>{" "}
-                  entre tus comidas y arrastra alimentos a cada una. Fíjate en la ración y en cómo medirla a ojo.
+                  entre las comidas del día y dale a tu cuerpo —es decir, a ti— lo que de verdad necesitas.
                 </Text>
               </Reveal>
 
@@ -647,9 +656,11 @@ export default function MetodoNutricionDia() {
       {infoFood && (
         <Flex position="fixed" inset={0} zIndex={5000} align="center" justify="center" px={4}
               bg="rgba(0,0,0,0.55)" onClick={() => setInfoKey(null)}>
-          <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="480px" borderRadius="2xl" overflow="hidden"
+          <Box onClick={(e) => e.stopPropagation()} position="relative" w="100%" maxW="480px" borderRadius="2xl" overflow="hidden"
                bg={nutricionBg} border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.5)` }}>
-            <Box px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+            {/* Acuarela de Nutrición de fondo, con velo claro para leer el texto oscuro */}
+            <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}bf`} />
+            <Box px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }} position="relative" zIndex={1}>
               <Flex justify="flex-end">
                 <Box as="button" onClick={() => setInfoKey(null)} w="30px" h="30px" borderRadius="full"
                      display="flex" alignItems="center" justifyContent="center" fontSize="lg" lineHeight="1"
@@ -789,9 +800,12 @@ export default function MetodoNutricionDia() {
       {modalOpen && kcalObjetivo && (
         <Flex position="fixed" inset={0} zIndex={5000} align="center" justify="center" px={4}
               bg="rgba(0,0,0,0.6)" onClick={() => numComidas != null && setModalOpen(false)}>
-          <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="560px" borderRadius="2xl"
-               px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} bg={nutricionBg}
+          <Box onClick={(e) => e.stopPropagation()} position="relative" overflow="hidden" w="100%" maxW="560px" borderRadius="2xl"
+               bg={nutricionBg}
                border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.5)` }}>
+            {/* Acuarela de Nutrición de fondo, con velo claro para leer el texto oscuro */}
+            <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}bf`} />
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
             <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">
               ¿Cuántas comidas haces al día?
             </Text>
@@ -823,13 +837,16 @@ export default function MetodoNutricionDia() {
                 );
               })}
             </Flex>
+            </Box>
           </Box>
         </Flex>
       )}
 
       <IndiceNutricion />
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
-      <SiteFooter />
+      <Box position="relative" zIndex={1}>
+        <SiteFooter />
+      </Box>
     </Box>
   );
 }
