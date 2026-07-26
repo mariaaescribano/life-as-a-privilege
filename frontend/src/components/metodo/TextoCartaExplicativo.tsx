@@ -415,7 +415,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           >
             <Text
               color={color}
-              fontSize={{ base: "xl", md: "2xl" }}
+              fontSize={{ base: "2xl", md: "3xl" }}
               lineHeight="1.9"
               letterSpacing="0.02em"
               fontWeight="400"

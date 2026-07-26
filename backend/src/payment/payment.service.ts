@@ -539,11 +539,12 @@ export class PaymentService {
   // flags directamente para poder probar el recorrido sin cobro real.
   // ─────────────────────────────────────────────────────────────────────────
   static testPagosHabilitado(): boolean {
-    // ⚠️ TEMPORAL (prueba real): modo test FORZADO a ON porque no se puede tocar
-    // la env var ALLOW_TEST_PAGOS en Render. Esto permite el pago falso en la web
-    // desplegada. REVERTIR antes de abrir al público — dejar solo la línea de abajo:
-    //   return process.env.ALLOW_TEST_PAGOS === 'true';
-    return true;
+    // El modo test (pago falso, test/unlock) SOLO se habilita si la env var
+    // ALLOW_TEST_PAGOS === 'true'. En producción va desactivado, así que cada
+    // disciplina queda bloqueada hasta haber pagado de verdad (no hay forma de
+    // desbloquear gratis). Para probar el pago falso en local, exporta
+    // ALLOW_TEST_PAGOS=true en el backend.
+    return process.env.ALLOW_TEST_PAGOS === 'true';
   }
 
   async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura' | 'all') {

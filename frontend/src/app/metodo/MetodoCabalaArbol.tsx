@@ -130,7 +130,6 @@ export default function MetodoCabalaArbol() {
               position="relative"
               overflow="hidden"
               boxShadow={`0 10px 40px rgba(0,0,0,0.45), 0 0 40px ${cabalaTxt}44, inset 0 0 60px ${cabalaBg}`}
-              border={`1.5px solid ${cabalaTxt}66`}
               borderRadius="3xl"
               px={{ base: 6, md: 10 }}
               pt={{ base: 8, md: 10 }}

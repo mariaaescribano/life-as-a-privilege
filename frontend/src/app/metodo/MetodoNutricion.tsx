@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
@@ -131,7 +131,7 @@ export default function MetodoNutricion() {
   const caloriasContinuar = () => { setCaloriasOpen(false); navigate("/metodo/nutricion/nutrientes"); };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <NutricionLoading />;
   }
 
   return (

@@ -41,11 +41,12 @@ const Divisor = ({ mb = 4, mt = 0 }: { mb?: any; mt?: any }) => (
   <Box h="1px" w="100%" mb={mb} mt={mt} bg={`${cabalaTxt}55`} />
 );
 
-/* ── Box base: el fondo es la imagen de Cábala (cabala.png) con un velo marrón
-   oscuro (cabalaBg) que sube el contraste del texto ámbar sobre la acuarela, y
-   SIN border line. TODOS los boxes del recorrido comparten esta caja. Acepta
-   props extra (p.ej. h="100%"). ── */
-const CAJA_OVERLAY = `${cabalaBg}cc`;
+/* ── Box base: el fondo es la imagen de Cábala (cabala.png) con un velo oscuro
+   MUY suave (transparente, sin tinte marrón) para que la acuarela se vea bien y
+   solo suba lo justo el contraste del texto ámbar (que además lleva su propia
+   sombra, INK_SHADOW), y SIN border line. TODOS los boxes del recorrido
+   comparten esta caja. Acepta props extra (p.ej. h="100%"). ── */
+const CAJA_OVERLAY = "rgba(0,0,0,0.35)";
 const Caja = ({ children, ...rest }: React.ComponentProps<typeof Box>) => (
   <Box
     position="relative"

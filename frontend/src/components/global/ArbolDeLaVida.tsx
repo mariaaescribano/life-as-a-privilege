@@ -559,7 +559,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     encima da contraste al nombre dorado; al pasar el ratón, se
                     aclara para resaltar el nodo. */}
                 <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#sefira-node-img)" />
-                <circle cx={sefira.x} cy={sefira.y} r={R} fill={active ? `${cabalaBg}44` : `${cabalaBg}80`} />
+                <circle cx={sefira.x} cy={sefira.y} r={R} fill={active ? `${cabalaBg}20` : `${cabalaBg}4d`} />
                 <circle
                   cx={sefira.x} cy={sefira.y} r={R}
                   fill="none"

@@ -4,7 +4,7 @@ import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -91,7 +91,7 @@ export default function MetodoNutricionNutrientesSecundarios() {
     navigate(`/metodo/nutricion/nutrientes/${n.key}`);
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <NutricionLoading />;
 
   const exploradosSet = new Set(explorados);
   // No se puede avanzar a la Microbiota hasta haber abierto TODOS los nutrientes

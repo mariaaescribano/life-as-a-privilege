@@ -107,9 +107,6 @@ export default function MetodoTcmCursos() {
           {cursosLoading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%" minH={{ base: "260px", md: "340px" }}>
               <TcmLoader color="#ffffff" />
-              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                Cargando cursos…
-              </Text>
             </Flex>
           ) : cursos.length > 0 ? (
             cursos.length === 1 ? (

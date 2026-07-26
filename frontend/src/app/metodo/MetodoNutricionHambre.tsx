@@ -4,7 +4,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
@@ -13,6 +13,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { glowSuave } from "../../components/metodo/FotoBox";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { HAMBRE_HOLISTICA, HAMBRE_CIERRE } from "../../components/metodo/hambreHolistica";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import type { Vineta } from "../../components/metodo/ComicViewer";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
@@ -87,13 +88,13 @@ function HambreBox({ v }: { v: Vineta }) {
              display="flex" flexDirection="column" justifyContent="flex-start"
              maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "auto" }} overflowX="hidden"
              pr={{ base: 0, md: 3 }} sx={SCROLL_SX}>
-          <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25"
+          <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.25"
                 mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}>
             {v.titulo}
           </Text>
           {v.paragraphs.map((p, i) => (
             <Text key={i} color={nutricionTxt} textAlign={{ base: "center", md: "left" }}
-                  fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" letterSpacing="0.01em"
+                  fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.85" letterSpacing="0.01em"
                   fontWeight="400" mt={i === 0 ? 0 : { base: 4, md: 5 }}>
               {renderNegrita(p)}
             </Text>
@@ -121,12 +122,17 @@ export default function MetodoNutricionHambre() {
         try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+
+        // No mostramos la página hasta que TODAS las fotos de los 4 boxes estén
+        // descargadas: mientras, se ve la animación de Nutrición (no aparecen
+        // de golpe ni sale un hueco vacío).
+        await precargarImagenes(HAMBRE_HOLISTICA.map((v) => encodeURI(v.src)));
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();
   }, [navigate]);
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <NutricionLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">

@@ -4,12 +4,13 @@ import axios from "axios";
 import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { CulturaIlustracionesModal } from "../../components/metodo/CulturaIlustracionesModal";
 import { Reveal } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
@@ -52,6 +53,12 @@ export default function MetodoCulturaHistorias() {
         // Gate de pago: sin suscripción a Cultura se vuelve a la portada (donde
         // vive el popup de pago). Blinda el acceso por URL directa.
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
+
+        // No mostramos la página hasta que las portadas visibles estén cargadas
+        // (son solo 3 y se ven todas de golpe: no hay flechas aquí).
+        await precargarImagenes(
+          HISTORIAS.slice(0, 3).map((h) => (h.portada ? encodeURI(h.portada) : null)),
+        );
       } catch {
         navigate("/metodo/cultura", { replace: true });
         return;
@@ -62,7 +69,7 @@ export default function MetodoCulturaHistorias() {
   }, [navigate]);
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <CulturaLoading />;
   }
 
   return (
@@ -70,7 +77,7 @@ export default function MetodoCulturaHistorias() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="900px" gap={8}>
+        <Flex direction="column" align="center" w="100%" maxW="1040px" gap={8}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -87,20 +94,19 @@ export default function MetodoCulturaHistorias() {
             />
           </Reveal>
 
-          {/* ── Las 6 Historias (3 arriba, 3 abajo) ── */}
+          {/* ── Las 3 primeras Historias (las demás llegarán). Foto 1:1. ── */}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 5, md: 7 }} w="100%">
-            {HISTORIAS.map((h, i) => (
+            {HISTORIAS.slice(0, 3).map((h, i) => (
               <Reveal key={h.key} direction="up" distance={26} scaleFrom={0.97} delay={0.1 + i * 0.08} duration={0.7}>
                 <Box h="100%">
                   <FotoBox
                     titulo={h.titulo}
-                    numero={i + 1}
                     emoji={h.emoji}
                     foto={h.portada}
                     nom={culturaNom}
                     tinta={culturaTxt}
                     bg={culturaBg}
-                    aspect={1.5}
+                    aspect={1}
                     onClick={() => navigate(h.ruta)}
                   />
                 </Box>

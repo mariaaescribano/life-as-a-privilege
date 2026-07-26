@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
@@ -15,79 +15,88 @@ import {
   ALIMENTOS_DIA, GRUPOS_DIA, grupoDiaColor, grupoDiaFondo, alimentoDiaByKey, infoAlimento,
   REPARTO_COMIDAS, NUM_COMIDAS_OPCIONES, MACRO_COLOR, type GrupoDia,
 } from "../../hardCoded/espacio/DiaSaludable";
+import { MOLECULAS, MACRO_LABEL, type AlimentoMolecula } from "../../hardCoded/espacio/AlimentosNutricion";
 
 // ═════════════════════════════════════════════════════════════════════════
-// Actividad «Diseña tu día» (recorrido de Nutrición).
-//   · Solo se desbloquea cuando la usuaria ya tiene su objetivo de calorías
-//     (calculado y guardado en /metodo/nutricion/calorias).
-//   · Popup: ¿cuántas comidas haces al día? (3/4/5). Repartimos las calorías del
-//     día entre esas comidas de forma equilibrada (REPARTO_COMIDAS).
-//   · Se arrastran alimentos desde la paleta a cada comida. Cada alimento entra
-//     con una RACIÓN real: gramos + cómo medirla A OJO (un puño, la palma…).
-//   · Se ve, en cada comida y en el día, cuánta energía llevas frente a tu meta.
-// Objetivo: consciencia — aprender cuánto y cómo comer, no contar obsesivo.
+// Actividad «Diseña tu día» (recorrido de Nutrición). Dos columnas:
+//   · Izquierda: tus comidas (zonas de drop) con scroll propio.
+//   · Derecha (más grande): elegir alimentos, 2 por fila, con scroll propio.
+// Al inicio de cada grupo hay una tarjeta «Crea tu alimento» (las veces que
+// quiera). Cada alimento tiene un botón de ojo que abre su ficha (ración, kcal,
+// macros y de qué está hecho). Se arrastran alimentos a cada comida.
 // El drag usa pointer events (ratón y dedo por igual) + hit-test de las tarjetas.
 // ═════════════════════════════════════════════════════════════════════════
 
 interface PlacedFood {
   id: string;
-  key: string;        // clave del alimento (ALIMENTOS_DIA)
+  key: string;        // clave del alimento (ALIMENTOS_DIA o custom-*)
   porciones: number;  // multiplicador de la ración (pasos de 0.5)
 }
 type Placed = Record<string, PlacedFood[]>; // por clave de comida
+
+// Alimento que crea la propia usuaria. Se guarda junto al día.
+interface CustomFoodDia {
+  key: string;        // "custom-<n>"
+  grupo: GrupoDia;
+  nombre: string;
+  kcalRacion: number; // kcal de UNA ración
+  porcionG: number;
+  aOjo: string;
+  macros: { carbohidrato: number; proteina: number; grasa: number };
+}
+
+// Forma unificada de un alimento (de la biblioteca o creado por la usuaria).
+interface FoodInfo {
+  key: string;
+  nombre: string;
+  emoji?: string;
+  foto?: string;
+  grupo: GrupoDia;
+  kcalRacion: number;
+  porcionG: number;
+  aOjo: string;
+  macros: { carbohidrato: number; proteina: number; grasa: number };
+  moleculas?: (string | AlimentoMolecula)[];
+  descripcion?: string;
+  custom?: boolean;
+}
 
 interface DragState { key: string; x: number; y: number; }
 
 let ID_SEQ = 1;
 const nid = () => `f${ID_SEQ++}`;
+let CUSTOM_SEQ = 1;
 
-// kcal de una ración colocada.
-const kcalDe = (f: PlacedFood): number => {
-  const a = alimentoDiaByKey(f.key);
-  if (!a) return 0;
-  return (a.kcal100 * a.porcionG * f.porciones) / 100;
-};
-const gramosDe = (f: PlacedFood): number => {
-  const a = alimentoDiaByKey(f.key);
-  return a ? Math.round(a.porcionG * f.porciones) : 0;
+const scrollSx = {
+  "&::-webkit-scrollbar": { width: "7px" },
+  "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}44`, borderRadius: "4px" },
+  "&::-webkit-scrollbar-track": { background: "transparent" },
+  scrollbarWidth: "thin" as const,
+  scrollbarColor: `${nutricionTxt}44 transparent`,
 };
 
-// Foto redonda del alimento (o emoji si aún no hay foto).
-function AlimentoFoto({ foodKey, size }: { foodKey: string; size: string | Record<string, string> }) {
-  const info = infoAlimento(foodKey);
+// Foto redonda del alimento (o emoji si aún no hay foto / es creado).
+function AlimentoFoto({ info, size }: { info?: Pick<FoodInfo, "foto" | "emoji" | "nombre">; size: string | Record<string, string> }) {
   return (
     <Box w={size} h={size} borderRadius="full" overflow="hidden" flexShrink={0}
-         bg="rgba(255,255,255,0.1)" display="flex" alignItems="center" justifyContent="center"
-         border="1px solid rgba(255,255,255,0.25)">
+         bg={`${nutricionTxt}12`} display="flex" alignItems="center" justifyContent="center"
+         border={`1px solid ${nutricionTxt}22`}>
       {info?.foto
         ? <Box as="img" src={encodeURI(info.foto)} alt={info.nombre} w="100%" h="100%"
                style={{ objectFit: "cover" }} draggable={false} pointerEvents="none" />
-        : <Box as="span" fontSize="lg" lineHeight="1" pointerEvents="none">{info?.emoji ?? "🍽️"}</Box>}
+        : <Box as="span" fontSize="xl" lineHeight="1" pointerEvents="none">{info?.emoji ?? "🍽️"}</Box>}
     </Box>
   );
 }
 
-// Barra fina de macros (carb/proteína/grasa) a partir de los alimentos de una comida.
-function MacroBarra({ foods }: { foods: PlacedFood[] }) {
-  const tot = useMemo(() => {
-    const acc = { carbohidrato: 0, proteina: 0, grasa: 0 };
-    foods.forEach((f) => {
-      const info = infoAlimento(f.key);
-      const kcal = kcalDe(f);
-      if (!info || kcal <= 0) return;
-      acc.carbohidrato += kcal * info.macros.carbohidrato / 100;
-      acc.proteina += kcal * info.macros.proteina / 100;
-      acc.grasa += kcal * info.macros.grasa / 100;
-    });
-    const s = acc.carbohidrato + acc.proteina + acc.grasa;
-    return s > 0 ? { c: acc.carbohidrato / s, p: acc.proteina / s, g: acc.grasa / s } : null;
-  }, [foods]);
-  if (!tot) return null;
+// Barra fina de macros a partir de un reparto ya calculado.
+function MacroBarra({ seg }: { seg: { c: number; p: number; g: number } | null }) {
+  if (!seg) return null;
   return (
-    <Flex h="6px" borderRadius="full" overflow="hidden" mt={2} bg="rgba(0,0,0,0.25)">
-      <Box w={`${tot.c * 100}%`} bg={MACRO_COLOR.carbohidrato} />
-      <Box w={`${tot.p * 100}%`} bg={MACRO_COLOR.proteina} />
-      <Box w={`${tot.g * 100}%`} bg={MACRO_COLOR.grasa} />
+    <Flex h="6px" borderRadius="full" overflow="hidden" mt={2} bg={`${nutricionTxt}22`}>
+      <Box w={`${seg.c * 100}%`} bg={MACRO_COLOR.carbohidrato} />
+      <Box w={`${seg.p * 100}%`} bg={MACRO_COLOR.proteina} />
+      <Box w={`${seg.g * 100}%`} bg={MACRO_COLOR.grasa} />
     </Flex>
   );
 }
@@ -98,14 +107,28 @@ export default function MetodoNutricionDia() {
   const [kcalObjetivo, setKcalObjetivo] = useState<number | null>(null);
   const [numComidas, setNumComidas] = useState<number | null>(null);
   const [placed, setPlaced] = useState<Placed>({});
+  const [customFoods, setCustomFoods] = useState<CustomFoodDia[]>([]);
   const [grupoSel, setGrupoSel] = useState<GrupoDia>(GRUPOS_DIA[0].key);
   const [modalOpen, setModalOpen] = useState(false);
+  const [crearOpen, setCrearOpen] = useState(false);
+  const [infoKey, setInfoKey] = useState<string | null>(null); // ficha (ojo)
   const [drag, setDrag] = useState<DragState | null>(null);
   const [overMeal, setOverMeal] = useState<string | null>(null);
+
+  // Formulario «crea tu alimento».
+  const [fNombre, setFNombre] = useState("");
+  const [fKcal, setFKcal] = useState("");
+  const [fGramos, setFGramos] = useState("");
+  const [fAOjo, setFAOjo] = useState("");
+  const [fCarb, setFCarb] = useState("");
+  const [fProt, setFProt] = useState("");
+  const [fGrasa, setFGrasa] = useState("");
 
   const dataRef = useRef<Record<string, any>>({});
   const mealRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const dragKeyRef = useRef<string | null>(null);
+  const placedRef = useRef<Placed>({});
+  const customRef = useRef<CustomFoodDia[]>([]);
 
   // ── Carga: sesión + suscripción + objetivo de calorías + día guardado ──────
   useEffect(() => {
@@ -126,6 +149,24 @@ export default function MetodoNutricionDia() {
           if (cal?.hecho && typeof cal.kcal === "number") setKcalObjetivo(cal.kcal);
           const dia = dataRef.current?.dia;
           if (dia && typeof dia === "object") {
+            // Alimentos creados por la usuaria.
+            if (Array.isArray(dia.customFoods)) {
+              const cf: CustomFoodDia[] = dia.customFoods
+                .filter((c: any) => c && typeof c.key === "string" && typeof c.nombre === "string")
+                .map((c: any) => ({
+                  key: c.key, grupo: GRUPOS_DIA.some((g) => g.key === c.grupo) ? c.grupo : "capricho",
+                  nombre: String(c.nombre), kcalRacion: Number(c.kcalRacion) || 0,
+                  porcionG: Number(c.porcionG) > 0 ? Number(c.porcionG) : 100,
+                  aOjo: typeof c.aOjo === "string" ? c.aOjo : "a tu medida",
+                  macros: {
+                    carbohidrato: Number(c.macros?.carbohidrato) || 0,
+                    proteina: Number(c.macros?.proteina) || 0,
+                    grasa: Number(c.macros?.grasa) || 0,
+                  },
+                }));
+              cf.forEach((c) => { const n = Number(c.key.replace("custom-", "")); if (n >= CUSTOM_SEQ) CUSTOM_SEQ = n + 1; });
+              setCustomFoods(cf); customRef.current = cf;
+            }
             const n = Number(dia.numComidas);
             if (REPARTO_COMIDAS[n]) {
               setNumComidas(n);
@@ -134,15 +175,13 @@ export default function MetodoNutricionDia() {
               REPARTO_COMIDAS[n].forEach((c) => {
                 const arr = Array.isArray(src[c.key]) ? src[c.key] : [];
                 next[c.key] = arr
-                  .filter((f: any) => f && alimentoDiaByKey(f.key))
+                  .filter((f: any) => f && typeof f.key === "string")
                   .map((f: any) => ({ id: nid(), key: f.key, porciones: Number(f.porciones) > 0 ? Number(f.porciones) : 1 }));
               });
-              setPlaced(next);
+              setPlaced(next); placedRef.current = next;
             }
           }
         } catch { /* sin fila todavía */ }
-        // Precargamos fotos de alimentos + fondos de cada grupo para que ni la
-        // paleta ni el fondo temático se rellenen de golpe.
         await precargarImagenes([
           ...ALIMENTOS_DIA.map((a) => infoAlimento(a.key)?.foto).filter(Boolean).map((f) => encodeURI(f as string)),
           ...GRUPOS_DIA.map((g) => encodeURI(grupoDiaFondo(g.key))),
@@ -159,7 +198,43 @@ export default function MetodoNutricionDia() {
 
   const comidasDef = numComidas ? REPARTO_COMIDAS[numComidas] : [];
 
-  // ── Guardado (debounce) ────────────────────────────────────────────────────
+  // ── Resolver: alimento (biblioteca o creado) → forma unificada ──────────────
+  const resolveFood = useCallback((key: string): FoodInfo | undefined => {
+    const cf = customFoods.find((c) => c.key === key);
+    if (cf) return {
+      key, nombre: cf.nombre, emoji: "🍽️", grupo: cf.grupo, kcalRacion: cf.kcalRacion,
+      porcionG: cf.porcionG, aOjo: cf.aOjo, macros: cf.macros, custom: true,
+    };
+    const ad = alimentoDiaByKey(key);
+    const info = infoAlimento(key);
+    if (!ad || !info) return undefined;
+    return {
+      key, nombre: info.nombre, emoji: info.emoji, foto: info.foto, grupo: ad.grupo,
+      kcalRacion: (ad.kcal100 * ad.porcionG) / 100, porcionG: ad.porcionG, aOjo: ad.aOjo,
+      macros: info.macros, moleculas: info.moleculas, descripcion: info.descripcion ?? info.resumen,
+    };
+  }, [customFoods]);
+
+  const kcalDe = useCallback((f: PlacedFood) => {
+    const r = resolveFood(f.key); return r ? r.kcalRacion * f.porciones : 0;
+  }, [resolveFood]);
+  const gramosDe = useCallback((f: PlacedFood) => {
+    const r = resolveFood(f.key); return r ? Math.round(r.porcionG * f.porciones) : 0;
+  }, [resolveFood]);
+  const macrosComida = useCallback((foods: PlacedFood[]) => {
+    const acc = { carbohidrato: 0, proteina: 0, grasa: 0 };
+    foods.forEach((f) => {
+      const r = resolveFood(f.key); const kcal = kcalDe(f);
+      if (!r || kcal <= 0) return;
+      acc.carbohidrato += kcal * r.macros.carbohidrato / 100;
+      acc.proteina += kcal * r.macros.proteina / 100;
+      acc.grasa += kcal * r.macros.grasa / 100;
+    });
+    const s = acc.carbohidrato + acc.proteina + acc.grasa;
+    return s > 0 ? { c: acc.carbohidrato / s, p: acc.proteina / s, g: acc.grasa / s } : null;
+  }, [resolveFood, kcalDe]);
+
+  // ── Guardado (día + comidas + alimentos creados) ────────────────────────────
   const guardar = useCallback((placedArg: Placed, numArg: number | null) => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
@@ -168,7 +243,7 @@ export default function MetodoNutricionDia() {
     Object.entries(placedArg).forEach(([k, arr]) => {
       comidas[k] = arr.map((f) => ({ key: f.key, porciones: f.porciones }));
     });
-    const data = { ...dataRef.current, dia: { numComidas: numArg, comidas } };
+    const data = { ...dataRef.current, dia: { numComidas: numArg, comidas, customFoods: customRef.current } };
     dataRef.current = data;
     axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
       { headers: { Authorization: `Bearer ${token}` } }).catch(() => { /* reintenta al próximo cambio */ });
@@ -177,22 +252,47 @@ export default function MetodoNutricionDia() {
   const setPlacedYGuardar = useCallback((updater: (prev: Placed) => Placed) => {
     setPlaced((prev) => {
       const next = updater(prev);
+      placedRef.current = next;
       guardar(next, numComidas);
       return next;
     });
   }, [guardar, numComidas]);
 
-  // Elige (o cambia) el nº de comidas: conserva lo que encaje en las comidas nuevas.
   const elegirComidas = useCallback((n: number) => {
     setNumComidas(n);
     setPlaced((prev) => {
       const next: Placed = {};
       REPARTO_COMIDAS[n].forEach((c) => { next[c.key] = prev[c.key] ?? []; });
+      placedRef.current = next;
       guardar(next, n);
       return next;
     });
     setModalOpen(false);
   }, [guardar]);
+
+  // ── Crear alimento ──────────────────────────────────────────────────────────
+  const abrirCrear = useCallback(() => {
+    setFNombre(""); setFKcal(""); setFGramos(""); setFAOjo(""); setFCarb(""); setFProt(""); setFGrasa("");
+    setCrearOpen(true);
+  }, []);
+  const crearAlimento = useCallback(() => {
+    const kcal = Number(fKcal);
+    if (!fNombre.trim() || !kcal || kcal <= 0) return;
+    // Reparto de macros: si no se rellena nada, queda vacío (sin barra).
+    const c = Number(fCarb) || 0, p = Number(fProt) || 0, g = Number(fGrasa) || 0;
+    const suma = c + p + g;
+    const macros = suma > 0
+      ? { carbohidrato: Math.round(c / suma * 100), proteina: Math.round(p / suma * 100), grasa: Math.round(g / suma * 100) }
+      : { carbohidrato: 0, proteina: 0, grasa: 0 };
+    const cf: CustomFoodDia = {
+      key: `custom-${CUSTOM_SEQ++}`, grupo: grupoSel, nombre: fNombre.trim(),
+      kcalRacion: Math.round(kcal), porcionG: Number(fGramos) > 0 ? Number(fGramos) : 100,
+      aOjo: fAOjo.trim() || "a tu medida", macros,
+    };
+    setCustomFoods((prev) => { const next = [...prev, cf]; customRef.current = next; return next; });
+    guardar(placedRef.current, numComidas);
+    setCrearOpen(false);
+  }, [fNombre, fKcal, fGramos, fAOjo, fCarb, fProt, fGrasa, grupoSel, guardar, numComidas]);
 
   // ── Añadir / ajustar / quitar alimentos ────────────────────────────────────
   const addFood = useCallback((mealKey: string, foodKey: string) => {
@@ -229,7 +329,6 @@ export default function MetodoNutricionDia() {
     }
     return null;
   };
-
   const onFoodPointerDown = (foodKey: string) => (e: React.PointerEvent) => {
     e.preventDefault();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -254,31 +353,72 @@ export default function MetodoNutricionDia() {
   // ── Totales ────────────────────────────────────────────────────────────────
   const totalDia = useMemo(
     () => Object.values(placed).flat().reduce((s, f) => s + kcalDe(f), 0),
-    [placed],
+    [placed, kcalDe],
   );
   const kcalComida = (mealKey: string) => (placed[mealKey] ?? []).reduce((s, f) => s + kcalDe(f), 0);
   const targetComida = (pct: number) => Math.round((kcalObjetivo ?? 0) * pct / 100);
 
   const alimentosGrupo = ALIMENTOS_DIA.filter((a) => a.grupo === grupoSel);
+  const customGrupo = customFoods.filter((c) => c.grupo === grupoSel);
+  const grupoColor = grupoDiaColor(grupoSel);
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <NutricionLoading />;
 
   const bloqueada = !kcalObjetivo;
+  const infoFood = infoKey ? resolveFood(infoKey) : undefined;
+
+  // Tarjeta de un alimento en la paleta (arrastrable + ojo de ficha).
+  const ChooserCard = (info: FoodInfo) => {
+    const arrastrando = drag?.key === info.key;
+    return (
+      <Flex key={info.key} direction="column" align="center" gap={1.5} borderRadius="xl" p={3} position="relative"
+            bg="#ffffff88" border={`1px solid ${grupoColor}55`}
+            opacity={arrastrando ? 0.4 : 1} cursor="grab"
+            onPointerDown={onFoodPointerDown(info.key)}
+            onPointerMove={onFoodPointerMove}
+            onPointerUp={onFoodPointerUp}
+            sx={{ touchAction: "none", userSelect: "none", WebkitTapHighlightColor: "transparent" }}
+            _hover={{ borderColor: grupoColor, bg: "#ffffffcc", transform: "translateY(-2px)" }}
+            transition="all 0.15s ease">
+        {/* Ojo → ficha del alimento */}
+        <Box as="button" position="absolute" top="6px" right="6px" zIndex={2}
+             onPointerDown={(e: React.PointerEvent) => e.stopPropagation()}
+             onClick={(e: React.MouseEvent) => { e.stopPropagation(); setInfoKey(info.key); }}
+             w="26px" h="26px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
+             bg="#ffffffcc" border={`1px solid ${nutricionTxt}33`} color={nutricionTxt} cursor="pointer"
+             _hover={{ bg: "#ffffff", borderColor: nutricionTxt }} title="Ver ficha">
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
+            <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+          </Box>
+        </Box>
+        <AlimentoFoto info={info} size={{ base: "56px", md: "68px" }} />
+        <Text color={nutricionTxt} fontSize="sm" fontWeight={700} textAlign="center" noOfLines={1}>
+          {info.nombre}{info.custom && " ✎"}
+        </Text>
+        <Text color={`${nutricionTxt}99`} fontSize="2xs" textAlign="center" lineHeight="1.25" noOfLines={2}>
+          {info.porcionG} g · {info.aOjo}
+        </Text>
+        <Text color={grupoColor} fontSize="2xs" fontWeight={700}>
+          {Math.round(info.kcalRacion)} kcal
+        </Text>
+      </Flex>
+    );
+  };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif"
          sx={{ touchAction: drag ? "none" : undefined }}>
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1100px" gap={6}>
+      <Flex flex="1" justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" maxW="1200px" gap={6}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title="Diseña tu día"
               compact
-              maxW="1100px"
+              maxW="1200px"
               bgColor={`${nutricionBg}dd`}
               color={nutricionTxt}
               nom={nutricionNom}
@@ -314,183 +454,176 @@ export default function MetodoNutricionDia() {
             </Reveal>
           ) : (
             <>
-              {/* Intro + resumen del objetivo */}
+              {/* Intro compacta */}
               <Reveal direction="up" distance={18} delay={0.08} duration={0.6} w="100%" display="flex" justifyContent="center">
-                <Flex direction="column" align="center" gap={2} maxW="720px">
-                  <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                        textAlign="center" lineHeight="1.8">
-                    Aprender a comer no es contar: es saber <b>cuánto</b> y <b>cómo</b>. Reparte tus{" "}
-                    <Text as="span" color={nutricionTxt} fontWeight={700}>{kcalObjetivo} kcal</Text>{" "}
-                    del día entre tus comidas y arrastra alimentos a cada una. Fíjate en la ración y en cómo medirla a ojo.
-                  </Text>
-                  <Flex gap={3} wrap="wrap" justify="center" mt={1}>
-                    <Box as="button" onClick={() => setModalOpen(true)}
-                         px={4} py={2} borderRadius="full" fontSize="sm" fontWeight={600}
-                         color="white" bg="rgba(255,255,255,0.08)" border={`1px solid ${nutricionTxt}66`}
-                         cursor="pointer" _hover={{ bg: "rgba(255,255,255,0.16)" }}>
-                      Cambiar nº de comidas ({numComidas})
+                <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                      textAlign="center" lineHeight="1.8" maxW="760px">
+                  Aprender a comer no es contar: es saber <b>cuánto</b> y <b>cómo</b>. Reparte tus{" "}
+                  <Text as="span" color={nutricionTxt} fontWeight={700}>{kcalObjetivo} kcal</Text>{" "}
+                  entre tus comidas y arrastra alimentos a cada una. Fíjate en la ración y en cómo medirla a ojo.
+                </Text>
+              </Reveal>
+
+              {/* ── DOS COLUMNAS ── */}
+              <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
+                <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
+
+                  {/* ── IZQUIERDA · tus comidas (scroll propio) ── */}
+                  <Flex direction="column" flex={{ md: "1" }} minW={0} gap={3}>
+                    {/* Total del día + cambiar nº de comidas */}
+                    <Flex justify="space-between" align="center" gap={3} wrap="wrap"
+                          borderRadius="xl" px={4} py={3} bg={`${nutricionBg}88`} border={`1px solid ${nutricionTxt}44`}>
+                      <Flex align="baseline" gap={2} wrap="wrap">
+                        <Text color={`${nutricionTxt}cc`} fontSize="sm">Tu día suma</Text>
+                        <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1">
+                          {Math.round(totalDia)}
+                        </Text>
+                        <Text color={`${nutricionTxt}aa`} fontSize="sm">de {kcalObjetivo} kcal</Text>
+                        <Text color={nutricionTxt} fontSize="xs" fontStyle="italic">
+                          ({totalDia > kcalObjetivo ? "+" : ""}{Math.round(totalDia - kcalObjetivo)})
+                        </Text>
+                      </Flex>
+                      <Box as="button" onClick={() => setModalOpen(true)}
+                           px={3.5} py={1.5} borderRadius="full" fontSize="xs" fontWeight={600}
+                           color={nutricionTxt} bg={`${nutricionTxt}12`} border={`1px solid ${nutricionTxt}55`}
+                           cursor="pointer" whiteSpace="nowrap" _hover={{ bg: `${nutricionTxt}22` }}>
+                        Comidas: {numComidas} ⚙
+                      </Box>
+                    </Flex>
+
+                    {/* Lista de comidas con scroll */}
+                    <Flex direction="column" gap={4} overflowY={{ base: "visible", md: "auto" }}
+                          maxH={{ base: "none", md: "62vh" }} pr={{ md: 1.5 }} sx={scrollSx}>
+                      {comidasDef.map((c) => {
+                        const foods = placed[c.key] ?? [];
+                        const kcal = Math.round(kcalComida(c.key));
+                        const meta = targetComida(c.pct);
+                        const ratio = meta > 0 ? kcal / meta : 0;
+                        const estado = ratio < 0.85 ? `${nutricionTxt}` : ratio <= 1.1 ? "#4f9a52" : "#c98a2e";
+                        const activo = overMeal === c.key;
+                        return (
+                          <Box key={c.key} ref={(el) => { mealRefs.current[c.key] = el; }}
+                               borderRadius="2xl" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }}
+                               bg={`${nutricionBg}${activo ? "e8" : "cc"}`}
+                               border={`2px solid ${activo ? nutricionTxt : `${nutricionTxt}33`}`}
+                               transition="all 0.15s ease"
+                               style={{ boxShadow: activo ? `0 0 22px ${nutricionTxt}55` : `0 0 14px ${nutricionTxt}14` }}>
+                            <Flex justify="space-between" align="baseline">
+                              <Text color={nutricionTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={700}>{c.label}</Text>
+                              <Text color={`${nutricionTxt}aa`} fontSize="xs" fontWeight={600}>{c.pct}%</Text>
+                            </Flex>
+                            <Flex align="baseline" gap={1.5} mt={0.5}>
+                              <Text color={estado} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.1">{kcal}</Text>
+                              <Text color={`${nutricionTxt}99`} fontSize="sm">/ {meta} kcal</Text>
+                            </Flex>
+                            <Box h="6px" borderRadius="full" bg={`${nutricionTxt}1a`} overflow="hidden" mt={2}>
+                              <Box h="100%" bg={estado} transition="width 0.25s ease" w={`${Math.min(100, ratio * 100)}%`} />
+                            </Box>
+                            <MacroBarra seg={macrosComida(foods)} />
+
+                            <Flex direction="column" gap={2} mt={4} minH="52px">
+                              {foods.length === 0 && (
+                                <Text color={`${nutricionTxt}77`} fontSize="sm" fontStyle="italic" textAlign="center" py={3}>
+                                  Arrastra alimentos aquí
+                                </Text>
+                              )}
+                              {foods.map((f) => {
+                                const r = resolveFood(f.key);
+                                if (!r) return null;
+                                return (
+                                  <Flex key={f.id} align="center" gap={2.5} borderRadius="lg" p={2}
+                                        bg="#ffffff88" border={`1px solid ${nutricionTxt}1a`}>
+                                    <AlimentoFoto info={r} size={{ base: "34px", md: "38px" }} />
+                                    <Box flex="1" minW={0}>
+                                      <Text color={nutricionTxt} fontSize="sm" fontWeight={600} noOfLines={1}>
+                                        {r.nombre}
+                                        {f.porciones !== 1 && <Text as="span" color={`${nutricionTxt}aa`}> ×{f.porciones}</Text>}
+                                      </Text>
+                                      <Text color={`${nutricionTxt}88`} fontSize="2xs" noOfLines={1}>
+                                        {gramosDe(f)} g · {r.aOjo}
+                                      </Text>
+                                    </Box>
+                                    <Text color={`${nutricionTxt}cc`} fontSize="xs" fontWeight={600} whiteSpace="nowrap">
+                                      {Math.round(kcalDe(f))} kcal
+                                    </Text>
+                                    <Flex align="center" gap={0.5}>
+                                      <MiniBtn onClick={() => cambiaPorciones(c.key, f.id, -0.5)}>−</MiniBtn>
+                                      <MiniBtn onClick={() => cambiaPorciones(c.key, f.id, +0.5)}>+</MiniBtn>
+                                      <MiniBtn onClick={() => quitar(c.key, f.id)} danger>×</MiniBtn>
+                                    </Flex>
+                                  </Flex>
+                                );
+                              })}
+                            </Flex>
+                          </Box>
+                        );
+                      })}
+                    </Flex>
+                  </Flex>
+
+                  {/* ── DERECHA · elegir alimento (más grande, scroll propio, 2 por fila) ── */}
+                  <Flex direction="column" flex={{ md: "1.25" }} minW={0} position="relative" overflow="hidden"
+                        borderRadius="2xl" border={`1px solid ${nutricionTxt}33`}
+                        style={{ boxShadow: `0 0 16px ${nutricionTxt}16` }}>
+                    {/* Fondo temático según el grupo elegido */}
+                    <Box position="absolute" inset={0} backgroundImage={`url("${encodeURI(grupoDiaFondo(grupoSel))}")`}
+                         backgroundSize="cover" backgroundPosition="center" transition="background-image 0.3s ease" />
+                    <Box position="absolute" inset={0} bg={`${nutricionBg}d8`} />
+
+                    <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} pt={{ base: 5, md: 6 }} pb={2}>
+                      <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={3}>
+                        Elige buenos alimentos · arrástralos a cada comida
+                      </Text>
+                      <Flex gap={2} wrap="wrap">
+                        {GRUPOS_DIA.map((g) => {
+                          const on = grupoSel === g.key;
+                          return (
+                            <Box key={g.key} as="button" onClick={() => setGrupoSel(g.key)}
+                                 px={3.5} py={1.5} borderRadius="full" fontSize="sm" fontWeight={600} whiteSpace="nowrap"
+                                 color={on ? nutricionBg : nutricionTxt} bg={on ? g.color : `${nutricionTxt}0f`}
+                                 border={`1px solid ${on ? g.color : `${nutricionTxt}33`}`} cursor="pointer"
+                                 transition="all 0.15s ease" _hover={on ? undefined : { bg: `${nutricionTxt}1f` }}>
+                              {g.label}
+                            </Box>
+                          );
+                        })}
+                      </Flex>
+                    </Box>
+
+                    {/* Rejilla de alimentos (2 por fila) con scroll propio */}
+                    <Box position="relative" zIndex={1} overflowY={{ base: "visible", md: "auto" }}
+                         maxH={{ base: "none", md: "56vh" }} px={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} pt={2} sx={scrollSx}>
+                      <SimpleGrid columns={2} spacing={{ base: 3, md: 4 }}>
+                        {/* Crear tu propio alimento (siempre el primero del grupo) */}
+                        <Flex direction="column" align="center" justify="center" gap={2} borderRadius="xl" p={3}
+                              minH="150px" bg="#ffffffcc" border={`2px dashed ${grupoColor}`} cursor="pointer"
+                              onClick={abrirCrear} transition="all 0.15s ease"
+                              _hover={{ bg: "#ffffff", transform: "translateY(-2px)" }}>
+                          <Flex w={{ base: "48px", md: "56px" }} h={{ base: "48px", md: "56px" }} borderRadius="full"
+                                align="center" justify="center" bg={`${grupoColor}22`} color={grupoColor}
+                                fontSize="3xl" fontWeight={700} lineHeight="1">+</Flex>
+                          <Text color={nutricionTxt} fontSize="sm" fontWeight={700} textAlign="center" lineHeight="1.2">
+                            Crea tu alimento
+                          </Text>
+                          <Text color={`${nutricionTxt}99`} fontSize="2xs" textAlign="center">
+                            el tuyo, las veces que quieras
+                          </Text>
+                        </Flex>
+
+                        {/* Alimentos creados por la usuaria (de este grupo) */}
+                        {customGrupo.map((c) => { const r = resolveFood(c.key); return r ? ChooserCard(r) : null; })}
+
+                        {/* Alimentos de la biblioteca */}
+                        {alimentosGrupo.map((a) => { const r = resolveFood(a.key); return r ? ChooserCard(r) : null; })}
+                      </SimpleGrid>
                     </Box>
                   </Flex>
                 </Flex>
               </Reveal>
 
-              {/* ── COMIDAS (zonas de drop) ── */}
-              <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
-                <SimpleGrid columns={{ base: 1, md: numComidas && numComidas >= 4 ? 3 : Math.min(3, numComidas ?? 3) }}
-                            spacing={{ base: 4, md: 5 }} w="100%">
-                  {comidasDef.map((c) => {
-                    const foods = placed[c.key] ?? [];
-                    const kcal = Math.round(kcalComida(c.key));
-                    const meta = targetComida(c.pct);
-                    const ratio = meta > 0 ? kcal / meta : 0;
-                    const estado = ratio < 0.85 ? nutricionTxt : ratio <= 1.1 ? "#7ac77a" : "#e0a03c";
-                    const activo = overMeal === c.key;
-                    return (
-                      <Box key={c.key} ref={(el) => { mealRefs.current[c.key] = el; }}
-                           borderRadius="2xl" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }}
-                           bg={`${nutricionBg}${activo ? "88" : "55"}`}
-                           border={`2px solid ${activo ? nutricionTxt : `${nutricionTxt}44`}`}
-                           transition="all 0.15s ease"
-                           style={{ boxShadow: activo ? `0 0 22px ${nutricionTxt}66` : `inset 0 0 20px rgba(0,0,0,0.18)` }}>
-                        <Flex justify="space-between" align="baseline">
-                          <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
-                                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>{c.label}</Text>
-                          <Text color={`${nutricionTxt}cc`} fontSize="xs" fontWeight={600}>{c.pct}%</Text>
-                        </Flex>
-                        <Flex align="baseline" gap={1.5} mt={0.5}>
-                          <Text color={estado} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.1"
-                                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>{kcal}</Text>
-                          <Text color="rgba(255,255,255,0.65)" fontSize="sm">/ {meta} kcal</Text>
-                        </Flex>
-                        {/* barra de progreso hacia la meta */}
-                        <Box h="6px" borderRadius="full" bg="rgba(0,0,0,0.28)" overflow="hidden" mt={2}>
-                          <Box h="100%" bg={estado} transition="width 0.25s ease"
-                               w={`${Math.min(100, ratio * 100)}%`} />
-                        </Box>
-                        <MacroBarra foods={foods} />
-
-                        {/* alimentos de la comida */}
-                        <Flex direction="column" gap={2} mt={4} minH="60px">
-                          {foods.length === 0 && (
-                            <Text color="rgba(255,255,255,0.45)" fontSize="sm" fontStyle="italic" textAlign="center" py={4}>
-                              Arrastra alimentos aquí
-                            </Text>
-                          )}
-                          {foods.map((f) => {
-                            const a = alimentoDiaByKey(f.key)!;
-                            const info = infoAlimento(f.key);
-                            return (
-                              <Flex key={f.id} align="center" gap={2.5} borderRadius="lg" p={2}
-                                    bg="rgba(255,255,255,0.06)" border="1px solid rgba(255,255,255,0.1)">
-                                <AlimentoFoto foodKey={f.key} size={{ base: "34px", md: "38px" }} />
-                                <Box flex="1" minW={0}>
-                                  <Text color="white" fontSize="sm" fontWeight={600} noOfLines={1}>
-                                    {info?.nombre ?? f.key}
-                                    {f.porciones !== 1 && <Text as="span" color={nutricionTxt}> ×{f.porciones}</Text>}
-                                  </Text>
-                                  <Text color="rgba(255,255,255,0.6)" fontSize="2xs" noOfLines={1}>
-                                    {gramosDe(f)} g · {a.aOjo}
-                                  </Text>
-                                </Box>
-                                <Text color="rgba(255,255,255,0.85)" fontSize="xs" fontWeight={600} whiteSpace="nowrap">
-                                  {Math.round(kcalDe(f))} kcal
-                                </Text>
-                                <Flex align="center" gap={0.5}>
-                                  <MiniBtn onClick={() => cambiaPorciones(c.key, f.id, -0.5)}>−</MiniBtn>
-                                  <MiniBtn onClick={() => cambiaPorciones(c.key, f.id, +0.5)}>+</MiniBtn>
-                                  <MiniBtn onClick={() => quitar(c.key, f.id)} danger>×</MiniBtn>
-                                </Flex>
-                              </Flex>
-                            );
-                          })}
-                        </Flex>
-                      </Box>
-                    );
-                  })}
-                </SimpleGrid>
-              </Reveal>
-
-              {/* ── TOTAL DEL DÍA ── */}
-              <Reveal direction="up" distance={16} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
-                <Flex w="100%" maxW="720px" justify="center" align="baseline" gap={2.5} wrap="wrap"
-                      borderRadius="xl" px={5} py={4} bg={`${nutricionBg}66`} border={`1px solid ${nutricionTxt}55`}>
-                  <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }}>Tu día suma</Text>
-                  <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1"
-                        style={{ textShadow: `0 0 18px ${nutricionTxt}55` }}>{Math.round(totalDia)}</Text>
-                  <Text color="rgba(255,255,255,0.7)" fontSize={{ base: "sm", md: "md" }}>de {kcalObjetivo} kcal</Text>
-                  <Text color={nutricionTxt} fontSize="sm" fontStyle="italic">
-                    ({totalDia > kcalObjetivo ? "+" : ""}{Math.round(totalDia - kcalObjetivo)})
-                  </Text>
-                </Flex>
-              </Reveal>
-
-              {/* ── PALETA DE ALIMENTOS (arrastrables) ── */}
-              <Reveal direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
-                <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
-                     border={`1px solid ${nutricionTxt}44`}
-                     style={{ boxShadow: `inset 0 0 26px rgba(0,0,0,0.2)` }}>
-                  {/* Fondo temático según el grupo elegido (platoverduras, platofruta…) */}
-                  <Box position="absolute" inset={0} backgroundImage={`url("${encodeURI(grupoDiaFondo(grupoSel))}")`}
-                       backgroundSize="cover" backgroundPosition="center" transition="background-image 0.3s ease" />
-                  <Box position="absolute" inset={0} bg={`${nutricionBg}cc`} />
-                  <Box position="relative" zIndex={1} px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }}>
-                  <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em"
-                        textTransform="uppercase" mb={3}
-                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-                    Elige buenos alimentos · arrástralos a cada comida
-                  </Text>
-                  {/* tabs de grupos */}
-                  <Flex gap={2} wrap="wrap" mb={4}>
-                    {GRUPOS_DIA.map((g) => {
-                      const on = grupoSel === g.key;
-                      return (
-                        <Box key={g.key} as="button" onClick={() => setGrupoSel(g.key)}
-                             px={3.5} py={1.5} borderRadius="full" fontSize="sm" fontWeight={600} whiteSpace="nowrap"
-                             color={on ? nutricionBg : "white"} bg={on ? g.color : "rgba(255,255,255,0.06)"}
-                             border={`1px solid ${on ? g.color : `${g.color}66`}`} cursor="pointer"
-                             transition="all 0.15s ease" _hover={on ? undefined : { bg: "rgba(255,255,255,0.14)" }}
-                             style={{ textShadow: on ? "none" : "0 1px 4px rgba(0,0,0,0.5)" }}>
-                          {g.label}
-                        </Box>
-                      );
-                    })}
-                  </Flex>
-                  {/* alimentos del grupo */}
-                  <SimpleGrid columns={{ base: 2, sm: 3, md: 4 }} spacing={{ base: 3, md: 4 }}>
-                    {alimentosGrupo.map((a) => {
-                      const info = infoAlimento(a.key);
-                      const arrastrando = drag?.key === a.key;
-                      return (
-                        <Flex key={a.key} direction="column" align="center" gap={1} borderRadius="xl" p={2.5}
-                              bg="rgba(255,255,255,0.05)" border={`1px solid ${grupoDiaColor(a.grupo)}44`}
-                              opacity={arrastrando ? 0.4 : 1} cursor="grab"
-                              onPointerDown={onFoodPointerDown(a.key)}
-                              onPointerMove={onFoodPointerMove}
-                              onPointerUp={onFoodPointerUp}
-                              sx={{ touchAction: "none", userSelect: "none", WebkitTapHighlightColor: "transparent" }}
-                              _hover={{ borderColor: grupoDiaColor(a.grupo), bg: "rgba(255,255,255,0.1)" }}
-                              transition="border-color 0.15s ease, background 0.15s ease">
-                          <AlimentoFoto foodKey={a.key} size={{ base: "48px", md: "56px" }} />
-                          <Text color="white" fontSize="sm" fontWeight={600} textAlign="center" noOfLines={1}>
-                            {info?.nombre ?? a.key}
-                          </Text>
-                          <Text color="rgba(255,255,255,0.6)" fontSize="2xs" textAlign="center" lineHeight="1.25" noOfLines={2}>
-                            {a.porcionG} g · {a.aOjo}
-                          </Text>
-                          <Text color={grupoDiaColor(a.grupo)} fontSize="2xs" fontWeight={700}>
-                            {Math.round(a.kcal100 * a.porcionG / 100)} kcal
-                          </Text>
-                        </Flex>
-                      );
-                    })}
-                  </SimpleGrid>
-                  </Box>
-                </Box>
-              </Reveal>
-
-              {/* Nota educativa: medir a ojo */}
+              {/* Nota educativa */}
               <Reveal direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
-                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="700px" lineHeight="1.7">
+                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="760px" lineHeight="1.7">
                   Tu mano es tu báscula: un puño ≈ una ración de fruta o cereal cocido · la palma ≈ tu proteína ·
                   el pulgar ≈ una cucharada de grasa · dos manos ahuecadas ≈ tus verduras. Aprende a mirar el plato,
                   no la báscula. Esto es orientativo y educativo; no sustituye a un profesional.
@@ -506,8 +639,150 @@ export default function MetodoNutricionDia() {
         <Box position="fixed" left={`${drag.x}px`} top={`${drag.y}px`} zIndex={4000} pointerEvents="none"
              transform="translate(-50%, -50%) scale(1.1)"
              style={{ filter: `drop-shadow(0 6px 14px rgba(0,0,0,0.5))` }}>
-          <AlimentoFoto foodKey={drag.key} size={{ base: "56px", md: "64px" }} />
+          <AlimentoFoto info={resolveFood(drag.key)} size={{ base: "56px", md: "64px" }} />
         </Box>
+      )}
+
+      {/* ── POPUP: ficha del alimento (ojo) ── */}
+      {infoFood && (
+        <Flex position="fixed" inset={0} zIndex={5000} align="center" justify="center" px={4}
+              bg="rgba(0,0,0,0.55)" onClick={() => setInfoKey(null)}>
+          <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="480px" borderRadius="2xl" overflow="hidden"
+               bg={nutricionBg} border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.5)` }}>
+            <Box px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+              <Flex justify="flex-end">
+                <Box as="button" onClick={() => setInfoKey(null)} w="30px" h="30px" borderRadius="full"
+                     display="flex" alignItems="center" justifyContent="center" fontSize="lg" lineHeight="1"
+                     color={nutricionTxt} bg={`${nutricionTxt}12`} _hover={{ bg: `${nutricionTxt}22` }} cursor="pointer">×</Box>
+              </Flex>
+              <Flex align="center" gap={4} mt={-1}>
+                <AlimentoFoto info={infoFood} size={{ base: "62px", md: "72px" }} />
+                <Box minW={0}>
+                  <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.15">
+                    {infoFood.nombre}
+                  </Text>
+                  <Text color={`${nutricionTxt}aa`} fontSize="sm">
+                    {infoFood.porcionG} g · {Math.round(infoFood.kcalRacion)} kcal por ración
+                  </Text>
+                </Box>
+              </Flex>
+
+              <Text color={nutricionTxt} fontSize="sm" mt={4} lineHeight="1.6">
+                <b>A ojo:</b> {infoFood.aOjo}.
+              </Text>
+              {infoFood.descripcion && (
+                <Text color={`${nutricionTxt}cc`} fontSize="sm" mt={2} lineHeight="1.7" fontStyle="italic">
+                  {infoFood.descripcion}
+                </Text>
+              )}
+
+              {/* Macros */}
+              {(infoFood.macros.carbohidrato + infoFood.macros.proteina + infoFood.macros.grasa) > 0 && (
+                <Box mt={4}>
+                  <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase" mb={2}>
+                    De qué está hecho
+                  </Text>
+                  <Flex h="10px" borderRadius="full" overflow="hidden" bg={`${nutricionTxt}1a`}>
+                    <Box w={`${infoFood.macros.carbohidrato}%`} bg={MACRO_COLOR.carbohidrato} />
+                    <Box w={`${infoFood.macros.proteina}%`} bg={MACRO_COLOR.proteina} />
+                    <Box w={`${infoFood.macros.grasa}%`} bg={MACRO_COLOR.grasa} />
+                  </Flex>
+                  <Flex gap={4} mt={2} wrap="wrap">
+                    {(["carbohidrato", "proteina", "grasa"] as const).map((m) => (
+                      <Flex key={m} align="center" gap={1.5}>
+                        <Box w="10px" h="10px" borderRadius="full" bg={MACRO_COLOR[m]} />
+                        <Text color={`${nutricionTxt}cc`} fontSize="2xs" fontWeight={600}>
+                          {MACRO_LABEL[m]} {infoFood.macros[m]}%
+                        </Text>
+                      </Flex>
+                    ))}
+                  </Flex>
+                </Box>
+              )}
+
+              {/* Moléculas (composición) — solo alimentos de la biblioteca */}
+              {infoFood.moleculas && infoFood.moleculas.length > 0 && (
+                <Box mt={4}>
+                  <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase" mb={2}>
+                    Sus moléculas
+                  </Text>
+                  <Flex gap={1.5} wrap="wrap">
+                    {infoFood.moleculas.map((m) => {
+                      const key = typeof m === "string" ? m : m.key;
+                      const pct = typeof m === "string" ? undefined : m.pct;
+                      const nombre = MOLECULAS[key]?.nombre ?? key;
+                      return (
+                        <Box key={key} px={2.5} py={1} borderRadius="full" bg={`${nutricionTxt}12`}
+                             border={`1px solid ${nutricionTxt}22`}>
+                          <Text color={nutricionTxt} fontSize="2xs" fontWeight={600}>
+                            {nombre}{pct != null && ` ${pct}%`}
+                          </Text>
+                        </Box>
+                      );
+                    })}
+                  </Flex>
+                </Box>
+              )}
+
+              {infoFood.custom && (
+                <Text color={`${nutricionTxt}99`} fontSize="2xs" fontStyle="italic" mt={4}>
+                  Este alimento lo has creado tú.
+                </Text>
+              )}
+            </Box>
+          </Box>
+        </Flex>
+      )}
+
+      {/* ── POPUP: crear tu alimento ── */}
+      {crearOpen && (
+        <Flex position="fixed" inset={0} zIndex={5200} align="center" justify="center" px={4}
+              bg="rgba(0,0,0,0.55)" onClick={() => setCrearOpen(false)}>
+          <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="480px" borderRadius="2xl"
+               px={{ base: 5, md: 7 }} py={{ base: 6, md: 7 }} bg={nutricionBg}
+               border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.5)` }}>
+            <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">
+              Crea tu alimento
+            </Text>
+            <Text color={`${nutricionTxt}aa`} fontSize="sm" textAlign="center" mt={1} mb={5}>
+              Se añadirá al grupo «{GRUPOS_DIA.find((g) => g.key === grupoSel)?.label}».
+            </Text>
+
+            <Flex direction="column" gap={3.5}>
+              <CampoCrear label="Nombre" value={fNombre} onChange={setFNombre} placeholder="p. ej. mi bocadillo" />
+              <SimpleGrid columns={2} spacing={3}>
+                <CampoCrear label="kcal por ración" value={fKcal} onChange={setFKcal} numeric placeholder="p. ej. 320" />
+                <CampoCrear label="Ración (g)" value={fGramos} onChange={setFGramos} numeric placeholder="100" />
+              </SimpleGrid>
+              <CampoCrear label="Cómo medirla a ojo (opcional)" value={fAOjo} onChange={setFAOjo} placeholder="p. ej. un puño" />
+              <Box>
+                <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.08em" textTransform="uppercase" mb={1.5}>
+                  De qué es (opcional, %)
+                </Text>
+                <SimpleGrid columns={3} spacing={3}>
+                  <CampoCrear label="Carb." value={fCarb} onChange={setFCarb} numeric placeholder="0" />
+                  <CampoCrear label="Proteína" value={fProt} onChange={setFProt} numeric placeholder="0" />
+                  <CampoCrear label="Grasa" value={fGrasa} onChange={setFGrasa} numeric placeholder="0" />
+                </SimpleGrid>
+              </Box>
+            </Flex>
+
+            <Flex gap={3} mt={6} justify="flex-end">
+              <Box as="button" onClick={() => setCrearOpen(false)} px={5} py={2.5} borderRadius="full"
+                   fontSize="sm" fontWeight={600} color={nutricionTxt} bg={`${nutricionTxt}12`}
+                   border={`1px solid ${nutricionTxt}33`} cursor="pointer" _hover={{ bg: `${nutricionTxt}22` }}>
+                Cancelar
+              </Box>
+              <Box as="button" onClick={crearAlimento}
+                   px={6} py={2.5} borderRadius="full" fontSize="sm" fontWeight={700}
+                   color={nutricionBg} bg={nutricionTxt} cursor={fNombre.trim() && Number(fKcal) > 0 ? "pointer" : "not-allowed"}
+                   opacity={fNombre.trim() && Number(fKcal) > 0 ? 1 : 0.5}
+                   _hover={fNombre.trim() && Number(fKcal) > 0 ? { transform: "translateY(-1px)" } : undefined}>
+                Crear alimento
+              </Box>
+            </Flex>
+          </Box>
+        </Flex>
       )}
 
       {/* ── POPUP: ¿cuántas comidas haces al día? ── */}
@@ -515,13 +790,12 @@ export default function MetodoNutricionDia() {
         <Flex position="fixed" inset={0} zIndex={5000} align="center" justify="center" px={4}
               bg="rgba(0,0,0,0.6)" onClick={() => numComidas != null && setModalOpen(false)}>
           <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="560px" borderRadius="2xl"
-               px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} bg="#0a5c5c"
-               border={`1px solid ${nutricionTxt}66`} style={{ boxShadow: `0 0 40px ${nutricionTxt}44` }}>
-            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center"
-                  style={{ textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>
+               px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} bg={nutricionBg}
+               border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.5)` }}>
+            <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">
               ¿Cuántas comidas haces al día?
             </Text>
-            <Text color="rgba(255,255,255,0.75)" fontSize="sm" textAlign="center" mt={2} mb={5} lineHeight="1.6">
+            <Text color={`${nutricionTxt}aa`} fontSize="sm" textAlign="center" mt={2} mb={5} lineHeight="1.6">
               Repartiremos tus {kcalObjetivo} kcal entre esas comidas de forma equilibrada. Puedes cambiarlo cuando quieras.
             </Text>
             <Flex direction="column" gap={3}>
@@ -530,17 +804,17 @@ export default function MetodoNutricionDia() {
                 return (
                   <Box key={n} as="button" onClick={() => elegirComidas(n)}
                        textAlign="left" borderRadius="xl" px={4} py={3.5}
-                       bg={on ? `${nutricionTxt}` : "rgba(255,255,255,0.06)"}
-                       border={`1px solid ${on ? nutricionTxt : `${nutricionTxt}55`}`}
+                       bg={on ? nutricionTxt : `${nutricionTxt}0f`}
+                       border={`1px solid ${on ? nutricionTxt : `${nutricionTxt}44`}`}
                        cursor="pointer" transition="all 0.15s ease"
-                       _hover={on ? undefined : { bg: "rgba(255,255,255,0.14)", borderColor: nutricionTxt }}>
-                    <Text color={on ? nutricionBg : "white"} fontSize="md" fontWeight={700}>
+                       _hover={on ? undefined : { bg: `${nutricionTxt}1f`, borderColor: nutricionTxt }}>
+                    <Text color={on ? nutricionBg : nutricionTxt} fontSize="md" fontWeight={700}>
                       {n} comidas
                     </Text>
                     <Flex gap={2} wrap="wrap" mt={1.5}>
                       {REPARTO_COMIDAS[n].map((c) => (
                         <Text key={c.key} fontSize="2xs" fontWeight={600}
-                              color={on ? nutricionBg : "rgba(255,255,255,0.7)"}>
+                              color={on ? nutricionBg : `${nutricionTxt}aa`}>
                           {c.label} {Math.round(kcalObjetivo * c.pct / 100)} kcal
                         </Text>
                       ))}
@@ -560,15 +834,36 @@ export default function MetodoNutricionDia() {
   );
 }
 
+// Campo del formulario «crea tu alimento».
+function CampoCrear({ label, value, onChange, numeric, placeholder }: {
+  label: string; value: string; onChange: (v: string) => void; numeric?: boolean; placeholder?: string;
+}) {
+  return (
+    <Flex direction="column" gap={1}>
+      <Text color={`${nutricionTxt}cc`} fontSize="xs" fontWeight={600}>{label}</Text>
+      <Input
+        value={value}
+        onChange={(e) => onChange(numeric ? e.target.value.replace(/[^\d]/g, "") : e.target.value)}
+        inputMode={numeric ? "numeric" : undefined}
+        placeholder={placeholder}
+        bg="#ffffffcc" border={`1px solid ${nutricionTxt}33`} color={nutricionTxt} fontWeight={600}
+        _hover={{ borderColor: `${nutricionTxt}66` }}
+        _focusVisible={{ borderColor: nutricionTxt, boxShadow: `0 0 0 1px ${nutricionTxt}` }}
+        _placeholder={{ color: `${nutricionTxt}55` }}
+      />
+    </Flex>
+  );
+}
+
 // Botón minúsculo redondo (± y quitar) en cada alimento de la comida.
 function MiniBtn({ children, onClick, danger }: { children: React.ReactNode; onClick: () => void; danger?: boolean }) {
   return (
     <Box as="button" onClick={onClick} w="24px" h="24px" borderRadius="full" flexShrink={0}
          display="flex" alignItems="center" justifyContent="center" fontSize="md" fontWeight={700} lineHeight="1"
-         color={danger ? "#f0a0a0" : "white"} bg="rgba(255,255,255,0.1)"
-         border={`1px solid ${danger ? "#f0a0a055" : "rgba(255,255,255,0.25)"}`}
+         color={danger ? "#c0554f" : nutricionTxt} bg={`${nutricionTxt}0f`}
+         border={`1px solid ${danger ? "#c0554f55" : `${nutricionTxt}33`}`}
          cursor="pointer" transition="all 0.12s ease"
-         _hover={{ bg: danger ? "#f0a0a033" : "rgba(255,255,255,0.22)" }}
+         _hover={{ bg: danger ? "#c0554f22" : `${nutricionTxt}1f` }}
          sx={{ touchAction: "manipulation", userSelect: "none", WebkitTapHighlightColor: "transparent" }}>
       {children}
     </Box>

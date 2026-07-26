@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
 import { getHistoria } from "../../components/metodo/culturaHistorias";
 import { Reveal } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Página de nivel 1 de una Historia de Cultura: su línea del tiempo de ERAS.
@@ -17,8 +18,10 @@ import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../G
 // /metodo/cultura/historia/:historiaKey). Al pulsar una era se abre su página
 // (/metodo/cultura/historia/:historiaKey/:eraKey) con su mini línea del tiempo.
 
-const INK_SHADOW = `0 1px 3px ${culturaBg}f5, 0 0 8px ${culturaBg}cc, 0 2px 16px ${culturaBg}88`;
 const VOLVER_HISTORIAS = "/metodo/cultura/historias";
+// Nº de fotos que se precargan antes de mostrar la página (la «primera ronda»
+// de círculos que se ven sin usar las flechas). Las demás se cargan al avanzar.
+const PRIMERA_RONDA = 6;
 
 export default function MetodoCulturaHistoria() {
   const navigate = useNavigate();
@@ -39,6 +42,13 @@ export default function MetodoCulturaHistoria() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         // Gate de pago: sin suscripción a Cultura, a la portada (con el popup de pago).
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
+
+        // No mostramos la línea del tiempo hasta que las fotos de la primera
+        // ronda de eras estén cargadas (las de más allá se cargan al usar las
+        // flechas para desplazarse).
+        await precargarImagenes(
+          (historia?.hitos ?? []).slice(0, PRIMERA_RONDA).map((h) => (h.foto ? encodeURI(h.foto) : null)),
+        );
       } catch {
         navigate("/metodo/cultura", { replace: true });
         return;
@@ -49,7 +59,7 @@ export default function MetodoCulturaHistoria() {
   }, [navigate, historia]);
 
   if (loading || !historia) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <CulturaLoading />;
   }
 
   return (
@@ -71,14 +81,6 @@ export default function MetodoCulturaHistoria() {
               mb={0}
               prev={{ label: "← Las Historias", onClick: () => navigate(VOLVER_HISTORIAS) }}
             />
-          </Reveal>
-
-          {/* Introducción breve */}
-          <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color={culturaTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.8" maxW="620px" opacity={0.92} style={{ textShadow: INK_SHADOW }}>
-              {historia.intro ?? "Recorre la línea del tiempo y pulsa cada era para adentrarte en su historia."}
-            </Text>
           </Reveal>
 
           {/* Línea de tiempo de las eras (centrada) */}

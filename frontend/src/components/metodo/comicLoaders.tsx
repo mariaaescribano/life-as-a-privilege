@@ -321,6 +321,17 @@ export function FisiologiaLoading() {
   );
 }
 
+// Pantalla de carga de NUTRICIÓN: la manzana (misma animación del AppleLoader)
+// en BLANCO, centrada sobre el fondo turquesa, a pantalla completa. Sustituye al
+// spinner en todo el recorrido de nutrición.
+export function NutricionLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <AppleLoader color="#ffffff" label={null} />
+    </Flex>
+  );
+}
+
 // ── Cábala · el Árbol de la Vida encendiendo las sefirot una a una ───────────
 const SEFIROT = [
   { x: 60, y: 14 }, { x: 88, y: 34 }, { x: 32, y: 34 }, { x: 88, y: 58 }, { x: 32, y: 58 },
@@ -363,34 +374,73 @@ export function CabalaLoader() {
   );
 }
 
-// ── Cultura · mandala (flor de la Vida) que gira y respira ───────────────────
+// ── Cultura · mandala (flor de la Vida) que gira mientras la luz recorre sus
+// pétalos uno a uno ──────────────────────────────────────────────────────────
 const girarLento = keyframes`
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 `;
-const respirar = keyframes`
-  0%, 100% { opacity: 0.55; }
-  50%      { opacity: 1; }
+// El anillo exterior respira suavemente (opacidad).
+const respirarAnillo = keyframes`
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.7; }
+`;
+// Cada pétalo se enciende y crece un poco; con un desfase por pétalo, la luz
+// «viaja» dando la vuelta a la flor (efecto de carga girando).
+const encenderPetalo = keyframes`
+  0%, 100% { opacity: 0.28; transform: scale(0.9); }
+  50%      { opacity: 1;    transform: scale(1.05); }
 `;
 const MANDALA = [
   { x: 60, y: 60 }, { x: 80, y: 60 }, { x: 70, y: 77.3 }, { x: 50, y: 77.3 },
   { x: 40, y: 60 }, { x: 50, y: 42.7 }, { x: 70, y: 42.7 },
 ];
-export function CulturaLoader() {
-  const c = culturaTxt;
+export function CulturaLoader({ color }: { color?: string } = {}) {
+  const c = color ?? culturaTxt;
   return (
     <Shell>
       <Box
         as="g"
-        animation={`${girarLento} 9s linear infinite, ${respirar} 3s ease-in-out infinite`}
+        animation={`${girarLento} 12s linear infinite`}
         sx={{ transformBox: "view-box", transformOrigin: "60px 60px" }}
       >
-        <circle cx={60} cy={60} r={40} fill="none" stroke={c} strokeWidth={1.4} opacity={0.4} />
+        <Box
+          as="circle"
+          cx={60}
+          cy={60}
+          r={40}
+          fill="none"
+          stroke={c}
+          strokeWidth={1.4}
+          animation={`${respirarAnillo} 3s ease-in-out infinite`}
+        />
         {MANDALA.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={20} fill="none" stroke={c} strokeWidth={1.6} opacity={i === 0 ? 0.9 : 0.7} />
+          <Box
+            as="circle"
+            key={i}
+            cx={p.x}
+            cy={p.y}
+            r={20}
+            fill="none"
+            stroke={c}
+            strokeWidth={1.6}
+            animation={`${encenderPetalo} 2.4s ease-in-out ${i * 0.18}s infinite`}
+            sx={{ transformBox: "fill-box", transformOrigin: "center" }}
+          />
         ))}
       </Box>
     </Shell>
+  );
+}
+
+// Pantalla de carga de CULTURA: la flor de la Vida (misma animación) en BLANCO,
+// centrada sobre el fondo turquesa, a pantalla completa. Sustituye al spinner en
+// todo el recorrido de cultura.
+export function CulturaLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <CulturaLoader color="#ffffff" />
+    </Flex>
   );
 }
 

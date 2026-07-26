@@ -18,6 +18,9 @@ import { astrologiaTxt } from "../../GlobalVariables";
 interface IntroComicModalProps {
   isOpen: boolean;
   vinetas: Vineta[];
+  /** Viñeta por la que empieza el visor (para abrir directamente en un momento
+   *  concreto de una serie más larga). Se pasa tal cual a ComicViewer. */
+  initialIndex?: number;
   /** Ya no se usa: el cómic de intro ahora SIEMPRE aparece (no se marca como
    *  visto). Se mantiene opcional por compatibilidad con las llamadas. */
   onFinish?: () => void;
@@ -88,6 +91,7 @@ interface IntroComicModalProps {
 export function IntroComicModal({
   isOpen,
   vinetas,
+  initialIndex,
   onClose,
   themeColor = astrologiaTxt,
   disciplinaBgImage,
@@ -121,8 +125,9 @@ export function IntroComicModal({
       >
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
-          key={String(isOpen)}
+          key={`${String(isOpen)}-${initialIndex ?? 0}`}
           vinetas={vinetas}
+          initialIndex={initialIndex}
           onClose={onClose}
           onComplete={onComplete}
           onBack={onBack}

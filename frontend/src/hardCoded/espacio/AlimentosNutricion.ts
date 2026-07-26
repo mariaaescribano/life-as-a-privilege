@@ -286,7 +286,10 @@ export const ALIMENTOS: Alimento[] = [
 // que no tengan foto muestran su emoji como marcador. (Se irán añadiendo más.)
 const FOTO_ALIMENTO: Record<string, string> = {
   manzana: "manzana", platano: "platano", naranja: "naranja", "zumo-naranja": "zumo",
-  brocoli: "brocoli", soja: "soja", garbanzos: "garbanzos",
+  brocoli: "brocoli", espinaca: "espinaca", zanahoria: "zanahoria", tomate: "tomate",
+  pimiento: "pimiento", calabacin: "calabacin", cebolla: "cebolla", berenjena: "berenjena",
+  esparragos: "esparragos",
+  soja: "soja", garbanzos: "garbanzos",
   pollo: "pollo", vaca: "vaca", cerdo: "cerdo", huevo: "huevo", atun: "atun",
   "arroz-blanco": "arroces", "arroz-integral": "arroces", pan: "pan",
   aguacate: "aguacate", "aceite-oliva": "aceite",

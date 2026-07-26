@@ -42,7 +42,10 @@ const shadowPulse = keyframes`
 
 const DUR = "1.5s";
 
-export function AppleLoader({ label = "Cargando…" }: { label?: string | null }) {
+export function AppleLoader({
+  label = null,
+  color = nutricionTxt,
+}: { label?: string | null; color?: string }) {
   return (
     <Flex direction="column" align="center" justify="center" gap={4}>
       <Box as="svg" viewBox="0 0 120 120" w={{ base: "78px", md: "92px" }} h={{ base: "78px", md: "92px" }}
@@ -54,7 +57,7 @@ export function AppleLoader({ label = "Cargando…" }: { label?: string | null }
           cy={114}
           rx={27}
           ry={5}
-          fill={nutricionTxt}
+          fill={color}
           opacity={0.28}
           animation={`${shadowPulse} ${DUR} ease-in-out infinite`}
           sx={{ transformBox: "fill-box", transformOrigin: "center" }}
@@ -70,7 +73,7 @@ export function AppleLoader({ label = "Cargando…" }: { label?: string | null }
           <path
             d="M60 34 C 61 25, 62 18, 66 13"
             fill="none"
-            stroke={nutricionTxt}
+            stroke={color}
             strokeWidth={5}
             strokeLinecap="round"
           />
@@ -80,7 +83,7 @@ export function AppleLoader({ label = "Cargando…" }: { label?: string | null }
           <Box
             as="path"
             d="M65 24 C 76 8, 99 9, 99 18 C 99 30, 77 35, 65 24 Z"
-            fill={nutricionTxt}
+            fill={color}
             fillOpacity={0.55}
             animation={`${sway} 2.1s ease-in-out infinite`}
             sx={{ transformBox: "view-box", transformOrigin: "66px 25px" }}
@@ -93,13 +96,13 @@ export function AppleLoader({ label = "Cargando…" }: { label?: string | null }
                C 21 80, 42 101, 60 101
                C 78 101, 99 80, 97 51
                C 95 23, 70 21, 60 36 Z"
-            fill={nutricionTxt}
+            fill={color}
           />
         </Box>
       </Box>
 
       {label && (
-        <Text color={nutricionTxt} fontFamily="'EB Garamond', serif" fontStyle="italic"
+        <Text color={color} fontFamily="'EB Garamond', serif" fontStyle="italic"
               fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em"
               style={{ textShadow: "0 1px 2px rgba(255,255,255,0.7)" }}>
           {label}

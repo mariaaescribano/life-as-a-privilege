@@ -886,3 +886,10 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     ],
   },
 ];
+
+// Portada de cada era (círculo de la línea del tiempo principal): vive en la
+// subcarpeta eras/, con el nombre = clave de la era. Mientras no exista el
+// archivo, el círculo muestra su marcador (onError de LineaTiempoCultura).
+HISTORIA_FILOSOFIA_HITOS.forEach((era) => {
+  era.foto = `/recorrido/cultura/historiafilosofia/eras/${era.key}.png`;
+});

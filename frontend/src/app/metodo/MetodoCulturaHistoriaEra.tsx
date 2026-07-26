@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { getHistoria } from "../../components/metodo/culturaHistorias";
 import { Reveal } from "../../components/global/Reveal";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -21,18 +22,9 @@ import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../G
 // ─────────────────────────────────────────────────────────────────────────
 
 const CULTURA_IMG = "/img/fondos/cultura.png";
-const INK_SHADOW = `0 1px 3px ${culturaBg}f5, 0 0 8px ${culturaBg}cc, 0 2px 16px ${culturaBg}88`;
-
-// Parte un texto en frases (salto de línea tras cada punto), re-uniendo los
-// cortes falsos de abreviaturas de un carácter como «a. C.» / «d. C.».
-function partirFrases(texto: string): string[] {
-  return texto.split(/(?<=\.)\s+/).reduce<string[]>((acc, frag) => {
-    const prev = acc[acc.length - 1];
-    if (prev && /(^|\s)[A-Za-zÁÉÍÓÚÑ]\.$/.test(prev)) acc[acc.length - 1] = `${prev} ${frag}`;
-    else acc.push(frag);
-    return acc;
-  }, []);
-}
+// Nº de fotos de la «primera ronda» de sub-hitos que se precargan antes de
+// mostrar la era (las de más allá se cargan al desplazarse con las flechas).
+const PRIMERA_RONDA = 6;
 
 export default function MetodoCulturaHistoriaEra() {
   const navigate = useNavigate();
@@ -61,6 +53,12 @@ export default function MetodoCulturaHistoriaEra() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         // Gate de pago: sin suscripción a Cultura, a la portada (con el popup de pago).
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
+
+        // No mostramos la era hasta que las fotos de la primera ronda de
+        // sub-hitos estén cargadas (las de más allá se cargan con las flechas).
+        await precargarImagenes(
+          (era?.subhitos ?? []).slice(0, PRIMERA_RONDA).map((s) => (s.foto ? encodeURI(s.foto) : null)),
+        );
       } catch {
         navigate("/metodo/cultura", { replace: true });
         return;
@@ -70,13 +68,25 @@ export default function MetodoCulturaHistoriaEra() {
     })();
   }, [navigate, historia, era, volverHistoria]);
 
-  const activo = useMemo(
-    () => era?.subhitos.find((s) => s.key === activeKey) ?? null,
-    [era, activeKey],
-  );
+  // Todas las viñetas de la era, en orden, concatenando los sub-hitos que ya
+  // tienen cómic. Así, dentro del visor, la flecha pasa de un momento al
+  // siguiente (y de una viñeta a la siguiente) sin cerrar y reabrir; recorre la
+  // era entera de un tirón. Guardamos también el índice donde empieza cada
+  // sub-hito para abrir directamente en el momento que se pulsa.
+  const { todasVinetas, indicePorSubhito } = useMemo(() => {
+    const conComic = (era?.subhitos ?? []).filter((s) => s.vinetas.length > 0);
+    const vinetas = conComic.flatMap((s) => s.vinetas);
+    const indice: Record<string, number> = {};
+    let i = 0;
+    conComic.forEach((s) => { indice[s.key] = i; i += s.vinetas.length; });
+    return { todasVinetas: vinetas, indicePorSubhito: indice };
+  }, [era]);
+
+  const abierto = activeKey !== null;
+  const indiceInicial = activeKey != null ? (indicePorSubhito[activeKey] ?? 0) : 0;
 
   if (loading || !era) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <CulturaLoading />;
   }
 
   const hayHitos = era.subhitos.length > 0;
@@ -102,43 +112,6 @@ export default function MetodoCulturaHistoriaEra() {
             />
           </Reveal>
 
-          {/* Introducción de la etapa (si la tiene) o línea breve. */}
-          {era.intro ? (
-            <Reveal direction="up" distance={18} delay={0.1} duration={0.65} w="100%" display="flex" justifyContent="center">
-              <Box maxW="760px" w="100%" borderRadius="2xl" px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}
-                   bg={`${culturaBg}66`} border={`1px solid ${culturaTxt}33`}
-                   sx={{ backdropFilter: "blur(2px)" }}>
-                <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
-                  {partirFrases(era.intro).map((frase, i) => (
-                    <Text key={i} color={culturaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                          fontStyle={i === 0 ? "italic" : "normal"} fontWeight={i === 0 ? 600 : 400}
-                          style={{ textShadow: INK_SHADOW }}>
-                      {frase}
-                    </Text>
-                  ))}
-                </Flex>
-              </Box>
-            </Reveal>
-          ) : (
-            <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-              <Text color={culturaTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                    lineHeight="1.8" maxW="620px" opacity={0.92}>
-                {hayHitos
-                  ? "Recorre esta era y pulsa cada momento para descubrir su historia."
-                  : "Muy pronto podrás recorrer los momentos de esta era."}
-              </Text>
-            </Reveal>
-          )}
-
-          {/* Etapa con intro pero aún sin momentos: aviso de «próximamente». */}
-          {era.intro && !hayHitos && (
-            <Reveal direction="up" distance={14} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
-              <Text color={`${culturaTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-                Muy pronto podrás recorrer los momentos de esta era.
-              </Text>
-            </Reveal>
-          )}
-
           {/* Mini línea de tiempo de la era (centrada). Los sub-hitos solo llevan
               título (sin fecha); su foto sigue en el círculo. */}
           {hayHitos && (
@@ -159,10 +132,13 @@ export default function MetodoCulturaHistoriaEra() {
         </Flex>
       </Flex>
 
-      {/* Cómic del sub-hito seleccionado (foto + texto), con el estilo de Cultura. */}
+      {/* Cómic de la era: TODOS los momentos concatenados, abriendo en el que se
+          pulsó. Así la flecha del visor pasa de una viñeta (momento) a la
+          siguiente sin salir, recorriendo la era entera. */}
       <IntroComicModal
-        isOpen={!!activo}
-        vinetas={activo?.vinetas ?? []}
+        isOpen={abierto}
+        vinetas={todasVinetas}
+        initialIndex={indiceInicial}
         onClose={() => setActiveKey(null)}
         themeColor={culturaTxt}
         textColor={culturaTxt}
