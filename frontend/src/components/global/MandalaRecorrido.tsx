@@ -2,7 +2,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
-import { recorridoContenido } from "../../data/recorridoContenido";
+import { recorridoContenido, nombreEnMapa, type VideoIntro } from "../../data/recorridoContenido";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -24,6 +24,8 @@ type Disciplina = {
   bg: string;
   txt: string;
   desc: string;
+  /** Texto introductorio del box de al lado del mandala (título + puntos ✓). */
+  videoIntro: VideoIntro;
   /** Capturas reales de la plataforma. Vacío = aún no disponible. */
   capturas: Captura[];
   /** Ruta a la que lleva el botón "Explorar disciplina". */
@@ -45,6 +47,7 @@ const disciplinas: Disciplina[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     desc: recorridoContenido.astrologia.desc,
+    videoIntro: recorridoContenido.astrologia.videoIntro,
     capturas: [
       { src: "/capturasRecorrido/astro/1.png",  titulo: "Tus datos para que te haga la lectura." },
       { src: "/capturasRecorrido/astro/2.png",  titulo: "Minicomic: entiende qué es una carta astral" },
@@ -76,6 +79,7 @@ const disciplinas: Disciplina[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     desc: recorridoContenido.psicologia.desc,
+    videoIntro: recorridoContenido.psicologia.videoIntro,
     capturas: [
       { src: "/capturasRecorrido/psico/1.png",  titulo: "Bienvenido a la segunda disciplina." },
       { src: "/capturasRecorrido/psico/2.png",  titulo: "Introducción" },
@@ -108,6 +112,7 @@ const disciplinas: Disciplina[] = [
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     desc: recorridoContenido.ayurveda.desc,
+    videoIntro: recorridoContenido.ayurveda.videoIntro,
     capturas: [
       { src: "/capturasRecorrido/hinduismo/1.png",  titulo: "Bienvenido a la tercera disciplina: Ayurveda" },
       { src: "/capturasRecorrido/hinduismo/2.png",  titulo: "Introducción" },
@@ -143,6 +148,7 @@ const disciplinas: Disciplina[] = [
     bg: tcmBg,
     txt: tcmTxt,
     desc: recorridoContenido.tcm.desc,
+    videoIntro: recorridoContenido.tcm.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + tcmNomLink,
     enabled: false,
@@ -153,6 +159,7 @@ const disciplinas: Disciplina[] = [
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     desc: recorridoContenido.fisiologia.desc,
+    videoIntro: recorridoContenido.fisiologia.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + fisiologiaNom,
     enabled: false,
@@ -163,6 +170,7 @@ const disciplinas: Disciplina[] = [
     bg: nutricionBg,
     txt: nutricionTxt,
     desc: recorridoContenido.nutricion.desc,
+    videoIntro: recorridoContenido.nutricion.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + nutricionNomLink,
     enabled: false,
@@ -173,6 +181,7 @@ const disciplinas: Disciplina[] = [
     bg: cabalaBg,
     txt: cabalaTxt,
     desc: recorridoContenido.cabala.desc,
+    videoIntro: recorridoContenido.cabala.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + cabalaNom,
     enabled: false,
@@ -183,6 +192,7 @@ const disciplinas: Disciplina[] = [
     bg: culturaBg,
     txt: culturaTxt,
     desc: recorridoContenido.cultura.desc,
+    videoIntro: recorridoContenido.cultura.videoIntro,
     capturas: [],
     link: "/aprendizaje/cursos/" + culturaNomLink,
     enabled: false,
@@ -218,6 +228,9 @@ const MandalaCircle = ({
       onAnimationComplete={() => { if (!entered) setEntered(true); }}
       whileHover={{ scale: isSelected ? 1.2 : 1.1 }}
       style={{ filter: isSelected ? undefined : "grayscale(0.6)", zIndex: isSelected ? 3 : undefined }}
+      // Los números y el círculo son un control, no texto: no seleccionables
+      // (nunca se pintan de azul al arrastrar el ratón).
+      sx={{ userSelect: "none", WebkitUserSelect: "none", WebkitTapHighlightColor: "transparent" }}
     >
       <Box
         position="relative"
@@ -637,7 +650,7 @@ const CarruselCard = ({
             opacity={disponible ? 1 : 0.65}
             textShadow={textGlow}
           >
-            {disc.nom}
+            {nombreEnMapa(disc.nom)}
           </Text>
         </Flex>
       </Flex>
@@ -841,11 +854,100 @@ export const RecorridoCarruseles = () => {
   );
 };
 
-// ── Box de vídeo de una disciplina ───────────────────────────────────────────
-// Fondo = imagen propia de la disciplina. Cabecera "nº. Nombre" + separador
-// horizontal y, debajo, el vídeo 9:16 recortado a 1:1 (sin tocar el original:
-// object-fit cover recorta arriba/abajo en pantalla).
-const VideoBox = ({ disc, step }: { disc: Disciplina; step: number }) => {
+// ── Popup del vídeo de muestra ───────────────────────────────────────────────
+// Mismo velo oscuro con blur que el modal de disciplina de arriba (/elMetodo),
+// pero SIN caja contenedora: el propio vídeo lleva el borde y el brillo de la
+// disciplina directamente. En ordenador se muestra 1:1 (cuadrado, cover) para
+// que luzca mejor; en móvil se mantiene vertical (9:16, contain) para verlo
+// entero. La X flota sobre la esquina del vídeo.
+const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) => {
+  const accent = disc.txt;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <Box
+      position="fixed"
+      inset={0}
+      zIndex={300}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bg="rgba(0,0,0,0.85)"
+      sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+      onClick={onClose}
+      px={{ base: 5, md: 10 }}
+    >
+      {/* El vídeo ES el elemento con el brillo (sin caja alrededor). La caja se
+          ciñe al vídeo: ratio 4:5 (rectangular suave, ni cuadrado ni 9:16) y el
+          vídeo lo rellena con `cover`, así no quedan franjas negras. */}
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        position="relative"
+        borderRadius="2xl"
+        overflow="hidden"
+        bg="#000"
+        border={`1.5px solid ${accent}66`}
+        boxShadow={`0 0 0 1px ${accent}55, 0 0 45px ${accent}66, 0 0 90px ${accent}33, 0 22px 70px rgba(0,0,0,0.6)`}
+        w={{ base: "min(92vw, 420px)", md: "auto" }}
+        h={{ base: "auto", md: "min(80vh, 600px)" }}
+        maxH="88vh"
+        sx={{ aspectRatio: "4 / 5" }}
+      >
+        {/* X cerrar — flota sobre la esquina del propio vídeo */}
+        <Box
+          position="absolute"
+          top={3}
+          right={3}
+          as="button"
+          onClick={onClose}
+          color={accent}
+          fontSize="md"
+          cursor="pointer"
+          bg="rgba(0,0,0,0.5)"
+          border={`1px solid ${accent}66`}
+          borderRadius="full"
+          w="38px"
+          h="38px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: accent }}
+          transition="all 0.2s"
+          zIndex={2}
+          sx={{ backdropFilter: "blur(4px)" }}
+        >
+          ✕
+        </Box>
+
+        {disc.video && (
+          <Box
+            as="video"
+            key={disc.video}
+            src={disc.video}
+            autoPlay
+            controls
+            playsInline
+            w="100%"
+            h="100%"
+            // cover: el vídeo rellena la caja 4:5 sin dejar franjas negras.
+            sx={{ objectFit: "cover" }}
+          />
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+// ── Box de al lado del mandala ────────────────────────────────────────────────
+// Fondo = imagen propia de la disciplina. Cabecera "nº. Nombre" + separador y,
+// debajo, un texto introductorio (título + puntos con ✓) y un botón al final
+// que abre el vídeo de muestra en un popup (VideoMuestraModal).
+const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; onVerVideo: () => void }) => {
   const accent = disc.txt;
   const hasBg = hasDisciplinaBg(disc.nom);
   const textGlow = `0 1px 3px ${disc.bg}, 0 0 10px ${disc.bg}, 0 0 20px ${disc.bg}`;
@@ -905,7 +1007,7 @@ const VideoBox = ({ disc, step }: { disc: Disciplina; step: number }) => {
             whiteSpace="nowrap"
             textShadow={textGlow}
           >
-            {disc.nom}
+            {nombreEnMapa(disc.nom)}
           </Text>
         </Flex>
       </Flex>
@@ -919,70 +1021,107 @@ const VideoBox = ({ disc, step }: { disc: Disciplina; step: number }) => {
         bg={`linear-gradient(to right, transparent, ${accent}bb, transparent)`}
       />
 
-      {/* Vídeo 9:16 recortado a cuadrado (1:1), o placeholder "En desarrollo"
-          para las disciplinas que aún no están disponibles. */}
-      <Box
+      {/* Texto introductorio (título + puntos con ✓) + botón al final */}
+      <Flex
+        direction="column"
         position="relative"
         zIndex={1}
-        m={{ base: 4, md: 5 }}
-        borderRadius="xl"
-        overflow="hidden"
-        sx={{ aspectRatio: "1 / 1" }}
-        boxShadow="0 6px 22px rgba(0,0,0,0.35)"
+        px={{ base: 5, md: 7 }}
+        pt={{ base: 5, md: 6 }}
+        pb={{ base: 5, md: 6 }}
+        gap={{ base: 4, md: 5 }}
       >
+        {/* Título (puede ser una frase larga que introduce el recorrido) */}
+        <Text
+          color={accent}
+          fontFamily="'EB Garamond', serif"
+          fontWeight="700"
+          fontSize={{ base: "lg", md: "xl" }}
+          lineHeight="1.35"
+          letterSpacing="0.01em"
+          textShadow={textGlow}
+        >
+          {disc.videoIntro.titulo}
+        </Text>
+
+        {/* Puntos con ✓ */}
+        <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
+          {disc.videoIntro.puntos.map((p, i) => (
+            <Flex key={i} align="flex-start" gap={2.5}>
+              <Text
+                color={accent}
+                fontWeight="700"
+                fontSize={{ base: "md", md: "lg" }}
+                lineHeight="1.5"
+                flexShrink={0}
+                textShadow={textGlow}
+              >
+                ✓
+              </Text>
+              <Text
+                color={accent}
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "sm", md: "md" }}
+                lineHeight="1.5"
+                textShadow={textGlow}
+              >
+                {p}
+              </Text>
+            </Flex>
+          ))}
+        </Flex>
+
+        {/* Botón: ver una muestra de la plataforma (abre el popup del vídeo).
+            Si la disciplina aún no tiene vídeo, se muestra un aviso discreto. */}
         {disc.video ? (
-          <Box
-            as="video"
-            key={disc.video}
-            src={disc.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            w="100%"
-            h="100%"
-            sx={{ objectFit: "cover", objectPosition: "center" }}
-          />
-        ) : (
           <Flex
-            w="100%"
-            h="100%"
-            direction="column"
+            as="button"
+            onClick={onVerVideo}
             align="center"
             justify="center"
-            gap={4}
-            px={5}
-            textAlign="center"
-            bg="rgba(0,0,0,0.32)"
-            sx={{ backdropFilter: "blur(2px)" }}
+            gap={2.5}
+            mt={{ base: 1, md: 2 }}
+            alignSelf={{ base: "stretch", md: "flex-start" }}
+            px={{ base: 5, md: 6 }}
+            py={{ base: "10px", md: "11px" }}
+            borderRadius="full"
+            border={`1.5px solid ${accent}aa`}
+            bg={`${accent}1f`}
+            color={accent}
+            cursor="pointer"
+            boxShadow={`0 0 14px ${accent}33, 0 2px 12px rgba(0,0,0,0.25)`}
+            sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
+            _hover={{ bg: `${accent}33`, borderColor: accent, boxShadow: `0 0 22px ${accent}55, 0 4px 16px rgba(0,0,0,0.3)`, transform: "translateY(-2px)" }}
+            _active={{ transform: "translateY(0) scale(0.98)" }}
+            transition="all 0.2s ease"
           >
-            <Box
-              as="svg"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 -960 960 960"
-              w={{ base: "40px", md: "48px" }}
-              h={{ base: "40px", md: "48px" }}
-              fill={accent}
-              opacity={0.9}
-              style={{ filter: `drop-shadow(0 0 10px ${accent}88)` }}
-            >
-              <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/>
-            </Box>
+            <Box as="span" fontSize={{ base: "sm", md: "md" }} lineHeight="1" style={{ textShadow: textGlow }}>▶</Box>
             <Text
-              color={accent}
               fontFamily="'EB Garamond', serif"
-              fontStyle="italic"
-              fontSize={{ base: "lg", md: "xl" }}
               fontWeight="600"
-              letterSpacing="0.16em"
-              textTransform="uppercase"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.03em"
               textShadow={textGlow}
             >
-              En desarrollo
+              {disc.videoIntro.boton ?? "Ver el recorrido por dentro"}
             </Text>
           </Flex>
+        ) : (
+          <Text
+            mt={{ base: 1, md: 2 }}
+            color={accent}
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            fontSize={{ base: "sm", md: "md" }}
+            letterSpacing="0.12em"
+            textTransform="uppercase"
+            opacity={0.8}
+            textShadow={textGlow}
+          >
+            Vídeo próximamente
+          </Text>
         )}
-      </Box>
+      </Flex>
     </Flex>
   );
 };
@@ -997,6 +1136,13 @@ export const RecorridoMandalaVideo = () => {
   );
   const firstEnabled = disciplinas.find((d) => d.enabled && d.video) ?? disciplinas[0];
   const [selectedNom, setSelectedNom] = useState(firstEnabled.nom);
+  // Disciplina cuyo vídeo de muestra está abierto en el popup (null = cerrado).
+  const [videoModal, setVideoModal] = useState<Disciplina | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = videoModal ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [videoModal]);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -1110,7 +1256,7 @@ export const RecorridoMandalaVideo = () => {
         </Box>
       </Box>
 
-      {/* ── Box de vídeo (derecha) ── */}
+      {/* ── Box de al lado del mandala (derecha) ── */}
       <Box w={{ base: "100%", lg: "auto" }} flex={{ lg: 1 }} maxW={{ base: "396px", lg: "450px" }}>
         <AnimatePresence mode="wait">
           <MotionBox
@@ -1121,10 +1267,13 @@ export const RecorridoMandalaVideo = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             w="100%"
           >
-            <VideoBox disc={selected} step={selectedIndex + 1} />
+            <VideoBox disc={selected} step={selectedIndex + 1} onVerVideo={() => setVideoModal(selected)} />
           </MotionBox>
         </AnimatePresence>
       </Box>
+
+      {/* Popup del vídeo de muestra (mismo estilo que el modal de disciplina) */}
+      {videoModal && <VideoMuestraModal disc={videoModal} onClose={() => setVideoModal(null)} />}
     </Flex>
   );
 };

@@ -250,7 +250,7 @@ function TestBalanceComic({
           {cabecera}{testTotal > 1 ? ` · ${testNum} de ${testTotal}` : ""}
         </Text>
         {test.titulo && (
-          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                 textAlign="center" mt={1.5} style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
             {test.titulo}
           </Text>
@@ -260,7 +260,7 @@ function TestBalanceComic({
 
       {test.preguntas.map((q, i) => (
         <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={3}
+          <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={3}
                 style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
             {i + 1}. {q.pregunta}{q.opcional ? " (opcional)" : ""}
           </Text>
@@ -272,7 +272,7 @@ function TestBalanceComic({
                   textAlign="left" px={{ base: 4, md: 5 }} py={{ base: 2.5, md: 3 }} borderRadius="lg"
                   bg={sel ? `${color}66` : "rgba(0,0,0,0.42)"}
                   border={`1px solid ${sel ? color : "rgba(255,255,255,0.22)"}`}
-                  color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
+                  color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
                   lineHeight="1.55" cursor="pointer" transition="all 0.15s"
                   boxShadow={sel ? `0 0 14px ${color}88` : "none"}
                   _hover={{ bg: sel ? `${color}77` : "rgba(0,0,0,0.55)" }}

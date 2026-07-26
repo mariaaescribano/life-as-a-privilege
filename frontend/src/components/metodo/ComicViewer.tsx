@@ -147,6 +147,10 @@ interface ComicViewerProps {
    *  ve el loader a pantalla completa. Evita ver el box con el fondo a medio
    *  cargar. Lo usan los cómics de TCM (elementos). */
   esperarFondo?: boolean;
+  /** Si true, en MÓVIL la foto se muestra CUADRADA (1:1) en vez del hero ancho,
+   *  y el box se estrecha para dejar hueco a las flechas laterales. En desktop no
+   *  cambia nada. Lo usa Cultura. */
+  fotoCuadradaMovil?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -175,6 +179,7 @@ export function ComicViewer({
   textSize,
   flechasEnBox,
   esperarFondo,
+  fotoCuadradaMovil,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
@@ -563,7 +568,9 @@ export function ComicViewer({
           key={`box-${index}`}
           w="100%"
           // Móvil: ancho completo (= ancho del header, con el px del ModalBody).
-          maxW={{ base: "100%", md: "940px" }}
+          // Con `fotoCuadradaMovil` (Cultura) el box se estrecha para dejar un
+          // hueco a cada lado donde caben las flechas fijas al viewport.
+          maxW={{ base: fotoCuadradaMovil ? "calc(100vw - 104px)" : "100%", md: "940px" }}
           h={{ base: "auto", md: "540px" }}
           maxH={{ base: "calc(100dvh - 72px)" }}
           display="flex"
@@ -719,8 +726,10 @@ export function ComicViewer({
               //   con márgenes: quedaba amorfo).
               w={{ base: "100%", md: "440px" }}
               maxW={{ base: "100%", md: "440px" }}
-              h={{ base: "36vh", md: "auto" }}
-              aspectRatio={{ base: "auto", md: 1 }}
+              // Con `fotoCuadradaMovil` (Cultura): en móvil la foto es 1:1
+              // (cuadrada), no el hero ancho de 36vh.
+              h={{ base: fotoCuadradaMovil ? "auto" : "36vh", md: "auto" }}
+              aspectRatio={{ base: fotoCuadradaMovil ? 1 : "auto", md: 1 }}
               flexShrink={0}
               alignSelf={{ base: "stretch", md: "center" }}
               position="relative"
@@ -740,7 +749,7 @@ export function ComicViewer({
                     // Móvil/tablet: cover (hero a todo el ancho que cubre todo).
                     // Desktop (md): contain (se ve la ilustración entera en el cuadrado).
                     objectFit={{ base: "cover", md: "contain" }}
-                    borderRadius={{ base: 0, md: "lg" }}
+                    borderRadius={{ base: fotoCuadradaMovil ? "lg" : 0, md: "lg" }}
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}

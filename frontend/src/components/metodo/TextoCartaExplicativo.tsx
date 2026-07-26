@@ -97,11 +97,11 @@ const Stars = () => {
   );
 };
 
-// Renderiza **negrita** con más brillo dentro del mismo color de acento.
-function renderTexto(texto: string, color: string): React.ReactNode {
+// Renderiza **negrita** (sin brillo: solo peso de fuente).
+function renderTexto(texto: string): React.ReactNode {
   return texto.split(/(\*\*[^*]+\*\*)/g).map((p, i) =>
     p.startsWith("**") && p.endsWith("**") ? (
-      <Box as="span" key={i} fontWeight="700" style={{ textShadow: `0 0 12px ${color}cc, 0 0 28px ${color}77` }}>
+      <Box as="span" key={i} fontWeight="700">
         {p.slice(2, -2)}
       </Box>
     ) : (
@@ -172,7 +172,6 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
   const v = VINETAS[i];
   const isFirst = i === 0;
   const isLast = i === total - 1;
-  const textShadow = `0 0 4px ${color}aa, 0 0 9px ${color}66`;
 
   const textScrollRef = useRef<HTMLDivElement>(null);
   const [imgLoaded, setImgLoaded] = useState<Record<number, boolean>>({});
@@ -225,14 +224,19 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
   };
 
   return (
-    <Flex direction="column" align="center" gap={{ base: 6, md: 7 }} w="100%">
-      {/* ── Caja idéntica a la de Ilustraciones (ComicViewer) ── */}
+    <Flex direction="row" align="center" justify="center" gap={{ base: 2, md: 4 }} w="100%">
+      {/* Flecha anterior — FUERA de la caja, a su izquierda. */}
+      <NavBtn dir="izq" color={color} disabled={isFirst} onClick={goPrev} />
+
+      {/* ── Caja (misma estética que Ilustraciones), ahora más pequeña ── */}
       <Box
         key={`box-${i}`}
+        flex="1"
+        minW={0}
         w="100%"
-        // Móvil: ancho completo (= ancho del header de la disciplina). Desktop: 940px.
-        maxW={{ base: "100%", md: "940px" }}
-        h={{ base: "auto", md: "540px" }}
+        // Caja más pequeña; en móvil ocupa el hueco entre las dos flechas.
+        maxW={{ base: "100%", md: "820px" }}
+        h={{ base: "auto", md: "470px" }}
         maxH={{ base: "calc(100dvh - 96px)" }}
         display="flex"
         flexDirection="column"
@@ -338,17 +342,14 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           <Box
             // Desktop: foto cuadrada MÁS GRANDE a la izquierda.
             // Móvil: hero image a todo el ancho que cubre la parte de arriba.
-            w={{ base: "100%", md: "440px" }}
-            maxW={{ base: "100%", md: "440px" }}
-            h={{ base: "42vh", md: "auto" }}
+            w={{ base: "100%", md: "360px" }}
+            maxW={{ base: "100%", md: "360px" }}
+            h={{ base: "38vh", md: "auto" }}
             aspectRatio={{ base: "auto", md: 1 }}
             flexShrink={0}
             alignSelf={{ base: "stretch", md: "center" }}
             position="relative"
-            filter={{
-              base: "none",
-              md: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${color}33)`,
-            }}
+            filter="none"
           >
             {!imgFailed[i] ? (
               <Image
@@ -399,7 +400,11 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
             justifyContent="flex-start"
             pt={{ base: 0, md: 6 }}
             pb={{ base: 9, md: 6 }}
-            pl={{ base: 5, md: 0 }}
+            // pl > 0 SIEMPRE: si el texto arranca pegado al borde, su glow
+            // (textShadow) se recorta en seco contra el overflowX:hidden y deja
+            // una raya vertical de luz cortada a la izquierda. El padding le da
+            // aire para que el halo respire sin cortarse.
+            pl={{ base: 5, md: 4 }}
             pr={{ base: 5, md: 4 }}
             sx={{
               "&::-webkit-scrollbar": { width: "6px" },
@@ -421,9 +426,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
               fontWeight="400"
               whiteSpace="pre-line"
               textAlign={{ base: "center", md: "left" }}
-              style={{ textShadow }}
             >
-              {renderTexto(v.texto, color)}
+              {renderTexto(v.texto)}
             </Text>
           </Box>
           )}
@@ -440,16 +444,10 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           zIndex={3}
         />
 
-        {/* Flechas pegadas a los bordes del box (centradas en su altura), como
-            en el ComicViewer. Sustituyen a la barra inferior de navegación. */}
-        <Box position="absolute" left={{ base: 1, md: 2 }} top="50%" transform="translateY(-50%)" zIndex={5}>
-          <NavBtn dir="izq" color={color} disabled={isFirst} onClick={goPrev} />
-        </Box>
-        <Box position="absolute" right={{ base: 1, md: 2 }} top="50%" transform="translateY(-50%)" zIndex={5}>
-          <NavBtn dir="der" color={color} disabled={isLast} onClick={goNext} />
-        </Box>
       </Box>
 
+      {/* Flecha siguiente — FUERA de la caja, a su derecha. */}
+      <NavBtn dir="der" color={color} disabled={isLast} onClick={goNext} />
     </Flex>
   );
 }

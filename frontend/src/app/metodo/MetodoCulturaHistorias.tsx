@@ -83,7 +83,6 @@ export default function MetodoCulturaHistorias() {
             <MetodoStepHeader
               icon={<CulturaIcon size={{ base: "40px", md: "56px" }} />}
               title="Cultura"
-              pageLabel="2"
               compact
               bgColor={`${culturaBg}dd`}
               color={culturaTxt}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { nutricionNom } from "../../GlobalVariables";
+import { culturaNom, nutricionNom } from "../../GlobalVariables";
 
 // Glow suave de la tarjeta, SOLO con el color de la disciplina (`c` = <disc>Txt).
 // Antes llevaba capas blancas + menta claro, pero sobre el turquesa del recorrido
@@ -69,9 +69,10 @@ export function FotoBox({
 }) {
   const [imgErr, setImgErr] = useState(false);
   const hayFoto = !!foto && !imgErr;
-  // En Nutrición las tarjetas van SIN líneas (ni borde exterior ni raya
-  // separadora): el fondo claro hace que cualquier línea oscura cante mucho.
-  const sinLineas = nom === nutricionNom;
+  // Sin líneas (ni borde exterior ni raya separadora): solo el glow define la
+  // tarjeta. En Nutrición porque el fondo claro hace cantar cualquier línea; en
+  // Cultura porque así se pidió (mantener el glow, quitar los border line).
+  const sinLineas = nom === nutricionNom || nom === culturaNom;
 
   return (
     <Box

@@ -124,6 +124,7 @@ export default function TextLessonPage() {
             nom={disciplinaNom}
             compact
             tallTitle
+            fitTitle
             hideCursos
             mb={{ base: 6, md: 7 }}
             prev={{

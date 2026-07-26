@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -22,6 +22,7 @@ import {
 import { welcomeDisciplinas } from "../../data/welcomeDisciplinas";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { LifeLoading } from "../../components/global/LifeLoading";
 
 type Discipline = {
   name: string;
@@ -115,7 +116,7 @@ const disciplines: Discipline[] = [
     desc: welcomeDisciplinas.cultura.desc,
     link: "/aprendizaje/cursos/" + culturaNom,
     available: true,
-    tagline: "Las grandes filosofías.",
+    tagline: "Las historias de la humanidad.",
   },
 ];
 
@@ -150,19 +151,23 @@ const descShadow = (d: Discipline) =>
     : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 14px ${d.bg}88, 0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)`;
 
 
+// callback ref: el observer se engancha en cuanto el nodo aparece en el DOM.
+// (Importante porque la página se monta primero mostrando <LifeLoading/> y el
+// contenido —con estos refs— aparece después; con un ref normal el efecto
+// correría una vez con el ref vacío y nunca volvería a observar.)
 const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [node, setNode] = useState<HTMLElement | null>(null);
+  const ref = useCallback((el: HTMLElement | null) => setNode(el), []);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    if (!node) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
       { threshold }
     );
-    obs.observe(el);
+    obs.observe(node);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [node, threshold]);
   return { ref, visible };
 };
 
@@ -175,13 +180,30 @@ const Welcome = () => {
   const disciplinasReveal = useReveal(0.05);
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
+  const [tiempoMin, setTiempoMin] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
+  // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
+  // tiempo mínimo (para que se vea la animación de carga aunque las fotos vengan
+  // de caché). Mientras, se muestra <LifeLoading/>.
+  const listo = imagenesListas && tiempoMin;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => setMounted(true), 60);
+    const t = setTimeout(() => setTiempoMin(true), 550);
     return () => clearTimeout(t);
   }, []);
+
+  // Cuando la página está lista, disparamos la entrada de la primera pantalla
+  // (mandala + héroe + tarjetas). Doble requestAnimationFrame: el contenido se
+  // pinta primero OCULTO y, al frame siguiente, cambia a visible → la transición
+  // CSS se ejecuta siempre (si lo hiciéramos en el mismo frame, el navegador
+  // pintaría ya el estado final y no se vería animación).
+  useEffect(() => {
+    if (!listo) return;
+    let r2 = 0;
+    const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setMounted(true)); });
+    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+  }, [listo]);
 
   useEffect(() => {
     if (selected) {
@@ -191,6 +213,9 @@ const Welcome = () => {
     }
     return () => { document.body.style.overflow = ""; };
   }, [selected]);
+
+  // Mientras cargan las fotos: pantalla de carga con el mandala animado.
+  if (!listo) return <LifeLoading variant="public" />;
 
   return (
     <Box
@@ -205,17 +230,34 @@ const Welcome = () => {
 
       <Box flex="1">
       {/* ── MANDALA (elemento central, encima del título) ── */}
+      {/* Wrapper con flotación + latido perpetuos (vida continua); la imagen
+          hace la entrada épica (surge girando desde muy pequeña y se enfoca). */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.png"
-          alt=""
-          h={{ base: "54px", md: "72px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
-          opacity={mounted && imagenesListas ? 1 : 0}
-          transform={mounted && imagenesListas ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
+        <Box
+          sx={{
+            "@keyframes mandalaFloat": {
+              "0%, 100%": { transform: "translateY(0) scale(1)" },
+              "50%": { transform: "translateY(-9px) scale(1.03)" },
+            },
+            animation: "mandalaFloat 5.5s ease-in-out infinite",
+          }}
+        >
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h={{ base: "54px", md: "72px" }}
+            objectFit="contain"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
+              // glow (drop-shadow) siempre + blur solo durante la entrada.
+              filter:
+                "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" +
+                (mounted ? "" : " blur(6px)"),
+              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
+            }}
+          />
+        </Box>
       </Flex>
 
       {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
@@ -228,9 +270,10 @@ const Welcome = () => {
           alignItems="center"
           textAlign="center"
           gap={{ base: 3, md: 4 }}
-          opacity={bienvenidaReveal.visible ? 1 : 0}
-          transform={bienvenidaReveal.visible ? "none" : "translateY(18px)"}
-          transition="opacity 0.7s ease, transform 0.7s ease"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0) scale(1)" : "translateY(30px) scale(0.94)"}
+          filter={mounted ? "blur(0px)" : "blur(8px)"}
+          transition="opacity 0.9s ease 0.15s, transform 1.1s cubic-bezier(0.22,1.35,0.36,1) 0.15s, filter 0.9s ease 0.15s"
         >
           <Text
             color="white"
@@ -322,9 +365,10 @@ const Welcome = () => {
                 mt="42px"
                 cursor="pointer"
                 onClick={() => setSelected(d)}
-                opacity={disciplinasReveal.visible ? 1 : 0}
-                transform={disciplinasReveal.visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-                transition={`opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`}
+                opacity={mounted ? 1 : 0}
+                transform={mounted ? "translateY(0) scale(1) rotate(0deg)" : "translateY(52px) scale(0.7) rotate(-4deg)"}
+                filter={mounted ? "blur(0px)" : "blur(7px)"}
+                transition={`opacity 0.55s ease ${0.15 + i * 0.09}s, transform 0.9s cubic-bezier(0.22,1.45,0.36,1) ${0.15 + i * 0.09}s, filter 0.55s ease ${0.15 + i * 0.09}s`}
               >
                 {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
                     del reveal de entrada para que no se pisen los transforms. */}

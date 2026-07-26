@@ -68,6 +68,11 @@ interface MetodoStepHeaderProps {
   /** Oculta el botón "Cursos" que Psicología añade por defecto. Útil en páginas
    *  donde ya se está dentro de un curso (lección, módulos). */
   hideCursos?: boolean;
+  /** El título va SIEMPRE en una sola línea: si a su tamaño natural no cabe,
+   *  se encoge (paso a paso) hasta que quepa. Nunca salta a dos líneas ni se
+   *  trunca. Ignora el modo `tituloUniforme` de las disciplinas (que sí
+   *  permite dos líneas). Usado en la página de lección (/aprendizaje/leccion). */
+  fitTitle?: boolean;
   /** Sombra/glow del box completo. Si se pasa, sustituye al glow por defecto
    *  (útil para darle un brillo propio a una página, p.ej. dorado). */
   boxShadow?: string;
@@ -189,6 +194,7 @@ export function MetodoStepHeader({
   boxShadow,
   tallTitle = false,
   hideCursos = false,
+  fitTitle = false,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
@@ -220,6 +226,7 @@ export function MetodoStepHeader({
   const titleWrapperRef = useRef<HTMLDivElement>(null);
   const [titleWraps, setTitleWraps] = useState(false);
   useLayoutEffect(() => {
+    if (fitTitle) return; // en modo fitTitle manda la medición px de abajo
     setTitleWraps(false); // empezamos midiendo con el tamaño grande
     const wrapper = titleWrapperRef.current;
     if (!wrapper) return;
@@ -231,7 +238,37 @@ export function MetodoStepHeader({
       if (overflows) setTitleWraps(true);
     });
     return () => cancelAnimationFrame(id);
-  }, [title]);
+  }, [title, fitTitle]);
+  // ── Modo `fitTitle` (página de lección) ────────────────────────────────
+  // El título va SIEMPRE en una sola línea y, SOLO si a su tamaño natural no
+  // cabe, lo encogemos px a px hasta que quepa. Nunca dos líneas, nunca "…".
+  // Es un fontSize numérico controlado por medición (no los tokens de Chakra),
+  // así que ignora `tituloUniforme`/`compact`. Solo se activa donde se pide.
+  const [fitPx, setFitPx] = useState<number | null>(null);
+  useLayoutEffect(() => {
+    if (!fitTitle) { setFitPx(null); return; }
+    const wrapper = titleWrapperRef.current;
+    if (!wrapper) return;
+    const fit = () => {
+      const el = wrapper.querySelector("p, .chakra-text") as HTMLElement | null;
+      if (!el) return;
+      const desktop = window.innerWidth >= 768;
+      const max = tallTitle ? (desktop ? 60 : 34) : (desktop ? 48 : 30);
+      const min = desktop ? 22 : 18;
+      let size = max;
+      el.style.fontSize = `${size}px`;
+      // Encogemos mientras el ancho natural supere el del contenedor (una línea).
+      while (size > min && el.scrollWidth > el.clientWidth + 1) {
+        size -= 1;
+        el.style.fontSize = `${size}px`;
+      }
+      setFitPx(size);
+    };
+    const raf = requestAnimationFrame(fit);
+    window.addEventListener("resize", fit);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", fit); };
+  }, [fitTitle, title, tallTitle]);
+
   // Con título uniforme (TCM) no encogemos nunca: el título mantiene su tamaño
   // grande y, si hace falta, envuelve a dos líneas (whiteSpace:normal).
   const titleWrapsEff = tituloUniforme ? false : titleWraps;
@@ -273,7 +310,11 @@ export function MetodoStepHeader({
               <Text
                 color={color}
                 fontSize={
-                  tallTitle
+                  fitTitle
+                    // En modo fitTitle el tamaño lo controla la medición (px);
+                    // hasta la 1ª medición usamos el tamaño grande como base.
+                    ? (tallTitle ? { base: "34px", md: "60px" } : { base: "30px", md: "48px" })
+                    : tallTitle
                     ? (compactEff
                         ? (titleWrapsEff ? { base: "xl", md: "3xl" } : { base: "3xl", md: "4xl" })
                         : (titleWrapsEff ? { base: "2xl", md: "5xl" } : { base: "4xl", md: "6xl" }))
@@ -285,7 +326,7 @@ export function MetodoStepHeader({
                 letterSpacing="0.05em"
                 lineHeight={tallTitle ? "1.75" : "1.3"}
                 textAlign="center"
-                whiteSpace={tituloUniforme ? "normal" : "nowrap"}
+                whiteSpace={fitTitle ? "nowrap" : tituloUniforme ? "normal" : "nowrap"}
                 overflow="hidden"
                 textOverflow="ellipsis"
                 // El rabito de la "g" (descendente) baja por debajo de la línea
@@ -297,6 +338,8 @@ export function MetodoStepHeader({
                   textShadow: useDiscBg
                     ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
                     : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
+                  // fitTitle: el tamaño medido (px) manda sobre el token de Chakra.
+                  ...(fitTitle && fitPx != null ? { fontSize: `${fitPx}px` } : {}),
                 }}
               >
                 {title}

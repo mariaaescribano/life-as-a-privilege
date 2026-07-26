@@ -86,7 +86,7 @@ export const welcomeDisciplinas: Record<
 
   cultura: {
 
-    desc: "Las grandes filosofías que marcaron un antes y un después en la historia de la humanidad. Entiéndelas y crea la tuya propia.",
+    desc: "Las historias de la humanidad que marcaron un antes y un después. Entiéndelas y crea la tuya propia.",
 
   },
 

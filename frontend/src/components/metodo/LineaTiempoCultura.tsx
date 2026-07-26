@@ -54,8 +54,7 @@ function CirculoVisual({
       borderRadius="full"
       overflow="hidden"
       bg={bg}
-      border={`2px solid ${tinta}aa`}
-      boxShadow={`0 0 0 6px ${bg}, 0 0 18px ${tinta}55, 0 0 40px ${tinta}22`}
+      boxShadow={`0 0 18px ${tinta}55, 0 0 40px ${tinta}22`}
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -148,12 +147,11 @@ function FlechaNav({
       h={{ base: "44px", md: "48px" }}
       borderRadius="full"
       bg={bg}
-      border={`1px solid ${disabled ? `${tinta}33` : `${tinta}aa`}`}
       boxShadow={disabled ? "none" : `0 0 14px ${tinta}55, 0 2px 10px rgba(0,0,0,0.4)`}
       opacity={disabled ? 0.4 : 1}
       cursor={disabled ? "not-allowed" : "pointer"}
       transition="all 0.2s ease"
-      _hover={disabled ? undefined : { transform: "scale(1.08)", borderColor: tinta, boxShadow: `0 0 22px ${tinta}88, 0 2px 10px rgba(0,0,0,0.45)` }}
+      _hover={disabled ? undefined : { transform: "scale(1.08)", boxShadow: `0 0 22px ${tinta}88, 0 2px 10px rgba(0,0,0,0.45)` }}
       _active={disabled ? undefined : { transform: "scale(1.02)" }}
     >
       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
@@ -184,15 +182,15 @@ function TimelineDesktop({
   const paginaSeg = Math.min(pagina, totalPaginas - 1);
   const visibles = hitos.slice(paginaSeg * POR_PAGINA, paginaSeg * POR_PAGINA + POR_PAGINA);
 
-  const size = { base: "96px", md: "98px", lg: "128px" };
-  const iconSize = { base: "34px", md: "34px", lg: "44px" };
+  const size = { base: "96px", md: "96px", lg: "136px", xl: "148px" };
+  const iconSize = { base: "34px", md: "34px", lg: "46px", xl: "50px" };
 
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 6, md: 7 }}>
       {/* Fila de círculos con su línea. py deja hueco para las etiquetas. */}
       <Box w="100%" position="relative" py={{ md: "96px", lg: "104px" }}>
         <Flex position="relative" align="center" justify="center"
-              gap={{ base: 4, md: 4, lg: 6 }} px={{ base: 4, md: 4, lg: 6 }}>
+              gap={{ base: 4, md: 4, lg: 5, xl: 5 }} px={{ base: 4, md: 4, lg: 6 }}>
           {/* Línea horizontal que une los círculos (solo si hay más de uno). */}
           {visibles.length > 1 && (
             <Box
@@ -293,7 +291,7 @@ function TimelineMovil({
           _active={{ transform: "scale(0.99)" }}
         >
           <CirculoVisual hito={hito} tinta={tinta} bg={bg}
-                         size={{ base: "84px" }} iconSize={{ base: "30px" }} lazy />
+                         size={{ base: "120px" }} iconSize={{ base: "42px" }} lazy />
           <Box flex="1" minW={0}>
             <Text color={tinta} fontSize="md" fontWeight="700" lineHeight="1.3"
                   letterSpacing="0.02em" style={{ textShadow: `0 1px 3px #0c3c3cf5, 0 0 10px ${tinta}55` }}>

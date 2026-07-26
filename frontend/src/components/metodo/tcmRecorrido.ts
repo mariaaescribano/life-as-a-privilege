@@ -1373,6 +1373,83 @@ export function posicionBalance(
   return (c.exceso - c.deficiencia) / c.total;
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// DIAGNÓSTICO HONESTO DE UN ELEMENTO
+//
+// Antes el estado era la opción "más repetida" (mayoría simple) y la barra solo
+// se mostraba si esa mayoría caía en exceso/deficiencia: podías responder ~45%
+// de deficiencia y salir "En equilibrio" con la barra a cero. Ahora el estado se
+// decide por UMBRALES sobre la proporción real de respuestas de desequilibrio:
+//
+//   magnitud = (exceso + deficiencia) / total   → CUÁNTO desequilibrio (0–1)
+//   posicion = (exceso − deficiencia) / total   → HACIA DÓNDE (−1 def … +1 exc)
+//
+//   · magnitud < UMBRAL_DESEQUILIBRIO           → "equilibrio"
+//   · si no, y ambos lados están repartidos     → "mixto"
+//   · si no                                     → "exceso" | "deficiencia"
+// ─────────────────────────────────────────────────────────────────────────
+/** A partir de qué proporción de respuestas de desequilibrio se deja de decir
+ *  "En equilibrio" (sensible: 25%). */
+export const UMBRAL_DESEQUILIBRIO = 0.25;
+/** Cuando hay desequilibrio, si el lado menor pesa al menos esto DENTRO del
+ *  desequilibrio (min/(exceso+deficiencia)), el estado es "mixto". */
+export const UMBRAL_MIXTO = 0.34;
+
+export type VeredictoBalance = "equilibrio" | "deficiencia" | "exceso" | "mixto";
+
+export interface EstadoDiagnostico {
+  veredicto: VeredictoBalance;
+  /** Proporción de respuestas de desequilibrio (0–1). */
+  magnitud: number;
+  /** Dirección: −1 (todo deficiencia) … 0 … +1 (todo exceso). */
+  posicion: number;
+  /** Fracción de respuestas de exceso (0–1). */
+  excesoFrac: number;
+  /** Fracción de respuestas de deficiencia (0–1). */
+  defFrac: number;
+  /** Nº de respuestas contabilizadas. */
+  total: number;
+}
+
+/** Diagnóstico honesto de un elemento a partir de sus respuestas de balance.
+ *  `null` si aún no hay respuestas. */
+export function diagnosticoElemento(
+  el: Elemento,
+  respuestas: Record<string, string> | undefined,
+): EstadoDiagnostico | null {
+  const c = conteoBalance(el, respuestas);
+  if (c.total === 0) return null;
+  const excesoFrac = c.exceso / c.total;
+  const defFrac = c.deficiencia / c.total;
+  const magnitud = excesoFrac + defFrac;
+  const posicion = excesoFrac - defFrac;
+
+  let veredicto: VeredictoBalance;
+  if (magnitud < UMBRAL_DESEQUILIBRIO) {
+    veredicto = "equilibrio";
+  } else {
+    const desequilibrio = c.exceso + c.deficiencia;
+    const mezcla = desequilibrio === 0 ? 0 : Math.min(c.exceso, c.deficiencia) / desequilibrio;
+    if (mezcla >= UMBRAL_MIXTO) veredicto = "mixto";
+    else veredicto = posicion >= 0 ? "exceso" : "deficiencia";
+  }
+  return { veredicto, magnitud, posicion, excesoFrac, defFrac, total: c.total };
+}
+
+/** Elemento que hoy más atención necesita: el de MAYOR magnitud de desequilibrio
+ *  (fracción, sin el sesgo del nº de preguntas del antiguo `elementoPredominante`).
+ *  Empate → el primero en el orden del ciclo. */
+export function elementoMasCargado(data: DatosTcm | null | undefined): Elemento {
+  let best: Elemento = ORDEN_ELEMENTOS[0];
+  let bestMag = -1;
+  for (const el of ORDEN_ELEMENTOS) {
+    const d = diagnosticoElemento(el, data?.elementos?.[el]?.miniTest?.respuestas);
+    const m = d?.magnitud ?? -1;
+    if (m > bestMag) { bestMag = m; best = el; }
+  }
+  return best;
+}
+
 /** Puntos de un elemento usando sus tests de balance si existen; si no, el
  *  mini-test antiguo (transición mientras se migran los 5 elementos). */
 export function puntosElemento(

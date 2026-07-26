@@ -37,7 +37,6 @@ function renderInline(texto: string, color: string): React.ReactNode {
           style={{
             fontWeight: 700,
             color,
-            textShadow: `0 0 8px ${color}55`,
           }}
         >
           {parte.slice(2, -2)}
@@ -65,7 +64,6 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
       whiteSpace="pre-wrap"
       textAlign="center"
       mt={pi === 0 ? 0 : { base: 2.5, md: 3 }}
-      style={{ textShadow: `0 0 8px rgba(255,255,255,0.25)` }}
     >
       {renderInline(parrafo, color)}
     </Text>
@@ -98,7 +96,6 @@ function renderResumen(resumen: string, color: string): React.ReactNode {
       fontWeight="700"
       textAlign="center"
       mt={i === 0 ? 0 : { base: 2, md: 2.5 }}
-      style={{ textShadow: `0 0 12px ${color}66, 0 0 4px rgba(255,255,255,0.35)` }}
     >
       {renderInline(linea, color)}
     </Text>
@@ -213,7 +210,6 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           letterSpacing="0.04em"
-          style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
         >
           {cuerpo.label} en
         </Text>
@@ -223,7 +219,6 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           letterSpacing="0.04em"
-          style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
         >
           {signoData.name}
         </Text>
@@ -261,7 +256,6 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="700"
           letterSpacing="0.04em"
-          style={{ textShadow: `0 0 12px rgba(255,255,255,0.5), 0 0 26px ${color}88` }}
         >
           {cuerpo.label} en Casa {casa}
         </Text>

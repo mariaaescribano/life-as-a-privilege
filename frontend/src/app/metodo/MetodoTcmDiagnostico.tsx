@@ -16,8 +16,8 @@ import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, CICLO_SHENG, CICLO_KE,
-  elementoPredominante, balanceElemento, conteoBalance, viajeCompleto,
-  type DatosTcm, type Elemento, type Balance,
+  diagnosticoElemento, elementoMasCargado, viajeCompleto,
+  type DatosTcm, type Elemento, type EstadoDiagnostico, type VeredictoBalance,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import {
@@ -32,15 +32,17 @@ const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 // Estado de balance (traído de la antigua «Tu equilibrio»): etiqueta y color.
-const ESTADO_LABEL: Record<Balance, string> = {
+const ESTADO_LABEL: Record<VeredictoBalance, string> = {
   equilibrio: "En equilibrio",
   exceso: "En exceso",
   deficiencia: "En deficiencia",
+  mixto: "Mixto",
 };
-const ESTADO_COLOR: Record<Balance, string> = {
+const ESTADO_COLOR: Record<VeredictoBalance, string> = {
   equilibrio: "#6f9463",
   exceso: "#d1495b",
   deficiencia: "#c8963e",
+  mixto: "#9b6fae",
 };
 
 const R = 104, FOTO_R = 25; // mismos que la geometría compartida del pentágono
@@ -53,7 +55,7 @@ const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const DP_ELEM_BASE = 0.12, DP_ELEM_STEP = 0.12, DP_ELEM_DUR = 0.5;
 const DP_SHENG_BASE = 1.0, DP_KE_BASE = 2.0, DP_ARROW_STEP = 0.18, DP_ARROW_DUR = 0.45;
 
-type EstadoElemento = { balance: Balance | null; nivel: number | null };
+type EstadoElemento = EstadoDiagnostico | null;
 
 export default function MetodoTcmDiagnostico() {
   const navigate = useNavigate();
@@ -86,18 +88,14 @@ export default function MetodoTcmDiagnostico() {
     })();
   }, [navigate]);
 
-  const predominante = useMemo(() => elementoPredominante(data), [data]);
+  const predominante = useMemo(() => elementoMasCargado(data), [data]);
 
-  // Estado (equilibrio/exceso/deficiencia) y nivel de desequilibrio (0–1) de cada elemento.
+  // Diagnóstico honesto por elemento: veredicto por umbrales (no por mayoría) +
+  // magnitud (cuánto) y dirección (exceso/deficiencia). null = sin respuestas.
   const estados = useMemo(() => {
     const out: Partial<Record<Elemento, EstadoElemento>> = {};
     for (const el of ORDEN_ELEMENTOS) {
-      const r = data.elementos?.[el]?.miniTest?.respuestas;
-      const c = conteoBalance(el, r);
-      out[el] = {
-        balance: balanceElemento(el, r),
-        nivel: c.total === 0 ? null : (c.exceso + c.deficiencia) / c.total,
-      };
+      out[el] = diagnosticoElemento(el, data.elementos?.[el]?.miniTest?.respuestas);
     }
     return out;
   }, [data]);
@@ -158,7 +156,7 @@ export default function MetodoTcmDiagnostico() {
           <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
           <Panel titulo="" color={tcmTxt}>
             <EstrellaPerfil estados={estados} onElemento={(el) => setComicEl(el)} />
-            <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center"
+            <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
                   mt={2} lineHeight="1.6">
               Los elementos iluminados son los que más necesitan de tu atención.
             </Text>
@@ -256,9 +254,9 @@ const AristaPerfil = React.memo(function AristaPerfil({ ciclo, origen, delay, es
 }) {
   const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
   const { inicio, fin, ux, uy } = segmentoPentagono(idxElemento(origen), idxElemento(destino));
-  const b = estados[origen]?.balance;
-  const activa = b === "exceso" || b === "deficiencia";
-  const nivel = estados[origen]?.nivel ?? 0;
+  const st = estados[origen];
+  const activa = !!st && st.veredicto !== "equilibrio";
+  const nivel = st?.magnitud ?? 0;
   // Cada flecha lleva el color de su elemento de origen. El ciclo se distingue
   // por el trazo: Sheng (generador) continuo, Ke (control) entrecortado.
   const color = ELEMENTOS[origen].color;
@@ -299,8 +297,8 @@ function EstrellaPerfil({ estados, onElemento }: {
   const enter = reduce || inView;
 
   const afecta = (el: Elemento) => {
-    const b = estados[el]?.balance;
-    return b === "exceso" || b === "deficiencia";
+    const st = estados[el];
+    return !!st && st.veredicto !== "equilibrio";
   };
 
   return (
@@ -332,7 +330,7 @@ function EstrellaPerfil({ estados, onElemento }: {
           const label = verticePentagono(i, R + 30);
           const E = ELEMENTOS[el];
           const deseq = afecta(el);
-          const nivel = estados[el]?.nivel ?? 0;
+          const nivel = estados[el]?.magnitud ?? 0;
           const hov = hover === el;
           // Aro SIEMPRE blanco; brilla más cuanto mayor es el desequilibrio.
           const glow = deseq ? 7 + nivel * 20 : 3;
@@ -389,9 +387,12 @@ function Panel({ titulo, color, children }: {
   );
 }
 
-// ── Box de métricas (barras por estado) · traído de «Tu equilibrio» ──────────
-// Barra vacía = en equilibrio; cuanta más altura, más desequilibrio. Las barras
-// suben (y su número cuenta) cuando la sección asoma en pantalla, una sola vez.
+// ── Box de métricas · barras DIVERGENTES por elemento ────────────────────────
+// Cada elemento tiene una línea central (= equilibrio). La barra crece HACIA
+// ARRIBA según la proporción de respuestas de exceso (rojo) y HACIA ABAJO según
+// las de deficiencia (ámbar). Un elemento equilibrado casi no se despega de la
+// línea; uno "mixto" muestra barra arriba y abajo a la vez. Todo se dibuja con
+// la proporción REAL de respuestas (no depende ya de ninguna mayoría).
 function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, EstadoElemento>> }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -401,12 +402,12 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
     <>
       <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
             textAlign="center" lineHeight="1.7" mb={5} style={{ textShadow: INK_SHADOW }}>
-        Cuanta más altura, más desequilibrio hay en ese Elemento. Los vacíos están en equilibrio.
+        Hacia arriba, cuánto exceso; hacia abajo, cuánta deficiencia. Cuanto más cerca de la línea, más en equilibrio.
       </Text>
 
       {/* Leyenda de estados */}
       <Flex justify="center" gap={{ base: 3, md: 6 }} wrap="wrap" mb={5}>
-        {(["equilibrio", "exceso", "deficiencia"] as Balance[]).map((b) => (
+        {(["equilibrio", "exceso", "deficiencia", "mixto"] as VeredictoBalance[]).map((b) => (
           <Flex key={b} align="center" gap={2}>
             <Box w="12px" h="12px" borderRadius="sm" bg={ESTADO_COLOR[b]}
                  style={{ boxShadow: `0 0 8px ${ESTADO_COLOR[b]}` }} />
@@ -418,12 +419,12 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
       </Flex>
 
       <Box ref={ref}>
-        {/* Zona de barras */}
-        <Box h={{ base: "180px", md: "240px" }}>
-          <Flex h="100%" align="flex-end" justify="space-between" gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }}>
+        {/* Zona de barras divergentes */}
+        <Box h={{ base: "200px", md: "260px" }}>
+          <Flex h="100%" align="stretch" justify="space-between" gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }}>
             {ORDEN_ELEMENTOS.map((el, i) => (
               <ColumnaBalance key={el} index={i} enter={enter} reduce={reduce}
-                              balance={estados[el]?.balance ?? null} nivel={estados[el]?.nivel ?? null} />
+                              estado={estados[el] ?? null} />
             ))}
           </Flex>
         </Box>
@@ -432,7 +433,7 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
         <Flex justify="space-between" gap={{ base: 2, md: 5 }} px={{ base: 1, md: 3 }} mt={2.5}>
           {ORDEN_ELEMENTOS.map((el) => {
             const E = ELEMENTOS[el];
-            const balance = estados[el]?.balance ?? null;
+            const veredicto = estados[el]?.veredicto ?? null;
             return (
               <Flex key={el} flex="1" direction="column" align="center" gap={1} minW={0}>
                 <Box w={{ base: "38px", md: "50px" }} h={{ base: "38px", md: "50px" }}
@@ -445,10 +446,10 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
                       textAlign="center" noOfLines={1}>
                   {E.nombre}
                 </Text>
-                <Text color={balance ? ESTADO_COLOR[balance] : "rgba(255,255,255,0.45)"}
+                <Text color={veredicto ? ESTADO_COLOR[veredicto] : "rgba(255,255,255,0.45)"}
                       fontSize={{ base: "3xs", md: "2xs" }} fontWeight={700} textAlign="center"
-                      fontStyle={balance ? "normal" : "italic"} noOfLines={1} lineHeight="1.2">
-                  {balance ? ESTADO_LABEL[balance] : "sin datos"}
+                      fontStyle={veredicto ? "normal" : "italic"} noOfLines={1} lineHeight="1.2">
+                  {veredicto ? ESTADO_LABEL[veredicto] : "sin datos"}
                 </Text>
               </Flex>
             );
@@ -459,61 +460,72 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
   );
 }
 
-// ── Columna vertical de un elemento, por estado ──────────────────────────────
-function ColumnaBalance({ balance, nivel, index, enter, reduce }: {
-  balance: Balance | null; nivel: number | null; index: number; enter: boolean; reduce: boolean | null;
+// ── Columna DIVERGENTE de un elemento ────────────────────────────────────────
+// Estructura fija e idéntica en las 5 columnas (para que las líneas centrales
+// queden alineadas): [% exceso] · [mitad superior] · [línea] · [mitad inferior]
+// · [% deficiencia]. La altura de cada barra es su fracción real de respuestas.
+const EXC = ESTADO_COLOR.exceso;
+const DEF = ESTADO_COLOR.deficiencia;
+function ColumnaBalance({ estado, index, enter, reduce }: {
+  estado: EstadoElemento; index: number; enter: boolean; reduce: boolean | null;
 }) {
-  const enDesequilibrio = balance === "exceso" || balance === "deficiencia";
-  const color = enDesequilibrio ? ESTADO_COLOR[balance] : ESTADO_COLOR.equilibrio;
-  const objetivo = enDesequilibrio ? Math.round((nivel ?? 0) * 100) : 0;
-  const alturaFinal = enDesequilibrio ? Math.max(objetivo, 12) : 0;
+  const excPct = estado ? Math.round(estado.excesoFrac * 100) : 0;
+  const defPct = estado ? Math.round(estado.defFrac * 100) : 0;
 
-  // Tween en JS de un progreso 0→1 (con retraso por índice) para animar la
-  // ALTURA real y que el número suba montado en lo alto de la barra.
-  const [prog, setProg] = useState(reduce ? 1 : 0);
+  // Al asomar, las barras crecen desde la línea central con retraso por índice.
+  const [shown, setShown] = useState(!!reduce);
   useEffect(() => {
     if (!enter) return;
-    if (reduce) { setProg(1); return; }
-    setProg(0);
-    let raf = 0;
-    let start: number | null = null;
-    const dur = 1000;
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-    const timer = setTimeout(() => {
-      const step = (ts: number) => {
-        if (start === null) start = ts;
-        const t = Math.min((ts - start) / dur, 1);
-        setProg(easeOutCubic(t));
-        if (t < 1) raf = requestAnimationFrame(step);
-      };
-      raf = requestAnimationFrame(step);
-    }, index * 170);
-    return () => { clearTimeout(timer); if (raf) cancelAnimationFrame(raf); };
+    if (reduce) { setShown(true); return; }
+    setShown(false);
+    const t = setTimeout(() => setShown(true), index * 150);
+    return () => clearTimeout(t);
   }, [enter, reduce, index]);
 
-  const alturaPct = alturaFinal * prog;
-  const numero = Math.round(objetivo * prog);
+  const barW = { base: "58%", md: "52%" } as const;
+  const ease = "height 0.8s cubic-bezier(0.22,1,0.36,1)";
 
   return (
-    <Flex flex="1" direction="column" align="center" justify="flex-end" h="100%" minW={0} gap={1}>
-      {enDesequilibrio ? (
-        <>
-          <Text color={color} fontSize={{ base: "2xs", md: "sm" }} fontWeight={800} lineHeight="1"
-                opacity={enter ? 1 : 0} transition="opacity 0.4s ease"
-                style={{ textShadow: `0 0 8px ${color}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
-            {numero}%
+    <Flex flex="1" direction="column" align="center" h="100%" minW={0}>
+      {/* % exceso (arriba) */}
+      <Box h="16px" display="flex" alignItems="flex-end" justifyContent="center">
+        {excPct > 0 && (
+          <Text color={EXC} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
+                opacity={shown ? 1 : 0} transition="opacity 0.4s ease"
+                style={{ textShadow: `0 0 8px ${EXC}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
+            {excPct}%
           </Text>
-          <Box w={{ base: "70%", md: "62%" }} maxW="64px" h={`${alturaPct}%`}
-               borderTopRadius="md" bgGradient={`linear(to-t, ${color}cc, ${color})`}
-               style={{ boxShadow: `0 0 12px ${color}88, inset 0 1px 0 rgba(255,255,255,0.4)` }} />
-        </>
-      ) : (
-        <Box w={{ base: "70%", md: "62%" }} maxW="64px" h="4px" borderRadius="full"
-             bg={`${ESTADO_COLOR.equilibrio}aa`} opacity={enter ? 1 : 0}
-             transform={enter ? "translateY(0)" : "translateY(6px)"}
-             transition="opacity 0.5s ease, transform 0.5s ease"
-             style={{ transitionDelay: `${index * 0.17}s`, boxShadow: `0 0 10px ${ESTADO_COLOR.equilibrio}66` }} />
-      )}
+        )}
+      </Box>
+
+      {/* Mitad superior · exceso (crece hacia arriba, anclado a la línea) */}
+      <Flex flex="1" w="100%" align="flex-end" justify="center">
+        <Box w={barW} maxW="46px" h={shown ? `${estado?.excesoFrac ? estado.excesoFrac * 100 : 0}%` : "0%"}
+             borderTopRadius="md" bgGradient={`linear(to-t, ${EXC}cc, ${EXC})`}
+             style={{ boxShadow: excPct > 0 ? `0 0 12px ${EXC}88, inset 0 1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
+      </Flex>
+
+      {/* Línea central = equilibrio */}
+      <Box w="100%" h="2px" flexShrink={0} borderRadius="full" bg="rgba(255,255,255,0.45)"
+           style={{ boxShadow: "0 0 6px rgba(255,255,255,0.35)" }} />
+
+      {/* Mitad inferior · deficiencia (crece hacia abajo, anclado a la línea) */}
+      <Flex flex="1" w="100%" align="flex-start" justify="center">
+        <Box w={barW} maxW="46px" h={shown ? `${estado?.defFrac ? estado.defFrac * 100 : 0}%` : "0%"}
+             borderBottomRadius="md" bgGradient={`linear(to-b, ${DEF}cc, ${DEF})`}
+             style={{ boxShadow: defPct > 0 ? `0 0 12px ${DEF}88, inset 0 -1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
+      </Flex>
+
+      {/* % deficiencia (abajo) */}
+      <Box h="16px" display="flex" alignItems="flex-start" justifyContent="center">
+        {defPct > 0 && (
+          <Text color={DEF} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
+                opacity={shown ? 1 : 0} transition="opacity 0.4s ease"
+                style={{ textShadow: `0 0 8px ${DEF}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
+            {defPct}%
+          </Text>
+        )}
+      </Box>
     </Flex>
   );
 }

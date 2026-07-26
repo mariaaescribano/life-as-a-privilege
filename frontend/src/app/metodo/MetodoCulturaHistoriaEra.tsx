@@ -146,6 +146,9 @@ export default function MetodoCulturaHistoriaEra() {
         disciplinaBgColor={culturaBg}
         // Salto de línea después de cada punto (una frase por bloque).
         separarFrases
+        // En móvil, la foto del momento se ve 1:1 (cuadrada) y el box se
+        // estrecha para dejar hueco a las flechas laterales.
+        fotoCuadradaMovil
       />
 
       <BotonCompania color={culturaTxt} bgColor={culturaBg} disciplinaNom={culturaNom} />

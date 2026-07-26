@@ -3,7 +3,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
-import { ELEMENTOS, ORDEN_ELEMENTOS, type Elemento, type Balance } from "./tcmRecorrido";
+import { ELEMENTOS, ORDEN_ELEMENTOS, type Elemento, type EstadoDiagnostico, type VeredictoBalance } from "./tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO, CONTENIDO_ELEMENTOS } from "./tcmElementosContenido";
 
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
@@ -13,11 +13,16 @@ const MotionG = motion.g as any;
 const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const STAR_BASE = 0.1, STAR_STEP = 0.13, STAR_DUR = 0.55;
 
-const ESTADO_LABEL: Record<Balance, string> = {
-  equilibrio: "En equilibrio", exceso: "En exceso", deficiencia: "En deficiencia",
+const ESTADO_LABEL: Record<VeredictoBalance, string> = {
+  equilibrio: "En equilibrio", exceso: "En exceso", deficiencia: "En deficiencia", mixto: "Mixto",
 };
-const ESTADO_COLOR: Record<Balance, string> = {
-  equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e",
+const ESTADO_COLOR: Record<VeredictoBalance, string> = {
+  equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e", mixto: "#9b6fae",
+};
+// Qué texto del elemento mostrar según el veredicto ("mixto" reutiliza el
+// párrafo genérico de desequilibrio).
+const CONTENT_KEY: Record<VeredictoBalance, "equilibrio" | "exceso" | "deficiencia" | "desequilibrio"> = {
+  equilibrio: "equilibrio", exceso: "exceso", deficiencia: "deficiencia", mixto: "desequilibrio",
 };
 
 // Geometría del pentágono selector (centrada en el viewBox 400×348).
@@ -27,7 +32,7 @@ function vertice(i: number, radio: number) {
   return { x: CX + radio * Math.cos(ang), y: CY + radio * Math.sin(ang) };
 }
 
-export type EstadoElemento = { balance: Balance | null; nivel: number | null };
+export type EstadoElemento = EstadoDiagnostico | null;
 
 /**
  * Box "estrella de los cinco elementos + tu mensaje": pentágono selector a la
@@ -48,10 +53,10 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
 
   const E = ELEMENTOS[elActivo];
   const C = CONTENIDO_ELEMENTOS[elActivo];
-  const balance = estados[elActivo]?.balance ?? null;
-  // Defensivo: si `balance` no fuese un enum válido o faltase el contenido, se
-  // cae a intro / a un array vacío en vez de reventar el .map (pantalla en blanco).
-  const parrafos = (balance ? C?.[balance] : C?.intro) ?? C?.intro ?? [];
+  const veredicto = estados[elActivo]?.veredicto ?? null;
+  // Defensivo: si `veredicto` no fuese válido o faltase el contenido, se cae a
+  // intro / a un array vacío en vez de reventar el .map (pantalla en blanco).
+  const parrafos = (veredicto ? C?.[CONTENT_KEY[veredicto]] : C?.intro) ?? C?.intro ?? [];
 
   return (
     <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
@@ -129,11 +134,11 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                     style={{ textShadow: "0 2px 10px rgba(0,0,0,0.9)" }}>
                 {C.nombre} <Text as="span" color={E.color}>{C.hanzi}</Text>
               </Text>
-              {balance ? (
-                <Box px={3} py={1} borderRadius="full" bg={`${ESTADO_COLOR[balance]}44`}
-                     border={`1px solid ${ESTADO_COLOR[balance]}`} sx={{ backdropFilter: "blur(4px)" }}>
+              {veredicto ? (
+                <Box px={3} py={1} borderRadius="full" bg={`${ESTADO_COLOR[veredicto]}44`}
+                     border={`1px solid ${ESTADO_COLOR[veredicto]}`} sx={{ backdropFilter: "blur(4px)" }}>
                   <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.04em">
-                    {ESTADO_LABEL[balance]}
+                    {ESTADO_LABEL[veredicto]}
                   </Text>
                 </Box>
               ) : (

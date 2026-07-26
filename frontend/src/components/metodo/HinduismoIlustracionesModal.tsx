@@ -12,6 +12,8 @@ import {
 import { ayurvedaBg, ayurvedaTxt } from "../../GlobalVariables";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
+import { AyurvedaLoader } from "./comicLoaders";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS 2 SUB-CÓMICS DE HINDUISMO
@@ -176,6 +178,10 @@ const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPos
   { key: "los_doshas",    title: "3. Los Doṣhas",    cover: "/viñetas/hinduismo/doshas/doshasportada.png"        },
 ];
 
+// Portadas del selector (con la misma codificación que usa el <img>), para
+// precargarlas y mostrar la animación de espera mientras descargan.
+const PORTADAS = SELECTOR_OPTIONS.map((o) => (o.cover ? encodeURI(o.cover) : null));
+
 interface HinduismoIlustracionesModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -189,6 +195,9 @@ export function HinduismoIlustracionesModal({
   onComplete,
 }: HinduismoIlustracionesModalProps) {
   const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
+  // Espera de las portadas del selector: hasta que TODAS estén descargadas se
+  // muestra la animación de Ayurveda (el loto) en vez de la rejilla.
+  const portadasListas = usePrecargarImagenes(PORTADAS);
 
   // Al abrir el modal, siempre volvemos al selector de capítulos.
   useEffect(() => {
@@ -279,6 +288,12 @@ export function HinduismoIlustracionesModal({
             overflowY="auto"
             overflowX="hidden"
           >
+            {!portadasListas ? (
+              // Mientras cargan las portadas: animación de Ayurveda centrada.
+              <Flex flex="1" w="100%" minH={{ base: "60vh", md: "80vh" }} align="center" justify="center">
+                <AyurvedaLoader color={ayurvedaTxt} />
+              </Flex>
+            ) : (
             <Flex
               direction="column"
               align="center"
@@ -423,6 +438,7 @@ export function HinduismoIlustracionesModal({
                 ))}
               </Flex>
             </Flex>
+            )}
           </ModalBody>
         )}
 

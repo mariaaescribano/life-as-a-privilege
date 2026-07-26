@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -101,6 +101,22 @@ export default function MetodoTcmElementos() {
     disponible: tieneContenido(el),
   })), [data]);
 
+  // Cuando se desbloquea un elemento nuevo, su cursor pasa de "prohibido" a
+  // "mano". Pero el navegador NO recalcula el cursor hasta que el ratón se mueve:
+  // si el puntero está quieto sobre la estrella, seguiría marcando prohibido.
+  // Forzamos el recálculo alternando pointer-events en el SVG cada vez que cambia
+  // qué elementos están activos, para que el puntero pase a la flechita al vuelo.
+  const svgRef = useRef<any>(null);
+  const activosFirma = estados.map((e) => (e.desbloqueado && e.disponible ? "1" : "0")).join("");
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const prev = svg.style.pointerEvents;
+    svg.style.pointerEvents = "none";
+    const id = requestAnimationFrame(() => { svg.style.pointerEvents = prev; });
+    return () => cancelAnimationFrame(id);
+  }, [activosFirma]);
+
   // Pinchar un elemento abre su cómic (no navega a otra página). El autoguardado,
   // los tests y el "marcar como leído" los gestiona ElementoComicModal.
   const abrir = (el: Elemento, desbloqueado: boolean, disponible: boolean) => {
@@ -155,7 +171,7 @@ export default function MetodoTcmElementos() {
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 6 }} py={{ base: 7, md: 9 }}>
-              <Box as="svg" viewBox="0 0 320 312" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
+              <Box as="svg" ref={svgRef} viewBox="0 0 320 312" w={{ base: "300px", md: "380px" }} h="auto" overflow="visible">
                 <defs>
                   {ORDEN_ELEMENTOS.map((el, i) => {
                     const v = vertice(i, R);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Flex, Grid, Image, Input, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -6,8 +6,10 @@ import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
 import { WaitlistModal } from "../../components/global/WaitlistModal";
-import { recorridoContenido, type ContenidoSeccion } from "../../data/recorridoContenido";
-import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { recorridoContenido, nombreEnMapa, type ContenidoSeccion } from "../../data/recorridoContenido";
+import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { LifeLoading } from "../../components/global/LifeLoading";
 // Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
@@ -97,9 +99,16 @@ const modalidades: ModalidadData[] = [
     bg: culturaBg,
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-    tagline: "Las grandes filosofías.",
+    tagline: "Las historias de la humanidad.",
     ...recorridoContenido.cultura,
   },
+];
+
+// Todas las fotos que deben estar cargadas antes de revelar la página (el logo
+// + los fondos propios de cada disciplina). Mientras, se ve <LifeLoading/>.
+const METODO_IMGS: string[] = [
+  "/img/icono/life.png",
+  ...(modalidades.map((m) => disciplinaBgImg(m.name)).filter(Boolean) as string[]),
 ];
 
 // ── Sombras de texto del recorrido ──
@@ -145,19 +154,23 @@ const headerDescShadow = (card: ModalidadData) =>
     ? SHADOW_BLACK
     : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 12px rgba(255,255,255,0.38), 0 0 26px rgba(255,255,255,0.19)`;
 
+// callback ref: el observer se engancha en cuanto el nodo aparece en el DOM.
+// (Importante porque la página se monta primero mostrando <LifeLoading/> y el
+// contenido —con estos refs— aparece después; con un ref normal el efecto
+// correría una vez con el ref vacío y nunca volvería a observar.)
 const useReveal = (threshold = 0.12) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [node, setNode] = useState<HTMLElement | null>(null);
+  const ref = useCallback((el: HTMLElement | null) => setNode(el), []);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    if (!node) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
       { threshold }
     );
-    obs.observe(el);
+    obs.observe(node);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [node, threshold]);
   return { ref, visible };
 };
 
@@ -172,27 +185,38 @@ type MetodoCardProps = {
 function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardProps) {
   const hasBg = hasDisciplinaBg(data.name);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
-  const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : data.name;
+  // En El Mapa, "Hinduismo" se muestra como "Ayurveda" (nombreEnMapa). Medicina
+  // China se abrevia en móvil por espacio.
+  const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : nombreEnMapa(data.name);
+  // Entrada épica: la tarjeta CAE en cascada con un "pop" (rebote + enfoque).
+  // La entrada va en el wrapper exterior y el hover en la tarjeta interior, para
+  // que sus `transform` no se pisen.
+  const entradaDelay = 0.15 + delay;
   return (
+    <Box
+      mt="42px"
+      mb={{ base: 3, md: 5 }}
+      opacity={parentVisible ? 1 : 0}
+      transform={parentVisible ? "translateY(0) scale(1) rotate(0deg)" : "translateY(56px) scale(0.68) rotate(-5deg)"}
+      filter={parentVisible ? "blur(0px)" : "blur(7px)"}
+      transition={`opacity 0.55s ease ${entradaDelay}s, transform 0.95s cubic-bezier(0.22,1.5,0.36,1) ${entradaDelay}s, filter 0.55s ease ${entradaDelay}s`}
+      sx={{ willChange: "transform, opacity, filter" }}
+    >
     <Box
       role="group"
       position="relative"
-      mt="42px"
-      mb={{ base: 3, md: 5 }}
       pt="46px"
       pb={{ base: 5, md: 7 }}
       px={{ base: 3, md: 5 }}
       bg={hasBg ? "transparent" : data.bg}
       borderRadius="2xl"
-      opacity={parentVisible ? 1 : 0}
-      transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.93)"}
-      transition={`opacity 0.65s ease ${delay}s, transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease`}
       cursor="pointer"
       onClick={onClick}
       textAlign="center"
       display="flex"
       flexDirection="column"
       alignItems="center"
+      transition="transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease"
       _hover={{
         transform: "translateY(-6px)",
         boxShadow: `0 12px 32px rgba(0,0,0,0.28), 0 0 30px ${data.txt}55`,
@@ -307,6 +331,7 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
         →
       </Box>
     </Box>
+    </Box>
   );
 }
 
@@ -322,6 +347,12 @@ export default function ElMetodo() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
+  const imagenesListas = usePrecargarImagenes(METODO_IMGS);
+  const [tiempoMin, setTiempoMin] = useState(false);
+  // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
+  // tiempo mínimo (para que se vea la animación de carga aunque las fotos vengan
+  // de caché). Mientras, se muestra <LifeLoading/>.
+  const listo = imagenesListas && tiempoMin;
 
   // Formulario de voluntario/a (dentro del aviso "Proyecto en desarrollo").
   // El email se manda al backend con origen "voluntario" → notificación a
@@ -369,9 +400,21 @@ export default function ElMetodo() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const t = setTimeout(() => setMounted(true), 60);
+    const t = setTimeout(() => setTiempoMin(true), 550);
     return () => clearTimeout(t);
   }, []);
+
+  // Cuando la página está lista, disparamos la entrada de la primera pantalla
+  // (mandala + cabecera + tarjetas). Doble requestAnimationFrame: el contenido
+  // se pinta primero OCULTO y, al frame siguiente, cambia a visible → la
+  // transición CSS se ejecuta siempre (si lo hiciéramos en el mismo frame, el
+  // navegador pintaría ya el estado final y no se vería animación).
+  useEffect(() => {
+    if (!listo) return;
+    let r2 = 0;
+    const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setMounted(true)); });
+    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+  }, [listo]);
 
   useEffect(() => {
     if (selectedCard) {
@@ -381,6 +424,9 @@ export default function ElMetodo() {
     }
     return () => { document.body.style.overflow = ""; };
   }, [selectedCard]);
+
+  // Mientras cargan las fotos: pantalla de carga con el mandala animado.
+  if (!listo) return <LifeLoading variant="auto" />;
 
   return (
     <Box
@@ -394,17 +440,34 @@ export default function ElMetodo() {
 
       <Box flex="1">
       {/* ── MANDALA SEPARADOR ── */}
+      {/* Wrapper con flotación + latido perpetuos; la imagen hace la entrada
+          épica (surge girando desde muy pequeña y se enfoca). */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.png"
-          alt=""
-          h={{ base: "63px", md: "86px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 23px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
+        <Box
+          sx={{
+            "@keyframes mandalaFloat": {
+              "0%, 100%": { transform: "translateY(0) scale(1)" },
+              "50%": { transform: "translateY(-9px) scale(1.03)" },
+            },
+            animation: "mandalaFloat 5.5s ease-in-out infinite",
+          }}
+        >
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h={{ base: "63px", md: "86px" }}
+            objectFit="contain"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
+              // glow (drop-shadow) siempre + blur solo durante la entrada.
+              filter:
+                "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 23px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" +
+                (mounted ? "" : " blur(6px)"),
+              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
+            }}
+          />
+        </Box>
       </Flex>
 
       {/* ── CABECERA ── */}
@@ -425,8 +488,8 @@ export default function ElMetodo() {
           letterSpacing="0.08em"
           lineHeight="1.1"
           textShadow="0 0 16px rgba(255,255,255,0.64), 0 0 34px rgba(255,255,255,0.41), 0 0 63px rgba(180,255,245,0.34)"
-          opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(22px)"}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.85s ease, transform 0.85s ease"
         >
           EL MAPA
@@ -438,8 +501,8 @@ export default function ElMetodo() {
           fontWeight="400"
           letterSpacing="0.05em"
           textShadow="0 0 9px rgba(255,255,255,0.41), 0 0 20px rgba(255,255,255,0.22)"
-          opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s"
         >
           de Life as a Privilege
@@ -454,8 +517,8 @@ export default function ElMetodo() {
           textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
           maxW={{ base: "100%", md: "70%" }}
           mt={{ base: 2, md: 3 }}
-          opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
           Ocho disciplinas. Un orden. Un propósito: entenderte.
@@ -469,27 +532,11 @@ export default function ElMetodo() {
           textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
           maxW={{ base: "100%", md: "70%" }}
           mt={{ base: 2, md: 3 }}
-          opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
           No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes para formar una comprensión profunda y coherente de quién eres.
-        </Text>
-
-        <Text
-          color="rgba(255,255,255,0.82)"
-          fontSize={{ base: "xs", md: "sm" }}
-          fontStyle="italic"
-          lineHeight="1.8"
-          letterSpacing="0.02em"
-          textShadow="0 0 9px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.16)"
-          maxW={{ base: "100%", md: "70%" }}
-          mt={{ base: 5, md: 7 }}
-          opacity={headerReveal.visible ? 1 : 0}
-          transform={headerReveal.visible ? "translateY(0)" : "translateY(14px)"}
-          transition="opacity 0.8s ease 0.7s, transform 0.8s ease 0.7s"
-        >
-          Doy mi palabra de honor de que todos los contenidos son obra mía, escritos y diseñados por mí.
         </Text>
 
       </Flex>
@@ -507,8 +554,8 @@ export default function ElMetodo() {
           maxW="500px"
           h="1px"
           bg="rgba(255,255,255,0.15)"
-          opacity={disciplinasTitleReveal.visible ? 1 : 0}
-          transform={disciplinasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.2)"}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "scaleX(1)" : "scaleX(0.2)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         />
 
@@ -521,8 +568,8 @@ export default function ElMetodo() {
           lineHeight="1.6"
           maxW={{ base: "100%", md: "640px" }}
           textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
-          opacity={disciplinasTitleReveal.visible ? 1 : 0}
-          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(10px)"}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(10px)"}
           transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
         >
           Cada disciplina observa una parte distinta del ser humano.
@@ -546,7 +593,7 @@ export default function ElMetodo() {
               key={m.name}
               data={m}
               delay={i * 0.1}
-              parentVisible={cardsReveal.visible}
+              parentVisible={mounted}
               index={i + 1}
               onClick={() => setSelectedCard(m)}
             />
@@ -1193,7 +1240,9 @@ export default function ElMetodo() {
             position="relative"
             overflow="hidden"
           >
-            {hasDisciplinaBg(selectedCard.name) && <DisciplinaBgLayer nom={selectedCard.name} borderRadius="3xl" blur />}
+            {/* Fondo de la disciplina NÍTIDO (sin blur): la imagen tal cual. El
+                único desenfoque es el de los boxes de dentro ("Qué incluye"). */}
+            {hasDisciplinaBg(selectedCard.name) && <DisciplinaBgLayer nom={selectedCard.name} borderRadius="3xl" />}
             {/* X */}
             <Box
               position="absolute"
@@ -1277,7 +1326,7 @@ export default function ElMetodo() {
                 textShadow={headerNameShadow(selectedCard)}
                 filter={hasDisciplinaBg(selectedCard.name) ? undefined : `drop-shadow(0 2px 14px ${selectedCard.txt}55)`}
               >
-                {selectedCard.name}
+                {nombreEnMapa(selectedCard.name)}
               </Text>
 
               <Box

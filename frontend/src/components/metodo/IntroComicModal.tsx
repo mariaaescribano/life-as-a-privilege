@@ -86,6 +86,9 @@ interface IntroComicModalProps {
   /** Si true, no se muestra el cómic hasta que la foto de fondo cargue del todo
    *  (loader a pantalla completa mientras). Se pasa tal cual a ComicViewer. */
   esperarFondo?: boolean;
+  /** Si true, en móvil la foto se ve 1:1 (cuadrada) y el box se estrecha para
+   *  dejar hueco a las flechas. Se pasa tal cual a ComicViewer. Lo usa Cultura. */
+  fotoCuadradaMovil?: boolean;
 }
 
 export function IntroComicModal({
@@ -110,6 +113,7 @@ export function IntroComicModal({
   textSize,
   flechasEnBox,
   esperarFondo,
+  fotoCuadradaMovil,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -146,6 +150,7 @@ export function IntroComicModal({
           textSize={textSize}
           flechasEnBox={flechasEnBox}
           esperarFondo={esperarFondo}
+          fotoCuadradaMovil={fotoCuadradaMovil}
         />
 
         {/* Botón de continuar (p.ej. "Astrología →"), fijo a la IZQUIERDA de la X
