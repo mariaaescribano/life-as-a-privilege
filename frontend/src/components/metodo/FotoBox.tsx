@@ -100,9 +100,9 @@ export function FotoBox({
       {/* Tick de «visto» (arriba a la derecha). */}
       {visto && (
         <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-              w="24px" h="24px" borderRadius="full" bg={tinta}
-              boxShadow={`0 0 10px ${tinta}, 0 1px 4px rgba(0,0,0,0.5)`}>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill={bg}>
+              w="24px" h="24px" borderRadius="full" bg={bg} border={`1px solid ${tinta}`}
+              boxShadow={`0 0 10px ${tinta}66, 0 1px 4px rgba(0,0,0,0.5)`}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill={tinta}>
             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
           </Box>
         </Flex>

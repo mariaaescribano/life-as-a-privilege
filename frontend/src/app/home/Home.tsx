@@ -937,16 +937,15 @@ const Home = () => {
       _hover={{ transform: "translateY(-1px)", boxShadow: `0 6px 22px rgba(0,0,0,0.34), 0 0 24px ${contDisc.txt}5a` }}
     >
       {/* Fondo de la disciplina NÍTIDO: velo muy suave para que la IMAGEN se vea
-          de verdad; la legibilidad del texto se apoya en el text-shadow. */}
+          de verdad. */}
       <DisciplinaBgLayer nom={contDisc.nom} borderRadius="full" overlay={`${contDisc.bg}59`} />
       {/* Icono de la disciplina, a la izquierda. */}
       {ContIcon && (
-        <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" flexShrink={0}
-             style={{ filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.85))" }}>
+        <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" flexShrink={0}>
           <ContIcon size={{ base: "20px", md: "22px" }} />
         </Box>
       )}
-      <Box as="span" position="relative" zIndex={1} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.7)" }}>
+      <Box as="span" position="relative" zIndex={1} textShadow="none">
         Continuar por dónde lo dejé →
       </Box>
     </Box>

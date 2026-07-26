@@ -357,20 +357,37 @@ export default function MetodoNutricionPlato() {
                         <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
                         <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
                       </radialGradient>
+                      {/* Un recorte por sector, para meter la foto del grupo dentro. */}
+                      {SECTORES.map(({ macro: m, d }) => (
+                        <clipPath key={`clip-${m.key}`} id={`clip-${m.key}`}>
+                          <path d={d} />
+                        </clipPath>
+                      ))}
                     </defs>
 
                     {/* Ala del plato (porcelana) */}
                     <circle cx={CX} cy={CY} r={R_PLATE} fill="url(#platoRim)" stroke="#ffffff" strokeWidth={1.5} />
                     <circle cx={CX} cy={CY} r={R_PLATE} fill="none" stroke="rgba(0,0,0,0.10)" strokeWidth={1} />
 
-                    {/* Sectores (el hueco central) */}
+                    {/* Sectores (el hueco central): cada uno lleva la FOTO de su
+                        grupo (platoverduras/platofruta/platocarbs/platoproteina)
+                        recortada al sector, con un velo del color encima —tenue en
+                        el sector activo (foto nítida) y más opaco en los demás. */}
                     {SECTORES.map(({ macro: m, d }) => {
                       const activo = m.key === macroSel;
+                      const foto = PLATO_PORTADA[m.key];
                       return (
-                        <path key={m.key} d={d} fill={m.color} fillOpacity={activo ? 1 : 0.6}
-                              stroke="#fffdf7" strokeWidth={activo ? 2.5 : 1.25} strokeLinejoin="round"
-                              style={{ cursor: "pointer", transition: "fill-opacity 0.2s" }}
-                              onClick={() => setMacroSel(m.key)} />
+                        <g key={m.key} style={{ cursor: "pointer" }} onClick={() => setMacroSel(m.key)}>
+                          {foto && (
+                            <image href={encodeURI(foto)} x={CX - R_FOOD} y={CY - R_FOOD}
+                                   width={R_FOOD * 2} height={R_FOOD * 2}
+                                   preserveAspectRatio="xMidYMid slice"
+                                   clipPath={`url(#clip-${m.key})`} />
+                          )}
+                          <path d={d} fill={m.color} fillOpacity={activo ? 0.28 : 0.62}
+                                stroke="#fffdf7" strokeWidth={activo ? 2.5 : 1.25} strokeLinejoin="round"
+                                style={{ transition: "fill-opacity 0.2s" }} />
+                        </g>
                       );
                     })}
 

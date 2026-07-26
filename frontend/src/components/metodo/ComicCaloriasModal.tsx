@@ -58,7 +58,7 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
           onClick={onContinue}
           position="fixed"
           top={{ base: 3, md: 5 }}
-          right={{ base: "60px", md: "72px" }}
+          right={{ base: "74px", md: "90px" }}
           zIndex={11}
           display="inline-flex"
           alignItems="center"
@@ -78,10 +78,10 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
           letterSpacing="0.04em"
           whiteSpace="nowrap"
           cursor="pointer"
-          boxShadow={`0 0 18px ${nutricionBg}88, 0 0 40px ${nutricionBg}44, 0 2px 12px rgba(0,0,0,0.45)`}
+          boxShadow="0 2px 12px rgba(0,0,0,0.45)"
           sx={{ backdropFilter: "blur(4px)" }}
           transition="all 0.2s"
-          _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 28px ${nutricionBg}aa, 0 0 58px ${nutricionBg}66` }}
+          _hover={{ transform: "translateY(-1px)" }}
         >
           {/* Fondo imagen + velo, como el botón «Saltar». */}
           <Box as="img" src="/img/fondos/nutri.png" alt="" loading="eager" position="absolute" inset="0"

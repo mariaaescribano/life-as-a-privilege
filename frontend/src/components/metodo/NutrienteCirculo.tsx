@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { nutricionTxt } from "../../GlobalVariables";
+import { glowSuave, glowSuaveHover } from "./FotoBox";
 import type { NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -32,9 +33,9 @@ function CirculoNodo({ tar, x, y, onClick }: {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      boxShadow={`0 0 12px ${color}cc, 0 4px 14px rgba(0,0,0,0.3)`}
+      boxShadow={glowSuave(nutricionTxt)}
       transition="transform 0.18s ease, box-shadow 0.18s ease"
-      _hover={{ transform: "translate(-50%, -50%) scale(1.12)", boxShadow: `0 0 20px ${color}, 0 6px 18px rgba(0,0,0,0.4)` }}
+      _hover={{ transform: "translate(-50%, -50%) scale(1.12)", boxShadow: glowSuaveHover(nutricionTxt) }}
       _active={{ transform: "translate(-50%, -50%) scale(1.04)" }}
       title={tar.titulo}
     >
@@ -71,11 +72,12 @@ export function NutrienteCirculo({ tarjetas, onSelect, tituloCentro }: {
       {tituloCentro && (
         <Flex position="absolute" inset={0} align="center" justify="center" pointerEvents="none"
               direction="column" gap={1} px="26%" textAlign="center">
-          <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "lg", md: "2xl" }} lineHeight="1.1"
-                style={{ textShadow: "0 1px 6px rgba(255,255,255,0.6)" }}>
+          <Text color="white" fontWeight="800" fontSize={{ base: "lg", md: "2xl" }} lineHeight="1.1"
+                style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
             {tituloCentro}
           </Text>
-          <Text color={`${nutricionTxt}aa`} fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic">
+          <Text color="whiteAlpha.800" fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.3)" }}>
             Toca cada una
           </Text>
         </Flex>

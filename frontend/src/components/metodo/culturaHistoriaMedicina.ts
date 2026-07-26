@@ -353,6 +353,15 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Comprendieron también el poder de la naturaleza sanadora del cuerpo: muchas veces, la mejor medicina era ayudar al organismo a recuperarse por sí mismo, sin estorbarlo.",
           "El médico dejó de ser un mago para convertirse en un observador paciente y honesto de la realidad.",
         ]),
+      hito("grecia", "herofilo-erasistrato", "Herófilo y Erasístrato", "≈siglo III a. C.",
+        "¿Qué se descubre cuando, por fin, se puede mirar dentro del cuerpo?",
+        [
+          "En la ciudad de Alejandría, en el Egipto griego, ocurrió algo excepcional: durante un tiempo se permitió estudiar el cuerpo humano por dentro. Allí trabajaron Herófilo y Erasístrato, los grandes anatomistas de la Antigüedad.",
+          "Herófilo estudió el cerebro y lo señaló —y no el corazón— como centro del pensamiento y de los nervios. Distinguió los nervios de los tendones y describió el ojo, el hígado y el aparato digestivo con un detalle nunca visto.",
+          "Erasístrato investigó el corazón y los vasos sanguíneos, y se acercó muchísimo a comprender cómo circulaba la sangre, casi dos mil años antes de que se demostrara del todo.",
+          "Fueron la cima de la anatomía antigua. Después, diseccionar cuerpos humanos volvió a prohibirse durante siglos, y aquel conocimiento tan valioso quedó casi congelado hasta el Renacimiento.",
+        ],
+        "Dato curioso: la famosa Biblioteca de Alejandría no solo guardaba libros: a su alrededor floreció una comunidad de sabios que convirtió la ciudad en el mayor centro científico del mundo antiguo."),
       hito("grecia", "grecia-aplicalo", "Aplícalo a tu vida", "",
         "Grecia te enseña el poder de la razón.",
         [
@@ -438,6 +447,33 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Defendía que el médico debía basarse en la experiencia y en los hechos, no solo en la autoridad de los libros antiguos. Si la observación contradecía a un maestro, había que fiarse de la observación.",
           "También escribió sobre la importancia de la relación con el paciente y de no perder nunca la esperanza en la curación.",
         ]),
+      hito("islam", "abulcasis", "Abulcasis", "936-1013",
+        "¿Quién enseñó a Europa a operar?",
+        [
+          "Abulcasis (Al-Zahrawi) vivió en Córdoba y está considerado el mayor cirujano del mundo medieval. Dedicó su vida a convertir la cirugía en una disciplina seria, cuidadosa y que se pudiera enseñar.",
+          "Escribió una enorme enciclopedia médica cuya última parte, dedicada a la cirugía, incluía dibujos de más de doscientos instrumentos quirúrgicos, muchos inventados o mejorados por él. Fue el primer tratado ilustrado de cirugía de la historia.",
+          "Describió cómo cauterizar heridas, extraer cálculos, tratar fracturas y coser con suturas, e insistía en conocer bien la anatomía y en tratar al paciente con delicadeza.",
+          "Su obra se tradujo al latín y se estudió en las universidades europeas durante más de quinientos años, convirtiéndolo en el gran maestro de la cirugía occidental.",
+        ],
+        "Dato curioso: algunos de los instrumentos que dibujó Abulcasis hace más de mil años —pinzas, bisturís, fórceps— se parecen asombrosamente a los que se siguen usando hoy en los quirófanos."),
+      hito("islam", "maimonides", "Maimónides", "1138-1204",
+        "¿Puede un mismo hombre ser médico del sultán y guía espiritual de su pueblo?",
+        [
+          "Maimónides nació en Córdoba, en plena edad de oro de Al-Ándalus. Filósofo, médico y sabio judío, tuvo que huir de la persecución y acabó ejerciendo como médico en la corte de Egipto, al servicio del entorno del sultán Saladino.",
+          "Escribió varios tratados médicos que se estudiaron durante siglos. En ellos insistía, mucho antes que casi nadie, en la prevención: la dieta moderada, el ejercicio, el descanso y el equilibrio como base de la salud.",
+          "Comprendió también que el cuerpo y la mente son inseparables. Aconsejaba cuidar el ánimo del enfermo, evitar las pasiones excesivas y buscar la serenidad, porque las emociones influyen directamente en la salud del cuerpo.",
+          "Unía así la mejor ciencia de su tiempo con una profunda humanidad y una ética exigente hacia el enfermo. Es una de las pocas figuras admiradas a la vez por médicos, filósofos y creyentes de tres religiones.",
+        ],
+        "Dato curioso: se atribuye a Maimónides una «oración del médico» que pide humildad, prudencia y amor al enfermo. Aunque quizá no la escribiera él, resume a la perfección el espíritu de su medicina."),
+      hito("islam", "averroes", "Averroes", "1126-1198",
+        "¿Y si el mejor médico fuera también el mejor filósofo?",
+        [
+          "Averroes (Ibn Rushd) nació en Córdoba, la misma ciudad que Maimónides, durante el esplendor de Al-Ándalus. Hoy se le recuerda sobre todo como filósofo —el gran comentarista de Aristóteles—, pero también fue un médico destacado.",
+          "Escribió un tratado médico general, el Kulliyat («Generalidades»), que intentaba ordenar toda la medicina de su tiempo en un sistema claro y razonado, y que se tradujo y estudió en Europa durante siglos.",
+          "Defendía que la medicina y la filosofía se necesitaban mutuamente: entender el cuerpo exigía entender la naturaleza, y curar bien exigía razonar bien. Para él, observar y pensar eran inseparables.",
+          "Su enorme influencia intelectual ayudó a que el saber griego, cuidadosamente comentado, regresara a las universidades europeas y reavivara la curiosidad por el cuerpo humano.",
+        ],
+        "Dato curioso: en la Europa medieval a Averroes se le llamaba simplemente «el Comentador», por la calidad de sus explicaciones de Aristóteles. Su medicina viajó pegada a su filosofía."),
       hito("islam", "hospitales", "Los primeros hospitales", "El bimaristán",
         "¿Y si existiera un lugar donde cualquiera pudiera ser atendido, gratis?",
         [
@@ -476,6 +512,15 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
     intro:
       "Durante siglos, la medicina había creído lo que decían los libros antiguos. En el Renacimiento, por fin, alguien se atrevió a mirar. Se abrieron cuerpos, se dibujó la anatomía real, se inventó el microscopio y se descubrió que la sangre circulaba y que estábamos hechos de células. La gran pregunta cambió por completo: en lugar de «¿qué dijo Galeno?», se empezó a preguntar «¿qué veo yo cuando miro de verdad?». Fue el momento en que la medicina pasó de creer a comprobar. El giro más importante de toda su historia.",
     subhitos: [
+      hito("renacimiento", "paracelso", "Paracelso", "1493-1541",
+        "¿Y si la naturaleza enseñara más que todos los libros antiguos?",
+        [
+          "Paracelso fue un médico rebelde e inconformista. Llegó a quemar en público los libros de Galeno y de Avicena para dejar claro que la medicina no podía seguir viviendo solo de repetir a los antiguos.",
+          "Defendía aprender de la observación directa, de la naturaleza y de la experiencia con los enfermos. Viajó sin descanso recogiendo saberes de médicos, cirujanos e incluso curanderos populares.",
+          "Fue pionero en usar sustancias químicas y minerales como remedios, abriendo el camino de la farmacología moderna. Todavía mezclaba ciencia, alquimia y misticismo, pero empujó a la medicina hacia lo experimental.",
+          "Su idea más famosa sigue siendo la base de la farmacología: cualquier sustancia puede curar o envenenar según la cantidad.",
+        ],
+        "Dato curioso: la frase de Paracelso «la dosis hace el veneno» significa que hasta el agua puede ser dañina en exceso, y que hasta un veneno puede ser medicina en su dosis justa."),
       hito("renacimiento", "vesalio", "Vesalio", "1514-1564",
         "¿Y si los libros llevaran mil años equivocados?",
         [
@@ -686,7 +731,64 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
   },
 
   // ───────────────────────────────────────────────────────────────────────
-  // PASO 12 — LA MEDICINA INTEGRATIVA
+  // PASO 12 — LA PSIQUIATRÍA
+  // ───────────────────────────────────────────────────────────────────────
+  {
+    key: "psiquiatria",
+    titulo: "La psiquiatría: curar la mente",
+    anio: "Siglos XIX-XX",
+    intro:
+      "Durante casi toda la historia, la medicina supo mirar el cuerpo, pero no la mente. La enfermedad mental se vivía como posesión, castigo o vergüenza, y a quien la sufría se le encerraba y se le apartaba. La gran pregunta de esta etapa fue revolucionaria: ¿puede la mente enfermar igual que el cuerpo, y puede curarse? La respuesta llegó en tres oleadas: primero, tratar al enfermo mental como una persona que merece cuidado (Pinel); después, descubrir que hablar de lo que duele puede sanar (Freud); y por fin, en el siglo XX, algo que lo cambió todo: el descubrimiento de que ciertas sustancias podían calmar la mente atormentada. Nacía la psicofarmacología, y con ella se confirmaban las tres formas de curar del principio de este viaje: la física, la química y la psicológica.",
+    subhitos: [
+      hito("psiquiatria", "locura-historia", "La locura, de la posesión a la enfermedad", "Durante casi toda la historia",
+        "¿Qué se hacía, antes, con quien perdía la razón?",
+        [
+          "Durante casi toda la historia, la enfermedad mental fue la gran incomprendida. Se veía como un castigo divino, una posesión de espíritus o una vergüenza que había que esconder.",
+          "A quienes sufrían trastornos mentales se les temía, se les apartaba y muchas veces se les encerraba en condiciones terribles, encadenados y sin ningún tratamiento ni cuidado.",
+          "Faltaba una idea sencilla pero revolucionaria: que la mente, igual que el cuerpo, también puede enfermar, y que quien la sufre es un enfermo que merece ayuda, no un culpable que merece castigo.",
+          "Reconocer eso —que el sufrimiento mental es una enfermedad y no un defecto moral— fue el primer gran paso de la psiquiatría.",
+        ],
+        "Dato curioso: durante siglos existieron lugares donde la gente pagaba una entrada para ver a los enfermos mentales encerrados, como si fueran un espectáculo. Cuesta imaginar hasta qué punto se malinterpretaba su sufrimiento."),
+      hito("psiquiatria", "pinel", "Philippe Pinel", "1745-1826",
+        "¿Y si a los «locos» hubiera que quitarles las cadenas en lugar de ponérselas?",
+        [
+          "Philippe Pinel fue un médico francés que, a finales del siglo XVIII, hizo algo que escandalizó a su época: mandó quitar las cadenas a los enfermos mentales de los hospitales de París.",
+          "Defendía tratarlos con humanidad, hablar con ellos, observarlos y cuidarlos, en lugar de castigarlos o abandonarlos. Fue el llamado «tratamiento moral».",
+          "Empezó a clasificar los distintos trastornos mentales y a estudiarlos como enfermedades, con sus causas y su evolución, igual que la medicina hacía con el resto del cuerpo.",
+          "Por eso se le considera uno de los padres de la psiquiatría: convirtió la locura en objeto de la medicina y al enfermo mental en un paciente con derecho a ser cuidado.",
+        ],
+        "Dato curioso: el gesto de Pinel liberando de sus cadenas a los enfermos se ha pintado muchas veces como símbolo del nacimiento de una medicina más humana."),
+      hito("psiquiatria", "freud", "Sigmund Freud", "1856-1939",
+        "¿Y si algunas heridas no estuvieran en el cuerpo, sino en lo que no recordamos?",
+        [
+          "Sigmund Freud, médico neurólogo vienés, propuso una idea que cambiaría para siempre la forma de entender la mente: gran parte de lo que sentimos y hacemos nace de una zona oculta de nosotros mismos, el inconsciente.",
+          "Según él, experiencias, deseos y conflictos que hemos olvidado o reprimido siguen influyendo en nosotros y pueden provocar sufrimiento. Creó el psicoanálisis para sacarlos a la luz hablando.",
+          "Su método consistía en escuchar al paciente durante horas: sus recuerdos, sus sueños, lo que decía sin darse cuenta. Por primera vez, la palabra se convertía en un tratamiento.",
+          "Muchas de sus teorías concretas han sido superadas o discutidas, pero su gran intuición sigue viva: hablar de lo que nos duele y comprender nuestra propia historia puede curar.",
+        ],
+        "Dato curioso: al psicoanálisis se le llamó «la cura por la palabra». Fue el antepasado de todas las psicoterapias que hoy ayudan a millones de personas."),
+      hito("psiquiatria", "psicofarmacos", "El nacimiento de los psicofármacos", "Desde 1950",
+        "¿Puede una simple pastilla calmar una mente atormentada?",
+        [
+          "A mediados del siglo XX ocurrió una de las revoluciones más silenciosas y más importantes de la medicina: se descubrió que ciertas sustancias químicas podían aliviar de verdad los trastornos mentales.",
+          "En 1952, en París, la clorpromazina —el primer antipsicótico— demostró que podía calmar los delirios y la agitación de enfermos que hasta entonces parecían perdidos. Poco después llegaron el litio, capaz de estabilizar el ánimo, y los primeros antidepresivos.",
+          "El efecto fue extraordinario. Muchos hospitales psiquiátricos, auténticos almacenes de enfermos sin esperanza, empezaron a vaciarse: por fin había tratamientos que permitían a muchas personas volver a vivir fuera del encierro.",
+          "Nacía así la psicofarmacología. Se confirmaba algo profundo: la mente tiene una base química en el cerebro, y actuar sobre esa química puede ayudar a devolver el equilibrio perdido.",
+        ],
+        "Dato curioso: muchos de aquellos primeros psicofármacos se descubrieron casi por casualidad, al observar que fármacos pensados para otra cosa cambiaban el ánimo o la conducta de los pacientes."),
+      hito("psiquiatria", "psiquiatria-aplicalo", "Aplícalo a tu vida", "",
+        "La psiquiatría te enseña que la mente también se cuida.",
+        [
+          "En qué se equivocó: cayó a veces en los extremos, del encierro y los tratamientos brutales del pasado al riesgo, más moderno, de medicarlo todo y olvidar a la persona que hay detrás.",
+          "Qué sigue siendo válido: que el sufrimiento mental es real, que no es una vergüenza ni una debilidad, y que se puede tratar —con palabra, con apoyo y, cuando hace falta, con medicación—.",
+          "Tu ejercicio: trata tu salud mental con el mismo respeto que la física. Pedir ayuda a un profesional cuando la mente duele es tan sensato como ir al médico por una herida.",
+          "Y recuerda las tres formas de curar del principio del viaje: muchas veces lo que mejor sana la mente es una combinación de las tres —cuidar el cuerpo, ajustar la química y hablar de lo que duele—.",
+        ]),
+    ],
+  },
+
+  // ───────────────────────────────────────────────────────────────────────
+  // PASO 13 — LA MEDICINA INTEGRATIVA
   // ───────────────────────────────────────────────────────────────────────
   {
     key: "integrativa",

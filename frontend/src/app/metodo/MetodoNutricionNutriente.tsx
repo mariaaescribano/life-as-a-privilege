@@ -50,7 +50,6 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
       px={{ base: 4, md: 5 }}
       py={{ base: 2, md: 2.5 }}
       borderRadius="full"
-      border={`1px solid ${nutricionTxt}55`}
       color={nutricionTxt}
       fontFamily="'EB Garamond', serif"
       fontWeight="600"
@@ -58,7 +57,7 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
       letterSpacing="0.03em"
       cursor="pointer"
       transition="all 0.18s"
-      _hover={{ borderColor: nutricionTxt, transform: "translateY(-1px)" }}
+      _hover={{ transform: "translateY(-1px)" }}
     >
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="full" overlay={`${nutricionBg}55`} />
       <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}>
@@ -220,12 +219,12 @@ export default function MetodoNutricionNutriente() {
                    bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
 
               <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "stretch" }}
-                    justify="center" gap={{ base: 5, md: 10 }} px={{ base: 5, md: 10 }} py={{ base: 6, md: 10 }}
-                    h={{ base: "auto", md: "540px" }}>
+                    justify="center" gap={{ base: 5, md: 10 }} px={{ base: 5, md: 10 }} py={{ base: 6, md: 9 }}
+                    h={{ base: "auto", md: "420px" }}>
 
                 {/* Izquierda: foto (contain + glow) + botón «Ver ilustración» debajo */}
                 <Flex direction="column" gap={{ base: 4, md: 5 }} flexShrink={0} align="center" justify="center"
-                      w={{ base: "100%", md: "440px" }} maxW={{ base: "340px", md: "440px" }}>
+                      w={{ base: "100%", md: "280px" }} maxW={{ base: "240px", md: "280px" }}>
                   <Box w="100%" aspectRatio={1} position="relative"
                        filter={`drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${nutricionTxt}33)`}>
                     <Image src={encodeURI(n.img)} alt={n.label} w="100%" h="100%" objectFit="contain" borderRadius="lg"
@@ -237,14 +236,15 @@ export default function MetodoNutricionNutriente() {
                          w="100%" position="relative" overflow="hidden"
                          display="inline-flex" alignItems="center" justifyContent="center" gap={2.5}
                          px={5} py={{ base: 2.5, md: 3 }} borderRadius="xl"
-                         color="#ffffff"
-                         bgGradient="linear(135deg, #6fa86b, #457a49)"
+                         color={nutricionTxt}
+                         bg="transparent"
+                         border={`1.5px solid ${nutricionTxt}`}
                          fontWeight="800" fontSize={{ base: "sm", md: "md" }}
                          letterSpacing="0.08em" textTransform="uppercase" cursor="pointer"
-                         boxShadow="0 6px 20px rgba(69,122,73,0.45), inset 0 1px 0 rgba(255,255,255,0.28)"
-                         transition="all 0.2s"
-                         _hover={{ transform: "translateY(-2px)", boxShadow: "0 10px 28px rgba(69,122,73,0.6), inset 0 1px 0 rgba(255,255,255,0.35)" }}
-                         _active={{ transform: "translateY(0)" }}>
+                         boxShadow="none"
+                         transition="all 0.25s ease"
+                         _hover={{ bg: nutricionTxt, color: nutricionBg, transform: "translateY(-2px)", boxShadow: `0 8px 22px ${nutricionTxt}55` }}
+                         _active={{ transform: "translateY(0)", boxShadow: `0 4px 14px ${nutricionTxt}44` }}>
                       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                            w={{ base: "20px", md: "22px" }} h={{ base: "20px", md: "22px" }} fill="currentColor" flexShrink={0}>
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
@@ -267,14 +267,14 @@ export default function MetodoNutricionNutriente() {
                        scrollbarWidth: "thin",
                        scrollbarColor: `${nutricionTxt}55 transparent`,
                      }}>
-                  <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
-                        mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}>
+                  <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25"
+                        mb={{ base: 3, md: 4 }} textAlign={{ base: "center", md: "left" }}>
                     {n.label}
                   </Text>
                   {(n.descripcion ?? [n.resumen]).map((parrafo, i) => (
                     <Text key={i} color={nutricionTxt} textAlign={{ base: "center", md: "left" }}
-                          fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.9" letterSpacing="0.02em"
-                          fontWeight="400" mt={i === 0 ? 0 : { base: 5, md: 6 }}>
+                          fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.02em"
+                          fontWeight="400" mt={i === 0 ? 0 : { base: 4, md: 5 }}>
                       {parrafo}
                     </Text>
                   ))}
@@ -296,17 +296,27 @@ export default function MetodoNutricionNutriente() {
                     <Box key={g.grupo ?? gi} w="100%">
                       {/* Encabezado del subgrupo con línea horizontal a los lados
                           (solo si hay más de un subgrupo, p.ej. Electrolitos/Minerales). */}
-                      {hayVariosSubgrupos && g.grupo && (
-                        <Flex align="center" gap={4} mb={{ base: 4, md: 5 }}>
-                          <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${nutricionTxt}66)`} />
-                          <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }}
-                                letterSpacing="0.06em" textTransform="uppercase" whiteSpace="nowrap"
-                                style={{ textShadow: `0 1px 4px ${nutricionBg}` }}>
-                            {g.grupo}
-                          </Text>
-                          <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${nutricionTxt}66)`} />
-                        </Flex>
-                      )}
+                      {hayVariosSubgrupos && g.grupo && (() => {
+                        // «⚡ Electrolitos» → mandala (emoji) centrado en la línea,
+                        // y el nombre en blanco, centrado, debajo de la separación.
+                        const partes = g.grupo.split(" ");
+                        const mandala = partes[0];
+                        const nombre = partes.slice(1).join(" ");
+                        return (
+                          <Flex direction="column" align="center" gap={{ base: 1.5, md: 2 }} mb={{ base: 4, md: 5 }}>
+                            <Flex align="center" gap={3} w="100%">
+                              <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${nutricionTxt}66)`} />
+                              <Box as="span" fontSize={{ base: "lg", md: "xl" }} lineHeight="1" flexShrink={0}>{mandala}</Box>
+                              <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${nutricionTxt}66)`} />
+                            </Flex>
+                            <Text color="white" fontWeight="800" fontSize={{ base: "md", md: "lg" }}
+                                  letterSpacing="0.08em" textTransform="uppercase" textAlign="center" whiteSpace="nowrap"
+                                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
+                              {nombre}
+                            </Text>
+                          </Flex>
+                        );
+                      })()}
                       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
                         {g.items.map(({ tar, idx }) => (
                           <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto} numero={tar.numero}

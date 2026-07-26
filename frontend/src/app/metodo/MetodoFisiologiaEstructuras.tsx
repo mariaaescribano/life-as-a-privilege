@@ -430,8 +430,8 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
           {/* Foto (o «?» si aún no está hecha) */}
           <Box
             flexShrink={0}
-            w={{ base: "101px", md: "144px" }}
-            h={{ base: "112px", md: "160px" }}
+            w={{ base: "91px", md: "130px" }}
+            h={{ base: "101px", md: "144px" }}
             borderRadius="xl"
             overflow="hidden"
             position="relative"
@@ -614,7 +614,7 @@ export default function MetodoFisiologiaEstructuras() {
             /* ── 4 boxes en rejilla 2×2 · entran uno detrás de otro. maxW mayor
                  que el header a propósito: las tarjetas se ven más grandes ── */
             <RevealStagger stagger={0.12} delayChildren={0.1}
-                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="1160px" gap={{ base: 4, md: 5 }}>
+                           display="flex" flexWrap="wrap" justifyContent="center" w="100%" maxW="1044px" gap={{ base: 4, md: 5 }}>
               {ESTRUCTURAS.map((e) => (
                 <RevealItem key={e.id} direction="up" distance={24} scaleFrom={0.97}
                             flex={{ base: "1 1 100%", md: "0 1 calc(50% - 10px)" }} minW={0} display="flex">

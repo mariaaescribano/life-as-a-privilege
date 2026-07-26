@@ -61,7 +61,7 @@ const SECTORES_META: Omit<PlatoMacro, "alimentos">[] = [
     key: "verduras",
     label: "Verduras y hortalizas",
     labelCorto: "Verduras",
-    color: "#6fa86b",
+    color: "#8fb877",
     proporcion: 35,
     descripcion:
       "Llena buena parte del plato de verduras y hortalizas de muchos colores. Cuanta más variedad, mejor.",
@@ -79,7 +79,7 @@ const SECTORES_META: Omit<PlatoMacro, "alimentos">[] = [
     key: "cereales",
     label: "Cereales integrales",
     labelCorto: "Cereales",
-    color: "#e0a92e",
+    color: "#c9a86a",
     proporcion: 25,
     descripcion:
       "Cereales integrales como la avena, el arroz o el pan integral: energía de liberación lenta.",
@@ -88,10 +88,10 @@ const SECTORES_META: Omit<PlatoMacro, "alimentos">[] = [
     key: "proteina",
     label: "Proteína saludable",
     labelCorto: "Proteína",
-    color: "#d75f5a",
+    color: "#ffffff",
     proporcion: 25,
     descripcion:
-      "Proteína saludable: legumbres, pescado, huevo, aves o frutos secos. Cuanto menos procesada, mejor.",
+      "Proteína saludable: legumbres, soja, huevo, tofu o frutos secos. Evita carnes y pescados, elige proteína vegetal.",
   },
 ];
 

@@ -20,16 +20,17 @@ const EyeIcon = () => (
   </svg>
 );
 
-// Las 6 grandes Historias del recorrido de Cultura, en orden. Las fotos (heros)
-// todavía no existen: cuando lleguen, se colocan en
-// /img/cultura/historias/<key>.png y aparecen solas. Mientras tanto, FotoBox
+// Las 6 grandes Historias del recorrido de Cultura, en orden. Las portadas viven
+// en /recorrido/cultura/portadas/<archivo>.png (nombres propios, no coinciden con
+// la key). Las que aún no tienen portada dejan `portada` sin poner y FotoBox
 // muestra el emoji de reserva.
-type Historia = { key: string; titulo: string; emoji: string; ruta: string };
+type Historia = { key: string; titulo: string; emoji: string; ruta: string; portada?: string };
 
+const P = "/recorrido/cultura/portadas";
 const HISTORIAS: Historia[] = [
-  { key: "universal",  titulo: "HISTORIA UNIVERSAL",              emoji: "🌍", ruta: "/metodo/cultura/historia/universal" },
-  { key: "religiones", titulo: "HISTORIA DE LAS RELIGIONES",      emoji: "🕊️", ruta: "/metodo/cultura/historia/religiones" },
-  { key: "filosofia",  titulo: "HISTORIA DE LA FILOSOFÍA",        emoji: "🏛️", ruta: "/metodo/cultura/historia/filosofia" },
+  { key: "universal",  titulo: "HISTORIA UNIVERSAL",              emoji: "🌍", ruta: "/metodo/cultura/historia/universal",  portada: `${P}/historiauniversal.png` },
+  { key: "religiones", titulo: "HISTORIA DE LAS RELIGIONES",      emoji: "🕊️", ruta: "/metodo/cultura/historia/religiones", portada: `${P}/historiareligion.png` },
+  { key: "filosofia",  titulo: "HISTORIA DE LA FILOSOFÍA",        emoji: "🏛️", ruta: "/metodo/cultura/historia/filosofia",  portada: `${P}/historiafilosofia.png` },
   { key: "ciencia",    titulo: "HISTORIA DE LA CIENCIA",          emoji: "🔬", ruta: "/metodo/cultura/historia/ciencia" },
   { key: "medicina",   titulo: "HISTORIA DE LA MEDICINA",         emoji: "⚕️", ruta: "/metodo/cultura/historia/medicina" },
   { key: "arte",       titulo: "HISTORIA DEL ARTE Y LA LITERATURA", emoji: "🎭", ruta: "/metodo/cultura/historia/arte" },
@@ -95,7 +96,7 @@ export default function MetodoCulturaHistorias() {
                     titulo={h.titulo}
                     numero={i + 1}
                     emoji={h.emoji}
-                    foto={`/img/cultura/historias/${h.key}.png`}
+                    foto={h.portada}
                     nom={culturaNom}
                     tinta={culturaTxt}
                     bg={culturaBg}
