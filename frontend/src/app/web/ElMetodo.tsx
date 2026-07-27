@@ -424,8 +424,8 @@ export default function ElMetodo() {
   // Botón principal "Acceder": si ya hay sesión, directo a /home; si no, al
   // registro, que al terminar devuelve a /home.
   const handleAcceder = () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) {
       navigate("/signIn?next=/home");
       return;

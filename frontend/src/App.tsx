@@ -160,7 +160,7 @@ function ScrollToTop() {
 }
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   if (!userId) return <Navigate to="/welcome" replace />;
   return <>{children}</>;
 }

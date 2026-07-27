@@ -17,6 +17,10 @@ export const inputAuthStyles = {
   color: "white",
   borderRadius: "full",
   size: "lg" as const,
+  // Un poco más grandes que el `lg` de Chakra (48px de alto): estas pantallas van
+  // dentro de un scale(0.8), así que a tamaño normal se quedaban pequeñas.
+  h: { base: "54px", md: "58px" },
+  fontSize: { base: "lg", md: "xl" },
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
@@ -57,9 +61,9 @@ export function CampoContrasena({
     <Box>
       <Text
         color="rgba(255,255,255,0.78)"
-        fontSize="xs"
+        fontSize="sm"
         letterSpacing="0.18em"
-        mb={2}
+        mb={2.5}
         fontWeight="600"
         textAlign="center"
         textShadow="0 0 8px rgba(255,255,255,0.35)"
@@ -101,7 +105,7 @@ export function CampoContrasena({
             _hover={{ color: "white", bg: "rgba(255,255,255,0.14)" }}
             style={visible ? { filter: "drop-shadow(0 0 8px rgba(255,255,255,0.5))" } : undefined}
           >
-            {visible ? <ViewOffIcon boxSize="18px" /> : <ViewIcon boxSize="18px" />}
+            {visible ? <ViewOffIcon boxSize="20px" /> : <ViewIcon boxSize="20px" />}
           </Box>
         </InputRightElement>
       </InputGroup>

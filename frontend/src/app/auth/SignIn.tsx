@@ -66,10 +66,10 @@ export default function SignIn() {
       });
 
       if (response.data != null) {
-        sessionStorage.setItem("userId", response.data.user.id);
-        sessionStorage.setItem("name", response.data.user.name);
-        sessionStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("img", "/img/icono/noImg.png");
+        localStorage.setItem("userId", response.data.user.id);
+        localStorage.setItem("name", response.data.user.name);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("img", "/img/icono/noImg.png");
 
         // Si el email es de admin, hace falta la contraseña de administración:
         // lo mandamos a la pantalla de desbloqueo (estar en la lista no basta).
@@ -77,7 +77,7 @@ export default function SignIn() {
           const me = await axios.get(`${API_URL}/user/me`, {
             headers: { Authorization: `Bearer ${response.data.token}` },
           });
-          sessionStorage.removeItem("isAdmin");
+          localStorage.removeItem("isAdmin");
           if (me.data?.admin_email && next === "/home") {
             destinoRef.current = "/admin/login";
           }
@@ -213,7 +213,7 @@ export default function SignIn() {
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
               NOMBRE
             </Text>
             <Input
@@ -224,7 +224,7 @@ export default function SignIn() {
           </Box>
 
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
               EMAIL
             </Text>
             <Input

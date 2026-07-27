@@ -16,7 +16,7 @@ export function useRecorridoProgreso(disciplina: string | null | undefined) {
 
   useEffect(() => {
     if (!disciplina) { setCargado(true); return; }
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { setCargado(true); return; }
     let cancel = false;
     axios
@@ -31,7 +31,7 @@ export function useRecorridoProgreso(disciplina: string | null | undefined) {
 
   const avanzar = useCallback((paso: number) => {
     if (!disciplina) return;
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
     if (paso <= pasoMaxRef.current) return; // ya desbloqueado
     setPasoMax(paso); // optimista: desbloquea ya en la UI

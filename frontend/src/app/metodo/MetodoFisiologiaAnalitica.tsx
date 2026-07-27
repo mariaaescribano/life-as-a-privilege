@@ -329,8 +329,8 @@ export default function MetodoFisiologiaAnalitica() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -365,8 +365,8 @@ export default function MetodoFisiologiaAnalitica() {
 
   // Guarda sexo + valores (solo los rellenados, como números) en data.analitica.
   const guardar = async (sexoN: Sexo, valoresN: Record<string, string>) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const valoresNum: Record<string, number> = {};
     for (const [k, v] of Object.entries(valoresN)) {

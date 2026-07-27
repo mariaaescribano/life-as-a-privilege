@@ -9,8 +9,8 @@ export function useAdminGuard() {
   const [verificando, setVerificando] = useState(true);
 
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -21,7 +21,7 @@ export function useAdminGuard() {
           // Estar desbloqueado exige la contraseña de admin. Si el email SÍ es de
           // admin pero aún no la ha introducido, lo mandamos a desbloquear; si no
           // es admin, fuera al home.
-          sessionStorage.removeItem("isAdmin");
+          localStorage.removeItem("isAdmin");
           navigate(me.data?.admin_email ? "/admin/login" : "/home");
           return;
         }
@@ -38,5 +38,5 @@ export function useAdminGuard() {
 }
 
 export const adminHeaders = () => ({
-  Authorization: `Bearer ${sessionStorage.getItem("token") ?? ""}`,
+  Authorization: `Bearer ${localStorage.getItem("token") ?? ""}`,
 });

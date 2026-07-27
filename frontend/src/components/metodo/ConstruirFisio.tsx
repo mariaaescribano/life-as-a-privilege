@@ -202,8 +202,8 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -221,8 +221,8 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
   }, [navigate, props.dataKey]);
 
   const guardar = async () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const data = { ...dataRef.current, [props.dataKey]: true };
     dataRef.current = data;

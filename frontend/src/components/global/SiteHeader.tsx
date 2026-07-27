@@ -6,13 +6,13 @@ type SiteHeaderProps = {
   /**
    * "public"  → logo a /, botones Inicio de sesión / Registrarse
    * "private" → logo a /home, iconos Mi Espacio / Aprendizajes / avatar
-   * "auto"    → detecta sessionStorage: si hay userId → private, si no → public
+   * "auto"    → detecta localStorage: si hay userId → private, si no → public
    */
   variant: "public" | "private" | "auto";
   /**
    * Imagen de perfil del usuario. Úsalo cuando el componente padre gestione
    * el estado del avatar (p.ej. EspacioHome tras subir foto). Si no se pasa,
-   * el componente lee sessionStorage.getItem("img") al montarse.
+   * el componente lee localStorage.getItem("img") al montarse.
    */
   userImg?: string;
 };
@@ -20,7 +20,7 @@ type SiteHeaderProps = {
 const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [sessionImg] = useState<string | null>(() => sessionStorage.getItem("img"));
+  const [sessionImg] = useState<string | null>(() => localStorage.getItem("img"));
 
   // Recordamos la última página del Mapa (recorrido) visitada, para que /home
   // pueda ofrecer «Continuar por dónde lo dejé». Persiste en localStorage, así
@@ -31,11 +31,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     }
   }, [location.pathname, location.search]);
 
-  const hasSession = !!sessionStorage.getItem("userId");
+  const hasSession = !!localStorage.getItem("userId");
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   // En el área privada (logueado: /home, /metodo, …) el header es ~10% más compacto.
   const compact = isPrivate;
-  const isAdmin    = sessionStorage.getItem("isAdmin") === "1";
+  const isAdmin    = localStorage.getItem("isAdmin") === "1";
   // Para admins el "home" es el panel de administración.
   const homeTarget = isPrivate ? (isAdmin ? "/admin" : "/home") : "/";
   const logoTarget = homeTarget;

@@ -25,9 +25,9 @@ const inputStyles = inputAuthStyles;
 const Etiqueta = ({ children }: { children: React.ReactNode }) => (
   <Text
     color="rgba(255,255,255,0.78)"
-    fontSize="xs"
+    fontSize="sm"
     letterSpacing="0.18em"
-    mb={2}
+    mb={2.5}
     fontWeight="600"
     textAlign="center"
     textShadow="0 0 8px rgba(255,255,255,0.35)"

@@ -42,8 +42,8 @@ export default function MetodoCulturaHistoriaEra() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     // Historia inexistente → al listado; era inexistente → a la Historia.
     if (!historia) { navigate("/metodo/cultura/historias", { replace: true }); return; }

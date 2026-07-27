@@ -69,8 +69,8 @@ export default function MetodoPsicologiaAce() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
 
@@ -102,8 +102,8 @@ export default function MetodoPsicologiaAce() {
     const next = { ...respuestas, [key]: value };
     setRespuestas(next);
 
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     setGuardando(true);
     const payload = { ...dataRef.current, ace: { respuestas: next } };

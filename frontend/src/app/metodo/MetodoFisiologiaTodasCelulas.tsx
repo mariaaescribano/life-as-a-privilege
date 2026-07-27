@@ -1231,8 +1231,8 @@ export default function MetodoFisiologiaTodasCelulas() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -1272,8 +1272,8 @@ export default function MetodoFisiologiaTodasCelulas() {
     const next = new Set(vistas);
     next.add(c.id);
     setVistas(next);
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const data = { ...dataRef.current, [VISTAS_KEY]: Array.from(next) };
     dataRef.current = data;
@@ -1290,8 +1290,8 @@ export default function MetodoFisiologiaTodasCelulas() {
     const next = new Set(curiosidadesLeidas);
     next.add(c.titular);
     setCuriosidadesLeidas(next);
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const data = { ...dataRef.current, [CURIOSIDADES_KEY]: Array.from(next) };
     dataRef.current = data;

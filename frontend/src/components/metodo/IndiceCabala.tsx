@@ -17,8 +17,8 @@ export function IndiceCabala() {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { setData({}); return; }
     axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setData(res.data?.data ?? {}))

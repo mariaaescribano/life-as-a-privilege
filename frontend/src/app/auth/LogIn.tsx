@@ -71,14 +71,14 @@ export default function LogIn() {
       );
 
       if (response.data != null) {
-        sessionStorage.setItem("userId", response.data?.user.id);
-        sessionStorage.setItem("name", response.data?.user.name);
-        sessionStorage.setItem("token", response.data?.token);
+        localStorage.setItem("userId", response.data?.user.id);
+        localStorage.setItem("name", response.data?.user.name);
+        localStorage.setItem("token", response.data?.token);
 
         const res = await fetch(API_URL + `/upload/profile-pic/${response.data?.user.id}`);
         const data = await res.json();
 
-        sessionStorage.setItem(
+        localStorage.setItem(
           "img",
           data.url && data.url != ""
             ? data.url
@@ -92,7 +92,7 @@ export default function LogIn() {
           const me = await axios.get(`${API_URL}/user/me`, {
             headers: { Authorization: `Bearer ${response.data?.token}` },
           });
-          sessionStorage.removeItem("isAdmin");
+          localStorage.removeItem("isAdmin");
           if (me.data?.admin_email && next === "/home") {
             destinoRef.current = "/admin/login";
           }
@@ -206,7 +206,7 @@ export default function LogIn() {
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
               NOMBRE O EMAIL
             </Text>
             <Input

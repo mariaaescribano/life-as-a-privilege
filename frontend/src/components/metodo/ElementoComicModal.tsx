@@ -46,8 +46,8 @@ export function ElementoComicModal({
 
   // Persiste el estado del elemento (respuestas + puntos, y opcionalmente leído).
   const persistir = async (el: Elemento, respuestas: Record<string, string>, leido?: boolean) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     const puntos = puntosElemento(el, respuestas);
     const next: DatosTcm = {
       ...data,

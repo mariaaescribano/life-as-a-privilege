@@ -70,8 +70,8 @@ export function TusCelulasModal({
   // Al abrir el popup, traemos del backend las células ya descubiertas.
   useEffect(() => {
     if (!isOpen) return;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     (async () => {
       try {

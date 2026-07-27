@@ -205,7 +205,7 @@ export default function TCMTestPage({
       localStorage.setItem(localStorageKey, JSON.stringify(result));
     }
 
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     if (userId) {
       if (tcmField && primaryNombre) {
         try {

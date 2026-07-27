@@ -111,8 +111,8 @@ export default function MetodoAyurvedaDoshaDia() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
 
@@ -169,8 +169,8 @@ export default function MetodoAyurvedaDoshaDia() {
   const removeBloque = (id: number) => { setGuardado(false); setBloques((prev) => prev.filter((b) => b.id !== id)); };
 
   const guardar = async () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token || !doshaKey) return;
     setGuardando(true);
     try {

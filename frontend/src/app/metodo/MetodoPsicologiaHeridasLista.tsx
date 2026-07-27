@@ -51,8 +51,8 @@ export default function MetodoPsicologiaHeridasLista() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
 
@@ -77,8 +77,8 @@ export default function MetodoPsicologiaHeridasLista() {
   const borrarHerida = async (id: string) => {
     const next = heridas.filter((h) => h.id !== id);
     setHeridas(next);
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     try {
       const data = { ...dataRef.current, heridas: next };

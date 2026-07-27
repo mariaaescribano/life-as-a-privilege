@@ -145,8 +145,8 @@ export default function MetodoNutricionPlato() {
   // ── Carga: sesión + suscripción + estado guardado del plato ──────────────
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -183,8 +183,8 @@ export default function MetodoNutricionPlato() {
 
   // Guarda el plato construido. `plato_hecho` = hay al menos un alimento de cada macro.
   const guardar = useCallback((nuevos: AlimentoPuesto[]) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const macrosConAlimento = new Set(nuevos.map((a) => a.macroKey));
     const data = {
@@ -206,8 +206,8 @@ export default function MetodoNutricionPlato() {
   // guardado anterior fallido.
   const flushGuardado = useCallback(async () => {
     try { await savingRef.current; } catch { /* lo reintentamos ahora */ }
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     try {
       await axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data: dataRef.current },

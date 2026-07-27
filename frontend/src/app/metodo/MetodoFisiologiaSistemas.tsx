@@ -61,8 +61,8 @@ export default function MetodoFisiologiaSistemas() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -93,8 +93,8 @@ export default function MetodoFisiologiaSistemas() {
     const next = new Set(vistos);
     next.add(s.key);
     setVistos(next);
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const data = { ...dataRef.current, [SISTEMAS_VISTOS_KEY]: Array.from(next) };
     dataRef.current = data;

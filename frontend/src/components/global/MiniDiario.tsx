@@ -72,7 +72,7 @@ export function MiniDiario() {
   const [notas, setNotas] = useState<Nota[]>([]);
   const [cargandoNotas, setCargandoNotas] = useState(false);
 
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
 
   const disciplinaSel = categoria ? disciplinaByKey(categoria) : undefined;
 

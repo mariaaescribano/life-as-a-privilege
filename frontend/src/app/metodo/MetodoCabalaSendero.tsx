@@ -86,8 +86,8 @@ export default function MetodoCabalaSendero() {
     window.scrollTo({ top: 0, behavior: "auto" });
     if (sendero) setAnswers(new Array(sendero.test.length).fill(0));
 
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!sendero) { navigate("/metodo/cabala/senderos"); return; }
 
@@ -119,8 +119,8 @@ export default function MetodoCabalaSendero() {
     const prev = dataRef.current ?? {};
     const nextData = { ...prev, senderos: { ...(prev.senderos ?? {}), [sendero.num]: nuevas } };
     dataRef.current = nextData;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (userId && token) {
       axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
     }

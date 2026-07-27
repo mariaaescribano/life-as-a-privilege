@@ -192,8 +192,8 @@ export default function MetodoNutricionCalorias() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -294,8 +294,8 @@ export default function MetodoNutricionCalorias() {
   // y no rebote/quede bloqueada por la carrera del debounce.
   const guardarCaloriasAhora = async () => {
     const data = construirDatosCalorias();
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!data || !userId || !token) return;
     dataRef.current = data;
     try {
@@ -308,8 +308,8 @@ export default function MetodoNutricionCalorias() {
   // «Diseña tu día»). Se dispara cuando hay un resultado válido.
   useEffect(() => {
     if (!resultado) return;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return;
     const t = setTimeout(() => {
       const data = construirDatosCalorias();

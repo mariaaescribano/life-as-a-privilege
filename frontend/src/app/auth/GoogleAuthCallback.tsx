@@ -14,13 +14,13 @@ export default function GoogleAuthCallback() {
     const img    = params.get("img");
 
     if (token && userId && name) {
-      sessionStorage.setItem("token",  token);
-      sessionStorage.setItem("userId", userId);
-      sessionStorage.setItem("name",   name);
-      sessionStorage.setItem("img",    img && img !== "" ? img : "/img/icono/noImg.png");
+      localStorage.setItem("token",  token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("name",   name);
+      localStorage.setItem("img",    img && img !== "" ? img : "/img/icono/noImg.png");
 
-      const next = sessionStorage.getItem("postAuthNext");
-      sessionStorage.removeItem("postAuthNext");
+      const next = localStorage.getItem("postAuthNext");
+      localStorage.removeItem("postAuthNext");
       navigate(next || "/home", { replace: true });
     } else {
       navigate("/logIn", { replace: true });

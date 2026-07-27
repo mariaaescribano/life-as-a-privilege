@@ -135,15 +135,15 @@ export default function MetodoPsicologiaHuellasNudos() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
 
     (async () => {
       try {
         // Las dos peticiones no dependen una de otra (ambas usan userId/token de
-        // sessionStorage), así que van EN PARALELO: una sola ida y vuelta en vez
+        // localStorage), así que van EN PARALELO: una sola ida y vuelta en vez
         // de dos encadenadas.
         const [me, psi] = await Promise.all([
           axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } }),
@@ -169,8 +169,8 @@ export default function MetodoPsicologiaHuellasNudos() {
   }, [experienciaId]);
 
   const persistir = async (next: RelacionHuellaNudo[]): Promise<boolean> => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return false;
     if (montado.current) setEstadoGuardado("guardando");
     try {

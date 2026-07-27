@@ -114,7 +114,7 @@ export function AgendarLlamada({
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   // Prerrellenamos el nombre con el de la sesión para no pedirlo de nuevo.
-  const [nombre, setNombre] = useState(() => sessionStorage.getItem("name") || "");
+  const [nombre, setNombre] = useState(() => localStorage.getItem("name") || "");
   const [email, setEmail] = useState("");
   const [tema, setTema] = useState("");
   const [pagando, setPagando] = useState(false);
@@ -182,7 +182,7 @@ export function AgendarLlamada({
 
     // Prerrellena nombre/email con los datos del usuario (si ha iniciado sesión),
     // para que no tenga que volver a escribirlos.
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       axios
         .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })

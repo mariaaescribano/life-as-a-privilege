@@ -21,7 +21,7 @@ const NEAR_TOP_PX = 80;
 // registrado o navegado al recorrido después de armar los listeners).
 function bloqueado(): boolean {
   if (typeof window === "undefined") return true;
-  if (sessionStorage.getItem("userId")) return true; // usuario registrado
+  if (localStorage.getItem("userId")) return true; // usuario registrado
   if (window.location.pathname.startsWith("/metodo")) return true; // dentro del mapa/recorrido
   return false;
 }
@@ -29,6 +29,8 @@ function bloqueado(): boolean {
 function shouldSkip(): boolean {
   if (typeof window === "undefined") return true;
   if (localStorage.getItem(DISMISSED_KEY)) return true;
+  // «Ya se ha enseñado» es POR VISITA, a propósito: en localStorage no volvería
+  // a salir nunca a quien vuelva otro día sin haberlo cerrado.
   if (sessionStorage.getItem(SHOWN_KEY)) return true;
   if (bloqueado()) return true;
   return false;

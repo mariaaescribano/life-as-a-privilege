@@ -329,7 +329,7 @@ function ResultadoPanel({
    COMPONENTE PRINCIPAL
 ────────────────────────────────────────────── */
 export default function AyurvedaMiEspacio() {
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
 
   const [loadingInit, setLoadingInit]         = useState(true);
   const [savedResult, setSavedResult]         = useState<BackendResultado | null>(null);
@@ -395,7 +395,7 @@ export default function AyurvedaMiEspacio() {
 
   if (!savedResult) {
     return <AyurvedaTestPage onComplete={async () => {
-      const userId = sessionStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
       if (!userId) return;
       const res = await axios.get(`${API_URL}/ayurveda/${userId}`);
       if (res.data) {

@@ -135,8 +135,8 @@ export default function MetodoNutricionDia() {
   // ── Carga: sesión + suscripción + objetivo de calorías + día guardado ──────
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -236,8 +236,8 @@ export default function MetodoNutricionDia() {
 
   // ── Guardado (día + comidas + alimentos creados) ────────────────────────────
   const guardar = useCallback((placedArg: Placed, numArg: number | null) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token || !numArg) return;
     const comidas: Record<string, { key: string; porciones: number }[]> = {};
     Object.entries(placedArg).forEach(([k, arr]) => {

@@ -18,12 +18,12 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  const token = sessionStorage.getItem("token") ?? "";
+  const token = localStorage.getItem("token") ?? "";
 
   // Al entrar: si no está logueado → welcome; si el email NO es de admin → home;
   // si ya está desbloqueado → directo al panel.
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
@@ -53,8 +53,8 @@ export default function AdminLogin() {
       );
       if (res.data?.token) {
         // El nuevo token lleva el permiso de admin: reemplaza al de la sesión.
-        sessionStorage.setItem("token", res.data.token);
-        sessionStorage.setItem("isAdmin", "1");
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("isAdmin", "1");
         navigate("/admin");
         return;
       }

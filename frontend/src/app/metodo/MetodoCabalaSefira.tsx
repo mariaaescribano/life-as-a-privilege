@@ -444,8 +444,8 @@ export default function MetodoCabalaSefira() {
       setPreguntasResp(new Array(sefira.preguntas.items.length).fill(""));
     }
 
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!sefira) { navigate("/metodo/cabala/arbol"); return; }
 
@@ -500,8 +500,8 @@ export default function MetodoCabalaSefira() {
     const prev = dataRef.current ?? {};
     const nextData = { ...prev, test: { ...(prev.test ?? {}), [key]: nuevas } };
     dataRef.current = nextData;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (userId && token) {
       axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
     }
@@ -517,8 +517,8 @@ export default function MetodoCabalaSefira() {
       const prevData = dataRef.current ?? {};
       const nextData = { ...prevData, autoeval: { ...(prevData.autoeval ?? {}), [key]: nuevas } };
       dataRef.current = nextData;
-      const userId = sessionStorage.getItem("userId");
-      const token = sessionStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
       if (userId && token) {
         axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
       }
@@ -533,8 +533,8 @@ export default function MetodoCabalaSefira() {
     const prevData = dataRef.current ?? {};
     const nextData = { ...prevData, preguntas: { ...(prevData.preguntas ?? {}), [key]: preguntasResp } };
     dataRef.current = nextData;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (userId && token) {
       axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
     }

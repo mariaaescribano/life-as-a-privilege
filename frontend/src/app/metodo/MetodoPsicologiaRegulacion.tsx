@@ -87,8 +87,8 @@ export default function MetodoPsicologiaRegulacion() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
 
@@ -121,8 +121,8 @@ export default function MetodoPsicologiaRegulacion() {
   }, [experienciaId]);
 
   const persistir = async (next: string[]): Promise<boolean> => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return false;
     try {
       // Guardamos los fragmentos y, por compatibilidad, una copia unificada en `texto`.

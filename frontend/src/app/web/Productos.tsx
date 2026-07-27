@@ -31,7 +31,7 @@ const glassCard = {
 
 const Productos = () => {
   const navigate = useNavigate();
-  const isRegistered = !!sessionStorage.getItem("userId");
+  const isRegistered = !!localStorage.getItem("userId");
   const [favoritos, setFavoritos] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem("favoritos") || "[]")); }
     catch { return new Set(); }

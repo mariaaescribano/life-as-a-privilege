@@ -42,10 +42,10 @@ const inputStyles = {
 
 export default function UserAccount() {
   const navigate = useNavigate();
-  const userId = sessionStorage.getItem("userId") ?? "";
-  const token  = sessionStorage.getItem("token")  ?? "";
+  const userId = localStorage.getItem("userId") ?? "";
+  const token  = localStorage.getItem("token")  ?? "";
 
-  const [img, setImg] = useState<string>(sessionStorage.getItem("img") ?? "");
+  const [img, setImg] = useState<string>(localStorage.getItem("img") ?? "");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [contra, setContra] = useState("");
@@ -107,7 +107,7 @@ export default function UserAccount() {
       const updated = await res.json();
       if (updated.name) {
         setName(updated.name);
-        sessionStorage.setItem("name", updated.name);
+        localStorage.setItem("name", updated.name);
         initialRef.current.name = updated.name;
       }
       if (updated.email) {
@@ -125,8 +125,8 @@ export default function UserAccount() {
   };
 
   const handleLogout = () => {
-    sessionStorage.clear();
     localStorage.clear();
+    sessionStorage.clear();
     navigate("/welcome");
   };
 
@@ -158,8 +158,8 @@ export default function UserAccount() {
         const data = await res.json().catch(() => null);
         throw new Error(data?.message || "Error al eliminar la cuenta");
       }
-      sessionStorage.clear();
       localStorage.clear();
+      sessionStorage.clear();
       navigate("/welcome");
     } catch (err: any) {
       setDelError(err?.message || "Error al eliminar la cuenta");
@@ -182,7 +182,7 @@ export default function UserAccount() {
       const data = await res.json();
       const newUrl = `${data.url}?v=${Date.now()}`;
       setImg(newUrl);
-      sessionStorage.setItem("img", newUrl);
+      localStorage.setItem("img", newUrl);
     } catch {
       setError("Error al subir la foto");
     } finally {

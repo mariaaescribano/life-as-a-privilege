@@ -31,8 +31,8 @@ export default function MetodoTcmLenguaLeer() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
 
     (async () => {
@@ -57,8 +57,8 @@ export default function MetodoTcmLenguaLeer() {
       observarte: { ...data.observarte, [lenguaObsKey(dim)]: opKey },
     };
     setData(next);
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (userId && token) {
       try {
         await axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },

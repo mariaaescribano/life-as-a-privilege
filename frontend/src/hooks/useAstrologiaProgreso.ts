@@ -35,8 +35,8 @@ export function useAstrologiaProgreso() {
 
   useEffect(() => {
     let cancel = false;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { setCargado(true); return; }
     axios
       .get<Row | null>(`${API_URL}/metodo-astrologia/${userId}`, {

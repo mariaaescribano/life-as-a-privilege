@@ -15,7 +15,13 @@ import { AuthService } from './auth.service';
         }
         return {
           secret,
-          signOptions: { expiresIn: '24h' },
+          // 30 días. El frontend guarda el token en localStorage (aguanta al
+          // cerrar el navegador), así que con 24h la sesión se caía igual al
+          // día siguiente: la persona pagaba un recorrido, volvía y se
+          // encontraba en la pantalla de login. No hay refresh token, así que
+          // este número ES lo que dura la sesión. Al cerrar sesión el token se
+          // borra del navegador.
+          signOptions: { expiresIn: '30d' },
         };
       },
     }),

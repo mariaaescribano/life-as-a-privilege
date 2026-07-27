@@ -338,7 +338,7 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
   const navigate = useNavigate();
   const [selected, setSelected]   = useState<Planta | null>(null);
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 

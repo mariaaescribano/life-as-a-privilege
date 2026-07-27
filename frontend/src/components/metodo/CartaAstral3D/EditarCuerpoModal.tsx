@@ -45,8 +45,8 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
     }
     const gradoAbsoluto = signoIdx * 30 + g + m / 60;
 
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) {
       setError("Sesión caducada");
       return;

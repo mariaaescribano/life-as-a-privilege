@@ -32,7 +32,7 @@ export function FloatingActionButton({
     } else if (config.action === "espacio") {
       navigate("/espacio/espacioHome");
     } else if (config.action === "espacio-auth") {
-      const userId = sessionStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
       if (userId) {
         navigate(config.route ?? "/espacio/espacioHome");
       } else {

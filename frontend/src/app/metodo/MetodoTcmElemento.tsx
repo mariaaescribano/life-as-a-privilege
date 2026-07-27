@@ -49,8 +49,8 @@ export default function MetodoTcmElemento() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!el || !tieneContenido(el)) { navigate("/metodo/tcm/elementos"); return; }
 
@@ -210,8 +210,8 @@ export default function MetodoTcmElemento() {
     if (!esUltimo) { setPaso((p) => Math.min(total - 1, p + 1)); return; }
     // Último momento (mini-test): guardar, marcar leído y volver a la estrella.
     if (!testCompleto || !el) return;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     const next: DatosTcm = {
       ...dataRef.current,

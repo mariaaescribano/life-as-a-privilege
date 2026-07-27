@@ -68,15 +68,15 @@ const EspacioHome = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     if (img == null) {
-      const stored = sessionStorage.getItem("img");
+      const stored = localStorage.getItem("img");
       setimg(stored);
     }
   }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    const userId = sessionStorage.getItem("userId");
-    const token  = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token  = localStorage.getItem("token");
     if (userId && token) {
       setUploading(true);
       try {
@@ -90,7 +90,7 @@ const EspacioHome = () => {
         const data = await res.json();
         if (data.url) {
           const freshUrl = `${data.url}?v=${Date.now()}`;
-          sessionStorage.setItem("img", freshUrl);
+          localStorage.setItem("img", freshUrl);
           setimg(freshUrl);
         }
       } finally {

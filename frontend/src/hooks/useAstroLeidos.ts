@@ -44,8 +44,8 @@ export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos") {
 
   useEffect(() => {
     let cancelado = false;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { setCargado(true); return; }
 
     axios
@@ -72,8 +72,8 @@ export function useAstroLeidos(tipo: "retos" | "casas" | "aspectos") {
       cache[dataKey] = next; // disponible al instante para la siguiente página
       setLeidos(next);
 
-      const userId = sessionStorage.getItem("userId");
-      const token = sessionStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
       if (!userId || !token) return;
       // Persistimos el conjunto completo del tipo. El backend fusiona `data`,
       // así que no pisa planetas ni los otros tipos de leídos.

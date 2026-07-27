@@ -56,7 +56,7 @@ export type DisciplinaScope =
  * ha podido construir el enlace (y entonces NO navega), o null si todo bien.
  */
 export function irAPagoDisciplina(scope: DisciplinaScope): string | null {
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   if (!userId) return "Sesión expirada. Vuelve a iniciar sesión.";
 
   const ref = `${scope}__${userId}`;

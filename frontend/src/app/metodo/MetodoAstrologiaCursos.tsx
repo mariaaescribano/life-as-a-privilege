@@ -43,7 +43,7 @@ export default function MetodoAstrologiaCursos() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
     axios
       .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
@@ -52,7 +52,7 @@ export default function MetodoAstrologiaCursos() {
   }, []);
 
   const pagarPsicologia = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoPsicoLoading(true);
     setPagoPsicoError(null);

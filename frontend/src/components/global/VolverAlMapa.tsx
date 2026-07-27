@@ -10,6 +10,10 @@ import { useNavigate } from "react-router-dom";
 // Mapa, guardamos en sessionStorage la URL del Mapa de origen; así, por mucho
 // que el usuario navegue o lea dentro del curso, siempre puede volver justo a
 // donde lo dejó. El botón solo aparece si ese origen está guardado.
+//
+// Va en sessionStorage a propósito (la sesión sí vive en localStorage): esto
+// es una miga de pan de ESTA visita. Guardada de forma permanente, aparecería
+// un «Volver al Mapa» apuntando a una página de hace semanas.
 // ─────────────────────────────────────────────────────────────────────────
 
 const KEY = "mapaReturnUrl";

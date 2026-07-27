@@ -593,7 +593,7 @@ export default function TCMespacio() {
   const [saberMasOpen, setSaberMasOpen] = useState(false);
 
   const fetchData = () => {
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     if (!userId) {
       setLoading(false);
       return;
@@ -619,7 +619,7 @@ export default function TCMespacio() {
   const desequilibrio = tcmData?.desequilibrio ?? null;
 
   const handleDownloadPdf = async (testNum: number, resultado: string | null) => {
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     if (!userId || !resultado) return;
     try {
       const { data } = await axios.get<TcmRespuesta[]>(

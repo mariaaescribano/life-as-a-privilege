@@ -140,8 +140,8 @@ export default function MetodoPsicologiaMapa() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
 
@@ -182,8 +182,8 @@ export default function MetodoPsicologiaMapa() {
   // guardan igual; el usuario solo lo percibe al pulsar «Hecho» (que cierra el
   // popup y fuerza el guardado con flushGuardado).
   const persistir = async (next: Constelacion[]): Promise<boolean> => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return false;
     try {
       const nuevo = { ...dataRef.current, constelaciones: next };

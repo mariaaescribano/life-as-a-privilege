@@ -141,8 +141,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
 
@@ -167,8 +167,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
   // Autoguardado: persiste ambas listas dentro de doshaCuidarte[dosha], sin pisar
   // la reflexión/compromiso que guarda la página de Estilo de Vida.
   const persist = async (deseq: string[], equil: string[]) => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token || !doshaKey) return;
     setGuardando(true);
     try {

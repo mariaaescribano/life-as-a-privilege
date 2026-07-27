@@ -731,7 +731,7 @@ export default function AstrologiaEspacio() {
   const chartScale    = wrapperWidth > 0 ? Math.min(1, wrapperWidth / containerSide) : 1;
   const chartOffsetX  = Math.max(0, (wrapperWidth - containerSide * chartScale) / 2);
 
-  const userId = sessionStorage.getItem("userId") ?? "";
+  const userId = localStorage.getItem("userId") ?? "";
 
   const fetchData = () => {
     if (!userId) { setLoading(false); return; }
@@ -744,7 +744,7 @@ export default function AstrologiaEspacio() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const img = sessionStorage.getItem("img");
+    const img = localStorage.getItem("img");
     if (img) setImgUrl(img);
     fetchData();
   }, []);

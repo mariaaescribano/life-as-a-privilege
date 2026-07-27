@@ -95,7 +95,7 @@ export default function AyurvedaTestPage({
       doshaElegida: answers[i] as Dosha,
     }));
 
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     if (userId) {
       try {
         await axios.post(`${API_URL}/ayurveda/resultado`, {

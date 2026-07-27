@@ -33,8 +33,8 @@ export function useRecorridoAlcanzable(
     if (!activo) return;
     const u = urlRef.current;
     const c = computarRef.current;
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     // Nada que consultar (sin endpoint/función o sin sesión): se da por revisado.
     if (!u || !c || !userId || !token) { setCargado(true); return; }
     let cancel = false;

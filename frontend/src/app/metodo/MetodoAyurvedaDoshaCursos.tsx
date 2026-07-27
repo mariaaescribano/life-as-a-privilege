@@ -49,8 +49,8 @@ export default function MetodoAyurvedaDoshaCursos() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
     axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
@@ -69,7 +69,7 @@ export default function MetodoAyurvedaDoshaCursos() {
   };
 
   const pagarTcm = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoTcmLoading(true);
     setPagoTcmError(null);

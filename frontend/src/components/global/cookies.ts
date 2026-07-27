@@ -4,7 +4,7 @@
 // y ponía sus cookies ANTES de que nadie diera permiso. Eso no cumple el RGPD ni
 // el artículo 22.2 de la LSSI. Ahora GA no existe hasta que se acepta aquí.
 //
-// Las cookies técnicas (la sesión, que va en sessionStorage) no necesitan
+// Las cookies técnicas (la sesión, que va en localStorage) no necesitan
 // consentimiento: sin ellas el sitio no puede funcionar.
 
 const CLAVE = "cookieConsent";

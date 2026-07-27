@@ -68,8 +68,8 @@ export default function MetodoPsicologiaBrujula() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!exp) { navigate("/metodo/psicologia", { replace: true }); return; }
 
@@ -94,8 +94,8 @@ export default function MetodoPsicologiaBrujula() {
   }, [experienciaId]);
 
   const persistir = async (next: BrujulaData): Promise<boolean> => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) return false;
     if (montado.current) setEstadoGuardado("guardando");
     try {

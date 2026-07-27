@@ -25,7 +25,7 @@ const EditableCard = (props:{
   const [saveColor, setSaveColor] = useState<string | null>(null);
 
   const subeRespuesta = async () => {
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     if (!userId) navigate("/");
     else {
       const pregunta: Respuesta = {
@@ -57,7 +57,7 @@ const EditableCard = (props:{
   const getRespuesta = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/${props.apiPath ?? "respuesta"}/${props.idPregunta}/${sessionStorage.getItem("userId")}`,
+        `${API_URL}/${props.apiPath ?? "respuesta"}/${props.idPregunta}/${localStorage.getItem("userId")}`,
         { headers: { "Content-Type": "application/json" } }
       );
       if (response.data) setText(response.data?.respuesta);

@@ -89,11 +89,11 @@ const Home = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  // Iniciamos la foto ya desde sessionStorage: así, al volver a /home con la
+  // Iniciamos la foto ya desde localStorage: así, al volver a /home con la
   // caché caliente, el mandala se pinta en el primer render (sin un frame con
   // img=null que mostraría el spinner).
   const [img, setImg] = useState<string | null>(() => {
-    try { return sessionStorage.getItem("img"); } catch { return null; }
+    try { return localStorage.getItem("img"); } catch { return null; }
   });
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState<string>("");
@@ -156,8 +156,8 @@ const Home = () => {
   };
 
   const irAstrologia = async () => {
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId || !token) {
       navigate("/welcome");
       return;
@@ -192,7 +192,7 @@ const Home = () => {
   // desbloquea. Flujo autocontenido: NO usar Payment Links estáticos, que no
   // llevan el userId ni vuelven a la URL de verificación.
   const pagarMetodo = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/welcome");
       return;
@@ -220,7 +220,7 @@ const Home = () => {
   };
 
   const pagarPsicologia = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoPsicoLoading(true);
     setPagoPsicoError(null);
@@ -245,7 +245,7 @@ const Home = () => {
   };
 
   const pagarAyurveda = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoAyurLoading(true);
     setPagoAyurError(null);
@@ -270,7 +270,7 @@ const Home = () => {
   };
 
   const pagarTcm = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoTcmLoading(true);
     setPagoTcmError(null);
@@ -295,7 +295,7 @@ const Home = () => {
   };
 
   const pagarFisiologia = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoFisioLoading(true);
     setPagoFisioError(null);
@@ -320,7 +320,7 @@ const Home = () => {
   };
 
   const pagarNutricion = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoNutriLoading(true);
     setPagoNutriError(null);
@@ -345,7 +345,7 @@ const Home = () => {
   };
 
   const pagarCabala = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoCabalaLoading(true);
     setPagoCabalaError(null);
@@ -370,7 +370,7 @@ const Home = () => {
   };
 
   const pagarCultura = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoCulturaLoading(true);
     setPagoCulturaError(null);
@@ -394,17 +394,17 @@ const Home = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-    const userId = sessionStorage.getItem("userId");
-    const token = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId) {
       navigate("/");
       return;
     }
     if (img == null) {
-      const stored = sessionStorage.getItem("img");
+      const stored = localStorage.getItem("img");
       setImg(stored);
     }
-    setName(sessionStorage.getItem("name") || "");
+    setName(localStorage.getItem("name") || "");
 
     const url = new URL(window.location.href);
     const metodoPagado = url.searchParams.get("metodo_pagado");
@@ -721,8 +721,8 @@ const Home = () => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    const userId = sessionStorage.getItem("userId");
-    const token  = sessionStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const token  = localStorage.getItem("token");
     if (!userId || !token) {
       navigate("/");
       return;
@@ -740,7 +740,7 @@ const Home = () => {
       const data = await res.json();
       if (!data.url) throw new Error("Sin URL devuelta");
       const freshUrl = `${data.url}?v=${Date.now()}`;
-      sessionStorage.setItem("img", freshUrl);
+      localStorage.setItem("img", freshUrl);
       setImg(freshUrl);
     } catch (err) {
       toast({
