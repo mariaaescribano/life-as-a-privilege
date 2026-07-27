@@ -15,7 +15,7 @@ export type ContenidoSeccion = {
 export type VideoIntro = {
   titulo: string;
   puntos: string[];
-  /** Texto del botón (por defecto "Ver el recorrido por dentro"). */
+  /** Texto del botón (por defecto "Ver por dentro"). */
   boton?: string;
 };
 
@@ -131,7 +131,6 @@ export const recorridoContenido: Record<
         "Identifica qué favorece tu equilibrio y qué tiende a desequilibrarte.",
         "Aprende hábitos, alimentación y rutinas adaptados a tu constitución.",
       ],
-      boton: "Ver cómo funciona",
     },
     modalDesc:
       "El ayurveda es la medicina tradicional india. No mira síntomas aislados: lee a la persona entera. Tu constitución (Doṣha) determina cómo piensas, cómo enfermas y qué te sienta bien comer. Entender tu Doṣha es entender por qué dos personas con la misma Vida tienen problemas distintos.",

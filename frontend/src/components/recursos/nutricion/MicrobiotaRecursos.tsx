@@ -26,7 +26,6 @@ export const capasIntestinoData = [
     titulo:      "Capa 1: Mucosa",
     color:       "#48C0B5",
     glow:        "rgba(72,192,181,0.45)",
-    foto:        "/img/nutri/microbiotaRecursos/capa1.webp",
     descripciones: [
       "Es la primera barrera en contacto con los alimentos y la microbiota intestinal.",
       "Está formada por una capa de moco que protege el epitelio y sirve de hábitat para muchas bacterias beneficiosas.",
@@ -39,7 +38,6 @@ export const capasIntestinoData = [
     titulo:      "Capa 2: Epitelio intestinal",
     color:       "#C06B9B",
     glow:        "rgba(192,107,155,0.45)",
-    foto:        "/img/nutri/microbiotaRecursos/capa2.webp",
     descripciones: [
       "Formada por células epiteliales unidas por uniones estrechas (tight junctions) que regulan el paso selectivo de sustancias.",
       "Actúa como una barrera física que permite el paso de nutrientes y bloquea microorganismos y toxinas.",
@@ -52,7 +50,6 @@ export const capasIntestinoData = [
     titulo:      "Capa 3: Sistema inmunitario",
     color:       "#7B6EC8",
     glow:        "rgba(123,110,200,0.45)",
-    foto:        "/img/nutri/microbiotaRecursos/capa3.webp",
     descripciones: [
       "Compuesta por células del sistema inmunitario que protegen frente a patógenos.",
       "Forma parte del tejido linfoide asociado al intestino (GALT).",

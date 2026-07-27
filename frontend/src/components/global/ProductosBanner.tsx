@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const FlowerIcon = ({ size = "28px" }: { size?: string }) => (
@@ -36,12 +36,8 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
       >
         {/* Imagen */}
         <Box h="150px" position="relative" overflow="hidden" flexShrink={0}>
-          <Image
-            src="/img/jabones.png"
-            alt="Productos naturales"
-            w="100%" h="100%"
-            objectFit="cover" objectPosition="center"
-          />
+          {/* Aquí iba /img/jabones.png, que no existe. Cuando haya fotos de
+              producto de verdad, se vuelve a poner el <Image> aquí. */}
           <Box
             position="absolute" bottom={0} left={0} right={0} h="70px"
             bgGradient="linear(to-b, transparent, rgba(0,100,90,0.7))"
@@ -125,12 +121,8 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
         position="relative"
         overflow="hidden"
       >
-        <Image
-          src="/img/jabones.png"
-          alt="Productos naturales"
-          w="100%" h="100%"
-          objectFit="cover" objectPosition="center"
-        />
+        {/* Aquí iba /img/jabones.png, que no existe. Cuando haya fotos de
+            producto de verdad, se vuelve a poner el <Image> aquí. */}
         <Box
           position="absolute"
           bottom={{ base: "0", md: "unset" }}

@@ -52,14 +52,9 @@ export function IndiceCabala() {
   // Senderos, sólo tras haber pasado por el Diagnóstico. Así el índice avanza
   // paso a paso.
   const diagnosticoUnlocked = sefirotContenidoOk;
-  // TEMPORAL (a petición, para poder entrar a probar): «Los Senderos» abierto
-  // sin haber pasado por el Diagnóstico. Para restaurar el bloqueo, borrar
-  // TEMP_SENDEROS_ABIERTOS y dejar:  diagnosticoUnlocked && diagnosticoVisto
-  // El tipo explícito `boolean` es necesario: sin él TypeScript deduce el literal
-  // `true`, da el `||` por resuelto y marca `diagnosticoVisto` como no usado
-  // (error TS6133 → `npm run build` falla).
-  const TEMP_SENDEROS_ABIERTOS: boolean = true;
-  const senderosUnlocked = TEMP_SENDEROS_ABIERTOS || (diagnosticoUnlocked && diagnosticoVisto);
+  // «Los Senderos» exige haber rellenado todas las sefirot Y haber pasado por el
+  // Diagnóstico. El recorrido es un camino: no se salta un paso.
+  const senderosUnlocked = diagnosticoUnlocked && diagnosticoVisto;
   // El recorrido sendero a sendero (los 22, uno a uno) también es secuencial: se
   // abre tras ver TODAS las ilustraciones de los senderos, y cada sendero exige
   // que los anteriores tengan su test completo. Su diagnóstico, sólo cuando se

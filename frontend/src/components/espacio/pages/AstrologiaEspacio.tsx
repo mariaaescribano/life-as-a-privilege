@@ -190,10 +190,12 @@ const TrashIcon = () => (
   </svg>
 );
 
-const FIELD_META: Record<SignField, { label: string; img: string; icon: (size?: number) => React.ReactNode }> = {
-  sol:        { label: "Sol",        img: "/img/astrologia/sun.png",  icon: (s) => <SolFieldIcon size={s} /> },
-  luna:       { label: "Luna",       img: "/img/astrologia/moon.png", icon: (s) => <LunaFieldIcon size={s} /> },
-  ascendente: { label: "Ascendente", img: "/img/astrologia/path.png", icon: (s) => <AscendenteFieldIcon size={s} /> },
+// Sin `img`: apuntaba a fotos que no existen y además nunca se leía — lo que se
+// pinta es el `icon`.
+const FIELD_META: Record<SignField, { label: string; icon: (size?: number) => React.ReactNode }> = {
+  sol:        { label: "Sol",        icon: (s) => <SolFieldIcon size={s} /> },
+  luna:       { label: "Luna",       icon: (s) => <LunaFieldIcon size={s} /> },
+  ascendente: { label: "Ascendente", icon: (s) => <AscendenteFieldIcon size={s} /> },
 };
 
 /* ══════════════════════════════════════════════

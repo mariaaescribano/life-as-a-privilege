@@ -22,6 +22,7 @@ import {
 import { welcomeDisciplinas } from "../../data/welcomeDisciplinas";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
 
 type Discipline = {
@@ -177,7 +178,12 @@ const Welcome = () => {
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
   const disciplinasTitleReveal = useReveal(0.2);
-  const disciplinasReveal = useReveal(0.05);
+  // La cascada de las ocho tarjetas. Va con useEnPantalla (margen inferior
+  // negativo) y NO con useReveal por umbral: la cabecera de Welcome es corta, así
+  // que en un escritorio normal el borde de la cuadrícula ya está en pantalla al
+  // cargar y un umbral del 12% se cumplía al instante — la cascada se gastaba
+  // mientras se miraba el título y al bajar las tarjetas ya estaban puestas.
+  const cardsEnPantalla = useEnPantalla();
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
@@ -346,7 +352,7 @@ const Welcome = () => {
 
       {/* ── CARDS DE DISCIPLINAS ── */}
       <Box
-        ref={disciplinasReveal.ref}
+        ref={cardsEnPantalla.ref}
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 7, md: 11 }}
         pb={{ base: 9, md: 13 }}
@@ -365,10 +371,20 @@ const Welcome = () => {
                 mt="42px"
                 cursor="pointer"
                 onClick={() => setSelected(d)}
-                opacity={mounted ? 1 : 0}
-                transform={mounted ? "translateY(0) scale(1) rotate(0deg)" : "translateY(52px) scale(0.7) rotate(-4deg)"}
-                filter={mounted ? "blur(0px)" : "blur(7px)"}
-                transition={`opacity 0.55s ease ${0.15 + i * 0.09}s, transform 0.9s cubic-bezier(0.22,1.45,0.36,1) ${0.15 + i * 0.09}s, filter 0.55s ease ${0.15 + i * 0.09}s`}
+                // Dispara cuando la cuadrícula está metida en pantalla, NO al
+                // cargar la página: si no, la animación se gasta mientras se mira
+                // la cabecera y al bajar te encuentras las tarjetas ya puestas.
+                opacity={cardsEnPantalla.visto ? 1 : 0}
+                transform={cardsEnPantalla.visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
+                filter={cardsEnPantalla.visto ? "blur(0px)" : "blur(6px)"}
+                // Las ocho entran UNA DETRÁS DE OTRA, con 0.15s de hueco: se ve
+                // la secuencia pero es ágil (antes 0.09s, que se solapaba tanto
+                // que parecían entrar de golpe).
+                // Sin giro y sin rebote: antes entraban con rotate(-4deg) y una
+                // curva que se pasaba de largo, así que aterrizaban torcidas y se
+                // enderezaban dando un tumbo. Ahora suben limpias y se enfocan,
+                // con la curva del sistema Reveal. Mismos números que /elMetodo.
+                transition={`opacity 0.4s ease ${0.1 + i * 0.15}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${0.1 + i * 0.15}s, filter 0.4s ease ${0.1 + i * 0.15}s`}
               >
                 {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
                     del reveal de entrada para que no se pisen los transforms. */}

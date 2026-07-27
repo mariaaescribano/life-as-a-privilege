@@ -718,7 +718,7 @@ const ORGANOS: Organo[] = [
         texto: <>El tamaño del bazo no siempre es el mismo. Puede aumentar temporalmente durante algunas infecciones, enfermedades de la sangre o problemas hepáticos, ya que trabaja más intensamente para filtrar la sangre y activar la respuesta inmunitaria. En condiciones normales mide alrededor de 12 centímetros, pero su tamaño puede variar según la edad, la constitución física y el estado de salud de cada persona.</>,
       },
     ] },
-  { key: "vesicula",  label: "Vesícula biliar", foto: "/recorrido/fisiologia/organos/vesicula.png", hotspot: { top: 36, left: 41 }, celulas: pick("colangiocito-vesicula", "muscular-vesicula"),
+  { key: "vesicula",  label: "Vesícula biliar", foto: "/recorrido/fisiologia/organos/vesiculabiliar.png", hotspot: { top: 36, left: 41 }, celulas: pick("colangiocito-vesicula", "muscular-vesicula"),
     descripcion: <>Es una pequeña bolsa situada bajo el hígado que guarda y concentra la bilis entre comidas. Cuando comes grasa, se contrae y libera esa bilis al intestino para ayudar a digerirla y a absorber las vitaminas liposolubles. Trabaja en equipo con el hígado y el páncreas dentro del sistema digestivo.</>,
     consejos: [
       {

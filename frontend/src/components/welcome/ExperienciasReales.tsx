@@ -1,25 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
+import { Breathe, RevealItem, RevealStagger } from "../global/Reveal";
 
-const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-};
+// La entrada ya no se hace con un IntersectionObserver propio (que encendía
+// todo el bloque a la vez): ahora se usa el sistema Reveal común, que además
+// respeta `prefers-reduced-motion`.
 
 // Aparición suave al cambiar de testimonio (sin glow nuevo, solo fade + leve subida).
 const fadeIn = keyframes`
@@ -56,7 +45,6 @@ const ArrowButton: React.FC<{ dir: "left" | "right"; onClick: () => void }> = ({
 
 const ExperienciasReales: React.FC = () => {
   const navigate = useNavigate();
-  const reveal = useReveal(0.1);
   const [opiniones, setOpiniones] = useState<Opinion[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [index, setIndex] = useState(0);
@@ -76,17 +64,27 @@ const ExperienciasReales: React.FC = () => {
   const current = opiniones[index];
 
   return (
-    <Box ref={reveal.ref} w="100%">
+    // RevealStagger: los elementos entran EN CASCADA al asomar en pantalla, en
+    // vez de aparecer todos a la vez con el mismo fundido. Mismo sistema que el
+    // recorrido de astrología (components/global/Reveal.tsx).
+    <RevealStagger
+      inView
+      stagger={0.18}
+      w="100%"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
       <Flex direction="column" align="center" w="100%">
         {/* ── Título ── */}
-        <Flex
-          align="center"
-          justify="center"
+        <RevealItem
+          direction="up"
+          distance={22}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
           gap={3}
           mb={{ base: 8, md: 10 }}
-          opacity={reveal.visible ? 1 : 0}
-          transform={reveal.visible ? "translateY(0)" : "translateY(20px)"}
-          transition="opacity 0.7s ease, transform 0.7s ease"
         >
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "28px", md: "36px" }} h={{ base: "28px", md: "36px" }} fill="white" flexShrink={0} style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55)) drop-shadow(0 0 18px rgba(255,255,255,0.3))" }}>
             <path d="M240-400h122l200-200q9-9 13.5-20.5T580-643q0-11-5-21.5T562-684l-36-38q-9-9-20-13.5t-23-4.5q-11 0-22.5 4.5T440-722L240-522v122Zm280-243-37-37 37 37ZM300-460v-38l101-101 20 18 18 20-101 101h-38Zm121-121 18 20-38-38 20 18Zm26 181h273v-80H527l-80 80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/>
@@ -101,25 +99,29 @@ const ExperienciasReales: React.FC = () => {
           >
             Experiencias reales
           </Text>
-        </Flex>
+        </RevealItem>
 
         {/* ── Carrusel: una opinión cada vez, flechas a los lados ── */}
         {current && (
-          <Flex
-            align="center"
-            justify="center"
+          <RevealItem
+            direction="up"
+            distance={30}
+            scaleFrom={0.97}
+            blur
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
             gap={{ base: 2, md: 5 }}
             w="100%"
             maxW="820px"
-            opacity={reveal.visible ? 1 : 0}
-            transform={reveal.visible ? "translateY(0)" : "translateY(28px)"}
-            transition="opacity 0.6s ease, transform 0.6s ease"
           >
             {total > 1 && <ArrowButton dir="left" onClick={() => go(-1)} />}
 
+            {/* Breathe: latido de escala muy leve y continuo. La tarjeta deja de
+                ser un rectángulo quieto sin llegar a distraer de la lectura. */}
+            <Breathe scale={0.008} duration={7} flex="1" maxW="600px" display="flex">
             <Box
               flex="1"
-              maxW="600px"
               bg="rgba(255,255,255,0.18)"
               border="1px solid rgba(255,255,255,0.4)"
               sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
@@ -156,14 +158,23 @@ const ExperienciasReales: React.FC = () => {
                 </Text>
               </Flex>
             </Box>
+            </Breathe>
 
             {total > 1 && <ArrowButton dir="right" onClick={() => go(1)} />}
-          </Flex>
+          </RevealItem>
         )}
 
         {/* ── Indicadores (dots) ── */}
         {total > 1 && (
-          <Flex gap={2} mt={{ base: 5, md: 6 }} justify="center" align="center">
+          <RevealItem
+            direction="up"
+            distance={14}
+            display="flex"
+            gap={2}
+            mt={{ base: 5, md: 6 }}
+            justifyContent="center"
+            alignItems="center"
+          >
             {opiniones.map((_, i) => (
               <Box
                 key={i}
@@ -179,10 +190,11 @@ const ExperienciasReales: React.FC = () => {
                 _hover={{ bg: i === index ? "white" : "rgba(255,255,255,0.55)" }}
               />
             ))}
-          </Flex>
+          </RevealItem>
         )}
 
         {/* ── Frase de conversión ── */}
+        <RevealItem direction="up" distance={18} textAlign="center">
         <Text
           mt={{ base: 10, md: 14 }}
           mb={{ base: 8, md: 10 }}
@@ -195,14 +207,13 @@ const ExperienciasReales: React.FC = () => {
           lineHeight="1.6"
           maxW="640px"
           textShadow="0 0 10px rgba(255,255,255,0.3)"
-          opacity={reveal.visible ? 1 : 0}
-          transform={reveal.visible ? "translateY(0)" : "translateY(18px)"}
-          transition="opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s"
         >
           Si ellos encontraron respuestas aquí, tú también puedes.
         </Text>
+        </RevealItem>
 
         {/* ── Enlace secundario → página completa de Opiniones ── */}
+        <RevealItem direction="up" distance={14}>
         <Box
           as="button"
           onClick={() => navigate("/opiniones")}
@@ -220,8 +231,9 @@ const ExperienciasReales: React.FC = () => {
         >
           Ver más experiencias →
         </Box>
+        </RevealItem>
       </Flex>
-    </Box>
+    </RevealStagger>
   );
 };
 

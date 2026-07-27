@@ -148,19 +148,22 @@ const Productos = () => {
                   </Box>
                 )}
 
-                {/* Imagen */}
-                <Box h={{ base: "220px", md: "240px" }} overflow="hidden" flexShrink={0}>
-                  <Image
-                    src={p.imgs[0]}
-                    alt={p.title}
-                    w="100%"
-                    h="100%"
-                    objectFit="cover"
-                    objectPosition="center"
-                    transition="transform 0.35s ease"
-                    _groupHover={{ transform: "scale(1.04)" }}
-                  />
-                </Box>
+                {/* Imagen — solo si el producto tiene alguna. Sin este guardado,
+                    un producto sin fotos pintaba el icono de «imagen rota». */}
+                {p.imgs[0] && (
+                  <Box h={{ base: "220px", md: "240px" }} overflow="hidden" flexShrink={0}>
+                    <Image
+                      src={p.imgs[0]}
+                      alt={p.title}
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
+                      objectPosition="center"
+                      transition="transform 0.35s ease"
+                      _groupHover={{ transform: "scale(1.04)" }}
+                    />
+                  </Box>
+                )}
 
                 {/* Contenido */}
                 <Box

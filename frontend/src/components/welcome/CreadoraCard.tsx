@@ -1,22 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
-const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-};
+import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
 
 /**
  * Tarjeta de la creadora — panel glass horizontal: texto a la izquierda
@@ -41,33 +26,54 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
   extraParagraph,
 }) => {
   const navigate = useNavigate();
-  const reveal = useReveal(0.12);
 
   return (
     <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
-      <Flex
-        ref={reveal.ref}
-        direction={{ base: "column-reverse", md: "row" }}
-        align="center"
-        justify="center"
-        gap={{ base: 7, md: 14, lg: 20 }}
+      {/* El panel entra al asomar: sube, crece un poco y sus dos mitades llegan
+          en cascada (texto desde la izquierda, foto desde la derecha).
+          `amount={0.02}`: arranca en cuanto asoma el BORDE de la caja. Es
+          importante en un panel tan alto — con el umbral por defecto (20% de la
+          caja visible) la animación empezaba cuando ya llevabas medio panel en
+          pantalla, así que primero veías un hueco vacío y luego la caja
+          apareciendo de golpe. Tampoco lleva `blur`: sobre un panel de cristal
+          tan grande, el salto de desenfoque a nítido se percibe como un fogonazo.
+          Duración generosa (1s) para que se vea llegar, no aparecer. */}
+      <Reveal
+        inView
+        amount={0.02}
+        direction="up"
+        distance={26}
+        scaleFrom={0.98}
+        duration={1}
         w="100%"
         maxW={{ base: "900px", lg: "1180px" }}
         mx="auto"
+      >
+      <RevealStagger
+        inView
+        amount={0.02}
+        stagger={0.22}
+        delayChildren={0.18}
+        display="flex"
+        flexDirection={{ base: "column-reverse", md: "row" }}
+        alignItems="center"
+        justifyContent="center"
+        gap={{ base: 7, md: 14, lg: 20 }}
+        w="100%"
         p={{ base: 7, md: 12, lg: 16 }}
         borderRadius="3xl"
         bg="rgba(255,255,255,0.05)"
         border="1px solid rgba(255,255,255,0.14)"
         sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
-        opacity={reveal.visible ? 1 : 0}
-        transform={reveal.visible ? "translateY(0)" : "translateY(28px)"}
-        transition="opacity 0.8s ease, transform 0.8s ease"
       >
         {/* ── Texto (izquierda) ── */}
-        <Flex
+        <RevealItem
+          direction="right"
+          distance={26}
           flex="1"
-          direction="column"
-          align={{ base: "center", md: "flex-start" }}
+          display="flex"
+          flexDirection="column"
+          alignItems={{ base: "center", md: "flex-start" }}
           textAlign={{ base: "center", md: "left" }}
           gap={{ base: 4, md: 5, lg: 6 }}
         >
@@ -150,10 +156,13 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             {actionLabel}
             <Box as="span" fontSize={{ base: "sm", md: "md", lg: "lg" }}>→</Box>
           </Flex>
-        </Flex>
+        </RevealItem>
 
         {/* ── Foto (derecha) — recortada apaisada (más ancha que alta) ── */}
-        <Box
+        <RevealItem
+          direction="left"
+          distance={26}
+          scaleFrom={0.94}
           flexShrink={0}
           w={{ base: "240px", md: "340px", lg: "430px" }}
           borderRadius="2xl"
@@ -170,8 +179,9 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             objectPosition="center top"
             display="block"
           />
-        </Box>
-      </Flex>
+        </RevealItem>
+      </RevealStagger>
+      </Reveal>
     </Box>
   );
 };

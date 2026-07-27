@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, Flex, Grid, Image, Input, Text, useBreakpointValue } from "@chakra-ui/react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Grid, Image, Text, useBreakpointValue, type BoxProps } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
-import { WaitlistModal } from "../../components/global/WaitlistModal";
 import { recorridoContenido, nombreEnMapa, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
 // Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
 import {
-  API_URL,
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
@@ -159,25 +159,80 @@ const headerDescShadow = (card: ModalidadData) =>
     ? SHADOW_BLACK
     : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 12px rgba(255,255,255,0.38), 0 0 26px rgba(255,255,255,0.19)`;
 
-// callback ref: el observer se engancha en cuanto el nodo aparece en el DOM.
-// (Importante porque la página se monta primero mostrando <LifeLoading/> y el
-// contenido —con estos refs— aparece después; con un ref normal el efecto
-// correría una vez con el ref vacío y nunca volvería a observar.)
-const useReveal = (threshold = 0.12) => {
-  const [visible, setVisible] = useState(false);
+// ── Bloque de montaje diferido ──────────────────────────────────────────────
+// No es una animación: retrasa el MONTAJE de lo que envuelve hasta que está a
+// punto de asomar. Hace falta porque el mandala-vídeo anima sus círculos al
+// montarse (framer `animate`, no `whileInView`), y como vive muy por debajo del
+// pliegue, esa entrada ocurría fuera de pantalla: al bajar hasta él lo
+// encontrabas ya colocado y quieto. Envolver en <Reveal> NO lo arregla — Reveal
+// anima su envoltorio, pero el hijo se monta igual. De paso, no se cargan sus
+// siete vídeos hasta que hacen falta.
+// `minH` reserva el hueco para que la página no dé un salto al montarlo.
+function BloqueDiferido({
+  children,
+  minH,
+}: {
+  children: React.ReactNode;
+  minH?: BoxProps["minH"];
+}) {
+  const [cerca, setCerca] = useState(false);
   const [node, setNode] = useState<HTMLElement | null>(null);
-  const ref = useCallback((el: HTMLElement | null) => setNode(el), []);
+
   useEffect(() => {
-    if (!node) return;
+    if (!node || cerca) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
+      ([entrada]) => { if (entrada.isIntersecting) { setCerca(true); obs.disconnect(); } },
+      // Justo antes de entrar (80px), no mucho antes. El montaje dispara la
+      // entrada de los círculos, así que si se monta demasiado pronto la cascada
+      // arranca fuera de pantalla y te pierdes los primeros. 80px es suficiente
+      // para que el salto de maquetación no se vea y la cascada se vea entera.
+      { rootMargin: "80px 0px" },
     );
     obs.observe(node);
     return () => obs.disconnect();
-  }, [node, threshold]);
-  return { ref, visible };
-};
+  }, [node, cerca]);
+
+  return (
+    <Box ref={setNode} minH={cerca ? undefined : minH}>
+      {cerca ? children : null}
+    </Box>
+  );
+}
+
+// ── Separador de mandala ────────────────────────────────────────────────────
+// Las tres cesuras de la página (antes de «Así es El Mapa», antes de la creadora
+// y después de ella) eran el MISMO bloque copiado tres veces, y la tercera ni se
+// animaba. Ahora es un solo componente: el conjunto se abre desde el centro al
+// asomar y el mandala del medio flota despacio, para que la pausa entre
+// secciones también respire.
+function SeparadorMandala({ mt, mb }: { mt?: BoxProps["mt"]; mb?: BoxProps["mb"] }) {
+  return (
+    <Reveal inView direction="none" scaleFrom={0.86} duration={0.9} mt={mt} mb={mb}>
+      <Flex align="center" justify="center" gap={{ base: 4, md: 6 }}>
+        <Box
+          h="1px"
+          w={{ base: "60px", md: "150px" }}
+          bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
+        />
+        <Float amplitude={4} duration={6.5}>
+          <Image
+            src="/img/icono/life.png"
+            alt=""
+            h={{ base: "26px", md: "34px" }}
+            objectFit="contain"
+            flexShrink={0}
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+          />
+        </Float>
+        <Box
+          h="1px"
+          w={{ base: "60px", md: "150px" }}
+          bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+        />
+      </Flex>
+    </Reveal>
+  );
+}
 
 type MetodoCardProps = {
   data: ModalidadData;
@@ -193,18 +248,26 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
   // En El Mapa, "Hinduismo" se muestra como "Ayurveda" (nombreEnMapa). Medicina
   // China se abrevia en móvil por espacio.
   const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : nombreEnMapa(data.name);
-  // Entrada épica: la tarjeta CAE en cascada con un "pop" (rebote + enfoque).
+  // Entrada: la tarjeta sube a su sitio y se enfoca, y las ocho lo hacen UNA
+  // DETRÁS DE OTRA. El orden lo marca `delay`, que viene del índice.
+  //
+  // NADA de giro ni de rebote. Antes entraba con rotate(-5deg) y una curva que
+  // se pasaba de largo (el 1.5 de cubic-bezier(0.22,1.5,0.36,1)): la tarjeta
+  // aterrizaba torcida y se enderezaba dando un tumbo, que es justo lo que
+  // quedaba poco profesional. Ahora usa la curva del sistema Reveal —fuerte al
+  // frenar, sin pasarse— y solo desplazamiento + escala + enfoque.
+  //
   // La entrada va en el wrapper exterior y el hover en la tarjeta interior, para
   // que sus `transform` no se pisen.
-  const entradaDelay = 0.15 + delay;
+  const entradaDelay = 0.1 + delay;
   return (
     <Box
       mt="42px"
       mb={{ base: 3, md: 5 }}
       opacity={parentVisible ? 1 : 0}
-      transform={parentVisible ? "translateY(0) scale(1) rotate(0deg)" : "translateY(56px) scale(0.68) rotate(-5deg)"}
-      filter={parentVisible ? "blur(0px)" : "blur(7px)"}
-      transition={`opacity 0.55s ease ${entradaDelay}s, transform 0.95s cubic-bezier(0.22,1.5,0.36,1) ${entradaDelay}s, filter 0.55s ease ${entradaDelay}s`}
+      transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
+      filter={parentVisible ? "blur(0px)" : "blur(6px)"}
+      transition={`opacity 0.4s ease ${entradaDelay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${entradaDelay}s, filter 0.4s ease ${entradaDelay}s`}
       sx={{ willChange: "transform, opacity, filter" }}
     >
     <Box
@@ -341,16 +404,14 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
 }
 
 export default function ElMetodo() {
-  const headerReveal = useReveal(0.05);
-  const disciplinasTitleReveal = useReveal(0.15);
-  const cardsReveal = useReveal(0.04);
-  // const precioReveal = useReveal(0.2); // ← con el párrafo de PRECIO
-  const recibirasTitleReveal = useReveal(0.2);
-  const creadoraReveal = useReveal(0.12);
-  const botonesReveal = useReveal(0.1);
+  const navigate = useNavigate();
+  // Las entradas de esta página las hace el sistema Reveal (framer-motion), el
+  // mismo del recorrido de astrología. La única excepción son las ocho tarjetas:
+  // conservan su entrada en CSS (el «pop» con rebote y giro, que Reveal no sabe
+  // hacer), y por eso necesitan saber por su cuenta cuándo asoman en pantalla.
+  const cardsEnPantalla = useEnPantalla();
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(METODO_IMGS);
@@ -360,49 +421,17 @@ export default function ElMetodo() {
   // de caché). Mientras, se muestra <LifeLoading/>.
   const listo = imagenesListas && tiempoMin;
 
-  // Formulario de voluntario/a (dentro del aviso "Proyecto en desarrollo").
-  // El email se manda al backend con origen "voluntario" → notificación a
-  // darkcake141@gmail.com marcada como voluntario.
-  const [volEmail, setVolEmail] = useState("");
-  const [volSubmitting, setVolSubmitting] = useState(false);
-  const [volSubmitted, setVolSubmitted] = useState(false);
-  const [volError, setVolError] = useState<string | null>(null);
-
-  const handleVoluntario = async () => {
-    if (volSubmitting) return;
-    setVolError(null);
-    const cleanEmail = volEmail.trim().toLowerCase();
-    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      setVolError("Introduce un email válido.");
+  // Botón principal "Acceder": si ya hay sesión, directo a /home; si no, al
+  // registro, que al terminar devuelve a /home.
+  const handleAcceder = () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      navigate("/signIn?next=/home");
       return;
     }
-    setVolSubmitting(true);
-    try {
-      await axios.post(`${API_URL}/subscribe`, { email: cleanEmail, origen: "voluntario" });
-      setVolSubmitted(true);
-    } catch {
-      setVolError("No se pudo enviar. Inténtalo de nuevo en un momento.");
-    } finally {
-      setVolSubmitting(false);
-    }
+    navigate("/home");
   };
-
-  // El recorrido aún no está acabado: en vez de mandar al registro/flujo
-  // incompleto, abrimos el modal de "lista de espera" y guardamos el email.
-  const handleApuntarme = () => {
-    setWaitlistOpen(true);
-  };
-
-  // Flujo original (cuando el recorrido esté disponible):
-  // const handleApuntarme = () => {
-  //   const userId = sessionStorage.getItem("userId");
-  //   const token = sessionStorage.getItem("token");
-  //   if (!userId || !token) {
-  //     navigate("/signIn?next=/home");
-  //     return;
-  //   }
-  //   navigate("/home");
-  // };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -478,7 +507,6 @@ export default function ElMetodo() {
 
       {/* ── CABECERA ── */}
       <Flex
-        ref={headerReveal.ref}
         direction="column"
         align="center"
         textAlign="center"
@@ -549,7 +577,6 @@ export default function ElMetodo() {
 
       {/* ── SEPARADOR + TÍTULO DISCIPLINAS ── */}
       <Flex
-        ref={disciplinasTitleReveal.ref}
         direction="column"
         align="center"
         pt={{ base: 14, md: 21 }}
@@ -583,9 +610,13 @@ export default function ElMetodo() {
       </Flex>
       
 
-      {/* ── CARDS DE MODALIDADES ── */}
+      {/* ── CARDS DE MODALIDADES ──
+          La cascada NO arranca al cargar la página: espera a que la cuadrícula
+          asome (useEnPantalla). Antes iba con `mounted` y, como las tarjetas
+          quedan por debajo del pliegue, entraban con la pantalla en la cabecera:
+          al bajar te las encontrabas ya puestas y no veías la animación. */}
       <Box
-        ref={cardsReveal.ref}
+        ref={cardsEnPantalla.ref}
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 12, md: 16 }}
         pb={{ base: 6, md: 10 }}
@@ -598,8 +629,13 @@ export default function ElMetodo() {
             <MetodoCard
               key={m.name}
               data={m}
-              delay={i * 0.1}
-              parentVisible={mounted}
+              // 0.15s de hueco: se sigue viendo entrar una detrás de otra, pero
+              // ágil. Son ocho y están arriba del todo — a 0.35s la secuencia se
+              // hacía larga (3.2s). Así la última arranca a 1.15s y todo acaba
+              // sobre 1.7s. Los círculos del mandala, que son un momento más
+              // contemplativo, sí van más pausados (0.18s).
+              delay={i * 0.15}
+              parentVisible={cardsEnPantalla.visto}
               index={i + 1}
               onClick={() => setSelectedCard(m)}
             />
@@ -611,35 +647,7 @@ export default function ElMetodo() {
       <Box w="100%" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }}>
         <Box maxW="1200px" mx="auto">
           {/* Separador con mandala en medio y líneas degradadas a los lados */}
-          <Flex
-            ref={recibirasTitleReveal.ref}
-            align="center"
-            justify="center"
-            gap={{ base: 4, md: 6 }}
-            mb={{ base: 10, md: 14 }}
-            opacity={recibirasTitleReveal.visible ? 1 : 0}
-            transform={recibirasTitleReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
-            transition="opacity 0.8s ease, transform 0.8s ease"
-          >
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
-            />
-            <Image
-              src="/img/icono/life.png"
-              alt=""
-              h={{ base: "26px", md: "34px" }}
-              objectFit="contain"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-            />
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
-            />
-          </Flex>
+          <SeparadorMandala mb={{ base: 10, md: 14 }} />
 
           {/* Título + subtítulo */}
           <Flex
@@ -648,20 +656,19 @@ export default function ElMetodo() {
             textAlign="center"
             gap={{ base: 4, md: 5 }}
           >
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "3xl", md: "5xl" }}
-              letterSpacing="0.04em"
-              lineHeight="1.2"
-              textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
-              opacity={recibirasTitleReveal.visible ? 1 : 0}
-              transform={recibirasTitleReveal.visible ? "translateY(0)" : "translateY(20px)"}
-              transition="opacity 0.8s ease, transform 0.8s ease"
-            >
-              Así es El Mapa por dentro
-            </Text>
+            <Reveal inView direction="up" distance={22} duration={0.8}>
+              <Text
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "3xl", md: "5xl" }}
+                letterSpacing="0.04em"
+                lineHeight="1.2"
+                textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
+              >
+                Así es El Mapa por dentro
+              </Text>
+            </Reveal>
           </Flex>
 
           {/* Mandala interactivo — resumen visual de la estructura del recorrido.
@@ -677,8 +684,14 @@ export default function ElMetodo() {
               derecha el box de la disciplina seleccionada con su vídeo (9:16
               recortado a 1:1). Al pulsar una disciplina disponible, el box se
               actualiza. */}
+          {/* Montaje diferido: así los círculos del mandala hacen su «pop» justo
+              cuando llegas a ellos, y no antes en una zona que no ves. */}
           <Box mt={{ base: 12, md: 20 }}>
-            <RecorridoMandalaVideo />
+            <BloqueDiferido minH={{ base: "760px", md: "560px" }}>
+              <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
+                <RecorridoMandalaVideo />
+              </Reveal>
+            </BloqueDiferido>
           </Box>
 
           {/* ── PRECIO ──
@@ -712,70 +725,21 @@ export default function ElMetodo() {
               aporta su propio pt (40px móvil / 56px escritorio); compensamos con
               mt igual y mb=0 para que el separador quede JUSTO en medio de los
               dos paneles visibles. */}
-          <Flex
-            ref={creadoraReveal.ref}
-            align="center"
-            justify="center"
-            gap={{ base: 4, md: 6 }}
-            mt={{ base: 10, md: 14 }}
-            mb={0}
-            opacity={creadoraReveal.visible ? 1 : 0}
-            transform={creadoraReveal.visible ? "scaleX(1)" : "scaleX(0.85)"}
-            transition="opacity 0.8s ease, transform 0.8s ease"
-          >
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
-            />
-            <Image
-              src="/img/icono/life.png"
-              alt=""
-              h={{ base: "26px", md: "34px" }}
-              objectFit="contain"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-            />
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
-            />
-          </Flex>
+          <SeparadorMandala mt={{ base: 10, md: 14 }} mb={0} />
 
           {/* Tarjeta de la creadora (componente compartido con Welcome) */}
           <CreadoraCard />
 
           {/* ── Separador con mandala en medio ── */}
-          <Flex
-            align="center"
-            justify="center"
-            gap={{ base: 4, md: 6 }}
-            mt={{ base: 5, md: 7 }}
-            mb={{ base: 10, md: 14 }}
-          >
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
-            />
-            <Image
-              src="/img/icono/life.png"
-              alt=""
-              h={{ base: "26px", md: "34px" }}
-              objectFit="contain"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-            />
-            <Box
-              h="1px"
-              w={{ base: "60px", md: "150px" }}
-              bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
-            />
-          </Flex>
+          {/* Aquí había un tercer separador de mandala. Fuera: era el tercero en
+              muy poco recorrido y «Experiencias reales» ya entra con su propio
+              título con icono, así que no hacía falta anunciarlo. El hueco que
+              aportaba lo pone ahora el pt del bloque de testimonios. */}
 
           {/* ── EXPERIENCIAS REALES (testimonios) ── */}
-          <ExperienciasReales />
+          <Box pt={{ base: 20, md: 28 }}>
+            <ExperienciasReales />
+          </Box>
 
           {/* Separador (mismo estilo que el de las disciplinas) */}
           {/* <Flex justify="center" mt={{ base: 16, md: 20 }}>
@@ -948,149 +912,20 @@ export default function ElMetodo() {
 
       {/* ── BOTÓN EMPEZAR + TENGO DUDAS ── */}
       <Flex
-        ref={botonesReveal.ref}
         direction="column"
         align="center"
         pt={{ base: 16, md: 24 }}
         pb={{ base: 24, md: 32 }}
         gap={{ base: 12, md: 16 }}
-        opacity={botonesReveal.visible ? 1 : 0}
-        transform={botonesReveal.visible ? "translateY(0)" : "translateY(28px)"}
-        transition="opacity 0.8s ease, transform 0.8s ease"
       >
-        {/* Aviso elegante: proyecto en desarrollo + búsqueda de voluntarios */}
-        <Flex
-          direction="column"
-          align="center"
-          textAlign="center"
-          gap={{ base: 3, md: 3.5 }}
-          maxW={{ base: "92vw", md: "640px" }}
-          px={{ base: 6, md: 9 }}
-          py={{ base: 6, md: 7 }}
-          borderRadius="2xl"
-          border="1px solid rgba(255,255,255,0.28)"
-          bg="rgba(255,255,255,0.07)"
-          sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
-          boxShadow="0 4px 20px rgba(0,0,0,0.14), 0 0 24px rgba(180,255,245,0.10)"
-        >
-          <Flex align="center" gap={2}>
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "xs", md: "sm" }}
-              letterSpacing="0.18em"
-              textTransform="uppercase"
-              textShadow="0 0 10px rgba(255,255,255,0.35)"
-            >
-              Proyecto en desarrollo
-            </Text>
-          </Flex>
-          <Text
-            color="rgba(255,255,255,0.9)"
-            fontFamily="'EB Garamond', serif"
-            fontStyle="italic"
-            fontSize={{ base: "sm", md: "md" }}
-            lineHeight="1.7"
-            letterSpacing="0.01em"
-            textShadow="0 0 10px rgba(255,255,255,0.22)"
-          >
-            El Mapa todavía está en desarrollo. Por eso busco a personas
-            voluntarias que quieran vivirlo a un precio muy reducido y acompañarme
-            con su feedback para seguir puliéndolo.
-          </Text>
-
-          {/* Mini-formulario de voluntario/a */}
-          {!volSubmitted ? (
-            <Flex direction="column" align="center" gap={3} w="100%" mt={{ base: 1, md: 1.5 }}>
-              <Flex
-                direction={{ base: "column", sm: "row" }}
-                align="center"
-                gap={3}
-                w="100%"
-                maxW="440px"
-              >
-                <Input
-                  placeholder="Tu email"
-                  type="email"
-                  value={volEmail}
-                  onChange={(e) => setVolEmail(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") void handleVoluntario(); }}
-                  isDisabled={volSubmitting}
-                  flex="1"
-                  w="100%"
-                  bg="rgba(255,255,255,0.10)"
-                  border="1px solid rgba(255,255,255,0.4)"
-                  color="white"
-                  borderRadius="full"
-                  textAlign="center"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }}
-                  _placeholder={{ color: "rgba(255,255,255,0.55)" }}
-                  _hover={{ borderColor: "rgba(255,255,255,0.7)" }}
-                  _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.5)" }}
-                />
-                <Box
-                  as="button"
-                  onClick={handleVoluntario}
-                  disabled={volSubmitting}
-                  flexShrink={0}
-                  w={{ base: "100%", sm: "auto" }}
-                  px={{ base: 6, md: 7 }}
-                  py={{ base: "9px", md: "10px" }}
-                  borderRadius="full"
-                  bg="white"
-                  color="#008080"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }}
-                  fontWeight="700"
-                  letterSpacing="0.06em"
-                  whiteSpace="nowrap"
-                  cursor={volSubmitting ? "not-allowed" : "pointer"}
-                  opacity={volSubmitting ? 0.6 : 1}
-                  boxShadow="0 4px 20px rgba(255,255,255,0.28)"
-                  transition="all 0.22s"
-                  _hover={volSubmitting ? {} : { transform: "translateY(-2px)", boxShadow: "0 8px 30px rgba(255,255,255,0.42)" }}
-                >
-                  {volSubmitting ? "Enviando…" : "Quiero ser voluntario/a"}
-                </Box>
-              </Flex>
-              {volError && (
-                <Text color="rgba(255,205,205,0.95)" fontSize="sm">
-                  {volError}
-                </Text>
-              )}
-            </Flex>
-          ) : (
-            <Flex direction="column" align="center" gap={1.5} mt={{ base: 1, md: 1.5 }}>
-              <Text fontSize="2xl" color="white" lineHeight="1">✓</Text>
-              <Text
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }}
-                fontWeight="700"
-                letterSpacing="0.03em"
-                textShadow="0 0 10px rgba(255,255,255,0.3)"
-              >
-                ¡Gracias!
-              </Text>
-              <Text
-                color="rgba(255,255,255,0.85)"
-                fontFamily="'EB Garamond', serif"
-                fontStyle="italic"
-                fontSize={{ base: "sm", md: "md" }}
-                lineHeight="1.6"
-              >
-                Te escribiré para contarte cómo participar.
-              </Text>
-            </Flex>
-          )}
-        </Flex>
-
-        {/* EMPEZAR (botón grande con mandala) */}
+        {/* ACCEDER (botón grande con mandala).
+            Única llamada a la acción de la página: lleva al registro (o directo
+            a /home si ya hay sesión). Respira en bucle para que el ojo vuelva. */}
+        <Reveal inView direction="up" distance={24} duration={0.7} display="flex" justifyContent="center">
+        <Breathe scale={0.014} duration={5.5} display="flex" justifyContent="center">
         <Flex
           as="button"
-          onClick={handleApuntarme}
+          onClick={handleAcceder}
           align="center"
           justify="center"
           gap={{ base: 2, md: 6 }}
@@ -1130,11 +965,15 @@ export default function ElMetodo() {
             whiteSpace="nowrap"
             textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
           >
-            Apúntate a la lista de espera
+            Acceder
           </Text>
         </Flex>
+        </Breathe>
+        </Reveal>
 
-        {/* Agendar llamada + Tengo dudas (botones secundarios) */}
+        {/* Agendar llamada + Tengo dudas (botones secundarios).
+            Cierran la cascada: entran los últimos, después del botón grande. */}
+        <Reveal inView direction="up" distance={20} delay={0.3} duration={0.65} display="flex" justifyContent="center">
         <Flex
           direction={{ base: "column", md: "row" }}
           align="center"
@@ -1242,6 +1081,7 @@ export default function ElMetodo() {
             </Text>
           </Flex>
         </Flex>
+        </Reveal>
       </Flex>
       </Box>
 
@@ -1259,6 +1099,18 @@ export default function ElMetodo() {
           onClick={() => setSelectedCard(null)}
           px={{ base: 5, md: 10 }}
         >
+          {/* La ficha ya no aparece de golpe: sube un poco, se enfoca y crece
+              desde el 96%. La entrada va en este envoltorio y no en la caja, para
+              que su `transform` no pise al del contenido de dentro. */}
+          <Reveal
+            direction="up"
+            distance={22}
+            scaleFrom={0.96}
+            blur
+            duration={0.5}
+            maxW={{ base: "100%", md: "700px" }}
+            w="100%"
+          >
           <Box
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
             bg={hasDisciplinaBg(selectedCard.name) ? "transparent" : selectedCard.bg + "f0"}
@@ -1266,7 +1118,6 @@ export default function ElMetodo() {
             sx={{ backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)" }}
             borderRadius="3xl"
             boxShadow={`0 0 0 1px ${selectedCard.txt}55, 0 0 45px ${selectedCard.txt}66, 0 0 90px ${selectedCard.txt}33, 0 22px 70px rgba(0,0,0,0.6)`}
-            maxW={{ base: "100%", md: "700px" }}
             w="100%"
             h={{ base: "85dvh", md: "82vh" }}
             position="relative"
@@ -1320,8 +1171,23 @@ export default function ElMetodo() {
               }}
             >
 
-            {/* HERO ── icono + título + descripción ── */}
-            <Flex direction="column" align="center" gap={{ base: 4, md: 6 }} pt={{ base: 2, md: 4 }} position="relative" zIndex={1}>
+            {/* HERO ── icono + título + descripción ──
+                Entra en cascada (icono → nombre → línea → frase) con un retraso
+                sobre la propia ficha, para que se lea como una sola secuencia. */}
+            <RevealStagger
+              stagger={0.14}
+              delayChildren={0.22}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              gap={{ base: 4, md: 6 }}
+              pt={{ base: 2, md: 4 }}
+              position="relative"
+              zIndex={1}
+            >
+              <RevealItem direction="up" distance={16} scaleFrom={0.9} display="flex" justifyContent="center">
+              {/* El icono late despacio mientras la ficha está abierta. */}
+              <Breathe scale={0.02} duration={5}>
               <Box position="relative" display="flex" alignItems="center" justifyContent="center">
                 <Box
                   position="absolute"
@@ -1349,7 +1215,10 @@ export default function ElMetodo() {
                   </Box>
                 </Box>
               </Box>
+              </Breathe>
+              </RevealItem>
 
+              <RevealItem direction="up" distance={14}>
               <Text
                 color={selectedCard.txt}
                 fontSize={{ base: "3xl", md: "5xl" }}
@@ -1362,14 +1231,18 @@ export default function ElMetodo() {
               >
                 {nombreEnMapa(selectedCard.name)}
               </Text>
+              </RevealItem>
 
+              <RevealItem direction="none" scaleFrom={0.3}>
               <Box
                 w="80px"
                 h="2px"
                 bgGradient={`linear(to-r, transparent, ${selectedCard.txt}, transparent)`}
                 opacity={0.7}
               />
+              </RevealItem>
 
+              <RevealItem direction="up" distance={14}>
               <Text
                 color={selectedCard.txt}
                 fontSize={{ base: "lg", md: "2xl" }}
@@ -1383,10 +1256,12 @@ export default function ElMetodo() {
               >
                 {selectedCard.desc}
               </Text>
-            </Flex>
+              </RevealItem>
+            </RevealStagger>
 
             {/* Separador antes del contenido */}
-            <Flex align="center" gap={4} mt={{ base: 2, md: 4 }} position="relative" zIndex={1}>
+            <Reveal direction="none" scaleFrom={0.9} delay={0.5} duration={0.7} position="relative" zIndex={1}>
+            <Flex align="center" gap={4} mt={{ base: 2, md: 4 }}>
               <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${selectedCard.txt}55)`} />
               <Text
                 color={selectedCard.txt}
@@ -1401,15 +1276,29 @@ export default function ElMetodo() {
               </Text>
               <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${selectedCard.txt}55)`} />
             </Flex>
+            </Reveal>
 
             {/* SECCIONES DE CONTENIDO — cada una dentro de un panel translúcido
                 claro, estilo cristal, para separarlas visualmente del fondo de
-                la disciplina. Sin hover ni shadow fuerte para no parecer botón. */}
-            <Flex direction="column" gap={{ base: 4, md: 5 }} position="relative" zIndex={1}>
+                la disciplina. Sin hover ni shadow fuerte para no parecer botón.
+                Entran en cascada, uno detrás de otro, después del hero. */}
+            <RevealStagger
+              stagger={0.18}
+              delayChildren={0.6}
+              display="flex"
+              flexDirection="column"
+              gap={{ base: 4, md: 5 }}
+              position="relative"
+              zIndex={1}
+            >
               {selectedCard.contenido.map((seccion, i) => (
-                <Flex
+                <RevealItem
                   key={i}
-                  direction="column"
+                  direction="up"
+                  distance={18}
+                  scaleFrom={0.98}
+                  display="flex"
+                  flexDirection="column"
                   px={{ base: 5, md: 7 }}
                   py={{ base: 5, md: 6 }}
                   gap={{ base: 3, md: 4 }}
@@ -1484,11 +1373,12 @@ export default function ElMetodo() {
                       </Text>
                     </Flex>
                   )}
-                </Flex>
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
             </Box>
           </Box>
+          </Reveal>
         </Box>
       )}
 
@@ -1507,11 +1397,6 @@ export default function ElMetodo() {
       <BookCallModal
         isOpen={bookCallOpen}
         onClose={() => setBookCallOpen(false)}
-      />
-
-      <WaitlistModal
-        isOpen={waitlistOpen}
-        onClose={() => setWaitlistOpen(false)}
       />
 
       <SiteFooter />

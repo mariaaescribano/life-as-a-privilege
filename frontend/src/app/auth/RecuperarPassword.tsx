@@ -16,26 +16,11 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
 import { API_URL } from "../../GlobalVariables";
 import { gestionaError } from "../../GlobalHelper";
+import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
 
-const inputStyles = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
-  color: "white",
-  borderRadius: "full",
-  size: "lg" as const,
-  textAlign: "center" as const,
-  fontFamily: "'EB Garamond', serif",
-  letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { border: "1px solid rgba(255,255,255,0.55)" },
-  _focus: {
-    border: "1px solid rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
-    bg: "rgba(255,255,255,0.12)",
-    outline: "none",
-  },
-};
+// El estilo de los campos vive en CampoContrasena, para que el campo con ojo y
+// los normales no puedan quedar distintos.
+const inputStyles = inputAuthStyles;
 
 const Etiqueta = ({ children }: { children: React.ReactNode }) => (
   <Text
@@ -278,27 +263,21 @@ export default function RecuperarPassword() {
           <VStack w={{ base: "100%", sm: "440px" }} spacing={5} align="stretch">
             {conToken ? (
               <>
-                <Box>
-                  <Etiqueta>NUEVA CONTRASEÑA</Etiqueta>
-                  <Input
-                    type="password"
-                    value={pass1}
-                    onChange={(e) => setPass1(e.target.value)}
-                    isDisabled={bloqueado}
-                    {...inputStyles}
-                  />
-                </Box>
-                <Box>
-                  <Etiqueta>REPÍTELA</Etiqueta>
-                  <Input
-                    type="password"
-                    value={pass2}
-                    onChange={(e) => setPass2(e.target.value)}
-                    isDisabled={bloqueado}
-                    onKeyDown={(e) => { if (e.key === "Enter" && !bloqueado) cambiarPassword(); }}
-                    {...inputStyles}
-                  />
-                </Box>
+                <CampoContrasena
+                  label="NUEVA CONTRASEÑA"
+                  value={pass1}
+                  onChange={setPass1}
+                  isDisabled={bloqueado}
+                  autoComplete="new-password"
+                />
+                <CampoContrasena
+                  label="REPÍTELA"
+                  value={pass2}
+                  onChange={setPass2}
+                  isDisabled={bloqueado}
+                  onEnter={cambiarPassword}
+                  autoComplete="new-password"
+                />
               </>
             ) : (
               <Box>

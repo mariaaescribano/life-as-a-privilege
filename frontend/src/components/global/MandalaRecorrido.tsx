@@ -201,6 +201,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/aprendizaje/cursos/" + culturaNomLink,
     enabled: false,
+    video: "/videos/cultura.mp4",
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
   },
 ];
@@ -229,7 +230,12 @@ const MandalaCircle = ({
       onClick={onSelect}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
       animate={{ scale: isSelected ? 1.14 : 1, opacity: 1, x, y }}
-      transition={entered ? { duration: 0.25 } : { duration: 0.7, delay: index * 0.06 }}
+      // Los ocho salen del centro y se colocan UNO DETRÁS DE OTRO, girando el
+      // círculo. Con 0.06s de hueco los ocho estaban puestos en medio segundo y
+      // se leía como un bloque; con 0.18s se sigue el recorrido de uno en uno.
+      // (Al terminar la entrada, `entered` deja los cambios de selección en
+      // 0.25s, sin arrastrar este retraso a cada clic.)
+      transition={entered ? { duration: 0.25 } : { duration: 0.65, delay: index * 0.18 }}
       onAnimationComplete={() => { if (!entered) setEntered(true); }}
       whileHover={{ scale: isSelected ? 1.2 : 1.1 }}
       style={{ filter: isSelected ? undefined : "grayscale(0.6)", zIndex: isSelected ? 3 : undefined }}
@@ -862,17 +868,28 @@ export const RecorridoCarruseles = () => {
 // ── Popup del vídeo de muestra ───────────────────────────────────────────────
 // Mismo velo oscuro con blur que el modal de disciplina de arriba (/elMetodo),
 // pero SIN caja contenedora: el propio vídeo lleva el borde y el brillo de la
-// disciplina directamente. En ordenador se muestra 1:1 (cuadrado, cover) para
-// que luzca mejor; en móvil se mantiene vertical (9:16, contain) para verlo
-// entero. La X flota sobre la esquina del vídeo.
+// disciplina directamente. La caja es CUADRADA (1:1) en móvil y en ordenador,
+// que es la proporción en la que se graban los vídeos del recorrido. La X flota
+// sobre la esquina del vídeo.
 const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) => {
   const accent = disc.txt;
+  // ¿El vídeo es cuadrado? Se sabe al cargar sus metadatos. La caja SIEMPRE es
+  // 1:1; lo que cambia es cómo se encaja el vídeo dentro:
+  //   · cuadrado (los nuevos, 1080×1080) → `cover`: encaje exacto, no se recorta.
+  //   · vertical (astro/psico/hinduismo, 1080×1920) → `contain`: se ve entero,
+  //     con franjas a los lados. Con `cover` perderían el 44% de su alto —
+  //     media pantalla de la app cortada por arriba y por abajo.
+  // Mientras no se sepa, `contain`: más vale una franja que un recorte.
+  const [cuadrado, setCuadrado] = useState<boolean | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  // Cada vídeo tiene su propia proporción: al cambiar de disciplina, a cero.
+  useEffect(() => { setCuadrado(null); }, [disc.video]);
 
   return (
     <Box
@@ -887,9 +904,10 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
       onClick={onClose}
       px={{ base: 5, md: 10 }}
     >
-      {/* El vídeo ES el elemento con el brillo (sin caja alrededor). La caja se
-          ciñe al vídeo: ratio 4:5 (rectangular suave, ni cuadrado ni 9:16) y el
-          vídeo lo rellena con `cover`, así no quedan franjas negras. */}
+      {/* El vídeo ES el elemento con el brillo (sin caja alrededor). La caja es
+          CUADRADA (1:1), la proporción en la que se graban los vídeos del
+          recorrido. Antes era 4:5, así que a un vídeo cuadrado le recortaba los
+          lados. */}
       <Box
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         position="relative"
@@ -901,7 +919,7 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
         w={{ base: "min(92vw, 420px)", md: "auto" }}
         h={{ base: "auto", md: "min(80vh, 600px)" }}
         maxH="88vh"
-        sx={{ aspectRatio: "4 / 5" }}
+        sx={{ aspectRatio: "1 / 1" }}
       >
         {/* X cerrar — flota sobre la esquina del propio vídeo */}
         <Box
@@ -942,8 +960,15 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
             playsInline
             w="100%"
             h="100%"
-            // cover: el vídeo rellena la caja 4:5 sin dejar franjas negras.
-            sx={{ objectFit: "cover" }}
+            onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
+              const v = e.currentTarget;
+              if (!v.videoWidth || !v.videoHeight) return;
+              // Margen del 2% para no descartar un 1080×1081 por un píxel.
+              setCuadrado(Math.abs(v.videoWidth / v.videoHeight - 1) < 0.02);
+            }}
+            // Cuadrado → `cover` (encaje exacto en la caja 1:1, sin recorte).
+            // Vertical → `contain`, para verlo entero en vez de perder el 44%.
+            sx={{ objectFit: cuadrado ? "cover" : "contain" }}
           />
         )}
       </Box>
@@ -1120,7 +1145,7 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
                 letterSpacing="0.03em"
                 textShadow={textGlow}
               >
-                {disc.videoIntro.boton ?? "Ver el recorrido por dentro"}
+                {disc.videoIntro.boton ?? "Ver por dentro"}
               </Text>
             </Flex>
           ) : (
@@ -1170,7 +1195,7 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
                 por disciplina
               </Text>
             </Flex>
-            <Text
+            {/* <Text
               color={accent}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "xs", md: "sm" }}
@@ -1178,7 +1203,7 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
               textShadow={textGlow}
             >
               Pago único · tuya para siempre
-            </Text>
+            </Text> */}
           </Flex>
         </Flex>
       </Flex>

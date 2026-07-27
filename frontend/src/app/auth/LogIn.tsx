@@ -10,6 +10,7 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
+import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -27,25 +28,9 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
-const inputStyles = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
-  color: "white",
-  borderRadius: "full",
-  size: "lg" as const,
-  textAlign: "center" as const,
-  fontFamily: "'EB Garamond', serif",
-  letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { border: "1px solid rgba(255,255,255,0.55)" },
-  _focus: {
-    border: "1px solid rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
-    bg: "rgba(255,255,255,0.12)",
-    outline: "none",
-  },
-};
+// El estilo de los campos vive en CampoContrasena, para que el campo con ojo y
+// los normales no puedan quedar distintos.
+const inputStyles = inputAuthStyles;
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -231,17 +216,14 @@ export default function LogIn() {
             />
           </Box>
 
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              CONTRASEÑA
-            </Text>
-            <Input
-              type="password"
-              value={contra}
-              onChange={(e) => setcontra(e.target.value)}
-              {...inputStyles}
-            />
-          </Box>
+          <CampoContrasena
+            label="CONTRASEÑA"
+            value={contra}
+            onChange={setcontra}
+            isDisabled={bloqueado}
+            onEnter={validarInicioSesion}
+            autoComplete="current-password"
+          />
 
           {message && (
             <SuccessErrorMessage

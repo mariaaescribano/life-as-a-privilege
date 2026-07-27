@@ -10,6 +10,7 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { CreateUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
+import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -27,25 +28,9 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
-const inputStyles = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
-  color: "white",
-  borderRadius: "full",
-  size: "lg" as const,
-  textAlign: "center" as const,
-  fontFamily: "'EB Garamond', serif",
-  letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
-  _placeholder: { color: "rgba(255,255,255,0.4)" },
-  _hover: { border: "1px solid rgba(255,255,255,0.55)" },
-  _focus: {
-    border: "1px solid rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
-    bg: "rgba(255,255,255,0.12)",
-    outline: "none",
-  },
-};
+// El estilo de los campos vive en CampoContrasena, para que el campo con ojo y
+// los normales no puedan quedar distintos.
+const inputStyles = inputAuthStyles;
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -56,6 +41,10 @@ export default function SignIn() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [contra, setContra] = useState<string>("");
+  // Repetir la contraseña es OBLIGATORIO al crear cuenta: una errata al teclearla
+  // a ciegas deja a la persona fuera de una cuenta que quizá ya ha pagado, y
+  // recuperarla exige pasar por el email.
+  const [contra2, setContra2] = useState<string>("");
   const [message, setMessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -108,7 +97,7 @@ export default function SignIn() {
   };
 
   const validarRegistro = () => {
-    if (name === "" || email === "" || contra === "") {
+    if (name === "" || email === "" || contra === "" || contra2 === "") {
       setMessage({
         soy: 2,
         title: "Faltan datos",
@@ -129,6 +118,14 @@ export default function SignIn() {
         soy: 2,
         title: "Contraseña muy corta",
         description: "Usa al menos 4 caracteres",
+      });
+      return;
+    }
+    if (contra !== contra2) {
+      setMessage({
+        soy: 2,
+        title: "Las contraseñas no coinciden",
+        description: "Repite la misma contraseña en los dos campos",
       });
       return;
     }
@@ -238,17 +235,22 @@ export default function SignIn() {
             />
           </Box>
 
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              CONTRASEÑA
-            </Text>
-            <Input
-              type="password"
-              value={contra}
-              onChange={(e) => setContra(e.target.value)}
-              {...inputStyles}
-            />
-          </Box>
+          <CampoContrasena
+            label="CONTRASEÑA"
+            value={contra}
+            onChange={setContra}
+            isDisabled={bloqueado}
+            autoComplete="new-password"
+          />
+
+          <CampoContrasena
+            label="REPITE LA CONTRASEÑA"
+            value={contra2}
+            onChange={setContra2}
+            isDisabled={bloqueado}
+            onEnter={validarRegistro}
+            autoComplete="new-password"
+          />
 
           {message && (
             <SuccessErrorMessage

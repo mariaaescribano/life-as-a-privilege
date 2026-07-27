@@ -14,7 +14,6 @@ import type { Alimento } from "../../hardCoded/espacio/AlimentosNutricion";
 
 // Portada del box de Ilustraciones (pendiente de subir). Si no existe, el box
 // muestra un icono de galería como marcador.
-const ILUSTRACIONES_PORTADA = "/recorrido/nutricion/biblioteca/ilustraciones.png";
 
 // Una de las dos opciones del popup. `portada` opcional: si se pasa, se ve como
 // fondo del box; si falla o no hay, se pinta `icono`. `proximamente` la deja
@@ -150,7 +149,6 @@ export function AlimentoOpcionesModal({
           <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }} align="stretch">
             <OpcionBox
               titulo="Ilustraciones"
-              portada={ILUSTRACIONES_PORTADA}
               proximamente={!onIlustraciones}
               onClick={onIlustraciones}
               icono={

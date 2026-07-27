@@ -354,7 +354,7 @@ export default function TCMTestPage({
               _hover={{}}
             >
               {allAnswered && (
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}77`} imageSrc="/img/fondos/tcm-vertical.png" />
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}77`} />
               )}
               <Box as="span" position="relative" zIndex={1}>
                 Ver mis resultados
@@ -375,7 +375,7 @@ export default function TCMTestPage({
                 mb={5}
                 boxShadow={GLOW}
               >
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} imageSrc="/img/fondos/tcm-vertical.png" />
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} />
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text
                   color={tcmTxt}
@@ -469,7 +469,7 @@ export default function TCMTestPage({
                 borderRadius="2xl"
                 boxShadow={"0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)"}
               >
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} imageSrc="/img/fondos/tcm-vertical.png" />
+                <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} />
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text
                   color={tcmTxt}
@@ -640,7 +640,7 @@ export default function TCMTestPage({
                             borderRadius="2xl"
                             boxShadow={GLOW}
                           >
-                            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} imageSrc="/img/fondos/tcm-vertical.png" />
+                            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}55`} />
                             <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
                             <Flex align="center" gap={2.5} mb={4}>
                               <Text

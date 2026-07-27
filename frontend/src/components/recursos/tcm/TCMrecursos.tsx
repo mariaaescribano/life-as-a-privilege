@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Collapse, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../global/SiteHeader";
 import { tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
@@ -700,7 +700,7 @@ const circleStyle = (iconColor: string, bgColor: string) => ({
    TARJETA IZQUIERDA — foto circular yin/yang
 ═══════════════════════════════════════════ */
 const LeftCard = ({ onOpen, isSelected }: { onOpen: () => void; isSelected?: boolean }) => {
-  const [imgError, setImgError] = useState(false);
+  // (ya no hay foto que pueda fallar: el icono es fijo)
   return (
     <Box
       flex="1" bg={CARD_BG} border={`1px solid ${CARD_BORDER}`}
@@ -731,16 +731,14 @@ const LeftCard = ({ onOpen, isSelected }: { onOpen: () => void; isSelected?: boo
         _hover={{ transform: "scale(1.06)", boxShadow: "0 4px 16px rgba(0,0,0,0.28), 0 0 38px rgba(255,255,255,0.80), 0 0 80px rgba(255,255,255,0.35)" }}
         _focus={{ outline: "none" }}
       >
-        {!imgError ? (
-          <Image src="/img/tcm/yinyang.png" alt="TCM" w="100%" h="100%"
-            objectFit="cover" onError={() => setImgError(true)} draggable={false} />
-        ) : (
-          <Box color={tcmTxt} opacity={0.5}>
-            <svg width="52" height="52" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
-            </svg>
-          </Box>
-        )}
+        {/* La foto (/img/tcm/yinyang.png) no existía, así que en la práctica
+            siempre se veía este icono: era el plan B del onError. Ahora es lo
+            único que hay, sin la petición fallida de por medio. */}
+        <Box color={tcmTxt} opacity={0.5}>
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+          </svg>
+        </Box>
       </Box>
       </Box>
     </Box>
@@ -1000,72 +998,11 @@ const TCMOptionModal = ({
 };
 
 /* ═══════════════════════════════════════════
-   MODAL — FOTO AMPLIADA
-═══════════════════════════════════════════ */
-const PhotoModal = ({ src, onClose }: { src: string; onClose: () => void }) => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-  }, [onClose]);
-
-  return (
-    <Box
-      position="fixed" inset={0} zIndex={1200}
-      bg="rgba(0,0,0,0.78)"
-      sx={{ backdropFilter: "blur(22px)", WebkitBackdropFilter: "blur(22px)" }}
-      display="flex" alignItems="center" justifyContent="center"
-      onClick={onClose}
-    >
-      {/* Botón cerrar */}
-      <Box
-        as="button"
-        position="absolute" top={4} right={4}
-        w="44px" h="44px"
-        borderRadius="full"
-        bg="rgba(255,255,255,0.12)"
-        border="1px solid rgba(255,255,255,0.28)"
-        display="flex" alignItems="center" justifyContent="center"
-        color="rgba(255,255,255,0.88)"
-        cursor="pointer"
-        zIndex={1201}
-        onClick={onClose}
-        sx={{ transition: "background 0.18s ease", "&:hover": { bg: "rgba(255,255,255,0.24)" } }}
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      </Box>
-
-      <Box
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        maxW="90vw" maxH="90vh"
-        borderRadius="2xl" overflow="hidden"
-        boxShadow="0 32px 80px rgba(0,0,0,0.75)"
-      >
-        <Image
-          src={src} alt=""
-          maxW="90vw" maxH="90vh"
-          objectFit="contain"
-          draggable={false}
-        />
-      </Box>
-    </Box>
-  );
-};
-
-/* ═══════════════════════════════════════════
    CARD — TABLAS A / B / C + FOTO
 ═══════════════════════════════════════════ */
 const VIDEO_IDS = ["tcm10", "tcm11", "tcm12"];
 
 const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }) => {
-  const [imgError, setImgError]   = useState(false);
-  const [photoOpen, setPhotoOpen] = useState(false);
   const [expanded, setExpanded]   = useState([false, false, false]);
   const navigate = useNavigate();
 
@@ -1097,37 +1034,11 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
         gap={{ base: 6, md: 7 }} mt="50px"
         align={{ base: "stretch", md: "flex-start" }}
       >
-        {/* ── Foto ── */}
-        <Box flexShrink={0} w={{ base: "100%", md: "30%" }}>
-          <Box
-            borderRadius="xl" overflow="hidden"
-            w="100%"
-            sx={{ aspectRatio: "4/3", cursor: imgError ? "default" : "zoom-in" }}
-            bg="rgba(107,4,4,0.30)"
-            border={`1px solid ${CARD_BORDER}`}
-            boxShadow={ "0 4px 16px rgba(0,0,0,0.28), 0 0 20px rgba(251, 255, 255, 0.5), 0 0 45px rgba(255, 255, 255, 0.2)"}
-            minH="160px"
-            display="flex" alignItems="center" justifyContent="center"
-            onClick={() => { if (!imgError) setPhotoOpen(true); }}
-          >
-            {!imgError ? (
-              <Image
-                src="/img/tcm/lengua.png"
-                alt=""
-                w="100%" h="100%"
-                objectFit="cover"
-                onError={() => setImgError(true)}
-                draggable={false}
-              />
-            ) : (
-              <Box color={tcmTxt} opacity={0.3}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                </svg>
-              </Box>
-            )}
-          </Box>
-        </Box>
+        {/* ── Foto ──
+            La imagen (/img/tcm/lengua.png) no existía, así que este hueco solo
+            enseñaba el icono de «imagen rota» del onError y el zoom no llegaba a
+            abrirse nunca. Se retira el hueco entero: las tres tablas de al lado
+            pasan a ocupar todo el ancho, que se lee mejor. */}
 
         {/* ── 3 Boxes ── */}
         <Flex flex="1" gap={{ base: 3, md: 4 }} direction={{ base: "column", sm: "row" }} align="flex-start">
@@ -1229,7 +1140,6 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
       </Flex>
     </Box>
 
-    {photoOpen && <PhotoModal src="/img/tcm/lengua.png" onClose={() => setPhotoOpen(false)} />}
   </>
   );
 };
