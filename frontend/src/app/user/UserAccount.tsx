@@ -3,6 +3,7 @@ import { Box, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
+import { cerrarSesionLocal } from "../../api/sesion";
 
 // Spinner inline
 const Spinner = () => (
@@ -125,8 +126,7 @@ export default function UserAccount() {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
+    cerrarSesionLocal();
     navigate("/welcome");
   };
 
@@ -158,8 +158,7 @@ export default function UserAccount() {
         const data = await res.json().catch(() => null);
         throw new Error(data?.message || "Error al eliminar la cuenta");
       }
-      localStorage.clear();
-      sessionStorage.clear();
+      cerrarSesionLocal();
       navigate("/welcome");
     } catch (err: any) {
       setDelError(err?.message || "Error al eliminar la cuenta");

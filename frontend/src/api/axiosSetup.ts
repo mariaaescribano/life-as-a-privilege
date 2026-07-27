@@ -1,4 +1,5 @@
 import axios from "axios";
+import { cerrarSesionLocal } from "./sesion";
 
 /**
  * DÓNDE VIVE LA SESIÓN — token, userId, name, img e isAdmin se guardan en
@@ -56,8 +57,7 @@ axios.interceptors.response.use(
       const path = window.location.pathname;
       const enAuth = AUTH_PATHS.some((p) => path.toLowerCase().startsWith(p.toLowerCase()));
       if (!enAuth) {
-        localStorage.clear();
-        sessionStorage.clear(); // por si quedaran restos de la sesión antigua
+        cerrarSesionLocal();
         window.location.assign("/logIn");
       }
     }
