@@ -48,7 +48,17 @@ export default function MetodoTcmCiclos() {
         });
         const d: DatosTcm = res.data?.data ?? {};
         datosRef.current = d;
-        if (d.ciclosLeidos) setYaLeido(true);
+        // Ya visto antes: desbloqueamos y damos TODAS las relaciones por vistas,
+        // para que la página cargue como completada (flechitas marcadas + botón
+        // «Diagnóstico final» abierto) y no haya que volver a tocarlas.
+        if (d.ciclosLeidos) {
+          setYaLeido(true);
+          const todas = new Set<string>();
+          for (const ciclo of ["sheng", "ke"] as Ciclo[]) {
+            for (const el of ORDEN_ELEMENTOS) todas.add(`${ciclo}-${el}`);
+          }
+          setVistas(todas);
+        }
       } catch {
         navigate("/metodo/tcm");
         return;

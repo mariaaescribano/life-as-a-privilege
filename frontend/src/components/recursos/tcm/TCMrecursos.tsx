@@ -621,21 +621,6 @@ const TCMInfoModal = ({ onClose }: { onClose: () => void }) => {
             {content.subtitle}
           </Text>
 
-          {/* Vídeo */}
-          <Box borderRadius="xl" overflow="hidden" w="100%" mb={5}
-            sx={{ aspectRatio: "16/9" }}
-            boxShadow="0 4px 16px rgba(0,0,0,0.35)"
-          >
-            <iframe
-              src="https://www.youtube.com/embed/OU5huhK-FxU"
-              width="100%" height="100%"
-              style={{ display: "block", border: "none" }}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="Yin Yang"
-            />
-          </Box>
-
           {/* Texto resumido */}
           <Box
             bg={isDark ? "rgba(255,255,255,0.06)" : "rgba(107,4,4,0.05)"}

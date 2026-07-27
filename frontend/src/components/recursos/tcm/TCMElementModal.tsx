@@ -209,25 +209,6 @@ const TCMElementModal = ({
           </Flex>
 
           {/* ── Vídeo ── */}
-          {element.video && (
-            <Box
-              w="100%"
-              aspectRatio={16 / 9}
-              borderRadius="xl"
-              overflow="hidden"
-              boxShadow={`0 8px 28px rgba(0,0,0,0.45), 0 0 18px ${element.bgColor}55`}
-              mb={6}
-              bg={element.bgColor + "55"}
-            >
-              <iframe
-                style={{ width: "100%", height: "100%", border: "none" }}
-                src={`https://www.youtube.com/embed/${element.video}`}
-                title={`${element.name} · Medicina Tradicional China`}
-                allowFullScreen
-              />
-            </Box>
-          )}
-
           {/* ── Descripción ── */}
           <Box
             bg={element.bgColor + "18"}

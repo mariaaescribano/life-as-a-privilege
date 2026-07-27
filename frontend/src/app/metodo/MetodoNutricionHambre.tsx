@@ -10,7 +10,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { glowSuave } from "../../components/metodo/FotoBox";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { HAMBRE_HOLISTICA, HAMBRE_CIERRE } from "../../components/metodo/hambreHolistica";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -62,7 +62,7 @@ function FotoPlaceholder() {
 // scroll vertical (idéntico al box de las ilustraciones / cómics de Nutrición).
 function HambreBox({ v }: { v: Vineta }) {
   return (
-    <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl" boxShadow={glowSuave(nutricionTxt)}>
+    <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl" boxShadow={glowHeader(nutricionTxt)}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
 
       {/* Líneas de luz arriba/abajo (como el visor de ilustraciones) */}
@@ -118,10 +118,8 @@ export default function MetodoNutricionHambre() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // No mostramos la página hasta que TODAS las fotos de los 4 boxes estén
         // descargadas: mientras, se ve la animación de Nutrición (no aparecen

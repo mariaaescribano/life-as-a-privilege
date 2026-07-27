@@ -1,0 +1,18 @@
+# Life as a Privilege — qué puede rastrear Google.
+# Las zonas privadas (recorrido, cuenta, administración) no aportan nada en
+# búsquedas: exigen login y solo gastarían presupuesto de rastreo.
+
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /home
+Disallow: /metodo
+Disallow: /espacio
+Disallow: /auth
+Disallow: /logIn
+Disallow: /signIn
+Disallow: /checkoutMetodo
+Disallow: /libros/descargar
+
+Sitemap: https://lifeasaprivilege.onrender.com/sitemap.xml

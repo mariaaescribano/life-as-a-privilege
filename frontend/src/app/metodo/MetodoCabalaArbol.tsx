@@ -20,6 +20,7 @@ import {
   CABALA_ILUSTRACIONES_VINETA_KEYS,
 } from "../../components/metodo/cabalaIlustraciones";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
 const EyeIcon = () => (
@@ -129,7 +130,7 @@ export default function MetodoCabalaArbol() {
               w="100%"
               position="relative"
               overflow="hidden"
-              boxShadow={`0 10px 40px rgba(0,0,0,0.45), 0 0 40px ${cabalaTxt}44, inset 0 0 60px ${cabalaBg}`}
+              boxShadow={CAJA_GLOW}
               borderRadius="3xl"
               px={{ base: 6, md: 10 }}
               pt={{ base: 8, md: 10 }}

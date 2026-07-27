@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
-import { type CourseEntry } from "./NuevosCursosPage";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
@@ -53,7 +52,9 @@ export const AprendizajeHome = () => {
 
   // Todos los cursos de todas las disciplinas, en una sola lista mezclada,
   // ordenada por fecha de creación descendente (los más nuevos, primero).
-  const allCourses: CourseEntry[] = Object.values(cursosData)
+  // El tipo se deduce del propio `cursosData`; antes venía de NuevosCursosPage
+  // (la página de «Vídeos»), que se eliminó junto con la sección de YouTube.
+  const allCourses = Object.values(cursosData)
     .flatMap((modalidad) => modalidad.cursos.map((curso) => ({ curso, modalidad })))
     .sort((a, b) => (b.curso.createdAt ?? "").localeCompare(a.curso.createdAt ?? ""));
 

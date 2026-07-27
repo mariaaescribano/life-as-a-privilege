@@ -1,9 +1,23 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database.service';
 import { randomString } from 'src/Global';
 import * as bcrypt from 'bcrypt';
 import { CreateUser, LoginUser, UpdateUser } from '../dtos/user.types';
+import { MailService } from '../mail/mail.service';
+import {
+  crearTokenRecuperacion,
+  leerUserIdDeToken,
+  tokenRecuperacionValido,
+} from '../auth/password-reset.util';
+
+
+/** Las ocho disciplinas de «El Recorrido», en el orden en que se desbloquean. */
+export const DISCIPLINAS_ORDEN = [
+  'metodo', 'psicologia', 'ayurveda', 'tcm',
+  'fisiologia', 'nutricion', 'cabala', 'cultura',
+] as const;
+export type DisciplinaKey = (typeof DISCIPLINAS_ORDEN)[number];
 
 
 async function hashPassword(password: string): Promise<string> {
@@ -17,7 +31,11 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 
 @Injectable()
 export class UserService {
-  constructor(private readonly authService: AuthService, private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly databaseService: DatabaseService,
+    private readonly mailService: MailService,
+  ) {}
 
   // --------- Verifica si el nombre o email existen ---------
   async getNomEmailExist(nom: string, email: string): Promise<{ nameExists: boolean; emailExists: boolean }> {
@@ -109,6 +127,70 @@ export class UserService {
     }
   }
 
+  // ───────────────────────────────────────────────────────────────────────────
+  // RECUPERACIÓN DE CONTRASEÑA
+  //
+  // Sin esto, quien se registraba con email y contraseña y la olvidaba perdía
+  // para siempre el acceso a un recorrido que había pagado (solo se salvaban las
+  // cuentas de Google). El token va firmado, no guardado: ver
+  // `auth/password-reset.util.ts` para el porqué.
+  // ───────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Envía el email de recuperación si el email existe. No devuelve nunca si la
+   * cuenta existe o no: contestar distinto convertiría este endpoint en un
+   * comprobador de «¿está esta persona registrada aquí?».
+   */
+  async solicitarRecuperacion(email: string): Promise<void> {
+    const limpio = (email ?? '').trim().toLowerCase();
+    if (!limpio) return;
+
+    const { data: rows } = await this.databaseService.getClient()
+      .from('user')
+      .select('id, name, email, password')
+      .eq('email', limpio)
+      .limit(1);
+
+    const user = rows?.[0] as { id: string; name: string; email: string; password: string } | undefined;
+    if (!user?.password) return; // cuenta inexistente o sin contraseña utilizable
+
+    const token = crearTokenRecuperacion(user.id, user.password);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const enlace = `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
+
+    await this.mailService.enviarRecuperacionPassword(user.email, user.name ?? '', enlace);
+  }
+
+  /** Cambia la contraseña si el token es válido. El token queda inservible al hacerlo. */
+  async restablecerPassword(token: string, nuevaPassword: string) {
+    const pass = (nuevaPassword ?? '').trim();
+    if (pass.length < 6) {
+      throw new BadRequestException('La contraseña debe tener al menos 6 caracteres');
+    }
+
+    const userId = leerUserIdDeToken(token);
+    if (!userId) throw new BadRequestException('El enlace no es válido');
+
+    const { data: rows } = await this.databaseService.getClient()
+      .from('user')
+      .select('id, password')
+      .eq('id', userId)
+      .limit(1);
+
+    const user = rows?.[0] as { id: string; password: string } | undefined;
+    if (!user?.password || !tokenRecuperacionValido(token, user.password)) {
+      throw new BadRequestException('El enlace ha caducado o ya se ha usado');
+    }
+
+    const { error } = await this.databaseService.getClient()
+      .from('user')
+      .update({ password: await hashPassword(pass) })
+      .eq('id', user.id);
+    if (error) throw error;
+
+    return { ok: true as const };
+  }
+
   // --------- Obtener todos los usuarios ---------
   async getUser() {
     const { data } = await this.databaseService.getClient()
@@ -133,6 +215,71 @@ export class UserService {
       .select('id, name, email, img')
       .order('name', { ascending: true });
     return data ?? [];
+  }
+
+  // --------- TODOS los usuarios, con sus disciplinas (panel de accesos) ---------
+  // A diferencia de getRecorridoUsers (que solo lista a quien ya entró en el
+  // recorrido), aquí hacen falta TODAS las cuentas: para regalar el acceso a
+  // alguien que todavía no ha pagado nada hay que poder encontrarlo.
+  // El buscador del panel filtra en el cliente, así que aquí basta con devolver
+  // la lista completa ordenada (tope de 500 para no traer nunca una respuesta
+  // enorme; si algún día se pasa de ahí, habrá que buscar en servidor).
+  async getTodosUsuarios() {
+    const client = this.databaseService.getClient();
+    const flags = DISCIPLINAS_ORDEN.map((k) => `${k}_suscrito`).join(', ');
+
+    const consulta = (select: string) =>
+      client.from('user').select(select).order('name', { ascending: true }).limit(500);
+
+    // Si alguna columna *_suscrito aún no existe, caemos a los datos básicos.
+    const full = await consulta(`id, name, email, img, ${flags}`);
+    if (!full.error) return full.data ?? [];
+
+    const { data } = await consulta('id, name, email, img');
+    return data ?? [];
+  }
+
+  // --------- Conceder acceso gratis a una cuenta (panel admin) ---------
+  // Marca las disciplinas como suscritas SIN pasar por Stripe. Solo lo puede
+  // llamar el controlador tras JwtAuthGuard + AdminGuard, así que no es una vía
+  // para que un usuario se desbloquee a sí mismo. Como el recorrido es en orden,
+  // conceder una disciplina concede también todas las anteriores.
+  async concederAcceso(id: string, hasta: DisciplinaKey | 'all' = 'all') {
+    const limite = hasta === 'all' ? DISCIPLINAS_ORDEN.length - 1 : DISCIPLINAS_ORDEN.indexOf(hasta);
+    if (limite < 0) throw new ConflictException('Disciplina desconocida');
+
+    await this.getUserById(id); // 404 si la cuenta no existe
+    for (const key of DISCIPLINAS_ORDEN.slice(0, limite + 1)) {
+      await this.setSuscripcion(id, key, true);
+    }
+    return await this.getUserById(id);
+  }
+
+  // --------- Quitar el acceso concedido (panel admin) ---------
+  // Cierra TODAS las disciplinas de esa cuenta. Se usa para retirar un acceso
+  // regalado; ojo, si la persona había pagado de verdad también se lo quita.
+  async revocarAcceso(id: string) {
+    await this.getUserById(id);
+    for (const key of DISCIPLINAS_ORDEN) {
+      await this.setSuscripcion(id, key, false);
+    }
+    return await this.getUserById(id);
+  }
+
+  // Abre o cierra UNA disciplina. Va columna a columna (no en un único update)
+  // para que, si alguna *_suscrito todavía no está migrada, solo se pierda esa y
+  // no el resto — el mismo criterio que los marcarSuscrito*.
+  private async setSuscripcion(id: string, key: DisciplinaKey, abierta: boolean) {
+    const { error } = await this.databaseService.getClient()
+      .from('user')
+      .update({
+        [`${key}_suscrito`]: abierta,
+        [`${key}_fecha_compra`]: abierta ? new Date().toISOString() : null,
+      })
+      .eq('id', id);
+    if (error) {
+      console.warn(`[user.service] setSuscripcion ${key}=${abierta} falló (¿columnas no creadas?):`, error.message);
+    }
   }
 
   // --------- Obtener usuario por ID ---------
@@ -516,16 +663,29 @@ export class UserService {
   // y su foto de perfil en el bucket de storage. La fila de `user` se borra al
   // final. Cada borrado es best-effort: si una tabla falla, se registra el
   // error pero se continúa con las demás para no dejar datos huérfanos.
-  async deleteUser(id: string) {
+  async deleteUser(id: string, password?: string) {
     const db = this.databaseService.getClient();
 
-    // Recuperamos email y foto ANTES de borrar la fila de usuario, porque
-    // algunas tablas (bookings) se relacionan por email y la foto vive en storage.
+    // Recuperamos email, foto y hash de contraseña ANTES de borrar la fila de
+    // usuario, porque algunas tablas (bookings) se relacionan por email, la foto
+    // vive en storage y necesitamos el hash para confirmar la identidad.
     const { data: userRows } = await db
       .from('user')
-      .select('email, img')
+      .select('email, img, password')
       .eq('id', id);
-    const user = userRows?.[0] as { email?: string; img?: string } | undefined;
+    const user = userRows?.[0] as { email?: string; img?: string; password?: string } | undefined;
+
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    // Confirmación de seguridad: para eliminar la cuenta hay que introducir la
+    // contraseña correcta (además de escribir «BORRAR» en el cliente).
+    if (!password?.trim()) {
+      throw new ConflictException('Debes introducir tu contraseña para eliminar la cuenta');
+    }
+    const coincide = user.password ? await comparePassword(password, user.password) : false;
+    if (!coincide) {
+      throw new ConflictException('La contraseña es errónea');
+    }
 
     // Tablas con datos del usuario, cada una con su columna identificadora.
     // (Los nombres de columna difieren entre tablas: user_id, userId, userid, idUser…)

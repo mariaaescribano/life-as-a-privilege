@@ -129,33 +129,6 @@ const DOSHAS: {
   },
 ];
 
-const ELEMENTOS_VIDEO = "gdr9WTsvmn8";
-
-/* ══════════════════════════════════════════
-   YOUTUBE EMBED
-══════════════════════════════════════════ */
-function YoutubeEmbed({ videoId, color }: { videoId: string; color: string }) {
-  return (
-    <Box
-      borderRadius="xl"
-      overflow="hidden"
-      border={`1px solid ${color}30`}
-      w="100%"
-      sx={{ aspectRatio: "16/9" }}
-    >
-      <iframe
-        src={`https://www.youtube.com/embed/${videoId}?rel=0`}
-        width="100%"
-        height="100%"
-        style={{ border: "none", display: "block" }}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        title="Video"
-      />
-    </Box>
-  );
-}
-
 /* ══════════════════════════════════════════
    ELEMENTOS MODAL
 ══════════════════════════════════════════ */
@@ -222,9 +195,6 @@ function ElementosModal({ onClose }: { onClose: () => void }) {
               Los Cinco Elementos
             </Text>
           </Flex>
-
-          {/* Video */}
-          <YoutubeEmbed videoId={ELEMENTOS_VIDEO} color={ACCENT} />
 
           {/* Descripción */}
           <Box
@@ -387,9 +357,6 @@ function DoshaModal({
               </Text>
             </Box>
           </Flex>
-
-          {/* Video */}
-          <YoutubeEmbed videoId={dosha.video} color={dosha.color} />
 
           {/* Descripción */}
           <Box

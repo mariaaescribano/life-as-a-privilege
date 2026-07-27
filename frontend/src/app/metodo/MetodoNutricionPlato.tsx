@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { glowSuave } from "../../components/metodo/FotoBox";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal, Float, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
@@ -102,7 +102,7 @@ const PORTADAS_PLATO = [PLATO_PORTADA_GENERAL, ...Object.values(PLATO_PORTADA)];
 function SeccionBox({ children, imageSrc, ...rest }: React.ComponentProps<typeof Box> & { imageSrc?: string }) {
   return (
     <Box position="relative" overflow="hidden" borderRadius="2xl"
-         boxShadow={glowSuave(nutricionTxt)} {...rest}>
+         boxShadow={glowHeader(nutricionTxt)} {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}88`} imageSrc={imageSrc} />
       <Box position="relative" zIndex={1} h="100%">{children}</Box>
     </Box>
@@ -150,10 +150,8 @@ export default function MetodoNutricionPlato() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
         try {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           dataRef.current = r.data?.data ?? {};

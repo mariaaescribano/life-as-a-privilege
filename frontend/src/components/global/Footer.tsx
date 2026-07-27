@@ -137,6 +137,31 @@ const SiteFooter = () => {
         </Flex>
       </Flex>
 
+      {/* ── Enlaces legales ── */}
+      <Flex justify="center" gap={{ base: 3, md: 5 }} mt={5} flexWrap="wrap" alignItems="center">
+        {[
+          { texto: "Aviso legal", ruta: "/aviso-legal" },
+          { texto: "Privacidad", ruta: "/privacidad" },
+          { texto: "Cookies", ruta: "/cookies" },
+          { texto: "Términos de contratación", ruta: "/terminos" },
+        ].map((l) => (
+          <Text
+            key={l.ruta}
+            as="button"
+            onClick={() => navigate(l.ruta)}
+            color="rgba(255,255,255,0.45)"
+            fontSize="xs"
+            letterSpacing="0.06em"
+            bg="transparent"
+            cursor="pointer"
+            transition="color 0.2s"
+            _hover={{ color: "rgba(255,255,255,0.85)" }}
+          >
+            {l.texto}
+          </Text>
+        ))}
+      </Flex>
+
     </Box>
   );
 };

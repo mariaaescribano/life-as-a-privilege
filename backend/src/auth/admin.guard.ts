@@ -12,7 +12,10 @@ import { isAdminEmail } from './admin.util';
 export class AdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest();
-    if (!isAdminEmail(req.user?.email)) {
+    // Doble condición: el email debe estar en ADMIN_EMAILS Y el token debe
+    // haberse emitido tras verificar la contraseña de admin (claim `admin`).
+    // Estar en la lista de emails ya no basta por sí solo.
+    if (!isAdminEmail(req.user?.email) || req.user?.admin !== true) {
       throw new ForbiddenException('Acceso restringido a administración');
     }
     return true;

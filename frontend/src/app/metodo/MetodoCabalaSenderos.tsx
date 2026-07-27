@@ -16,6 +16,7 @@ import { CABALA_SENDEROS } from "../../components/metodo/cabalaSenderos";
 import { CABALA_SENDERO_VINETAS, CABALA_SENDERO_VINETA_NUMS } from "../../components/metodo/cabalaSenderoIlustraciones";
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -122,7 +123,7 @@ export default function MetodoCabalaSenderos() {
               w="100%"
               position="relative"
               overflow="hidden"
-              boxShadow={`0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}55`}
+              boxShadow={CAJA_GLOW}
               border={`1.5px solid ${cabalaTxt}55`}
               borderRadius="3xl"
               px={{ base: 6, md: 10 }}

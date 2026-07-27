@@ -71,12 +71,25 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
-}
+/* El foco NUNCA se ve. Al abrir un modal, Chakra enfoca el primer botón: eso
+   está bien —así basta con pulsar Enter— pero no debe pintarse nada, ni el
+   anillo azul del navegador ni el borde morado del hover, que venían de la
+   plantilla de Vite y rompían la estética de los boxes de pago y de los cómics.
+   Cada botón se pinta solo con los colores de su disciplina.
+   El foco sigue existiendo (Enter y Tab funcionan igual), simplemente es
+   invisible.
+   Solo se quita el `outline`: el `box-shadow` NO se toca, porque muchos botones
+   lo usan de resplandor decorativo (el «Pagar» de los boxes de pago, sin ir más
+   lejos) y apagarlo al enfocarlos sería el mismo problema al revés. */
 button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+button:focus-visible,
+a:focus,
+a:focus-visible,
+[role="button"]:focus,
+[role="button"]:focus-visible,
+[tabindex]:focus,
+[tabindex]:focus-visible {
+  outline: none;
 }
 
 @keyframes spin {

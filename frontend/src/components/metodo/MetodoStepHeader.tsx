@@ -13,6 +13,9 @@ interface StepButton {
   disabledTooltip?: string;
   /** Botón más compacto (menos padding y letra), p.ej. «Volver al curso». */
   small?: boolean;
+  /** Lo pone el header en modo `dense`: botón algo más bajo que el normal,
+   *  pero sin llegar a la letra diminuta de `small`. */
+  dense?: boolean;
   /** Pinta una flecha SVG de verdad (no el carácter «→/←»): a la derecha del
    *  texto si es «next», a la izquierda si es «prev». Usa la etiqueta sin flecha. */
   arrow?: "prev" | "next";
@@ -76,9 +79,15 @@ interface MetodoStepHeaderProps {
   /** Sombra/glow del box completo. Si se pasa, sustituye al glow por defecto
    *  (útil para darle un brillo propio a una página, p.ej. dorado). */
   boxShadow?: string;
+  /** Header de perfil bajo: menos padding, título más pequeño, menos hueco
+   *  antes de los botones y botones algo más bajos. Para páginas donde el
+   *  contenido manda y el header solo tiene que orientar (p.ej. «Diseña tu
+   *  día»). A diferencia de `compact`, SÍ se aplica en las disciplinas de
+   *  título uniforme (TCM, Fisiología, Nutrición, Cábala, Cultura). */
+  dense?: boolean;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, arrow, btnColor, btnBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
   // Colores efectivos: si el botón trae los suyos (p.ej. lleva a otra disciplina),
   // mandan sobre los del header. `c` = texto/borde; `fillBg` = fondo.
   const c = btnColor ?? color;
@@ -93,14 +102,14 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       as="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      px={small ? { base: 2, md: 3.5 } : { base: 3, sm: 5, md: 8 }}
-      py={small ? { base: 1, md: 1.5 } : { base: 2, md: 3 }}
+      px={small ? { base: 2, md: 3.5 } : dense ? { base: 2.5, sm: 4, md: 6 } : { base: 3, sm: 5, md: 8 }}
+      py={small ? { base: 1, md: 1.5 } : dense ? { base: 1.5, md: 2 } : { base: 2, md: 3 }}
       borderRadius="full"
       bg={disabled ? (whiteBg ? "rgba(255,255,255,0.14)" : `${c}12`) : baseBg}
       border={`1.5px solid ${disabled ? c + "22" : `${c}aa`}`}
       color={disabled ? `${c}44` : c}
       fontFamily="'EB Garamond', serif"
-      fontSize={small ? { base: "2xs", md: "xs" } : { base: "sm", sm: "md", md: "md" }}
+      fontSize={small ? { base: "2xs", md: "xs" } : dense ? { base: "xs", sm: "sm", md: "sm" } : { base: "sm", sm: "md", md: "md" }}
       letterSpacing={{ base: "0.02em", md: "0.05em" }}
       fontStyle="italic"
       cursor={disabled ? "not-allowed" : "pointer"}
@@ -198,6 +207,7 @@ export function MetodoStepHeader({
   tallTitle = false,
   hideCursos = false,
   fitTitle = false,
+  dense = false,
 }: MetodoStepHeaderProps) {
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
@@ -299,11 +309,13 @@ export function MetodoStepHeader({
     >
       {useDiscBg && <DisciplinaBgLayer nom={headerNom!} borderRadius="2xl" />}
 
-      <Box position="relative" zIndex={1} px={{ base: 4, md: 14 }} py={{ base: 3, md: 4 }}>
+      <Box position="relative" zIndex={1} px={{ base: 4, md: dense ? 10 : 14 }}
+           py={dense ? { base: 2.5, md: 3 } : { base: 3, md: 4 }}>
         {/* Cabecera: icono + título. Un pequeño margen superior baja el título
             para que quede ópticamente más centrado dentro del box (detalle de
             calidad; afecta a todos los headers). */}
-        <Flex direction="row" align="center" justify="center" gap={5} mt={{ base: 1.5, md: 2 }}>
+        <Flex direction="row" align="center" justify="center" gap={dense ? 3.5 : 5}
+              mt={dense ? { base: 0.5, md: 1 } : { base: 1.5, md: 2 }}>
           <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center">
             {icon}
           </Box>
@@ -317,6 +329,10 @@ export function MetodoStepHeader({
                     // En modo fitTitle el tamaño lo controla la medición (px);
                     // hasta la 1ª medición usamos el tamaño grande como base.
                     ? (tallTitle ? { base: "34px", md: "60px" } : { base: "30px", md: "48px" })
+                    : dense
+                    // Modo denso: título contenido. Manda sobre `tituloUniforme`,
+                    // que es lo que anula el `compact` en estas disciplinas.
+                    ? (titleWraps ? { base: "lg", md: "2xl" } : { base: "xl", md: "3xl" })
                     : tallTitle
                     ? (compactEff
                         ? (titleWrapsEff ? { base: "xl", md: "3xl" } : { base: "3xl", md: "4xl" })
@@ -364,7 +380,7 @@ export function MetodoStepHeader({
         </Flex>
 
         {/* Espacio entre título y botones (antes había una raya separadora) */}
-        {(prev || next || extra || showPsicoCursos) && <Box h={{ base: 5, md: 7 }} />}
+        {(prev || next || extra || showPsicoCursos) && <Box h={dense ? { base: 3, md: 4 } : { base: 5, md: 7 }} />}
 
         {/* Botones contextuales — siempre en una sola fila horizontal,
             tanto en móvil como en desktop. Si no caben, los botones se
@@ -374,14 +390,14 @@ export function MetodoStepHeader({
           <Flex
             justify="center"
             align="center"
-            gap={{ base: 3, md: 6 }}
+            gap={dense ? { base: 2.5, md: 4 } : { base: 3, md: 6 }}
             direction="row"
             wrap="nowrap"
           >
-            {prev && <StepBtn {...prev} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {extra && <StepBtn {...extra} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {showPsicoCursos && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {next && <StepBtn {...next} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {extra && <StepBtn {...extra} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {showPsicoCursos && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
           </Flex>
         )}
       </Box>

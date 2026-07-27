@@ -177,7 +177,7 @@ export function MiniDiario() {
         py={{ base: "10px", md: "13px" }}
         borderRadius="full"
         bg={btnBg}
-        border={`2px solid color-mix(in srgb, ${btnFg} 75%, #000)`}
+        border={`2px solid ${btnFg}`}
         boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${btnBg}66`}
         cursor="pointer"
         transition="all 0.22s ease"

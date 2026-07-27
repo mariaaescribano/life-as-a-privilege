@@ -3,6 +3,7 @@ import { Box, Flex, Modal, ModalBody, ModalContent, ModalOverlay, Text } from "@
 import { cabalaBg, cabalaNom, cabalaTxt } from "../../GlobalVariables";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import type { NotaEstudios } from "./cabalaSefirot";
+import { CAJA_GLOW } from "./cabalaGlow";
 
 // Popup de una "nota" (asterisco) de una sefirá: título + párrafos, sobre el
 // fondo de Cábala. Genérico: sirve para cualquier sefirá que tenga `nota`.
@@ -12,7 +13,7 @@ export function CabalaNotaModal({ nota, isOpen, onClose }: { nota: NotaEstudios;
       <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(8px)" }} />
       <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
         <Box position="relative" borderRadius="2xl" overflow="hidden"
-             boxShadow={`0 0 24px ${cabalaTxt}44, 0 0 60px ${cabalaTxt}22, 0 26px 70px rgba(0,0,0,0.6)`}>
+             boxShadow={CAJA_GLOW}>
           <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
           {/* Cerrar */}
           <Box

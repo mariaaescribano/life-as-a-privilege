@@ -33,10 +33,8 @@ export default function MetodoNutricionMitos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // No mostramos la página hasta que TODAS las fotos de los mitos estén
         // descargadas: si no, se queda en el spinner (no aparecen de golpe).

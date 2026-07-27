@@ -20,6 +20,7 @@ import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Tinta rojiza clara con halo oscuro (granate) para leer sobre el fondo de TCM.
 const TINTA = tcmTxt;
@@ -35,7 +36,6 @@ export default function MetodoTcm() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
   // Cómic de los cinco elementos: se intercala antes de pasar a «Los 5 elementos».
   const [comicElementosOpen, setComicElementosOpen] = useState(false);
@@ -53,14 +53,6 @@ export default function MetodoTcm() {
 
     (async () => {
       try {
-        // ¿Modo test de pagos habilitado? (nos deja fake-pay sin la cadena previa).
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-        setTestPagos(testEnabled);
-
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -76,9 +68,8 @@ export default function MetodoTcm() {
           }
         } catch { /* sin dosha: se queda el inicio de Ayurveda */ }
 
-        // Prerrequisito: hay que haber pagado Ayurveda (3ª disciplina). En modo
-        // test dejamos ver el pago igualmente (el fake-pay desbloquea la cadena).
-        if (!me.data?.ayurveda_suscrito && !testEnabled) { navigate("/home"); return; }
+        // Prerrequisito: hay que haber pagado Ayurveda (3ª disciplina).
+        if (!me.data?.ayurveda_suscrito) { navigate("/home"); return; }
 
         const tcmSuscrito = !!me.data?.tcm_suscrito;
         setSuscrito(tcmSuscrito);
@@ -100,39 +91,13 @@ export default function MetodoTcm() {
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/tcm/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("tcm");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoError(
-        status === 403
-          ? "Necesitas completar el pago de Ayurveda antes de adquirir la Medicina China."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoLoading(false);
-    }
-  };
-
-  const testUnlock = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "tcm" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setSuscrito(true);
-      setPagoOpen(false);
-    } catch (err: any) {
-      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
@@ -271,7 +236,6 @@ export default function MetodoTcm() {
         onPagar={pagarTcm}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? testUnlock : undefined}
       />
 
       {/* ── Aviso importante ── */}

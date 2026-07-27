@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Collapse, Flex, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContactModal } from "../../components/global/ContactModal";
@@ -178,55 +178,10 @@ export default function VideoLessonPage() {
   }, [moduloId, submoduloId]);
 
   const [saberMasOpen, setSaberMasOpen] = useState(false);
-  const [speed, setSpeed] = useState(() => {
-    const s = parseFloat(sessionStorage.getItem("videoSpeed") ?? "1");
-    return isNaN(s) ? 1 : s;
-  });
-  const [shouldAutoplay, setShouldAutoplay] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  useEffect(() => {
-    const val = sessionStorage.getItem("videoAutoplay") === "1";
-    sessionStorage.removeItem("videoAutoplay");
-    setShouldAutoplay(val);
-  }, [moduloId, submoduloId]);
-
-  // Auto-avance al vídeo siguiente cuando YouTube termina; aplica velocidad guardada al cargar
-  useEffect(() => {
-    const applySpeed = () => {
-      iframeRef.current?.contentWindow?.postMessage(
-        JSON.stringify({ event: "command", func: "setPlaybackRate", args: [speed] }),
-        "*"
-      );
-    };
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== "https://www.youtube.com") return;
-      try {
-        const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-        // Aplica velocidad cuando el player está listo y al comenzar a reproducir
-        if (data.event === "onReady" || (data.event === "onStateChange" && data.info === 1)) {
-          applySpeed();
-        }
-        if (data.event === "onStateChange" && data.info === 0 && datos?.linkNext) {
-          sessionStorage.setItem("videoAutoplay", "1");
-          navigate(datos.linkNext);
-        }
-      } catch {}
-    };
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [datos, navigate, speed]);
-
-  const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
-
-  const changeSpeed = (rate: number) => {
-    setSpeed(rate);
-    sessionStorage.setItem("videoSpeed", String(rate));
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func: "setPlaybackRate", args: [rate] }),
-      "*"
-    );
-  };
+  // Aquí vivían el reproductor de YouTube y su fontanería: control de velocidad,
+  // autoplay al encadenar lecciones y un listener de `postMessage` contra la API
+  // de YouTube. Se retiró todo junto con el iframe.
 
   const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
 
@@ -259,123 +214,11 @@ export default function VideoLessonPage() {
               />
             )}
 
-            {/* Video + flechas laterales (desktop) */}
+            {/* Flechas de lección anterior / siguiente. Antes flanqueaban el
+                vídeo en escritorio y estas solo salían en móvil; al quitar el
+                reproductor son las únicas, así que se ven en todos los tamaños. */}
             <Flex
-              w="100%"
-              maxW={{ base: "100%", md: "85%", xl: "75%" }}
-              align="center"
-              gap={4}
-              mb={{ base: 4, md: 8 }}
-            >
-              {/* Flecha anterior — solo desktop */}
-              <Box
-                as="button"
-                flexShrink={0}
-                boxShadow={GLOW}
-                display={{ base: "none", md: "flex" }}
-                disabled={!datos.linkAnterior}
-                onClick={() => datos.linkAnterior && navigate(datos.linkAnterior)}
-                w="52px" h="52px"
-                borderRadius="full"
-                border="2px solid rgba(255,255,255,0.55)"
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontSize="2xl"
-                fontWeight="700"
-                bg="rgba(255,255,255,0.08)"
-                cursor={datos.linkAnterior ? "pointer" : "not-allowed"}
-                opacity={datos.linkAnterior ? 1 : 0.25}
-                transition="all 0.2s"
-                alignItems="center" justifyContent="center"
-                _hover={datos.linkAnterior ? { bg: "rgba(255,255,255,0.2)", borderColor: "white" } : {}}
-              >
-                ←
-              </Box>
-
-              {/* iframe */}
-              <Box
-                flex="1"
-                aspectRatio={16 / 9}
-                borderRadius="2xl"
-                overflow="hidden"
-                boxShadow={GLOW}
-              >
-                <iframe
-                  key={datos.video}
-                  ref={iframeRef}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  src={`https://www.youtube.com/embed/${datos.video}?enablejsapi=1${shouldAutoplay ? "&autoplay=1" : ""}`}
-                  title="YouTube video player"
-                  allowFullScreen
-                  onLoad={() => {
-                    iframeRef.current?.contentWindow?.postMessage(
-                      JSON.stringify({ event: "listening" }),
-                      "*"
-                    );
-                  }}
-                />
-              </Box>
-
-              {/* Flecha siguiente — solo desktop */}
-              <Box
-                as="button"
-                flexShrink={0}
-                display={{ base: "none", md: "flex" }}
-                disabled={!datos.linkNext}
-                onClick={() => datos.linkNext && navigate(datos.linkNext)}
-                w="52px" h="52px"
-                boxShadow={GLOW}
-                borderRadius="full"
-                border="2px solid rgba(255,255,255,0.55)"
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontSize="2xl"
-                fontWeight="700"
-                bg="rgba(255,255,255,0.08)"
-                cursor={datos.linkNext ? "pointer" : "not-allowed"}
-                opacity={datos.linkNext ? 1 : 0.25}
-                transition="all 0.2s"
-                alignItems="center" justifyContent="center"
-                _hover={datos.linkNext ? { bg: "rgba(255,255,255,0.2)", borderColor: "white" } : {}}
-              >
-                →
-              </Box>
-            </Flex>
-
-            {/* Velocidad de reproducción */}
-            <Flex
-              alignSelf="center"
-              gap={1}
-              mb={{ base: 4, md: 6 }}
-              bg="rgba(0,0,0,0.45)"
-              borderRadius="full"
-              px={3} py="6px"
-              border="1px solid rgba(255,255,255,0.18)"
-            >
-              {SPEEDS.map((rate) => (
-                <Box
-                  key={rate}
-                  as="button"
-                  onClick={() => changeSpeed(rate)}
-                  px="10px" py="4px"
-                  borderRadius="full"
-                  fontSize={{ base: "12px", md: "13px" }}
-                  fontWeight="700"
-                  letterSpacing="0.04em"
-                  cursor="pointer"
-                  color={speed === rate ? "#1a1a1a" : "rgba(255,255,255,0.80)"}
-                  bg={speed === rate ? "white" : "transparent"}
-                  transition="all 0.18s ease"
-                  _hover={{ color: speed === rate ? "#1a1a1a" : "white", bg: speed === rate ? "white" : "rgba(255,255,255,0.12)" }}
-                >
-                  {rate === 1 ? "1×" : `${rate}×`}
-                </Box>
-              ))}
-            </Flex>
-
-            {/* Flechas debajo — solo móvil */}
-            <Flex
-              display={{ base: "flex", md: "none" }}
+              display="flex"
               gap={4}
               justify="center"
               mb={{ base: 6 }}

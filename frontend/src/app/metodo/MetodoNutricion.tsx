@@ -26,11 +26,13 @@ import {
   nutricionTxt,
   NutricionIcon,
 } from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // La imagen de fondo (nutri.png) es clara y se muestra tal cual (sin velo), así
 // que el texto va en verde oscuro (nutricionTxt) con un halo claro que lo
 // despega de las zonas de la foto con más detalle.
-const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,222,170,0.14), 0 0 20px ${nutricionTxt}1a`;
+// Glow de la caja = el mismo de la cabecera (a juego, siempre glow, nunca sombra).
+const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${nutricionTxt}1a, 0 0 48px ${nutricionTxt}10`;
 
 export default function MetodoNutricion() {
   const navigate = useNavigate();
@@ -39,7 +41,6 @@ export default function MetodoNutricion() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
   const [caloriasOpen, setCaloriasOpen] = useState(false); // cómic de transición a nutrientes
   const [avisoOpen, setAvisoOpen] = useState(false); // popup del aviso importante
   const intro = useIntroComic("metodo-nutricion"); // cómic de intro, 1ª vez
@@ -52,20 +53,13 @@ export default function MetodoNutricion() {
 
     (async () => {
       try {
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-        setTestPagos(testEnabled);
 
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Fisiología (5ª disciplina). En modo
-        // test dejamos ver el pago igualmente (el fake-pay desbloquea la cadena).
-        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/home"); return; }
+        // Prerrequisito: hay que haber pagado Fisiología (5ª disciplina).
+        if (!me.data?.fisiologia_suscrito) { navigate("/home"); return; }
 
         const nutriSuscrito = !!me.data?.nutricion_suscrito;
         setSuscrito(nutriSuscrito);
@@ -87,45 +81,18 @@ export default function MetodoNutricion() {
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/nutricion/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("nutricion");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoError(
-        status === 403
-          ? "Necesitas completar el pago de Fisiología antes de adquirir la Nutrición."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoLoading(false);
-    }
-  };
-
-  const testUnlock = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "nutricion" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setSuscrito(true);
-      setPagoOpen(false);
-      void intro.checkAndOpen();
-    } catch (err: any) {
-      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
   const comenzar = () => {
-    if (!suscrito && !testPagos) { setPagoOpen(true); return; }
+    if (!suscrito) { setPagoOpen(true); return; }
     setCaloriasOpen(true); // cómic de transición «Las calorías no existen»
   };
   const caloriasContinuar = () => { setCaloriasOpen(false); navigate("/metodo/nutricion/nutrientes"); };
@@ -293,7 +260,6 @@ export default function MetodoNutricion() {
         onPagar={pagarNutricion}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? testUnlock : undefined}
       />
     </Box>
   );

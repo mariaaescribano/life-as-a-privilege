@@ -24,6 +24,7 @@ import {
   ayurvedaTxt,
   AyurvedaIcon,
 } from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Tinta cálida con halo crema para que se lea sobre el fondo de acuarela de
 // Hinduismo (mismo lenguaje visual que el recorrido de Psicología).
@@ -39,7 +40,6 @@ export default function MetodoAyurveda() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
   const intro = useIntroComic("metodo-ayurveda"); // cómic del Origen (hinduismo), 1ª vez
@@ -49,10 +49,6 @@ export default function MetodoAyurveda() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
-
-    axios.get(`${API_URL}/payment/test/enabled`)
-      .then((r) => setTestPagos(!!r.data?.enabled))
-      .catch(() => setTestPagos(false));
 
     (async () => {
       try {
@@ -82,39 +78,13 @@ export default function MetodoAyurveda() {
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/ayurveda/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("ayurveda");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoError(
-        status === 403
-          ? "Necesitas completar el pago de Psicología antes de adquirir Ayurveda."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoLoading(false);
-    }
-  };
-
-  const testUnlock = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "ayurveda" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setSuscrito(true);
-      setPagoOpen(false);
-    } catch (err: any) {
-      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
@@ -221,7 +191,6 @@ export default function MetodoAyurveda() {
         onPagar={pagarAyurveda}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? testUnlock : undefined}
       />
 
       {ilustracionesModal}

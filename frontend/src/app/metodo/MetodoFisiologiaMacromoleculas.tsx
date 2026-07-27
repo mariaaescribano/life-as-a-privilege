@@ -552,14 +552,8 @@ export default function MetodoFisiologiaMacromoleculas() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
         let yaFormadas: MacroId[] = [];
         try {
           const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } });

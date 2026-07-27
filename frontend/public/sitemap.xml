@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Páginas públicas de Life as a Privilege. Solo las que se pueden ver sin
+  cuenta: el recorrido y la administración van con login y quedan fuera
+  (ver robots.txt).
+  OJO: al cambiar de dominio hay que reescribir todas las <loc> de aquí,
+  la línea Sitemap de robots.txt y las meta og:url/canonical de index.html.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/elMetodo</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/quienSoy</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/productos</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/libros</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/materiales</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/videos</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/reels</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/aprendizaje/aprendizajeHome</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/opiniones</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/contacto</loc>
+    <priority>0.4</priority>
+  </url>
+</urlset>

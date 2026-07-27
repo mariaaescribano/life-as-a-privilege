@@ -25,6 +25,11 @@ import {
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
 } from "../../GlobalVariables";
+// Descomentar junto con el párrafo de PRECIO (más abajo, ahora comentado):
+// sin él, estos tres no se usan y noUnusedLocals rompe la compilación.
+// import {
+//   NUM_DISCIPLINAS, PRECIO_DISCIPLINA, PRECIO_MAPA_COMPLETO,
+// } from "../../components/metodo/pagoDisciplinaLink";
 
 type ModalidadData = {
   name: string;
@@ -339,6 +344,7 @@ export default function ElMetodo() {
   const headerReveal = useReveal(0.05);
   const disciplinasTitleReveal = useReveal(0.15);
   const cardsReveal = useReveal(0.04);
+  // const precioReveal = useReveal(0.2); // ← con el párrafo de PRECIO
   const recibirasTitleReveal = useReveal(0.2);
   const creadoraReveal = useReveal(0.12);
   const botonesReveal = useReveal(0.1);
@@ -675,6 +681,32 @@ export default function ElMetodo() {
             <RecorridoMandalaVideo />
           </Box>
 
+          {/* ── PRECIO ──
+              El importe vive dentro del box de cada disciplina (abajo a la
+              derecha, al lado del botón). Aquí solo queda la letra pequeña:
+              cómo se paga y cuánto es el Mapa entero. Las cifras salen de
+              pagoDisciplinaLink, el mismo sitio del que bebe el box de pago,
+              así que web y cobro no pueden desincronizarse. */}
+          {/* <Text
+            ref={precioReveal.ref}
+            mt={{ base: 6, md: 8 }}
+            textAlign="center"
+            color="rgba(255,255,255,0.82)"
+            fontFamily="'EB Garamond', serif"
+            fontStyle="italic"
+            fontSize={{ base: "sm", md: "md" }}
+            lineHeight="1.75"
+            textShadow="0 0 10px rgba(255,255,255,0.22)"
+            opacity={precioReveal.visible ? 1 : 0}
+            transform={precioReveal.visible ? "translateY(0)" : "translateY(18px)"}
+            transition="opacity 0.8s ease, transform 0.8s ease"
+          >
+            No hay suscripción ni cuota mensual: pagas {PRECIO_DISCIPLINA} por
+            disciplina cuando llegas a ella, en el orden del Mapa, y se queda
+            tuya para siempre. Las {NUM_DISCIPLINAS} completas son{" "}
+            {PRECIO_MAPA_COMPLETO}, repartidos a tu ritmo.
+          </Text> */}
+
           {/* ── LA CREADORA ── */}
           {/* Separador con mandala en medio. La tarjeta de la creadora (debajo)
               aporta su propio pt (40px móvil / 56px escritorio); compensamos con
@@ -792,12 +824,12 @@ export default function ElMetodo() {
               {[
                 {
                   nombre: "Disciplina individual",
-                  precio: "20 €",
+                  precio: "30 €",
                   desc: "Acceso completo a una disciplina.",
                 },
                 {
                   nombre: "Sesión individual",
-                  precio: "15 € / hora",
+                  precio: "20 € / hora",
                   desc: "Acompañamiento opcional.",
                 },
               ].map((col, i) => (

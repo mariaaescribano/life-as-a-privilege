@@ -88,11 +88,10 @@ export const recorridoContenido: Record<
     videoIntro: {
       titulo: "Comprende cómo tu historia ha dado forma a la persona que eres hoy.",
       puntos: [
-        "Un recorrido guiado para comprender tu historia desde una nueva perspectiva.",
+        "Un recorrido guiado para comprender tu historia desde una nueva perspectiva y favorecer un cambio real.",
         "Descubre cómo se formaron los patrones que hoy influyen en tu Vida.",
         "Identifica las heridas emocionales que condicionan tu forma de pensar, sentir y relacionarte.",
         "Integra tu historia con mayor claridad para avanzar de forma consciente.",
-        "Una herramienta práctica para conocerte mejor y favorecer un cambio real.",
       ],
     },
     modalDesc:
@@ -127,11 +126,10 @@ export const recorridoContenido: Record<
     videoIntro: {
       titulo: "Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
       puntos: [
-        "Descubre cuál es tu doṣha predominante y qué revela sobre ti.",
+        "Descubre cuál es tu Doṣha predominante y qué revela sobre ti.",
         "Comprende las tendencias naturales de tu cuerpo y de tu mente.",
         "Identifica qué favorece tu equilibrio y qué tiende a desequilibrarte.",
         "Aprende hábitos, alimentación y rutinas adaptados a tu constitución.",
-        "Convierte este conocimiento en una forma práctica de cuidarte mejor.",
       ],
       boton: "Ver cómo funciona",
     },
@@ -208,7 +206,7 @@ export const recorridoContenido: Record<
         "Comprende las moléculas que forman tu cuerpo.",
         "Descubre qué ocurre dentro de ti a nivel celular.",
         "Entiende cómo funcionan tus órganos y las células que los componen.",
-        "Deja de creer lo que te dicen. Entiende cómo funciona tu cuerpo y decide por ti mismo.",
+        "Deja de creer lo que te dice cualquiera. Entiende cómo funciona tu cuerpo y decide por ti mismo.",
       ],
     },
     modalDesc:

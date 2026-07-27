@@ -37,20 +37,28 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
+function origenesPermitidos() {
+    const fijos = [
+        'https://lifeasaprivilege.onrender.com',
+        'http://localhost:5173',
+        'http://localhost:3001',
+        'http://localhost:3000',
+    ];
+    const extra = (process.env.FRONTEND_ORIGINS ?? '')
+        .split(',')
+        .map((o) => o.trim().replace(/\/$/, ''))
+        .filter(Boolean);
+    const desdeFrontendUrl = (process.env.FRONTEND_URL ?? '').trim().replace(/\/$/, '');
+    return [...new Set([...fijos, ...extra, ...(desdeFrontendUrl ? [desdeFrontendUrl] : [])])];
+}
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.enableCors({
-        origin: [
-            'https://lifeasaprivilege.onrender.com',
-            'http://localhost:5173',
-            'http://localhost:3001',
-            'http://localhost:3000',
-        ],
-        credentials: true,
-    });
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { rawBody: true });
+    const origins = origenesPermitidos();
+    app.enableCors({ origin: origins, credentials: true });
     const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
     await app.listen(port);
     console.log(`🚀 Server running on port ${port}`);
+    console.log(`   CORS permitido para: ${origins.join(', ')}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

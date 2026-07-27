@@ -471,22 +471,6 @@ const ZodiacModal = ({
 
               {submoduleData && (
                 <Box
-                  borderRadius="xl"
-                  overflow="hidden" border={`1px solid ${astrologiaTxt}22`}
-                  style={{ aspectRatio: "16/9", flexShrink: 0 }}
-                  boxShadow={`0 4px 24px rgba(0,0,0,0.55), 0 0 24px ${astrologiaTxt}18`}
-                >
-                  <iframe
-                    style={{ width: "100%", height: "100%", border: "none", display: "block" }}
-                    src={`https://www.youtube.com/embed/${submoduleData.video}`}
-                    title={submoduleData.nom}
-                    allowFullScreen
-                  />
-                </Box>
-              )}
-
-              {submoduleData && (
-                <Box
                   bg={astrologiaBg}
                   border={`1px solid ${astrologiaTxt}22`}
                   borderRadius="xl"

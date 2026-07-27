@@ -34,6 +34,8 @@ function NutrienteBox({ n, visto, onClick, delay }: { n: Nutriente; visto: boole
         visto={visto}
         colorTint={`${n.color}22`}
         onClick={onClick}
+        // Mismo glow que la cabecera (halo blanco + menta con el tinte de la disciplina).
+        glow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${nutricionTxt}1a, 0 0 48px ${nutricionTxt}10`}
       />
     </Reveal>
   );
@@ -53,10 +55,8 @@ export default function MetodoNutricionNutrientes() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
         try {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           dataRef.current = r.data?.data ?? {};

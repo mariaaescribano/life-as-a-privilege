@@ -17,6 +17,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
@@ -39,7 +40,6 @@ export default function MetodoAstrologiaCursos() {
   const [pagoPsicoOpen, setPagoPsicoOpen] = useState(false);
   const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
   const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -49,48 +49,19 @@ export default function MetodoAstrologiaCursos() {
       .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setPsicologiaSuscrito(!!res.data?.psicologia_suscrito))
       .catch(() => {});
-    axios
-      .get(`${API_URL}/payment/test/enabled`)
-      .then((res) => setTestPagos(!!res.data?.enabled))
-      .catch(() => {});
   }, []);
-
-  const testUnlockPsico = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "psicologia" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      navigate("/metodo/psicologia");
-    } catch (err: any) {
-      setPagoPsicoError(err?.response?.data?.message || "No se pudo activar el modo test.");
-    }
-  };
 
   const pagarPsicologia = async () => {
     const token = sessionStorage.getItem("token");
     if (!token) { navigate("/welcome"); return; }
     setPagoPsicoLoading(true);
     setPagoPsicoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/psicologia/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoPsicoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoPsicoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoPsicoError(
-        status === 403
-          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("psicologia");
+    if (errPago) {
+      setPagoPsicoError(errPago);
       setPagoPsicoLoading(false);
     }
   };
@@ -246,7 +217,6 @@ export default function MetodoAstrologiaCursos() {
         onPagar={pagarPsicologia}
         loading={pagoPsicoLoading}
         error={pagoPsicoError}
-        onTest={testPagos ? testUnlockPsico : undefined}
       />
 
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />

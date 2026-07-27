@@ -24,6 +24,7 @@ import {
   type Polaridad,
 } from "../../components/metodo/cabalaDiagnostico";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW, CAJA_GLOW_FUERTE } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -182,7 +183,7 @@ export default function MetodoCabalaDiagnostico() {
 
           {respondidas < 2 ? (
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%">
-              <Box w="100%" bg={cabalaBg} border={`1px dashed ${cabalaTxt}55`} borderRadius="2xl"
+              <Box w="100%" bg={cabalaBg} border={`1px dashed ${cabalaTxt}55`} borderRadius="2xl" boxShadow={CAJA_GLOW}
                    px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }} textAlign="center">
                 <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                   Aún faltan respuestas
@@ -199,7 +200,7 @@ export default function MetodoCabalaDiagnostico() {
               {principal ? (
                 <Reveal direction="up" distance={22} delay={0.18} duration={0.7} w="100%">
                   <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}`} borderRadius="2xl"
-                       boxShadow={`0 4px 22px rgba(0,0,0,0.25), 0 0 30px ${cabalaTxt}55`}
+                       boxShadow={CAJA_GLOW_FUERTE}
                        px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }}>
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={2}>
                       Tu paso evolutivo prioritario
@@ -248,7 +249,7 @@ export default function MetodoCabalaDiagnostico() {
                 </Reveal>
               ) : (
                 <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%">
-                  <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}55`} borderRadius="2xl"
+                  <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}55`} borderRadius="2xl" boxShadow={CAJA_GLOW}
                        px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }} textAlign="center">
                     <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                       Tus transiciones fluyen
@@ -272,7 +273,7 @@ export default function MetodoCabalaDiagnostico() {
                     <Flex direction="column" gap={3}>
                       {secundarios.map((t) => (
                         <Box key={`${t.from}-${t.to}`} bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="xl"
-                             px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
+                             boxShadow={CAJA_GLOW} px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
                           <Flex align="baseline" justify="space-between" gap={3} wrap="wrap" mb={2}>
                             <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {nombre(t.from)} → {nombre(t.to)}
@@ -305,7 +306,7 @@ export default function MetodoCabalaDiagnostico() {
 
               {/* ── Tus capacidades (niveles + polaridad) ── */}
               <Reveal direction="up" distance={18} delay={0.3} duration={0.6} w="100%">
-                <Box w="100%" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl"
+                <Box w="100%" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
                      px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
                     Tus capacidades
@@ -359,7 +360,8 @@ function BotonSefira({ label, onClick }: { label: string; onClick: () => void })
 
 function ListaChips({ titulo, items, vacio }: { titulo: string; items: string[]; vacio: string }) {
   return (
-    <Box flex="1" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}>
+    <Box flex="1" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
+         px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}>
       <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={3} style={{ textShadow: INK_SHADOW }}>
         {titulo}
       </Text>

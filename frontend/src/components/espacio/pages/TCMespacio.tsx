@@ -73,22 +73,6 @@ const DESC_DESEQUILIBRIO: Record<string, string> = {
 };
 
 /* ══════════════════════════════════════════════
-   VIDEOS POR RESULTADO
-══════════════════════════════════════════════ */
-const VIDEOS_CONSTITUCION: Record<string, string | undefined> = {};
-
-const VIDEOS_ELEMENTO: Record<string, string | undefined> = {
-  "Madera": "1gMBVFKMAXY",
-  "Fuego":  "oqmoovl3Yio",
-  "Tierra": "tXqEjnQPgwc",
-  "Metal":  "BzgxPMYOqrA",
-  "Agua":   "o2ot4bFWMoQ",
-};
-
-const VIDEOS_DESEQUILIBRIO: Record<string, string | undefined> = {};
-
-
-/* ══════════════════════════════════════════════
    ICONOS DE CATEGORÍA
 ══════════════════════════════════════════════ */
 const TeaIcon = () => (
@@ -272,7 +256,6 @@ type ResultSectionProps = {
   result: string | null;
   recs: Record<string, Recs>;
   descriptions: Record<string, string>;
-  videos: Record<string, string | undefined>;
   navigate: (path: string) => void;
   useElementColor?: boolean;
   onSaberMas: () => void;
@@ -287,7 +270,6 @@ const ResultSection = ({
   result,
   recs,
   descriptions,
-  videos,
   navigate,
   useElementColor,
   onSaberMas,
@@ -295,7 +277,6 @@ const ResultSection = ({
 }: ResultSectionProps) => {
   const locked = !result;
   const rec = result ? recs[result] : null;
-  const video = result ? videos[result] : undefined;
   const description = result ? descriptions[result] : undefined;
   const elTheme = result && useElementColor ? getTheme(result) : null;
 
@@ -438,26 +419,6 @@ const ResultSection = ({
       ) : (
         /* ── DESBLOQUEADO ── */
         <Flex direction="column" gap={4}>
-
-          {/* Vídeo (solo si existe) */}
-          {video && (
-            <Box
-              w="100%"
-              aspectRatio={16 / 9}
-              borderRadius="2xl"
-              overflow="hidden"
-              boxShadow={`0 8px 40px rgba(0,0,0,0.5), 0 0 48px ${tcmTxt}77, 0 0 14px ${tcmTxt}55`}
-              bg="rgba(0,0,0,0.45)"
-              border={`2px solid ${tcmTxt}bb`}
-            >
-              <iframe
-                style={{ width: "100%", height: "100%", border: "none" }}
-                src={`https://www.youtube.com/embed/${video}`}
-                title={testLabel}
-                allowFullScreen
-              />
-            </Box>
-          )}
 
           {/* Descripción */}
           {description && (() => {
@@ -773,7 +734,6 @@ export default function TCMespacio() {
                 result={constitucion}
                 recs={RECS_CONSTITUCIONES}
                 descriptions={DESC_CONSTITUCION}
-                videos={VIDEOS_CONSTITUCION}
                 navigate={navigate}
                 onSaberMas={() => setSaberMasOpen(true)}
                 onDownloadPdf={constitucion ? () => handleDownloadPdf(1, constitucion) : undefined}
@@ -788,7 +748,6 @@ export default function TCMespacio() {
                 result={elemento}
                 recs={RECS_ELEMENTOS}
                 descriptions={DESC_ELEMENTO}
-                videos={VIDEOS_ELEMENTO}
                 navigate={navigate}
                 useElementColor
                 onSaberMas={() => setSaberMasOpen(true)}
@@ -804,7 +763,6 @@ export default function TCMespacio() {
                 result={desequilibrio}
                 recs={RECS_DESEQUILIBRIOS}
                 descriptions={DESC_DESEQUILIBRIO}
-                videos={VIDEOS_DESEQUILIBRIO}
                 navigate={navigate}
                 useElementColor
                 onSaberMas={() => setSaberMasOpen(true)}

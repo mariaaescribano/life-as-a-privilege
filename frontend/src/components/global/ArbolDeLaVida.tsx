@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { cabalaBg, cabalaTxt } from '../../GlobalVariables'
+import { CAJA_GLOW } from '../metodo/cabalaGlow'
 
 export type SefiraKey =
   | 'kether' | 'chokmah' | 'binah'
@@ -171,7 +172,7 @@ function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void 
         borderRadius="2xl"
         overflow="hidden"
         w="100%" maxW="460px"
-        boxShadow={`0 0 60px ${cabalaTxt}44, 0 12px 40px rgba(0,0,0,0.7)`}
+        boxShadow={CAJA_GLOW}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Brillo sutil en el borde superior */}
@@ -566,15 +567,18 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   stroke={strokeColor}
                   strokeWidth={strokeW}
                 />
-                {/* Nombre hebreo centrado */}
+                {/* Nombre hebreo centrado. El nodo es una esfera de fuego
+                    (dorada, muy clara), así que el nombre va en marrón oscuro
+                    (cabalaBg) con un halo dorado suave: se lee de verdad. */}
                 <text
                   x={sefira.x} y={sefira.y + 4}
                   textAnchor="middle"
                   fontSize="9"
                   fontFamily="Georgia, serif"
                   fontStyle="italic"
-                  fill={cabalaTxt}
-                  style={{ fill: cabalaTxt, textShadow: `0 1px 3px #000, 0 0 6px ${cabalaBg}` }}
+                  fontWeight="700"
+                  fill={cabalaBg}
+                  style={{ fill: cabalaBg, textShadow: `0 0 5px ${cabalaTxt}cc, 0 1px 2px ${cabalaTxt}88` }}
                 >
                   {sefira.hebrewName}
                 </text>

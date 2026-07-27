@@ -20,6 +20,7 @@ import {
   API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
 } from "../../GlobalVariables";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Candado blanco con brillo (mismo que Nutrición/Fisiología Cursos).
 const Candado = ({ size }: { size: any }) => (
@@ -45,7 +46,6 @@ export default function MetodoAyurvedaDoshaCursos() {
   const [pagoTcmOpen, setPagoTcmOpen] = useState(false);
   const [pagoTcmLoading, setPagoTcmLoading] = useState(false);
   const [pagoTcmError, setPagoTcmError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -58,9 +58,6 @@ export default function MetodoAyurvedaDoshaCursos() {
         if (!res.data?.ayurveda_suscrito) navigate("/metodo/ayurveda");
         setTcmSuscrito(!!res.data?.tcm_suscrito);
       })
-      .catch(() => {});
-    axios.get(`${API_URL}/payment/test/enabled`)
-      .then((res) => setTestPagos(!!res.data?.enabled))
       .catch(() => {});
   }, [navigate, doshaKey]);
 
@@ -76,38 +73,13 @@ export default function MetodoAyurvedaDoshaCursos() {
     if (!token) { navigate("/welcome"); return; }
     setPagoTcmLoading(true);
     setPagoTcmError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/tcm/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoTcmError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("tcm");
+    if (errPago) {
+      setPagoTcmError(errPago);
       setPagoTcmLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoTcmError(
-        status === 403
-          ? "Necesitas completar el pago de Ayurveda antes de adquirir la Medicina China."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoTcmLoading(false);
-    }
-  };
-
-  const testUnlockTcm = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "tcm" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      navigate("/metodo/tcm");
-    } catch (err: any) {
-      setPagoTcmError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
@@ -210,7 +182,6 @@ export default function MetodoAyurvedaDoshaCursos() {
         onPagar={pagarTcm}
         loading={pagoTcmLoading}
         error={pagoTcmError}
-        onTest={testPagos ? testUnlockTcm : undefined}
       />
 
       <IndiceAyurveda />

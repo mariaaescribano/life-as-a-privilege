@@ -23,11 +23,12 @@ import {
   type SenderoContenido,
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
-const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
+// El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
 
 // Sin líneas divisorias: se muestran los boxes sin ningún "border line".
 const Divisor = (_props?: { mb?: any; mt?: any }) => null;
@@ -143,24 +144,7 @@ export default function MetodoCabalaSendero() {
   });
 
   return (
-    <Box minH="100vh" position="relative" display="flex" flexDirection="column" bg={cabalaBg} fontFamily="'EB Garamond', serif">
-      {/* Fondo de página: imagen de Cábala (cabala.png) OSCURECIDA, en lugar del
-          turquesa. Capa fija (cubre todo el viewport al hacer scroll) con velo
-          negro fuerte para que el texto ámbar siga legible por encima. */}
-      <Box
-        position="fixed"
-        inset="0"
-        zIndex={-1}
-        pointerEvents="none"
-        bgColor={cabalaBg}
-        bgImage="url('/img/fondos/cabala.png')"
-        bgSize="cover"
-        bgPosition="center"
-        bgRepeat="no-repeat"
-      >
-        <Box position="absolute" inset="0" bg="rgba(0,0,0,0.62)" />
-      </Box>
-
+    <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>

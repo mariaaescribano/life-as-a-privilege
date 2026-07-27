@@ -20,17 +20,18 @@ import {
 } from "../../components/metodo/cabalaSenderos";
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW, CAJA_GLOW_FUERTE } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
-const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
+// El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
 const CAJA_OVERLAY = `${cabalaBg}cc`;
 
 // Box con la imagen de Cábala de fondo (letra dorada).
 const Caja = ({ children, destacado = false }: { children: React.ReactNode; destacado?: boolean }) => (
   <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${destacado ? cabalaTxt : `${cabalaTxt}44`}`}
-       borderRadius="2xl" boxShadow={destacado ? `0 4px 22px rgba(0,0,0,0.25), 0 0 30px ${cabalaTxt}55` : CAJA_GLOW}>
+       borderRadius="2xl" boxShadow={destacado ? CAJA_GLOW_FUERTE : CAJA_GLOW}>
     <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
       {children}

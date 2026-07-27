@@ -28,6 +28,7 @@ import {
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 const popIn = keyframes`
   from { opacity: 0; transform: scale(0.2); }
@@ -145,7 +146,6 @@ const Home = () => {
   const [pagoCulturaLoading, setPagoCulturaLoading] = useState(false);
   const [pagoCulturaError, setPagoCulturaError] = useState<string | null>(null);
   const [pagoCulturaExitoOpen, setPagoCulturaExitoOpen] = useState(false);
-  const [testPagos, setTestPagos] = useState(false);
   // No mostramos NADA del mandala hasta que TODAS las fotos (fondos de las
   // disciplinas + foto central del usuario) estén cargadas. Si ya se precargaron
   // en una visita anterior de esta sesión, arrancamos en true (sin re-precargar).
@@ -186,6 +186,11 @@ const Home = () => {
 
   const [pagoError, setPagoError] = useState<string | null>(null);
 
+  // Pago de Astrología: el backend crea un Checkout Session de Stripe (con el
+  // userId en metadata y success_url a /home?metodo_pagado={SESSION_ID}); al
+  // volver del pago, el efecto de arriba llama a /payment/metodo/verify y
+  // desbloquea. Flujo autocontenido: NO usar Payment Links estáticos, que no
+  // llevan el userId ni vuelven a la URL de verificación.
   const pagarMetodo = async () => {
     const token = sessionStorage.getItem("token");
     if (!token) {
@@ -194,120 +199,13 @@ const Home = () => {
     }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/metodo/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) {
-        window.location.href = res.data.url;
-        return;
-      }
-      console.error("[pagarMetodo] respuesta sin url:", res.data);
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("metodo");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      console.error("[pagarMetodo] error:", err?.response?.status, err?.response?.data || err?.message);
-      const status = err?.response?.status;
-      const reason =
-        status === 404
-          ? "Endpoint no encontrado — reinicia el backend para cargar la nueva ruta."
-          : status === 401
-          ? "Sesión expirada. Vuelve a iniciar sesión."
-          : err?.response?.data?.message || err?.message || "Error desconocido";
-      setPagoError(reason);
-      setPagoLoading(false);
-    }
-  };
-
-  // Desbloqueo en modo test (sin Stripe). Solo funciona si el backend lo permite.
-  const testUnlock = async (scope: "metodo" | "psicologia" | "ayurveda" | "tcm" | "fisiologia" | "nutricion" | "cabala" | "cultura") => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (scope === "metodo") {
-        setMetodoSuscrito(true);
-        setPagoOpen(false);
-        setPagoExitoOpen(true);
-      } else if (scope === "psicologia") {
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setPagoPsicoOpen(false);
-        setPagoPsicoExitoOpen(true);
-      } else if (scope === "ayurveda") {
-        // Ayurveda desbloquea también las disciplinas anteriores (cadena de prereq).
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setAyurvedaSuscrito(true);
-        setPagoAyurOpen(false);
-        setPagoAyurExitoOpen(true);
-      } else if (scope === "tcm") {
-        // TCM desbloquea también toda la cadena anterior.
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setAyurvedaSuscrito(true);
-        setTcmSuscrito(true);
-        setPagoTcmOpen(false);
-        setPagoTcmExitoOpen(true);
-      } else if (scope === "fisiologia") {
-        // Fisiología desbloquea también toda la cadena anterior.
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setAyurvedaSuscrito(true);
-        setTcmSuscrito(true);
-        setFisiologiaSuscrito(true);
-        setPagoFisioOpen(false);
-        setPagoFisioExitoOpen(true);
-      } else if (scope === "nutricion") {
-        // Nutrición desbloquea también toda la cadena anterior.
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setAyurvedaSuscrito(true);
-        setTcmSuscrito(true);
-        setFisiologiaSuscrito(true);
-        setNutricionSuscrito(true);
-        setPagoNutriOpen(false);
-        setPagoNutriExitoOpen(true);
-      } else if (scope === "cabala") {
-        // Cábala desbloquea también toda la cadena anterior.
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setAyurvedaSuscrito(true);
-        setTcmSuscrito(true);
-        setFisiologiaSuscrito(true);
-        setNutricionSuscrito(true);
-        setCabalaSuscrito(true);
-        setPagoCabalaOpen(false);
-        setPagoCabalaExitoOpen(true);
-      } else {
-        // Cultura desbloquea también toda la cadena anterior.
-        setMetodoSuscrito(true);
-        setPsicologiaSuscrito(true);
-        setAyurvedaSuscrito(true);
-        setTcmSuscrito(true);
-        setFisiologiaSuscrito(true);
-        setNutricionSuscrito(true);
-        setCabalaSuscrito(true);
-        setCulturaSuscrito(true);
-        setPagoCulturaOpen(false);
-        setPagoCulturaExitoOpen(true);
-      }
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || "No se pudo activar el modo test.";
-      if (scope === "metodo") setPagoError(msg);
-      else if (scope === "psicologia") setPagoPsicoError(msg);
-      else if (scope === "ayurveda") setPagoAyurError(msg);
-      else if (scope === "tcm") setPagoTcmError(msg);
-      else if (scope === "fisiologia") setPagoFisioError(msg);
-      else if (scope === "nutricion") setPagoNutriError(msg);
-      else if (scope === "cabala") setPagoCabalaError(msg);
-      else setPagoCulturaError(msg);
     }
   };
 
@@ -326,22 +224,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoPsicoLoading(true);
     setPagoPsicoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/psicologia/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoPsicoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoPsicoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoPsicoError(
-        status === 403
-          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("psicologia");
+    if (errPago) {
+      setPagoPsicoError(errPago);
       setPagoPsicoLoading(false);
     }
   };
@@ -361,22 +249,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoAyurLoading(true);
     setPagoAyurError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/ayurveda/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoAyurError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoAyurLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoAyurError(
-        status === 403
-          ? "Necesitas completar el pago de Psicología antes de adquirir Ayurveda."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("ayurveda");
+    if (errPago) {
+      setPagoAyurError(errPago);
       setPagoAyurLoading(false);
     }
   };
@@ -396,22 +274,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoTcmLoading(true);
     setPagoTcmError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/tcm/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoTcmError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoTcmLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoTcmError(
-        status === 403
-          ? "Necesitas completar el pago de Ayurveda antes de adquirir Medicina China."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("tcm");
+    if (errPago) {
+      setPagoTcmError(errPago);
       setPagoTcmLoading(false);
     }
   };
@@ -431,22 +299,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoFisioLoading(true);
     setPagoFisioError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/fisiologia/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoFisioError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoFisioLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoFisioError(
-        status === 403
-          ? "Necesitas completar el pago de Medicina China antes de adquirir Fisiología."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("fisiologia");
+    if (errPago) {
+      setPagoFisioError(errPago);
       setPagoFisioLoading(false);
     }
   };
@@ -466,22 +324,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoNutriLoading(true);
     setPagoNutriError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/nutricion/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoNutriError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoNutriLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoNutriError(
-        status === 403
-          ? "Necesitas completar el pago de Fisiología antes de adquirir Nutrición."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("nutricion");
+    if (errPago) {
+      setPagoNutriError(errPago);
       setPagoNutriLoading(false);
     }
   };
@@ -501,22 +349,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoCabalaLoading(true);
     setPagoCabalaError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/cabala/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoCabalaError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoCabalaLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoCabalaError(
-        status === 403
-          ? "Necesitas completar el pago de Nutrición antes de adquirir Cábala."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("cabala");
+    if (errPago) {
+      setPagoCabalaError(errPago);
       setPagoCabalaLoading(false);
     }
   };
@@ -536,22 +374,12 @@ const Home = () => {
     if (!token) { navigate("/welcome"); return; }
     setPagoCulturaLoading(true);
     setPagoCulturaError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/cultura/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoCulturaError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
-      setPagoCulturaLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoCulturaError(
-        status === 403
-          ? "Necesitas completar el pago de Cábala antes de adquirir Cultura."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("cultura");
+    if (errPago) {
+      setPagoCulturaError(errPago);
       setPagoCulturaLoading(false);
     }
   };
@@ -578,11 +406,6 @@ const Home = () => {
     }
     setName(sessionStorage.getItem("name") || "");
 
-    // ¿Modo test de pagos habilitado en el backend? (público)
-    axios.get(`${API_URL}/payment/test/enabled`)
-      .then((r) => setTestPagos(!!r.data?.enabled))
-      .catch(() => setTestPagos(false));
-
     const url = new URL(window.location.href);
     const metodoPagado = url.searchParams.get("metodo_pagado");
     const psicologiaPagado = url.searchParams.get("psicologia_pagado");
@@ -592,13 +415,18 @@ const Home = () => {
     const nutricionPagado = url.searchParams.get("nutricion_pagado");
     const cabalaPagado = url.searchParams.get("cabala_pagado");
     const culturaPagado = url.searchParams.get("cultura_pagado");
+    // Vuelta del Payment Link compartido: una sola query para las ocho, porque
+    // el enlace es el mismo. Qué disciplina se ha pagado lo dice el backend, que
+    // lo saca del client_reference_id de la sesión.
+    const disciplinaPagada = url.searchParams.get("disciplina_pagada");
 
     // Si ya cargamos las suscripciones antes en esta sesión y NO venimos de un
     // pago (que obliga a re-verificar), no volvemos a pedir /user/me: el estado
     // ya se inicializó desde la caché y el mandala se pinta directo.
     const hayPagoQuery =
       metodoPagado || psicologiaPagado || ayurvedaPagado || tcmPagado ||
-      fisiologiaPagado || nutricionPagado || cabalaPagado || culturaPagado;
+      fisiologiaPagado || nutricionPagado || cabalaPagado || culturaPagado ||
+      disciplinaPagada;
     if (suscCache && !hayPagoQuery) {
       return;
     }
@@ -631,7 +459,42 @@ const Home = () => {
       }
     };
 
-    if (metodoPagado) {
+    if (disciplinaPagada) {
+      setVerificandoPago(true);
+      url.searchParams.delete("disciplina_pagada");
+      window.history.replaceState({}, "", url.pathname + url.search);
+
+      // El scope viene de vuelta en la respuesta, así que abrimos el box de
+      // «pagado» de la disciplina que toque.
+      const EXITO: Record<string, () => void> = {
+        metodo:     () => setPagoExitoOpen(true),
+        psicologia: () => setPagoPsicoExitoOpen(true),
+        ayurveda:   () => setPagoAyurExitoOpen(true),
+        tcm:        () => setPagoTcmExitoOpen(true),
+        fisiologia: () => setPagoFisioExitoOpen(true),
+        nutricion:  () => setPagoNutriExitoOpen(true),
+        cabala:     () => setPagoCabalaExitoOpen(true),
+        cultura:    () => setPagoCulturaExitoOpen(true),
+      };
+
+      axios
+        .get(`${API_URL}/payment/disciplina/verify`, {
+          params: { session_id: disciplinaPagada },
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(async (res) => {
+          // Recargamos SIEMPRE las suscripciones: es la fuente de verdad y deja
+          // el mandala coherente aunque el verify haya fallado.
+          await cargarSuscripcion();
+          if (res.data?.ok) {
+            EXITO[res.data.scope]?.();
+          }
+        })
+        .catch(async () => {
+          await cargarSuscripcion();
+        })
+        .finally(() => setVerificandoPago(false));
+    } else if (metodoPagado) {
       setVerificandoPago(true);
       url.searchParams.delete("metodo_pagado");
       window.history.replaceState({}, "", url.pathname + url.search);
@@ -834,8 +697,8 @@ const Home = () => {
 
   // Mantiene la caché de suscripciones al día. En cuanto se resuelven (deja de
   // ser null), la guardamos para que la próxima visita a /home no vuelva a
-  // pedir /user/me. Cubre las tres vías que las fijan: la carga inicial, la
-  // verificación tras pago y el desbloqueo en modo test.
+  // pedir /user/me. Cubre las dos vías que las fijan: la carga inicial y la
+  // verificación tras el pago.
   useEffect(() => {
     if (metodoSuscrito === null) return;
     suscCache = {
@@ -895,6 +758,15 @@ const Home = () => {
 
   const angleStep = (2 * Math.PI) / disciplines.length;
 
+  // Estado de pago de cada disciplina, en el MISMO orden que `disciplines`
+  // (Astrología → Psicología → Ayurveda → TCM → Fisiología → Nutrición →
+  // Cábala → Cultura). Con esto el mandala aplica el ORDEN del Mapa: una
+  // disciplina solo se puede abrir —o pagar— si la anterior ya está pagada.
+  const pagadas = [
+    metodoSuscrito, psicologiaSuscrito, ayurvedaSuscrito, tcmSuscrito,
+    fisiologiaSuscrito, nutricionSuscrito, cabalaSuscrito, culturaSuscrito,
+  ].map(Boolean);
+
   // El mandala se pinta UNA sola vez y ya en su estado correcto (candados donde
   // toca). Para eso hace falta esperar a TRES cosas: la foto del usuario, la
   // precarga de los fondos, y —clave— el estado de suscripciones. Como
@@ -926,7 +798,7 @@ const Home = () => {
       borderRadius="full"
       bg={contDisc.bg}
       color={contDisc.txt}
-      border={`2px solid ${contDisc.txt}66`}
+      border={`2px solid ${contDisc.txt}`}
       fontFamily="'EB Garamond', serif"
       fontWeight={700}
       fontSize={{ base: "sm", md: "md" }}
@@ -1099,17 +971,11 @@ const Home = () => {
                   (d.name === cabalaNom && cabalaSuscrito === true) ||
                   (d.name === culturaNom && culturaSuscrito === true);
                 // `clickable` = se puede pulsar aunque siga con candado, para poder
-                //   abrir su pago (real o el de prueba): la disciplina ya pagada, o
-                //   su prerrequisito —la disciplina anterior de la cadena— ya pagado.
-                const clickable =
-                  d.name === astrologiaNom ||
-                  (d.name === neuropsicologiaNom && (psicologiaSuscrito === true || metodoSuscrito === true)) ||
-                  (d.name === ayurvedaNom && (ayurvedaSuscrito === true || psicologiaSuscrito === true)) ||
-                  (d.name === tcmNom && (tcmSuscrito === true || ayurvedaSuscrito === true)) ||
-                  (d.name === fisiologiaNom && (fisiologiaSuscrito === true || tcmSuscrito === true)) ||
-                  (d.name === nutricionNom && (nutricionSuscrito === true || fisiologiaSuscrito === true)) ||
-                  (d.name === cabalaNom && (cabalaSuscrito === true || nutricionSuscrito === true)) ||
-                  (d.name === culturaNom && (culturaSuscrito === true || cabalaSuscrito === true));
+                //   abrir su pago. BLOQUEO SECUENCIAL: el Mapa se hace en orden, así
+                //   que una disciplina solo es clicable si la ANTERIOR de la cadena
+                //   ya está pagada (Astrología, la primera, siempre lo es). Las que
+                //   aún no tocan quedan con candado y no responden al clic.
+                const clickable = index === 0 || pagadas[index - 1];
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
@@ -1298,7 +1164,7 @@ const Home = () => {
 
       <SiteFooter />
 
-      <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => setPagoExitoOpen(false)} />
+      <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => { setPagoExitoOpen(false); navigate("/metodo/astrologia"); }} />
       <PagoExitoModal
         isOpen={pagoPsicoExitoOpen}
         onAceptar={() => setPagoPsicoExitoOpen(false)}
@@ -1314,7 +1180,6 @@ const Home = () => {
         onPagar={pagarMetodo}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? () => testUnlock("metodo") : undefined}
       />
       <PagoPsicologiaModal
         isOpen={pagoPsicoOpen}
@@ -1322,7 +1187,6 @@ const Home = () => {
         onPagar={pagarPsicologia}
         loading={pagoPsicoLoading}
         error={pagoPsicoError}
-        onTest={testPagos ? () => testUnlock("psicologia") : undefined}
       />
       <PagoExitoModal
         isOpen={pagoAyurExitoOpen}
@@ -1339,7 +1203,6 @@ const Home = () => {
         onPagar={pagarAyurveda}
         loading={pagoAyurLoading}
         error={pagoAyurError}
-        onTest={testPagos ? () => testUnlock("ayurveda") : undefined}
       />
       <PagoExitoModal
         isOpen={pagoTcmExitoOpen}
@@ -1356,7 +1219,6 @@ const Home = () => {
         onPagar={pagarTcm}
         loading={pagoTcmLoading}
         error={pagoTcmError}
-        onTest={testPagos ? () => testUnlock("tcm") : undefined}
       />
       <PagoExitoModal
         isOpen={pagoFisioExitoOpen}
@@ -1373,7 +1235,6 @@ const Home = () => {
         onPagar={pagarFisiologia}
         loading={pagoFisioLoading}
         error={pagoFisioError}
-        onTest={testPagos ? () => testUnlock("fisiologia") : undefined}
       />
       <PagoExitoModal
         isOpen={pagoNutriExitoOpen}
@@ -1390,7 +1251,6 @@ const Home = () => {
         onPagar={pagarNutricion}
         loading={pagoNutriLoading}
         error={pagoNutriError}
-        onTest={testPagos ? () => testUnlock("nutricion") : undefined}
       />
       <PagoExitoModal
         isOpen={pagoCabalaExitoOpen}
@@ -1407,7 +1267,6 @@ const Home = () => {
         onPagar={pagarCabala}
         loading={pagoCabalaLoading}
         error={pagoCabalaError}
-        onTest={testPagos ? () => testUnlock("cabala") : undefined}
       />
       <PagoExitoModal
         isOpen={pagoCulturaExitoOpen}
@@ -1424,7 +1283,6 @@ const Home = () => {
         onPagar={pagarCultura}
         loading={pagoCulturaLoading}
         error={pagoCulturaError}
-        onTest={testPagos ? () => testUnlock("cultura") : undefined}
       />
       {verificandoPago && <SpinnerTurquesa />}
     </Box>

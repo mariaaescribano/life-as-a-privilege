@@ -1,10 +1,36 @@
-import { BadRequestException, Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
+import type { RawBodyRequest } from '@nestjs/common';
+import type { Request } from 'express';
 import { PaymentService } from './payment.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Controller('payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
+
+  // ── Webhook de Stripe ────────────────────────────────────────────────────
+  // SIN JwtAuthGuard a propósito: quien llama es Stripe, no un usuario con
+  // sesión. La autenticación es la firma `stripe-signature`, que se verifica
+  // contra STRIPE_WEBHOOK_SECRET en el servicio; sin firma válida no se procesa
+  // nada. Es lo que garantiza que un pago concede el acceso aunque la persona
+  // cierre la pestaña al volver de Stripe.
+  @Post('webhook')
+  @HttpCode(HttpStatus.OK)
+  async webhook(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('stripe-signature') signature: string,
+  ) {
+    return await this.paymentService.handleWebhook(req.rawBody, signature);
+  }
+
+  // Verify único del Payment Link compartido por las ocho disciplinas. El scope
+  // viaja dentro del client_reference_id de la sesión, así que no hace falta una
+  // ruta por disciplina.
+  @Get('disciplina/verify')
+  @UseGuards(JwtAuthGuard)
+  async verifyDisciplinaLink(@Req() req: any, @Query('session_id') sessionId: string) {
+    return await this.paymentService.verifyDisciplinaLink(sessionId, req.user.userId);
+  }
 
   @Post('metodo/checkout')
   @UseGuards(JwtAuthGuard)
@@ -102,17 +128,9 @@ export class PaymentController {
     return await this.paymentService.verifyCulturaCheckout(sessionId, req.user.userId);
   }
 
-  // ── Modo test (solo si ALLOW_TEST_PAGOS=true) ──
-  @Get('test/enabled')
-  testEnabled() {
-    return { enabled: PaymentService.testPagosHabilitado() };
-  }
-
-  @Post('test/unlock')
-  @UseGuards(JwtAuthGuard)
-  async testUnlock(@Req() req: any, @Body() body: { scope?: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura' | 'all' }) {
-    return await this.paymentService.testUnlock(req.user.userId, body?.scope ?? 'all');
-  }
+  // El modo test de pagos (test/enabled + test/unlock) se eliminó: era la única
+  // forma de desbloquear una disciplina sin pagar. Para regalar el acceso a una
+  // cuenta está el panel /admin/accesos (o ACCESO_LIBRE_EMAILS).
 
   // ── Llamada de acompañamiento (pago REAL de Stripe, sin login) ──
   @Post('llamada/checkout')
@@ -124,7 +142,9 @@ export class PaymentController {
       fecha?: string;
       slot?: string;
       tema?: string;
-      precio?: number;
+      // El precio NO viaja en el body: lo fija el servidor a partir del tipo
+      // (ver llamadas-pago.data.ts).
+      tipo?: string;
       disciplinaNom?: string;
       returnPath?: string;
     },

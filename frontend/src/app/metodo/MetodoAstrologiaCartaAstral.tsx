@@ -194,10 +194,11 @@ export default function MetodoAstrologiaCartaAstral() {
             duration={0.8}
             position="relative"
             w="100%"
-            // 20% más pequeño que antes (el ancho lo daba el contenedor de 850px).
-            // maxW ESTÁTICO: la entrada es solo opacidad (direction="none"), así el
-            // <Canvas> mide su caja ya a este tamaño al montar y la rueda queda bien.
-            maxW="680px"
+            // Caja más ancha SOLO para dar más padding alrededor de la rueda: la
+            // rueda está topada en maxW 680, así que el ancho de más queda como
+            // margen interior; el círculo NO cambia de tamaño. maxW ESTÁTICO: la
+            // entrada es solo opacidad, así el <Canvas> mide bien su caja al montar.
+            maxW="820px"
             mx="auto"
             borderRadius="2xl"
             overflow="hidden"
@@ -211,8 +212,8 @@ export default function MetodoAstrologiaCartaAstral() {
               direction="column"
               align="center"
               gap={{ base: 5, md: 6 }}
-              px={{ base: 4, md: 8 }}
-              py={{ base: 8, md: 10 }}
+              px={{ base: 5, md: 12 }}
+              py={{ base: 10, md: 14 }}
             >
               <CartaAstral3D
                 color={astrologiaTxt}

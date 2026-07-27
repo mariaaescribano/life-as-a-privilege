@@ -3,6 +3,7 @@ import { Box, Flex, Grid, Text, Input, Textarea } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
+import { PRECIO_LLAMADA, type LlamadaTipo } from "./llamadaPrecios";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * AgendarLlamada — componente INLINE y REUTILIZABLE para reservar una llamada
@@ -19,7 +20,9 @@ interface AgendarLlamadaProps {
   bgColor: string;
   /** Nombre de la disciplina, para pintar su imagen de fondo (DisciplinaBgLayer). */
   disciplinaNom: string;
-  /** Precio en € de la llamada. Por defecto 20. */
+  /** Tipo de llamada: decide el importe QUE COBRA EL BACKEND. Por defecto la suelta. */
+  tipo?: LlamadaTipo;
+  /** Precio en € solo para MOSTRAR. Por defecto, el del tipo. */
   precio?: number;
   /** Duración en minutos. Por defecto 60. */
   duracionMin?: number;
@@ -98,7 +101,8 @@ export function AgendarLlamada({
   color,
   bgColor,
   disciplinaNom,
-  precio = 20,
+  tipo = "estandar",
+  precio = PRECIO_LLAMADA[tipo],
   duracionMin = 60,
   titulo = "Reserva tu llamada",
   subtitulo,
@@ -218,7 +222,8 @@ export function AgendarLlamada({
         fecha: toIsoDate(selectedDay),
         slot: selectedSlot,
         tema: tema.trim() || undefined,
-        precio,
+        // Solo el tipo: el importe lo pone el backend.
+        tipo,
         disciplinaNom,
         // Volver a ESTA misma página tras el pago (donde se reservó).
         returnPath: window.location.pathname,

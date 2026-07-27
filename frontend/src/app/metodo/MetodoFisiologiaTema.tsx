@@ -111,10 +111,8 @@ export default function MetodoFisiologiaTema() {
     if (!tema) { navigate("/metodo/fisiologia/profundiza", { replace: true }); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
 
         // Cargamos las fichas ya leídas de este tema (para los checks).
         try {

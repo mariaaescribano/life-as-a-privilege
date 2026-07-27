@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { glowSuave } from "../../components/metodo/FotoBox";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
@@ -147,7 +147,7 @@ function Stepper({ label, value, min, max, sufijo, onChange }: {
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
-         boxShadow={glowSuave(nutricionTxt)} {...rest}>
+         boxShadow={glowHeader(nutricionTxt)} {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}4d`} />
       <Box position="relative" zIndex={1}>{children}</Box>
     </Box>
@@ -197,10 +197,8 @@ export default function MetodoNutricionCalorias() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
         // Prerrellena con lo que la usuaria ya calculó otra vez (no repetir).
         try {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -270,6 +268,42 @@ export default function MetodoNutricionCalorias() {
     };
   }, [sexo, edad, peso, altura, base, ejIntensidad, ejDias, ejMinutos, objetivo]);
 
+  // Construye el blob a guardar con las calorías calculadas (null si no hay
+  // resultado válido). Reutilizado por el guardado con debounce y por el flush
+  // inmediato al pasar a «Diseña tu día».
+  const construirDatosCalorias = () => {
+    if (!resultado) return null;
+    return {
+      ...dataRef.current,
+      calorias: {
+        hecho: true,
+        kcal: resultado.kcal,
+        macros: {
+          prot: resultado.prot.g, carb: resultado.carb.g, fat: resultado.fat.g,
+        },
+        entrada: {
+          sexo, edad: Number(edad), peso: Number(peso), altura: Number(altura),
+          base, ejIntensidad, ejDias, ejMinutos, objetivo,
+        },
+      },
+    };
+  };
+
+  // Guarda YA las calorías (sin esperar al debounce). Se usa antes de navegar a
+  // «Diseña tu día» para que esa página encuentre `calorias.hecho` en el servidor
+  // y no rebote/quede bloqueada por la carrera del debounce.
+  const guardarCaloriasAhora = async () => {
+    const data = construirDatosCalorias();
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!data || !userId || !token) return;
+    dataRef.current = data;
+    try {
+      await axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
+        { headers: { Authorization: `Bearer ${token}` } });
+    } catch { /* si falla, «Diseña tu día» mostrará el candado */ }
+  };
+
   // Guarda el resultado (y las entradas, para prerrellenar y para desbloquear
   // «Diseña tu día»). Se dispara cuando hay un resultado válido.
   useEffect(() => {
@@ -278,20 +312,8 @@ export default function MetodoNutricionCalorias() {
     const token = sessionStorage.getItem("token");
     if (!userId || !token) return;
     const t = setTimeout(() => {
-      const data = {
-        ...dataRef.current,
-        calorias: {
-          hecho: true,
-          kcal: resultado.kcal,
-          macros: {
-            prot: resultado.prot.g, carb: resultado.carb.g, fat: resultado.fat.g,
-          },
-          entrada: {
-            sexo, edad: Number(edad), peso: Number(peso), altura: Number(altura),
-            base, ejIntensidad, ejDias, ejMinutos, objetivo,
-          },
-        },
-      };
+      const data = construirDatosCalorias();
+      if (!data) return;
       dataRef.current = data;
       axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
         { headers: { Authorization: `Bearer ${token}` } }).catch(() => { /* reintenta al próximo cambio */ });
@@ -320,7 +342,16 @@ export default function MetodoNutricionCalorias() {
               mb={0}
               prev={{ label: "← Tu plato", onClick: () => navigate("/metodo/nutricion/plato") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Diseña tu día →", onClick: () => navigate("/metodo/nutricion/dia") }}
+              next={{
+                label: "Diseña tu día →",
+                disabled: !resultado,
+                disabledTooltip: "Calcula tus calorías para desbloquear «Diseña tu día»",
+                onClick: async () => {
+                  if (!resultado) return;
+                  await guardarCaloriasAhora(); // flush antes de navegar (evita el candado por debounce)
+                  navigate("/metodo/nutricion/dia");
+                },
+              }}
             />
           </Reveal>
 

@@ -1,24 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/img/icono/iconoFondo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Life as a Privilege</title>
+    <meta
+      name="description"
+      content="Un recorrido guiado por ocho disciplinas — astrología, psicología, ayurveda, medicina china, fisiología, nutrición, cábala y cultura — para entenderte de verdad y cuidarte con criterio."
+    />
+    <link rel="canonical" href="https://lifeasaprivilege.onrender.com/" />
+
+    <!-- Open Graph / Twitter: lo que se ve al compartir un enlace (WhatsApp,
+         Instagram, Telegram…). Sin esto el enlace sale pelado.
+         OJO: al cambiar de dominio hay que actualizar og:url, canonical y el
+         sitemap.xml de /public. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Life as a Privilege" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content="Life as a Privilege — El Recorrido" />
+    <meta
+      property="og:description"
+      content="Ocho disciplinas para conocerte: astrología, psicología, ayurveda, medicina china, fisiología, nutrición, cábala y cultura."
+    />
+    <meta property="og:url" content="https://lifeasaprivilege.onrender.com/" />
+    <meta property="og:image" content="https://lifeasaprivilege.onrender.com/img/og/portada.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mandala de Life as a Privilege sobre fondo turquesa" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Life as a Privilege — El Recorrido" />
+    <meta
+      name="twitter:description"
+      content="Ocho disciplinas para conocerte: astrología, psicología, ayurveda, medicina china, fisiología, nutrición, cábala y cultura."
+    />
+    <meta name="twitter:image" content="https://lifeasaprivilege.onrender.com/img/og/portada.png" />
+    <meta name="theme-color" content="#008080" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LSEBM0PB9V"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      // cookie_domain: 'none' → la cookie se pone en el host exacto (sin intentar
-      // el dominio raíz). Evita el error "rejected for invalid domain" en dominios
-      // públicos compartidos como *.onrender.com y en localhost.
-      gtag('config', 'G-LSEBM0PB9V', { cookie_domain: 'none' });
-    </script>
+    <!--
+      Google Analytics YA NO se carga aquí. Ponerlo en el <head> hacía que se
+      instalasen sus cookies antes de que nadie diera su consentimiento, lo que
+      incumple el RGPD y el art. 22.2 de la LSSI. Ahora lo carga en tiempo de
+      ejecución src/components/global/cookies.ts, y solo si se acepta el aviso.
+    -->
+
   </head>
   <body spellcheck="false">
     <div id="root"></div>

@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { PRECIO_DISCIPLINA } from "./pagoDisciplinaLink";
 import {
   ayurvedaNom, AyurvedaIcon,
   tcmNom, TCMIcon,
@@ -39,8 +40,6 @@ export interface PagoDisciplinaModalProps {
   onPagar: () => void;
   loading?: boolean;
   error?: string | null;
-  /** Si se pasa, muestra un botón de "modo test" (desbloqueo sin cobro). */
-  onTest?: () => void;
 }
 
 interface BaseProps extends PagoDisciplinaModalProps {
@@ -54,7 +53,7 @@ interface BaseProps extends PagoDisciplinaModalProps {
   ordinal: string;
   /** Resumen de 2 líneas de lo que hace el recorrido. */
   descripcion: React.ReactNode;
-  /** Precio mostrado (por defecto "20 €"). */
+  /** Precio mostrado (por defecto, el de una disciplina: PRECIO_DISCIPLINA). */
   precio?: string;
   /** Color del texto de error (según el fondo sea claro u oscuro). */
   errorColor?: string;
@@ -73,15 +72,19 @@ export function PagoDisciplinaModal({
   onPagar,
   loading,
   error,
-  onTest,
   bg,
   txt,
   nom,
   ordinal,
   descripcion,
-  precio = "20 €",
+  precio = PRECIO_DISCIPLINA,
   errorColor = "#ffb4b4",
 }: BaseProps) {
+  // Consentimiento de términos + renuncia al desistimiento. Se reinicia cada vez
+  // que se abre el modal: nunca debe quedar marcado «de la vez anterior».
+  const [acepta, setAcepta] = React.useState(false);
+  React.useEffect(() => { if (isOpen) setAcepta(false); }, [isOpen]);
+
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
     // box no crece sin límite — se limita a la altura del viewport y el cuerpo
@@ -145,10 +148,54 @@ export function PagoDisciplinaModal({
               {precio}
             </Text>
 
+            {/* Una sola casilla, con texto corto. El detalle de qué se acepta
+                —incluido que el pago no se devuelve— vive en la lista de
+                condiciones de /terminos, no aquí: el box de pago no es sitio
+                para un párrafo jurídico. */}
+            <Flex
+              align="center"
+              justify="center"
+              gap={3}
+              mt={2}
+              cursor="pointer"
+              onClick={() => setAcepta((v) => !v)}
+              role="checkbox"
+              aria-checked={acepta}
+            >
+              <Flex
+                flexShrink={0}
+                w="20px"
+                h="20px"
+                borderRadius="4px"
+                border={`1.5px solid ${acepta ? txt : `${txt}80`}`}
+                bg={acepta ? txt : "transparent"}
+                align="center"
+                justify="center"
+                transition="all 0.18s"
+              >
+                {acepta && (
+                  <Box as="svg" viewBox="0 0 24 24" w="14px" h="14px" fill="none" stroke={bg} strokeWidth="3.5">
+                    <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                  </Box>
+                )}
+              </Flex>
+              <Text color={`${txt}e0`} fontSize="sm" lineHeight="1.6">
+                Acepto las{" "}
+                <Text
+                  as="span"
+                  textDecoration="underline"
+                  onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
+                  _hover={{ color: txt }}
+                >
+                  condiciones de compra
+                </Text>
+              </Text>
+            </Flex>
+
             <Flex justify="center" mt={3} gap={4} wrap="wrap">
               <Box
                 as="button"
-                onClick={loading ? undefined : onPagar}
+                onClick={loading || !acepta ? undefined : onPagar}
                 px={10}
                 py={3}
                 borderRadius="full"
@@ -158,11 +205,11 @@ export function PagoDisciplinaModal({
                 fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="700"
                 letterSpacing="0.08em"
-                cursor={loading ? "not-allowed" : "pointer"}
-                opacity={loading ? 0.6 : 1}
+                cursor={loading || !acepta ? "not-allowed" : "pointer"}
+                opacity={loading || !acepta ? 0.5 : 1}
                 boxShadow={`0 4px 24px ${txt}47`}
                 transition="all 0.22s"
-                _hover={loading ? {} : { transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txt}66` }}
+                _hover={loading || !acepta ? {} : { transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txt}66` }}
               >
                 {loading ? "Conectando…" : "Pagar"}
               </Box>
@@ -198,30 +245,6 @@ export function PagoDisciplinaModal({
               >
                 {error}
               </Text>
-            )}
-
-            {onTest && (
-              <Box
-                as="button"
-                onClick={loading ? undefined : onTest}
-                alignSelf="center"
-                mt={2}
-                px={8}
-                py={2.5}
-                borderRadius="full"
-                bg={`${txt}29`}
-                color={txt}
-                border={`1.5px dashed ${txt}bf`}
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }}
-                fontWeight="600"
-                letterSpacing="0.05em"
-                cursor={loading ? "not-allowed" : "pointer"}
-                transition="all 0.2s"
-                _hover={loading ? {} : { bg: `${txt}47`, transform: "translateY(-1px)" }}
-              >
-                💳 Pago de prueba (sin cobro real)
-              </Box>
             )}
 
             <Text

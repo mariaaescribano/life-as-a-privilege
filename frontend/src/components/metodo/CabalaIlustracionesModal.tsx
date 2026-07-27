@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { cabalaBg, cabalaTxt } from "../../GlobalVariables";
+import { CAJA_GLOW, CAJA_GLOW_HOVER } from "./cabalaGlow";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { CABALA_INTRO } from "./comicCabalaIntro";
@@ -201,11 +202,11 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                       backdropFilter: "blur(10px)",
                       WebkitBackdropFilter: "blur(10px)",
                       transition: "all 0.25s ease",
-                      boxShadow: `0 0 18px ${cabalaTxt}33, 0 0 42px ${cabalaTxt}1f, inset 0 0 24px rgba(255,255,255,0.04)`,
+                      boxShadow: CAJA_GLOW,
                       _hover: {
                         transform: "translateY(-4px)",
                         borderColor: cabalaTxt,
-                        boxShadow: `0 0 28px ${cabalaTxt}99, 0 0 70px ${cabalaTxt}55, inset 0 0 24px rgba(255,255,255,0.08)`,
+                        boxShadow: CAJA_GLOW_HOVER,
                       },
                       _active: { transform: "translateY(-1px)" },
                     }}

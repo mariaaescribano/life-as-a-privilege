@@ -17,7 +17,14 @@ export function useAdminGuard() {
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!me.data?.is_admin) { navigate("/home"); return; }
+        if (!me.data?.is_admin) {
+          // Estar desbloqueado exige la contraseña de admin. Si el email SÍ es de
+          // admin pero aún no la ha introducido, lo mandamos a desbloquear; si no
+          // es admin, fuera al home.
+          sessionStorage.removeItem("isAdmin");
+          navigate(me.data?.admin_email ? "/admin/login" : "/home");
+          return;
+        }
       } catch {
         navigate("/home");
         return;

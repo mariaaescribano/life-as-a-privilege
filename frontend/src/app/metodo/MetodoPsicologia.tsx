@@ -25,6 +25,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Tinta cálida con halo claro (crema + color de la disciplina) para que se lea
 // bien sobre el fondo de acuarela.
@@ -39,7 +40,6 @@ export default function MetodoPsicologia() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
   const [avisoOpen, setAvisoOpen] = useState(false);
   const intro = useIntroComic("metodo-psicologia"); // cómic de intro, 1ª vez
 
@@ -48,10 +48,6 @@ export default function MetodoPsicologia() {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
-
-    axios.get(`${API_URL}/payment/test/enabled`)
-      .then((r) => setTestPagos(!!r.data?.enabled))
-      .catch(() => setTestPagos(false));
 
     (async () => {
       try {
@@ -81,39 +77,13 @@ export default function MetodoPsicologia() {
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/psicologia/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("psicologia");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoError(
-        status === 403
-          ? "Necesitas completar el pago de Astrología antes de adquirir Psicología."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoLoading(false);
-    }
-  };
-
-  const testUnlock = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "psicologia" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setSuscrito(true);
-      setPagoOpen(false);
-    } catch (err: any) {
-      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
@@ -254,7 +224,6 @@ export default function MetodoPsicologia() {
         onPagar={pagarPsicologia}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? testUnlock : undefined}
       />
 
       {/* ── Aviso importante (popup centrado, estilo acuarela) ── */}

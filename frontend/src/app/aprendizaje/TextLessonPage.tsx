@@ -74,7 +74,6 @@ export default function TextLessonPage() {
 
   const { bgColor, color, icon, nom: disciplinaNom } = modalidad;
   const hasBg = hasDisciplinaBg(disciplinaNom);
-  const esVideo = leccion.tipo === "video" && !!leccion.video;
   const esTest = leccion.tipo === "test";
 
   // Misma sombra que la tarjeta de curso y el editor admin (coherencia del módulo de cursos).
@@ -146,25 +145,9 @@ export default function TextLessonPage() {
             }}
           />
 
-          {/* Vídeo (16:9) o artículo de texto */}
-          {esVideo ? (
-            <Box
-              maxW="900px"
-              w="100%"
-              sx={{ aspectRatio: "16 / 9" }}
-              borderRadius="2xl"
-              overflow="hidden"
-              boxShadow={HEADER_GLOW}
-              mt={{ base: 2, md: 4 }}
-            >
-              <iframe
-                style={{ width: "100%", height: "100%" }}
-                src={`https://www.youtube.com/embed/${leccion.video}`}
-                title={leccion.nom}
-                allowFullScreen
-              />
-            </Box>
-          ) : esTest ? (
+          {/* Test o artículo de texto. Las lecciones de tipo «vídeo» ya no
+              tienen reproductor: caen aquí y se muestran como texto. */}
+          {esTest ? (
             <Box
               maxW="850px"
               w="100%"

@@ -18,9 +18,6 @@ import EspacioHome from "./app/espacio/main/EspacioHome";
 import ExpandablePage from "./app/espacio/main/ThemePreguntas";
 import QuienSoy from "./app/web/QuienSoy";
 import Productos from "./app/web/Productos";
-import ReelsPage from "./app/web/Reels";
-import VideosPage from "./app/web/VideosPage";
-import VideoPage from "./app/web/VideoPage";
 import LibrosPage from "./app/web/LibrosPage";
 import DescargarLibroPage from "./app/web/DescargarLibroPage";
 import Contacto from "./app/web/Contacto";
@@ -40,6 +37,7 @@ import MetodoAstrologiaAspectos from "./app/metodo/MetodoAstrologiaAspectos";
 import MetodoAstrologiaLlamada from "./app/metodo/MetodoAstrologiaLlamada";
 import MetodoAstrologiaCursos from "./app/metodo/MetodoAstrologiaCursos";
 import AdminHome from "./app/admin/AdminHome";
+import AdminLogin from "./app/admin/AdminLogin";
 import AdminUsuarios from "./app/admin/AdminUsuarios";
 import AdminAstrologiaEditor from "./app/admin/AdminAstrologiaEditor";
 import AdminPsicologiaLectura from "./app/admin/AdminPsicologiaLectura";
@@ -48,6 +46,8 @@ import AdminEditorPlaceholder from "./app/admin/AdminEditorPlaceholder";
 import AdminCursos from "./app/admin/AdminCursos";
 import AdminCursoEditor from "./app/admin/AdminCursoEditor";
 import AdminAstrologiaTextos from "./app/admin/AdminAstrologiaTextos";
+import AdminAccesos from "./app/admin/AdminAccesos";
+import NoEncontrada from "./app/web/NoEncontrada";
 import MetodoPsicologia from "./app/metodo/MetodoPsicologia";
 import MetodoPsicologiaProblema from "./app/metodo/MetodoPsicologiaProblema";
 import MetodoPsicologiaNecesidades from "./app/metodo/MetodoPsicologiaNecesidades";
@@ -132,7 +132,6 @@ import MetodoCulturaHistoria from "./app/metodo/MetodoCulturaHistoria";
 import MetodoCulturaHistoriaEra from "./app/metodo/MetodoCulturaHistoriaEra";
 import AyurvedaMiEspacio from "./app/web/AyurvedaMiEspacio";
 import RecursosPage from "./app/recursos/RecursosPage";
-// import NuevosCursosPage from "./app/aprendizaje/NuevosCursosPage"; // ruta «Vídeos» de Materiales comentada
 import UserAccount from "./app/user/UserAccount";
 import TCMTest1 from "./components/espacio/components/TCMTest1";
 import TCMTest2 from "./components/espacio/components/TCMTest2";
@@ -142,6 +141,13 @@ import FitoterapiaEspacio from "./components/espacio/pages/FitoterapiaEspacio";
 import CelulasCuerpoPage from "./app/espacio/CelulasCuerpoPage";
 import { ExitIntentSubscribeModal } from "./components/global/ExitIntentSubscribeModal";
 import { MiniDiario } from "./components/global/MiniDiario";
+import RecuperarPassword from "./app/auth/RecuperarPassword";
+import AvisoLegal from "./app/legal/AvisoLegal";
+import Privacidad from "./app/legal/Privacidad";
+import Cookies from "./app/legal/Cookies";
+import Terminos from "./app/legal/Terminos";
+import AvisoCookies from "./components/global/AvisoCookies";
+import { aplicarConsentimientoGuardado } from "./components/global/cookies";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -157,25 +163,34 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 
 export default function App()
 {
+  // Si en una visita anterior se aceptaron las cookies analíticas, se cargan
+  // ahora. Si no, no se carga nada hasta que se pulse «Aceptar» en el aviso.
+  useEffect(() => { aplicarConsentimientoGuardado(); }, []);
+
   return (
     <>
     <ScrollToTop />
     <ExitIntentSubscribeModal />
     <MiniDiario />
+    <AvisoCookies />
     <Routes>
       <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
+      <Route path="/recuperar" element={<RecuperarPassword />} />
       <Route path="/auth/google/callback" element={<GoogleAuthCallback />} />
+
+      {/* ── Páginas legales (públicas, enlazadas desde el footer) ── */}
+      <Route path="/aviso-legal" element={<AvisoLegal />} />
+      <Route path="/privacidad" element={<Privacidad />} />
+      <Route path="/cookies" element={<Cookies />} />
+      <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
 
       <Route path="/productos" element={<Productos />} />
 
-      <Route path="/reels" element={<ReelsPage />} />
-      <Route path="/videos" element={<VideosPage />} />
-      <Route path="/videos/:videoId" element={<VideoPage />} />
       <Route path="/libros" element={<LibrosPage />} />
       <Route path="/libros/descargar" element={<DescargarLibroPage />} />
       <Route path="/contacto" element={<Contacto />} />
@@ -194,10 +209,13 @@ export default function App()
       <Route path="/metodo/astrologia/llamada" element={<PrivateRoute><MetodoAstrologiaLlamada /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
+      <Route path="/admin/login" element={<PrivateRoute><AdminLogin /></PrivateRoute>} />
       <Route path="/admin" element={<PrivateRoute><AdminHome /></PrivateRoute>} />
       <Route path="/admin/cursos" element={<PrivateRoute><AdminCursos /></PrivateRoute>} />
       <Route path="/admin/cursos/:id" element={<PrivateRoute><AdminCursoEditor /></PrivateRoute>} />
       <Route path="/admin/astrologia-textos" element={<PrivateRoute><AdminAstrologiaTextos /></PrivateRoute>} />
+      {/* antes de /admin/:disciplina, que si no se traga «accesos» como slug */}
+      <Route path="/admin/accesos" element={<PrivateRoute><AdminAccesos /></PrivateRoute>} />
       <Route path="/admin/astrologia/:userId" element={<PrivateRoute><AdminAstrologiaEditor /></PrivateRoute>} />
       <Route path="/admin/psicologia/:userId" element={<PrivateRoute><AdminPsicologiaLectura /></PrivateRoute>} />
       <Route path="/admin/ayurveda/:userId" element={<PrivateRoute><AdminAyurvedaLectura /></PrivateRoute>} />
@@ -309,7 +327,6 @@ export default function App()
 
       <Route path="/aprendizaje/aprendizajeHome" element={<AprendizajeHome />} />
       {/* Página de «Vídeos» de Materiales comentada a petición (el box también). */}
-      {/* <Route path="/aprendizaje/todosVideos" element={<NuevosCursosPage />} /> */}
       <Route path="/aprendizaje/cursos/:moduloId" element={<CursosModalidad />} />
       <Route path="/aprendizaje/herbario" element={<HerbarioPage />} />
       <Route path="/aprendizaje/herbario/favoritos" element={<PrivateRoute><HerbarioPage favoritesOnly /></PrivateRoute>} />
@@ -324,7 +341,7 @@ export default function App()
       <Route path="/recursos/:moduloId" element={<RecursosPage />} />
 
 
-      <Route path="*" element={<Welcome />} />
+      <Route path="*" element={<NoEncontrada />} />
     </Routes>
     </>
   );

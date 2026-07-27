@@ -45,7 +45,7 @@ export function PagoExitoModal({
   const Icon = DISCIPLINAS_CURSO.find((d) => d.nom === nom)?.Icon;
   return (
     <Modal isOpen={isOpen} onClose={onAceptar} size="lg" isCentered closeOnOverlayClick={false} closeOnEsc={false}>
-      <ModalOverlay bg="transparent" />
+      <ModalOverlay bg="rgba(0,0,0,0.6)" sx={{ backdropFilter: "blur(9px)", WebkitBackdropFilter: "blur(9px)" }} />
       <ModalContent
         position="relative"
         bg={bgColor}
@@ -67,10 +67,14 @@ export function PagoExitoModal({
                 : <Image src="/img/icono/life.png" h="36px" objectFit="contain" />}
               <Text
                 color={txtColor}
-                fontSize={{ base: "lg", md: "3xl" }}
+                // Siempre en UNA sola línea horizontal (nowrap); el tamaño se
+                // ajusta para que quepan también los títulos largos ("Pago de
+                // Medicina China realizado").
+                fontSize={{ base: "sm", md: "xl" }}
                 fontWeight="800"
-                letterSpacing="0.03em"
+                letterSpacing="0.02em"
                 textAlign="left"
+                whiteSpace="nowrap"
                 style={{ textShadow: ink }}
               >
                 {titulo}
@@ -107,6 +111,11 @@ export function PagoExitoModal({
                 cursor="pointer"
                 boxShadow={`0 4px 24px ${txtColor}55`}
                 transition="all 0.22s"
+                // Al volver del pago el modal enfoca el botón: quitamos el aro
+                // azul de foco (no debe verse "seleccionado").
+                outline="none"
+                _focus={{ boxShadow: `0 4px 24px ${txtColor}55`, outline: "none" }}
+                _focusVisible={{ boxShadow: `0 4px 24px ${txtColor}55`, outline: "none" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txtColor}88` }}
               >
                 Aceptar

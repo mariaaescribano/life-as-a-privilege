@@ -168,10 +168,8 @@ export default function MetodoNutricionAlimento() {
     if (!a) { navigate("/metodo/nutricion/alimentos", { replace: true }); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();

@@ -745,7 +745,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
               color={neuropsicologiaTxt}
               bgColor={neuropsicologiaBg}
               disciplinaNom={neuropsicologiaNom}
-              precio={60}
+              tipo="compania"
               titulo="¿Prefieres compañía?"
               subtitulo="Recorre el camino conmigo. Agenda una llamada · horario peninsular España"
             />

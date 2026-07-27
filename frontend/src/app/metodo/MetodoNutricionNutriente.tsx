@@ -13,7 +13,6 @@ import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlus
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
-import { glowSuave } from "../../components/metodo/FotoBox";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
@@ -77,7 +76,10 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
-         boxShadow={glowSuave(nutricionTxt)} {...rest}>
+         // Mismo glow que la cabecera (halo blanco + menta con el tinte de la
+         // disciplina), en vez del glow suave solo-color.
+         boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${nutricionTxt}1a, 0 0 48px ${nutricionTxt}10`}
+         {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
       <Box position="relative" zIndex={1}>{children}</Box>
     </Box>
@@ -120,10 +122,8 @@ export default function MetodoNutricionNutriente() {
     if (!n) { navigate("/metodo/nutricion/nutrientes", { replace: true }); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // Marcar este nutriente como REVISADO: el usuario está viendo sus subtipos.
         // Es el único sitio donde se marca (fuente única para principales y
@@ -273,7 +273,7 @@ export default function MetodoNutricionNutriente() {
                   </Text>
                   {(n.descripcion ?? [n.resumen]).map((parrafo, i) => (
                     <Text key={i} color={nutricionTxt} textAlign={{ base: "center", md: "left" }}
-                          fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.85" letterSpacing="0.02em"
+                          fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" letterSpacing="0.02em"
                           fontWeight="400" mt={i === 0 ? 0 : { base: 4, md: 5 }}>
                       {parrafo}
                     </Text>

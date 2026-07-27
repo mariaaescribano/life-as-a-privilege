@@ -99,11 +99,15 @@ const LINE = "1px solid rgba(255,255,255,0.22)";
 function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: number }) {
   const lastRowStart2 = total - ((total % 2) || 2);
   const [loading, setLoading] = useState(false);
+  // Igual que en el pago de las disciplinas: el PDF se entrega al instante, así
+  // que hay que recoger el consentimiento expreso y la renuncia al desistimiento
+  // ANTES de cobrar (art. 103.m TRLGDCU). Sin marcar, no se puede comprar.
+  const [acepta, setAcepta] = useState(false);
   const { ref, visible } = useReveal();
   const toast = useToast();
 
   const handleComprar = async () => {
-    if (loading) return;
+    if (loading || !acepta) return;
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/payment/libros/checkout`, {
@@ -207,10 +211,56 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
           </Text>
           <DescargarBtn
             onClick={handleComprar}
-            disabled={loading}
+            disabled={loading || !acepta}
             label={loading ? "Cargando…" : "Comprar"}
             icon="→"
           />
+        </Flex>
+
+        {/* Consentimiento previo al pago (ver comentario del estado `acepta`). */}
+        <Flex
+          align="flex-start"
+          gap={2.5}
+          mt={2}
+          cursor="pointer"
+          onClick={() => setAcepta((v) => !v)}
+          role="checkbox"
+          aria-checked={acepta}
+        >
+          <Flex
+            flexShrink={0}
+            mt="2px"
+            w="18px"
+            h="18px"
+            borderRadius="4px"
+            border={`1.5px solid rgba(255,255,255,${acepta ? 0.9 : 0.45})`}
+            bg={acepta ? "rgba(255,255,255,0.9)" : "transparent"}
+            align="center"
+            justify="center"
+            transition="all 0.18s"
+          >
+            {acepta && (
+              <Box as="svg" viewBox="0 0 24 24" w="12px" h="12px" fill="none" stroke="#008080" strokeWidth="3.5">
+                <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+              </Box>
+            )}
+          </Flex>
+          <Text
+            color="rgba(255,255,255,0.72)"
+            fontFamily="'EB Garamond', serif"
+            fontSize="xs"
+            lineHeight="1.55"
+          >
+            Acepto las{" "}
+            <Text
+              as="span"
+              textDecoration="underline"
+              onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
+              _hover={{ color: "white" }}
+            >
+              condiciones de compra
+            </Text>
+          </Text>
         </Flex>
       </Flex>
     </Flex>

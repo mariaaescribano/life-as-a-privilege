@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { AgendarLlamada } from "./AgendarLlamada";
+import { PRECIO_LLAMADA, type LlamadaTipo } from "./llamadaPrecios";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -24,7 +25,9 @@ interface BotonCompaniaProps {
   bgColor: string;
   /** Nombre de la disciplina, para pintar su fondo (DisciplinaBgLayer). */
   disciplinaNom: string;
-  /** Precio en € de la llamada. Por defecto 20. */
+  /** Tipo de llamada: decide el importe que cobra el backend. */
+  tipo?: LlamadaTipo;
+  /** Precio en € solo para MOSTRAR. Por defecto, el del tipo. */
   precio?: number;
   /** Texto del botón flotante. Por defecto «¿Quieres compañía?». */
   etiqueta?: string;
@@ -42,7 +45,8 @@ export function BotonCompania({
   color,
   bgColor,
   disciplinaNom,
-  precio = 20,
+  tipo = "estandar",
+  precio = PRECIO_LLAMADA[tipo],
   etiqueta = "¿Quieres compañía?",
   titulo = "¿Prefieres hacerlo acompañado?",
   texto = "Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.",
@@ -255,6 +259,7 @@ export function BotonCompania({
               color={color}
               bgColor={bgColor}
               disciplinaNom={disciplinaNom}
+              tipo={tipo}
               precio={precio}
               titulo={llamadaTitulo}
               subtitulo={llamadaSubtitulo}

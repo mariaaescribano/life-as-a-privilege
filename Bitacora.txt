@@ -23,11 +23,17 @@ USAR OBJ+ID : userId
 
 CONECTANDO CON SUPABASE
 
-postgresql://postgres:[YOUR-PASSWORD]@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres
+NUNCA escribas aquí la contraseña real: este fichero está en el repositorio y
+cualquiera con acceso al código (o al historial de git) la vería. Las cadenas de
+conexión van SIEMPRE en el .env local y en las variables de entorno de Render.
 
-postgresql://postgres:mariaaescribano@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres
+Formato (coge la cadena real del panel de Supabase → Settings → Database):
 
-Poner en env: DATABASE_URL="postgresql://postgres:TU_PASSWORD@db.lrdenqkwfrrsvhcuqpyy.supabase.co:5432/postgres"
+postgresql://postgres:[TU-PASSWORD]@db.[TU-PROYECTO].supabase.co:5432/postgres
+
+Poner en env: DATABASE_URL="postgresql://postgres:TU_PASSWORD@db.TU_PROYECTO.supabase.co:5432/postgres"
+
+Para migraciones usa el POOLER (IPv4); la conexión directa es solo IPv6.
 
 
 Si usas TypeORM

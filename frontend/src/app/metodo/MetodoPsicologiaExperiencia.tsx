@@ -555,7 +555,7 @@ export default function MetodoPsicologiaExperiencia() {
               color={neuropsicologiaTxt}
               bgColor={neuropsicologiaBg}
               disciplinaNom={neuropsicologiaNom}
-              precio={60}
+              tipo="compania"
               titulo="¿Prefieres compañía?"
               subtitulo="Recorre tu línea de Vida conmigo. Agenda una llamada · horario peninsular España"
             />

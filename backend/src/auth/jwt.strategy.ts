@@ -20,6 +20,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       userId: payload.sub,
       email: payload.email,
+      // Solo es true si el token se emitió tras verificar la contraseña de admin.
+      admin: payload.admin === true,
     };
   }
 }

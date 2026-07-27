@@ -19,6 +19,7 @@ import {
   CabalaIcon,
   noSelectSx,
 } from "../../GlobalVariables";
+import { CAJA_GLOW, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -67,13 +68,11 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
       cursor={bloqueado ? "default" : "pointer"}
       aria-disabled={bloqueado}
       opacity={bloqueado ? 0.78 : 1}
-      boxShadow={bloqueado
-        ? "inset 0 0 24px rgba(0,0,0,0.35)"
-        : `0 0 16px ${cabalaTxt}22, 0 0 40px ${cabalaTxt}14, inset 0 0 24px rgba(0,0,0,0.22)`}
+      boxShadow={CAJA_GLOW}
       transition="all 0.25s ease"
       _hover={bloqueado ? undefined : {
         transform: "translateY(-6px)",
-        boxShadow: `0 0 26px ${cabalaTxt}66, 0 0 64px ${cabalaTxt}33, inset 0 0 24px rgba(0,0,0,0.2)`,
+        boxShadow: CAJA_GLOW_HOVER,
       }}
       _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}
     >
@@ -83,7 +82,7 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
       <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
             p={{ base: 4, md: 5 }} h="100%">
         <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg="rgba(255,255,255,0.14)" boxShadow="0 4px 16px rgba(0,0,0,0.28)"
+             bg="rgba(255,255,255,0.14)" boxShadow={CAJA_GLOW}
              display="flex" alignItems="center" justifyContent="center">
           {curso.foto && !imgErr ? (
             <Image src={encodeURI(curso.foto)} alt={curso.titulo} w="100%" h="100%" objectFit="cover"

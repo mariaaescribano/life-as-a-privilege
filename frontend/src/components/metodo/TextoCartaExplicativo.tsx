@@ -243,7 +243,9 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         position="relative"
         borderRadius="xl"
         overflow="hidden"
-        boxShadow="none"
+        // Mismo glow que la cabecera (halo blanco + menta con el tinte de la
+        // disciplina), en vez de una sombra plana.
+        boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`}
         animation={`${fadeIn} 0.55s ease both`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
@@ -420,8 +422,12 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           >
             <Text
               color={color}
-              fontSize={{ base: "2xl", md: "3xl" }}
-              lineHeight="1.9"
+              // Un punto menos que el ComicViewer de Ilustraciones: aquí la caja
+              // va incrustada en la página (380px de alto), no a pantalla
+              // completa, así que a 3xl las viñetas largas obligaban a hacer
+              // demasiado scroll dentro del box.
+              fontSize={{ base: "xl", md: "2xl" }}
+              lineHeight="1.8"
               letterSpacing="0.02em"
               fontWeight="400"
               whiteSpace="pre-line"

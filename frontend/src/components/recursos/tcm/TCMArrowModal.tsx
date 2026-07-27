@@ -142,26 +142,6 @@ const TCMArrowModal = ({
             </Box>
           </Flex>
 
-          {/* ── Vídeo ── */}
-          {relation.video && (
-            <Box
-              w="100%"
-              aspectRatio={16 / 9}
-              borderRadius="xl"
-              overflow="hidden"
-              boxShadow="0 8px 28px rgba(0,0,0,0.30)"
-              mb={6}
-              bg="rgba(0,0,0,0.12)"
-            >
-              <iframe
-                style={{ width: "100%", height: "100%", border: "none" }}
-                src={`https://www.youtube.com/embed/${relation.video}`}
-                title={`${relation.fromName} → ${relation.toName} · TCM`}
-                allowFullScreen
-              />
-            </Box>
-          )}
-
           {/* ── Descripción ── */}
           <Box
             bg="rgba(0,0,0,0.06)"

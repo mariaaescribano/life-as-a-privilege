@@ -82,14 +82,15 @@ export default function SignIn() {
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("img", "/img/icono/noImg.png");
 
-        // Si la cuenta es admin, al continuar va al panel.
+        // Si el email es de admin, hace falta la contraseña de administración:
+        // lo mandamos a la pantalla de desbloqueo (estar en la lista no basta).
         try {
           const me = await axios.get(`${API_URL}/user/me`, {
             headers: { Authorization: `Bearer ${response.data.token}` },
           });
-          if (me.data?.is_admin) {
-            sessionStorage.setItem("isAdmin", "1");
-            if (next === "/home") destinoRef.current = "/admin";
+          sessionStorage.removeItem("isAdmin");
+          if (me.data?.admin_email && next === "/home") {
+            destinoRef.current = "/admin/login";
           }
         } catch { /* destino normal */ }
 

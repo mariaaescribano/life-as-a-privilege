@@ -17,13 +17,14 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Halo oscuro (marrón profundo) para leer el texto sobre el fondo de Cábala
 // (nebulosa con destellos).
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
-const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.14), 0 0 34px rgba(255,255,255,0.07), 0 0 20px ${cabalaTxt}22, 0 0 48px ${cabalaTxt}14`;
 
 // Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
 const EyeIcon = () => (
@@ -40,7 +41,6 @@ export default function MetodoCabala() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   const intro = useIntroComic("metodo-cabala"); // cómic del Origen, 1ª vez
 
@@ -52,21 +52,12 @@ export default function MetodoCabala() {
 
     (async () => {
       try {
-        // ¿Modo test de pagos habilitado? (nos deja fake-pay sin la cadena previa).
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-        setTestPagos(testEnabled);
-
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Nutrición (6ª disciplina). En modo
-        // test dejamos ver el pago igualmente (el fake-pay desbloquea la cadena).
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/home"); return; }
+        // Prerrequisito: hay que haber pagado Nutrición (6ª disciplina).
+        if (!me.data?.nutricion_suscrito) { navigate("/home"); return; }
 
         const cabalaSuscrito = !!me.data?.cabala_suscrito;
         setSuscrito(cabalaSuscrito);
@@ -88,40 +79,13 @@ export default function MetodoCabala() {
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/cabala/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("cabala");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoError(
-        status === 403
-          ? "Necesitas completar el pago de Nutrición antes de adquirir la Cábala."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoLoading(false);
-    }
-  };
-
-  const testUnlock = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "cabala" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setSuscrito(true);
-      setPagoOpen(false);
-      void intro.checkAndOpen();
-    } catch (err: any) {
-      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
@@ -224,7 +188,6 @@ export default function MetodoCabala() {
         onPagar={pagarCabala}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? testUnlock : undefined}
       />
 
       <IndiceCabala />

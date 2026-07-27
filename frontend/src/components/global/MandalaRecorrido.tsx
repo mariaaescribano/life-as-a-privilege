@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { recorridoContenido, nombreEnMapa, type VideoIntro } from "../../data/recorridoContenido";
+import { PRECIO_DISCIPLINA } from "../metodo/pagoDisciplinaLink";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -152,6 +153,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + tcmNomLink,
     enabled: false,
+    video: "/videos/tcm.mp4",
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
   },
   {
@@ -163,6 +165,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + fisiologiaNom,
     enabled: false,
+    video: "/videos/fisiologia.mp4",
     renderIcon: (size) => <FisiologiaIcon size={size} />,
   },
   {
@@ -174,6 +177,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + nutricionNomLink,
     enabled: false,
+    video: "/videos/nutricion.mp4",
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
   },
   {
@@ -185,6 +189,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + cabalaNom,
     enabled: false,
+    video: "/videos/cabala.mp4",
     renderIcon: (size) => <CabalaIcon size={size} />,
   },
   {
@@ -930,6 +935,9 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
             key={disc.video}
             src={disc.video}
             autoPlay
+            // Los vídeos son mudos, pero llevan pista de audio en silencio y sin
+            // `muted` Chrome/Safari bloquean el autoPlay (se abrían parados).
+            muted
             controls
             playsInline
             w="100%"
@@ -1071,56 +1079,108 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
           ))}
         </Flex>
 
-        {/* Botón: ver una muestra de la plataforma (abre el popup del vídeo).
-            Si la disciplina aún no tiene vídeo, se muestra un aviso discreto. */}
-        {disc.video ? (
-          <Flex
-            as="button"
-            onClick={onVerVideo}
-            align="center"
-            justify="center"
-            gap={2.5}
-            mt={{ base: 1, md: 2 }}
-            alignSelf={{ base: "stretch", md: "flex-start" }}
-            px={{ base: 5, md: 6 }}
-            py={{ base: "10px", md: "11px" }}
-            borderRadius="full"
-            border={`1.5px solid ${accent}aa`}
-            bg={`${accent}1f`}
-            color={accent}
-            cursor="pointer"
-            boxShadow={`0 0 14px ${accent}33, 0 2px 12px rgba(0,0,0,0.25)`}
-            sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
-            _hover={{ bg: `${accent}33`, borderColor: accent, boxShadow: `0 0 22px ${accent}55, 0 4px 16px rgba(0,0,0,0.3)`, transform: "translateY(-2px)" }}
-            _active={{ transform: "translateY(0) scale(0.98)" }}
-            transition="all 0.2s ease"
-          >
-            <Box as="span" fontSize={{ base: "sm", md: "md" }} lineHeight="1" style={{ textShadow: textGlow }}>▶</Box>
+        {/* Fila de cierre: a la izquierda el botón (ver una muestra de la
+            plataforma, abre el popup del vídeo); abajo a la derecha, el precio
+            de la disciplina. Así el «cuánto cuesta» sale justo donde se decide,
+            sin necesidad de un box de precio aparte. */}
+        <Flex
+          mt={{ base: 1, md: 2 }}
+          direction={{ base: "column", md: "row" }}
+          align={{ base: "stretch", md: "flex-end" }}
+          justify="space-between"
+          gap={{ base: 4, md: 5 }}
+          w="100%"
+        >
+          {disc.video ? (
+            <Flex
+              as="button"
+              onClick={onVerVideo}
+              align="center"
+              justify="center"
+              gap={2.5}
+              alignSelf={{ base: "stretch", md: "flex-end" }}
+              px={{ base: 5, md: 6 }}
+              py={{ base: "10px", md: "11px" }}
+              borderRadius="full"
+              border={`1.5px solid ${accent}aa`}
+              bg={`${accent}1f`}
+              color={accent}
+              cursor="pointer"
+              boxShadow={`0 0 14px ${accent}33, 0 2px 12px rgba(0,0,0,0.25)`}
+              sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
+              _hover={{ bg: `${accent}33`, borderColor: accent, boxShadow: `0 0 22px ${accent}55, 0 4px 16px rgba(0,0,0,0.3)`, transform: "translateY(-2px)" }}
+              _active={{ transform: "translateY(0) scale(0.98)" }}
+              transition="all 0.2s ease"
+            >
+              <Box as="span" fontSize={{ base: "sm", md: "md" }} lineHeight="1" style={{ textShadow: textGlow }}>▶</Box>
+              <Text
+                fontFamily="'EB Garamond', serif"
+                fontWeight="600"
+                fontSize={{ base: "sm", md: "md" }}
+                letterSpacing="0.03em"
+                textShadow={textGlow}
+              >
+                {disc.videoIntro.boton ?? "Ver el recorrido por dentro"}
+              </Text>
+            </Flex>
+          ) : (
             <Text
+              color={accent}
               fontFamily="'EB Garamond', serif"
-              fontWeight="600"
+              fontStyle="italic"
               fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.03em"
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+              opacity={0.8}
+              alignSelf={{ base: "center", md: "flex-end" }}
               textShadow={textGlow}
             >
-              {disc.videoIntro.boton ?? "Ver el recorrido por dentro"}
+              Vídeo próximamente
+            </Text>
+          )}
+
+          {/* Precio de la disciplina (sale de pagoDisciplinaLink, el mismo sitio
+              del que bebe el box de pago: web y cobro no se desincronizan). */}
+          <Flex
+            direction="column"
+            align={{ base: "center", md: "flex-end" }}
+            gap={0.5}
+            flexShrink={0}
+          >
+            <Flex align="baseline" gap={2}>
+              <Text
+                color={accent}
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "3xl", md: "4xl" }}
+                lineHeight="1"
+                letterSpacing="0.02em"
+                textShadow={textGlow}
+              >
+                {PRECIO_DISCIPLINA}
+              </Text>
+              <Text
+                color={accent}
+                fontFamily="'EB Garamond', serif"
+                fontStyle="italic"
+                fontSize={{ base: "sm", md: "md" }}
+                opacity={0.9}
+                textShadow={textGlow}
+              >
+                por disciplina
+              </Text>
+            </Flex>
+            <Text
+              color={accent}
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "xs", md: "sm" }}
+              opacity={0.72}
+              textShadow={textGlow}
+            >
+              Pago único · tuya para siempre
             </Text>
           </Flex>
-        ) : (
-          <Text
-            mt={{ base: 1, md: 2 }}
-            color={accent}
-            fontFamily="'EB Garamond', serif"
-            fontStyle="italic"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.12em"
-            textTransform="uppercase"
-            opacity={0.8}
-            textShadow={textGlow}
-          >
-            Vídeo próximamente
-          </Text>
-        )}
+        </Flex>
       </Flex>
     </Flex>
   );

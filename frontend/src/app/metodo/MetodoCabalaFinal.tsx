@@ -20,11 +20,12 @@ import {
   CABALA_SENDEROS, NOMBRE_SEFIRA, senderoCompleto, senderosContenidoCompleto, puntuacionSendero, interpretacionSendero,
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
-const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
+// El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
 const CAJA_OVERLAY = `${cabalaBg}cc`;
 
 const Caja = ({ children }: { children: React.ReactNode }) => (
@@ -189,8 +190,8 @@ export default function MetodoCabalaFinal() {
                  display="inline-flex" alignItems="center" gap={2.5} px={{ base: 7, md: 8 }} py={{ base: 2.5, md: 3 }}
                  borderRadius="full" bg={cabalaTxt} color={cabalaBg} fontWeight="800" fontSize={{ base: "sm", md: "md" }}
                  letterSpacing="0.06em" cursor="pointer" transition="all 0.2s"
-                 boxShadow={`0 0 20px ${cabalaTxt}66, 0 4px 16px rgba(0,0,0,0.3)`}
-                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 30px ${cabalaTxt}99, 0 6px 22px rgba(0,0,0,0.35)` }}>
+                 boxShadow={CAJA_GLOW}
+                 _hover={{ transform: "translateY(-2px)", boxShadow: CAJA_GLOW_HOVER }}>
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="20px" h="20px" fill="currentColor">
                 <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
               </Box>

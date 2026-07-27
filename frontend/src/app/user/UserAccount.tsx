@@ -57,6 +57,10 @@ export default function UserAccount() {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [delPassword, setDelPassword] = useState("");
+  const [delWord, setDelWord] = useState("");
+  const [delError, setDelError] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
@@ -126,17 +130,40 @@ export default function UserAccount() {
     navigate("/welcome");
   };
 
+  // Cierra el pop-up y limpia los campos de confirmación.
+  const cerrarConfirmDelete = () => {
+    setConfirmDelete(false);
+    setDelPassword("");
+    setDelWord("");
+    setDelError("");
+  };
+
+  // Para eliminar hace falta: contraseña + escribir exactamente «BORRAR».
+  const puedeBorrar = delPassword.trim().length > 0 && delWord.trim().toUpperCase() === "BORRAR";
+
   const handleDelete = async () => {
+    if (!puedeBorrar || deleting) return;
+    setDelError("");
+    setDeleting(true);
     try {
-      await fetch(`${API_URL}/user/${userId}`, {
+      const res = await fetch(`${API_URL}/user/${userId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ password: delPassword.trim() }),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.message || "Error al eliminar la cuenta");
+      }
       sessionStorage.clear();
       localStorage.clear();
       navigate("/welcome");
-    } catch {
-      setError("Error al eliminar la cuenta");
+    } catch (err: any) {
+      setDelError(err?.message || "Error al eliminar la cuenta");
+      setDeleting(false);
     }
   };
 
@@ -451,7 +478,7 @@ export default function UserAccount() {
           bg="rgba(0,0,0,0.55)"
           backdropFilter="blur(6px)"
           px={5}
-          onClick={() => setConfirmDelete(false)}
+          onClick={cerrarConfirmDelete}
         >
           <Flex
             direction="column"
@@ -496,33 +523,71 @@ export default function UserAccount() {
               Todos tus datos se borrarán y no podrás recuperarlos. No se devolverá lo abonado. No se guardará tu información personalizada.
             </Text>
 
+            {/* Confirmación: contraseña + escribir la palabra BORRAR */}
+            <VStack w="100%" spacing={4} align="stretch">
+              <Box>
+                <Text color="rgba(255,225,225,0.82)" fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
+                  TU CONTRASEÑA
+                </Text>
+                <Input
+                  type="password"
+                  value={delPassword}
+                  onChange={(e) => { setDelPassword(e.target.value); setDelError(""); }}
+                  placeholder="Contraseña"
+                  autoComplete="current-password"
+                  {...inputStyles}
+                />
+              </Box>
+              <Box>
+                <Text color="rgba(255,225,225,0.82)" fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
+                  ESCRIBE <Box as="span" fontWeight="800" color="white">BORRAR</Box> PARA CONFIRMAR
+                </Text>
+                <Input
+                  type="text"
+                  value={delWord}
+                  onChange={(e) => { setDelWord(e.target.value); setDelError(""); }}
+                  placeholder="BORRAR"
+                  {...inputStyles}
+                />
+              </Box>
+            </VStack>
+
+            {delError && (
+              <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
+                {delError}
+              </Text>
+            )}
+
             <Flex gap={4} pt={4} w="100%" justify="center" wrap="wrap">
-              {/* Aceptar (discreto: acción destructiva) */}
+              {/* Aceptar (discreto: acción destructiva). Deshabilitado hasta que
+                  la contraseña esté escrita y la palabra sea exactamente BORRAR. */}
               <Text
                 as="button"
                 onClick={handleDelete}
+                disabled={!puedeBorrar || deleting}
                 color="rgba(255,225,225,0.82)"
                 fontSize="md"
                 fontWeight="600"
                 letterSpacing="0.08em"
                 textTransform="uppercase"
                 bg="rgba(0,0,0,0.2)"
-                cursor="pointer"
+                cursor={puedeBorrar && !deleting ? "pointer" : "not-allowed"}
+                opacity={puedeBorrar && !deleting ? 1 : 0.4}
                 px={7}
                 py={3}
                 borderRadius="full"
                 border="1px solid rgba(255,200,200,0.32)"
                 textShadow="0 0 8px rgba(0,0,0,0.4)"
-                _hover={{ color: "white", bg: "rgba(0,0,0,0.32)", borderColor: "rgba(255,210,210,0.6)" }}
+                _hover={puedeBorrar && !deleting ? { color: "white", bg: "rgba(0,0,0,0.32)", borderColor: "rgba(255,210,210,0.6)" } : undefined}
                 transition="all 0.22s ease"
               >
-                Aceptar
+                {deleting ? "Eliminando…" : "Aceptar"}
               </Text>
 
               {/* Cancelar (destacado) */}
               <Flex
                 as="button"
-                onClick={() => setConfirmDelete(false)}
+                onClick={cerrarConfirmDelete}
                 align="center"
                 justify="center"
                 px={10}

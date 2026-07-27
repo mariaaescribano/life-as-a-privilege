@@ -23,11 +23,12 @@ import {
 import { CABALA_TEST, ESCALA, NUM_PREGUNTAS, type DimensionTest } from "../../components/metodo/cabalaTest";
 import { sefirotContenidoCompleto } from "../../components/metodo/cabalaDiagnostico";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
-const CAJA_GLOW = `0 4px 20px rgba(0,0,0,0.22), 0 0 22px ${cabalaTxt}44`;
+// El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
 
 // Puerta de progreso: si es true, no se puede pasar a la siguiente sefirá hasta
 // completar TODO lo que se pide en la dimensión (preguntas de reflexión +
@@ -654,7 +655,7 @@ export default function MetodoCabalaSefira() {
           {nIntro > 0 && (
             <Reveal direction="up" distance={24} scaleFrom={0.97} delay={0.12} duration={0.7} w="100%">
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                   boxShadow={`0 0 16px rgba(255,255,255,0.12), 0 0 20px ${cabalaTxt}22`}>
+                   boxShadow={CAJA_GLOW}>
                 <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
                 <Flex position="relative" zIndex={1} align="center" gap={{ base: 3, md: 5 }}
                       px={{ base: 4, md: 8 }} py={{ base: 8, md: 12 }} minH={{ base: "220px", md: "260px" }}>

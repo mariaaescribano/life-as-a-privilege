@@ -274,18 +274,10 @@ export default function MetodoFisiologiaParticulas() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        // ¿Modo test de pagos? Nos deja entrar aunque la columna fisiologia_suscrito
-        // aún no exista en la BD (ALTER TABLE pendiente) — como en la página de entrada.
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
         try {
           const r = await axios.get(`${API_URL}/metodo-fisiologia/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },

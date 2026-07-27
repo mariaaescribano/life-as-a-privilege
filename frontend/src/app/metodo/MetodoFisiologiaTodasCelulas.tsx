@@ -1236,16 +1236,10 @@ export default function MetodoFisiologiaTodasCelulas() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!me.data?.fisiologia_suscrito && !testEnabled) { navigate("/metodo/fisiologia"); return; }
+        if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
 
         // Cargamos las células ya descubiertas para retomar el camino.
         try {

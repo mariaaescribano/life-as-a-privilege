@@ -112,23 +112,6 @@ function CabalaModal2({
             {sub.nom}
           </Text>
 
-          {/* Vídeo */}
-          {sub.video && (
-            <Box
-              w="100%" aspectRatio={16 / 9}
-              borderRadius="xl" overflow="hidden"
-              boxShadow={`0 8px 28px rgba(0,0,0,0.55), 0 0 20px ${GOLD}22`}
-              mb={7}
-            >
-              <iframe
-                style={{ width: "100%", height: "100%", border: "none" }}
-                src={`https://www.youtube.com/embed/${sub.video}`}
-                title={sub.nom}
-                allowFullScreen
-              />
-            </Box>
-          )}
-
           {/* Descripción */}
          <Box
                     w="100%"

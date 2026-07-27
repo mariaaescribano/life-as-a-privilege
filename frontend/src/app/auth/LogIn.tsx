@@ -100,14 +100,16 @@ export default function LogIn() {
             : "/img/icono/noImg.png"
         );
 
-        // Si la cuenta es admin, redirige al panel en vez de a /home.
+        // Si el email es de admin, aún NO está desbloqueado (hace falta la
+        // contraseña de administración): lo mandamos a la pantalla de desbloqueo.
+        // Estar en la lista de emails ya no da acceso por sí solo.
         try {
           const me = await axios.get(`${API_URL}/user/me`, {
             headers: { Authorization: `Bearer ${response.data?.token}` },
           });
-          if (me.data?.is_admin) {
-            sessionStorage.setItem("isAdmin", "1");
-            if (next === "/home") destinoRef.current = "/admin";
+          sessionStorage.removeItem("isAdmin");
+          if (me.data?.admin_email && next === "/home") {
+            destinoRef.current = "/admin/login";
           }
         } catch { /* si falla, destino normal */ }
 
@@ -305,6 +307,24 @@ export default function LogIn() {
                 />
               )}
             </Flex>
+          </Flex>
+
+          {/* Link a recuperar contraseña */}
+          <Flex justify="center" pt={2}>
+            <Text
+              as="button"
+              onClick={() => navigate("/recuperar")}
+              color="rgba(255,255,255,0.78)"
+              fontSize="sm"
+              letterSpacing="0.06em"
+              bg="transparent"
+              cursor="pointer"
+              textShadow="0 0 8px rgba(255,255,255,0.35)"
+              _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
+              transition="all 0.22s ease"
+            >
+              ¿Has olvidado tu contraseña?
+            </Text>
           </Flex>
 
           {/* Link a registrarse */}

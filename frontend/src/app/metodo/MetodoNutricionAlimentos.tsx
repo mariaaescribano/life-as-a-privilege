@@ -13,7 +13,7 @@ import { Reveal, Float } from "../../components/global/Reveal";
 import { NutricionIlustracionesModal } from "../../components/metodo/NutricionIlustracionesModal";
 import { NutricionMaterialesModal } from "../../components/metodo/NutricionMaterialesModal";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
-import { glowSuave, glowSuaveHover } from "../../components/metodo/FotoBox";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
@@ -50,12 +50,13 @@ function BibliotecaCard({
         borderRadius="2xl"
         cursor="pointer"
         fontFamily="'EB Garamond', serif"
-        boxShadow={glowSuave(nutricionTxt)}
+        boxShadow={glowHeader(nutricionTxt)}
         transition="all 0.2s ease"
-        _hover={{ transform: "translateY(-4px)", boxShadow: glowSuaveHover(nutricionTxt) }}
+        _hover={{ transform: "translateY(-4px)", boxShadow: glowHeader(nutricionTxt) }}
         _active={{ transform: "translateY(-1px)" }}
       >
-        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}4d`} />
+        {/* NutriImg de fondo, clara y nítida (sin velo ni difuminado). */}
+        <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
 
         <Flex position="relative" zIndex={1} direction="column" align="center" justify="center"
               gap={{ base: 3, md: 3.5 }} px={{ base: 6, md: 7 }} py={{ base: 8, md: 10 }} h="100%" textAlign="center">
@@ -120,10 +121,8 @@ export default function MetodoNutricionAlimentos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        let testEnabled = false;
-        try { const t = await axios.get(`${API_URL}/payment/test/enabled`); testEnabled = !!t.data?.enabled; } catch { /* */ }
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!me.data?.nutricion_suscrito && !testEnabled) { navigate("/metodo/nutricion"); return; }
+        if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }
     })();

@@ -11,6 +11,12 @@ import { culturaNom, nutricionNom } from "../../GlobalVariables";
 export const glowSuave = (c: string): string =>
   `0 0 14px ${c}26, 0 0 32px ${c}14`;
 
+// Glow de la CABECERA (halo blanco + menta suave con el tinte de la disciplina).
+// Es el mismo que usa MetodoStepHeader; se centraliza aquí para que TODAS las
+// cajas puedan llevar glow (nunca sombra plana) y queden a juego con el header.
+export const glowHeader = (c: string): string =>
+  `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${c}1a, 0 0 48px ${c}10`;
+
 // Variante más intensa para el hover.
 export const glowSuaveHover = (c: string): string =>
   `0 0 20px ${c}3a, 0 0 42px ${c}1e`;
@@ -46,6 +52,7 @@ export function FotoBox({
   emoji,
   colorTint,
   aspect = 1,
+  glow,
 }: {
   titulo: React.ReactNode;
   foto?: string;
@@ -66,6 +73,9 @@ export function FotoBox({
   colorTint?: string;
   /** Relación de aspecto de la imagen (por defecto cuadrada). */
   aspect?: number;
+  /** Glow a medida (sustituye al glowSuave por defecto). P.ej. el glow de la
+   *  cabecera. Se usa también en hover para que no cambie a otro tono. */
+  glow?: string;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const hayFoto = !!foto && !imgErr;
@@ -89,10 +99,10 @@ export function FotoBox({
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
       border={sinLineas ? "none" : (visto ? `1px solid ${tinta}aa` : `1px solid ${tinta}33`)}
-      boxShadow={visto ? glowSuaveVisto(tinta) : glowSuave(tinta)}
+      boxShadow={glow ?? (visto ? glowSuaveVisto(tinta) : glowSuave(tinta))}
       transition="all 0.22s ease"
       _hover={{ transform: "translateY(-4px)", ...(sinLineas ? {} : { borderColor: `${tinta}88` }),
-                boxShadow: glowSuaveHover(tinta) }}
+                boxShadow: glow ?? glowSuaveHover(tinta) }}
       _active={{ transform: "translateY(-1px)" }}
     >
       {/* Fondo temático de la disciplina (se ve en el pie, bajo el título). */}

@@ -20,6 +20,7 @@ import {
   fisiologiaNom,
   fisiologiaTxt,
   FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
+import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Halo oscuro para leer el texto claro sobre el fondo morado de Fisiología.
 const INK_SHADOW = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
@@ -32,7 +33,6 @@ export default function MetodoFisiologia() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [testPagos, setTestPagos] = useState(false);
   const intro = useIntroComic("metodo-fisiologia"); // cómic del Origen «según la ciencia», 1ª vez
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
@@ -44,20 +44,13 @@ export default function MetodoFisiologia() {
 
     (async () => {
       try {
-        let testEnabled = false;
-        try {
-          const t = await axios.get(`${API_URL}/payment/test/enabled`);
-          testEnabled = !!t.data?.enabled;
-        } catch { /* sin modo test */ }
-        setTestPagos(testEnabled);
 
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Medicina China (4ª disciplina). En
-        // modo test dejamos ver el pago igualmente (el fake-pay desbloquea la cadena).
-        if (!me.data?.tcm_suscrito && !testEnabled) { navigate("/home"); return; }
+        // Prerrequisito: hay que haber pagado Medicina China (4ª disciplina).
+        if (!me.data?.tcm_suscrito) { navigate("/home"); return; }
 
         const fisioSuscrito = !!me.data?.fisiologia_suscrito;
         setSuscrito(fisioSuscrito);
@@ -79,47 +72,18 @@ export default function MetodoFisiologia() {
     if (!token) { navigate("/welcome"); return; }
     setPagoLoading(true);
     setPagoError(null);
-    try {
-      const res = await axios.post(
-        `${API_URL}/payment/fisiologia/checkout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.url) { window.location.href = res.data.url; return; }
-      setPagoError("No se pudo obtener la URL de pago. Inténtalo de nuevo.");
+    // Todas las disciplinas se cobran por separado, pero comparten el mismo
+    // Payment Link: el scope y el userId viajan en el client_reference_id
+    // para que, al volver a /home, el verify sepa qué desbloquear.
+    const errPago = irAPagoDisciplina("fisiologia");
+    if (errPago) {
+      setPagoError(errPago);
       setPagoLoading(false);
-    } catch (err: any) {
-      const status = err?.response?.status;
-      setPagoError(
-        status === 403
-          ? "Necesitas completar el pago de Medicina China antes de adquirir la Fisiología."
-          : err?.response?.data?.message || err?.message || "Error desconocido",
-      );
-      setPagoLoading(false);
-    }
-  };
-
-  const testUnlock = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    try {
-      await axios.post(
-        `${API_URL}/payment/test/unlock`,
-        { scope: "fisiologia" },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      setSuscrito(true);
-      setPagoOpen(false);
-      void intro.checkAndOpen();
-    } catch (err: any) {
-      setPagoError(err?.response?.data?.message || "No se pudo activar el modo test.");
     }
   };
 
   const comenzar = () => {
-    // En modo test dejamos avanzar aunque la BD no reporte la suscripción todavía
-    // (columna fisiologia_suscrito pendiente de crear).
-    if (!suscrito && !testPagos) { setPagoOpen(true); return; }
+    if (!suscrito) { setPagoOpen(true); return; }
     navigate("/metodo/fisiologia/niveles");
   };
 
@@ -213,7 +177,6 @@ export default function MetodoFisiologia() {
         onPagar={pagarFisiologia}
         loading={pagoLoading}
         error={pagoError}
-        onTest={testPagos ? testUnlock : undefined}
       />
     </Box>
   );

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 import { ZODIAC_SIGNS, cuerpoByKey, type CuerpoKey } from "../astrologiaData";
@@ -27,6 +27,24 @@ const R_ZODIAC_INNER = 2.85;
 const R_HOUSES_OUTER = 2.82;
 const R_HOUSES_INNER = 2.35;
 const R_PLANETS = 2.05;
+
+// Distancia de cámara: a fov 50 la media-altura visible = z·tan(25°). El anillo
+// zodiacal llega a 3.4, así que con z≈7.3 (media-altura ≈ 3.40) la rueda LLENA
+// el círculo justo hasta el borde, sin recortarse en 4 lados planos (que pasa si
+// z es menor) ni dejar hueco/«segundo círculo» (que pasa si z es mayor).
+const CAM_Z = 7.3;
+
+// Aplica la posición de la cámara de forma REACTIVA. La prop `camera` de <Canvas>
+// solo se lee al montar, así que un cambio de CAM_Z no se reflejaba con HMR (y
+// tampoco si se quisiera animar). Este rig la fija en un efecto → siempre aplica.
+function CameraRig({ z }: { z: number }) {
+  const camera = useThree((s) => s.camera);
+  useEffect(() => {
+    camera.position.set(0, 0, z);
+    camera.updateProjectionMatrix();
+  }, [camera, z]);
+  return null;
+}
 
 export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas, completados }: CartaAstral3DProps) {
   // Solo planetas que REALMENTE se dibujan (tienen glifo). Excluimos el
@@ -266,8 +284,13 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
       {/* ── Círculo de la carta (va ARRIBA; los controles debajo vía order) ── */}
       <Box
         order={0}
-        w={{ base: "100%", md: "80%" }}
-        maxW="680px"
+        // Antes 80% en desktop: dejaba el círculo pequeño dentro de la caja.
+        // Ahora 90%: la rueda es un 10% más pequeña que el ancho disponible, y
+        // encoge el DISCO ENTERO (fondo + halo + rueda). Ojo: no escalar solo la
+        // rueda por dentro del Canvas — el disco se quedaría del tamaño de antes
+        // y aparecería un aro vacío alrededor (el feo "doble círculo").
+        w="90%"
+        maxW="612px"
         mx="auto"
         mt={0}
         position="relative"
@@ -282,24 +305,25 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           // Interior 15% más oscuro que el fondo (capa negra al 15% sobre el SpaceBg,
           // visible por la transparencia del Canvas).
           background: "rgba(0,0,0,0.15)",
+          // Sin `border`: era el "segundo círculo" que se veía por fuera del
+          // anillo zodiacal. Dejamos solo el glow suave (halo, no una línea).
           boxShadow: `0 0 40px ${color}33, 0 0 80px ${color}22, inset 0 0 60px rgba(255,255,255,0.05)`,
-          border: `1px solid ${color}55`,
         }}
       >
-        {/* Capa absoluta que rellena el cuadrado (el ::before ocupa el flujo). */}
-        <Box position="absolute" inset={0}>
+        {/* Capa absoluta que rellena el cuadrado (el ::before ocupa el flujo).
+            clipPath circular OBLIGATORIO: el <canvas> WebGL se compone en su
+            propia capa GPU y NO respeta el overflow:hidden + border-radius del
+            padre, así que las esquinas del cuadrado (estrellas del Starfield y
+            bloom) asomaban como una "luz cuadrada". clip-path sí recorta capas
+            compuestas → el canvas queda perfectamente circular. */}
+        <Box position="absolute" inset={0}
+             sx={{ clipPath: "circle(50% at 50% 50%)", borderRadius: "9999px", overflow: "hidden", transform: "translateZ(0)" }}>
         <Canvas
-          // Cámara ATRÁS lo justo para que TODA la rueda quepa en el círculo:
-          // a fov 50, la media-altura visible = z·tan(25°). El anillo zodiacal
-          // llega a R_ZODIAC_OUTER (3.4), así que con z=7 (media-altura ≈ 3.26)
-          // el anillo se salía del encuadre y se recortaba con 4 lados planos
-          // (la "luz cuadrada") y los aspectos parecían irse fuera. Con z=8.6
-          // (media-altura ≈ 4.0) el anillo queda al ~85% del radio: dentro del
-          // recorte circular, sin recortes y sin que el bloom toque los bordes.
-          camera={{ position: [0, 0, 8.6], fov: 50 }}
+          camera={{ position: [0, 0, CAM_Z], fov: 50 }}
           dpr={[1, 2]}
           gl={{ antialias: true, alpha: true }}
         >
+          <CameraRig z={CAM_Z} />
           <ambientLight intensity={0.3} />
 
           <Starfield />

@@ -3,20 +3,222 @@ import Stripe from 'stripe';
 import { UserService } from '../user/user.service';
 import { BookingService } from '../booking/booking.service';
 import { findLibroPago } from './libros-pago.data';
+import { findLlamadaPago } from './llamadas-pago.data';
+import { MailService } from '../mail/mail.service';
+
+/** Los ocho scopes de «El Recorrido», en orden. */
+export type DisciplinaScope =
+  | 'metodo' | 'psicologia' | 'ayurveda' | 'tcm'
+  | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura';
+
+/**
+ * Tabla única de disciplinas: para cada scope, qué columna hay que tener ya
+ * pagada (cadena de prerrequisitos) y con qué método se marca la suscripción.
+ * La usa el verify del Payment Link compartido, que recibe el scope dentro del
+ * `client_reference_id` en vez de tener un endpoint por disciplina.
+ */
+const DISCIPLINAS: Record<
+  DisciplinaScope,
+  { nombre: string; requiere: string | null; requiereNom: string | null; marcar: keyof UserService }
+> = {
+  metodo:     { nombre: 'Astrología',     requiere: null,                  requiereNom: null,             marcar: 'marcarSuscritoMetodo' },
+  psicologia: { nombre: 'Psicología',     requiere: 'metodo_suscrito',     requiereNom: 'Astrología',     marcar: 'marcarSuscritoPsicologia' },
+  ayurveda:   { nombre: 'Ayurveda',       requiere: 'psicologia_suscrito', requiereNom: 'Psicología',     marcar: 'marcarSuscritoAyurveda' },
+  tcm:        { nombre: 'Medicina China', requiere: 'ayurveda_suscrito',   requiereNom: 'Ayurveda',       marcar: 'marcarSuscritoTcm' },
+  fisiologia: { nombre: 'Fisiología',     requiere: 'tcm_suscrito',        requiereNom: 'Medicina China', marcar: 'marcarSuscritoFisiologia' },
+  nutricion:  { nombre: 'Nutrición',      requiere: 'fisiologia_suscrito', requiereNom: 'Fisiología',     marcar: 'marcarSuscritoNutricion' },
+  cabala:     { nombre: 'Cábala',         requiere: 'nutricion_suscrito',  requiereNom: 'Nutrición',      marcar: 'marcarSuscritoCabala' },
+  cultura:    { nombre: 'Cultura',        requiere: 'cabala_suscrito',     requiereNom: 'Cábala',         marcar: 'marcarSuscritoCultura' },
+};
 
 @Injectable()
 export class PaymentService {
   private readonly stripe: Stripe;
 
+  // Si es `true`, cada disciplina exige haber pagado la anterior de la cadena
+  // (Astrología → Psicología → … → Cultura). En `false` se puede pagar cualquier
+  // disciplina directamente, sin orden. Poner en `true` para restaurar el camino.
+  private static readonly PAGO_SECUENCIAL = true;
+
   constructor(
     private readonly userService: UserService,
     private readonly bookingService: BookingService,
+    private readonly mailService: MailService,
   ) {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) {
       throw new Error('STRIPE_SECRET_KEY no está configurado en el entorno');
     }
     this.stripe = new Stripe(key);
+  }
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // WEBHOOK DE STRIPE
+  //
+  // Los `verify*` de más abajo solo se ejecutan si el navegador vuelve al
+  // `success_url`. Si la persona cierra la pestaña, se queda sin cobertura o el
+  // pago se confirma más tarde (transferencias, 3-D Secure lento), el cobro se
+  // hace igual y nunca se le daba el acceso: dinero cobrado sin servicio.
+  //
+  // El webhook cierra ese agujero: Stripe nos avisa servidor-a-servidor de cada
+  // pago completado y aquí se concede lo comprado, pase lo que pase con el
+  // navegador. Los `verify*` siguen existiendo para que el desbloqueo sea
+  // inmediato al volver; ambos caminos son idempotentes, así que no importa cuál
+  // llegue primero ni que lleguen los dos.
+  // ═════════════════════════════════════════════════════════════════════════
+
+  /** Eventos que significan «este pago ya es firme». */
+  private static readonly EVENTOS_PAGADOS = [
+    'checkout.session.completed',
+    'checkout.session.async_payment_succeeded',
+  ];
+
+  /**
+   * Verifica la firma del webhook y procesa el evento. Devuelve `{ recibido: true }`
+   * para que Stripe marque la entrega como buena; si algo del procesado falla,
+   * lanzamos y Stripe reintenta automáticamente.
+   */
+  async handleWebhook(rawBody: Buffer | undefined, signature: string | undefined) {
+    const secret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!secret) {
+      // Sin secreto no se puede verificar nada, y aceptar eventos sin verificar
+      // permitiría a cualquiera regalarse el recorrido con un simple POST.
+      console.error('[webhook] STRIPE_WEBHOOK_SECRET no configurado — evento rechazado.');
+      throw new BadRequestException('Webhook no configurado');
+    }
+    if (!rawBody || !signature) {
+      throw new BadRequestException('Falta el cuerpo o la firma del webhook');
+    }
+
+    let event: Stripe.Event;
+    try {
+      event = this.stripe.webhooks.constructEvent(rawBody, signature, secret);
+    } catch (err: any) {
+      // Firma inválida: o no viene de Stripe, o el secreto no es el que toca.
+      console.error('[webhook] Firma inválida:', err?.message);
+      throw new BadRequestException('Firma de webhook inválida');
+    }
+
+    if (!PaymentService.EVENTOS_PAGADOS.includes(event.type)) {
+      return { recibido: true, ignorado: event.type };
+    }
+
+    const session = event.data.object as Stripe.Checkout.Session;
+    if (session.payment_status !== 'paid') {
+      return { recibido: true, ignorado: 'unpaid' };
+    }
+
+    await this.procesarSesionPagada(session, `webhook:${event.type}`);
+    return { recibido: true };
+  }
+
+  /**
+   * Concede lo que se haya comprado en una sesión de Stripe ya pagada. Es el
+   * tronco común del webhook: mira de qué compra se trata y la aplica.
+   * Todo lo que hace es idempotente (marcar flags que ya están a `true`, crear
+   * una reserva que comprueba duplicados), así que repetirlo no rompe nada.
+   */
+  private async procesarSesionPagada(session: Stripe.Checkout.Session, origen: string) {
+    // 1. Llamada de acompañamiento.
+    if (session.metadata?.scope === 'llamada') {
+      const res = await this.guardarReservaDeSesion(session);
+      console.log(`[${origen}] llamada → ${res}`);
+      return;
+    }
+
+    // 2. Compra de un libro suelto (no requiere cuenta).
+    if (session.metadata?.libroId) {
+      await this.entregarLibroDeSesion(session);
+      console.log(`[${origen}] libro ${session.metadata.libroId} entregado`);
+      return;
+    }
+
+    // 3. Disciplina de El Recorrido. Puede venir por dos caminos:
+    //    - checkout propio     → metadata { userId, scope }
+    //    - Payment Link común  → client_reference_id "<scope>__<userId>"
+    const ref = this.leerDisciplinaDeSesion(session);
+    if (!ref) {
+      console.warn(`[${origen}] sesión pagada sin scope reconocible (${session.id})`);
+      return;
+    }
+
+    const def = DISCIPLINAS[ref.scope];
+    // Ojo: aquí NO se comprueba la cadena de prerrequisitos. El dinero ya está
+    // cobrado, así que negar el acceso por orden sería lo peor de los dos mundos.
+    // El orden se hace cumplir ANTES, al crear el checkout.
+    await (this.userService as any)[def.marcar](ref.userId);
+    console.log(`[${origen}] ${ref.scope} concedida a ${ref.userId}`);
+
+    try {
+      const user = (await this.userService.getUserById(ref.userId)) as any;
+      if (user?.email) {
+        await this.mailService.enviarDisciplinaDesbloqueada(user.email, user.name ?? '', def.nombre);
+      }
+    } catch (err) {
+      // El email es un extra: si falla, el acceso ya está concedido y no
+      // queremos que Stripe reintente el evento por esto.
+      console.error(`[${origen}] no se pudo enviar el email de ${def.nombre}:`, err);
+    }
+  }
+
+  /** Extrae `{ scope, userId }` de una sesión, venga por metadata o por client_reference_id. */
+  private leerDisciplinaDeSesion(
+    session: Stripe.Checkout.Session,
+  ): { scope: DisciplinaScope; userId: string } | null {
+    const scopeMeta = session.metadata?.scope as DisciplinaScope | undefined;
+    const userIdMeta = session.metadata?.userId;
+    if (scopeMeta && userIdMeta && DISCIPLINAS[scopeMeta]) {
+      return { scope: scopeMeta, userId: userIdMeta };
+    }
+
+    // <scope>__<userId>. Partimos por el PRIMER '__' porque el scope nunca lo
+    // lleva, pero el userId sí podría llevar guiones.
+    const ref = session.client_reference_id ?? '';
+    const corte = ref.indexOf('__');
+    if (corte <= 0) return null;
+    const scope = ref.slice(0, corte) as DisciplinaScope;
+    const userId = ref.slice(corte + 2);
+    if (!DISCIPLINAS[scope] || !userId) return null;
+    return { scope, userId };
+  }
+
+  /** Crea la reserva de una llamada ya pagada. Comparte lógica con el verify. */
+  private async guardarReservaDeSesion(session: Stripe.Checkout.Session) {
+    const m = session.metadata ?? {};
+    const dto = {
+      nombre: m.nombre ?? '',
+      email: m.email ?? '',
+      fecha: m.fecha ?? '',
+      slot: m.slot ?? '',
+      tema: m.tema || undefined,
+    };
+    if (!dto.nombre || !dto.email || !dto.fecha || !dto.slot) return 'no-metadata';
+
+    // Idempotencia: si la reserva ya existe (verify o reintento del webhook), no
+    // la duplicamos ni reenviamos el email.
+    const estado = await this.bookingService.yaReservado(dto.fecha, dto.slot, dto.email);
+    if (estado === 'mine') return 'ya-reservada';
+    if (estado === 'other') {
+      // Alguien cogió el hueco entre el checkout y la confirmación del pago.
+      console.error(
+        `[webhook] PAGO COBRADO SIN HUECO — ${dto.email} pagó ${dto.fecha} ${dto.slot}, ` +
+        `pero lo tiene otra persona. Hay que reubicar o devolver el importe.`,
+      );
+      return 'slot-taken';
+    }
+    return await this.bookingService.create(dto);
+  }
+
+  /** Reenvía por email el enlace de descarga de un libro ya pagado. */
+  private async entregarLibroDeSesion(session: Stripe.Checkout.Session) {
+    const libro = findLibroPago(session.metadata?.libroId ?? '');
+    if (!libro) return;
+    const email = session.customer_details?.email || session.customer_email;
+    if (!email) {
+      console.warn(`[webhook] libro ${libro.id} pagado sin email de contacto (${session.id})`);
+      return;
+    }
+    await this.mailService.enviarLibroComprado(email, libro.titulo, libro.pdfLink);
   }
 
   async createMetodoCheckout(userId: string) {
@@ -30,7 +232,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Astrología — primera disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -80,7 +282,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Psicología solo se
     // puede adquirir si ya se pagó la primera disciplina (Astrología).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.metodo_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.metodo_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Astrología antes de adquirir Psicología.',
       );
@@ -96,7 +298,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Psicología — segunda disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -146,7 +348,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Ayurveda solo se
     // puede adquirir si ya se pagó la segunda disciplina (Psicología).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.psicologia_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.psicologia_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Psicología antes de adquirir Ayurveda.',
       );
@@ -162,7 +364,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Ayurveda — tercera disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -212,7 +414,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Medicina China solo
     // se puede adquirir si ya se pagó la tercera disciplina (Ayurveda).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.ayurveda_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.ayurveda_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Ayurveda antes de adquirir Medicina China.',
       );
@@ -228,7 +430,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Medicina China — cuarta disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -278,7 +480,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Fisiología solo se
     // puede adquirir si ya se pagó la cuarta disciplina (Medicina China).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.tcm_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.tcm_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Medicina China antes de adquirir Fisiología.',
       );
@@ -294,7 +496,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Fisiología — quinta disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -344,7 +546,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Nutrición solo se
     // puede adquirir si ya se pagó la quinta disciplina (Fisiología).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.fisiologia_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.fisiologia_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Fisiología antes de adquirir Nutrición.',
       );
@@ -360,7 +562,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Nutrición — sexta disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -410,7 +612,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Cábala solo se
     // puede adquirir si ya se pagó la sexta disciplina (Nutrición).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.nutricion_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.nutricion_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Nutrición antes de adquirir Cábala.',
       );
@@ -426,7 +628,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Cábala — séptima disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -476,7 +678,7 @@ export class PaymentService {
     // Prerrequisito: el recorrido se hace en orden, así que Cultura solo se
     // puede adquirir si ya se pagó la séptima disciplina (Cábala).
     const user = (await this.userService.getUserById(userId)) as any;
-    if (!user?.cabala_suscrito) {
+    if (PaymentService.PAGO_SECUENCIAL && !user?.cabala_suscrito) {
       throw new ForbiddenException(
         'Necesitas completar el pago de Cábala antes de adquirir Cultura.',
       );
@@ -492,7 +694,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Cultura — octava disciplina de El Recorrido' },
-            unit_amount: 2000,
+            unit_amount: 3000,
           },
           quantity: 1,
         },
@@ -534,54 +736,68 @@ export class PaymentService {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // MODO TEST — desbloqueo sin pasar por Stripe. SOLO se activa si la variable
-  // de entorno ALLOW_TEST_PAGOS === 'true' (nunca en producción). Marca los
-  // flags directamente para poder probar el recorrido sin cobro real.
+  // PAYMENT LINK COMPARTIDO — las ocho disciplinas se cobran por separado, pero
+  // todas a través del MISMO enlace de Stripe (mismo importe). Como un Payment
+  // Link es una URL estática y no sabe quién la abre, el frontend le añade
+  //     ?client_reference_id=<scope>__<userId>
+  // (Stripe solo admite [A-Za-z0-9_-] ahí, y el userId es un UUID, así que cabe).
+  // Al terminar el pago, el enlace redirige a
+  //     /home?disciplina_pagada={CHECKOUT_SESSION_ID}
+  // y este verify recupera la sesión, saca de vuelta el scope y el userId, y
+  // marca el flag de esa disciplina — igual que hacía el metadata.userId de los
+  // Checkout Sessions, pero con la referencia que sí viaja en un Payment Link.
   // ─────────────────────────────────────────────────────────────────────────
-  static testPagosHabilitado(): boolean {
-    // El modo test (pago falso, test/unlock) SOLO se habilita si la env var
-    // ALLOW_TEST_PAGOS === 'true'. En producción va desactivado, así que cada
-    // disciplina queda bloqueada hasta haber pagado de verdad (no hay forma de
-    // desbloquear gratis). Para probar el pago falso en local, exporta
-    // ALLOW_TEST_PAGOS=true en el backend.
-    return process.env.ALLOW_TEST_PAGOS === 'true';
+  async verifyDisciplinaLink(sessionId: string, userId: string) {
+    if (!sessionId) throw new BadRequestException('session_id requerido');
+
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    } catch {
+      return { ok: false as const, reason: 'invalid-session' };
+    }
+
+    if (session.payment_status !== 'paid') {
+      return { ok: false as const, reason: 'unpaid' };
+    }
+
+    // <scope>__<userId>. Partimos por el PRIMER '__' porque el scope nunca lo
+    // lleva, pero el userId sí podría llevar guiones.
+    const ref = session.client_reference_id ?? '';
+    const corte = ref.indexOf('__');
+    if (corte <= 0) {
+      return { ok: false as const, reason: 'no-reference' };
+    }
+    const scope = ref.slice(0, corte) as DisciplinaScope;
+    const refUserId = ref.slice(corte + 2);
+
+    const def = DISCIPLINAS[scope];
+    if (!def) {
+      return { ok: false as const, reason: 'wrong-scope' };
+    }
+    // El client_reference_id lo pone el cliente, así que nunca desbloqueamos a
+    // otra persona: tiene que coincidir con el usuario del token.
+    if (refUserId !== userId) {
+      return { ok: false as const, reason: 'wrong-user' };
+    }
+
+    // El recorrido se hace en orden: la disciplina anterior tiene que estar
+    // pagada (salvo que PAGO_SECUENCIAL esté desactivado).
+    if (PaymentService.PAGO_SECUENCIAL && def.requiere) {
+      const user = (await this.userService.getUserById(userId)) as any;
+      if (!user?.[def.requiere]) {
+        return { ok: false as const, reason: 'prereq', requiereNom: def.requiereNom };
+      }
+    }
+
+    // Idempotente: si el verify se repite (recarga de /home), solo re-marca el flag.
+    await (this.userService as any)[def.marcar](userId);
+    return { ok: true as const, scope, nombre: def.nombre };
   }
 
-  async testUnlock(userId: string, scope: 'metodo' | 'psicologia' | 'ayurveda' | 'tcm' | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura' | 'all') {
-    if (!PaymentService.testPagosHabilitado()) {
-      throw new ForbiddenException('El modo test de pagos no está habilitado.');
-    }
-    // Cadena de prerrequisitos: Cultura requiere Cábala, que requiere Nutrición,
-    // que requiere Fisiología, que requiere Medicina China, que requiere
-    // Ayurveda, que requiere Psicología, que a su vez requiere Astrología. Al
-    // desbloquear una disciplina, desbloqueamos también las anteriores para
-    // respetar el orden.
-    if (scope === 'metodo' || scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoMetodo(userId);
-    }
-    if (scope === 'psicologia' || scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoPsicologia(userId);
-    }
-    if (scope === 'ayurveda' || scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoAyurveda(userId);
-    }
-    if (scope === 'tcm' || scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoTcm(userId);
-    }
-    if (scope === 'fisiologia' || scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoFisiologia(userId);
-    }
-    if (scope === 'nutricion' || scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoNutricion(userId);
-    }
-    if (scope === 'cabala' || scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoCabala(userId);
-    }
-    if (scope === 'cultura' || scope === 'all') {
-      await this.userService.marcarSuscritoCultura(userId);
-    }
-    return { ok: true as const };
-  }
+  // El MODO TEST (desbloqueo sin pasar por Stripe) se eliminó por completo:
+  // era la única puerta para abrir una disciplina sin pagar. Regalar el acceso
+  // se hace ahora desde el panel /admin/accesos o con ACCESO_LIBRE_EMAILS.
 
   // ─────────────────────────────────────────────────────────────────────────
   // Llamada de acompañamiento — pago REAL de Stripe. A diferencia del recorrido,
@@ -596,7 +812,7 @@ export class PaymentService {
     fecha?: string;
     slot?: string;
     tema?: string;
-    precio?: number;
+    tipo?: string;
     disciplinaNom?: string;
     returnPath?: string;
   }) {
@@ -609,8 +825,10 @@ export class PaymentService {
       throw new BadRequestException('Faltan datos de la reserva');
     }
 
-    const precioEur = Number(body.precio);
-    const unitAmount = Number.isFinite(precioEur) && precioEur > 0 ? Math.round(precioEur * 100) : 2000;
+    // El importe sale de la tabla del servidor, NUNCA del body: el cliente solo
+    // elige el tipo de llamada.
+    const tarifa = findLlamadaPago(body.tipo);
+    if (!tarifa) throw new BadRequestException('Tipo de llamada desconocido');
 
     // Si el hueco ya está cogido, no dejamos ni empezar el pago.
     const taken = await this.bookingService.getTaken();
@@ -624,7 +842,7 @@ export class PaymentService {
 
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const disciplina = (body.disciplinaNom ?? '').trim();
-    const productName = disciplina ? `Llamada de acompañamiento — ${disciplina}` : 'Llamada de acompañamiento';
+    const productName = disciplina ? `${tarifa.nombre} — ${disciplina}` : tarifa.nombre;
     const sep = returnPath.includes('?') ? '&' : '?';
 
     const session = await this.stripe.checkout.sessions.create({
@@ -636,7 +854,7 @@ export class PaymentService {
           price_data: {
             currency: 'eur',
             product_data: { name: productName },
-            unit_amount: unitAmount,
+            unit_amount: tarifa.precioCentimos,
           },
           quantity: 1,
         },
