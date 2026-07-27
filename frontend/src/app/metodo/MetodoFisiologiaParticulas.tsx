@@ -42,17 +42,17 @@ const PIEZAS_INICIALES: Pieza[] = [
 ];
 
 const IMG: Record<Tipo, string> = {
-  up: "/recorrido/fisiologia/pre/upquark.png",
-  down: "/recorrido/fisiologia/pre/downquark.png",
-  gluon: "/recorrido/fisiologia/pre/gluon.png",
+  up: "/recorrido/fisiologia/pre/upquark.webp",
+  down: "/recorrido/fisiologia/pre/downquark.webp",
+  gluon: "/recorrido/fisiologia/pre/gluon.webp",
 };
-const PROTON_IMG = "/recorrido/fisiologia/pre/protonpordentro.png";
+const PROTON_IMG = "/recorrido/fisiologia/pre/protonpordentro.webp";
 // Todas las fotos que usa el dinamismo. La página no se muestra hasta que estén
 // cargadas, para que al arrastrar/animar las piezas ya tengan su ilustración.
 const TODAS_IMAGENES = [
-  "/recorrido/fisiologia/pre/upquark.png",
-  "/recorrido/fisiologia/pre/downquark.png",
-  "/recorrido/fisiologia/pre/gluon.png",
+  "/recorrido/fisiologia/pre/upquark.webp",
+  "/recorrido/fisiologia/pre/downquark.webp",
+  "/recorrido/fisiologia/pre/gluon.webp",
   PROTON_IMG,
 ];
 const GLOW: Record<Tipo, string> = { up: "#8ab6e6", down: "#e08a8a", gluon: "#f2c86b" };

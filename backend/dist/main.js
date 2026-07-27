@@ -32,8 +32,12 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
+const helmet_1 = __importDefault(require("helmet"));
 const app_module_1 = require("./app.module");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
@@ -53,6 +57,11 @@ function origenesPermitidos() {
 }
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { rawBody: true });
+    app.set('trust proxy', 1);
+    app.use((0, helmet_1.default)({
+        contentSecurityPolicy: false,
+        crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }));
     const origins = origenesPermitidos();
     app.enableCors({ origin: origins, credentials: true });
     const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;

@@ -21,7 +21,7 @@ const DOSHA_COLORS: Record<string, [number, number, number]> = {
 const MARGIN = 20;
 const PAGE_W = 210;
 const CONTENT_W = PAGE_W - MARGIN * 2;
-const BG_IMG = "/img/fondos/hinduismo.png";
+const BG_IMG = "/img/fondos/hinduismo.webp";
 
 const plain = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
 

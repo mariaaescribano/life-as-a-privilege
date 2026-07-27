@@ -55,11 +55,11 @@ export interface HitoHistoria {
 // misma carpeta, así que la era no interviene en la ruta (se conserva en la
 // firma para que cada llamada siga documentando a qué era pertenece el hito).
 const foto = (_era: string, sub: string) =>
-  `/recorrido/cultura/historiageneral/${sub}.png`;
+  `/recorrido/cultura/historiageneral/${sub}.webp`;
 
 // Ruta de la portada (círculo) de una era.
 const fotoEra = (eraKey: string) =>
-  `/recorrido/cultura/historiageneral/eras/${eraKey}.png`;
+  `/recorrido/cultura/historiageneral/eras/${eraKey}.webp`;
 
 // Construye un sub-hito con su cómic de una sola viñeta (foto + fecha + texto).
 const hito = (era: string, key: string, titulo: string, fecha: string, texto: string): SubHito => ({

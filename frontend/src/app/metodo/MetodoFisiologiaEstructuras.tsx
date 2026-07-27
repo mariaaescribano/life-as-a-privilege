@@ -31,8 +31,8 @@ const PRE = "/recorrido/fisiologia/pre";
 type Macro = "proteina" | "adn" | "lipido";
 const MACRO: Record<Macro, { color: string; glyph: string; img: string }> = {
   proteina: { color: "#7fd6c2", glyph: "P", img: `${PRE}/proteina.png` },
-  adn:      { color: "#9ab6f0", glyph: "N", img: `${PRE}/adn.png` },
-  lipido:   { color: "#f2c86b", glyph: "L", img: `${PRE}/fosfolipido.png` },
+  adn:      { color: "#9ab6f0", glyph: "N", img: `${PRE}/adn.webp` },
+  lipido:   { color: "#f2c86b", glyph: "L", img: `${PRE}/fosfolipido.webp` },
 };
 
 // ── Estructuras celulares ────────────────────────────────────────────────────
@@ -59,42 +59,42 @@ const ESTRUCTURAS: EstDef[] = [
   {
     id: "nucleo", nombre: "Núcleo", glow: "#9ab6f0", forma: "cluster",
     desc: "Guarda y protege tu información genética.",
-    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Barrera nuclear", img: `${PRE}/barreranuclear.png` }],
+    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Barrera nuclear", img: `${PRE}/barreranuclear.webp` }],
     resultado: [
       "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
       "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la Vida.",
     ],
-    resultadoImg: `${PRE}/nucleocircular.png`, cuadradoImg: `${PRE}/nucleo.png`,
+    resultadoImg: `${PRE}/nucleocircular.webp`, cuadradoImg: `${PRE}/nucleo.webp`,
   },
   {
     id: "membrana", nombre: "Membrana celular", glow: "#f2c86b", forma: "membrana",
     desc: "Envuelve la célula y decide qué entra y qué sale.",
-    ingredientes: [{ macro: "lipido", n: 4, label: "lípido" }, { macro: "proteina", n: 2, label: "Receptores hormonales", img: `${PRE}/receptoresmembranacelular.png` }],
+    ingredientes: [{ macro: "lipido", n: 4, label: "lípido" }, { macro: "proteina", n: 2, label: "Receptores hormonales", img: `${PRE}/receptoresmembranacelular.webp` }],
     resultado: [
       "Los fosfolípidos se ordenan solos en una doble capa, y las proteínas se incrustan como puertas y sensores.",
       "Así nace la membrana: la frontera viva que separa el interior de la célula del mundo exterior y controla el paso.",
     ],
-    resultadoImg: `${PRE}/circularmembrana.png`, cuadradoImg: `${PRE}/membrana.png`,
+    resultadoImg: `${PRE}/circularmembrana.webp`, cuadradoImg: `${PRE}/membrana.webp`,
   },
   {
     id: "mitocondria", nombre: "Mitocondria", glow: "#e08a8a", forma: "cluster",
     desc: "La central de energía de la célula.",
-    ingredientes: [{ macro: "lipido", n: 2, label: "Membrana mitocondrial", img: `${PRE}/membranamitocondria.png` }, { macro: "proteina", n: 3, label: "Receptores", img: `${PRE}/receptoresmitocondria.png` }],
+    ingredientes: [{ macro: "lipido", n: 2, label: "Membrana mitocondrial", img: `${PRE}/membranamitocondria.webp` }, { macro: "proteina", n: 3, label: "Receptores", img: `${PRE}/receptoresmitocondria.webp` }],
     resultado: [
       "Con sus membranas plegadas y muchísimas proteínas y enzimas, la mitocondria transforma los nutrientes y el oxígeno en energía.",
       "Es la central eléctrica que fabrica el ATP, el combustible que mantiene en marcha cada proceso de tu cuerpo.",
     ],
-    resultadoImg: `${PRE}/circularmitocondria.png`, cuadradoImg: `${PRE}/mitocondria.png`,
+    resultadoImg: `${PRE}/circularmitocondria.webp`, cuadradoImg: `${PRE}/mitocondria.webp`,
   },
   {
     id: "ribosoma", nombre: "Ribosoma", glow: "#7fd6c2", forma: "cluster",
     desc: "La fábrica de enzimas.",
-    ingredientes: [{ macro: "proteina", n: 3, label: "Enzimas", img: `${PRE}/enzimasribosoma.png` }, { macro: "adn", n: 1, label: "ARN", img: `${PRE}/ARN.png` }],
+    ingredientes: [{ macro: "proteina", n: 3, label: "Enzimas", img: `${PRE}/enzimasribosoma.webp` }, { macro: "adn", n: 1, label: "ARN", img: `${PRE}/ARN.webp` }],
     resultado: [
       "Hecho de proteínas y de ARN(r), el ribosoma lee las instrucciones ARN(m), que vienen del ADN.",
       "Con ellas ensambla aminoácidos uno tras otro y fabrica nuevas enzimas: convierte la información genética en materia viva.",
     ],
-    resultadoImg: `${PRE}/circularribosoma.png`, cuadradoImg: `${PRE}/ribosoma.png`,
+    resultadoImg: `${PRE}/circularribosoma.webp`, cuadradoImg: `${PRE}/ribosoma.webp`,
   },
 ];
 

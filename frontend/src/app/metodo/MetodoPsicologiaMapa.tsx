@@ -373,7 +373,7 @@ export default function MetodoPsicologiaMapa() {
         continueLabel="Continuar"
         botonNitido
         themeColor={neuropsicologiaTxt}
-        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgImage="/img/fondos/psciologia.webp"
         disciplinaBgColor={neuropsicologiaBg}
         textShadow={INK_SHADOW}
       />

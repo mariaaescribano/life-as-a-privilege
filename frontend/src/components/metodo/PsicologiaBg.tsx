@@ -29,7 +29,7 @@ export const PsicologiaBg = ({ overlay = "rgba(247,236,220,0.32)" }: PsicologiaB
   >
     <Box
       as="img"
-      src="/img/fondos/psciologia.png"
+      src="/img/fondos/psciologia.webp"
       alt=""
       loading="eager"
       position="absolute"

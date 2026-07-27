@@ -1,4 +1,6 @@
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 
@@ -34,7 +36,28 @@ async function bootstrap() {
   // JSON de siempre). El webhook de Stripe lo necesita: la firma se calcula
   // sobre los bytes exactos que envió Stripe, así que si solo tuviéramos el
   // objeto ya parseado no podríamos verificarla.
-  const app = await NestFactory.create(AppModule, { rawBody: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
+
+  // CONFIAR EN EL PROXY. Imprescindible para que el límite por IP funcione: en
+  // Render la petición llega a través de su balanceador, así que sin esto todas
+  // las peticiones parecen venir de la MISMA IP (la del proxy) y el límite se
+  // aplicaría a todos los usuarios en común — la web se caería sola con cuatro
+  // personas dentro. Con `trust proxy` se usa la IP real de X-Forwarded-For.
+  app.set('trust proxy', 1);
+
+  // Cabeceras de seguridad (helmet). Dos ajustes a medida:
+  //  · contentSecurityPolicy: false → esto es una API que devuelve JSON; la CSP
+  //    es cosa del HTML que sirve el frontend, y activarla aquí solo estorba.
+  //  · crossOriginResourcePolicy 'cross-origin' → el backend sirve las fotos de
+  //    perfil en /img y las pide el frontend, que está en OTRO dominio. Con el
+  //    valor por defecto ('same-origin') el navegador bloquearía esas imágenes.
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
+
   const origins = origenesPermitidos();
   app.enableCors({ origin: origins, credentials: true });
 

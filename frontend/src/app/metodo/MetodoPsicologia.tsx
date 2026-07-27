@@ -205,7 +205,7 @@ export default function MetodoPsicologia() {
         isOpen={intro.open}
         vinetas={INTRO_PSICOLOGIA}
         themeColor={neuropsicologiaTxt}
-        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgImage="/img/fondos/psciologia.webp"
         disciplinaBgColor={neuropsicologiaBg}
         textShadow={`0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`}
         onFinish={intro.finish}

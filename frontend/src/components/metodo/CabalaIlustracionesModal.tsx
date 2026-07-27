@@ -30,7 +30,7 @@ import SpinnerTurquesa from "../global/Spinner";
 // capítulo y, al pulsar, el ComicViewer con las viñetas en orden.
 // ─────────────────────────────────────────────────────────────────────────
 
-const CABALA_IMG = "/img/fondos/cabala.png";
+const CABALA_IMG = "/img/fondos/cabala.webp";
 
 type Capitulo = "origen" | "sefirot" | "senderos";
 

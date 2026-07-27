@@ -21,7 +21,7 @@ import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../G
 // sin fecha). Al pulsar un sub-hito se abre su cómic (foto + texto a la derecha).
 // ─────────────────────────────────────────────────────────────────────────
 
-const CULTURA_IMG = "/img/fondos/cultura.png";
+const CULTURA_IMG = "/img/fondos/cultura.webp";
 // Nº de fotos de la «primera ronda» de sub-hitos que se precargan antes de
 // mostrar la era (las de más allá se cargan al desplazarse con las flechas).
 const PRIMERA_RONDA = 6;

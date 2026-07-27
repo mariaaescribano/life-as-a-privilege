@@ -25,7 +25,7 @@ const ACCENT = INK;
 const MARGIN = 20;
 const PAGE_W = 210;
 const CONTENT_W = PAGE_W - MARGIN * 2;
-const BG_IMG = "/img/fondos/psciologia.png";
+const BG_IMG = "/img/fondos/psciologia.webp";
 
 const plain = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
 

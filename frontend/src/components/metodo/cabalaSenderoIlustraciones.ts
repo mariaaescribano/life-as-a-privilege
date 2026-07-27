@@ -13,7 +13,7 @@ import type { Vineta } from "./ComicViewer";
 // Los 22 senderos (Aleph→Tav) ya tienen ilustración.
 // ─────────────────────────────────────────────────────────────────────────
 
-const IMG = "/img/fondos/cabala.png"; // placeholder por si faltara alguna foto
+const IMG = "/img/fondos/cabala.webp"; // placeholder por si faltara alguna foto
 
 // Foto de cada sendero por su letra hebrea (archivo en /recorrido/cabala/senderos/).
 const FOTOS: Record<number, string> = {

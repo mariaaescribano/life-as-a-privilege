@@ -12,7 +12,7 @@ import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 // la disciplina. Se abre desde el botón «Ver ilustración» del box principal.
 // ─────────────────────────────────────────────────────────────────────────
 
-const NUTRI_IMG = disciplinaBgImg(nutricionNom) ?? "/img/fondos/nutri.png";
+const NUTRI_IMG = disciplinaBgImg(nutricionNom) ?? "/img/fondos/nutri.webp";
 
 export function NutrienteIlustracionModal({
   isOpen,

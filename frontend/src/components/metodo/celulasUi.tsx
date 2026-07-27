@@ -8,7 +8,7 @@ import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
-const FISIO_IMG = disciplinaBgImg(fisiologiaNom) ?? "/img/fondos/fisio.png";
+const FISIO_IMG = disciplinaBgImg(fisiologiaNom) ?? "/img/fondos/fisio.webp";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(8px); }

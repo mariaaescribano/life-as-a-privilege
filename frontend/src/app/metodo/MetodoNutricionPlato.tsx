@@ -88,13 +88,13 @@ const PROTEINA_D = SECTORES.find((s) => s.macro.key === "proteina")?.d ?? "";
 const PORTADA_BASE = "/recorrido/nutricion/portadas";
 // Foto de portada por macro/grupo (el apartado que muestra el panel).
 const PLATO_PORTADA: Record<string, string> = {
-  verduras: `${PORTADA_BASE}/platoverduras.png`,
-  fruta: `${PORTADA_BASE}/platofruta.png`,
-  cereales: `${PORTADA_BASE}/platocarbs.png`,
-  proteina: `${PORTADA_BASE}/platoproteina.png`,
+  verduras: `${PORTADA_BASE}/platoverduras.webp`,
+  fruta: `${PORTADA_BASE}/platofruta.webp`,
+  cereales: `${PORTADA_BASE}/platocarbs.webp`,
+  proteina: `${PORTADA_BASE}/platoproteina.webp`,
 };
 // Fondo del apartado del plato (izquierda).
-const PLATO_PORTADA_GENERAL = `${PORTADA_BASE}/nutri.png`;
+const PLATO_PORTADA_GENERAL = `${PORTADA_BASE}/nutri.webp`;
 // Todas las portadas que hay que precargar para que no aparezcan de golpe.
 const PORTADAS_PLATO = [PLATO_PORTADA_GENERAL, ...Object.values(PLATO_PORTADA)];
 

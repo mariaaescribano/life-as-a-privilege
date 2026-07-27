@@ -299,7 +299,7 @@ export default function MetodoPsicologiaAce() {
         continueLabel="Continuar"
         botonNitido
         themeColor={neuropsicologiaTxt}
-        disciplinaBgImage="/img/fondos/psciologia.png"
+        disciplinaBgImage="/img/fondos/psciologia.webp"
         disciplinaBgColor={neuropsicologiaBg}
         textShadow={`0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`}
       />

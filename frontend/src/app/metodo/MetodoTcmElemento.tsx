@@ -330,7 +330,7 @@ function NavBtn({ label, onClick, primary, disabled, tooltip }: {
     <Box as="button" onClick={disabled ? undefined : onClick} title={tooltip}
          position="relative" overflow="hidden"
          px={{ base: 6, md: 9 }} py={3} borderRadius="full"
-         bgImage="url('/img/fondos/tcm.png')" bgSize="cover" bgPosition="center"
+         bgImage="url('/img/fondos/tcm.webp')" bgSize="cover" bgPosition="center"
          color={disabled ? `${tcmTxt}88` : tcmTxt}
          fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }} fontWeight="700"
          letterSpacing="0.05em" cursor={disabled ? "not-allowed" : "pointer"} transition="all 0.2s"

@@ -22,13 +22,13 @@ import { StarsLayer } from "./StarsLayer";
 // Cada disciplina con "fondo propio" tiene una imagen en /img/fondos/ (o un
 // patrón especial — Astrología usa la capa de estrellas en lugar de imagen).
 const DISCIPLINA_BG_IMG: Record<string, string> = {
-  [tcmNom]: "/img/fondos/tcm.png",
-  [ayurvedaNom]: "/img/fondos/hinduismo.png",
-  [neuropsicologiaNom]: "/img/fondos/psciologia.png",
-  [fisiologiaNom]: "/img/fondos/fisio.png",
-  [nutricionNom]: "/img/fondos/nutri.png",
-  [cabalaNom]: "/img/fondos/cabala.png",
-  [culturaNom]: "/img/fondos/cultura.png",
+  [tcmNom]: "/img/fondos/tcm.webp",
+  [ayurvedaNom]: "/img/fondos/hinduismo.webp",
+  [neuropsicologiaNom]: "/img/fondos/psciologia.webp",
+  [fisiologiaNom]: "/img/fondos/fisio.webp",
+  [nutricionNom]: "/img/fondos/nutri.webp",
+  [cabalaNom]: "/img/fondos/cabala.webp",
+  [culturaNom]: "/img/fondos/cultura.webp",
 };
 
 // Color sólido de respaldo por disciplina. Se pinta DEBAJO de la imagen

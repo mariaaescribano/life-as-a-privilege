@@ -269,7 +269,7 @@ export default function MetodoAyurvedaResultado() {
         themeColor={ayurvedaTxt}
         continueBtnColor={ayurvedaTxt}
         continueBtnBg={ayurvedaBg}
-        disciplinaBgImage="/img/fondos/hinduismo.png"
+        disciplinaBgImage="/img/fondos/hinduismo.webp"
         disciplinaBgColor={ayurvedaBg}
         textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
       />

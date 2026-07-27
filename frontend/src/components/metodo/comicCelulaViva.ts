@@ -18,28 +18,28 @@ export const CELULA_VIVA: Vineta[] = [
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula2.png",
-    titulo: "La membrana",
+    titulo: "",
     paragraphs: [
       "La membrana celular protege la ciudad y controla cuidadosamente qué puede entrar y qué debe salir.",
     ],
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula3.png",
-    titulo: "El núcleo",
+    titulo: "",
     paragraphs: [
       "En el núcleo se guarda el ADN: el gran libro de instrucciones que contiene toda la información necesaria para que la célula funcione.",
     ],
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula4.png",
-    titulo: "Los ribosomas",
+    titulo: "",
     paragraphs: [
       "Los ribosomas leen las instrucciones del ADN y construyen enzimas, las herramientas que permiten trabajar a la célula.",
     ],
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula5.png",
-    titulo: "Las enzimas",
+    titulo: "",
     paragraphs: [
       "Las enzimas son las trabajadoras de la célula. Aceleran miles de reacciones químicas y hacen posible que la Vida ocurra.",
       "Sin ellas, muchas reacciones tardarían años o incluso siglos en producirse.",
@@ -47,7 +47,7 @@ export const CELULA_VIVA: Vineta[] = [
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula6.png",
-    titulo: "La mitocondria",
+    titulo: "",
     paragraphs: [
       "Toda esa actividad necesita energía.",
       "Las enzimas de las mitocondrias transforman los nutrientes y el oxígeno en el combustible, científicamente llamado ATP.",
@@ -56,7 +56,7 @@ export const CELULA_VIVA: Vineta[] = [
   },
   {
     src: "/viñetas/fisiologia/celulacomic/celula7.png",
-    titulo: "Todo funciona junto",
+    titulo: "",
     paragraphs: [
       "Ninguna estructura podría mantener viva la célula por sí sola.",
       "Solo cuando todas trabajan juntas aparece aquello que llamamos Vida.",

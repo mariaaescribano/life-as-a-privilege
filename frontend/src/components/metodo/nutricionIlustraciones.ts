@@ -16,7 +16,7 @@ import { NUTRIENTES } from "../../hardCoded/espacio/NutrientesNutricion";
 // microbiota. La portada de cada uno es su ÚLTIMA viñeta.
 // ─────────────────────────────────────────────────────────────────────────
 
-const NUTRI_BG_IMG = "/img/fondos/nutri.png";
+const NUTRI_BG_IMG = "/img/fondos/nutri.webp";
 
 // El visor de cómic (ComicViewer) pinta los párrafos en plano, sin markdown.
 // Quitamos los **…** de las negritas para que no salgan los asteriscos literales.

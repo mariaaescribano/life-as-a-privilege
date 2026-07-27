@@ -31,7 +31,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
           themeColor={nutricionBg}
           textColor={nutricionTxt}
           textShadow="none"
-          disciplinaBgImage="/img/fondos/nutri.png"
+          disciplinaBgImage="/img/fondos/nutri.webp"
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
         />
@@ -47,7 +47,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
              sx={{ backdropFilter: "blur(4px)" }} transition="all 0.2s"
              _hover={{ transform: "translateY(-1px)" }}>
           {/* Fondo imagen + velo, como el botón «Saltar»; letra en nutricionTxt. */}
-          <Box as="img" src="/img/fondos/nutri.png" alt="" loading="eager" position="absolute" inset="0"
+          <Box as="img" src="/img/fondos/nutri.webp" alt="" loading="eager" position="absolute" inset="0"
                w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
           <Box position="absolute" inset="0" bg={`${nutricionBg}b3`} />
           <Box as="span" position="relative" zIndex={1}>Ir a El hambre</Box>

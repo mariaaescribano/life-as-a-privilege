@@ -16,7 +16,7 @@ const BASE = "/img/nutri/curso1";
 // Fondo de la disciplina Nutrición para los boxes (mismo que el header).
 const nutriBoxBg = {
   bgColor: nutricionBg,
-  bgImage: "url('/img/fondos/nutri.png')",
+  bgImage: "url('/img/fondos/nutri.webp')",
   bgSize: "cover",
   bgPosition: "center",
   bgRepeat: "no-repeat",

@@ -235,7 +235,7 @@ export function HinduismoIlustracionesModal({
         >
           <Box
             as="img"
-            src="/img/fondos/hinduismo.png"
+            src="/img/fondos/hinduismo.webp"
             alt=""
             loading="eager"
             position="absolute"
@@ -443,7 +443,7 @@ export function HinduismoIlustracionesModal({
             key={capitulo}
             vinetas={vinetas}
             themeColor={ayurvedaTxt}
-            disciplinaBgImage="/img/fondos/hinduismo.png"
+            disciplinaBgImage="/img/fondos/hinduismo.webp"
             disciplinaBgColor={ayurvedaBg}
             textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
             onClose={onClose}

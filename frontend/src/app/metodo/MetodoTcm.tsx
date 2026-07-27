@@ -198,7 +198,7 @@ export default function MetodoTcm() {
         isOpen={intro.open}
         vinetas={ORIGEN_TAOISMO}
         themeColor={tcmTxt}
-        disciplinaBgImage="/img/fondos/tcm.png"
+        disciplinaBgImage="/img/fondos/tcm.webp"
         disciplinaBgColor={tcmBg}
         onFinish={intro.finish}
         onClose={intro.close}
@@ -220,7 +220,7 @@ export default function MetodoTcm() {
         vinetas={VINETAS_ELEMENTOS}
         continueLabel="Los 5 elementos"
         themeColor={tcmTxt}
-        disciplinaBgImage="/img/fondos/tcm.png"
+        disciplinaBgImage="/img/fondos/tcm.webp"
         disciplinaBgColor={tcmBg}
       />
 

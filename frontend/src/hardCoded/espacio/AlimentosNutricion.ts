@@ -96,7 +96,7 @@ export const MOLECULAS: Record<string, Molecula> = {
 // Se asigna aquí en un solo sitio; las que aún no tengan imagen mostrarán un
 // icono de marcador en la ficha (la <Image> cae al placeholder con onError).
 Object.values(MOLECULAS).forEach((m) => {
-  if (!m.foto) m.foto = `/recorrido/nutricion/moleculas/${m.key}.png`;
+  if (!m.foto) m.foto = `/recorrido/nutricion/moleculas/${m.key}.webp`;
 });
 
 // ── Grupos de alimentos (pestañas del hub) ──────────────────────────────────
@@ -299,7 +299,7 @@ const FOTO_ALIMENTO: Record<string, string> = {
 };
 ALIMENTOS.forEach((a) => {
   const f = FOTO_ALIMENTO[a.key];
-  if (f) a.foto = `/recorrido/nutricion/alimentos/${f}.png`;
+  if (f) a.foto = `/recorrido/nutricion/alimentos/${f}.webp`;
 });
 
 export const alimentoByKey = (k: string): Alimento | undefined => ALIMENTOS.find((a) => a.key === k);

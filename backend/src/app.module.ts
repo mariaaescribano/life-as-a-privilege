@@ -1,6 +1,9 @@
 // app.module.ts
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { LIMITE_GENERAL } from './rate-limit';
 import { UsersModule } from './user/user.module';
 import { DatabaseService } from './database.service';
 import { AuthModule } from './auth/auth.module';
@@ -38,6 +41,9 @@ export const uploadFolder = join(process.cwd(), 'img');
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    // Límite de peticiones por IP. Un único limitador global; las rutas
+    // sensibles lo estrechan con @Throttle (ver rate-limit.ts).
+    ThrottlerModule.forRoot([LIMITE_GENERAL]),
     ServeStaticModule.forRoot({
       rootPath: uploadFolder, 
       serveRoot: "/img", 
@@ -73,7 +79,13 @@ export const uploadFolder = join(process.cwd(), 'img');
     AstrologiaTextosModule,
     RecorridoProgresoModule,
   ],
-  providers: [DatabaseService, JwtStrategy],
+  providers: [
+    DatabaseService,
+    JwtStrategy,
+    // Guard GLOBAL: el límite se aplica a todas las rutas sin tener que
+    // acordarse de ponerlo en cada controlador (que es como se olvida).
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
   exports: [DatabaseService],
 })
 export class AppModule {}

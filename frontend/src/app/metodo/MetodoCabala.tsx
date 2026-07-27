@@ -168,7 +168,7 @@ export default function MetodoCabala() {
         vinetas={CABALA_INTRO}
         themeColor={cabalaTxt}
         textColor={cabalaTxt}
-        disciplinaBgImage="/img/fondos/cabala.png"
+        disciplinaBgImage="/img/fondos/cabala.webp"
         disciplinaBgColor={cabalaBg}
         continueLabel="Cábala"
         onContinue={intro.close}

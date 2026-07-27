@@ -18,7 +18,7 @@ import { recordarOrigenCurso } from "../global/VolverAlMapa";
 import { PsicologiaLoader } from "./comicLoaders";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
-const PSICOLOGIA_BG = "/img/fondos/psciologia.png";
+const PSICOLOGIA_BG = "/img/fondos/psciologia.webp";
 const C = neuropsicologiaTxt;
 
 const fadeInScale = keyframes`

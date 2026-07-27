@@ -76,7 +76,7 @@ export const MICROBIOTA_TARJETAS: NutrienteTarjeta[] = [
   {
     key: "propionato",
     titulo: "Propionato",
-    foto: "/recorrido/nutricion/moleculas/propionato.png",
+    foto: "/recorrido/nutricion/moleculas/propionato.webp",
     parrafos: [
       "Es otro de los ácidos grasos de cadena corta que las bacterias fabrican al fermentar la fibra.",
       "Viaja hasta el hígado, donde participa en la regulación de la producción de glucosa y del metabolismo del colesterol.",
@@ -86,7 +86,7 @@ export const MICROBIOTA_TARJETAS: NutrienteTarjeta[] = [
   {
     key: "acetato",
     titulo: "Acetato",
-    foto: "/recorrido/nutricion/moleculas/acetato.png",
+    foto: "/recorrido/nutricion/moleculas/acetato.webp",
     parrafos: [
       "Es uno de los ácidos grasos de cadena corta que las bacterias fabrican al fermentar la fibra.",
       "Se absorbe y viaja por la sangre, donde sirve de fuente de energía y de molécula que ayuda a regular el metabolismo.",
@@ -95,7 +95,7 @@ export const MICROBIOTA_TARJETAS: NutrienteTarjeta[] = [
   {
     key: "butirato",
     titulo: "Butirato",
-    foto: "/recorrido/nutricion/moleculas/butirato.png",
+    foto: "/recorrido/nutricion/moleculas/butirato.webp",
     parrafos: [
       "Es el ácido graso de cadena corta preferido por las células del colon: es su principal alimento.",
       "Ayuda a mantener sana y unida la pared intestinal y participa en la regulación de la inflamación y del sistema inmunitario.",

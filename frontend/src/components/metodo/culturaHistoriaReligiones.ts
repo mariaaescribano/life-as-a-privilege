@@ -64,7 +64,7 @@ const FOTOS: Record<string, string> = {
 };
 
 const foto = (_era: string, sub: string) =>
-  `/recorrido/cultura/historiareligion/${FOTOS[sub] ?? sub}.png`;
+  `/recorrido/cultura/historiareligion/${FOTOS[sub] ?? sub}.webp`;
 
 // Sub-hito con su cómic (una viñeta). `pregunta` opcional (gancho, va primero) y
 // `dato` opcional (curiosidad, va al final). El `cuerpo` son los párrafos.
@@ -466,5 +466,5 @@ export const HISTORIA_RELIGIONES_HITOS: HitoHistoria[] = [
 // subcarpeta eras/, con el nombre = clave de la era. Mientras no exista el
 // archivo, el círculo muestra su marcador (onError de LineaTiempoCultura).
 HISTORIA_RELIGIONES_HITOS.forEach((era) => {
-  era.foto = `/recorrido/cultura/historiareligion/eras/${era.key}.png`;
+  era.foto = `/recorrido/cultura/historiareligion/eras/${era.key}.webp`;
 });

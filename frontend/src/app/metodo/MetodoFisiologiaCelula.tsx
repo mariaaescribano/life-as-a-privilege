@@ -26,13 +26,13 @@ export default function MetodoFisiologiaCelula() {
         forma="cluster"
         glow="#8fd6a8"
         piezas={[
-          { tipo: "nucleo", color: "#b79af0", glyph: "Nu", label: "núcleo", n: 1, img: `${PRE}/nucleo.png` },
-          { tipo: "adn", color: "#9ab6f0", glyph: "N", label: "ADN", n: 1, img: `${PRE}/ADN.png` },
-          { tipo: "membrana", color: "#f2c86b", glyph: "L", label: "membrana", n: 1, img: `${PRE}/membrana.png` },
-          { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: "mitocondria", n: 2, img: `${PRE}/mitocondria.png` },
-          { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: "ribosoma", n: 3, img: `${PRE}/ribosoma.png` },
+          { tipo: "nucleo", color: "#b79af0", glyph: "Nu", label: "núcleo", n: 1, img: `${PRE}/nucleo.webp` },
+          { tipo: "adn", color: "#9ab6f0", glyph: "N", label: "ADN", n: 1, img: `${PRE}/adn.webp` },
+          { tipo: "membrana", color: "#f2c86b", glyph: "L", label: "membrana", n: 1, img: `${PRE}/membrana.webp` },
+          { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: "mitocondria", n: 2, img: `${PRE}/mitocondria.webp` },
+          { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: "ribosoma", n: 3, img: `${PRE}/ribosoma.webp` },
         ]}
-        resultImg={`${PRE}/celulaentera.png`}
+        resultImg={`${PRE}/celulaentera.webp`}
         resultTitulo="¡Has construido una célula!"
         resultParrafos={[
           <>Una <b>célula</b> es la unidad más pequeña con Vida propia: dentro de su membrana, el núcleo guarda el ADN con las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
@@ -54,7 +54,7 @@ export default function MetodoFisiologiaCelula() {
         vinetas={CELULAS_ORGANOS}
         continueLabel="Órganos"
         themeColor={fisiologiaTxt}
-        disciplinaBgImage="/img/fondos/fisio.png"
+        disciplinaBgImage="/img/fondos/fisio.webp"
         disciplinaBgColor={fisiologiaBg}
       />
     </>

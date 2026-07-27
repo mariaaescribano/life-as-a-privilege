@@ -322,7 +322,7 @@ const Pagina = ({
       overflow="hidden"
       h={{ base: "60vh", md: "440px" }}
       bgColor={neuropsicologiaBg}
-      bgImage="url('/img/fondos/psciologia.png')"
+      bgImage="url('/img/fondos/psciologia.webp')"
       bgSize="cover"
       bgPosition="center"
     >
@@ -443,7 +443,7 @@ const FotoFranja = ({ posicion }: { posicion: string }) => (
     inset="0"
     pointerEvents="none"
     bgColor={neuropsicologiaBg}
-    bgImage="url('/img/fondos/psciologia.png')"
+    bgImage="url('/img/fondos/psciologia.webp')"
     bgSize="cover"
     style={{ backgroundPosition: posicion }}
   />

@@ -8,7 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = exports.uploadFolder = void 0;
 const common_1 = require("@nestjs/common");
+const core_1 = require("@nestjs/core");
 const config_1 = require("@nestjs/config");
+const throttler_1 = require("@nestjs/throttler");
+const rate_limit_1 = require("./rate-limit");
 const user_module_1 = require("./user/user.module");
 const database_service_1 = require("./database.service");
 const auth_module_1 = require("./auth/auth.module");
@@ -48,6 +51,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
+            throttler_1.ThrottlerModule.forRoot([rate_limit_1.LIMITE_GENERAL]),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: exports.uploadFolder,
                 serveRoot: "/img",
@@ -83,7 +87,11 @@ exports.AppModule = AppModule = __decorate([
             astrologiaTextos_module_1.AstrologiaTextosModule,
             recorridoProgreso_module_1.RecorridoProgresoModule,
         ],
-        providers: [database_service_1.DatabaseService, jwt_strategy_1.JwtStrategy],
+        providers: [
+            database_service_1.DatabaseService,
+            jwt_strategy_1.JwtStrategy,
+            { provide: core_1.APP_GUARD, useClass: throttler_1.ThrottlerGuard },
+        ],
         exports: [database_service_1.DatabaseService],
     })
 ], AppModule);

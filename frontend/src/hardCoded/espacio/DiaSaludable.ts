@@ -34,13 +34,13 @@ export const grupoDiaColor = (g: GrupoDia): string =>
 // del plato existen en /recorrido/nutricion/portadas/plato<grupo>.png; lácteos y
 // caprichos (que no son del plato de Harvard) caen al fondo general de Nutrición.
 const FONDO_GRUPO: Record<GrupoDia, string> = {
-  verdura:  "/recorrido/nutricion/portadas/platoverduras.png",
-  fruta:    "/recorrido/nutricion/portadas/platofruta.png",
-  cereal:   "/recorrido/nutricion/portadas/platocarbs.png",
-  proteina: "/recorrido/nutricion/portadas/platoproteina.png",
-  grasa:    "/recorrido/nutricion/portadas/platograsas.png",
-  lacteo:   "/recorrido/nutricion/portadas/nutri.png",
-  capricho: "/recorrido/nutricion/portadas/nutri.png",
+  verdura:  "/recorrido/nutricion/portadas/platoverduras.webp",
+  fruta:    "/recorrido/nutricion/portadas/platofruta.webp",
+  cereal:   "/recorrido/nutricion/portadas/platocarbs.webp",
+  proteina: "/recorrido/nutricion/portadas/platoproteina.webp",
+  grasa:    "/recorrido/nutricion/portadas/platograsas.webp",
+  lacteo:   "/recorrido/nutricion/portadas/nutri.webp",
+  capricho: "/recorrido/nutricion/portadas/nutri.webp",
 };
 
 export const grupoDiaFondo = (g: GrupoDia): string => FONDO_GRUPO[g];

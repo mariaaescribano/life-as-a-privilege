@@ -15,7 +15,7 @@ import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/Celulas
 
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
-const FISIO_IMG = "/img/fondos/fisio.png";
+const FISIO_IMG = "/img/fondos/fisio.webp";
 
 const MBox = motion(Box);
 

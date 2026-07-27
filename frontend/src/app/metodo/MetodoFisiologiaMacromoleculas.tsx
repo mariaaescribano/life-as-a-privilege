@@ -42,7 +42,7 @@ interface MacroDef {
   forma: Forma;
   desc: string;           // frase de la tarjeta
   resultado: string[];    // párrafos al formarla
-  monomeroImg: string;    // /recorrido/fisiologia/pre/aminoacido.png …
+  monomeroImg: string;    // /recorrido/fisiologia/pre/aminoacido.webp …
   resultadoImg: string;   // circular · se usa en el resultado (Fase B)
   cuadradoImg: string;    // cuadrada · se usa en el box de la rejilla
   /** Para macromoléculas cuyas piezas NO son todas iguales (p.ej. el fosfolípido:
@@ -74,7 +74,7 @@ const MACROS: MacroDef[] = [
       "Una proteína es una larga cadena de aminoácidos que se construye voluntariamente cuando la célula lo necesita y que cumple una función concreta.",
       "De esa forma depende su función: hay proteínas que transportan, defienden, construyen o aceleran reacciones. Son las obreras de la célula.",
     ],
-    monomeroImg: `${PRE}/aminoacido.png`, resultadoImg: `${PRE}/circularenzima.png`, cuadradoImg: `${PRE}/enzima.png`,
+    monomeroImg: `${PRE}/aminoacido.webp`, resultadoImg: `${PRE}/circularenzima.webp`, cuadradoImg: `${PRE}/enzima.webp`,
   },
   {
     id: "adn", nombre: "ADN", monomero: "nucleótido", monomeroPl: "nucleótidos",
@@ -84,12 +84,12 @@ const MACROS: MacroDef[] = [
       "El ADN es una cadena de nucleótidos —las letras A, T, C y G— enrollada en una doble hélice.",
       "El orden de esas letras es el manual de instrucciones para fabricar todas tus proteínas: es tu información genética.",
     ],
-    monomeroImg: `${PRE}/nucleotido.png`, resultadoImg: `${PRE}/circularadn.png`, cuadradoImg: `${PRE}/adn.png`,
+    monomeroImg: `${PRE}/nucleotido.webp`, resultadoImg: `${PRE}/circularadn.webp`, cuadradoImg: `${PRE}/adn.webp`,
     monomerosVariados: [
-      { label: "A", img: `${PRE}/nucleotidoa.png`, glyph: "A" },
-      { label: "T", img: `${PRE}/nucleotidot.png`, glyph: "T" },
-      { label: "C", img: `${PRE}/nucleotidoc.png`, glyph: "C" },
-      { label: "G", img: `${PRE}/nucleotidog.png`, glyph: "G" },
+      { label: "A", img: `${PRE}/nucleotidoa.webp`, glyph: "A" },
+      { label: "T", img: `${PRE}/nucleotidot.webp`, glyph: "T" },
+      { label: "C", img: `${PRE}/nucleotidoc.webp`, glyph: "C" },
+      { label: "G", img: `${PRE}/nucleotidog.webp`, glyph: "G" },
     ],
   },
   {
@@ -100,12 +100,12 @@ const MACROS: MacroDef[] = [
       "Un fosfolípido se forma uniendo un fosfato y un glicerol (la cabeza, que ama el agua) con dos ácidos grasos (las colas, que la repelen).",
       "Por eso los fosfolípidos se ordenan solos en una doble capa: la membrana que envuelve y protege cada una de tus células.",
     ],
-    monomeroImg: `${PRE}/fosfolipido.png`, resultadoImg: `${PRE}/circularfolipido.png`, cuadradoImg: `${PRE}/fosfolipido.png`,
+    monomeroImg: `${PRE}/fosfolipido.webp`, resultadoImg: `${PRE}/circularfolipido.webp`, cuadradoImg: `${PRE}/fosfolipido.webp`,
     componentes: [
-      { label: "fosfato", img: `${PRE}/fosfato.png`, glyph: "P" },
-      { label: "glicerol", img: `${PRE}/glicerol.png`, glyph: "G" },
-      { label: "ácido graso saturado", img: `${PRE}/acidosgrasossaturados.png`, glyph: "A" },
-      { label: "ácido graso insaturado", img: `${PRE}/acidosgrasosinsaturados.png`, glyph: "A" },
+      { label: "fosfato", img: `${PRE}/fosfato.webp`, glyph: "P" },
+      { label: "glicerol", img: `${PRE}/glicerol.webp`, glyph: "G" },
+      { label: "ácido graso saturado", img: `${PRE}/acidosgrasossaturados.webp`, glyph: "A" },
+      { label: "ácido graso insaturado", img: `${PRE}/acidosgrasosinsaturados.webp`, glyph: "A" },
     ],
   },
   {
@@ -116,7 +116,7 @@ const MACROS: MacroDef[] = [
       "Uniendo muchas glucosas se forman los carbohidratos, como el glucógeno.",
       "Son la reserva de energía rápida del cuerpo: se guardan cuando sobra y se rompen cuando hace falta combustible.",
     ],
-    monomeroImg: `${PRE}/glucosa.png`, resultadoImg: `${PRE}/circularcarbohidrato.png`, cuadradoImg: `${PRE}/carbohidrato.png`,
+    monomeroImg: `${PRE}/glucosa.webp`, resultadoImg: `${PRE}/circularcarbohidrato.webp`, cuadradoImg: `${PRE}/carbohidrato.webp`,
   },
 ];
 

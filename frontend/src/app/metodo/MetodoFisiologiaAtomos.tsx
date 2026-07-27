@@ -33,9 +33,9 @@ const GLOW: Record<Tipo, string> = { proton: "#e08a8a", neutron: "#b7b3c9", elec
 const LABEL: Record<Tipo, string> = { proton: "protón", neutron: "neutrón", electron: "electrón" };
 const GLYPH: Record<Tipo, string> = { proton: "+", neutron: "0", electron: "–" };
 const IMG: Record<Tipo, string> = {
-  proton: "/recorrido/fisiologia/pre/proton.png",
-  neutron: "/recorrido/fisiologia/pre/neutron.png",
-  electron: "/recorrido/fisiologia/pre/electron.png",
+  proton: "/recorrido/fisiologia/pre/proton.webp",
+  neutron: "/recorrido/fisiologia/pre/neutron.webp",
+  electron: "/recorrido/fisiologia/pre/electron.webp",
 };
 const esfera = (c: Tipo): string =>
   `radial-gradient(circle at 34% 30%, #ffffff 0%, ${GLOW[c]} 34%, ${GLOW[c]}dd 62%, ${GLOW[c]}77 100%)`;
@@ -60,7 +60,7 @@ const ATOMOS: AtomoDef[] = [
     piezas: ["proton", "electron"],
     nucleoCluster: [{ x: 50, y: 50 }],
     orbitaPos: [{ x: 14, y: 50 }],
-    img: "/recorrido/fisiologia/pre/hidrogeno.png",
+    img: "/recorrido/fisiologia/pre/hidrogeno.webp",
     instruccion: "Lleva el protón al núcleo y el electrón a su órbita.",
     titulo: "¡Has construido un átomo de Hidrógeno!",
     parrafos: [
@@ -73,7 +73,7 @@ const ATOMOS: AtomoDef[] = [
     piezas: ["proton", "proton", "neutron", "neutron", "electron", "electron"],
     nucleoCluster: [{ x: 39, y: 41 }, { x: 61, y: 41 }, { x: 39, y: 61 }, { x: 61, y: 61 }],
     orbitaPos: [{ x: 14, y: 50 }, { x: 86, y: 50 }],
-    img: "/recorrido/fisiologia/pre/helio.png",
+    img: "/recorrido/fisiologia/pre/helio.webp",
     instruccion: "Lleva los 2 protones y 2 neutrones al núcleo, y los 2 electrones a su órbita.",
     titulo: "¡Has construido un átomo de Helio!",
     parrafos: [

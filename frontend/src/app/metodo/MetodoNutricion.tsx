@@ -200,7 +200,7 @@ export default function MetodoNutricion() {
         vinetas={NUTRICION_INTRO}
         themeColor={nutricionBg}
         textColor={nutricionTxt}
-        disciplinaBgImage="/img/fondos/nutri.png"
+        disciplinaBgImage="/img/fondos/nutri.webp"
         disciplinaBgColor={nutricionBg}
         textShadow="none"
         loader={<AppleLoader />}

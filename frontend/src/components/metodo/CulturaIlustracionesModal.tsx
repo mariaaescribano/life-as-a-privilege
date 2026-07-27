@@ -23,7 +23,7 @@ import SpinnerTurquesa from "../global/Spinner";
 // ComicViewer, igual que en CabalaIlustracionesModal.
 // ─────────────────────────────────────────────────────────────────────────
 
-const CULTURA_IMG = "/img/fondos/cultura.png";
+const CULTURA_IMG = "/img/fondos/cultura.webp";
 
 export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const fondosListos = usePrecargarImagenes(isOpen ? [CULTURA_IMG] : []);

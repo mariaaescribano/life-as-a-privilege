@@ -353,7 +353,7 @@ export default function CursosModalidad() {
           >
             <Box
               as="img"
-              src="/img/fondos/tcm.png"
+              src="/img/fondos/tcm.webp"
               alt=""
               loading="eager"
               position="absolute"

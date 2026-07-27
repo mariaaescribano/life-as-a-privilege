@@ -16,7 +16,7 @@ const MODAL_COLOR = nutricionBg;
 // Fondo de la disciplina Nutrición para los boxes/cards (mismo que el header).
 const nutriBoxBg = {
   bgColor: nutricionBg,
-  bgImage: "url('/img/fondos/nutri.png')",
+  bgImage: "url('/img/fondos/nutri.webp')",
   bgSize: "cover",
   bgPosition: "center",
   bgRepeat: "no-repeat",
@@ -117,7 +117,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
         maxH={{ base: "88vh", md: "88vh" }}
         overflowY="auto"
         borderRadius="24px"
-        bgImage={`linear-gradient(rgba(253,247,238,0.42), rgba(253,247,238,0.54)), url('/img/fondos/nutri.png')`}
+        bgImage={`linear-gradient(rgba(253,247,238,0.42), rgba(253,247,238,0.54)), url('/img/fondos/nutri.webp')`}
         bgSize="cover"
         bgPosition="center"
         bgRepeat="no-repeat"

@@ -244,7 +244,7 @@ export function TCMIlustracionesModal({
   // selector estén completamente cargadas: mientras tanto se ve solo el loader
   // de TCM, para que luego aparezca todo a la vez (fondo + tarjetas).
   const fondosListos = usePrecargarImagenes(
-    isOpen ? ["/img/fondos/tcm.png", ...SELECTOR_OPTIONS.map((o) => o.cover)] : [],
+    isOpen ? ["/img/fondos/tcm.webp", ...SELECTOR_OPTIONS.map((o) => o.cover)] : [],
   );
 
   return (
@@ -256,7 +256,7 @@ export function TCMIlustracionesModal({
       <ModalOverlay
         bg={tcmBg}
         sx={fondosListos ? {
-          backgroundImage: `linear-gradient(${tcmBg}33, ${tcmBg}33), url('/img/fondos/tcm.png')`,
+          backgroundImage: `linear-gradient(${tcmBg}33, ${tcmBg}33), url('/img/fondos/tcm.webp')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -478,7 +478,7 @@ export function TCMIlustracionesModal({
             key={capitulo}
             vinetas={vinetas}
             themeColor={tcmTxt}
-            disciplinaBgImage="/img/fondos/tcm.png"
+            disciplinaBgImage="/img/fondos/tcm.webp"
             disciplinaBgColor={tcmBg}
             onClose={onClose}
             onBack={volverAlSelector}

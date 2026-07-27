@@ -38,7 +38,7 @@ export function ComicCelulaModal({ isOpen, onClose, onContinue }: ComicCelulaMod
           onClose={onClose}
           onComplete={onContinue}
           themeColor={fisiologiaTxt}
-          disciplinaBgImage="/img/fondos/fisio.png"
+          disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
         />
 
@@ -75,7 +75,7 @@ export function ComicCelulaModal({ isOpen, onClose, onContinue }: ComicCelulaMod
           _hover={{ transform: "translateY(-1px)" }}
         >
           {/* Fondo imagen + velo, como el botón «Saltar». */}
-          <Box as="img" src="/img/fondos/fisio.png" alt="" loading="eager" position="absolute" inset="0"
+          <Box as="img" src="/img/fondos/fisio.webp" alt="" loading="eager" position="absolute" inset="0"
                w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
           <Box position="absolute" inset="0" bg={`${fisiologiaBg}b3`} />
           <Box as="span" position="relative" zIndex={1}>Crea la célula</Box>

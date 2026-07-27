@@ -80,7 +80,7 @@ const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
 const nutriEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]): IlustracionEntry => ({
   id, titulo, disciplina: "Nutrición", cover, vinetas,
   themeColor: nutricionBg, textColor: nutricionTxt, cardColor: nutricionTxt,
-  disciplinaBgImage: "/img/fondos/nutri.png", disciplinaBgColor: nutricionBg, textShadow: "none",
+  disciplinaBgImage: "/img/fondos/nutri.webp", disciplinaBgColor: nutricionBg, textShadow: "none",
 });
 
 export const ILUSTRACIONES: IlustracionEntry[] = [
@@ -92,7 +92,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/comicInicioSegunCiencia/inicio1.png",
     vinetas: ORIGEN_CIENCIA,
     themeColor: fisiologiaTxt,
-    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,
   },
   {
@@ -110,7 +110,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/hinduismo/origen/portada.png",
     vinetas: HINDU_ORIGEN,
     themeColor: ayurvedaTxt,
-    disciplinaBgImage: "/img/fondos/hinduismo.png",
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
     disciplinaBgColor: ayurvedaBg,
     textShadow: hinduTextShadow,
   },
@@ -121,7 +121,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/tcm/origen/origentcm3.png",
     vinetas: TCM_ORIGEN,
     themeColor: tcmTxt,
-    disciplinaBgImage: "/img/fondos/tcm.png",
+    disciplinaBgImage: "/img/fondos/tcm.webp",
     disciplinaBgColor: tcmBg,
   },
   {
@@ -131,7 +131,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/cabala/origen/cabalaorigen1.png",
     vinetas: CABALA_INTRO,
     themeColor: cabalaTxt,
-    disciplinaBgImage: "/img/fondos/cabala.png",
+    disciplinaBgImage: "/img/fondos/cabala.webp",
     disciplinaBgColor: cabalaBg,
   },
 
@@ -143,7 +143,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/fisiologia/estrellas/star6.png",
     vinetas: ESTRELLA_ATOMOS,
     themeColor: fisiologiaTxt,
-    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,
   },
   {
@@ -153,7 +153,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/fisiologia/celulacomic/celula1.png",
     vinetas: CELULA_VIVA,
     themeColor: fisiologiaTxt,
-    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,
   },
   {
@@ -164,7 +164,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     vinetas: CICLOS_NATURALEZA,
     themeColor: fisiologiaTxt,
     textColor: fisiologiaTxt,
-    disciplinaBgImage: "/img/fondos/fisio.png",
+    disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,
   },
 
@@ -205,7 +205,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/hinduismo/elementos/elementosayurveda.png",
     vinetas: HINDU_ELEMENTOS,
     themeColor: ayurvedaTxt,
-    disciplinaBgImage: "/img/fondos/hinduismo.png",
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
     disciplinaBgColor: ayurvedaBg,
     textShadow: hinduTextShadow,
   },
@@ -216,7 +216,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/hinduismo/doshas/doshasportada.png",
     vinetas: HINDU_DOSHAS,
     themeColor: ayurvedaTxt,
-    disciplinaBgImage: "/img/fondos/hinduismo.png",
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
     disciplinaBgColor: ayurvedaBg,
     textShadow: hinduTextShadow,
   },
@@ -229,7 +229,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/psicologia/sufrimiento/sufrimiento1.png",
     vinetas: INTRO_PSICOLOGIA,
     themeColor: neuropsicologiaTxt,
-    disciplinaBgImage: "/img/fondos/psciologia.png",
+    disciplinaBgImage: "/img/fondos/psciologia.webp",
     disciplinaBgColor: neuropsicologiaBg,
     textShadow: psicoTextShadow,
   },
@@ -240,7 +240,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/psicologia/compromiso/compromiso1.png",
     vinetas: COMIC_COMPROMISO,
     themeColor: neuropsicologiaTxt,
-    disciplinaBgImage: "/img/fondos/psciologia.png",
+    disciplinaBgImage: "/img/fondos/psciologia.webp",
     disciplinaBgColor: neuropsicologiaBg,
     textShadow: psicoTextShadow,
   },
@@ -255,7 +255,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     themeColor: nutricionBg,
     textColor: nutricionTxt,
     cardColor: nutricionTxt,
-    disciplinaBgImage: "/img/fondos/nutri.png",
+    disciplinaBgImage: "/img/fondos/nutri.webp",
     disciplinaBgColor: nutricionBg,
     textShadow: "none",
   },
@@ -268,7 +268,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     themeColor: nutricionBg,
     textColor: nutricionTxt,
     cardColor: nutricionTxt,
-    disciplinaBgImage: "/img/fondos/nutri.png",
+    disciplinaBgImage: "/img/fondos/nutri.webp",
     disciplinaBgColor: nutricionBg,
     textShadow: "none",
   },
@@ -288,7 +288,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/tcm/yinyang/yinyang.png",
     vinetas: TCM_YINYANG,
     themeColor: tcmTxt,
-    disciplinaBgImage: "/img/fondos/tcm.png",
+    disciplinaBgImage: "/img/fondos/tcm.webp",
     disciplinaBgColor: tcmBg,
   },
   {
@@ -298,7 +298,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/tcm/elementos/portadaelementos.png",
     vinetas: TCM_ELEMENTOS,
     themeColor: tcmTxt,
-    disciplinaBgImage: "/img/fondos/tcm.png",
+    disciplinaBgImage: "/img/fondos/tcm.webp",
     disciplinaBgColor: tcmBg,
   },
   {
@@ -308,7 +308,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/tcm/alma/alma7.png",
     vinetas: TCM_ALMA,
     themeColor: tcmTxt,
-    disciplinaBgImage: "/img/fondos/tcm.png",
+    disciplinaBgImage: "/img/fondos/tcm.webp",
     disciplinaBgColor: tcmBg,
   },
 ];

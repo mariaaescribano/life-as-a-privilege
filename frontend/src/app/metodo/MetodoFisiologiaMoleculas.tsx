@@ -34,9 +34,9 @@ const GLOW: Record<Tipo, string> = { oxigeno: "#e08a8a", hidrogeno: "#8ab6e6", c
 const LABEL: Record<Tipo, string> = { oxigeno: "oxígeno", hidrogeno: "hidrógeno", carbono: "carbono" };
 const GLYPH: Record<Tipo, string> = { oxigeno: "O", hidrogeno: "H", carbono: "C" };
 const IMG: Record<Tipo, string> = {
-  oxigeno: "/recorrido/fisiologia/pre/oxigeno.png",
-  hidrogeno: "/recorrido/fisiologia/pre/hidrogeno.png",
-  carbono: "/recorrido/fisiologia/pre/carbono.png",
+  oxigeno: "/recorrido/fisiologia/pre/oxigeno.webp",
+  hidrogeno: "/recorrido/fisiologia/pre/hidrogeno.webp",
+  carbono: "/recorrido/fisiologia/pre/carbono.webp",
 };
 
 // Tamaños del átomo según contexto.
@@ -86,7 +86,7 @@ const MOLS: Mol[] = [
       <>Una <b>molécula</b> nace cuando varios átomos se unen <b>compartiendo electrones</b>: esa unión es un <b>enlace</b>. Aquí, un oxígeno se une a dos hidrógenos y forman el <b>agua</b>, H₂O.</>,
       <>El agua es la <b>molécula de la Vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células. Alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
     ],
-    resultadoImg: "/recorrido/fisiologia/pre/h2o.png",
+    resultadoImg: "/recorrido/fisiologia/pre/h2o.webp",
   },
   {
     key: "co2",
@@ -103,7 +103,7 @@ const MOLS: Mol[] = [
       <>Un átomo de <b>carbono</b> se une a dos de <b>oxígeno</b>: es el <b>CO₂</b>, el gas que exhalas en cada respiración.</>,
       <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la Vida</b>.</>,
     ],
-    resultadoImg: "/recorrido/fisiologia/pre/co2.png",
+    resultadoImg: "/recorrido/fisiologia/pre/co2.webp",
   },
   {
     key: "o2",
@@ -119,7 +119,7 @@ const MOLS: Mol[] = [
       <>Dos átomos de oxígeno se unen y forman el <b>O₂</b>: el oxígeno que respiras.</>,
       <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la Vida tal como la conoces no existiría.</>,
     ],
-    resultadoImg: "/recorrido/fisiologia/pre/o2.png",
+    resultadoImg: "/recorrido/fisiologia/pre/o2.webp",
   },
 ];
 

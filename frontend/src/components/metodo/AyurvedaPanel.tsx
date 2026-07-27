@@ -46,7 +46,7 @@ export function AyurvedaPanel({
       position="absolute" inset="0" zIndex={0} pointerEvents="none"
       borderRadius="2xl" overflow="hidden"
       bgColor={ayurvedaBg}
-      bgImage="url('/img/fondos/hinduismo.png')"
+      bgImage="url('/img/fondos/hinduismo.webp')"
       bgSize="100% auto"
       bgRepeat="repeat-y"
       bgPosition="top center"

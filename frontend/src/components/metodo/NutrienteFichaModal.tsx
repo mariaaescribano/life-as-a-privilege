@@ -15,7 +15,7 @@ import type { NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutrici
 // texto SIN sombra.
 // ─────────────────────────────────────────────────────────────────────────
 
-const NUTRI_IMG = disciplinaBgImg(nutricionNom) ?? "/img/fondos/nutri.png";
+const NUTRI_IMG = disciplinaBgImg(nutricionNom) ?? "/img/fondos/nutri.webp";
 
 export function NutrienteFichaModal({
   tarjetas,

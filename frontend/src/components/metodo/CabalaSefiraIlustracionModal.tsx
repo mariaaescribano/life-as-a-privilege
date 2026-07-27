@@ -14,7 +14,7 @@ import { cabalaBg, cabalaNom, cabalaTxt } from "../../GlobalVariables";
 // antetítulo). `onPageView` marca cada sefirá como leída según se navega.
 // ─────────────────────────────────────────────────────────────────────────
 
-const CABALA_IMG = disciplinaBgImg(cabalaNom) ?? "/img/fondos/cabala.png";
+const CABALA_IMG = disciplinaBgImg(cabalaNom) ?? "/img/fondos/cabala.webp";
 
 export function CabalaSefiraIlustracionModal({
   isOpen,

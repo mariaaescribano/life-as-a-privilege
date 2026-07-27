@@ -6,7 +6,9 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 import { AdminGuard } from '../auth/admin.guard';
 import { OwnerGuard } from '../auth/owner.guard';
 import { AuthService } from '../auth/auth.service';
+import { Throttle } from '@nestjs/throttler';
 import { isAdminEmail, isAccesoLibreEmail, verifyAdminPassword } from '../auth/admin.util';
+import { LIMITE_AUTH } from '../rate-limit';
 
 // #region user
 @Controller('user')
@@ -16,12 +18,16 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
+  // Los cuatro de abajo frenan la fuerza bruta (probar contraseñas o emails en
+  // masa): diez intentos cada cinco minutos por IP.
   @Post("signIn")
+  @Throttle(LIMITE_AUTH)
   async create(@Body() body: CreateUser) {
     return await this.usersService.createUser(body);
   }
 
   @Post("logIn")
+  @Throttle(LIMITE_AUTH)
   async logIn(@Body() body: LoginUser) {
     return await this.usersService.logIn(body);
   }
@@ -32,6 +38,7 @@ export class UserController {
   // una hora y sirve una sola vez.
 
   @Post("password/forgot")
+  @Throttle(LIMITE_AUTH)
   @HttpCode(HttpStatus.OK)
   async forgotPassword(@Body() body: { email?: string }) {
     await this.usersService.solicitarRecuperacion(body?.email ?? '');
@@ -41,6 +48,7 @@ export class UserController {
   }
 
   @Post("password/reset")
+  @Throttle(LIMITE_AUTH)
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() body: { token?: string; password?: string }) {
     if (!body?.token) throw new BadRequestException('Falta el token');
@@ -77,7 +85,10 @@ export class UserController {
   // Verifica la contraseña de administración. Si el email está en ADMIN_EMAILS y
   // la contraseña (ADMIN_PASSWORD) es correcta, devuelve un token NUEVO con el
   // permiso de admin activado. Sin este token, el AdminGuard rechaza todo.
+  // La llave del panel entero: sin límite, se puede probar ADMIN_PASSWORD a
+  // ciegas hasta acertar.
   @Post("admin/verify")
+  @Throttle(LIMITE_AUTH)
   @UseGuards(JwtAuthGuard)
   async verifyAdmin(@Req() req: any, @Body() body: { password?: string }) {
     const email = req.user?.email;

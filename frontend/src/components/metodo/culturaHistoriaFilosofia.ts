@@ -19,7 +19,7 @@ import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
 // Todas las fotos (círculo + viñeta) van planas en una sola carpeta, con el
 // nombre del sub-hito (misma convención que Historia Universal / historiageneral).
 const foto = (_era: string, sub: string) =>
-  `/recorrido/cultura/historiafilosofia/${sub}.png`;
+  `/recorrido/cultura/historiafilosofia/${sub}.webp`;
 
 // Sub-hito con su cómic (una viñeta). `pregunta` opcional (gancho, va primero) y
 // `dato` opcional (curiosidad, va al final). El `cuerpo` son los párrafos.
@@ -891,5 +891,5 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
 // subcarpeta eras/, con el nombre = clave de la era. Mientras no exista el
 // archivo, el círculo muestra su marcador (onError de LineaTiempoCultura).
 HISTORIA_FILOSOFIA_HITOS.forEach((era) => {
-  era.foto = `/recorrido/cultura/historiafilosofia/eras/${era.key}.png`;
+  era.foto = `/recorrido/cultura/historiafilosofia/eras/${era.key}.webp`;
 });

@@ -37,7 +37,7 @@ export function ComicTemaModal({
           onClose={onClose}
           onComplete={onClose}
           themeColor={fisiologiaTxt}
-          disciplinaBgImage="/img/fondos/fisio.png"
+          disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
         />
       </ModalContent>

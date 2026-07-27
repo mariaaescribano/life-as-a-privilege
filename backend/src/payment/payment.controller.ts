@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, Get, Headers, HttpCode, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
+import { SkipThrottle } from '@nestjs/throttler';
 import { PaymentService } from './payment.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 
@@ -14,7 +15,12 @@ export class PaymentController {
   // contra STRIPE_WEBHOOK_SECRET en el servicio; sin firma válida no se procesa
   // nada. Es lo que garantiza que un pago concede el acceso aunque la persona
   // cierre la pestaña al volver de Stripe.
+  // @SkipThrottle: el límite por IP NO debe aplicarse aquí. Stripe reintenta los
+  // eventos en ráfagas y todos llegan de sus mismas IPs; si los cortáramos,
+  // habría pagos cobrados que nunca desbloquean nada. La puerta la guarda la
+  // firma `stripe-signature`, no el número de peticiones.
   @Post('webhook')
+  @SkipThrottle()
   @HttpCode(HttpStatus.OK)
   async webhook(
     @Req() req: RawBodyRequest<Request>,

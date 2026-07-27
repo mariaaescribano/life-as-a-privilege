@@ -154,7 +154,7 @@ export default function MetodoFisiologia() {
         isOpen={intro.open}
         vinetas={ORIGEN_CIENCIA}
         themeColor={fisiologiaTxt}
-        disciplinaBgImage="/img/fondos/fisio.png"
+        disciplinaBgImage="/img/fondos/fisio.webp"
         disciplinaBgColor={fisiologiaBg}
         continueLabel="Fisiología"
         onContinue={intro.close}

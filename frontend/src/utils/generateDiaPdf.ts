@@ -16,7 +16,7 @@ const DOSHA_COLORS: Record<string, [number, number, number]> = {
 const MARGIN = 20;
 const PAGE_W = 210;
 const CONTENT_W = PAGE_W - MARGIN * 2;
-const BG_IMG = "/img/fondos/hinduismo.png";
+const BG_IMG = "/img/fondos/hinduismo.webp";
 
 export interface DiaBloque { hora: string; actividad: string; comida: boolean; alimentos: string[] }
 

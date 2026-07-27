@@ -454,7 +454,7 @@ export default function MetodoFisiologiaOrganismo() {
         continueLabel="Niveles"
         themeColor={fisiologiaTxt}
         textColor={fisiologiaTxt}
-        disciplinaBgImage="/img/fondos/fisio.png"
+        disciplinaBgImage="/img/fondos/fisio.webp"
         disciplinaBgColor={fisiologiaBg}
       />
 

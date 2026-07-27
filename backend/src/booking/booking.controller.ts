@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Post, HttpCode, HttpStatus, ConflictException, BadRequestException } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { BookingService } from './booking.service';
+import { LIMITE_RESERVA } from '../rate-limit';
 
 export class BookingDto {
   nombre: string;
@@ -20,7 +22,10 @@ export class BookingController {
     return { taken };
   }
 
+  // El más caro de abusar: cada llamada OCUPA UN HUECO de agenda que luego no
+  // se puede vender. Cinco por hora y por IP.
   @Post()
+  @Throttle(LIMITE_RESERVA)
   @HttpCode(HttpStatus.OK)
   async create(@Body() dto: BookingDto) {
     if (!dto?.nombre?.trim() || !dto?.email?.trim() || !dto?.fecha || !dto?.slot) {
