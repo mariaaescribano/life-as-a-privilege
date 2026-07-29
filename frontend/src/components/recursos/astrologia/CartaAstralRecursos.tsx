@@ -11,6 +11,7 @@ import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
 import { modulosAstrologiaCurso0 } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
+import { FUENTE_GLIFOS } from "../../metodo/glifosAstro";
 
 const popIn = keyframes`
   from { opacity: 0; transform: scale(0.2); }
@@ -76,7 +77,7 @@ const SpaceBg = () => (
 const PlanetGlyph = ({ symbol, size = 32, color }: { symbol: string; size?: number; color: string }) => (
   <svg viewBox="0 0 36 36" width={size} height={size} style={{ flexShrink: 0, filter: `drop-shadow(0 0 6px ${color}99)` }}>
     <text x="18" y="27" textAnchor="middle" fontSize="26"
-      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
+      fontFamily={FUENTE_GLIFOS}
       fill={color}>
       {symbol}{"\uFE0E"}
     </text>

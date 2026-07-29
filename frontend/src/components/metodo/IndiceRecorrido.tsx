@@ -179,7 +179,9 @@ export function IndiceRecorrido({
         py={{ base: "9px", md: "12px" }}
         borderRadius="full"
         overflow="hidden"
-        border={`2px solid ${TINTA}`}
+        // Trazo más fino y algo apagado en móvil (ver «Mis notas» y «Agenda una
+        // llamada», los otros dos flotantes: los tres van igual).
+        border={{ base: `1px solid ${TINTA}80`, md: `2px solid ${TINTA}` }}
         boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${bg}66`}
         cursor="pointer"
         transition="all 0.22s ease"
@@ -249,7 +251,10 @@ export function IndiceRecorrido({
                       <Text flex="1" minW={0} color={esActual ? contraste(ACENTO) : OSCURO} fontWeight={esActual ? "700" : "600"}
                             fontSize={{ base: "sm", md: "md" }} lineHeight="1.25" noOfLines={1}
                             style={esActual && contraste(ACENTO) === PAPEL ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
-                        {p.titulo}
+                        {/* En móvil, la versión corta del título si el paso la
+                            trae (los largos se cortaban con noOfLines={1}). */}
+                        <Box as="span" display={{ base: "none", md: "inline" }}>{p.titulo}</Box>
+                        <Box as="span" display={{ base: "inline", md: "none" }}>{p.tituloCorto ?? p.titulo}</Box>
                       </Text>
                       {bloqueado && (
                         <Box as="svg" flexShrink={0} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"

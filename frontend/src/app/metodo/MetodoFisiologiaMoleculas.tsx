@@ -241,6 +241,32 @@ function MoleculaVisual({ mol, tam }: { mol: Mol; tam: Record<Tipo, any> }) {
 }
 
 // ── Panel con fondo de disciplina (caja del recorrido) ──────────────────────
+// Botón de acción de la página: relleno en el lila de la disciplina con la letra
+// oscura, el mismo que «Ahora, el Helio →» de /metodo/fisiologia/atomos. Antes
+// aquí eran enlaces de texto transparentes y no tenían presencia.
+function BotonAccion({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+  return (
+    <Box as="button" onClick={onClick}
+         display="inline-flex" alignItems="center" gap={2}
+         px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
+         fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+         letterSpacing="0.05em" cursor="pointer" transition="all 0.2s" whiteSpace="nowrap"
+         boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+         _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
+      {children}
+    </Box>
+  );
+}
+
+// Fila de acciones: siempre abajo (`mt="auto"`) y a la derecha, dentro de la caja.
+function AccionesBox({ children }: { children: React.ReactNode }) {
+  return (
+    <Flex gap={3} mt="auto" pt={5} wrap="wrap" justify="flex-end" w="100%">
+      {children}
+    </Flex>
+  );
+}
+
 function PanelBox({ children, minH, px, py, ...rest }: any) {
   return (
     <Box position="relative" borderRadius="2xl" overflow="hidden"
@@ -535,17 +561,12 @@ export default function MetodoFisiologiaMoleculas() {
                             </Text>
                           ))}
 
-                          <Flex gap={4} mt="auto" pt={3} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
-                            <Box as="button" onClick={siguiente}
-                                 display="inline-flex" alignItems="center" gap={1.5}
-                                 bg="transparent" border="none" color={fisiologiaTxt}
-                                 fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
-                                 letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                                 style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
-                                 _hover={{ color: "white", transform: "translateX(3px)" }}>
+                          <AccionesBox>
+                            <BotonAccion onClick={reiniciar}>↺ Volver a hacer</BotonAccion>
+                            <BotonAccion onClick={siguiente}>
                               {esUltima ? "Ver las moléculas de la Vida →" : "Siguiente →"}
-                            </Box>
-                          </Flex>
+                            </BotonAccion>
+                          </AccionesBox>
                         </Flex>
                       </PanelBox>
                     </Flex>
@@ -557,7 +578,9 @@ export default function MetodoFisiologiaMoleculas() {
                   <MBox key="final" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}>
                    <PanelBox w="100%" minH={{ md: "360px" }}>
-                    <Flex direction="column" align="center" gap={{ base: 7, md: 9 }} py={{ base: 2, md: 4 }}>
+                    {/* `h="100%"` para que el `mt="auto"` de AccionesBox tenga
+                        contra qué empujar y el botón quede pegado abajo. */}
+                    <Flex direction="column" align="center" h="100%" gap={{ base: 7, md: 9 }} py={{ base: 2, md: 4 }}>
 
                       <Flex wrap="nowrap" justify="center" align="flex-start" gap={{ base: 1.5, md: 5 }} w="100%">
                         {MOLS.map((m, i) => (
@@ -578,26 +601,18 @@ export default function MetodoFisiologiaMoleculas() {
                           </MBox>
                         ))}
                       </Flex>
+
+                      {/* Acción de esta fase, también dentro de la caja y abajo
+                          a la derecha (antes vivía fuera, al final de la página). */}
+                      <AccionesBox>
+                        <BotonAccion onClick={empezarDeCero}>↺ Volver a hacer</BotonAccion>
+                      </AccionesBox>
                     </Flex>
                    </PanelBox>
                   </MBox>
                 )}
               </AnimatePresence>
           </Box>
-
-          {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}
-          {(completo || terminado) && (
-            <Flex justify="flex-end" w="100%">
-              <Box as="button" onClick={terminado ? empezarDeCero : reiniciar}
-                   display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
-                   bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
-                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
-                   letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
-                   _hover={{ bg: "rgba(255,255,255,0.16)", color: fisiologiaTxt, borderColor: `${fisiologiaTxt}aa` }}>
-                ↺ Volver a hacer
-              </Box>
-            </Flex>
-          )}
         </Flex>
       </Flex>
 

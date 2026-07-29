@@ -177,7 +177,10 @@ export function MiniDiario() {
         py={{ base: "10px", md: "13px" }}
         borderRadius="full"
         bg={btnBg}
-        border={`2px solid ${btnFg}`}
+        // En móvil el trazo va más fino y algo apagado: a ese tamaño los 2px
+        // llenos dibujaban un contorno duro que se comía el botón. En escritorio
+        // se queda como estaba.
+        border={{ base: `1px solid ${btnFg}80`, md: `2px solid ${btnFg}` }}
         boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${btnBg}66`}
         cursor="pointer"
         transition="all 0.22s ease"

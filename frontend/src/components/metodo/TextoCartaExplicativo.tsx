@@ -63,7 +63,14 @@ const twinkle = keyframes`
   50%      { opacity: 1; }
 `;
 
-/* Estrellas titilantes, idénticas a las del ComicViewer (Ilustraciones). */
+/* Brillo de la caja: esta caja (y SOLO esta) va apagada respecto a las demás.
+   BRILLO afecta al fondo, las estrellas y los halos; BRILLO_FOTO a la propia
+   ilustración de la viñeta, que es lo que más luz daba. */
+const BRILLO = 0.5;
+const BRILLO_FOTO = 0.7;
+
+/* Estrellas titilantes, idénticas a las del ComicViewer (Ilustraciones), pero
+   atenuadas con BRILLO. */
 const Stars = () => {
   const stars = [
     { top: "12%", left: "8%", size: 2, delay: "0s" },
@@ -88,9 +95,10 @@ const Stars = () => {
           borderRadius="full"
           bg="white"
           animation={`${twinkle} 3.5s ease-in-out ${s.delay} infinite`}
-          boxShadow="0 0 6px rgba(255,255,255,0.85), 0 0 14px rgba(180,255,245,0.55)"
+          boxShadow={`0 0 6px rgba(255,255,255,${0.85 * BRILLO}), 0 0 14px rgba(180,255,245,${0.55 * BRILLO})`}
           pointerEvents="none"
           zIndex={1}
+          style={{ filter: `brightness(${BRILLO})` }}
         />
       ))}
     </>
@@ -126,8 +134,8 @@ const NavBtn = ({
     as="button"
     onClick={disabled ? undefined : onClick}
     aria-label={dir === "izq" ? "Anterior" : "Siguiente"}
-    w={{ base: "44px", md: "52px" }}
-    h={{ base: "44px", md: "52px" }}
+    w={{ base: "48px", md: "57px" }}
+    h={{ base: "48px", md: "57px" }}
     flexShrink={0}
     borderRadius="full"
     display="flex"
@@ -147,8 +155,8 @@ const NavBtn = ({
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 -960 960 960"
-      w={{ base: "22px", md: "26px" }}
-      h={{ base: "22px", md: "26px" }}
+      w={{ base: "24px", md: "29px" }}
+      h={{ base: "24px", md: "29px" }}
       fill="#ffffff"
       style={{
         transform: dir === "der" ? "scaleX(-1)" : undefined,
@@ -234,9 +242,10 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         flex="1"
         minW={0}
         w="100%"
-        // Caja más pequeña; en móvil ocupa el hueco entre las dos flechas.
-        maxW={{ base: "100%", md: "860px" }}
-        h={{ base: "auto", md: "380px" }}
+        // En móvil ocupa el hueco entre las dos flechas. En escritorio, un 10%
+        // más grande que la caja original (860×380) para que no se quede corta.
+        maxW={{ base: "100%", md: "946px" }}
+        h={{ base: "auto", md: "418px" }}
         maxH={{ base: "calc(100dvh - 96px)" }}
         display="flex"
         flexDirection="column"
@@ -244,14 +253,16 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         borderRadius="xl"
         overflow="hidden"
         // Mismo glow que la cabecera (halo blanco + menta con el tinte de la
-        // disciplina), en vez de una sombra plana.
-        boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`}
+        // disciplina), en vez de una sombra plana — atenuado por BRILLO.
+        boxShadow={`0 0 16px rgba(255,255,255,${0.16 * BRILLO}), 0 0 34px rgba(255,255,255,${0.08 * BRILLO}), 0 0 60px rgba(180,255,245,${0.09 * BRILLO}), 0 0 20px ${color}0d, 0 0 48px ${color}08`}
         animation={`${fadeIn} 0.55s ease both`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{ touchAction: "pan-y" }}
       >
-        {/* Fondo de la caja (foto espacial + velo) */}
+        {/* Fondo de la caja (foto espacial + velo), un 30% más apagado que el
+            del resto de cajas: solo se atenúa el FONDO, el texto se queda igual
+            de nítido. */}
         <Box
           position="absolute"
           inset="0"
@@ -260,6 +271,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           style={{
             background:
               "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
+            filter: `brightness(${BRILLO})`,
           }}
         >
           <Box
@@ -285,7 +297,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           left="15%"
           right="15%"
           h="1px"
-          bgGradient={`linear(to-r, transparent, ${color}aa, transparent)`}
+          bgGradient={`linear(to-r, transparent, ${color}55, transparent)`}
           zIndex={3}
         />
 
@@ -302,8 +314,11 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           overflowY={{ base: "auto", md: "hidden" }}
           overflowX="hidden"
           // Móvil sin padding para que la foto sea hero (full-bleed) arriba; el
-          // texto añade el suyo. Desktop, padding normal.
-          px={{ base: 0, md: 10 }}
+          // texto añade el suyo. Desktop: padding a la izquierda, pero NINGUNO a
+          // la derecha — así la columna de texto llega hasta la pared de la caja
+          // y su barra de scroll queda pegada al borde, sin flotar sobre el texto.
+          pl={{ base: 0, md: 10 }}
+          pr={0}
           py={{ base: 0, md: 10 }}
           sx={{
             "&::-webkit-scrollbar": { width: "6px" },
@@ -342,16 +357,23 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           {/* Foto (izquierda) — solo cuando la imagen ya está lista */}
           {imgReady && (
           <Box
-            // Desktop: foto cuadrada MÁS GRANDE a la izquierda.
+            // Desktop: foto cuadrada MÁS GRANDE a la izquierda (290px + 10%).
             // Móvil: hero image a todo el ancho que cubre la parte de arriba.
-            w={{ base: "100%", md: "290px" }}
-            maxW={{ base: "100%", md: "290px" }}
-            h={{ base: "38vh", md: "auto" }}
+            w={{ base: "100%", md: "319px" }}
+            maxW={{ base: "100%", md: "319px" }}
+            h={{ base: "42vh", md: "auto" }}
             aspectRatio={{ base: "auto", md: 1 }}
             flexShrink={0}
             alignSelf={{ base: "stretch", md: "center" }}
             position="relative"
-            filter="none"
+            // Brillo alrededor de la carta SOLO en escritorio, donde la foto va
+            // al lado del texto y tiene aire por los cuatro costados para que el
+            // halo se vea. En móvil es un hero a todo el ancho: el resplandor se
+            // recortaría contra los bordes de la caja y se vería como una mancha.
+            filter={{
+              base: "none",
+              md: `drop-shadow(0 0 10px rgba(255,255,255,${0.22 * BRILLO})) drop-shadow(0 0 26px ${color}26) drop-shadow(0 0 54px ${color}13)`,
+            }}
           >
             {!imgFailed[i] ? (
               <Image
@@ -361,6 +383,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
                 h="100%"
                 objectFit={{ base: "cover", md: "contain" }}
                 borderRadius={{ base: 0, md: "lg" }}
+                // La ilustración es lo que más luz daba: va atenuada.
+                style={{ filter: `brightness(${BRILLO_FOTO})` }}
               />
             ) : (
               <Flex
@@ -376,7 +400,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
                 border={`1px dashed ${color}44`}
                 borderRadius="lg"
               >
-                <Text fontSize="4xl">✨</Text>
+                {/* Sin emoji: si no hay ilustración, solo el aviso en texto. */}
                 <Text color={`${color}cc`} fontSize="sm" fontStyle="italic">
                   Ilustración {i + 1} próximamente
                 </Text>
@@ -407,7 +431,10 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
             // una raya vertical de luz cortada a la izquierda. El padding le da
             // aire para que el halo respire sin cortarse.
             pl={{ base: 5, md: 4 }}
-            pr={{ base: 5, md: 4 }}
+            // En desktop este box llega hasta la pared derecha de la caja, así
+            // que la barra de scroll se dibuja pegada al borde; el padding es el
+            // aire entre el TEXTO y la barra (nunca se solapan).
+            pr={{ base: 5, md: 8 }}
             sx={{
               "&::-webkit-scrollbar": { width: "6px" },
               "&::-webkit-scrollbar-track": { background: "transparent" },
@@ -426,7 +453,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
               // va incrustada en la página (380px de alto), no a pantalla
               // completa, así que a 3xl las viñetas largas obligaban a hacer
               // demasiado scroll dentro del box.
-              fontSize={{ base: "xl", md: "2xl" }}
+              // 10% más grande que el original (xl / 2xl → 1.375rem / 1.65rem).
+              fontSize={{ base: "1.375rem", md: "1.65rem" }}
               lineHeight="1.8"
               letterSpacing="0.02em"
               fontWeight="400"
@@ -446,7 +474,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           left="15%"
           right="15%"
           h="1px"
-          bgGradient={`linear(to-r, transparent, ${color}aa, transparent)`}
+          bgGradient={`linear(to-r, transparent, ${color}55, transparent)`}
           zIndex={3}
         />
 

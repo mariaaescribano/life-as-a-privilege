@@ -648,14 +648,14 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
             direction="column" align="flex-end" gap={2}>
         {esInicio ? (
           <>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
+            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>Agenda una llamada</BotonAyuda>
             <BotonAyuda onClick={() => setCursoOpen(true)}>Orientación</BotonAyuda>
           </>
         ) : (
           <>
             <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>Ejemplo</BotonAyuda>
             {!ocultarCompania && (
-              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>¿Quieres compañía?</BotonAyuda>
+              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>Agenda una llamada</BotonAyuda>
             )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
@@ -712,7 +712,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
                    _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4" mb={5} style={{ textShadow: INK_SHADOW }}>
-                ¿Prefieres hacerlo acompañado?
+                Agenda una llamada
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
                 Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.

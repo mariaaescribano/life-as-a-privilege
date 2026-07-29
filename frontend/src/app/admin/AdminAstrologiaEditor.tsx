@@ -4,7 +4,7 @@ import { Box, Flex, Text, Textarea, Input, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { Glifo } from "../../components/metodo/Glifo";
+import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
 import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import {
@@ -279,7 +279,7 @@ export default function AdminAstrologiaEditor() {
                             {info && (
                               <>
                                 <Text color="rgba(255,255,255,0.5)">·</Text>
-                                <Glifo symbol={info.signo.symbol} color="#ffffff" size={18} />
+                                <GlifoSigno nombre={info.signo.name} color="#ffffff" size={18} />
                                 <Text color="#ffffff" fontSize="sm" style={{ textShadow: GLOW }}>{info.signo.name}</Text>
                                 {info.regente && (
                                   <Flex align="center" gap={1} ml={1}>

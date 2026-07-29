@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { CelulaCard, CelulaModal, ConsejoModal, type Consejo } from "../../components/metodo/celulasUi";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -16,9 +17,11 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
-// Glow de las cajas SOLO con el acento de Fisiología (sin halos blancos/menta,
-// que sobre el turquesa se veían como un "box clarito" alrededor de la caja).
-const CAJA_GLOW = `0 0 16px ${fisiologiaTxt}26, 0 0 40px ${fisiologiaTxt}16`;
+// Glow de TODAS las cajas de la página: exactamente el mismo que pinta la
+// cabecera (MetodoStepHeader con fondo de disciplina). Está centralizado en
+// FotoBox como `glowHeader`, así que cabecera, paneles y tarjetas comparten el
+// halo y ninguna caja lleva línea de borde ni sombra oscura.
+const CAJA_GLOW = glowHeader(fisiologiaTxt);
 
 // Helper para coger células por id de la lista plana de Fisiología.
 const pick = (...ids: string[]): Celula[] =>
@@ -119,7 +122,9 @@ const ORGANOS: Organo[] = [
       {
         titular: "La tensión alta desgasta tus arterias en silencio.",
         claves: ["La presión alta lesiona arterias", "Forma placas al repararse", "Sube el riesgo de infarto"],
-        texto: <>La sangre ejerce presión sobre las paredes de las arterias en cada latido. Si esa presión es demasiado alta durante años, las lesiona poco a poco. El organismo intenta repararlas, pero esas reparaciones favorecen la formación de placas que estrechan los vasos y aumentan el riesgo de infarto o ictus.</>,
+        texto: <>La sangre ejerce presión sobre las paredes de las arterias en cada latido. Si esa presión es demasiado alta durante años, va produciendo pequeñas grietas o lesiones en su capa interna. El organismo intenta repararlas para mantener la arteria intacta. Sin embargo, como el daño se repite una y otra vez, durante esas reparaciones pueden quedar atrapados colesterol y células inflamatorias en la pared de la arteria. Con el tiempo, el cuerpo los recubre con tejido cicatricial, formando placas que sobresalen hacia el interior del vaso, estrechando las arterias y dificultando el paso de la sangre. Esto aumenta el riesgo de infarto o ictus.</>,
+      
+      
       },
       {
         titular: "Tu corazón también necesita dormir.",
@@ -795,18 +800,16 @@ function OrganoCard({
       w="100%"
       h="100%"
       borderRadius="2xl"
-      border={completo ? `1px solid ${fisiologiaTxt}aa` : `1px solid ${fisiologiaTxt}33`}
+      border="none"
       cursor="pointer"
       fontFamily="'EB Garamond', serif"
-      boxShadow={completo
-        ? `0 4px 18px rgba(0,0,0,0.22), 0 0 22px ${fisiologiaTxt}66`
-        : `0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${fisiologiaTxt}26`}
+      // Mismo halo que la cabecera (CAJA_GLOW), sin línea de borde ni sombra
+      // oscura: los boxes flotan sobre el turquesa en vez de recortarse contra
+      // él. El órgano completo se distingue por su sello, no por el borde.
+      // En hover solo sube: el halo no cambia de tono.
+      boxShadow={CAJA_GLOW}
       transition="all 0.22s ease"
-      _hover={{
-        transform: "translateY(-4px)",
-        borderColor: `${fisiologiaTxt}88`,
-        boxShadow: `0 10px 30px rgba(0,0,0,0.3), 0 0 26px ${fisiologiaTxt}55`,
-      }}
+      _hover={{ transform: "translateY(-4px)", boxShadow: CAJA_GLOW }}
       _active={{ transform: "translateY(-1px)" }}
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
@@ -1076,7 +1079,7 @@ function OrganoDetalle({
             borderRadius="2xl"
             overflow="hidden"
             bg={`${fisiologiaTxt}14`}
-            boxShadow={`0 8px 30px rgba(0,0,0,0.3), 0 0 18px ${fisiologiaTxt}26`}
+            boxShadow={CAJA_GLOW}
           >
             {!imgErr ? (
               <Image src={encodeURI(organo.foto)} alt={organo.label} w="100%" h="100%" objectFit="cover"

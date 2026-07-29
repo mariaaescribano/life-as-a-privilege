@@ -59,6 +59,40 @@ function parseInline(str: string, color: string): React.ReactNode[] {
   return nodes;
 }
 
+/**
+ * Recoge los ítems consecutivos de una lista a partir de la línea `desde`.
+ *
+ * Lo importante: una línea en blanco entre dos ítems NO corta la lista. En
+ * Markdown eso es una «lista suelta» (los ítems separados por un hueco), y
+ * seguía siendo la misma lista. Antes el bucle paraba en el primer blanco, así
+ * que cada ítem acababa en su propio <ol> y la numeración se reiniciaba: por eso
+ * se veía «1. 1. 1. 1.» en vez de «1. 2. 3. 4.».
+ */
+function recogerItems(lines: string[], desde: number, marca: RegExp): { items: string[]; next: number } {
+  const items: string[] = [];
+  let i = desde;
+  while (i < lines.length) {
+    const t = lines[i].trim();
+    if (marca.test(t)) {
+      items.push(t.replace(marca, ""));
+      i++;
+      continue;
+    }
+    if (t === "") {
+      // Nos saltamos los blancos solo si DESPUÉS sigue habiendo ítems; si no,
+      // la lista ha terminado de verdad y el blanco separa del bloque siguiente.
+      let j = i + 1;
+      while (j < lines.length && lines[j].trim() === "") j++;
+      if (j < lines.length && marca.test(lines[j].trim())) {
+        i = j;
+        continue;
+      }
+    }
+    break;
+  }
+  return { items, next: i };
+}
+
 export function Markdown({ text, color = "white", bigger = false }: MarkdownProps) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
   const blocks: React.ReactNode[] = [];
@@ -142,11 +176,8 @@ export function Markdown({ text, color = "white", bigger = false }: MarkdownProp
 
     // Lista numerada
     if (/^\d+\.\s+/.test(trimmed)) {
-      const items: string[] = [];
-      while (i < lines.length && /^\d+\.\s+/.test(lines[i].trim())) {
-        items.push(lines[i].trim().replace(/^\d+\.\s+/, ""));
-        i++;
-      }
+      const { items, next } = recogerItems(lines, i, /^\d+\.\s+/);
+      i = next;
       blocks.push(
         <List key={key++} as="ol" styleType="decimal" pl={{ base: 6, md: 7 }} my={{ base: 3, md: 4 }} spacing={2}>
           {items.map((it, j) => (
@@ -161,11 +192,8 @@ export function Markdown({ text, color = "white", bigger = false }: MarkdownProp
 
     // Lista con viñetas
     if (/^[-*]\s+/.test(trimmed)) {
-      const items: string[] = [];
-      while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) {
-        items.push(lines[i].trim().replace(/^[-*]\s+/, ""));
-        i++;
-      }
+      const { items, next } = recogerItems(lines, i, /^[-*]\s+/);
+      i = next;
       blocks.push(
         <List key={key++} styleType="disc" pl={{ base: 6, md: 7 }} my={{ base: 3, md: 4 }} spacing={2}>
           {items.map((it, j) => (

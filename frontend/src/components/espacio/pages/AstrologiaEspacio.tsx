@@ -19,6 +19,8 @@ import {
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import SiteFooter from "../../global/Footer";
+import { GlifoSigno } from "../../metodo/Glifo";
+import { FUENTE_GLIFOS } from "../../metodo/glifosAstro";
 import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
 
 /* ══════════════════════════════════════════════
@@ -93,22 +95,13 @@ const SpaceBg = () => (
 /* ══════════════════════════════════════════════
    GLIFO ZODIACAL — svg text (sin emoji)
 ══════════════════════════════════════════════ */
-const ZodiacGlyph = ({ symbol, size = 22 }: { symbol: string; size?: number }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ flexShrink: 0 }}>
-    <text x="12" y="19" textAnchor="middle" fontSize="19"
-      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
-      {symbol}{"\uFE0E"}
-    </text>
-  </svg>
-);
-
 /* ══════════════════════════════════════════════
    SÍMBOLO DE PLANETA — en círculo
 ══════════════════════════════════════════════ */
 const PlanetGlyph = ({ symbol, size = 32, color }: { symbol: string; size?: number; color: string }) => (
   <svg viewBox="0 0 36 36" width={size} height={size} style={{ flexShrink: 0, filter: `drop-shadow(0 0 6px ${color}99)` }}>
     <text x="18" y="27" textAnchor="middle" fontSize="26"
-      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
+      fontFamily={FUENTE_GLIFOS}
       fill={color}>
       {symbol}{"\uFE0E"}
     </text>
@@ -458,7 +451,7 @@ const ZodiacModal = ({
                     color={astrologiaTxt}
                     filter={`drop-shadow(0 0 12px ${astrologiaTxt}cc) drop-shadow(0 0 24px ${astrologiaTxt}66)`}
                   >
-                    <ZodiacGlyph symbol={signData.symbol} size={34} />
+                    <GlifoSigno nombre={signData.name} color={astrologiaTxt} size={34} />
                   </Box>
                   <Text
                     color={astrologiaTxt}
@@ -592,7 +585,7 @@ const ZodiacModal = ({
                       display="flex" alignItems="center" justifyContent="center"
                       color={astrologiaTxt} flexShrink={0}
                     >
-                      <ZodiacGlyph symbol={sign.symbol} size={18} />
+                      <GlifoSigno nombre={sign.name} color={astrologiaTxt} size={18} />
                     </Box>
                     <Text color={astrologiaTxt} fontSize="lg"
                       fontFamily="'EB Garamond', serif" letterSpacing="0.04em">

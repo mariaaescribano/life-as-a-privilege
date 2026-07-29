@@ -101,11 +101,13 @@ export default function MetodoTcmElementos() {
     disponible: tieneContenido(el),
   })), [data]);
 
-  // Cuando se desbloquea un elemento nuevo, su cursor pasa de "prohibido" a
-  // "mano". Pero el navegador NO recalcula el cursor hasta que el ratón se mueve:
-  // si el puntero está quieto sobre la estrella, seguiría marcando prohibido.
-  // Forzamos el recálculo alternando pointer-events en el SVG cada vez que cambia
-  // qué elementos están activos, para que el puntero pase a la flechita al vuelo.
+  // Cuando se desbloquea un elemento nuevo, su cursor pasa a "mano". Pero el
+  // navegador NO recalcula el cursor hasta que el ratón se mueve: si el puntero
+  // está quieto sobre la estrella (justo donde estaba al cerrar el cómic), se
+  // quedaría con el cursor de antes. Forzamos el recálculo apagando y volviendo
+  // a encender pointer-events en el SVG cada vez que cambia qué elementos están
+  // activos —y al cerrarse el cómic, que es cuando llega el desbloqueo—, para
+  // que el puntero pase a la mano al vuelo.
   const svgRef = useRef<any>(null);
   const activosFirma = estados.map((e) => (e.desbloqueado && e.disponible ? "1" : "0")).join("");
   useEffect(() => {
@@ -113,9 +115,18 @@ export default function MetodoTcmElementos() {
     if (!svg) return;
     const prev = svg.style.pointerEvents;
     svg.style.pointerEvents = "none";
-    const id = requestAnimationFrame(() => { svg.style.pointerEvents = prev; });
-    return () => cancelAnimationFrame(id);
-  }, [activosFirma]);
+    // Hacen falta DOS frames reales: restaurándolo en el mismo frame el
+    // navegador no llega a rehacer el hit-test y el cursor no cambia.
+    let id2 = 0;
+    const id1 = requestAnimationFrame(() => {
+      id2 = requestAnimationFrame(() => { svg.style.pointerEvents = prev; });
+    });
+    return () => {
+      cancelAnimationFrame(id1);
+      if (id2) cancelAnimationFrame(id2);
+      svg.style.pointerEvents = prev;
+    };
+  }, [activosFirma, comicEl]);
 
   // Pinchar un elemento abre su cómic (no navega a otra página). El autoguardado,
   // los tests y el "marcar como leído" los gestiona ElementoComicModal.
@@ -192,8 +203,13 @@ export default function MetodoTcmElementos() {
                   const label = vertice(i, R + 46);
                   const activo = desbloqueado && disponible;
                   const color = ELEMENTOS[el].color;
+                  // Cursor: mano en los desbloqueados y flecha normal en los
+                  // bloqueados. NUNCA el círculo de prohibido: si el navegador
+                  // tarda en refrescar el cursor tras un desbloqueo, lo peor que
+                  // se ve es la flecha normal (y el clic ya funciona), nunca un
+                  // "prohibido" mentiroso.
                   return (
-                    <MotionG key={el} style={{ cursor: activo ? "pointer" : "not-allowed",
+                    <MotionG key={el} style={{ cursor: activo ? "pointer" : "default",
                                transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}
                        initial={reduce ? false : { opacity: 0, scale: 0.3 }}
                        animate={reduce ? {} : { opacity: 1, scale: 1 }}

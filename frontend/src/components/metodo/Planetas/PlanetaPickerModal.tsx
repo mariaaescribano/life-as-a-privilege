@@ -1,19 +1,10 @@
 import React from "react";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import { CASAS, CUERPOS, ZODIAC_SIGNS, type CuerpoKey } from "../astrologiaData";
-import { Glifo } from "../Glifo";
+import { Glifo, GlifoSigno } from "../Glifo";
 import { SpaceBg } from "../SpaceBg";
 import { valorOf, type CartaData } from "./useCartaPlanetas";
 void React;
-
-const ZodiacGlyph = ({ symbol, size = 20, color = "currentColor" }: { symbol: string; size?: number; color?: string }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={color} style={{ flexShrink: 0 }}>
-    <text x="12" y="19" textAnchor="middle" fontSize="19"
-          fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
-      {symbol}{"︎"}
-    </text>
-  </svg>
-);
 
 export interface PickerState {
   key: CuerpoKey;
@@ -152,7 +143,7 @@ export function PlanetaPickerModal({ picker, carta, onClose, onSelect }: Planeta
                       flexShrink={0}
                       boxShadow={`0 0 10px ${color}33`}
                     >
-                      <ZodiacGlyph symbol={s.symbol} size={20} />
+                      <GlifoSigno nombre={s.name} color={color} size={20} />
                     </Box>
                     <Text color={color} fontSize="lg" fontFamily="'EB Garamond', serif" letterSpacing="0.04em">
                       {s.name}

@@ -10,7 +10,8 @@ import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
-import { Glifo } from "../../components/metodo/Glifo";
+import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
+import { trazosSigno } from "../../components/metodo/signosIconos";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
@@ -342,13 +343,19 @@ export default function MetodoAstrologiaCasas() {
                     {/* marcador superior (12 en punto) */}
                     <polygon points={`${CX - 8},${CY - R_OUT - 6} ${CX + 8},${CY - R_OUT - 6} ${CX},${CY - R_OUT + 8}`}
                              fill={astrologiaTxt} style={{ filter: `drop-shadow(0 0 5px ${astrologiaTxt})` }} />
-                    {/* glifo central del signo de la casa activa */}
+                    {/* Icono del signo de la casa activa, en el centro de la
+                        rueda. Va DIBUJADO (ya no el carácter ♈♉♊…, que los
+                        sistemas pintan como emoji morado): escalamos el lienzo
+                        de 24×24 del icono a 40 px. */}
                     {info && (
-                      <text x={CX} y={CY + 12} textAnchor="middle" fontSize={34} fill={info.regente?.color ?? astrologiaTxt}
-                            fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif"
-                            style={{ filter: `drop-shadow(0 0 8px ${(info.regente?.color ?? astrologiaTxt)}aa)` }}>
-                        {info.signo.symbol}{"︎"}
-                      </text>
+                      <g transform={`translate(${CX - 20} ${CY - 20}) scale(${40 / 24})`}
+                         fill="none" stroke={info.regente?.color ?? astrologiaTxt}
+                         strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round"
+                         style={{ filter: `drop-shadow(0 0 8px ${(info.regente?.color ?? astrologiaTxt)}aa)` }}>
+                        {(trazosSigno(info.signo.name) ?? []).map((d, i) => (
+                          <path key={i} d={d} />
+                        ))}
+                      </g>
                     )}
                   </Box>
                   <Text color={`${astrologiaTxt}99`} fontSize="xs" textAlign="center" mt={2} fontStyle="italic" letterSpacing="0.04em">
@@ -419,7 +426,7 @@ function CasaBox({
           <>
             <Box w="1px" h="22px" bg={`${astrologiaTxt}33`} flexShrink={0} />
             <Flex align="center" gap={1.5} minW={0}>
-              <Box flexShrink={0}><Glifo symbol={info.signo.symbol} color={astrologiaTxt} size={22} /></Box>
+              <Box flexShrink={0}><GlifoSigno nombre={info.signo.name} color={astrologiaTxt} size={22} /></Box>
               <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} noOfLines={1}>{info.signo.name}</Text>
             </Flex>
           </>

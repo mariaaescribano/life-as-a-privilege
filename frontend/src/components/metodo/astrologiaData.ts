@@ -1,16 +1,19 @@
+// Los signos NO llevan símbolo: sus caracteres (♈♉♊…) tienen versión emoji y
+// los sistemas los pintaban morados. Cada signo se dibuja como icono, por su
+// nombre → components/metodo/signosIconos.ts (<GlifoSigno nombre="…" />).
 export const ZODIAC_SIGNS = [
-  { name: "Aries",       symbol: "♈" },
-  { name: "Tauro",       symbol: "♉" },
-  { name: "Géminis",     symbol: "♊" },
-  { name: "Cáncer",      symbol: "♋" },
-  { name: "Leo",         symbol: "♌" },
-  { name: "Virgo",       symbol: "♍" },
-  { name: "Libra",       symbol: "♎" },
-  { name: "Escorpio",    symbol: "♏" },
-  { name: "Sagitario",   symbol: "♐" },
-  { name: "Capricornio", symbol: "♑" },
-  { name: "Acuario",     symbol: "♒" },
-  { name: "Piscis",      symbol: "♓" },
+  { name: "Aries" },
+  { name: "Tauro" },
+  { name: "Géminis" },
+  { name: "Cáncer" },
+  { name: "Leo" },
+  { name: "Virgo" },
+  { name: "Libra" },
+  { name: "Escorpio" },
+  { name: "Sagitario" },
+  { name: "Capricornio" },
+  { name: "Acuario" },
+  { name: "Piscis" },
 ];
 
 export const CASAS = Array.from({ length: 12 }, (_, i) => i + 1);

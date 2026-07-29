@@ -172,22 +172,224 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
+// ── Tarjeta de disciplina ────────────────────────────────────────────────────
+// Va en su propio componente para que CADA UNA tenga su propio observador: así
+// una tarjeta no se coloca hasta que ella misma asoma en pantalla. Con un único
+// observador para toda la cuadrícula, al llegar a la primera fila arrancaban las
+// ocho, y la segunda (en móvil, las filas 2, 3 y 4) se colocaba fuera de vista.
+//
+// El retraso lo marca la COLUMNA, no el índice global: las de una misma fila
+// entran de izquierda a derecha, y cada fila empieza su cuenta cuando aparece.
+// Si usáramos el índice global, la última esperaría más de un segundo desde que
+// ya se está viendo.
+function TarjetaDisciplina({
+  d,
+  delay,
+  isMobile,
+  entraAlCargar = false,
+  cargado = false,
+  onSelect,
+  onExplorar,
+}: {
+  d: Discipline;
+  delay: number;
+  isMobile: boolean;
+  /** Tarjeta de la PRIMERA fila: entra al cargar la página, sin esperar a asomar
+   *  en pantalla. Las de abajo sí esperan (ver `useEnPantalla`). */
+  entraAlCargar?: boolean;
+  /** Con `entraAlCargar`: el momento en que el padre dispara la entrada. */
+  cargado?: boolean;
+  onSelect: () => void;
+  onExplorar: () => void;
+}) {
+  // Margen suave (-6% en vez del -25% por defecto): la fila de abajo entra en
+  // cuanto asoma por el borde inferior, con un scroll corto. Con el -25% había
+  // que bajar un cuarto de pantalla —unos 200px— antes de que se dignaran a
+  // aparecer, y se sentía como que la página no reaccionaba.
+  const enPantalla = useEnPantalla("0px 0px -6% 0px");
+  // La primera fila queda justo en el pliegue: con el observador nunca llegaba a
+  // «asomar» y el usuario se encontraba un hueco turquesa vacío donde deberían
+  // estar las tarjetas. Esa fila entra con la página; las siguientes, al bajar.
+  const visto = entraAlCargar ? cargado : enPantalla.visto;
+  const hasBg = hasDisciplinaBg(d.name);
+  const displayName = d.name === "Medicina China" && isMobile ? "Med. China" : d.name;
+
+  return (
+    <Box
+      role="group"
+      mt="42px"
+      cursor="pointer"
+      onClick={onSelect}
+      // Dispara cuando ESTA tarjeta asoma en pantalla, no al cargar la página ni
+      // cuando asoma la cuadrícula: así también se ve colocarse a las de las
+      // filas de abajo, en vez de encontrarlas ya puestas al bajar.
+      ref={enPantalla.ref}
+      opacity={visto ? 1 : 0}
+      transform={visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
+      filter={visto ? "blur(0px)" : "blur(6px)"}
+      // Las ocho entran UNA DETRÁS DE OTRA, con 0.15s de hueco: se ve
+      // la secuencia pero es ágil (antes 0.09s, que se solapaba tanto
+      // que parecían entrar de golpe).
+      // Sin giro y sin rebote: antes entraban con rotate(-4deg) y una
+      // curva que se pasaba de largo, así que aterrizaban torcidas y se
+      // enderezaban dando un tumbo. Ahora suben limpias y se enfocan,
+      // con la curva del sistema Reveal. Mismos números que /elMetodo.
+      transition={`opacity 0.4s ease ${delay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s, filter 0.4s ease ${delay}s`}
+    >
+      {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
+          del reveal de entrada para que no se pisen los transforms. */}
+      <Box
+        position="relative"
+        pt="46px"
+        pb={{ base: 5, md: 7 }}
+        px={{ base: 3, md: 5 }}
+        bg={hasBg ? "transparent" : d.bg}
+        borderRadius="2xl"
+        textAlign="center"
+        overflow={hasBg ? "visible" : undefined}
+        boxShadow="0 4px 20px rgba(0,0,0,0.16)"
+        transition="transform 0.28s ease, box-shadow 0.28s ease"
+        _groupHover={{
+          transform: "translateY(-6px)",
+          boxShadow: "0 14px 38px rgba(0,0,0,0.26)",
+        }}
+      >
+        {/* Fondo propio de la disciplina (estrellas o imagen) — en su
+            propia capa con overflow:hidden, para que el icono que
+            sobresale por arriba (top:-36px) no quede recortado. */}
+        {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
+  
+        {/* Icono que sobresale por arriba — único elemento con glow
+            fuerte; en hover crece un 5% y aumenta su brillo. */}
+        <Box
+          position="absolute"
+          top="-36px"
+          left="50%"
+          transform="translateX(-50%)"
+          bg={hasBg ? "transparent" : d.bg}
+          borderRadius="full"
+          p="8px"
+          border={"4px solid "+ d.txt}
+          boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
+          w="72px"
+          h="72px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          zIndex={2}
+          overflow={hasBg ? "hidden" : undefined}
+          transition="transform 0.28s ease, box-shadow 0.28s ease"
+          _groupHover={{
+            transform: "translateX(-50%) scale(1.05)",
+            boxShadow: `0 0 30px ${d.txt}dd, 0 2px 20px ${d.txt}aa`,
+          }}
+        >
+          {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
+          <Box
+            position="relative"
+            zIndex={1}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            transition="filter 0.28s ease"
+            _groupHover={{ filter: "brightness(1.12)" }}
+          >
+            {d.renderIcon("42px")}
+          </Box>
+        </Box>
+  
+        {/* Nombre — protagonista tras el icono. Sombra reforzada en
+            el color de la disciplina para despegarlo del fondo. */}
+        <Text
+          position="relative"
+          zIndex={1}
+          color={d.txt}
+          fontWeight="700"
+          fontSize={{ base: "18px", md: "27px", lg: "33px" }}
+          letterSpacing="0.04em"
+          lineHeight="short"
+          textShadow={hasBg
+            ? `0 1px 3px ${d.bg}, 0 2px 8px ${d.bg}, 0 0 16px ${d.bg}dd, 0 2px 14px ${d.bg}aa`
+            : "2px 2px 4px rgba(0,0,0,0.55)"}
+        >
+          {displayName}
+        </Text>
+  
+        {/* Subtítulo — el verdadero protagonista: responde
+            "¿qué voy a descubrir aquí?". minH fija para que la fila
+            "Explorar disciplina" quede alineada en todas las tarjetas. */}
+        {d.tagline && (
+          <Text
+            position="relative"
+            zIndex={1}
+            mt={{ base: 2, md: 3 }}
+            minH="2em"
+            color={d.txt}
+            fontWeight="500"
+            fontSize={{ base: "sm", md: "lg" }}
+            lineHeight="1.45"
+            letterSpacing="0.01em"
+            opacity={0.96}
+            textShadow={hasBg
+              ? `0 1px 3px ${d.bg}, 0 1px 6px ${d.bg}, 0 0 12px ${d.bg}dd`
+              : "1px 1px 3px rgba(0,0,0,0.5)"}
+          >
+            {d.tagline}
+          </Text>
+        )}
+  
+        {/* Indicador de interacción — invita a explorar; tenue en
+            reposo, se enciende y la flecha avanza en hover. Enlaza
+            directamente con la página de la disciplina (sin abrir el
+            popup, de ahí el stopPropagation). */}
+        <Flex
+          position="relative"
+          zIndex={1}
+          align="center"
+          justify="center"
+          gap={1.5}
+          mt={{ base: 3, md: 3 }}
+          color={d.txt}
+          fontSize={{ base: "10px", md: "xs" }}
+          fontWeight="600"
+          letterSpacing={{ base: "0.08em", md: "0.14em" }}
+          textTransform="uppercase"
+          whiteSpace="nowrap"
+          cursor="pointer"
+          userSelect="none"
+          opacity={0.75}
+          transition="opacity 0.28s ease"
+          _groupHover={{ opacity: 1 }}
+          _hover={{ opacity: 1 }}
+          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onExplorar(); }}
+        >
+          <Box as="span">Explorar</Box>
+          <Box
+            as="span"
+            transition="transform 0.28s ease"
+            _groupHover={{ transform: "translateX(4px)" }}
+          >
+            →
+          </Box>
+        </Flex>
+      </Box>
+    </Box>
+  );
+}
+
 const Welcome = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<Discipline | null>(null);
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
   const disciplinasTitleReveal = useReveal(0.2);
-  // La cascada de las ocho tarjetas. Va con useEnPantalla (margen inferior
-  // negativo) y NO con useReveal por umbral: la cabecera de Welcome es corta, así
-  // que en un escritorio normal el borde de la cuadrícula ya está en pantalla al
-  // cargar y un umbral del 12% se cumplía al instante — la cascada se gastaba
-  // mientras se miraba el título y al bajar las tarjetas ya estaban puestas.
-  const cardsEnPantalla = useEnPantalla();
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
+  // Tarjetas por fila (2 en móvil, 4 en escritorio): define la cascada y cuáles
+  // son «la primera fila», la que tiene que verse sin hacer scroll.
+  const columnas = isMobile ? 2 : 4;
   // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
   // tiempo mínimo (para que se vea la animación de carga aunque las fotos vengan
   // de caché). Mientras, se muestra <LifeLoading/>.
@@ -238,7 +440,7 @@ const Welcome = () => {
       {/* ── MANDALA (elemento central, encima del título) ── */}
       {/* Wrapper con flotación + latido perpetuos (vida continua); la imagen
           hace la entrada épica (surge girando desde muy pequeña y se enfoca). */}
-      <Flex justify="center" pt={{ base: 10, md: 14 }}>
+      <Flex justify="center" pt={{ base: 7, md: 9 }}>
         <Box
           sx={{
             "@keyframes mandalaFloat": {
@@ -326,11 +528,14 @@ const Welcome = () => {
       </Flex> */}
 
       {/* ── TÍTULO DISCIPLINAS ── */}
+      {/* El texto está comentado, así que este bloque no pinta nada: sin `pt`
+          para que no deje 40px de hueco muerto empujando las tarjetas por
+          debajo del pliegue. Si se vuelve a poner el título, devuélvele el
+          padding. */}
       <Flex
         ref={disciplinasTitleReveal.ref}
         direction="column"
         align="center"
-        pt={{ base: 8, md: 10 }}
       >
         {/* <Text
           color="rgba(255,255,255,0.85)"
@@ -351,181 +556,33 @@ const Welcome = () => {
       </Flex>
 
       {/* ── CARDS DE DISCIPLINAS ── */}
+      {/* `pt` corto a propósito: la primera fila tiene que asomar al entrar, sin
+          scroll. Ojo al subirlo: cada píxel de aquí empuja esa fila hacia abajo.
+          (Las tarjetas ya traen 42px de `mt` propios para el icono que sobresale.) */}
       <Box
-        ref={cardsEnPantalla.ref}
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 7, md: 11 }}
+        pt={{ base: 2, md: 4 }}
         pb={{ base: 9, md: 13 }}
       >
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
           gap={{ base: 4, md: 10 }}
         >
-          {disciplines.map((d, i) => {
-            const hasBg = hasDisciplinaBg(d.name);
-            const displayName = d.name === "Medicina China" && isMobile ? "Med. China" : d.name;
-            return (
-              <Box
-                key={i}
-                role="group"
-                mt="42px"
-                cursor="pointer"
-                onClick={() => setSelected(d)}
-                // Dispara cuando la cuadrícula está metida en pantalla, NO al
-                // cargar la página: si no, la animación se gasta mientras se mira
-                // la cabecera y al bajar te encuentras las tarjetas ya puestas.
-                opacity={cardsEnPantalla.visto ? 1 : 0}
-                transform={cardsEnPantalla.visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
-                filter={cardsEnPantalla.visto ? "blur(0px)" : "blur(6px)"}
-                // Las ocho entran UNA DETRÁS DE OTRA, con 0.15s de hueco: se ve
-                // la secuencia pero es ágil (antes 0.09s, que se solapaba tanto
-                // que parecían entrar de golpe).
-                // Sin giro y sin rebote: antes entraban con rotate(-4deg) y una
-                // curva que se pasaba de largo, así que aterrizaban torcidas y se
-                // enderezaban dando un tumbo. Ahora suben limpias y se enfocan,
-                // con la curva del sistema Reveal. Mismos números que /elMetodo.
-                transition={`opacity 0.4s ease ${0.1 + i * 0.15}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${0.1 + i * 0.15}s, filter 0.4s ease ${0.1 + i * 0.15}s`}
-              >
-                {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
-                    del reveal de entrada para que no se pisen los transforms. */}
-                <Box
-                  position="relative"
-                  pt="46px"
-                  pb={{ base: 5, md: 7 }}
-                  px={{ base: 3, md: 5 }}
-                  bg={hasBg ? "transparent" : d.bg}
-                  borderRadius="2xl"
-                  textAlign="center"
-                  overflow={hasBg ? "visible" : undefined}
-                  boxShadow="0 4px 20px rgba(0,0,0,0.16)"
-                  transition="transform 0.28s ease, box-shadow 0.28s ease"
-                  _groupHover={{
-                    transform: "translateY(-6px)",
-                    boxShadow: "0 14px 38px rgba(0,0,0,0.26)",
-                  }}
-                >
-                  {/* Fondo propio de la disciplina (estrellas o imagen) — en su
-                      propia capa con overflow:hidden, para que el icono que
-                      sobresale por arriba (top:-36px) no quede recortado. */}
-                  {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
-
-                  {/* Icono que sobresale por arriba — único elemento con glow
-                      fuerte; en hover crece un 5% y aumenta su brillo. */}
-                  <Box
-                    position="absolute"
-                    top="-36px"
-                    left="50%"
-                    transform="translateX(-50%)"
-                    bg={hasBg ? "transparent" : d.bg}
-                    borderRadius="full"
-                    p="8px"
-                    border={"4px solid "+ d.txt}
-                    boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-                    w="72px"
-                    h="72px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    zIndex={2}
-                    overflow={hasBg ? "hidden" : undefined}
-                    transition="transform 0.28s ease, box-shadow 0.28s ease"
-                    _groupHover={{
-                      transform: "translateX(-50%) scale(1.05)",
-                      boxShadow: `0 0 30px ${d.txt}dd, 0 2px 20px ${d.txt}aa`,
-                    }}
-                  >
-                    {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
-                    <Box
-                      position="relative"
-                      zIndex={1}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      transition="filter 0.28s ease"
-                      _groupHover={{ filter: "brightness(1.12)" }}
-                    >
-                      {d.renderIcon("42px")}
-                    </Box>
-                  </Box>
-
-                  {/* Nombre — protagonista tras el icono. Sombra reforzada en
-                      el color de la disciplina para despegarlo del fondo. */}
-                  <Text
-                    position="relative"
-                    zIndex={1}
-                    color={d.txt}
-                    fontWeight="700"
-                    fontSize={{ base: "18px", md: "27px", lg: "33px" }}
-                    letterSpacing="0.04em"
-                    lineHeight="short"
-                    textShadow={hasBg
-                      ? `0 1px 3px ${d.bg}, 0 2px 8px ${d.bg}, 0 0 16px ${d.bg}dd, 0 2px 14px ${d.bg}aa`
-                      : "2px 2px 4px rgba(0,0,0,0.55)"}
-                  >
-                    {displayName}
-                  </Text>
-
-                  {/* Subtítulo — el verdadero protagonista: responde
-                      "¿qué voy a descubrir aquí?". minH fija para que la fila
-                      "Explorar disciplina" quede alineada en todas las tarjetas. */}
-                  {d.tagline && (
-                    <Text
-                      position="relative"
-                      zIndex={1}
-                      mt={{ base: 2, md: 3 }}
-                      minH="2em"
-                      color={d.txt}
-                      fontWeight="500"
-                      fontSize={{ base: "sm", md: "lg" }}
-                      lineHeight="1.45"
-                      letterSpacing="0.01em"
-                      opacity={0.96}
-                      textShadow={hasBg
-                        ? `0 1px 3px ${d.bg}, 0 1px 6px ${d.bg}, 0 0 12px ${d.bg}dd`
-                        : "1px 1px 3px rgba(0,0,0,0.5)"}
-                    >
-                      {d.tagline}
-                    </Text>
-                  )}
-
-                  {/* Indicador de interacción — invita a explorar; tenue en
-                      reposo, se enciende y la flecha avanza en hover. Enlaza
-                      directamente con la página de la disciplina (sin abrir el
-                      popup, de ahí el stopPropagation). */}
-                  <Flex
-                    position="relative"
-                    zIndex={1}
-                    align="center"
-                    justify="center"
-                    gap={1.5}
-                    mt={{ base: 3, md: 3 }}
-                    color={d.txt}
-                    fontSize={{ base: "10px", md: "xs" }}
-                    fontWeight="600"
-                    letterSpacing={{ base: "0.08em", md: "0.14em" }}
-                    textTransform="uppercase"
-                    whiteSpace="nowrap"
-                    cursor="pointer"
-                    userSelect="none"
-                    opacity={0.75}
-                    transition="opacity 0.28s ease"
-                    _groupHover={{ opacity: 1 }}
-                    _hover={{ opacity: 1 }}
-                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); navigate(d.link); }}
-                  >
-                    <Box as="span">Explorar</Box>
-                    <Box
-                      as="span"
-                      transition="transform 0.28s ease"
-                      _groupHover={{ transform: "translateX(4px)" }}
-                    >
-                      →
-                    </Box>
-                  </Flex>
-                </Box>
-              </Box>
-            );
-          })}
+          {disciplines.map((d, i) => (
+            <TarjetaDisciplina
+              key={i}
+              d={d}
+              isMobile={isMobile}
+              // La columna dentro de su fila: 2 columnas en móvil, 4 en escritorio.
+              delay={0.1 + (i % columnas) * 0.15}
+              // La primera fila entra con la página (se ve sin hacer scroll); de
+              // la segunda hacia abajo, cada tarjeta entra al asomar.
+              entraAlCargar={i < columnas}
+              cargado={mounted}
+              onSelect={() => setSelected(d)}
+              onExplorar={() => navigate(d.link)}
+            />
+          ))}
         </Grid>
       </Box>
 

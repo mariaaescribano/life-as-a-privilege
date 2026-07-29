@@ -81,7 +81,10 @@ export default function MetodoTcmLenguaLeer() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="960px" gap={7}>
+        {/* Columna algo más ancha que el resto de pasos (1080 en vez de 960):
+            la herramienta de la lengua necesita sitio para que las 6 fotos de
+            «El color del cuerpo» quepan en una sola fila siendo más grandes. */}
+        <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -116,12 +119,12 @@ export default function MetodoTcmLenguaLeer() {
                boxShadow={CAJA_GLOW} bg="rgba(0,0,0,0.28)">
             {/* Cabecera: título + intro */}
             <Banda>
-              <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.1em"
+              <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700} letterSpacing="0.1em"
                     textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
                 Lee tu propia lengua
               </Text>
-              <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                    lineHeight="1.7" maxW="640px" style={{ textShadow: INK_SHADOW }}>
+              <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                    lineHeight="1.7" maxW="720px" style={{ textShadow: INK_SHADOW }}>
                 Elige lo que más se parezca a la tuya en cada apartado. No hay respuestas correctas.
               </Text>
             </Banda>
@@ -133,8 +136,8 @@ export default function MetodoTcmLenguaLeer() {
               return (
                 <React.Fragment key={d.dim}>
                   <Banda>
-                    <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700}
-                          letterSpacing="0.08em" textTransform="uppercase" mb={3}
+                    <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}
+                          letterSpacing="0.08em" textTransform="uppercase" mb={4}
                           style={{ textShadow: INK_SHADOW }}>
                       {d.titulo}
                     </Text>
@@ -185,7 +188,7 @@ function SelectoresLengua({ opciones, elegidaKey, onElegir }: {
   const inView = useInView(ref, { once: true, amount: 0.2 });
   const enter = reduce || inView;
   return (
-    <Flex ref={ref} wrap="wrap" gap={{ base: 2.5, md: 3.5 }}>
+    <Flex ref={ref} wrap="wrap" gap={{ base: 2.5, md: 4 }}>
       {opciones.map((op, i) => (
         <SelectorCard
           key={op.key}
@@ -206,7 +209,7 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
 }) {
   return (
     <Box as="button" onClick={onClick} textAlign="center"
-         w={{ base: "calc(33.333% - 7px)", sm: "120px", md: "132px" }}
+         w={{ base: "calc(33.333% - 7px)", sm: "134px", md: "150px" }}
          borderRadius="xl" overflow="hidden" cursor="pointer"
          bg={seleccionada ? `${tcmTxt}26` : "rgba(0,0,0,0.28)"}
          border={`2px solid ${seleccionada ? tcmTxt : "rgba(255,255,255,0.18)"}`}
@@ -217,8 +220,8 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
          sx={{ backdropFilter: "blur(6px)", transitionDelay: `${index * 0.05}s` }}
          transition="opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.15s, background 0.15s">
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
-      <Box px={2} py={2.5}>
-        <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight={seleccionada ? 700 : 600}
+      <Box px={2.5} py={3}>
+        <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={seleccionada ? 700 : 600}
               lineHeight="1.35" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
           {opcion.nombre}
         </Text>
@@ -370,7 +373,7 @@ function Banda({ children }: { children: React.ReactNode }) {
   return (
     <Box position="relative" overflow="hidden">
       <DisciplinaBgLayer nom={tcmNom} borderRadius={0} />
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}>
+      <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }}>
         {children}
       </Box>
     </Box>

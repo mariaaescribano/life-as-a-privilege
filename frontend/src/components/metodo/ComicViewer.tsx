@@ -34,6 +34,11 @@ export interface Vineta {
   titulo?: string;
   /** Antetítulo pequeño en mayúsculas sobre el título (p.ej. "Ciclo generador"). */
   eyebrow?: string;
+  /** La ilustración de esta viñeta es VERTICAL (9:16). En vez del cuadrado
+   *  (desktop) / hero recortado (móvil), se muestra entera y alta: columna
+   *  estrecha en desktop y foto completa centrada en móvil. Lo usa la última
+   *  viñeta del cómic de estrellas (la tabla periódica). */
+  fotoVertical?: boolean;
 }
 
 const Stars = () => {
@@ -147,10 +152,6 @@ interface ComicViewerProps {
    *  ve el loader a pantalla completa. Evita ver el box con el fondo a medio
    *  cargar. Lo usan los cómics de TCM (elementos). */
   esperarFondo?: boolean;
-  /** Si true, en MÓVIL la foto se muestra CUADRADA (1:1) en vez del hero ancho,
-   *  y el box se estrecha para dejar hueco a las flechas laterales. En desktop no
-   *  cambia nada. Lo usa Cultura. */
-  fotoCuadradaMovil?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -179,7 +180,6 @@ export function ComicViewer({
   textSize,
   flechasEnBox,
   esperarFondo,
-  fotoCuadradaMovil,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
@@ -226,6 +226,9 @@ export function ComicViewer({
   const blocked = bloqueado ? bloqueado(index) : false;
   // Página sin foto: solo el texto/box a todo el ancho (p.ej. el paso de test).
   const hideFoto = sinFoto ? sinFoto(index) : false;
+  // Viñeta con ilustración vertical (9:16): se ve ENTERA (contain), alta y
+  // estrecha, en vez del cuadrado de desktop / hero recortado de móvil.
+  const fotoVertical = !!current?.fotoVertical;
   // El panel entero (foto + texto) espera a que la ilustración de la izquierda
   // esté cargada: mientras tanto se ve solo un spinner del color de la
   // disciplina. Si no hay foto (hideFoto) o la foto falló, no hay nada que
@@ -567,10 +570,10 @@ export function ComicViewer({
         <Box
           key={`box-${index}`}
           w="100%"
-          // Móvil: ancho completo (= ancho del header, con el px del ModalBody).
-          // Con `fotoCuadradaMovil` (Cultura) el box se estrecha para dejar un
-          // hueco a cada lado donde caben las flechas fijas al viewport.
-          maxW={{ base: fotoCuadradaMovil ? "calc(100vw - 104px)" : "100%", md: "940px" }}
+          // Móvil: el box se estrecha para dejar un hueco a cada lado donde
+          // caben las flechas fijas al viewport, en vez de que estas se le
+          // monten encima. Así la caja es más pequeña y se lee mejor.
+          maxW={{ base: "calc(100vw - 104px)", md: "940px" }}
           h={{ base: "auto", md: "540px" }}
           maxH={{ base: "calc(100dvh - 72px)" }}
           display="flex"
@@ -681,7 +684,12 @@ export function ComicViewer({
             overflowX="hidden"
             // En móvil SIN padding para que la foto sea hero (full-bleed) arriba;
             // el texto añade su propio padding. En desktop, padding normal.
-            px={{ base: 0, md: 10 }}
+            // OJO con `pr`: en escritorio va a 0 para que la barra de scroll del
+            // texto quede pegada al borde derecho del box y no flotando a 56px
+            // de él. El aire que se pierde aquí lo recupera la columna de texto
+            // con su propio `pr` (así se mueve la barra, no el texto).
+            pl={{ base: 0, md: 10 }}
+            pr={0}
             py={{ base: 0, md: 10 }}
             sx={{
               "&::-webkit-scrollbar": { width: "6px" },
@@ -724,19 +732,38 @@ export function ComicViewer({
               // Móvil / tablet (base): hero a TODO el ancho que marca el ancho
               //   del box y cubre la parte de arriba (nada de cuadrado centrado
               //   con márgenes: quedaba amorfo).
-              w={{ base: "100%", md: "440px" }}
-              maxW={{ base: "100%", md: "440px" }}
-              // Con `fotoCuadradaMovil` (Cultura): en móvil la foto es 1:1
-              // (cuadrada), no el hero ancho de 36vh.
-              h={{ base: fotoCuadradaMovil ? "auto" : "36vh", md: "auto" }}
-              aspectRatio={{ base: fotoCuadradaMovil ? 1 : "auto", md: 1 }}
+              // Vertical (9:16): columna estrecha en desktop; en móvil la foto
+              // entera centrada (alto limitado por el viewport, no recortada).
+              w={{ base: "100%", md: fotoVertical ? "250px" : "440px" }}
+              maxW={{ base: "100%", md: fotoVertical ? "250px" : "440px" }}
+              // En móvil la foto es 1:1 (cuadrada, como la ilustración
+              // original), no el hero ancho de 36vh que la recortaba.
+              h={{
+                base: fotoVertical ? "52vh" : "auto",
+                md: "auto",
+              }}
+              aspectRatio={{
+                base: fotoVertical ? "auto" : 1,
+                md: fotoVertical ? 9 / 16 : 1,
+              }}
               flexShrink={0}
-              alignSelf={{ base: "stretch", md: "center" }}
+              alignSelf={{ base: fotoVertical ? "center" : "stretch", md: "center" }}
+              mt={{ base: fotoVertical ? 5 : 0, md: 0 }}
               position="relative"
+              // Luz alrededor de la ilustración: tres capas, de dentro a fuera.
+              // Un filo blanco corto que despega la foto del box, un halo medio
+              // del color del cómic y un resplandor amplio muy tenue.
+              //
+              // Solo de `md` hacia arriba, que es cuando la foto va al lado del
+              // texto. Mientras la maquetación es la de móvil (foto arriba,
+              // texto debajo) el halo se recorta contra los bordes de la caja y
+              // parece una mancha de luz; además los filtros son costosos de
+              // pintar justo donde menos potencia hay. Ojo: el corte tiene que
+              // ser en `md` y no en `sm`, para que coincida con el cambio de
+              // maquetación.
               filter={{
                 base: "none",
-                sm: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${themeColor}33)`,
-                md: `drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${themeColor}33)`,
+                md: `drop-shadow(0 0 10px rgba(255,255,255,0.26)) drop-shadow(0 0 26px ${themeColor}55) drop-shadow(0 0 56px ${themeColor}2b)`,
               }}
             >
               {!imgFailed[index] ? (
@@ -746,10 +773,11 @@ export function ComicViewer({
                     alt={`Viñeta ${index + 1}`}
                     w="100%"
                     h="100%"
-                    // Móvil/tablet: cover (hero a todo el ancho que cubre todo).
-                    // Desktop (md): contain (se ve la ilustración entera en el cuadrado).
-                    objectFit={{ base: "cover", md: "contain" }}
-                    borderRadius={{ base: fotoCuadradaMovil ? "lg" : 0, md: "lg" }}
+                    // La ilustración es cuadrada y el hueco también, así que
+                    // `contain` la enseña entera sin recortar nada, igual que en
+                    // escritorio. Vertical (9:16): contain SIEMPRE.
+                    objectFit="contain"
+                    borderRadius="lg"
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
@@ -776,7 +804,7 @@ export function ComicViewer({
                   border={`1px dashed ${themeColor}44`}
                   borderRadius="2xl"
                 >
-                  <Text fontSize="4xl">✨</Text>
+                  {/* Sin emoji: si no hay ilustración, solo el aviso en texto. */}
                   <Text color={`${themeColor}cc`} fontSize="sm" fontStyle="italic">
                     Viñeta {index + 1} próximamente
                   </Text>
@@ -809,7 +837,10 @@ export function ComicViewer({
               // del contenedor (una raya vertical de luz cortada, poco pro).
               // El padding le da aire para que la luz respire sin recortarse.
               pl={{ base: 5, md: 4 }}
-              pr={{ base: 5, md: 4 }}
+              // 14 (56px) en escritorio = los 4 de antes + los 10 que se le
+              // quitaron a la fila. El texto queda donde estaba; lo que se ha
+              // movido a la derecha es la barra de scroll.
+              pr={{ base: 5, md: 14 }}
               sx={{
                 "&::-webkit-scrollbar": { width: "6px" },
                 "&::-webkit-scrollbar-track": { background: "transparent" },

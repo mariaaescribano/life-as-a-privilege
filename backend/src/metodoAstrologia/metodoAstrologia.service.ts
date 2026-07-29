@@ -201,6 +201,11 @@ export class MetodoAstrologiaService {
     const user = await this.userService.getUserById(userId).catch(() => null);
     if (!user) throw new NotFoundException('Usuario no encontrado');
 
+    // Fila previa: sirve para saber si esto es una CORRECCIÓN de unos datos ya
+    // enviados y para no perder el geocoding anterior si el nuevo falla.
+    const existingRow = await this.getMetodoAstrologia(userId);
+    const esCorreccion = !!existingRow?.solicitud_enviada_at;
+
     // Geocoding + timezone + cálculo (best-effort, no rompe la solicitud si falla)
     let latitud: number | null = null;
     let longitud: number | null = null;
@@ -213,9 +218,24 @@ export class MetodoAstrologiaService {
         latitud = geo.lat;
         longitud = geo.lng;
         timezone = this.cartaNatalService.getTimezone(geo.lat, geo.lng);
+      } else if (
+        // El geocoding ha fallado, pero si el lugar NO ha cambiado respecto a lo
+        // guardado reutilizamos sus coordenadas: así una corrección de fecha/hora
+        // no deja al usuario sin carta calculada.
+        existingRow?.latitud != null && existingRow?.longitud != null && existingRow?.timezone &&
+        (existingRow.lugar ?? '') === datos.lugar &&
+        (existingRow.region ?? '') === datos.region &&
+        (existingRow.pais ?? '') === datos.pais
+      ) {
+        latitud = Number(existingRow.latitud);
+        longitud = Number(existingRow.longitud);
+        timezone = existingRow.timezone as string;
+      }
+
+      if (latitud != null && longitud != null && timezone) {
         const utc = this.cartaNatalService.localToUtc(datos.fecha_nacimiento, datos.hora_nacimiento, timezone);
         if (utc) {
-          carta_natal_json = this.cartaNatalService.calcular(utc, { lat: geo.lat, lng: geo.lng, timezone });
+          carta_natal_json = this.cartaNatalService.calcular(utc, { lat: latitud, lng: longitud, timezone });
         }
       }
     } catch (err: unknown) {
@@ -224,7 +244,6 @@ export class MetodoAstrologiaService {
 
     // Si calculamos la carta, pre-llenamos también el `data` (signos/casas por planeta)
     // sin sobrescribir lo que el usuario ya hubiese completado.
-    const existingRow = await this.getMetodoAstrologia(userId);
     const existingData = (existingRow?.data ?? null) as Record<string, any> | null;
     const data = carta_natal_json
       ? this.cartaNatalService.mergeWithCartaData(existingData, carta_natal_json)
@@ -257,7 +276,7 @@ export class MetodoAstrologiaService {
     }
 
     // Email a la creadora — silencioso si el SMTP no está configurado
-    await this.mailService.enviarSolicitudCarta(user.email, user.name, datos);
+    await this.mailService.enviarSolicitudCarta(user.email, user.name, datos, esCorreccion);
 
     return { success: true };
   }

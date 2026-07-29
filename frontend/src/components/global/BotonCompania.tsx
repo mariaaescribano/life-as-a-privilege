@@ -9,7 +9,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
  * BotonCompania — botón flotante REUTILIZABLE (abajo a la derecha, siempre
  * visible) para cualquier recorrido/disciplina.
  *
- * Flujo:  «¿Quieres compañía?»  → popup invitación
+ * Flujo:  «Agenda una llamada»  → popup invitación
  *         → «Agenda tu llamada» → AgendarLlamada (día · hora · datos · pago)
  *         → el pago (simulado) confirma la reserva y le llega el email a María.
  *
@@ -29,7 +29,7 @@ interface BotonCompaniaProps {
   tipo?: LlamadaTipo;
   /** Precio en € solo para MOSTRAR. Por defecto, el del tipo. */
   precio?: number;
-  /** Texto del botón flotante. Por defecto «¿Quieres compañía?». */
+  /** Texto del botón flotante. Por defecto «Agenda una llamada». */
   etiqueta?: string;
   /** Título del popup de invitación. */
   titulo?: string;
@@ -47,8 +47,8 @@ export function BotonCompania({
   disciplinaNom,
   tipo = "estandar",
   precio = PRECIO_LLAMADA[tipo],
-  etiqueta = "¿Quieres compañía?",
-  titulo = "¿Prefieres hacerlo acompañado?",
+  etiqueta = "Agenda una llamada",
+  titulo = "Agenda una llamada",
   texto = "Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.",
   llamadaTitulo = "Reserva tu llamada",
   llamadaSubtitulo,
@@ -86,16 +86,27 @@ export function BotonCompania({
         px={{ base: 4, md: 5 }}
         py={2}
         borderRadius="full"
-        border={`2px solid ${color}`}
+        // Trazo más fino y algo apagado en móvil (igual que «Índice» y «Mis
+        // notas»): a ese tamaño los 2px llenos hacían un contorno duro.
+        border={{ base: `1px solid ${color}80`, md: `2px solid ${color}` }}
         fontFamily="'EB Garamond', serif"
         fontWeight="700"
         fontSize={{ base: "xs", md: "sm" }}
         letterSpacing="0.03em"
         cursor="pointer"
         whiteSpace="nowrap"
-        boxShadow={`0 4px 18px ${bgColor}55, 0 0 14px ${color}22`}
+        // Misma sombra y mismo hover que los botones flotantes de la esquina
+        // opuesta («Índice» y «Mis notas»): sombra oscura de base para que el
+        // botón despegue del fondo, más un halo del color de la disciplina que
+        // se intensifica al pasar por encima. Antes solo tenía el halo de color
+        // (sin la sombra oscura) y el hover no tocaba la sombra, así que los dos
+        // extremos de la pantalla no se veían igual.
+        boxShadow={`0 4px 20px rgba(0,0,0,0.28), 0 0 18px ${bgColor}66`}
         transition="all 0.18s"
-        _hover={{ transform: "translateY(-2px)" }}
+        _hover={{
+          transform: "translateY(-2px)",
+          boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 28px ${bgColor}aa`,
+        }}
       >
         {hasBg ? (
           <DisciplinaBgLayer nom={disciplinaNom} borderRadius="full" />

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { ZODIAC_SIGNS, type Cuerpo } from "../astrologiaData";
-import { Glifo } from "../Glifo";
+import { Glifo, GlifoSigno } from "../Glifo";
 import { SpaceBg } from "../SpaceBg";
 import { fetchAstroTexto } from "../../../data/astrologiaTextosApi";
 void React;
@@ -16,15 +16,6 @@ interface SaberMasModalProps {
    *  muestra ambas (comportamiento por defecto en Astrología). */
   facet?: "signo" | "casa";
 }
-
-const ZodiacGlyph = ({ symbol, size = 28, color }: { symbol: string; size?: number; color: string }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={color} style={{ flexShrink: 0, filter: `drop-shadow(0 0 8px ${color}99)` }}>
-    <text x="12" y="19" textAnchor="middle" fontSize="19"
-          fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
-      {symbol}{"︎"}
-    </text>
-  </svg>
-);
 
 /** Renderiza el contenido inline de un párrafo, aplicando **negritas** del color del cuerpo. */
 function renderInline(texto: string, color: string): React.ReactNode {
@@ -213,7 +204,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         >
           {cuerpo.label} en
         </Text>
-        <ZodiacGlyph symbol={signoData.symbol} color={color} size={28} />
+        <GlifoSigno nombre={signoData.name} color={color} size={28} />
         <Text
           color={color}
           fontSize={{ base: "xl", md: "2xl" }}

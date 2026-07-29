@@ -18,7 +18,7 @@ export const celulas: Celula[] = [
     nombre: "Neuronas",
     foto: "/viñetas/fisiologia/celulas/neuronas.webp",
     descripcion:
-      "Las neuronas manifiestan en lo tangible nuestros pensamientos. Cuando una neurona se activa, se genera una corriente eléctrica en la que entra sodio al interior y sale potasio, permitiendo que el impulso eléctrico viaje a través de la célula. Las neuronas se comunican entre sí mediante neurotransmisores, creando la red viva de todo lo que sentimos, pensamos y recordamos.",
+      "Cuando una neurona se activa, se genera una corriente eléctrica en la que entra sodio al interior y sale potasio, permitiendo que el impulso eléctrico viaje a través de la célula. Creando así un pensamiento. Las neuronas se comunican entre sí mediante neurotransmisores, creando la red viva de todo lo que sentimos, pensamos y recordamos.",
     cuidados:
       "Cuídalas con buen sueño (durante el sueño profundo el cerebro se limpia y procesa mejor la información), ejercicio (les encanta el movimiento; favorece la neuroplasticidad) y evitando el exceso de alcohol (interfiere con la comunicación neuronal y puede dañarlas a largo plazo).",
   },

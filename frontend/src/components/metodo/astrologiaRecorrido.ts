@@ -8,9 +8,21 @@
 // ─────────────────────────────────────────────────────────────────────────
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 
+// Nombre del paso 2 en un solo sitio: lo usan la cabecera de su página, el
+// índice y los dos botones que llevan hasta ella (el «siguiente» de la intro y
+// el «continuar» del cómic de los signos). En móvil se abrevia, que el largo no
+// cabe de una línea en un botón.
+export const PASO_CARTA_TITULO = "Lo primero de tu carta";
+export const PASO_CARTA_TITULO_CORTO = "Lo primero";
+
 export const ASTROLOGIA_INDICE: PasoRecorrido[] = [
   { n: 1, titulo: "Astrología",              ruta: () => "/metodo/astrologia" },
-  { n: 2, titulo: "Sol, Luna y Ascendente",  ruta: () => "/metodo/astrologia/solascendenteluna" },
+  // «Lo primero de tu carta» en vez de «Sol, Luna y Ascendente»: para quien
+  // empieza, esos tres nombres todavía no significan nada, y lo que necesita
+  // saber es que esta es la primera de las partes de su lectura. Los tres
+  // nombres se explican dentro de la página, que es donde hacen falta.
+  { n: 2, titulo: PASO_CARTA_TITULO, tituloCorto: PASO_CARTA_TITULO_CORTO,
+    ruta: () => "/metodo/astrologia/solascendenteluna" },
   { n: 3, titulo: "Arquetipos",              ruta: () => "/metodo/astrologia/cartaAstral" },
   { n: 4, titulo: "Puntos clave",            ruta: () => "/metodo/astrologia/lectura" },
   { n: 5, titulo: "Casas",                   ruta: () => "/metodo/astrologia/casas" },

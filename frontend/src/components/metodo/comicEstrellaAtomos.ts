@@ -5,7 +5,7 @@ import type { Vineta } from "./ComicViewer";
 // el usuario haya construido él mismo un átomo de hidrógeno (así el cómic
 // recontextualiza lo que acaba de hacer). Reutiliza el ComicViewer.
 //
-// Imágenes: /viñetas/fisiologia/estrellas/star1.png … star6.png
+// Imágenes: /viñetas/fisiologia/estrellas/star1.png … star6.png + tablaperiodica.png
 // (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).
 export const ESTRELLA_ATOMOS: Vineta[] = [
   {
@@ -20,7 +20,7 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
     src: "/viñetas/fisiologia/estrellas/star2.png",
     paragraphs: [
       "En su interior, la temperatura es tan extrema que los átomos de hidrógeno se separan de sus electrones, dejando solo protones, sus núcleos.",
-      "Estos protones chocan y comienzan a unirse. Ha empezado la fusión nuclear.",
+      "Estos protones colisionan y comienzan a unirse. Ha empezado la fusión nuclear.",
       "Dato técnico: El hidrógeno está formado por un protón y un electrón. En el núcleo de una estrella, las temperaturas y presiones son tan extremas que los protones pueden fusionarse. En ese proceso, uno de ellos se transforma en un neutrón y se forma un núcleo de deuterio. Tras varias reacciones más, el resultado es un núcleo de helio, compuesto por 2 protones y 2 neutrones. En estrellas más masivas, la fusión continúa produciendo elementos cada vez más pesados.",
     ],
   },
@@ -49,6 +49,15 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
     paragraphs: [
       "La estrella colapsa y explota.",
       "En ese instante nacen algunos de los elementos más pesados del universo, como el oro o el uranio.",
+    ],
+  },
+  // Cierre distinto al resto: la tabla periódica, en vertical (9:16) y entera
+  // (`fotoVertical`), con una sola frase que recontextualiza todo el cómic.
+  {
+    src: "/viñetas/fisiologia/estrellas/tablaperiodica.png",
+    fotoVertical: true,
+    paragraphs: [
+      "Nunca más mirarás la tabla periódica con los mismos ojos...",
     ],
   },
 ];

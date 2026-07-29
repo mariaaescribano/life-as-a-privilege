@@ -10,7 +10,7 @@ import { API_URL } from "../GlobalVariables";
  *
  * Cadena de desbloqueo (acumulativa), según los guardas de las páginas:
  *   1 Astrología          → siempre
- *   2 Sol, Luna y Asc.    → hay solicitud enviada (solicitud_enviada_at)
+ *   2 Lo primero de tu carta → hay solicitud enviada (solicitud_enviada_at)
  *   3 Arquetipos          → hay solicitud enviada
  *   4 Puntos clave        → la carta está procesada (link_carta O hay retos)
  *   5 Casas               → 4 + todos los puntos clave leídos (retosLeidos)

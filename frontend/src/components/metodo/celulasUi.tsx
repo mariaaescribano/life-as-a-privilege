@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
-import { FotoBox } from "./FotoBox";
+import { FotoBox, glowHeader } from "./FotoBox";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -31,6 +31,9 @@ export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula;
       // Fondo del área de la foto en oscuro (el Bg de Fisiología) en vez del
       // tinte claro por defecto: así la tarjeta no tiene ese "color claro".
       colorTint={BG}
+      // El mismo halo que la cabecera de la página: así la tarjeta de célula,
+      // los paneles y el header llevan exactamente el mismo brillo.
+      glow={glowHeader(TXT)}
       visto={visto}
       onClick={onClick}
     />

@@ -1,19 +1,10 @@
 import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { ZODIAC_SIGNS, type Cuerpo } from "../astrologiaData";
-import { Glifo } from "../Glifo";
+import { type Cuerpo } from "../astrologiaData";
+import { Glifo, GlifoSigno } from "../Glifo";
 import { SpaceBg } from "../SpaceBg";
 import { esCuerpoCompleto, type Valor } from "./useCartaPlanetas";
 void React;
-
-const ZodiacGlyph = ({ symbol, size = 22, color = "currentColor" }: { symbol: string; size?: number; color?: string }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={color} style={{ flexShrink: 0 }}>
-    <text x="12" y="19" textAnchor="middle" fontSize="19"
-          fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
-      {symbol}{"︎"}
-    </text>
-  </svg>
-);
 
 interface ProfundizarBtnProps {
   label: string;
@@ -167,11 +158,7 @@ export function PlanetaBox({
           >
             <Flex align="center" gap={2}>
               {valor.signo && (
-                <ZodiacGlyph
-                  symbol={ZODIAC_SIGNS.find((s) => s.name === valor.signo)?.symbol || ""}
-                  size={22}
-                  color={c.color}
-                />
+                <GlifoSigno nombre={valor.signo} size={22} color={c.color} />
               )}
               <Text as="span">{valor.signo || "Elegir…"}</Text>
             </Flex>

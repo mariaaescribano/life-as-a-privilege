@@ -161,7 +161,7 @@ function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, co
       <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0} visibility="hidden" aria-hidden>
         <Perla pieza={pieza} glow={glow} size={{ base: "80px", md: "100px" }} />
         {mostrarLabel && (
-          <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+          <Text color={fisiologiaTxt} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
                 letterSpacing="0.05em" textTransform="uppercase">{pieza.label}</Text>
         )}
       </Box>
@@ -193,7 +193,7 @@ function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, co
     >
       <Perla pieza={pieza} glow={glow} size={{ base: "80px", md: "100px" }} />
       {mostrarLabel && (
-        <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+        <Text color={fisiologiaTxt} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
               letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
           {pieza.label}
@@ -283,12 +283,23 @@ function Estacion({
     <MBox key={def.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} w="100%">
       {/* Volver */}
       <Flex mb={4}>
+        {/* Volver: en vez del velo blanco translúcido de antes, lleva el fondo
+            propio de Fisiología (DisciplinaBgLayer), como el header. */}
         <Box as="button" onClick={onVolver}
+             position="relative" overflow="hidden"
              display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-             bg="rgba(255,255,255,0.1)" color={fisiologiaTxt}
-             fontFamily="'EB Garamond', serif" fontWeight="600" fontSize="sm" cursor="pointer"
-             transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)" }}>
-          ← Las 4 macromoléculas
+             color={fisiologiaTxt}
+             fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }} cursor="pointer"
+             transition="all 0.2s"
+             sx={{ "&:hover .volver-velo": { opacity: 0 } }}>
+          <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}bb`} />
+          {/* Velo extra que se desvanece al pasar por encima: así el botón
+              "responde" sin cambiar el fondo. */}
+          <Box className="volver-velo" position="absolute" inset={0} borderRadius="full"
+               bg="rgba(0,0,0,0.18)" opacity={1} transition="opacity 0.2s" pointerEvents="none" />
+          <Box position="relative" zIndex={1} style={{ textShadow: INK }}>
+            ← Las 4 macromoléculas
+          </Box>
         </Box>
       </Flex>
 
@@ -296,9 +307,16 @@ function Estacion({
         {!completo ? (
           // ── FASE A · encadenar (dos boxes: bandeja | piezas) ──
           <MBox key="a" w="100%" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
+            {/* Texto FUERA de las cajas: va en blanco, no en el color de la
+                disciplina, para que se lea sobre el turquesa de la página. */}
+            <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
                   style={{ textShadow: INK }}>{def.nombre}</Text>
-            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
+                  textTransform="uppercase" textAlign="center" mt={2} opacity={0.75}
+                  style={{ textShadow: INK }}>
+              Explicación
+            </Text>
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
               {heterogenea
                 ? `Arrastra las ${total} piezas a la bandeja para formar el ${def.monomero}.`
@@ -331,7 +349,7 @@ function Estacion({
                       })}
                       {puestas.length === 0 && (
                         <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
-                          <Text color={`${def.glow}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                          <Text color={`${def.glow}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                                 style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>bandeja de ensamblaje</Text>
                         </Flex>
                       )}
@@ -358,7 +376,7 @@ function Estacion({
                       </AnimatePresence>
                     </Box>
                     {pendientes.length === 0 && (
-                      <Text color={`${def.glow}bb`} fontSize="md" fontStyle="italic">…plegándose…</Text>
+                      <Text color={`${def.glow}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">…plegándose…</Text>
                     )}
 
                     {/* progreso */}
@@ -399,38 +417,43 @@ function Estacion({
               {/* Caja 2 · texto */}
               <PanelBox flex="1">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
-                  <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
+                  <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
                         style={{ textShadow: INK }}>¡Has formado {def.nombre.toLowerCase()}!</Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
                   {def.resultado.map((p, i) => (
-                    <Text key={i} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
+                    <Text key={i} color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }}
                           lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
                   ))}
+
+                  {/* «Siguiente →» va DENTRO de la caja del texto, al final y a la
+                      derecha. La caja crece un poco de alto para acogerlo, que es
+                      lo pedido. Lleva a la próxima macromolécula sin formar (y en
+                      la última, de vuelta al menú de las 4). */}
+                  <Box as="button" onClick={onSiguiente}
+                       alignSelf={{ base: "center", md: "flex-end" }} mt={2}
+                       display="inline-flex" alignItems="center" gap={2} px={7} py={2} borderRadius="full"
+                       bg={fisiologiaTxt} color={fisiologiaBg}
+                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                       letterSpacing="0.04em" cursor="pointer" transition="all 0.2s" whiteSpace="nowrap"
+                       boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
+                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
+                    Siguiente →
+                  </Box>
                 </Flex>
               </PanelBox>
             </Flex>
 
-            {/* Acciones — fuera del box, abajo a la derecha del todo.
-                «Siguiente →» lleva a la próxima macromolécula sin formar (y en la
-                última, de vuelta al menú de las 4), sin tener que volver a mano. */}
-            <Flex justify="flex-end" align="center" gap={3} w="100%" mt={{ base: 5, md: 6 }} wrap="wrap">
+            {/* «Volver a hacer» se queda FUERA de la caja, debajo y a la derecha:
+                es la acción secundaria y así no compite con «Siguiente». */}
+            <Flex justify="flex-end" align="center" w="100%" mt={{ base: 5, md: 6 }}>
               <Box as="button" onClick={reiniciar}
                    display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
                    bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
-                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
                 ↺ Volver a hacer
-              </Box>
-              <Box as="button" onClick={onSiguiente}
-                   display="inline-flex" alignItems="center" gap={2} px={7} py={2} borderRadius="full"
-                   bg={fisiologiaTxt} color={fisiologiaBg}
-                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                   letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
-                   boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
-                   _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                Siguiente →
               </Box>
             </Flex>
           </MBox>
@@ -514,7 +537,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
           {/* Texto */}
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
-              <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+              <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                     style={{ textShadow: INK }}>{m.nombre}</Text>
               {hecha && (
                 <Flex as="span" align="center" justify="center" flexShrink={0}
@@ -523,9 +546,9 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
                       boxShadow={`0 0 10px ${m.glow}aa`}>✓</Flex>
               )}
             </Flex>
-            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
+            <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mt={1.5}
                   style={{ textShadow: INK }}>{m.desc}</Text>
-            <Text color={hecha ? m.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="700"
+            <Text color={hecha ? m.glow : `${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
                   letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
               {hecha ? "Formada · ver de nuevo" : `Construir · ${m.n} ${m.monomeroPl}`}
             </Text>
@@ -649,7 +672,7 @@ export default function MetodoFisiologiaMacromoleculas() {
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic" mt={1}
+              <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="400" fontStyle="italic" mt={1}
                     letterSpacing="0.02em" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
                 Las grandes moléculas de la Vida.
               </Text>

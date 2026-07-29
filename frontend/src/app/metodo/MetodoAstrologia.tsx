@@ -12,6 +12,8 @@ import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
 import { HISTORIA_ASTROLOGIA } from "../../components/metodo/comicHistoriaAstrologia";
+import { PASO_CARTA_TITULO, PASO_CARTA_TITULO_CORTO } from "../../components/metodo/astrologiaRecorrido";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { TextoCartaExplicativo, CARTA_MAPA_IMGS } from "../../components/metodo/TextoCartaExplicativo";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -41,6 +43,20 @@ const EyeIcon = () => (
 );
 
 const SPACE_IMG = "/img/astrologia/space.jpg";
+
+// Nombre del paso 2 («Lo primero de tu carta»), abreviado en móvil para que
+// quepa de una línea en los botones. Se resuelve por CSS y no con un hook, así
+// no hay un primer pintado con el texto equivocado.
+const TituloPaso2 = ({ flecha = false }: { flecha?: boolean }) => (
+  <>
+    <Box as="span" display={{ base: "none", md: "inline" }}>
+      {PASO_CARTA_TITULO}{flecha ? " →" : ""}
+    </Box>
+    <Box as="span" display={{ base: "inline", md: "none" }}>
+      {PASO_CARTA_TITULO_CORTO}{flecha ? " →" : ""}
+    </Box>
+  </>
+);
 
 // Precarga una imagen; resuelve al cargar o al fallar (para que el spinner
 // nunca se quede colgado si la foto no existe).
@@ -109,7 +125,7 @@ export default function MetodoAstrologia() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comicAstroOpen, setComicAstroOpen] = useState(false);
-  // Cómic de los signos: se intercala antes de pasar a «Sol, Luna y Ascendente».
+  // Cómic de los signos: se intercala antes de pasar a «Lo primero de tu carta».
   const [comicSignosOpen, setComicSignosOpen] = useState(false);
   const intro = useIntroComic("metodo-astrologia"); // cómic del Origen (espiritualidad), 1ª vez
   // Segundo cómic de intro: «La Historia de la Astrología». Va SEGUIDO del cómic
@@ -122,6 +138,11 @@ export default function MetodoAstrologia() {
   const [popupError, setPopupError] = useState<string | null>(null);
   // Popup "tu carta está en proceso" que sale tras enviar
   const [procesoOpen, setProcesoOpen] = useState(false);
+  // Quien ya envió su solicitud puede volver a abrir el formulario y corregir
+  // sus datos de nacimiento: al reenviarlos el backend recalcula la carta y
+  // avisa por email. `avisoEdicion` cambia el texto del popup final.
+  const [editando, setEditando] = useState(false);
+  const [avisoEdicion, setAvisoEdicion] = useState(false);
 
   // Bloquea el scroll del fondo mientras cualquier popup está abierto.
   useLockBodyScroll(confirmOpen || procesoOpen);
@@ -186,6 +207,24 @@ export default function MetodoAstrologia() {
     })();
   }, []);
 
+  // Prerrellena el formulario con los datos ya guardados, para que quien vuelve
+  // a abrirlo solo tenga que corregir lo que esté mal (no reescribirlo todo).
+  const rellenarDesdeEstado = (e: Estado | null) => {
+    if (!e) return;
+    const [a, m, d] = (e.fecha_nacimiento ?? "").slice(0, 10).split("-");
+    if (a && m && d) {
+      setAnio(a);
+      setMes(m);
+      setDia(String(parseInt(d, 10)));
+    }
+    if (e.hora_nacimiento) setHora(e.hora_nacimiento.slice(0, 5));
+    if (e.pais) setPais(e.pais);
+    if (e.lugar) setLugar(e.lugar);
+    if (e.region) setRegion(e.region);
+  };
+
+  useEffect(() => { rellenarDesdeEstado(estado); }, [estado]);
+
   // Valida los campos y devuelve la fecha YYYY-MM-DD, o null si hay error (lo deja en `error`).
   const validarFecha = (): string | null => {
     setError(null);
@@ -236,6 +275,8 @@ export default function MetodoAstrologia() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEstado(r.data ?? null);
+      setAvisoEdicion(editando); // el popup final cambia si era una corrección
+      setEditando(false);
       setConfirmOpen(false);   // cierra el de confirmación
       setProcesoOpen(true);    // abre el de "tu carta está en proceso"
     } catch (err: any) {
@@ -254,6 +295,18 @@ export default function MetodoAstrologia() {
     : "";
   const lugarLegible = [lugar.trim(), region.trim(), pais.trim()].filter(Boolean).join(", ");
 
+  // Resumen de los datos YA guardados (los que se enviaron con la solicitud),
+  // para poder revisarlos y decidir si hay que corregirlos.
+  const [gAnio, gMes, gDia] = (estado?.fecha_nacimiento ?? "").slice(0, 10).split("-");
+  const guardadoFecha = gAnio && gMes && gDia
+    ? `${parseInt(gDia, 10)} de ${MESES.find((m) => m.num === gMes)?.nombre.toLowerCase() ?? gMes} de ${gAnio}`
+    : "";
+  const guardadoHora = (estado?.hora_nacimiento ?? "").slice(0, 5);
+  const guardadoLugar = [estado?.lugar, estado?.region, estado?.pais]
+    .map((s) => (s ?? "").trim())
+    .filter(Boolean)
+    .join(", ");
+
   if (loading) {
     return <RecorridoLoading />;
   }
@@ -270,8 +323,8 @@ export default function MetodoAstrologia() {
     icon: <EyeIcon />,
   };
   const headerNext = (yaConPdf || yaSolicitado)
-    // Antes de pasar a «Sol, Luna y Ascendente» intercalamos el cómic de los signos.
-    ? { label: "Sol, Luna y Ascendente →", onClick: () => setComicSignosOpen(true) }
+    // Antes de pasar a «Lo primero de tu carta» intercalamos el cómic de los signos.
+    ? { label: <TituloPaso2 flecha />, onClick: () => setComicSignosOpen(true) }
     : { label: "Leer carta →", onClick: abrirConfirmacion, disabled: !camposCompletos };
 
   return (
@@ -297,10 +350,106 @@ export default function MetodoAstrologia() {
             />
           </Reveal>
 
+          {/* ── Datos de nacimiento ya enviados ──
+                Chapa compacta y centrada, ENCIMA del cómic. Antes era una barra a
+                todo el ancho colgando debajo, que pesaba visualmente más que el
+                propio cómic siendo un dato secundario. Aquí solo recuerda con qué
+                datos se ha calculado la carta y deja corregirlos. */}
+          {yaSolicitado && !editando && (
+            <Reveal direction="down" distance={14} delay={0.1} duration={0.6}
+                    w="100%" display="flex" justifyContent="center">
+              <Box
+                position="relative"
+                overflow="hidden"
+                maxW="100%"
+                borderRadius="full"
+                // Sin línea de borde y con el MISMO halo que la cabecera (y que
+                // el box de lectura de abajo): las tres piezas de la página
+                // brillan igual, ninguna se recorta contra el turquesa.
+                border="none"
+                boxShadow={glowHeader(astrologiaTxt)}
+              >
+                {/* Fondo espacial de Astrología, el mismo que el header. Antes la
+                    chapa era translúcida y dejaba pasar el turquesa de la página,
+                    así que se veía verdosa y desentonaba con el resto. */}
+                <Box position="absolute" inset={0} bgImage={`url('${SPACE_IMG}')`}
+                     bgSize="cover" bgPosition="center" pointerEvents="none" />
+                {/* Velo: la foto sola no da contraste suficiente para la letra. */}
+                <Box position="absolute" inset={0} bg="rgba(8,13,30,0.62)" pointerEvents="none" />
+
+                <Flex
+                  position="relative"
+                  zIndex={1}
+                  align="center"
+                  justify="center"
+                  gap={{ base: 2.5, md: 3.5 }}
+                  wrap="wrap"
+                  px={{ base: 4, md: 5 }}
+                  py={{ base: 2, md: 2.5 }}
+                >
+                {/* El icono de la disciplina hace de etiqueta: dice «esto es tu
+                    carta» sin gastar una línea de texto en mayúsculas. */}
+                <Box flexShrink={0} opacity={0.85} display="flex" alignItems="center">
+                  <AstrologiaIcon size={{ base: "16px", md: "18px" }} />
+                </Box>
+
+                <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="600"
+                      whiteSpace="nowrap" style={{ textShadow: `0 0 12px ${astrologiaBg}` }}>
+                  {guardadoFecha || "—"}{guardadoHora ? ` · ${guardadoHora}` : ""}
+                </Text>
+
+                {guardadoLugar && (
+                  <>
+                    <Box w="4px" h="4px" borderRadius="full" bg={`${astrologiaTxt}55`} flexShrink={0} />
+                    <Text color={`${astrologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} whiteSpace="nowrap">
+                      {guardadoLugar}
+                    </Text>
+                  </>
+                )}
+
+                <Box
+                  as="button"
+                  onClick={() => {
+                    setError(null);
+                    rellenarDesdeEstado(estado);
+                    setEditando(true);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  flexShrink={0}
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={1.5}
+                  ml={{ base: 0, md: 1 }}
+                  px={3}
+                  py={1}
+                  borderRadius="full"
+                  bg="transparent"
+                  color={`${astrologiaTxt}cc`}
+                  border={`1px solid ${astrologiaTxt}44`}
+                  fontFamily="'EB Garamond', serif"
+                  fontSize="xs"
+                  fontWeight="700"
+                  letterSpacing="0.05em"
+                  cursor="pointer"
+                  transition="all 0.2s"
+                  _hover={{ color: astrologiaTxt, borderColor: astrologiaTxt, boxShadow: `0 0 14px ${astrologiaTxt}44` }}
+                >
+                  {/* Lápiz vectorial (nada de caracteres tipo «✎»). */}
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                       w="13px" h="13px" fill="currentColor" flexShrink={0}>
+                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                  </Box>
+                  Cambiar
+                </Box>
+                </Flex>
+              </Box>
+            </Reveal>
+          )}
+
           {/* ── Tras enviar la solicitud: cómic "¿Qué es una carta astral?" con la
                 MISMA caja que las Ilustraciones (la trae el propio componente, por
                 eso aquí NO se envuelve en la caja espacial, para no anidar dos). ── */}
-          {yaSolicitado && (
+          {yaSolicitado && !editando && (
             <Reveal
               direction="up"
               distance={34}
@@ -314,8 +463,11 @@ export default function MetodoAstrologia() {
             </Reveal>
           )}
 
-          {/* ── ESTADO A — formulario dentro de la caja principal con SpaceBg ── */}
-          {!yaSolicitado && (
+          {/* ── ESTADO A — formulario dentro de la caja principal con SpaceBg ──
+                También es el formulario de corrección: quien ya envió la
+                solicitud lo reabre con «Corregir» (la chapa de arriba) y lo
+                reenvía. ── */}
+          {(!yaSolicitado || editando) && (
             <Reveal
               direction="up"
               distance={34}
@@ -335,13 +487,15 @@ export default function MetodoAstrologia() {
                   <RevealItem>
                     <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
                           style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
-                      Tu Carta Astral
+                      {editando ? "Corrige tus datos" : "Tu Carta Astral"}
                     </Text>
                   </RevealItem>
                   <RevealItem>
                     <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto"
                           style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
-                      Necesito tus datos de nacimiento para poder leer tu carta.
+                      {editando
+                        ? "Cambia lo que haga falta y vuelve a enviarlos: tu carta se calcula de nuevo con los datos corregidos."
+                        : "Necesito tus datos de nacimiento para poder leer tu carta."}
                     </Text>
                   </RevealItem>
 
@@ -473,7 +627,28 @@ export default function MetodoAstrologia() {
                     <Text color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>
                   )}
 
-                  <RevealItem display="flex" justifyContent="flex-end" mt={4}>
+                  <RevealItem display="flex" justifyContent="flex-end" alignItems="center" gap={3} mt={4}>
+                    {editando && (
+                      <Box
+                        as="button"
+                        onClick={() => { setEditando(false); setError(null); rellenarDesdeEstado(estado); }}
+                        px={{ base: 6, md: 7 }}
+                        py={{ base: 3, md: 3.5 }}
+                        borderRadius="full"
+                        bg="transparent"
+                        color={`${astrologiaTxt}cc`}
+                        border={`1px solid ${astrologiaTxt}55`}
+                        fontFamily="'EB Garamond', serif"
+                        fontSize={{ base: "md", md: "lg" }}
+                        fontWeight="600"
+                        letterSpacing="0.06em"
+                        cursor="pointer"
+                        transition="all 0.22s"
+                        _hover={{ borderColor: astrologiaTxt, color: astrologiaTxt }}
+                      >
+                        Cancelar
+                      </Box>
+                    )}
                     <Box
                       as="button"
                       onClick={() => { if (camposCompletos) abrirConfirmacion(); }}
@@ -499,7 +674,7 @@ export default function MetodoAstrologia() {
                         boxShadow: `0 0 28px ${astrologiaTxt}88, 0 0 58px ${astrologiaTxt}44`,
                       } : {}}
                     >
-                      Recibir mi lectura
+                      {editando ? "Guardar" : "Recibir mi lectura"}
                     </Box>
                   </RevealItem>
                 </RevealStagger>
@@ -514,13 +689,13 @@ export default function MetodoAstrologia() {
         onClose={() => setComicAstroOpen(false)}
       />
 
-      {/* Cómic de los signos: intercalado antes de «Sol, Luna y Ascendente». */}
+      {/* Cómic de los signos: intercalado antes de «Lo primero de tu carta». */}
       <ComicPasoModal
         isOpen={comicSignosOpen}
         onClose={() => setComicSignosOpen(false)}
         onContinue={() => navigate("/metodo/astrologia/solascendenteluna")}
         vinetas={VINETAS_SIGNOS}
-        continueLabel="Sol, Luna y Ascendente"
+        continueLabel={<TituloPaso2 />}
         themeColor={astrologiaTxt}
       />
 
@@ -609,7 +784,7 @@ export default function MetodoAstrologia() {
                        boxShadow={`0 0 18px ${astrologiaTxt}66`}
                        _hover={enviando ? {} : { boxShadow: `0 0 28px ${astrologiaTxt}88`, transform: "translateY(-1px)" }}
                        transition="all 0.2s">
-                    {enviando ? "Enviando…" : "Sí, confirmar"}
+                    {enviando ? "Enviando…" : editando ? "Sí, actualizar" : "Sí, confirmar"}
                   </Box>
                 </Flex>
               </Flex>
@@ -639,7 +814,9 @@ export default function MetodoAstrologia() {
             <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
               <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center"
                     style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}>
-                Tu carta está en proceso. Yo misma leeré tu carta. Mientras tanto, puedes continuar para ver tus arquetipos.
+                {avisoEdicion
+                  ? "He recibido tus datos corregidos. Tu carta se ha vuelto a calcular con ellos y yo misma la leeré de nuevo. Mientras tanto, puedes continuar para ver tus arquetipos."
+                  : "Tu carta está en proceso. Yo misma leeré tu carta. Mientras tanto, puedes continuar para ver tus arquetipos."}
               </Text>
               <Flex justify="flex-end" mt={6}>
                 <Box as="button" onClick={() => setProcesoOpen(false)}

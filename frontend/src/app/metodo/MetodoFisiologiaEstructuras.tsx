@@ -171,24 +171,21 @@ function LadrilloFicha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRec
       flexShrink={0}
       style={{ touchAction: "none", WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
     >
-      {/* El nombre de la pieza va DENTRO del círculo (sobre la imagen), con un
-          velo oscuro abajo para que se lea sobre cualquier foto. */}
+      {/* El nombre va DEBAJO del círculo, no encima de la imagen: así la
+          ilustración se ve entera y el texto no compite con ella. */}
       <Box position="relative" borderRadius="full"
            sx={{ filter: arrastrando ? `drop-shadow(0 0 16px ${st.color}) drop-shadow(0 10px 22px rgba(0,0,0,0.5))` : "none" }}>
         <Perla macro={pieza.macro} img={pieza.img} size={{ base: "62px", md: "80px" }} />
-        <Flex position="absolute" inset="0" align="flex-end" justify="center"
-              borderRadius="full" overflow="hidden" pointerEvents="none">
-          <Box w="100%" px="5px" pb={{ base: "5px", md: "7px" }} pt={{ base: "14px", md: "18px" }}
-               sx={{ background: "linear-gradient(to top, rgba(4,2,10,0.85) 32%, rgba(4,2,10,0.35) 68%, transparent)" }}>
-            <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
-                  letterSpacing="0.02em" textTransform="uppercase" textAlign="center"
-                  lineHeight="1.05" noOfLines={2}
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}>
-              {pieza.label}
-            </Text>
-          </Box>
-        </Flex>
       </Box>
+      {/* `maxW` igual al ancho del círculo: los nombres largos («Barrera
+          nuclear») parten en dos líneas en vez de ensanchar la pieza y
+          descolocar la rejilla. */}
+      <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
+            letterSpacing="0.02em" textTransform="uppercase" textAlign="center"
+            lineHeight="1.15" noOfLines={2} maxW={{ base: "62px", md: "80px" }}
+            style={{ textShadow: INK }}>
+        {pieza.label}
+      </Text>
     </MBox>
   );
 }
@@ -286,7 +283,9 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
               Arrastra las macromoléculas a la zona para ensamblarla.
             </Text>
 
-            <PanelBox minH={{ md: "360px" }}>
+            {/* Un poco más alto que antes: los nombres de las piezas pasaron de
+                ir sobre la foto a ir debajo, así que cada pieza ocupa más. */}
+            <PanelBox minH={{ md: "400px" }}>
             {/* Bandeja */}
             <Box ref={bandejaRef} position="relative" w="100%" h={{ base: "150px", md: "170px" }}
                  borderRadius="2xl" overflow="hidden" mb={6}
@@ -313,8 +312,11 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
             </Box>
 
             {/* Piezas a arrastrar */}
-            <Flex ref={piezasRef} wrap="wrap" justify="center" align="center" alignContent="center"
-                  gap={{ base: 3, md: 4 }} minH={piezasMinH ? `${piezasMinH}px` : "70px"}>
+            {/* El minH de reserva evita que la fila encoja al sacar piezas. El
+                valor de respaldo (antes 70px) sube porque ahora cada pieza es
+                círculo + nombre debajo. */}
+            <Flex ref={piezasRef} wrap="wrap" justify="center" align="flex-start" alignContent="flex-start"
+                  gap={{ base: 3, md: 4 }} minH={piezasMinH ? `${piezasMinH}px` : "110px"}>
               <AnimatePresence>
                 {pendientes.map((p) => (
                   <LadrilloFicha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />

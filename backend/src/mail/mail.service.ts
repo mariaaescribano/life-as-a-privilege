@@ -144,25 +144,39 @@ export class MailService {
     await this.enviar(email, `${disciplina} desbloqueada — Life as a Privilege`, html, 'email de disciplina');
   }
 
-  // Notifica a la creadora cuando un usuario solicita su carta astral
+  // Notifica a la creadora cuando un usuario solicita su carta astral.
+  // La fecha llega en ISO (YYYY-MM-DD) y en el email se muestra DD-MM-YYYY.
   async enviarSolicitudCarta(
     userEmail: string,
     userName: string,
     datos: { fecha_nacimiento: string; hora_nacimiento: string; pais: string; lugar: string; region: string },
+    // true cuando el usuario ya había enviado su solicitud y ahora CORRIGE los datos.
+    esCorreccion = false,
   ): Promise<void> {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.warn('[MailService] EMAIL_USER / EMAIL_PASS no configurados — solicitud de carta no enviada.');
       return;
     }
 
+    // YYYY-MM-DD → DD-MM-YYYY (si no viene en ese formato, se deja tal cual).
+    const fechaLegible = /^\d{4}-\d{2}-\d{2}/.test(datos.fecha_nacimiento)
+      ? datos.fecha_nacimiento.slice(0, 10).split('-').reverse().join('-')
+      : datos.fecha_nacimiento;
+
     const html = `
       <div style="font-family: 'EB Garamond', Georgia, serif; max-width: 560px; margin: 0 auto; padding: 32px; background: #008080; color: #ffffff; border-radius: 16px;">
-        <h1 style="margin: 0 0 16px; letter-spacing: 0.04em;">Nueva solicitud de carta astral</h1>
+        <h1 style="margin: 0 0 16px; letter-spacing: 0.04em;">${
+          esCorreccion ? 'Datos corregidos de carta astral' : 'Nueva solicitud de carta astral'
+        }</h1>
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
-          <strong>${userName}</strong> (${userEmail}) ha pedido su lectura de carta.
+          <strong>${userName}</strong> (${userEmail}) ${
+            esCorreccion
+              ? 'ha corregido sus datos de nacimiento. Estos son los datos buenos:'
+              : 'ha pedido su lectura de carta.'
+          }
         </p>
         <div style="margin-top: 20px; padding: 16px 20px; background: rgba(255,255,255,0.12); border-radius: 12px;">
-          <p style="margin: 6px 0; font-size: 15px;"><strong>Fecha:</strong> ${datos.fecha_nacimiento}</p>
+          <p style="margin: 6px 0; font-size: 15px;"><strong>Fecha:</strong> ${fechaLegible}</p>
           <p style="margin: 6px 0; font-size: 15px;"><strong>Hora:</strong> ${datos.hora_nacimiento}</p>
           <p style="margin: 6px 0; font-size: 15px;"><strong>País:</strong> ${datos.pais}</p>
           <p style="margin: 6px 0; font-size: 15px;"><strong>Lugar:</strong> ${datos.lugar}</p>
@@ -182,7 +196,7 @@ export class MailService {
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
         to,
         replyTo: userEmail,
-        subject: `Carta Astral de ${userEmail}`,
+        subject: `${esCorreccion ? 'Datos corregidos' : 'Carta Astral'} de ${userEmail}`,
         html,
       });
     } catch (err) {

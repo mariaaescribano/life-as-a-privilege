@@ -96,6 +96,10 @@ export interface PasoRecorrido {
   n: number;
   /** Título visible en el índice. */
   titulo: string;
+  /** Versión corta para MÓVIL, cuando el título largo no cabe de una línea
+   *  (p.ej. «Lo primero de tu carta» → «Lo primero»). Si no se pone, en móvil
+   *  se usa `titulo` tal cual. */
+  tituloCorto?: string;
   /** Ruta a la que salta (recibe el id de la experiencia). */
   ruta: (expId: string) => string;
   /** Si true, la página aún no está desbloqueada: se muestra con un candado y no

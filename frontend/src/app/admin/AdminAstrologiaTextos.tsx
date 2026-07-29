@@ -16,7 +16,7 @@ import SiteFooter from "../../components/global/Footer";
 import SpinnerTurquesa from "../../components/global/Spinner";
 import { useAdminGuard } from "./useAdminGuard";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
-import { Glifo } from "../../components/metodo/Glifo";
+import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
 import { CUERPOS, ZODIAC_SIGNS, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { getTextoSignoOriginal, getTextoCasaOriginal } from "../../components/metodo/astrologiaTextos";
 import {
@@ -281,7 +281,7 @@ export default function AdminAstrologiaTextos() {
                           border={`1.5px solid ${abierta ? color : editado ? `${color}88` : "rgba(255,255,255,0.15)"}`}
                           cursor="pointer" transition="all 0.15s"
                           _hover={{ borderColor: `${color}aa`, bg: `${color}1c` }}>
-                      {signoData && <Glifo symbol={signoData.symbol} color={color} size={16} />}
+                      {signoData && <GlifoSigno nombre={signoData.name} color={color} size={16} />}
                       <Text color="white" fontSize="sm" fontWeight="500" flex="1" textAlign="left" noOfLines={1}>
                         {faceta === "casa" ? `Casa ${v}` : v}
                       </Text>

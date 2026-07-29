@@ -168,6 +168,95 @@ const headerDescShadow = (card: ModalidadData) =>
 // anima su envoltorio, pero el hijo se monta igual. De paso, no se cargan sus
 // siete vídeos hasta que hacen falta.
 // `minH` reserva el hueco para que la página no dé un salto al montarlo.
+// ── QUÉ OBTIENES ─────────────────────────────────────────────────────────────
+// Lo que se lleva quien accede a El Mapa. Va en DOS columnas a propósito: son
+// siete líneas y en una sola columna el box se hacía una lista larguísima que
+// obligaba a bajar; en dos entra de un vistazo y queda horizontal, del ancho del
+// resto de la página. En móvil se apila a una columna, que dos no caben.
+const QUE_OBTIENES: string[] = [
+  "Una lectura personalizada de tu carta astral, realizada por mí.",
+  "Un recorrido guiado, con un orden coherente y concreto.",
+  "Materiales de lectura, ilustraciones y explicaciones paso a paso.",
+  "Ejercicios prácticos para integrar lo aprendido en tu día a día.",
+  "Acceso durante 1 año. Los PDF personalizados con tu información serán tuyos para siempre.",
+  "Compra por disciplina. Avanza a tu ritmo, sin suscripciones ni compromisos.",
+  "Posibilidad de llamadas para resolver dudas o profundizar en tu proceso.",
+  "Acceso a todos los cursos e ilustraciones."
+];
+
+function QueObtienesBox() {
+  return (
+    <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.8} w="100%">
+      <Flex
+        direction="column"
+        w="100%"
+        px={{ base: 6, md: 12 }}
+        py={{ base: 7, md: 10 }}
+        borderRadius="2xl"
+        border="1px solid rgba(255,255,255,0.28)"
+        bg="rgba(255,255,255,0.07)"
+        sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
+        boxShadow="0 4px 20px rgba(0,0,0,0.14), 0 0 24px rgba(180,255,245,0.10)"
+        gap={{ base: 5, md: 7 }}
+      >
+        <Flex direction="column" align="center" gap={{ base: 3, md: 4 }}>
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "xl", md: "3xl" }}
+            letterSpacing="0.03em"
+            lineHeight="1.25"
+            textAlign="center"
+            textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
+          >
+            ¿Qué obtienes al acceder a El Mapa?
+          </Text>
+          {/* Rayita corta bajo el título: cierra la cabecera del box sin meter
+              otra línea a todo el ancho, que competiría con el borde. */}
+          <Box w={{ base: "70px", md: "90px" }} h="1px" bg="rgba(255,255,255,0.35)" />
+        </Flex>
+
+        <RevealStagger
+          inView
+          stagger={0.07}
+          delayChildren={0.1}
+          display="grid"
+          gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }}
+          gap={{ base: 3.5, md: "18px 44px" }}
+        >
+          {QUE_OBTIENES.map((linea) => (
+            <RevealItem key={linea} direction="up" distance={14}>
+              <Flex align="flex-start" gap={3}>
+                <Text
+                  color="white"
+                  fontWeight="700"
+                  fontSize={{ base: "sm", md: "md" }}
+                  lineHeight="1.7"
+                  flexShrink={0}
+                  textShadow="0 0 10px rgba(255,255,255,0.45)"
+                >
+                  ✓
+                </Text>
+                <Text
+                  color="rgba(255,255,255,0.92)"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "sm", md: "md" }}
+                  lineHeight="1.7"
+                  letterSpacing="0.01em"
+                  textShadow="0 0 10px rgba(255,255,255,0.2)"
+                >
+                  {linea}
+                </Text>
+              </Flex>
+            </RevealItem>
+          ))}
+        </RevealStagger>
+      </Flex>
+    </Reveal>
+  );
+}
+
 function BloqueDiferido({
   children,
   minH,
@@ -236,20 +325,25 @@ function SeparadorMandala({ mt, mb }: { mt?: BoxProps["mt"]; mb?: BoxProps["mb"]
 
 type MetodoCardProps = {
   data: ModalidadData;
+  /** Retraso de entrada, en segundos. Lo marca la COLUMNA, no el índice global. */
   delay: number;
-  parentVisible: boolean;
   index: number;
   onClick: () => void;
 };
 
-function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardProps) {
+function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
+  // Cada tarjeta con SU propio observador: no se coloca hasta que ella misma
+  // asoma. Con un único observador para la cuadrícula, al llegar a la primera
+  // fila arrancaban las ocho y la segunda (en móvil, las filas 2, 3 y 4) se
+  // colocaba fuera de la vista.
+  const enPantalla = useEnPantalla();
   const hasBg = hasDisciplinaBg(data.name);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
   // En El Mapa, "Hinduismo" se muestra como "Ayurveda" (nombreEnMapa). Medicina
   // China se abrevia en móvil por espacio.
   const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : nombreEnMapa(data.name);
-  // Entrada: la tarjeta sube a su sitio y se enfoca, y las ocho lo hacen UNA
-  // DETRÁS DE OTRA. El orden lo marca `delay`, que viene del índice.
+  // Entrada: la tarjeta sube a su sitio y se enfoca, y las de una misma fila lo
+  // hacen UNA DETRÁS DE OTRA, de izquierda a derecha.
   //
   // NADA de giro ni de rebote. Antes entraba con rotate(-5deg) y una curva que
   // se pasaba de largo (el 1.5 de cubic-bezier(0.22,1.5,0.36,1)): la tarjeta
@@ -264,9 +358,10 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
     <Box
       mt="42px"
       mb={{ base: 3, md: 5 }}
-      opacity={parentVisible ? 1 : 0}
-      transform={parentVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
-      filter={parentVisible ? "blur(0px)" : "blur(6px)"}
+      ref={enPantalla.ref}
+      opacity={enPantalla.visto ? 1 : 0}
+      transform={enPantalla.visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
+      filter={enPantalla.visto ? "blur(0px)" : "blur(6px)"}
       transition={`opacity 0.4s ease ${entradaDelay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${entradaDelay}s, filter 0.4s ease ${entradaDelay}s`}
       sx={{ willChange: "transform, opacity, filter" }}
     >
@@ -406,10 +501,10 @@ function MetodoCard({ data, delay, parentVisible, index, onClick }: MetodoCardPr
 export default function ElMetodo() {
   const navigate = useNavigate();
   // Las entradas de esta página las hace el sistema Reveal (framer-motion), el
-  // mismo del recorrido de astrología. La única excepción son las ocho tarjetas:
-  // conservan su entrada en CSS (el «pop» con rebote y giro, que Reveal no sabe
-  // hacer), y por eso necesitan saber por su cuenta cuándo asoman en pantalla.
-  const cardsEnPantalla = useEnPantalla();
+  // mismo del recorrido de astrología. Las ocho tarjetas son la excepción:
+  // conservan su entrada en CSS y cada una se observa a sí misma (ver MetodoCard).
+  // Aquí solo hace falta saber cuántas columnas hay, para el orden de la cascada.
+  const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
@@ -575,98 +670,92 @@ export default function ElMetodo() {
 
       </Flex>
 
-      {/* ── SEPARADOR + TÍTULO DISCIPLINAS ── */}
+      {/* ── SEPARADOR + TÍTULO DEL MANDALA ──
+          Las frases van con su bloque: este título encabeza el mandala de las
+          ocho disciplinas (que es «El Mapa por dentro»), y la frase «Cada
+          disciplina observa una parte distinta…» bajó con las fichas. */}
       <Flex
         direction="column"
         align="center"
+        px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 14, md: 21 }}
-        gap={{ base: 6, md: 8 }}
       >
-        <Box
-          w="100%"
-          maxW="500px"
-          h="1px"
-          bg="rgba(255,255,255,0.15)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scaleX(1)" : "scaleX(0.2)"}
-          transition="opacity 0.8s ease, transform 0.8s ease"
-        />
+        <SeparadorMandala mb={{ base: 10, md: 14 }} />
 
         <Text
-          color="rgba(255,255,255,0.9)"
-          fontSize={{ base: "sm", md: "lg" }}
-          fontStyle="italic"
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontWeight="700"
+          fontSize={{ base: "3xl", md: "5xl" }}
+          letterSpacing="0.04em"
+          lineHeight="1.2"
           textAlign="center"
-          letterSpacing="0.02em"
-          lineHeight="1.6"
-          maxW={{ base: "100%", md: "640px" }}
-          textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
+          textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
           opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(10px)"}
+          transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
         >
-          Cada disciplina observa una parte distinta del ser humano.
+          Así es El Mapa por dentro
         </Text>
       </Flex>
       
 
-      {/* ── CARDS DE MODALIDADES ──
-          La cascada NO arranca al cargar la página: espera a que la cuadrícula
-          asome (useEnPantalla). Antes iba con `mounted` y, como las tarjetas
-          quedan por debajo del pliegue, entraban con la pantalla en la cabecera:
-          al bajar te las encontrabas ya puestas y no veías la animación. */}
+      {/* ── LAS 8 DISCIPLINAS (mandala + vídeo) ──
+          Va lo primero tras la cabecera: a la izquierda el mandala interactivo
+          con las ocho, a la derecha el box de la disciplina seleccionada con su
+          vídeo y su precio. Es el resumen de qué se compra, así que se enseña
+          antes que las fichas de detalle.
+          Montaje diferido: los círculos del mandala hacen su «pop» justo cuando
+          llegas a ellos, y no antes en una zona que no ves. */}
       <Box
-        ref={cardsEnPantalla.ref}
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 12, md: 16 }}
-        pb={{ base: 6, md: 10 }}
+        // Poco `pb`: el separador de abajo tiene que quedar cerca del box de la
+        // disciplina, no a media pantalla. El aire entre los dos lo reparten este
+        // `pb` y el `pt` del separador, y nada más.
+        pb={{ base: 4, md: 6 }}
       >
-        <Grid
-          templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 4, md: 18 }}
-        >
-          {modalidades.map((m, i) => (
-            <MetodoCard
-              key={m.name}
-              data={m}
-              // 0.15s de hueco: se sigue viendo entrar una detrás de otra, pero
-              // ágil. Son ocho y están arriba del todo — a 0.35s la secuencia se
-              // hacía larga (3.2s). Así la última arranca a 1.15s y todo acaba
-              // sobre 1.7s. Los círculos del mandala, que son un momento más
-              // contemplativo, sí van más pausados (0.18s).
-              delay={i * 0.15}
-              parentVisible={cardsEnPantalla.visto}
-              index={i + 1}
-              onClick={() => setSelectedCard(m)}
-            />
-          ))}
-        </Grid>
+        <Box maxW="1200px" mx="auto">
+          <BloqueDiferido minH={{ base: "760px", md: "560px" }}>
+            <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
+              <RecorridoMandalaVideo />
+            </Reveal>
+          </BloqueDiferido>
+        </Box>
       </Box>
 
       {/* ── QUÉ RECIBIRÁS ── */}
-      <Box w="100%" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }}>
+      {/* Sin `pt` propio: el hueco con el bloque de arriba lo pone el `pt` del
+          separador, en un solo sitio, para poder ajustarlo sin sumar tres
+          paddings distintos. */}
+      <Box w="100%" px={{ base: 5, md: 10, lg: 16 }}>
         <Box maxW="1200px" mx="auto">
-          {/* Separador con mandala en medio y líneas degradadas a los lados */}
-          <SeparadorMandala mb={{ base: 10, md: 14 }} />
-
-          {/* Título + subtítulo */}
+          {/* Separador de mandala + la frase que introduce las fichas de
+              disciplina. Lleva el separador con el mandala en medio (no la línea
+              fina): es el que marca los cortes de sección en esta página.
+              La frase entra al asomar (inView) y no con `mounted`: este bloque
+              está muy por debajo del pliegue y con `mounted` la animación pasaba
+              mientras se miraba la cabecera. */}
           <Flex
             direction="column"
             align="center"
-            textAlign="center"
-            gap={{ base: 4, md: 5 }}
+            pt={{ base: 6, md: 8 }}
+            gap={{ base: 5, md: 7 }}
           >
-            <Reveal inView direction="up" distance={22} duration={0.8}>
+            <SeparadorMandala />
+
+            <Reveal inView direction="up" distance={12} duration={0.8} delay={0.15}>
               <Text
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "3xl", md: "5xl" }}
-                letterSpacing="0.04em"
-                lineHeight="1.2"
-                textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
+                color="rgba(255,255,255,0.9)"
+                fontSize={{ base: "sm", md: "lg" }}
+                fontStyle="italic"
+                textAlign="center"
+                letterSpacing="0.02em"
+                lineHeight="1.6"
+                maxW={{ base: "100%", md: "640px" }}
+                textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
               >
-                Así es El Mapa por dentro
+                Cada disciplina observa una parte distinta del ser humano.
               </Text>
             </Reveal>
           </Flex>
@@ -680,18 +769,47 @@ export default function ElMetodo() {
           </Box>
           */}
 
-          {/* Mandala + vídeo — a la izquierda el mandala interactivo, a la
-              derecha el box de la disciplina seleccionada con su vídeo (9:16
-              recortado a 1:1). Al pulsar una disciplina disponible, el box se
-              actualiza. */}
-          {/* Montaje diferido: así los círculos del mandala hacen su «pop» justo
-              cuando llegas a ellos, y no antes en una zona que no ves. */}
-          <Box mt={{ base: 12, md: 20 }}>
-            <BloqueDiferido minH={{ base: "760px", md: "560px" }}>
-              <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
-                <RecorridoMandalaVideo />
-              </Reveal>
-            </BloqueDiferido>
+        </Box>
+
+        {/* ── LOS 8 BOXES DE DETALLE ──
+            Las fichas de cada disciplina, que abren el modal con «Qué incluye».
+            Van aquí abajo, tras el mandala: quien ya se ha hecho una idea con él
+            baja a mirar el detalle.
+            FUERA del contenedor de 1200px a propósito: estas tarjetas van a todo
+            el ancho de la página (solo con el px del margen), que es el ancho que
+            tenían antes de bajarlas aquí. Si se meten dentro, se estrechan.
+            La cascada NO arranca al cargar la página: espera a que la cuadrícula
+            asome (useEnPantalla). Antes iba con `mounted` y, como las tarjetas
+            quedan por debajo del pliegue, entraban con la pantalla en la
+            cabecera: al bajar te las encontrabas ya puestas y no veías la
+            animación. */}
+        <Box mt={{ base: 12, md: 20 }}>
+          <Grid
+            templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+            gap={{ base: 4, md: 18 }}
+          >
+            {modalidades.map((m, i) => (
+              <MetodoCard
+                key={m.name}
+                data={m}
+                // La columna dentro de su fila (2 columnas en móvil, 4 en
+                // escritorio) con 0.15s de hueco: cada fila entra de izquierda a
+                // derecha cuando le toca, sin arrastrar el retraso de las de arriba.
+                delay={(i % (esMovil ? 2 : 4)) * 0.15}
+                index={i + 1}
+                onClick={() => setSelectedCard(m)}
+              />
+            ))}
+          </Grid>
+        </Box>
+
+        <Box maxW="1200px" mx="auto">
+
+          {/* ── QUÉ OBTIENES ──
+              Cierra la parte comercial (las ocho fichas de arriba) justo antes de
+              la tarjeta de María: primero qué te llevas, después quién te lo da. */}
+          <Box mt={{ base: 12, md: 16 }}>
+            <QueObtienesBox />
           </Box>
 
           {/* ── PRECIO ──
@@ -965,7 +1083,7 @@ export default function ElMetodo() {
             whiteSpace="nowrap"
             textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
           >
-            Acceder
+            Acceder a El Mapa
           </Text>
         </Flex>
         </Breathe>

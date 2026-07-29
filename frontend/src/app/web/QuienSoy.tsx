@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { GlifoSigno } from "../../components/metodo/Glifo";
 
 const heartbeat = keyframes`
   0%   { transform: scale(1); }
@@ -656,7 +657,10 @@ const QuienSoy = () => {
           transform={cierreReveal.visible ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)"}
           transition="opacity 0.9s ease, transform 0.9s ease"
         >
-          ♊︎ Esto es solo el principio…
+          <Box as="span" display="inline-flex" alignItems="center" verticalAlign="-3px" mr={2}>
+            <GlifoSigno nombre="Géminis" color="currentColor" size={22} glow={false} />
+          </Box>
+          Esto es solo el principio…
         </Text>
       </Flex>
       </Box>

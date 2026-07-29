@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Cuerpo } from "../astrologiaData";
+import { FUENTE_GLIFOS } from "../glifosAstro";
 void React;
 
 interface PlanetProps {
@@ -19,7 +20,7 @@ interface PlanetProps {
 const APPEAR_DUR = 0.95;
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
-const SERIF = "500 170px 'Times New Roman', Georgia, 'DejaVu Serif', serif";
+const SERIF = `500 170px ${FUENTE_GLIFOS}`;
 
 function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
   const size = 256;

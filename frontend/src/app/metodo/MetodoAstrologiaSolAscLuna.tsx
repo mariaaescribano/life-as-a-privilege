@@ -9,13 +9,14 @@ import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
-import { Glifo } from "../../components/metodo/Glifo";
+import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
 import { ComicAstrologiaModal, VINETAS_PLANETAS } from "../../components/metodo/ComicAstrologiaModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { SaberMasModal } from "../../components/metodo/Planetas";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ZODIAC_SIGNS, cuerpoByKey, soloClavesPlaneta, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { PASO_CARTA_TITULO, PASO_CARTA_TITULO_CORTO } from "../../components/metodo/astrologiaRecorrido";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
@@ -154,7 +155,12 @@ export default function MetodoAstrologiaSolAscLuna() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Sol, Luna y Ascendente"
+              title={
+                <>
+                  <Box as="span" display={{ base: "none", md: "inline" }}>{PASO_CARTA_TITULO}</Box>
+                  <Box as="span" display={{ base: "inline", md: "none" }}>{PASO_CARTA_TITULO_CORTO}</Box>
+                </>
+              }
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
@@ -164,6 +170,23 @@ export default function MetodoAstrologiaSolAscLuna() {
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={headerNext}
             />
+          </Reveal>
+
+          {/* El título ya dice que esta es la primera parte de la carta; esta
+              frase pone nombre a las tres piezas, que es el vocabulario con el
+              que se va a leer todo el resto del recorrido. Va FUERA de la caja,
+              en blanco sobre el turquesa, entre el header y el box principal. */}
+          <Reveal direction="up" distance={18} delay={0.08} duration={0.7} w="100%">
+            <Text
+              color="#ffffff"
+              fontSize={{ base: "md", md: "lg" }}
+              lineHeight="1.8"
+              textAlign="center"
+              maxW="620px"
+              mx="auto"
+            >
+              Tu carta se lee por partes, y esta es la primera: tu Luna (el hogar al que llegaste y tus sentimientos), tu Sol (tu esencia) y tu Ascendente (cómo percibes el mundo).
+            </Text>
           </Reveal>
 
           <Reveal
@@ -181,10 +204,6 @@ export default function MetodoAstrologiaSolAscLuna() {
             <SpaceBg overlay="rgba(8,13,30,0.62)" />
 
             <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 9, md: 12 }}>
-              {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center" mb={{ base: 8, md: 10 }} maxW="560px" mx="auto">
-                Tu Luna (el hogar al que llegaste y tus sentimientos), tu Sol (tu esencia) y tu Ascendente (cómo percibes al mundo). Léelos los tres.
-              </Text> */}
-
               <RevealStagger
                 display="flex"
                 flexDirection={{ base: "column", md: "row" }}
@@ -301,7 +320,7 @@ function TrioCard({
       <Flex align="center" gap={2} minH="28px">
         {signoData ? (
           <>
-            <Glifo symbol={signoData.symbol} color={c} size={24} />
+            <GlifoSigno nombre={signoData.name} color={c} size={24} />
             <Text color={`${c}dd`} fontSize={{ base: "sm", md: "md" }}>
               {signoData.name}{casa != null ? ` · Casa ${casa}` : ""}
             </Text>

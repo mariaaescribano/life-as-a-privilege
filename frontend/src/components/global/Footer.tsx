@@ -2,6 +2,8 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { GlifoSigno } from "../metodo/Glifo";
+
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const SiteFooter = () => {
@@ -45,7 +47,8 @@ const SiteFooter = () => {
           transition="color 0.2s"
           onClick={() => navigate("/quienSoy")}
         >
-          <Text fontSize="15px" lineHeight="1" color="white">♊︎</Text>
+          {/* Géminis DIBUJADO (el carácter ♊ salía como emoji morado). */}
+          <GlifoSigno nombre="Géminis" color="white" size={16} glow={false} />
           Quién soy
         </Flex>
         <Flex

@@ -146,7 +146,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
             sx={{ option: { background: "#0c1230", color } }}
           >
             {ZODIAC_SIGNS.map((s, i) => (
-              <option key={s.name} value={i}>{s.symbol} {s.name}</option>
+              <option key={s.name} value={i}>{s.name}</option>
             ))}
           </Select>
         </Box>

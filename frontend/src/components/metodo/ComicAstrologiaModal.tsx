@@ -15,6 +15,9 @@ import type { Vineta } from "./ComicViewer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
 import SpinnerTurquesa from "../global/Spinner";
+import { FUENTE_GLIFOS } from "./glifosAstro";
+import { GlifoSigno } from "./Glifo";
+import { SIGNOS_ORDEN } from "./signosIconos";
 
 const SPACE_IMG = "/img/astrologia/space.jpg";
 
@@ -135,6 +138,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/aries.png",
     paragraphs: [
+      "Aries",
       "Acaba de nacer. No conoce las reglas.",
       "Actúa sin ser consciente de que sus actos tienen consecuencias. Cuando rompe la barrera, pierde interés en lo que hay detrás y busca la siguiente.",
       "Necesita novedad constante, por eso le cuesta acabar lo que empieza. Prefiere pelear antes que aceptar su derrota.",
@@ -143,6 +147,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/tauro.png",
     paragraphs: [
+      "Tauro",
       "Materializa la energía. Conectado con la naturaleza.",
       "Vive en los sentidos. Disfruta despacio y trabaja constante. Termina lo que empieza.",
       "Necesita anclarse en algo sólido y estable. Confunde seguridad con apego a patrones tóxicos.",
@@ -151,6 +156,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/geminis.png",
     paragraphs: [
+      "Géminis",
       "La inteligencia en alta frecuencia. El ruido si no se pone consciencia.",
       "Le cuesta el mundo emocional, por eso se queda en lo mental. Piensa antes de sentir.",
       "No tolera el aburrimiento ni lo ya sabido. Cambia constantemente porque desea novedad.",
@@ -160,6 +166,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/cancer.png",
     paragraphs: [
+      "Cáncer",
       "Necesita sentir para saber quién es. Necesita pertenecer.",
       "Su identidad viene de sus raíces. Hace familia a aquellos que ama.",
       "Es vulnerable por dentro. Por eso construye un escudo por fuera. Le cuesta soltar el pasado, incluso cuando duele.",
@@ -168,6 +175,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/leo.png",
     paragraphs: [
+      "Leo",
       "Brillante, carismático, encantador. Atrae atención y además la necesita.",
       "Busca la validación de otros, pero debe aprender a validarse a sí mismo.",
       "Domina de forma natural. Puede cazar para demostrar su supremacía. Le calma más el halago que la razón.",
@@ -176,6 +184,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/virgo.png",
     paragraphs: [
+      "Virgo",
       "Analiza, ordena, cuida, sirve.",
       "Vive sin querer ver su propio caos. Somatiza lo que niega.",
       "Es el crítico y juzgador más duro consigo mismo y con los demás.",
@@ -185,6 +194,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/libra.png",
     paragraphs: [
+      "Libra",
       "La diplomacia. Necesita al otro para descubrirse a sí mismo.",
       "Quiere encajar y ser aceptado en la sociedad. Indeciso. Quiere que otros decidan por él.",
       "No le gustan las peleas. Recopila datos de todos para evitar desencuentros.",
@@ -193,6 +203,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/escorpio.png",
     paragraphs: [
+      "Escorpio",
       "Intensidad, profundidad, transformación. Todo o nada.",
       "Paseos por los infiernos para descubrirse a sí mismo y a su sombra.",
       "Desea fundirse con el otro. La separación después de la fusión le duele mucho, pero debe de aprender a que sin uno no existe el otro.",
@@ -201,6 +212,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/sagitario.png",
     paragraphs: [
+      "Sagitario",
       "El filósofo. Busca el sentido de la Vida. Encuentra el para qué de sus experiencias.",
       "Nómada por naturaleza. La libertad no se negocia.",
       "El maestro. El que va más allá.",
@@ -209,6 +221,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/capricornio.png",
     paragraphs: [
+      "Capricornio",
       "La responsabilidad. Desea que lo que construye repercuta positivamente en las siguientes generaciones.",
       "Espera. Renuncia. Aguanta. Pone el deber antes que el deseo. Planificador meticuloso.",
       "Por dentro es frágil. No lo va a contar ni quiere que se note.",
@@ -218,6 +231,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/acuario.png",
     paragraphs: [
+      "Acuario",
       "Ama a la humanidad, odia a los humanos.",
       "Desea pertenecer, pero no quiere perder su individualidad. Original. Innovador.",
       "Analiza a todos antes de fiarse. No le gustan los vínculos ni compromisos emocionales.",
@@ -226,6 +240,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/piscis.png",
     paragraphs: [
+      "Piscis",      
       "Debe diferenciar si lo que siente es suyo o si lo ha absorbido sin querer.",
       "Carga la basura psíquica de otros, debe aprender a liberarse. Ese dolor no es suyo.",
       "Necesita periodos de soledad. Sensible, dulce. Su gran corazón es rosa.",
@@ -352,6 +367,8 @@ interface SelectorOption {
   cover: string;
   /** Fallback de glifos si la imagen de portada no carga. */
   glyphs: string[];
+  /** Si true, en vez de `glyphs` se pintan los 12 iconos de los signos. */
+  iconosSigno?: boolean;
 }
 
 const SELECTOR_OPTIONS: SelectorOption[] = [
@@ -359,7 +376,9 @@ const SELECTOR_OPTIONS: SelectorOption[] = [
     seccion: "signos",
     title: "Los Signos",
     cover: "/viñetas/astrologia/portadasignos.png",
-    glyphs: ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"],
+    // Los signos van como ICONO dibujado (no su carácter): se pintan aparte.
+    glyphs: [],
+    iconosSigno: true,
   },
   {
     seccion: "casas",
@@ -462,11 +481,15 @@ function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
             />
             <Flex position="absolute" inset="0" align="center" justify="center" p={{ base: 4, md: 5 }}>
               <Flex wrap="wrap" justify="center" align="center" gap={{ base: 2, md: 2.5 }} maxW="200px">
+                {option.iconosSigno && SIGNOS_ORDEN.map((nombre) => (
+                  <GlifoSigno key={nombre} nombre={nombre} color={astrologiaTxt} size={22} />
+                ))}
                 {option.glyphs.map((g, i) => (
                   <Box
                     key={i}
                     color={astrologiaTxt}
-                    fontFamily="'Times New Roman', Georgia, serif"
+                    fontFamily={FUENTE_GLIFOS}
+                    sx={{ fontVariantEmoji: "text" }}
                     fontSize={{ base: "lg", md: "xl" }}
                     lineHeight="1"
                     opacity={0.85}
@@ -577,6 +600,12 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
       // - Vista selector: "inside" → mantiene el layout original con su
       //   propio scroll interno.
       scrollBehavior={seccion ? "outside" : "inside"}
+      // La barra de scroll que se veía a la derecha del popup NO era suya: era
+      // la de la página de debajo, que Chakra deja pintada (pero muerta: no
+      // scrollea nada) porque su default es preserveScrollBarGap. Con `false`
+      // esa barra fantasma desaparece; el scroll DENTRO del popup sigue igual
+      // (el ModalBody del selector y el contenedor de la vista cómic).
+      preserveScrollBarGap={false}
     >
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
@@ -725,7 +754,9 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             SIN botón «Saltar» (la X ya cierra; el «Saltar» solo tiene sentido en
             los cómics incrustados en el recorrido). El texto usa la sombra NEGRA
             por defecto del ComicViewer (sin la luz de color), como el cómic del
-            Origen y el de la Historia de la Astrología. */}
+            Origen y el de la Historia de la Astrología.
+            Va CON la sombra del box (sin `sinSombra`): sobre el cielo estrellado
+            el panel quedaba plano, sin despegarse del fondo. */}
         {seccion && (
           <ComicViewer
             key={seccion}
@@ -733,7 +764,6 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             onClose={onClose}
             onComplete={handleComplete}
             onBack={volverAlSelector}
-            sinSombra
           />
         )}
       </ModalContent>

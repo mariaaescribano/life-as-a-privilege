@@ -108,3 +108,13 @@ a:focus-visible,
     background-color: #f9f9f9;
   }
 }
+
+/* Glifos astrológicos (y cualquier símbolo con doble versión): que el navegador
+   use SIEMPRE la versión de TEXTO (icono monocromo) y no la de emoji de color.
+   Sin esto, en Windows los signos del zodíaco (♈ ♉ ♊ …) salían en morado con
+   su recuadro de emoji, mientras los de los planetas (☉ ☽ ♀ …) se veían bien.
+   Se complementa con FUENTE_GLIFOS (components/metodo/glifosAstro.ts), que pide
+   explícitamente las fuentes de símbolos donde se pintan los glifos. */
+:root {
+  font-variant-emoji: text;
+}

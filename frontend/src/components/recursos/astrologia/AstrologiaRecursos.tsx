@@ -7,6 +7,7 @@ import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { ContactModal } from "../../global/ContactModal";
 import { SubscribeBox } from "../../global/SubscribeBox";
 import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
+import { GlifoSigno } from "../../metodo/Glifo";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../../GlobalVariables";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import type { Submodulo } from "../../../dtos/aprendizaje.type";
@@ -54,15 +55,6 @@ const SpaceBg = () => (
 /* ══════════════════════════════════════════════
    GLIFO ZODIACAL
 ══════════════════════════════════════════════ */
-const ZodiacGlyph = ({ symbol, size = 22 }: { symbol: string; size?: number }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ flexShrink: 0 }}>
-    <text x="12" y="19" textAnchor="middle" fontSize="19"
-      fontFamily="'Times New Roman', Georgia, 'DejaVu Serif', serif">
-      {symbol}{"\uFE0E"}
-    </text>
-  </svg>
-);
-
 /* ══════════════════════════════════════════════
    ICONOS DE CAMPO
 ══════════════════════════════════════════════ */
@@ -479,7 +471,7 @@ export default function AstrologiaRecursos() {
                             boxShadow={`0 0 8px ${astrologiaTxt}18`}
                             _groupHover={{ boxShadow: `0 0 14px ${astrologiaTxt}55` }}
                           >
-                            <ZodiacGlyph symbol={sign.symbol} size={18} />
+                            <GlifoSigno nombre={sign.name} color={astrologiaTxt} size={18} />
                           </Box>
                           <Text
                             color={`${astrologiaTxt}dd`}

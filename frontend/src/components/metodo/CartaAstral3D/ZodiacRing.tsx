@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { ZODIAC_SIGNS } from "../astrologiaData";
+import { SIGNOS_ORDEN, SIGNO_TRAZOS } from "../signosIconos";
 import { gradoAVisualRad } from "./types";
 void React;
 
@@ -27,7 +27,12 @@ interface ZodiacRingProps {
   cusps: number[];
 }
 
-const SERIF = "500 90px 'Times New Roman', Georgia, 'DejaVu Serif', serif";
+// El anillo pinta los signos DIBUJADOS, con los mismos trazos que el resto de
+// la app (signosIconos.ts). Con el carácter (♈♉♊…) no había forma: en canvas no
+// llega el CSS y el sistema lo resolvía con su fuente de emoji — morado, con
+// recuadro y sin respetar el color que le pide el código.
+const ICONO_LADO = 100;   // lado del icono dentro del lienzo de 2048
+const ICONO_TRAZO = 5.4;  // grosor del trazo a ese tamaño
 
 /**
  * Anillo del zodíaco usando el mismo mapeo no-lineal que los planetas:
@@ -48,12 +53,9 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
   // innerR del canvas alineado con el inner real del anillo 3D.
   const innerR = outerR * innerRatio;
   const midR = (innerR + outerR) / 2;
-  // Los glifos de los signos del zodíaco son tipográficamente "altos": con
-  // textBaseline="middle" el centro del em-square cae en y, pero la masa
-  // visual del glifo queda muy por encima. Tras rotar tangente al anillo,
-  // eso desplaza el glifo hacia el exterior del rectángulo (= "arriba").
-  // Compensamos con un offset radial generoso hacia el centro del anillo.
-  const GLYPH_INNER_OFFSET = Math.round((outerR - innerR) * 0.22);
+  // El icono ya está centrado en su lienzo; solo se separa un pelín hacia el
+  // interior del anillo para que no roce el borde exterior.
+  const GLYPH_INNER_OFFSET = Math.round((outerR - innerR) * 0.06);
 
   ctx.clearRect(0, 0, size, size);
 
@@ -87,11 +89,10 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
     ctx.stroke();
   }
 
-  // Glifos: el centro angular del signo (a chart angle), no del zodíaco.
+  // Iconos: el centro angular del signo (a chart angle), no del zodíaco.
   // Punto medio gestionando wrap-around: avanzamos CCW (math angle creciente).
-  ctx.font = SERIF;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
 
   for (let i = 0; i < 12; i++) {
     const aStart = signStartAngles[i];
@@ -104,15 +105,22 @@ function buildTexture(cusps: number[], innerRatio: number): THREE.CanvasTexture 
 
     ctx.save();
     ctx.translate(x, y);
-    // Orientar el glifo tangente al anillo (igual que antes: que "mire" hacia fuera).
+    // Orientar el icono tangente al anillo (igual que antes: que "mire" hacia fuera).
     ctx.rotate(-(angle) + Math.PI / 2);
+    // +y en el frame rotado = hacia el centro del anillo: el offset separa el
+    // icono del borde exterior.
+    ctx.translate(0, GLYPH_INNER_OFFSET);
     ctx.shadowColor = "rgba(255,255,255,0.14)";
     ctx.shadowBlur = 1.5;
-    ctx.fillStyle = "rgba(255,255,255,0.4)";
-    // +y en el frame rotado = hacia el centro del anillo. El offset compensa
-    // que el glifo es alto y, con textBaseline="middle", queda visualmente
-    // más alto de lo que correspondería al centro del rectángulo.
-    ctx.fillText(ZODIAC_SIGNS[i].symbol + "︎", 0, GLYPH_INNER_OFFSET);
+    ctx.strokeStyle = "rgba(255,255,255,0.4)";
+    // El icono viene en un lienzo de 24×24: se escala y se centra en el punto.
+    const escala = ICONO_LADO / 24;
+    ctx.scale(escala, escala);
+    ctx.lineWidth = ICONO_TRAZO / escala;
+    ctx.translate(-12, -12);
+    for (const d of SIGNO_TRAZOS[SIGNOS_ORDEN[i]] ?? []) {
+      ctx.stroke(new Path2D(d));
+    }
     ctx.restore();
   }
 

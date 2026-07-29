@@ -28,8 +28,9 @@ interface ComicPasoModalProps {
   onContinue: () => void;
   /** Viñetas del cómic (VINETAS_SIGNOS / VINETAS_PLANETAS / VINETAS_DOSHAS…). */
   vinetas: Vineta[];
-  /** Texto del botón de continuar (p.ej. "Arquetipos", "Energías"). */
-  continueLabel: string;
+  /** Texto del botón de continuar (p.ej. "Arquetipos", "Energías"). Acepta JSX
+   *  para poder abreviarlo en móvil con dos <span> y `display`. */
+  continueLabel: React.ReactNode;
   /** Color de acento de la disciplina (flechas, líneas, botones). */
   themeColor?: string;
   /** Foto de fondo de la disciplina. Si se omite, el ComicViewer usa el fondo
