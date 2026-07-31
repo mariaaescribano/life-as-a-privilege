@@ -61,10 +61,13 @@ const ImageBgLayer = ({
   overlay,
   strongBlur = false,
   fallbackBg,
+  talCual = false,
 }: {
   src: string;
   borderRadius?: any;
   overlay?: string;
+  /** La foto tal cual: sin velo encima y sin el escalado del difuminado. */
+  talCual?: boolean;
   /** Blur extra para los popups, donde el texto es grande y necesita destacar. */
   strongBlur?: boolean;
   /** Color sólido detrás de la imagen como respaldo (poco probable que se
@@ -122,10 +125,12 @@ const ImageBgLayer = ({
           objectFit: "cover",
           objectPosition: "center",
           filter: `blur(${blurPx}px)`,
-          transform: "scale(1.08)",
+          // El escalado solo hace falta para tapar el desvanecido del blur; sin
+          // velo ni blur, ampliar la foto sería recortarla sin motivo.
+          transform: talCual ? "none" : "scale(1.08)",
         }}
       />
-      {overlay && (
+      {overlay && !talCual && (
         <Box
           position="absolute"
           inset="0"
@@ -156,18 +161,22 @@ export const DisciplinaBgLayer = ({
   overlay,
   blur,
   imageSrc,
+  talCual,
 }: {
   nom: string;
   borderRadius?: any;
   overlay?: string;
   blur?: boolean;
+  /** Enseña la foto TAL CUAL: su color real, sin velo de color encima ni
+   *  opacidad rebajada. Lo usa el panel de admin de Astrología. */
+  talCual?: boolean;
   /** Sustituye la imagen por defecto de la disciplina por otra (mismo
    *  tratamiento de blur/overlay). Útil cuando un layout concreto pide una
    *  variante (p.ej. TCM vertical en los boxes de los tests). */
   imageSrc?: string;
 }) => {
   if (nom === astrologiaNom) {
-    return <StarsLayer borderRadius={borderRadius} overlay={overlay} blur={blur} />;
+    return <StarsLayer borderRadius={borderRadius} overlay={overlay} blur={blur} talCual={talCual} />;
   }
   const src = imageSrc ?? DISCIPLINA_BG_IMG[nom];
   if (!src) return null;
@@ -178,6 +187,7 @@ export const DisciplinaBgLayer = ({
       overlay={overlay ?? DISCIPLINA_OVERLAY[nom]}
       strongBlur={blur}
       fallbackBg={DISCIPLINA_FALLBACK_BG[nom]}
+      talCual={talCual}
     />
   );
 };

@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import SpinnerTurquesa from "../global/Spinner";
 import { comicLoaderPorColor } from "./comicLoaders";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
@@ -220,7 +219,7 @@ export function IndiceRecorrido({
                   de espera de la disciplina (nada de lista a medio calcular). */}
               {revisando ? (
                 <Flex minH={{ base: "180px", md: "220px" }} align="center" justify="center">
-                  {comicLoaderPorColor(TINTA) ?? <SpinnerTurquesa fullScreen={false} color={TINTA} />}
+                  {comicLoaderPorColor(TINTA)}
                 </Flex>
               ) : (
               <>

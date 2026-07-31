@@ -4,20 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
 import { cerrarSesionLocal } from "../../api/sesion";
-
-// Spinner inline
-const Spinner = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="44px"
-    height="44px"
-    viewBox="0 0 44 44"
-    style={{ animation: "spin 0.9s linear infinite" }}
-  >
-    <circle cx="22" cy="22" r="18" fill="none" stroke={turquesa} strokeWidth="3.5" strokeDasharray="90 30" strokeLinecap="round"/>
-    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-  </svg>
-);
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 
 const inputStyles = {
   bg: "rgba(255,255,255,0.06)",
@@ -191,7 +178,7 @@ export default function UserAccount() {
 
   if (loading) return (
     <Flex minH="100vh" bg="#008080" justify="center" align="center">
-      <Spinner />
+      <LifeLoader color="#ffffff" />
     </Flex>
   );
 
@@ -283,7 +270,7 @@ export default function UserAccount() {
                   left={0}
                   zIndex={2}
                 >
-                  <Spinner />
+                  <LifeLoader color="#ffffff" size="46px" />
                 </Flex>
               )}
               {img ? (

@@ -7,7 +7,8 @@
 // Antes no existía nada de esto: quien se registraba con email y contraseña y la
 // olvidaba perdía el acceso a un recorrido ya pagado.
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Image, Input, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -95,15 +96,9 @@ const BotonPrincipal = ({
         {texto}
       </Text>
       {loading && (
-        <Spinner
-          size="sm"
-          thickness="2px"
-          speed="0.7s"
-          color="white"
-          emptyColor="rgba(255,255,255,0.25)"
-          flexShrink={0}
-          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55))" }}
-        />
+        <Box flexShrink={0}>
+          <LifeLoader color="#ffffff" size="26px" />
+        </Box>
       )}
     </Flex>
   </Flex>

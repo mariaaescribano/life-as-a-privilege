@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
@@ -150,7 +150,7 @@ export default function CursosModalidad() {
   // Mientras se cargan los cursos desde la API, mostramos el spinner en vez de
   // pintar la cabecera con los cursos vacíos y que aparezcan luego de golpe.
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SiteHeader variant="auto" /><SpinnerTurquesa /></Box>;
+    return <LifeLoading variant="auto" />;
   }
 
   if (!modalidad) {

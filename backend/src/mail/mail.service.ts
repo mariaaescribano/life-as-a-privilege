@@ -144,6 +144,266 @@ export class MailService {
     await this.enviar(email, `${disciplina} desbloqueada — Life as a Privilege`, html, 'email de disciplina');
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CORREOS DE LA CARTA ASTRAL (al usuario)
+  //
+  // Van con el turquesa del fondo de la web (#008080) y letra blanca, mandala
+  // arriba, filete de menta y el botón abajo a la derecha (como los botones de
+  // avanzar del recorrido). Tres correos:
+  //
+  //   1. «Tu carta ha sido registrada correctamente» — automático, al enviar
+  //      (o corregir) los datos de nacimiento. Lleva sus datos.
+  //   2. «Tu carta está en proceso de ser leída»     — a mano, botón del panel.
+  //   3. «Tu carta ya ha sido leída»                 — a mano, botón del panel;
+  //      lleva a «Puntos clave», que es donde se lee la carta.
+  //
+  // Todo el HTML va con tablas y estilos en línea (sin flex, sin grid, sin
+  // imágenes de fondo): es lo único que se pinta igual en Gmail, Apple Mail y
+  // Outlook.
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Paleta: el turquesa del fondo de la web y letra blanca.
+  private static readonly PALETA = {
+    fondo: '#006b6b',      // turquesa más hondo, fuera de la tarjeta
+    tarjeta: '#008080',    // el turquesa de la web
+    caja: '#016d6d',       // caja interior (los datos)
+    borde: '#5fc9c0',      // borde de la caja interior (menta de la marca)
+    tinta: '#ffffff',      // blanco: títulos, datos y botón
+    tintaSuave: '#eaf7f5', // blanco con una gota de menta, para el cuerpo
+    menta: '#a9e6df',      // menta clara: antetítulos y filetes
+    mentaTenue: '#4fada6', // filete fino
+    pie: '#c6e9e5',        // menta pálida del pie
+  };
+
+  private static readonly SERIF =
+    "'EB Garamond', Garamond, Georgia, 'Times New Roman', serif";
+
+  /** Sobre de los correos de Astrología: mandala, filete, antetítulo,
+   *  título y cuerpo. `preheader` es la línea que se lee en la bandeja de
+   *  entrada junto al asunto (invisible dentro del correo). */
+  private sobreAstro({
+    titulo,
+    preheader,
+    cuerpo,
+    antetitulo = 'Astrología · tu carta astral',
+  }: {
+    titulo: string;
+    preheader: string;
+    cuerpo: string;
+    antetitulo?: string;
+  }): string {
+    const c = MailService.PALETA;
+    const serif = MailService.SERIF;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const logo = `${frontendUrl}/img/icono/life.png`;
+
+    return `
+<div style="display:none;font-size:0;line-height:0;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${preheader}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${c.fondo};margin:0;padding:0;">
+  <tr>
+    <td align="center" style="padding:36px 12px 44px;">
+
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:${c.tarjeta};border-radius:20px;">
+        <!-- Mandala + marca -->
+        <tr>
+          <td align="center" style="padding:40px 44px 0;">
+            <img src="${logo}" width="52" height="52" alt="" style="display:block;border:0;outline:none;text-decoration:none;" />
+            <div style="font-family:${serif};font-size:11px;line-height:1.2;letter-spacing:0.3em;text-transform:uppercase;color:${c.menta};padding-top:16px;">
+              Life as a Privilege
+            </div>
+          </td>
+        </tr>
+
+        <!-- Filete de menta -->
+        <tr>
+          <td style="padding:24px 44px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr><td height="1" style="height:1px;background:${c.mentaTenue};font-size:0;line-height:0;">&nbsp;</td></tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Antetítulo + título -->
+        <tr>
+          <td style="padding:26px 44px 0;">
+            <div style="font-family:${serif};font-size:11px;line-height:1.3;letter-spacing:0.22em;text-transform:uppercase;color:${c.menta};">
+              ${antetitulo}
+            </div>
+            <h1 style="margin:12px 0 0;font-family:${serif};font-size:29px;line-height:1.28;font-weight:400;letter-spacing:0.01em;color:${c.tinta};">
+              ${titulo}
+            </h1>
+          </td>
+        </tr>
+
+        <!-- Cuerpo -->
+        <tr>
+          <td style="padding:22px 44px 42px;font-family:${serif};">
+            ${cuerpo}
+          </td>
+        </tr>
+      </table>
+
+      <!-- Pie, fuera de la tarjeta -->
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
+        <tr>
+          <td align="center" style="padding:20px 24px 0;font-family:${serif};font-size:12px;line-height:1.7;color:${c.pie};">
+            Te escribo desde <a href="${frontendUrl}" style="color:${c.menta};text-decoration:none;">Life as a Privilege</a>.<br />
+            Este correo es solo para ti: nadie más ve tu carta.
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>`;
+  }
+
+  /** Párrafo del cuerpo. */
+  private parrafo(texto: string, mt = 18): string {
+    const c = MailService.PALETA;
+    return `<p style="margin:${mt}px 0 0;font-family:${MailService.SERIF};font-size:17px;line-height:1.75;color:${c.tintaSuave};">${texto}</p>`;
+  }
+
+  /** Botón principal: blanco sólido sobre el turquesa (el contraste más alto de
+   *  la paleta, para que se vea que se pulsa). Va ABAJO A LA DERECHA, como los
+   *  botones de avanzar del recorrido. */
+  private boton(href: string, label: string): string {
+    const c = MailService.PALETA;
+    return `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:30px 0 0;">
+              <tr>
+                <td align="right">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="right">
+                    <tr>
+                      <td align="center" bgcolor="${c.tinta}" style="border-radius:999px;">
+                        <a href="${href}" style="display:inline-block;padding:15px 32px;font-family:${MailService.SERIF};font-size:14px;line-height:1;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:${c.tarjeta};text-decoration:none;border-radius:999px;">${label}</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>`;
+  }
+
+  // ── 1. Automático: datos registrados ──────────────────────────────────────
+  // Sale en cuanto la persona envía (o corrige) sus datos de nacimiento.
+  async enviarCartaRegistrada(
+    email: string,
+    nombre: string,
+    datos: { fecha_nacimiento: string; hora_nacimiento: string; pais: string; lugar: string; region: string },
+    esCorreccion = false,
+  ): Promise<void> {
+    const c = MailService.PALETA;
+    const serif = MailService.SERIF;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+    // YYYY-MM-DD → DD-MM-YYYY (si no viene en ese formato, se deja tal cual).
+    const fechaLegible = /^\d{4}-\d{2}-\d{2}/.test(datos.fecha_nacimiento)
+      ? datos.fecha_nacimiento.slice(0, 10).split('-').reverse().join('-')
+      : datos.fecha_nacimiento;
+    const lugarLegible = [datos.lugar, datos.region, datos.pais]
+      .map((s) => (s ?? '').trim())
+      .filter(Boolean)
+      .join(', ');
+
+    // Caja de los datos: cada dato con su etiqueta en dorado y su valor en crema.
+    const fila = (label: string, valor: string) => `
+              <tr>
+                <td style="padding:9px 0 0;font-family:${serif};font-size:11px;line-height:1.3;letter-spacing:0.2em;text-transform:uppercase;color:${c.menta};width:96px;vertical-align:top;">${label}</td>
+                <td style="padding:9px 0 0;font-family:${serif};font-size:17px;line-height:1.4;color:${c.tinta};">${valor}</td>
+              </tr>`;
+
+    const cajaDatos = `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 0;background:${c.caja};border:1px solid ${c.borde};border-radius:14px;">
+              <tr>
+                <td style="padding:20px 24px 24px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    ${fila('Fecha', fechaLegible)}
+                    ${fila('Hora', datos.hora_nacimiento)}
+                    ${fila('Lugar', lugarLegible || '—')}
+                  </table>
+                </td>
+              </tr>
+            </table>`;
+
+    const html = this.sobreAstro({
+      titulo: esCorreccion
+        ? 'Tus datos corregidos han quedado registrados'
+        : 'Tu carta ha sido registrada correctamente',
+      preheader: esCorreccion
+        ? 'Tu carta se ha vuelto a calcular con los datos buenos.'
+        : 'Estos son los datos con los que se ha calculado tu carta.',
+      cuerpo: `
+            ${this.parrafo(
+              esCorreccion
+                ? `Hola <span style="color:${c.tinta};">${nombre}</span>, he recibido tus datos corregidos. Tu carta se ha vuelto a calcular con ellos, y estos son los que valen:`
+                : `Hola <span style="color:${c.tinta};">${nombre}</span>, tus datos de nacimiento ya están guardados y tu carta está calculada. Estos son los datos con los que se ha hecho:`,
+              0,
+            )}
+            ${cajaDatos}
+            ${this.parrafo(
+              `Si algo no es exacto —sobre todo la <span style="color:${c.tinta};">hora</span>, que es la que fija tu Ascendente y tus casas— entra en tu recorrido, pulsa <span style="color:${c.tinta};">Cambiar</span> y vuelve a enviarlos. Mientras tu carta no esté escrita, corregirla no cuesta nada.`,
+              22,
+            )}
+            ${this.parrafo('A partir de aquí la leo yo misma, a mano. Te aviso cuando empiece y cuando esté terminada.')}
+            ${this.boton(`${frontendUrl}/metodo/astrologia`, 'Ver mi recorrido')}`,
+    });
+
+    await this.enviar(
+      email,
+      esCorreccion
+        ? 'Tus datos corregidos han quedado registrados'
+        : 'Tu carta ha sido registrada correctamente',
+      html,
+      'email de carta registrada',
+    );
+  }
+
+  // ── 2. A mano (panel): la carta está en proceso de ser leída ───────────────
+  async enviarCartaEnProceso(email: string, nombre: string): Promise<void> {
+    const c = MailService.PALETA;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+    const html = this.sobreAstro({
+      titulo: 'Tu carta está en proceso de ser leída',
+      preheader: 'Ya la tengo delante. Te aviso en cuanto esté escrita.',
+      cuerpo: `
+            ${this.parrafo(
+              `Hola <span style="color:${c.tinta};">${nombre}</span>, ya tengo tu carta delante y he empezado a leerla.`,
+              0,
+            )}
+            ${this.parrafo('La escribo a mano, mirando tu carta: los planetas, las casas y las relaciones que forman entre ellos. Eso lleva su tiempo, así que te pido un poco de paciencia, por favor.')}
+            ${this.parrafo('No hace falta que esperes para seguir: puedes continuar con tu recorrido mientras yo escribo. Te aviso en cuanto esté terminada.')}
+            ${this.boton(`${frontendUrl}/metodo/astrologia`, 'Seguir mi recorrido')}`,
+    });
+
+    await this.enviar(email, 'Tu carta está en proceso de ser leída', html, 'email de carta en proceso');
+  }
+
+  // ── 3. A mano (panel): la carta ya está leída ─────────────────────────────
+  // El enlace lleva SIEMPRE a «Puntos clave» del recorrido, que es donde se lee
+  // la carta. (Ya no se manda ningún PDF de Drive.)
+  async enviarCartaLeida(email: string, nombre: string): Promise<void> {
+    const c = MailService.PALETA;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const destino = `${frontendUrl}/metodo/astrologia/lectura`;
+
+    const html = this.sobreAstro({
+      titulo: 'Tu carta ya ha sido leída',
+      preheader: 'Te espera en Puntos clave. Léela con calma.',
+      cuerpo: `
+            ${this.parrafo(
+              `Hola <span style="color:${c.tinta};">${nombre}</span>, he terminado de leer tu carta. Ya te espera en tu recorrido, en <span style="color:${c.tinta};">Puntos clave</span>.`,
+              0,
+            )}
+            ${this.parrafo('Ahí tienes lo que más me ha llamado la atención de tu cielo: cada punto es una estrella que puedes abrir para leer lo que he escrito sobre ti.')}
+            ${this.parrafo('Léela sin prisa y sin juzgarte: en tu carta no hay nada bueno ni malo. Si quieres que la recorramos juntas, puedes agendar una llamada desde tu recorrido.')}
+            ${this.boton(destino, 'Leer mi carta')}`,
+    });
+
+    await this.enviar(email, 'Tu carta ya ha sido leída', html, 'email de carta leída');
+  }
+
   // Notifica a la creadora cuando un usuario solicita su carta astral.
   // La fecha llega en ISO (YYYY-MM-DD) y en el email se muestra DD-MM-YYYY.
   async enviarSolicitudCarta(
@@ -183,9 +443,10 @@ export class MailService {
           <p style="margin: 6px 0; font-size: 15px;"><strong>Región:</strong> ${datos.region}</p>
         </div>
         <p style="margin-top: 24px; font-size: 14px; opacity: 0.78;">
-          Cuando tengas la lectura lista, sube el PDF a Drive y pega el enlace de compartir
-          en el campo <code>link_carta</code> de la fila de este usuario en
-          <code>metodo_astrologia</code>.
+          Cuando tengas la lectura lista, escríbela en el panel de administración
+          (<strong>Astrología · textos</strong>) y pulsa <strong>Guardar</strong>. Cuando
+          quieras que se entere, pulsa <strong>Avisar de que su carta está lista</strong>:
+          ese botón es el único que le manda el email.
         </p>
       </div>
     `;

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { Flex } from "@chakra-ui/react";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 
 export default function GoogleAuthCallback() {
   const [params] = useSearchParams();
@@ -28,8 +28,8 @@ export default function GoogleAuthCallback() {
   }, []);
 
   return (
-    <Box minH="100vh" bg="#008080">
-      <SpinnerTurquesa />
-    </Box>
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <LifeLoader color="#ffffff" />
+    </Flex>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
-import SpinnerTurquesa from "../global/Spinner";
+import { AppleLoader } from "./AppleLoader";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import type { Vineta } from "./ComicViewer";
@@ -122,7 +122,7 @@ export function NutrienteComic({ vinetas }: { vinetas: Vineta[] }) {
           )}
           {!imgErr && !imgOk && (
             <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-              <SpinnerTurquesa fullScreen={false} color={nutricionTxt} />
+              <AppleLoader color={nutricionTxt} label={null} />
             </Box>
           )}
         </Box>

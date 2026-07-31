@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { VolverAlMapa } from "../../components/global/VolverAlMapa";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Markdown } from "../../components/global/Markdown";
 import { CursoTest } from "../../components/aprendizaje/CursoTest";
@@ -57,7 +57,7 @@ export default function TextLessonPage() {
   const siguiente = idx >= 0 && idx < lecciones.length - 1 ? lecciones[idx + 1] : null;
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SiteHeader variant="auto" /><SpinnerTurquesa /></Box>;
+    return <LifeLoading variant="auto" />;
   }
 
   if (!modalidad || !curso || !leccion) {

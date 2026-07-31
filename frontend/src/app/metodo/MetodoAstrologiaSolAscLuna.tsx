@@ -33,6 +33,15 @@ const CheckIcon = ({ color }: { color: string }) => (
   </Box>
 );
 
+// Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
+// llamada): explica esta página del recorrido. Edítalo libremente.
+const QUE_ES_ESTO = {
+  parrafos: [
+    "Ya has conocido a los doce Signos, que de una forma u otra viven en ti. Aquí empiezas por los tres arquetipos más básicos de la Astrología: tu Ascendente, tu Sol y tu Luna.",
+    "Léetelos con calma: esto es el calentamiento. En cuanto termines seguirás con el resto de tus arquetipos.",
+  ],
+};
+
 // Orden visual pedido: Luna (izq) · Sol (centro) · Ascendente (dcha).
 // En móvil se apila y el Sol queda en medio igualmente.
 const TRIO: CuerpoKey[] = ["luna", "sol", "ascendente"];
@@ -267,7 +276,8 @@ export default function MetodoAstrologiaSolAscLuna() {
         continueLabel="Arquetipos"
         themeColor={astrologiaTxt}
       />
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

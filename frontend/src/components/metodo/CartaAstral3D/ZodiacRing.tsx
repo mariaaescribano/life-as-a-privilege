@@ -32,7 +32,7 @@ interface ZodiacRingProps {
 // llega el CSS y el sistema lo resolvía con su fuente de emoji — morado, con
 // recuadro y sin respetar el color que le pide el código.
 const ICONO_LADO = 100;   // lado del icono dentro del lienzo de 2048
-const ICONO_TRAZO = 5.4;  // grosor del trazo a ese tamaño
+const ICONO_TRAZO = 4.8;  // grosor del trazo a ese tamaño
 
 /**
  * Anillo del zodíaco usando el mismo mapeo no-lineal que los planetas:

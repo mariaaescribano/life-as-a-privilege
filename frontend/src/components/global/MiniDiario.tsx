@@ -6,7 +6,6 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
-  Spinner,
   Text,
   Textarea,
   Tooltip,
@@ -17,6 +16,7 @@ import axios from "axios";
 import { API_URL, turquesa } from "../../GlobalVariables";
 import { ADMIN_DISCIPLINAS, disciplinaByKey } from "../../data/adminDisciplinas";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
+import { LifeLoader } from "../metodo/comicLoaders";
 
 /** Icono del diario (libro abierto). El color se adapta vía `fill`. */
 function DiarioIcon({ fill = "currentColor", size = "24px" }: { fill?: string; size?: string }) {
@@ -541,7 +541,7 @@ function VistaNotas({
 
       {cargando ? (
         <Flex justify="center" align="center" flex="1" minH={0}>
-          <Spinner color={turquesa} />
+          <LifeLoader color="#ffffff" size="56px" />
         </Flex>
       ) : notas.length === 0 ? (
         <Flex justify="center" align="center" flex="1" minH={0}>

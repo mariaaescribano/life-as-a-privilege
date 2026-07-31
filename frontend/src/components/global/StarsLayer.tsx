@@ -8,7 +8,16 @@ export const StarsLayer = ({
   borderRadius = "2xl",
   overlay = "rgba(8,13,30,0.62)",
   blur = false,
-}: { borderRadius?: any; overlay?: string; blur?: boolean }) => (
+  talCual = false,
+}: {
+  borderRadius?: any;
+  overlay?: string;
+  blur?: boolean;
+  /** La foto TAL CUAL: sin velo de color encima y sin bajarle la opacidad.
+   *  Se ve el color real de la imagen. Solo para sitios donde el texto ya se
+   *  lee bien sobre la foto (el panel de admin de Astrología). */
+  talCual?: boolean;
+}) => (
   <Box
     position="absolute"
     inset="0"
@@ -39,12 +48,14 @@ export const StarsLayer = ({
       style={{
         objectFit: "cover",
         objectPosition: "center",
-        opacity: 0.85,
+        opacity: talCual ? 1 : 0.85,
         // Blur opcional: las cards de Astrología no llevan blur, pero los
         // popups sí — con blur fuerte para que las letras destaquen del fondo.
         ...(blur ? { filter: "blur(8px)", transform: "scale(1.12)" } : {}),
       }}
     />
-    <Box position="absolute" inset="0" borderRadius={borderRadius} style={{ background: overlay }} />
+    {!talCual && (
+      <Box position="absolute" inset="0" borderRadius={borderRadius} style={{ background: overlay }} />
+    )}
   </Box>
 );

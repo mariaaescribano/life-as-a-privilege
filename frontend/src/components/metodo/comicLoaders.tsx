@@ -16,10 +16,16 @@ import {
 
 const SVG_W = { base: "74px", md: "90px" };
 
-function Shell({ children }: { children: React.ReactNode }) {
+/** Props comunes a todos los loaders. `size` es el lado del SVG: por defecto el
+ *  tamaño grande de pantalla de carga; pásalo más pequeño para los huecos
+ *  inline (miniaturas, botones, celdas de una rejilla). */
+type LoaderProps = { color?: string; size?: any };
+
+function Shell({ children, size }: { children: React.ReactNode; size?: any }) {
+  const w = size ?? SVG_W;
   return (
     <Flex align="center" justify="center">
-      <Box as="svg" viewBox="0 0 120 120" w={SVG_W} h={SVG_W} overflow="visible" aria-label="Cargando">
+      <Box as="svg" viewBox="0 0 120 120" w={w} h={w} overflow="visible" aria-label="Cargando">
         {children}
       </Box>
     </Flex>
@@ -41,10 +47,10 @@ const girarMandala = keyframes`
 `;
 // Pétalo de loto con la punta arriba, naciendo del centro (60,60).
 const PETALO_VIDA = "M60,60 C 47,43 47,27 60,15 C 73,27 73,43 60,60 Z";
-export function LifeLoader({ color }: { color?: string } = {}) {
+export function LifeLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? "#ffffff";
   return (
-    <Shell>
+    <Shell size={size}>
       <Box
         as="g"
         animation={`${girarMandala} 16s linear infinite`}
@@ -110,10 +116,10 @@ const ESTRELLAS = [
 // continua con 8 puntas afiladas (estrella de Ishtar/brújula), mucho más mística
 // que el pentagrama y sin recordar a la estrella de David (que son 6 puntas).
 const TRAZO = [0, 3, 6, 1, 4, 7, 2, 5, 0];
-export function AstrologiaLoader({ color }: { color?: string } = {}) {
+export function AstrologiaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? astrologiaTxt;
   return (
-    <Shell>
+    <Shell size={size}>
       <Box
         as="g"
         animation={`${girarAstro} 30s linear infinite`}
@@ -150,6 +156,17 @@ export function AstrologiaLoader({ color }: { color?: string } = {}) {
   );
 }
 
+// Pantalla de carga de ASTROLOGÍA: el octagrama (misma animación) en BLANCO,
+// centrado sobre el fondo turquesa, a pantalla completa. Sustituye al spinner
+// en todo el recorrido de astrología.
+export function AstrologiaLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <AstrologiaLoader color="#ffffff" />
+    </Flex>
+  );
+}
+
 // ── Psicología · neurona con el impulso viajando por el axón ─────────────────
 const impulso = keyframes`
   0%   { stroke-dashoffset: 100; opacity: 0; }
@@ -161,11 +178,11 @@ const latirSoma = keyframes`
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.12); }
 `;
-export function PsicologiaLoader({ color }: { color?: string } = {}) {
+export function PsicologiaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? neuropsicologiaTxt;
   const axon = "M50,60 C 72,60 78,44 104,50";
   return (
-    <Shell>
+    <Shell size={size}>
       {/* Dendritas */}
       {[[24, 44], [18, 60], [24, 78], [32, 40]].map(([x, y], i) => (
         <line key={i} x1={40} y1={60} x2={x} y2={y} stroke={c} strokeWidth={2.4} strokeLinecap="round" opacity={0.6} />
@@ -217,10 +234,10 @@ const florecer = keyframes`
   45%, 70%   { transform: scale(1);   opacity: 1; }
 `;
 const PETALO = "M60,66 C 51,50 51,33 60,25 C 69,33 69,50 60,66 Z";
-export function AyurvedaLoader({ color }: { color?: string } = {}) {
+export function AyurvedaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? ayurvedaTxt;
   return (
-    <Shell>
+    <Shell size={size}>
       {[0, 1, 2, 3, 4, 5].map((k) => (
         <Box
           as="g"
@@ -267,10 +284,10 @@ const girar = keyframes`
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 `;
-export function TcmLoader({ color = tcmTxt }: { color?: string } = {}) {
+export function TcmLoader({ color = tcmTxt, size }: LoaderProps = {}) {
   const c = color;
   return (
-    <Shell>
+    <Shell size={size}>
       <Box
         as="g"
         animation={`${girar} 2.6s linear infinite`}
@@ -308,10 +325,10 @@ const brilloCorazon = keyframes`
   15%           { filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 18px currentColor); }
 `;
 const CORAZON = "M60,98 C 18,66 22,28 46,28 C 57,28 60,40 60,45 C 60,40 63,28 74,28 C 98,28 102,66 60,98 Z";
-export function FisiologiaLoader({ color }: { color?: string } = {}) {
+export function FisiologiaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? fisiologiaTxt;
   return (
-    <Shell>
+    <Shell size={size}>
       <Box
         as="path"
         d={CORAZON}
@@ -361,10 +378,10 @@ const encender = keyframes`
   18%      { fill-opacity: 1; filter: drop-shadow(0 0 6px currentColor); }
   40%      { fill-opacity: 0.12; filter: none; }
 `;
-export function CabalaLoader() {
-  const c = cabalaTxt;
+export function CabalaLoader({ color, size }: LoaderProps = {}) {
+  const c = color ?? cabalaTxt;
   return (
-    <Shell>
+    <Shell size={size}>
       {SENDEROS.map(([a, b], i) => (
         <line key={i} x1={SEFIROT[a].x} y1={SEFIROT[a].y} x2={SEFIROT[b].x} y2={SEFIROT[b].y}
               stroke={c} strokeWidth={1.4} opacity={0.22} />
@@ -385,6 +402,17 @@ export function CabalaLoader() {
         />
       ))}
     </Shell>
+  );
+}
+
+// Pantalla de carga de CÁBALA: el Árbol de la Vida (misma animación) en BLANCO,
+// centrado sobre el fondo turquesa, a pantalla completa. Sustituye al spinner
+// en todo el recorrido de cábala.
+export function CabalaLoading() {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      <CabalaLoader color="#ffffff" />
+    </Flex>
   );
 }
 
@@ -409,10 +437,10 @@ const MANDALA = [
   { x: 60, y: 60 }, { x: 80, y: 60 }, { x: 70, y: 77.3 }, { x: 50, y: 77.3 },
   { x: 40, y: 60 }, { x: 50, y: 42.7 }, { x: 70, y: 42.7 },
 ];
-export function CulturaLoader({ color }: { color?: string } = {}) {
+export function CulturaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? culturaTxt;
   return (
-    <Shell>
+    <Shell size={size}>
       <Box
         as="g"
         animation={`${girarLento} 12s linear infinite`}
@@ -459,22 +487,45 @@ export function CulturaLoading() {
 }
 
 // ── Registro: elige el loader por el color de la disciplina (themeColor) ─────
-// Nutrición conserva su manzana (AppleLoader). Si el color no coincide con
-// ninguna disciplina, se devuelve null y el ComicViewer cae en el spinner.
-const LOADER_POR_TXT: Record<string, () => React.ReactNode> = {
-  // Astrología: estrella en BLANCO (más nítida sobre el fondo estrellado oscuro
-  // de las ilustraciones y los cómics del recorrido).
-  [astrologiaTxt.toLowerCase()]: () => <AstrologiaLoader color="#ffffff" />,
-  [neuropsicologiaTxt.toLowerCase()]: () => <PsicologiaLoader />,
-  [ayurvedaTxt.toLowerCase()]: () => <AyurvedaLoader />,
-  [tcmTxt.toLowerCase()]: () => <TcmLoader />,
-  [fisiologiaTxt.toLowerCase()]: () => <FisiologiaLoader />,
-  [cabalaTxt.toLowerCase()]: () => <CabalaLoader />,
-  [culturaTxt.toLowerCase()]: () => <CulturaLoader />,
-  [nutricionTxt.toLowerCase()]: () => <AppleLoader label={null} />,
+// Nutrición conserva su manzana (AppleLoader). `pintar` sin valor = cada loader
+// usa el color propio de su disciplina.
+const LOADER_POR_TXT: Record<string, (pintar?: string, size?: any) => React.ReactNode> = {
+  [astrologiaTxt.toLowerCase()]: (c, s) => <AstrologiaLoader color={c} size={s} />,
+  [neuropsicologiaTxt.toLowerCase()]: (c, s) => <PsicologiaLoader color={c} size={s} />,
+  [ayurvedaTxt.toLowerCase()]: (c, s) => <AyurvedaLoader color={c} size={s} />,
+  [tcmTxt.toLowerCase()]: (c, s) => <TcmLoader color={c} size={s} />,
+  [fisiologiaTxt.toLowerCase()]: (c, s) => <FisiologiaLoader color={c} size={s} />,
+  [cabalaTxt.toLowerCase()]: (c, s) => <CabalaLoader color={c} size={s} />,
+  [culturaTxt.toLowerCase()]: (c, s) => <CulturaLoader color={c} size={s} />,
+  [nutricionTxt.toLowerCase()]: (c, s) => <AppleLoader color={c} size={s} label={null} />,
 };
 
-export function comicLoaderPorColor(color?: string): React.ReactNode | null {
-  const key = (color ?? "").trim().toLowerCase();
-  return LOADER_POR_TXT[key]?.() ?? null;
+const clave = (color?: string) => (color ?? "").trim().toLowerCase();
+
+/** Loader para el interior de un cómic/ilustración: va sobre la viñeta, así que
+ *  cada disciplina se pinta en SU color. Excepción: Astrología en blanco, más
+ *  nítida sobre el cielo estrellado oscuro. Si el color no es de ninguna
+ *  disciplina, cae en el mandala de la casa. */
+export function comicLoaderPorColor(color?: string, size?: any): React.ReactNode {
+  const key = clave(color);
+  const pintar = key === clave(astrologiaTxt) ? "#ffffff" : undefined;
+  return LOADER_POR_TXT[key]?.(pintar, size) ?? <LifeLoader color={color} size={size} />;
+}
+
+/** Loader de la disciplina EN BLANCO, para las pantallas de carga sobre el
+ *  turquesa (#008080), donde el color propio de la disciplina no contrastaría.
+ *  Si el color no es de ninguna disciplina, cae en el mandala de la casa. */
+export function loaderDisciplinaBlanco(color?: string, size?: any): React.ReactNode {
+  return LOADER_POR_TXT[clave(color)]?.("#ffffff", size) ?? <LifeLoader color="#ffffff" size={size} />;
+}
+
+/** Pantalla de carga completa (turquesa + loader blanco) de la disciplina cuyo
+ *  `<disc>Txt` es `color`. Es lo que va en los `if (loading) return …` de todas
+ *  las páginas del recorrido. */
+export function LoadingDisciplina({ color }: { color?: string }) {
+  return (
+    <Flex minH="100vh" bg="#008080" align="center" justify="center">
+      {loaderDisciplinaBlanco(color)}
+    </Flex>
+  );
 }

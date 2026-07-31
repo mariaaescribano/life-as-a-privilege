@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import SpinnerTurquesa from "../global/Spinner";
 import { comicLoaderPorColor } from "./comicLoaders";
+import { glowHeader } from "./FotoBox";
 import { astrologiaTxt } from "../../GlobalVariables";
 
 /* ──────────────────────────────────────────────────────────────
@@ -146,7 +146,8 @@ const NavBtn = ({
     color={color}
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.3 : 1}
-    boxShadow={disabled ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
+    // Mismo halo que el header y que la caja: nada de sombra negra plana.
+    boxShadow={disabled ? "none" : glowHeader(color)}
     sx={{ backdropFilter: "blur(4px)" }}
     _hover={disabled ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: color }}
     transition="all 0.18s"
@@ -252,9 +253,10 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         position="relative"
         borderRadius="xl"
         overflow="hidden"
-        // Mismo glow que la cabecera (halo blanco + menta con el tinte de la
-        // disciplina), en vez de una sombra plana — atenuado por BRILLO.
-        boxShadow={`0 0 16px rgba(255,255,255,${0.16 * BRILLO}), 0 0 34px rgba(255,255,255,${0.08 * BRILLO}), 0 0 60px rgba(180,255,245,${0.09 * BRILLO}), 0 0 20px ${color}0d, 0 0 48px ${color}08`}
+        // EXACTAMENTE el glow del header (glowHeader), sin atenuar por BRILLO:
+        // todos los boxes de la página tienen que brillar igual. BRILLO sigue
+        // apagando el FONDO y la ilustración, pero no el halo de la caja.
+        boxShadow={glowHeader(color)}
         animation={`${fadeIn} 0.55s ease both`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
@@ -339,7 +341,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
               align="center"
               justify="center"
             >
-              {comicLoaderPorColor(color) ?? <SpinnerTurquesa fullScreen={false} color={color} />}
+              {comicLoaderPorColor(color)}
               <Image
                 src={encodeURI(v.img)}
                 alt=""
@@ -366,6 +368,11 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
             flexShrink={0}
             alignSelf={{ base: "stretch", md: "center" }}
             position="relative"
+            // La ilustración trae aire de sobra dentro del propio archivo, así
+            // que la acercamos con un zoom (abajo) y recortamos aquí lo que se
+            // sale: el marco queda lleno y la rueda se ve grande.
+            overflow="hidden"
+            borderRadius={{ base: 0, md: "lg" }}
             // Brillo alrededor de la carta SOLO en escritorio, donde la foto va
             // al lado del texto y tiene aire por los cuatro costados para que el
             // halo se vea. En móvil es un hero a todo el ancho: el resplandor se
@@ -381,8 +388,12 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
                 alt={`Viñeta ${i + 1}`}
                 w="100%"
                 h="100%"
-                objectFit={{ base: "cover", md: "contain" }}
+                objectFit="cover"
                 borderRadius={{ base: 0, md: "lg" }}
+                // Zoom del 18%: la rueda de la carta llena el marco en vez de
+                // quedarse pequeña con el margen que trae la propia ilustración.
+                // Lo que sobra lo recorta el `overflow: hidden` del contenedor.
+                sx={{ transform: { base: "scale(1.06)", md: "scale(1.18)" } }}
                 // La ilustración es lo que más luz daba: va atenuada.
                 style={{ filter: `brightness(${BRILLO_FOTO})` }}
               />

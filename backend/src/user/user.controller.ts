@@ -140,6 +140,16 @@ export class UserController {
     return await this.usersService.revocarAcceso(body.userId);
   }
 
+  // Borrar una cuenta entera desde el panel (irreversible: se va la cuenta y
+  // todos sus datos de recorrido, notas y reservas). Va aquí arriba, antes de
+  // @Delete(":id"), que es el borrado de la propia cuenta y pide contraseña.
+  @Delete("admin/usuario/:id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async borrarCuenta(@Param("id") id: string, @Req() req: any) {
+    if (!id?.trim()) throw new BadRequestException('id requerido');
+    return await this.usersService.deleteUserComoAdmin(id, req.user?.userId);
+  }
+
   @Get(":id")
   @UseGuards(JwtAuthGuard, OwnerGuard)
   async getById(@Param("id") id: string) {

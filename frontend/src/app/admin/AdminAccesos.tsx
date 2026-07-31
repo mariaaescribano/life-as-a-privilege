@@ -8,14 +8,23 @@
 //
 // Como el recorrido va en orden, conceder una disciplina concede también todas
 // las anteriores. «Quitar acceso» cierra las ocho.
+//
+// Aquí también se BORRAN cuentas (DELETE /user/admin/usuario/:id). Eso se lleva
+// la cuenta y todos sus datos —recorrido, notas, reservas, foto— y no tiene
+// vuelta: por eso hay que escribir el email exacto para confirmar. Si solo
+// quieres cerrarle las disciplinas, usa «Quitar acceso», no esto.
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Input, Text, Image } from "@chakra-ui/react";
+import {
+  Box, Flex, Input, Text, Image,
+  Modal, ModalOverlay, ModalContent, ModalCloseButton,
+} from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { ADMIN_DISCIPLINAS, disciplinaByKey } from "../../data/adminDisciplinas";
 import { API_URL } from "../../GlobalVariables";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
@@ -54,6 +63,10 @@ export default function AdminAccesos() {
   const [abierto, setAbierto] = useState<string | null>(null);
   const [guardando, setGuardando] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
+  // Borrado de cuenta: la cuenta señalada y el email tecleado para confirmar.
+  const [aBorrar, setABorrar] = useState<CuentaAdmin | null>(null);
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [borrando, setBorrando] = useState(false);
 
   const cargar = useCallback(async () => {
     try {
@@ -118,8 +131,37 @@ export default function AdminAccesos() {
     }
   };
 
+  // Borrado definitivo. El backend además se niega a borrar tu propia cuenta o
+  // una de administración, así que aquí basta con confirmar el email.
+  const borrarCuenta = async (u: CuentaAdmin) => {
+    setBorrando(true);
+    setAviso(null);
+    try {
+      await axios.delete(`${API_URL}/user/admin/usuario/${u.id}`, { headers: adminHeaders() });
+      setUsuarios((prev) => prev.filter((x) => x.id !== u.id));
+      if (abierto === u.id) setAbierto(null);
+      setABorrar(null);
+      setConfirmEmail("");
+      setAviso(`Cuenta de ${u.email} borrada con todos sus datos.`);
+    } catch (e: any) {
+      setAviso(e?.response?.data?.message ?? "No se pudo borrar la cuenta.");
+    } finally {
+      setBorrando(false);
+    }
+  };
+
+  const cerrarBorrado = () => {
+    if (borrando) return;
+    setABorrar(null);
+    setConfirmEmail("");
+  };
+
+  // La confirmación es el email exacto: así no se borra la fila de al lado.
+  const confirmado =
+    !!aBorrar && confirmEmail.trim().toLowerCase() === (aBorrar.email ?? "").trim().toLowerCase();
+
   if (verificando) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <LifeLoading variant="private" />;
   }
 
   return (
@@ -160,7 +202,7 @@ export default function AdminAccesos() {
           )}
 
           {loading ? (
-            <Flex justify="center" py={10}><SpinnerTurquesa /></Flex>
+            <Flex justify="center" py={10}><LifeLoader color="#ffffff" /></Flex>
           ) : (
             <Flex direction="column" gap={2}>
               {filtrados.map((u) => {
@@ -294,6 +336,36 @@ export default function AdminAccesos() {
                             Quitar acceso
                           </Box>
                         </Flex>
+
+                        {/* Borrar la cuenta: separado del resto, porque no es
+                            «cerrarle el recorrido», es que desaparece. */}
+                        <Box mt={4} pt={3} borderTop="1px solid rgba(255,255,255,0.12)">
+                          <Flex align="center" justify="space-between" gap={3} wrap="wrap">
+                            <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" flex="1" minW="200px">
+                              Borrar la cuenta se lleva también su recorrido, sus notas y sus reservas.
+                              No se puede deshacer.
+                            </Text>
+                            <Box
+                              as="button"
+                              onClick={() => { setABorrar(u); setConfirmEmail(""); }}
+                              disabled={ocupado}
+                              px={4}
+                              py={1.5}
+                              borderRadius="full"
+                              bg="transparent"
+                              border="1px solid rgba(255,150,150,0.55)"
+                              color="#ffc4c4"
+                              fontWeight="600"
+                              fontSize="sm"
+                              cursor={ocupado ? "wait" : "pointer"}
+                              opacity={ocupado ? 0.6 : 1}
+                              transition="all 0.2s"
+                              _hover={{ bg: ocupado ? undefined : "rgba(224,90,90,0.22)", borderColor: "#ffb0b0" }}
+                            >
+                              Borrar cuenta
+                            </Box>
+                          </Flex>
+                        </Box>
                       </Box>
                     )}
                   </Box>
@@ -320,6 +392,85 @@ export default function AdminAccesos() {
           </Flex>
         </Box>
       </Flex>
+
+      {/* ── Confirmar borrado: hay que teclear el email exacto ── */}
+      <Modal isOpen={!!aBorrar} onClose={cerrarBorrado} isCentered size="md">
+        <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalContent
+          bg="#008080"
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          border="1px solid rgba(255,255,255,0.22)"
+          borderRadius="2xl"
+          boxShadow="0 0 42px rgba(255,140,140,0.18), 0 0 100px rgba(255,255,255,0.08), 0 22px 60px rgba(0,0,0,0.6)"
+          mx={4}
+          overflow="hidden"
+        >
+          <ModalCloseButton color="white" />
+          <Box p={{ base: 6, md: 8 }} textAlign="center">
+            <Image src="/img/icono/life.png" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
+                   style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
+            <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={2}
+                  textShadow="0 0 12px rgba(255,255,255,0.45)">
+              ¿Borrar esta cuenta?
+            </Text>
+            <Text fontSize="md" opacity={0.9} mb={1}>
+              {aBorrar?.name || "(sin nombre)"}
+            </Text>
+            <Text fontSize="sm" opacity={0.7} mb={4}>
+              {aBorrar?.email}
+            </Text>
+            <Text fontSize="sm" opacity={0.75} mb={4} fontStyle="italic">
+              Se borra la cuenta y todo lo suyo: recorrido, notas, respuestas, reservas de llamada
+              y su foto. No se puede deshacer y no avisa a la persona.
+            </Text>
+            <Text fontSize="xs" opacity={0.6} mb={2}>
+              Escribe su email para confirmar:
+            </Text>
+            <Input
+              value={confirmEmail}
+              onChange={(e) => setConfirmEmail(e.target.value)}
+              placeholder={aBorrar?.email ?? ""}
+              autoFocus
+              mb={5}
+              textAlign="center"
+              bg="rgba(255,255,255,0.08)"
+              border="1px solid rgba(255,255,255,0.28)"
+              color="white"
+              borderRadius="full"
+              fontFamily="'EB Garamond', serif"
+              _placeholder={{ color: "rgba(255,255,255,0.35)" }}
+              _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.3)" }}
+            />
+            <Flex justify="center" gap={3}>
+              <Box as="button" onClick={cerrarBorrado} px={6} py="9px" borderRadius="full"
+                   border="1px solid rgba(255,255,255,0.45)" color="white" fontWeight="600" fontSize="sm"
+                   cursor="pointer" transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.1)" }}>
+                Cancelar
+              </Box>
+              <Box
+                as="button"
+                onClick={() => confirmado && aBorrar && borrarCuenta(aBorrar)}
+                disabled={!confirmado || borrando}
+                px={6}
+                py="9px"
+                borderRadius="full"
+                bg={confirmado ? "#e05a5a" : "rgba(255,255,255,0.08)"}
+                border={confirmado ? "1px solid #e05a5a" : "1px solid rgba(255,255,255,0.2)"}
+                color={confirmado ? "white" : "rgba(255,255,255,0.4)"}
+                fontWeight="700"
+                fontSize="sm"
+                cursor={!confirmado || borrando ? "not-allowed" : "pointer"}
+                boxShadow={confirmado ? "0 0 16px rgba(224,90,90,0.55)" : undefined}
+                transition="all 0.2s"
+                _hover={confirmado && !borrando ? { bg: "#d44b4b", boxShadow: "0 0 24px rgba(224,90,90,0.8)" } : undefined}
+              >
+                {borrando ? "Borrando…" : "Borrar cuenta"}
+              </Box>
+            </Flex>
+          </Box>
+        </ModalContent>
+      </Modal>
 
       <SiteFooter />
     </Box>

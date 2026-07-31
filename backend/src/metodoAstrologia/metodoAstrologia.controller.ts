@@ -25,6 +25,16 @@ export class MetodoAstrologiaController {
     return await this.service.guardarTextos(userId, body);
   }
 
+  // ── ADMIN: avisos por email, a mano desde el panel ──
+  // `tipo` = 'proceso' («tu carta está en proceso de ser leída») o
+  //          'leida'   («tu carta ya ha sido leída», con el enlace).
+  // Guardar la lectura no manda nada: solo estos botones.
+  @Post('admin/:userId/avisar/:tipo')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async avisar(@Param('userId') userId: string, @Param('tipo') tipo: 'proceso' | 'leida') {
+    return await this.service.avisar(userId, tipo);
+  }
+
   // JSON de la carta natal calculada para el componente 3D (debe ir antes de :userId)
   @Get('carta-natal/:userId')
   @UseGuards(JwtAuthGuard, OwnerGuard)

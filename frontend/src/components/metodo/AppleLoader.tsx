@@ -45,10 +45,12 @@ const DUR = "1.5s";
 export function AppleLoader({
   label = null,
   color = nutricionTxt,
-}: { label?: string | null; color?: string }) {
+  size,
+}: { label?: string | null; color?: string; size?: any }) {
+  const w = size ?? { base: "78px", md: "92px" };
   return (
     <Flex direction="column" align="center" justify="center" gap={4}>
-      <Box as="svg" viewBox="0 0 120 120" w={{ base: "78px", md: "92px" }} h={{ base: "78px", md: "92px" }}
+      <Box as="svg" viewBox="0 0 120 120" w={w} h={w}
            overflow="visible" aria-label="Cargando">
         {/* Sombra en el suelo (no bota con la manzana) */}
         <Box

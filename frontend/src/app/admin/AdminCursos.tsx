@@ -8,7 +8,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
+import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 import { API_URL } from "../../GlobalVariables";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
@@ -273,7 +274,7 @@ export default function AdminCursos() {
     </Box>
   );
 
-  if (verificando) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (verificando) return <LifeLoading variant="private" />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -306,7 +307,7 @@ export default function AdminCursos() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }}>
         <Box w="100%" maxW="920px">
           {loading ? (
-            <SpinnerTurquesa />
+            <LifeLoader color="#ffffff" />
           ) : cursos.length === 0 ? (
             <Text color="rgba(255,255,255,0.75)" fontStyle="italic" textAlign="center" mt={10}>
               Aún no hay cursos. Crea el primero con “+ Nuevo curso”.

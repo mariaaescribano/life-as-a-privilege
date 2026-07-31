@@ -10,6 +10,7 @@ import {
   leerUserIdDeToken,
   tokenRecuperacionValido,
 } from '../auth/password-reset.util';
+import { isAdminEmail } from '../auth/admin.util';
 
 
 /** Las ocho disciplinas de «El Recorrido», en el orden en que se desbloquean. */
@@ -664,18 +665,7 @@ export class UserService {
   // final. Cada borrado es best-effort: si una tabla falla, se registra el
   // error pero se continúa con las demás para no dejar datos huérfanos.
   async deleteUser(id: string, password?: string) {
-    const db = this.databaseService.getClient();
-
-    // Recuperamos email, foto y hash de contraseña ANTES de borrar la fila de
-    // usuario, porque algunas tablas (bookings) se relacionan por email, la foto
-    // vive en storage y necesitamos el hash para confirmar la identidad.
-    const { data: userRows } = await db
-      .from('user')
-      .select('email, img, password')
-      .eq('id', id);
-    const user = userRows?.[0] as { email?: string; img?: string; password?: string } | undefined;
-
-    if (!user) throw new NotFoundException('Usuario no encontrado');
+    const user = await this.leerCuentaParaBorrar(id);
 
     // Confirmación de seguridad: para eliminar la cuenta hay que introducir la
     // contraseña correcta (además de escribir «BORRAR» en el cliente).
@@ -687,6 +677,57 @@ export class UserService {
       throw new ConflictException('La contraseña es errónea');
     }
 
+    return await this.borrarCuentaYDatos(id, user);
+  }
+
+  // --------- Eliminar usuario DESDE EL PANEL DE ADMIN ---------
+  /**
+   * Borra la cuenta de otra persona desde /admin/accesos. Aquí no se pide
+   * contraseña porque quien borra no es la dueña de la cuenta, así que el
+   * permiso lo da el `AdminGuard` (email en ADMIN_EMAILS + contraseña de
+   * administración ya verificada). Dos cerrojos, porque esto no tiene vuelta:
+   *  · no puedes borrarte a ti misma desde el panel (eso va en «Mi cuenta»);
+   *  · no se puede borrar una cuenta de administración, o un despiste te deja
+   *    sin panel para siempre.
+   */
+  async deleteUserComoAdmin(id: string, adminUserId: string) {
+    if (id === adminUserId) {
+      throw new ConflictException(
+        'No puedes borrar tu propia cuenta desde el panel: hazlo desde «Mi cuenta».',
+      );
+    }
+    const user = await this.leerCuentaParaBorrar(id);
+    if (isAdminEmail(user.email)) {
+      throw new ConflictException(
+        'Esa cuenta es de administración: sácala de ADMIN_EMAILS antes de borrarla.',
+      );
+    }
+    return await this.borrarCuentaYDatos(id, user);
+  }
+
+  /**
+   * Lee email, foto y hash de contraseña ANTES de borrar la fila de usuario:
+   * algunas tablas (bookings) se relacionan por email, la foto vive en storage
+   * y el hash hace falta para confirmar la identidad cuando borra la dueña.
+   */
+  private async leerCuentaParaBorrar(id: string) {
+    const db = this.databaseService.getClient();
+    const { data: userRows } = await db
+      .from('user')
+      .select('email, img, password')
+      .eq('id', id);
+    const user = userRows?.[0] as { email?: string; img?: string; password?: string } | undefined;
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
+  }
+
+  /** Borrado real: datos de todas las tablas, reservas, foto y la fila `user`. */
+  private async borrarCuentaYDatos(
+    id: string,
+    user: { email?: string; img?: string },
+  ) {
+    const db = this.databaseService.getClient();
+
     // Tablas con datos del usuario, cada una con su columna identificadora.
     // (Los nombres de columna difieren entre tablas: user_id, userId, userid, idUser…)
     const relatedTables: { table: string; column: string }[] = [
@@ -696,6 +737,9 @@ export class UserService {
       { table: 'metodo_tcm', column: 'user_id' },
       { table: 'metodo_fisiologia', column: 'user_id' },
       { table: 'metodo_nutricion', column: 'user_id' },
+      { table: 'metodo_cabala', column: 'user_id' },
+      { table: 'notas', column: 'user_id' },
+      { table: 'recorrido_progreso', column: 'user_id' },
       { table: 'astrologia', column: 'userId' },
       { table: 'ayurveda', column: 'userId' },
       { table: 'ayurveda_respuestas', column: 'user_id' },

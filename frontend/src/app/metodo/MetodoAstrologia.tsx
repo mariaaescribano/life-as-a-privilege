@@ -42,6 +42,18 @@ const EyeIcon = () => (
   </Box>
 );
 
+// Contenido del popup «¿Qué es esto?»: explica esta primera pantalla del
+// recorrido (qué es, qué se hace aquí y qué pasa después). Edítalo libremente.
+const QUE_ES_ESTO: { titulo: string; parrafos: string[] } = {
+  titulo: "¿Qué es esto?",
+  parrafos: [
+    "Rellena tus datos de nacimiento. Si la hora no es exacta, no podré leer correctamente tu carta.",
+    "En cuanto lo envías, aparece un cómic que te cuenta qué es una carta astral.",
+    "Cuando tu carta esté lista, te llegará un aviso por email.",
+    "¿Te has equivocado, o has encontrado la hora buena? Pulsa «Cambiar», corrige lo que haga falta y vuelve a enviarlos. Si tu carta todavía no está en proceso o está escrita, volver a enviarla no se cobra.",
+  ],
+};
+
 const SPACE_IMG = "/img/astrologia/space.jpg";
 
 // Nombre del paso 2 («Lo primero de tu carta»), abreviado en móvil para que
@@ -478,7 +490,7 @@ export default function MetodoAstrologia() {
               w="100%"
               borderRadius="2xl"
               overflow="hidden"
-              boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+              boxShadow={glowHeader(astrologiaTxt)}
             >
               <SpaceBg overlay="rgba(8,13,30,0.65)" />
 
@@ -832,7 +844,8 @@ export default function MetodoAstrologia() {
         </Box>
       )}
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

@@ -6,6 +6,7 @@ import {
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { AgendarLlamada } from "../global/AgendarLlamada";
+import { LlamadaIcon } from "../global/BotonCompania";
 import { CursoCardDetalle } from "../aprendizaje/CursoCardDetalle";
 import { useCursosData } from "../../data/cursosApi";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -583,7 +584,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
   },
 };
 
-function BotonAyuda({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+function BotonAyuda({ children, onClick, icon }: { children: React.ReactNode; onClick: () => void; icon?: React.ReactNode }) {
   return (
     <Box as="button" onClick={onClick}
          position="relative" overflow="hidden"
@@ -595,7 +596,9 @@ function BotonAyuda({ children, onClick }: { children: React.ReactNode; onClick:
       {/* Fondo: imagen de la disciplina (psicología) recortada al pill */}
       <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
       <Box as="span" position="relative" zIndex={1} color={TINTA}
+           display="inline-flex" alignItems="center" gap={{ base: 1.5, md: 2 }}
            style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 8px ${PAPEL}` }}>
+        {icon}
         {children}
       </Box>
     </Box>
@@ -648,14 +651,14 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
             direction="column" align="flex-end" gap={2}>
         {esInicio ? (
           <>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>Agenda una llamada</BotonAyuda>
+            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>Agenda una llamada</BotonAyuda>
             <BotonAyuda onClick={() => setCursoOpen(true)}>Orientación</BotonAyuda>
           </>
         ) : (
           <>
             <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>Ejemplo</BotonAyuda>
             {!ocultarCompania && (
-              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)}>Agenda una llamada</BotonAyuda>
+              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>Agenda una llamada</BotonAyuda>
             )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
@@ -711,9 +714,13 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
                    _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4" mb={5} style={{ textShadow: INK_SHADOW }}>
-                Agenda una llamada
-              </Text>
+              <Flex align="center" justify="center" gap={{ base: 2.5, md: 3 }} color={TINTA} mb={5}
+                    style={{ textShadow: INK_SHADOW }}>
+                <LlamadaIcon size={{ base: "22px", md: "26px" }} />
+                <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4">
+                  Agenda una llamada
+                </Text>
+              </Flex>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
                 Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.
               </Text>

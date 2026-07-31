@@ -38,6 +38,15 @@ const EyeIcon = () => (
   </Box>
 );
 
+// Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
+// llamada): explica esta página del recorrido. Edítalo libremente.
+const QUE_ES_ESTO = {
+  parrafos: [
+    "Ya sabes qué Planetas viven en tu carta. Aquí los recorres uno a uno, profundizando en lo que cada uno significa en ti.",
+    "Léelos sin prisa: mientras tú avanzas, yo estoy acabando de escribir tu carta.",
+  ],
+};
+
 export default function MetodoAstrologiaCartaAstral() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -247,7 +256,8 @@ export default function MetodoAstrologiaCartaAstral() {
         onClose={() => setComicOpen(false)}
       />
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

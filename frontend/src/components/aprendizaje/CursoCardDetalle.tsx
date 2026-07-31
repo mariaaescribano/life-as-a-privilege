@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import type { Curso } from "../../hardCoded/cursos";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { recordarOrigenCurso } from "../global/VolverAlMapa";
-import SpinnerTurquesa from "../global/Spinner";
+import { LifeLoader } from "../metodo/comicLoaders";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -91,7 +91,7 @@ export function CursoCardDetalle({
                opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
         {!fotoOk && (
           <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-            <SpinnerTurquesa fullScreen={false} color={color} />
+            <LifeLoader color={color} size={{ base: "52px", md: "60px" }} />
           </Box>
         )}
       </Box>

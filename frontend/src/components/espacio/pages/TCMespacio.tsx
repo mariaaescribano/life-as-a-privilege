@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import SpinnerTurquesa from "../../global/Spinner";
+import { TcmLoader } from "../../metodo/comicLoaders";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
@@ -659,8 +659,8 @@ export default function TCMespacio() {
             mb={{ base: 0, md: 0 }}
           />
 
-          {/* ══ SPINNER DE CARGA ══ */}
-          {loading && <SpinnerTurquesa />}
+          {/* ══ CARGA: el yin-yang de la disciplina ══ */}
+          {loading && <TcmLoader color="#ffffff" />}
           {!loading && (
             <>
               {/* ══ TARJETAS DE ESTADO DE TESTS ══ */}

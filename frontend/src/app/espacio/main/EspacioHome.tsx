@@ -25,7 +25,7 @@ import {
   ayurvedaNomLink,
 } from "../../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
-import SpinnerTurquesa from "../../../components/global/Spinner";
+import { LifeLoader } from "../../../components/metodo/comicLoaders";
 import SiteFooter from "../../../components/global/Footer";
 
 const popIn = keyframes`
@@ -198,7 +198,7 @@ const EspacioHome = () => {
                     justifyContent="center"
                     zIndex={20}
                   >
-                    <SpinnerTurquesa fullScreen={false} size={44} thickness={4} />
+                    <LifeLoader color="#ffffff" size="58px" />
                   </Box>
                 )}
               </Box>
@@ -250,7 +250,11 @@ const EspacioHome = () => {
           </Flex>
         )}
 
-        {img == null && <SpinnerTurquesa />}
+        {img == null && (
+          <Flex flex="1" align="center" justify="center" py={16}>
+            <LifeLoader color="#ffffff" />
+          </Flex>
+        )}
       </Box>
 
       {/* ── FOOTER ── */}

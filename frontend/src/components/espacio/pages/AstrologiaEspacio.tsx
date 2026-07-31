@@ -9,7 +9,7 @@ const popIn = keyframes`
   to   { opacity: 1; transform: scale(1); }
 `;
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import SpinnerTurquesa from "../../global/Spinner";
+import { AstrologiaLoader } from "../../metodo/comicLoaders";
 import {
   API_URL,
   astrologiaBg,
@@ -417,7 +417,7 @@ const ZodiacModal = ({
             bg="rgba(0,0,0,0.45)"
             display="flex" alignItems="center" justifyContent="center"
           >
-            <SpinnerTurquesa size={44} thickness={4} fullScreen={false} />
+            <AstrologiaLoader color="#ffffff" size="58px" />
           </Box>
         )}
 
@@ -809,7 +809,7 @@ export default function AstrologiaEspacio() {
             maxW="900px"
           />
 
-          {loading && <SpinnerTurquesa />}
+          {loading && <AstrologiaLoader color="#ffffff" />}
 
           {!loading && (
             <Box

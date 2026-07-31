@@ -4,7 +4,7 @@ import axios from "axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -155,7 +155,7 @@ export default function MetodoCabalaFinal() {
     URL.revokeObjectURL(url);
   };
 
-  if (loading) return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+  if (loading) return <CabalaLoading />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">

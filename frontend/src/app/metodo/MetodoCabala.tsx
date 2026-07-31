@@ -4,7 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoCabalaModal } from "../../components/metodo/PagoCabalaModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
@@ -95,7 +95,7 @@ export default function MetodoCabala() {
   };
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <CabalaLoading />;
   }
 
   return (

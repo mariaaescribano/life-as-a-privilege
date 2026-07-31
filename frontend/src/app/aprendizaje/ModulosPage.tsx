@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import { VolverAlMapa } from "../../components/global/VolverAlMapa";
@@ -23,7 +23,7 @@ export default function ModulosPage() {
   const curso = modalidad?.cursos.find((c) => c.id === cursoId);
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SiteHeader variant="auto" /><SpinnerTurquesa /></Box>;
+    return <LifeLoading variant="auto" />;
   }
 
   return (

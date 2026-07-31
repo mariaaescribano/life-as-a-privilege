@@ -6,7 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
@@ -138,7 +138,7 @@ export default function MetodoCabalaCursos() {
   }, [navigate]);
 
   if (loading) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <CabalaLoading />;
   }
 
   return (

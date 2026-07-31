@@ -4,7 +4,6 @@ import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { PagoMetodoModal } from "../../components/metodo/PagoMetodoModal";
 import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal";
@@ -940,7 +939,7 @@ const Home = () => {
                     justifyContent="center"
                     zIndex={20}
                   >
-                    <SpinnerTurquesa fullScreen={false} size={44} thickness={4} />
+                    <LifeLoader color="#ffffff" size="58px" />
                   </Box>
                 )}
               </Box>
@@ -1284,7 +1283,11 @@ const Home = () => {
         loading={pagoCulturaLoading}
         error={pagoCulturaError}
       />
-      {verificandoPago && <SpinnerTurquesa />}
+      {verificandoPago && (
+        <Box position="fixed" inset="0" display="flex" alignItems="center" justifyContent="center" zIndex={9999}>
+          <LifeLoader color="#ffffff" />
+        </Box>
+      )}
     </Box>
   );
 };

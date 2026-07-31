@@ -142,7 +142,58 @@ export class MetodoAstrologiaService {
       console.warn('[metodoAstrologia.guardarTextos] error:', error.message);
       return { success: false };
     }
+
+    // Guardar la lectura NO avisa a la persona: los avisos los manda la
+    // administradora cuando quiere, con los botones del panel (`avisar`).
     return { success: true };
+  }
+
+  // ── ADMIN: avisos por email que se mandan A MANO desde el panel ──
+  //  · «proceso» → «Tu carta está en proceso de ser leída»
+  //  · «leida»   → «Tu carta ya ha sido leída» (con el enlace de la lectura)
+  // Cada uno queda registrado en `data` (aviso_proceso_at / aviso_leida_at) para
+  // que el panel pueda mostrar cuándo se mandó y avisar antes de repetirlo.
+  async avisar(
+    userId: string,
+    tipo: 'proceso' | 'leida',
+  ): Promise<{ success: boolean; message?: string; avisado_at?: string }> {
+    if (tipo !== 'proceso' && tipo !== 'leida') {
+      return { success: false, message: 'Tipo de aviso no válido' };
+    }
+
+    const row = await this.getMetodoAstrologia(userId);
+    if (!row) return { success: false, message: 'El usuario no tiene solicitud de carta' };
+
+    const user = await this.userService.getUserById(userId).catch(() => null);
+    if (!user?.email) return { success: false, message: 'El usuario no tiene email' };
+
+    if (tipo === 'proceso') {
+      await this.mailService.enviarCartaEnProceso(user.email, user.name);
+    } else {
+      // Este correo lleva a «Puntos clave», que solo se abre cuando hay lectura
+      // publicada. Sin puntos clave guardados, el aviso llevaría a una puerta
+      // cerrada, así que no lo mandamos.
+      const hayRetos = Array.isArray(row.retos) && row.retos.length > 0;
+      if (!hayRetos) {
+        return {
+          success: false,
+          message: 'Guarda antes al menos un punto clave: este correo lleva a Puntos clave y sin ellos esa página está cerrada.',
+        };
+      }
+      await this.mailService.enviarCartaLeida(user.email, user.name);
+    }
+
+    const avisado_at = new Date().toISOString();
+    const campo = tipo === 'proceso' ? 'aviso_proceso_at' : 'aviso_leida_at';
+    const data = { ...((row.data ?? {}) as Record<string, any>), [campo]: avisado_at };
+    const { error } = await this.databaseService.getClient()
+      .from('metodo_astrologia')
+      .update({ data, updated_at: avisado_at })
+      .eq('user_id', userId);
+    // El email ya ha salido: si el registro falla, no lo damos por fallido.
+    if (error) console.warn('[metodoAstrologia.avisar] no se pudo registrar el aviso:', error.message);
+
+    return { success: true, avisado_at };
   }
 
   // ── GET solo del JSON de la carta natal calculada ──
@@ -275,8 +326,12 @@ export class MetodoAstrologiaService {
       return { success: false };
     }
 
-    // Email a la creadora — silencioso si el SMTP no está configurado
+    // Emails — silenciosos si el SMTP no está configurado. Uno a la creadora
+    // (con los datos para escribir la carta) y otro al usuario, como acuse de
+    // recibo: así sabe que su carta está en marcha y no se queda esperando sin
+    // noticias hasta que la lectura esté escrita.
     await this.mailService.enviarSolicitudCarta(user.email, user.name, datos, esCorreccion);
+    await this.mailService.enviarCartaRegistrada(user.email, user.name, datos, esCorreccion);
 
     return { success: true };
   }

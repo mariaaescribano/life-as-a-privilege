@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 import { API_URL } from "../../GlobalVariables";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
@@ -244,7 +244,7 @@ export default function AdminCursoEditor() {
     }
   };
 
-  if (verificando || loading) return <Box minH="100vh" bg="#008080"><SiteHeader variant="private" /><SpinnerTurquesa /></Box>;
+  if (verificando || loading) return <LifeLoading variant="private" />;
   if (!curso) {
     return (
       <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">

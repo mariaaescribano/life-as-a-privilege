@@ -4,7 +4,7 @@ import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
-import { Breathe, RevealItem, RevealStagger } from "../global/Reveal";
+import { RevealItem, RevealStagger } from "../global/Reveal";
 
 // La entrada ya no se hace con un IntersectionObserver propio (que encendía
 // todo el bloque a la vez): ahora se usa el sistema Reveal común, que además
@@ -117,11 +117,10 @@ const ExperienciasReales: React.FC = () => {
           >
             {total > 1 && <ArrowButton dir="left" onClick={() => go(-1)} />}
 
-            {/* Breathe: latido de escala muy leve y continuo. La tarjeta deja de
-                ser un rectángulo quieto sin llegar a distraer de la lectura. */}
-            <Breathe scale={0.008} duration={7} flex="1" maxW="600px" display="flex">
+            {/* La tarjeta va QUIETA: nada de latido/escala continua, molesta al leer. */}
             <Box
               flex="1"
+              maxW="600px"
               bg="rgba(255,255,255,0.18)"
               border="1px solid rgba(255,255,255,0.4)"
               sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
@@ -158,7 +157,6 @@ const ExperienciasReales: React.FC = () => {
                 </Text>
               </Flex>
             </Box>
-            </Breathe>
 
             {total > 1 && <ArrowButton dir="right" onClick={() => go(1)} />}
           </RevealItem>

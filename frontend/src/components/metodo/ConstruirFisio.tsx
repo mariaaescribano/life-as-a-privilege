@@ -6,8 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../global/SiteHeader";
 import SiteFooter from "../global/Footer";
-import SpinnerTurquesa from "../global/Spinner";
-import { FisiologiaLoading } from "./comicLoaders";
+import { FisiologiaLoading, FisiologiaLoader } from "./comicLoaders";
 import { MetodoStepHeader } from "./MetodoStepHeader";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { useTusCelulas } from "./TusCelulasModal";
@@ -383,7 +382,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                                fallback={<Dibujada piezas={puestas.length ? puestas : flat()} forma={props.forma} />} />
                         {props.resultImg && !imgOk && (
                           <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-                            <SpinnerTurquesa fullScreen={false} />
+                            <FisiologiaLoader size={{ base: "52px", md: "60px" }} />
                           </Box>
                         )}
                       </Box>

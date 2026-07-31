@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Text, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -65,9 +66,7 @@ export default function AdminAyurvedaLectura() {
 
   if (verificando || loading) {
     return (
-      <Flex minH="100vh" bg="#008080" justify="center" align="center">
-        <Spinner size="xl" color="white" />
-      </Flex>
+      <AyurvedaLoading />
     );
   }
 
@@ -99,7 +98,7 @@ export default function AdminAyurvedaLectura() {
           <Text as="button" onClick={() => navigate("/admin/ayurveda")} color="rgba(255,255,255,0.85)" fontSize="sm" mb={3}
                 _hover={{ color: "white" }}>← Usuarios de {disc.nombre.toLowerCase()}</Text>
 
-          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} imagen />
+          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
           {doshasConDatos.length === 0 ? (
             <LecturaVacio txt="rgba(255,255,255,0.92)">

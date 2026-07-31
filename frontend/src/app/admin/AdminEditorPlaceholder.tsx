@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LoadingDisciplina } from "../../components/metodo/comicLoaders";
 import { disciplinaByKey } from "../../data/adminDisciplinas";
 import { useAdminGuard } from "./useAdminGuard";
 
@@ -14,7 +14,7 @@ export default function AdminEditorPlaceholder() {
   const disc = disciplinaByKey(disciplina ?? "");
 
   if (verificando) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <LoadingDisciplina color={disc?.txt} />;
   }
 
   return (

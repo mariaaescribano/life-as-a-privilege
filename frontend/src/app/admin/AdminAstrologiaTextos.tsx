@@ -13,7 +13,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { Box, Flex, Text, Textarea, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AstrologiaLoading } from "../../components/metodo/comicLoaders";
 import { useAdminGuard } from "./useAdminGuard";
 import { SpaceBg } from "../../components/metodo/SpaceBg";
 import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
@@ -162,7 +162,7 @@ export default function AdminAstrologiaTextos() {
   };
 
   if (verificando) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <AstrologiaLoading />;
   }
 
   const totalPersonalizadas = contarOverrides(overrides);

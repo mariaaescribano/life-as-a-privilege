@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Text, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -72,9 +73,7 @@ export default function AdminPsicologiaLectura() {
 
   if (verificando || loading) {
     return (
-      <Flex minH="100vh" bg="#008080" justify="center" align="center">
-        <Spinner size="xl" color="white" />
-      </Flex>
+      <PsicologiaLoading />
     );
   }
 
@@ -122,7 +121,7 @@ export default function AdminPsicologiaLectura() {
           <Text as="button" onClick={() => navigate("/admin/psicologia")} color="rgba(255,255,255,0.85)" fontSize="sm" mb={3}
                 _hover={{ color: "white" }}>← Usuarios de psicología</Text>
 
-          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} imagen />
+          <AdminDisciplinaHeader disc={disc} subtitle={`${nombre || "Usuario"}${email ? ` · ${email}` : ""}`} />
 
           {!haleAlgo ? (
             <LecturaVacio txt="rgba(255,255,255,0.92)">

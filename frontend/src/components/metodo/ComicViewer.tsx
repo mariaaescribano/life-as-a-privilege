@@ -9,7 +9,6 @@ import {
   type TextProps,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import SpinnerTurquesa from "../global/Spinner";
 import { comicLoaderPorColor } from "./comicLoaders";
 import { astrologiaTxt } from "../../GlobalVariables";
 
@@ -504,7 +503,7 @@ export function ComicViewer({
           justify="center"
           bg={disciplinaBgColor ?? "rgba(0,0,0,0.92)"}
         >
-          {loader ?? comicLoaderPorColor(themeColor) ?? <SpinnerTurquesa fullScreen={false} color={themeColor} />}
+          {loader ?? comicLoaderPorColor(themeColor)}
         </Flex>
       )}
 
@@ -711,7 +710,7 @@ export function ComicViewer({
                 align="center"
                 justify="center"
               >
-                {loader ?? comicLoaderPorColor(themeColor) ?? <SpinnerTurquesa fullScreen={false} color={themeColor} />}
+                {loader ?? comicLoaderPorColor(themeColor)}
                 <Image
                   src={encodeURI(current.src)}
                   alt=""
@@ -783,10 +782,10 @@ export function ComicViewer({
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
                     onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
                   />
-                  {/* Mientras la viñeta carga, spinner en su hueco. */}
+                  {/* Mientras la viñeta carga, el loader de la disciplina. */}
                   {!imgLoaded[index] && (
                     <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-                      <SpinnerTurquesa fullScreen={false} color={themeColor} />
+                      {loader ?? comicLoaderPorColor(themeColor)}
                     </Box>
                   )}
                 </>

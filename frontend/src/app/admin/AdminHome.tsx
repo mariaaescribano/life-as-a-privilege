@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
 import { ADMIN_DISCIPLINAS } from "../../data/adminDisciplinas";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { useAdminGuard } from "./useAdminGuard";
@@ -13,7 +13,7 @@ export default function AdminHome() {
   const { verificando } = useAdminGuard();
 
   if (verificando) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <LifeLoading variant="private" />;
   }
 
   return (

@@ -14,7 +14,6 @@ import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
-import SpinnerTurquesa from "../global/Spinner";
 import { FUENTE_GLIFOS } from "./glifosAstro";
 import { GlifoSigno } from "./Glifo";
 import { SIGNOS_ORDEN } from "./signosIconos";
@@ -138,7 +137,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/aries.png",
     paragraphs: [
-      "Aries",
+      "Aries.",
       "Acaba de nacer. No conoce las reglas.",
       "Actúa sin ser consciente de que sus actos tienen consecuencias. Cuando rompe la barrera, pierde interés en lo que hay detrás y busca la siguiente.",
       "Necesita novedad constante, por eso le cuesta acabar lo que empieza. Prefiere pelear antes que aceptar su derrota.",
@@ -147,7 +146,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/tauro.png",
     paragraphs: [
-      "Tauro",
+      "Tauro.",
       "Materializa la energía. Conectado con la naturaleza.",
       "Vive en los sentidos. Disfruta despacio y trabaja constante. Termina lo que empieza.",
       "Necesita anclarse en algo sólido y estable. Confunde seguridad con apego a patrones tóxicos.",
@@ -156,7 +155,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/geminis.png",
     paragraphs: [
-      "Géminis",
+      "Géminis.",
       "La inteligencia en alta frecuencia. El ruido si no se pone consciencia.",
       "Le cuesta el mundo emocional, por eso se queda en lo mental. Piensa antes de sentir.",
       "No tolera el aburrimiento ni lo ya sabido. Cambia constantemente porque desea novedad.",
@@ -166,7 +165,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/cancer.png",
     paragraphs: [
-      "Cáncer",
+      "Cáncer.",
       "Necesita sentir para saber quién es. Necesita pertenecer.",
       "Su identidad viene de sus raíces. Hace familia a aquellos que ama.",
       "Es vulnerable por dentro. Por eso construye un escudo por fuera. Le cuesta soltar el pasado, incluso cuando duele.",
@@ -184,7 +183,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/virgo.png",
     paragraphs: [
-      "Virgo",
+      "Virgo.",
       "Analiza, ordena, cuida, sirve.",
       "Vive sin querer ver su propio caos. Somatiza lo que niega.",
       "Es el crítico y juzgador más duro consigo mismo y con los demás.",
@@ -194,7 +193,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/libra.png",
     paragraphs: [
-      "Libra",
+      "Libra.",
       "La diplomacia. Necesita al otro para descubrirse a sí mismo.",
       "Quiere encajar y ser aceptado en la sociedad. Indeciso. Quiere que otros decidan por él.",
       "No le gustan las peleas. Recopila datos de todos para evitar desencuentros.",
@@ -203,7 +202,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/escorpio.png",
     paragraphs: [
-      "Escorpio",
+      "Escorpio.",
       "Intensidad, profundidad, transformación. Todo o nada.",
       "Paseos por los infiernos para descubrirse a sí mismo y a su sombra.",
       "Desea fundirse con el otro. La separación después de la fusión le duele mucho, pero debe de aprender a que sin uno no existe el otro.",
@@ -231,7 +230,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/acuario.png",
     paragraphs: [
-      "Acuario",
+      "Acuario.",
       "Ama a la humanidad, odia a los humanos.",
       "Desea pertenecer, pero no quiere perder su individualidad. Original. Innovador.",
       "Analiza a todos antes de fiarse. No le gustan los vínculos ni compromisos emocionales.",
@@ -240,7 +239,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/piscis.png",
     paragraphs: [
-      "Piscis",      
+      "Piscis.",      
       "Debe diferenciar si lo que siente es suyo o si lo ha absorbido sin querer.",
       "Carga la basura psíquica de otros, debe aprender a liberarse. Ese dolor no es suyo.",
       "Necesita periodos de soledad. Sensible, dulce. Su gran corazón es rosa.",
@@ -666,7 +665,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             {/* Hasta que el fondo y las portadas carguen: solo la estrella. */}
             {!selectorListo && (
               <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
-                {comicLoaderPorColor(astrologiaTxt) ?? <SpinnerTurquesa fullScreen={false} color={astrologiaTxt} />}
+                {comicLoaderPorColor(astrologiaTxt)}
               </Flex>
             )}
             {selectorListo && (

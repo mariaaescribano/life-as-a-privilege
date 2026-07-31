@@ -6,8 +6,7 @@ import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
-import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
+import { FisiologiaLoading, FisiologiaLoader } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
@@ -187,7 +186,7 @@ function FichaArrastrable({
         />
         {!imgOk && (
           <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-            <SpinnerTurquesa fullScreen={false} size={22} thickness={2} />
+            <FisiologiaLoader size="26px" />
           </Box>
         )}
       </Box>
@@ -496,7 +495,7 @@ export default function MetodoFisiologiaParticulas() {
                                fallback={<Box w="100%" h="100%" borderRadius="full" bg={fisiologiaBg} />} />
                         {!protonImgOk && (
                           <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-                            <SpinnerTurquesa fullScreen={false} />
+                            <FisiologiaLoader size={{ base: "52px", md: "60px" }} />
                           </Box>
                         )}
                       </Box>

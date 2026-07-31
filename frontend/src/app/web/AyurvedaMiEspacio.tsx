@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { AyurvedaLoader } from "../../components/metodo/comicLoaders";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -386,7 +386,7 @@ export default function AyurvedaMiEspacio() {
       <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="private" />
         <Flex flex="1" justify="center" align="center" minH="60vh">
-          <SpinnerTurquesa fullScreen={false} />
+          <AyurvedaLoader color="#ffffff" />
         </Flex>
         <SiteFooter />
       </Box>

@@ -4,7 +4,7 @@ import axios from "axios";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import SpinnerTurquesa from "../../components/global/Spinner";
+import { LifeLoading } from "../../components/global/LifeLoading";
 import { API_URL } from "../../GlobalVariables";
 
 // Pantalla de desbloqueo del panel de administración. Estar en ADMIN_EMAILS ya
@@ -68,7 +68,7 @@ export default function AdminLogin() {
   };
 
   if (verificando) {
-    return <Box minH="100vh" bg="#008080"><SpinnerTurquesa /></Box>;
+    return <LifeLoading variant="private" />;
   }
 
   return (

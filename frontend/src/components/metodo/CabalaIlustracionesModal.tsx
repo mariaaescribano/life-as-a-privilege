@@ -18,7 +18,6 @@ import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
 import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
-import SpinnerTurquesa from "../global/Spinner";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Popup "Ilustraciones de Cábala". Se abre desde el botón "Ilustraciones" del
@@ -95,7 +94,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
       >
         {!fondosListos && (
           <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
-            {comicLoaderPorColor(cabalaTxt) ?? <SpinnerTurquesa fullScreen={false} color={cabalaTxt} />}
+            {comicLoaderPorColor(cabalaTxt)}
           </Flex>
         )}
 

@@ -14,7 +14,6 @@ import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
-import SpinnerTurquesa from "../global/Spinner";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS CAPÍTULOS DE MEDICINA CHINA
@@ -276,7 +275,7 @@ export function TCMIlustracionesModal({
             muestra nada salvo el loader de TCM (aparece todo a la vez). */}
         {!fondosListos && (
           <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
-            {comicLoaderPorColor(tcmTxt) ?? <SpinnerTurquesa fullScreen={false} color={tcmTxt} />}
+            {comicLoaderPorColor(tcmTxt)}
           </Flex>
         )}
 

@@ -12,7 +12,6 @@ import {
 import { culturaBg, culturaTxt } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
-import SpinnerTurquesa from "../global/Spinner";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Popup "Ilustraciones de Cultura". Mismo patrón (pantalla completa con el
@@ -51,7 +50,7 @@ export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean
       >
         {!fondosListos && (
           <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
-            {comicLoaderPorColor(culturaTxt) ?? <SpinnerTurquesa fullScreen={false} color={culturaTxt} />}
+            {comicLoaderPorColor(culturaTxt)}
           </Flex>
         )}
 
