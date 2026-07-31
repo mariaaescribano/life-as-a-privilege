@@ -624,7 +624,17 @@ export default function AdminAstrologiaEditor() {
                 {/* Rueda. Lleva velo: es el cielo sobre el que se dibuja la carta,
                     no una foto decorativa (ver el prop `velo` de Trozo). */}
                 <Trozo py={{ base: 6, md: 8 }} velo="rgba(8,13,30,0.82)">
-                  <Flex direction="column" align="center">
+                  {/* El `& canvas` es a prueba de ZOOM del navegador, y solo se
+                      aplica aquí (el de la página del recorrido no se toca).
+                      three.js llama a setSize() con el tamaño MEDIDO y eso
+                      escribe el ancho del <canvas> en píxeles CSS; dentro de una
+                      página con zoom, esos píxeles vuelven a escalarse, así que
+                      el zoom se aplicaba dos veces (al 80% → 0,64) y la rueda
+                      salía pequeña en medio de su disco. Forzarla al 100% de su
+                      caja lo deja igual a cualquier zoom, y al 100% no cambia
+                      nada porque ahí ya coincidían. */}
+                  <Flex direction="column" align="center"
+                        sx={{ "& canvas": { width: "100% !important", height: "100% !important" } }}>
                     <CartaAstral3D color={astrologiaTxt} carta={carta} onSaberMas={(k) => setSaberMasKey(k)} />
                   </Flex>
                 </Trozo>
