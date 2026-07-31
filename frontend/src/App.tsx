@@ -34,6 +34,7 @@ const MetodoAstrologiaSolAscLuna = lazy(() => import("./app/metodo/MetodoAstrolo
 const MetodoAstrologiaLectura = lazy(() => import("./app/metodo/MetodoAstrologiaLectura"));
 const MetodoAstrologiaCasas = lazy(() => import("./app/metodo/MetodoAstrologiaCasas"));
 const MetodoAstrologiaAspectos = lazy(() => import("./app/metodo/MetodoAstrologiaAspectos"));
+const MetodoAstrologiaPdf = lazy(() => import("./app/metodo/MetodoAstrologiaPdf"));
 const MetodoAstrologiaLlamada = lazy(() => import("./app/metodo/MetodoAstrologiaLlamada"));
 const MetodoAstrologiaCursos = lazy(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
@@ -215,6 +216,7 @@ export default function App()
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />
       <Route path="/metodo/astrologia/casas" element={<PrivateRoute><MetodoAstrologiaCasas /></PrivateRoute>} />
       <Route path="/metodo/astrologia/aspectos" element={<PrivateRoute><MetodoAstrologiaAspectos /></PrivateRoute>} />
+      <Route path="/metodo/astrologia/pdf" element={<PrivateRoute><MetodoAstrologiaPdf /></PrivateRoute>} />
       <Route path="/metodo/astrologia/llamada" element={<PrivateRoute><MetodoAstrologiaLlamada /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />

@@ -383,12 +383,16 @@ const Home = () => {
     }
   };
 
-  const radius       = useBreakpointValue({ base: 112, sm: 138, md: 196, lg: 248, xl: 284 });
-  const containerSize = useBreakpointValue({ base: "286px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
-  const centerSize    = useBreakpointValue({ base: "102px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
-  const circleSize    = useBreakpointValue({ base: "67px", sm: "79px", md: "96px", lg: "116px" });
-  const iconSize      = useBreakpointValue({ base: "34px", sm: "43px", md: "53px", lg: "64px" });
-  const numberSize    = useBreakpointValue({ base: "22px", sm: "25px", md: "29px", lg: "34px" });
+  // Móvil (`base`) un pelín más grande que antes (+9%): el mandala se quedaba
+  // pequeño y con mucho turquesa vacío alrededor. El tope es el ancho de un
+  // móvil estrecho (360px): con radio 122 y círculos de 73 ocupa 317px, y con
+  // el px={5} del contenedor son 357px, así que aún entra sin scroll lateral.
+  const radius       = useBreakpointValue({ base: 122, sm: 138, md: 196, lg: 248, xl: 284 });
+  const containerSize = useBreakpointValue({ base: "312px", sm: "356px", md: "498px", lg: "622px", xl: "712px" });
+  const centerSize    = useBreakpointValue({ base: "112px", sm: "124px", md: "160px", lg: "196px", xl: "232px" });
+  const circleSize    = useBreakpointValue({ base: "73px", sm: "79px", md: "96px", lg: "116px" });
+  const iconSize      = useBreakpointValue({ base: "37px", sm: "43px", md: "53px", lg: "64px" });
+  const numberSize    = useBreakpointValue({ base: "24px", sm: "25px", md: "29px", lg: "34px" });
   const mandalaScale  = useBreakpointValue({ base: "none", md: "scale(0.7)" });
 
   useEffect(() => {
@@ -842,14 +846,20 @@ const Home = () => {
         </Box>
       )}
 
-      <Box flex="1" display="flex" alignItems="flex-start" justifyContent="center" transform={mandalaScale} transformOrigin="top center">
+      {/* En móvil el mandala se centra en el hueco que queda entre el header y
+          el footer (antes se pegaba arriba y dejaba un turquesa enorme debajo).
+          En escritorio sigue anclado arriba, que ahí sí llena la pantalla. */}
+      <Box flex="1" display="flex" alignItems={{ base: "center", md: "flex-start" }} justifyContent="center"
+           transform={mandalaScale} transformOrigin="top center">
         {mandalaListo ? (
           <Flex
             direction="column"
             alignItems="center"
             justifyContent="center"
             pt={{ base: 8, md: 10 }}
-            pb={{ base: 20, md: 10 }}
+            // Móvil: el mismo aire arriba y abajo, si no el centrado queda
+            // falseado por el padding y el mandala vuelve a subirse.
+            pb={{ base: 8, md: 10 }}
             px={{ base: 5, md: 10 }}
             w="100%"
           >

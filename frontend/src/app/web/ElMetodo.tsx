@@ -665,7 +665,7 @@ export default function ElMetodo() {
           transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
-          No son ocho cursos independientes. Es una única exploración de ti mismo desde ocho perspectivas diferentes para formar una comprensión profunda y coherente de quién eres.
+          No son ocho cursos independientes. Es una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.
         </Text>
 
       </Flex>

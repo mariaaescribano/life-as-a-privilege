@@ -9,7 +9,7 @@
 // base de datos. Es una herramienta de autoría LOCAL: al guardar, el back
 // reescribe ese archivo en la copia de trabajo; luego se hace commit + deploy.
 // ─────────────────────────────────────────────────────────────────────────
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Flex, Text, Textarea, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -21,6 +21,7 @@ import { CUERPOS, ZODIAC_SIGNS, type Cuerpo, type CuerpoKey } from "../../compon
 import { getTextoSignoOriginal, getTextoCasaOriginal } from "../../components/metodo/astrologiaTextos";
 import {
   cargarOverrides,
+  cargarOverridesLocales,
   guardarOverrides,
   type ArquetiposOverrides,
   type FacetaAstro,
@@ -47,9 +48,30 @@ export default function AdminAstrologiaTextos() {
   const toast = useToast();
 
   // Overrides en memoria + snapshot de lo guardado (para saber si hay cambios).
-  const [overrides, setOverrides] = useState<ArquetiposOverrides>(() => cargarOverrides());
-  const guardadoRef = useRef<string>(JSON.stringify(cargarOverrides()));
+  // Se arranca con los del proyecto (los del bundle, disponibles ya) y en cuanto
+  // llega la BD se sustituyen: la fila de la BD es la que manda, y hay que
+  // editar sobre el conjunto COMPLETO porque al guardar se manda entero.
+  const [overrides, setOverrides] = useState<ArquetiposOverrides>(() => cargarOverridesLocales());
+  const guardadoRef = useRef<string>(JSON.stringify(cargarOverridesLocales()));
   const [guardando, setGuardando] = useState(false);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    if (verificando) return;
+    let vivo = true;
+    cargarOverrides()
+      .then((o) => {
+        if (!vivo) return;
+        setOverrides(o);
+        guardadoRef.current = JSON.stringify(o);
+      })
+      .finally(() => {
+        if (vivo) setCargando(false);
+      });
+    return () => {
+      vivo = false;
+    };
+  }, [verificando]);
 
   // Selección: cuerpo + faceta + celda abierta.
   const [cuerpoKey, setCuerpoKey] = useState<CuerpoKey>("sol");
@@ -146,7 +168,15 @@ export default function AdminAstrologiaTextos() {
       const res = await guardarOverrides(overrides);
       if (res.success) {
         guardadoRef.current = JSON.stringify(overrides);
-        toast({ title: "Guardado en el proyecto", status: "success", duration: 1800, isClosable: true });
+        toast({
+          title: "Guardado",
+          description: res.archivoLocal
+            ? "En la base de datos y en el archivo del proyecto (commitéalo)."
+            : "En la base de datos: ya se ve en el recorrido.",
+          status: "success",
+          duration: 2600,
+          isClosable: true,
+        });
       } else {
         toast({
           title: "No se pudo guardar",
@@ -161,7 +191,9 @@ export default function AdminAstrologiaTextos() {
     }
   };
 
-  if (verificando) {
+  // Hasta que no llegan los overrides de la BD no se puede editar: si se editara
+  // sobre los del bundle y se guardara, se machacaría lo guardado en la BD.
+  if (verificando || cargando) {
     return <AstrologiaLoading />;
   }
 

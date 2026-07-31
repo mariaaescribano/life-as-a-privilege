@@ -171,8 +171,8 @@ export default function MetodoAstrologiaAspectos() {
   }
 
   const headerNext = {
-    label: "Agendar llamada →",
-    onClick: () => navigate("/metodo/astrologia/llamada"),
+    label: "Tu carta en PDF →",
+    onClick: () => navigate("/metodo/astrologia/pdf"),
   };
 
   const textoAbierto = abierto ? (textos[aspectoKey(abierto)] ?? "").trim() : "";
@@ -218,7 +218,7 @@ export default function MetodoAstrologiaAspectos() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 6, total: 8 }}
+              step={{ current: 6, total: 9 }}
               mb={0}
               prev={{ label: "← Casas", onClick: () => navigate("/metodo/astrologia/casas") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}

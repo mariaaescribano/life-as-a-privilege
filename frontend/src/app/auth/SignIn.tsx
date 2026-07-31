@@ -7,7 +7,7 @@ import { API_URL } from "../../GlobalVariables";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
 import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
-import type { CreateUser } from "../../dtos/user.types";
+import type { CreateUser, Trato } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
 import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
@@ -32,6 +32,69 @@ const useReveal = (threshold = 0.15) => {
 // los normales no puedan quedar distintos.
 const inputStyles = inputAuthStyles;
 
+/**
+ * Casilla de «cómo prefieres que me dirija hacia ti». Son dos casillas pero
+ * excluyentes: marcar una desmarca la otra, y volver a pulsar la marcada la
+ * deja en blanco (el campo es opcional, nadie se queda sin registrarse por no
+ * elegir). El ✓ va como texto, igual que en el resto de la app.
+ */
+const CasillaTrato = ({
+  etiqueta,
+  marcada,
+  onClick,
+  disabled,
+}: {
+  etiqueta: string;
+  marcada: boolean;
+  onClick: () => void;
+  disabled?: boolean;
+}) => (
+  <Flex
+    as="button"
+    type="button"
+    onClick={disabled ? undefined : onClick}
+    align="center"
+    gap={2.5}
+    px={5}
+    py={2.5}
+    flex="1"
+    justify="center"
+    borderRadius="full"
+    border={`1.5px solid ${marcada ? "white" : "rgba(255,255,255,0.4)"}`}
+    bg={marcada ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.06)"}
+    cursor={disabled ? "not-allowed" : "pointer"}
+    opacity={disabled ? 0.55 : 1}
+    boxShadow={marcada ? "0 0 16px rgba(255,255,255,0.35)" : "none"}
+    transition="all 0.2s ease"
+    _hover={disabled ? {} : { borderColor: "white", bg: "rgba(255,255,255,0.14)" }}
+  >
+    <Flex
+      align="center"
+      justify="center"
+      w="19px"
+      h="19px"
+      flexShrink={0}
+      borderRadius="4px"
+      border={`1.5px solid ${marcada ? "white" : "rgba(255,255,255,0.55)"}`}
+      bg={marcada ? "white" : "transparent"}
+    >
+      {marcada && (
+        <Text color="#008080" fontSize="12px" fontWeight="700" lineHeight="1">
+          ✓
+        </Text>
+      )}
+    </Flex>
+    <Text
+      color="white"
+      fontSize={{ base: "md", md: "lg" }}
+      letterSpacing="0.08em"
+      textShadow="0 0 8px rgba(255,255,255,0.35)"
+    >
+      {etiqueta}
+    </Text>
+  </Flex>
+);
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -45,6 +108,8 @@ export default function SignIn() {
   // a ciegas deja a la persona fuera de una cuenta que quizá ya ha pagado, y
   // recuperarla exige pasar por el email.
   const [contra2, setContra2] = useState<string>("");
+  // Cómo prefiere que se le hable. null = no lo ha elegido (es opcional).
+  const [trato, setTrato] = useState<Trato | null>(null);
   const [message, setMessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -59,7 +124,7 @@ export default function SignIn() {
   const registrar = async () => {
     setLoading(true);
     try {
-      const body: CreateUser = { name, email, password: contra };
+      const body: CreateUser = { name, email, password: contra, trato };
 
       const response = await axios.post(`${API_URL}/user/signIn`, body, {
         headers: { "Content-Type": "application/json" },
@@ -221,6 +286,27 @@ export default function SignIn() {
               onChange={(e) => setName(e.target.value)}
               {...inputStyles}
             />
+          </Box>
+
+          <Box>
+            <Text color="rgba(255,255,255,0.78)" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" mb={2.5}
+                  fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              ¿CÓMO PREFIERES QUE ME DIRIJA HACIA TI?
+            </Text>
+            <Flex gap={3}>
+              <CasillaTrato
+                etiqueta="Él"
+                marcada={trato === "el"}
+                disabled={bloqueado}
+                onClick={() => setTrato(trato === "el" ? null : "el")}
+              />
+              <CasillaTrato
+                etiqueta="Ella"
+                marcada={trato === "ella"}
+                disabled={bloqueado}
+                onClick={() => setTrato(trato === "ella" ? null : "ella")}
+              />
+            </Flex>
           </Box>
 
           <Box>

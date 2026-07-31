@@ -44,9 +44,9 @@ export default function MetodoAstrologiaLlamada() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 7, total: 8 }}
+              step={{ current: 8, total: 9 }}
               mb={0}
-              prev={{ label: "← Aspectos", onClick: () => navigate("/metodo/astrologia/aspectos") }}
+              prev={{ label: "← Tu carta en PDF", onClick: () => navigate("/metodo/astrologia/pdf") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={{ label: "Cursos →", onClick: () => navigate("/metodo/astrologia/cursos") }}
             />

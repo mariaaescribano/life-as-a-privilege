@@ -14,8 +14,7 @@ export function PagoMetodoModal(props: PagoDisciplinaModalProps) {
       ordinal="Primera disciplina"
       descripcion={
         <>
-          Empieza el Mapa con tu carta natal: descubre tus puntos clave, tus dones y tus conflictos.
-          Aprende a leerte para reconocerte, comprenderte y respetarte como el ser único que eres.
+          Empieza el mapa con tu carta natal: descubre tus puntos clave, tus dones y tus conflictos. Encuentra dónde nacieron tus patrones, para qué y por qué los mantienes, y cuál es tu propósito.
         </>
       }
     />

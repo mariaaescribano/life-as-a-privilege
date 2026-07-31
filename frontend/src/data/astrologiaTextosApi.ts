@@ -2,14 +2,13 @@
 // API de los TEXTOS de arquetipos (interpretaciones de la carta astral del
 // recorrido).
 //
-// Los textos viven HARDCODEADOS en el proyecto:
-//   · originales  → astrologiaTextos.ts
-//   · overrides   → astrologiaTextos.overrides.ts (editados desde /admin)
-// El texto efectivo (override ?? original) lo resuelven getTextoSigno/getTextoCasa.
-//
-// El editor de admin persiste los overrides reescribiendo el archivo del
-// proyecto a través del back (PUT /astrologia-arquetipos), solo en local. No hay
-// base de datos de por medio.
+// Los textos ORIGINALES viven hardcodeados en el proyecto (astrologiaTextos.ts).
+// Los overrides (lo editado en /admin/astrologia-textos) tienen dos copias:
+//   · la fila de la tabla astrologia_arquetipos → la que MANDA, y la que hace
+//     que editar en producción funcione;
+//   · astrologiaTextos.overrides.ts → respaldo commiteado, se usa mientras no
+//     haya nada en la BD (y como arranque en frío).
+// El texto efectivo lo resuelven getTextoSigno/getTextoCasa.
 // ─────────────────────────────────────────────────────────────────────────
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
@@ -18,13 +17,15 @@ import { ARQUETIPOS_OVERRIDES } from "../components/metodo/astrologiaTextos.over
 import { RESUMENES_SIGNO, RESUMENES_CASA } from "../components/metodo/astrologiaResumenes";
 import type { CuerpoKey } from "../components/metodo/astrologiaData";
 import { adminHeaders } from "../app/admin/useAdminGuard";
+import {
+  cargarOverridesRemotos,
+  overridesRemotos,
+  type ArquetiposOverrides,
+} from "./astrologiaOverridesRemotos";
 
 export type FacetaAstro = "signo" | "casa";
 
-export interface ArquetiposOverrides {
-  signo: Record<string, Record<string, string>>;
-  casa: Record<string, Record<string, string>>;
-}
+export type { ArquetiposOverrides };
 
 /** El resumen (2-3 frases memorables) de un arquetipo, si existe. */
 function resumenDe(cuerpo: string, faceta: FacetaAstro, valor: string): string | null {
@@ -49,34 +50,57 @@ export function textoEstatico(cuerpo: string, faceta: FacetaAstro, valor: string
 }
 
 /**
- * Texto de una interpretación para el popup «saber más». Ya no hay red ni BD:
- * el texto está hardcodeado, así que se resuelve en local y se devuelve envuelto
- * en una Promise para no tocar el llamante (SaberMasModal).
+ * Texto de una interpretación para el popup «saber más». Espera a los overrides
+ * de la BD (una sola petición cacheada para toda la carga de página) y luego
+ * resuelve en local; si el servidor no responde, sale el texto del bundle.
  */
-export function fetchAstroTexto(cuerpo: string, faceta: FacetaAstro, valor: string): Promise<string | null> {
-  return Promise.resolve(textoEstatico(cuerpo, faceta, valor));
+export async function fetchAstroTexto(
+  cuerpo: string,
+  faceta: FacetaAstro,
+  valor: string,
+): Promise<string | null> {
+  await cargarOverridesRemotos();
+  return textoEstatico(cuerpo, faceta, valor);
 }
 
 // ── Admin (editor de overrides) ──────────────────────────────────────────────
 
-/** Los overrides actuales del proyecto (clon del módulo hardcodeado). */
-export function cargarOverrides(): ArquetiposOverrides {
-  return {
-    signo: JSON.parse(JSON.stringify(ARQUETIPOS_OVERRIDES.signo ?? {})),
-    casa: JSON.parse(JSON.stringify(ARQUETIPOS_OVERRIDES.casa ?? {})),
-  };
+const clonar = (o: ArquetiposOverrides): ArquetiposOverrides => ({
+  signo: JSON.parse(JSON.stringify(o.signo ?? {})),
+  casa: JSON.parse(JSON.stringify(o.casa ?? {})),
+});
+
+/** Los overrides del proyecto (respaldo del bundle), sin pasar por la red. */
+export function cargarOverridesLocales(): ArquetiposOverrides {
+  return clonar(ARQUETIPOS_OVERRIDES as ArquetiposOverrides);
 }
 
-/** Reescribe el archivo de overrides del proyecto (solo funciona en local). */
+/**
+ * Los overrides que hay que EDITAR: los de la BD si hay fila, si no los del
+ * proyecto. Importa que sea el conjunto completo, porque al guardar se manda
+ * entero y la fila pasa a ser la verdad: si se editara sobre un conjunto a
+ * medias, lo que faltara se borraría sin querer.
+ */
+export async function cargarOverrides(): Promise<ArquetiposOverrides> {
+  const remotos = await cargarOverridesRemotos(true);
+  return clonar(remotos ?? (ARQUETIPOS_OVERRIDES as ArquetiposOverrides));
+}
+
+/**
+ * Guarda el conjunto completo. El back lo escribe en la BD (lo que funciona en
+ * producción) y, si se está en local, también en el archivo del proyecto.
+ */
 export async function guardarOverrides(
   overrides: ArquetiposOverrides,
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; archivoLocal?: boolean }> {
   try {
     const { data } = await axios.put(
       `${API_URL}/astrologia-arquetipos`,
       { overrides },
       { headers: adminHeaders() },
     );
+    // Que lo recién guardado sea ya lo que ve el recorrido en esta pestaña.
+    if (data?.success) await cargarOverridesRemotos(true);
     return data ?? { success: false };
   } catch (e: unknown) {
     const error =
@@ -86,3 +110,6 @@ export async function guardarOverrides(
     return { success: false, error };
   }
 }
+
+/** Reexport para las pantallas que pintan texto de forma síncrona. */
+export { overridesRemotos };

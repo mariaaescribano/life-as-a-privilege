@@ -173,7 +173,7 @@ export default function MetodoAstrologiaSolAscLuna() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 2, total: 8 }}
+              step={{ current: 2, total: 9 }}
               mb={0}
               prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
@@ -193,8 +193,11 @@ export default function MetodoAstrologiaSolAscLuna() {
               textAlign="center"
               maxW="620px"
               mx="auto"
+              fontStyle="italic"
             >
-              Tu carta se lee por partes, y esta es la primera: tu Luna (el hogar al que llegaste y tus sentimientos), tu Sol (tu esencia) y tu Ascendente (cómo percibes el mundo).
+              Tu carta se lee por partes, y esta es la primera: tu <Box as="strong" fontWeight="700">Luna</Box> (el
+              hogar al que llegaste y tus sentimientos), tu <Box as="strong" fontWeight="700">Sol</Box> (tu esencia) y
+              tu <Box as="strong" fontWeight="700">Ascendente</Box> (cómo percibes el mundo).
             </Text>
           </Reveal>
 

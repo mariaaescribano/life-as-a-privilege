@@ -104,20 +104,34 @@ function BotonAviso({ label, enviado, enviando, onClick }: {
   );
 }
 
-function Desplegable({ titulo, count, open, onToggle, children }: {
-  titulo: string; count?: number; open: boolean; onToggle: () => void; children: React.ReactNode;
+function Desplegable({ titulo, count, open, onToggle, accion, children }: {
+  titulo: string;
+  count?: number;
+  open: boolean;
+  onToggle: () => void;
+  /** Botón propio de la sección (p. ej. «+ Añadir»). Va FUERA de la zona que
+   *  pliega: un botón dentro de otro botón no es HTML válido y el clic se
+   *  robaría entre los dos. */
+  accion?: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
          boxShadow={GLOW_CAJA}>
       <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
-      <Flex position="relative" zIndex={1} as="button" w="100%" align="center" justify="space-between" px={{ base: 4, md: 6 }} py={4}
-            onClick={onToggle} cursor="pointer" _hover={{ bg: "rgba(255,255,255,0.05)" }} transition="background 0.15s">
-        <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: GLOW }}>
-          {titulo}
-          {count != null && <Box as="span" color="rgba(255,255,255,0.75)" fontSize="sm"> ({count})</Box>}
-        </Text>
-        <Chevron open={open} color="#ffffff" />
+      <Flex position="relative" zIndex={1} align="center" gap={3} px={{ base: 4, md: 6 }} py={4}
+            _hover={{ bg: "rgba(255,255,255,0.05)" }} transition="background 0.15s">
+        <Flex as="button" onClick={onToggle} flex="1" minW={0} align="center" textAlign="left" cursor="pointer">
+          <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: GLOW }}>
+            {titulo}
+            {count != null && <Box as="span" color="rgba(255,255,255,0.75)" fontSize="sm"> ({count})</Box>}
+          </Text>
+        </Flex>
+        {accion}
+        <Box as="button" onClick={onToggle} flexShrink={0} cursor="pointer"
+             aria-label={open ? `Plegar ${titulo}` : `Desplegar ${titulo}`}>
+          <Chevron open={open} color="#ffffff" />
+        </Box>
       </Flex>
       {/* Sin padding: el cuerpo son `Trozo`s a todo el ancho, cada uno con su
           propia foto y su raya de separación. */}
@@ -147,6 +161,7 @@ export default function AdminAstrologiaEditor() {
   const [avisadoAt, setAvisadoAt] = useState<{ proceso?: string; leida?: string }>({});
   const [avisoMsg, setAvisoMsg] = useState<string | null>(null);
   const [avisoError, setAvisoError] = useState<string | null>(null);
+  const [retosOpen, setRetosOpen] = useState(true);
   const [casasOpen, setCasasOpen] = useState(true);
   const [aspectosOpen, setAspectosOpen] = useState(false);
   // Box de consulta: la carta del usuario (rueda + planetas + casas). Abierto
@@ -478,34 +493,37 @@ export default function AdminAstrologiaEditor() {
             )}
 
             {/* ── Retos (estrellas del cielo del usuario) ── */}
-            <Box position="relative" borderRadius="xl" border={`1px solid ${turquesa}44`} mb={5} overflow="hidden"
-                 boxShadow={GLOW_CAJA}>
-              <DisciplinaBgLayer nom={astrologiaNom} borderRadius="xl" talCual />
-              {/* Cabecera del box (con padding); las estrellas van debajo, cada
-                  una en su propio `Trozo` a todo el ancho. */}
-              <Box position="relative" zIndex={1} p={{ base: 4, md: 5 }}>
-                <Flex align="center" justify="space-between" gap={2} mb={3} wrap="wrap">
-                  <Text color="#ffffff" fontWeight="700" fontSize="md" style={{ textShadow: GLOW }}>
-                    Puntos clave <Box as="span" color="rgba(255,255,255,0.75)" fontSize="sm">({retos.length})</Box>
-                  </Text>
-                  <Box as="button"
-                       onClick={() => setRetos((p) => [...p, { id: genRetoId(), titulo: "", texto: "" }])}
-                       px={4} py={1.5} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
-                       color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.04em"
-                       cursor="pointer" boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER }} transition="all 0.2s"
-                       style={{ textShadow: GLOW }}>
-                    + Añadir punto clave
-                  </Box>
-                </Flex>
-
+            {/* Plegable como las Casas y los Aspectos: con muchas estrellas el
+                box se hacía larguísimo. El botón de añadir va en `accion`, así
+                que sigue funcionando esté plegado o no (y si está plegado, abre
+                la sección para que se vea la estrella nueva). */}
+            <Desplegable
+              titulo="Puntos clave"
+              count={retos.length}
+              open={retosOpen}
+              onToggle={() => setRetosOpen((o) => !o)}
+              accion={
+                <Box as="button"
+                     onClick={() => {
+                       setRetos((p) => [...p, { id: genRetoId(), titulo: "", texto: "" }]);
+                       setRetosOpen(true);
+                     }}
+                     px={4} py={1.5} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
+                     color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.04em" flexShrink={0}
+                     cursor="pointer" boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER }} transition="all 0.2s"
+                     style={{ textShadow: GLOW }}>
+                  + Añadir punto clave
+                </Box>
+              }
+            >
+              <Trozo py={{ base: 3, md: 4 }}>
                 <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic">
                   Cada punto clave aparece como una estrella en el cielo del usuario; al pulsarla lee su texto. Mínimo 1, y cada uno con título y descripción.
                 </Text>
-
                 {retos.length === 0 && (
-                  <Text color="rgba(255,255,255,0.55)" fontStyle="italic" fontSize="sm" mt={4}>Sin puntos clave todavía. Añade el primero.</Text>
+                  <Text color="rgba(255,255,255,0.55)" fontStyle="italic" fontSize="sm" mt={3}>Sin puntos clave todavía. Añade el primero.</Text>
                 )}
-              </Box>
+              </Trozo>
 
               {retos.length > 0 && (
                 <Box position="relative" zIndex={1}>
@@ -544,7 +562,7 @@ export default function AdminAstrologiaEditor() {
                   </Flex>
                 </Box>
               )}
-            </Box>
+            </Desplegable>
 
             {!carta ? (
               <Box bg="rgba(0,0,0,0.32)" borderRadius="xl" border="1px solid rgba(255,255,255,0.18)" p={7}>

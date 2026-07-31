@@ -27,8 +27,12 @@ export const ASTROLOGIA_INDICE: PasoRecorrido[] = [
   { n: 4, titulo: "Puntos clave",            ruta: () => "/metodo/astrologia/lectura" },
   { n: 5, titulo: "Casas",                   ruta: () => "/metodo/astrologia/casas" },
   { n: 6, titulo: "Aspectos",                ruta: () => "/metodo/astrologia/aspectos" },
-  { n: 7, titulo: "Llamada",                 ruta: () => "/metodo/astrologia/llamada" },
-  { n: 8, titulo: "Cursos",                  ruta: () => "/metodo/astrologia/cursos" },
+  // Su carta entera en un PDF descargable: va justo después de haberla leído
+  // toda y antes de la llamada, que es cuando ya tiene sentido llevársela.
+  { n: 7, titulo: "Tu carta en PDF", tituloCorto: "PDF",
+    ruta: () => "/metodo/astrologia/pdf" },
+  { n: 8, titulo: "Llamada",                 ruta: () => "/metodo/astrologia/llamada" },
+  { n: 9, titulo: "Cursos",                  ruta: () => "/metodo/astrologia/cursos" },
 ];
 
 export const ASTROLOGIA_TOTAL = ASTROLOGIA_INDICE.length;

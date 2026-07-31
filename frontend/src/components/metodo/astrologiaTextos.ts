@@ -1,5 +1,6 @@
 import type { CuerpoKey } from "./astrologiaData";
 import { ARQUETIPOS_OVERRIDES } from "./astrologiaTextos.overrides";
+import { overridesRemotos } from "../../data/astrologiaOverridesRemotos";
 
 /**
  * Textos de Quirón — el mismo texto aplica tanto al signo como a la casa
@@ -3646,16 +3647,29 @@ export function getTextoCasaOriginal(planetaKey: string, casa: number): string |
   return TEXTOS_CASA[planetaKey as CuerpoKey]?.[casa] ?? null;
 }
 
+/**
+ * De dónde salen los overrides: si la BD tiene fila (editada desde
+ * /admin/astrologia-textos, que ahora también funciona en producción), esa fila
+ * MANDA sobre todo el conjunto — incluidas las celdas que se hayan borrado ahí.
+ * Mientras no haya llegado (o no haya nada guardado), los del proyecto.
+ *
+ * Ojo: quien pinte el texto de forma síncrona tiene que llamar a
+ * useOverridesRemotos() para volver a renderizar cuando lleguen.
+ */
+function fuenteOverrides() {
+  return overridesRemotos() ?? ARQUETIPOS_OVERRIDES;
+}
+
 // Texto efectivo: primero el override del editor de admin (si existe y no está
 // vacío), si no el original. Todos los consumidores del recorrido pasan por aquí.
 export function getTextoSigno(planetaKey: string, signo: string): string | null {
-  const ov = ARQUETIPOS_OVERRIDES.signo?.[planetaKey]?.[signo];
+  const ov = fuenteOverrides().signo?.[planetaKey]?.[signo];
   if (typeof ov === "string" && ov.trim() !== "") return ov;
   return getTextoSignoOriginal(planetaKey, signo);
 }
 
 export function getTextoCasa(planetaKey: string, casa: number): string | null {
-  const ov = ARQUETIPOS_OVERRIDES.casa?.[planetaKey]?.[String(casa)];
+  const ov = fuenteOverrides().casa?.[planetaKey]?.[String(casa)];
   if (typeof ov === "string" && ov.trim() !== "") return ov;
   return getTextoCasaOriginal(planetaKey, casa);
 }

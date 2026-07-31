@@ -102,7 +102,7 @@ export default function MetodoAstrologiaCursos() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 8, total: 8 }}
+              step={{ current: 9, total: 9 }}
               mb={0}
               prev={{ label: "← Llamada", onClick: () => navigate("/metodo/astrologia/llamada") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}

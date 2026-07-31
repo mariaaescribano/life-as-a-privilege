@@ -15,8 +15,9 @@ import { API_URL } from "../GlobalVariables";
  *   4 Puntos clave        → la carta está procesada (link_carta O hay retos)
  *   5 Casas               → 4 + todos los puntos clave leídos (retosLeidos)
  *   6 Aspectos            → 5 + todas las casas escritas leídas (casasLeidos)
- *   7 Llamada             → 6 (una vez accesible Aspectos, no hay más guardas)
- *   8 Cursos              → 6
+ *   7 Tu carta en PDF     → 6 (misma puerta que Aspectos: ya lo ha leído todo)
+ *   8 Llamada             → 6 (una vez accesible Aspectos, no hay más guardas)
+ *   9 Cursos              → 6
  *
  * Los "leídos" y los textos escritos salen del mismo row de la BD
  * (metodo_astrologia): data.retosLeidos / data.casasLeidos y casas_texto.
@@ -69,6 +70,7 @@ export function useAstrologiaProgreso() {
     6: hastaAspectos,
     7: hastaAspectos,
     8: hastaAspectos,
+    9: hastaAspectos,
   };
 
   // Mientras no ha cargado el progreso NO bloqueamos (permisivo), para no marcar

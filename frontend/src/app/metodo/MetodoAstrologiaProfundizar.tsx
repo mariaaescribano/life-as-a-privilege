@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Glifo } from "../../components/metodo/Glifo";
 import { cuerpoByKey, soloClavesPlaneta, type CuerpoKey } from "../../components/metodo/astrologiaData";
 import { getTextoSigno, getTextoCasa } from "../../components/metodo/astrologiaTextos";
+import { useOverridesRemotos } from "../../data/astrologiaOverridesRemotos";
 import { SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -75,6 +76,9 @@ export default function MetodoAstrologiaProfundizar() {
   const profundizadoPromise = useRef<Promise<void> | null>(null);
   const [loading, setLoading] = useState(true);
   const [valor, setValor] = useState<{ signo?: string; casa?: number }>({});
+  // Los textos editados desde /admin viven en la BD: al llegar, esto provoca el
+  // re-render para que getTextoSigno/getTextoCasa devuelvan ya la versión nueva.
+  const overridesListos = useOverridesRemotos();
   const fotosListas = useImagesReady([SPACE_IMG]);
 
   useEffect(() => {
@@ -124,7 +128,7 @@ export default function MetodoAstrologiaProfundizar() {
     navigate("/metodo/astrologia/planetas");
   };
 
-  if (loading || !fotosListas) {
+  if (loading || !fotosListas || !overridesListos) {
     return <RecorridoLoading />;
   }
   if (!cuerpo) return null;

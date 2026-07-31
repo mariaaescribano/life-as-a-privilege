@@ -29,6 +29,15 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
   return await bcrypt.compare(password, hash);
 }
 
+/**
+ * Deja el trato en 'el' | 'ella' o en null. Cualquier otra cosa se descarta en
+ * vez de guardarse: la columna lleva un check y un valor raro reventaría el
+ * insert entero (y con él el registro de la cuenta).
+ */
+function saneaTrato(valor: unknown): 'el' | 'ella' | null {
+  return valor === 'el' || valor === 'ella' ? valor : null;
+}
+
 
 @Injectable()
 export class UserService {
@@ -63,14 +72,24 @@ export class UserService {
       let id = randomString();
       const pass = await hashPassword(data.password);
 
+      // Si la columna `trato` todavía no está creada (sql/user-trato.sql sin
+      // ejecutar), se inserta sin ella: crear la cuenta es más importante que
+      // guardar la preferencia, y sin este respaldo el registro entero fallaría.
+      let conTrato = true;
+
       // Reintentamos solo ante colisión de id (23505), con un tope para no
       // entrar en bucle infinito si el insert nunca devuelve la fila esperada.
       for (let intento = 0; intento < 5; intento++) {
         try {
-          const { data: rows, error } = await this.databaseService.getClient()
-            .from('user')
-            .insert({ id, name: data.name, email: data.email, password: pass })
-            .select('id, name, email, img');
+          const fila: Record<string, unknown> = { id, name: data.name, email: data.email, password: pass };
+          if (conTrato) fila.trato = saneaTrato(data.trato);
+
+          // El select va con cadena literal en cada rama (el cliente de Supabase
+          // tipa la respuesta a partir de ese texto y no admite un ternario).
+          const insercion = this.databaseService.getClient().from('user').insert(fila);
+          const { data: rows, error } = conTrato
+            ? await insercion.select('id, name, email, img, trato')
+            : await insercion.select('id, name, email, img');
 
           if (error) throw error;
 
@@ -84,6 +103,14 @@ export class UserService {
         } catch (error: any) {
           if (error.code === '23505') {
             id = randomString();
+            continue;
+          }
+          // Falta la columna `trato`: repetimos sin ella (una sola vez).
+          if (conTrato && /trato/i.test(String(error?.message ?? ''))) {
+            console.warn(
+              '[createUser] la columna "trato" no existe: ejecuta backend/sql/user-trato.sql. Creo la cuenta sin ella.',
+            );
+            conTrato = false;
             continue;
           }
           throw error;
@@ -290,7 +317,7 @@ export class UserService {
     // caemos a los intentos siguientes).
     const full = await this.databaseService.getClient()
       .from('user')
-      .select('id, name, email, img, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra, nutricion_suscrito, nutricion_fecha_compra, cabala_suscrito, cabala_fecha_compra, cultura_suscrito, cultura_fecha_compra')
+      .select('id, name, email, img, trato, metodo_suscrito, metodo_fecha_compra, psicologia_suscrito, psicologia_fecha_compra, ayurveda_suscrito, ayurveda_fecha_compra, tcm_suscrito, tcm_fecha_compra, fisiologia_suscrito, fisiologia_fecha_compra, nutricion_suscrito, nutricion_fecha_compra, cabala_suscrito, cabala_fecha_compra, cultura_suscrito, cultura_fecha_compra')
       .eq('id', id)
       .single();
     if (full.data) return full.data;
@@ -352,10 +379,13 @@ export class UserService {
 
   // --------- Actualizar usuario ---------
   async updateUser(id: string, body: UpdateUser) {
-    const updates: Record<string, string> = {};
+    const updates: Record<string, string | null> = {};
     if (body.name) updates.name = body.name;
     if (body.email) updates.email = body.email;
     if (body.password) updates.password = await hashPassword(body.password);
+    // `trato`: se acepta también el null (quitar la preferencia), así que se
+    // mira si viene la clave, no si el valor es «truthy».
+    if ('trato' in body) updates.trato = saneaTrato(body.trato);
 
     const { data, error } = await this.databaseService.getClient()
       .from('user')

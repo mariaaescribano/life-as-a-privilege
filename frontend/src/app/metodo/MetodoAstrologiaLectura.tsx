@@ -194,7 +194,7 @@ export default function MetodoAstrologiaLectura() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 4, total: 8 }}
+              step={{ current: 4, total: 9 }}
               mb={0}
               prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
               extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
