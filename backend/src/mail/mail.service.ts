@@ -31,15 +31,42 @@ export class MailService {
     `;
   }
 
-  private async enviar(to: string, subject: string, html: string, etiqueta: string): Promise<void> {
+  /** Dirección donde se guarda copia de lo que se manda (NOTIFY_EMAIL). */
+  private get copiaAdmin(): string {
+    return process.env.NOTIFY_EMAIL || CARTA_ASTRAL_FALLBACK;
+  }
+
+  private async enviar(
+    to: string,
+    subject: string,
+    html: string,
+    etiqueta: string,
+    opciones?: {
+      /**
+       * Manda una copia OCULTA (bcc) a NOTIFY_EMAIL, para tener el correo
+       * exacto que ha recibido la persona. Va en bcc y no en cc a propósito:
+       * quien lo recibe no tiene por qué ver una dirección interna.
+       */
+      copiaAdmin?: boolean;
+    },
+  ): Promise<void> {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.warn(`[MailService] EMAIL_USER / EMAIL_PASS no configurados — ${etiqueta} no enviado.`);
       return;
     }
     try {
+      // Si la copia fuese a la MISMA cuenta que envía, se omite: Gmail no se
+      // manda un correo a sí mismo a la bandeja de entrada (queda en Enviados).
+      const copia =
+        opciones?.copiaAdmin &&
+        this.copiaAdmin.toLowerCase() !== (process.env.EMAIL_USER ?? '').trim().toLowerCase()
+          ? this.copiaAdmin
+          : undefined;
+
       await this.getTransporter().sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
         to,
+        bcc: copia,
         subject,
         html,
       });
@@ -377,7 +404,10 @@ export class MailService {
             ${this.boton(`${frontendUrl}/metodo/astrologia`, 'Seguir mi recorrido')}`,
     });
 
-    await this.enviar(email, 'Tu carta está en proceso de ser leída', html, 'email de carta en proceso');
+    // Copia oculta: igual que el de «carta leída», este lo manda ella desde el panel.
+    await this.enviar(email, 'Tu carta está en proceso de ser leída', html, 'email de carta en proceso', {
+      copiaAdmin: true,
+    });
   }
 
   // ── 3. A mano (panel): la carta ya está leída ─────────────────────────────
@@ -401,7 +431,11 @@ export class MailService {
             ${this.boton(destino, 'Leer mi carta')}`,
     });
 
-    await this.enviar(email, 'Tu carta ya ha sido leída', html, 'email de carta leída');
+    // Copia oculta a NOTIFY_EMAIL: este correo lo manda ella a mano desde el
+    // panel, y quiere tener delante exactamente lo que le ha llegado a la persona.
+    await this.enviar(email, 'Tu carta ya ha sido leída', html, 'email de carta leída', {
+      copiaAdmin: true,
+    });
   }
 
   // Notifica a la creadora cuando un usuario solicita su carta astral.
