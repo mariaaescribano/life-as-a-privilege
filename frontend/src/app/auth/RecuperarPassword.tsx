@@ -7,8 +7,7 @@
 // Antes no existía nada de esto: quien se registraba con email y contraseña y la
 // olvidaba perdía el acceso a un recorrido ya pagado.
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
-import { LifeLoader } from "../../components/metodo/comicLoaders";
+import { Box, Flex, Image, Input, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -95,10 +94,18 @@ const BotonPrincipal = ({
       >
         {texto}
       </Text>
+      {/* Dentro de un botón sí va el anillo de siempre: el mandala pide
+          demasiado sitio y distrae en una línea de texto. */}
       {loading && (
-        <Box flexShrink={0}>
-          <LifeLoader color="#ffffff" size="26px" />
-        </Box>
+        <Spinner
+          size="sm"
+          thickness="2px"
+          speed="0.7s"
+          color="white"
+          emptyColor="rgba(255,255,255,0.25)"
+          flexShrink={0}
+          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55))" }}
+        />
       )}
     </Flex>
   </Flex>

@@ -19,6 +19,7 @@ import { TextoCartaExplicativo, CARTA_MAPA_IMGS } from "../../components/metodo/
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { rutaHome } from "../../api/sesion";
 import {
   API_URL,
   astrologiaBg,
@@ -328,7 +329,9 @@ export default function MetodoAstrologia() {
 
   // Etiquetas de los botones del header según estado
   const camposCompletos = !!dia && !!mes && !!anio && !!hora && !!pais.trim() && !!lugar.trim() && !!region.trim();
-  const headerPrev = { label: "← Home", onClick: () => navigate("/home") };
+  // «Home» = la casa de quien mira: el panel si es admin, el home del recorrido
+  // si no (rutaHome()). Antes iba siempre al del recorrido.
+  const headerPrev = { label: "← Home", onClick: () => navigate(rutaHome()) };
   const headerExtra = {
     label: "Ilustraciones",
     onClick: () => setComicAstroOpen(true),

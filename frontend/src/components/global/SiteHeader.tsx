@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { rutaHome } from "../../api/sesion";
 
 type SiteHeaderProps = {
   /**
@@ -35,9 +36,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   // En el área privada (logueado: /home, /metodo, …) el header es ~10% más compacto.
   const compact = isPrivate;
-  const isAdmin    = localStorage.getItem("isAdmin") === "1";
-  // Para admins el "home" es el panel de administración.
-  const homeTarget = isPrivate ? (isAdmin ? "/admin" : "/home") : "/";
+  // Para admins el "home" es el panel de administración (ver rutaHome()).
+  const homeTarget = isPrivate ? rutaHome() : "/";
   const logoTarget = homeTarget;
   const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.png";
 

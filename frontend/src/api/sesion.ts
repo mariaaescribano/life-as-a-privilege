@@ -19,6 +19,33 @@
 const PREFERENCIAS = ["cookieConsent"];
 
 /**
+ * ¿Esta sesión tiene el panel de administración DESBLOQUEADO?
+ *
+ * No basta con que el email esté en ADMIN_EMAILS: hay que haber pasado por
+ * /admin/login con la contraseña de administración, que es lo que pone esta
+ * marca (y lo que la quita cada vez que se vuelve a iniciar sesión).
+ */
+export function esAdminDesbloqueado(): boolean {
+  try {
+    return localStorage.getItem("isAdmin") === "1";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * A dónde lleva «Home» dentro de la sesión.
+ *
+ * Para una admin con el panel desbloqueado su casa es el panel, no el home del
+ * recorrido: si está administrando, «Home» tiene que devolverla a /admin.
+ * Cualquier botón de «volver al inicio» debería usar esto en vez de escribir
+ * "/home" a mano, o vuelve a aparecer la incoherencia.
+ */
+export function rutaHome(): string {
+  return esAdminDesbloqueado() ? "/admin" : "/home";
+}
+
+/**
  * Borra la sesión del navegador conservando las preferencias.
  *
  * Se hace por lista de lo que se CONSERVA (y no de lo que se borra) a propósito:
