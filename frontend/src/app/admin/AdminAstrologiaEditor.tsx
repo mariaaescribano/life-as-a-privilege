@@ -856,11 +856,17 @@ export default function AdminAstrologiaEditor() {
                           const key = aspectoKey(a);
                           return (
                             <Trozo key={`${cuerpo.key}-${key}-${idx}`} px={{ base: 5, md: 9 }}>
+                              {/* El aspecto se lee entero de izquierda a derecha:
+                                  ☉ △ ♄ «Sol trígono Saturno». Antes empezaba por
+                                  el símbolo del aspecto y faltaba el planeta del
+                                  que va el box, así que al bajar por la lista se
+                                  perdía de vista de quién se estaba hablando. */}
                               <Flex align="center" gap={2} mb={1.5} wrap="wrap">
+                                <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={18} />
                                 <Text color="#ffffff" fontSize="md" style={{ textShadow: GLOW }}>{ASPECTO_SYMBOL[a.tipo]}{"︎"}</Text>
                                 {co && <Glifo symbol={co.symbol} color={co.color} size={18} />}
                                 <Text color="#ffffff" fontSize="sm" ml={1} style={{ textShadow: GLOW }}>
-                                  {ASPECTO_LABEL[a.tipo]} {co?.label}
+                                  {cuerpo.label} {ASPECTO_LABEL[a.tipo].toLowerCase()} {co?.label}
                                 </Text>
                               </Flex>
                               <Textarea
