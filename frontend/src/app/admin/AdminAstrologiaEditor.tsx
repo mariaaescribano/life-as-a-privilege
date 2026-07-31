@@ -104,6 +104,25 @@ function BotonAviso({ label, enviado, enviando, onClick }: {
   );
 }
 
+/** Meses para el desplegable de la fecha de nacimiento. */
+const MESES_NAC = [
+  { num: "01", nombre: "Enero" }, { num: "02", nombre: "Febrero" }, { num: "03", nombre: "Marzo" },
+  { num: "04", nombre: "Abril" }, { num: "05", nombre: "Mayo" }, { num: "06", nombre: "Junio" },
+  { num: "07", nombre: "Julio" }, { num: "08", nombre: "Agosto" }, { num: "09", nombre: "Septiembre" },
+  { num: "10", nombre: "Octubre" }, { num: "11", nombre: "Noviembre" }, { num: "12", nombre: "Diciembre" },
+];
+
+/** Estilo común de los campos de nacimiento. */
+const campoNac = {
+  bg: "rgba(0,0,0,0.35)",
+  border: "1px solid rgba(255,255,255,0.22)",
+  color: "white",
+  borderRadius: "lg",
+  fontFamily: "'EB Garamond', serif",
+  _placeholder: { color: "rgba(255,255,255,0.35)" },
+  _focus: { borderColor: turquesa, boxShadow: `0 0 0 1px ${turquesa}55` },
+} as const;
+
 function Desplegable({ titulo, count, open, onToggle, accion, children }: {
   titulo: string;
   count?: number;
@@ -161,6 +180,15 @@ export default function AdminAstrologiaEditor() {
   const [avisadoAt, setAvisadoAt] = useState<{ proceso?: string; leida?: string }>({});
   const [avisoMsg, setAvisoMsg] = useState<string | null>(null);
   const [avisoError, setAvisoError] = useState<string | null>(null);
+  // Datos de nacimiento, editables desde aquí. La fecha va en tres campos (como
+  // en el formulario de la persona) porque un date picker en algunos idiomas
+  // muestra MM/DD y se confunde con DD/MM: con la hora de nacimiento, un día
+  // mal leído cambia la carta entera.
+  const [nac, setNac] = useState({ dia: "", mes: "", anio: "", hora: "", pais: "", lugar: "", region: "" });
+  const [nacOpen, setNacOpen] = useState(true);
+  const [guardandoNac, setGuardandoNac] = useState(false);
+  const [nacMsg, setNacMsg] = useState<string | null>(null);
+  const [nacError, setNacError] = useState<string | null>(null);
   const [retosOpen, setRetosOpen] = useState(true);
   const [casasOpen, setCasasOpen] = useState(true);
   const [aspectosOpen, setAspectosOpen] = useState(false);
@@ -184,6 +212,11 @@ export default function AdminAstrologiaEditor() {
             aspectos_texto?: Record<string, string>;
             retos?: Reto[];
             data?: { aviso_proceso_at?: string; aviso_leida_at?: string };
+            fecha_nacimiento?: string | null;
+            hora_nacimiento?: string | null;
+            pais?: string | null;
+            lugar?: string | null;
+            region?: string | null;
           } | null>(
             `${API_URL}/metodo-astrologia/${userId}`, { headers: adminHeaders() },
           ),
@@ -198,6 +231,18 @@ export default function AdminAstrologiaEditor() {
           proceso: rowRes.data?.data?.aviso_proceso_at,
           leida: rowRes.data?.data?.aviso_leida_at,
         });
+        // Datos de nacimiento: la fecha viene como AAAA-MM-DD y aquí se edita
+        // partida en tres campos.
+        const f = /^(\d{4})-(\d{2})-(\d{2})/.exec(rowRes.data?.fecha_nacimiento ?? "");
+        setNac({
+          dia: f ? f[3] : "",
+          mes: f ? f[2] : "",
+          anio: f ? f[1] : "",
+          hora: (rowRes.data?.hora_nacimiento ?? "").slice(0, 5),
+          pais: rowRes.data?.pais ?? "",
+          lugar: rowRes.data?.lugar ?? "",
+          region: rowRes.data?.region ?? "",
+        });
       } catch {
         // silencioso
       } finally {
@@ -205,6 +250,69 @@ export default function AdminAstrologiaEditor() {
       }
     })();
   }, [verificando, userId]);
+
+  /**
+   * Guarda los datos de nacimiento y recalcula la carta. Al terminar recarga la
+   * carta para que la rueda y las casas del panel muestren ya lo nuevo (si no,
+   * se seguiría viendo la carta vieja y parecería que no ha hecho nada).
+   */
+  const guardarNacimiento = async () => {
+    if (!userId) return;
+    setNacMsg(null);
+    setNacError(null);
+
+    const { dia, mes, anio, hora, pais, lugar, region } = nac;
+    if (!dia || !mes || !anio || !hora) {
+      setNacError("Faltan la fecha completa y la hora.");
+      return;
+    }
+    if (!/^\d{1,2}:\d{2}$/.test(hora)) {
+      setNacError("La hora va en formato 24h, por ejemplo 04:30.");
+      return;
+    }
+    const d = Number(dia), a = Number(anio);
+    if (d < 1 || d > 31 || a < 1900 || a > 2100) {
+      setNacError("Revisa el día y el año.");
+      return;
+    }
+    if (!lugar.trim() || !pais.trim()) {
+      setNacError("Hacen falta al menos la ciudad y el país para localizar el lugar.");
+      return;
+    }
+
+    setGuardandoNac(true);
+    try {
+      const res = await axios.patch<{ success: boolean; message?: string; recalculada: boolean }>(
+        `${API_URL}/metodo-astrologia/admin/${userId}/nacimiento`,
+        {
+          fecha_nacimiento: `${anio}-${mes}-${String(d).padStart(2, "0")}`,
+          hora_nacimiento: hora.padStart(5, "0"),
+          pais: pais.trim(),
+          lugar: lugar.trim(),
+          region: region.trim(),
+        },
+        { headers: adminHeaders() },
+      );
+
+      if (!res.data?.success) {
+        setNacError(res.data?.message ?? "No se pudo guardar.");
+        return;
+      }
+      // La carta nueva, para verla al momento en el panel.
+      const cartaRes = await axios.get<CartaNatal | null>(
+        `${API_URL}/metodo-astrologia/carta-natal/${userId}`,
+        { headers: adminHeaders() },
+      );
+      setCarta(cartaRes.data ?? null);
+      setNacMsg(res.data.recalculada ? "Guardado y carta recalculada." : (res.data.message ?? "Guardado."));
+      if (!res.data.recalculada) setNacError(res.data.message ?? null);
+      setTimeout(() => setNacMsg(null), 6000);
+    } catch (e: any) {
+      setNacError(e?.response?.data?.message ?? "No se pudo guardar.");
+    } finally {
+      setGuardandoNac(false);
+    }
+  };
 
   const guardar = async () => {
     if (!userId) return;
@@ -399,6 +507,97 @@ export default function AdminAstrologiaEditor() {
                 )}
               </Trozo>
             </Box>
+
+            {/* ── DATOS DE NACIMIENTO (editables) ──
+                  Antes solo podía cambiarlos la propia persona en el paso 1 de su
+                  recorrido. Al guardar aquí se recalcula su carta entera, pero NO
+                  se le manda ningún correo: los avisos son los botones de arriba. */}
+            <Desplegable titulo="Datos de nacimiento" open={nacOpen} onToggle={() => setNacOpen((o) => !o)}>
+              <Trozo>
+                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" mb={4}>
+                  Con esto se calcula toda su carta. Al guardar se recalcula sola (posiciones,
+                  casas y aspectos) y no se le avisa por correo. Sus lecturas escritas se
+                  mantienen, pero si cambia la hora pueden cambiarle las casas y los aspectos:
+                  revisa después que las lecturas sigan cuadrando.
+                </Text>
+
+                <Flex gap={3} wrap="wrap" mb={3}>
+                  <Box flex="1 1 90px" minW="80px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Día</Text>
+                    <Input
+                      value={nac.dia}
+                      onChange={(e) => setNac((p) => ({ ...p, dia: e.target.value.replace(/\D/g, "").slice(0, 2) }))}
+                      placeholder="27" {...campoNac}
+                    />
+                  </Box>
+                  <Box flex="1 1 120px" minW="110px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Mes</Text>
+                    <Box as="select"
+                         value={nac.mes}
+                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNac((p) => ({ ...p, mes: e.target.value }))}
+                         w="100%" px={3} py="9px" borderRadius="lg" bg="rgba(0,0,0,0.55)" color="white"
+                         border="1px solid rgba(255,255,255,0.22)" fontFamily="'EB Garamond', serif" cursor="pointer">
+                      <option value="">—</option>
+                      {MESES_NAC.map((m) => (
+                        <option key={m.num} value={m.num} style={{ background: "#0b1020" }}>{m.nombre}</option>
+                      ))}
+                    </Box>
+                  </Box>
+                  <Box flex="1 1 110px" minW="90px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Año</Text>
+                    <Input
+                      value={nac.anio}
+                      onChange={(e) => setNac((p) => ({ ...p, anio: e.target.value.replace(/\D/g, "").slice(0, 4) }))}
+                      placeholder="1998" {...campoNac}
+                    />
+                  </Box>
+                  <Box flex="1 1 110px" minW="90px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Hora (24h)</Text>
+                    <Input
+                      value={nac.hora}
+                      onChange={(e) => setNac((p) => ({ ...p, hora: e.target.value.slice(0, 5) }))}
+                      placeholder="04:30" {...campoNac}
+                    />
+                  </Box>
+                </Flex>
+
+                <Flex gap={3} wrap="wrap" mb={4}>
+                  <Box flex="1 1 200px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Ciudad / pueblo</Text>
+                    <Input value={nac.lugar} onChange={(e) => setNac((p) => ({ ...p, lugar: e.target.value }))}
+                           placeholder="Alicante" {...campoNac} />
+                  </Box>
+                  <Box flex="1 1 200px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>Región / provincia</Text>
+                    <Input value={nac.region} onChange={(e) => setNac((p) => ({ ...p, region: e.target.value }))}
+                           placeholder="Comunidad Valenciana" {...campoNac} />
+                  </Box>
+                  <Box flex="1 1 200px">
+                    <Text color="rgba(255,255,255,0.7)" fontSize="xs" mb={1}>País</Text>
+                    <Input value={nac.pais} onChange={(e) => setNac((p) => ({ ...p, pais: e.target.value }))}
+                           placeholder="España" {...campoNac} />
+                  </Box>
+                </Flex>
+
+                <Flex align="center" gap={3} wrap="wrap">
+                  <Box as="button"
+                       onClick={guardandoNac ? undefined : () => void guardarNacimiento()}
+                       px={6} py={2} borderRadius="full" border={`1px solid ${astrologiaTxt}88`}
+                       color="#ffffff" fontWeight="700" fontSize="sm" letterSpacing="0.04em"
+                       cursor={guardandoNac ? "wait" : "pointer"} opacity={guardandoNac ? 0.7 : 1}
+                       boxShadow={GLOW_CAJA} _hover={{ boxShadow: GLOW_CAJA_HOVER }} transition="all 0.2s"
+                       style={{ textShadow: GLOW }}>
+                    {guardandoNac ? "Recalculando…" : "Guardar y recalcular la carta"}
+                  </Box>
+                  {nacMsg && (
+                    <Text color="#ffffff" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>{nacMsg}</Text>
+                  )}
+                  {nacError && (
+                    <Text color="#ff9a9a" fontSize="sm" fontStyle="italic" style={{ textShadow: GLOW }}>{nacError}</Text>
+                  )}
+                </Flex>
+              </Trozo>
+            </Desplegable>
 
             {/* ── CONSULTA: la carta de la persona ──
                   La MISMA rueda que ve ella en su recorrido, más sus planetas y

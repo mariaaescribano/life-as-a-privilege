@@ -148,7 +148,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "El estrés deja tu estómago con menos defensas.",
         claves: ["Altera la conexión cerebro-estómago", "Baja la protección de la mucosa", "Sube el riesgo de úlceras"],
-        texto: <>El estrés prolongado altera la comunicación entre el cerebro y el estómago. Cambia la producción de ácido, reduce algunos mecanismos de protección de la mucosa y dificulta su reparación. Si además existe una infección por Helicobacter pylori o tomas antiinflamatorios con frecuencia, el riesgo de gastritis y úlceras aumenta.</>,
+        texto: <>El estrés prolongado altera la comunicación entre el cerebro y el estómago. Cambia la producción de ácido, reduce algunos mecanismos de protección de la mucosa y dificulta su reparación. Si además existe una infección por Helicobacter pylori o tomas antiinflamatorios con frecuencia, el riesgo de gastritis (inflamación o hinchazón de la pared de dentro del estómago) y úlceras (llaga o herida abierta en la mucosa que reviste el estómago o la primera parte del intestino delgado) aumenta.</>,
       },
       {
         titular: "Tu estómago fabrica uno de los ácidos más fuertes del cuerpo.",
@@ -195,14 +195,9 @@ const ORGANOS: Organo[] = [
         texto: <>Es uno de los pocos órganos con una gran capacidad de regeneración. Puede recuperar parte del tejido perdido tras una lesión. Sin embargo, si el daño se repite durante años, las cicatrices sustituyen a las células sanas y esa regeneración deja de ser suficiente.</>,
       },
       {
-        titular: "No todas las toxinas vienen en una botella.",
-        claves: ["Procesa fármacos y químicos", "Más no es mejor", "Los suplementos de sobra dañan"],
-        texto: <>El hígado transforma medicamentos, alcohol y muchas otras sustancias químicas. Pero «más» no significa «mejor»: tomar fármacos sin necesidad o abusar de suplementos y productos naturales también puede dañarlo. Antes de consumir cualquier producto de forma habitual, asegúrate de que realmente lo necesitas.</>,
-      },
-      {
         titular: "El colesterol no es tu enemigo.",
         claves: ["El colesterol es esencial", "El hígado lo produce y regula", "El riesgo: años en niveles altos"],
-        texto: <>El colesterol es una molécula esencial. Todas tus células lo necesitan para construir sus membranas y fabricar hormonas como la testosterona, los estrógenos o el cortisol. El hígado produce gran parte del colesterol que necesitas y regula cuánto fabricar, reutilizar o eliminar. El problema no es el colesterol en sí, sino mantener durante años niveles elevados de las lipoproteínas que lo transportan, favorecidos por una mala alimentación, el sedentarismo y otros factores.</>,
+        texto: <>El colesterol es una molécula esencial. Todas tus células lo necesitan para mantener pegadas sus respectivas membranas y fabricar hormonas como la testosterona, los estrógenos o el cortisol. El hígado produce gran parte del colesterol que necesitas y regula cuánto fabricar, reutilizar o eliminar. El problema no es el colesterol en sí, sino mantener durante años niveles elevados de las lipoproteínas que lo transportan, favorecidos por una mala alimentación, el sedentarismo y otros factores.</>,
       },
       {
         titular: "La bilis es el detergente de tu cuerpo.",

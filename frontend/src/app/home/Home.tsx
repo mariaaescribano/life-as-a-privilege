@@ -822,7 +822,7 @@ const Home = () => {
         </Box>
       )}
       <Box as="span" position="relative" zIndex={1} textShadow="none">
-        Continuar por dónde lo dejé →
+        Continuar →
       </Box>
     </Box>
   ) : null;

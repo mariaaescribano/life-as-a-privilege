@@ -248,16 +248,24 @@ export class MetodoAstrologiaService {
   }
 
   // ── Solicitud de carta astral + email a la creadora + cálculo carta natal ──
-  async solicitarCarta(userId: string, datos: SolicitudCarta): Promise<{ success: boolean }> {
-    const user = await this.userService.getUserById(userId).catch(() => null);
-    if (!user) throw new NotFoundException('Usuario no encontrado');
-
-    // Fila previa: sirve para saber si esto es una CORRECCIÓN de unos datos ya
-    // enviados y para no perder el geocoding anterior si el nuevo falla.
-    const existingRow = await this.getMetodoAstrologia(userId);
-    const esCorreccion = !!existingRow?.solicitud_enviada_at;
-
-    // Geocoding + timezone + cálculo (best-effort, no rompe la solicitud si falla)
+  /**
+   * Geocodifica el lugar, saca su zona horaria y calcula la carta. No escribe en
+   * la BD: solo devuelve lo calculado, para que cada llamante lo guarde con sus
+   * propios campos. Lo comparten la solicitud del usuario y la corrección del
+   * admin, que solo se diferencian en los correos y en `solicitud_enviada_at`.
+   *
+   * Es best-effort a propósito: si el geocoding falla no se pierde el dato de
+   * nacimiento, solo se queda sin carta calculada.
+   */
+  private async calcularDesdeNacimiento(
+    datos: SolicitudCarta,
+    existingRow: any | null,
+  ): Promise<{
+    latitud: number | null;
+    longitud: number | null;
+    timezone: string | null;
+    carta_natal_json: CartaNatal | null;
+  }> {
     let latitud: number | null = null;
     let longitud: number | null = null;
     let timezone: string | null = null;
@@ -290,8 +298,23 @@ export class MetodoAstrologiaService {
         }
       }
     } catch (err: unknown) {
-      console.warn('[metodoAstrologia.solicitar] error cálculo carta:', err instanceof Error ? err.message : err);
+      console.warn('[metodoAstrologia] error cálculo carta:', err instanceof Error ? err.message : err);
     }
+
+    return { latitud, longitud, timezone, carta_natal_json };
+  }
+
+  async solicitarCarta(userId: string, datos: SolicitudCarta): Promise<{ success: boolean }> {
+    const user = await this.userService.getUserById(userId).catch(() => null);
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    // Fila previa: sirve para saber si esto es una CORRECCIÓN de unos datos ya
+    // enviados y para no perder el geocoding anterior si el nuevo falla.
+    const existingRow = await this.getMetodoAstrologia(userId);
+    const esCorreccion = !!existingRow?.solicitud_enviada_at;
+
+    const { latitud, longitud, timezone, carta_natal_json } =
+      await this.calcularDesdeNacimiento(datos, existingRow);
 
     // Si calculamos la carta, pre-llenamos también el `data` (signos/casas por planeta)
     // sin sobrescribir lo que el usuario ya hubiese completado.
@@ -334,6 +357,83 @@ export class MetodoAstrologiaService {
     await this.mailService.enviarCartaRegistrada(user.email, user.name, datos, esCorreccion);
 
     return { success: true };
+  }
+
+  // --------- ADMIN: corregir los datos de nacimiento ---------
+  /**
+   * Guarda los datos de nacimiento desde el panel y recalcula la carta.
+   *
+   * Diferencias con `solicitarCarta`, que son el motivo de que exista aparte:
+   *  · NO manda ningún correo (los avisos se mandan solo con sus botones);
+   *  · NO toca `solicitud_enviada_at`: esto es una corrección, no una solicitud
+   *    nueva, y ese campo es la puerta que abre los pasos del recorrido.
+   *
+   * Los textos ya escritos (puntos clave, casas, aspectos) NO se tocan. Ojo: al
+   * recalcular pueden cambiar las casas y los aspectos, así que alguna lectura
+   * puede quedarse referida a un aspecto que ya no existe. Se avisa en el panel.
+   */
+  async guardarNacimientoAdmin(
+    userId: string,
+    datos: SolicitudCarta,
+  ): Promise<{ success: boolean; message?: string; carta?: CartaNatal | null; recalculada: boolean }> {
+    const user = await this.userService.getUserById(userId).catch(() => null);
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    const falta = (v?: string) => !v || !String(v).trim();
+    if (falta(datos?.fecha_nacimiento) || falta(datos?.hora_nacimiento)) {
+      return { success: false, message: 'Hacen falta la fecha y la hora de nacimiento.', recalculada: false };
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(datos.fecha_nacimiento)) {
+      return { success: false, message: 'La fecha debe ser AAAA-MM-DD.', recalculada: false };
+    }
+    if (!/^\d{2}:\d{2}$/.test(datos.hora_nacimiento)) {
+      return { success: false, message: 'La hora debe ser HH:MM.', recalculada: false };
+    }
+
+    const existingRow = await this.getMetodoAstrologia(userId);
+    const { latitud, longitud, timezone, carta_natal_json } =
+      await this.calcularDesdeNacimiento(datos, existingRow);
+
+    const existingData = (existingRow?.data ?? null) as Record<string, any> | null;
+    const data = carta_natal_json
+      ? this.cartaNatalService.mergeWithCartaData(existingData, carta_natal_json)
+      : existingData;
+
+    const fila: Record<string, unknown> = {
+      user_id: userId,
+      fecha_nacimiento: datos.fecha_nacimiento,
+      hora_nacimiento: datos.hora_nacimiento,
+      pais: datos.pais,
+      lugar: datos.lugar,
+      region: datos.region,
+      latitud,
+      longitud,
+      timezone,
+      data,
+      updated_at: new Date().toISOString(),
+    };
+    // Si el cálculo falló, NO se pisa la carta que ya hubiera: es mejor dejar la
+    // anterior que dejar al usuario sin carta por un geocoding caído.
+    if (carta_natal_json) fila.carta_natal_json = carta_natal_json;
+
+    const { error } = await this.databaseService.getClient()
+      .from('metodo_astrologia')
+      .upsert(fila, { onConflict: 'user_id' });
+
+    if (error) {
+      console.warn('[metodoAstrologia.guardarNacimientoAdmin] error BD:', error.message);
+      return { success: false, message: `No se pudo guardar: ${error.message}`, recalculada: false };
+    }
+
+    if (!carta_natal_json) {
+      return {
+        success: true,
+        recalculada: false,
+        message:
+          'Datos guardados, pero no se pudo recalcular la carta: no encuentro ese lugar. Revisa lugar / región / país.',
+      };
+    }
+    return { success: true, recalculada: true, carta: carta_natal_json };
   }
 
   // ── Fuerza el recálculo de la carta natal a partir de los datos ya guardados.

@@ -66,7 +66,7 @@ export const modulosFitoterapia: ModuloContenido[] = [
         linkAnterior: `${basePath}/ftP3`,
         linkNext: `${basePath}/ftP5`,
         descripcion: "Potente antibacteriano que apoya la digestión, la inmunidad y la energía natural.",
-        letra: "El tomillo es la planta más antibacteriana de todas, no solo eso, sino que también nos ayuda en la digestión y en el cuidado de la piel. Al ser tan protector es capaz de inhibir el crecimiento de la candidiasis y del helicobacter pylori, la bacteria asociada a las úlceras. El tomillo está lleno de antioxidantes, entre ellos polifenoles, lo que hace que refuerce al sistema inmunitario y proteja a nuestras células del estrés oxidativo. Se ha visto que es capaz de estimular tanto como el café o el té, por lo que puede ser un buen sustituto natural para aumentar la energía de forma más equilibrada.",
+        letra: "El tomillo es la planta más antibacteriana de todas, no solo eso, sino que también nos ayuda en la digestión y en el cuidado de la piel. Al ser tan protector es capaz de inhibir el crecimiento de la candidiasis y del helicobacter pylori, la bacteria asociada a las úlceras (llaga o herida abierta en la mucosa que reviste el estómago o la primera parte del intestino delgado). El tomillo está lleno de antioxidantes, entre ellos polifenoles, lo que hace que refuerce al sistema inmunitario y proteja a nuestras células del estrés oxidativo. Se ha visto que es capaz de estimular tanto como el café o el té, por lo que puede ser un buen sustituto natural para aumentar la energía de forma más equilibrada.",
         video: "xF0HvXVkMYY",
         cursoId: "fito-curso-1",
         detalles: detalles,

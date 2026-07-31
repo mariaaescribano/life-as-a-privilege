@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
-import { FotoBox, glowHeader } from "./FotoBox";
+import { FotoBox } from "./FotoBox";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -31,9 +31,10 @@ export function CelulaCard({ celula, onClick, visto = false }: { celula: Celula;
       // Fondo del área de la foto en oscuro (el Bg de Fisiología) en vez del
       // tinte claro por defecto: así la tarjeta no tiene ese "color claro".
       colorTint={BG}
-      // El mismo halo que la cabecera de la página: así la tarjeta de célula,
-      // los paneles y el header llevan exactamente el mismo brillo.
-      glow={glowHeader(TXT)}
+      // Glow por defecto (`glowSuave`), NO el de la cabecera: el de la cabecera
+      // lleva capas blancas de hasta 60px y, con las tarjetas en fila, esos
+      // halos se fundían entre sí y pintaban un "box clarito" alrededor de todo
+      // el carrusel. Solo el acento de la disciplina; el turquesa queda limpio.
       visto={visto}
       onClick={onClick}
     />

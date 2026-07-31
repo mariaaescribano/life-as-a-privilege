@@ -36,7 +36,11 @@ const inputStyles = inputAuthStyles;
  * Casilla de «cómo prefieres que me dirija hacia ti». Son dos casillas pero
  * excluyentes: marcar una desmarca la otra, y volver a pulsar la marcada la
  * deja en blanco (el campo es opcional, nadie se queda sin registrarse por no
- * elegir). El ✓ va como texto, igual que en el resto de la app.
+ * elegir).
+ *
+ * La píldora ENTERA es la casilla: no lleva dentro un cuadradito de check. Ese
+ * cuadrado repetía lo que el propio botón ya dice al marcarse (borde blanco,
+ * fondo más claro y halo), y era un box dentro de otro box.
  */
 const CasillaTrato = ({
   etiqueta,
@@ -53,8 +57,10 @@ const CasillaTrato = ({
     as="button"
     type="button"
     onClick={disabled ? undefined : onClick}
+    // Sin el cuadradito, el estado marcado solo se ve; esto se lo dice también
+    // a un lector de pantalla.
+    aria-pressed={marcada}
     align="center"
-    gap={2.5}
     px={5}
     py={2.5}
     flex="1"
@@ -68,26 +74,11 @@ const CasillaTrato = ({
     transition="all 0.2s ease"
     _hover={disabled ? {} : { borderColor: "white", bg: "rgba(255,255,255,0.14)" }}
   >
-    <Flex
-      align="center"
-      justify="center"
-      w="19px"
-      h="19px"
-      flexShrink={0}
-      borderRadius="4px"
-      border={`1.5px solid ${marcada ? "white" : "rgba(255,255,255,0.55)"}`}
-      bg={marcada ? "white" : "transparent"}
-    >
-      {marcada && (
-        <Text color="#008080" fontSize="12px" fontWeight="700" lineHeight="1">
-          ✓
-        </Text>
-      )}
-    </Flex>
     <Text
       color="white"
       fontSize={{ base: "md", md: "lg" }}
       letterSpacing="0.08em"
+      fontWeight={marcada ? "700" : "400"}
       textShadow="0 0 8px rgba(255,255,255,0.35)"
     >
       {etiqueta}

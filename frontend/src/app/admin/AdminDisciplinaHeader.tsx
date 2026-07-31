@@ -34,9 +34,11 @@ export function AdminDisciplinaHeader({
       overflow="hidden"
       mb={6}
       bg={disc.bg}
-      border={`1.5px solid ${disc.txt}`}
-      // Glow, nunca sombra negra: el MISMO halo que la cabecera del recorrido
-      // (glowHeader), así el panel se ve de la misma familia que el recorrido.
+      // Sin línea de borde: el box se define SOLO por el halo, igual que las
+      // tarjetas del recorrido. Glow, nunca sombra negra: el MISMO halo que la
+      // cabecera del recorrido (glowHeader), así el panel se ve de la misma
+      // familia.
+      border="none"
       boxShadow={glowHeader(disc.txt)}
     >
       {conImagen && (

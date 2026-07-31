@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
+import { Box } from "@chakra-ui/react";
 import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 const LogIn = lazy(() => import("./app/auth/LogIn"));
@@ -166,6 +167,43 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Todo el panel de administración se ve un 20% más grande. Vive AQUÍ, en el
+// envoltorio de las rutas /admin, para que no pueda escaparse al resto de la web.
+const ADMIN_ZOOM = 1.2;
+
+/** Envoltorio de TODAS las páginas de /admin: exige sesión (PrivateRoute) y las
+ *  agranda.
+ *
+ *  Se usa `zoom` y no `transform: scale()` porque zoom RECALCULA el layout: los
+ *  anchos siguen siendo los reales y no aparece scroll lateral. Con `scale` la
+ *  página ocuparía su hueco original y se saldría por los lados.
+ *
+ *  Dos detalles del zoom:
+ *   · `100vh` NO se ajusta con él, así que la altura mínima de la página se
+ *     dividiría mal y saldría scroll vertical de sobra aunque no haga falta.
+ *     Se compensa en el hijo directo (la raíz de cada página admin).
+ *   · Los modales de Chakra se pintan en un portal colgado de <body>, o sea
+ *     FUERA de este contenedor, así que esos no se agrandan. */
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  return (
+    <PrivateRoute>
+      <Box
+        sx={{
+          zoom: ADMIN_ZOOM,
+          // La raíz de cada página admin lleva `minH="100vh"`. Los `vh` se miden
+          // contra la pantalla SIN escalar, así que con el zoom esa altura se
+          // vuelve un 20% mayor que la ventana y aparece scroll aunque la página
+          // esté vacía. Aquí se le devuelve la altura que le toca; el resto de su
+          // maquetación (flex column, footer abajo) no se toca.
+          "& > *": { minHeight: `calc(100vh / ${ADMIN_ZOOM})` },
+        }}
+      >
+        {children}
+      </Box>
+    </PrivateRoute>
+  );
+}
+
 export default function App()
 {
   // Si en una visita anterior se aceptaron las cookies analíticas, se cargan
@@ -220,18 +258,18 @@ export default function App()
       <Route path="/metodo/astrologia/llamada" element={<PrivateRoute><MetodoAstrologiaLlamada /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
-      <Route path="/admin/login" element={<PrivateRoute><AdminLogin /></PrivateRoute>} />
-      <Route path="/admin" element={<PrivateRoute><AdminHome /></PrivateRoute>} />
-      <Route path="/admin/cursos" element={<PrivateRoute><AdminCursos /></PrivateRoute>} />
-      <Route path="/admin/cursos/:id" element={<PrivateRoute><AdminCursoEditor /></PrivateRoute>} />
-      <Route path="/admin/astrologia-textos" element={<PrivateRoute><AdminAstrologiaTextos /></PrivateRoute>} />
+      <Route path="/admin/login" element={<AdminRoute><AdminLogin /></AdminRoute>} />
+      <Route path="/admin" element={<AdminRoute><AdminHome /></AdminRoute>} />
+      <Route path="/admin/cursos" element={<AdminRoute><AdminCursos /></AdminRoute>} />
+      <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
+      <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />
       {/* antes de /admin/:disciplina, que si no se traga «accesos» como slug */}
-      <Route path="/admin/accesos" element={<PrivateRoute><AdminAccesos /></PrivateRoute>} />
-      <Route path="/admin/astrologia/:userId" element={<PrivateRoute><AdminAstrologiaEditor /></PrivateRoute>} />
-      <Route path="/admin/psicologia/:userId" element={<PrivateRoute><AdminPsicologiaLectura /></PrivateRoute>} />
-      <Route path="/admin/ayurveda/:userId" element={<PrivateRoute><AdminAyurvedaLectura /></PrivateRoute>} />
-      <Route path="/admin/:disciplina/:userId" element={<PrivateRoute><AdminEditorPlaceholder /></PrivateRoute>} />
-      <Route path="/admin/:disciplina" element={<PrivateRoute><AdminUsuarios /></PrivateRoute>} />
+      <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} />
+      <Route path="/admin/astrologia/:userId" element={<AdminRoute><AdminAstrologiaEditor /></AdminRoute>} />
+      <Route path="/admin/psicologia/:userId" element={<AdminRoute><AdminPsicologiaLectura /></AdminRoute>} />
+      <Route path="/admin/ayurveda/:userId" element={<AdminRoute><AdminAyurvedaLectura /></AdminRoute>} />
+      <Route path="/admin/:disciplina/:userId" element={<AdminRoute><AdminEditorPlaceholder /></AdminRoute>} />
+      <Route path="/admin/:disciplina" element={<AdminRoute><AdminUsuarios /></AdminRoute>} />
       <Route path="/metodo/psicologia" element={<PrivateRoute><MetodoPsicologia /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/problema" element={<PrivateRoute><MetodoPsicologiaProblema /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/necesidades" element={<PrivateRoute><MetodoPsicologiaNecesidades /></PrivateRoute>} />

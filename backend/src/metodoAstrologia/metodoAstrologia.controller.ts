@@ -25,6 +25,17 @@ export class MetodoAstrologiaController {
     return await this.service.guardarTextos(userId, body);
   }
 
+  // ── ADMIN: corregir los datos de nacimiento y recalcular la carta ──
+  // Hasta ahora solo podía cambiarlos la propia persona (POST solicitud/:userId),
+  // que además le manda dos correos de acuse de recibo. Aquí NO se manda ningún
+  // correo ni se toca `solicitud_enviada_at`: es una corrección desde el panel,
+  // no una solicitud nueva. Los avisos siguen saliendo solo con sus botones.
+  @Patch('admin/:userId/nacimiento')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async guardarNacimiento(@Param('userId') userId: string, @Body() body: SolicitudCarta) {
+    return await this.service.guardarNacimientoAdmin(userId, body);
+  }
+
   // ── ADMIN: avisos por email, a mano desde el panel ──
   // `tipo` = 'proceso' («tu carta está en proceso de ser leída») o
   //          'leida'   («tu carta ya ha sido leída», con el enlace).
