@@ -57,12 +57,22 @@ const Chevron = ({ open, color }: { open: boolean; color: string }) => (
  *  Los trozos van pegados unos a otros (sin hueco) y a todo el ancho del box:
  *  así tapan por completo el fondo estirado del contenedor, que solo se sigue
  *  viendo detrás de la cabecera (una franja baja, donde no se deforma). */
-function Trozo({ children, px = { base: 4, md: 6 }, py = { base: 4, md: 5 } }: {
-  children: React.ReactNode; px?: any; py?: any;
+function Trozo({ children, px = { base: 4, md: 6 }, py = { base: 4, md: 5 }, velo }: {
+  children: React.ReactNode;
+  px?: any;
+  py?: any;
+  /**
+   * Velo oscuro sobre la foto. Normalmente NO se usa: la foto va tal cual.
+   * Hace falta solo debajo de la RUEDA 3D, porque ese canvas es transparente y
+   * no trae cielo propio — solo oscurece un 15% lo que haya detrás (ver el
+   * comentario en CartaAstral3D). Sin velo, la nebulosa a plena luz se cuela
+   * entre los trazos de la carta y ese 15% de negro parece un manchón.
+   */
+  velo?: string;
 }) {
   return (
     <Box position="relative" overflow="hidden" w="100%">
-      <DisciplinaBgLayer nom={astrologiaNom} borderRadius="0" talCual />
+      <DisciplinaBgLayer nom={astrologiaNom} borderRadius="0" overlay={velo} talCual={!velo} />
       {/* Separación horizontal con lo que va justo encima */}
       <Box position="absolute" top={0} left={0} right={0} h="1px" zIndex={2}
            bgGradient="linear(to-r, transparent, rgba(255,255,255,0.3), transparent)" />
@@ -189,8 +199,11 @@ export default function AdminAstrologiaEditor() {
   const [guardandoNac, setGuardandoNac] = useState(false);
   const [nacMsg, setNacMsg] = useState<string | null>(null);
   const [nacError, setNacError] = useState<string | null>(null);
-  const [retosOpen, setRetosOpen] = useState(true);
-  const [casasOpen, setCasasOpen] = useState(true);
+  // Las tres secciones de escritura arrancan PLEGADAS: abiertas, la página salía
+  // kilométrica y había que scrollear un rato para ver qué hay. Se abre la que
+  // se vaya a tocar.
+  const [retosOpen, setRetosOpen] = useState(false);
+  const [casasOpen, setCasasOpen] = useState(false);
   const [aspectosOpen, setAspectosOpen] = useState(false);
   // Box de consulta: la carta del usuario (rueda + planetas + casas). Abierto
   // por defecto para poder mirarla mientras se escribe la lectura.
@@ -608,8 +621,9 @@ export default function AdminAstrologiaEditor() {
             {carta && (
               <Desplegable titulo={`La carta de ${nombre || "esta persona"}`} open={cartaOpen}
                            onToggle={() => setCartaOpen((o) => !o)}>
-                {/* Rueda */}
-                <Trozo py={{ base: 6, md: 8 }}>
+                {/* Rueda. Lleva velo: es el cielo sobre el que se dibuja la carta,
+                    no una foto decorativa (ver el prop `velo` de Trozo). */}
+                <Trozo py={{ base: 6, md: 8 }} velo="rgba(8,13,30,0.82)">
                   <Flex direction="column" align="center">
                     <CartaAstral3D color={astrologiaTxt} carta={carta} onSaberMas={(k) => setSaberMasKey(k)} />
                   </Flex>

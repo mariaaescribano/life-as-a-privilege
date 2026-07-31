@@ -202,12 +202,12 @@ const ORGANOS: Organo[] = [
       {
         titular: "La bilis es el detergente de tu cuerpo.",
         claves: ["Grasa y agua no se mezclan", "La bilis rompe las gotas", "Facilita absorber las grasas"],
-        texto: <>Las grasas no se mezclan con el agua, igual que el aceite no se mezcla con el agua del fregadero. Para solucionarlo, el hígado fabrica bilis, un líquido que rompe las grandes gotas de grasa en otras mucho más pequeñas para que el intestino pueda digerirlas y absorberlas con facilidad.</>,
+        texto: <>Las grasas no se mezclan con el agua, igual que el aceite no se mezcla con el agua del fregadero. Para solucionarlo, el hígado fabrica bilis, un líquido que rompe las grandes gotas de grasa en otras mucho más pequeñas para que el intestino pueda digerirlas y absorberlas con facilidad. Es preferible que las grasas que tomes sean insaturadas para favorecer una mejor estructura de la bilis (recuerda que la bilis se hace con ácidos grasos de tu dieta).</>,
       },
       {
-        titular: "Las grasas saludables ayudan a vaciar la vesícula.",
-        claves: ["Las grasas buenas vacían la vesícula", "Liberan la bilis guardada", "Poca grasa favorece cálculos"],
-        texto: <>Cada vez que comes alimentos ricos en grasas saludables, como aceite de oliva, frutos secos o pescado azul, la vesícula biliar se contrae y libera la bilis almacenada. Si pasas mucho tiempo con dietas extremadamente bajas en grasa o ayunos prolongados, la bilis permanece estancada durante más tiempo y aumenta el riesgo de formar cálculos biliares.</>,
+        titular: "Las grasas ayudan a vaciar la vesícula.",
+        claves: ["Las grasas vacían la vesícula", "Liberan la bilis guardada", "Poca grasa favorece cálculos"],
+        texto: <>Cada vez que comes alimentos ricos en grasas, la vesícula biliar se contrae y libera la bilis almacenada. Si pasas mucho tiempo con dietas extremadamente bajas en grasa o ayunos prolongados, la bilis permanece estancada durante más tiempo y aumenta el riesgo de formar cálculos biliares.</>,
       },
       {
         titular: "Tu fibra también alimenta a tu hígado.",
