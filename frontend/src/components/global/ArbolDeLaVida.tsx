@@ -370,6 +370,27 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            {/* Filtro de brillo dorado — sefirot EN REPOSO.
+                Aparte del general a propósito: el general lo comparten los
+                senderos (variant 'senderos'), donde los nodos van atenuados
+                para que brillen los caminos. Aquí las esferas son las
+                protagonistas y se quedaban apagadas. */}
+            <filter id="sefira-glow-nodo" x="-75%" y="-75%" width="250%" height="250%">
+              <feGaussianBlur stdDeviation="9" result="blur" />
+              <feColorMatrix
+                in="blur" type="matrix"
+                values="2.2 1.0 0   0 0
+                        1.4 0.75 0  0 0
+                        0   0   0.1 0 0
+                        0   0   0   1 0"
+                result="glow"
+              />
+              <feMerge>
+                <feMergeNode in="glow" />
+                <feMergeNode in="glow" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
             {/* Filtro de brillo dorado — hover */}
             <filter id="sefira-glow-hover" x="-80%" y="-80%" width="260%" height="260%">
               <feGaussianBlur stdDeviation="11" result="blur" />
@@ -548,7 +569,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 onClick={() => handleClick(sefira)}
                 onMouseEnter={() => setHovered(sefira.key)}
                 onMouseLeave={() => setHovered(null)}
-                filter={active ? 'url(#sefira-glow-hover)' : 'url(#sefira-glow)'}
+                filter={active ? 'url(#sefira-glow-hover)' : 'url(#sefira-glow-nodo)'}
                 style={{
                   cursor: 'pointer',
                   opacity: 0,
@@ -560,7 +581,9 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                     encima da contraste al nombre dorado; al pasar el ratón, se
                     aclara para resaltar el nodo. */}
                 <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#sefira-node-img)" />
-                <circle cx={sefira.x} cy={sefira.y} r={R} fill={active ? `${cabalaBg}20` : `${cabalaBg}4d`} />
+                {/* Velo mínimo: lo justo para que el nombre (marrón oscuro) siga
+                    leyéndose. Estaba al 30% y apagaba la esfera de fuego. */}
+                <circle cx={sefira.x} cy={sefira.y} r={R} fill={active ? `${cabalaBg}14` : `${cabalaBg}26`} />
                 <circle
                   cx={sefira.x} cy={sefira.y} r={R}
                   fill="none"
