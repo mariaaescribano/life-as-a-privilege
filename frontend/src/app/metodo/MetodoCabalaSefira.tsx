@@ -782,7 +782,13 @@ export default function MetodoCabalaSefira() {
                 <Box
                   maxH={{ base: "360px", md: "420px" }}
                   overflowY="auto"
-                  pr={{ base: 1, md: 3 }}
+                  // La barra se pinta en el borde derecho de ESTE box, así que
+                  // para que quede al fondo de la caja hay que estirarlo por
+                  // encima del padding de `Caja` (6/9) con margen negativo. El
+                  // `pr` recupera ese mismo hueco para el texto, así que las
+                  // preguntas no se mueven: solo se va la barra hacia fuera.
+                  mr={{ base: -6, md: -9 }}
+                  pr={{ base: 7, md: 12 }}
                   sx={{
                     "&::-webkit-scrollbar": { width: "6px" },
                     "&::-webkit-scrollbar-track": { background: "transparent" },
