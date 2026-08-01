@@ -133,6 +133,11 @@ interface ComicViewerProps {
    *  algunos cómics (TCM: elementos, ciclos) la piden blanca para que case con
    *  su letra blanca. */
   scrollbarColor?: string;
+  /** Color de la X de cerrar. Por defecto va blanca sobre un chip oscuro. Si se
+   *  pasa (Nutrición: nutricionTxt), la X va de ESE color sobre un chip CLARO
+   *  (el color de fondo de la disciplina), igual que el botón de continuar que
+   *  tiene al lado; si no, la letra oscura no se leería sobre el chip negro. */
+  cerrarColor?: string;
   /** @deprecated El botón «Saltar» se eliminó de todos los cómics. Se mantiene el
    *  prop (no-op) solo para no romper los llamadores que aún lo pasan. */
   sinSaltar?: boolean;
@@ -176,6 +181,7 @@ export function ComicViewer({
   onPageView,
   sinSombra,
   scrollbarColor,
+  cerrarColor,
   textSize,
   flechasEnBox,
   esperarFondo,
@@ -461,7 +467,10 @@ export function ComicViewer({
         <Box position="absolute" inset="0" bg={bgOverlay} />
       </Box>
 
-      {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo.
+      {/* X cerrar — chip oscuro con la X blanca para que resalte sobre cualquier
+          fondo. Con `cerrarColor` (Nutrición) se invierte: X del color pedido
+          sobre un chip CLARO del color de la disciplina, a juego con el botón de
+          continuar que lleva al lado.
           zIndex 12: por encima del loader de espera de fondo (11) para poder
           cerrar aunque la foto aún no haya cargado. */}
       <IconButton
@@ -476,16 +485,23 @@ export function ComicViewer({
         w={{ base: "42px", md: "48px" }}
         h={{ base: "42px", md: "48px" }}
         minW={{ base: "42px", md: "48px" }}
-        bg="rgba(0,0,0,0.5)"
-        border={`1px solid ${themeColor}aa`}
+        bg={cerrarColor ? `${disciplinaBgColor ?? "#ffffff"}d9` : "rgba(0,0,0,0.5)"}
+        border={cerrarColor ? `2px solid ${cerrarColor}` : `1px solid ${themeColor}aa`}
         boxShadow="0 2px 12px rgba(0,0,0,0.45)"
         sx={{ backdropFilter: "blur(4px)" }}
-        _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
+        _hover={cerrarColor
+          ? { bg: disciplinaBgColor ?? "#ffffff", transform: "translateY(-1px)" }
+          : { bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
         _focus={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
         _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
         icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill="#ffffff"
-            style={{ filter: `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px"
+            fill={cerrarColor ?? "#ffffff"}
+            style={{
+              filter: cerrarColor
+                ? undefined
+                : `drop-shadow(0 0 5px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))`,
+            }}>
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </Box>
         }

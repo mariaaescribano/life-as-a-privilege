@@ -141,7 +141,7 @@ export const neuropsicologiaDescrip = "Entiende el porqué de tus hábitos diari
 export const astrologiaNom = "Astrología";
 export const astrologiaBg = "#1e296b";
 export const astrologiaTxt = "#feffe4";
-export function AstrologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string } }) {
+export function AstrologiaIcon({ size = { base: "24px", md: "24px" } }: { size?: string | { base: string; md: string; lg?: string } }) {
   return (
     <Box
       as="svg"

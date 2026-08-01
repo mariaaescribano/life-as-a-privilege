@@ -44,6 +44,9 @@ interface IntroComicModalProps {
   /** Animación de espera mientras cada viñeta carga (por defecto, spinner).
    *  Nutrición pasa aquí su manzana (AppleLoader). */
   loader?: React.ReactNode;
+  /** Color de la X de cerrar (se pasa tal cual a ComicViewer). Nutrición la pide
+   *  en nutricionTxt, no blanca. */
+  cerrarColor?: string;
   /** Si se define (junto a `onContinue`), muestra un botón a la IZQUIERDA de la
    *  X con esta etiqueta (p.ej. "Astrología"). Sirve para pasar directamente al
    *  contenido de la disciplina sin recorrer todo el cómic. */
@@ -99,6 +102,7 @@ export function IntroComicModal({
   textShadow,
   textColor,
   loader,
+  cerrarColor,
   continueLabel,
   continueBgImage,
   onContinue,
@@ -137,6 +141,7 @@ export function IntroComicModal({
           textShadow={textShadow}
           textColor={textColor}
           loader={loader}
+          cerrarColor={cerrarColor}
           // Si este intro ya pinta su propio botón (p.ej. «Nutrición →») a la
           // izquierda de la X, ocultamos el «Saltar» genérico para no duplicar.
           // Con `mantenerSaltar` (Ayurveda) se conservan los dos, a juego.

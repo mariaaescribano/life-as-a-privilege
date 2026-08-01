@@ -34,6 +34,7 @@ export function ComicIntegralModal({ isOpen, onClose, onContinue }: ComicIntegra
           disciplinaBgImage="/img/fondos/nutri.webp"
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
+          cerrarColor={nutricionTxt}
         />
 
         {/* Botón «Ir a Tu plato →» fijo, a la IZQUIERDA de la X del ComicViewer. */}

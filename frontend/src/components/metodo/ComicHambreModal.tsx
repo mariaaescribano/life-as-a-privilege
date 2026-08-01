@@ -34,6 +34,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
           disciplinaBgImage="/img/fondos/nutri.webp"
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
+          cerrarColor={nutricionTxt}
         />
 
         {/* Botón «Ir a El hambre →» fijo, a la IZQUIERDA de la X del ComicViewer. */}

@@ -46,6 +46,7 @@ export function NutrienteIlustracionModal({
             disciplinaBgImage={NUTRI_IMG}
             disciplinaBgColor={nutricionBg}
             loader={<AppleLoader />}
+            cerrarColor={nutricionTxt}
             onClose={onClose}
             onComplete={onClose}
           />

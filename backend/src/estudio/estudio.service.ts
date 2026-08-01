@@ -81,6 +81,21 @@ export interface ItemEstadistica {
  */
 @Injectable()
 export class EstudioService {
+  /**
+   * Posiciones (signos y casas) de cada participante, en memoria.
+   *
+   * Guardar una respuesta necesita saber en qué signo y en qué casa está ese
+   * planeta, y eso NO se acepta del navegador: se lee de la carta guardada. Pero
+   * quien responde manda decenas de respuestas seguidas y su carta no cambia
+   * entre una y otra, así que se lee una vez y se reutiliza: cada Sí/No pasa de
+   * dos viajes a la base de datos a uno.
+   */
+  private readonly posicionesEnMemoria = new Map<
+    string,
+    { signos: Record<string, string>; casas: Record<string, number>; ts: number }
+  >();
+  private static readonly POSICIONES_TTL_MS = 30 * 60 * 1000;
+
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly cartaNatalService: CartaNatalService,
@@ -165,6 +180,10 @@ export class EstudioService {
       }
       id = data.id as string;
     }
+
+    // La carta se acaba de recalcular: la copia en memoria se pone al día en el
+    // acto (si corrigió su hora, las respuestas siguientes van a la posición nueva).
+    this.posicionesEnMemoria.set(id, { signos, casas, ts: Date.now() });
 
     return {
       id,
@@ -317,12 +336,16 @@ export class EstudioService {
     return (data as Record<string, any>) ?? null;
   }
 
-  /** La posición de un planeta en un eje, leída de la carta guardada. */
-  private async posicionDe(
-    participanteId: string,
-    planeta: string,
-    eje: Eje,
-  ): Promise<string | null> {
+  /** Las posiciones de un participante: de memoria si están frescas, si no de la BD. */
+  private async posicionesDeParticipante(participanteId: string): Promise<{
+    signos: Record<string, string>;
+    casas: Record<string, number>;
+  }> {
+    const enMemoria = this.posicionesEnMemoria.get(participanteId);
+    if (enMemoria && Date.now() - enMemoria.ts < EstudioService.POSICIONES_TTL_MS) {
+      return { signos: enMemoria.signos, casas: enMemoria.casas };
+    }
+
     const { data, error } = await this.databaseService.getClient()
       .from('estudio_participante')
       .select('signos, casas')
@@ -330,11 +353,25 @@ export class EstudioService {
       .maybeSingle();
     if (error || !data) throw new NotFoundException('Participante no encontrado');
 
+    const signos = (data.signos ?? {}) as Record<string, string>;
+    const casas = (data.casas ?? {}) as Record<string, number>;
+    this.posicionesEnMemoria.set(participanteId, { signos, casas, ts: Date.now() });
+    return { signos, casas };
+  }
+
+  /** La posición de un planeta en un eje, leída de la carta guardada. */
+  private async posicionDe(
+    participanteId: string,
+    planeta: string,
+    eje: Eje,
+  ): Promise<string | null> {
+    const { signos, casas } = await this.posicionesDeParticipante(participanteId);
+
     if (eje === 'signo') {
-      const signo = ((data.signos ?? {}) as Record<string, string>)[planeta];
+      const signo = signos[planeta];
       return signo ? String(signo) : null;
     }
-    const casa = ((data.casas ?? {}) as Record<string, number>)[planeta];
+    const casa = casas[planeta];
     return casa != null ? String(casa) : null;
   }
 

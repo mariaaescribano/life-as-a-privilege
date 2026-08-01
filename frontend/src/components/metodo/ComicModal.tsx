@@ -23,6 +23,9 @@ interface ComicModalProps {
   /** Color de la LETRA si difiere del acento (themeColor). P.ej. Nutrición usa
    *  acento claro (nutricionBg) y letra oscura (nutricionTxt). */
   textColor?: string;
+  /** Color de la X de cerrar (se pasa tal cual a ComicViewer). Nutrición la pide
+   *  en nutricionTxt, no blanca. */
+  cerrarColor?: string;
 }
 
 export function ComicModal({
@@ -34,6 +37,7 @@ export function ComicModal({
   disciplinaBgColor,
   textShadow,
   textColor,
+  cerrarColor,
 }: ComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -57,6 +61,7 @@ export function ComicModal({
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
           textColor={textColor}
+          cerrarColor={cerrarColor}
           // En la galería de Ilustraciones no hay «Saltar»: es un visor, la X ya
           // cierra. Saltar solo tiene sentido en el cómic de intro de disciplina.
           sinSaltar

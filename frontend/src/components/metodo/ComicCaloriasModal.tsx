@@ -48,6 +48,7 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
           disciplinaBgImage="/img/fondos/nutri.webp"
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
+          cerrarColor={nutricionTxt}
         />
 
         {/* Botón «Ir a los nutrientes →» fijo, a la IZQUIERDA de la X del

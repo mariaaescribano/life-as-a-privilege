@@ -124,6 +124,7 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
         disciplinaBgColor={abierta?.disciplinaBgColor}
         textShadow={abierta?.textShadow}
         textColor={abierta?.textColor}
+        cerrarColor={nutricionTxt}
       />
     </>
   );

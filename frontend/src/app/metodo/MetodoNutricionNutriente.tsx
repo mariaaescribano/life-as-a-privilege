@@ -219,7 +219,12 @@ export default function MetodoNutricionNutriente() {
                    bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
 
               <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "stretch" }}
-                    justify="center" gap={{ base: 5, md: 10 }} px={{ base: 5, md: 10 }} py={{ base: 6, md: 9 }}
+                    justify="center" gap={{ base: 5, md: 10 }}
+                    // OJO con `pr`: en escritorio va a 0 para que la barra de
+                    // scroll del texto quede pegada al borde derecho del box y no
+                    // flotando a 40px de él. Ese aire lo recupera la columna de
+                    // texto con su propio `pr` (se mueve la barra, no el texto).
+                    pl={{ base: 5, md: 10 }} pr={{ base: 5, md: 0 }} py={{ base: 6, md: 9 }}
                     h={{ base: "auto", md: "420px" }}>
 
                 {/* Izquierda: foto (contain + glow) + botón «Ver ilustración» debajo */}
@@ -259,7 +264,8 @@ export default function MetodoNutricionNutriente() {
                 <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }} alignSelf={{ base: "auto", md: "stretch" }}
                      display="flex" flexDirection="column" justifyContent="flex-start"
                      maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "auto" }} overflowX="hidden"
-                     pr={{ base: 0, md: 3 }}
+                     // 52px = los 12 de antes + los 40 que se le han quitado a la fila.
+                     pr={{ base: 0, md: "52px" }}
                      sx={{
                        "&::-webkit-scrollbar": { width: "6px" },
                        "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}55`, borderRadius: "3px" },

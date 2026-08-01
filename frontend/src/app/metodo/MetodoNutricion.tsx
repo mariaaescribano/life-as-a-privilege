@@ -204,6 +204,7 @@ export default function MetodoNutricion() {
         disciplinaBgColor={nutricionBg}
         textShadow="none"
         loader={<AppleLoader />}
+        cerrarColor={nutricionTxt}
         continueLabel="Nutrición"
         onContinue={intro.close}
         onFinish={intro.finish}
@@ -216,7 +217,9 @@ export default function MetodoNutricion() {
         <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow="0 26px 70px rgba(0,0,0,0.4)">
             <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
-            <ModalCloseButton color="#ffffff" zIndex={3} />
+            {/* X del aviso: en el color de texto de Nutrición (no blanca), que
+                el fondo del popup es claro. */}
+            <ModalCloseButton color={nutricionTxt} zIndex={3} />
             <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 10 }}>
               <Flex direction="column" gap={4}>
                 <Flex align="center" justify="center" gap={2.5}>

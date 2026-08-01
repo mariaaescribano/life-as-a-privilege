@@ -34,6 +34,7 @@ export function ComicMicrobiotaModal({ isOpen, onClose, onContinue }: ComicMicro
           disciplinaBgImage="/img/fondos/nutri.webp"
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
+          cerrarColor={nutricionTxt}
         />
 
         {/* Botón «Ir a la microbiota →» fijo, a la IZQUIERDA de la X del ComicViewer. */}

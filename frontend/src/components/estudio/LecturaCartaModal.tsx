@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { SpaceBg } from "../metodo/SpaceBg";
+import { EstudioPopup } from "./EstudioPopup";
 import { API_URL, AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -11,9 +12,9 @@ import { API_URL, AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
  *  Dos opciones, nunca tres: con dos, la barata hace de ancla y la otra parece
  *  razonable. La de 30 € NO es un producto nuevo: es exactamente la primera
  *  disciplina de El Mapa (Astrología), que ya cuesta 30 € en Stripe y ya incluye
- *  la lectura. Por eso lleva al checkout que ya existe, en lugar de duplicar
- *  precio en otro sitio (dos puertas al mismo sitio con tarifas distintas es
- *  como se acaba cobrando de más a alguien).
+ *  la lectura. Por eso lleva a /elMetodo (la página de El Mapa, con su propio
+ *  botón de compra) en lugar de duplicar precio en otro sitio: dos puertas al
+ *  mismo sitio con tarifas distintas es como se acaba cobrando de más a alguien.
  *
  *  La de 15 € es una lectura escrita a mano en PDF: no hay pago instantáneo
  *  porque hay trabajo detrás. Se pide aquí y llega como correo; María responde
@@ -147,51 +148,9 @@ export function LecturaCartaModal({ isOpen, onClose, email, datos, participanteI
   };
 
   return (
-    <Box
-      position="fixed"
-      inset={0}
-      zIndex={500}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      px={{ base: 4, md: 10 }}
-      py={{ base: 6, md: 10 }}
-      bg="rgba(0,0,0,0.82)"
-      sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
-      onClick={onClose}
-    >
-      <Box
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        position="relative"
-        w="100%"
-        maxW="620px"
-        maxH={{ base: "calc(100dvh - 48px)", md: "calc(100vh - 80px)" }}
-        borderRadius="2xl"
-        overflow="hidden"
-        border={`1px solid ${color}66`}
-        boxShadow={`0 0 32px ${color}55, 0 0 80px ${color}28, 0 12px 60px rgba(0,0,0,0.6)`}
-        fontFamily="'EB Garamond', serif"
-        display="flex"
-        flexDirection="column"
-      >
-        <SpaceBg overlay="rgba(8,13,30,0.78)" />
-
-        {/* X cerrar */}
-        <Box
-          position="absolute" top={3} right={3} zIndex={3}
-          as="button" onClick={onClose}
-          w="36px" h="36px" borderRadius="full"
-          display="flex" alignItems="center" justifyContent="center"
-          bg="rgba(0,0,0,0.6)" border={`1px solid ${color}66`} color={color}
-          cursor="pointer" transition="all 0.15s" boxShadow={`0 0 14px ${color}44`}
-          _hover={{ bg: "rgba(0,0,0,0.85)", borderColor: color, boxShadow: `0 0 22px ${color}88` }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 -960 960 960" width="14" fill="currentColor">
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-          </svg>
-        </Box>
-
-        <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 7, md: 8 }} overflowY="auto">
+    <EstudioPopup onClose={onClose} color={color} overlay="rgba(8,13,30,0.78)">
+        <Box position="relative" zIndex={1} flex="1 1 auto" minH={0}
+             px={{ base: 5, md: 8 }} py={{ base: 7, md: 8 }} overflowY="auto">
           <Flex direction="column" align="center" gap={2} textAlign="center" mb={6}>
             <AstrologiaIcon size={{ base: "34px", md: "42px" }} />
             <Text color={color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.06em"
@@ -317,7 +276,7 @@ export function LecturaCartaModal({ isOpen, onClose, email, datos, participanteI
               {/* ── Opción 2: El Mapa (el producto que ya existe) ── */}
               <Box
                 as="button"
-                onClick={() => navigate("/checkoutMetodo")}
+                onClick={() => navigate("/elMetodo")}
                 textAlign="left"
                 w="100%"
                 px={{ base: 5, md: 6 }}
@@ -339,11 +298,11 @@ export function LecturaCartaModal({ isOpen, onClose, email, datos, participanteI
                   </Text>
                 </Flex>
                 <Text color={`${color}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
-                  Tu carta leída dentro del recorrido interactivo: la rueda, tus planetas uno a uno,
-                  tus casas, tus aspectos y tu lectura escrita. Te la recorres tú, a tu ritmo.
+                  Tu carta leída en profundidad por mí. No te quedarán dudas. Descubrirás tus dones,
+                  conflictos, heridas y tus recursos internos para dejar de sufrir.
                 </Text>
                 <Text color={`${color}99`} fontSize="xs" mt={2} fontStyle="italic">
-                  Es la primera disciplina de El Mapa · acceso inmediato
+                  Es la primera disciplina de El Mapa · míralo aquí
                 </Text>
               </Box>
 
@@ -353,8 +312,7 @@ export function LecturaCartaModal({ isOpen, onClose, email, datos, participanteI
             </Flex>
           )}
         </Box>
-      </Box>
-    </Box>
+    </EstudioPopup>
   );
 }
 

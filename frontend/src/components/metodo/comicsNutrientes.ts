@@ -26,13 +26,15 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
       src: src("carbohidratos", 2),
       paragraphs: [
         "Necesitamos glucosa, sí. Pero la necesitamos poco a poco. Si llega demasiado rápido a la sangre, el organismo tiene que hacer un gran esfuerzo para mantener el equilibrio.",
-        "Lo ideal es que las células la reciban de forma gradual. Eso es precisamente lo que consiguen las verduras, las frutas y las legumbres: su estructura hace que la digestión sea más lenta y que la glucosa se vaya liberando poco a poco, justo como nuestro cuerpo prefiere.",
+        "Lo ideal es que las células la reciban de forma gradual.",
+        "Eso es precisamente lo que consiguen las verduras, las frutas y las legumbres: su estructura hace que la digestión sea más lenta y que la glucosa se vaya liberando poco a poco, justo como nuestro cuerpo prefiere.",
       ],
     },
     {
       src: src("carbohidratos", 3),
       paragraphs: [
-        "Esta es la razón por la que el azúcar nos gusta tanto. Apenas necesita digestión y las moléculas llegan muy rápido a la sangre, provocando un pico de glucosa al que el organismo tiene que responder inmediatamente.",
+        "Esta es la razón por la que el azúcar nos gusta tanto.",
+        "Apenas necesita digestión y las moléculas llegan muy rápido a la sangre, provocando un pico de glucosa al que el organismo tiene que responder inmediatamente.",
         "El problema no es la glucosa. El problema es la velocidad con la que llega.",
       ],
     },
@@ -80,7 +82,9 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       src: src("proteinas", 1),
       paragraphs: [
-        "Cuando comes proteínas, no estás alimentando directamente tus músculos. En realidad, tu cuerpo primero tiene que desmontarlas por completo. Solo entonces podrá decidir qué hacer con cada una de sus piezas.",
+        "Cuando comes proteínas, no estás alimentando directamente tus músculos.",
+        "En realidad, tu cuerpo primero tiene que desmontarlas por completo.",
+        "Solo entonces podrá decidir qué hacer con cada una de sus piezas.",
         "Las enzimas digestivas cortan las proteínas hasta separarlas en moléculas mucho más pequeñas llamadas aminoácidos. Son los auténticos ladrillos con los que trabaja el organismo.",
       ],
     },
@@ -88,14 +92,16 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
       src: src("proteinas", 2),
       paragraphs: [
         "Existen veinte aminoácidos principales. Nuestro cuerpo puede fabricar algunos. Pero otros, llamados esenciales, solo podemos obtenerlos a través de la alimentación.",
-        "Una vez dentro de las células, los aminoácidos ya no «pertenecen» a la soja, al huevo o a las lentejas. Ahora son simplemente piezas disponibles para construir lo que el organismo necesite.",
+        "Una vez dentro de las células, los aminoácidos ya no «pertenecen» a la soja, al huevo o a las lentejas.",
+        "Ahora son simplemente piezas disponibles para construir lo que el organismo necesite.",
       ],
     },
     {
       src: src("proteinas", 3),
       paragraphs: [
         "Algunas células los utilizarán para fabricar músculo. Otras crearán colágeno para la piel. Otras producirán anticuerpos, hormonas o miles de proteínas diferentes.",
-        "Entre todas esas proteínas hay unas especialmente importantes: las enzimas. Son las responsables de que casi todas las reacciones químicas del cuerpo ocurran a la velocidad necesaria para mantenernos vivos.",
+        "Entre todas esas proteínas hay unas especialmente importantes: las enzimas.",
+        "Las enzimas son las responsables de que casi todas las reacciones químicas del cuerpo ocurran a la velocidad necesaria para mantenernos vivos.",
       ],
     },
     {
@@ -103,7 +109,8 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
       paragraphs: [
         "Una enzima no aporta energía. Tampoco se consume. Simplemente acerca las moléculas adecuadas y hace posible que la reacción ocurra millones de veces más rápido.",
         "Gracias a las enzimas podemos digerir alimentos, copiar el ADN, fabricar ATP, reparar tejidos y realizar prácticamente todas las funciones necesarias para vivir. Sin ellas, la Vida sería demasiado lenta para existir.",
-        "Cada proteína que comes termina convertida en aminoácidos. Y con esos mismos aminoácidos tu cuerpo fabrica músculo, piel, hormonas, anticuerpos... e incluso las enzimas que hacen funcionar todas tus células. Una vez más, lo que comes acaba literalmente convirtiéndose en ti.",
+        "Cada proteína que comes termina convertida en aminoácidos. Y con esos mismos aminoácidos tu cuerpo fabrica músculo, piel, hormonas, anticuerpos... e incluso las enzimas que hacen funcionar todas tus células.",
+        "Una vez más, lo que comes acaba literalmente convirtiéndose en ti.",
       ],
     },
   ],

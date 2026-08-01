@@ -73,7 +73,12 @@ function HambreBox({ v }: { v: Vineta }) {
 
       <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
             align={{ base: "center", md: "stretch" }} justify="center" gap={{ base: 5, md: 10 }}
-            px={{ base: 5, md: 10 }} py={{ base: 6, md: 9 }} h={{ base: "auto", md: "440px" }}>
+            // OJO con `pr`: en escritorio va a 0 para que la barra de scroll del
+            // texto quede pegada al borde derecho del box y no flotando a 40px de
+            // él. Ese aire lo recupera la columna de texto con su propio `pr`
+            // (así se mueve la barra, no el texto).
+            pl={{ base: 5, md: 10 }} pr={{ base: 5, md: 0 }}
+            py={{ base: 6, md: 9 }} h={{ base: "auto", md: "440px" }}>
 
         {/* Foto (izquierda) */}
         <Box flexShrink={0} w={{ base: "100%", md: "400px" }} maxW={{ base: "320px", md: "400px" }}
@@ -87,7 +92,8 @@ function HambreBox({ v }: { v: Vineta }) {
         <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }} alignSelf={{ base: "auto", md: "stretch" }}
              display="flex" flexDirection="column" justifyContent="flex-start"
              maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "auto" }} overflowX="hidden"
-             pr={{ base: 0, md: 3 }} sx={SCROLL_SX}>
+             // 52px = los 12 de antes + los 40 que se le han quitado a la fila.
+             pr={{ base: 0, md: "52px" }} sx={SCROLL_SX}>
           <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.25"
                 mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}>
             {v.titulo}

@@ -57,7 +57,8 @@ export const NUTRIENTES: Nutriente[] = [
     img: "/recorrido/nutricion/portadas/carbs.webp",
     resumen: "Tu principal fuente de energía.",
     descripcion: [
-      "Los carbohidratos son la principal fuente de energía del cuerpo. Durante la digestión, las enzimas los descomponen en moléculas simples, principalmente glucosa. Esta permite que las células obtengan energía mediante la respiración celular.",
+      "Los carbohidratos son la principal fuente de energía del cuerpo.",
+      "Durante la digestión, las enzimas los descomponen en moléculas simples, principalmente glucosa. Esta permite que las células obtengan energía mediante la respiración celular.",
       "Cuando se consume más de la necesaria, el exceso se almacena como glucógeno o se transforma en triglicéridos los cuales se almacenan en las células de grasa blanca.",
     ],
     tipos: [
@@ -85,7 +86,8 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Fructosa",
         foto: "/recorrido/nutricion/moleculas/fructosa.webp",
         parrafos: [
-          "Es la molécula característica de las frutas y la miel. A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
+          "Es la molécula característica de las frutas y la miel.",
+          "A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
           "Cuando se consume dentro de una fruta, la fibra hace que se absorba lentamente.",
           " Sin embargo, cuando se consume en grandes cantidades y sin fibra (como en refrescos o zumos), el hígado recibe una carga muy rápida que favorece la producción de grasa, gasta las reservas y altera el metabolismo.",
         ],
@@ -141,7 +143,8 @@ export const NUTRIENTES: Nutriente[] = [
         foto: "/recorrido/nutricion/moleculas/saturado.webp",
         parrafos: [
           "Se encuentran principalmente en productos de origen animal, como la carne o los lácteos, aunque también en algunos vegetales como el aceite de coco.",
-          "Sus moléculas son rectas y pueden empaquetarse con mayor facilidad, haciendo que las membranas celulares sean más rígidas y menos eficientes. Nuestro cuerpo también las utiliza, pero un consumo elevado y mantenido puede favorecer alteraciones cardiovasculares, especialmente cuando su consumo desplaza a las grasas insaturadas.",
+          "Sus moléculas son rectas y pueden empaquetarse con mayor facilidad, haciendo que las membranas celulares sean más rígidas y menos eficientes.",
+          "Nuestro cuerpo también las utiliza, pero un consumo elevado y mantenido puede favorecer alteraciones cardiovasculares, especialmente cuando su consumo desplaza a las grasas insaturadas.",
         ],
       },
       {
@@ -163,7 +166,8 @@ export const NUTRIENTES: Nutriente[] = [
     img: "/recorrido/nutricion/portadas/prote.webp",
     resumen: "El material con el que te reconstruyes.",
     descripcion: [
-      "Las proteínas son el material con el que tu cuerpo construye y repara tejidos. Durante la digestión se descomponen en aminoácidos, los ladrillos con los que el organismo fabrica músculo, piel, enzimas, anticuerpos y muchas hormonas.",
+      "Las proteínas son el material con el que tu cuerpo construye y repara tejidos.",
+      "Durante la digestión se descomponen en aminoácidos, los ladrillos con los que el organismo fabrica músculo, piel, enzimas, anticuerpos y muchas hormonas.",
     ],
     tipos: [
       { nombre: "Completas", desc: "De origen animal: aportan todos los aminoácidos esenciales." },
@@ -190,7 +194,8 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Aminoácidos no esenciales",
         foto: "/recorrido/nutricion/moleculas/noaesencial.webp",
         parrafos: [
-          "Nuestro cuerpo puede fabricar estos aminoácidos a partir de otras moléculas, por lo que no es imprescindible obtenerlos directamente de los alimentos. Aun así, siguen siendo igual de importantes, ya que participan en la construcción y reparación de todos los tejidos.",
+          "Nuestro cuerpo puede fabricar estos aminoácidos a partir de otras moléculas, por lo que no es imprescindible obtenerlos directamente de los alimentos.",
+          "Aun así, siguen siendo igual de importantes, ya que participan en la construcción y reparación de todos los tejidos.",
         ],
       },
       {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { EstudioLayout } from "../../components/estudio/EstudioLayout";
@@ -30,6 +30,11 @@ export default function EstudioPreguntas() {
   // había guardado y se van actualizando conforme responde.
   const [respuestas, setRespuestas] = useState<Record<string, boolean>>({});
   const [abierto, setAbierto] = useState<CuerpoKey | null>(null);
+  const [errorGuardado, setErrorGuardado] = useState<string | null>(null);
+  // Guardados en vuelo: se responde sin esperar al servidor, pero antes de
+  // enseñar las estadísticas hay que dejar que lleguen todos.
+  const pendientes = useRef(new Set<Promise<unknown>>());
+  const [yendoAResultados, setYendoAResultados] = useState(false);
 
   const fotosListas = useImagesReady([SPACE_IMG]);
 
@@ -97,10 +102,46 @@ export default function EstudioPreguntas() {
   // medias ve lo suyo, y puede volver cuando quiera a seguir.
   const puedeVerResultados = totalRespondidas > 0;
 
-  const responder = async (planeta: CuerpoKey, pregunta: PreguntaConEje, valor: boolean) => {
-    if (!participante) throw new Error("sin participante");
-    await guardarRespuesta(participante.id, planeta, pregunta.eje, pregunta.id, valor);
-    setRespuestas((prev) => ({ ...prev, [clave(planeta, pregunta.id)]: valor }));
+  /**
+   * Responder es INSTANTÁNEO: se apunta en pantalla y el POST viaja por detrás.
+   * Son decenas de preguntas seguidas y cada guardado tarda lo suyo (viaje al
+   * servidor + base de datos); esperar a cada Sí/No hacía el cuestionario lento.
+   * Si un guardado falla, esa respuesta se deshace y se avisa: nada se da por
+   * guardado sin estarlo.
+   */
+  const responder = (planeta: CuerpoKey, pregunta: PreguntaConEje, valor: boolean) => {
+    if (!participante) return;
+    const k = clave(planeta, pregunta.id);
+    const anterior = respuestas[k];
+
+    setRespuestas((prev) => ({ ...prev, [k]: valor }));
+    setErrorGuardado(null);
+
+    const envio = guardarRespuesta(participante.id, planeta, pregunta.eje, pregunta.id, valor)
+      .catch(() => {
+        setRespuestas((prev) => {
+          const copia = { ...prev };
+          if (anterior === undefined) delete copia[k];
+          else copia[k] = anterior;
+          return copia;
+        });
+        setErrorGuardado(
+          "Alguna respuesta no se ha podido guardar. Revisa la conexión y vuelve a responderla.",
+        );
+      })
+      .finally(() => { pendientes.current.delete(envio); });
+    pendientes.current.add(envio);
+  };
+
+  /** No se va a las estadísticas hasta que hayan llegado los guardados en vuelo. */
+  const irAResultados = async () => {
+    if (!puedeVerResultados || yendoAResultados) return;
+    if (pendientes.current.size > 0) {
+      setYendoAResultados(true);
+      await Promise.allSettled([...pendientes.current]);
+      setYendoAResultados(false);
+    }
+    navigate("/estudio/resultados");
   };
 
   if (cargando || !fotosListas) return <LifeLoading />;
@@ -202,7 +243,7 @@ export default function EstudioPreguntas() {
           <Flex direction="column" align="center" gap={3}>
             <Box
               as="button"
-              onClick={() => { if (puedeVerResultados) navigate("/estudio/resultados"); }}
+              onClick={() => void irAResultados()}
               w="100%"
               py={{ base: 4, md: 5 }}
               borderRadius="full"
@@ -214,12 +255,18 @@ export default function EstudioPreguntas() {
               fontWeight="700"
               letterSpacing="0.16em"
               textTransform="uppercase"
-              cursor={puedeVerResultados ? "pointer" : "not-allowed"}
+              cursor={puedeVerResultados ? (yendoAResultados ? "wait" : "pointer") : "not-allowed"}
+              opacity={yendoAResultados ? 0.7 : 1}
               transition="all 0.22s"
               _hover={puedeVerResultados ? { bg: "rgba(255,255,255,0.26)", boxShadow: "0 0 26px rgba(255,255,255,0.4)" } : {}}
             >
-              Ver mis estadísticas →
+              {yendoAResultados ? "Guardando lo último…" : "Ver mis estadísticas →"}
             </Box>
+            {errorGuardado && (
+              <Text color="#ffb8b8" fontSize="sm" fontStyle="italic" textAlign="center">
+                {errorGuardado}
+              </Text>
+            )}
             <Text color="rgba(255,255,255,0.66)" fontSize="sm" fontStyle="italic" textAlign="center">
               {completado
                 ? "Ya está todo respondido. Vamos a ver qué dicen los números."
@@ -240,6 +287,7 @@ export default function EstudioPreguntas() {
         preguntas={preguntasDelAbierto}
         respuestas={respuestasDelAbierto}
         onResponder={(pregunta, valor) => responder(cuerpoAbierto!.key, pregunta, valor)}
+        error={errorGuardado}
       />
     </EstudioLayout>
   );

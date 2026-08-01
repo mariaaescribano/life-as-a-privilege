@@ -26,13 +26,16 @@ const MESES = [
   { num: "11", nombre: "Noviembre" },{ num: "12", nombre: "Diciembre" },
 ];
 
-/* Estilo común de todos los campos: caja oscura sobre el cielo. */
+/* Estilo común de todos los campos: caja oscura sobre el cielo.
+   En ordenador los campos crecen (size lg + letra más grande): hay sitio de
+   sobra y así no se leen como un formulario de móvil estirado. */
 const campoSx = {
   bg: "rgba(8,13,30,0.55)",
   border: `1px solid ${astrologiaTxt}44`,
   color: astrologiaTxt,
   borderRadius: "lg",
-  size: "md" as const,
+  size: { base: "md", lg: "lg" },
+  fontSize: { base: "md", lg: "xl" },
   fontFamily: "'EB Garamond', serif",
   _placeholder: { color: `${astrologiaTxt}55` },
   _hover: { borderColor: `${astrologiaTxt}88` },
@@ -44,8 +47,8 @@ const campoSx = {
 };
 
 const Etiqueta = ({ children }: { children: React.ReactNode }) => (
-  <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5}
-        fontWeight="600" textTransform="uppercase">
+  <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "xs", lg: "sm" }} letterSpacing="0.14em"
+        mb={{ base: 1.5, lg: 2 }} fontWeight="600" textTransform="uppercase">
     {children}
   </Text>
 );
@@ -156,17 +159,19 @@ export default function EstudioDatos() {
 
   return (
     <EstudioLayout>
-      <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 6, md: 8 }}>
+      <Flex direction="column" align="center" w="100%" maxW={{ base: "760px", lg: "1000px" }}
+            gap={{ base: 6, md: 8, lg: 10 }}>
         {/* ── Cabecera ── */}
         <Reveal direction="down" distance={16} duration={0.7}>
-          <Flex direction="column" align="center" gap={3} textAlign="center">
-            <AstrologiaIcon size={{ base: "38px", md: "48px" }} />
-            <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700"
+          <Flex direction="column" align="center" gap={{ base: 3, lg: 4 }} textAlign="center">
+            <AstrologiaIcon size={{ base: "38px", md: "48px", lg: "64px" }} />
+            <Text color="white" fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }} fontWeight="700"
                   letterSpacing="0.06em" textTransform="uppercase" lineHeight="1.15"
                   textShadow="0 0 14px rgba(255,255,255,0.55), 0 0 32px rgba(180,255,245,0.3)">
               Tus datos de nacimiento
             </Text>
-            <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "md", md: "lg" }} maxW="600px" lineHeight="1.75">
+            <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "md", md: "lg", lg: "xl" }}
+                  maxW={{ base: "600px", lg: "760px" }} lineHeight="1.75">
               Con ellos se calcula tu carta natal. Sin carta no hay estudio: es la que dice en qué
               signo tienes cada planeta, y eso es justo lo que se está midiendo.
             </Text>
@@ -187,28 +192,28 @@ export default function EstudioDatos() {
             boxShadow="0 0 20px rgba(255,220,120,0.22), 0 0 46px rgba(255,220,120,0.1)"
           >
             <SpaceBg overlay="rgba(8,13,30,0.72)" />
-            <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 7 }}>
-              <Text color="#ffe08a" fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-                    letterSpacing="0.16em" textTransform="uppercase" mb={3}
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 8, lg: 12 }} py={{ base: 6, md: 7, lg: 10 }}>
+              <Text color="#ffe08a" fontSize={{ base: "md", md: "lg", lg: "2xl" }} fontWeight="700"
+                    letterSpacing="0.16em" textTransform="uppercase" mb={{ base: 3, lg: 4 }}
                     style={{ textShadow: "0 0 12px rgba(255,224,138,0.5)" }}>
                 ¡Importante! La hora exacta
               </Text>
-              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.8">
+              <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md", lg: "lg" }} lineHeight="1.8">
                 La hora de nacimiento es el dato más delicado de toda la carta. De ella dependen tu
                 Ascendente y las doce casas: <b>media hora de diferencia puede cambiarte el Ascendente
                 entero</b>. Si la pones «más o menos», la lectura no será correcta y tus respuestas
                 sumarán al grupo equivocado.
               </Text>
-              <Box h="1px" my={4} bgGradient="linear(to-r, transparent, rgba(255,224,138,0.5), transparent)" />
-              <Text color="#ffe08a" fontSize={{ base: "sm", md: "md" }} fontWeight="700" lineHeight="1.8">
+              <Box h="1px" my={{ base: 4, lg: 6 }} bgGradient="linear(to-r, transparent, rgba(255,224,138,0.5), transparent)" />
+              <Text color="#ffe08a" fontSize={{ base: "sm", md: "md", lg: "lg" }} fontWeight="700" lineHeight="1.8">
                 Si naciste en España: ¡PIDE TU CERTIFICADO!
               </Text>
-              <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" mt={2}>
+              <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md", lg: "lg" }} lineHeight="1.8" mt={2}>
                 Pide el <b>certificado literal de nacimiento</b> en el Registro Civil (se solicita
                 gratis y en línea) y mira la hora que figura ahí. No la de memoria, ni la que
                 recuerda la familia: la del certificado. Sin esa hora, la lectura no será correcta.
               </Text>
-              <Flex mt={4}>
+              <Flex mt={{ base: 4, lg: 6 }}>
                 <Box
                   as="a"
                   href={CERTIFICADO_URL}
@@ -217,13 +222,13 @@ export default function EstudioDatos() {
                   display="inline-flex"
                   alignItems="center"
                   gap={2}
-                  px={{ base: 5, md: 6 }}
-                  py={{ base: 2.5, md: 3 }}
+                  px={{ base: 5, md: 6, lg: 8 }}
+                  py={{ base: 2.5, md: 3, lg: 4 }}
                   borderRadius="full"
                   bg="rgba(255,224,138,0.14)"
                   border="1px solid rgba(255,224,138,0.75)"
                   color="#ffe08a"
-                  fontSize={{ base: "sm", md: "md" }}
+                  fontSize={{ base: "sm", md: "md", lg: "lg" }}
                   fontWeight="700"
                   letterSpacing="0.06em"
                   transition="all 0.22s"
@@ -239,7 +244,7 @@ export default function EstudioDatos() {
                   </Box>
                 </Box>
               </Flex>
-              <Text color="rgba(255,255,255,0.6)" fontSize="xs" mt={2} fontStyle="italic">
+              <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "xs", lg: "sm" }} mt={2} fontStyle="italic">
                 Sede electrónica del Ministerio de Justicia · se abre en otra pestaña
               </Text>
             </Box>
@@ -252,8 +257,9 @@ export default function EstudioDatos() {
                 boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 20px ${astrologiaTxt}1a`}>
           <SpaceBg overlay="rgba(8,13,30,0.68)" />
 
-          <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-            <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.08} delayChildren={0.35}>
+          <Box position="relative" zIndex={1} px={{ base: 6, md: 10, lg: 14 }} py={{ base: 8, md: 10, lg: 14 }}>
+            <RevealStagger display="flex" flexDirection="column" gap={{ base: 5, lg: 7 }}
+                           stagger={0.08} delayChildren={0.35}>
               {/* Email — sin él no se puede continuar: es lo que identifica la
                   muestra y lo que evita contar dos veces a la misma persona. Eso
                   no se le cuenta aquí: el botón de continuar ya no deja pasar y,
@@ -276,7 +282,7 @@ export default function EstudioDatos() {
 
               <RevealItem>
                 <Etiqueta>Fecha de nacimiento</Etiqueta>
-                <Flex gap={3}>
+                <Flex gap={{ base: 3, lg: 4 }}>
                   <Box flex="1">
                     <Input type="number" inputMode="numeric" min={1} max={31} value={dia}
                            onChange={(e) => setDia(e.target.value)} placeholder="Día" {...campoSx} />
@@ -306,7 +312,7 @@ export default function EstudioDatos() {
                   {...campoSx}
                   sx={{ "::-webkit-calendar-picker-indicator": { filter: "invert(0.9)" } }}
                 />
-                <Text color="#ffe08a" fontSize="xs" mt={2} fontStyle="italic" lineHeight="1.6">
+                <Text color="#ffe08a" fontSize={{ base: "xs", lg: "sm" }} mt={2} fontStyle="italic" lineHeight="1.6">
                   Hora local del lugar donde naciste, tal cual figura en el registro. El cambio de
                   horario de ese año ya se tiene en cuenta al calcular la carta.
                 </Text>
@@ -315,7 +321,7 @@ export default function EstudioDatos() {
               <RevealItem>
                 <Campo label="País" value={pais} onChange={setPais} placeholder="Ej: España" />
                 {esEspana(pais) && (
-                  <Text color="#ffe08a" fontSize="sm" mt={2} lineHeight="1.7" fontWeight="600">
+                  <Text color="#ffe08a" fontSize={{ base: "sm", lg: "md" }} mt={2} lineHeight="1.7" fontWeight="600">
                     ¡Importante! Pide tu certificado literal de nacimiento y comprueba ahí la hora
                     antes de seguir:{" "}
                     <Box as="a" href={CERTIFICADO_URL} target="_blank" rel="noopener noreferrer"
@@ -326,27 +332,27 @@ export default function EstudioDatos() {
                 )}
               </RevealItem>
 
-              <RevealItem display="flex" flexDirection={{ base: "column", md: "row" }} gap={4}>
+              <RevealItem display="flex" flexDirection={{ base: "column", md: "row" }} gap={{ base: 4, lg: 5 }}>
                 <Campo label="Lugar (ciudad)" value={lugar} onChange={setLugar} placeholder="Ej: Madrid" />
                 <Campo label="Región / provincia" value={region} onChange={setRegion} placeholder="Ej: Comunidad de Madrid" />
               </RevealItem>
 
               {error && (
-                <Text color="#ffb8b8" fontSize="sm" textAlign="center" fontStyle="italic">{error}</Text>
+                <Text color="#ffb8b8" fontSize={{ base: "sm", lg: "md" }} textAlign="center" fontStyle="italic">{error}</Text>
               )}
 
               <RevealItem display="flex" justifyContent="flex-end" mt={3}>
                 <Box
                   as="button"
                   onClick={() => { if (!enviando) void continuar(); }}
-                  px={{ base: 8, md: 10 }}
-                  py={{ base: 3, md: 3.5 }}
+                  px={{ base: 8, md: 10, lg: 14 }}
+                  py={{ base: 3, md: 3.5, lg: 4 }}
                   borderRadius="full"
                   bg={camposCompletos ? `${astrologiaTxt}1f` : "transparent"}
                   color={camposCompletos ? astrologiaTxt : `${astrologiaTxt}66`}
                   border={`1px solid ${camposCompletos ? astrologiaTxt : `${astrologiaTxt}44`}`}
                   fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "md", md: "lg", lg: "xl" }}
                   fontWeight="700"
                   letterSpacing="0.12em"
                   textTransform="uppercase"
@@ -365,7 +371,7 @@ export default function EstudioDatos() {
                   para qué y enlazar la política de privacidad en el mismo punto
                   donde se piden. Discreto, pero tiene que estar. */}
               <RevealItem>
-                <Text color={`${astrologiaTxt}88`} fontSize="xs" textAlign="center" lineHeight="1.6">
+                <Text color={`${astrologiaTxt}88`} fontSize={{ base: "xs", lg: "sm" }} textAlign="center" lineHeight="1.6">
                   Tus datos se usan solo para calcular tu carta y agrupar tus respuestas. Los
                   resultados se publican siempre en conjunto, nunca con tu nombre ni tu email.{" "}
                   <Box as="a" href="/privacidad" target="_blank" rel="noopener noreferrer"
@@ -380,7 +386,7 @@ export default function EstudioDatos() {
 
         <Reveal direction="up" distance={12} duration={0.6} delay={0.35}>
           <Box as="button" onClick={() => navigate("/estudio")}
-               color="rgba(255,255,255,0.7)" fontSize="sm" bg="transparent" border="none"
+               color="rgba(255,255,255,0.7)" fontSize={{ base: "sm", lg: "md" }} bg="transparent" border="none"
                cursor="pointer" _hover={{ color: "white" }}>
             ← Volver a la portada del estudio
           </Box>
