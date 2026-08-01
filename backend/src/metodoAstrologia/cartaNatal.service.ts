@@ -110,27 +110,48 @@ function orbeEntre(def: AspectoDef, a: CuerpoKey, b: CuerpoKey): number {
 export class CartaNatalService {
   private readonly logger = new Logger(CartaNatalService.name);
 
-  /* ── Geocoding (Nominatim) ── */
+  /* ── Geocoding (Nominatim) ──
+   *
+   * Con REINTENTO, y no por capricho: Nominatim es un servicio gratuito y
+   * ajeno, y un corte de red de un segundo («fetch failed») dejaba sin carta a
+   * alguien cuyos datos eran perfectos. Como esto es el primer paso de todo
+   * —tanto del recorrido como del estudio—, fallar aquí es perder a la persona
+   * entera. Dos intentos más, separados, arreglan casi todos esos casos.
+   *
+   * Lo que NO se reintenta: que el lugar no exista (sin resultados) ni que
+   * Nominatim conteste un error suyo. Eso no mejora repitiendo, solo molesta a
+   * un servicio gratuito. Solo se repite el fallo de RED. */
   async geocode(lugar: string, region: string, pais: string): Promise<{ lat: number; lng: number } | null> {
     const q = [lugar, region, pais].filter(Boolean).join(', ');
     const url = `${NOMINATIM_URL}?q=${encodeURIComponent(q)}&format=json&limit=1`;
-    try {
-      const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT, 'Accept-Language': 'es,en' } });
-      if (!res.ok) {
-        this.logger.warn(`Nominatim ${res.status}: ${q}`);
-        return null;
+    const INTENTOS = 3;
+
+    for (let intento = 1; intento <= INTENTOS; intento++) {
+      try {
+        const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT, 'Accept-Language': 'es,en' } });
+        if (!res.ok) {
+          this.logger.warn(`Nominatim ${res.status}: ${q}`);
+          return null;
+        }
+        const arr = await res.json() as Array<{ lat: string; lon: string }>;
+        if (!arr || arr.length === 0) {
+          this.logger.warn(`Nominatim sin resultados: ${q}`);
+          return null;
+        }
+        return { lat: parseFloat(arr[0].lat), lng: parseFloat(arr[0].lon) };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        if (intento === INTENTOS) {
+          this.logger.error(`Geocode error tras ${INTENTOS} intentos: ${msg}`);
+          return null;
+        }
+        this.logger.warn(`Geocode falló (intento ${intento}/${INTENTOS}), reintentando: ${msg}`);
+        // Espera creciente: 600 ms y 1,2 s. Respeta el límite de Nominatim
+        // (una petición por segundo) y da tiempo a que la red se recupere.
+        await new Promise((r) => setTimeout(r, 600 * intento));
       }
-      const arr = await res.json() as Array<{ lat: string; lon: string }>;
-      if (!arr || arr.length === 0) {
-        this.logger.warn(`Nominatim sin resultados: ${q}`);
-        return null;
-      }
-      return { lat: parseFloat(arr[0].lat), lng: parseFloat(arr[0].lon) };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      this.logger.error(`Geocode error: ${msg}`);
-      return null;
     }
+    return null;
   }
 
   /* ── Timezone IANA a partir de lat/lng ── */

@@ -891,7 +891,7 @@ const MALKHUT: SefiraContenido = {
     items: [
       "Vive de acuerdo con sus valores de forma natural.",
       "Asume responsabilidad por sus decisiones y sus consecuencias.",
-      "Genera un impacto positivo en su entorno.",
+      "Es posible que incomode a las personas que se han acomodado en el sufrimiento.",
       "Mantiene coherencia entre su mundo interior y su Vida cotidiana.",
       "Se adapta a los cambios sin perder su esencia.",
       "Recibe tanto los desafíos como las oportunidades con presencia y responsabilidad.",

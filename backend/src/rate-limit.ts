@@ -48,6 +48,16 @@ export const LIMITE_RESERVA = { default: { ttl: HORA, limit: 5 } };
 export const LIMITE_ESTUDIO = { default: { ttl: HORA, limit: 20 } };
 
 /**
+ * Guardar una respuesta del estudio. Aquí el límite general (150/minuto) se
+ * queda CORTO, no largo: el cuestionario son ~145 preguntas y cada Sí/No es una
+ * petición. Alguien respondiendo a buen ritmo —dos o tres por segundo, que con
+ * dos botones es normal— rebasaría el techo general y empezaría a ver errores
+ * de guardado a mitad del cuestionario. Se le da holgura de sobra; la ruta no
+ * manda correos ni cobra nada, solo escribe una fila.
+ */
+export const LIMITE_ESTUDIO_RESPUESTA = { default: { ttl: MINUTO, limit: 400 } };
+
+/**
  * Entrar, registrarse y pedir recuperación de contraseña. Frena la prueba de
  * contraseñas por fuerza bruta sin castigar a quien se equivoca al teclear:
  * diez intentos cada cinco minutos.

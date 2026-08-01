@@ -134,7 +134,8 @@ export default function EstudioPreguntas() {
         {/* La lectura de pago, arriba del todo: quien entra ya sabe que existe,
             no hay que llegar al final para enterarse. */}
         <Reveal direction="up" distance={14} duration={0.65} delay={0.08}>
-          <BotonLecturaCarta email={participante?.email} datos={participante?.datos} />
+          <BotonLecturaCarta email={participante?.email} datos={participante?.datos}
+                             participanteId={participante?.id} />
         </Reveal>
 
         {/* ── Progreso general ── */}

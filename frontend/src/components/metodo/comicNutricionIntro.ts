@@ -11,7 +11,8 @@ export const NUTRICION_INTRO: Vineta[] = [
     src: "/viñetas/nutricion/intro/nutricomic1.png",
     paragraphs: [
       "Todo lo que está vivo está formado por átomos, moléculas y células.",
-      "El universo invierte cierta cantidad de partículas para experimentarse de forma supuestamente individual. Pero cuando esa forma se descompone, las partículas se reutilizan para seguir creando Vida."
+      "El universo invierte cierta cantidad de partículas para experimentarse de forma supuestamente individual.",
+      "Cuando esa forma se descompone, las partículas se reutilizan para seguir creando Vida."
     ],
   },
   {

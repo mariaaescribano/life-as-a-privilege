@@ -61,6 +61,20 @@ export function testsAEscala10(
   return out;
 }
 
+/**
+ * Deja el blob del recorrido con TODO el test en escala 1-10 y marcado como tal.
+ * Migración de una sola vez, y tiene que ser del blob ENTERO: `escalaTest` es un
+ * único flag para todas las sefirot, así que convertir solo la que se está
+ * mirando y marcar el blob dejaría a las demás (aún en 1-5) leyéndose como si
+ * fueran 1-10 — es decir, hundidas — y sin forma de distinguirlo después.
+ * Devuelve el MISMO objeto si ya estaba en 1-10, para poder saber si hay que
+ * guardar.
+ */
+export function normalizarEscalaTest<T extends Record<string, any>>(data: T): T {
+  if (!data || data.escalaTest === TEST_MAX) return data;
+  return { ...data, test: testsAEscala10(data.test, data.escalaTest), escalaTest: TEST_MAX };
+}
+
 // Escala 1-5 (index 0 → valor 1).
 export const ESCALA: { valor: number; label: string }[] = [
   { valor: 1, label: "Nunca" },

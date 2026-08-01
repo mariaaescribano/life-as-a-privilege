@@ -297,19 +297,20 @@ export default function MetodoCabalaSendero() {
                           </Text>
                           <Box
                             as="input"
-                            type="number"
+                            // type="text" + filtro de dígitos, NO type="number":
+                            // el input numérico deja teclear «e», «+», «-» o «,»
+                            // y la letra se queda pintada en la caja.
+                            type="text"
                             inputMode="numeric"
-                            min={1}
-                            max={5}
+                            pattern="[0-9]*"
+                            maxLength={1}
                             aria-label={`Respuesta pregunta ${qi + 1} (1 a 5)`}
                             placeholder="—"
                             value={relleno ? String(val) : ""}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                              const raw = e.target.value;
-                              if (raw === "") { guardar(qi, 0); return; }
-                              const n = parseInt(raw, 10);
-                              if (Number.isNaN(n)) return;
-                              guardar(qi, Math.max(1, Math.min(5, n)));
+                              const digitos = e.target.value.replace(/\D/g, "");
+                              if (!digitos) { guardar(qi, 0); return; }
+                              guardar(qi, Math.max(1, Math.min(5, parseInt(digitos, 10))));
                             }}
                             flexShrink={0}
                             w={{ base: "56px", md: "64px" }}
@@ -326,9 +327,6 @@ export default function MetodoCabalaSendero() {
                             sx={{
                               caretColor: cabalaTxt,
                               "::placeholder": { color: `${cabalaTxt}55`, fontWeight: 400 },
-                              "::-webkit-outer-spin-button": { WebkitAppearance: "none", margin: 0 },
-                              "::-webkit-inner-spin-button": { WebkitAppearance: "none", margin: 0 },
-                              MozAppearance: "textfield",
                             }}
                             _hover={{ borderColor: `${cabalaTxt}88` }}
                             _focus={{ outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 16px ${cabalaTxt}88` }}

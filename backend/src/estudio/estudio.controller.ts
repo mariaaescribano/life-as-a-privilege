@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestj
 import { Throttle } from '@nestjs/throttler';
 import { EstudioService } from './estudio.service';
 import type { DatosParticipante, Eje } from './estudio.service';
-import { LIMITE_ESTUDIO } from '../rate-limit';
+import { LIMITE_ESTUDIO, LIMITE_ESTUDIO_RESPUESTA } from '../rate-limit';
 
 /**
  * Estudio estadístico sobre astrología. Rutas PÚBLICAS a propósito: participar
@@ -32,6 +32,7 @@ export class EstudioController {
    *  dice si la pregunta era del signo o de la casa; la posición concreta la
    *  pone el servidor leyendo la carta guardada, no el navegador. */
   @Post('respuesta')
+  @Throttle(LIMITE_ESTUDIO_RESPUESTA)
   @HttpCode(HttpStatus.OK)
   async guardarRespuesta(
     @Body() body: {

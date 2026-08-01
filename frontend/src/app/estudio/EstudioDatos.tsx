@@ -360,6 +360,20 @@ export default function EstudioDatos() {
                   {enviando ? "Calculando tu carta…" : "Continuar →"}
                 </Box>
               </RevealItem>
+
+              {/* Se recogen datos personales (email y nacimiento): hay que decir
+                  para qué y enlazar la política de privacidad en el mismo punto
+                  donde se piden. Discreto, pero tiene que estar. */}
+              <RevealItem>
+                <Text color={`${astrologiaTxt}88`} fontSize="xs" textAlign="center" lineHeight="1.6">
+                  Tus datos se usan solo para calcular tu carta y agrupar tus respuestas. Los
+                  resultados se publican siempre en conjunto, nunca con tu nombre ni tu email.{" "}
+                  <Box as="a" href="/privacidad" target="_blank" rel="noopener noreferrer"
+                       textDecoration="underline" _hover={{ color: astrologiaTxt }}>
+                    Política de privacidad
+                  </Box>
+                </Text>
+              </RevealItem>
             </RevealStagger>
           </Box>
         </Reveal>

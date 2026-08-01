@@ -311,9 +311,28 @@ export default function MetodoCabalaDiagnostico() {
               <Reveal direction="up" distance={18} delay={0.3} duration={0.6} w="100%">
                 <Box w="100%" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
                      px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
-                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
                     Tus capacidades
                   </Text>
+
+                  {/* Sin esta leyenda, «Sobreexpresada» se lee como un suspenso.
+                      Son dos medidas distintas y hay que decirlo: el número es
+                      CUÁNTO, la palabra es HACIA DÓNDE. */}
+                  <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mb={2.5}
+                        style={{ textShadow: INK_SHADOW }}>
+                    El número dice <Box as="span" fontWeight="700" color={cabalaTxt}>cuánto</Box> tienes
+                    desarrollada la capacidad. La palabra dice <Box as="span" fontWeight="700" color={cabalaTxt}>hacia
+                    dónde</Box> se desequilibra — no es una nota, y ninguna de las tres es peor que otra:
+                  </Text>
+                  <Flex direction="column" gap={1.5} mb={5}>
+                    <LeyendaPolaridad label={POLARIDAD_LABEL.deficit}
+                                      texto="esa energía te falta. El trabajo es construirla." />
+                    <LeyendaPolaridad label={POLARIDAD_LABEL.equilibrio}
+                                      texto="la usas de forma proporcionada a lo que pide cada situación." />
+                    <LeyendaPolaridad label={POLARIDAD_LABEL.exceso}
+                                      texto="la tienes de sobra y empieza a volverse en tu contra (rigidez, autoexigencia, no saber parar). El trabajo es soltar, no añadir." />
+                  </Flex>
+
                   <Flex direction="column" gap={3.5}>
                     {niveles.map((n) => (
                       <Box key={n.key}>
@@ -348,6 +367,19 @@ export default function MetodoCabalaDiagnostico() {
 
       <IndiceCabala />
     </Box>
+  );
+}
+
+/* Una línea de la leyenda de polaridades: el nombre tal como sale en la lista
+   («Sobreexpresada») y qué significa. */
+function LeyendaPolaridad({ label, texto }: { label: string; texto: string }) {
+  return (
+    <Flex align="flex-start" gap={2.5}>
+      <Box flexShrink={0} mt="9px" w="5px" h="5px" borderRadius="full" bg={cabalaTxt} boxShadow={`0 0 8px ${cabalaTxt}aa`} />
+      <Text color={`${cabalaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.65" style={{ textShadow: INK_SHADOW }}>
+        <Box as="span" fontWeight="700" color={cabalaTxt}>{label}</Box> — {texto}
+      </Text>
+    </Flex>
   );
 }
 

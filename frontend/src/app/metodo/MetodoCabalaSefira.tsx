@@ -19,7 +19,7 @@ import {
   type SefiraContenido,
   type CabalaPageKey,
 } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, NUM_PREGUNTAS, TEST_MAX, testAEscala10, type DimensionTest } from "../../components/metodo/cabalaTest";
+import { CABALA_TEST, NUM_PREGUNTAS, TEST_MAX, normalizarEscalaTest, type DimensionTest } from "../../components/metodo/cabalaTest";
 import { sefirotContenidoCompleto } from "../../components/metodo/cabalaDiagnostico";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
@@ -110,16 +110,20 @@ function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: s
       <Text flex="1" color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
         {statement}
       </Text>
+      {/* type="text" + filtro de dígitos, NO type="number": el input numérico del
+          navegador deja teclear «e», «+», «-» o «,», y esas letras se quedan
+          pintadas en la caja aunque el valor que llega al onChange sea vacío. */}
       <Box
         as="input"
-        type="number"
+        type="text"
         inputMode="numeric"
-        min={1}
-        max={max}
+        pattern="[0-9]*"
+        maxLength={String(max).length}
         value={value ? String(value) : ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const raw = Number(e.target.value);
-          onChange(Number.isFinite(raw) ? Math.max(0, Math.min(max, Math.round(raw))) : 0);
+          const digitos = e.target.value.replace(/\D/g, "");
+          if (!digitos) { onChange(0); return; }
+          onChange(Math.max(1, Math.min(max, parseInt(digitos, 10))));
         }}
         placeholder="—"
         flexShrink={0}
@@ -136,9 +140,6 @@ function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: s
         sx={{
           "::placeholder": { color: `${cabalaTxt}44` },
           ":focus": { outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 0 1px ${cabalaTxt}66` },
-          "::-webkit-inner-spin-button": { WebkitAppearance: "none", margin: 0 },
-          "::-webkit-outer-spin-button": { WebkitAppearance: "none", margin: 0 },
-          MozAppearance: "textfield",
         }}
       />
     </Flex>
@@ -264,12 +265,18 @@ export default function MetodoCabalaSefira() {
         // marcamos esta sefirá como vista.
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
-          const prevData = res.data?.data ?? {};
+          const bruto = res.data?.data ?? {};
+          // Migración de escala ANTES de nada: si el test venía en 1-5, se pasa
+          // ENTERO a 1-10 (todas las sefirot) y se guarda ya marcado. Si se
+          // dejara para el primer guardado, ese guardado marcaría el blob como
+          // 1-10 habiendo convertido solo esta sefirá, y las demás se leerían
+          // como respuestas bajísimas.
+          const prevData = normalizarEscalaTest(bruto);
+          const migrado = prevData !== bruto;
           dataRef.current = prevData;
 
-          // Respuestas del test ya guardadas para esta dimensión. Las de antes
-          // del cambio venían en escala 1-5 y se reescalan al leerlas.
-          const saved = testAEscala10(prevData?.test?.[sefira.key], prevData?.escalaTest);
+          // Respuestas del test ya guardadas para esta dimensión (ya en 1-10).
+          const saved = prevData?.test?.[sefira.key];
           if (Array.isArray(saved) && saved.length === NUM_PREGUNTAS) setTestAnswers(saved.map((n: any) => Number(n) || 0));
 
           // Autoevaluación guardada.
@@ -279,8 +286,9 @@ export default function MetodoCabalaSefira() {
           }
 
           const vistas: string[] = Array.isArray(prevData.sefirotVistas) ? prevData.sefirotVistas : [];
-          if (!vistas.includes(sefira.key)) {
-            const next = { ...prevData, sefirotVistas: [...vistas, sefira.key] };
+          const marcarVista = !vistas.includes(sefira.key);
+          if (migrado || marcarVista) {
+            const next = marcarVista ? { ...prevData, sefirotVistas: [...vistas, sefira.key] } : prevData;
             dataRef.current = next;
             await axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: next }, { headers: { Authorization: `Bearer ${token}` } });
           }

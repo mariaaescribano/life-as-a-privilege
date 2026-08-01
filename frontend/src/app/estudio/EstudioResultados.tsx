@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { EstudioLayout } from "../../components/estudio/EstudioLayout";
 import { BotonLecturaCarta } from "../../components/estudio/LecturaCartaModal";
@@ -9,7 +9,7 @@ import { CUERPOS } from "../../components/metodo/astrologiaData";
 import { Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { LifeLoading } from "../../components/global/LifeLoading";
-import { textoPregunta } from "../../data/estudioPreguntas";
+import { estadisticasDeEjemplo } from "../../data/estudioDemo";
 import { AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
 import {
   getEstadisticas,
@@ -21,17 +21,52 @@ import {
 /** Debajo de esta muestra, un porcentaje no significa gran cosa: se avisa. */
 const MUESTRA_MINIMA = 5;
 
+/**
+ * Un TOTAL del estudio: un arquetipo en una de sus dos posiciones. No se enseña
+ * pregunta a pregunta —eso es ruido—: se enseña cuánto conecta esta persona con
+ * ese arquetipo y cuánto conecta la gente que lo tiene en el mismo sitio.
+ */
+interface Grupo {
+  eje: "signo" | "casa";
+  posicion: string;
+  /** Cuántas preguntas tiene ese bloque y a cuántas dijo que sí. */
+  preguntas: number;
+  tuSi: number;
+  /** % de «sí» suyo en ese bloque. */
+  tuPorcentaje: number;
+  /** % de «sí» de TODA la gente con esa misma posición (respuestas agregadas). */
+  mediaPorcentaje: number;
+  /** Cuánta gente hay en ese grupo (la pregunta más respondida del bloque). */
+  personas: number;
+}
+
 /** Cómo se nombra el grupo con el que se compara: «Sol en Leo» o «Sol en la casa 5». */
-const grupoDe = (label: string, it: ItemEstadistica) =>
-  it.eje === "casa" ? `${label} en la casa ${it.posicion}` : `${label} en ${it.posicion}`;
+const grupoDe = (label: string, g: Grupo) =>
+  g.eje === "casa" ? `${label} en la casa ${g.posicion}` : `${label} en ${g.posicion}`;
+
+/** El título del bloque dentro de la tarjeta del planeta. */
+const tituloGrupo = (g: Grupo) => (g.eje === "casa" ? `En la casa ${g.posicion}` : `En ${g.posicion}`);
 
 export default function EstudioResultados() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [datos, setDatos] = useState<EstadisticasEstudio | null>(null);
   const [cargando, setCargando] = useState(true);
   const fotosListas = useImagesReady([SPACE_IMG, "/img/icono/life.png"]);
 
+  const params = new URLSearchParams(location.search);
+  // Vista de ejemplo: /estudio/resultados?demo — datos inventados, para poder
+  // ver la pantalla antes de que el estudio tenga muestra. Ver estudioDemo.ts.
+  const esEjemplo = params.has("demo");
+  // Vuelta desde Stripe tras pagar la lectura (el Payment Link redirige aquí).
+  const vieneDePagar = params.get("lectura") === "ok";
+
   useEffect(() => {
+    if (esEjemplo) {
+      setDatos(estadisticasDeEjemplo());
+      setCargando(false);
+      return;
+    }
     const id = getEstudioId();
     if (!id) { navigate("/estudio/datos", { replace: true }); return; }
     (async () => {
@@ -43,33 +78,86 @@ export default function EstudioResultados() {
         setCargando(false);
       }
     })();
-  }, [navigate]);
+  }, [navigate, esEjemplo]);
 
-  // Las respuestas llegan en una lista plana; se agrupan por planeta y se
-  // ordenan como en la carta (Ascendente, Sol, Luna, …), no como vengan de la BD.
+  /**
+   * Las respuestas llegan pregunta a pregunta; aquí se convierten en TOTALES.
+   * Se agrupan por (planeta, eje) —que es como se mide el estudio: por signo y
+   * por casa— y de cada bloque salen dos cifras: cuánto ha dicho que sí esta
+   * persona y cuánto dice que sí todo el mundo con esa misma posición.
+   *
+   * La media del grupo se calcula sumando síes y respuestas de todas sus
+   * preguntas (no promediando porcentajes): así una pregunta con mucha muestra
+   * pesa lo que le toca y no lo mismo que una con tres respuestas.
+   */
   const porPlaneta = useMemo(() => {
-    const mapa = new Map<string, ItemEstadistica[]>();
+    const bloques = new Map<string, ItemEstadistica[]>();
     for (const it of datos?.items ?? []) {
-      const lista = mapa.get(it.planeta) ?? [];
-      lista.push(it);
-      mapa.set(it.planeta, lista);
+      const clave = `${it.planeta}|${it.eje}`;
+      bloques.set(clave, [...(bloques.get(clave) ?? []), it]);
     }
+
+    const grupoDeItems = (items: ItemEstadistica[]): Grupo => {
+      const tuSi = items.filter((i) => i.respuesta).length;
+      const si = items.reduce((n, i) => n + i.si, 0);
+      const total = items.reduce((n, i) => n + i.total, 0);
+      return {
+        eje: items[0].eje,
+        posicion: items[0].posicion,
+        preguntas: items.length,
+        tuSi,
+        tuPorcentaje: Math.round((tuSi / items.length) * 100),
+        mediaPorcentaje: total > 0 ? Math.round((si / total) * 100) : 0,
+        // Cuánta gente hay en el grupo: la pregunta más contestada del bloque.
+        personas: items.reduce((n, i) => Math.max(n, i.total), 0),
+      };
+    };
+
+    // Se ordena como la carta (Ascendente, Sol, Luna…), no como venga de la BD,
+    // y dentro de cada planeta primero el signo y después la casa.
     return CUERPOS
-      .filter((c) => mapa.has(c.key))
-      .map((c) => ({ cuerpo: c, items: mapa.get(c.key)! }));
+      .map((c) => {
+        const grupos = (["signo", "casa"] as const)
+          .map((eje) => bloques.get(`${c.key}|${eje}`))
+          .filter((items): items is ItemEstadistica[] => !!items?.length)
+          .map(grupoDeItems);
+        return { cuerpo: c, grupos };
+      })
+      .filter((p) => p.grupos.length > 0);
   }, [datos]);
 
   if (cargando || !fotosListas) return <LifeLoading />;
   if (!datos) return null;
 
-  const coincidencias = datos.items.filter(
-    (i) => i.total >= MUESTRA_MINIMA && (i.respuesta ? i.porcentajeSi >= 50 : i.porcentajeSi < 50),
-  ).length;
-  const medibles = datos.items.filter((i) => i.total >= MUESTRA_MINIMA).length;
-
   return (
     <EstudioLayout>
       <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 7, md: 9 }}>
+        {/* Chapa de «esto es un ejemplo»: discreta, pero suficiente para que unos
+            números inventados no se puedan tomar por resultados del estudio. */}
+        {esEjemplo && (
+          <Box px={4} py={1.5} borderRadius="full" bg="rgba(255,255,255,0.14)"
+               border="1px solid rgba(255,255,255,0.4)">
+            <Text color="white" fontSize="xs" letterSpacing="0.18em" textTransform="uppercase" fontWeight="600">
+              Vista de ejemplo · datos inventados
+            </Text>
+          </Box>
+        )}
+
+        {/* Vuelta de Stripe: lo primero que tiene que ver es que su pago llegó.
+            No confirma nada por su cuenta —el cobro lo confirma Stripe—, solo
+            recoge a quien vuelve para que no aterrice en una página muda. */}
+        {vieneDePagar && (
+          <Box w="100%" maxW="620px" px={{ base: 5, md: 7 }} py={{ base: 4, md: 5 }} borderRadius="xl"
+               bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.45)" textAlign="center">
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={1}>
+              Pago recibido ✓
+            </Text>
+            <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
+              Gracias. Me pongo con tu carta y te la mando por correo en cuanto esté lista.
+            </Text>
+          </Box>
+        )}
+
         {/* ── GRACIAS ── */}
         <Reveal direction="down" distance={18} duration={0.8}>
           <Flex direction="column" align="center" gap={4} textAlign="center">
@@ -82,25 +170,29 @@ export default function EstudioResultados() {
                   textShadow="0 0 16px rgba(255,255,255,0.6), 0 0 38px rgba(180,255,245,0.32)">
               Gracias
             </Text>
+            {/* Nada de «somos N personas»: con muestra pequeña es un número que
+                resta, y en la vista de ejemplo sería directamente falso. */}
             <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "md", md: "lg" }} maxW="680px" lineHeight="1.8">
-              Tus respuestas ya forman parte del estudio. Ahora mismo somos{" "}
-              <b>{datos.participantesTotales}</b>{" "}
-              {datos.participantesTotales === 1 ? "persona" : "personas"} y cada carta nueva afina un
-              poco más los números. Esto es lo que ha salido con lo tuyo:
+              Gracias por haber participado
             </Text>
-            {medibles > 0 && (
-              <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" maxW="620px">
-                Has respondido igual que la mayoría de la gente con tu mismo signo en{" "}
-                <b>{coincidencias} de {medibles}</b> preguntas con muestra suficiente.
-              </Text>
-            )}
           </Flex>
+        </Reveal>
+
+        {/* La lectura, antes de los resultados: quien viene a por su carta la
+            encuentra sin bajar, y quien viene a por los números sigue scroll. */}
+        <Reveal direction="up" distance={14} duration={0.65} delay={0.12}>
+          <BotonLecturaCarta
+            email={datos.participante.email}
+            datos={datos.participante.datos}
+            participanteId={datos.participante.id}
+            variant="destacado"
+          />
         </Reveal>
 
         {/* ── RESULTADOS PLANETA A PLANETA ── */}
         <RevealStagger display="flex" flexDirection="column" gap={{ base: 5, md: 6 }} w="100%"
                        stagger={0.07} delayChildren={0.2}>
-          {porPlaneta.map(({ cuerpo: c, items }) => (
+          {porPlaneta.map(({ cuerpo: c, grupos }) => (
             <RevealItem key={c.key}>
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                    boxShadow={`0 0 20px ${c.color}44, 0 0 52px ${c.color}22`}>
@@ -129,58 +221,74 @@ export default function EstudioResultados() {
                     </Box>
                   </Flex>
 
-                  <Flex direction="column" gap={{ base: 4, md: 5 }}>
-                    {items.map((it) => (
-                      <Box key={it.preguntaId}>
-                        <Text color={`${c.color}ee`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mb={2}
-                              style={{ textShadow: "0 0 10px rgba(0,0,0,0.85)" }}>
-                          {textoPregunta(it.preguntaId)}
-                        </Text>
+                  {/* Un bloque por eje: el signo y la casa. Nada de pregunta a
+                      pregunta — dos totales y su comparación, que es lo que el
+                      estudio mide. */}
+                  <Flex direction="column" gap={{ base: 5, md: 6 }}>
+                    {grupos.map((g, i) => {
+                      const hayMuestra = g.personas >= MUESTRA_MINIMA;
+                      return (
+                        <React.Fragment key={`${g.eje}-${g.posicion}`}>
+                          {/* Raya entre el signo y la casa: fina, pero que se vea.
+                              Va suelta entre bloques para que el hueco del `gap`
+                              le quede igual arriba y abajo. */}
+                          {i > 0 && <Box h="1px" bg={`${c.color}55`} />}
+                        <Box>
+                          <Text color={`${c.color}ee`} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                                letterSpacing="0.04em" mb={3}
+                                style={{ textShadow: "0 0 10px rgba(0,0,0,0.85)" }}>
+                            {tituloGrupo(g)}
+                          </Text>
 
-                        {/* Barra: proporción de «sí» dentro de su mismo signo */}
-                        <Flex align="center" gap={3}>
-                          <Box flex="1" h="8px" borderRadius="full" bg={`${c.color}1f`} overflow="hidden">
-                            <Box h="100%" borderRadius="full" bg={c.color}
-                                 w={`${it.porcentajeSi}%`} boxShadow={`0 0 10px ${c.color}88`}
-                                 transition="width 0.5s ease" />
-                          </Box>
-                          <Text color={c.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" flexShrink={0}
-                                minW="52px" textAlign="right">
-                            {it.porcentajeSi}%
-                          </Text>
-                        </Flex>
+                          {/* Tu barra */}
+                          <Flex align="center" gap={3} mb={2}>
+                            <Text color={`${c.color}bb`} fontSize="xs" fontWeight="700" letterSpacing="0.14em"
+                                  textTransform="uppercase" minW="52px">
+                              Tú
+                            </Text>
+                            <Box flex="1" h="10px" borderRadius="full" bg={`${c.color}1f`} overflow="hidden">
+                              <Box h="100%" borderRadius="full" bg={c.color} w={`${g.tuPorcentaje}%`}
+                                   boxShadow={`0 0 10px ${c.color}aa`} transition="width 0.6s ease" />
+                            </Box>
+                            <Text color={c.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                                  minW="52px" textAlign="right" flexShrink={0}>
+                              {g.tuPorcentaje}%
+                            </Text>
+                          </Flex>
 
-                        <Flex justify="space-between" align="baseline" gap={3} mt={1.5} flexWrap="wrap">
-                          <Text color={`${c.color}aa`} fontSize="xs" fontStyle="italic" lineHeight="1.5">
-                            {it.total >= MUESTRA_MINIMA
-                              ? `Las personas con ${grupoDe(c.label, it)} han respondido que sí un ${it.porcentajeSi}% (${it.si} de ${it.total}).`
-                              : `Todavía sois pocos con ${grupoDe(c.label, it)} (${it.total}): el porcentaje aún no dice mucho.`}
+                          {/* La del grupo, más apagada: es el fondo contra el que se lee la tuya */}
+                          <Flex align="center" gap={3}>
+                            <Text color={`${c.color}77`} fontSize="xs" fontWeight="600" letterSpacing="0.14em"
+                                  textTransform="uppercase" minW="52px">
+                              Media
+                            </Text>
+                            <Box flex="1" h="10px" borderRadius="full" bg={`${c.color}14`} overflow="hidden">
+                              <Box h="100%" borderRadius="full" bg={`${c.color}66`}
+                                   w={`${hayMuestra ? g.mediaPorcentaje : 0}%`} transition="width 0.6s ease" />
+                            </Box>
+                            <Text color={`${c.color}88`} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                                  minW="52px" textAlign="right" flexShrink={0}>
+                              {hayMuestra ? `${g.mediaPorcentaje}%` : "—"}
+                            </Text>
+                          </Flex>
+
+                          {/* Sin cifras de muestra: el tamaño del grupo se nota en
+                              si hay media o no, no hace falta cantarlo. */}
+                          <Text color={`${c.color}aa`} fontSize="xs" fontStyle="italic" lineHeight="1.6" mt={2.5}>
+                            {hayMuestra
+                              ? `Las personas con ${grupoDe(c.label, g)} se reconocen en él un ${g.mediaPorcentaje}% de media.`
+                              : `Todavía sois pocos con ${grupoDe(c.label, g)}: la media aún no dice mucho.`}
                           </Text>
-                          <Text color={c.color} fontSize="xs" fontWeight="700" letterSpacing="0.1em"
-                                textTransform="uppercase" flexShrink={0}>
-                            Tú: {it.respuesta ? "Sí" : "No"}
-                          </Text>
-                        </Flex>
-                      </Box>
-                    ))}
+                        </Box>
+                        </React.Fragment>
+                      );
+                    })}
                   </Flex>
                 </Box>
               </Box>
             </RevealItem>
           ))}
         </RevealStagger>
-
-        {/* ── LA LECTURA ──
-            Aquí es donde más sentido tiene ofrecerla: acaba de leer datos sobre
-            sí mismo y quiere más. Va ANTES del enlace a El Mapa porque una de
-            las dos opciones lleva justo ahí. */}
-        <Reveal direction="up" distance={16} duration={0.7} delay={0.25}>
-          <BotonLecturaCarta
-            email={datos.participante.email}
-            datos={datos.participante.datos}
-            variant="destacado"
-          />
-        </Reveal>
 
         {/* ── EL PROYECTO ──
             De aquí sale el puente al Mapa: quien ha llegado hasta el final del
