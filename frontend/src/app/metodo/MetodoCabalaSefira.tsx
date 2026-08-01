@@ -422,6 +422,12 @@ export default function MetodoCabalaSefira() {
   const [autoeval, setAutoeval] = useState<number[]>([]);
   const [preguntasResp, setPreguntasResp] = useState<string[]>([]); // respuestas locales a las preguntas de reflexión
   const [notaOpen, setNotaOpen] = useState(false);
+  // Estado del guardado, para poder cerrar la página diciendo si está a salvo.
+  const [guardando, setGuardando] = useState(false);
+  const [guardadoOk, setGuardadoOk] = useState(false);
+  const [errorGuardado, setErrorGuardado] = useState(false);
+  /** Ha escrito en una respuesta y todavía no se ha guardado (sigue en el campo). */
+  const [sinGuardar, setSinGuardar] = useState(false);
   const [testAnswers, setTestAnswers] = useState<number[]>(() => new Array(NUM_PREGUNTAS).fill(0));
   // Copia local del `data` de metodo_cabala para poder mergear al guardar el test.
   const dataRef = useRef<any>({});
@@ -492,6 +498,33 @@ export default function MetodoCabalaSefira() {
   }, [key, navigate, sefira]);
 
   // Guarda una respuesta del test en BD (merge dentro de data.test[key]).
+  /**
+   * ÚNICO sitio por el que pasan los guardados de esta página. Antes cada uno
+   * lanzaba su PATCH por su cuenta y se comía el error; ahora todos pasan por
+   * aquí, que es lo que permite decir abajo si está guardado de verdad — si no,
+   * el mensaje mentiría en cuanto un guardado fallara.
+   */
+  const persistir = async (nextData: Record<string, any>) => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId || !token) return;
+    setGuardando(true);
+    setErrorGuardado(false);
+    try {
+      await axios.patch(
+        `${API_URL}/metodo-cabala/${userId}`,
+        { data: nextData },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setSinGuardar(false);
+      setGuardadoOk(true);
+    } catch {
+      setErrorGuardado(true);
+    } finally {
+      setGuardando(false);
+    }
+  };
+
   const guardarTest = (idx: number, valor: number) => {
     if (!key) return;
     const nuevas = [...testAnswers];
@@ -500,11 +533,7 @@ export default function MetodoCabalaSefira() {
     const prev = dataRef.current ?? {};
     const nextData = { ...prev, test: { ...(prev.test ?? {}), [key]: nuevas } };
     dataRef.current = nextData;
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    if (userId && token) {
-      axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
-    }
+    void persistir(nextData);
   };
 
   // Guarda la autoevaluación en BD (merge en data.autoeval[key]). Cuenta también
@@ -517,27 +546,19 @@ export default function MetodoCabalaSefira() {
       const prevData = dataRef.current ?? {};
       const nextData = { ...prevData, autoeval: { ...(prevData.autoeval ?? {}), [key]: nuevas } };
       dataRef.current = nextData;
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
-      if (userId && token) {
-        axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
-      }
+      void persistir(nextData);
       return nuevas;
     });
   };
 
   // Guarda las respuestas de reflexión (merge en data.preguntas[key]). Se llama
   // al salir del campo (onBlur) para no lanzar una petición por cada tecla.
-  const guardarPreguntas = () => {
+  const guardarPreguntas = async () => {
     if (!key) return;
     const prevData = dataRef.current ?? {};
     const nextData = { ...prevData, preguntas: { ...(prevData.preguntas ?? {}), [key]: preguntasResp } };
     dataRef.current = nextData;
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    if (userId && token) {
-      axios.patch(`${API_URL}/metodo-cabala/${userId}`, { data: nextData }, { headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
-    }
+    await persistir(nextData);
   };
 
   if (loading || !sefira) {
@@ -568,6 +589,38 @@ export default function MetodoCabalaSefira() {
     { ...(dataRef.current?.autoeval ?? {}), ...(key ? { [key]: autoeval } : {}) },
   );
 
+  // El «siguiente» vive en un solo sitio: lo usan la cabecera y el pie de la
+  // página, así no pueden acabar llevando a destinos distintos.
+  const siguiente = nextKey
+    ? {
+        label: `${cabalaSefirotMap[nextKey].titulo} →`,
+        onClick: () => navigate(`/metodo/cabala/sefira/${nextKey}`),
+        disabled: bloquearSiguiente,
+        disabledTooltip: "Completa todo lo que se pide en esta dimensión para continuar",
+      }
+    : {
+        label: "Diagnóstico →",
+        onClick: () => navigate("/metodo/cabala/diagnostico"),
+        disabled: bloquearSiguiente || !contenidoSefirot,
+        disabledTooltip: !contenidoSefirot
+          ? "Rellena el contenido de todas las sefirot para ver tu Diagnóstico"
+          : "Completa todo lo que se pide en esta dimensión para continuar",
+      };
+
+  /** Lo que falta para poder seguir, dicho con nombres, no con un «completa todo». */
+  const queFalta = [
+    !preguntasCompletas && "las preguntas para la reflexión",
+    !autoevalCompleta && "la autoevaluación",
+    !testCompletado && "la escala de equilibrio",
+  ].filter(Boolean) as string[];
+
+  /** Guarda lo que quede pendiente y solo entonces navega (ver flushSaves). */
+  const seguir = async () => {
+    if (siguiente.disabled) return;
+    if (sinGuardar) await guardarPreguntas();
+    siguiente.onClick();
+  };
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif"
          bg="#008080">
@@ -592,9 +645,7 @@ export default function MetodoCabalaSefira() {
                   ? { label: `← ${cabalaSefirotMap[prevKey].titulo}`, onClick: () => navigate(`/metodo/cabala/sefira/${prevKey}`) }
                   : { label: "← El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
                 extra={{ label: "Ilustraciones", onClick: () => setIlusOpen(true), icon: <EyeIcon /> }}
-                next={nextKey
-                  ? { label: `${cabalaSefirotMap[nextKey].titulo} →`, onClick: () => navigate(`/metodo/cabala/sefira/${nextKey}`), disabled: bloquearSiguiente, disabledTooltip: "Completa todo lo que se pide en esta dimensión para continuar" }
-                  : { label: "Diagnóstico →", onClick: () => navigate("/metodo/cabala/diagnostico"), disabled: bloquearSiguiente || !contenidoSefirot, disabledTooltip: !contenidoSefirot ? "Rellena el contenido de todas las sefirot para ver tu Diagnóstico" : "Completa todo lo que se pide en esta dimensión para continuar" }}
+                next={siguiente}
               />
             </Box>
           </Reveal>
@@ -806,9 +857,11 @@ export default function MetodoCabalaSefira() {
                         <Box
                           as="textarea"
                           value={preguntasResp[i] ?? ""}
-                          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                            setPreguntasResp((prev) => { const n = [...prev]; n[i] = e.target.value; return n; })}
-                          onBlur={guardarPreguntas}
+                          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                            setSinGuardar(true);
+                            setPreguntasResp((prev) => { const n = [...prev]; n[i] = e.target.value; return n; });
+                          }}
+                          onBlur={() => void guardarPreguntas()}
                           placeholder="Escribe tu respuesta…"
                           rows={2}
                           w="100%"
@@ -893,6 +946,90 @@ export default function MetodoCabalaSefira() {
               </Caja>
             </Reveal>
           )}
+
+          {/* ── Cierre de la página: si está guardado y por dónde seguir ──
+                Las respuestas se guardan solas al salir de cada campo, pero eso
+                no se veía en ninguna parte y había que subir hasta la cabecera
+                para pasar a la sefirá siguiente. */}
+          <Reveal direction="up" distance={18} delay={0.38} duration={0.6} w="100%">
+            <Caja>
+              <Flex align="center" justify="space-between" gap={4} wrap="wrap">
+                <Flex align="center" gap={2} minW="200px">
+                  {guardando ? (
+                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                          style={{ textShadow: INK_SHADOW }}>
+                      Guardando…
+                    </Text>
+                  ) : errorGuardado ? (
+                    <Text color="#ffb3b3" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                          style={{ textShadow: INK_SHADOW }}>
+                      No se ha podido guardar. Revisa tu conexión y vuelve a intentarlo.
+                    </Text>
+                  ) : sinGuardar ? (
+                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                          style={{ textShadow: INK_SHADOW }}>
+                      Tienes cambios sin guardar.
+                    </Text>
+                  ) : (
+                    <Flex align="center" gap={2}>
+                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           w="20px" h="20px" fill={cabalaTxt} flexShrink={0}>
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                      </Box>
+                      <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }}
+                            style={{ textShadow: INK_SHADOW }}>
+                        {guardadoOk ? "Todo guardado" : "Todo lo que escribas se guarda solo"}
+                      </Text>
+                    </Flex>
+                  )}
+                </Flex>
+
+                <Flex gap={3} wrap="wrap">
+                  {(sinGuardar || errorGuardado) && (
+                    <Box as="button"
+                         onClick={guardando ? undefined : () => void guardarPreguntas()}
+                         px={6} py={2.5} borderRadius="full"
+                         border={`1.5px solid ${cabalaTxt}88`} color={cabalaTxt}
+                         fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
+                         cursor={guardando ? "wait" : "pointer"} opacity={guardando ? 0.6 : 1}
+                         boxShadow={CAJA_GLOW} transition="all 0.2s"
+                         _hover={{ bg: `${cabalaTxt}1a`, borderColor: cabalaTxt }}
+                         style={{ textShadow: INK_SHADOW }}>
+                      {errorGuardado ? "Reintentar" : "Salvar"}
+                    </Box>
+                  )}
+                  <Box as="button"
+                       onClick={siguiente.disabled ? undefined : () => void seguir()}
+                       title={siguiente.disabled ? siguiente.disabledTooltip : undefined}
+                       px={7} py={2.5} borderRadius="full"
+                       bg={siguiente.disabled ? "transparent" : `${cabalaTxt}1f`}
+                       border={`1.5px solid ${siguiente.disabled ? `${cabalaTxt}44` : cabalaTxt}`}
+                       color={siguiente.disabled ? `${cabalaTxt}66` : cabalaTxt}
+                       fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
+                       cursor={siguiente.disabled ? "not-allowed" : "pointer"}
+                       boxShadow={siguiente.disabled ? "none" : CAJA_GLOW} transition="all 0.2s"
+                       _hover={siguiente.disabled ? {} : { bg: `${cabalaTxt}33`, transform: "translateY(-1px)" }}
+                       style={{ textShadow: INK_SHADOW }}>
+                    {siguiente.label}
+                  </Box>
+                </Flex>
+              </Flex>
+
+              {/* Si el paso está bloqueado, se dice QUÉ falta por nombre. */}
+              {siguiente.disabled && queFalta.length > 0 && (
+                <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}
+                      style={{ textShadow: INK_SHADOW }}>
+                  Para seguir te queda por completar {queFalta.join(", ")}.
+                </Text>
+              )}
+              {siguiente.disabled && queFalta.length === 0 && !contenidoSefirot && (
+                <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}
+                      style={{ textShadow: INK_SHADOW }}>
+                  Para ver tu Diagnóstico falta el contenido de alguna otra sefirá.
+                </Text>
+              )}
+            </Caja>
+          </Reveal>
         </Flex>
       </Flex>
 
