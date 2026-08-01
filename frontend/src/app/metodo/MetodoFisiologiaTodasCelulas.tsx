@@ -410,7 +410,7 @@ const ORGANOS: Organo[] = [
         texto: <>La piel puede ocupar cerca de dos metros cuadrados y representa alrededor del 15 % de tu peso corporal. Es la primera barrera que te protege frente a golpes, microorganismos, sustancias químicas y la pérdida de agua.</>,
       },
       {
-        titular: "El Sol envejece tu piel… incluso cuando no te quemas.",
+        titular: "El sol envejece tu piel… incluso cuando no te quemas.",
         claves: ["La UV daña el ADN sin quemar", "El daño se acumula con los años", "Genera radicales libres"],
         texto: <>La radiación ultravioleta atraviesa la piel y daña el ADN de sus células. Aunque no aparezca una quemadura, ese daño se va acumulando con los años y favorece las arrugas, las manchas y el cáncer de piel.<br /><br />Además, algunos fotones de la radiación ultravioleta aportan tanta energía que alteran las moléculas de tus células y favorecen la formación de radicales libres (ROS). Estas moléculas son muy inestables y «roban» electrones a otras para estabilizarse, desencadenando una reacción en cadena que acelera el envejecimiento y el daño celular.</>,
       },
@@ -432,7 +432,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Tus heridas se reparan mejor de lo que imaginas.",
         claves: ["Las plaquetas cierran en minutos", "Las defensas evitan infección", "El colágeno reconstruye"],
-        texto: <>Cuando te haces un corte, las plaquetas cierran la herida en minutos, creando una barrera junto a un montón de desafortunados glóbulos rojos que pasaban por ahí. Después llegan células inmunitarias para evitar infecciones y, finalmente, los fibroblastos fabrican colágeno para reconstruir el tejido. Una simple herida pone en marcha a millones de células trabajando al mismo tiempo con un único objetivo: protegerte.</>,
+        texto: <>Cuando te haces un corte, las plaquetas cierran la herida en minutos, creando una barrera usando a un montón de desafortunados glóbulos rojos que pasaban por ahí. Después llegan células inmunitarias para evitar infecciones y, finalmente, los fibroblastos fabrican colágeno para reconstruir el tejido. Una simple herida pone en marcha a millones de células trabajando al mismo tiempo con un único objetivo: protegerte.</>,
       },
       {
         titular: "Tu piel también tiene un ecosistema.",
@@ -495,7 +495,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Sin vitamina D, el calcio sirve de poco.",
         claves: ["Sin vitamina D no se absorbe el calcio", "Mejor por dieta o suplemento", "Del sol cuesta obtenerla"],
-        texto: <>Puedes consumir mucho calcio, pero si no tienes suficiente vitamina D absorberás mucho menos en el intestino. Es recomendado obtener la vitamina D con la alimentación o con suplementos, obtenerla del sol es realmente difícil debido a que hace falta 3 activaciones distintas.</>,
+        texto: <>Puedes consumir mucho calcio, pero si no tienes suficiente vitamina D absorberás mucho menos en el intestino. Es recomendado obtener la vitamina D con la alimentación o con suplementos, obtenerla del sol es realmente difícil debido a que hace falta tres activaciones distintas.</>,
       },
       {
         titular: "Tus huesos son los ahorros del calcio.",
@@ -510,7 +510,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "Nunca es tarde para fortalecer tus huesos.",
         claves: ["Máxima masa a los 30", "Responden toda la Vida", "Moverte hoy es invertir"],
-        texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la Vida. Moverte hoy sigue siendo una inversión para el esqueleto de mañana.</>,
+        texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la Vida. Moverte hoy sigue siendo una inversión para el esqueleto de dentro de unas horas o de mañana (literalmente).</>,
       },
     ] },
   { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 76 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
@@ -617,7 +617,7 @@ const ORGANOS: Organo[] = [
       {
         titular: "La grasa debería ser un aliado.",
         claves: ["Almacena energía", "Protege y aísla del frío", "Fabrica leptina, habla al cerebro"],
-        texto: <>El tejido adiposo almacena energía para cuando el cuerpo la necesita. Además, protege órganos, ayuda a mantener la temperatura corporal y fabrica hormonas como la leptina, que informa al hipotálamo de cuánta energía tenemos almacenada y ayuda a regular el apetito. A partir de esa información, el cerebro ajusta el metabolismo, el gasto energético e incluso parte de la respuesta inmunitaria. Sin grasa, simplemente no podríamos vivir.</>,
+        texto: <>El tejido adiposo almacena energía para cuando el cuerpo la necesita. Además, protege órganos, ayuda a mantener la temperatura corporal y fabrica hormonas como la leptina, que informa al hipotálamo de cuánta energía ya tenemos almacenada y ayuda a regular el apetito. A partir de esa información, el cerebro ajusta el metabolismo, el gasto energético e incluso parte de la respuesta inmunitaria. Sin grasa, simplemente no podríamos vivir.</>,
       },
       {
         titular: "Tus células de grasa también hablan con tu cerebro.",
