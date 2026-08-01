@@ -40,6 +40,14 @@ export const LIMITE_FORMULARIO = { default: { ttl: HORA, limit: 5 } };
 export const LIMITE_RESERVA = { default: { ttl: HORA, limit: 5 } };
 
 /**
+ * Alta en el estudio estadístico de astrología. Cada alta calcula una carta
+ * natal, y eso incluye una llamada al geocodificador externo (Nominatim), que
+ * conviene no martillear. Veinte por hora y por IP: sobra para participar y
+ * corregir los datos varias veces, y no sirve para llenar la muestra de ruido.
+ */
+export const LIMITE_ESTUDIO = { default: { ttl: HORA, limit: 20 } };
+
+/**
  * Entrar, registrarse y pedir recuperación de contraseña. Frena la prueba de
  * contraseñas por fuerza bruta sin castigar a quien se equivoca al teclear:
  * diez intentos cada cinco minutos.

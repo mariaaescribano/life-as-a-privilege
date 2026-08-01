@@ -5,6 +5,10 @@ import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import type { NotaEstudios } from "./cabalaSefirot";
 import { CAJA_GLOW } from "./cabalaGlow";
 
+// Sombra NEGRA (no del color del fondo): es lo que hace legible el texto ámbar
+// sobre la acuarela marrón.
+const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
+
 // Popup de una "nota" (asterisco) de una sefirá: título + párrafos, sobre el
 // fondo de Cábala. Genérico: sirve para cualquier sefirá que tenga `nota`.
 export function CabalaNotaModal({ nota, isOpen, onClose }: { nota: NotaEstudios; isOpen: boolean; onClose: () => void }) {
@@ -41,8 +45,22 @@ export function CabalaNotaModal({ nota, isOpen, onClose }: { nota: NotaEstudios;
             </svg>
           </Box>
 
-          <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 9, md: 11 }}>
-            <Flex direction="column" gap={4}>
+          {/* El cuerpo ES el contenedor de scroll: así la barra queda pegada al
+              borde de la caja y no flotando dentro del padding. */}
+          <ModalBody
+            position="relative"
+            zIndex={1}
+            px={{ base: 7, md: 14 }}
+            py={{ base: 12, md: 16 }}
+            maxH={{ base: "78vh", md: "76vh" }}
+            overflowY="auto"
+            sx={{
+              "&::-webkit-scrollbar": { width: "4px" },
+              "&::-webkit-scrollbar-track": { background: "transparent" },
+              "&::-webkit-scrollbar-thumb": { background: `${cabalaTxt}55`, borderRadius: "999px" },
+            }}
+          >
+            <Flex direction="column" gap={5}>
               <Text
                 color={cabalaTxt}
                 fontSize={{ base: "xl", md: "2xl" }}
@@ -55,10 +73,10 @@ export function CabalaNotaModal({ nota, isOpen, onClose }: { nota: NotaEstudios;
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto"
                    style={{ background: `linear-gradient(90deg, transparent, ${cabalaTxt}66, transparent)` }} />
-              <Flex direction="column" gap={3.5}>
+              <Flex direction="column" gap={4}>
                 {nota.parrafos.map((p, i) => (
-                  <Text key={i} color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.85"
-                        style={{ textShadow: `0 1px 3px ${cabalaBg}f5, 0 0 10px ${cabalaBg}cc` }}>
+                  <Text key={i} color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
+                        style={{ textShadow: INK_SHADOW }}>
                     {p}
                   </Text>
                 ))}

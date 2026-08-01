@@ -60,7 +60,7 @@ export const RECONSTRUCCION: Vineta[] = [
       "Cada decisión es una instrucción.",
       "Cada hábito es un plano de construcción.",
       "La pregunta no es si tu cuerpo va a cambiar.",
-      "La pregunta es en qué dirección lo estás construyendo.",
+      "La pregunta es en qué dirección lo estás reconstruyendo.",
     ],
   },
 ];

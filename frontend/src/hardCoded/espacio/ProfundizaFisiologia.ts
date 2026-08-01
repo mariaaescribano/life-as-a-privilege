@@ -300,7 +300,7 @@ const METABOLISMO: Ficha[] = [
     key: "glucolisis", nombre: "1. Glucólisis", color: "#e6a7d9", foto: SUB("metabolismo", "metabolismo2"),
     claves: ["Parte la glucosa en piruvato", "Da 2 ATP y NADH", "No necesita oxígeno"],
     explicacion: [
-      "La respiración celular comienza en el citoplasma, fuera de la mitocondria. Cuando comemos carbohidratos, estos se convierten en glucosa, una molécula rica en energía. Durante la glucólisis, una molécula de glucosa (6 carbonos) se divide en dos moléculas más pequeñas llamadas piruvato (3 carbonos cada una).",
+      "La respiración celular comienza en el citoplasma, fuera de la mitocondria. Cuando comemos carbohidratos, a través del proceso de la digestión, se descomponerá en moléculas de glucosa (recordemos que los carbohidratos son cadenas de glucosa unidas, la digestión las separa). Durante la glucólisis, una molécula de glucosa (6 carbonos) se divide en dos moléculas más pequeñas llamadas piruvato (3 carbonos cada una).",
       "En este proceso se obtienen 2 ATP (energía inmediata) y 2 NADH, unas moléculas que almacenan electrones para producir más energía después.",
       "La glucólisis no necesita oxígeno, por eso puede ocurrir incluso cuando hacemos ejercicio intenso.",
     ],
@@ -391,7 +391,7 @@ const EPIGENETICA: Ficha[] = [
     eyebrow: "A veces se hereda",
     claves: ["Algunas marcas se heredan", "La Vida de los padres influye", "Un campo joven y apasionante"],
     explicacion: [
-      "Algunas marcas epigenéticas pueden pasar de una generación a otra, de modo que las experiencias de los padres podrían influir un poco en los hijos.",
+      "Algunas marcas epigenéticas pueden pasar de una generación a otra, de modo que las experiencias de los padres podrían influir en los hijos.",
       "Es un campo joven y apasionante: sugiere que el entorno deja una huella que va más allá de una sola Vida.",
     ],
   },

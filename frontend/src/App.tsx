@@ -134,6 +134,11 @@ const MetodoCulturaHistoria = lazy(() => import("./app/metodo/MetodoCulturaHisto
 const MetodoCulturaHistoriaEra = lazy(() => import("./app/metodo/MetodoCulturaHistoriaEra"));
 const AyurvedaMiEspacio = lazy(() => import("./app/web/AyurvedaMiEspacio"));
 const RecursosPage = lazy(() => import("./app/recursos/RecursosPage"));
+// Estudio estadístico sobre astrología (público: no hace falta cuenta)
+const EstudioHome = lazy(() => import("./app/estudio/EstudioHome"));
+const EstudioDatos = lazy(() => import("./app/estudio/EstudioDatos"));
+const EstudioPreguntas = lazy(() => import("./app/estudio/EstudioPreguntas"));
+const EstudioResultados = lazy(() => import("./app/estudio/EstudioResultados"));
 const UserAccount = lazy(() => import("./app/user/UserAccount"));
 const TCMTest1 = lazy(() => import("./components/espacio/components/TCMTest1"));
 const TCMTest2 = lazy(() => import("./components/espacio/components/TCMTest2"));
@@ -388,6 +393,13 @@ export default function App()
       <Route path="/aprendizaje/leccion/:modalidadId/:cursoId/:submoduloId" element={<TextLessonPage />} />
 
       <Route path="/recursos/:moduloId" element={<RecursosPage />} />
+
+      {/* ── Estudio estadístico sobre astrología ──
+          Públicas a propósito: participar no exige cuenta, solo un email. */}
+      <Route path="/estudio" element={<EstudioHome />} />
+      <Route path="/estudio/datos" element={<EstudioDatos />} />
+      <Route path="/estudio/preguntas" element={<EstudioPreguntas />} />
+      <Route path="/estudio/resultados" element={<EstudioResultados />} />
 
 
       <Route path="*" element={<NoEncontrada />} />

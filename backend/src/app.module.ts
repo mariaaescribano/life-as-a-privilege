@@ -35,6 +35,7 @@ import { BookingModule } from './booking/booking.module';
 import { CursosModule } from './cursos/cursos.module';
 import { AstrologiaTextosModule } from './astrologiaTextos/astrologiaTextos.module';
 import { RecorridoProgresoModule } from './recorridoProgreso/recorridoProgreso.module';
+import { EstudioModule } from './estudio/estudio.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -78,6 +79,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     CursosModule,
     AstrologiaTextosModule,
     RecorridoProgresoModule,
+    EstudioModule,
   ],
   providers: [
     DatabaseService,

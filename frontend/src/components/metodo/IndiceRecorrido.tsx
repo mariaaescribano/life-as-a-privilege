@@ -37,6 +37,7 @@ export function IndiceRecorrido({
   alcanzableUrl = (userId: string) => `${API_URL}/metodo-psicologia/${userId}`,
   alcanzableDe = pasoAlcanzablePsicologia,
   cargando = false,
+  onOpen,
 }: {
   indice?: PasoRecorrido[];
   total?: number;
@@ -69,6 +70,11 @@ export function IndiceRecorrido({
    *  abierto), se muestra la animación de espera de la disciplina en vez de la
    *  lista, para no enseñar los candados a medio calcular. */
   cargando?: boolean;
+  /** SOLO modo por flags: se llama cada vez que se ABRE el índice. El padre lo
+   *  usa para releer el progreso, para que lo que la usuaria acaba de responder
+   *  en esta misma página ya cuente en los candados (si no, el índice enseñaría
+   *  la foto del progreso de cuando cargó la página). */
+  onOpen?: () => void;
 } = {}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -143,7 +149,9 @@ export function IndiceRecorrido({
   // todos los pasos salvo la página actual, para no permitir saltar por el índice
   // (y romper el recorrido) en ese instante previo a conocer `pasoMax`.
   const estaBloqueado = (p: PasoRecorrido): boolean => {
-    if (!progresoKey) return !!p.bloqueado;
+    // Modo por flags: la página en la que ESTÁS nunca sale con candado (estás
+    // en ella; enseñarla bloqueada es mentir y además impide volver a ella).
+    if (!progresoKey) return !!p.bloqueado && p.n !== actual;
     // Aún sin datos de progreso NI de alcanzabilidad: solo la actual abierta.
     if (!progresoCargado && maxAlcanzable == null) return p.n !== actual;
     // Techo abierto = lo más lejos entre: lo que YA PUEDE alcanzar por requisitos
@@ -166,7 +174,7 @@ export function IndiceRecorrido({
       {/* Botón flotante (abajo a la izquierda, sobre «Mis notas») */}
       <Flex
         as="button"
-        onClick={() => setOpen(true)}
+        onClick={() => { setOpen(true); onOpen?.(); }}
         position="fixed"
         bottom={{ base: "74px", md: "88px" }}
         left={{ base: "16px", md: "26px" }}

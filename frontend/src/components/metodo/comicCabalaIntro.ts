@@ -45,7 +45,7 @@ export const CABALA_INTRO: Vineta[] = [
       "Beriah, el mundo de la Creación, donde el Infinito se manifiesta en distintas formas.",
       "Yetzirah, el mundo de la Formación, donde aparecen las estructuras y las almas.",
       "Assiah, el mundo de la Acción, donde la creación se manifiesta como materia.",
-      "En cada mundo, la Luz se expresa de forma diferente, haciéndose cada vez más velada hasta llegar al universo físico.",
+      "En cada mundo, la Luz se expresa de forma diferente, haciéndose cada vez más denso hasta manifestar el universo tangible.",
     ],
   },
   {

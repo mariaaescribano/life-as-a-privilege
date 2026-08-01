@@ -44,6 +44,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const path = location.pathname.toLowerCase();
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
+  const isEstudioPage = path.startsWith("/estudio");
   // Navegación de administración (pestañas en el header).
   const isAdminPage = path.startsWith("/admin");
   const adminCursosActive = path.startsWith("/admin/cursos");
@@ -172,6 +173,33 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               Materiales
             </Text>
           )}
+          {/* Estudio estadístico sobre astrología — abierto a todo el mundo */}
+          {!isAdminPage && (
+            <Text
+              as="button"
+              onClick={() => navigate("/estudio")}
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize={{ base: "2xs", md: "lg" }}
+              letterSpacing={{ base: "0.08em", md: "0.14em" }}
+              textTransform="uppercase"
+              textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+              cursor="pointer"
+              bg="transparent"
+              border="none"
+              whiteSpace="nowrap"
+              {...(isEstudioPage ? underlineStyles : {})}
+              _hover={{
+                color: "white",
+                textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
+                ...(isEstudioPage ? { textDecorationColor: "white" } : {}),
+              }}
+              transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
+            >
+              Estudio
+            </Text>
+          )}
           <Box
             as="button"
             onClick={() => navigate("/user/account")}
@@ -247,6 +275,30 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
           >
             Materiales
+          </Text>
+          {/* Estudio estadístico sobre astrología — abierto a todo el mundo */}
+          <Text
+            as="button"
+            onClick={() => navigate("/estudio")}
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "xs", md: "xl" }}
+            letterSpacing={{ base: "0.1em", md: "0.16em" }}
+            textTransform="uppercase"
+            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
+            cursor="pointer"
+            bg="transparent"
+            border="none"
+            {...(isEstudioPage ? underlineStyles : {})}
+            _hover={{
+              color: "white",
+              textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
+              ...(isEstudioPage ? { textDecorationColor: "white" } : {}),
+            }}
+            transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
+          >
+            Estudio
           </Text>
         </Flex>
       )}

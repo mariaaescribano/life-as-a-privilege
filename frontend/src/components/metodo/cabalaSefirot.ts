@@ -554,9 +554,12 @@ const TIFERET: SefiraContenido = {
   nota: {
     titulo: "El corazón, el «rey» del cuerpo",
     parrafos: [
-      "En muchas tradiciones, y también en la investigación contemporánea, el corazón se describe como algo más que una bomba: un órgano que participa en cómo sentimos, decidimos y nos regulamos.",
-      "Diversos estudios sugieren que el corazón posee su propia red de neuronas —a veces llamada «cerebro del corazón»— capaz de enviar al cerebro más señales de las que recibe, influyendo en la atención, la emoción y la toma de decisiones.",
-      "Además, genera el campo electromagnético más intenso del cuerpo, y su ritmo refleja nuestro estado interno: cuando el corazón entra en coherencia, el resto del sistema tiende a ordenarse a su alrededor. Por eso se dice que «es el rey».",
+      "Muchas tradiciones sitúan en el corazón el centro desde el que se ordena la persona. La neurocardiología no dice exactamente eso, pero sí ha encontrado algo que se le parece: el corazón está mucho más metido en la vida mental de lo que se suponía.",
+      "Para empezar, tiene sistema nervioso propio. Los ganglios intracardíacos reúnen unas 40.000 neuronas que ajustan el latido de forma local, sin esperar órdenes del cerebro; de ahí que se hable del «pequeño cerebro del corazón». El corazón trasplantado, que queda desconectado de los nervios del cuerpo, sigue latiendo y regulándose.",
+      "Y la conversación va sobre todo de abajo arriba: la mayoría de las fibras del nervio vago son aferentes, es decir, suben del cuerpo al cerebro. Esa información cardíaca llega a zonas implicadas en la emoción y la atención, hasta el punto de que el instante exacto del ciclo cardíaco en que aparece un estímulo cambia cómo lo percibimos: una cara de miedo mostrada justo cuando el corazón se contrae se juzga más intensa. A esa escucha del cuerpo se la llama interocepción.",
+      "También es el órgano con la señal eléctrica más potente: el electrocardiograma se mide en milivoltios, unas mil veces más que las ondas del electroencefalograma. Su campo magnético sale del cuerpo, sí, pero es tan débil que hace falta instrumental especializado (magnetocardiografía) para captarlo a pocos centímetros; lo que se lee por ahí sobre campos que se detectan a metros de distancia o entre dos personas no está demostrado.",
+      "Lo que sí está bien establecido es la variabilidad de la frecuencia cardíaca: la pequeña diferencia de tiempo entre un latido y el siguiente. Un corazón sano no va como un metrónomo. Esa variabilidad sube en los estados de calma y buena regulación, y se hunde con el estrés sostenido, el dolor o el agotamiento. Y se puede entrenar: respirar lento, en torno a seis respiraciones por minuto, la eleva en cuestión de minutos.",
+      "Ahí está el sentido honesto de llamarlo «rey»: no manda sobre el resto del cuerpo, pero su ritmo es a la vez el mejor espejo de tu estado interno y una de las pocas palancas que puedes mover a voluntad para cambiarlo.",
     ],
   },
   intro: [
